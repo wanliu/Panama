@@ -39,6 +39,6 @@ class UserSessionsController < ApplicationController
     session[:user_id] = nil
 
     flash[:notice] = 'You have successfully signed out!'
-    redirect_to "#{CUSTOM_PROVIDER_URL}/accounts/login"
+    redirect_to "#{accounts_provider_url}/accounts/login"
   end
 end

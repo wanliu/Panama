@@ -1,9 +1,11 @@
 require 'omniauth-oauth2'
+require 'sso'
+
 module OmniAuth
   module Strategies
     class WanliuId < OmniAuth::Strategies::OAuth2
 
-      CUSTOM_PROVIDER_URL = 'http://localhost:3000'
+      CUSTOM_PROVIDER_URL = Rails.application.config.sso_provider_url
 
       option :client_options, {
         :site =>  CUSTOM_PROVIDER_URL,

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>Panama</title>
@@ -7,8 +6,38 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%= link_to 'Sign Out', logout_path, :method => :delete %>
-<%= yield %>
+	<%= render_cell :header, :show %>
+	<div class='second-nav-bar'></div>
+	<div class='main-slide'>
+        <style type="text/css" media="screen">
+
+        </style>		
+		<div class='slide'>
+			
+		</div>
+
+	</div>	
+	<div class='contents container'>
+		<div class='left-side shadow'>
+			<%= render_cell :category, :show %>
+		</div>
+		<div class='body'>
+			<%= render_cell :navigation, :show %>
+			<div class='main'>
+				<div class="slide-box">
+					<%= render_cell :slide, :show %>
+				</div>
+				<script type="text/javascript">
+					$(".slide-box").slides({
+						play: 5000,
+				        pause: 2500,
+				        hoverPause: true						
+					});
+				</script>
+				<%= yield %>
+			</div>
+		</div>
+	</div>
 
 </body>
 </html>

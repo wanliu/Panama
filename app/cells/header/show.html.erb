@@ -1,0 +1,14 @@
+<div id="header-back">
+	<div id="header" class="container">
+	<%= render_cell :topbar, :show %>
+	<div class="logo">
+		<h1>万流市场</h1>
+	</div>
+	<div class="search">
+		<%= text_field_tag :query, nil, :size => 40 %>
+		<%= button_tag l(:search, '搜索') %>
+
+	</div>
+	</div>	
+</div>
+
