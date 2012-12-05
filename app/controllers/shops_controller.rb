@@ -3,6 +3,8 @@ require 'tempfile'
 class ShopsController < ApplicationController
   respond_to :erb
   
+  admin
+  
   layout 'shops'
 
   # GET /shops
@@ -22,7 +24,7 @@ class ShopsController < ApplicationController
     @shop = Shop.find(params[:id])
 
     respond_to do |format|
-      format.html { render_content([:shops, @shop.name], @shop) }
+      format.html { render_shop_content @shop, :index, @shop }
       format.json { render json: @shop }
     end
   end
@@ -85,5 +87,50 @@ class ShopsController < ApplicationController
       format.html { redirect_to shops_url }
       format.json { head :no_content }
     end
+  end
+
+  protected
+  def content_tpl_path
+    Rails.root.join "tmp/templates"
+  end
+
+  def generate_template(content, options = {})
+    tpl = Tempfile.new(['shop', '.html.erb'], content_tpl_path.to_s)
+    tpl.write(content)
+    tpl.close
+    tpl_name = tpl.path.gsub(/^(.*?)\.html\.erb/, '\1')
+    begin
+      yield(tpl_name, options)
+    ensure
+      tpl.unlink
+    end
+  end
+
+  def render_shop_content(shop, name, *opts)
+    content = shop.contents.lookup(name)
+    begin
+      tpl = shop.fs[content.template].read
+      generate_template(tpl) do |tpl_name, options|
+        prepend_tpl_view_path
+        inital = extract_temp_options opts
+        render_content_template tpl_name, inital
+      end      
+    rescue Vfs::Error => e
+      raise "template file :#{content.template} not found"
+    end
+  end
+
+  def render_content_template(tpl_file, inital = {})
+    render tpl_file
+  end
+
+  def prepend_tpl_view_path
+    tmpdir = Rails.root.join(content_tpl_path)
+    `mkdir #{tmpdir}`
+    prepend_view_path tmpdir    
+  end
+
+  def extract_temp_options(*args)
+    args.last
   end
 end

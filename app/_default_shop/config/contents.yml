@@ -1,0 +1,6 @@
+contents:
+  - name: index
+    template: templates/index.html.erb
+  - name: item
+    template: templates/item.html.erb
+

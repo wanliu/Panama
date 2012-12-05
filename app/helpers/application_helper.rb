@@ -15,12 +15,26 @@ module ApplicationHelper
     Rails.application.config.sso_provider_url
   end
 
+  def action_controller
+    if controller.is_a?(ActionController::Base)
+      controller
+    elsif controller.respond_to?(:action_controller)
+      controller.action_controller
+    else
+      nil
+    end
+  end
+
   def industry_title(after)
     after
   end
 
   def link_to_logout
     link_to l(:sign_out, "退出"), logout_path, :method => :delete
+  end
+
+  def link_to_admin
+    link_to l(:admin, '管理'), action_controller.admin_path if action_controller.respond_to?(:admin?)
   end
 
   def link_to_account

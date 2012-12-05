@@ -1,4 +1,6 @@
-module VPS
+require 'vfs'
+
+module Vfs
   module Drivers
     class ORMFS
       class Writer
@@ -56,29 +58,40 @@ module VPS
       #
       def read_file(path, &block)
         file_entity = parse_path path
-
-        unless file_entity && file_entity.stat
+        unless file_entity && file_entity.file?
           raise("#{path} must a file")
         end
 
-        handle = StringIO.new(file_entity.data)
+        handle = StringIO.new(file_entity.data || "")
         while buff = handle.gets(self.buffer)
           block.call buff
         end
       end
 
-      def write_file(original_path, append, &block)
-        file_entity = parse_path path
-        unless file_entity && file_entity.stat
-          raise("#{original_path} must a file")
+      def write_file(original, append, &block)
+        last_index = original.rindex('/')
+        paths, last_name = original[0...last_index], original[(last_index+1)..-1]
+
+        file_entity = retrieve_path paths
+        unless file_entity && file_entity.directory?
+          raise("#{original_path} must a directory")
         end
-        handle = StringIO.new(file_entity.data)
-        block.call(Write.new(handle))
+
+        fe = file_entity.children.where(name: last_name, stat: 'file').first
+        unless fe
+          fe = file_entity.children.create(name: last_name, stat: 'file')
+        end
+
+        handle = StringIO.new
+        block.call(Writer.new(handle))
+        handle.close
+        fe.data = handle.string
+        fe.save
       end
 
       def delete_file path
         file_entity = parse_path path
-        unless file_entity && file_entity.stat == 'file'
+        unless file_entity && file_entity.file?
           raise('must file type')
         end
 
@@ -94,16 +107,15 @@ module VPS
       # Dir
       #
       def create_dir path
-
         if path == '/'
-          root
+          raise('root always existy')
         else
           paths = path.split('/')
           file_entity = paths.inject(root) do |parent, path| 
             begin
               parent.children.find_by(:name => path, :stat => 'directory')
             rescue Mongoid::Errors::DocumentNotFound
-              parent.children.create_dir(path)
+              parent.create_dir(path)
               retry
             end
           end
@@ -111,33 +123,24 @@ module VPS
       end
 
       def delete_dir original_path
-        path = with_root original_path
-        ::FileUtils.rm_r path
+        path = parse_path original_path
+        if path && path.directory?
+          path.destroy
+        end
       end
 
       def each_entry path, query, &block
-        path = with_root path
-
-        if query
-          path_with_trailing_slash = path == '/' ? path : "#{path}/"
-          ::Dir["#{path_with_trailing_slash}#{query}"].each do |absolute_path|
-            name = absolute_path.sub path_with_trailing_slash, ''
-            block.call name, ->{::File.directory?(absolute_path) ? :dir : :file}
-            # if ::File.directory? absolute_path
-            #   block.call relative_path, :dir
-            # else
-            #   block.call relative_path, :file
-            # end
-          end
-        else
-          ::Dir.foreach path do |name|
-            next if name == '.' or name == '..'
-            block.call name, ->{::File.directory?("#{path}/#{name}") ? :dir : :file}
-            # if ::File.directory? "#{path}/#{relative_name}"
-            #   block.call relative_name, :dir
-            # else
-            #   block.call relative_name, :file
-            # end
+        current_path = parse_path path
+        base = path.blank? ? '/' : path
+        if current_path && current_path.directory?
+          if query
+            current_path.match query do |file_entity|
+              block.call file_entity.path, ->{file_entity.directory? ? :dir : :file}
+            end
+          else
+            current_path.traverse(:breadth_first) do |file_entity|
+              block.call file_entity.path, ->{file_entity.directory? ? :dir : :file}
+            end
           end
         end
       end
@@ -163,6 +166,33 @@ module VPS
             end
           end
         end
+
+        def retrieve_path(path)
+          if path == '/' or path == ''
+            root
+          else
+            paths = path.split('/')
+            begin
+              file_entity = paths.inject(root) do |parent, path| 
+                pa = parent.children.where(:name => path, :stat => 'directory').first
+                unless pa
+                  pa = parent.children.create(:name => path, :stat => 'directory')
+                end
+                pa
+              end
+
+              file_entity
+            end
+          end          
+        end
+    end
+  end
+end
+
+module Vfs
+  class << self
+    def default_driver
+      ::Vfs::Drivers::ORMFS.new
     end
   end
 end

@@ -16,22 +16,29 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-
+  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
+  gem 'compass-rails'
+  gem 'compass-h5bp'  
 end
 
 gem 'jquery-rails'
+gem 'html5-rails'
 
 gem 'omniauth'
 gem 'omniauth-oauth2'
 
 gem 'cells'
+gem 'rspec'
 gem 'rspec-rails'
 group :test do
   gem "rspec-cells"
 end
 
 gem 'vfs'
+
+
+gem 'hirb'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -46,3 +53,4 @@ gem 'vfs'
 
 # To use debugger
 gem 'debugger'
+gem 'thin'

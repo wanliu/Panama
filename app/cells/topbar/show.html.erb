@@ -1,6 +1,22 @@
-<div class='right_menu'>
-	<ul class='nav'>
-		<li><%= link_to_account %></li>
-		<li><%= link_to_logout %></li>
-	</ul>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+
+		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		</a>    
+		<h1><a class="brand" href="#">万流市场</a></h1>
+		<div class="nav-collapse collapse">
+			<ul class="nav pull-right">
+			  <li class="active"><%= link_to_account %></li>
+			  <li><%= link_to_admin %></li>
+			  <li><%= link_to_logout %></li>
+			</ul>
+		</div><!--/.nav-collapse -->
+    </div>
+  </div>
 </div>
+
+

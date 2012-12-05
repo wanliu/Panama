@@ -2,7 +2,12 @@ Panama::Application.routes.draw do
 
   resources :contents
 
-  resources :shops
+  resources :shops do
+    scope :module => "admins" do
+      resources :shop, :path => "admins", :as => "admins"
+    end
+  end
+
   resources :search
   
   root :to => 'welcome#index'

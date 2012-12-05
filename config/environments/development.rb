@@ -1,3 +1,5 @@
+require 'disable_assets_logger'
+
 Panama::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -28,4 +30,6 @@ Panama::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.middleware.insert_before Rails::Rack::Logger, DisableAssetsLogger
 end
