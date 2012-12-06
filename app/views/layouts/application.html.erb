@@ -6,7 +6,15 @@
   <body class="<%= controller.controller_name %>">
     <%= render "chromeframe" %>
     <%= render "header" %>
+	<div class='second-nav-bar'></div>
+	<div class='main-slide'>
+        <style type="text/css" media="screen">
 
+        </style>		
+		<div class='slide'>
+			
+		</div>
+	</div>
 	<div class='contents container'>
 		<div class='left-side shadow'>
 			<%= render_cell :category, :show %>
@@ -15,15 +23,9 @@
 			<%= render_cell :navigation, :show %>
 			<div class='main'>
 				<div class="slide-box">
-					<%#= render_cell :slide, :show %>
+					<%= render_cell :slide, :show %>
 				</div>
-				<script type="text/javascript">
-					$(".slide-box").slides({
-						play: 5000,
-				        pause: 2500,
-				        hoverPause: true						
-					});
-				</script>
+
 			    <%= render "flashes" %>
 			    <%= yield %>
 			</div>
@@ -35,5 +37,12 @@
 
     <%# Javascript at the bottom for fast page loading %>
     <%= render "javascripts" %>
+	<script type="text/javascript">
+		$(".slide-box").slides({
+			play: 5000,
+	        pause: 2500,
+			hoverPause: true
+		});
+	</script>    
   </body>
 </html>
