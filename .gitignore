@@ -8,6 +8,7 @@
 /.bundle
 /.rvmrc
 /.config/sso.yml
+.DS_Store
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
