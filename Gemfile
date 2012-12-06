@@ -16,7 +16,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
+  # gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails'
   gem 'compass-h5bp'  

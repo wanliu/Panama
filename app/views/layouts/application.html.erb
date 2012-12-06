@@ -7,10 +7,29 @@
     <%= render "chromeframe" %>
     <%= render "header" %>
 
-    <div id="main" role="main" class="container">
-      <%= render "flashes" %>
-      <%= yield %>
-    </div>
+	<div class='contents container'>
+		<div class='left-side shadow'>
+			<%= render_cell :category, :show %>
+		</div>
+		<div class='body'>
+			<%= render_cell :navigation, :show %>
+			<div class='main'>
+				<div class="slide-box">
+					<%#= render_cell :slide, :show %>
+				</div>
+				<script type="text/javascript">
+					$(".slide-box").slides({
+						play: 5000,
+				        pause: 2500,
+				        hoverPause: true						
+					});
+				</script>
+			    <%= render "flashes" %>
+			    <%= yield %>
+			</div>
+		</div>
+	</div>
+
 
     <%= render "footer" %>
 
