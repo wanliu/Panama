@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
   protect_from_forgery
   
+  layout 'bootstrap'
+  
   helper_method :current_user
 
   def login_required

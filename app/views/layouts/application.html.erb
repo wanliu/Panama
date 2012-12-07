@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-  <%= render "head" %>
+  <%= cache do %>
+	<%= render "head" %>
+  <% end %>
 
   <body class="<%= controller.controller_name %>">
     <%= render "chromeframe" %>
-    <%= render "header" %>
+    <%= render_cell :header, :show %>
 	<div class='second-nav-bar'></div>
 	<div class='main-slide'>
         <style type="text/css" media="screen">

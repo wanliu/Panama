@@ -16,12 +16,13 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-  # gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
+  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails'
   gem 'compass-h5bp'  
 end
 
+gem 'cache_digests'
 gem 'jquery-rails'
 gem 'html5-rails'
 
@@ -53,4 +54,7 @@ gem 'hirb'
 
 # To use debugger
 gem 'debugger'
-gem 'thin'
+
+group :development do 
+  gem 'thin'
+end
