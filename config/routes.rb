@@ -1,6 +1,7 @@
 Panama::Application.routes.draw do
 
   resources :contents
+  resources :newsletter_receivers
 
   resources :shops do
     scope :module => "admins" do

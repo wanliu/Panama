@@ -1,0 +1,9 @@
+<div class="cell_border" id="newsletterRegister">
+  Join our Mailinglist, man!
+  
+  <%= form_for @receiver do |f| %>
+    Email: <%= f.text_field :email %>
+    <%= hidden_field_tag :mode, :register %>
+    <%= submit_tag "Join!" %>
+  <% end %>
+</div>

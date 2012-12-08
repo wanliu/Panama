@@ -30,6 +30,7 @@ gem 'omniauth'
 gem 'omniauth-oauth2'
 
 gem 'cells'
+
 gem 'rspec'
 gem 'rspec-rails'
 group :test do
