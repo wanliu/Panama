@@ -30,7 +30,7 @@ gem 'omniauth'
 gem 'omniauth-oauth2'
 
 # gem 'cells'
-gem 'apotomo', :github => 'hysios/apotomo', :branch => 'add_render_widget_with_block'
+gem 'apotomo' #, :github => 'hysios/apotomo', :branch => 'add_render_widget_with_block'
 
 gem 'rspec'
 gem 'rspec-rails'

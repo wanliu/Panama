@@ -3,6 +3,8 @@ class Admins::ShopController < Admins::BaseController
 
   has_widgets do |root|
     root << widget(:table, :records => @contents)
+    root << widget(:search)
+    root << widget(:button)
   end
 
   section :dashboard

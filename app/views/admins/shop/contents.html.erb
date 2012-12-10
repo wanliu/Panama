@@ -1,6 +1,8 @@
 Hi <%= current_user.login %>
 
 <%#= render_widget :table, :display, @contents, :ignore_heads => ['shop_id'] %>
+<%= render_widget :search, :display, :filter_content %>
+<%= render_widget :button, :display, t(:create) %>
 <%= render_widget :table, :display, @contents, nil, 
 	:heads => [:name, :template, :created_at, :updated_at],
 	:head_options => { 
