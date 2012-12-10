@@ -5,7 +5,11 @@ Panama::Application.routes.draw do
 
   resources :shops do
     scope :module => "admins" do
-      resources :shop, :path => "admins", :as => "admins"
+      match "admins", :to => 'shop#index'
+      match "admins/:section_name", :to => 'shop#section'
+      # resources :shop, :path => "admins", :as => "admins" do 
+      #   collection :section
+      # end
     end
   end
 

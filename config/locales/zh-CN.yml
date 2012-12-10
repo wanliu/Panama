@@ -198,6 +198,18 @@ zh-CN:
     errors:
       <<: *errors
 
+  mongoid:
+    models:
+      content: "内容"
+    attributes:
+      content:
+        name: "名称"
+        created_at: "创建于"
+        updated_at: "修改于"
+        template: "模板"
+        lock: "锁"
+        shop_id: "Shop ID"
+
   dashboard: 状态
   contents: 内容
   categories: 分类

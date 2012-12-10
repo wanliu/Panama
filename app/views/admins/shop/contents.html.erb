@@ -1,0 +1,10 @@
+Hi <%= current_user.login %>
+
+<%#= render_widget :table, :display, @contents, :ignore_heads => ['shop_id'] %>
+<%= render_widget :table, :display, @contents, nil, 
+	:heads => [:name, :template, :created_at, :updated_at],
+	:head_options => { 
+		:class => %w(table table-striped table-bordered)
+	}
+%>
+

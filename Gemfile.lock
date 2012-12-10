@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/hysios/apotomo.git
+  revision: 8b51777513e4a3c3693cb8b151261a40d563be60
+  branch: add_render_widget_with_block
+  specs:
+    apotomo (1.2.3)
+      cells (>= 3.6.7)
+      hooks (~> 0.2.0)
+      onfire (~> 0.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -74,6 +84,7 @@ GEM
     hashie (1.2.0)
     hike (1.2.1)
     hirb (0.7.0)
+    hooks (0.2.2)
     html5-rails (0.0.6)
       jquery-rails (>= 2.0)
       railties (~> 3.1)
@@ -114,6 +125,7 @@ GEM
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
+    onfire (0.2.0)
     origin (1.0.11)
     polyglot (0.3.3)
     rack (1.4.1)
@@ -189,8 +201,8 @@ PLATFORMS
 
 DEPENDENCIES
   anjlab-bootstrap-rails (>= 2.2)
+  apotomo!
   cache_digests
-  cells
   coffee-rails (~> 3.2.1)
   compass-h5bp
   compass-rails
