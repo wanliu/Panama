@@ -8,20 +8,18 @@
 <body class="<%= controller.controller_name %>">
 	  <%= yield :module_stylesheet %>
 
-	<%= render_cell :header, :show %>
+	<%= render "header" %>
 	<%= render "flashes" %>
   	<div id="admin_content" class="container relative">
 	    <div id="main">
 	      <div class="container-fluid">
-	      	<div class="row-fluid">
-	      	  <div class="span12">
 		        <%= yield %>
 		        <%= render "footer" %>
-	      	  </div>
-	      	</div>
 	      </div>
 	    </div>
 	    <%= side_bar :admin_left_side %>
 	</div>
+    <%#= render "javascripts" %>
+	<%= javascripts_codes %>
 </body>
 </html>

@@ -1,12 +1,23 @@
 Hi <%= current_user.login %>
-
-<%#= render_widget :table, :display, @contents, :ignore_heads => ['shop_id'] %>
-<%= render_widget :search, :display, :filter_content %>
-<%= render_widget :button, :display, t(:create) %>
-<%= render_widget :table, :display, @contents, nil, 
-	:heads => [:name, :template, :created_at, :updated_at],
-	:head_options => { 
-		:class => %w(table table-striped table-bordered)
-	}
-%>
-
+<div id="page" >
+	<div class="row-fluid">
+		<div class="span9">
+			<div class="row-fluid">
+				<%= render_widget :search, :display, :content_query, nil, :class => 'span12' %>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="row-fluid">
+				<%= render_widget :new_content, :display, t(:create), "#", :class => 'span12' %>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<%= render_widget :table, :display, @contents, nil, 
+			:heads => [:name, :template, :created_at, :updated_at],
+			:head_options => { 
+				:class => %w(table table-striped table-bordered table-hover)
+			}
+		%>
+	</div>
+</div>

@@ -1,0 +1,11 @@
+<%= widget_div do %>
+	<div class="child">
+	</div>
+<% end %>
+<script type="text/javascript">
+	setTimeout(function(){
+		var current_content = $("#<%= controller.options[:widget] %> option:selected").val();
+		var url = "<%= url_for_event(:change).html_safe %>&value=" + current_content;
+		$.getScript(url);
+	}, 10);
+</script>

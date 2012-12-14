@@ -1,1 +1,22 @@
-<%= render_cell :header, :show %>
+<div id="header" class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container relative">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      	<div id="logo">
+    	<h1><a  href="#">万流市场</a></h1>
+      	</div>
+		<form id="top_search" class="navbar-form pull-right">
+			<%= text_field_tag :query, nil, :class=>"span5" %>			
+			<%= submit_tag l(:search, '搜索'), :class=> "btn"%>
+		</form>
+		<div id="topbar" class="nav-collapse collapse pull-right">
+			<%= render "topbar" %>
+    	</div><!--/.nav-collapse -->
+
+    </div>
+  </div>
+</div>

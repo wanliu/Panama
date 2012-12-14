@@ -1,3 +1,3 @@
-class CommonWidget < Apotomo::Widget
+class CommonWidget < WidgetUI::UIBase
   helper ApplicationHelper
 end
