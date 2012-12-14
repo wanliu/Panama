@@ -10,6 +10,7 @@
  *
  *= require_self
  *= require_tree .
+ *
  */
 
 $border_color  : #980905;
@@ -159,6 +160,11 @@ body {
 .slides_container div img {
     width:1024px;
     height:768px;            	
+}
+
+.wrapper {
+	margin-right: auto;
+	margin-left: auto;
 }
 
 .category-top-bar {

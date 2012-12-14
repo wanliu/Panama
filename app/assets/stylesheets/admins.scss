@@ -1,0 +1,14 @@
+@import "variables";
+
+#admin_content { 
+	margin-top: 20px;
+}
+
+#admin_left_side {
+	width: $left-side-width;
+	position: absolute;
+	min-height: 500px;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;	
+}

@@ -16,22 +16,39 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-
+  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
+  gem 'compass-rails'
+  gem 'compass-h5bp'  
 end
 
+gem 'cache_digests'
 gem 'jquery-rails'
+gem 'html5-rails'
 
 gem 'omniauth'
 gem 'omniauth-oauth2'
 
-gem 'cells'
+# gem 'cells'
+gem 'apotomo' #, :github => 'hysios/apotomo', :branch => 'add_render_widget_with_block'
+
+gem 'widget_ui', :github => 'hysios/widget_ui'
+
+# markup
+
+gem 'github-markup'
+gem 'redcarpet'
+
+gem 'rspec'
 gem 'rspec-rails'
 group :test do
   gem "rspec-cells"
 end
 
 gem 'vfs'
+
+
+gem 'hirb'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -46,3 +63,8 @@ gem 'vfs'
 
 # To use debugger
 gem 'debugger'
+
+group :development do 
+  gem 'thin'
+ # gem 'better_errors'
+end

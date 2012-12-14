@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
+<%= html_tag :class => "no-js" %>
+<%= render "head" %>
+<% content_for :module_stylesheet do %>
+  <%= stylesheet_link_tag "admins" %>
+<% end %>
+<body class="<%= controller.controller_name %>">
+	  <%= yield :module_stylesheet %>
+
+	<%= render "header" %>
+	<%= render "flashes" %>
+  	<div id="admin_content" class="container relative">
+	    <div id="main">
+	      <div class="container-fluid">
+		        <%= yield %>
+		        <%= render "footer" %>
+	      </div>
+	    </div>
+	    <%= side_bar :admin_left_side %>
+	</div>
+    <%#= render "javascripts" %>
+	<%= javascripts_codes %>
+</body>
+</html>

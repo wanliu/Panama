@@ -1,0 +1,14 @@
+// change colors
+// $linkColor: red;
+
+// change grid
+$gridColumnWidth: 70px;
+$gridGutterWidth: 10px;
+
+@import "variables";
+
+// import original bootstrap
+@import "twitter/bootstrap";
+@import "twitter/bootstrap-responsive";
+@import "responsive-1300px-min";
+@import "slide-box-responsive";

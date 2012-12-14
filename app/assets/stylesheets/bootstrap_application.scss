@@ -1,0 +1,90 @@
+@import 'launch_bootstrap';
+
+
+// body {
+// 	padding-top: 120px;
+// }
+
+#category {
+	width: 240px;
+}
+
+#content {
+	margin-top: -$slide-height - 41px;
+}
+
+#header.navbar.navbar-fixed-top {
+	position: relative;
+}
+
+#logo {
+	margin-top: 30px;
+	position: absolute;
+	a {
+		color: white;
+	}
+}
+
+#left-sidebar {
+	width: $left-side-width;
+	position: absolute;
+	min-height: 500px;
+	top: 40px;
+	left: 0px;
+	bottom: 0px;
+	background: $white;
+	@include box-shadow(3px 0px 7px $grayDarker);
+	z-index: 10
+}
+
+#main {
+	margin-left: $left-side-width + $gridGutterWidth;
+	// margin-top: $slide-height;
+}
+
+#main-nav {
+	position: relative;
+	margin-top: -5px;
+	.navbar-fixed-top {
+		position: absolute;
+	}
+}
+
+#slide-back{
+	margin-top: 41px;
+	background: $blueDark url('1.png');
+	background-position: 40% 0px;	
+	height: $slide-height;
+	z-index: 1;
+}
+
+#slide-box {
+	margin-top: 41px;
+	position: relative;
+	// margin-left: -$gridGutterWidth * 2;
+	height: $slide-height;
+	z-index: 2;
+}
+
+
+
+#topbar {
+	position: absolute;
+	right: -10px;
+}
+
+#top_search {
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+
+.relative {
+	position: relative;
+}
+
+@media (max-width: 979px) {
+	body {
+		padding-top: 0;
+	}
+}

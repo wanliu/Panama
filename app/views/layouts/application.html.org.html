@@ -1,0 +1,43 @@
+<html>
+<head>
+  <title>Panama</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<%= render_cell :header, :show %>
+	<div class='second-nav-bar'></div>
+	<div class='main-slide'>
+        <style type="text/css" media="screen">
+
+        </style>		
+		<div class='slide'>
+			
+		</div>
+
+	</div>	
+	<div class='contents container'>
+		<div class='left-side shadow'>
+			<%= render_cell :category, :show %>
+		</div>
+		<div class='body'>
+			<%= render_cell :navigation, :show %>
+			<div class='main'>
+				<div class="slide-box">
+					<%= render_cell :slide, :show %>
+				</div>
+				<script type="text/javascript">
+					$(".slide-box").slides({
+						play: 5000,
+				        pause: 2500,
+				        hoverPause: true						
+					});
+				</script>
+				<%= yield %>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

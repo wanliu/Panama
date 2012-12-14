@@ -1,0 +1,2 @@
+module NewsletterReceiverHelper
+end
