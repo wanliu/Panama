@@ -34,6 +34,10 @@ gem 'apotomo' #, :github => 'hysios/apotomo', :branch => 'add_render_widget_with
 
 gem 'widget_ui', :github => 'hysios/widget_ui'
 
+# markup
+
+gem 'github-markup'
+gem 'redcarpet'
 
 gem 'rspec'
 gem 'rspec-rails'

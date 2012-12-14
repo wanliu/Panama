@@ -83,6 +83,7 @@ GEM
     faraday (0.8.4)
       multipart-post (~> 1.1)
     fssm (0.2.9)
+    github-markup (0.7.4)
     hashie (1.2.0)
     hike (1.2.1)
     hirb (0.7.0)
@@ -155,6 +156,7 @@ GEM
     rake (10.0.3)
     rdoc (3.12)
       json (~> 1.4)
+    redcarpet (2.2.2)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
@@ -209,6 +211,7 @@ DEPENDENCIES
   compass-h5bp
   compass-rails
   debugger
+  github-markup
   hirb
   html5-rails
   jquery-rails
@@ -217,6 +220,7 @@ DEPENDENCIES
   omniauth
   omniauth-oauth2
   rails (= 3.2.8)
+  redcarpet
   rspec
   rspec-cells
   rspec-rails
