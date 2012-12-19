@@ -3,7 +3,7 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head" %>
 <body class="<%= controller.controller_name %>">
-	<%= render_cell :header, :show %>
+	<%= render "header" %>
 	<div id='wrapper' class='container'>
 		<%= yield %>
 	</div>

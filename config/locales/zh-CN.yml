@@ -209,6 +209,7 @@ zh-CN:
         template: "模板"
         lock: "锁"
         shop_id: "Shop ID"
+        util: "工具"
 
   dashboard: 状态
   contents: 内容
@@ -216,4 +217,4 @@ zh-CN:
   menu: 菜单
   components: 组件
   media: 媒体
-  create: '新增'
+  create: 新增

@@ -3,6 +3,8 @@ class Admins::BaseController < ApplicationController
 
   layout "admins"
 
+  helper_method :current_admin_path
+
   cattr_accessor :sections
 
   def section
@@ -26,6 +28,9 @@ class Admins::BaseController < ApplicationController
     end
   end
 
+  def current_admin_path
+    "/shops/#{params[:shop_id]}/admins/"
+  end
 end
 
 Admins::BaseController.sections = []

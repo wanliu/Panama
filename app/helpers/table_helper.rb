@@ -19,21 +19,14 @@ module TableHelper
       @output_buffer ||= ActiveSupport::SafeBuffer.new
     end
 
-    def initialize(records = nil, options)
-      # ignore_names.concat(options[:ignore_heads] || [])
-
-      # case model_klass
-      # when Symbol
-      #   klass = model_klass.to_s.classify.constantize
-      # when String
-      #   klass = model_klass.classify.constantize
-      # when Class
-      #   klass = model_klass
-      # else
-      #   raise ArgumentError.new 'invalide type, must be Symbol, String, or Model Class'
-      # end
-
-      # @heads = klass.fields.keys - ignore_names
+    def initialize(records = nil, options = {})
+      @additional_heads = {}
+      add_columns = options[:add_column] || []
+      add_columns.each do |col|
+        name = col.keys[0]
+        value = col.values[0]
+        @additional_heads[name] = {:name => name , :proc => value } 
+      end
     end
 
     def table_head(heads, *args)
@@ -58,15 +51,21 @@ module TableHelper
       output_buffer << content_tag(:tr, tr_options) do
         @heads.each do |column|
           output_buffer << content_tag(:td, td_options) do 
-            col = row.read_attribute(column.to_sym)
-            # todo: how to pass format options argument
-            # todo: how to change time to user timezone
-            output_buffer << (case col
-                              when DateTime, Time ,Date
-                                I18n.l col, :format => :short
-                              else
-                                col.to_s
-                              end)
+            column_sym = column.to_sym
+            col = row.read_attribute(column_sym)
+            if col.nil?
+              callback = @additional_heads[column_sym][:proc] if @additional_heads[column_sym]
+              output_buffer <<  callback.call if callback
+            else
+              # todo: how to pass format options argument
+              # todo: how to change time to user timezone
+              output_buffer << (case col
+                                when DateTime, Time ,Date
+                                  I18n.l col, :format => :short
+                                else
+                                  col.to_s
+                                end)
+            end
           end
         end
       end

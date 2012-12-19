@@ -62,4 +62,8 @@ module ApplicationHelper
     @@javascripts_codes[widget_id] = code
     nil
   end
+
+  def icon(name)
+    content_tag :i, nil, :class => "icon-#{name}"
+  end
 end

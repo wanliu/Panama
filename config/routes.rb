@@ -3,15 +3,28 @@ Panama::Application.routes.draw do
   resources :contents
   resources :newsletter_receivers
 
-  resources :shops do
-    scope :module => "admins" do
-      match "admins", :to => 'shop#index'
-      match "admins/:section_name", :to => 'shop#section'
-      # resources :shop, :path => "admins", :as => "admins" do 
-      #   collection :section
-      # end
+  # resources :shops do
+  #   scope :module => "admins" do
+  #     match "admins", :to => 'shop#index'
+  #     match "admins/:section_name", :to => 'shop#section'
+  #     # resources :shop, :path => "admins", :as => "admins" do 
+  #     #   collection :section
+  #     # end
+  #   end
+  # end
+  # 
+
+  resources :shops do 
+    namespace :admins do 
+      resources :contents, :controller => "shops/contents"
     end
   end
+
+  match "shops/:shop_id/admins/", :to => "admins/shops#index"
+
+  # match "shops/:shop_id/admins/contents", :to => "admins/shops/contents"
+
+  # match "shops/:shop_id/admins/", :to => "admins/shops#index"
 
   resources :search
   

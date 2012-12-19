@@ -19,8 +19,9 @@ class TableWidget < CommonWidget
 
     if args.length > 0
       table_options = args.shift
+
       locals.merge! table_options
-      locals[:options] = args.first
+      locals[:options] = table_options.slice(:add_column)
     else
       locals[:options] = nil
     end

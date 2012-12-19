@@ -1,0 +1,28 @@
+<div id="page" >
+	<div class="row-fluid">
+		<div class="span9">
+			<div class="row-fluid">
+				<%= render_widget :search, :display, :content_query, nil, :class => 'span12' %>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="row-fluid">
+				<%= render_widget :new_content, :display, t(:create), "#", :class => 'span12' %>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<%= render_widget :table, :display, @contents, nil, 
+			:heads => [:name, :template, :created_at, :updated_at, :util],
+			:head_options => { 
+				:class => %w(table table-striped table-bordered table-hover)
+			},
+			:add_column => [ {:util => proc do 
+				content_tag :div, :class => 'btn-group' do 
+					link_to(icon(:edit), "#", :class => 'btn') +
+					link_to(icon(:remove), "#", :class => 'btn')
+				end
+			end }]
+		%>
+	</div>
+</div>
