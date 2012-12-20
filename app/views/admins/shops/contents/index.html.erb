@@ -7,7 +7,8 @@
 		</div>
 		<div class="span3">
 			<div class="row-fluid">
-				<%= render_widget :new_content, :display, t(:create), "#", :class => 'span12' %>
+				<%= link_to t(:create), "#/new", :class => 'btn', :id => :new_content %>
+
 			</div>
 		</div>
 	</div>
@@ -17,12 +18,58 @@
 			:head_options => { 
 				:class => %w(table table-striped table-bordered table-hover)
 			},
-			:add_column => [ {:util => proc do 
+			:add_column => [ {:util => proc do |row|
 				content_tag :div, :class => 'btn-group' do 
-					link_to(icon(:edit), "#", :class => 'btn') +
-					link_to(icon(:remove), "#", :class => 'btn')
+					link_to(icon(:edit), "#/#{row[:_id]}/edit", :class => 'btn utils edit') +
+					link_to(icon(:remove), "#", :'data-delete-url' => "#{row[:_id]}", :class => 'btn utils delete')
 				end
-			end }]
+			end }],
+			:hide_column => [:_id]
 		%>
+
 	</div>
 </div>
+<script type="text/javascript">
+	require(['jquery','ajaxify', 'panama'], function(jquery, Ajaxify, Panama){
+		Ajaxify.addRoute("default", function(){
+			Panama.loadPage("#page", "<%= shop_admins_contents_path %>");
+		});
+
+		// new button js process
+		Ajaxify.addRoute("new", function(){
+			Panama.loadPage("#page", "<%= new_shop_admins_content_path %>");
+		});
+
+		// delete button js process
+		Ajaxify.addRoute("{id}/edit", function(id) {
+			var url = "<%= shop_admins_contents_path %>/" + id + "/edit";
+			Panama.loadPage("#page", "<%= shop_admins_contents_path %>/" + id + "/edit");
+		});
+
+		$("#table a.utils.delete").on("click", function(){
+			var url = "<%= shop_admins_contents_path %>/" + $(this).attr('data-delete-url');
+			$.post(url, { _method: "delete"}, $.proxy(function(data,  textStatus, jqxhr){
+				if (textStatus === 'success'){
+					$(this).parents("tr")
+						.css('display', 'block')
+						.slideUp('slow', function(){
+							this.remove();
+						})
+				}
+			}, this));
+		});
+
+		// todo: jquery table freeze 
+
+		setTimeout(function(){
+			function has_anchor() {
+				return /#+/.test(location.href);
+			}
+
+			if (!has_anchor()){
+				Ajaxify.go("default");
+			}
+			
+		}, 10);
+	});
+</script>

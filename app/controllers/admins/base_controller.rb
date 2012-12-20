@@ -1,5 +1,5 @@
 class Admins::BaseController < ApplicationController
-  include Apotomo::Rails::ControllerMethods
+
 
   layout "admins"
 

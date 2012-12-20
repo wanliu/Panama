@@ -1,11 +1,27 @@
 <div class="child">
 	<%= widget_div do %>
-	  <h1>
-	    Contents::ArticleWidget#display
-	  </h1>
-
-	  <p>
-	    Find me in app/widgets/contents/article/display.html.erb
-	  </p>
+	<div class="editor" placeholder="请在此输入内容">
+		
+	</div>
 	<% end %>
 </div>
+<script type="text/javascript">
+	require(['jquery', 'hallo'], function($){
+		var query = "#<%= widget_id %> .editor";
+		console.log(query);
+		console.log($(query));
+		var hallo = $(query)
+			.hallo({
+				plugins: {
+					'halloformat': {},
+					'halloblock': {},
+					'hallojustify': {},
+					'hallolists': {},
+					'halloimage': {}
+				},
+				showAlways: true
+			});
+		hallo =	hallo.data('hallo');
+		hallo._setToolbarPosition(40);
+	})
+</script>

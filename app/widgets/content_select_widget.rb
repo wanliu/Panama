@@ -1,6 +1,4 @@
-class ContentSelectWidget < CommonWidget
-  helper_method :options_for_items
-  responds_to_event :choose
+class ContentSelectWidget < ComboBoxWidget
 
   def display(query)
     @query = query
@@ -8,22 +6,10 @@ class ContentSelectWidget < CommonWidget
       {value: 'article', text: 'Article'}, 
       {value: 'text', text: 'Text'},
       {value: 'datetime', text: 'Date && Time'},
-      {value: 'query_language', text: 'Data Query'}
+      {value: 'query_language', text: 'Data Query'},
+      {value: 'page', text: 'Page'}
     ]
     
     render
   end
-
-  def choose(event)
-  end
-
-  protected 
-  def options_for_items(items)
-    output = ActiveSupport::SafeBuffer.new
-    items.each do |item|
-      output << "<option value=#{item[:value]}>#{item[:text]}</option>".html_safe
-    end
-    output
-  end
-
 end

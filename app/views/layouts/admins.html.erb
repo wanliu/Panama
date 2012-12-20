@@ -4,6 +4,7 @@
 <%= render "head" %>
 <% content_for :module_stylesheet do %>
   <%= stylesheet_link_tag "admins" %>
+  <%= javascript_include_tag "admins" %>
 <% end %>
 <body class="<%= controller.controller_name %>">
 	  <%= yield :module_stylesheet %>
@@ -21,5 +22,10 @@
 	</div>
     <%#= render "javascripts" %>
 	<%= javascripts_codes %>
+	<script type="text/javascript">
+		require(['ajaxify'], function(Ajaxify){
+			Ajaxify.start();
+		});
+	</script>
 </body>
 </html>

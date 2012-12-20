@@ -25,6 +25,7 @@ end
 gem 'cache_digests'
 gem 'jquery-rails'
 gem 'html5-rails'
+gem 'requirejs-rails'
 
 gem 'omniauth'
 gem 'omniauth-oauth2'
@@ -32,7 +33,7 @@ gem 'omniauth-oauth2'
 # gem 'cells'
 gem 'apotomo' #, :github => 'hysios/apotomo', :branch => 'add_render_widget_with_block'
 
-gem 'widget_ui', :github => 'hysios/widget_ui'
+# gem 'widget_ui', :github => 'hysios/widget_ui'
 
 # markup
 

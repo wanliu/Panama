@@ -1,3 +1,8 @@
+//= require_self
+//= require 'hallo'
+//= require 'image'
+//= require 'jquery-ui-1.8.16.custom'
+
 @import "variables";
 
 #admin_content { 
@@ -11,4 +16,8 @@
 	top: 0px;
 	left: 0px;
 	bottom: 0px;	
+}
+
+.editor {
+	border: 4px dashed #ccc;
 }

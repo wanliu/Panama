@@ -1,11 +1,3 @@
-GIT
-  remote: git://github.com/hysios/widget_ui.git
-  revision: fc5bebe13000e75faec552541a5a0a2310886af3
-  specs:
-    widget_ui (0.0.2)
-      apotomo
-      hooks (~> 0.2.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -157,6 +149,8 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     redcarpet (2.2.2)
+    requirejs-rails (0.9.0)
+      railties (>= 3.1.1, < 3.3)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
@@ -221,6 +215,7 @@ DEPENDENCIES
   omniauth-oauth2
   rails (= 3.2.8)
   redcarpet
+  requirejs-rails
   rspec
   rspec-cells
   rspec-rails
@@ -228,4 +223,3 @@ DEPENDENCIES
   thin
   uglifier (>= 1.0.3)
   vfs
-  widget_ui!

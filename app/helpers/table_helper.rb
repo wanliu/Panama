@@ -21,12 +21,14 @@ module TableHelper
 
     def initialize(records = nil, options = {})
       @additional_heads = {}
+      @hidden_heads = []
       add_columns = options[:add_column] || []
       add_columns.each do |col|
         name = col.keys[0]
         value = col.values[0]
         @additional_heads[name] = {:name => name , :proc => value } 
       end
+      @hidden_heads = options[:hide_column] || []
     end
 
     def table_head(heads, *args)
@@ -39,6 +41,9 @@ module TableHelper
           content_tag :tr, tr_options do 
           @heads.each do |column|
             output_buffer << content_tag(:th, I18n.t("mongoid.attributes.content.#{column}"), th_options)
+          end
+          @hidden_heads.each do |column|
+            output_buffer << content_tag(:th, column, :class => "hide" )
           end
         end
       end)
@@ -55,21 +60,33 @@ module TableHelper
             col = row.read_attribute(column_sym)
             if col.nil?
               callback = @additional_heads[column_sym][:proc] if @additional_heads[column_sym]
-              output_buffer <<  callback.call if callback
+              output_buffer << callback.call(row) if callback
             else
               # todo: how to pass format options argument
               # todo: how to change time to user timezone
-              output_buffer << (case col
-                                when DateTime, Time ,Date
-                                  I18n.l col, :format => :short
-                                else
-                                  col.to_s
-                                end)
+              output_buffer << content_to(col)
             end
           end
         end
+
+        @hidden_heads.each do |column_sym|
+          column_sym
+          col = row.read_attribute(column_sym)
+          output_buffer << content_tag(:td, :class => "hide") do 
+            output_buffer << content_to(col)
+          end
+        end        
       end
       output_buffer
+    end
+
+    def content_to(col)
+      case col
+      when DateTime, Time ,Date
+        I18n.l col, :format => :short
+      else
+        col.to_s
+      end
     end
 
     def table_footer(options)

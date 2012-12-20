@@ -10,8 +10,10 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
-//= require jquery_ujs
-//= require h5bp
-//= require slides.jquery
 
+
+define('Panama', function(require, exports, modules){
+	var $ = require('jquery');
+	var $ = require('jquery_ui');
+	var h5bp = require('h5bp');
+});

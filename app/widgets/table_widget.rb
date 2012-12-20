@@ -21,7 +21,7 @@ class TableWidget < CommonWidget
       table_options = args.shift
 
       locals.merge! table_options
-      locals[:options] = table_options.slice(:add_column)
+      locals[:options] = table_options.slice(:add_column, :hide_column)
     else
       locals[:options] = nil
     end
