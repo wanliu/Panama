@@ -9,7 +9,7 @@ class ContainerWidget < CommonWidget
 
   def change(evt)
     content_type = evt[:value]
-    widget("contents/#{content_type}", content_type).build(self) unless root.find_widget(content_type)
+    widget("contents/#{content_type}", content_type.to_sym).build(root) unless root.find_widget(content_type)
     replace ".child", :widget => content_type, :view => :display
   end
 

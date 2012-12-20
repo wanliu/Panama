@@ -4,6 +4,7 @@
 <%= render "head" %>
 <% content_for :module_stylesheet do %>
   <%= stylesheet_link_tag "admins" %>
+  <%= javascript_include_tag "rangy-core-1.2.3" %>
   <%= javascript_include_tag "admins" %>
 <% end %>
 <body class="<%= controller.controller_name %>">

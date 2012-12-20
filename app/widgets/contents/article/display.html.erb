@@ -3,10 +3,16 @@
 	<div class="editor" placeholder="请在此输入内容">
 		
 	</div>
+	<div class="pull-right">
+		<form class="form-inline">
+		<%= render_widget :save_article, :display, t(:save) %>
+		<%= render_widget :cancel_article, :display, t(:cancel) %>
+		</form>
+	</div>
 	<% end %>
 </div>
 <script type="text/javascript">
-	require(['jquery', 'hallo'], function($){
+	require(['jquery-ui', 'hallo'], function($){
 		var query = "#<%= widget_id %> .editor";
 		console.log(query);
 		console.log($(query));
@@ -17,11 +23,17 @@
 					'halloblock': {},
 					'hallojustify': {},
 					'hallolists': {},
-					'halloimage': {}
+					'halloimage': {},
+					'halloannotate': {}
 				},
 				showAlways: true
 			});
 		hallo =	hallo.data('hallo');
 		hallo._setToolbarPosition(40);
+
+		$("#save_article").on('click', function(){
+			$.post("<%= url_for_event(:save) %>", {content: $(".editor").html()});
+			return false;
+		})
 	})
 </script>

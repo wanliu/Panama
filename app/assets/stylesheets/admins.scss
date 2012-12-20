@@ -1,7 +1,8 @@
-//= require_self
+//= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
 //= require 'hallo'
 //= require 'image'
-//= require 'jquery-ui-1.8.16.custom'
+//= require 'annotate'
+//= require_self
 
 @import "variables";
 
@@ -20,4 +21,5 @@
 
 .editor {
 	border: 4px dashed #ccc;
+	min-height: 400px;
 }

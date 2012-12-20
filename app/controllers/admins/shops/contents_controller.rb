@@ -9,7 +9,8 @@ class Admins::Shops::ContentsController < Admins::Shops::SectionController
     root << widget(:input, :content_name)
     root << widget(:content_select, :choose_content)
     root << widget(:table, :source => @contents)
-    root << widget(:container, :widget => :choose_content)
+    container = root << widget(:container, :widget => :choose_content)
+    container << widget("contents/article", :article)
     root << widget(:template_combo_box, :choose_template, :shop => @current_shop)
   end
 

@@ -1,11 +1,2 @@
-<%= widget_div do %>
- 	<%= link_to @title, @url_options, @html_options %>
-<% end %>
+<%= link_to @title, @url_options, @html_options %>
 
-<script type="text/javascript">
-	var button = $("#<%= widget_id %> a");
-	button.click(function(event){
-		$.getScript(button.attr("data-event-url"));
-		// return false;
-	})
-</script>
