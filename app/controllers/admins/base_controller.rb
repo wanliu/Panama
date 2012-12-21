@@ -3,6 +3,8 @@ class Admins::BaseController < ApplicationController
 
   layout "admins"
 
+  before_filter :login_required
+
   helper_method :current_admin_path
 
   cattr_accessor :sections

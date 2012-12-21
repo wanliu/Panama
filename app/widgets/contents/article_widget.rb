@@ -13,7 +13,6 @@ class Contents::ArticleWidget < Apotomo::Widget
 
   def save(evt)
     if evt[:content_id].nil?
-      debugger
       @content = Contents::Article.create(data: evt[:content])
     else
       @content = Contents::Article.find(evt[:content_id])

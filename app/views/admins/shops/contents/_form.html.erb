@@ -1,0 +1,11 @@
+<div id="form_editor">
+	<%= simple_form_for @content, :url => admins_contents(@content), :remote => true do |f| %>
+		<%= f.input :name %>
+		<%#= f.input :name %>
+		<%#= f.input :template, :collection => @files %>
+		<%= f.input :template, :collection => @templates, :prompt => "Select a template" %>
+		<%= render_widget :content_type, :display, @content.data %>
+		<%= render_widget :container %>
+		<%= f.button :submit, :save %>
+	<% end %>
+</div>

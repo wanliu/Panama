@@ -1,7 +1,9 @@
 class ContentSelectWidget < ComboBoxWidget
 
-  def display(query)
-    @query = query
+  def display(selected)
+    unless selected.nil?
+      @selected = selected.class.undescore
+    end
     @items = [
       {value: 'article', text: 'Article'}, 
       {value: 'text', text: 'Text'},
@@ -9,7 +11,6 @@ class ContentSelectWidget < ComboBoxWidget
       {value: 'query_language', text: 'Data Query'},
       {value: 'page', text: 'Page'}
     ]
-    
     render
   end
 end

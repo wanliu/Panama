@@ -1,6 +1,4 @@
-<%= widget_div do %>
-	<%= select_tag @query, options_for_items(@items) %>
-<% end %>
+<%= select_tag widget_id, options_for_items(@items, @selected) %>
 
 <script type="text/javascript">
 	$("#<%= widget_id %>").change(function(event){

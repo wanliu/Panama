@@ -1,1 +1,1 @@
-require(['application', 'ajaxify'])
+require(['application', 'ajaxify', 'jquery', 'jquery_ujs'])
