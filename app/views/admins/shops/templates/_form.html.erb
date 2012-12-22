@@ -1,0 +1,22 @@
+<div id="form_editor">
+	<%= simple_form_for @template, :url => admins_template(@template), :remote => true do |f| %>
+		<%= f.input :name %>
+		<%= f.input :data %>
+		<%= f.button :submit, :save %>
+	<% end %>
+	<script type="text/javascript">
+		require(['jquery'], function($){
+			var form = $("#form_editor>form");
+			form.bind('ajax:before', function(){
+				console.log('ajax:before');
+				$("<input/>")
+					.attr('name', 'content[resource]')
+					.attr('type', 'hidden')
+					.val(form.find(".editor").html())
+					.appendTo(form);
+				console.log($("#form_editor>form").serialize());
+			})
+
+		})
+	</script>
+</div>

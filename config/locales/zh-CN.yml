@@ -219,3 +219,14 @@ zh-CN:
   media: 媒体
   create: 新增
   templates: 模板
+
+  table:
+    heads:
+      name: "名称"
+      created_at: "创建于"
+      updated_at: "修改于"
+      template: "模板"
+      lock: "锁"
+      shop_id: "Shop ID"
+      util: "工具"
+      path: "路径"

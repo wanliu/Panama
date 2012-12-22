@@ -14,13 +14,39 @@ Panama::Application.routes.draw do
   # end
   # 
 
+  # shop admins routes
+  resources :shops do 
+    namespace :admins do 
+      resources :dashboard, :controller => "shops/dashboard"
+    end
+  end
+
   resources :shops do 
     namespace :admins do 
       resources :contents, :controller => "shops/contents"
     end
   end
 
+  resources :shops do 
+    namespace :admins do 
+      resources :menu, :controller => "shops/menu"
+    end
+  end
+
+  resources :shops do 
+    namespace :admins do 
+      resources :categories, :controller => "shops/categories"
+    end
+  end  
+
+  resources :shops do 
+    namespace :admins do 
+      resources :templates, :controller => "shops/templates"
+    end
+  end  
+
   match "shops/:shop_id/admins/", :to => "admins/shops#index"
+
 
   # match "shops/:shop_id/admins/contents", :to => "admins/shops/contents"
 

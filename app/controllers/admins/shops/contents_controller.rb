@@ -1,5 +1,4 @@
 class Admins::Shops::ContentsController < Admins::Shops::SectionController
-  include Apotomo::Rails::ControllerMethods
   
   before_filter :prepend_data, :only => [:new, :edit, :create, :update]
 

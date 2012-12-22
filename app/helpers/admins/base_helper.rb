@@ -12,5 +12,13 @@ module Admins
         shop_admins_content_path params[:shop_id], record
       end
     end
+
+    def admins_template(record)
+      if record.new_record?
+        shop_admins_templates_path params[:shop_id]
+      else
+        shop_admins_template_path params[:shop_id], record
+      end      
+    end
   end
 end

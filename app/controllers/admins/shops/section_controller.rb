@@ -1,4 +1,6 @@
 class Admins::Shops::SectionController < Admins::BaseController
+  include Apotomo::Rails::ControllerMethods
+  
   before_filter :current_shop, :only => [:new, :index, :edit]
 
   section :dashboard

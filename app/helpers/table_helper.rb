@@ -1,4 +1,5 @@
 require 'action_view/helpers/tag_helper'
+require 'active_record'
 
 module TableHelper
 
@@ -22,6 +23,7 @@ module TableHelper
     def initialize(records = nil, options = {})
       @additional_heads = {}
       @hidden_heads = []
+      @heads = options[:heads]
       add_columns = options[:add_column] || []
       add_columns.each do |col|
         name = col.keys[0]
@@ -31,8 +33,8 @@ module TableHelper
       @hidden_heads = options[:hide_column] || []
     end
 
-    def table_head(heads, *args)
-      @heads ||= heads
+    def table_head(heads = nil, *args)
+      @heads = heads unless heads.nil?
       table_options, tr_options, th_options = parse_head_args args
       cleanup!
 
@@ -40,7 +42,7 @@ module TableHelper
       output_buffer << (content_tag :thead do 
           content_tag :tr, tr_options do 
           @heads.each do |column|
-            output_buffer << content_tag(:th, I18n.t("mongoid.attributes.content.#{column}"), th_options)
+            output_buffer << content_tag(:th, I18n.t("table.heads.#{column}"), th_options)
           end
           @hidden_heads.each do |column|
             output_buffer << content_tag(:th, column, :class => "hide" )
@@ -57,7 +59,7 @@ module TableHelper
         @heads.each do |column|
           output_buffer << content_tag(:td, td_options) do 
             column_sym = column.to_sym
-            col = row.read_attribute(column_sym)
+            col = adapter(row).read_attribute(column_sym)
             if col.nil?
               callback = @additional_heads[column_sym][:proc] if @additional_heads[column_sym]
               output_buffer << callback.call(row) if callback
@@ -89,8 +91,19 @@ module TableHelper
       end
     end
 
-    def table_footer(options)
+    def table_footer(options = {})
       tag "/table", nil, true
+    end
+
+    def adapter(row)
+      case row
+      when ::ActiveRecord::Base
+        TableRowAdapter::ActiveRecord.new(row)
+      when ::Mongoid::Document
+        TableRowAdapter::Mongoid.new(row)
+      when ::Hash
+        TableRowAdapter::Hash.new(row)
+      end
     end
 
     protected
@@ -107,4 +120,33 @@ module TableHelper
       end
   end
 
+  module TableRowAdapter
+    class Base
+      attr_reader :record 
+      def initialize(record)
+        @record = record
+      end
+
+      def read_attribute(column)
+      end
+    end
+
+    class ActiveRecord < Base
+      def read_attribute(column)
+        record.read_attribute(column)
+      end
+    end
+
+    class Mongoid < Base
+      def read_attribute(column)
+        record.read_attribute(column)
+      end
+    end
+
+    class Hash < Base
+      def read_attribute(column)
+        record[column]
+      end
+    end
+  end
 end
