@@ -18,18 +18,27 @@ class Admins::Shops::ContentsController < Admins::Shops::SectionController
 
   def new
     @content = Content.new
+    @content_type = :article
   end
 
   def index
     @contents = current_shop.contents
   end
 
+  def params_hash(hash)
+     hash.delete(:resource)
+  end
+
   def create
-    content_params = {
+    hash = {
       :shop_id => current_shop.id
     }.merge(params[:content])
 
-    @content = Content.create(content_params)
+    resource_data = hash.delete("resource")
+    @content = Content.create(hash)
+    klass = params[:content_type].classify.constantize
+    
+    @content.resources.build({:name => hash[:name], :data => resource_data}, klass)
     if @content.save
       render :js => "alert('save is ok!')"
     else
@@ -41,12 +50,20 @@ class Admins::Shops::ContentsController < Admins::Shops::SectionController
 
   def edit
     @content = current_shop.contents.find(params[:id])
+    if @content.resource.blank?
+      @content_type = :article
+    else
+      @content_type = @content.resource.class.name.underscore.to_sym
+    end
   end
 
   def update
     @content = current_shop.contents.find(params[:id])
     @content.update_attributes(params[:content])
-    if @content.save
+    resource_data = params[:content].delete("resource")
+    @content.resource.data = resource_data
+
+    if @content.save and @content.resource.save
       render :js => "alert('save is ok!')"
     else
       respond_to do |format|

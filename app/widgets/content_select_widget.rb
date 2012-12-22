@@ -2,7 +2,7 @@ class ContentSelectWidget < ComboBoxWidget
 
   def display(selected)
     unless selected.nil?
-      @selected = selected.class.undescore
+      @selected = selected.class.name.underscore
     end
     @items = [
       {value: 'article', text: 'Article'}, 

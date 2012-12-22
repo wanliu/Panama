@@ -6,8 +6,8 @@ class Contents::ArticleWidget < Apotomo::Widget
     self << widget(:button, :cancel_article)      
   end
 
-  def display
-
+  def display(content)
+    @content = content
     render
   end
 

@@ -52,7 +52,7 @@
 				if (textStatus === 'success'){
 					$(this).parents("tr")
 						.css('display', 'block')
-						.slideUp('slow', function(){
+						.slideUp(function(){
 							this.remove();
 						})
 				}

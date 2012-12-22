@@ -4,8 +4,23 @@
 		<%#= f.input :name %>
 		<%#= f.input :template, :collection => @files %>
 		<%= f.input :template, :collection => @templates, :prompt => "Select a template" %>
-		<%= render_widget :content_type, :display, @content.data %>
-		<%= render_widget :container %>
+		<%= render_widget :content_type, :display, @content.resource %>
+		<%= render_widget :container, :display, @content.resource %>
 		<%= f.button :submit, :save %>
 	<% end %>
+	<script type="text/javascript">
+		require(['jquery'], function($){
+			var form = $("#form_editor>form");
+			form.bind('ajax:before', function(){
+				console.log('ajax:before');
+				$("<input/>")
+					.attr('name', 'content[resource]')
+					.attr('type', 'hidden')
+					.val(form.find(".editor").html())
+					.appendTo(form);
+				console.log($("#form_editor>form").serialize());
+			})
+
+		})
+	</script>
 </div>
