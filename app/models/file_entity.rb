@@ -37,6 +37,16 @@ class FileEntity
     self.stat == 'directory'
   end
 
+  def file
+    path = Rails.root.join("tmp/")
+    if file?
+      @file = Tempfile.new("vfs_" + name, path)
+      @file.write(read)
+      @file.rewind
+      @file
+    end
+  end
+
   def file?
     self.stat == 'file'
   end

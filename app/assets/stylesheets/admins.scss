@@ -3,6 +3,8 @@
 //= require 'image'
 //= require 'annotate'
 //= require_self
+//
+$left-side-admin-width :200px;
 
 @import "variables";
 
@@ -11,7 +13,7 @@
 }
 
 #admin_left_side {
-	width: $left-side-width;
+	width: $left-side-admin-width;
 	position: absolute;
 	min-height: 500px;
 	top: 0px;
@@ -19,7 +21,24 @@
 	bottom: 0px;	
 }
 
+#admin_main {
+	margin-left: $left-side-admin-width + $gridGutterWidth;
+	// margin-top: $slide-height;
+}
+
 .editor {
 	border: 4px dashed #ccc;
 	min-height: 400px;
+}
+
+.indent_1 td:first-child{
+	padding-left: $gridGutterWidth * 2;
+}
+
+.indent_2 td:first-child {
+	padding-left: $gridGutterWidth * 4;
+}
+
+.indent_3 td:first-child {
+	padding-left: $gridGutterWidth * 8;
 }

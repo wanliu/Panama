@@ -2,12 +2,18 @@ class Admins::Shops::SectionController < Admins::BaseController
   include Apotomo::Rails::ControllerMethods
   
   before_filter :current_shop, :only => [:new, :index, :edit]
+  helper_method :current_section 
 
-  section :dashboard
-  section :contents
-  section :menu
-  section :categories
-  section :templates
+  section :dashboard, :top
+  section :pending, :transactions
+  section :complete, :transactions
+  section :transport, :transportation
+  section :products, :products
+  section :categories, :products
+  section :complaint, :service
+  section :contents, :design
+  section :menu, :design
+  section :templates, :design
 
   cattr_accessor :ajaxify_pages_names
   @@ajaxify_pages_names = []
@@ -27,5 +33,9 @@ class Admins::Shops::SectionController < Admins::BaseController
       args.push options
     end
     super
+  end
+
+  def current_section
+    self.controller_name
   end
 end

@@ -11,7 +11,10 @@ class Shop
   field :name, type: String
 
   before_create :create_shop
+  after_create :initial_shop_data
   before_destroy :delete_shop
+
+  has_one :category
 
   validates :name, presence: true
   validates :name, uniqueness: true
@@ -27,6 +30,11 @@ class Shop
     load_default_contents
 
     write_default_options
+  end
+
+  def initial_shop_data
+    @category = create_category(:name => name + "_" + "root") unless category
+    @category.load_default
   end
 
   def delete_shop

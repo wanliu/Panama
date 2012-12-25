@@ -1,5 +1,13 @@
 Panama::Application.routes.draw do
 
+  get "transport/index"
+
+  get "products/index"
+
+  get "complete/index"
+
+  get "pending/index"
+
   resources :contents
   resources :newsletter_receivers
 
@@ -37,7 +45,38 @@ Panama::Application.routes.draw do
     namespace :admins do 
       resources :categories, :controller => "shops/categories"
     end
-  end  
+  end
+
+  resources :shops do 
+    namespace :admins do 
+      resources :products, :controller => "shops/products"
+    end
+  end
+
+  resources :shops do 
+    namespace :admins do 
+      resources :pending, :controller => "shops/pending"
+    end
+  end
+
+  resources :shops do 
+    namespace :admins do 
+      resources :complete, :controller => "shops/complete"
+    end
+  end
+
+  resources :shops do 
+    namespace :admins do 
+      resources :complaint, :controller => "shops/complaint"
+    end
+  end
+
+  resources :shops do 
+    namespace :admins do 
+      resources :transport, :controller => "shops/transport"
+    end
+  end
+
 
   resources :shops do 
     namespace :admins do 
@@ -45,7 +84,7 @@ Panama::Application.routes.draw do
     end
   end  
 
-  match "shops/:shop_id/admins/", :to => "admins/shops#index"
+  match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index"
 
 
   # match "shops/:shop_id/admins/contents", :to => "admins/shops/contents"

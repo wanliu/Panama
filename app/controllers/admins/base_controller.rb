@@ -5,9 +5,7 @@ class Admins::BaseController < ApplicationController
 
   before_filter :login_required
 
-  helper_method :current_admin_path
-
-  cattr_accessor :sections
+  helper_method :current_admin_path, :sections
 
   def section
     name = params[:section_name]
@@ -18,15 +16,27 @@ class Admins::BaseController < ApplicationController
     render name
   end
 
-  def sections
-    self.class.sections
+  def sections(category = nil)
+    if category == :all || category.nil?
+      self.class.sections
+    elsif category.is_a?(Array)
+      self.class.sections.select { |s| category.include?(s[:category]) }
+    else
+      self.class.sections.select { |s| category == s[:category] }
+    end
   end
 
   protected
 
   class << self
-    def section(name, *args, &block)
-      sections << {:name => name, :block => block}
+    @@sections = []
+
+    def section(name, category, *args, &block)
+      @@sections << {:name => name, :category => category, :block => block}
+    end
+
+    def sections
+      @@sections ||= []
     end
   end
 
@@ -34,5 +44,3 @@ class Admins::BaseController < ApplicationController
     "/shops/#{params[:shop_id]}/admins/"
   end
 end
-
-Admins::BaseController.sections = []

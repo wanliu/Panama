@@ -3,13 +3,14 @@ class TableWidget < CommonWidget
 
   attr_reader  :ignore_names
 
+  AVAILABLE_OPTIONS_NAMES = %w(add_column modify_column hide_column heads nest_table_field children_field adapter)
+
   def display(records = [], model = nil, *args, &block)
     @records = records
     @model = model
 
-    if model.nil? && records.size == 0 
-      raise ArgumentError.new("can't get records Model information, please pass :model argument")
-    end
+    _options = args.first
+    @heads = _options[:heads]
 
     locals = {
       records: records
@@ -21,7 +22,7 @@ class TableWidget < CommonWidget
       table_options = args.shift
 
       locals.merge! table_options
-      locals[:options] = table_options.slice(:add_column, :hide_column)
+      locals[:options] = table_options.slice(*AVAILABLE_OPTIONS_NAMES.map(&:to_sym))
     else
       locals[:options] = nil
     end
@@ -37,13 +38,25 @@ class TableWidget < CommonWidget
   end
 
   def extract_table_options(args)
-    [args[0] || {}, args[1] || {} , args[2] || {}]
+    [args[0] , args[1], args[2]]
   end
 
   def default_fields
-    @klass = @model || @records.first.class
-    @klass = @klass.is_a?(Symbol) ? @klass.to_s : @klass          
-    @klass.fields.keys - ignore_names
+    if @model.nil?
+      if not (@records && @records.is_a?(Array) && @records.first)
+        if !@heads.nil?
+          @fields = @heads
+        else
+          raise ArgumentError.new("can't get records Model information, please pass :model argument")          
+        end
+      else
+        @klass = @records.first.class
+        @klass.fields.keys - ignore_names
+      end
+    else
+      @klass = @model
+      @klass.fields.keys - ignore_names
+    end
   end
 
   def default_options

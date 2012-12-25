@@ -214,6 +214,12 @@ zh-CN:
   dashboard: 状态
   contents: 内容
   categories: 分类
+  category: 分类
+  pending: 未处理
+  complete: 完成的
+  transport: 运输中
+  complaint: 投诉
+  products: 商品
   menu: 菜单
   components: 组件
   media: 媒体
@@ -230,3 +236,8 @@ zh-CN:
       shop_id: "Shop ID"
       util: "工具"
       path: "路径"
+      customer: 客户
+      price: "单价"
+      amount: 数量
+      bonus: 优惠
+
