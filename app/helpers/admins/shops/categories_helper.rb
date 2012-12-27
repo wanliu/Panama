@@ -23,7 +23,7 @@ module Admins::Shops::CategoriesHelper
       content_tag :div, :class => 'btn-group' do 
         link_to(icon(:edit), "#/#{category.id}/edit", :class => 'btn utils edit') +
         link_to(icon(:remove), "#", 
-          :'data-delete-url' => "#{category.id}", 
+          :'data-delete-url' => admins_categories(category), 
           :class             => 'btn utils delete')
       end
     end +

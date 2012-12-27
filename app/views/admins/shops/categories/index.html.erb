@@ -52,6 +52,20 @@
 			addChildCategoryEditor(target, id, indent);
 		});
 
+		$("#table .utils.delete").on('click', function(){
+			var $tr = $(this).parents("tr");
+			var url = $(this).attr('data-delete-url');
+			$.post(url, {"_method": "delete"}, function(){
+				var trs = getChildrenTrs($tr)
+				trs.unshift($tr);
+				$(trs).each(function(){
+					$(this)
+						.slideUp()
+						.remove();
+				});
+			});
+		});		
+
 		function addChildCategoryEditor(target, id, indent){
 			var url = "<%= File.join(request.path, 'new') %>";
 
@@ -66,17 +80,26 @@
 			})				
 		}
 
-		function getChildrenTrs(parent){
+		function getChildrenTrs(target){
 			var result = [];
-			var _next = parent;
-			var indent = parseInt($(parent).attr('indent'));
+			var _next = target;
+			var indent = parseInt($(target).attr('indent'));
+			var $parent = $(target).parents("table")
+			trs = $parent.find("tr");
+			index = $parent.index(target);
+			var start = false;
+			trs.each(function(i, tr){
+				if (target.is(tr))
+					start = true;
 
-			while (_next = $(_next).next()){
-				if (parseInt(_next.attr('indent')) <= indent)
-					break;
-				else
-					result.push(_next);
-			}
+				if (start){
+					var tr_indent = parseInt($(tr).attr('indent')) || 0;
+					if (indent >= tr_indent)
+						return ;
+					else
+						result.push(tr);
+				}
+			})
 			return result;
 		}
 

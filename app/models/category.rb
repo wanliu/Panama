@@ -2,6 +2,8 @@ class Category
   include Mongoid::Document
   include Mongoid::Tree
 
+  attr_accessor :indent
+
   field :name, type: String
 
   belongs_to :shop
@@ -26,6 +28,11 @@ class Category
         child.create_node(config["children"], child)
       end
     end
+  end
+
+  def indent
+    parent_indent = self.parent.nil? ? -1 : self.parent.indent
+    parent_indent+=1
   end
 end
 

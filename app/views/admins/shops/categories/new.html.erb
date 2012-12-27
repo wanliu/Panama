@@ -1,5 +1,4 @@
 <tr <%= indent_attributes(@indent) %> >
-
 	<td>
 		<%= category_name_field @category %>
 	</td>
@@ -43,8 +42,6 @@
 
 			$form.submit(false);
 		});
-
-
 
 		$("#table .btn.utils.cancel").on('click', function(){
 			var $tr = $(this).parents("tr");
