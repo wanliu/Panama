@@ -40,5 +40,30 @@ $left-side-admin-width :200px;
 }
 
 .indent_3 td:first-child {
-	padding-left: $gridGutterWidth * 8;
+	padding-left: $gridGutterWidth * 6;
+}
+
+// expand bootstrap
+
+.btn-group {
+	input {
+		margin-bottom: 0px;
+	}
+
+	.unstyled  {
+		margin: 0px;
+	}
+}
+
+.collapse_button ul {
+	margin-left: 0px;
+	li {
+		list-style-type: none;
+	}
+}
+
+.category.collapse_button{
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 10px;
 }

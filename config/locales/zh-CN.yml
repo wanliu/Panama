@@ -124,6 +124,7 @@ zh-CN:
       header:
         one: 有 1 个错误发生导致「%{model}」无法被保存。
         other: 有 %{count} 个错误发生导致「%{model}」无法被保存。
+    incorret_descentant_node: '不正确的节点 %{node}, 不属于节点 %{parent} '
   helpers:
     select:
       prompt: 请选择

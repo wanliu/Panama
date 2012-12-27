@@ -203,7 +203,13 @@ module TableBuilder
         if childs.size > 0
           _tr_options = tr_options.clone
           indent = _tr_options[:indent] += 1
-          _tr_options.add_class "indent_#{indent}"
+          _tr_options.add_or_replace_class "indent_#{indent}" do |_class|
+            if _class.start_with?('indent_')
+              "indent_#{indent}"
+            else
+              _class
+            end
+          end
           childs.each do |_row|
             output_buffer << table_row(_row, _tr_options, td_options)
           end
@@ -283,6 +289,31 @@ module TableBuilder
       end
       target << value
       self[:class] = target
+    end
+
+    def replace_class(&block)
+      classes = case self[:class]
+                when NilClass
+                  []
+                when String
+                  self[:class].split(' ')
+                when Array
+                  self[:class]
+                when Symbol
+                  [self[:class].to_s]
+                else
+                  throw ArgumentError.new("invalid class , must String, Array, Symbol")
+                end
+
+      self[:class] = classes.map {|c| yield c }
+    end
+
+    def add_or_replace_class(name, &block)
+      if self[:class].nil?
+        add_class(name)
+      else
+        replace_class(&block)
+      end
     end
   end
 

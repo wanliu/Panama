@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'zlib'
 
 module ApplicationHelper
   include WidgetHelper
@@ -57,13 +58,22 @@ module ApplicationHelper
     output
   end
 
-  def register_javascript(&block)
+  def register_javascript(name, &block)
     code = capture { yield } if block_given?
-    @@javascripts_codes[widget_id] = code
-    nil
+    if request.xhr?
+      code 
+    else
+      uniqu_id = Zlib.crc32(code)
+      @@javascripts_codes[name] = code
+      nil
+    end
   end
 
   def icon(name)
     content_tag :i, nil, :class => "icon-#{name}"
+  end
+
+  def caret
+    content_tag :span, nil, :class => :caret
   end
 end
