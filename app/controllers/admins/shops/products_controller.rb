@@ -3,7 +3,14 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     root << widget(:table, :source => @products)
   end
 
+  def new
+    @product = Product.new
+  end
+
   def index
+    node = current_shop.category
+    @categories = node.traverse(:depth_first)
+    @categories.shift
     @products = []
   end
 end

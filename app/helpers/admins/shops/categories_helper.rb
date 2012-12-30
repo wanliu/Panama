@@ -11,6 +11,14 @@ module Admins::Shops::CategoriesHelper
     }.map     
   end
 
+  def tr_category_attributes(category)
+    {
+      id: category.id,
+      indent: category.indent,
+      :class => "indent_#{category.indent}"
+    }.map {|k,v| "#{k}=#{v}" }.join(' ')
+  end
+
   def category_util_field(category)
     if category.new_record?
       content_tag :div, :class => 'btn-group' do 
@@ -21,7 +29,8 @@ module Admins::Shops::CategoriesHelper
       end
     else
       content_tag :div, :class => 'btn-group' do 
-        link_to(icon(:edit), "#/#{category.id}/edit", :class => 'btn utils edit') +
+#        link_to(icon(:edit), "#/#{category.id}/edit", :class => 'btn utils edit') +
+        link_to(icon(:ok), "#/#{category.id}/", :class => 'btn utils update') +
         link_to(icon(:remove), "#", 
           :'data-delete-url' => admins_categories(category), 
           :class             => 'btn utils delete')
@@ -61,5 +70,15 @@ module Admins::Shops::CategoriesHelper
     content_tag(:div, :class => 'btn-group') do
       link_to(icon(:picture), "#", :class =>'btn')
     end    
+  end
+
+  def category_mini_field(category)
+    content_tag(:div, :class => 'btn-group') do
+      collapse_button(true, :class => "category") + 
+      label_tag(category.name, nil, :class => "category")
+    end +
+    content_tag(:div, :class => ["btn-group", "pull-right"]) do
+      link_to(icon(:list), "#", :class => 'btn btn-mini')
+    end
   end
 end

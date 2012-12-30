@@ -2,11 +2,14 @@
 //= require 'hallo'
 //= require 'image'
 //= require 'annotate'
+//= require 'arrow'
+//= require 'bootstrap_extend'
 //= require_self
-//
-$left-side-admin-width :200px;
 
 @import "variables";
+
+$left-side-admin-width :200px;
+
 
 #admin_content { 
 	margin-top: 20px;
@@ -31,34 +34,31 @@ $left-side-admin-width :200px;
 	min-height: 400px;
 }
 
-.indent_1 td:first-child{
+.indent_1 td:first-child {
+	padding-left: 0px;
+}
+
+.indent_2 td:first-child{
 	padding-left: $gridGutterWidth * 2;
 }
 
-.indent_2 td:first-child {
+.indent_3 td:first-child {
 	padding-left: $gridGutterWidth * 4;
 }
 
-.indent_3 td:first-child {
+.indent_4 td:first-child {
 	padding-left: $gridGutterWidth * 6;
 }
 
-// expand bootstrap
-
-.btn-group {
-	input {
-		margin-bottom: 0px;
-	}
-
-	.unstyled  {
-		margin: 0px;
-	}
+.collapse_button {
+	margin-left: 10px;
 }
 
 .collapse_button ul {
 	margin-left: 0px;
 	li {
 		list-style-type: none;
+		padding-top: 13px;
 	}
 }
 
@@ -66,4 +66,25 @@ $left-side-admin-width :200px;
 	display: inline-block;
 	vertical-align: middle;
 	margin-right: 10px;
+}
+
+.caret.up {
+	border-top:   none;
+	border-right: 4px solid transparent;
+	border-left:  4px solid transparent;
+	border-bottom:  4px solid $black;
+}
+
+.caret.left {
+	border-top:   4px solid transparent;
+	border-right: 4px solid $black;
+	border-left:  none;
+	border-bottom:  4px solid transparent;
+}
+
+.caret.right {
+	border-top:   4px solid transparent;
+	border-right: none;
+	border-left:  4px solid $black;
+	border-bottom:  4px solid transparent;
 }

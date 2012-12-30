@@ -3,106 +3,37 @@
 		<%= link_to t(:create), '#', :class => 'btn add_category' %>
 	</div>
 	<div class="row-fluid">
-		<%= render_widget :table, :display, @children, nil, 
-			:adapter => :tree_table,
-			:heads => [:name, :created_at, :updated_at, :util],
-			:head_options => { 
-				:class => %w(table table-striped table-bordered table-hover)
-			},
-			:add_column => [ {:util => proc do |row|
-				category_util_field(row)
-			end }],
-			:modify_column => [{:name => proc do |row|
-				category_name_field(row)
-			end }],
-			:hide_column => [:_id], 
-			:children_field => :children
-		%>
+		<table id="table" class="table table-bordered table-striped">
+			<thead>
+				<tr>
+				<th>名称</th><th>更新于</th><th>创建于</th><th>工具</th><th class="hide"></th>
+				</tr>
+			</thead>
+
+			<%= render @categories %>
+		</table>
 	</div>
 </div>
 <%= register_javascript :category_tools do %>
 <script type="text/javascript">
-	require(['jquery'], function($){
-		$("#table a.category").on('click', function(){
-			var $this = $(this);
-			var state = $this.attr('state') === 'true';
-			var trs = getChildrenTrs($this.parents('tr'));
-			$(trs).each(function(){
-				if (state)
-					$(this).slideUp();
-				else
-					$(this).slideDown();
-			});
-			state = !state;
-			$this.attr('state', state);
-		});
-		$(".add_category").on('click', function(){
-			var target = $("#table table").get(0);
-			addChildCategoryEditor(target);
+	require(['jquery', 'admins/shops/categories', 'models/form_model'], function($, Category, FormModel){
+
+		var $trs = $("#table tr:gt(0)");
+		$trs.each(function(i, tr){
+			var models = new FormModel.ObjectFormModel($(tr).find("form"), "category");
+			var model = new Category.Model(models)
+			new Category.CategoryRow({el: tr, model: model});			
 		});
 
-		$("#table .add_child").on('click', function(){
-			var $this = $(this);
-			var $tr = $this.parents('tr');
-			var trs = getChildrenTrs($tr);
-			var target = trs.length <= 0 ? $tr : trs.pop();
-			var id = $tr.find('td.hide').text();
-			
-			var indent = $tr.attr('indent');
-			addChildCategoryEditor(target, id, indent);
+
+		$(".add_category").on("click", function(){
+			// var model = new Category.Model(models)
+			var tr = $("<tr />").appendTo("#table")
+			$("#table")
+			var row = new Category.CategoryRow({el: tr});
+			var data = row.render('new');
+			tr.replaceWith(data);
 		});
-
-		$("#table .utils.delete").on('click', function(){
-			var $tr = $(this).parents("tr");
-			var url = $(this).attr('data-delete-url');
-			$.post(url, {"_method": "delete"}, function(){
-				var trs = getChildrenTrs($tr)
-				trs.unshift($tr);
-				$(trs).each(function(){
-					$(this)
-						.slideUp()
-						.remove();
-				});
-			});
-		});		
-
-		function addChildCategoryEditor(target, id, indent){
-			var url = "<%= File.join(request.path, 'new') %>";
-
-			if (typeof id === 'undefined')
-				id = null;
-			if (typeof indent === 'undefined')
-				indent = -1;
-
-			$.get(url, {parent_id: id, ajaxify: true, indent: indent}, function(data){
-				var new_tr = $(target).is('table') ? $(data).appendTo(target) : $(data).insertAfter(target);
-				new_tr.find("input[type=text]").focus()
-			})				
-		}
-
-		function getChildrenTrs(target){
-			var result = [];
-			var _next = target;
-			var indent = parseInt($(target).attr('indent'));
-			var $parent = $(target).parents("table")
-			trs = $parent.find("tr");
-			index = $parent.index(target);
-			var start = false;
-			trs.each(function(i, tr){
-				if (target.is(tr))
-					start = true;
-
-				if (start){
-					var tr_indent = parseInt($(tr).attr('indent')) || 0;
-					if (indent >= tr_indent)
-						return ;
-					else
-						result.push(tr);
-				}
-			})
-			return result;
-		}
-
 	});
 </script>
 <% end %>

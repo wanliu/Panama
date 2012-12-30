@@ -51,6 +51,8 @@ gem 'simple_form'
 
 gem 'vfs'
 
+# css arrow
+gem 'compass-css-arrow'
 
 gem 'hirb'
 # To use ActiveModel has_secure_password

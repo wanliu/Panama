@@ -39,7 +39,7 @@ module WidgetHelper
   def collapse_button(state, *args)
     options = args.extract_options!
     options = apppend_class(options, "collapse_button")
-    state_button(state, icon(:plus), icon(:minus), options)
+    state_button(state, caret(:down), caret(:right), options)
   end
 
   def apppend_class(options, name)

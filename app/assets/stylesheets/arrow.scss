@@ -1,0 +1,31 @@
+// generate by http://cssarrowplease.com/
+
+.arrow_box {
+	position: relative;
+	background: #FFFFFF;
+	border: 1px solid #dddddd;
+}
+.arrow_box:after, .arrow_box:before {
+	left: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-left-color: #FFFFFF;
+	border-width: 30px;
+	top: 50%;
+	margin-top: -30px;
+}
+.arrow_box:before {
+	border-color: rgba(221, 221, 221, 0);
+	border-left-color: #dddddd;
+	border-width: 31px;
+	top: 50%;
+	margin-top: -31px;
+}

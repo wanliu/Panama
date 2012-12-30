@@ -7,4 +7,5 @@ class Product
   field :summary, type: String
 
   has_many :photos
+  belongs_to :shop
 end

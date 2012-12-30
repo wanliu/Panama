@@ -8,6 +8,8 @@ class Shop
     end
   end
 
+  has_many :products, dependent: :delete
+
   field :name, type: String
 
   before_create :create_shop

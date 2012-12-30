@@ -1,6 +1,8 @@
 class Category
   include Mongoid::Document
   include Mongoid::Tree
+  include Mongoid::Tree::Ordering
+  include Mongoid::Tree::Traversal
 
   attr_accessor :indent
 

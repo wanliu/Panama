@@ -1,0 +1,24 @@
+<tr <%= tr_category_attributes(@category) %> >
+	<td>
+		<%= category_name_field @category %>
+	</td>
+	<td></td>
+	<td></td>
+	<td>
+		<%= category_util_field @category %>
+	</td>
+	<td class="hide">
+		<%= render :partial => "form", :object => @category %>
+	</td>
+</tr>
+
+<%= register_javascript :ajax_category_editor, :only => :ajax do %>
+<script type="text/javascript">
+	require(['jquery', 'admins/shops/categories'], function($, Category){
+		var target = $("tr#<%= @category.id %>")
+		var model = new Category.Model(<%=raw @category.to_json %>);
+		model.set("id", model.get("_id"));
+		new Category.CategoryRow({el: target, model: model });
+	});
+</script>
+<% end %>

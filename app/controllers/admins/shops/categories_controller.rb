@@ -4,26 +4,28 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
 
   before_filter :form_params, :only => [:new, :create]
 
-  ajaxify_pages :new, :edit, :create
+  ajaxify_pages :new, :edit, :create, :update
 
   has_widgets do |root|
     root << widget(:table, :source => @children)
   end
 
   def index
-    @category = current_shop.category
-    @children = @category.children
+    # @categories = current_shop.category.descendants
+    node = current_shop.category
+    @categories = node.traverse(:depth_first)
+    @categories.shift
+    #@children = @category.children
   end
 
   def new
     @indent += 1
-    @category = Category.new
+    @category = @parent.children.build
   end
 
   def create
     @category = @parent.children.create(params[:category])
-    @form_id = params[:form_id]
-    render "edit_row"
+    render :action => :edit
   end
 
   def destroy
@@ -37,6 +39,12 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     render "report_destroy"
   end
 
+  def update
+    @category = Category.find(params[:id])
+    @category.update_attributes(params[:category])
+    render :action => :edit
+  end
+
   def form_params
     @parent = params[:parent_id].blank? ? current_shop.category : Category.find(params[:parent_id])
     if !(@parent == current_shop.category || @parent.descendant_of?(current_shop.category))
@@ -44,6 +52,6 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
         :node => params[:parent_id],
         :parent => @parent.id))
     end
-    @indent = params.fetch(:indent, 0).to_i
+    @indent = @parent.indent
   end
 end

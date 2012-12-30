@@ -58,13 +58,14 @@ module ApplicationHelper
     output
   end
 
-  def register_javascript(name, &block)
+  def register_javascript(name, options = {}, &block)
     code = capture { yield } if block_given?
     if request.xhr?
       code 
     else
-      uniqu_id = Zlib.crc32(code)
-      @@javascripts_codes[name] = code
+      unless options[:only] == :ajax
+        @@javascripts_codes[name] = code
+      end
       nil
     end
   end
@@ -73,7 +74,7 @@ module ApplicationHelper
     content_tag :i, nil, :class => "icon-#{name}"
   end
 
-  def caret
-    content_tag :span, nil, :class => :caret
+  def caret(position = :down)
+    content_tag :span, nil, :class => [:caret, position]
   end
 end

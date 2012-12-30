@@ -1,0 +1,10 @@
+<%= simple_form_for form, 
+	:url => admins_categories(form), 
+	:remote => true,
+	:html => {:id => form._id } do |f| %>
+	<%= hidden_field_tag :ajaxify, true %>
+	<%= hidden_field_tag :parent_id, form.parent.id %>
+	<%= f.input :id %>
+	<%= f.input :indent %>
+	<%= f.input :name %>
+<% end %>

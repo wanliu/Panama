@@ -1,0 +1,6 @@
+<%= simple_form_for form, :url => admins_products(form) do |f| %>
+	<%= f.input :name %>
+	<%= f.input :price %>
+	<%= f.input :summary , as: :text %>
+	<%= f.association :photos %>
+<% end %>
