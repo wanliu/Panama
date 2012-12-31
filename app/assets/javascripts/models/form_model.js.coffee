@@ -14,6 +14,8 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				attributes[name] = value
 			attributes
 
+		to_hash: () ->
+			@attributes
 
 	class FormModel extends AbstractFormModel
 
@@ -47,6 +49,12 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				if object_name == @objectName
 					m[2]
 
+		to_hash: () ->
+			results = {}
+			for attr, value of @attributes
+				name = "#{@objectName}[#{attr}]"
+				results[name] = value
+			results
 
 	exports.AbstractFormModel = AbstractFormModel
 	exports.FormModel = FormModel

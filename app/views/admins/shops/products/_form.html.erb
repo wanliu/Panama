@@ -1,6 +1,27 @@
-<%= simple_form_for form, :url => admins_products(form) do |f| %>
+<%= simple_form_for form, 
+	:url => admins_products(form), 
+	:remote => true,
+	:html => {
+		:class => "form-horizontal"
+	} do |f| %>
 	<%= f.input :name %>
 	<%= f.input :price %>
+	<%= f.association :category, 
+		:collection => current_shop.category.descendants %>
 	<%= f.input :summary , as: :text %>
-	<%= f.association :photos %>
+	<%= f.button :submit, :save %>
+	<%= link_to :cancel, '#', :class => 'btn cancel' %>
+
+	<%#= f.association :photos %>
+<% end %>
+
+
+<%= register_javascript :product_form_editor, :only => :ajax do %>
+<script type="text/javascript">
+	require(['jquery', 'backbone', 'rails.view'], function($, Backbone, Rails){
+		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
+			model: <%= raw form.to_json %>
+		});
+	})
+</script>
 <% end %>

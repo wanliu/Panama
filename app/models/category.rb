@@ -8,6 +8,8 @@ class Category
 
   field :name, type: String
 
+  has_many :products
+  
   belongs_to :shop
 
   before_destroy :delete_descendants

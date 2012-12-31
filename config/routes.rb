@@ -47,9 +47,12 @@ Panama::Application.routes.draw do
     end
   end
 
+  match "shops/:shop_id/admins/products/category/:category_id", 
+    :to => "admins/shops/products#products_by_category"
+
   resources :shops do 
     namespace :admins do 
-      resources :products, :controller => "shops/products"
+      resources :products, :controller => "shops/products" 
     end
   end
 

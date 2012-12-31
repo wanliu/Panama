@@ -2,7 +2,7 @@ class Admins::Shops::SectionController < Admins::BaseController
   include Apotomo::Rails::ControllerMethods
   
   before_filter :current_shop, :only => [:new, :index, :edit]
-  helper_method :current_section 
+  helper_method :current_section, :current_shop
 
   section :dashboard, :top
   section :pending, :transactions

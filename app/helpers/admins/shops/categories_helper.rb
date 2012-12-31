@@ -78,7 +78,7 @@ module Admins::Shops::CategoriesHelper
       label_tag(category.name, nil, :class => "category")
     end +
     content_tag(:div, :class => ["btn-group", "pull-right"]) do
-      link_to(icon(:list), "#", :class => 'btn btn-mini')
+      link_to(icon(:list), "#", :class => 'btn list_category_products btn-mini')
     end
   end
 end

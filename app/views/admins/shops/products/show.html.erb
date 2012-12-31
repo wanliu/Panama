@@ -1,0 +1,36 @@
+<td>
+	<%= @product.name %>
+</td>
+<td>
+	<%= @product.price %>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+	<%= content_tag :div, :class => 'btn-group' do %>
+	<%= link_to(icon(:edit), "#/#{@product.id}/edit", :class => 'btn utils edit') %>
+	<%= link_to(icon(:remove), "#", :'data-delete-url' => "#{@product.id}", :class => 'btn utils delete') %>
+	<% end %>
+</td>
+<td class="hide">
+	<%= @product.id %>
+</td>
+
+<%= register_javascript :product_row_show, :only => :ajax do %>
+<script type="text/javascript">
+	require(['jquery', 'backbone', 'rails.view', 'models/element_model'], function($, Backbone, Rails, ElementModel){
+			// var tr = $("#<% @product.id %>").get(0);		
+			var urlRoot = '<%= shop_admins_products_path %>';
+
+			// var model = new ElementModel(tr, {
+			// 	name: "td[1]", 
+			// 	price: "td[2]",
+			// 	id: "td[6]"
+			// });
+
+			// var row = new Products.ProductRow({el: tr, urlRoot: urlRoot, model: model})	
+		})
+</script>
+<% end %>

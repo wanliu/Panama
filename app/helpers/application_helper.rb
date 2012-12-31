@@ -77,4 +77,10 @@ module ApplicationHelper
   def caret(position = :down)
     content_tag :span, nil, :class => [:caret, position]
   end
+
+  def options_dom_id(object, options = {})
+    as = options[:as]
+    action, method = object.respond_to?(:persisted?) && object.persisted? ? [:edit, :put] : [:new, :post]
+    as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
+  end
 end

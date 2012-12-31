@@ -1,11 +1,23 @@
-define ['jquery', 'backbone'], ($, Backbone) ->
+define ['jquery', 'backbone', 'lib/XPath'], ($, Backbone,XPath) ->
 
 	class ElementModel extends Backbone.Model
 
-		constructor: (el, @options) ->
-			super(@options)
-			
-			for item in el.attributes
-				@set(item.name, item.value)
+		constructor: (@el, @paths, @options) ->
+			super @options
+			el = $(@el)[0];
 
+			@parseXPaths(el)
+
+
+		parseXPaths: (parent, paths = @paths) ->
+			for name, query of paths
+				results = document.evaluate(
+					query,
+					parent,
+					null,
+					""
+					null)
+
+				for element in results.value
+					@set name, $.trim(element.innerText)
 

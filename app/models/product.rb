@@ -8,4 +8,9 @@ class Product
 
   has_many :photos
   belongs_to :shop
+  belongs_to :category
+
+  validates :name, presence: true
+  validates :price, presence: true
+  validates :price, numericality: true
 end
