@@ -23,4 +23,10 @@ class Admins::Shops::TemplatesController < Admins::Shops::SectionController
     Template.setup(current_shop)
   end
 
+  def update
+    @template = Template.find(params[:id])
+    @template.data = params[:template][:data]
+    render :text => :ok
+  end
+
 end

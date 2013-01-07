@@ -1,0 +1,15 @@
+<%= widget_div do %>
+	<div class="navbar">
+	  <div class="navbar-inner">
+	    <a class="brand" href="#">首页</a>
+			<ul class="nav nav-pills">
+			<% @navigator.each do |nav| %>
+				<li>
+				<%= link_to nav.name, '#' %>
+				</li>		
+			<% end %>
+			</ul>
+	  </div>
+	</div>
+<% end %>
+

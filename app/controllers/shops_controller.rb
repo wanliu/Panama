@@ -1,6 +1,12 @@
 require 'tempfile'
 
 class ShopsController < ApplicationController
+  include Apotomo::Rails::ControllerMethods
+
+  has_widgets do |root|
+    root << widget(:navigator, :shop => @shop)
+  end
+
   respond_to :erb
   
   admin

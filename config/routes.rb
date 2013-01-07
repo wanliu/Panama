@@ -1,5 +1,7 @@
 Panama::Application.routes.draw do
 
+  resources :activities
+
   get "transport/index"
 
   get "products/index"
@@ -50,6 +52,9 @@ Panama::Application.routes.draw do
   match "shops/:shop_id/admins/products/category/:category_id", 
     :to => "admins/shops/products#products_by_category"
 
+  match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id", 
+    :to => "admins/shops/products#accept_product"
+
   resources :shops do 
     namespace :admins do 
       resources :products, :controller => "shops/products" 
@@ -79,7 +84,6 @@ Panama::Application.routes.draw do
       resources :transport, :controller => "shops/transport"
     end
   end
-
 
   resources :shops do 
     namespace :admins do 

@@ -14,6 +14,10 @@ class Template
   end
 
   def new_record?
+    !(@fs && (@fs.file? or @fs.dir?))
+  end
+
+  def persisted?
     @fs && (@fs.file? or @fs.dir?)
   end
 

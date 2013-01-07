@@ -13,4 +13,7 @@ class Product
   validates :name, presence: true
   validates :price, presence: true
   validates :price, numericality: true
+
+  validates_presence_of :category
+  validates_presence_of :shop
 end

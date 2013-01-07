@@ -10,7 +10,10 @@
 		:collection => current_shop.category.descendants %>
 	<%= f.input :summary , as: :text %>
 	<%= f.button :submit, :save %>
-	<%= link_to :cancel, '#', :class => 'btn cancel' %>
+
+	<%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
+		link_to :close, '#', :class => 'btn close'
+	end %>
 
 	<%#= f.association :photos %>
 <% end %>

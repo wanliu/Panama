@@ -2,11 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
+define ['jquery', 'backbone', 'lib/dnd',  'exports'], ($, Backbone, DND, exports) ->
 
 	class Category extends Backbone.Model
 
-	class AbstractRow extends Backbone.View
+	class AbstractRow extends DND.DNDView
 
 		getChildren: () ->
 			results = []

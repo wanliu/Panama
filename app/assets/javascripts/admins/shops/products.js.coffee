@@ -3,19 +3,32 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 define [
-	'jquery', 
+	'jquery-ui', 
 	'backbone', 
 	'admins/shops/categories',
 	'rails.view', 
 	'models/element_model',
-	'lib/spin'
-	'exports'], ($, Backbone, Category, Rails, ElementModel, Spinner, exports) ->
+	'lib/spin',
+	'exports'], (
+		$, 
+		Backbone, 
+		Category, 
+		Rails, 
+		ElementModel, 
+		Spinner, 
+		exports) ->
 
 	class CategoryMiniRow extends Category.AbstractRow
-	
+		 
 		events:
 			"click .category"               : "toggleChildren"
 			"click .list_category_products" : "getCategoryProducts"
+
+		droppable: {
+			activeClass: "ui-state-hover"
+			hoverClass: "ui-state-active"
+			accept: "#table table tr"
+		}
 
 		toggleChildren: (event) ->
 			$toggleBtn = $(@el).find(".category")
@@ -54,6 +67,22 @@ define [
 			$("#table").load url, () -> 
 				btn.html(icon)
 
+		moveToCategory: (product) ->
+			url = "#{@options['urlRoot']}/category/#{@model.get("id")}/accept/#{product.get('id')}"
+
+			$.post(url)
+
+		onDroppable: (event, ui) ->
+			ui.draggable.draggable({revert: 'invalid'})
+			product = new ElementModel(ui.draggable, {
+				name: "td[1]", 
+				price: "td[2]",
+				id: "td[6]"
+			})
+			@moveToCategory(product)
+			ui.draggable
+				.slideUp () ->
+					$(@).remove()
 
 	class ProductRow extends Rails.ResourceView
 		tagName: "tr"
@@ -63,7 +92,13 @@ define [
 			"click .delete"		: "removeProduct"
 			"submitted form"	: "createdProduct"
 			"click .update"		: "updateProduct"
-			"click .cancel"		: "closeProductEditor"
+			"click .close"		: "closeProductEditor"
+			"click .cancel"		: "cancelEditor"
+
+		draggable: {
+			revert: true
+			helper: "clone"
+		}
 
 		no_implementation: () ->
 			alert "no implementation!"
@@ -90,6 +125,9 @@ define [
 		closeProductEditor: () ->
 			@render('show')
 
+		cancelEditor: () ->
+			@remove()
+			
 		updateProduct: () ->
 			@no_implementation()
 

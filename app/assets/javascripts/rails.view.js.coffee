@@ -1,6 +1,11 @@
-define ['jquery', 'backbone', 'models/form_model', 'exports'], ($, Backbone, FormModel, exports) ->
+define [
+	'jquery-ui', 
+	'backbone', 
+	'models/form_model',
+	'lib/dnd',
+	'exports'], ($, Backbone, FormModel, DND, exports) ->
 
-	class AbstractFormView extends Backbone.View
+	class AbstractFormView extends DND.DNDView
 		el: "form"
 
 		constructor: (@el, @options) ->
@@ -23,7 +28,7 @@ define ['jquery', 'backbone', 'models/form_model', 'exports'], ($, Backbone, For
 
 	class FormView extends AbstractFormView		
 
-	class AbstractResourceView extends Backbone.View
+	class AbstractResourceView extends DND.DNDView
 
 		constructor: (@options) ->
 			@urlRoot = @options['urlRoot'] || @urlRoot

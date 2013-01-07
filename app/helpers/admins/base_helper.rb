@@ -17,7 +17,7 @@ module Admins
       if record.new_record?
         shop_admins_templates_path params[:shop_id]
       else
-        shop_admins_template_path params[:shop_id], record
+        shop_admins_template_path params[:shop_id], record.name
       end      
     end
 

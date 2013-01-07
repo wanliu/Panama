@@ -51,6 +51,17 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @product = Product.find(params[:id])
   end
 
+  def accept_product
+    @product = Product.find(params[:product_id])
+    @category = Category.find(params[:category_id])
+    @product.category = @category
+    if @product.save
+      render :text => :ok
+    else
+      render :text => :error
+    end
+  end  
+
   def products_by_category
     category = Category.find(params[:category_id])
     @products = category.products
