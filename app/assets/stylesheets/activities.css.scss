@@ -1,3 +1,110 @@
 // Place all the styles related to the Activities controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'launch_bootstrap';
+@import "compass/css3";
+@import "variables";
+
+body {
+	@include background(
+        radial-gradient(center, ellipse cover, #E9E9E9 0%,#D1D1D1 100%));
+}
+
+#header.navbar.navbar-fixed-top {
+	position: relative;
+}
+
+#logo {
+	margin-top: 30px;
+	position: absolute;
+	a {
+		color: white;
+	}
+}
+
+
+#topbar {
+	top: -5px;
+	right: 0px;
+}
+
+#top_search {
+	padding-top: 30px;
+	padding-bottom: 20px;
+}
+
+#logo {
+	margin-top: 15px;
+}
+
+#content {
+	// &.container {
+	// 
+	// 	width: 100%;
+	// }
+}
+
+#main-nav {
+	position: relative;
+	.navbar {
+		margin-bottom: 0px;
+	}
+	z-index: 1050;
+
+}
+
+#main {
+	position: absolute;
+	top:0px;
+	left:0px;
+	padding-top: 10px;
+	margin-left: 0px;
+	// margin-right: 400px;
+	width: 996px;
+	min-height: 500px;
+	border-right: 1px solid #ccc;
+}
+
+#social_sidebar {
+	position: fixed;
+	// width: 400px;
+	top:0px;
+	left: 996px;
+	right: 0px;
+	bottom: 0px;
+	background: $grayLighter;
+	bottom: 0px;
+	// @include box-shadow(inset 2px 2px 3px rgba(0,0,0,.075));
+}
+
+#center_image {
+	padding:20px;
+	background: $white;
+	@include box-shadow(#333 0 0 80px);
+}
+
+.activity {
+	width: 197px;
+	padding: 15px;
+	margin: 7.5px;
+	border: 1px solid #ccc;
+	float:left;
+	background: $white;
+	@include box-shadow(#ccc 0 0 1px); 
+
+	img:active {
+		margin: 2px;
+	}
+}
+
+.relative {
+	position: relative;
+}
+
+.affix {
+	top: 0px;
+	z-index: 1050;
+	right:0px;
+	left:0px;
+	position: fixed!important;
+}

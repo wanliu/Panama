@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-<%= render "head" %>
+<%= render "head_activities" %>
+
 <body class="<%= controller.controller_name %>">
-	<%= render "header" %>
-	<%= render "flashes" %>
-	
-  <%= render "main_nav" %>
-  <div id="slide-back">
-  </div>
-  <div id="content" class="container relative">
+  <%= javascript_include_tag "activities" %>
+  <%= render "header-fluid" %>
+  <%= render "main_nav-fluid" %>
+  <div id="content" class="relative">
+    <%= render "social_sidebar" %>
     <div id="main">
-        <div id="slide-box">
-          <%#= render_cell :slide, :show %>
-        </div>
       <div class="container-fluid">
-        <%= yield %>
+        <div class="row-fluid">
+          <%= render "flashes" %>
+          <%= yield %>
+        </div>
         <%= render "footer" %>
       </div>
     </div>
-    <%= render "left_sidebar" %>
+    <%#= render "left_sidebar" %>
 	</div>
+
   <%# Javascript at the bottom for fast page loading %>
 </body>
 </html>

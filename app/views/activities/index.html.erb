@@ -1,21 +1,41 @@
-<h1>Listing activities</h1>
-
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @activities.each do |activity| %>
-  <tr>
-    <td><%= link_to 'Show', activity %></td>
-    <td><%= link_to 'Edit', edit_activity_path(activity) %></td>
-    <td><%= link_to 'Destroy', activity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
+<div id="activities" >
+  <%= render :partial => "activity", :collection => @activities %>
+</div>
 <%= link_to 'New Activity', new_activity_path %>
+<script type="text/javascript">
+  require(['jquery', 'jquery.masonry', 'lib/image_natural_size'], function($){
+    var $container = $('#activities');
+
+    $container.imagesLoaded( function(){
+      $container.masonry({
+        itemSelector : '.activity'
+      });
+    });
+
+    $("#activities img").on('click', function(){
+    	var $this = $(this);
+    		html = "<div id='center_image'><img src='" + $this.attr('src') + "' alt='#' /> </div>",
+    		$dialog = $('#center_image').get(0) ? $('#center_image') : $(html).appendTo('body'),
+    		naturalWidth = $this.naturalWidth(),
+    		naturalHeight = $this.naturalHeight(),
+    		windowWidth = $(window).width(),
+    		windowHeight = $(window).height();
+
+    	var top = naturalHeight > windowHeight ? 0 : (windowHeight - naturalHeight) / 2,
+    		left = naturalWidth > windowWidth ? 0 : (windowWidth - naturalWidth) / 2;
+
+
+    	$dialog.find("img").attr('src', $this.attr('src'));
+    	effect = "fadeIn"
+    	$dialog.removeClass("animated " + effect);
+    	$dialog
+    		.css('position', 'absolute')
+    		.width(naturalWidth)
+    		.height(naturalHeight)
+    		.offset({top: top, left: left})
+    		.css('z-index', 2000)
+			.show()
+			.addClass('animated ' + effect);
+    })
+  });
+</script>

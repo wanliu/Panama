@@ -1,4 +1,5 @@
 class ActivitiesController < ApplicationController
+  before_filter :login_required
   # GET /activities
   # GET /activities.json
   layout "activities"
