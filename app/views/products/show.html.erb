@@ -1,11 +1,6 @@
 <div class='product relative'>
-	<div class="preview relative">
-		<div class="body">
-			<%= image_tag @product.preview.url('420x420') %>
-		</div>
-	</div>
+
 	<div class="property">
-		<div class='clearfix'></div>
 		<h3><%= @product.name %></h3>
 		<p><small><%= @product.summary %></small></P>
 		<table>
@@ -48,5 +43,8 @@
 				</div>
  			</form>
 		</div>				
+	</div>
+	<div class="preview relative">
+		<%= image_tag @product.preview.url('420x420') %>
 	</div>
 </div>

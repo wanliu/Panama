@@ -14,18 +14,16 @@
 }
 
 .product {
-	margin-right: 300px;
+	float:left;
+	width:100%;
 }
 
 .preview {
-	min-height: 1px;
-	.body {
-		position: absolute;
-		top: 0px;
-		width: 360px;
-		img {
-			border: 1px solid #ccc;
-		}
+	width: 360px;
+	float:left;
+	margin-left: -100%;
+	img {
+		border: 1px solid #ccc;
 	}
 }
 
