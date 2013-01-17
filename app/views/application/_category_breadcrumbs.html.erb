@@ -1,0 +1,18 @@
+<% if @category %>
+<ul class="breadcrumb">
+  <% @category.ancestors.each do |category| %>
+
+  	<li><%= link_to_if category.root?, t('frontpage'), '/category/' do %>
+  			<%= link_to category.name.humanize, category %>
+  		<% end %>
+  		<span class="divider">/</span></li>
+  <% end %>
+  <li class="active">
+  	<% if @category.root? %>
+  	  <%= t('frontpage') %>
+  	<% else %>
+      <%= @category.name.humanize %>
+    <% end %>
+	</li>
+</ul>
+<% end %>

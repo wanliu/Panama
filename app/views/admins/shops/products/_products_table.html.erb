@@ -3,6 +3,9 @@
 	:head_options => { 
 		:class => %w(table table-striped table-bordered table-hover)
 	},
+	:modify_column => [{:name => proc do |row|
+		picture_and_name(row)
+	end	}],
 	:add_column => [ {:util => proc do |row|
 		content_tag :div, :class => 'btn-group' do 
 			link_to(icon(:edit), "#/#{row[:_id]}/edit", :class => 'btn utils edit') +

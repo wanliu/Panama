@@ -1,0 +1,21 @@
+category:
+    - 
+        name: 新品上市
+        children:
+            - 
+                name: 最新潮装
+            - 
+                name: 最新潮裤
+                children: 
+                    - 
+                        name: 冬款
+                    -
+                        name: 夏款
+                    -
+                        name: 秋款
+    - 
+        name: 企业介绍
+    - 
+        name: 诚招精英
+    - 
+        name: 加盟合作

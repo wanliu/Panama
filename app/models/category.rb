@@ -8,6 +8,8 @@ class Category
 
   field :name, type: String
 
+  mount_uploader :cover, ImageUploader
+  
   has_many :products
   
   belongs_to :shop
@@ -18,10 +20,19 @@ class Category
     config_file = shop.fs["config/default_category.yml"].file
     config_root = YAML.load(config_file.read)["category"]
 
+    load_category(config_root)
+  end
+
+  def load_category(config_root)
     # clear all category children
-    shop.category.destroy_children
-    create_node(config_root, shop.category)
-    shop.category.save
+    root.destroy_children
+    create_node(config_root, root)
+    root.save
+  end
+
+  def load_file(file)
+    config_root = YAML.load_file(file)["category"]
+    load_category(config_root)
   end
 
   def create_node(_config_parent, _tree_parent)

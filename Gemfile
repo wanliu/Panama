@@ -67,10 +67,20 @@ gem 'hirb'
 # Deploy with Capistrano
 # gem 'capistrano'
 
+# image uploader
+gem "carrierwave"
+gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
+gem "carrierwave-upyun"
+gem "rest-client"
+
+# rmagick
+gem "mini_magick"
+
 # To use debugger
 gem 'debugger'
 
 group :development do 
   gem 'thin'
- # gem 'better_errors'
+  # gem 'better_errors'
+  # gem 'binding_of_caller'
 end

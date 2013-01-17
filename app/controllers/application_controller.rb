@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def load_category
+    @category_root = Category.where(:name => "_products_root").first
+  end
+
   def self.admin
     self.class_eval <<-RUBY
       def admin?

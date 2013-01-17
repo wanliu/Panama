@@ -24,6 +24,7 @@ Panama::Application.routes.draw do
   # end
   # 
 
+  resources :category
   # shop admins routes
   resources :shops do 
     namespace :admins do 
@@ -100,7 +101,6 @@ Panama::Application.routes.draw do
 
   resources :search
   
-  root :to => 'welcome#index'
   
   # omniauth
   match '/auth/:provider/callback', :to => 'user_sessions#create'
@@ -110,6 +110,7 @@ Panama::Application.routes.draw do
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
 
+  root :to => 'activities#index'
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
