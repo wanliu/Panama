@@ -17,3 +17,5 @@ define('Panama', function(require, exports, modules){
 	var $ = require('jquery_ui');
 	var h5bp = require('h5bp');
 });
+
+//= require chosen.ex
