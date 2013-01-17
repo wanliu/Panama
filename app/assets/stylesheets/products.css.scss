@@ -1,0 +1,76 @@
+// Place all the styles related to the products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#content {
+	margin-top: 0px;
+}
+
+#comments_sidebar {
+	float:right;
+	width:300px;
+	background: #eeeeee;
+	min-height: 400px;
+}
+
+.product {
+	margin-right: 300px;
+}
+
+.preview {
+	min-height: 1px;
+	.body {
+		position: absolute;
+		top: 0px;
+		width: 360px;
+		img {
+			border: 1px solid #ccc;
+		}
+	}
+}
+
+.property {
+	position: relative;
+	margin-left: 380px;
+	padding: 20px;
+	zoom: 1;
+
+	dl.dl-horizontal dt {
+		clear: none;
+	}
+
+	.property_label {
+		width: 120px;
+	}
+
+	td {
+		line-height: 35px;
+		padding-left: 20px;
+		vertical-align: middle;
+
+		p {
+			vertical-align: middle;
+
+		}
+	}
+
+	.form-horizontal {
+		.control-group {
+			.control-label {
+				width: 120px;
+				text-align: left;
+			}
+
+			.controls {
+				margin-left: 140px;
+			}
+		}
+	}
+
+}
+
+.text-surprised  {
+	color: red;
+	font-size: 21px;
+	line-height: 30px;
+}

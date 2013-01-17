@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
+<%= html_tag :class => "no-js" %>
+<%= render :partial => "head", :locals => {styles: ['products']} %>
+<body class="<%= controller.controller_name %>">
+  	<%= render "header-fluid" %>
+  	<%#= render "main_nav-fluid" %>
+    <div id="content" class="relative">
+		<%= render "category_breadcrumbs" %>
+	    <%= render "comments_sidebar" %>
+		<%= yield %>
+
+	</div>
+
+</body>
+</html>
