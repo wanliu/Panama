@@ -9,7 +9,7 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
     ) +
     <<-JAVASCRIPT
     <SCRIPT type='text/javascript'>
-    	define(['jquery', 'lib/chosen.ex'], function($){ 
+    	require(['jquery', 'lib/chosen.ex'], function($){ 
         $("##{field_name}").chosenEx({remote: {remote_url: '#{input_options[:url]}'}})
       })
     </SCRIPT>
