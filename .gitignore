@@ -7,7 +7,6 @@
 # Ignore bundler config
 /.bundle
 /.rvmrc
-config/sso.*
 .DS_Store
 
 # Ignore the default SQLite database.
