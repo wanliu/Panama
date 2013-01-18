@@ -8,11 +8,11 @@
 /.bundle
 /.rvmrc
 .DS_Store
-
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
+/config/sso.yml
 /log/*.log
 /tmp
 /vendor/bundle
