@@ -592,3 +592,5 @@ define ['jquery', 'lib/select-parser','lib/abstract-chosen'], ($,SelectParser,Ab
     side_border_padding = elmt.outerWidth() - elmt.width()
 
   root.get_side_border_padding = get_side_border_padding
+
+  Chosen
