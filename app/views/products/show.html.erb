@@ -1,50 +1,53 @@
-<div class='product relative'>
-
-	<div class="property">
-		<h3><%= @product.name %></h3>
-		<p><small><%= @product.summary %></small></P>
-		<table>
-			<tr>
-				<td class="property_label">价格</td>
-				<td><p class="text-surprised"><%= @product.price %></p></td>
-			</tr>
-			<tr>
-				<td>配送</td>
-				<td><%= @product.price %></td>
-			</tr>
-			<tr>
-				<td>商品评分</td>
-				<td><%= @product.price %></td>
-			</tr>
-		</table>
-		<div class='well'>
-			<form class='form-horizontal'>
-				<div class="control-group">
-				    <label class="control-label" for="inputEmail">数量</label>
-				    <div class="controls">
-						<div id="MySpinner" class="spinner">
-					      <input type="text" class="input-mini spinner-input" maxlength="3" value='1'>
-					      <div class="spinner-buttons  btn-group btn-group-vertical">
-					        <button class="btn spinner-up">
-					          <i class="icon-chevron-up"></i>
-					        </button>
-					        <button class="btn spinner-down">
-					          <i class="icon-chevron-down"></i>
-					        </button>
-					      </div>
-					    </div>
-				    </div>
-			    </div>		
-				<div class="control-group">
-					<div class="controls pull-right">
-						<button class="btn btn-primary btn-large">BUY</button>
-						<button class="btn btn-large">Add To Cart</button>
-					</div>
-				</div>
- 			</form>
-		</div>				
-	</div>
-	<div class="preview relative">
+<div class='row-fluid'>
+	<div class="preview">
 		<%= image_tag @product.preview.url('420x420') %>
+	</div>
+	<div class="container-fluid property">
+		<div class="row-fluid">
+			<div class="span12">
+			<h3><%= @product.name %></h3>
+			<p><small><%= @product.summary %></small></P>
+			<table>
+				<tr>
+					<td class="property_label">价格</td>
+					<td><p class="text-surprised"><%= @product.price %></p></td>
+				</tr>
+				<tr>
+					<td>配送</td>
+					<td><%= @product.price %></td>
+				</tr>
+				<tr>
+					<td>商品评分</td>
+					<td><%= @product.price %></td>
+				</tr>
+			</table>
+			<div class='well'>
+				<form class='form-horizontal'>
+					<div class="control-group">
+					    <label class="control-label" for="inputEmail">数量</label>
+					    <div class="controls">
+							<div id="MySpinner" class="spinner">
+						      <input type="text" class="input-mini spinner-input" maxlength="3" value='1'>
+						      <div class="spinner-buttons  btn-group btn-group-vertical">
+						        <button class="btn spinner-up">
+						          <i class="icon-chevron-up"></i>
+						        </button>
+						        <button class="btn spinner-down">
+						          <i class="icon-chevron-down"></i>
+						        </button>
+						      </div>
+						    </div>
+					    </div>
+				    </div>		
+					<div class="control-group">
+						<div class="controls pull-right">
+							<button class="btn btn-primary btn-large">BUY</button>
+							<button class="btn btn-large">Add To Cart</button>
+						</div>
+					</div>
+	 			</form>
+			</div>
+			</div>	
+		</div>			
 	</div>
 </div>

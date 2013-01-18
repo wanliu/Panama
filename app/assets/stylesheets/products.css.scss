@@ -13,24 +13,19 @@
 	min-height: 400px;
 }
 
-.product {
-	float:left;
-	width:100%;
-}
-
 .preview {
+	position: absolute;
+	padding: 20px 0px 20px 5px;
 	width: 360px;
 	float:left;
-	margin-left: -100%;
 	img {
 		border: 1px solid #ccc;
 	}
 }
 
 .property {
-	position: relative;
 	margin-left: 380px;
-	padding: 20px;
+	margin-right: 300px;
 	zoom: 1;
 
 	dl.dl-horizontal dt {
