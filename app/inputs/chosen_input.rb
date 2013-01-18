@@ -9,7 +9,7 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
     ) +
     <<-JAVASCRIPT
     <SCRIPT type='text/javascript'>
-    	$("##{field_name}").chosenEx({remote: {remote_url: '#{input_html_options[:remote_url]}'}})
+    	$("##{field_name}").chosenEx({remote: {remote_url: '#{input_options[:url]}'}})
     </SCRIPT>
     JAVASCRIPT
     .html_safe
