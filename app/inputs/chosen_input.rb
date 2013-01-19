@@ -2,16 +2,28 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
 
   def input
   	# "$ #{@builder.text_field(attribute_name, input_html_options)}".html_safe   collection 
-  	label_method, value_method = detect_collection_methods
+    @isif = input_options[:collection].blank?
+    @collection =  @isif ? ["",""] : collection
+    @strID = @isif ? "" : "_id"
+    remote_key = input_options[:remote_key] || "name"
+    remote_value = input_options[:remote_value] || "id"
+
+    label_method, value_method = detect_collection_methods
     @builder.collection_select(
-      attribute_name, ['',''], value_method, label_method,
+      attribute_name, @collection, value_method, label_method,
       input_options, input_html_options
     ) +
     <<-JAVASCRIPT
     <SCRIPT type='text/javascript'>
-    	require(['jquery', 'lib/chosen.ex'], function($){ 
-        $("##{field_name}").chosenEx({remote: {remote_url: '#{input_options[:url]}'}})
-      })
+    	require(['jquery', 'lib/chosen.ex'], function($){
+        $("##{field_name+@strID}").chosenEx({
+          remote: {
+            url: '#{input_options[:url]}',
+            remote_key: #{remote_key.inspect},
+            remote_value: #{remote_value.inspect}
+          }
+        });
+      });
     </SCRIPT>
     JAVASCRIPT
     .html_safe
@@ -19,5 +31,5 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
 
   def field_name 
   	"#{lookup_model_names.join("_")}_#{reflection_or_attribute_name}"
-  end
+  end 
 end

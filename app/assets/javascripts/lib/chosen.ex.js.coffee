@@ -47,27 +47,30 @@ define ['jquery','lib/chosen.jquery'], ($,Chosen) ->
 			blurHandle = @options['blur']
 			remote_options = @options['remote']
 			if typeof remote_options == 'string'
-				@remote_options = $.extend({}, @default_remote_options)
+				@remote_options = $.extend({}, @default_remote_options())
 				@remote_options.url = remote_options
 				@remote_options.callback = @remote_callback
 			else if $.isPlainObject(remote_options)
-				@remote_options = $.extend(@default_remote_options, remote_options)
+				@remote_options = $.extend(@default_remote_options(), remote_options)
 				@remote_options.callback = @remote_callback
 
 	 		@results_none_found = @remote_options.no_results_text
 			if $.isFunction(blurHandle)
-				@bindFunctionGround('input_blur', blurHandle) 
+				@bindFunctionGround('input_blur', blurHandle)
 
-			if @remote_options.remote_url?
+			if @remote_options.url != ""
 				@search_field.unbind()
 				@search_field.bind('keyup', $.proxy(@keyupRemote,@))
 
-		default_remote_options: {
-			method: 'GET',
-			dataType: 'json',
-			callback: "remote_callback",
-			no_results_text: "没有匹配结果!"
-		}
+		default_remote_options: () ->
+			return {
+				method: 'GET',
+				dataType: 'jsonp',
+				callback: "remote_callback",
+				no_results_text: "没有匹配结果!", 
+				remote_value: "id",
+				remote_key: "name"
+			}
 
 		bindFunctionAfter: (event, handle) ->
 			@events ||= {}
@@ -95,25 +98,32 @@ define ['jquery','lib/chosen.jquery'], ($,Chosen) ->
 				@fetchRemote($(event.target).val())
 
 		fetchRemote: (search_param) ->
-		    if @remote_options.remote_url?
-		    	@search_param = search_param
-		    	$.get @remote_options.remote_url, {search_param: search_param}, $.proxy(@remote_options.callback,@)
+			if @remote_options.url?
+				@search_param = search_param
+				# $.get @remote_options.url, {q: search_param}, $.proxy(@remote_options.callback,@)
+				$.ajax({
+					url: @remote_options.url, 
+					dataType: @remote_options.dataType,
+					data:{q: search_param},
+					success: $.proxy(@remote_options.callback,@)
+				})
 
-		remote_callback: (data) ->  
-			products = JSON.parse(data)
+		remote_callback: (data) ->
+			strHtml = ""
+			# products = JSON.parse(products)
 			text_class = this.form_field.id+"_on_text"
 			if $("."+text_class).length <= 0
 				@text_html()
 	 		
 	 		@textObj = $("."+text_class)
-			if products.length > 0 
-				@strHtml = "<option value='"+num._id+"'>"+num.age+"</option>" for num in products
+			if data.length > 0 
+				strHtml += "<option value='"+num[@remote_options.remote_value]+"'>"+num[@remote_options.remote_key]+"</option>" for num in data
 				@textObj.hide()
 			else
-				@strHtml = "<option value=''></option>"
+				strHtml = "<option value=''></option>"
 				@textObj.show()
 
-			$(this.form_field).html(@strHtml)
+			$(this.form_field).html(strHtml)
 			$(this.form_field).trigger("liszt:updated")
 			@search_field.val(@search_param)
 	 
