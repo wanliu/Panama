@@ -5,24 +5,33 @@
 	<div class="container-fluid property">
 		<div class="row-fluid">
 			<div class="span12">
-			<h3><%= @product.name %></h3>
+			<h5><%= @product.name %></h5>
 			<p><small><%= @product.summary %></small></P>
-			<table>
-				<tr>
-					<td class="property_label">价格</td>
-					<td><p class="text-surprised"><%= @product.price %></p></td>
-				</tr>
-				<tr>
-					<td>配送</td>
-					<td><%= @product.price %></td>
-				</tr>
-				<tr>
-					<td>商品评分</td>
-					<td><%= @product.price %></td>
-				</tr>
-			</table>
-			<div class='well'>
+			<hr>
 				<form class='form-horizontal'>
+					<div class="control-group">
+ 						<label class="control-label" for="inputEmail">价格</label>
+ 						<div class="controls">
+							<p class="text-surprised"><%= @product.price %></p>
+						</div>
+ 						<label class="control-label" for="inputEmail">配送</label>
+ 						<div class="controls">
+							<p class="text-surprised"><%= @product.price %></p>
+						</div>						
+ 						<label class="control-label" for="inputEmail">商品评分</label>
+ 						<div class="controls">
+							<p class="star"></p>
+			<script type="text/javascript">
+				require(['jquery', 'lib/jquery.raty'], function($){
+					$(".star").raty({
+						readOnly : true,
+						score    : 4,
+						path     : "<%= asset_path 'raty' %>"
+					})
+				});
+			</script>
+						</div>
+					</div>
 					<div class="control-group">
 					    <label class="control-label" for="inputEmail">数量</label>
 					    <div class="controls">
@@ -45,8 +54,7 @@
 							<button class="btn btn-large">Add To Cart</button>
 						</div>
 					</div>
-	 			</form>
-			</div>
+	 			</form>			
 			</div>	
 		</div>			
 	</div>

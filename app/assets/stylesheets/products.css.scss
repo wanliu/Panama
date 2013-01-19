@@ -15,7 +15,7 @@
 
 .preview {
 	position: absolute;
-	padding: 20px 0px 20px 5px;
+	padding: 10px 0px 10px 5px;
 	width: 360px;
 	float:left;
 	img {
@@ -26,8 +26,13 @@
 .property {
 	margin-left: 380px;
 	margin-right: 300px;
+	padding-left: 0px;
 	zoom: 1;
 
+	hr {
+		margin-top: 0px;
+		margin-bottom: 10px;
+	}
 	dl.dl-horizontal dt {
 		clear: none;
 	}
@@ -50,12 +55,12 @@
 	.form-horizontal {
 		.control-group {
 			.control-label {
-				width: 120px;
+				width: 80px;
 				text-align: left;
 			}
 
 			.controls {
-				margin-left: 140px;
+				margin-left: 80px;
 			}
 		}
 	}
