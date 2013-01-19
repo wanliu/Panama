@@ -77,8 +77,11 @@ gem "rest-client"
 # rmagick
 gem "mini_magick"
 
+gem 'rb-readline'
 # To use debugger
 gem 'debugger'
+
+gem 'omniauth-wanliu', :github => "wanliu/omniauth-wanliu"
 
 group :development do 
   gem 'thin'
