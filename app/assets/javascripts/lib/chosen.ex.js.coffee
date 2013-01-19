@@ -38,7 +38,7 @@ define ['jquery','lib/chosen.jquery'], ($,Chosen) ->
 	#   remote: '/product'	
 	# })
 
-	#<%= f.input :selecct, :as =>:chosen, :input_html =>{ :style => "width:350px;", :remote_url => "/detalls/search"} %>
+	#<%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id", :param_name => "qq" %>
 
 	class ChosenEx extends Chosen
 
@@ -69,7 +69,8 @@ define ['jquery','lib/chosen.jquery'], ($,Chosen) ->
 				callback: "remote_callback",
 				no_results_text: "没有匹配结果!", 
 				remote_value: "id",
-				remote_key: "name"
+				remote_key: "name",
+				param_name: "q"
 			}
 
 		bindFunctionAfter: (event, handle) ->
@@ -101,10 +102,12 @@ define ['jquery','lib/chosen.jquery'], ($,Chosen) ->
 			if @remote_options.url?
 				@search_param = search_param
 				# $.get @remote_options.url, {q: search_param}, $.proxy(@remote_options.callback,@)
+				data = {}
+				data[@remote_options.param_name] = search_param
 				$.ajax({
 					url: @remote_options.url, 
 					dataType: @remote_options.dataType,
-					data:{q: search_param},
+					data: data,
 					success: $.proxy(@remote_options.callback,@)
 				})
 
