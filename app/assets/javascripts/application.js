@@ -12,11 +12,18 @@
 //
 
 
-define('Panama', function(require, exports, modules){
+define('Panama', function(require, exports, modules){	
 	var $ = require('jquery');
 	var $ = require('jquery_ui');
 	var h5bp = require('h5bp');
 	var chosen = require('lib/chosen.ex');
+	var ajax_auth = require('wanliu/ajax_auth_client')
+
+	AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){                
+	})
+
+	AjaxAuthClient.registreLoginSuccess(function(user){        
+	})
 });
 
  
