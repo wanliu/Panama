@@ -15,7 +15,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
+  gem 'therubyracer', :platforms => :ruby
   gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails'
@@ -45,6 +45,7 @@ gem 'rspec-rails'
 group :test do
   gem "rspec-cells"
 end
+
 
 # form helper
 gem 'simple_form'

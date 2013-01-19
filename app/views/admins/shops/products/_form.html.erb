@@ -10,7 +10,7 @@
 	<%= f.input :preview , as: :file %>
 	<%= f.input :price %>
 	<%= f.association :category, 
-		:collection => current_shop.category.descendants %>
+		:collection => current_shop.category.descendants, :as => :chosen %>
 	<%= f.input :summary , as: :text %>
 	<%= f.button :submit, :save %>
 
