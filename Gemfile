@@ -81,7 +81,7 @@ gem 'rb-readline'
 # To use debugger
 gem 'debugger'
 
-gem 'omniauth-wanliu', :github => "wanliu/omniauth-wanliu"
+gem 'omniauth-wanliu', "0.0.9", :github => "wanliu/omniauth-wanliu"
 
 group :development do 
   gem 'thin'

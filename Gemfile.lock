@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
-  revision: cb7c923d63f91ff7445fdee5d315e6c1d2c3c89d
+  revision: caf75da27751f30d3f3dd481a94a29547336bc86
   specs:
-    omniauth-wanliu (0.0.7)
+    omniauth-wanliu (0.0.9)
       omniauth-oauth2 (~> 1.1.0)
       railties (~> 3.1)
 
@@ -249,7 +249,7 @@ DEPENDENCIES
   mongoid-tree
   omniauth
   omniauth-oauth2
-  omniauth-wanliu!
+  omniauth-wanliu (= 0.0.9)!
   rails (= 3.2.8)
   rb-readline
   redcarpet
