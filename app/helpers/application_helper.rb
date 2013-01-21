@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def accounts_provider_url
-    Rails.application.config.sso_provider_url
+    OmniAuth::Wanliu.config["provider_url"]    
   end
 
   def action_controller
