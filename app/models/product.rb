@@ -10,6 +10,10 @@ class Product
 
   mount_uploader :preview, ImageUploader
 
+  has_many :attachments, :as => :attachable
+
+  accepts_nested_attributes_for :attachments
+
   has_many :photos
   belongs_to :shop
   belongs_to :category
