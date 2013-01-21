@@ -1,0 +1,61 @@
+<div class='row-fluid'>
+	<div class="preview">
+		<%= image_tag @product.preview.url('420x420') %>
+	</div>
+	<div class="container-fluid property">
+		<div class="row-fluid">
+			<div class="span12">
+			<h5><%= @product.name %></h5>
+			<p><small><%= @product.summary %></small></P>
+			<hr>
+				<form class='form-horizontal'>
+					<div class="control-group">
+ 						<label class="control-label" for="inputEmail">价格</label>
+ 						<div class="controls">
+							<p class="text-surprised"><%= @product.price %></p>
+						</div>
+ 						<label class="control-label" for="inputEmail">配送</label>
+ 						<div class="controls">
+							<p class="text-surprised"><%= @product.price %></p>
+						</div>						
+ 						<label class="control-label" for="inputEmail">商品评分</label>
+ 						<div class="controls">
+							<p class="star"></p>
+			<script type="text/javascript">
+				require(['jquery', 'lib/jquery.raty'], function($){
+					$(".star").raty({
+						readOnly : true,
+						score    : 4,
+						path     : "<%= asset_path 'raty' %>"
+					})
+				});
+			</script>
+						</div>
+					</div>
+					<div class="control-group">
+					    <label class="control-label" for="inputEmail">数量</label>
+					    <div class="controls">
+							<div id="MySpinner" class="spinner">
+						      <input type="text" class="input-mini spinner-input" maxlength="3" value='1'>
+						      <div class="spinner-buttons  btn-group btn-group-vertical">
+						        <button class="btn spinner-up">
+						          <i class="icon-chevron-up"></i>
+						        </button>
+						        <button class="btn spinner-down">
+						          <i class="icon-chevron-down"></i>
+						        </button>
+						      </div>
+						    </div>
+					    </div>
+				    </div>		
+					<div class="control-group">
+						<div class="controls pull-right">
+							<button class="btn btn-primary btn-large">BUY</button>
+							<button class="btn btn-large">Add To Cart</button>
+						</div>
+					</div>
+	 			</form>			
+			</div>	
+		</div>			
+	</div>
+</div>
