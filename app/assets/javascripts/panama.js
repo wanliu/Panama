@@ -6,33 +6,33 @@ define(function(require, exports, module){
     var pm = require("lib/postmessage");
     var ajax_auth = require('wanliu/ajax_auth_client');    
 
-    AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){ 
-        var panle = $("#login-modal");
-        panle.find("iframe").attr("src", url);
-        panle.modal("show");               
+    var panle_modal = $("#login-modal");
+    AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
+        panle_modal.find("iframe").attr("src", url);
+        panle_modal.modal("show");               
     })
 
     AjaxAuthClient.registreLoginSuccess(function(user){
-        $("#login-modal").modal("hide");        
+        panle_modal.modal("hide");        
     })
 
-    var load_modal_head = function(title, height){
-        $("#login-modal").find(".modal-header>.context").html(title);
-        $("#login-modal").find(".modal-body>iframe").animate({
+    var load_modal_head_with_height = function(title, height){
+        panle_modal.find(".modal-header>.context").html(title);
+        panle_modal.find(".modal-body>iframe").animate({
             height : height
         })
     }
 
     AjaxAuthClient.registreLoadUserLogin(function(){
-        load_modal_head("用户登陆", "200px");
+        load_modal_head_with_height("用户登陆", "200px");
     })
 
     AjaxAuthClient.registreLoadForgotPassword(function(){
-        load_modal_head("找回密码", "130px");
+        load_modal_head_with_height("找回密码", "130px");
     })
 
     AjaxAuthClient.registreLoadCreateUser(function(){
-        load_modal_head("用户注册", "310px");
+        load_modal_head_with_height("用户注册", "310px");
     })
     
     exports.loadPage = function(query, url){
