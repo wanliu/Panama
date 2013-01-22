@@ -75,6 +75,7 @@ gem "carrierwave-upyun"
 gem 'rack-raw-upload'
 gem "rest-client"
 
+gem "nested_form"
 # rmagick
 gem "mini_magick"
 

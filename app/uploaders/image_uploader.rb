@@ -1,6 +1,6 @@
 # encoding: utf-8
 require 'carrierwave/processing/mini_magick'
-IMAGE_UPLOADER_ALLOW_IMAGE_VERSION_NAMES = %(20x20 30x30 240x240 100x100 120x90 160x120 250x187 320 640 800)
+IMAGE_UPLOADER_ALLOW_IMAGE_VERSION_NAMES = %(20x20 30x30 240x240 100x100 120x90 160x120 250x187 420x420 320 640 800)
 
 class ImageUploader < CarrierWave::Uploader::Base
   def store_dir

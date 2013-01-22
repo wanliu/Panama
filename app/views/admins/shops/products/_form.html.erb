@@ -32,11 +32,11 @@
 
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
-    require(['jquery', 'backbone', 'rails.view'], function($, Backbone, Rails){
-        var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
-            model: <%= raw form.to_json %>
-        });
-    })
+	require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
+		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
+			model: <%= raw form.to_json %>
+		});
+	})
 </script>
 <% end %>
 
