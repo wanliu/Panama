@@ -13,6 +13,8 @@ Panama::Application.routes.draw do
   resources :contents
   resources :newsletter_receivers
 
+  resources :products
+
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
