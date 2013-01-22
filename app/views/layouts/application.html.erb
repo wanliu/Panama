@@ -2,49 +2,48 @@
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
   <%= cache do %>
-	<%= render "head" %>
+    <%= render "head" %>
   <% end %>
 
   <body class="<%= controller.controller_name %>">
     <%= render "chromeframe" %>
     <%= render 'header' %>
-	<div class='second-nav-bar'></div>
-	<div class='main-slide'>
+    <div class='second-nav-bar'></div>
+    <div class='main-slide'>
         <style type="text/css" media="screen">
 
-        </style>		
-		<div class='slide'>
-			
-		</div>
-	</div>
-	<div class='contents container'>
-		<div class='left-side shadow'>
-			<%= render_cell :category, :show %>
-		</div>
-		<div class='body'>
-			<%= render_cell :navigation, :show %>
-			<div class='main'>
-				<div class="slide-box">
-					<%= render_cell :slide, :show %>
-				</div>
+        </style>        
+        <div class='slide'>
+            
+        </div>
+    </div>
+    <div class='contents container'>
+        <div class='left-side shadow'>
+            <%= render_cell :category, :show %>
+        </div>
+        <div class='body'>
+            <%= render_cell :navigation, :show %>
+            <div class='main'>
+                <div class="slide-box">
+                    <%= render_cell :slide, :show %>
+                </div>
 
-			    <%= render "flashes" %>
-			    <%= yield %>
-			</div>
-		</div>
-	</div>
-
+                <%= render "flashes" %>
+                <%= yield %>
+            </div>
+        </div>
+    </div>
 
     <%= render "footer" %>
 
     <%# Javascript at the bottom for fast page loading %>
     <%= render "javascripts" %>
-	<script type="text/javascript">
-		$(".slide-box").slides({
-			play: 5000,
-	        pause: 2500,
-			hoverPause: true
-		});
-	</script>    
+    <script type="text/javascript">
+        $(".slide-box").slides({
+            play: 5000,
+            pause: 2500,
+            hoverPause: true
+        });
+    </script>    
   </body>
 </html>
