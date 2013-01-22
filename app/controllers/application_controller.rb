@@ -3,8 +3,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   layout 'bootstrap'
+
+  has_widgets do |root|
+    root << widget(:cart, :my_cart)
+  end
   
-  helper_method :current_user
+  helper_method :current_user, :my_cart
 
   def login_required
     if !current_user

@@ -1,0 +1,20 @@
+<%= widget_div do %>
+	<a href="#" class='handle' >My Cart</a>
+	<span id="shop_count" class="badge badge-important"><%= @my_cart.items_count %></span>
+<% end %>
+<div id="cart_box">
+
+</div>
+
+<script type="text/javascript">
+	require(["jquery", 'my_cart'], function($, MyCart){
+		var id = "#<%= widget_id %>";
+		var my_cart = new MyCart;
+		
+		$(id).hover(function(){
+			$("#cart_box")
+				.show()
+				.addClass("animated fadeInUpBig")
+		})
+	});
+</script>
