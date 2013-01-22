@@ -4,7 +4,6 @@ class Product
 
   attr_accessor :uploader_secure_token
   
-  field :title, type: String
   field :name, type: String
   field :price, type: BigDecimal
   field :summary, type: String
@@ -19,7 +18,7 @@ class Product
   belongs_to :shop
   belongs_to :category
 
-  validates :title, presence: true
+  # validates :title, presence: true
   validates :name, presence: true
   validates :price, presence: true
   validates :price, numericality: true
