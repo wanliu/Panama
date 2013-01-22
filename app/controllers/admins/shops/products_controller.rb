@@ -67,4 +67,15 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
   end
+
+  def product_upload    
+    product = Product.new(:name => "test", :price => 1)
+    product.preview = params[:file]
+    debugger
+    if product.save
+      render :text => "{ success: true, avatar_filename : #{product.avatar_filename} }"      
+    else
+      render :text => "{ success: false}"
+    end
+  end
 end
