@@ -1,43 +1,47 @@
 <%= simple_form_for form, 
-	:url => admins_products(form), 
-	:remote => true,
-	:html => {
-		:class => "form-horizontal"
-	} do |f| %>
-	<%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %>
-	<%= image_tag form.preview.url("100x100") %>
-	<div class="control-group string required">
-		<label class="string required control-label" for="product_price"><abbr title="required">*</abbr>preview</label>
-		<div class="controls product_preview">			
-		</div>
-	</div>
-	<%#= f.input :preview , as: :file %>
-	<%= f.input :price %>
-	<%= f.association :category, 
-		:collection => current_shop.category.descendants, :as => :chosen %>
-	<%= f.input :summary , as: :text %>
-	<%= f.button :submit, :save %>
+    :url => admins_products(form), 
+    :remote => true,
+    :html => {
+        :class => "form-horizontal"
+    } do |f| %>
+    <%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %>
+    <%= image_tag form.preview.url("100x100"), :class => "img-polaroid"  %>
+    <%= image_tag form.preview.url("100x100"), :class => "img-polaroid"  %>
+    <%= image_tag form.preview.url("100x100"), :class => "img-polaroid"  %>
+    <%= image_tag form.preview.url("100x100"), :class => "img-polaroid"  %>
+    
+    <div class="control-group string required">
+        <label class="string required control-label" for="product_price"><abbr title="required">*</abbr>preview</label>
+        <div class="controls product_preview">          
+        </div>
+    </div>
+    <%#= f.input :preview , as: :file %>
+    <%= f.input :price %>
+    <%= f.association :category, 
+        :collection => current_shop.category.descendants, :as => :chosen %>
+    <%= f.input :summary , as: :text %>
+    <%= f.button :submit, :save %>
 
-	<%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
-		link_to :close, '#', :class => 'btn close'
-	end %>
+    <%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
+        link_to :close, '#', :class => 'btn close'
+    end %>
 
-	<%#= f.association :photos %>
+    <%#= f.association :photos %>
 <% end %>
 
 
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
-	require(['jquery', 'backbone', 'rails.view'], function($, Backbone, Rails){
-		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
-			model: <%= raw form.to_json %>
-		});
-	})
+    require(['jquery', 'backbone', 'rails.view'], function($, Backbone, Rails){
+        var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
+            model: <%= raw form.to_json %>
+        });
+    })
 </script>
 <% end %>
 
 <script type='text/javascript'>
-	require(["admins/shops/product_upload"], function(view){		
-		new view.ProductUpload({ el : $("form .product_preview") })
-	})
+    require(["admins/shops/product_upload"], function(view){        
+        new view.ProductUpload({ el : $("form .product_preview") })
+    })
 </script>

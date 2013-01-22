@@ -15,7 +15,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     "http://panama-img.b0.upaiyun.com/product_blank.gif#{version_name}"
   end
 
-  # 覆盖 url 方法以适应“图片空间”的缩略图命名
+  #覆盖 url 方法以适应“图片空间”的缩略图命名
   def url(version_name = "")
     @url ||= super({})
     version_name = version_name.to_s

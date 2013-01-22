@@ -148,6 +148,8 @@ GEM
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
+    rack-raw-upload (1.1.1)
+      multi_json
     rack-ssl (1.3.2)
       rack
     rack-test (0.6.2)
@@ -250,6 +252,7 @@ DEPENDENCIES
   omniauth
   omniauth-oauth2
   omniauth-wanliu (= 0.0.9)!
+  rack-raw-upload
   rails (= 3.2.8)
   rb-readline
   redcarpet

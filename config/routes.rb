@@ -60,7 +60,7 @@ Panama::Application.routes.draw do
     namespace :admins do 
       resources :products, :controller => "shops/products"  do 
         collection do 
-          post "/product_upload"
+          post "/product_upload", :to =>  :product_upload
         end
       end
     end

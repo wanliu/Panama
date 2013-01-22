@@ -18,9 +18,9 @@ define(["jquery", "backbone", "fileuploader", "exports"], ($, Backbone, qq, expo
                 sizeLimit : 1048576, # max size: 1MB
                 minSizeLimit : 0, # min size
                 debug : true,
-                multiple : false,
+                multiple : true,
                 action : '/shops/50fcdf4adc86738e6f000002/admins/products/product_upload',
-                inputName : "avatar",
+                inputName : "preview",
                 template : @template(),
                 cancelButtonText : "取消上传",
                 uploadButtonText : '<i class="icon-upload icon-white"></i> 上传头像',
@@ -46,8 +46,7 @@ define(["jquery", "backbone", "fileuploader", "exports"], ($, Backbone, qq, expo
                 authenticity_token : $("meta[name=csrf-token]").attr("content")
             )
 
-        complete_callback : (id, filename, data) ->
-            debugger
+        complete_callback : (id, filename, data) ->            
 
     exports
 )

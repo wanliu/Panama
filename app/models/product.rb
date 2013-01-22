@@ -1,6 +1,7 @@
 class Product
   include Mongoid::Document
   include Mongoid::Timestamps::Created
+  include Rails.application.routes.url_helpers
 
   attr_accessor :uploader_secure_token
   

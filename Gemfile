@@ -72,6 +72,7 @@ gem 'hirb'
 gem "carrierwave"
 gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
 gem "carrierwave-upyun"
+gem 'rack-raw-upload'
 gem "rest-client"
 
 # rmagick
