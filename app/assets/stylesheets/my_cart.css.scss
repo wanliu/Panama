@@ -27,4 +27,13 @@
 	right: 25px;
 	@include border-radius(5px);	
 	@include box-shadow(1px 1px 3px $grayDarker);
+
+	.tool {
+		text-align: center;
+		line-height: 40px;
+	}
+
+	hr {
+		margin-top: 3px;
+	}
 }

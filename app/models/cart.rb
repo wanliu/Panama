@@ -7,5 +7,6 @@ class Cart
 
   belongs_to :user
   has_many :product_items
-  
+
+  alias :items :product_items  
 end

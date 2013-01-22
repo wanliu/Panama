@@ -10,7 +10,6 @@ define ['jquery', 'backbone', 'exports'] , ($, Backbone, exports) ->
 			@hover = false
 
 		signalProcess: (event) ->
-			debugger
 			_(@over_elements).include(event.currentTarget)
 
 
@@ -22,11 +21,28 @@ define ['jquery', 'backbone', 'exports'] , ($, Backbone, exports) ->
 		el: "#my_cart"
 
 		events: 
-			"hover .handle": "signalProcess"
-			"blur .handle": "signalProcess"
+			"click .handle": "toggleCartBox"
 
 		initialize: (@options) ->
 			@hm = new HoverManager(@$("a.handle, #cart_box"))
 
-		signalProcess: (event) ->
-			@hm.signalProcess(event)
+		toggleCartBox: (event) ->
+			$("#cart_box")
+				.toggle () ->
+					if $(@).hasClass "fadeInUpBig" 
+						'animate fadeInDownBig show'
+					else 
+						'animate fadeInUpBig'
+
+		hoverProcess: (event) ->
+			@$("#cart_box")
+				.show()
+				.addClass("animated fadeInUpBig")
+			# @hm.signalProcess(event)
+
+		blurProcess: (event)->
+			$(@el)
+				.addClass("animated fadeInDownBig")
+
+
+
