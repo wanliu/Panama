@@ -9,7 +9,7 @@ class User
 
   def cart
     if _cart.nil?
-      _cart = Cart.create
+      create__cart
       save
     end
     _cart

@@ -19,7 +19,7 @@ class Admins::Shops::SectionController < Admins::BaseController
   @@ajaxify_pages_names = []
 
   def current_shop
-    @current_shop = Shop.find(params[:shop_id])
+    @current_shop = Shop.find_by(:name => params[:shop_id])
   end
 
   def self.ajaxify_pages(*args)

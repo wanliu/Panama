@@ -5,10 +5,17 @@
 	<div class="container-fluid property">
 		<div class="row-fluid">
 			<div class="span12">
+			<%= link_to t(:enter_shop, :name => @product.shop.name), 
+						shop_path(@product.shop.name), 
+						:class => 'btn pull-right' %>
 			<h5><%= @product.name %></h5>
 			<p><small><%= @product.summary %></small></P>
 			<hr>
-				<form class='form-horizontal'>
+				<%= simple_form_for @item, :url => @product, :html => {:class => 'form-horizontal' } do |f| %>
+					<%= f.input :title, :as => :hidden %>
+					<%= f.input :price, :as => :hidden %>
+					<%= f.input :amount, :as => :hidden %>
+					<%= f.input :product, :as => :hidden, :input_html => { :value => @product.id } %>
 					<div class="control-group">
  						<label class="control-label" for="inputEmail">价格</label>
  						<div class="controls">
@@ -21,15 +28,15 @@
  						<label class="control-label" for="inputEmail">商品评分</label>
  						<div class="controls">
 							<p class="star"></p>
-			<script type="text/javascript">
-				require(['jquery', 'lib/jquery.raty'], function($){
-					$(".star").raty({
-						readOnly : true,
-						score    : 4,
-						path     : "<%= asset_path 'raty' %>"
-					})
-				});
-			</script>
+							<script type="text/javascript">
+								require(['jquery', 'lib/jquery.raty'], function($){
+									$(".star").raty({
+										readOnly : true,
+										score    : 4,
+										path     : "<%= asset_path 'raty' %>"
+									})
+								});
+							</script>
 						</div>
 					</div>
 					<div class="control-group">
@@ -51,10 +58,10 @@
 					<div class="control-group">
 						<div class="controls pull-right">
 							<button class="btn btn-primary btn-large">BUY</button>
-							<button class="btn btn-large">Add To Cart</button>
+							<%= add_to_my_cart("Add To Cart", '.preview') %>
 						</div>
 					</div>
-	 			</form>			
+				<% end %>
 			</div>	
 		</div>			
 	</div>
