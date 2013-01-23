@@ -1,15 +1,12 @@
 class Product
   include Mongoid::Document
-  include Mongoid::Timestamps::Created
-  include Rails.application.routes.url_helpers
+  include Mongoid::Timestamps::Created  
 
   attr_accessor :uploader_secure_token
   
   field :name, type: String
   field :price, type: BigDecimal
-  field :summary, type: String
-
-  mount_uploader :preview, ImageUploader
+  field :summary, type: String  
 
   has_many :attachments, :as => :attachable
 

@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
-  revision: caf75da27751f30d3f3dd481a94a29547336bc86
+  revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
-    omniauth-wanliu (0.0.9)
+    omniauth-wanliu (0.1.0)
       omniauth-oauth2 (~> 1.1.0)
       railties (~> 3.1)
 
@@ -253,7 +253,7 @@ DEPENDENCIES
   nested_form
   omniauth
   omniauth-oauth2
-  omniauth-wanliu (= 0.0.9)!
+  omniauth-wanliu (= 0.1.0)!
   rack-raw-upload
   rails (= 3.2.8)
   rb-readline

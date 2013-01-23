@@ -72,3 +72,45 @@
 	font-size: 21px;
 	line-height: 30px;
 }
+
+.attachment-list{
+	list-style: none;
+
+	li{
+		margin-right: 15px;
+		float: left;	
+
+		.attachable{		
+			position: relative;
+			margin-left: 10px;
+			margin-right: 10px;
+			height : 100px;
+			width : 100px;
+			padding: 4px;
+			border: 1px solid #DDD;			
+			vertical-align: middle;
+			display: table-cell;	
+
+			.focus-panle{
+				position: absolute;
+				bottom: 0px;
+				background: gray;
+				width: 100%;
+				left: 0px;				
+				opacity: 0.6;
+				font-size : 9px;
+				text-align: center;
+
+				a{
+					/*color : black;*/
+				}
+			}
+		}
+
+		.default_img{
+			border : 1px solid red !important;
+		}
+	}
+
+
+}

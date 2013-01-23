@@ -16,6 +16,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     @product = Product.new
+    @attachments = []
+    4.times{ @attachments << Attachment.new }
   end
 
   def create
@@ -67,17 +69,5 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
   end
-
-  def product_upload        
-    product = Product.new(:name => "test", :price => 1)
-    product.category_id = Category.first.id
-    product.shop_id = params[:shop_id]
-    product.preview = params[:file] 
-    begin
-      product.save
-      render :json => { :success => true, :preview_filename => product.preview_filename  }.to_json  #"{ success: true, avatar_filename : #{product.preview_filename} }"      
-    rescue Exception => e            
-      render :json => { :success => false }.to_json
-    end
-  end
+  
 end

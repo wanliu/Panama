@@ -29,6 +29,11 @@ Panama::Application.routes.draw do
   resources :category
   # shop admins routes
   resources :shops do 
+    match "admins/attachments/upload", :to => "admins/shops/attachments#upload", :via => :post
+    match "admins/attachments/destroy/:id", :to => "admins/shops/attachments#destroy", :via => :get
+  end
+
+  resources :shops do 
     namespace :admins do 
       resources :dashboard, :controller => "shops/dashboard"
     end
@@ -62,7 +67,7 @@ Panama::Application.routes.draw do
     namespace :admins do 
       resources :products, :controller => "shops/products"  do 
         collection do 
-          post "/product_upload", :to =>  :product_upload
+          #post "/product_upload", :to =>  :product_upload
         end
       end
     end
