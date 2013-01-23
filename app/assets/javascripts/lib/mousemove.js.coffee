@@ -29,15 +29,18 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 			$("#main_drag").stop(); 
 			_x = ev.pageX - @x;   
 			$("#main_drag").animate({left:_x+"px",top:"0px"},10)
-			strWidth = "996px"
-			if _x > 601 && _x < 840
-				strWidth = "750px" 
-			else if _x > 371 && _x < 600
-				strWidth = "510px" 
-			else if _x > 1 && _x < 370
-				strWidth = "270px" 
+			strWidth = 1245
+			if _x > 861 && _x < 1100
+				strWidth = 996
+			else if _x > 621 && _x < 860
+				strWidth = 760 
+			else if _x > 391 && _x < 620
+				strWidth = 520 
+			else if _x > 1 && _x < 390
+				strWidth = 280 
 
-			$("#main").width(strWidth)
+			$("#social_sidebar").css('left',strWidth+"px") 
+			$("#main").width(strWidth+"px")
 			$("#activities").data("masonry").resize()	
 
 		mouseup: ()-> 
