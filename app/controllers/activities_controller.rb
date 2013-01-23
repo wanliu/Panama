@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
-  before_filter :login_required
-  before_filter :load_category, :only => [:index,:new]
+  before_filter :login_required 
+  before_filter :load_category, :only => [:index,:new] 
   # GET /activities
   # GET /activities.json
   layout "activities"

@@ -4,6 +4,7 @@
 @import 'launch_bootstrap';
 @import "compass/css3";
 @import "variables";
+@import "my_cart";
 
 body {
 	@include background(
