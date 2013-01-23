@@ -18,6 +18,8 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 		on_mousedown: (e)->
 			# $(document).bind "selectstart",$.proxy(@selectstart,@)
 			# $(document).bind "contextmenu",$.proxy(@contextmenu,@)
+			@.$main.css("border","2px dashed gray")
+			@el.css("border-right","2px dashed gray")
 			$("body").css('-moz-user-select','none')
 			$("body").css('-webkit-user-select','none') 
 			offset = @el.offset();
@@ -49,6 +51,8 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 			# $(document).unbind("selectstart");
 			# $(document).unbind("contextmenu");
 			$("#main_drag").css('left',$("#main").offset().left+$("#main").width()-3)
+			@.$main.css("border","0px solid gray")
+			@el.css("border-right","5px solid #ccc")
 			$("#main_drag").height($("#main").height()+"px")
 			$("body").css('-moz-user-select','')
 			$("body").css('-webkit-user-select','')
