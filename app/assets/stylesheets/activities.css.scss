@@ -54,7 +54,6 @@ body {
 }
 
 #main {
-	position: absolute;
 	top:0px;
 	left:0px;
 	padding-top: 10px;
@@ -63,6 +62,17 @@ body {
 	width: 996px;
 	min-height: 500px;
 	border-right: 1px solid #ccc;
+}
+
+#main_drag{
+	top:0px;
+	left:0px;
+	position: absolute;
+	min-height: 500px;
+	width: 1px;
+	border-right: 2px solid #ccc; 
+	cursor: w-resize;
+    z-index: 1000;
 }
 
 #social_sidebar {
