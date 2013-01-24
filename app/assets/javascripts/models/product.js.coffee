@@ -10,5 +10,6 @@ define(["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
 	exports.Product = Product
 	exports.ProductList = ProductList
+	
 	exports
 )

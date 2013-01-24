@@ -6,23 +6,9 @@
     } do |f| %>
     <%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %> 
 
-    <div class='control-group'>
-        <ul class='attachment-list'>            
-            <% @attachments.each do | a | %>
-                <li>
-                    <div class='attachable'>   
-                        <%= image_tag a.attachable.url("100x100"), :class => "img-rounded attachable-preview"  %>
-                        <input type='hidden' value="<%= a.new_record? ? "" : a.id %>" />
-                        <div class="attachment-upload" style='display:none'></div>
-
-                        <div class='focus-panle' style='display:none' status="<%=a.new_record  %>" >
-                            <a href='javascript:void(0)' class='delete-img'>删除</a>
-                            <a href='javascript:void(0)' class='default-index-img'>设为主图</a>
-                        </div>
-                    </div>
-                </li>
-            <% end %>        
-        <ul>
+    <div class='control-group'>        
+        <ul class='attachment-list'>                 
+        </ul>
     </div>
     
     <%= f.input :price %>
@@ -50,11 +36,13 @@
 <% end %>
 
 <script type='text/javascript'>
-    require(["admins/shops/product_upload"], function(view){        
+    require(["admins/shops/product_upload", "models/attachment"], function(view, models){                      
         new view.ProductUpload({ 
             el : $("form .attachment-list"), 
             shop_id : "<%=current_shop.id %>" ,
-            default_img_url : "<%=default_img_url('100x100') %>"
+            default_img_url : "<%=default_img_url('100x100') %>",
+            data : <%= raw form.format_attachment.to_json %>,
+            models : models
         })
     })
 </script>

@@ -16,12 +16,11 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     @product = Product.new
-    @attachments = []
-    4.times{ @attachments << Attachment.new }
   end
 
-  def create
-    @product = current_shop.products.create params[:product]
+  def create            
+    @product = current_shop.products.create(params[:product].merge!(convent_attachment_params))
+
     if @product.valid?
       render :action => :show
     else
@@ -70,4 +69,15 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     render :partial => "products_table", :locals => { :products => @products }
   end
   
+  private 
+
+  def convent_attachment_params
+    options = {:attachments => [], :default_attachment => nil }
+    params.delete(:attachment).each do |k ,v |
+      attachment = Attachment.where(:id => v).first
+      options[:attachments] << attachment
+      options[:default_attachment] = attachment if k == "default"      
+    end
+    options
+  end
 end

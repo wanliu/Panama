@@ -5,10 +5,9 @@ class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
         file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[:attachable]
         attachment = Attachment.new
         attachment.attachable = file        
-        begin
+        begin            
             attachment.save!          
-            _attachment = attachment.attributes            
-            _attachment[:url] = attachment.attachable.url("100x100")
+            _attachment = attachment.get_attributes(params[:version_name])                        
             render :json => { :success => true, :attachment => _attachment.to_json   }.to_json
         rescue Exceoption => e
             attachment.attachable.remove!
@@ -17,12 +16,8 @@ class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
     end
 
     def destroy
-        # attachment = Attachment.find(params[:id])
-        # attachment.destroy
-        render :json => { :success => true }.to_json
-    end
-
-    def testa
+        attachment = Attachment.find(params[:id])
+        attachment.destroy
         render :json => { :success => true }.to_json
     end
 end

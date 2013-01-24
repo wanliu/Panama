@@ -30,7 +30,7 @@ Panama::Application.routes.draw do
   # shop admins routes
   resources :shops do 
     match "admins/attachments/upload", :to => "admins/shops/attachments#upload", :via => :post
-    match "admins/attachments/destroy/:id", :to => "admins/shops/attachments#destroy", :via => :get
+    match "admins/attachments/destroy/:id", :to => "admins/shops/attachments#destroy", :via => :delete
   end
 
   resources :shops do 
