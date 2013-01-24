@@ -39,11 +39,11 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 				else if _x > 621 && _x < 860
 					strWidth = 755 
 				else if _x > 391 && _x < 620
-					strWidth = 515 
+					strWidth = 510 
 				else if _x > 1 && _x < 390
 					strWidth = 270 
 
-				$("#social_sidebar").css('left',strWidth+"px") 
+				$("#social_sidebar").css('left',strWidth+"px")
 				$("#main").width(strWidth+"px")
 				$("#activities").data("masonry").resize()	
 
