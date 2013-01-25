@@ -26,7 +26,7 @@ class ShopsController < ApplicationController
 
   # GET /shops/1
   # GET /shops/1.json
-  def show
+  def show    
     @shop = Shop.find(params[:id])
 
     respond_to do |format|
