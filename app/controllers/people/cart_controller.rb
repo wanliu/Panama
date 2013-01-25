@@ -1,4 +1,6 @@
 class People::CartController < ApplicationController
+  layout "cart"
+
   def index
   end
 
