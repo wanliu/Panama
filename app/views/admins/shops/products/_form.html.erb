@@ -6,7 +6,7 @@
 	} do |f| %>
 	<%= f.input :name %>
 	<%= image_tag form.preview.url("100x100") %>
-    <%= f.association :attachments %>
+    <%#= f.association :attachments %>
 	<%= f.input :preview , as: :file %>
 	<%= f.simple_fields_for	:attachments do |c| %>
 		<%= c.input :file, :as => :file %>
