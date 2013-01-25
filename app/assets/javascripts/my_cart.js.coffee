@@ -15,8 +15,6 @@ define ['jquery', 'backbone', 'exports'] , ($, Backbone, exports) ->
 
 		checkStatus: (event) ->
 
-
-
 	class MyCart extends Backbone.View
 		el: "#my_cart"
 
@@ -44,5 +42,45 @@ define ['jquery', 'backbone', 'exports'] , ($, Backbone, exports) ->
 			$(@el)
 				.addClass("animated fadeInDownBig")
 
+		addToCart: ($element, form, urlAction) ->
+			$el = $(@el)
+
+			targetPosition = @targetAttributes($el)
+
+			moveTarget = $element
+				.clone()
+				.appendTo("body")
+			
+			moveTarget		
+				.css('position', "fixed")
+				.animate targetPosition, () =>
+					$(@el)
+						.addClass("bounce")					
+					moveTarget.remove()
+					@cartAddAction(urlAction, form)
+
+		cartAddAction: (url, form) ->
+			$.post url, form.serialize(), (item) =>
 
 
+		targetAttributes: (target) ->
+			top: target.position().top
+			left: target.position().left
+			width: target.width()
+			height: target.height()
+			opacity: 0.25
+
+
+	class CartBox extends Backbone.View
+
+	myCart = new MyCart
+
+	$("[add-to-cart]").on "click", (event) ->
+		selector = $(@).attr('add-to-cart')
+		urlAction = $(@).attr('add-to-action')
+		form = $(@).parents("form")
+
+		myCart.addToCart($(selector), form, urlAction)
+
+	exports.myCart = myCart
+	exports
