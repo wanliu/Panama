@@ -39,13 +39,14 @@ define([
             @init_element()
 
         init_element : () ->
-            @attachment_upload_panle = @$(".attachment-upload")
-            @init_up_file()
-            @file_input = @$("input[type=file]") 
+            @attachment_upload_panle = @$(".attachment-upload")                        
             @hidden_input = @$("input[type=hidden]")
             @img = @$("img.attachable-preview")   
-            @bottom_meun = @$(".focus-panle")
+            @bottom_meun = @$(".operation-panle")
             @attachable = @$(".attachable")
+            @progress_panle_list = @$(".progress-panle").find("ul.list")
+            @init_up_file()
+            @file_input = @$("input[type=file]")
 
         render : () ->
             @$el
@@ -57,18 +58,17 @@ define([
                 sizeLimit : 1048576, # max size: 1MB
                 minSizeLimit : 0, # min size
                 debug : true,
-                multiple : true,
+                multiple : false,
                 action : "#{@url_root()}/upload",
                 inputName : "attachable",
-                template : @file_upload_template(),
                 cancelButtonText : "取消上传",
                 uploadButtonText : '<i class="icon-upload icon-white"></i> 上传头像',
                 onComplete : _.bind(@complete_callback, @),
                 onSubmit : _.bind(@submit_before_callback, @),
-                messages : @messages()
+                messages : @messages()                
             })   
 
-        file_upload_template : () ->
+        file_upload_button_template : () ->
             """
             <div class="qq-uploader">
                 <pre class="qq-upload-drop-area"><span>{dragZoneText}</span></pre>
@@ -76,6 +76,7 @@ define([
                 <ul class="qq-upload-list" style="margin-top: 10px; text-align: center;"></ul>
             </div>
             """
+
         messages : () ->
             {
                 typeError : "请选择正确的{file}头像图片，只支持{extensions}图片",
@@ -90,6 +91,7 @@ define([
 
         complete_callback : (id, filename, data) ->            
             info = JSON.parse(data.attachment)
+            #空图框时，添加新的空图框
             @add_blank_product_attachment() if @is_blank_img()                
             default_status = @is_default_index_img()
             @model.set(info)   
