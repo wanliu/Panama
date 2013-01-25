@@ -130,6 +130,7 @@ GEM
     moped (1.3.0)
     multi_json (1.5.0)
     multipart-post (1.1.5)
+    nested_form (0.3.1)
     oauth2 (0.8.0)
       faraday (~> 0.8)
       httpauth (~> 0.1)
@@ -247,6 +248,7 @@ DEPENDENCIES
   mini_magick
   mongoid (~> 3.0.0)
   mongoid-tree
+  nested_form
   omniauth
   omniauth-oauth2
   omniauth-wanliu (= 0.0.9)!

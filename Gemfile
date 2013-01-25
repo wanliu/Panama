@@ -74,6 +74,7 @@ gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
 gem "carrierwave-upyun"
 gem "rest-client"
 
+gem "nested_form"
 # rmagick
 gem "mini_magick"
 
