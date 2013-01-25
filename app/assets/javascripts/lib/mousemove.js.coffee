@@ -17,10 +17,10 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 			
 		on_mousedown: (e)->
 			# $(document).bind "selectstart",$.proxy(@selectstart,@)
-			# $(document).bind "contextmenu",$.proxy(@contextmenu,@) 
-			$("body").css("cursor","w-resize")
+			# $(document).bind "contextmenu",$.proxy(@contextmenu,@)
+			$("body").css('cursor','w-resize')
 			@.$main.css("border","2px dashed gray")
-			@el.css("border-right","0px dashed gray")
+			@el.css("border-right","0hpx dashed gray")
 			$("body").css('-moz-user-select','none')
 			$("body").css('-webkit-user-select','none') 
 			offset = @el.offset();
@@ -33,17 +33,17 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 			_x = ev.pageX - @x;   
 			if _x < $(window).width()
 				$("#main_drag").animate({left:_x+"px",top:"0px"},10)
-				strWidth = 1240
+				strWidth = 1235
 				if _x > 861 && _x < 1100
 					strWidth = 996
 				else if _x > 621 && _x < 860
 					strWidth = 755 
 				else if _x > 391 && _x < 620
-					strWidth = 510 
+					strWidth = 515 
 				else if _x > 1 && _x < 390
 					strWidth = 270 
 
-				$("#social_sidebar").css('left',strWidth+"px")
+				$("#social_sidebar").css('left',strWidth+"px") 
 				$("#main").width(strWidth+"px")
 				$("#activities").data("masonry").resize()	
 
@@ -55,7 +55,7 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 			@.$main.css("border","0px solid gray")
 			@el.css("border-right","5px solid #ccc")
 			$("#main_drag").height($("#main").height()+"px")
-			$("body").css("cursor","")
+			$("body").css('cursor','')
 			$("body").css('-moz-user-select','')
 			$("body").css('-webkit-user-select','')
 
