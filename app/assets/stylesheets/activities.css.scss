@@ -5,6 +5,7 @@
 @import "compass/css3";
 @import "variables";
 @import "my_cart";
+@import 'bootstrap-spinner';
 
 body {
 	@include background(
