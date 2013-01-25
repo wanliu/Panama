@@ -128,14 +128,6 @@ define([
 
                     @$el.remove()
             )
-            ###          
-            $.get("#{@url_root()}/destroy/#{@hidden_input.val()}", (data) =>                          
-                if @is_default_index_img()
-                    @trigger("default_first_img")
-
-                @$el.remove()
-            )
-            ###
 
         url_root : () ->
             "/shops/#{@shop_id}/admins/attachments"
