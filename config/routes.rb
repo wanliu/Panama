@@ -1,5 +1,14 @@
 Panama::Application.routes.draw do
 
+  resources :people, :key => :login do
+    resources :cart, :controller => "people/cart"
+    member do 
+      post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
+      put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
+      post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list  
+    end
+  end
+
   resources :activities
 
   get "transport/index"
@@ -10,8 +19,11 @@ Panama::Application.routes.draw do
 
   get "pending/index"
 
+  resources :users
   resources :contents
   resources :newsletter_receivers
+
+  resources :products
 
   # resources :shops do
   #   scope :module => "admins" do
@@ -26,13 +38,14 @@ Panama::Application.routes.draw do
 
   resources :category
   # shop admins routes
-  resources :shops do 
+
+  resources :shops, :key => :name  do 
     namespace :admins do 
       resources :dashboard, :controller => "shops/dashboard"
     end
   end
 
-  resources :shops do 
+  resources :shops, :key => :name do 
     namespace :admins do 
       resources :contents, :controller => "shops/contents"
     end

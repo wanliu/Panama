@@ -13,6 +13,10 @@ module ApplicationHelper
     @current_user ||= User.where(:uid => session[:user_id]['uid']).first
   end
 
+  def my_cart
+    current_user.cart
+  end
+
   def accounts_provider_url
     OmniAuth::Wanliu.config["provider_url"]    
   end
