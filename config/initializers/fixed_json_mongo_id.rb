@@ -3,6 +3,7 @@ module Mongoid
     def as_json(options={})
       attrs = super(options)
       attrs["id"] = attrs["_id"]
+      attrs.delete("_id")
       attrs
     end
   end
