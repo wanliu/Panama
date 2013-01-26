@@ -19,8 +19,8 @@ class SpinnerInput < SimpleForm::Inputs::Base
 	      </div>
 	    </div> 
     <SCRIPT type='text/javascript'>
-    	require(['jquery', 'lib/spinner'], function($,Spinner){
-        	new Spinner.SpinnerView({el: '.#{discern_class}'})
+    	require(['jquery', 'lib/spinner'], function($, SpinnerView){
+        	new SpinnerView({el: '.#{discern_class}'})
         });
     </SCRIPT>
     JAVASCRIPT

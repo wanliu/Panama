@@ -1,5 +1,5 @@
-
-define ['jquery','backbone','exports'], ($,Backbone,exports) ->
+define ['jquery','backbone'], ($,Backbone) ->
+	
 	class SpinnerView extends Backbone.View 
 		events: {
 			'click .spinner-up' : 'spinnerUp',
@@ -17,7 +17,3 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 
 		getInput: () ->
 			@$el.find("input[type='text']")
-
-
-	exports.SpinnerView = SpinnerView
-	exports
