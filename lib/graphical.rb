@@ -14,6 +14,7 @@ module Graphical
 
         module ClassMethods
 
+            #定义graphical attribute
             def define_graphical_attr(*args)
                 attribute, options = args
                 raise "not setting attribute argument!" if attribute.nil?
@@ -29,6 +30,7 @@ module Graphical
                end
             end
 
+            #配置图片类型
             def configrue_graphical(options = {})
                 @config ||= Graphical::Display.config.merge(options)
             end
