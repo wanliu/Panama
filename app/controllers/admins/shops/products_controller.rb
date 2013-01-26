@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   ajaxify_pages :new, :edit, :create, :index, :show, :update
@@ -16,6 +17,11 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     @product = Product.new
+    @colors = [ ['#FFB6C1', '浅粉红'], ['#FFC0CB', '粉红'],
+                ['#7B68EE', '中板岩蓝'], ['#00FA9A', '中春绿'],
+                ['#DAA520', '金菊黄'], ['#1E90FF', '道奇蓝'],
+                ['#5F9EA0', '军兰'], ['#40E0D0', '绿宝石']]
+    @sizes = ['M', 'ML', 'L', 'XL', 'XXL', 'XXL', '均码']
   end
 
   def create
@@ -66,5 +72,11 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     category = Category.find(params[:category_id])
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
+  end
+
+  def colors
+  end
+
+  def sizes
   end
 end

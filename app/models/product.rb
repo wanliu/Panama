@@ -3,10 +3,12 @@ class Product
   include Mongoid::Timestamps::Created
 
   attr_accessor :uploader_secure_token
-  
+
   field :name, type: String
   field :price, type: BigDecimal
   field :summary, type: String
+  field :quanity, type: Integer
+  field :sub_products, type: Array
 
   mount_uploader :preview, ImageUploader
 
