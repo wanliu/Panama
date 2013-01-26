@@ -8,6 +8,7 @@
 			, "jqueryui": "lib/jqueryui"
 			, "underscore": "lib/underscore"
 			, "templates": "templates"
+			, "fileuploader": "lib/fileuploader"
 		},
 
 		shim: {
@@ -35,7 +36,10 @@
 				deps: ["lib/underscore"], 
 				exports: "Backbone"
 			},
-			"bootstrap": ['jquery']
+			"bootstrap": ['jquery'],
+			"fileuploader": {
+				exports: "qq"
+			}
 		}
 	});	
 </script>

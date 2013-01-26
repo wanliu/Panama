@@ -12,9 +12,10 @@ class Product
 
   has_many :attachments, :as => :attachable
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments,
+                                :reject_if => proc { |att| att['file_filename'].blank? }, 
+                                :allow_destroy => true
 
-  has_many :photos
   belongs_to :shop
   belongs_to :category
 

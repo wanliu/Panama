@@ -49,7 +49,6 @@ end
 
 # form helper
 gem 'simple_form'
-gem 'nested_form'
 
 gem 'vfs'
 

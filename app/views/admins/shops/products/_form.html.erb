@@ -1,18 +1,17 @@
-<%= simple_nested_form_for form, 
+<%= simple_form_for form, 
 	:url => admins_products(form), 
 	:remote => true,
 	:html => {
 		:class => "form-horizontal"
 	} do |f| %>
 	<%= f.input :name %>
-	<%= image_tag form.preview.url("100x100") %>
-    <%#= f.association :attachments %>
-	<%= f.input :preview , as: :file %>
-	<%= f.simple_fields_for	:attachments do |c| %>
-		<%= c.input :file, :as => :file %>
-		<%= c.link_to_remove "删除这个图片" %>
-	<% end %>
-    <%= f.link_to_add "添加图片", :attachments %>
+	<%#= image_tag form.preview.url("100x100") %>
+    <%= f.association :attachments, 
+    				  :as => :album, 
+    				  :upload_url => shop_admins_attachments_upload_path(current_shop),
+    				  :collection => form.attachments %>
+	<%#= f.input :preview , as: :file %>
+
 	<%= f.input :price %>
 	<%= f.association :category, 
 		:collection => current_shop.category.descendants, :as => :chosen %>
