@@ -20,7 +20,7 @@ class SpinnerInput < SimpleForm::Inputs::Base
 	    </div> 
     <SCRIPT type='text/javascript'>
     	require(['jquery', 'lib/spinner'], function($,Spinner){
-        	new Spinner.SpinnerView({discern_class: '#{discern_class}'})
+        	new Spinner.SpinnerView({el: '.#{discern_class}'})
         });
     </SCRIPT>
     JAVASCRIPT
