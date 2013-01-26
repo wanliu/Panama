@@ -2,18 +2,22 @@
 define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 	class SpinnerView extends Backbone.View 
 		events: {
-			'click .spinner-up' : 'spinner_up',
-			'click .spinner-down': 'spinner_down'
+			'click .spinner-up' : 'spinnerUp',
+			'click .spinner-down': 'spinnerDown'
 		},
-		spinner_up: ()-> 
-			$input = @.$el.find("input[type='text']")
+		spinnerUp: () -> 
+			$input = @getInput()
 			$input.val(parseInt($input.val())+1)
 			false
 
-		spinner_down: ()-> 
-			$input = @.$el.find("input[type='text']")
+		spinnerDown: () -> 
+			$input = @getInput()
 			$input.val(parseInt($input.val())-1) 
 			false
+
+		getInput: () ->
+			@$el.find("input[type='text']")
+
 
 	exports.SpinnerView = SpinnerView
 	exports
