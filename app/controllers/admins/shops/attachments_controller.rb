@@ -9,8 +9,13 @@ class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
             attachment.save!          
             _attachment = attachment.get_attributes(params[:version_name])                        
             render :json => { :success => true, :attachment => _attachment.to_json   }.to_json
-        rescue Exceoption => e
-            attachment.attachable.remove!
+        rescue Exception => e
+            if attachment.attachable         
+                path = File.dirname(attachment.attachable.file.file)                    
+                attachment.attachable.remove! 
+                FileUtils.rm_rf(path)
+            end
+            attachment.destroy
             render :json => { :success => false }.to_json
         end
     end

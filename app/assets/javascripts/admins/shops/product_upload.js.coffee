@@ -11,7 +11,6 @@ define([
         template : JST["templates/products/product_upload"]
         tagName : "li"
         input_name : "attachment"
-
         default_img_class : "default_img"
         events : {
             "click img.attachable-preview" : 'upload',
@@ -89,7 +88,8 @@ define([
                 version_name : "100x100"
             )
 
-        complete_callback : (id, filename, data) ->            
+        complete_callback : (id, filename, data) ->          
+            return unless data.success            
             info = JSON.parse(data.attachment)
             #空图框时，添加新的空图框
             @add_blank_product_attachment() if @is_blank_img()                
