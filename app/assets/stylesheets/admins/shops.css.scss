@@ -1,0 +1,9 @@
+//= require '/admins/shops/products'
+form{
+	.sizes, .colours{
+		label{
+			display: inline-block;
+			margin: 5px 10px;
+		}
+	}
+}

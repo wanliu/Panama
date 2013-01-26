@@ -6,7 +6,9 @@
 	} do |f| %>
 	<%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %>
 	<%= image_tag form.preview.url("100x100") %>
-	<%= f.input :sub_products, :collection => @colors.map{|color| color.last}, :as => :Colours %>
+	<%= f.input :colours, :collection => @colours.map{|color| color[:name]}, :as => :check_boxes, :wrapper_html => {:class => "colours"} %>
+	<%= f.input :sizes, :collection => @sizes, :as => :check_boxes, :wrapper_html => {:class => "sizes"} %>
+	<div class="sub_products"></div>
 	<%= f.input :preview , as: :file %>
 	<%= f.input :price %>
 	<%= f.association :category, 
@@ -28,6 +30,15 @@
 		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
 			model: <%= raw form.to_json %>
 		});
+	})
+
+	require(['table_creater'], function(TableCreater){
+		var options = {
+			depth: [color, size],
+			structure: [['red', 'blue', 'white'], ['M', 'ML', 'XL', 'XXL']],
+			data: ['price', 'quantity']
+		}
+		var table = new TableCreater($('.sub_products'), options)
 	})
 </script>
 <% end %>

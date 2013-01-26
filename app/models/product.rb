@@ -22,4 +22,10 @@ class Product
 
   validates_presence_of :category
   validates_presence_of :shop
+
+  def colours
+  end
+
+  def sizes
+  end
 end

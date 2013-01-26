@@ -17,10 +17,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     @product = Product.new
-    @colors = [ ['#FFB6C1', '浅粉红'], ['#FFC0CB', '粉红'],
-                ['#7B68EE', '中板岩蓝'], ['#00FA9A', '中春绿'],
-                ['#DAA520', '金菊黄'], ['#1E90FF', '道奇蓝'],
-                ['#5F9EA0', '军兰'], ['#40E0D0', '绿宝石']]
+    # @colors = [ ['#FFB6C1', '浅粉红'], ['#FFC0CB', '粉红'],
+    #             ['#7B68EE', '中板岩蓝'], ['#00FA9A', '中春绿'],
+    #             ['#DAA520', '金菊黄'], ['#1E90FF', '道奇蓝'],
+    #             ['#5F9EA0', '军兰'], ['#40E0D0', '绿宝石']]
+    @colours = [ {id: 1, rgb: '#FFB6C1', name: '浅粉红'}, {id: 2, rgb: '#FFC0CB', name: '粉红'},
+                {id: 3, rgb: '#7B68EE', name: '中板岩蓝'}, {id: 4, rgb: '#00FA9A', name: '中春绿'}]
     @sizes = ['M', 'ML', 'L', 'XL', 'XXL', 'XXL', '均码']
   end
 
