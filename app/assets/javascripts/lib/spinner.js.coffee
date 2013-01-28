@@ -16,4 +16,4 @@ define ['jquery','backbone'], ($,Backbone) ->
 			false
 
 		getInput: () ->
-			@$el.find("input[type='text']")
+			@$el.find("input[type='text']") 

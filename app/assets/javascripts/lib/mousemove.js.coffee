@@ -20,7 +20,7 @@ define ['jquery','backbone','exports'], ($,Backbone,exports) ->
 			# $(document).bind "contextmenu",$.proxy(@contextmenu,@)
 			$("body").css('cursor','w-resize')
 			@.$main.css("border","2px dashed gray")
-			@el.css("border-right","0hpx dashed gray")
+			@el.css("border-right","0px dashed gray")
 			$("body").css('-moz-user-select','none')
 			$("body").css('-webkit-user-select','none') 
 			offset = @el.offset();
