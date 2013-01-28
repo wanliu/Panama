@@ -1,18 +1,20 @@
-define ['jquery', 'backbone', 'underscore', 'exports'], ($, Backbone, _, exports)->
+define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 	class exports.tableCreater extends Backbone.View
+		tagName: 'table'
+		className: 'table table-striped'
 		#schema:
 		#	depth: [color, size]    #维度
 		#	structure: [[red, blue, white], [M, ML, XL, XXL], ....]  #初始表结构对象
 		#	data: [price, quantity]  #数据字段
-		constructor: (el, schema)->
+		initialize: (el, schema)->
 			@render(el)
-
 			@schema = schema
 			@structure = @schema.structure
 			@parseTable()
 
 		render: (el)->
-			@el = $("<table></table>")
+			# @el = $("<table class=''><tbody></tbody></table>")
+			$(@el).html('<tbody></tbody>')
 			el.append(@el)
 
 		parseTable: ()->
@@ -20,7 +22,7 @@ define ['jquery', 'backbone', 'underscore', 'exports'], ($, Backbone, _, exports
 				structure  : @structure
 				position   : [-1, 0]
 				isRoot     : true
-				parent_el  : @el)
+				el         : @$('tbody') )
 
 		# addRow: (Row, depth)->
 		# 	@forwardAdd()
@@ -41,51 +43,64 @@ define ['jquery', 'backbone', 'underscore', 'exports'], ($, Backbone, _, exports
 		# remove: ()->
 
 	class tableUnitView extends Backbone.View
-		tagName: 'tr'
-		constructor: ()->
+		# tagName: 'tr'
+		initialize: ()->
 			@structure = @options.structure
 			@position = @options.position
 			@parent_el = @options.parent_el
-
-			@title = @title() if !@options.isRoot
-			@parent = @options.creater ? @options.creater :null
+			debugger
+			@initTitle() if !@options.isRoot
+			@parent = if @options.creater then @options.creater else null
 			@render()
 
-			@children()
-			@rowspan()
+			@initChildren()
+			# @initRowspan()
 
 		render: ()->
-			@parent_el.append @el
-			@el.html('<td>' + @title + '</td>'))
+			if @hasParent()
+				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
+				# @parent_el.append @el
 
-		title: ()->
+		initTitle: ()->
+			that = @
 			position = "[" + @position.join("][") + "]"
-			return eval("@structure" + position )
+			@title = eval("that.structure#{position}" )
 
-		children: ()->
-			if _.first(@position) is (@structure.length - 1)
-				@children = []
-				return
+		initChildren: ()->
+			return (@children = []) if _.first(@position) is (@structure.length - 1)
 
-			for x in 0..(@structure[ _.first(@position) + 1 ].length - 1)
+			that = @
+			@children = @children || []
+
+			children_load_el = if @hasParent()
+				children_el = $('<td class="children"></td>')
+				$(@el).append children_el
+				children_el
+			else
+				$(@el)
+
+			for x in [0...@structure[ _.first(@position) + 1 ].length]
 				do (x)->
+					child_el = $("<tr></tr>")
+					children_load_el.append( child_el )
 					view = new tableUnitView(
-						structure  : @structure
-						position   : [ _.first(@position) + 1, x]
+						structure  : that.structure
+						position   : [ _.first(that.position) + 1, x]
 						isRoot     : false
-						creater    : @
-						parent_el  : $(@el) )
-					@children.push view
+						creater    : that
+						el         : child_el )
+					that.children.push view
 
-		rowspan: ()->
-			return 0 if !@hasChildren()
+		# initRowspan: ()->
+		# 	return 0 if !@hasChildren()
+		# 	that = @
+		# 	@rowspan = 1
+		# 	start = _.first(@position) + 1
+		# 	for x in [start...that.structure.length - 1]
+		# 		do (x)->
+		# 			that.rowspan = that.rowspan * that.structure[x].length if _.isArray that.structure[x]
 
-			@rowspan = 1
-			for x in 1..@structure.length
-				do (x)->
-					@rowspan = @rowspan * x.length if _.isArray(x)
-
-			$(@el).attr('rowspan', @rowspan)
+		# 	$(@el).attr('rowspan', @rowspan)
 
 		resetRowspan: ()->
 			@rowspan()
