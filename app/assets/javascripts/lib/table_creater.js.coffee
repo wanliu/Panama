@@ -1,7 +1,7 @@
 define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 	class exports.tableCreater extends Backbone.View
 		tagName: 'table'
-		className: 'table table-striped'
+		className: 'table table-bordered'
 		#schema:
 		#	depth: [color, size]    #维度
 		#	structure: [[red, blue, white], [M, ML, XL, XXL], ....]  #初始表结构对象
@@ -9,57 +9,55 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 		initialize: (el, schema)->
 			@render(el)
 			@schema = schema
-			@structure = @schema.structure
 			@parseTable()
 
 		render: (el)->
-			# @el = $("<table class=''><tbody></tbody></table>")
 			$(@el).html('<tbody></tbody>')
 			el.append(@el)
 
 		parseTable: ()->
-			@tableView = new tableUnitView(
-				structure  : @structure
+			Window.tableView = @tableView = new tableUnitView(
+				schema     : @schema
 				position   : [-1, 0]
 				isRoot     : true
-				el         : @$('tbody') )
+				creater    : null
+				parent_el  : @$('tbody') )
 
-		# addRow: (Row, depth)->
-		# 	@forwardAdd()
-		# 	@backwardAdd()
-
-		# removeRow: (Row, depth)->
-		# 	@forwardRemove()
-		# 	@backwardRemove()
-
-		# forwardAdd: ()->
-
-		# forwardRemove: ()->
-
-		# backwardAdd: ()->
-
-		# backwardRemove: ()->
-
-		# remove: ()->
+		checkRow: ()->
+			@tableView.checkRow()
 
 	class tableUnitView extends Backbone.View
-		# tagName: 'tr'
+		tagName: 'tr'
 		initialize: ()->
-			@structure = @options.structure
+			@structure = @options.schema.structure
+			@schema = @options.schema
 			@position = @options.position
 			@parent_el = @options.parent_el
-			debugger
+
 			@initTitle() if !@options.isRoot
 			@parent = if @options.creater then @options.creater else null
 			@render()
 
 			@initChildren()
-			# @initRowspan()
+			@initRowspan()
 
 		render: ()->
-			if @hasParent()
+			if @hasChildren()
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
-				# @parent_el.append @el
+			else
+				html = for data in @schema['data']
+					do (data)->
+						"<td>#{data}: <input type='text'></td>"
+
+				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html)
+
+			if @hasParent() and @parent.parent
+				@parent_el.after(@el)
+				return @
+
+			if @hasParent() and !@parent.parent
+				@parent_el.append(@el)
+				@
 
 		initTitle: ()->
 			that = @
@@ -67,62 +65,103 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 			@title = eval("that.structure#{position}" )
 
 		initChildren: ()->
-			return (@children = []) if _.first(@position) is (@structure.length - 1)
+			return (@children = []) if not @hasChildren()
 
 			that = @
+			parent_el = if @hasParent() then $(@el) else $(@parent_el)
 			@children = @children || []
-
-			children_load_el = if @hasParent()
-				children_el = $('<td class="children"></td>')
-				$(@el).append children_el
-				children_el
-			else
-				$(@el)
 
 			for x in [0...@structure[ _.first(@position) + 1 ].length]
 				do (x)->
-					child_el = $("<tr></tr>")
-					children_load_el.append( child_el )
 					view = new tableUnitView(
 						structure  : that.structure
 						position   : [ _.first(that.position) + 1, x]
 						isRoot     : false
+						schema     : that.schema
 						creater    : that
-						el         : child_el )
+						parent_el  : parent_el
+					)
 					that.children.push view
+					parent_el = if that.hasParent() then $(view.render().el) else that.parent_el
 
-		# initRowspan: ()->
-		# 	return 0 if !@hasChildren()
-		# 	that = @
-		# 	@rowspan = 1
-		# 	start = _.first(@position) + 1
-		# 	for x in [start...that.structure.length - 1]
-		# 		do (x)->
-		# 			that.rowspan = that.rowspan * that.structure[x].length if _.isArray that.structure[x]
+		initRowspan: ()->
+			return if !@hasChildren()
+			that = @
+			@rowspan = 1
+			start = _.first(@position) + 1
+			for x in [start..that.structure.length - 1]
+				do (x)->
+					that.rowspan = that.rowspan * that.structure[x].length if _.isArray(that.structure[x])
 
-		# 	$(@el).attr('rowspan', @rowspan)
+			@$('td').attr('rowspan', @rowspan + 1)
 
 		resetRowspan: ()->
-			@rowspan()
-			@parent.resetRowspan() if @parent.hasParent()
+			@initRowspan()
+			@parent.resetRowspan() if @hasParent()
 
 		hasParent: ()->
 			return !!@parent
 
 		hasChildren: ()->
-			return @children.length > 0
+			return _.first(@position) isnt (@structure.length - 1)
 
-		destroy: (title)->
-			return null if @title isnt title
+		checkRow: ()->
+			return if not @hasChildren()
+
+			@increceCheck()
+			@reduceCheck()
+
+			for child in @children
+				do (child)->
+					child.checkRow()
+
+		destroy: ()->
+			# return null if @title isnt title
+			if @hasChildren()
+				for child in @children
+					do (child)->
+						child.destroy()
+
+			$(@el).remove()
 			@parent.resetRowspan() if @hasParent()
-			@el.remove()
 			@remove()
 
+		increceCheck: ()->
+			for title in @structure[_.first(@position) + 1]
+				if not _.contains( _.map(@children, (child)-> child['title'] ), title)
+					@addChild(title)
 
-	# class tableCollection extends Backbone.Collection
-	# 	model: tableUnitModel
+		reduceCheck: ()->
+			for title in _.map( @children, (child)-> child['title'] )
+				if not _.contains(@structure[_.first(@position) + 1], title)
+					@removeChild(title)
 
-	# class tableUnitModel extends Backbone.Model
+		addChild: (title)->
+			index = _.indexOf(@structure[_.first(@position) + 1], title)
 
+			parent_el = if index is 0
+				$(@el)
+			else
+				front_title = @structure[_.first(@position) + 1][index - 1]
+				front_view = _.find(@children, (child)-> child.title is front_title)
+				$(front_view.el)
+
+			view = new tableUnitView(
+				structure  : @structure
+				position   : [ _.first(@position) + 1, index]
+				isRoot     : false
+				schema     : @schema
+				creater    : @
+				parent_el  : parent_el
+			)
+			@children.splice(index, 0, view)
+			@resetRowspan()
+
+		createView: ()->
+
+		removeChild: (title)->
+			if ( badLuckyGuy = _.find(@children, (child)-> child.title is title) )
+				@children.splice(_.indexOf(@children, badLuckyGuy), 1)
+				badLuckyGuy.destroy()
 
 	exports

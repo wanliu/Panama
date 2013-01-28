@@ -6,7 +6,7 @@
 	} do |f| %>
 	<%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %>
 	<%= image_tag form.preview.url("100x100") %>
-	<%= f.input :colours, :collection => @colours.map{|color| color[:name]}, :as => :check_boxes, :wrapper_html => {:class => "colours"} %>
+	<%= f.input :colours, :collection => @colours.map{|color| color[:name] }, :as => :check_boxes, :wrapper_html => {:class => "colours"} %>
 	<%= f.input :sizes, :collection => @sizes, :as => :check_boxes, :wrapper_html => {:class => "sizes"} %>
 	<div class="sub_products"></div>
 	<%= f.input :preview , as: :file %>
