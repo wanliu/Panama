@@ -134,19 +134,363 @@ category:
                                 name: 雪地靴
                             -
                                 name: 中筒靴
+                            -   
+                                name: 高筒靴
+                            -
+                                name: 短靴
+                            -
+                                name: 踝靴
+                            -
+                                name: 马丁靴
                     -
                         name: 休闲鞋
+                        children:
+                            -
+                                name: 帆布鞋
+                            -
+                                name: 透气鞋
+                            -
+                                name: 厚底鞋
                     -
                         name: 凉鞋
+                        children: 
+                            -
+                                name: 平跟凉鞋
+                            -
+                                name: 低跟凉鞋
+                            -
+                                name: 高跟凉鞋
+                            -
+                                name: 人字拖
+                            
                 
-            -   name: 男鞋    
+            -   name: 男鞋
+                children:
+                    -
+                        name: 休闲鞋
+                        children:
+                            -   
+                                name: 帆布鞋
+                            -
+                                name: 商务休闲
+                            -
+                                name: 运动休闲
+                            -
+                                name: 日常休闲
+                    -
+                        name: 皮鞋
+                        children:
+                            -
+                                name: 圆头皮鞋
+                            -
+                                name: 尖头皮鞋
+                            - 
+                                name: 方头皮鞋
+                            -
+                                name: 扁头皮鞋
+                    -
+                        name: 男靴/靴子
+                        children: 
+                            -
+                                name: 雪地靴
+                            -
+                                name: 工装靴
+                            -
+                                name: 牛仔靴
+                            - 
+                                name: 马丁靴
             
             -   name: 女包
-            
+                children:
+                    -
+                        name: 女士单肩包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: PU皮
+                            -
+                                name: 帆布
+                            - 
+                                name: 牛仔布
+                    -
+                        name: 女士斜挎包
+                        children: 
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: PU皮
+                            -
+                                name: 帆布
+                            -
+                                name: 牛仔布
+                    -
+                        name: 女士手提包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: PU皮
+                            -
+                                name: 帆布
+                            -
+                                name: 牛仔布
+                    -
+                        name: 女士双肩包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -  
+                                name: 牛仔布
+                            -
+                                name: 无纺布
+                    -
+                        name: 女士手拿包
+                        children: 
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                    -
+                        name: 女士腰包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -  
+                                name: 帆布
+                            -
+                                name: 无纺布
             -   name: 男包
-            
+                children:
+                    -
+                        name: 男士单肩包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -
+                                name: 涤纶
+                            -
+                                name: 尼龙
+                            -
+                                name: 牛仔布
+                    -
+                        name: 男士斜挎包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -
+                                name: 涤纶
+                            -
+                                name: 尼龙
+                            -
+                                name: 牛仔布
+                    - 
+                        name: 男士双肩包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -
+                                name: 涤纶
+                            -
+                                name: 尼龙
+                            -
+                                name: 牛仔布
+                    -
+                        name: 男士手拿包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -
+                                name: 涤纶
+                            -
+                                name: 尼龙
+                            -
+                                name: 牛仔布
+                    -
+                        name: 男士手提包
+                        children:
+                            -  
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -
+                                name: 涤纶
+                            -
+                                name: 尼龙
+                            -
+                                name: 牛仔布
+                    -
+                        name: 男士腰包
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 帆布
+                            -
+                                name: 涤纶
+                            -
+                                name: 尼龙
+                            -
+                                name: 牛仔布
+                                
             -   name: 配饰
-
+                children:
+                    -
+                        name: 女士腰带
+                        children:
+                            -
+                                name: 羊皮
+                            -
+                                name: 牛皮
+                            -
+                                name: 编织
+                            -
+                                name: 轧花
+                            - 
+                                name: 镶嵌
+                            -
+                                name: 流苏
+                            -
+                                name: 镂空
+                            -
+                                name: 蕾丝
+                            -
+                                name: 铆钉
+                            -
+                                name: 亮片
+                            -
+                                name: 雕刻
+                            -
+                                name: 磨砂
+                    -
+                        name: 男士皮带
+                        children:
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 漆皮
+                            -
+                                name: 磨砂
+                            - 
+                                name: 光面
+                            -
+                                name: 印花
+                            -
+                                name: 压花
+                            -
+                                name: 软面
+                    -
+                        name: 女士围巾
+                        children:
+                            -
+                                name: 羊毛
+                            -
+                                name: 棉质
+                            -
+                                name: 羊绒
+                            -
+                                name: 毛线
+                            -
+                                name: 丝绒
+                            -
+                                name: 真丝
+                            -
+                                name: 皮草
+                                
+                    -
+                        name: 男士围巾
+                        children:
+                            -
+                                name: 麻质
+                            -
+                                name: 毛线
+                            -
+                                name: 羊毛
+                            -
+                                name: 丝绒
+                            -
+                                name: 羊绒
+                            -
+                                name: 真丝
+                    -
+                        name: 帽子
+                        children:
+                            -
+                                name: 针织帽
+                            -
+                                name: 遮阳帽
+                            -
+                                name: 贝雷帽
+                            -
+                                name: 鸭舌帽
+                            -
+                                name: 草帽
+                    -
+                        name: 手套
+                        children:
+                            -
+                                name: 猪皮
+                            -
+                                name: 牛皮
+                            -
+                                name: 羊皮
+                            -
+                                name: 毛线
+                            -
+                                name: 蕾丝
+                            -
+                                name: PU皮
+                            -
+                                name: 绸缎
+                    -
+                        name: 领带/领结/袖扣
+                        children:
+                            -
+                                name: 领带
+                            -
+                                name: 领结
+                            -
+                                name: 领带夹
+                            -
+                                name: 袖扣
+                                
+    -   name: 母婴
 
     - 
         name: 企业介绍
