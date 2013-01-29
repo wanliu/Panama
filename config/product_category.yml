@@ -1,18 +1,153 @@
 category:
     - 
-        name: 新品上市
+        name: 服饰/鞋帽/配饰
         children:
             - 
-                name: 最新潮装
+                name: 女装
+                children:
+                    - 
+                        name: 上衣
+                        children:
+                            -
+                                name: 羽绒服
+                            -
+                                name: 棉衣棉服
+                            -
+                                name: 皮衣皮草
+                            - 
+                                name: 风衣
+                            -
+                                name: 短外套
+                            - 
+                                name: 吊带/背心
+                            -
+                                name: 卫衣/绒衫
+                            -
+                                name: T恤
+                            -
+                                name: 针织衫
+                            -
+                                name: 衬衫
+                    -
+                        name: 下装
+                        children:
+                            -
+                                name: 牛仔裤
+                            -
+                                name: 休闲裤
+                            -
+                                name: 卫裤/运动裤
+                            -
+                                name: 打底裤
+                            -
+                                name: 七分裤
+                            -
+                                name: 背带裤
+                    -
+                        name: 裙装
+                        children:
+                            -
+                                name: 连衣裙
+                            -
+                                name: 半身裙
+                            -
+                                name: 吊带裙
+                            -
+                                name: 超短裙
+                                
             - 
-                name: 最新潮裤
+                name: 男装
                 children: 
                     - 
-                        name: 冬款
+                        name: 上衣
+                        children:
+                            -   
+                                name: 羽绒服
+                            -
+                                name: 夹克
+                            -
+                                name: 皮衣
+                            -
+                                name: 风衣
+                            -
+                                name: 棉衣棉服
+                            -   
+                                name: 衬衫
+                            -
+                                name: T恤
+                            -
+                                name: 线衫/针织衫
+                            -
+                                name: 毛衣/羊毛衫
+                            -
+                                name: 背心/马甲
                     -
-                        name: 夏款
+                        name: 下装
+                        children:
+                            -
+                                name: 牛仔裤
+                            -
+                                name: 休闲裤
+                            -
+                                name: 卫裤/运动裤
+                            - 
+                                name: 七分裤
+                                
+            -
+                name: 特色服装
+                children:
                     -
-                        name: 秋款
+                        name: 中老年服装
+                    -
+                        name: 唐装/中山装
+                    -
+                        name: 婚纱/礼服/旗袍
+                    -
+                        name: 制服/校服
+                        
+            -  
+                name: 女鞋
+                children:
+                    -
+                        name: 单鞋
+                        children:
+                            -
+                                name: 平底鞋
+                            -
+                                name: 中跟鞋
+                            -
+                                name: 高跟鞋
+                            -
+                                name: 粗跟鞋
+                            -
+                                name: 浅口鞋
+                            - 
+                                name: 尖头鞋
+                            -
+                                name: 坡跟鞋
+                            -
+                                name: 系带鞋
+                    -
+                        name: 靴子
+                        children:
+                            -
+                                name: 雪地靴
+                            -
+                                name: 中筒靴
+                    -
+                        name: 休闲鞋
+                    -
+                        name: 凉鞋
+                
+            -   name: 男鞋    
+            
+            -   name: 女包
+            
+            -   name: 男包
+            
+            -   name: 配饰
+
+
     - 
         name: 企业介绍
     - 
