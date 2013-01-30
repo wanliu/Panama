@@ -16,6 +16,10 @@ class ProductItem
     product.preview.url("30x30")
   end
 
+  def avatar
+    product.preview.url("100x100")    
+  end
+
   after_create do |document|
     cart = document.cart
     cart.inc(:items_count, 1)

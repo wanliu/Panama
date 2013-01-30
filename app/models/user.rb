@@ -5,13 +5,19 @@ class User
   field :uid, type: String
   field :login, type: String
   
-  has_one :_cart, :class_name => "Cart"
+  has_one :cart
+  has_one :image, :as => :imageable
+  alias :avatar :image
 
-  def cart
-    if _cart.nil?
-      create__cart
+  after_initialize do 
+    if cart.nil?
+      create_cart
       save
     end
-    _cart
+
+    if image.nil?
+      create_image
+      save
+    end
   end
 end
