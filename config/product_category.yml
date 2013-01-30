@@ -758,10 +758,10 @@ category:
 
     - 
         name: 食品
-		children:
-		    -
-			    name: 零食
-				children:
+	children:
+            -
+	        name: 零食
+	        children:
 				    -
 					    name: 南北干货/特产
 					-
@@ -1040,7 +1040,7 @@ category:
 					    name: 松露巧克力
 			-
 			    name: 进口食品
-				children:
+			    children:
 				    -
 					    name: 进口巧克力
 					-
@@ -1053,7 +1053,7 @@ category:
 					    name: 进口坚果/果干
     - 
         name: 手机数码
-		children:
+	      children:
 		    -
 			    name: 手机通讯
 				children:
