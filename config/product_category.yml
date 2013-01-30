@@ -190,7 +190,8 @@ category:
                                 name: 人字拖
                             
                 
-            -   name: 男鞋
+            -   
+                name: 男鞋
                 children:
                     -
                         name: 休闲鞋
@@ -226,7 +227,8 @@ category:
                             - 
                                 name: 马丁靴
             
-            -   name: 女包
+            -   
+                name: 女包
                 children:
                     -
                         name: 女士单肩包
@@ -300,7 +302,8 @@ category:
                                 name: 帆布
                             -
                                 name: 无纺布
-            -   name: 男包
+            -   
+                name: 男包
                 children:
                     -
                         name: 男士单肩包
@@ -393,7 +396,8 @@ category:
                             -
                                 name: 牛仔布
                                 
-            -   name: 配饰
+            -   
+                name: 配饰
                 children:
                     -
                         name: 女士腰带
@@ -516,7 +520,8 @@ category:
                             -
                                 name: 袖扣
                                 
-    -   name: 母婴/玩具/早教
+    -   
+        name: 母婴/玩具/早教
         children:
             -
                 name: 母婴
