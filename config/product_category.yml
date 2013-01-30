@@ -54,7 +54,6 @@ category:
                                 name: 吊带裙
                             -
                                 name: 超短裙
-                                
             - 
                 name: 男装
                 children: 
@@ -91,8 +90,7 @@ category:
                             -
                                 name: 卫裤/运动裤
                             - 
-                                name: 七分裤
-            
+                                name: 七分裤            
             - 
                 name: 内衣
                 children:
@@ -118,7 +116,6 @@ category:
                         name: 抹胸背心
                     -
                         name: 情趣内衣
-        
             -
                 name: 特色服装
                 children:
@@ -130,7 +127,6 @@ category:
                         name: 婚纱/礼服/旗袍
                     -
                         name: 制服/校服
-                        
             -  
                 name: 女鞋
                 children:
@@ -188,8 +184,6 @@ category:
                                 name: 高跟凉鞋
                             -
                                 name: 人字拖
-                            
-                
             -   
                 name: 男鞋
                 children:
@@ -226,7 +220,6 @@ category:
                                 name: 牛仔靴
                             - 
                                 name: 马丁靴
-            
             -   
                 name: 女包
                 children:
@@ -395,7 +388,6 @@ category:
                                 name: 尼龙
                             -
                                 name: 牛仔布
-                                
             -   
                 name: 配饰
                 children:
@@ -462,7 +454,6 @@ category:
                                 name: 真丝
                             -
                                 name: 皮草
-                                
                     -
                         name: 男士围巾
                         children:
@@ -519,7 +510,6 @@ category:
                                 name: 领带夹
                             -
                                 name: 袖扣
-                                
     -   
         name: 母婴/玩具/早教
         children:
@@ -644,7 +634,6 @@ category:
                                 name: 吸奶器
                             -
                                 name: 防溢乳垫
-                                
                     -
                         name: 车床
                         children:
@@ -759,8 +748,6 @@ category:
                         name: 儿童家具
                     -
                         name: 儿童早教
-            
-
     - 
         name: 食品
         children:
