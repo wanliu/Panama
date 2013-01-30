@@ -848,6 +848,21 @@ category:
                     -
                         name: 黑茶/白茶/黄茶
             -
+                name: 饮料
+                children:
+                    -
+                        name: 牛奶
+                    -
+                        name: 豆制品
+                    -
+                        name: 果汁饮料
+                    -
+                        name: 碳酸饮料
+                    -
+                        name: 咖啡饮品
+                    -
+                        name: 功能型饮料
+            -
                 name: 冲饮
                 children:
                     -
@@ -1157,4 +1172,146 @@ category:
                     -
                         name: 数码相框
     - 
-        name: 
+        name: 电脑/办公
+        children:
+            -
+                name: 电脑
+                children:				
+                    - 
+                        name: 笔记本
+                    -
+                        name: 超极本
+                    -
+                        name: 上网本
+                    -
+                        name: 平板电脑
+                    -
+                        name: 品牌台式机
+                    -
+                        name: 服务器
+                    -
+                        name: 笔记本配件
+            -
+                name: 电脑配件
+                children:
+                    -
+                        name: CPU
+                    -
+                        name: 主板
+                    -
+                        name: 显卡
+                    -   
+                        name: 硬盘
+                    -
+                        name: 内存
+                    - 
+                        name: 机箱/电源
+                    -
+                        name: 显示器
+                    -
+                        name: 录机/光驱
+                    -
+                        name: 声卡/扩展卡
+                    -
+                        name: 散热器
+                    -
+                        name: 其它装机配件
+            -
+                name: 外设产品
+                children:
+                    -
+                        name: 鼠标
+                    -
+                        name: 键盘
+                    -
+                        name: 游戏设备
+                    -
+                        name: U盘/移动硬盘
+                    -
+                        name: 电视盒
+                    -
+                        name: 摄像头 
+                    -
+                        name: 线缆 
+                    -
+                        name: 耳机
+                    - 
+                        name: 手写板
+                    -
+                        name: 鼠标垫 
+                    -
+                        name: 电脑清洁
+            -
+                name: 网络产品
+                children:
+                    -
+                        name: 路由器
+                    -
+                        name: 网卡 
+                    -
+                        name: 交换机
+                    -
+                        name: 网线
+                    -
+                        name: 3G上网
+            -
+                name: 办公打印
+                children:
+                    -
+                        name: 打印机
+                    -
+                        name: 一体机
+                    -
+                        name: 投影机
+                    -
+                        name: 投影配件
+                    -
+                        name: 传真机 
+                    -
+                        name: 复印机
+                    -
+                        name: 碎纸机
+                    -
+                        name: 扫描仪
+                    -
+                        name: 墨盒
+                    -
+                        name: 硒鼓
+                    -
+                        name: 墨粉
+                    -
+                        name: 色带
+            - 
+                name: 办公文仪
+                children:
+                    -
+                        name: 办公文具
+                    -
+                        name: 文件管理
+                    -
+                        name: 笔类
+                    -
+                        name: 纸类
+                    -
+                        name: 本册/便签
+                    -
+                        name: 学生文具
+                    -
+                        name: 财务用品
+                    -
+                        name: 计算器
+                    -
+                        name: 激光笔
+                    -
+                        name: 白板/封装
+                    -
+                        name: 考勤机
+                    -
+                        name: 刻录碟片
+                    -
+                        name: 点钞机
+                    -
+                        name: POS机
+                    -
+                        name: 保险柜
+						
