@@ -1,7 +1,10 @@
 class People::CartController < ApplicationController
-  layout "cart"
+  layout "people"
 
   def index
+    @people = User.find_by(:login => params[:person_id])
+
+    @items = @people.cart.items
   end
 
   def add_to_cart
