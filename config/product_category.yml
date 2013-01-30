@@ -1176,7 +1176,7 @@ category:
         children:
             -
                 name: 电脑
-                children:				
+                children:
                     - 
                         name: 笔记本
                     -
@@ -1314,4 +1314,3 @@ category:
                         name: POS机
                     -
                         name: 保险柜
-						
