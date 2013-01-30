@@ -50,5 +50,3 @@ class Category
     parent_indent+=1
   end
 end
-
-Category.root = Category.create(:name => :root) unless Category.root
