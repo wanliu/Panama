@@ -1,8 +1,5 @@
-class People::CartController < ApplicationController
-  layout "people"
-
+class People::CartController < People::BaseController
   def index
-    @people = User.find_by(:login => params[:person_id])
 
     @items = @people.cart.items
   end
