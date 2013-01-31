@@ -28,4 +28,7 @@ class Product
 
   def sizes
   end
+
+  def options
+  end
 end

@@ -32,13 +32,11 @@
 		});
 	})
 
-	require(['lib/table_creater'], function(TableCreater){
-		var options = {
-			depth     : ['color', 'size'],
-			structure : [['red', 'blue', 'white'], ['M', 'ML', 'L', 'XL', 'XXL']],
-			data      : ['price', 'quantity']
-		}
-		var table = new TableCreater.tableCreater($('.sub_products'), options)
+	require(['lib/table_bander'], function(tableBander){
+		var bander = new tableBander.TableBander({
+			els    : [$('div.colours'), $('div.sizes')],
+			fields : ['price', 'quantity']
+		})
 	})
 </script>
 <% end %>

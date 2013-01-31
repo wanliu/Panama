@@ -1,9 +1,14 @@
 //= require '/admins/shops/products'
+
 form{
 	.sizes, .colours{
 		label{
 			display: inline-block;
 			margin: 5px 10px;
 		}
+	}
+	td input{
+		height: 12px;
+		width: 80px;
 	}
 }
