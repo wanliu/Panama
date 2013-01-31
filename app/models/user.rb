@@ -7,6 +7,9 @@ class User
   
   has_one :cart
   has_one :image, :as => :imageable
+  has_many :transactions, inverse_of: :buyer
+  has_many :addresses, as: :addressable, class_name: "Address"
+  
   alias :avatar :image
 
   after_initialize do 

@@ -1,5 +1,6 @@
-<%= simple_form_for(@people_transaction) do |f| %>
+<%= simple_form_for @transaction, :url => transaction_path(@people, @transaction) do |f| %>
   <%= f.error_notification %>
+  <%= f.association :seller, :collection => Shop.all %>
 
   <div class="form-inputs">
   </div>
