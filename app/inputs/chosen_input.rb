@@ -32,6 +32,7 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
   end
 
   def field_name 
+    debugger
   	"#{lookup_model_names.join("_")}_#{reflection_or_attribute_name}"
   end 
 end
