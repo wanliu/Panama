@@ -18,8 +18,11 @@
 #            image
 #        end
 #    end
+#
+#    #使用
+#    <%= image_tag @model.photos.icon %>
 module Graphical
-    module Display
+    module Display        
         def self.config(options = {})        
             @config ||= {
                 :icon => "20x20",
