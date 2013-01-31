@@ -1,11 +1,12 @@
 module Graphical
     module Display
-        def self.config(options = {})
+        def self.config(options = {})        
             @config ||= {
-                :ico => "20x20",
+                :icon => "20x20",
                 :avatar => "100x100",
-                :img => ""
-            }.merge(options)
+                :preview => "400x400"                
+            }.merge(options)            
+            @config[:default] = ""
         end
 
         def self.included(base)
@@ -20,8 +21,9 @@ module Graphical
                 raise "not setting attribute argument!" if attribute.nil?
                 options = { 
                     :handler => :attachment , 
-                    :allow => [:ico, :avatar, :img]
-                }.merge(options || {})               
+                    :allow => [:icon, :avatar, :preview]
+                }.merge(options || {})                                
+                options[:allow].push(:default)
 
                self.instance_eval do
                     define_method attribute do                         
@@ -32,7 +34,7 @@ module Graphical
 
             #配置图片类型
             def configrue_graphical(options = {})
-                @config ||= Graphical::Display.config.merge(options)
+                @config ||= Graphical::Display.config.merge(options)                
             end
         end
 
