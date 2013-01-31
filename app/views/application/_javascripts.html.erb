@@ -8,6 +8,7 @@
 			, "jqueryui": "lib/jqueryui"
 			, "underscore": "lib/underscore"
 			, "templates": "templates"
+			, "jquery_columnview": "lib/jquery.columnview"
 		},
 
 		shim: {
@@ -35,7 +36,11 @@
 				deps: ["lib/underscore"], 
 				exports: "Backbone"
 			},
-			"bootstrap": ['jquery']
+			"bootstrap": ['jquery'],
+			"jquery_columnview" : {
+				exports : "$",
+				deps : ["jquery"]
+			}
 		}
 	});	
 </script>
