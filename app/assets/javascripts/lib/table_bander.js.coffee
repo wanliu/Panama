@@ -1,6 +1,6 @@
-define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, TableCreater, exports)->
+define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, TblCreater, exports)->
 	class exports.TableBander
-		constructor: (options)->
+		constructor: (options) ->
 			@els = options.els
 			@data = options.fields
 			@depth = []
@@ -14,29 +14,29 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tab
 			@loadEl = _.last @els
 			@initStructure()
 
-		initStructure: ()->
+		initStructure: () ->
 			that = @
-			deleEvents = (el)->
-				el.delegate ':checkbox', 'click', ()->
+			deleEvents = (el) ->
+				el.delegate ':checkbox', 'click', () ->
 						that.countChecked()
 
 			deleEvents el for el in @els
 
-		countChecked: ()->
+		countChecked: () ->
 			that = @
 			index = 0
 			for el in @els
-				do (el)->
+				do (el) ->
 					collection = el.find ':checkbox'
-					selecteds = _.filter collection, (item)-> $(item).attr('checked') is "checked"
-					that.structure[index] = _.map selecteds, (item)-> $(item).val()
+					selecteds = _.filter collection, (item) -> $(item).attr('checked') is "checked"
+					that.structure[index] = _.map selecteds, (item) -> $(item).val()
 				index++
 
 			@checkRow()
 
 
 
-		checkRow: ()->
+		checkRow: () ->
 			ifEmpty = _.some @structure, (item)-> _.isEmpty(item)
 			if ifEmpty
 				@table.remove() if @table
@@ -46,7 +46,7 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tab
 			return if _.isEmpty( _.last(@structure) ) and not @drawed
 			if not @drawed
 				@drawed = true
-				@table = new TableCreater.tableCreater(@loadEl, @schema)
+				@table = new TblCreater.TableCreater @loadEl, @schema
 			else
 				@table.checkRow()
 

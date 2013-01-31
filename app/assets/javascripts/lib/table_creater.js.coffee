@@ -1,5 +1,5 @@
-define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
-	class exports.tableCreater extends Backbone.View
+define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
+	class exports.TableCreater extends Backbone.View
 		tagName: 'table'
 		className: 'table table-bordered js-createdTable'
 		attributes:
@@ -8,29 +8,29 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 		#	depth: [color, size]    #维度
 		#	structure: [[red, blue, white], [M, ML, XL, XXL], ....]  #初始表结构对象
 		#	data: [price, quantity]  #数据字段
-		initialize: (el, schema)->
+		initialize: (el, schema) ->
 			@render(el)
 			@schema = schema
 			@parseTable()
 
-		render: (el)->
+		render: (el) ->
 			$(@el).html('<tbody></tbody>')
 			el.after(@el)
 
-		parseTable: ()->
-			@tableView = new tableUnitView(
+		parseTable: () ->
+			@tableView = new TableUnitView(
 				schema     : @schema
 				position   : [-1, 0]
 				isRoot     : true
 				creater    : null
 				parent_el  : @$('tbody') )
 
-		checkRow: ()->
+		checkRow: () ->
 			@tableView.checkRow()
 
-	class tableUnitView extends Backbone.View
+	class TableUnitView extends Backbone.View
 		tagName: 'tr'
-		initialize: ()->
+		initialize: () ->
 			@structure = @options.schema.structure
 			@schema = @options.schema
 			@position = @options.position
@@ -43,12 +43,12 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 
 			@initChildren()
 
-		render: ()->
+		render: () ->
 			if @hasChildren()  # render the no-leaf node
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
 			else  # render leaf node
 				html = for data in @schema['data']
-					do (data)->
+					do (data) ->
 						"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input type='text'></td>"
 
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html)
@@ -63,12 +63,12 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 			@parent_el.append(@el)
 			@
 
-		initTitle: ()->
+		initTitle: () ->
 			that = @
 			position = "[" + @position.join("][") + "]"
 			@title = eval("that.structure#{position}" )
 
-		initChildren: ()->
+		initChildren: () ->
 			return (@children = []) if not @hasChildren()
 
 			that = @
@@ -76,8 +76,8 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 			@children = @children || []
 
 			for x in [0...@structure[ _.first(@position) + 1 ].length]
-				do (x)->
-					view = new tableUnitView(
+				do (x) ->
+					view = new TableUnitView(
 						structure  : that.structure
 						position   : [ _.first(that.position) + 1, x]
 						isRoot     : false
@@ -88,47 +88,47 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 					that.children.push view
 					parent_el = $(view.lastChild().el)
 
-		initRowspan: ()->
+		initRowspan: () ->
 			return if !@hasChildren() or !@hasParent()
 			that = @
 			@rowspan = 1
 			start = _.first(@position) + 1
 			for x in [start..that.structure.length - 1]
-				do (x)->
+				do (x) ->
 					that.rowspan = that.rowspan * that.structure[x].length if _.isArray(that.structure[x])
 
 			if start <= that.structure.length - 2
 				for x in [start..that.structure.length - 2]
-					do (x)->
+					do (x) ->
 						that.rowspan += that.structure[x].length if _.isArray(that.structure[x])
 
 			@$('td').attr('rowspan', @rowspan + 1)
 
-		resetRowspan: ()->
+		resetRowspan: () ->
 			@initRowspan()
 			@parent.resetRowspan() if @hasParent()
 
-		hasParent: ()->
+		hasParent: () ->
 			return !!@parent
 
-		hasChildren: ()->
+		hasChildren: () ->
 			return _.first(@position) isnt (@structure.length - 1)
 
-		lastChild: ()->
+		lastChild: () ->
 			return @ if not @hasChildren()
 			return _.last(@children).lastChild()
 
-		checkRow: ()->
+		checkRow: () ->
 			return if not @hasChildren()
 
 			@increceCheck()
 			@reduceCheck()
 
 			for child in @children
-				do (child)->
+				do (child) ->
 					child.checkRow()
 
-		destroy: ()->
+		destroy: () ->
 			# return null if @title isnt title
 			if @hasChildren()
 				for child in @children
@@ -139,27 +139,27 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 			@parent.resetRowspan() if @hasParent()
 			@remove()
 
-		increceCheck: ()->
+		increceCheck: () ->
 			for title in @structure[_.first(@position) + 1]
-				if not _.contains( _.map(@children, (child)-> child['title'] ), title)
+				if not _.contains( _.map(@children, (child) -> child['title'] ), title)
 					@addChild(title)
 
-		reduceCheck: ()->
-			for title in _.map( @children, (child)-> child['title'] )
+		reduceCheck: () ->
+			for title in _.map( @children, (child) -> child['title'] )
 				if not _.contains(@structure[_.first(@position) + 1], title)
 					@removeChild(title)
 
-		addChild: (title)->
+		addChild: (title) ->
 			index = _.indexOf(@structure[_.first(@position) + 1], title)
 
 			parent_el = if index is 0
 				$(@el)
 			else
 				front_title = @structure[_.first(@position) + 1][index - 1]
-				front_view = _.find(@children, (child)-> child.title is front_title)
+				front_view = _.find(@children, (child) -> child.title is front_title)
 				$(front_view.lastChild().el)
 
-			view = new tableUnitView(
+			view = new TableUnitView(
 				structure  : @structure
 				position   : [ _.first(@position) + 1, index]
 				isRoot     : false
@@ -170,10 +170,10 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports)->
 			@children.splice(index, 0, view)
 			@resetRowspan()
 
-		createView: ()->
+		createView: () ->
 
-		removeChild: (title)->
-			if ( badLuckyGuy = _.find(@children, (child)-> child.title is title) )
+		removeChild: (title) ->
+			if ( badLuckyGuy = _.find(@children, (child) -> child.title is title) )
 				@children.splice(_.indexOf(@children, badLuckyGuy), 1)
 				badLuckyGuy.destroy()
 
