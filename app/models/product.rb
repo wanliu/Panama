@@ -12,9 +12,7 @@ class Product
 
   mount_uploader :preview, ImageUploader
 
-  define_graphical_attr :photos, :handler => :default_image, :allow => [:test]  
-
-  configrue_graphical :test => "160x120"
+  define_graphical_attr :photos, :handler => :default_image  
   
   belongs_to :shop
   belongs_to :category
