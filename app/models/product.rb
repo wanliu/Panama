@@ -1,6 +1,7 @@
 class Product
   include Mongoid::Document
   include Mongoid::Timestamps::Created
+  include Graphical::Display
 
   attr_accessor :uploader_secure_token
   
@@ -11,7 +12,10 @@ class Product
 
   mount_uploader :preview, ImageUploader
 
-  has_many :photos
+  define_graphical_attr :photos, :handler => :default_image, :allow => [:test]  
+
+  configrue_graphical :test => "160x120"
+  
   belongs_to :shop
   belongs_to :category
 
@@ -22,4 +26,8 @@ class Product
 
   validates_presence_of :category
   validates_presence_of :shop
+
+  def default_image
+      preview
+  end
 end

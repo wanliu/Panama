@@ -1,7 +1,1 @@
-module Graphical
-
-  def icon
-
-  end
-
-end
+require "#{Rails.root}/lib/graphical"
