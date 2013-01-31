@@ -63,12 +63,14 @@ module Graphical
         end
 
         class ImageType
+            attr_accessor :klass, :options
 
-            def initialize(klass, options)                                            
-                config = klass.class.configrue_graphical
-                options[:allow].each do | type |                    
+            def initialize(klass, options)
+                @klass, @options  = klass, options                
+                config = @klass.class.configrue_graphical
+                @options[:allow].each do | type |                    
                     define_singleton_method type do 
-                        klass.send(options[:handler]).url(config[type])
+                        @klass.send(@options[:handler]).url(config[type])
                     end
                 end              
             end
