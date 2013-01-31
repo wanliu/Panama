@@ -1,12 +1,33 @@
+# author : huxinghai
+# describe : 图型显示
+# example :
+#    class ModelName  
+#        include Graphical::Display
+#
+#        #定义图型属性
+#        #参数 
+#        #    photos: 调用属性名(必选), 
+#        #    handler: 获取图片方法名(必选), 
+#        #    allow: 允许显示那几项,还可以自定义图型项
+#        define_graphical_attr :photos, :handler => :default_image, :allow => [:icon, :preview, :customer_img]
+#
+#        #可选配置
+#        configrue_graphical :icon => "50x50", :preview => "200x200", :customer_img => "600x600"
+#
+#        def default_image
+#            image
+#        end
+#    end
 module Graphical
     module Display
         def self.config(options = {})        
             @config ||= {
                 :icon => "20x20",
                 :avatar => "100x100",
-                :preview => "400x400"                
+                :preview => "250x187"                
             }.merge(options)            
             @config[:default] = ""
+            @config
         end
 
         def self.included(base)
@@ -48,7 +69,6 @@ module Graphical
                     end
                 end              
             end
-
         end
     end
 end
