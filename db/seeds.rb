@@ -6,6 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-@root = Category.create(:name => '_products_root')
+@root = Category.find_or_create_by(:name => '_products_root')
 product_category_file = Rails.root.join("config/product_category.yml")
 @root.load_file(product_category_file)
