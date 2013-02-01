@@ -78,14 +78,15 @@ body {
 }
 
 #social_sidebar {
-	position: fixed;
+	position: absolute;
 	// width: 400px;
-	top:0px;
+	top: 0px;
 	left: 996px;
 	right: 0px;
 	bottom: 0px;
+	/*height: 665px;*/
 	background: $grayLighter;
-	bottom: 0px;
+	/*overflow-y: scroll;*/
 	// @include box-shadow(inset 2px 2px 3px rgba(0,0,0,.075));
 }
 
@@ -119,4 +120,8 @@ body {
 	right:0px;
 	left:0px;
 	position: fixed!important;
+}
+
+#social_sidebar.affix{
+	top: 40px;
 }
