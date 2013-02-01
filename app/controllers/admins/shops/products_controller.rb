@@ -7,7 +7,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index
+  def index    
     node = current_shop.category
     @categories = node.traverse(:depth_first)
     @categories.shift
