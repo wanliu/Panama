@@ -20,8 +20,7 @@ Carrierwave::Switch.configure do | storage |
             include CarrierWave::MiniMagick         
             def url(version_name = "")                    
                 args = {}
-                args = "t#{version_name.split("x").join}".to_sym unless version_name.blank?
-                debugger
+                args = "t#{version_name.split("x").join}".to_sym unless version_name.blank?                
                 url = super(args)  
 
                 file_path = "#{ImageUploader.root.call}#{url}"
