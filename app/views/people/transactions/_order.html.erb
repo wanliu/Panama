@@ -7,5 +7,32 @@
 				:label_method => :location, 
 				:value_method => :id,
 				:input_html => { :class => 'input-xxlarge' } %>
-	<button class='btn'>+</button>
+
+	<%= simple_fields_for :addresses do |address_form| %>
+		<%= address_form.input :province, :as => :chosen %>
+		<%= address_form.input :city, :as => :chosen %>
+		<%= address_form.input :area, :as => :chosen %>
+		<%= address_form.input :road %>
+
+	<% end %>
+
 <% end %>
+
+<table class="table">
+	<% @transaction.items.each do |item| %>
+	<tr>
+		<td>
+			<%= item.title %>
+		</td>
+		<td>
+			<%= item.amount %>
+		</td>
+		<td>
+			<%= item.price %>
+		</td>
+		<td>
+			<%= item.total %>
+		</td>
+	</tr>
+	<% end %>
+</table>

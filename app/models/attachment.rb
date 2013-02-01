@@ -10,4 +10,6 @@ class Attachment
 
   mount_uploader :file, ImageUploader
 
+  validates :file_filename, :length => { :minimum => 2 }
+
 end

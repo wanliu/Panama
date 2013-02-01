@@ -1,9 +1,9 @@
 class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
 
   def input
-  	# "$ #{@builder.text_field(attribute_name, input_html_options)}".html_safe   collection  
-    @isif = input_options[:collection].blank?
-    @collection =  @isif ? ["",""] : collection
+  	# "$ #{@builder.text_field(attribute_name, input_html_options)}".html_safe   collection 
+    @isif = reflection.blank?
+    @collection =  input_options[:collection].blank? ? ["",""] : collection
     @strID = @isif ? "" : "_id"
     remote_key = input_options[:remote_key] || "name"
     remote_value = input_options[:remote_value] || "id"
@@ -32,7 +32,6 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
   end
 
   def field_name 
-    debugger
   	"#{lookup_model_names.join("_")}_#{reflection_or_attribute_name}"
   end 
 end

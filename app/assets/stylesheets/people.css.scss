@@ -79,6 +79,59 @@
 
 	.transaction-body {
 		border-left: 1px solid $grayLighter;
-		border-right: 1px solid $grayLighter;		
+		border-right: 1px solid $grayLighter;
+		border-bottom: 1px solid $grayLighter;
+	}
+
+	.transaction-footer {
+		margin-left: 5px;
+		margin-right: 5px;
+		padding: 5px;
+		border-left: 1px solid $grayLighter;
+		border-right: 1px solid $grayLighter;
+		border-bottom: 1px solid $grayLighter;
+
+		.messages {
+			position: relative;
+			max-height: 300px;
+			overflow-y: auto;
+
+			.row-msg {
+
+				margin-bottom: 5px;
+				min-height: 30px;
+				padding: 5px;
+
+				.wrapper {
+					display: inline-block;
+					padding: 5px 15px;
+					.people {
+						opacity: 0.5
+					}
+					@include border-radius(5px);
+					@include box-shadow(2px 2px 5px $gray);
+					background: #FAFAFA;
+					border: 1px solid $grayLighter;		
+				}
+
+
+				p {
+					margin-bottom: 0px;
+				}
+			}
+
+		}
+
+		.me {
+			position: absolute;
+
+			p {
+				margin-top: 5px;
+			}
+		}
+
+		.input-msg {
+			margin-left: 50px;
+		}
 	}
 }
