@@ -102,18 +102,25 @@
 				min-height: 30px;
 				padding: 5px;
 
+				.people {
+
+				}
+
+				.self {
+					float: right;
+				}
+
 				.wrapper {
 					display: inline-block;
 					padding: 5px 15px;
-					.people {
+					.people-name {
 						opacity: 0.5
 					}
 					@include border-radius(5px);
 					@include box-shadow(2px 2px 5px $gray);
 					background: #FAFAFA;
 					border: 1px solid $grayLighter;		
-				}
-
+				}				
 
 				p {
 					margin-bottom: 0px;
