@@ -1,0 +1,2 @@
+module People::CartHelper
+end

@@ -5,4 +5,13 @@ class User
   field :uid, type: String
   field :login, type: String
   
+  has_one :_cart, :class_name => "Cart"
+
+  def cart
+    if _cart.nil?
+      create__cart
+      save
+    end
+    _cart
+  end
 end

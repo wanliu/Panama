@@ -1,4 +1,5 @@
 class CommonWidget < Apotomo::Widget
+  include ApplicationHelper
   helper ApplicationHelper
 
   def action_controller(controller)

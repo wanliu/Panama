@@ -132,7 +132,7 @@ define([
             )
 
         url_root : () ->
-            "/shops/#{@shop_id}/admins/attachments"
+            "/shops/#{@shop_name}/admins/attachments"
 
         set_value_attr : () ->
             @attachable.removeClass(@default_img_class)
@@ -163,7 +163,7 @@ define([
 
         add_one : (model) ->
             product_attachment = new ProductAttachmentUpload(                                     
-                shop_id : @shop_id,                
+                shop_name : @shop_name,                
                 model : model,
                 add_blank_product_attachment : _.bind(@add_blank_product_attachment, @)
             )

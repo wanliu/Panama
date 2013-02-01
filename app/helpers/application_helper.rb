@@ -17,6 +17,10 @@ module ApplicationHelper
     ImageUploader.new.url(version_name)
   end
 
+  def my_cart
+    current_user.cart
+  end
+
   def accounts_provider_url
     OmniAuth::Wanliu.config["provider_url"]    
   end
@@ -88,8 +92,8 @@ module ApplicationHelper
     as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
   end
 
-  def build_menu(root)
-    output = ActiveSupport::SafeBuffer.new
+  def build_menu(root)    
+    output = ActiveSupport::SafeBuffer.new    
     if root.children && root.children.size && root.children.size > 0
       content_tag(:ul, :class => "dropdown-menu") do 
         root.children.map do |node|

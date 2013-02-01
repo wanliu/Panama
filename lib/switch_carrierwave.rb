@@ -21,6 +21,7 @@ Carrierwave::Switch.configure do | storage |
             def url(version_name = "")                    
                 args = {}
                 args = "t#{version_name.split("x").join}".to_sym unless version_name.blank?
+                debugger
                 url = super(args)  
 
                 file_path = "#{ImageUploader.root.call}#{url}"
@@ -28,7 +29,6 @@ Carrierwave::Switch.configure do | storage |
                     return (version_name.blank? ? default_url : "#{default_url}!#{version_name}")
                 end
 
-                return url if version_name.blank? 
                 url            
             end
 
