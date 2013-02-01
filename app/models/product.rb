@@ -1,6 +1,7 @@
 class Product
   include Mongoid::Document
   include Mongoid::Timestamps::Created
+  include Graphical::Display
 
   attr_accessor :uploader_secure_token
   
@@ -16,6 +17,8 @@ class Product
                                 :reject_if => proc { |att| att['file_filename'].blank? }, 
                                 :allow_destroy => true
 
+  define_graphical_attr :photos, :handler => :default_image  
+
   belongs_to :shop
   belongs_to :category
 
@@ -26,4 +29,8 @@ class Product
 
   validates_presence_of :category
   validates_presence_of :shop
+
+  def default_image
+      preview
+  end
 end
