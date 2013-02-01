@@ -18,9 +18,34 @@
 
 <% end %>
 
-<table class="table">
+<table class="table table-striped">
+	<thead>
+	<tr>
+		<th colspan=2 class="relative">
+			<div class="left-frame"></div>
+			<% @transaction.items[0...5].each do |item| %>
+				<%= image_tag item.product.photos.ico %>
+			<% end %>
+		</th>
+		<th>
+			<%= @transaction.items_count %>
+		</th>
+		<th>小计: <%= number_to_currency(@transaction.items.inject(0) {|s, n| s += n.price }) %>
+		</th>
+		<th>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %>
+		</th>
+		<th class="relative">
+			<button class="btn"><%= icon :download %></button>
+			<button class="btn btn-primary">购买</button>
+			<div class="right-frame"></div>
+		</th>
+	</tr>
+	</thead>
 	<% @transaction.items.each do |item| %>
 	<tr>
+		<td>
+			<%= image_tag item.product.photos.ico %>
+		</td>
 		<td>
 			<%= item.title %>
 		</td>
@@ -33,6 +58,7 @@
 		<td>
 			<%= item.total %>
 		</td>
+		<td></td>
 	</tr>
 	<% end %>
 </table>

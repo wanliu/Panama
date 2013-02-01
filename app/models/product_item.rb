@@ -11,6 +11,7 @@ class ProductItem
 
   belongs_to :product 
   belongs_to :cart
+  belongs_to :transaction, inverse_of: :items, class_name: "Transaction"
 
   def icon
     product.preview.url("30x30")

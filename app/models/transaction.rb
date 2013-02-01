@@ -13,13 +13,15 @@ class Transaction
   include Mongoid::Timestamps
 
   field :state, :type => String
+  field :items_count, :type => Fixnum
+  field :total, :type => BigDecimal
+
   has_one :address, as: :addressable
 
   belongs_to :seller, inverse_of: :transactions, class_name: "Shop"
   belongs_to :buyer, inverse_of: :transactions, class_name: "User"
 
-  has_many :product_items
-  alias :items :product_items
+  has_many :items, inverse_of: :transaction, class_name: "ProductItem"
 
   state_machine :initial => :order do
     

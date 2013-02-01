@@ -76,6 +76,34 @@
 		border: 1px solid $grayLighter;
 		border-bottom: none;
 	}
+	table {
+		border-top:  1px solid $grayLighter;
+		border-bottom: 1px solid $grayLighter;
+		
+		.left-frame {
+			position: absolute;
+			top: -1px;
+			left: -5px;
+			border: 1px solid $grayLighter;
+			border-right: none;
+			width: 5px;
+			height: 46px;
+
+			background: $white
+		}
+
+		.right-frame {
+			position: absolute;
+			top: -1px;
+			right: -5px;
+			border: 1px solid $grayLighter;
+			border-left: none;
+			width: 5px;
+			height: 46px;
+
+			background: $white
+		}
+	}
 
 	.transaction-body {
 		border-left: 1px solid $grayLighter;
