@@ -6,7 +6,7 @@ class Shop
 
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
 
-  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "100x100", :preview => "420x420"
+  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
 
   has_many :contents, dependent: :delete do 
     def lookup(name)
