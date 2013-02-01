@@ -1,11 +1,7 @@
 class Product
   include Mongoid::Document
-  include Mongoid::Timestamps::Created 
-  include Graphical::Display 
-
-  define_graphical_attr :photos, :handler => :default_photo, :allow => [:ico, :avatar, :img]
-
-  configrue_graphical :ico => "20x20", :avatar => "120x90", :img => "250x187"
+  include Mongoid::Timestamps::Created
+  include Graphical::Display
 
   attr_accessor :uploader_secure_token
   
@@ -16,6 +12,7 @@ class Product
   has_and_belongs_to_many :attachments, :class_name => "Attachment", :inverse_of => :products
 
   accepts_nested_attributes_for :attachments
+  define_graphical_attr :photos, :handler => :default_photo  
   
   belongs_to :shop
   belongs_to :category

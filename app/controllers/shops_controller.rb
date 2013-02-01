@@ -26,8 +26,9 @@ class ShopsController < ApplicationController
 
   # GET /shops/1
   # GET /shops/1.json
-  def show    
-    @shop = Shop.find(params[:id])
+
+  def show
+    @shop = Shop.find_by(:name => params[:id])
 
     respond_to do |format|
       format.html { render_shop_content @shop, :index, @shop }
@@ -48,7 +49,7 @@ class ShopsController < ApplicationController
 
   # GET /shops/1/edit
   def edit
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
   end
 
   # POST /shops
@@ -70,7 +71,7 @@ class ShopsController < ApplicationController
   # PUT /shops/1
   # PUT /shops/1.json
   def update
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
 
     respond_to do |format|
       if @shop.update_attributes(params[:shop])
@@ -86,7 +87,7 @@ class ShopsController < ApplicationController
   # DELETE /shops/1
   # DELETE /shops/1.json
   def destroy
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
     @shop.destroy
 
     respond_to do |format|

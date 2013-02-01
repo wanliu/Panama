@@ -3,46 +3,50 @@
     require.config({
         deps: ["application"],
 
-        paths: {
-            "jquery": "jquery"
-            , "jqueryui": "lib/jqueryui"
-            , "underscore": "lib/underscore"
-            , "templates": "templates"
+		paths: {
+			"jquery": "jquery"
+			, "jqueryui": "lib/jqueryui"
+			, "underscore": "lib/underscore"
+			, "templates": "templates"
+			, "jquery_columnview": "lib/jquery.columnview"
             , "fileuploader" : "lib/fileuploader"
-        },
+		},
 
-        shim: {
-            "underscore": {
-                exports: "_"
-            },
-            "jquery": {
-                exports: "$",
-                deps: ["jquery", "jquery_ujs"]
-            },
-            "jquery-ui": {
-                exports: "$",
-                deps: [ "jquery"]
-            },
-            "hallo" : {
-                deps: ['annotate']
-            },
-            'annotate': {
-                deps: ['vie-2.1.0.debug']
-            },
-            'vie-2.1.0.debug': {
-                deps: ['backbone']
-            },
-            "backbone": {
-                deps: ["lib/underscore"], 
-                exports: "Backbone"
-            },
-            "bootstrap": ['jquery'],
+		shim: {
+			"underscore": {
+				exports: "_"
+			},
+			"jquery": {
+				exports: "$",
+				deps: ["jquery", "jquery_ujs"]
+			},
+			"jquery-ui": {
+				exports: "$",
+				deps: [ "jquery"]
+			},
+			"hallo" : {
+				deps: ['annotate']
+			},
+			'annotate': {
+				deps: ['vie-2.1.0.debug']
+			},
+			'vie-2.1.0.debug': {
+				deps: ['backbone']
+			},
+			"backbone": {
+				deps: ["lib/underscore"], 
+				exports: "Backbone"
+			},
+			"bootstrap": ['jquery'],
+			"jquery_columnview" : {
+				exports : "$",
+				deps : ["jquery"]
+			},
             "fileuploader" : {
                 exports : "qq"
             }
-        }
-    });
-
+		}
+	});	
 </script>
 
 <%# Append your own using content_for :javascripts %>
