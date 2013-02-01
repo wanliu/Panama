@@ -19,6 +19,7 @@ class Product
 
   define_graphical_attr :photos, :handler => :default_image  
 
+  has_many :product_item
   belongs_to :shop
   belongs_to :category
 
