@@ -58,11 +58,12 @@ module Graphical
 
             #配置图片类型
             def configrue_graphical(options = {})
-                @config ||= Graphical::Display.config.merge(options)                
+                @config ||= Graphical::Display.config.merge(options)
             end
         end
 
         class ImageType
+
             attr_accessor :klass, :options
 
             def initialize(klass, options)

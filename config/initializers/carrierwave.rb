@@ -5,3 +5,5 @@ CarrierWave.configure do |config|
   config.upyun_bucket = "panama-img"
   config.upyun_bucket_domain = "panama-img.b0.upaiyun.com"
 end
+
+require 'switch_carrierwave'

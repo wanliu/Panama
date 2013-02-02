@@ -13,8 +13,8 @@
 
 # Ignore all logfiles and tempfiles.
 /config/sso.yml
-/public/uploads
 /log/*.log
 /tmp
 /vendor/bundle
 /vendor/cache
+/public/uploads

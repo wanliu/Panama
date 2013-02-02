@@ -7,7 +7,13 @@ class Attachment
   field :filename, :type => String
 
   belongs_to :attachable, :polymorphic => true
-
+  has_and_belongs_to_many :products, :class_name => "Product", :inverse_of => :attachments
+  
   mount_uploader :file, ImageUploader
 
+  def get_attributes(version_name = nil)
+  	_attributes = attributes
+  	_attributes[:url] = file.url(version_name)
+  	_attributes
+  end
 end

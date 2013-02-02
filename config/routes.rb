@@ -40,34 +40,34 @@ Panama::Application.routes.draw do
   resources :category
   # shop admins routes
   
-  resources :shops do 
-    match "admins/attachments/upload", :to => "admins/shops/attachments#upload", :via => :post
-    match "admins/attachments/destroy/:id", :to => "admins/shops/attachments#destroy", :via => :delete
-  end
-
-  resources :shops, :key => :name  do 
-    namespace :admins do 
-      resources :dashboard, :controller => "shops/dashboard"
-    end
-  end
-
   resources :shops, :key => :name do 
+
     namespace :admins do 
+      match "attachments/upload", :to => "shops/attachments#upload", :via => :post
+      match "attachments/destroy/:id", :to => "shops/attachments#destroy", :via => :delete
+
+      resources :dashboard, :controller => "shops/dashboard"
+
       resources :contents, :controller => "shops/contents"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :menu, :controller => "shops/menu"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
-      resources :categories, :controller => "shops/categories"
+      resources :categories, :controller => "shops/categories" 
+      
+      resources :products, :controller => "shops/products"
+
+      resources :pending, :controller => "shops/pending"    
+
+      resources :complete, :controller => "shops/complete"
+
+      resources :complaint, :controller => "shops/complaint" 
+
+      resources :transport, :controller => "shops/transport"
+
+      resources :templates, :controller => "shops/templates"
     end
-  end
+  end  
+
 
   match "shops/:shop_id/admins/products/category/:category_id", 
     :to => "admins/shops/products#products_by_category"
@@ -75,48 +75,8 @@ Panama::Application.routes.draw do
   match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id", 
     :to => "admins/shops/products#accept_product"
 
-  resources :shops do 
-    namespace :admins do 
-      resources :products, :controller => "shops/products" 
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
-      resources :pending, :controller => "shops/pending"
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
-      resources :complete, :controller => "shops/complete"
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
-      resources :complaint, :controller => "shops/complaint"
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
-      resources :transport, :controller => "shops/transport"
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
-      resources :templates, :controller => "shops/templates"
-    end
-  end  
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index"
-
-
-  # match "shops/:shop_id/admins/contents", :to => "admins/shops/contents"
-
-  # match "shops/:shop_id/admins/", :to => "admins/shops#index"
 
   resources :search
   
