@@ -2,7 +2,11 @@ Panama::Application.routes.draw do
 
   resources :people, :key => :login do
     resources :cart, :controller => "people/cart"
-    resources :transactions, :controller => "people/transactions"
+    resources :transactions, :controller => "people/transactions" do
+      member do 
+        post "event/:event", :to => "people/transactions#event", :as => :trigger_event
+      end
+    end
     
     member do 
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart

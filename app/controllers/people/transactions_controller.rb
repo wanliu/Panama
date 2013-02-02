@@ -21,6 +21,13 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def event
+    @transaction = Transaction.find(params[:id])
+    if @transaction.fire_events!(params[:event])
+      redirect_to person_transaction_path(@people.login, @transaction)
+    end
+  end
+
   # GET /people/transactions/new
   # GET /people/transactions/new.json
   def new
