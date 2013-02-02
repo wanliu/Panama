@@ -3,7 +3,7 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 		constructor: (options) ->
 			@els = options.els
 			@data = options.fields
-			@depth = []
+			@depth = options.depth
 			@structure = []
 
 			@schema =

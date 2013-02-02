@@ -44,17 +44,35 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@initChildren()
 
 		render: () ->
-			that = @
+			# that = @
+			# if @hasChildren()  # render the no-leaf node
+			# 	$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
+			# else  # render leaf node
+			# 	html = for data in @schema['data']
+			# 		do (data) ->
+			# 			arr = that.getNameField()
+			# 			arr += "[#{data}]"
+			# 			"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input name=sub_products#{arr}  type='text'></td>"
+
+			# 	$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html)
+
 			if @hasChildren()  # render the no-leaf node
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
 			else  # render leaf node
-				html = for data in @schema['data']
-					do (data) ->
-						arr = that.getNameField()
-						arr += "[#{data}]"
-						"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input name=sub_products#{arr}  type='text'></td>"
+				counter = counterFun()
 
-				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html)
+				arr = @getNameField()
+				html_front = for item in arr
+					name = @schema['depth'] if @schema['depth']
+					name = name[_.first(item['position'])]
+					"<input type='hidden' name='sub_products[#{counter}][#{name}]' value=#{item.value} >"
+				html = for data in @schema['data']
+					# do (data) ->
+					"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input name=sub_products[#{counter}][#{data}]  type='text'></td>"
+
+				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html_front + html)
+
+
 
 			# load no root node to DOM tree
 			if @hasParent()
@@ -179,12 +197,20 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				badLuckyGuy.destroy()
 
 		getNameField: ()->
-			node = that
-			arr = ''
+			node = @
+			arr = []
 			while node.hasParent()
-				do ()->
-					arr = "[#{node.title}]" + arr
-					node = node.parent
+				arr.push
+					position : node.position
+					value    : node.title
+
+				node = node.parent
 			arr
+
+	counterFun = (() ->
+		counter = 1
+		innerCounter = ()-> counter++
+		return innerCounter)()
+
 
 	exports

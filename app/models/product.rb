@@ -7,10 +7,15 @@ class Product
   field :name, type: String
   field :price, type: BigDecimal
   field :summary, type: String
-  field :quanity, type: Integer
-  field :sub_products, type: Array
+  # field :quanity, type: Float
+  # field :sub_products, type: Array
 
   mount_uploader :preview, ImageUploader
+
+  has_many :sub_products, :dependent => :destroy
+  accepts_nested_attributes_for :sub_products
+
+  has_one :style
 
   has_many :photos
   belongs_to :shop
@@ -22,13 +27,4 @@ class Product
 
   validates_presence_of :category
   validates_presence_of :shop
-
-  def colours
-  end
-
-  def sizes
-  end
-
-  def options
-  end
 end
