@@ -18,20 +18,27 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def new
     Hash.class_eval do
       def id
-        [:id]
+        self[:id]
       end
       def name
-        [:name]
+        self[:name]
+      end
+      def rgb
+        self[:rgb]
       end
     end
     @product = Product.new
     @colours = [ {id: 1, rgb: '#FFB6C1', name: '浅粉红'}, {id: 2, rgb: '#FFC0CB', name: '粉红'},
                 {id: 3, rgb: '#7B68EE', name: '中板岩蓝'}, {id: 4, rgb: '#00FA9A', name: '中春绿'}]
-    @sizes = ['M', 'ML', 'L', 'XL', 'XXL', '均码']
+    @sizes = ['M', 'ML', 'L', 'XL', 'XXL', 'XXXL']
   end
 
   def create
     @product = current_shop.products.create params[:product]
+    @colours = [ {id: 1, rgb: '#FFB6C1', name: '浅粉红'}, {id: 2, rgb: '#FFC0CB', name: '粉红'},
+                {id: 3, rgb: '#7B68EE', name: '中板岩蓝'}, {id: 4, rgb: '#00FA9A', name: '中春绿'}]
+    @sizes = ['M', 'ML', 'L', 'XL', 'XXL', 'XXXL']
+
     if @product.valid?
       render :action => :show
     else
@@ -85,4 +92,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def sizes
   end
+
+  # class << self
+  #   attr_accessor :colours, :sizes
+  # end
 end

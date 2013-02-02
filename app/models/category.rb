@@ -7,6 +7,7 @@ class Category
   attr_accessor :indent
 
   field :name, type: String
+  field :styles, type: Array
 
   mount_uploader :cover, ImageUploader
   

@@ -6,9 +6,11 @@
 	} do |f| %>
 	<%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %>
 	<%= image_tag form.preview.url("100x100") %>
-	<%= f.input :colours, :collection => @colours.map{|color| color[:name] }, :as => :check_boxes, :wrapper_html => {:class => "colours"} %>
-	<%= f.input :sizes, :collection => @sizes, :as => :check_boxes, :wrapper_html => {:class => "sizes"} %>
-	<div class="sub_products"></div>
+
+	<%= sub_product_property('Colours', @colours, {:class => 'colours'}, :name, true) %>
+
+	<%= sub_product_property('Sizes', @sizes, {:class => 'sizes'}) %>
+
 	<%= f.input :preview , as: :file %>
 	<%= f.input :price %>
 	<%= f.association :category, 
@@ -32,10 +34,10 @@
 		});
 	})
 
-	require(['lib/table_bander'], function(tableBander){
-		var bander = new tableBander.TableBander({
+	require(['lib/table_bander'], function(tblBander){
+		var bander = new tblBander.TableBander({
 			els    : [$('div.colours'), $('div.sizes')],
-			fields : ['price', 'quantity']
+			fields : ['价格', '数量']
 		})
 	})
 </script>

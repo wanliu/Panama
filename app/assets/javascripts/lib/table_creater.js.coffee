@@ -44,12 +44,15 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@initChildren()
 
 		render: () ->
+			that = @
 			if @hasChildren()  # render the no-leaf node
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
 			else  # render leaf node
 				html = for data in @schema['data']
 					do (data) ->
-						"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input type='text'></td>"
+						arr = that.getNameField()
+						arr += "[#{data}]"
+						"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input name=sub_products#{arr}  type='text'></td>"
 
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html)
 
@@ -170,11 +173,18 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@children.splice(index, 0, view)
 			@resetRowspan()
 
-		createView: () ->
-
 		removeChild: (title) ->
 			if ( badLuckyGuy = _.find(@children, (child) -> child.title is title) )
 				@children.splice(_.indexOf(@children, badLuckyGuy), 1)
 				badLuckyGuy.destroy()
+
+		getNameField: ()->
+			node = that
+			arr = ''
+			while node.hasParent()
+				do ()->
+					arr = "[#{node.title}]" + arr
+					node = node.parent
+			arr
 
 	exports
