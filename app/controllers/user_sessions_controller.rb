@@ -39,6 +39,6 @@ class UserSessionsController < ApplicationController
     session[:user_id] = nil
         
     flash[:notice] = 'You have successfully signed out!'
-    redirect_to "#{accounts_provider_url}/accounts/logout?redirect_uri=http://#{request.env['HTTP_HOST']}"
+    redirect_to "#{accounts_provider_url}/accounts/logout?callback_redirect_uri=http://#{request.env['HTTP_HOST']}"
   end
 end
