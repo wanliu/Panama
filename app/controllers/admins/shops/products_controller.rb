@@ -16,6 +16,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     @product = Product.new
+    @category_root = Category.find_by(:name => "root")
   end
 
   def create            
