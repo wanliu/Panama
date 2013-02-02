@@ -2,6 +2,8 @@ Panama::Application.routes.draw do
 
   resources :people, :key => :login do
     resources :cart, :controller => "people/cart"
+    resources :transactions, :controller => "people/transactions"
+    
     member do 
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
@@ -21,7 +23,6 @@ Panama::Application.routes.draw do
 
   resources :users
   resources :contents
-  resources :newsletter_receivers
 
   resources :products
 
@@ -38,6 +39,11 @@ Panama::Application.routes.draw do
 
   resources :category
   # shop admins routes
+  
+  resources :shops do 
+    match "admins/attachments/upload", :to => "admins/shops/attachments#upload", :via => :post
+    match "admins/attachments/destroy/:id", :to => "admins/shops/attachments#destroy", :via => :delete
+  end
 
   resources :shops, :key => :name  do 
     namespace :admins do 

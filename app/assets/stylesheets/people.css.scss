@@ -1,3 +1,137 @@
 // Place all the styles related to the people controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "compass/css3";
+@import "variables";
+
+#wrapper {
+	padding-top :10px;
+
+}
+
+#people-sidebar {
+	width: 250px;
+	position: absolute;
+
+	.icon-chevron-right {
+		float: right;
+		margin-top: 2px;
+		margin-right: -6px;
+		opacity: .25;
+	}
+
+	.nav-list > .active > a, 
+	.nav-list > .active > a:hover {
+		margin-left: -35px;
+		padding-left: 35px;
+		margin-right: -35px;
+		padding-right: 35px;			
+	}
+
+	.nav > li > a:hover {
+		margin-left: -35px;
+		padding-left: 35px;
+		margin-right: -35px;
+		padding-right: 35px;
+	}	
+}
+
+#main-body {
+	margin-left: 270px;
+}
+
+.product-item {
+	margin-bottom: 10px;
+	padding: 10px;
+	border: 1px solid $grayLighter;
+
+	h1 {
+		font-size: 18px;
+		line-height: 18px;
+	}
+
+	&:hover {
+		border-color: $blue;
+		@include box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
+	}
+}
+
+.transaction {
+	padding-top: 40px;
+
+
+	.transaction-header {
+		.avatar {
+			margin-left: 40px;
+			margin-top: - 40px;
+			position: absolute;
+			width: 100px;
+		}
+
+		.info-header {
+			margin-left: 150px;
+		}
+
+		border: 1px solid $grayLighter;
+		border-bottom: none;
+	}
+
+	.transaction-body {
+		border-left: 1px solid $grayLighter;
+		border-right: 1px solid $grayLighter;
+		border-bottom: 1px solid $grayLighter;
+	}
+
+	.transaction-footer {
+		margin-left: 5px;
+		margin-right: 5px;
+		padding: 5px;
+		border-left: 1px solid $grayLighter;
+		border-right: 1px solid $grayLighter;
+		border-bottom: 1px solid $grayLighter;
+
+		.messages {
+			position: relative;
+			max-height: 300px;
+			overflow-y: auto;
+
+			.row-msg {
+
+				margin-bottom: 5px;
+				min-height: 30px;
+				padding: 5px;
+
+				.wrapper {
+					display: inline-block;
+					padding: 5px 15px;
+					.people {
+						opacity: 0.5
+					}
+					@include border-radius(5px);
+					@include box-shadow(2px 2px 5px $gray);
+					background: #FAFAFA;
+					border: 1px solid $grayLighter;		
+				}
+
+
+				p {
+					margin-bottom: 0px;
+				}
+			}
+
+		}
+
+		.me {
+			position: absolute;
+
+			p {
+				margin-top: 5px;
+			}
+		}
+
+		.input-msg {
+			margin-left: 50px;
+		}
+	}
+}

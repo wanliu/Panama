@@ -1,7 +1,7 @@
-class People::CartController < ApplicationController
-  layout "cart"
-
+class People::CartController < People::BaseController
   def index
+
+    @items = @people.cart.items
   end
 
   def add_to_cart
