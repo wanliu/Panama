@@ -8,9 +8,13 @@ module ApplicationHelper
     t(sym, :default => default)
   end
 
-  def current_user
+  def current_user    
     return nil unless session[:user_id]
     @current_user ||= User.where(:uid => session[:user_id]['uid']).first
+  end
+
+  def default_img_url(version_name)
+    ImageUploader.new.url(version_name)
   end
 
   def my_cart
