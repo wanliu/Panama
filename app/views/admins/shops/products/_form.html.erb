@@ -10,11 +10,11 @@
     				  :as => :album, 
     				  :upload_url => shop_admins_attachments_upload_path(current_shop),
     				  :collection => form.attachments %>
-	<%#= f.input :preview , as: :file %>
-
+	<%#= f.input :preview , as: :file %>    
 	<%= f.input :price %>
-	<%= f.association :category, 
+	<%#= f.association :category, 
 		:collection => current_shop.category.descendants, :as => :chosen %>
+    <%= f.association :category, :collection => @category_root , :as => :columnview %>
 	<%= f.input :summary , as: :text %>
 	<%= f.button :submit, :save %>
    
