@@ -24,8 +24,9 @@
 		<th colspan=2 class="relative">
 			<div class="left-frame"></div>
 			<% @transaction.items[0...5].each do |item| %>
-				<%= image_tag item.product.photos.ico %>
+				<%= image_tag item.product.photos.icon %>
 			<% end %>
+			<span class='ellipsis'>...</span>
 		</th>
 		<th>
 			<%= @transaction.items_count %>
@@ -44,7 +45,7 @@
 	<% @transaction.items.each do |item| %>
 	<tr>
 		<td>
-			<%= image_tag item.product.photos.ico %>
+			<%= image_tag item.product.photos.icon %>
 		</td>
 		<td>
 			<%= item.title %>
