@@ -1,3 +1,4 @@
+<!-- 订单 -->
 <%= simple_form_for @transaction, 
 					:url => transaction_path(@people, @transaction),
 					:html => { :class => "form-horizontal"}   do |f| %>
@@ -36,8 +37,11 @@
 		<th>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %>
 		</th>
 		<th class="relative">
-			<button class="btn"><%= icon :download %></button>
-			<button class="btn btn-primary">购买</button>
+			<%= form_tag trigger_event_person_transaction_path(@people.login, @transaction, :buy), 
+				:class => 'form-inline' do |f| %>
+				<button class="btn"><%= icon :download %></button>
+				<%= submit_tag '购买', :class => 'btn btn-primary' %>
+			<% end %>
 			<div class="right-frame"></div>
 		</th>
 	</tr>
