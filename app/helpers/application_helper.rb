@@ -44,7 +44,7 @@ module ApplicationHelper
   end
 
   def link_to_account
-    link_to current_user.login, '#'
+    link_to current_user.login, person_path(current_user.login)
   end
 
   def search_box(name, value = nil, options = { size: 40})

@@ -1,0 +1,5 @@
+<p id="notice"><%= notice %></p>
+<%= render @transaction, :state => @transaction.state %>
+
+<%= link_to 'Edit', edit_person_transaction_path(@people.login, @transaction) %> |
+<%= link_to 'Back', person_transactions_path %>

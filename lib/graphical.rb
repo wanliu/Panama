@@ -58,7 +58,7 @@ module Graphical
 
             #配置图片类型
             def configrue_graphical(options = {})
-                @config ||= Graphical::Display.config.merge(options)                
+                @config ||= Graphical::Display.config.merge(options)   
             end
         end
 
