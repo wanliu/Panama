@@ -41,7 +41,7 @@ Panama::Application.routes.draw do
   # shop admins routes
   
   resources :shops, :key => :name do 
-
+    
     namespace :admins do 
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post
       match "attachments/destroy/:id", :to => "shops/attachments#destroy", :via => :delete
