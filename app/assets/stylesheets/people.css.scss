@@ -79,7 +79,10 @@
 	table {
 		border-top:  1px solid $grayLighter;
 		border-bottom: 1px solid $grayLighter;
-		
+		.ellipsis {
+			opacity: 0.5
+		}
+
 		.left-frame {
 			position: absolute;
 			top: -1px;
