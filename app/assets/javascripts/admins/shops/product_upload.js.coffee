@@ -5,12 +5,14 @@ define([
         "jquery", 
         "backbone", 
         "fileuploader", 
-        "exports", 
-        "templates/products/product_upload"], ($, Backbone, qq, exports) ->    
-    class ProductAttachmentUpload extends Backbone.View
-        template : JST["templates/products/product_upload"]
-        tagName : "li"
-        input_name : "attachment"
+        "exports"], ($, Backbone, qq, exports) ->    
+    class exports.Attachment extends Backbone.Model
+
+    class exports.AttachmentList extends Backbone.Collection
+        model : exports.Attachment
+
+    class ProductAttachmentUpload extends Backbone.View        
+        tagName : "li"        
         default_img_class : "default_img"
         events : {
             "click img.attachable-preview" : 'upload',
@@ -20,21 +22,29 @@ define([
             "click .delete-img" : "delete_img"
         }
 
+        default_params : {
+            url_upload : "",
+            default_img_url : "",
+            template : "",
+            version_name : "100X100",
+            input_name : ""           
+        }
+
         initialize : () ->
-            $.extend(this, this.options)
+            @model = @.options.model
+            $.extend(@.default_params, @.options.params)
 
             @$el = $(@el)
 
             @init_template()            
             @model.bind("set_default_attr", _.bind(@set_default_attr, @))
-            @model.bind("set_value_attr", _.bind(@set_value_attr, @))
-            @default_url_img = @model.get("url");
+            @model.bind("set_value_attr", _.bind(@set_value_attr, @))           
 
         upload : () ->
             @file_input.click()
 
         init_template : () ->            
-            @$el.html(@template(@model))
+            @$el.html(@template)
             @init_element()
 
         init_element : () ->
@@ -47,6 +57,9 @@ define([
             @init_up_file()
             @file_input = @$("input[type=file]")
 
+            @img.attr("src", @model.get("url"))
+            @hidden_input.val(@model.id)            
+
         render : () ->
             @$el
 
@@ -58,7 +71,7 @@ define([
                 minSizeLimit : 0, # min size
                 debug : true,
                 multiple : false,
-                action : "#{@url_root()}/upload",
+                action : "#{@default_params.url_upload}/upload",
                 inputName : "attachable",
                 cancelButtonText : "取消上传",
                 uploadButtonText : '<i class="icon-upload icon-white"></i> 上传头像',
@@ -123,7 +136,7 @@ define([
 
         delete_img : () ->    
             @model.destroy(
-                url : "#{@url_root()}/destroy/#{@hidden_input.val()}",
+                url : "#{@default_params.url_upload}/destroy/#{@hidden_input.val()}",
                 success : (model, data) =>
                     if @is_default_index_img()
                         @trigger("default_first_img")
@@ -131,27 +144,24 @@ define([
                     @$el.remove()
             )
 
-        url_root : () ->
-            "/shops/#{@shop_name}/admins/attachments"
-
         set_value_attr : () ->
             @attachable.removeClass(@default_img_class)
             if @hidden_input.val() is ""
                 @hidden_input.removeAttr("name")
             else
-                @hidden_input.attr("name", "#{@input_name}[#{@hidden_input.val()}]")
+                @hidden_input.attr("name", "#{@default_params.input_name}[#{@hidden_input.val()}]")
 
         set_default_attr : () -> 
             @attachable.addClass(@default_img_class)
-            @hidden_input.attr("name", "#{@input_name}[default]")            
+            @hidden_input.attr("name", "#{@default_params.input_name}[default]")            
 
     
-    class exports.ProductUpload extends Backbone.View               
+    class exports.ProductUpload extends Backbone.View       
 
         initialize : () ->
-            _.extend(@, @options)
-
-            @attachment_list = new @models.AttachmentList
+            _.extend(@, @options)                        
+            @$.el = @.el            
+            @attachment_list = new AttachmentList
             @attachment_list.bind("add", @add_one, @)            
 
             $.each(@data, (i, attachment)=>                
@@ -162,20 +172,20 @@ define([
             @default_first_img();
 
         add_one : (model) ->
-            product_attachment = new ProductAttachmentUpload(                                     
-                shop_name : @shop_name,                
-                model : model,
-                add_blank_product_attachment : _.bind(@add_blank_product_attachment, @)
+            product_attachment = new ProductAttachmentUpload(                                                     
+                model : model,                
+                params : @options.params
             )
             product_attachment.bind("default_first_img", _.bind(@default_first_img, @))
             product_attachment.bind("clear_blank_default", _.bind(@clear_blank_default, @))
-            @el.append(product_attachment.render())
+            product_attachment.bind("add_blank_product_attachment", _.bind(@add_blank_product_attachment, @))
+            @$.el.append(product_attachment.render())
 
         default_first_img : () ->            
             @attachment_list.models[0].trigger("set_default_attr")
 
         add_blank_product_attachment : () ->
-            @attachment_list.add( url : @default_img_url )
+            @attachment_list.add( url : @options.params.default_img_url )
 
         clear_blank_default : () ->
             @attachment_list.each (model) ->  model.trigger("set_value_attr")
