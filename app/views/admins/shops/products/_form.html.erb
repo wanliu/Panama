@@ -8,7 +8,7 @@
 	<%#= image_tag form.preview.url("100x100") %>
     <%= f.association :attachments, 
     				  :as => :album, 
-    				  :upload_url => shop_admins_attachments_upload_path(current_shop),
+    				  :upload_url => shop_admins_attachments_path(current_shop),                      
     				  :collection => form.attachments %>
 	<%#= f.input :preview , as: :file %>    
 	<%= f.input :price %>
@@ -40,14 +40,14 @@
 </script>
 <% end %>
 
-<script type='text/javascript'>
-    require(["admins/shops/product_upload", "models/attachment"], function(view, models){                      
-        new view.ProductUpload({ 
-            el : $("form .attachment-list"), 
-            shop_name : "<%=current_shop.name %>" ,
-            default_img_url : "<%=default_img_url('100x100') %>",
-            data : <%= raw form.format_attachment.to_json %>,
-            models : models
-        })
-    })
-</script>
+// <script type='text/javascript'>
+//     require(["admins/shops/product_upload", "models/attachment"], function(view, models){                      
+//         new view.ProductUpload({ 
+//             el : $("form .attachment-list"), 
+//             shop_name : "<%=current_shop.name %>" ,
+//             default_img_url : "<%=default_img_url('100x100') %>",
+//             data : <%= raw form.format_attachment.to_json %>,
+//             models : models
+//         })
+//     })
+// </script>
