@@ -14,6 +14,7 @@ class Attachment
   def get_attributes(version_name = nil)
   	_attributes = attributes
   	_attributes[:url] = file.url(version_name)
+    _attributes[:id] = id    
   	_attributes
   end
 end

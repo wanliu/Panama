@@ -6,8 +6,8 @@ class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
         attachment = Attachment.new
         attachment.file = file        
         begin            
-            attachment.save!          
-            _attachment = attachment.get_attributes(params[:version_name])                        
+            attachment.save!                      
+            _attachment = attachment.get_attributes(params[:version_name])                                    
             render :json => { :success => true, :attachment => _attachment.to_json   }.to_json
         rescue Exception => e
             if attachment.file         

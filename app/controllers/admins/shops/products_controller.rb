@@ -19,8 +19,9 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category_root = Category.find_by(:name => "root")
   end
 
-  def create            
-    @product = current_shop.products.create(params[:product].merge!(convent_attachment_params))
+  def create                
+    debugger
+    @product = current_shop.products.create(params[:product])
 
     if @product.valid?
       render :action => :show
@@ -71,14 +72,4 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
   
   private 
-
-  def convent_attachment_params
-    options = {:attachments => [], :default_attachment => nil }
-    params.delete(:attachment).each do |k ,v |
-      attachment = Attachment.where(:id => v).first
-      options[:attachments] << attachment
-      options[:default_attachment] = attachment if k == "default"      
-    end
-    options
-  end
 end
