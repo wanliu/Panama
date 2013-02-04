@@ -10,7 +10,8 @@ class Address
   field :zip_code, type: String
   field :road, type: String # 地址
 
-  belongs_to :addressable, :polymorphic => true
+  belongs_to :transaction
+  belongs_to :user
 
   def location
     "#{country}#{province}#{city}#{area}#{road}"
