@@ -1,2 +1,100 @@
 <!-- 等待付款 -->
-<p class="lead"><%= @transaction.address.location %></p>
+<div class="info">
+	<div class="row-fluid">
+		<div class="span2">
+			<label class="control-label" for="inputEmail">收货地址</label>
+		</div>	
+		<div class="span8">
+			<%= @transaction.address.location %>
+		</div>
+		<div class="span2">
+			邮编 <small><%= @transaction.address.zip_code %></small>			
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2">
+			<label class="control-label" for="inputEmail">购买的宝贝</label>
+		</div>
+		<div class="span10">
+			<% @transaction.items[0...10].each do |item| %>
+				<%= image_tag item.product.photos.icon %><small>x<%= item.amount.to_i %></small>
+			<% end %>			
+		</div>
+	</div>
+</div>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th colspan=2 class="relative">
+				<div class="left-frame"></div>
+			</th>
+			<th>
+				<%= @transaction.items_count %>
+			</th>
+			<th><strong>小计: <%= number_to_currency(@transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
+			</th>
+			<th><strong>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+			</th>
+			<th class="relative">
+				<%= link_to trigger_event_person_transaction_path(@people.login, @transaction, :back),
+					:class => 'btn btn-large',
+					:remote => true,
+					:method => :post do %>
+					<%= raw caret(:left) + ' 后退' %>
+				<% end %>
+				<%= link_to trigger_event_person_transaction_path(@people.login, @transaction, :buy), 
+					:class => 'btn btn-primary btn-large',
+					:remote => true,
+					:method => :post do %>
+					<%=  raw '付款 ' + caret(:right) %>
+				<% end %>
+				<div class="right-frame"></div>
+			</th>
+		</tr>
+		</thead>
+	</table>
+	<div class="row-fluid">
+		<div class="bank-wrapper">
+		<% Bank.all.each do |bank| %>
+			<%= link_to '#' do %>
+			<%= content_tag :div, :class => 'bank_card' do %>
+				<span><%= bank.name %></span>
+				<%= content_tag :div, nil, :class => ['cart', "banks-#{bank.code}"] %>
+			<% end %>
+			<% end %>
+		<% end %>
+		</div>
+	</div>
+	<div id="creditcard" class="row-fluid">
+		<div class="span5">
+			<img class="creditcard-preview" src="/assets/creditcard.png"></img>
+		</div>
+		<div class="span5">
+			<form class="form-horizontal">
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">卡号</label>
+					<div class="controls">
+						<input name="cardid" class="input-xlarge" type="text" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">支付密码</label>
+					<div class="controls">
+						<input name="password" class="input-xlarge" type="password" />
+					</div>
+				</div>				
+
+				<div class="control-group actions">
+					<div class="controls pull-right">
+						<input class="btn btn-primary" name="commit" type="submit" value="付款">
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="span2">
+			<blockquote>
+不要向他人透露您的密码，也不要设定简单数字排列（如888888）或本人生日日期作为密码，刷卡进入自助银行的门禁无需输入密码
+			</blockquote>
+		</div>
+	</div>

@@ -1,0 +1,21 @@
+
+.caret.up {
+	border-top:   none;
+	border-right: 4px solid transparent;
+	border-left:  4px solid transparent;
+	border-bottom:  4px solid $black;
+}
+
+.caret.left {
+	border-top:   4px solid transparent;
+	border-right: 4px solid $black;
+	border-left:  none;
+	border-bottom:  4px solid transparent;
+}
+
+.caret.right {
+	border-top:   4px solid transparent;
+	border-right: none;
+	border-left:  4px solid $black;
+	border-bottom:  4px solid transparent;
+}

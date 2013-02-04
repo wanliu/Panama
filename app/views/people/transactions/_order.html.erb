@@ -32,16 +32,20 @@
 		<th>
 			<%= @transaction.items_count %>
 		</th>
-		<th>小计: <%= number_to_currency(@transaction.items.inject(0) {|s, n| s += n.price }) %>
+		<th><strong>小计: <%= number_to_currency(@transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
 		</th>
-		<th>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %>
+		<th><strong>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
 		</th>
 		<th class="relative">
-			<%= form_tag trigger_event_person_transaction_path(@people.login, @transaction, :buy), 
-				:class => 'form-inline' do |f| %>
-				<button class="btn"><%= icon :download %></button>
-				<%= submit_tag '购买', :class => 'btn btn-primary' %>
-			<% end %>
+				<%= link_to '#', :class => "btn btn-large" do %>
+					<%= icon :download %>
+				<% end %>
+				<%= link_to trigger_event_person_transaction_path(@people.login, @transaction, :buy), 
+					:class => 'btn btn-primary btn-large',
+					:remote => true,
+					:method => :post do %>
+					<%=  raw '购买 ' + caret(:right) %>
+				<% end %>
 			<div class="right-frame"></div>
 		</th>
 	</tr>
@@ -67,3 +71,5 @@
 	</tr>
 	<% end %>
 </table>
+
+

@@ -16,7 +16,7 @@ class Transaction
   field :items_count, :type => Fixnum
   field :total, :type => BigDecimal
 
-  has_one :address, as: :addressable
+  has_one :address
 
   belongs_to :seller, inverse_of: :transactions, class_name: "Shop"
   belongs_to :buyer, inverse_of: :transactions, class_name: "User"
@@ -27,6 +27,10 @@ class Transaction
     
     event :buy do
       transition [:order] => :waiting_paid
+    end
+
+    event :back do 
+      transition [:waiting_paid] => :order
     end
   end
 end
