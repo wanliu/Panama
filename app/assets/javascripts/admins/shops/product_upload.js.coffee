@@ -6,10 +6,10 @@ define([
         "backbone", 
         "fileuploader", 
         "exports"], ($, Backbone, qq, exports) ->    
-    class exports.Attachment extends Backbone.Model
+    class Attachment extends Backbone.Model
 
-    class exports.AttachmentList extends Backbone.Collection
-        model : exports.Attachment
+    class AttachmentList extends Backbone.Collection
+        model : Attachment
 
     class ProductAttachmentUpload extends Backbone.View        
         tagName : "li"        
@@ -23,18 +23,31 @@ define([
         }
 
         default_params : {
+
+            #上传url
             url_upload : "",
+
+            #默认图片url
             default_img_url : "",
+
+            #模板
             template : "",
+
+            #预览图片版本
             version_name : "100X100",
-            input_name : ""           
+
+            #提交文本名
+            input_name : "",
+
+            #默认图片的文本名称
+            default_input_name : ""           
         }
 
         initialize : () ->
             @model = @.options.model
             $.extend(@.default_params, @.options.params)
 
-            @$el = $(@el)
+            @el = $(@el)
 
             @init_template()            
             @model.bind("set_default_attr", _.bind(@set_default_attr, @))
@@ -44,7 +57,7 @@ define([
             @file_input.click()
 
         init_template : () ->            
-            @$el.html(@template)
+            @$el.html(@default_params.template)            
             @init_element()
 
         init_element : () ->
@@ -58,7 +71,7 @@ define([
             @file_input = @$("input[type=file]")
 
             @img.attr("src", @model.get("url"))
-            @hidden_input.val(@model.id)            
+            @hidden_input.val(@model.get("file_filename"))            
 
         render : () ->
             @$el
@@ -98,15 +111,15 @@ define([
         submit_before_callback : (id, filename) ->
             @fileupload.setParams(
                 authenticity_token : $("meta[name=csrf-token]").attr("content"),
-                version_name : "100x100"
+                version_name : this.default_params.version_name
             )
 
         complete_callback : (id, filename, data) ->          
             return unless data.success            
             info = JSON.parse(data.attachment)
             #空图框时，添加新的空图框
-            @add_blank_product_attachment() if @is_blank_img()                
-            default_status = @is_default_index_img()
+            @trigger("add_blank_product_attachment") if @is_blank_img()                
+            default_status = @is_default_index_img()            
             @model.set(info)   
             @init_template()            
             if default_status then @set_default_attr() else @set_value_attr()                
@@ -149,18 +162,19 @@ define([
             if @hidden_input.val() is ""
                 @hidden_input.removeAttr("name")
             else
-                @hidden_input.attr("name", "#{@default_params.input_name}[#{@hidden_input.val()}]")
+                @hidden_input.attr("name", "#{@default_params.input_name}[#{@model.id}][file_filename]")
 
         set_default_attr : () -> 
             @attachable.addClass(@default_img_class)
-            @hidden_input.attr("name", "#{@default_params.input_name}[default]")            
+            @hidden_input.val(@model.id)
+            @hidden_input.attr("name", "#{@default_params.default_input_name}")            
 
     
     class exports.ProductUpload extends Backbone.View       
 
         initialize : () ->
             _.extend(@, @options)                        
-            @$.el = @.el            
+            @$el = $(@el)
             @attachment_list = new AttachmentList
             @attachment_list.bind("add", @add_one, @)            
 
@@ -179,19 +193,16 @@ define([
             product_attachment.bind("default_first_img", _.bind(@default_first_img, @))
             product_attachment.bind("clear_blank_default", _.bind(@clear_blank_default, @))
             product_attachment.bind("add_blank_product_attachment", _.bind(@add_blank_product_attachment, @))
-            @$.el.append(product_attachment.render())
+            @$el.append(product_attachment.render())
 
         default_first_img : () ->            
             @attachment_list.models[0].trigger("set_default_attr")
 
         add_blank_product_attachment : () ->
-            @attachment_list.add( url : @options.params.default_img_url )
+            @attachment_list.add( url : @options.params.default_img_url, index : @attachment_list.length-1 )
 
         clear_blank_default : () ->
             @attachment_list.each (model) ->  model.trigger("set_value_attr")
-
-
-
 
     exports
 )

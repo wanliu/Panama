@@ -1,22 +1,18 @@
 <%= simple_form_for form, 
-	:url => admins_products(form), 
-	:remote => true,
-	:html => {
-		:class => "form-horizontal"
-	} do |f| %>
-	<%= f.input :name %>
-	<%#= image_tag form.preview.url("100x100") %>
+    :url => admins_products(form), 
+    :remote => true,
+    :html => {
+        :class => "form-horizontal"
+    } do |f| %>
+    <%= f.input :name %>    
     <%= f.association :attachments, 
-    				  :as => :album, 
-    				  :upload_url => shop_admins_attachments_path(current_shop),                      
-    				  :collection => form.attachments %>
-	<%#= f.input :preview , as: :file %>    
-	<%= f.input :price %>
-	<%#= f.association :category, 
-		:collection => current_shop.category.descendants, :as => :chosen %>
+                      :as => :album, 
+                      :upload_url => shop_admins_attachments_path(current_shop),                      
+                      :collection => form.attachments %>    
+    <%= f.input :price %>    
     <%= f.association :category, :collection => @category_root , :as => :columnview %>
-	<%= f.input :summary , as: :text %>
-	<%= f.button :submit, :save %>
+    <%= f.input :summary , as: :text %>
+    <%= f.button :submit, :save %>
    
     <%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
         link_to :close, '#', :class => 'btn close'
@@ -25,8 +21,7 @@
     <div class='control-group'>        
         <ul class='attachment-list'>                 
         </ul>
-    </div>
-    <%#= f.association :photos %>
+    </div>    
 <% end %>
 
 
@@ -39,15 +34,3 @@
     })
 </script>
 <% end %>
-
-// <script type='text/javascript'>
-//     require(["admins/shops/product_upload", "models/attachment"], function(view, models){                      
-//         new view.ProductUpload({ 
-//             el : $("form .attachment-list"), 
-//             shop_name : "<%=current_shop.name %>" ,
-//             default_img_url : "<%=default_img_url('100x100') %>",
-//             data : <%= raw form.format_attachment.to_json %>,
-//             models : models
-//         })
-//     })
-// </script>
