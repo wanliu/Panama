@@ -7,13 +7,35 @@
 				:collection => @people.addresses, 
 				:label_method => :location, 
 				:value_method => :id,
-				:input_html => { :class => 'input-xxlarge' } %>
+				:input_html => { :class => :span12 } %>
 
 	<%= simple_fields_for :addresses do |address_form| %>
-		<%= address_form.input :province, :as => :depend_select, :children => :city, :collection => get_city %>
-		<%= address_form.input :city, :as => :depend_select, :children => :area, :collection_url => "/city/" %>
-		<%= address_form.input :area, :as => :depend_select, :collection_url => "/city/" %>
-		<%= address_form.input :road %> 
+		<div class="control-group">
+			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
+			<div class="controls controls-row">
+				<div class="span8">
+				<%= address_form.input :province, 
+									   :as => :depend_select, 
+									   :children => :city, 
+									   :wrapper => :inline,
+									   :collection => get_city %>
+				<%= address_form.input :city, 
+									   :as => :depend_select, 
+									   :children => :area, 
+									   :wrapper => :inline,
+									   :collection_url => "/city/" %>
+				<%= address_form.input :area, 
+									   :as => :depend_select, 
+									   :wrapper => :inline,
+									   :collection_url => "/city/" %>
+				</div>
+				<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
+
+			</div>
+		</div>
+
+		<%= address_form.input :road, :input_html => { :class => :span12 } %> 
+
 
 	<% end %>
 
@@ -21,6 +43,7 @@
 <% provide :state_toolbar do %>
 
 <% end %>
+
 
 <table class="table table-striped">
 	<thead>
@@ -68,5 +91,3 @@
 	</tr>
 	<% end %>
 </table>
-
-
