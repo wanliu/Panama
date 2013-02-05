@@ -1,1 +1,1 @@
-require "#{Rails.root}/lib/graphical"
+require "graphical"

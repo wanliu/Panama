@@ -20,6 +20,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails'
   gem 'compass-h5bp'  
+  gem 'ejs'
 end
 
 gem 'cache_digests'
@@ -72,6 +73,7 @@ gem 'hirb'
 gem "carrierwave"
 gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
 gem "carrierwave-upyun"
+gem 'rack-raw-upload'
 gem "rest-client"
 
 # rmagick
@@ -79,12 +81,19 @@ gem "mini_magick"
 
 gem 'rb-readline'
 # To use debugger
-gem 'debugger'
 
 gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 
-group :development do 
+gem 'state_machine'
+
+group :development, :test do 
+  gem 'debugger'
   gem 'thin'
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
+
+
+
+gem "mysql"
+gem "mongo"

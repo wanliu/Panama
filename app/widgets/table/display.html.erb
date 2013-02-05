@@ -1,7 +1,7 @@
 <%= widget_div do %>
 	<% table records, options do |t| %>
 		<%= t.table_head heads, head_options %>
-		<% records.each do |record| %>
+		<% records.each do |record| %>			
 			<%= t.table_row record, row_options %>
 		<% end %>
 		<%= t.table_footer foot_options %>

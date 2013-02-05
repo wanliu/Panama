@@ -1,2 +1,23 @@
-<h1>People::Cart#index</h1>
-<p>Find me in app/views/people/cart/index.html.erb</p>
+<% active_section :cart %>
+<div class="page-header">
+  <h1>购物车 <small>你挑选的宝贝都在这里吗?</small></h1>
+</div>
+<% @items.each do |item| %>
+	<div class="product-item row-fluid">
+		<div class="span2">
+			<%= link_to '#', :class => "img-polaroid" do %>
+				<%= image_tag item.header %>
+			<% end %>
+		</div>
+		<div class="span10">
+			<h1><%= item.title %></h1>
+			<amount><%= item.amount %></amount>
+			<price><%= item.price %></price>
+			<div class="controls pull-right">
+				<button class="btn btn-mini">不想要了</button>
+			</div>
+		</div>
+	</div>
+<% end %>
+<button class="btn btn-primary btn-large">生成订单</button>
+<button class="btn btn-large">清空列表</button>

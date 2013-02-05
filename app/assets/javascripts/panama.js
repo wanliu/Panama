@@ -1,4 +1,5 @@
 define(function(require, exports, module){
+    
     var $ = require('jquery');      
     var $ = require('jquery-ui');
     var h5bp = require('h5bp');
