@@ -24,9 +24,10 @@
 module Graphical
     module Display        
         def self.config(options = {})        
-            @config ||= {
-                :icon => "20x20",
-                :avatar => "100x100",
+            @config ||= {                
+                :icon => "30x30",
+                :header => "100x100",
+                :avatar => "240x240",                
                 :preview => "250x187"                
             }.merge(options)            
             @config[:default] = ""
@@ -45,7 +46,7 @@ module Graphical
                 raise "not setting attribute argument!" if attribute.nil?
                 options = { 
                     :handler => :attachment , 
-                    :allow => [:icon, :avatar, :preview]
+                    :allow => [:icon, :avatar, :preview, :header]
                 }.merge(options || {})                                
                 options[:allow].push(:default)
 
