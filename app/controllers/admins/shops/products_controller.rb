@@ -19,8 +19,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category_root = Category.find_by(:name => "root")
   end
 
-  def create            
-    @product = current_shop.products.create(params[:product].merge!(convent_attachment_params))
+  def create                    
+    @product = current_shop.products.create(params[:product].merge(dispose_options))
 
     if @product.valid?
       render :action => :show
@@ -31,11 +31,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = Category.find_by(:name => "root")
   end
 
   def update
     @product = Product.find(params[:id])
-    @product.update_attributes(params[:product])
+    @product.update_attributes(params[:product].merge(dispose_options))
     if @product.valid?
       render :action => :show
     else
@@ -70,15 +71,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     render :partial => "products_table", :locals => { :products => @products }
   end
   
-  private 
-
-  def convent_attachment_params
-    options = {:attachments => [], :default_attachment => nil }
-    params.delete(:attachment).each do |k ,v |
-      attachment = Attachment.where(:id => v).first
-      options[:attachments] << attachment
-      options[:default_attachment] = attachment if k == "default"      
+  private
+  def dispose_options
+    args = { :attachment_ids => [] }    
+    params[:product][:attachment_ids].each do | k, v |
+      args[:attachment_ids] << v
     end
-    options
-  end
+    args
+  end     
 end

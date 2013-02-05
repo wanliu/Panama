@@ -31,12 +31,13 @@ class Product
   validates_presence_of :shop
 
   def default_photo
-    default_attachment.attachable
+    default_attachment.file
   end
 
   def format_attachment
-    attachments.map do | atta |
-      atta.get_attributes
-    end
+    temp = []
+    temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank? 
+    attachments.each{| atta | temp << atta.get_attributes }
+    temp 
   end
 end
