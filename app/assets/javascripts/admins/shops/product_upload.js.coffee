@@ -5,12 +5,14 @@ define([
         "jquery", 
         "backbone", 
         "fileuploader", 
-        "exports", 
-        "templates/products/product_upload"], ($, Backbone, qq, exports) ->    
-    class ProductAttachmentUpload extends Backbone.View
-        template : JST["templates/products/product_upload"]
-        tagName : "li"
-        input_name : "attachment"
+        "exports"], ($, Backbone, qq, exports) ->    
+    class Attachment extends Backbone.Model
+
+    class AttachmentList extends Backbone.Collection
+        model : Attachment
+
+    class ProductAttachmentUpload extends Backbone.View        
+        tagName : "li"        
         default_img_class : "default_img"
         events : {
             "click img.attachable-preview" : 'upload',
@@ -20,21 +22,42 @@ define([
             "click .delete-img" : "delete_img"
         }
 
-        initialize : () ->
-            $.extend(this, this.options)
+        default_params : {
 
-            @$el = $(@el)
+            #上传url
+            url_upload : "",
+
+            #默认图片url
+            default_img_url : "",
+
+            #模板
+            template : "",
+
+            #预览图片版本
+            version_name : "100X100",
+
+            #提交文本名
+            input_name : "",
+
+            #默认图片的文本名称
+            default_input_name : ""           
+        }
+
+        initialize : () ->
+            @model = @.options.model
+            $.extend(@.default_params, @.options.params)
+
+            @el = $(@el)
 
             @init_template()            
             @model.bind("set_default_attr", _.bind(@set_default_attr, @))
-            @model.bind("set_value_attr", _.bind(@set_value_attr, @))
-            @default_url_img = @model.get("url");
+            @model.bind("set_value_attr", _.bind(@set_value_attr, @))           
 
         upload : () ->
             @file_input.click()
 
         init_template : () ->            
-            @$el.html(@template(@model))
+            @$el.html(@default_params.template)            
             @init_element()
 
         init_element : () ->
@@ -45,7 +68,14 @@ define([
             @attachable = @$(".attachable")
             @progress_panle_list = @$(".progress-panle").find("ul.list")
             @init_up_file()
-            @file_input = @$("input[type=file]")
+            @file_input = @$("input[type=file]")  
+
+            @init_element_data()         
+
+        init_element_data: () ->           
+            @img.attr("src", @model.get("url"))
+            @hidden_input.val(@model.id)            
+            if @is_default_index_img() then @set_default_attr() else @set_value_attr()  
 
         render : () ->
             @$el
@@ -58,7 +88,7 @@ define([
                 minSizeLimit : 0, # min size
                 debug : true,
                 multiple : false,
-                action : "#{@url_root()}/upload",
+                action : "#{@default_params.url_upload}/upload",
                 inputName : "attachable",
                 cancelButtonText : "取消上传",
                 uploadButtonText : '<i class="icon-upload icon-white"></i> 上传头像',
@@ -85,18 +115,16 @@ define([
         submit_before_callback : (id, filename) ->
             @fileupload.setParams(
                 authenticity_token : $("meta[name=csrf-token]").attr("content"),
-                version_name : "100x100"
+                version_name : this.default_params.version_name
             )
 
         complete_callback : (id, filename, data) ->          
             return unless data.success            
             info = JSON.parse(data.attachment)
             #空图框时，添加新的空图框
-            @add_blank_product_attachment() if @is_blank_img()                
-            default_status = @is_default_index_img()
-            @model.set(info)   
-            @init_template()            
-            if default_status then @set_default_attr() else @set_value_attr()                
+            @trigger("add_blank_product_attachment") if @is_blank_img()                       
+            @model.set(info)
+            @init_element_data()
 
         hide_bottom_meun : () ->
             @bottom_meun.hide()
@@ -123,7 +151,7 @@ define([
 
         delete_img : () ->    
             @model.destroy(
-                url : "#{@url_root()}/destroy/#{@hidden_input.val()}",
+                url : "#{@default_params.url_upload}/destroy/#{@hidden_input.val()}",
                 success : (model, data) =>
                     if @is_default_index_img()
                         @trigger("default_first_img")
@@ -131,57 +159,60 @@ define([
                     @$el.remove()
             )
 
-        url_root : () ->
-            "/shops/#{@shop_name}/admins/attachments"
-
         set_value_attr : () ->
             @attachable.removeClass(@default_img_class)
             if @hidden_input.val() is ""
                 @hidden_input.removeAttr("name")
             else
-                @hidden_input.attr("name", "#{@input_name}[#{@hidden_input.val()}]")
+                @hidden_input.attr("name", "#{@default_params.input_name}[#{@model.id}]")
 
         set_default_attr : () -> 
-            @attachable.addClass(@default_img_class)
-            @hidden_input.attr("name", "#{@input_name}[default]")            
+            @attachable.addClass(@default_img_class)            
+            @hidden_input.attr("name", "#{@default_params.default_input_name}")            
 
     
-    class exports.ProductUpload extends Backbone.View               
+    class exports.ProductUpload extends Backbone.View       
 
         initialize : () ->
-            _.extend(@, @options)
-
-            @attachment_list = new @models.AttachmentList
+            _.extend(@, @options)                        
+            @$el = $(@el)
+            @attachment_list = new AttachmentList
             @attachment_list.bind("add", @add_one, @)            
 
             $.each(@data, (i, attachment)=>                
                 @attachment_list.add(attachment)
-            )
-
+            )            
             @add_blank_product_attachment()
-            @default_first_img();
+            @default_choose_img(@get_default_model())
 
         add_one : (model) ->
-            product_attachment = new ProductAttachmentUpload(                                     
-                shop_name : @shop_name,                
-                model : model,
-                add_blank_product_attachment : _.bind(@add_blank_product_attachment, @)
-            )
+            product_attachment = new ProductAttachmentUpload(                                                     
+                model : model,                
+                params : @options.params
+            )            
             product_attachment.bind("default_first_img", _.bind(@default_first_img, @))
             product_attachment.bind("clear_blank_default", _.bind(@clear_blank_default, @))
-            @el.append(product_attachment.render())
+            product_attachment.bind("add_blank_product_attachment", _.bind(@add_blank_product_attachment, @))
+            @$el.append(product_attachment.render())
 
-        default_first_img : () ->            
-            @attachment_list.models[0].trigger("set_default_attr")
+        default_choose_img: (model) ->            
+            model.trigger("set_default_attr")
+
+        default_first_img: (model) ->
+            @default_choose_img(@attachment_list.models[0])
 
         add_blank_product_attachment : () ->
-            @attachment_list.add( url : @default_img_url )
+            @attachment_list.add( url : @options.params.default_img_url, index : @attachment_list.length-1 )
 
         clear_blank_default : () ->
             @attachment_list.each (model) ->  model.trigger("set_value_attr")
 
-
-
+        get_default_model : () ->
+            temp = @attachment_list.models[0]
+            @attachment_list.each((model) ->
+                temp = model if model.get("default_state")?
+            )
+            temp
 
     exports
 )
