@@ -18,11 +18,10 @@ Carrierwave::Switch.configure do | storage |
     if storage == :file
         ImageUploader.class_eval do        
             include CarrierWave::MiniMagick         
-            def url(version_name = "")                    
-                args = {}
+            def url(version_name = "")                                 
+                args = {}                
                 args = "t#{version_name.split("x").join}".to_sym unless version_name.blank?                
                 url = super(args)  
-
                 file_path = "#{ImageUploader.root.call}#{url}"
                 unless File.exist?(file_path)           
                     return (version_name.blank? ? default_url : "#{default_url}!#{version_name}")
