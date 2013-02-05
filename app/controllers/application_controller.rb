@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     root << widget(:cart, :my_cart)
   end
   
-  helper_method :current_user, :my_cart
+  helper_method :current_user, :my_cart, :get_city
 
   def login_required    
     if !current_user
@@ -40,6 +40,10 @@ class ApplicationController < ActionController::Base
         File.join(url_for,"admins")
       end
     RUBY
+  end
+
+  def get_city
+    City.first.children
   end
   protected
 end

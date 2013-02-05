@@ -6,6 +6,7 @@
 #   inflect.plural /^(ox)$/i, '\1en'
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
+#   inflect.irregular 'address', 'addresses'
 #   inflect.uncountable %w( fish sheep )
 # end
 #
@@ -13,3 +14,6 @@
 # ActiveSupport::Inflector.inflections do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+
+require "#{Rails.root}/lib/graphical"

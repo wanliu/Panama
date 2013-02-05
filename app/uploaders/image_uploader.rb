@@ -1,8 +1,14 @@
 # encoding: utf-8
 require 'carrierwave/processing/mini_magick'
-IMAGE_UPLOADER_ALLOW_IMAGE_VERSION_NAMES = %(20x20 30x30 240x240 100x100 120x90 160x120 250x187 420x420 320 640 800)
 
+module CarrierWave::Uploader
+  def self.version_names
+    %w(20x20 30x30 240x240 100x100 120x90 160x120 250x187 420x420 320 640 800)
+  end
+end
+ 
 class ImageUploader < CarrierWave::Uploader::Base
+
   def store_dir
     "#{model.class.to_s.underscore}/#{mounted_as}"
   end
@@ -15,12 +21,12 @@ class ImageUploader < CarrierWave::Uploader::Base
     "http://panama-img.b0.upaiyun.com/product_blank.gif#{version_name}"
   end
 
-  # 覆盖 url 方法以适应“图片空间”的缩略图命名
+  #覆盖 url 方法以适应“图片空间”的缩略图命名
   def url(version_name = "")
     @url ||= super({})
     version_name = version_name.to_s
     return @url if version_name.blank?
-    if not version_name.in?(IMAGE_UPLOADER_ALLOW_IMAGE_VERSION_NAMES)
+    if not version_name.in?(CarrierWave::Uploader.version_names)
       # 故意在调用了一个没有定义的“缩略图版本名称”的时候抛出异常，以便开发的时候能及时看到调错了
       raise "ImageUploader version_name:#{version_name} not allow."
     end

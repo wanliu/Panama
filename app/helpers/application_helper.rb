@@ -8,9 +8,13 @@ module ApplicationHelper
     t(sym, :default => default)
   end
 
-  def current_user
+  def current_user    
     return nil unless session[:user_id]
     @current_user ||= User.where(:uid => session[:user_id]['uid']).first
+  end
+
+  def default_img_url(version_name)
+    ImageUploader.new.url(version_name)
   end
 
   def my_cart
@@ -88,19 +92,19 @@ module ApplicationHelper
     as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
   end
 
-  def build_menu(root)    
+  def build_menu(root, element_id = nil)        
     output = ActiveSupport::SafeBuffer.new    
     if root.children && root.children.size && root.children.size > 0
-      content_tag(:ul, :class => "dropdown-menu") do 
+      content_tag(:ul, :class => "dropdown-menu", :id => element_id) do 
         root.children.map do |node|
           if node.children && node.children.size > 0
             output.concat(content_tag(:li, :class => 'dropdown-submenu') do 
-              link_to(node.name.humanize, node, :html => {tabindex: -1}) + 
+              link_to(node.name, node, :html => {tabindex: -1}, 'data-id' => node.id, 'data-name' => node.name) + 
               build_menu(node)
             end)
           else
             output.concat(content_tag(:li) do 
-              link_to node.name.humanize, node
+              link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name
             end)
           end
         end

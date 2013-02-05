@@ -10,10 +10,10 @@
 				:input_html => { :class => 'input-xxlarge' } %>
 
 	<%= simple_fields_for :addresses do |address_form| %>
-		<%= address_form.input :province, :as => :chosen %>
-		<%= address_form.input :city, :as => :chosen %>
-		<%= address_form.input :area, :as => :chosen %>
-		<%= address_form.input :road %>
+		<%= address_form.input :province, :as => :depend_select, :children => :city, :collection => get_city %>
+		<%= address_form.input :city, :as => :depend_select, :children => :area, :collection_url => "/city/" %>
+		<%= address_form.input :area, :as => :depend_select, :collection_url => "/city/" %>
+		<%= address_form.input :road %> 
 
 	<% end %>
 
