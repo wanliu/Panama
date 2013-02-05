@@ -1,21 +1,46 @@
+@mixin caret-arrow($dist, $size, $color, $height: $size) {
+	$left: 'right';
+	$right: 'left';
+	$bottom: 'top';
+	$top: 'bottom';
+	$inverse-dist: none;
 
-.caret.up {
-	border-top:   none;
-	border-right: 4px solid transparent;
-	border-left:  4px solid transparent;
-	border-bottom:  4px solid $black;
+	@if $dist == 'up' { $dist:'top'; }
+	@if $dist == 'down' { $dist: 'bottom'; }
+	@if $dist == 'top' { $inverse-dist: 'bottom'; }
+	@if $dist == 'bottom' { $inverse-dist: 'top'; }
+	@if $dist == 'right' { $inverse-dist: 'left'; }
+	@if $dist == 'left' { $inverse-dist: 'right'; }
+
+	border: $height solid transparent;
+	border-#{$dist}: none;
+	border-#{$inverse-dist}: $size solid $color;
 }
 
-.caret.left {
-	border-top:   4px solid transparent;
-	border-right: 4px solid $black;
-	border-left:  none;
-	border-bottom:  4px solid transparent;
-}
 
-.caret.right {
-	border-top:   4px solid transparent;
-	border-right: none;
-	border-left:  4px solid $black;
-	border-bottom:  4px solid transparent;
+.caret {
+
+	&.up {
+		@include caret-arrow('up', 5px, $black);
+	}
+
+	&.inverse.up {
+		@include caret-arrow('up', 5px, $white);
+	}
+
+	&.left {
+		@include caret-arrow('left', 5px, $black);
+	}
+
+	&.inverse.left {
+		@include caret-arrow('left', 5px, $white);
+	}
+
+	&.right {
+		@include caret-arrow('right', 5px, $black);
+	}
+
+	&.inverse.right {
+		@include caret-arrow('right', 5px, $white);
+	}	
 }
