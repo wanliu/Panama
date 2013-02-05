@@ -12,13 +12,9 @@ class ProductItem
   belongs_to :product 
   belongs_to :cart
 
-  def icon
-    product.preview.url("30x30")
-  end
+  delegate :photos, :to => :product
+  delegate :icon, :avatar, :to => :photos
 
-  def avatar
-    product.preview.url("100x100")    
-  end
 
   after_create do |document|
     cart = document.cart
