@@ -7,6 +7,7 @@ class Attachment
   field :filename, :type => String
 
   belongs_to :attachable, :polymorphic => true
+  has_many :default_product, :class_name => "Product", :inverse_of => :default_attachment  
   has_and_belongs_to_many :products, :class_name => "Product", :inverse_of => :attachments
   
   mount_uploader :file, ImageUploader
