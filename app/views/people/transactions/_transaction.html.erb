@@ -1,0 +1,84 @@
+<% seller = transaction.seller %>
+<div class="transaction">
+	<div class="transaction-header">
+		<div class="avatar">
+			<%= image_tag seller.photos.header, :class => 'img-polaroid' %>
+		</div>
+		<div class="container-fluid info-header">
+			<div class="page-header">
+			  <h1><%= seller.name %> <small><%=I18n.l transaction.created_at, :format => :long %></small>
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  </h1>
+			</div>
+		</div>
+	</div>
+	<div class="transaction-body">
+		<%= render state %>
+	</div>
+	<div class="transaction-footer">
+		<div class="messages">
+			<div class="row-msg">
+				<div class='wrapper'>
+					<div class="people">
+						<p><%= current_user.login %>:</p>
+					</div>
+					<div class="msg">
+						<p>老板,这件衣服多少钱啊?</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row-msg">
+				<div class='wrapper'>
+					<div class="people">
+						<p><%= current_user.login %>:</p>					
+					</div>
+					<div class="msg">
+						<p>488</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row-msg">
+				<div class='wrapper'>
+					<div class="people">
+						<p><%= current_user.login %>:</p>					
+					</div>
+					<div class="msg">
+						<p>看上去还挺不错的</p>
+					</div>
+				</div>
+			</div>
+			<div class="row-msg">
+				<div class='wrapper'>
+					<div class="people">
+						<p><%= current_user.login %>:</p>					
+					</div>
+					<div class="msg">
+						<p>看上去还挺不错的</p>
+					</div>
+				</div>
+			</div>
+			<div class="row-msg">
+				<div class='wrapper'>
+					<div class="people">
+						<p><%= current_user.login %>:</p>					
+					</div>
+					<div class="msg">
+						<p>看上去还挺不错的</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="me">
+			<%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
+			<p><%= current_user.login %></p>
+		</div>
+		<div class='input-msg'>
+			<form>
+				<textarea rows=3 class="span12">
+				</textarea>
+			</form>
+		</div>
+	</div>
+</div>
