@@ -4,13 +4,18 @@ class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
     def upload        
         file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[:attachable]
         attachment = Attachment.new
-        attachment.attachable = file        
+        attachment.file = file        
         begin            
-            attachment.save!          
-            _attachment = attachment.get_attributes(params[:version_name])                        
+            attachment.save!                      
+            _attachment = attachment.get_attributes(params[:version_name])                                    
             render :json => { :success => true, :attachment => _attachment.to_json   }.to_json
-        rescue Exceoption => e
-            attachment.attachable.remove!
+        rescue Exception => e
+            if attachment.file         
+                path = File.dirname(attachment.file.file.file)                    
+                attachment.file.remove! 
+                FileUtils.rm_rf(path)
+            end
+            attachment.destroy
             render :json => { :success => false }.to_json
         end
     end

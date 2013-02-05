@@ -14,7 +14,7 @@ class User
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_many :transactions, inverse_of: :buyer
-  has_many :addresses, as: :addressable, class_name: "Address"
+  has_many :addresses, class_name: "Address"
   
   after_initialize do 
     if cart.nil?

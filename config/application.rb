@@ -67,6 +67,8 @@ module Panama
 
     config.default_shop_path = Rails.root.join('app/_default_shop')
 
+    config.middleware.use 'Rack::RawUpload'
+
     config.assets.logger = false
   end
 end

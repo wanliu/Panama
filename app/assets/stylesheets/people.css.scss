@@ -4,6 +4,9 @@
 
 @import "compass/css3";
 @import "variables";
+@import "banks";
+@import "progress";
+@import "caret";
 
 #wrapper {
 	padding-top :10px;
@@ -44,7 +47,7 @@
 .product-item {
 	margin-bottom: 10px;
 	padding: 10px;
-	border: 1px solid $grayLighter;
+	border: 1px solid $tableBorder;
 
 	h1 {
 		font-size: 18px;
@@ -71,23 +74,65 @@
 
 		.info-header {
 			margin-left: 150px;
+			.page-header {
+				border-bottom:none;
+				margin-bottom: 20px;
+
+				.controls {
+					display: inline-block;
+					margin-right: 20px;
+					form{
+						display: inline-block;
+						margin-bottom: 0px;	
+					}					
+				}
+				.progress {
+					margin-top: 25px;
+					margin-bottom: 0px;
+				}
+			}
+
 		}
 
-		border: 1px solid $grayLighter;
+		border: 1px solid $tableBorder;
 		border-bottom: none;
 	}
+
 	table {
-		border-top:  1px solid $grayLighter;
-		border-bottom: 1px solid $grayLighter;
-		
+		border-top:  1px solid $tableBorder;
+		border-bottom: 1px solid $tableBorder;
+		.ellipsis {
+			opacity: 0.5
+		}
+
+		thead {
+			th:first-child {
+				height: 45px;
+			};
+			
+			strong{
+				font-size:25px;
+				line-height: 40px;
+			}
+
+			img {
+				margin-bottom: 5px;
+				width: 30px;
+			}
+		}
+
+		thead form  {
+			margin: 0px;
+		}
+
 		.left-frame {
 			position: absolute;
 			top: -1px;
-			left: -5px;
-			border: 1px solid $grayLighter;
+			left: -25px;
+			border: 1px solid $tableBorder;
 			border-right: none;
-			width: 5px;
-			height: 46px;
+			width: 25px;
+			height: 61px;
 
 			background: $white
 		}
@@ -95,29 +140,30 @@
 		.right-frame {
 			position: absolute;
 			top: -1px;
-			right: -5px;
-			border: 1px solid $grayLighter;
+			right: -25px;
+			border: 1px solid $tableBorder;
 			border-left: none;
-			width: 5px;
-			height: 46px;
+			width: 25px;
+			height: 61px;
 
 			background: $white
 		}
 	}
 
 	.transaction-body {
-		border-left: 1px solid $grayLighter;
-		border-right: 1px solid $grayLighter;
-		border-bottom: 1px solid $grayLighter;
+		border-left: 1px solid $tableBorder;
+		border-right: 1px solid $tableBorder;
+		border-bottom: 1px solid $tableBorder;
+		padding: 0 20px 20px 20px;
 	}
 
 	.transaction-footer {
 		margin-left: 5px;
 		margin-right: 5px;
 		padding: 5px;
-		border-left: 1px solid $grayLighter;
-		border-right: 1px solid $grayLighter;
-		border-bottom: 1px solid $grayLighter;
+		border-left: 1px solid $tableBorder;
+		border-right: 1px solid $tableBorder;
+		border-bottom: 1px solid $tableBorder;
 
 		.messages {
 			position: relative;
@@ -147,7 +193,7 @@
 					@include border-radius(5px);
 					@include box-shadow(2px 2px 5px $gray);
 					background: #FAFAFA;
-					border: 1px solid $grayLighter;		
+					border: 1px solid $tableBorder;		
 				}				
 
 				p {
@@ -169,4 +215,57 @@
 			margin-left: 50px;
 		}
 	}
+}
+
+.info {
+	.control-label {
+		text-align: right;
+		font-weight: bold;
+	}
+}
+
+.bank-wrapper {
+
+	.bank_card {
+		float: left;
+		margin-right: 10px;
+		margin-bottom: 10px;
+
+		.cart {
+
+			// width: 180px;
+			// height: 110px;
+			width: 100px;
+			height: 62px;
+			@include box-shadow(0 1px 2px $gray);
+		}
+
+		opacity: 0.5;
+		&:hover{
+			opacity: 1;
+		}
+	}
+}
+
+#creditcard {
+	margin-top: 20px;
+	.form-horizontal .control-group {
+		.control-label {
+			width: 80px;
+		}
+
+		.controls {
+			margin-left: 100px;
+		}
+
+
+ 
+	}
+		.actions {
+			margin-top: 130px;
+		}
+}
+
+.creditcard-preview {
+	// height: 180px;
 }
