@@ -7,24 +7,10 @@ class Product
   
   field :name, type: String
   field :price, type: BigDecimal
-<<<<<<< HEAD
   field :summary, type: String 
   
   define_graphical_attr :photos, :handler => :default_photo  
   
-=======
-  field :summary, type: String
-
-  mount_uploader :preview, ImageUploader
-
-  define_graphical_attr :photos, :handler => :default_image  
-
-  has_many :attachments, :as => :attachable
-
-  accepts_nested_attributes_for :attachments,
-                                :reject_if => proc { |att| att['file_filename'].blank? }, 
-                                :allow_destroy => true
->>>>>>> chosen_add
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
