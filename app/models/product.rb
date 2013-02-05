@@ -15,7 +15,7 @@ class Product
                                 :reject_if => proc { |att| att['file_filename'].blank? }, 
                                 :allow_destroy => true
 
-  define_graphical_attr :photos, :handler => :default_image  
+  define_graphical_attr :photos, :handler => :default_photo  
 
   belongs_to :shop
   belongs_to :category
