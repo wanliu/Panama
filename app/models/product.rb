@@ -9,20 +9,17 @@ class Product
   field :price, type: BigDecimal
   field :summary, type: String
 
-  has_many :attachments, :as => :attachable
-
-  accepts_nested_attributes_for :attachments,
-                                :reject_if => proc { |att| att['file_filename'].blank? }, 
-                                :allow_destroy => true
-
   define_graphical_attr :photos, :handler => :default_photo  
 
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
   has_and_belongs_to_many :attachments, :class_name => "Attachment", :inverse_of => :products
-
-  
+    
+  accepts_nested_attributes_for :attachments,
+                                :reject_if => proc { |att| att['file_filename'].blank? }, 
+                                :allow_destroy => true
+                                
   validates :name, presence: true
   validates :price, presence: true
   validates :price, numericality: true
@@ -31,7 +28,7 @@ class Product
   validates_presence_of :shop
 
   def default_photo
-    default_attachment.file
+    default_attachment.file 
   end
 
   def format_attachment
@@ -40,4 +37,10 @@ class Product
     attachments.each{| atta | temp << atta.get_attributes }
     temp 
   end
+
+  after_initialize do 
+    if default_attachment.nil?
+      build_default_attachment
+    end
+  end  
 end
