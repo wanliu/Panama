@@ -13,12 +13,13 @@ module Admins::Shops::ProductsHelper
             <label class='check_boxes optional control-label'>#{name}</label>
             <div class='controls'>"
                 instance_var.each do |item|
+                    field = method ? item.send(method) : item
                     html << "<label class='checkbox'>
-                        <input type='hidden' name='product[#{name}][]' value='#{method ? item.send(method) : item}' >
-                        <input class='check_boxes optional' name='product[#{name}_selected][]' type='checkbox' value='#{method ? item.send(method) : item}' >"
-                    html << "<span style= 'width:13px; height:13px; background-color: #{item.rgb}; display: inline-block; '></span>" if color_span
-                    html << "<span class='name'>#{method ? item.send(method) : item}</span>
-                    </label>"
+                        <input type='hidden' name='product[style][#{name}][name][]' value='#{field}' >
+                        <input class='check_boxes optional' name='product[style][#{name}][checked][]' type='checkbox' value='#{field}' #{"checked='checked'" if item[:checked]}>"
+                    html << "<span style= 'width:13px; height:13px; background-color: #{item.rgb}; display: inline-block; '></span>
+                        <input type='hidden' name='product[style][#{name}][rgb][]' value=#{item.rgb}>" if color_span
+                    html << "<span class='name'>#{field}</span></label>"
                 end
         html << "</div></div>"
         html.html_safe

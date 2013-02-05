@@ -22,22 +22,21 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
       def rgb; self[:rgb]; end
     end
     @product = Product.new
-    @colours = [ {id: 1, rgb: '#FFB6C1', name: '浅粉红'}, {id: 2, rgb: '#FFC0CB', name: '粉红'},
-                {id: 3, rgb: '#7B68EE', name: '中板岩蓝'}, {id: 4, rgb: '#00FA9A', name: '中春绿'}]
-    @sizes = ['M', 'ML', 'L', 'XL', 'XXL', 'XXXL']
+    @colours = [ {rgb: '#FFB6C1', name: '浅粉红'}, {rgb: '#FFC0CB', name: '粉红'},
+                {rgb: '#7B68EE', name: '中板岩蓝'}, {rgb: '#00FA9A', name: '中春绿'}]
+    @sizes = [{name: 'M'}, {name: 'ML'}, {name: 'L'}, {name: 'XL'}, {name: 'XXL'}, {name: 'XXXL'}]
   end
 
   def create
-    @product = current_shop.products.create params[:product]
+    # @product = current_shop.products.create params[:product]
+    the_product = processed_params
+    @product = current_shop.products.create the_product
 
-    @colours = [ {id: 1, rgb: '#FFB6C1', name: '浅粉红'}, {id: 2, rgb: '#FFC0CB', name: '粉红'},
-                {id: 3, rgb: '#7B68EE', name: '中板岩蓝'}, {id: 4, rgb: '#00FA9A', name: '中春绿'}]
-    @sizes = ['M', 'ML', 'L', 'XL', 'XXL', 'XXXL']
+    @colours = the_product['style']['Colours']
+    @sizes = the_product['style']['Sizes']
 
     if @product.valid?
-      params[:sub_products].values.each do |sub|
-        @product.sub_products.create! sub
-      end
+      create_style_and_subs
       render :action => :show
     else
       render :action => :edit
@@ -91,7 +90,40 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def sizes
   end
 
-  # class << self
-  #   attr_accessor :colours, :sizes
-  # end
+  private
+  def processed_params
+    (style_attributes = params[:product][:style]) && params[:product].delete_if{|key, value| key == :style && key == "style"}
+    return params[:product] if !style_attributes
+
+    new_attributes = {}
+    style_attributes.each do |attr_k, attr_v|
+      new_attributes.merge!( attr_k => (combine_attributes style_attributes[attr_k]) )
+    end
+    params[:product].merge!(:style => new_attributes)
+  end
+
+  def combine_attributes(attribute)
+    (checked = attribute[:checked]) && attribute.delete_if{|k, v| k == :checked || k == 'checked'}
+    result = []
+    index = 0
+    attribute.each do |k, v|
+      v.map do |x|
+        result[index] ||= {}
+        result[index].merge!( k => x)
+        result[index].merge!( :checked => true ) if checked && checked.include?(x)
+        index += 1
+      end
+      index = 0
+    end
+    result
+  end
+
+  def create_style_and_subs
+    params[:sub_products].values.each do |sub|
+      @product.sub_products.create! sub
+    end if !params[:sub_products].blank?
+
+    @product.create_style params[:product][:style]
+  end
+
 end

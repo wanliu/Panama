@@ -7,15 +7,14 @@ class Product
   field :name, type: String
   field :price, type: BigDecimal
   field :summary, type: String
-  # field :quanity, type: Float
-  # field :sub_products, type: Array
 
   mount_uploader :preview, ImageUploader
 
   has_many :sub_products, :dependent => :destroy
   accepts_nested_attributes_for :sub_products
 
-  has_one :style
+  has_one :style, :dependent => :destroy
+  accepts_nested_attributes_for :style
 
   has_many :photos
   belongs_to :shop

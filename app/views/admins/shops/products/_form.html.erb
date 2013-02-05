@@ -12,7 +12,7 @@
 
 	<%= sub_product_property('Colours', @colours, {:class => 'colours'}, :name, true) %>
 
-	<%= sub_product_property('Sizes', @sizes, {:class => 'sizes'}) %>
+	<%= sub_product_property('Sizes', @sizes, {:class => 'sizes'}, :name) %>
 
 	<%= f.input :preview , as: :file %>
 	<%= f.input :price %>

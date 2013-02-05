@@ -17,6 +17,7 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 		init: () ->
 			@initStructure()
 			@initEls()
+			@countChecked()
 
 		initStructure: () ->
 			that = @

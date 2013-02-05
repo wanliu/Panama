@@ -2,10 +2,10 @@ class Style
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  has_many :colours
-  has_many :sizes
+  field :colours, type: Array
+  field :sizes,   type: Array
 
-  belongs_to :product, :dependent => :destroy
+  belongs_to :product
 
   validates_presence_of :product
 end
