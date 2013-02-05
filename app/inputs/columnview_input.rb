@@ -2,11 +2,10 @@
 class ColumnviewInput < SimpleForm::Inputs::Base
 
   def input
-    element_id = input_options[:id] || rand.to_s.split(".").last 
-    debugger
+    element_id = input_options[:id] || rand.to_s.split(".").last     
     <<-HTML
         #{template.build_menu(input_options[:collection], element_id)} 
-        #{@builder.hidden_field(attribute_name, input_html_options.merge(:value => input_options[:value].id))}
+        #{@builder.hidden_field(attribute_name, input_html_options.merge(:value => input_options[:value] ? input_options[:value].id : "" ))}
         <script type="text/javascript">
           require(["jquery_columnview"], function($){            
             $("##{element_id}").columnview({
