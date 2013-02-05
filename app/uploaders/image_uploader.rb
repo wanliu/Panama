@@ -22,7 +22,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   #覆盖 url 方法以适应“图片空间”的缩略图命名
-  def url(version_name = "")
+  def url(version_name = "")    
     @url ||= super({})
     version_name = version_name.to_s
     return @url if version_name.blank?
