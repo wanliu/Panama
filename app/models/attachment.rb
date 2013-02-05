@@ -11,9 +11,14 @@ class Attachment
   
   mount_uploader :file, ImageUploader
 
+<<<<<<< HEAD
   def get_attributes(version_name = nil)
   	_attributes = attributes
   	_attributes[:url] = file.url(version_name)
   	_attributes
   end
+=======
+  validates :file_filename, :length => { :minimum => 2 }
+
+>>>>>>> chosen_add
 end
