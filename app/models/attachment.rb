@@ -16,4 +16,6 @@ class Attachment
   	_attributes[:url] = file.url(version_name)
   	_attributes
   end
+
+  validates :file_filename, :length => { :minimum => 2 }
 end
