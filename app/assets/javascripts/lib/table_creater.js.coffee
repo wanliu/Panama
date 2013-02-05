@@ -44,31 +44,21 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@initChildren()
 
 		render: () ->
-			# that = @
-			# if @hasChildren()  # render the no-leaf node
-			# 	$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
-			# else  # render leaf node
-			# 	html = for data in @schema['data']
-			# 		do (data) ->
-			# 			arr = that.getNameField()
-			# 			arr += "[#{data}]"
-			# 			"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input name=sub_products#{arr}  type='text'></td>"
-
-			# 	$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html)
-
 			if @hasChildren()  # render the no-leaf node
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>')
 			else  # render leaf node
 				counter = counterFun()
 
 				arr = @getNameField()
+				to_filled = ''
 				html_front = for item in arr
 					name = @schema['depth'] if @schema['depth']
 					name = name[_.first(item['position'])]
+					to_filled = "#{item.value}-" + to_filled
 					"<input type='hidden' name='sub_products[#{counter}][#{name}]' value=#{item.value} >"
+
 				html = for data in @schema['data']
-					# do (data) ->
-					"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input name=sub_products[#{counter}][#{data}]  type='text'></td>"
+					"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input class='#{to_filled + data}' name=sub_products[#{counter}][#{data}]  type='text'></td>"
 
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html_front + html)
 

@@ -17,9 +17,10 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     Hash.class_eval do
-      def name; self[:name]; end
-      def id; self[:id]; end
-      def rgb; self[:rgb]; end
+      def name; self['name']; end
+      def id; self['id']; end
+      def rgb; self['rgb']; end
+      def checked; self['checked']; end
     end
     @product = Product.new
     @colours = [ {rgb: '#FFB6C1', name: '浅粉红'}, {rgb: '#FFC0CB', name: '粉红'},
@@ -84,10 +85,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     render :partial => "products_table", :locals => { :products => @products }
   end
 
-  def colors
-  end
+  def sub_products
 
-  def sizes
   end
 
   private

@@ -10,9 +10,7 @@
 
 	<%= image_tag form.preview.url("100x100") %>
 
-	<%= sub_product_property('Colours', @colours, {:class => 'colours'}, :name, true) %>
-
-	<%= sub_product_property('Sizes', @sizes, {:class => 'sizes'}, :name) %>
+	<%= render_style %>
 
 	<%= f.input :preview , as: :file %>
 	<%= f.input :price %>
@@ -43,7 +41,8 @@
 
 	require(['lib/table_bander'], function(tblBander){
 		var bander = new tblBander.TableBander({
-			els    : [$('div.colours'), $('div.sizes')],
+			// els    : [$('div.colours'), $('div.sizes')],
+			els    : [<%= filter_attribtues.map{|item| "$('div.#{item.downcase}')"}.join(', ').html_safe %>],
 			fields : ['price', 'quantity'],
 			depth  : ['colour', 'size']
 		})

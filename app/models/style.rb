@@ -2,8 +2,8 @@ class Style
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
-  field :colours, type: Array
-  field :sizes,   type: Array
+  field :Colours, type: Array
+  field :Sizes,   type: Array
 
   belongs_to :product
 
