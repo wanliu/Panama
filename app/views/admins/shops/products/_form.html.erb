@@ -10,28 +10,44 @@
     				  :as => :album, 
     				  :upload_url => shop_admins_attachments_upload_path(current_shop),
     				  :collection => form.attachments %>
-	<%#= f.input :preview , as: :file %>
-
+	<%#= f.input :preview , as: :file %>    
 	<%= f.input :price %>
-	<%= f.association :category, 
+	<%#= f.association :category, 
 		:collection => current_shop.category.descendants, :as => :chosen %>
+    <%= f.association :category, :collection => @category_root , :as => :columnview %>
 	<%= f.input :summary , as: :text %>
 	<%= f.button :submit, :save %>
-
-	<%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
-		link_to :close, '#', :class => 'btn close'
-	end %>
-
-	<%#= f.association :photos %>
+   
+    <%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
+        link_to :close, '#', :class => 'btn close'
+    end %>
+    
+    <div class='control-group'>        
+        <ul class='attachment-list'>                 
+        </ul>
+    </div>
+    <%#= f.association :photos %>
 <% end %>
 
 
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
-	require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
-		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
-			model: <%= raw form.to_json %>
-		});
-	})
+    require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
+        var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
+            model: <%= raw form.to_json %>
+        });
+    })
 </script>
 <% end %>
+
+<script type='text/javascript'>
+    require(["admins/shops/product_upload", "models/attachment"], function(view, models){                      
+        new view.ProductUpload({ 
+            el : $("form .attachment-list"), 
+            shop_name : "<%=current_shop.name %>" ,
+            default_img_url : "<%=default_img_url('100x100') %>",
+            data : <%= raw form.format_attachment.to_json %>,
+            models : models
+        })
+    })
+</script>
