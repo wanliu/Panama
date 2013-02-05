@@ -9,18 +9,16 @@ class Product
   field :price, type: BigDecimal
   field :summary, type: String
 
-  has_many :attachments, :as => :attachable
-
-  accepts_nested_attributes_for :attachments,
-                                :reject_if => proc { |att| att['file_filename'].blank? }, 
-                                :allow_destroy => true
-
   define_graphical_attr :photos, :handler => :default_photo  
 
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
   has_and_belongs_to_many :attachments, :class_name => "Attachment", :inverse_of => :products
+
+  accepts_nested_attributes_for :attachments,
+                              :reject_if => proc { |att| att['file_filename'].blank? }, 
+                              :allow_destroy => true
 
   
   validates :name, presence: true
