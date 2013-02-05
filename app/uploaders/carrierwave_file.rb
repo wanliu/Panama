@@ -2,11 +2,11 @@ require 'carrierwave/processing/mini_magick'
 require 'carrierwave_uploader_version'
 
 class CarrierWaveStorageFile < CarrierWave::Uploader::Base
-	include CarrierWave::MiniMagick
+    include CarrierWave::MiniMagick
 
-	def store_dir
-    	"#{model.class.to_s.underscore}/#{mounted_as}"
-  	end
+    def store_dir
+        "#{model.class.to_s.underscore}/#{mounted_as}"
+    end
 
     def url(version_name = "")                                 
         args = {}                
@@ -21,12 +21,12 @@ class CarrierWaveStorageFile < CarrierWave::Uploader::Base
     end
 
     def extension_white_list
-    	%w(jpg jpeg gif png)
-  	end
+        %w(jpg jpeg gif png)
+    end
 
-  	def default_url
-    	"http://panama-img.b0.upaiyun.com/product_blank.gif#{version_name}"
-  	end
+    def default_url
+        "http://panama-img.b0.upaiyun.com/product_blank.gif#{version_name}"
+    end
 
     CarrierWave::Uploader.version_names.each do | vname |            
         xy = vname.split("x")
