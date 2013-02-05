@@ -7,7 +7,8 @@ Panama::Application.routes.draw do
     member do 
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
-      post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list  
+      post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
+      post "transactions_creates", :to => "people/transactions#creates", :as => :creates
     end
   end
 

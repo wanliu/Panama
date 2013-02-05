@@ -21,7 +21,7 @@ class Transaction
   belongs_to :seller, inverse_of: :transactions, class_name: "Shop"
   belongs_to :buyer, inverse_of: :transactions, class_name: "User"
 
-  has_many :items, inverse_of: :transaction, class_name: "ProductItem"
+  has_many :items, inverse_of: :transaction, class_name: "ProductItem",  autosave: true
 
   state_machine :initial => :order do
     
