@@ -21,7 +21,7 @@ class ProductItem
   belongs_to :transaction, inverse_of: :items, class_name: "Transaction"
 
   delegate :photos, :to => :product
-  delegate :icon, :avatar, :to => :photos
+  delegate :icon, :header, :avatar, :preview, :to => :photos
 
 
   # after_create do |document|
