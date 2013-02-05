@@ -18,6 +18,9 @@
 	<% end %>
 
 <% end %>
+<% provide :state_toolbar do %>
+
+<% end %>
 
 <table class="table table-striped">
 	<thead>
@@ -39,12 +42,6 @@
 		<th class="relative">
 				<%= link_to '#', :class => "btn btn-large" do %>
 					<%= icon :download %>
-				<% end %>
-				<%= link_to trigger_event_person_transaction_path(@people.login, @transaction, :buy), 
-					:class => 'btn btn-primary btn-large',
-					:remote => true,
-					:method => :post do %>
-					<%=  raw '购买 ' + caret(:right) %>
 				<% end %>
 			<div class="right-frame"></div>
 		</th>

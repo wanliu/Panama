@@ -78,6 +78,14 @@
 				border-bottom:none;
 				margin-bottom: 20px;
 
+				.controls {
+					display: inline-block;
+					margin-right: 20px;
+					form{
+						display: inline-block;
+						margin-bottom: 0px;	
+					}					
+				}
 				.progress {
 					margin-top: 25px;
 					margin-bottom: 0px;
