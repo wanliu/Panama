@@ -2,8 +2,7 @@ class City
 	include Mongoid::Document
 	include Mongoid::Tree
 
-	belongs_to :address
-	
+	has_one :address
+
 	field :name
-	field :city_id
 end
