@@ -9,8 +9,6 @@ class Product
   field :price, type: BigDecimal
   field :summary, type: String
 
-  mount_uploader :preview, ImageUploader
-
   has_many :attachments, :as => :attachable
 
   accepts_nested_attributes_for :attachments,
@@ -19,11 +17,12 @@ class Product
 
   define_graphical_attr :photos, :handler => :default_image  
 
-  has_many :product_item
   belongs_to :shop
   belongs_to :category
+  belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
+  has_and_belongs_to_many :attachments, :class_name => "Attachment", :inverse_of => :products
 
-  # validates :title, presence: true
+  
   validates :name, presence: true
   validates :price, presence: true
   validates :price, numericality: true
@@ -31,7 +30,14 @@ class Product
   validates_presence_of :category
   validates_presence_of :shop
 
-  def default_image
-      preview
+  def default_photo
+    default_attachment.file
+  end
+
+  def format_attachment
+    temp = []
+    temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank? 
+    attachments.each{| atta | temp << atta.get_attributes }
+    temp 
   end
 end
