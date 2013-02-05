@@ -12,7 +12,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
     photo = Attachment.new    
     img_version = input_options[:img_version] || "100x100"
     output = ActiveSupport::SafeBuffer.new
-    output << template.content_tag(:div, nil, :class => "attachment-list", :id => photo.id)
+    output << template.content_tag(:ul, nil, :class => "attachment-list", :id => photo.id)
     output << template.javascript_tag(<<-JAVASCRIPT
         require(["admins/shops/product_upload"], function(view, models){          
           new view.ProductUpload({
@@ -23,7 +23,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
               default_img_url : "#{input_options[:default_url] || photo.file.url(img_version) }",                       
               template : "#{photo_template}",
               version_name : "#{img_version}",
-              input_name : "product[attachments_attributes]",
+              input_name : "product[attachment_ids]",
               default_input_name : "product[default_attachment_id]"
             }
           })          
@@ -33,6 +33,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
 
     output
   end
+
 
   def photo_template    
     "<div class='attachable'>"+
@@ -47,27 +48,4 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
     "</div>"    
   end
 
-  def photograph(photo)    
-    output = ActiveSupport::SafeBuffer.new
-    output << template.image_tag(photo.file.url("100x100")) 
-    output << template.content_tag(:div, nil, :class => :uploader, :id => photo.id)
-    output << template.javascript_tag(<<-JAVASCRIPT
-      require(["jquery", "fileuploader"], function($, qq){
-        var uploader = new qq.FileUploader({
-          // pass the dom node (ex. $(selector)[0] for jQuery users)
-          element: document.getElementById('#{photo.id}'),
-          // path to sevrer-side upload script
-          action: #{input_options[:upload_url].inspect}, 
-          complete: function() {
-
-          }
-        }); 
-      });
-    JAVASCRIPT
-    )
-    @builder.simple_fields_for(:attachments, photo) do | f |
-      output << f.input(:file_filename)      
-    end
-    output
-  end
 end

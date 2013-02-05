@@ -8,20 +8,15 @@
     <%= f.association :attachments, 
                       :as => :album, 
                       :upload_url => shop_admins_attachments_path(current_shop),                      
-                      :collection => form.attachments %>    
+                      :collection => form.format_attachment %>    
     <%= f.input :price %>    
-    <%= f.association :category, :collection => @category_root , :as => :columnview %>
+    <%= f.association :category, :collection => @category_root, :value => form.category  , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
    
     <%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
         link_to :close, '#', :class => 'btn close'
-    end %>
-    
-    <div class='control-group'>        
-        <ul class='attachment-list'>                 
-        </ul>
-    </div>    
+    end %> 
 <% end %>
 
 

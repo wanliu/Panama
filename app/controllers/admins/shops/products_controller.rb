@@ -19,9 +19,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category_root = Category.find_by(:name => "root")
   end
 
-  def create                
-    debugger
-    @product = current_shop.products.create(params[:product])
+  def create                    
+    @product = current_shop.products.create(params[:product].merge(dispose_options))
 
     if @product.valid?
       render :action => :show
@@ -32,11 +31,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = Category.find_by(:name => "root")
   end
 
   def update
     @product = Product.find(params[:id])
-    @product.update_attributes(params[:product])
+    @product.update_attributes(params[:product].merge(dispose_options))
     if @product.valid?
       render :action => :show
     else
@@ -71,5 +71,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     render :partial => "products_table", :locals => { :products => @products }
   end
   
-  private 
+  private
+  def dispose_options
+    args = { :attachment_ids => [] }    
+    params[:product][:attachment_ids].each do | k, v |
+      args[:attachment_ids] << v
+    end
+    args
+  end     
 end
