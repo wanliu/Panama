@@ -27,31 +27,20 @@ task :city => :environment do
  
 	puts "----------------province--------------------" 
 	sql_select_province = sql.query("select * from province")
+	china = City.create(:name => 'China')
+	City.roots << china
     while row_province = sql_select_province.fetch_hash
-        if mong_db["city"].find(:provinceid => row_province["provinceid"]).to_a.length < 1
-	        ro = [:name => row_province["province"],:city_id => nil,:provinceid => row_province["provinceid"]]
-	        mong_db["city"].insert(ro)
-	    end
-    end
+    	obj_province = china.children.create(name: row_province["province"]) 
 
-    puts "----------------city--------------------" 
-   	sql_select_city = sql.query("select * from city")
-    while row_city = sql_select_city.fetch_hash
-        if mong_db["city"].find(:provinceid => row_city["cityid"]).to_a.length < 1
-        	father_id = mong_db["city"].find(:provinceid => row_city["fatherid"]).to_a[0]["_id"] 
-	        ro = [:name => row_city["city"],:city_id => father_id,:provinceid => row_city["cityid"]]
-	        mong_db["city"].insert(ro)
-	    end
-    end
+    	sql_select_city = sql.query("select * from city where fatherid = #{row_province["provinceid"]}")
+    	while row_city = sql_select_city.fetch_hash
+    		obj_city = obj_province.children.create(name: row_city["city"])
 
-    puts "----------------area--------------------" 
-    sql_select_area = sql.query("select * from area")
-    while row_area = sql_select_area.fetch_hash
-        if mong_db["city"].find(:provinceid => row_area["areaid"]).to_a.length < 1
-        	father_id = mong_db["city"].find(:provinceid => row_area["fatherid"]).to_a[0]["_id"] 
-	        ro = [:name => row_area["city"],:city_id => father_id,:provinceid => row_area["areaid"]]
-	        mong_db["city"].insert(ro)
-	    end
+    		sql_select_area = sql.query("select * from area where fatherid = #{row_city["cityid"]}")
+    		while row_area = sql_select_area.fetch_hash 
+    			obj_city.children.create(name: row_area["area"])
+    		end
+    	end
     end
 
 	puts ("--------------------end-------------------------")

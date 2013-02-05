@@ -3,13 +3,15 @@ Panama::Application.routes.draw do
   resources :people, :key => :login do
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions"
-    
+
     member do 
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list  
     end
   end
+  resources :city
+  resources :addresses
 
   resources :activities
 
@@ -134,4 +136,6 @@ Panama::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
+
+
 end

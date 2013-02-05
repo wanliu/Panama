@@ -1,0 +1,10 @@
+
+<%= simple_form_for @address do |f|  %> 
+ 
+    <%= f.input :province_id, :as => :depend_select, :children => :city_id, :collection => get_city, prompt: "--请选择--" %>
+    <%= f.input :city_id, :as => :depend_select, :children => :area_id, :collection_url => "/city/", :collection => @address.province.blank? ?  [] : @address.province.children, prompt: "--请选择--" %>
+    <%= f.input :area_id, :as => :depend_select, :collection_url => "/city/" , :collection => @address.city.blank? ?  [] : @address.city.children, prompt: "--请选择--"  %>
+    <%= f.input :road %> 
+
+  	<%= f.submit %>
+<% end %>
