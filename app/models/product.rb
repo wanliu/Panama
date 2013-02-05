@@ -29,7 +29,7 @@ class Product
   validates_presence_of :shop
 
   def default_photo
-    default_attachment.file
+    default_attachment.file 
   end
 
   def format_attachment
@@ -38,4 +38,10 @@ class Product
     attachments.each{| atta | temp << atta.get_attributes }
     temp 
   end
+
+  after_initialize do 
+    if default_attachment.nil?
+      build_default_attachment
+    end
+  end  
 end
