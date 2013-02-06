@@ -82,8 +82,8 @@ module ApplicationHelper
     content_tag :i, nil, :class => "icon-#{name}"
   end
 
-  def caret(position = :down)
-    content_tag :span, nil, :class => [:caret, position]
+  def caret(position = :down, *styles)
+    content_tag :span, nil, :class => [:caret, position, *styles]
   end
 
   def options_dom_id(object, options = {})

@@ -37,18 +37,6 @@
 			<th><strong>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
 			</th>
 			<th class="relative">
-				<%= link_to trigger_event_person_transaction_path(@people.login, @transaction, :back),
-					:class => 'btn btn-large',
-					:remote => true,
-					:method => :post do %>
-					<%= raw caret(:left) + ' 后退' %>
-				<% end %>
-				<%= link_to trigger_event_person_transaction_path(@people.login, @transaction, :buy), 
-					:class => 'btn btn-primary btn-large',
-					:remote => true,
-					:method => :post do %>
-					<%=  raw '付款 ' + caret(:right) %>
-				<% end %>
 				<div class="right-frame"></div>
 			</th>
 		</tr>
