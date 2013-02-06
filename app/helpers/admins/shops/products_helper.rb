@@ -69,4 +69,34 @@ module Admins::Shops::ProductsHelper
         "<span style= 'width:13px; height:13px; background-color: #{item.rgb}; display: inline-block; '></span>
         <input type='hidden' name='product[style][#{name}][rgb][]' value=#{item.rgb}>"
     end
+
+    #############################################################################################
+    ## fill data to the table created by js,
+    ## if the @product isn't new or it's form return for in correct input
+    ############################################################################################
+    def data_2_talbe
+        return if @product.new_record? and @temp_subs.blank?
+
+        subs = @temp_subs || @product.sub_products
+        objects = subs.map do |sub|
+            filters = ['_id', 'id', 'created_at', 'product_id']
+            object = []
+            begin
+                sub.each_pair do |k, v|
+                    object.push "#{k.to_s} : '#{v}'" if !filters.include?(k)
+                end
+            rescue
+                sub.attributes.each_pair do |k, v|
+                    object.push "#{k.to_s} : '#{v}'" if !filters.include?(k)
+                end
+            end
+            "{" + object.join(',') + "}"
+        end
+
+        "require(['lib/data_2_table'], function(data2table){
+            var load = new data2table.Data2Table({
+                collection : [#{objects.join(',')}]
+            })
+        })".html_safe
+    end
 end

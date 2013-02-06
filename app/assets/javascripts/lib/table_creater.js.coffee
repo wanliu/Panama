@@ -62,16 +62,18 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html_front + html)
 
-
-
 			# load no root node to DOM tree
 			if @hasParent()
 				@parent_el.after(@el)
+				#tigger table data load
+				@fillTableData()
 				return @
 
 			# load the root node to DOM tree
 			$(@el).css('display', 'none')
 			@parent_el.append(@el)
+			#tigger table data load
+			@fillTableData()
 			@
 
 		initTitle: () ->
@@ -196,6 +198,11 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 
 				node = node.parent
 			arr
+
+		fillTableData: () ->
+			$('a.trigger-data-filled').click()
+
+
 
 	counterFun = (() ->
 		counter = 1

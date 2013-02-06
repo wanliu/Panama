@@ -10,6 +10,7 @@
 
 	<%= image_tag form.preview.url("100x100") %>
 
+	<a class='button trigger-data-filled' href='javascript:void()' style='display:none;'></a>
 	<%= render_style %>
 
 	<%= f.input :preview , as: :file %>
@@ -47,5 +48,8 @@
 			depth  : ['colour', 'size']
 		})
 	})
+
+	<%= data_2_talbe %>
+
 </script>
 <% end %>

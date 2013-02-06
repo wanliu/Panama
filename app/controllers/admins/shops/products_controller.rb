@@ -33,13 +33,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     the_product = processed_params
     @product = current_shop.products.create the_product
 
-    @colours = the_product['style']['Colours']
-    @sizes = the_product['style']['Sizes']
-
     if @product.valid?
       create_style_and_subs
       render :action => :show
     else
+      # @temp_style = the_product['style']
+      # @temp_subs = params[:sub_products]
       render :action => :edit
     end
   end
