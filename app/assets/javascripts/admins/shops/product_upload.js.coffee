@@ -173,7 +173,7 @@ define([
     
     class exports.ProductUpload extends Backbone.View       
 
-        initialize : () ->
+        initialize : () ->            
             _.extend(@, @options)                        
             @$el = $(@el)
             @attachment_list = new AttachmentList
@@ -202,7 +202,7 @@ define([
             @default_choose_img(@attachment_list.models[0])
 
         add_blank_product_attachment : () ->
-            @attachment_list.add( url : @options.params.default_img_url, index : @attachment_list.length-1 )
+            @attachment_list.add( url : @options.params.default_img_url)
 
         clear_blank_default : () ->
             @attachment_list.each (model) ->  model.trigger("set_value_attr")
