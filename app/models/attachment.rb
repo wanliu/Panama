@@ -19,5 +19,5 @@ class Attachment
   	_attributes
   end
 
-  validates :file_filename, :length => { :minimum => 2 }
+  # validates :file_filename, :length => { :minimum => 2 }
 end
