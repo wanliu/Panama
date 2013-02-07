@@ -17,8 +17,8 @@
 				<div class="well">
 				<ul class="nav nav-list">
 					<li class="nav-header">购物</li>
-					<li><a href="<%= person_cart_index_path(current_user.login) %>"><i class="icon-chevron-right"></i> 购物车</a></li>
-					<li><a href="<%= person_transactions_path(current_user.login) %>"><i class="icon-chevron-right"></i> 订单</a></li>
+					<li><a class="people-cart" href="<%= person_cart_index_path(current_user.login) %>"><i class="icon-chevron-right"></i> 购物车</a></li>
+					<li><a class="people-transaction" href="<%= person_transactions_path(current_user.login) %>"><i class="icon-chevron-right"></i> 订单</a></li>
 					<li class="nav-header">活动</li>
 					<li><a href="my_activity"><i class="icon-chevron-right"></i> 我参于的活动</a></li>
 					<li><a href="about_to_happen"><i class="icon-chevron-right"></i> 马上要发生的</a></li>
@@ -38,7 +38,7 @@
 				</ul>
 				<script type="text/javascript">
 					require(['jquery'], function($){
-						$("a[href='<%= yield :people_siderbar %>']").parents("li").addClass("active")
+						$(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
 					});
 				</script>
 				</div>
