@@ -15,9 +15,15 @@
 			<price><%= item.price %></price>
 			<div class="controls pull-right">
 				<button class="btn btn-mini">不想要了</button>
+
 			</div>
 		</div>
 	</div>
 <% end %>
-<button class="btn btn-primary btn-large">生成订单</button>
+
+<%= button_to "生成订单", 
+			  creates_person_path(@people.login), 
+			  :method => :post, 
+			  :remote => true , 
+			  :class => "btn btn-primary btn-large" %>
 <button class="btn btn-large">清空列表</button>
