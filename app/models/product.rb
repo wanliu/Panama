@@ -13,8 +13,14 @@ class Product
   has_many :sub_products, :dependent => :destroy
   accepts_nested_attributes_for :sub_products
 
-  has_one :style, :dependent => :destroy
-  accepts_nested_attributes_for :style
+  has_many :styles, :dependent => :destroy, :class_name => "StyleGroup" do
+    def [](style_name)
+      where(:name => style_name.to_s).first
+    end
+  end
+
+
+  accepts_nested_attributes_for :styles
 
   has_many :photos
   belongs_to :shop
@@ -26,4 +32,5 @@ class Product
 
   validates_presence_of :category
   validates_presence_of :shop
+
 end

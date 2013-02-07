@@ -39,8 +39,8 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@initTitle() if !@options.isRoot
 			@parent = if @options.creater then @options.creater else null
 			@render()
-			@initRowspan()
 
+			@initRowspan()
 			@initChildren()
 
 		render: () ->
@@ -65,15 +65,11 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			# load no root node to DOM tree
 			if @hasParent()
 				@parent_el.after(@el)
-				#tigger table data load
-				@fillTableData()
 				return @
 
 			# load the root node to DOM tree
 			$(@el).css('display', 'none')
 			@parent_el.append(@el)
-			#tigger table data load
-			@fillTableData()
 			@
 
 		initTitle: () ->
@@ -84,36 +80,35 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 		initChildren: () ->
 			return (@children = []) if not @hasChildren()
 
-			that = @
 			parent_el = $(@el)
 			@children = @children || []
 
 			for x in [0...@structure[ _.first(@position) + 1 ].length]
-				do (x) ->
-					view = new TableUnitView(
-						structure  : that.structure
-						position   : [ _.first(that.position) + 1, x]
-						isRoot     : false
-						schema     : that.schema
-						creater    : that
-						parent_el  : parent_el
-					)
-					that.children.push view
-					parent_el = $(view.lastChild().el)
+				view = new TableUnitView(
+					structure  : @structure
+					position   : [ _.first(@position) + 1, x]
+					isRoot     : false
+					schema     : @schema
+					creater    : @
+					parent_el  : parent_el
+				)
+				@.children.push view
+				parent_el = $(view.lastChild().el)
+
+			#在table被渲染完毕后，通过click绑定/触发，调用table的数据填充程序
+			@fillTableData() if not @hasParent()
 
 		initRowspan: () ->
 			return if !@hasChildren() or !@hasParent()
-			that = @
+
 			@rowspan = 1
 			start = _.first(@position) + 1
-			for x in [start..that.structure.length - 1]
-				do (x) ->
-					that.rowspan = that.rowspan * that.structure[x].length if _.isArray(that.structure[x])
+			for x in [start..@structure.length - 1]
+				@rowspan = @rowspan * @structure[x].length if _.isArray(@structure[x])
 
-			if start <= that.structure.length - 2
-				for x in [start..that.structure.length - 2]
-					do (x) ->
-						that.rowspan += that.structure[x].length if _.isArray(that.structure[x])
+			if start <= @structure.length - 2
+				for x in [start..@structure.length - 2]
+					@rowspan += @structure[x].length if _.isArray(@structure[x])
 
 			@$('td').attr('rowspan', @rowspan + 1)
 
@@ -122,14 +117,14 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@parent.resetRowspan() if @hasParent()
 
 		hasParent: () ->
-			return !!@parent
+			!!@parent
 
 		hasChildren: () ->
-			return _.first(@position) isnt (@structure.length - 1)
+			_.first(@position) isnt (@structure.length - 1)
 
 		lastChild: () ->
 			return @ if not @hasChildren()
-			return _.last(@children).lastChild()
+			_.last(@children).lastChild()
 
 		checkRow: () ->
 			return if not @hasChildren()
@@ -138,15 +133,15 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@reduceCheck()
 
 			for child in @children
-				do (child) ->
-					child.checkRow()
+				# do (child) ->
+				child.checkRow()
 
 		destroy: () ->
 			# return null if @title isnt title
 			if @hasChildren()
 				for child in @children
-					do (child)->
-						child.destroy()
+					# do (child)->
+					child.destroy()
 
 			$(@el).remove()
 			@parent.resetRowspan() if @hasParent()
@@ -188,6 +183,9 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				@children.splice(_.indexOf(@children, badLuckyGuy), 1)
 				badLuckyGuy.destroy()
 
+		fillTableData: () ->
+			$('a.trigger-data-filled').click()
+
 		getNameField: ()->
 			node = @
 			arr = []
@@ -199,15 +197,11 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				node = node.parent
 			arr
 
-		fillTableData: () ->
-			$('a.trigger-data-filled').click()
-
-
 
 	counterFun = (() ->
 		counter = 1
 		innerCounter = ()-> counter++
-		return innerCounter)()
+		innerCounter )()
 
 
 	exports

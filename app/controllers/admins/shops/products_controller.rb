@@ -16,22 +16,37 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def new
+    #模拟数据库对象的属性操作
     Hash.class_eval do
-      def name; self['name']; end
-      def id; self['id']; end
-      def rgb; self['rgb']; end
-      def checked; self['checked']; end
+      ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
+        define_method method do
+          self[method]
+        end
+      end
     end
+
     @product = Product.new
-    @colours = [ {rgb: '#FFB6C1', name: '浅粉红'}, {rgb: '#FFC0CB', name: '粉红'},
-                {rgb: '#7B68EE', name: '中板岩蓝'}, {rgb: '#00FA9A', name: '中春绿'}]
-    @sizes = [{name: 'M'}, {name: 'ML'}, {name: 'L'}, {name: 'XL'}, {name: 'XXL'}, {name: 'XXXL'}]
+
+    #模拟数据库对象
+    def @product.styles
+      [
+        {'name' => 'colours', 'items' =>
+          [ {value: '#FFB6C1', title: '浅粉红'}, {value: '#FFC0CB', title: '粉红'},
+            {value: '#7B68EE', title: '中板岩蓝'}, {value: '#00FA9A', title: '中春绿'}
+          ]
+        },
+        {'name' => 'sizes', 'items' =>
+          [ {title: 'M', value: 'M'}, {title: 'ML', value: 'ML'}, {title: 'L', value: 'L'},
+            {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XL'}, {title: 'XXXL', value: 'XL'}
+          ]
+        }
+      ]
+    end
+
   end
 
   def create
-    # @product = current_shop.products.create params[:product]
-    the_product = processed_params
-    @product = current_shop.products.create the_product
+    @product = current_shop.products.create params[:product]
 
     if @product.valid?
       create_style_and_subs
@@ -90,14 +105,15 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   private
   def processed_params
-    (style_attributes = params[:product][:style]) && params[:product].delete_if{|key, value| key == :style && key == "style"}
-    return params[:product] if !style_attributes
+    return if params[:style].blank?
 
+    style_attributes = params[:style]
     new_attributes = {}
+
     style_attributes.each do |attr_k, attr_v|
       new_attributes.merge!( attr_k => (combine_attributes style_attributes[attr_k]) )
     end
-    params[:product].merge!(:style => new_attributes)
+    params.merge!(:style => new_attributes)
   end
 
   def combine_attributes(attribute)
@@ -117,11 +133,18 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create_style_and_subs
+    processed_params
+
     params[:sub_products].values.each do |sub|
       @product.sub_products.create! sub
     end if !params[:sub_products].blank?
 
-    @product.create_style params[:product][:style]
+    params[:style].each_pair do |name, value|
+      one_group = @product.style_groups.create! :name => name
+      value.each do |item|
+        one_group.style_items.create! item
+      end
+    end
   end
 
 end

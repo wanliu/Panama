@@ -44,6 +44,7 @@ gem 'rspec'
 gem 'rspec-rails'
 group :test do
   gem "rspec-cells"
+  # gem "mongoid-rspec"
 end
 
 

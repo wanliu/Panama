@@ -8,19 +8,17 @@ module Admins::Shops::ProductsHelper
     end
 
     def render_style
-        result = filter_attribtues.map do |key|
-            value = @product.style.send(key)
-
-            color_span = (key == 'Colours' || key == 'colours') ? true : false
-            sub_product_property(key, value, {:class => key.downcase}, :name, color_span)
+        result = @product.styles.map do |style_group|
+            value = style_group.items
+            title = style_group.name
+            color_span = (title == 'Colours' || title == 'colours') ? true : false
+            sub_product_property(title, value, {:class => title.downcase}, :title, color_span)
         end
         result.join('').html_safe
     end
 
     def filter_attribtues
-        @product.style.attribute_names.select do |key|
-            @product.style.send(key).is_a?(Array)
-        end
+        @product.styles.map{|style_group| style_group.name}
     end
 
     def sub_product_property(name, instance_var, html_options={}, method = nil, color_span = nil)
@@ -30,9 +28,10 @@ module Admins::Shops::ProductsHelper
         instance_var.each do |item|
             field = method ? item.send(method) : item
             html << label_open
-            html << hidden_name(name, field)
+            html << hidden_title(name, field)
             html << checked(item, name, field)
-            html << color_special(item, name) if color_span
+            html << hidden_value(name, item)
+            html << color_special(item) if color_span
             html << label_close(field)
         end
         html << div_close
@@ -57,17 +56,20 @@ module Admins::Shops::ProductsHelper
         "<span class='name'>#{field}</span></label>"
     end
 
-    def hidden_name(name, field)
-        "<input type='hidden' name='product[style][#{name}][name][]' value='#{field}' >"
+    def hidden_title(name, field)
+        "<input type='hidden' name='style[#{name}][title][]' value='#{field}' >"
+    end
+
+    def hidden_value(name, item)
+        "<input type='hidden' name='style[#{name}][value][]' value=#{item.value}>"
     end
 
     def checked(item, name, field)
-        "<input class='check_boxes optional' name='product[style][#{name}][checked][]' type='checkbox' value='#{field}' #{"checked='checked'" if item[:checked] || item['checked']}>"
+        "<input class='check_boxes optional' name='style[#{name}][checked][]' type='checkbox' value='#{field}' #{"checked='checked'" if item[:checked] || item['checked']}>"
     end
 
-    def color_special(item, name)
-        "<span style= 'width:13px; height:13px; background-color: #{item.rgb}; display: inline-block; '></span>
-        <input type='hidden' name='product[style][#{name}][rgb][]' value=#{item.rgb}>"
+    def color_special(item)
+        "<span style= 'width:13px; height:13px; background-color: #{item.value}; display: inline-block; '></span>"
     end
 
     #############################################################################################
