@@ -3,7 +3,18 @@ define ['jquery', 'exports'], ($, exports) ->
 		constructor: (collection) ->
 			@collection = collection.collection
 
+			#两种触发条件。触发类型取决于本js类与form中table的载入顺序
+			#①按键触发
+			@detect_if_button_clicked()
+			#②检测触发
+			@detect_if_draw_complited()
+
+		detect_if_button_clicked: () ->
 			$('a.trigger-data-filled').click () =>
+				@trigger_filled()
+
+		detect_if_draw_complited: () ->
+			if $('a.trigger-data-filled').data('draw_complited') is 'yes'
 				@trigger_filled()
 
 		trigger_filled: ()->
@@ -16,15 +27,15 @@ define ['jquery', 'exports'], ($, exports) ->
 		fill_data: () ->
 			for input in @inputs
 				input_class = $(input).attr('class')
-				input_vector = input_class.split('-')
-				$(input).val @get_value(input_vector)
+				input_id = input_class.split('-')
+				$(input).val @get_value(input_id)
 
-		get_value: (input_vector) ->
-			type = input_vector.pop()
+		get_value: (input_id) ->
+			type = input_id.pop()
 			for item in @collection
 				values = _.values(item)
 				before = values.length
-				after = _.uniq(input_vector.concat(values)).length
+				after = _.uniq(input_id.concat(values)).length
 				return item[type] if after is before
 
 	exports

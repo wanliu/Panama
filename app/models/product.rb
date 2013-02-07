@@ -2,6 +2,8 @@ class Product
   include Mongoid::Document
   include Mongoid::Timestamps::Created
 
+  before_create :divide_params
+
   attr_accessor :uploader_secure_token
 
   field :name, type: String
@@ -18,8 +20,6 @@ class Product
       where(:name => style_name.to_s).first
     end
   end
-
-
   accepts_nested_attributes_for :styles
 
   has_many :photos
@@ -32,5 +32,15 @@ class Product
 
   validates_presence_of :category
   validates_presence_of :shop
+
+  def divide_params
+    debugger
+  end
+
+  class << self
+    def create
+      debugger
+    end
+  end
 
 end

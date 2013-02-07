@@ -16,6 +16,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def new
+    debugger
     #模拟数据库对象的属性操作
     Hash.class_eval do
       ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
@@ -66,6 +67,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @product = Product.find(params[:id])
     @product.update_attributes(params[:product])
     if @product.valid?
+      updata_style_and_subs
       render :action => :show
     else
       render :action => :edit
@@ -135,15 +137,24 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def create_style_and_subs
     processed_params
 
+    yield if block_given?
+
     params[:sub_products].values.each do |sub|
       @product.sub_products.create! sub
     end if !params[:sub_products].blank?
 
     params[:style].each_pair do |name, value|
-      one_group = @product.style_groups.create! :name => name
+      one_group = @product.styles.create! :name => name
       value.each do |item|
-        one_group.style_items.create! item
+        one_group.items.create! item
       end
+    end
+  end
+
+  def updata_style_and_subs
+    create_style_and_subs do
+      @product.sub_products.clear
+      @product.styles.clear
     end
   end
 

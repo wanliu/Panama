@@ -78,7 +78,7 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			@title = eval("that.structure#{position}" )
 
 		initChildren: () ->
-			return (@children = []) if not @hasChildren()
+			return (@children = []) unless @hasChildren()
 
 			parent_el = $(@el)
 			@children = @children || []
@@ -96,7 +96,7 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				parent_el = $(view.lastChild().el)
 
 			#在table被渲染完毕后，通过click绑定/触发，调用table的数据填充程序
-			@fillTableData() if not @hasParent()
+			@fillTableData() unless @hasParent()
 
 		initRowspan: () ->
 			return if !@hasChildren() or !@hasParent()
@@ -123,25 +123,19 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			_.first(@position) isnt (@structure.length - 1)
 
 		lastChild: () ->
-			return @ if not @hasChildren()
+			return @ unless @hasChildren()
 			_.last(@children).lastChild()
 
 		checkRow: () ->
-			return if not @hasChildren()
+			return unless @hasChildren()
 
 			@increceCheck()
 			@reduceCheck()
 
-			for child in @children
-				# do (child) ->
-				child.checkRow()
+			child.checkRow() for child in @children
 
 		destroy: () ->
-			# return null if @title isnt title
-			if @hasChildren()
-				for child in @children
-					# do (child)->
-					child.destroy()
+			child.destroy() for child in @children if @hasChildren()
 
 			$(@el).remove()
 			@parent.resetRowspan() if @hasParent()
@@ -149,12 +143,12 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 
 		increceCheck: () ->
 			for title in @structure[_.first(@position) + 1]
-				if not _.contains( _.map(@children, (child) -> child['title'] ), title)
+				unless _.contains( _.map(@children, (child) -> child['title'] ), title)
 					@addChild(title)
 
 		reduceCheck: () ->
 			for title in _.map( @children, (child) -> child['title'] )
-				if not _.contains(@structure[_.first(@position) + 1], title)
+				unless _.contains(@structure[_.first(@position) + 1], title)
 					@removeChild(title)
 
 		addChild: (title) ->
@@ -184,6 +178,7 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 				badLuckyGuy.destroy()
 
 		fillTableData: () ->
+			$('a.trigger-data-filled').data('draw_complited', 'yes')
 			$('a.trigger-data-filled').click()
 
 		getNameField: ()->
