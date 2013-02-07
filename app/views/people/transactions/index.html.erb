@@ -1,3 +1,5 @@
+<% active_section :transactions %>
+
 <div class="page-header">
   <h1>已下单 <small>你挑选的宝贝都在这里吗?</small></h1>
 </div>
@@ -15,7 +17,7 @@
     <td><%= transaction.created_at %></td>
     <td><%= link_to 'Show', person_transaction_path(@people.login, transaction) %></td>
     <td><%= link_to 'Edit', edit_person_transaction_path(@people.login, transaction) %></td>
-    <td><%= link_to 'Destroy', person_transaction_path(@people.login, transaction), method: :delete, :remote => true, confirm: '确定要删除么?' %></td>
+    <td><%= link_to 'Destroy', person_transaction_path(@people.login, transaction), method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
