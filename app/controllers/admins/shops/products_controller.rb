@@ -16,7 +16,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def new
-    debugger
     #模拟数据库对象的属性操作
     Hash.class_eval do
       ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
