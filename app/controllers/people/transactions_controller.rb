@@ -44,6 +44,40 @@ class People::TransactionsController < People::BaseController
     @transaction = Transaction.find(params[:id])
   end
 
+  def creates
+    trs = {}
+    flag = false
+    respond_to do |format|
+      my_cart.items.each do |item|
+        total = item.total
+        count = 1
+        transaction = trs[item.product.shop.name]
+        if transaction.nil? 
+          transaction = @people.transactions.build(params[:transaction])
+          trs[item.product.shop.name] = transaction
+          transaction.seller = item.product.shop
+        else
+          total = item.total += item.total
+          count += item.amount
+        end
+        transaction.items_count = count
+        transaction.total = total
+        transaction.items.build item.attributes
+      end
+      trs.each do |value|
+        flag = value.save
+      end
+      if flag
+        my_cart.destroy
+        format.html { redirect_to person_transaction_path(@people.login, trs.values.last), notice: 'Transaction was successfully created.' }
+        format.json { render json: trs.values.last, status: :created, location: trs.values.last }
+      else
+        format.html { render action: "new" }
+        format.json { render json: trs.values.last.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # POST /people/transactions
   # POST /people/transactions.json
   def create
