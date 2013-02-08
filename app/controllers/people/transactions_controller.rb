@@ -45,15 +45,20 @@ class People::TransactionsController < People::BaseController
   end
 
   def batch_create
+    flag = false
     my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
       transaction = @people.transactions.build seller: shop
       items.each {|item| transaction.items.build item.attributes }
       transaction.items_count = items.inject(0) { |s, item| s + item.amount }
       transaction.total = items.inject(0) { |s, item| s + item.total }
-      transaction.save
-      items.destroy
+      flag = transaction.save
+      # if flag
+      #   items.destroy
+      # end
     end
-
+    if flag
+      my_cart.destroy
+    end
     redirect_to person_transactions_path(@people.login), 
                 notice: 'Transaction was successfully created.'
   end
