@@ -2,7 +2,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions
   # GET /people/transactions.json
   def index
-    @transactions = @people.transactions
+    @transactions = Transaction.where(:buyer => @people).page params[:page]
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,6 +13,8 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
+    @transactions = Transaction.where(:buyer => @people).page params[:page]
+    
     @transaction = Transaction.find(params[:id])
 
     respond_to do |format|
@@ -44,38 +46,23 @@ class People::TransactionsController < People::BaseController
     @transaction = Transaction.find(params[:id])
   end
 
-  def creates
-    trs = {}
+  def batch_create
     flag = false
-    respond_to do |format|
-      my_cart.items.each do |item|
-        total = item.total
-        count = 1
-        transaction = trs[item.product.shop.name]
-        if transaction.nil? 
-          transaction = @people.transactions.build(params[:transaction])
-          trs[item.product.shop.name] = transaction
-          transaction.seller = item.product.shop
-        else
-          total = item.total += item.total
-          count += item.amount
-        end
-        transaction.items_count = count
-        transaction.total = total
-        transaction.items.build item.attributes
-      end
-      trs.each do |value|
-        flag = value.save
-      end
-      if flag
-        my_cart.destroy
-        format.html { redirect_to person_transaction_path(@people.login, trs.values.last), notice: 'Transaction was successfully created.' }
-        format.json { render json: trs.values.last, status: :created, location: trs.values.last }
-      else
-        format.html { render action: "new" }
-        format.json { render json: trs.values.last.errors, status: :unprocessable_entity }
-      end
+    my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
+      transaction = @people.transactions.build seller: shop
+      items.each {|item| transaction.items.build item.attributes }
+      transaction.items_count = items.inject(0) { |s, item| s + item.amount }
+      transaction.total = items.inject(0) { |s, item| s + item.total }
+      flag = transaction.save
+      # if flag
+      #   items.destroy
+      # end
     end
+    if flag
+      my_cart.destroy
+    end
+    redirect_to person_transactions_path(@people.login), 
+                notice: 'Transaction was successfully created.'
   end
 
   # POST /people/transactions
@@ -118,6 +105,7 @@ class People::TransactionsController < People::BaseController
 
     respond_to do |format|
       format.html { redirect_to people_transactions_url }
+      format.js
       format.json { head :no_content }
     end
   end

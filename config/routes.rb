@@ -12,7 +12,7 @@ Panama::Application.routes.draw do
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
-      post "transactions_creates", :to => "people/transactions#creates", :as => :creates
+      post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
     end
   end
   resources :city
@@ -64,7 +64,7 @@ Panama::Application.routes.draw do
       
       resources :products, :controller => "shops/products"
 
-      resources :pending, :controller => "shops/pending"    
+      match "pending", :to => "shops/transactions#pending"    
 
       resources :complete, :controller => "shops/complete"
 
@@ -85,7 +85,6 @@ Panama::Application.routes.draw do
 
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index"
-
   resources :search
   
   
