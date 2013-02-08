@@ -1,39 +1,32 @@
 <%= simple_form_for form, 
-	:url => admins_products(form), 
-	:remote => true,
-	:html => {
-		:class => "form-horizontal"
-	} do |f| %>
-	<!-- <%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %> -->
+    :url => admins_products(form), 
+    :remote => true,
+    :html => {
+        :class => "form-horizontal"
+    } do |f| %>
+    <%= f.input :name %>    
+    <%= f.association :attachments, 
+                      :as => :album, 
+                      :upload_url => shop_admins_attachments_path(current_shop),                      
+                      :collection => form.format_attachment %>    
 
-	<%= f.input :name, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id" %>
+    <a class='button trigger-data-filled' href='javascript:void()' style='display:none;'></a>
+		<%= render_styles %>
 
-	<%= image_tag form.preview.url("100x100") %>
-
-	<a class='button trigger-data-filled' href='javascript:void()' style='display:none;'></a>
-	<%= render_styles %>
-
-	<%= f.input :preview , as: :file %>
-	<%= f.input :price %>
-
-	<!-- <%= f.association :category, 
-		:collection => current_shop.category.descendants, :as => :chosen %> -->
-	<%= f.association :category, 
-		:collection => current_shop.category.descendants %>
-
-	<%= f.input :summary , as: :text %>
-	<%= f.button :submit, :save %>
-
-	<%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
-		link_to :close, '#', :class => 'btn close'
-	end %>
-
-	<%#= f.association :photos %>
+    <%= f.input :price %>    
+    <%= f.association :category, :collection => @category_root, :value => form.category  , :as => :columnview %>
+    <%= f.input :summary , as: :text %>
+    <%= f.button :submit, :save %>
+   
+    <%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
+        link_to :close, '#', :class => 'btn close'
+    end %> 
 <% end %>
 
 
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
+
 	require(['jquery', 'backbone', 'rails.view'], function($, Backbone, Rails){
 		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
 			model: <%= raw form.to_json %>
@@ -50,6 +43,12 @@
 	})
 
 	<%= data_2_talbe %>
+
+    require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
+        var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
+            model: <%= raw form.to_json %>
+        });
+    })
 
 </script>
 <% end %>

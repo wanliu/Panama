@@ -3,11 +3,16 @@
 //= require 'image'
 //= require 'annotate'
 //= require 'arrow'
+//= require './lib/jquery.columnview'
+//= require './lib/fileuploader'
 //= require 'bootstrap_extend'
 //= require 'admins/shops'
+//= require products
+//= require attachments
 //= require_self
 
 @import "variables";
+@import "caret";
 
 $left-side-admin-width :200px;
 
@@ -67,25 +72,4 @@ $left-side-admin-width :200px;
 	display: inline-block;
 	vertical-align: middle;
 	margin-right: 10px;
-}
-
-.caret.up {
-	border-top:   none;
-	border-right: 4px solid transparent;
-	border-left:  4px solid transparent;
-	border-bottom:  4px solid $black;
-}
-
-.caret.left {
-	border-top:   4px solid transparent;
-	border-right: 4px solid $black;
-	border-left:  none;
-	border-bottom:  4px solid transparent;
-}
-
-.caret.right {
-	border-top:   4px solid transparent;
-	border-right: none;
-	border-left:  4px solid $black;
-	border-bottom:  4px solid transparent;
 }
