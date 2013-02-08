@@ -52,8 +52,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
       create_style_and_subs
       render :action => :show
     else
-      # @temp_style = the_product['style']
-      # @temp_subs = params[:sub_products]
+      @temp_subs = subs_back_for_edit
+      @temp_styles = sytles_back_for_edit
       render :action => :edit
     end
   end
@@ -155,6 +155,20 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
       @product.sub_products.clear
       @product.styles.clear
     end
+  end
+
+  def subs_back_for_edit
+    params[:sub_products]
+  end
+
+  def sytles_back_for_edit
+    processed_params
+    result = []
+    params[:style].each_pair do |name, items|
+      result.push 'name' => name, 'items' => items
+    end
+    result
+    # params[:style].map {|items| {'name' => items.first, 'items' => items.last} }
   end
 
 end

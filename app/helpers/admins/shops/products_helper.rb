@@ -7,8 +7,8 @@ module Admins::Shops::ProductsHelper
       end
     end
 
-    def render_style
-        result = @product.styles.map do |style_group|
+    def render_styles
+        result = filter_styles.map do |style_group|
             value = style_group.items
             title = style_group.name
             color_span = (title == 'Colours' || title == 'colours') ? true : false
@@ -17,8 +17,13 @@ module Admins::Shops::ProductsHelper
         result.join('').html_safe
     end
 
+    #区分商品编辑与表单错误返回
+    def filter_styles
+        @temp_styles || @product.styles
+    end
+
     def filter_attribtues
-        @product.styles.map{|style_group| style_group.name}
+        filter_styles.map{|style_group| style_group.name}
     end
 
     def sub_product_property(name, instance_var, html_options={}, method = nil, color_span = nil)
@@ -80,14 +85,17 @@ module Admins::Shops::ProductsHelper
         return if @product.new_record? and @temp_subs.blank?
 
         subs = @temp_subs || @product.sub_products
+        # debugger
         objects = subs.map do |sub|
             filters = ['_id', 'id', 'created_at', 'product_id']
             object = []
             begin
-                sub.each_pair do |k, v|
+                # temp_subs
+                sub.last.each_pair do |k, v|
                     object.push "#{k.to_s} : '#{v}'" if !filters.include?(k)
                 end
             rescue
+                # sub_products
                 sub.attributes.each_pair do |k, v|
                     object.push "#{k.to_s} : '#{v}'" if !filters.include?(k)
                 end
