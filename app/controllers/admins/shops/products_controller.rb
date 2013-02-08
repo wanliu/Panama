@@ -8,7 +8,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index
+  def index    
     node = current_shop.category
     @categories = node.traverse(:depth_first)
     @categories.shift
@@ -26,6 +26,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     end
 
     @product = Product.new
+    @category_root = Category.find_by(:name => "root")
 
     #模拟数据库对象
     def @product.styles
@@ -46,7 +47,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    @product = current_shop.products.create params[:product]
+    @product = current_shop.products.create(params[:product].merge(dispose_options))
 
     if @product.valid?
       create_style_and_subs
@@ -60,11 +61,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = Category.find_by(:name => "root")
   end
 
   def update
     @product = Product.find(params[:id])
-    @product.update_attributes(params[:product])
+    @product.update_attributes(params[:product].merge(dispose_options))
     if @product.valid?
       updata_style_and_subs
       render :action => :show
@@ -98,10 +100,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     category = Category.find(params[:category_id])
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
-  end
-
-  def sub_products
-
   end
 
   private
@@ -171,4 +169,11 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     # params[:style].map {|items| {'name' => items.first, 'items' => items.last} }
   end
 
+  def dispose_options
+    args = { :attachment_ids => [] }    
+    params[:product][:attachment_ids].each do | k, v |
+      args[:attachment_ids] << v
+    end
+    args
+  end     
 end
