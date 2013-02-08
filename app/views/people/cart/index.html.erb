@@ -22,7 +22,7 @@
 <% end %>
 
 <%= button_to "生成订单", 
-			  creates_person_path(@people.login), 
+			  batch_create_person_path(@people.login), 
 			  :method => :post, 
 			  :remote => true , 
 			  :class => "btn btn-primary btn-large" %>
