@@ -1,9 +1,14 @@
 module Admins::Shops::ProductsHelper
 
-    def picture_and_name(record)
-      content_tag :div, :class => 'btn-group' do
-        image_tag(record.preview.url("30x30")) +
-        label_tag(record.name)
+    def picture_and_name(record)        
+      content_tag :div, :class => 'btn-group' do                
+        imgs = record.attachments.map do | a |
+            image_tag(a.file.url("30x30"))
+        end
+
+        imgs << image_tag(record.default_attachment.file.url("30x30"))
+
+        imgs.join.html_safe + label_tag(record.name)
       end
     end
 
@@ -28,7 +33,8 @@ module Admins::Shops::ProductsHelper
 
     def sub_product_property(name, instance_var, html_options={}, method = nil, color_span = nil)
         className = html_options[:class] || ''
-        html = div_open(className, name)
+        html = marker_and_mq_element
+        html << div_open(className, name)
 
         instance_var.each do |item|
             field = method ? item.send(method) : item
@@ -40,7 +46,11 @@ module Admins::Shops::ProductsHelper
             html << label_close(field)
         end
         html << div_close
-        # html.html_safe
+    end
+
+    # the element for information exchanges between two js view
+    def marker_and_mq_element
+        "<a class='button trigger-data-filled' href='javascript:void()' style='display:none;'></a>"
     end
 
     def div_open(className, name)

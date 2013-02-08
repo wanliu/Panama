@@ -2,6 +2,12 @@ require 'orm_fs'
 
 class Shop
   include Mongoid::Document
+  include Graphical::Display 
+
+  define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
+
+  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
+
   has_many :contents, dependent: :delete do 
     def lookup(name)
       where(:name => name).first
@@ -9,6 +15,7 @@ class Shop
   end
 
   has_many :products, dependent: :delete
+  has_many :transactions, inverse_of: :seller
 
   field :name, type: String
 
@@ -17,6 +24,8 @@ class Shop
   before_destroy :delete_shop
 
   has_one :category
+
+  mount_uploader :photo, ImageUploader
 
   validates :name, presence: true
   validates :name, uniqueness: true

@@ -1,0 +1,35 @@
+<%= widget_div do %>
+	<a href="#" class='handle' >My Cart</a>
+	<span id="shop_count" class="badge badge-important"><%= @my_cart.items_count %></span>
+
+<% end %>
+
+<div id="cart_box">
+	<div class="tool">
+		<%= link_to t(:clear_list), 
+					cart_clear_list, 
+					:class => 'btn', 
+					:remote => true,
+					:metohd => :post %>
+
+		<%= link_to_if @my_cart.items.count > 0,
+					   t(:checkout), 
+					   person_cart_index_path(current_user.login), 
+					   :class => 'btn btn-primary' do %>
+			<%= link_to t(:checkout), 
+						person_cart_index_path(current_user.login), 
+						:class => 'btn btn-primary disabled' %>
+		<% end %>
+	</div>
+	<hr>
+	<table>
+
+		<%= render :partial => "cart/product_item", :collection => @my_cart.items %>
+	</table>
+	</div>
+</div>
+<script type="text/javascript">
+	require(["jquery", 'my_cart'], function($, ShoppingCart){
+		var id = "#<%= widget_id %>";
+	});
+</script>
