@@ -79,11 +79,17 @@ gem "rest-client"
 # rmagick
 gem "mini_magick"
 
+gem "amqp", "~> 0.9.0" # optionally: :git => "git://github.com/ruby-amqp/amqp.git", :branch => "0.9.x-stable"
+
+
 gem 'rb-readline'
 # To use debugger
 # 
 # Pagination
 gem 'kaminari'
+
+# Faye
+gem 'faye-rails'
 
 gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 
