@@ -6,10 +6,12 @@
 		</div>
 		<div class="container-fluid info-header">
 			<div class="page-header">
-			  <h1><%= seller.name %> <small><%=I18n.l transaction.created_at, :format => :long %></small>
+			  <h1><%= seller.name %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+				<%= distance_of_time_in_words Time.now, transaction.created_at %>
+			  </small>
 
 			  	<button type="button" class="close" data-dismiss="alert">&times;</button>
-			  	<%= render "state_buttons" %>
+			  	<%= render "state_buttons", :transaction => transaction %>
 			  </h1>
 				<div class="progress progress-mini progress-striped active">
 					<div class="bar bar-success" style="width: 35%;"></div>
@@ -20,7 +22,7 @@
 		</div>
 	</div>
 	<div class="transaction-body">
-		<%= render state %>
+		<%= render state, transaction: transaction, people: people %>
 	</div>
 	<div class="transaction-footer">
 		<div class="toolbar">
