@@ -24,8 +24,11 @@
     <%#= render "javascripts" %>
 	<%= javascripts_codes %>
 	<script type="text/javascript">
-		require(['ajaxify'], function(Ajaxify){
+		require(['ajaxify', 'panama'], function(Ajaxify, Panama){
 			Ajaxify.start();
+			Panama.realtime.subscribe('/notice', function(payload){
+				$("#pending");
+			});
 		});
 	</script>
 </body>
