@@ -17,7 +17,7 @@ class ProductItem
   field :total, type: BigDecimal
 
   belongs_to :product 
-  belongs_to :cart
+  belongs_to :cart, inverse_of: :items, class_name: "Cart"
   belongs_to :transaction, inverse_of: :items, class_name: "Transaction"
 
   delegate :photos, :to => :product

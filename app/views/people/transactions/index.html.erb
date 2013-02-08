@@ -4,24 +4,21 @@
     <% if @transactions.size > 0 %>
     <div class="widget">
       <h2>已下订单</h2>
+      <ul class="cards">
       <% @transactions.each do |transaction| %>
-      <!--   <tr>
-          <td><%#= transaction.created_at %></td>
-          <td><%#= link_to 'Show', person_transaction_path(@people.login, transaction) %></td>
-          <td><%#= link_to 'Edit', edit_person_transaction_path(@people.login, transaction) %></td>
-          <td><%#= link_to 'Destroy', person_transaction_path(@people.login, transaction), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr> -->
-        <ul class="cards">
           <%= render :partial => 'trans_card', :locals => { :transaction => transaction, :state => transaction.state, :people => @people } %>
-        </ul>
       <% end %>     
+      </ul>
      </div>
      <% end %>
   </div>
   <div class="main-sidebar container-fluid">
-<!--     <div class="page-header">
+    <div class="page-header">
       <h1>已下单 <small>你挑选的宝贝都在这里吗?</small></h1>
-    </div>   -->  
+    </div>
+    <ul class="item-summary">
+
+    </ul>
     <% if @transactions.size > 0 %>
       <% @transactions.each do |transaction| %>
       <!--   <tr>
@@ -30,8 +27,13 @@
           <td><%#= link_to 'Edit', edit_person_transaction_path(@people.login, transaction) %></td>
           <td><%#= link_to 'Destroy', person_transaction_path(@people.login, transaction), method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr> -->
-        <%= render transaction, :state => transaction.state, :people => @people %>
+        <%= render :partial => 'item_trans', :locals => {
+                   :transaction => transaction, 
+                   :state => transaction.state, 
+                   :people => @people } %>
       <% end %>
+      <%= paginate @transactions %>
+
     <% else %>
       <h1>太好了你的交易清单是空的, 进入市场去购物吧</h1>
     <% end %>
@@ -47,10 +49,10 @@
     <th></th>
   </tr> -->
 
-
 <!-- </table> -->
 
 <!-- <br />
 
 <%#= link_to 'New Transaction', new_person_transaction_path(@people.login) %>
  -->
+

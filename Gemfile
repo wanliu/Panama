@@ -81,6 +81,9 @@ gem "mini_magick"
 
 gem 'rb-readline'
 # To use debugger
+# 
+# Pagination
+gem 'kaminari'
 
 gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 

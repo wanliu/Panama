@@ -28,7 +28,7 @@ module Graphical
                 :icon => "30x30",
                 :header => "100x100",
                 :avatar => "240x240",                
-                :preview => "250x187"                
+                :preview => "420x420"                
             }.merge(options)            
             @config[:default] = ""
             @config
