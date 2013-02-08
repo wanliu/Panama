@@ -7,6 +7,7 @@
 @import "banks";
 @import "progress";
 @import "caret";
+@import "widget";
 
 #wrapper {
 	padding-top :10px;
@@ -14,7 +15,7 @@
 }
 
 #people-sidebar {
-	width: 250px;
+	width: 200px;
 	position: absolute;
 
 	.icon-chevron-right {
@@ -41,7 +42,44 @@
 }
 
 #main-body {
-	margin-left: 270px;
+	margin-left: 210px;
+}
+
+.sidebar_panel {
+	position: relative;
+}
+
+.main-sidebar {
+	margin-right: 310px;
+}
+
+.right-sidebar {
+	width: 300px;
+	position: absolute;	
+	right: 0px;
+}
+
+
+
+.cards {
+	margin: 5px 15px;
+	li {
+		list-style-type: none;
+	}
+
+	.img {
+		width: 48px;
+		height: 48px;
+		float: left;
+		margin-right: 1em;
+		margin-bottom: 1em;	
+	}
+
+	.stats {
+		.time {
+			float: right;
+		}
+	}
 }
 
 .product-item {
@@ -68,7 +106,7 @@
 
 .depend_select {
 
-	width: 100px;
+	width: 90px;
 }
 
 .transaction {
@@ -169,6 +207,14 @@
 		border-right: 1px solid $tableBorder;
 		border-bottom: 1px solid $tableBorder;
 		padding: 0 20px 20px 20px;
+
+		.control-label {
+			width: 100px;
+		}
+		.controls {
+
+			margin-left: 120px;
+		}
 	}
 
 	.transaction-footer {
