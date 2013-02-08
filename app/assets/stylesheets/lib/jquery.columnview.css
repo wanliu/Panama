@@ -1,0 +1,60 @@
+.containerobj {
+  border: 1px solid #ccc;
+  height: 5em;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.containerobj div {
+  height:100%;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  position:absolute;
+}
+
+.containerobj a {
+  display: block;
+  clear: both;
+  white-space: nowrap;
+  min-width: 150px;
+  padding-right: 15px;
+}
+
+.containerobj a:focus {
+  outline:none;
+}
+
+.containerobj a canvas{
+  padding-left: 1em;
+}
+
+.containerobj .feature {
+  min-width: 200px;
+}
+
+.containerobj .feature a {
+  white-space: normal;
+}
+
+.containerobj .hasChildMenu {
+}
+
+.containerobj .active {
+  background-color: #3671cf;
+  color: #fff;
+}
+
+.containerobj .inpath {
+  background-color: #d0d0d0;
+  color: #000;
+}
+
+.containerobj .hasChildMenu .widget{
+  color: black;
+  position: absolute;
+  right: 0;
+  text-decoration: none;
+  font-size: 0.7em;
+}

@@ -1,0 +1,42 @@
+bank:
+    -
+        中国银行: 
+            name: 中国银行
+            code: boc
+    -
+        工商银行:
+            name: 工商银行
+            code: icbc
+    -
+        建设银行:
+            name: 建设银行
+            code: cbc
+    -
+        农业银行:
+            name: 农业银行
+            code: abc
+    -
+        招商银行:
+            name: 招商银行
+            code: cmb
+    -
+        民生银行:
+            name: 中国民生银行
+            code: cmbc
+    -
+        交通银行:
+            name: 交通银行
+            code: comm
+    -
+        广发银行:
+            name: 广发银行
+            code: cgb
+    -
+        兴业银行:
+            name: 兴业银行
+            code: cib
+
+    -   
+        中信银行:
+            name: 中信银行
+            code: ecitic
