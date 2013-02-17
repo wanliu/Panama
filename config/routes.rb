@@ -1,5 +1,10 @@
 Panama::Application.routes.draw do
 
+  faye_server '/realtime', timeout: 25 do
+    map '/notice' => RealtimeNoticeController
+    map default: :block
+  end
+
   resources :people, :key => :login do
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
@@ -15,6 +20,8 @@ Panama::Application.routes.draw do
       post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
     end
   end
+
+
   resources :city
   resources :addresses
 
@@ -64,7 +71,7 @@ Panama::Application.routes.draw do
       
       resources :products, :controller => "shops/products"
 
-      resources :pending, :controller => "shops/pending"    
+      match "pending", :to => "shops/transactions#pending"    
 
       resources :complete, :controller => "shops/complete"
 
@@ -85,7 +92,6 @@ Panama::Application.routes.draw do
 
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index"
-
   resources :search
   
   

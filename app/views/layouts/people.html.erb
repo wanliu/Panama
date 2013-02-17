@@ -3,9 +3,9 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => ["people"] %>
 <body class="<%= controller.controller_name %>">
-	<%= render "header" %>
+	<%= render "header-fluid" %>
 	<%= render "category_breadcrumbs" %>
-	<div id='wrapper' class='container'>
+	<div id='wrapper' class='container-fluid'>
 		<div class="row-fluid">
 			<div id='people-sidebar' class="span3">
 				<%= image_tag @people.photos.avatar, :class => "img-polaroid" %>

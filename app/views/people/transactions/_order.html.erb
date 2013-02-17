@@ -1,10 +1,10 @@
 <!-- 订单 -->
-<%= simple_form_for @transaction, 
-					:url => transaction_path(@people, @transaction),
+<%= simple_form_for transaction, 
+					:url => transaction_path(people, transaction),
 					:html => { :class => "form-horizontal"}   do |f| %>
 	<%= f.input :address, 
 				:as => :chosen, 
-				:collection => @people.addresses, 
+				:collection => people.addresses, 
 				:label_method => :location, 
 				:value_method => :id,
 				:input_html => { :class => :span12 } %>
@@ -45,17 +45,17 @@
 	<tr>
 		<th colspan=2 class="relative">
 			<div class="left-frame"></div>
-			<% @transaction.items[0...5].each do |item| %>
+			<% transaction.items[0...5].each do |item| %>
 				<%= image_tag item.product.photos.icon %>
 			<% end %>
 			<span class='ellipsis'>...</span>
 		</th>
 		<th>
-			<%= @transaction.items_count %>
+			<%= transaction.items_count %>
 		</th>
-		<th><strong>小计: <%= number_to_currency(@transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
+		<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
 		</th>
-		<th><strong>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+		<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
 		</th>
 		<th class="relative">
 				<%= link_to '#', :class => "btn btn-large" do %>
@@ -65,7 +65,7 @@
 		</th>
 	</tr>
 	</thead>
-	<% @transaction.items.each do |item| %>
+	<% transaction.items.each do |item| %>
 	<tr>
 		<td>
 			<%= image_tag item.product.photos.icon %>
