@@ -2,7 +2,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions
   # GET /people/transactions.json
   def index
-    @transactions = @people.transactions
+    @transactions = Transaction.where(:buyer => @people).page params[:page]
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,6 +13,8 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
+    @transactions = Transaction.where(:buyer => @people).page params[:page]
+    
     @transaction = Transaction.find(params[:id])
 
     respond_to do |format|

@@ -44,7 +44,7 @@ module ApplicationHelper
   end
 
   def link_to_admin
-    link_to l(:admin, '管理'), action_controller.admin_path if action_controller.respond_to?(:admin?)
+    link_to l(:admin, '管理'), shop_admins_path(@shop.name) if action_controller.respond_to?(:admin?)
   end
 
   def link_to_account

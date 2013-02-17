@@ -1,7 +1,6 @@
 class People::CartController < People::BaseController
   def index
-
-    @items = @people.cart.items
+    @items = ProductItem.where(:cart_id => my_cart.id).page params[:page]
   end
 
   def add_to_cart
