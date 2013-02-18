@@ -16,7 +16,7 @@ module Admins::Shops::ProductsHelper
         result = filter_styles.map do |style_group|
             value = style_group.items
             title = style_group.name
-            color_span = (title == 'Colours' || title == 'colours') ? true : false
+            color_span = (title == 'Colours' || title == 'colours') # ? true : false
             sub_product_property(title, value, {:class => title.downcase}, :title, color_span)
         end
         result.join('').html_safe
@@ -36,12 +36,12 @@ module Admins::Shops::ProductsHelper
         html = marker_and_mq_element
         html << div_open(className, name)
 
-        instance_var.each do |item|
+        instance_var.each_with_index do |item, index|
             field = method ? item.send(method) : item
             html << label_open
-            html << hidden_title(name, field)
-            html << checked(item, name, field)
-            html << hidden_value(name, item)
+            html << hidden_title(name, field, index)
+            html << checked(item, name, field, index)
+            html << hidden_value(name, item, index)
             html << color_special(item) if color_span
             html << label_close(field)
         end
@@ -71,16 +71,16 @@ module Admins::Shops::ProductsHelper
         "<span class='name'>#{field}</span></label>"
     end
 
-    def hidden_title(name, field)
-        "<input type='hidden' name='style[#{name}][title][]' value='#{field}' >"
+    def hidden_title(name, field, index)
+        "<input type='hidden' name='style[#{name}][#{index}][title]' value='#{field}' >"
     end
 
-    def hidden_value(name, item)
-        "<input type='hidden' name='style[#{name}][value][]' value=#{item.value}>"
+    def hidden_value(name, item, index)
+        "<input type='hidden' name='style[#{name}][#{index}][value]' value=#{item.value}>"
     end
 
-    def checked(item, name, field)
-        "<input class='check_boxes optional' name='style[#{name}][checked][]' type='checkbox' value='#{field}' #{"checked='checked'" if item[:checked] || item['checked']}>"
+    def checked(item, name, field, index)
+        "<input class='check_boxes optional' name='style[#{name}][#{index}][checked]' type='checkbox' value='#{field}' #{"checked='checked'" if item[:checked] || item['checked']}>"
     end
 
     def color_special(item)
@@ -92,7 +92,7 @@ module Admins::Shops::ProductsHelper
     ## if the @product isn't new or it's form return for in correct input
     ############################################################################################
     def data_2_talbe
-        return if @product.new_record? and @temp_subs.blank?
+        return if @product.new_record? && @temp_subs.blank?
 
         subs = @temp_subs || @product.sub_products
         # debugger

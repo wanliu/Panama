@@ -11,7 +11,7 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 				structure : @structure
 				data      : @data
 
-			@loadEl = _.last @els
+			@loadEl = _.last(@els)
 			@init()
 
 		init: () ->
@@ -28,13 +28,11 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 			deleEvents el for el in @els
 
 		countChecked: () ->
-			that = @
 			index = 0
 			for el in @els
-				do (el) ->
-					collection = el.find ':checkbox'
-					selecteds = _.filter collection, (item) -> $(item).attr('checked') is "checked"
-					that.structure[index] = _.map selecteds, (item) -> $(item).val()
+				collection = el.find ':checkbox'
+				selecteds = _.filter collection, (item) -> $(item).attr('checked') is "checked"
+				@structure[index] = _.map(selecteds, (item) -> $(item).val())
 				index++
 
 			@checkRow()
@@ -50,7 +48,7 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 
 			if not @drawed
 				@drawed = true
-				@table = new TblCreater.TableCreater @loadEl, @schema
+				@table = new TblCreater.TableCreater(@loadEl, @schema)
 			else
 				@table.checkRow()
 
@@ -66,20 +64,19 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 			nameNode.on('dblclick', $.proxy(that.editLable, that))
 
 		editLable: (event) ->
-			that = @
 			oldHtml = $(event.srcElement).html()
 			input = $("<input class='eidtName' type='text' style='width:80px; height:13px;' value=" + oldHtml + ">")
 			$(event.srcElement).hide()
 			lable = $(event.srcElement).parents('label')
 			lable.append(input)
 
-			input.change () ->
+			input.change () =>
 				value = input.val()
 				$(lable.find(':hidden')).val(value)
 				$(lable.find(':checkbox')).val(value)
 				$(lable.find('span.name')).html(value)
 				input.remove()
 				$(event.srcElement).show()
-				that.countChecked()
+				@countChecked()
 
 	exports

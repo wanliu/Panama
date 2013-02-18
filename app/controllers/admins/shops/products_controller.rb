@@ -47,7 +47,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    @product = current_shop.products.create(params[:product].merge(dispose_options))
+    # @product = current_shop.products.create(params[:product].merge(dispose_options))
+    @product = current_shop.products.create(params[:product])
 
     if @product.valid?
       create_style_and_subs
@@ -66,7 +67,9 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def update
     @product = Product.find(params[:id])
-    @product.update_attributes(params[:product].merge(dispose_options))
+    # @product.update_attributes(params[:product].merge(dispose_options))
+    @product.update_attributes(params[:product])
+
     if @product.valid?
       updata_style_and_subs
       render :action => :show
@@ -103,49 +106,51 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   private
-  def processed_params
-    return if params[:style].blank?
+  # def processed_params
+  #   return if params[:style].blank?
 
-    style_attributes = params[:style]
-    new_attributes = {}
+  #   style_attributes = params[:style]
+  #   new_attributes = {}
 
-    style_attributes.each do |attr_k, attr_v|
-      new_attributes.merge!( attr_k => (combine_attributes style_attributes[attr_k]) )
-    end
-    params.merge!(:style => new_attributes)
-  end
+  #   style_attributes.each do |attr_k, attr_v|
+  #     new_attributes.merge!(attr_k => (combine_attributes style_attributes[attr_k]))
+  #   end
+  #   params.merge!(:style => new_attributes)
+  # end
 
-  def combine_attributes(attribute)
-    (checked = attribute[:checked]) && attribute.delete_if{|k, v| k == :checked || k == 'checked'}
-    result = []
-    index = 0
-    attribute.each do |k, v|
-      v.map do |x|
-        result[index] ||= {}
-        result[index].merge!( k => x)
-        result[index].merge!( :checked => true ) if checked && checked.include?(x)
-        index += 1
-      end
-      index = 0
-    end
-    result
-  end
+  # def combine_attributes(attribute)
+  #   (checked = attribute[:checked]) && attribute.delete_if{ |k, v| k == :checked || k == 'checked' }
+  #   result = []
+  #   index = 0
+  #   attribute.each do |k, v|
+  #     v.map do |x|
+  #       result[index] ||= {}
+  #       result[index].merge!(k => x)
+  #       result[index].merge!(:checked => true) if checked && checked.include?(x)
+  #       index += 1
+  #     end
+  #     index = 0
+  #   end
+  #   result
+  # end
 
   def create_style_and_subs
-    processed_params
+    # processed_params
 
     yield if block_given?
 
     params[:sub_products].values.each do |sub|
-      @product.sub_products.create! sub
-    end if !params[:sub_products].blank?
+      @product.sub_products.create!(sub)
+    end unless params[:sub_products].blank?
 
     params[:style].each_pair do |name, value|
-      one_group = @product.styles.create! :name => name
-      value.each do |item|
-        one_group.items.create! item
+      one_group = @product.styles.create!(:name => name)
+      value.values.each do |item|
+        item = item.clone
+        item[:checked] = !item[:checked].blank?
+        one_group.items.create!(item)
       end
-    end
+    end unless params[:style].blank?
   end
 
   def updata_style_and_subs
@@ -160,20 +165,19 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def sytles_back_for_edit
-    processed_params
+    # processed_params
     result = []
     params[:style].each_pair do |name, items|
-      result.push 'name' => name, 'items' => items
-    end
+      result.push('name' => name, 'items' => items)
+    end unless params[:style].blank?
     result
-    # params[:style].map {|items| {'name' => items.first, 'items' => items.last} }
   end
 
   def dispose_options
     args = { :attachment_ids => [] }    
     params[:product][:attachment_ids].each do | k, v |
       args[:attachment_ids] << v
-    end
+    end unless params[:product][:attachment_ids].blank?
     args
   end     
 end
