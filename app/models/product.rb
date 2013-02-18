@@ -1,14 +1,10 @@
-class Product
-  include Mongoid::Document
-  include Mongoid::Timestamps::Created
+class Product < ActiveRecord::Base
   include Graphical::Display
+
+  attr_accessible :description, :name, :price, :summary
 
   attr_accessor :uploader_secure_token
   
-  field :name, type: String
-  field :price, type: BigDecimal
-  field :summary, type: String
-
   define_graphical_attr :photos, :handler => :default_photo  
 
   belongs_to :shop
@@ -43,4 +39,4 @@ class Product
       build_default_attachment
     end
   end  
-end
+end  

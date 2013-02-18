@@ -1,8 +1,7 @@
-require 'orm_fs'
-
-class Shop
-  include Mongoid::Document
+class Shop < ActiveRecord::Base
   include Graphical::Display 
+
+  attr_accessible :name
 
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
 
@@ -100,5 +99,5 @@ class Shop
       puts file
       root[file].write f.read 
     end
-  end
+  end  
 end

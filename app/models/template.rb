@@ -1,5 +1,3 @@
-# virtual Template class
-# 
 class Template
   cattr_accessor :shop
 
