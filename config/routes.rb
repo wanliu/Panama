@@ -91,7 +91,7 @@ Panama::Application.routes.draw do
     :to => "admins/shops/products#accept_product"
 
 
-  match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index"
+  match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
   resources :search
   
   
