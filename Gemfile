@@ -5,6 +5,8 @@ gem 'rails', '3.2.8'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+# database orm adapter
+gem 'mysql2'
 gem 'mongoid', '~> 3.0.0'
 gem 'mongoid-tree', :require => 'mongoid/tree'
 

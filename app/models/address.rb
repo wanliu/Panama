@@ -1,12 +1,7 @@
-
-class Address
-  include Mongoid::Document
+class Address < ActiveRecord::Base
   include Custom::Validators
-  attr_reader :location
-
-  field :country, type: String  # 国家
-  field :zip_code, type: String
-  field :road, type: String # 地址
+  
+  attr_accessible :country, :road, :zip_code
 
   belongs_to :transaction
   belongs_to :user
@@ -24,4 +19,3 @@ class Address
   validates :area, :superior => {:target => :city , :att => :area_id }
 
 end
- 

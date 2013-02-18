@@ -1,18 +1,14 @@
-class FileEntity
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  include Mongoid::Tree
-  include Mongoid::Tree::Traversal  
+class FileEntity < ActiveRecord::Base
+  attr_accessible :data, :name, :path, :size, :stat
 
-  field :name, type: String
-  field :stat, type: String
-  field :size, type: Fixnum
-  field :data, type: Moped::BSON::Binary
-  field :path, type: String
+  # FIXED: acts_as_tree
+  #   include Mongoid::Tree
+  #   include Mongoid::Tree::Traversal  
+  
+  # FIXED: add_index
+  #   index({stat: 1, name: 1})
 
-  index({stat: 1, name: 1})
-
-#  validates :name, presence: true
+  # validates :name, presence: true
   validates :stat, presence: true
 
   after_rearrange :rebuild_path
@@ -78,9 +74,4 @@ class FileEntity
   def rebuild_path
     self.path = self.ancestors_and_self.collect(&:name).compact.join('/') unless name.blank?
   end  
-end
-
-FileEntity.root || begin 
-  root = FileEntity.new(:stat => :directory)
-  root.save :validate => false
 end
