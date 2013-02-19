@@ -1,3 +1,5 @@
+require 'vfs'
+
 class Content < ActiveRecord::Base
   attr_accessible :lock, :name, :template
   belongs_to :shop

@@ -3,6 +3,8 @@ class Category < ActiveRecord::Base
   # include Mongoid::Tree::Ordering
   # include Mongoid::Tree::Traversal
 
+  has_ancestry
+
   attr_accessible :name
 
   attr_accessor :indent
@@ -24,7 +26,7 @@ class Category < ActiveRecord::Base
 
   def load_category(config_root)
     # clear all category children
-    root.destroy_children
+    root.descendants.destroy_all
     create_node(config_root, root)
     root.save
   end
@@ -47,5 +49,9 @@ class Category < ActiveRecord::Base
   def indent
     parent_indent = self.parent.nil? ? -1 : self.parent.indent
     parent_indent+=1
-  end  
+  end
+
+  def self.root
+    roots.first
+  end    
 end

@@ -10,7 +10,7 @@ class Product < ActiveRecord::Base
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
-  has_and_belongs_to_many :attachments, :class_name => "Attachment", :inverse_of => :products
+  has_and_belongs_to_many :attachments, :class_name => "Attachment"
     
   accepts_nested_attributes_for :attachments,
                                 :reject_if => proc { |att| att['file_filename'].blank? }, 

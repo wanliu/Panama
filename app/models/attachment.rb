@@ -4,7 +4,7 @@ class Attachment < ActiveRecord::Base
 
   belongs_to :attachable, :polymorphic => true
   has_many :default_product, :class_name => "Product", :inverse_of => :default_attachment  
-  has_and_belongs_to_many :products, :class_name => "Product", :inverse_of => :attachments
+  has_and_belongs_to_many :products, :class_name => "Product"
   
   mount_uploader :file, ImageUploader
 

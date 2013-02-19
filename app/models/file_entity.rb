@@ -11,7 +11,9 @@ class FileEntity < ActiveRecord::Base
   # validates :name, presence: true
   validates :stat, presence: true
 
-  after_rearrange :rebuild_path
+  has_ancestry
+
+  # after_rearrange :rebuild_path
 
   before_destroy :delete_descendants
   
@@ -69,9 +71,19 @@ class FileEntity < ActiveRecord::Base
     end
   end
 
+  def self.root
+    roots.first
+  end
+
   private
 
   def rebuild_path
     self.path = self.ancestors_and_self.collect(&:name).compact.join('/') unless name.blank?
   end  
+end
+
+
+FileEntity.root or begin 
+  root = FileEntity.new(:stat => :directory)
+  root.save :validate => false
 end
