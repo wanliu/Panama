@@ -1,23 +1,22 @@
 require 'orm_fs'
 
-class Shop
-  include Mongoid::Document
+class Shop < ActiveRecord::Base
   include Graphical::Display 
+
+  attr_accessible :name
 
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
 
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
 
-  has_many :contents, dependent: :delete do 
+  has_many :contents, dependent: :destroy do 
     def lookup(name)
       where(:name => name).first
     end
   end
 
-  has_many :products, dependent: :delete
-  has_many :transactions, inverse_of: :seller
-
-  field :name, type: String
+  has_many :products, dependent: :destroy
+  has_many :transactions, class_name: "OrderTransaction"
 
   before_create :create_shop
   after_create :initial_shop_data
@@ -31,10 +30,11 @@ class Shop
   validates :name, uniqueness: true
 
   def fs
-    "/_shops/#{self.name}".to_dir
+    "/_shops/#{name}".to_dir
   end
 
-  private 
+  private
+
   def create_shop
     copy_standardization_files
 
@@ -100,5 +100,5 @@ class Shop
       puts file
       root[file].write f.read 
     end
-  end
+  end  
 end

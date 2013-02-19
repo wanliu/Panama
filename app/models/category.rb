@@ -1,12 +1,14 @@
-class Category
-  include Mongoid::Document
-  include Mongoid::Tree
-  include Mongoid::Tree::Ordering
-  include Mongoid::Tree::Traversal
+class Category < ActiveRecord::Base
+  # include Mongoid::Tree
+  # include Mongoid::Tree::Ordering
+  # include Mongoid::Tree::Traversal
+  # 
+
+  has_ancestry :cache_depth => true
+
+  attr_accessible :name
 
   attr_accessor :indent
-
-  field :name, type: String
 
   mount_uploader :cover, ImageUploader
   
@@ -25,7 +27,7 @@ class Category
 
   def load_category(config_root)
     # clear all category children
-    root.destroy_children
+    root.descendants.destroy_all
     create_node(config_root, root)
     root.save
   end
@@ -49,4 +51,8 @@ class Category
     parent_indent = self.parent.nil? ? -1 : self.parent.indent
     parent_indent+=1
   end
+
+  def self.root
+    roots.first
+  end    
 end
