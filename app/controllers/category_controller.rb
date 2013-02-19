@@ -8,6 +8,6 @@ class CategoryController < ApplicationController
 
   def show
     @category = Category.find(params[:id])
-    @products = Product.where(:category => @category).limit(60)
+    @products = Product.where(:category_id => @category).limit(60)
   end
 end
