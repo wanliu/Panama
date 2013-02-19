@@ -107,19 +107,28 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def create_style_and_subs
     yield if block_given?
+    create_style and create_subs
+  end
 
+  def create_subs
     params[:sub_products].values.each do |sub|
       @product.sub_products.create!(sub)
     end unless params[:sub_products].blank?
+  end
 
+  def create_sytle
     params[:style].each_pair do |name, value|
-      one_group = @product.styles.create!(:name => name)
-      value.values.each do |item|
-        item = item.clone
-        item[:checked] = !item[:checked].blank?
-        one_group.items.create!(item)
-      end
+      create_style_group(name, value)
     end unless params[:style].blank?
+  end
+
+  def create_style_group(name, value)
+    the_group = @product.styles.create!(:name => name)
+    value.values.each do |item|
+      item = item.clone
+      item[:checked] = !item[:checked].blank?
+      the_group.items.create!(item)
+    end
   end
 
   def updata_style_and_subs
@@ -134,11 +143,9 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def sytles_back_for_edit
-    result = []
-    params[:style].each_pair do |name, items|
-      result.push('name' => name, 'items' => items.values)
+    params[:style].map do |name, items|
+      { 'name' => name, 'items' => items.values }
     end unless params[:style].blank?
-    result
   end
 
   def dispose_options
