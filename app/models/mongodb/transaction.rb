@@ -8,7 +8,7 @@
 #   退款    -    -     y     y      y
 #   评价
 #
-class Transaction
+class Mongodb::Transaction
   include Mongoid::Document
   include Mongoid::Timestamps
 

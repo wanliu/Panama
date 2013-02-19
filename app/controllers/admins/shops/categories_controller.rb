@@ -13,8 +13,7 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   def index
     # @categories = current_shop.category.descendants
     node = current_shop.category
-    @categories = node.traverse(:depth_first)
-    @categories.shift
+    @categories = Category.sort_by_ancestry(node.descendants)
     #@children = @category.children
   end
 

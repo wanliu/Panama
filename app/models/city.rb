@@ -1,8 +1,5 @@
-class City
-	include Mongoid::Document
-	include Mongoid::Tree
+class City < ActiveRecord::Base
+  attr_accessible :name
 
-	has_one :address
-
-	field :name
+  has_one :address
 end
