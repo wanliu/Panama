@@ -58,7 +58,7 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 					"<input type='hidden' name='sub_products[#{counter}][#{name}]' value=#{item.value} >"
 
 				html = for data in @schema['data']
-					"<td>#{data}: &nbsp;&nbsp;&nbsp;&nbsp;<input class='#{to_filled + data}' name=sub_products[#{counter}][#{data}]  type='text'></td>"
+					"<td>#{data.title}: &nbsp;&nbsp;&nbsp;&nbsp;<input class='#{to_filled + data.value}' name=sub_products[#{counter}][#{data.value}]  type='text'></td>"
 
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html_front + html)
 
