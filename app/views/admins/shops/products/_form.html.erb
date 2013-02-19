@@ -13,7 +13,7 @@
 		<%= render_styles %>
 
     <%= f.input :price %>    
-    <%= f.association :category, :collection => current_shop.category, :value => form.category  , :as => :columnview %>
+    <%= f.association :category, :collection => category_root, :value => form.category  , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
    

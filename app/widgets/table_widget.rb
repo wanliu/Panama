@@ -51,11 +51,13 @@ class TableWidget < CommonWidget
         end
       else
         @klass = @records.first.class
-        @klass.fields.keys - ignore_names
+        @record = @klass.new
+        @record.attributes.keys - ignore_names
       end
     else
       @klass = @model
-      @klass.fields.keys - ignore_names
+      @record = @klass.new
+      @record.attributes.keys - ignore_names
     end
   end
 

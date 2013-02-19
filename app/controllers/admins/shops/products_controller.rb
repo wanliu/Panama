@@ -10,8 +10,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def index    
     node = current_shop.category
-    @categories = node.traverse(:depth_first)
-    @categories.shift
+
+    @categories = Category.sort_by_ancestry(node.descendants)
     @products = current_shop.products
   end
 
@@ -46,6 +46,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
+    @category_root = current_shop.category
     @product = current_shop.products.create(params[:product].merge(dispose_options))
 
     if @product.valid?
@@ -60,6 +61,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = current_shop.category
   end
 
   def update
@@ -148,7 +150,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def dispose_options
     args = { :attachment_ids => [] }    
-    params[:product][:attachment_ids].each do | k, v |
+    attachments = params[:product].fetch(:attachment_ids, {})
+    attachments.each do | k, v |
       args[:attachment_ids] << v
     end unless params[:product][:attachment_ids].blank?
     args
