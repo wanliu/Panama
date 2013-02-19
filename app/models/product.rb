@@ -48,9 +48,9 @@ class Product
     temp 
   end
 
-  after_initialize do 
-    if default_attachment.nil?
-      build_default_attachment
-    end
-  end  
+  # after_initialize do 
+  #   if default_attachment.nil?
+  #     build_default_attachment
+  #   end
+  # end  
 end
