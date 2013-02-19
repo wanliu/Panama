@@ -26,8 +26,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     end
 
     @product = Product.new
-    #@category_root = Category.find_by(:name => "liulei shop_root")
-    # @category_root = current_shop.category
 
     #模拟数据库对象
     def @product.styles
@@ -116,7 +114,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     end unless params[:sub_products].blank?
   end
 
-  def create_sytle
+  def create_style
     params[:style].each_pair do |name, value|
       create_style_group(name, value)
     end unless params[:style].blank?
@@ -125,7 +123,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def create_style_group(name, value)
     the_group = @product.styles.create!(:name => name)
     value.values.each do |item|
-      item = item.clone
+      item = item.dup
       item[:checked] = !item[:checked].blank?
       the_group.items.create!(item)
     end
