@@ -1,3 +1,5 @@
+require 'orm_fs'
+
 class Shop < ActiveRecord::Base
   include Graphical::Display 
 
@@ -7,16 +9,14 @@ class Shop < ActiveRecord::Base
 
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
 
-  has_many :contents, dependent: :delete do 
+  has_many :contents, dependent: :destroy do 
     def lookup(name)
       where(:name => name).first
     end
   end
 
-  has_many :products, dependent: :delete
-  has_many :transactions, inverse_of: :seller
-
-  field :name, type: String
+  has_many :products, dependent: :destroy
+  has_many :transactions, class_name: "OrderTransaction"
 
   before_create :create_shop
   after_create :initial_shop_data
@@ -30,10 +30,11 @@ class Shop < ActiveRecord::Base
   validates :name, uniqueness: true
 
   def fs
-    "/_shops/#{self.name}".to_dir
+    "/_shops/#{name}".to_dir
   end
 
-  private 
+  private
+
   def create_shop
     copy_standardization_files
 

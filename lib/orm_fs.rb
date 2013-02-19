@@ -113,7 +113,7 @@ module Vfs
           paths = path.split('/')
           file_entity = paths.inject(root) do |parent, path| 
             begin
-              parent.children.find_by(:name => path, :stat => 'directory')
+              parent.children.where(:name => path, :stat => 'directory').first
             rescue Mongoid::Errors::DocumentNotFound
               parent.create_dir(path)
               retry
@@ -157,7 +157,7 @@ module Vfs
             paths = path.split('/')
             begin
               file_entity = paths.inject(root) do |parent, path| 
-                parent.children.find_by(:name => path)
+                parent.children.where(:name => path).first
               end
             rescue Mongoid::Errors::DocumentNotFound
               nil

@@ -8,7 +8,10 @@ gem 'rails', '3.2.8'
 # database orm adapter
 gem 'mysql2'
 gem 'mongoid', '~> 3.0.0'
+
+# acts_as_tree
 gem 'mongoid-tree', :require => 'mongoid/tree'
+gem 'ancestry'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -73,7 +76,7 @@ gem 'hirb'
 
 # image uploader
 gem "carrierwave"
-gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
+# gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
 gem "carrierwave-upyun"
 gem 'rack-raw-upload'
 gem "rest-client"
