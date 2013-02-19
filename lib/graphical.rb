@@ -47,7 +47,7 @@ module Graphical
                 options = { 
                     :handler => :attachment , 
                     :allow => [:icon, :avatar, :preview, :header]
-                }.merge(options || {})                                
+                }.merge(options || {})
                 options[:allow].push(:default)
 
                self.instance_eval do
@@ -71,8 +71,9 @@ module Graphical
                 @klass, @options  = klass, options                
                 config = @klass.class.configrue_graphical
                 @options[:allow].each do | type |                    
-                    define_singleton_method type do 
-                        @klass.send(@options[:handler]).url(config[type])
+                    define_singleton_method type do                         
+                        file = @klass.send(@options[:handler])                        
+                        file.url(config[type]) if file 
                     end
                 end              
             end

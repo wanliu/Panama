@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def default_img_url(version_name)
-    ImageUploader.new.url(version_name)
+    ImageUploader.new.default_url(version_name)
   end
 
   def my_cart
