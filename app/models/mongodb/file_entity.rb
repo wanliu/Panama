@@ -56,7 +56,7 @@ class Mongodb::FileEntity
       raise 'must a directory can do match'
     end
     base = self.path.blank? ? "/" : self.path + '/'
-    traverse(:breadth_first) do |n|
+    descendants do |n|
       path = n.path.sub base, ''
       if File.fnmatch?(filter, path, File::FNM_PATHNAME)
         block.call(n) if block

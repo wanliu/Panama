@@ -138,7 +138,7 @@ module Vfs
               block.call file_entity.path, ->{file_entity.directory? ? :dir : :file}
             end
           else
-            current_path.traverse(:breadth_first) do |file_entity|
+            current_path.descendants do |file_entity|
               block.call file_entity.path, ->{file_entity.directory? ? :dir : :file}
             end
           end

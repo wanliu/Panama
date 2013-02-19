@@ -9,7 +9,10 @@ class User < ActiveRecord::Base
 
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
-  has_many :transactions, inverse_of: :buyer
+  has_many :transactions, 
+           class_name: "OrderTransaction", 
+           foreign_key: 'buyer_id'
+
   has_many :addresses, class_name: "Address"
   
   after_initialize do 

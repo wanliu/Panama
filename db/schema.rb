@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130218100237) do
+ActiveRecord::Schema.define(:version => 20130219040231) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
@@ -43,6 +43,13 @@ ActiveRecord::Schema.define(:version => 20130218100237) do
     t.string   "file"
   end
 
+  create_table "attachments_products", :force => true do |t|
+    t.integer  "attachment_id"
+    t.integer  "product_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "banks", :force => true do |t|
     t.string   "name"
     t.string   "code"
@@ -59,11 +66,12 @@ ActiveRecord::Schema.define(:version => 20130218100237) do
 
   create_table "categories", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.integer  "shop_id"
     t.string   "ancestry"
     t.string   "cover"
+    t.integer  "ancestry_depth", :default => 0
   end
 
   add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"

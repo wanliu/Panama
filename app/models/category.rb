@@ -2,8 +2,9 @@ class Category < ActiveRecord::Base
   # include Mongoid::Tree
   # include Mongoid::Tree::Ordering
   # include Mongoid::Tree::Traversal
+  # 
 
-  has_ancestry
+  has_ancestry :cache_depth => true
 
   attr_accessible :name
 

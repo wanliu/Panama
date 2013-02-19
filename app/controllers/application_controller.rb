@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_city
-    City.first.children
+    City.first && City.first.children || []
   end
   protected
 end
