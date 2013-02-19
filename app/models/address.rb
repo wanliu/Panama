@@ -3,7 +3,8 @@ class Address < ActiveRecord::Base
   
   attr_accessible :country, :road, :zip_code
 
-  belongs_to :transaction
+  belongs_to :transaction, 
+             class_name: 'OrderTransaction'
   belongs_to :user
   belongs_to :province, :inverse_of => :address , class_name: "City"  # 省, 州
   belongs_to :city, :inverse_of => :address , class_name: "City"     # 市

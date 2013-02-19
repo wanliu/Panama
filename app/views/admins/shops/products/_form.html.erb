@@ -10,7 +10,7 @@
                       :upload_url => shop_admins_attachments_path(current_shop),                      
                       :collection => form.format_attachment %>    
     <%= f.input :price %>    
-    <%= f.association :category, :collection => @category_root, :value => form.category  , :as => :columnview %>
+    <%= f.association :category, :collection => category_root, :value => form.category  , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
    

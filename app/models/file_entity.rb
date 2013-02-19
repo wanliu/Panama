@@ -1,4 +1,5 @@
 class FileEntity < ActiveRecord::Base
+
   attr_accessible :data, :name, :path, :size, :stat
 
   # FIXED: acts_as_tree
@@ -54,7 +55,7 @@ class FileEntity < ActiveRecord::Base
       raise 'must a directory can do match'
     end
     base = self.path.blank? ? "/" : self.path + '/'
-    traverse(:breadth_first) do |n|
+    descendants.each do |n|
       path = n.path.sub base, ''
       if File.fnmatch?(filter, path, File::FNM_PATHNAME)
         block.call(n) if block
