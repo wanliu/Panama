@@ -107,12 +107,6 @@ group :development, :test do
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
-<<<<<<< HEAD
 
 
-
-gem "mysql"
-gem "mongo"
 gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
-=======
->>>>>>> 5c612ee6e360cf8ac1538aac4de6305105796c53
