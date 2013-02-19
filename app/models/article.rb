@@ -1,3 +1,0 @@
-class Article < Resource
-
-end
