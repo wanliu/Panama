@@ -50,18 +50,13 @@ class People::TransactionsController < People::BaseController
     flag = false
     my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
       transaction = @people.transactions.build seller: shop
-      items.each {|item| transaction.items.build item.attributes }
+      items.each { |item| transaction.items.build item.attributes }
       transaction.items_count = items.inject(0) { |s, item| s + item.amount }
       transaction.total = items.inject(0) { |s, item| s + item.total }
       flag = transaction.save
-      # if flag
-      #   items.destroy
-      # end
     end
-    if flag
-      my_cart.destroy
-    end
-    redirect_to person_transactions_path(@people.login), 
+    my_cart.destroy if flag
+    redirect_to person_transactions_path(@people.login),
                 notice: 'Transaction was successfully created.'
   end
 
@@ -105,7 +100,6 @@ class People::TransactionsController < People::BaseController
 
     respond_to do |format|
       format.html { redirect_to people_transactions_url }
-      format.js
       format.json { head :no_content }
     end
   end

@@ -21,7 +21,7 @@ class CarrierWaveStorageUpYun < CarrierWave::Uploader::Base
       # 故意在调用了一个没有定义的“缩略图版本名称”的时候抛出异常，以便开发的时候能及时看到调错了
       raise "ImageUploader version_name:#{version_name} not allow."
     end
-    [@url,version_name].join("!") # 我这里在图片空间里面选用 ! 作为“间隔标志符”
+    [@url, version_name].join("!") # 我这里在图片空间里面选用 ! 作为“间隔标志符”
   end
 
   def extension_white_list
