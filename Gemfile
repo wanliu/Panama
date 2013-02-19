@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 # database orm adapter
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
@@ -46,10 +43,14 @@ gem 'apotomo', '~> 1.2.3'
 gem 'github-markup', '~> 0.7.4'
 gem 'redcarpet', '~> 2.2.2'
 
-gem 'rspec', '~> 2.12.0'
-gem 'rspec-rails', '~> 2.12.0'
 group :test do
+  gem 'simplecov', '~> 0.7.1', :require => false  
+  gem 'rspec', '~> 2.12.0'
+  gem 'rspec-rails', '~> 2.12.0'  
   gem "rspec-cells", '~> 0.1.6'
+  gem 'cucumber-rails', '~> 1.3.0', :require => false
+  # database_cleaner is not required, but highly recommended
+  gem 'database_cleaner', '~> 0.9.1'
 end
 
 
@@ -107,3 +108,5 @@ group :development, :test do
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
+
+
