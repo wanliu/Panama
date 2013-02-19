@@ -2,7 +2,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions
   # GET /people/transactions.json
   def index
-    @transactions = Transaction.where(:buyer => @people).page params[:page]
+    @transactions = OrderTransaction.where(:buyer_id => @people).page params[:page]
 
     respond_to do |format|
       format.html # index.html.erb
@@ -13,9 +13,9 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
-    @transactions = Transaction.where(:buyer => @people).page params[:page]
+    @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
     
-    @transaction = Transaction.find(params[:id])
+    @transaction = OrderTransaction.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -24,7 +24,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def event
-    @transaction = Transaction.find(params[:id])
+    @transaction = OrderTransaction.find(params[:id])
     if @transaction.fire_events!(params[:event])
       redirect_to person_transaction_path(@people.login, @transaction)
     end
@@ -33,7 +33,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/new
   # GET /people/transactions/new.json
   def new
-    @transaction = Transaction.new
+    @transaction = OrderTransaction.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,14 +43,14 @@ class People::TransactionsController < People::BaseController
 
   # GET /people/transactions/1/edit
   def edit
-    @transaction = Transaction.find(params[:id])
+    @transaction = OrderTransaction.find(params[:id])
   end
 
   def batch_create
     flag = false
     my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
-      transaction = @people.transactions.build seller: shop
-      items.each { |item| transaction.items.build item.attributes }
+      transaction = @people.transactions.build seller_id: shop.id
+      items.each {|item| transaction.items.build item.attributes }
       transaction.items_count = items.inject(0) { |s, item| s + item.amount }
       transaction.total = items.inject(0) { |s, item| s + item.total }
       flag = transaction.save
@@ -67,7 +67,7 @@ class People::TransactionsController < People::BaseController
 
     respond_to do |format|
       if @transaction.save
-        format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'Transaction was successfully created.' }
+        format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully created.' }
         format.json { render json: @transaction, status: :created, location: @transaction }
       else
         format.html { render action: "new" }
@@ -79,11 +79,11 @@ class People::TransactionsController < People::BaseController
   # PUT /people/transactions/1
   # PUT /people/transactions/1.json
   def update
-    @transaction = Transaction.find(params[:id])
+    @transaction = OrderTransaction.find(params[:id])
 
     respond_to do |format|
       if @transaction.update_attributes(params[:transaction])
-        format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'Transaction was successfully updated.' }
+        format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -95,7 +95,7 @@ class People::TransactionsController < People::BaseController
   # DELETE /people/transactions/1
   # DELETE /people/transactions/1.json
   def destroy
-    @transaction = Transaction.find(params[:id])
+    @transaction = OrderTransaction.find(params[:id])
     @transaction.destroy
 
     respond_to do |format|

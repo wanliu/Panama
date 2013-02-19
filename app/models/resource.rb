@@ -1,9 +1,5 @@
-class Resource
-  include Mongoid::Document
-  include Mongoid::Timestamps
+class Resource < ActiveRecord::Base
+  attr_accessible :content_id, :data, :name
 
-  field :name, type: String
-  field :data, type: Moped::BSON::Binary
-
-  embedded_in :content
+  belongs_to :content
 end
