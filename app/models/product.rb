@@ -1,13 +1,9 @@
-class Product
-  include Mongoid::Document
-  include Mongoid::Timestamps::Created
+class Product < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessor :uploader_secure_token
+  attr_accessible :description, :name, :price, :summary, :category_id
 
-  field :name, type: String
-  field :price, type: BigDecimal
-  field :summary, type: String
+  attr_accessor :uploader_secure_token
 
   define_graphical_attr :photos, :handler => :default_photo  
 
@@ -24,7 +20,7 @@ class Product
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
-  has_and_belongs_to_many :attachments, :class_name => "Attachment", :inverse_of => :products
+  has_and_belongs_to_many :attachments, :class_name => "Attachment"
     
   accepts_nested_attributes_for :attachments,
                                 :reject_if => proc { |att| att['file_filename'].blank? }, 
@@ -48,9 +44,9 @@ class Product
     temp 
   end
 
-  # after_initialize do 
-  #   if default_attachment.nil?
-  #     build_default_attachment
-  #   end
-  # end  
-end
+  after_initialize do 
+    if default_attachment.nil?
+      build_default_attachment
+    end
+  end  
+end  

@@ -1,4 +1,3 @@
 	<td colspan=5>
-		<%= render :partial => "form", :object => @product %>
-		<%#= render :partial => "form" %>
+		<%= render "form", product: @product, category_root: @category_root %>
 	</td>

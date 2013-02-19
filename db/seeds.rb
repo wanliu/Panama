@@ -8,7 +8,7 @@
 
 Category.root = Category.create(:name => :root) unless Category.root
 
-@root = Category.find_or_create_by(:name => '_products_root')
+@root = Category.where(name: '_products_root').first_or_create(:name => '_products_root')
 product_category_file = Rails.root.join("config/product_category.yml")
 @root.load_file(product_category_file)
 
