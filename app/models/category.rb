@@ -16,8 +16,6 @@ class Category < ActiveRecord::Base
   
   belongs_to :shop
 
-  before_destroy :delete_descendants
-
   def load_default
     config_file = shop.fs["config/default_category.yml"].file
     config_root = YAML.load(config_file.read)["category"]
