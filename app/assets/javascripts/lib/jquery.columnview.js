@@ -64,17 +64,17 @@
         event.preventDefault();
       })
 
-      that.container.on("dblclick", "a", function(event){
+      that.container.on("click", "a", function(event){
         var divs = that.container.find(">div:not(.feature)");
         var results = [], current_data = {};
         divs.each(function(){
-          var $node = $(this).find(">a.active, >a.inpath");  
+          var $node = $(this).find(">a.active, >a.inpath");
           if($node){
-            var data = {id:  $node.attr("data-id"), name: $node.attr("data-name") }                
+            var data = {id:  $node.attr("data-id"), name: $node.attr("data-name") }
             $node.hasClass("active") ? current_data = data : results.push(data)
-          }            
-        });                        
-        that.settings.selector(results, current_data)                    
+          }
+        });
+        that.settings.selector(results, current_data)
       })
 
       that.container.on("keydown", "a", function(event){
