@@ -26,7 +26,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     end
 
     @product = Product.new
-    @category_root = Category.find_by(:name => "root")
+    #@category_root = Category.find_by(:name => "liulei shop_root")
+    # @category_root = current_shop.category
 
     #模拟数据库对象
     def @product.styles
@@ -47,9 +48,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    # @product = current_shop.products.create(params[:product].merge(dispose_options))
-    @product = current_shop.products.create(params[:product])
-
+    @product = current_shop.products.create(params[:product].merge(dispose_options))
+    #@product = current_shop.products.create(params[:product])
     if @product.valid?
       create_style_and_subs
       render :action => :show
@@ -62,13 +62,14 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
-    @category_root = Category.find_by(:name => "root")
+    #@category_root = current_shop.category
+    #@category_root = Category.find_by(:name => "liulei 1")
   end
 
   def update
     @product = Product.find(params[:id])
-    # @product.update_attributes(params[:product].merge(dispose_options))
-    @product.update_attributes(params[:product])
+    @product.update_attributes(params[:product].merge(dispose_options))
+    # @product.update_attributes(params[:product])
 
     if @product.valid?
       updata_style_and_subs
@@ -168,7 +169,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     # processed_params
     result = []
     params[:style].each_pair do |name, items|
-      result.push('name' => name, 'items' => items)
+      result.push('name' => name, 'items' => items.values)
     end unless params[:style].blank?
     result
   end

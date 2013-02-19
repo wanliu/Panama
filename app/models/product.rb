@@ -21,8 +21,6 @@ class Product
   end
   accepts_nested_attributes_for :styles
 
-  has_many :photos
-
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product

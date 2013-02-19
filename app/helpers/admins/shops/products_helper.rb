@@ -13,13 +13,12 @@ module Admins::Shops::ProductsHelper
     end
 
     def render_styles
-        result = filter_styles.map do |style_group|
+        filter_styles.map { |style_group|
             value = style_group.items
             title = style_group.name
             color_span = (title == 'Colours' || title == 'colours') # ? true : false
             sub_product_property(title, value, {:class => title.downcase}, :title, color_span)
-        end
-        result.join('').html_safe
+        }.join('').html_safe
     end
 
     #区分商品编辑与表单错误返回
@@ -41,8 +40,8 @@ module Admins::Shops::ProductsHelper
             html << label_open
             html << hidden_title(name, field, index)
             html << checked(item, name, field, index)
-            html << hidden_value(name, item, index)
-            html << color_special(item) if color_span
+            html << hidden_value(name, item, index) unless color_span
+            html << color_special(name, item, index) if color_span
             html << label_close(field)
         end
         html << div_close
@@ -83,8 +82,13 @@ module Admins::Shops::ProductsHelper
         "<input class='check_boxes optional' name='style[#{name}][#{index}][checked]' type='checkbox' value='#{field}' #{"checked='checked'" if item[:checked] || item['checked']}>"
     end
 
-    def color_special(item)
-        "<span style= 'width:13px; height:13px; background-color: #{item.value}; display: inline-block; '></span>"
+    def color_special(name, item, index)
+        "<div class='input-append color' data-color='#{item.value}' data-color-format='rgb'>
+          <input type='hidden' class='span2' name='style[#{name}][#{index}][value]' value=#{item.value}>
+          <span class='add-on' style='border:none; height: auto; background-color: transparent;'>
+            <i style='background-color: #{item.value}'></i>
+          </span>
+        </div>"
     end
 
     #############################################################################################
