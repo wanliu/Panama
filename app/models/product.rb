@@ -1,7 +1,7 @@
 class Product < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :description, :name, :price, :summary, :category_id
+  attr_accessible :description, :name, :price, :summary, :category_id, :default_attachment_id, :attachment_ids
 
   attr_accessor :uploader_secure_token
   
@@ -9,7 +9,7 @@ class Product < ActiveRecord::Base
 
   belongs_to :shop
   belongs_to :category
-  belongs_to :default_attachment, :class_name => "Attachment", :inverse_of => :default_product
+  belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
     
   accepts_nested_attributes_for :attachments,
@@ -34,9 +34,9 @@ class Product < ActiveRecord::Base
     temp 
   end
 
-  after_initialize do 
-    if default_attachment.nil?
-      build_default_attachment
-    end
-  end  
+  # after_initialize do 
+  #   if default_attachment.nil?
+  #     build_default_attachment
+  #   end
+  # end  
 end  

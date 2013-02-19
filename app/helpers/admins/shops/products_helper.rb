@@ -6,7 +6,7 @@ module Admins::Shops::ProductsHelper
             image_tag(a.file.url("30x30"))
         end
 
-        imgs << image_tag(record.default_attachment.file.url("30x30"))
+        imgs << image_tag(record.default_attachment.file.url("30x30")) if record.default_attachment
 
         imgs.join.html_safe + label_tag(record.name)
       end
