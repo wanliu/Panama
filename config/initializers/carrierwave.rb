@@ -1,3 +1,5 @@
+require 'carrierwave/orm/activerecord'
+
 CarrierWave.configure do |config|
   config.storage = :upyun
   config.upyun_username = "hysios"

@@ -1,8 +1,5 @@
-class Bank
-  include Mongoid::Document
-
-  field :name, type: String
-  field :code, type: String
+class Bank < ActiveRecord::Base
+  attr_accessible :code, :name
 
   validates :name, :presence => true
   validates :code, :presence => true
@@ -17,5 +14,5 @@ class Bank
       bank_attribute = bank.values[0]
       Bank.create bank_attribute
     end
-  end
+  end  
 end

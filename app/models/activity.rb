@@ -1,5 +1,3 @@
-class Activity
-  include Mongoid::Document
-
-  field :url, type: String
+class Activity < ActiveRecord::Base
+  attr_accessible :url
 end
