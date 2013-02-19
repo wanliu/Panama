@@ -75,7 +75,7 @@ gem 'compass-css-arrow', '~> 0.0.3'
 
 # image uploader
 gem "carrierwave", '~> 0.8.0'
-# gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
+gem "carrierwave-mongoid", '~> 0.1.0', :require => 'carrierwave/mongoid'
 gem "carrierwave-upyun", '~> 0.1.6'
 gem 'rack-raw-upload', '~> 1.1.1'
 gem "rest-client", '~> 1.6.7'
