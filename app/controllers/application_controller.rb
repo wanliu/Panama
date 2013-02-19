@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def load_category
-    @category_root = Category.where(:name => "_products_root").first
+    @category_root = Category.where(:name => "_products_root")[0]
   end
 
   def self.admin
