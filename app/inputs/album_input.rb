@@ -21,7 +21,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
             params : {            
               url_upload : "#{input_options[:upload_url]}" ,
               default_img_url : "#{input_options[:default_url] || photo.file.url(img_version) }",                       
-              template : "#{photo_template}",
+              template : '#{photo_template}',
               version_name : "#{img_version}",
               input_name : "product[attachment_ids]",
               default_input_name : "product[default_attachment_id]"
@@ -35,17 +35,19 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
   end
 
 
-  def photo_template    
-    "<div class='attachable'>"+
-        "<img src='' class='img-rounded attachable-preview' />"+
-        "<input type='hidden' name='' value='' />"+
-        "<div class='attachment-upload'></div>"+
-        "<div class='operation-panle'>"+
-            "<a href='javascript:void(0)' class='delete-img'>删除</a>"+
-            "<a href='javascript:void(0)' class='default-index-img'>设为主图</a>"+
-        "</div>"+
-        "<div class='progress-panle'></div>"+
-    "</div>"    
+  def photo_template
+    html = ''    
+    html << '<div class="attachable">'
+    html << '<img  class="img-rounded attachable-preview" />'
+    html << '<input type="hidden" />'
+    html << '<div class="attachment-upload"></div>'
+    html << '<div class="operation-panle">'
+    html << '<a href="javascript:void(0)" class="delete-img">删除</a>'
+    html << '<a href="javascript:void(0)" class="default-index-img">设为主图</a>'
+    html << '</div>'
+    html << '<div class="progress-panle"></div>'
+    html << '</div>'
+    html
   end
 
 end
