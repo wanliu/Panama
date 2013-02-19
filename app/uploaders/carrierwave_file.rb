@@ -9,12 +9,12 @@ class CarrierWaveStorageFile < CarrierWave::Uploader::Base
     end
 
     def url(version_name = "")                                 
-        args = {}                
+        args ||= nil            
         args = "t#{version_name.split("x").join}".to_sym unless version_name.blank?                
-        url = super(args)  
+        url = super(args || {})  
         file_path = "#{ImageUploader.root.call}#{url}"
         unless File.exist?(file_path)           
-            return (version_name.blank? ? default_url : "#{default_url}!#{version_name}")
+            return (version_name.blank? ? default_url : "#{default_url(args)}")
         end
 
         url            
@@ -24,8 +24,9 @@ class CarrierWaveStorageFile < CarrierWave::Uploader::Base
         %w(jpg jpeg gif png)
     end
 
-    def default_url
-        "http://panama-img.b0.upaiyun.com/product_blank.gif#{version_name}"
+    def default_url(version_name = nil)        
+        _version_name = version_name ? "#{version_name}_" : ""
+        "/default_img/#{_version_name}file_blank.gif"
     end
 
     CarrierWave::Uploader.version_names.each do | vname |            
@@ -36,5 +37,5 @@ class CarrierWaveStorageFile < CarrierWave::Uploader::Base
         version "t#{vname.split("x").join}".to_sym do                
             process :resize_to_fill => xy.map{ | x | x.to_i }
         end
-    end   
+    end    
 end
