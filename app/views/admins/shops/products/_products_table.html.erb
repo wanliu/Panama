@@ -11,12 +11,12 @@
 	:add_column => [ {
 		:util => proc do |row|
 			content_tag :div, :class => 'btn-group' do 
-				link_to(icon(:edit), "#/#{row[:_id]}/edit", :class => 'btn utils edit') +
-				link_to(icon(:remove), "#", :'data-delete-url' => "#{row[:_id]}", :class => 'btn utils delete')
+				link_to(icon(:edit), "#/#{row[:id]}/edit", :class => 'btn utils edit') +
+				link_to(icon(:remove), "#", :'data-delete-url' => "#{row[:id]}", :class => 'btn utils delete')
 			end
 		end 
 	}],
-	:hide_column => [:_id]
+	:hide_column => [:id]
 %>
 
 <%= register_javascript :all_product_row_tools do %>
