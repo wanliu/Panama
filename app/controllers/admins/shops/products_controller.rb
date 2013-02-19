@@ -49,7 +49,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def create
     @product = current_shop.products.create(params[:product].merge(dispose_options))
-    #@product = current_shop.products.create(params[:product])
+
     if @product.valid?
       create_style_and_subs
       render :action => :show
@@ -62,14 +62,11 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
-    #@category_root = current_shop.category
-    #@category_root = Category.find_by(:name => "liulei 1")
   end
 
   def update
     @product = Product.find(params[:id])
     @product.update_attributes(params[:product].merge(dispose_options))
-    # @product.update_attributes(params[:product])
 
     if @product.valid?
       updata_style_and_subs
@@ -107,37 +104,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   private
-  # def processed_params
-  #   return if params[:style].blank?
-
-  #   style_attributes = params[:style]
-  #   new_attributes = {}
-
-  #   style_attributes.each do |attr_k, attr_v|
-  #     new_attributes.merge!(attr_k => (combine_attributes style_attributes[attr_k]))
-  #   end
-  #   params.merge!(:style => new_attributes)
-  # end
-
-  # def combine_attributes(attribute)
-  #   (checked = attribute[:checked]) && attribute.delete_if{ |k, v| k == :checked || k == 'checked' }
-  #   result = []
-  #   index = 0
-  #   attribute.each do |k, v|
-  #     v.map do |x|
-  #       result[index] ||= {}
-  #       result[index].merge!(k => x)
-  #       result[index].merge!(:checked => true) if checked && checked.include?(x)
-  #       index += 1
-  #     end
-  #     index = 0
-  #   end
-  #   result
-  # end
 
   def create_style_and_subs
-    # processed_params
-
     yield if block_given?
 
     params[:sub_products].values.each do |sub|
@@ -166,7 +134,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def sytles_back_for_edit
-    # processed_params
     result = []
     params[:style].each_pair do |name, items|
       result.push('name' => name, 'items' => items.values)
