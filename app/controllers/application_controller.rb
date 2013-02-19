@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def load_category
+  def load_category    
     @category_root = Category.where(:name => "_products_root")[0]
   end
 

@@ -24,7 +24,7 @@ class Product < ActiveRecord::Base
   validates_presence_of :shop
 
   def default_photo
-    default_attachment.file 
+    default_attachment ? default_attachment.file : Attachment.new.file
   end
 
   def format_attachment
