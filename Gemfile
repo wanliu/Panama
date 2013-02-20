@@ -103,7 +103,8 @@ group :development, :test do
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'ruby_gntp'
-
+  gem 'growl'
+  gem 'factory_girl_rails'
   gem 'rspec', '~> 2.12.0'
   gem 'rspec-rails', '~> 2.12.0'
   gem 'shoulda-matchers'

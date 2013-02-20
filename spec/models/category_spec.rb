@@ -57,7 +57,29 @@ describe Category do
         ]
       ])
 
-      puts test.descendants.size
+      node1 = test.children[0]
+      node1.should be_a_kind_of(Category)
+      node1.name.should match 'node1'
+      node1.should have_at_most(3).children
+
+      node2 = node1.children[0]
+      node3 = node1.children[1]
+      node4 = node1.children[2]
+
+      node2.name.should match 'node2'
+      node3.name.should match 'node3'
+
+      node4.name.should match 'node4'
+      node4.should have_at_most(2).children
+
+      node5 = node4.children[0]
+      node6 = node4.children[1]
+
+      node5.name.should match 'node5'
+      node6.name.should match 'node6'
+    end
+
+    it "节点文件 `load_file`" do
     end
 
   end
