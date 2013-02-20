@@ -10,18 +10,19 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
   end
 
   def photo_generate
-    photo = Attachment.new    
+    el_id = SecureRandom.hex
     img_version = input_options[:img_version] || "100x100"
+
     output = ActiveSupport::SafeBuffer.new    
-    output << template.content_tag(:ul, nil, :class => "attachment-list", :id => photo.id)
+    output << template.content_tag(:ul, nil, :class => "attachment-list", :id => el_id)
     output << template.javascript_tag(<<-JAVASCRIPT
         require(["admins/shops/product_upload"], function(view, models){          
           new view.ProductUpload({
-            el : document.getElementById("#{photo.id}"),
+            el : document.getElementById("#{el_id}"),
             data : #{collection.to_json},   
             params : {            
               url_upload : "#{input_options[:upload_url]}" ,
-              default_img_url : "#{input_options[:default_url] || photo.file.url(img_version) }",                       
+              default_img_url : "#{input_options[:default_url] || template.default_img_url(img_version) }",                       
               template : '#{j(photo_template)}',
               version_name : "#{img_version}",
               input_name : "product[attachment_ids]",

@@ -5,9 +5,8 @@ class ActivitiesController < ApplicationController
   # GET /activities.json
   layout "activities"
   
-  def index
-    @activities = Activity.all
-
+  def index    
+    @activities = Activity.all        
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @activities }

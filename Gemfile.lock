@@ -149,6 +149,7 @@ GEM
     faye-websocket (0.4.6)
       eventmachine (>= 0.12.0)
     ffi (1.4.0)
+    friendly_id (4.0.9)
     fssm (0.2.9)
     gherkin (2.11.5)
       json (>= 1.4.6)
@@ -361,6 +362,7 @@ DEPENDENCIES
   debugger (~> 1.2.2)
   ejs (~> 1.1.1)
   faye-rails (~> 1.0.6)
+  friendly_id (~> 4.0.9)
   github-markup (~> 0.7.4)
   guard
   guard-cucumber
