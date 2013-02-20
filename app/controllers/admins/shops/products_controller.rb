@@ -8,7 +8,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index    
+  def index        
     node = current_shop.category
 
     @categories = Category.sort_by_ancestry(node.descendants)
@@ -49,7 +49,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def create
     @category_root = current_shop.category
     @product = current_shop.products.create(params[:product].merge(dispose_options))
-
     if @product.valid?
       create_style_and_subs
       render :action => :show
@@ -114,7 +113,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def create_subs
     params[:sub_products].values.each do |sub|
       sub = sub.dup
-      debugger
       sub_product = @product.sub_products.create!(:price => sub.delete(:price).to_f,
                                                   :quantity => sub.delete(:quantity).to_f)
 
