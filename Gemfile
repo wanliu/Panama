@@ -7,10 +7,10 @@ gem 'rails', '3.2.8'
 
 # database orm adapter
 gem 'mysql2', '~> 0.3.11'
-# gem 'mongoid', '~> 3.0.0'
+gem 'mongoid', '~> 3.0.0'
 
 # acts_as_tree
-# gem 'mongoid-tree',  '~> 1.0.1', :require => 'mongoid/tree'
+gem 'mongoid-tree',  '~> 1.0.1', :require => 'mongoid/tree'
 gem 'ancestry', '~> 1.3.0'
 
 # Gems used only for assets and not required
@@ -75,7 +75,7 @@ gem 'compass-css-arrow', '~> 0.0.3'
 
 # image uploader
 gem "carrierwave", '~> 0.8.0'
-# gem "carrierwave-mongoid", '~> 0.1.0', :require => 'carrierwave/mongoid'
+gem "carrierwave-mongoid", '~> 0.1.0', :require => 'carrierwave/mongoid'
 gem "carrierwave-upyun", '~> 0.1.6'
 gem 'rack-raw-upload', '~> 1.1.1'
 gem "rest-client", '~> 1.6.7'
