@@ -103,7 +103,8 @@ group :development, :test do
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'ruby_gntp'
-
+  gem 'growl'
+  gem 'factory_girl_rails'
   gem 'rspec', '~> 2.12.0'
   gem 'rspec-rails', '~> 2.12.0'
   gem 'shoulda-matchers'
@@ -120,6 +121,4 @@ group :test do
   gem 'spork', '~> 1.0rc'
 end
 
-gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
-
-gem "factory_girl_rails", "~> 4.0"
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10

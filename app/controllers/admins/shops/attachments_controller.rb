@@ -1,18 +1,18 @@
 class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
-    
+
     #ajax upload file
-    def upload              
+    def upload
         file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[:attachable]
         @attachment = Attachment.new
-        @attachment.file = file        
-        begin            
-            @attachment.save!                      
-            _attachment = @attachment.get_attributes(params[:version_name])                                    
+        @attachment.file = file
+        begin
+            @attachment.save!
+            _attachment = @attachment.get_attributes(params[:version_name])
             render :json => { :success => true, :attachment => _attachment.to_json   }.to_json
-        rescue Exception => e            
-            if @attachment.file         
+        rescue Exception => e
+            if @attachment.file
                 path = File.dirname(attachment.file.file.file)
-                @attachment.file.remove! 
+                @attachment.file.remove!
                 FileUtils.rm_rf(path)
             end
             @attachment.destroy
