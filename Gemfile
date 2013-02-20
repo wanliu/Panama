@@ -119,6 +119,7 @@ group :test do
   # database_cleaner is not required, but highly recommended
   gem 'database_cleaner', '~> 0.9.1'
   gem 'spork', '~> 1.0rc'
+  gem "fakefs", :require => "fakefs/safe"
 end
 
 gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
