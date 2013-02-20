@@ -2,12 +2,15 @@ require 'orm_fs'
 
 class Shop < ActiveRecord::Base
   include Graphical::Display 
+  extend FriendlyId
 
   attr_accessible :name
 
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
 
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
+  
+  friendly_id :name
 
   has_many :contents, dependent: :destroy do 
     def lookup(name)

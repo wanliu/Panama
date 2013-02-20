@@ -107,3 +107,6 @@ group :development, :test do
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
+
+
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+
