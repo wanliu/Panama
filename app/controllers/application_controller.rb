@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   
   helper_method :current_user, :my_cart, :get_city
 
-  def login_required    
+  def login_required        
     if !current_user
       respond_to do |format|
         format.js{
