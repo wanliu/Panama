@@ -43,16 +43,6 @@ gem 'apotomo', '~> 1.2.3'
 gem 'github-markup', '~> 0.7.4'
 gem 'redcarpet', '~> 2.2.2'
 
-group :test do
-  gem 'simplecov', '~> 0.7.1', :require => false  
-  gem 'rspec', '~> 2.12.0'
-  gem 'rspec-rails', '~> 2.12.0'  
-  gem "rspec-cells", '~> 0.1.6'
-  gem 'cucumber-rails', '~> 1.3.0', :require => false
-  # database_cleaner is not required, but highly recommended
-  gem 'database_cleaner', '~> 0.9.1'
-end
-
 
 # form helper
 gem 'simple_form', '~> 2.0.4'
@@ -105,8 +95,28 @@ group :development, :test do
   gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'
   gem 'rb-readline', '~> 0.4.2'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'  
+  gem 'guard-spork'
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
+  gem 'ruby_gntp'
+
+  gem 'rspec', '~> 2.12.0'
+  gem 'rspec-rails', '~> 2.12.0'
+  gem 'shoulda-matchers'
+  gem 'cucumber-rails', '~> 1.3.0', :require => false
+
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
 
 
+group :test do
+  gem 'simplecov', '~> 0.7.1', :require => false  
+  # database_cleaner is not required, but highly recommended
+  gem 'database_cleaner', '~> 0.9.1'
+  gem 'spork', '~> 1.0rc'
+end
