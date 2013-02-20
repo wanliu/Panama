@@ -7,7 +7,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index    
+  def index        
     node = current_shop.category
 
     @categories = Category.sort_by_ancestry(node.descendants)
