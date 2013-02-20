@@ -79,7 +79,7 @@ gem "amqp", "~> 0.9.0" # optionally: :git => "git://github.com/ruby-amqp/amqp.gi
 
 
 # To use debugger
-# 
+#
 # Pagination
 gem 'kaminari', '~> 0.14.1'
 
@@ -90,14 +90,14 @@ gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 
 gem 'state_machine', '~> 1.1.2'
 
-group :development, :test do 
+group :development, :test do
   gem 'debugger', '~> 1.2.2'
   gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'
   gem 'rb-readline', '~> 0.4.2'
   gem 'guard'
   gem 'guard-rspec'
-  gem 'guard-cucumber'  
+  gem 'guard-cucumber'
   gem 'guard-spork'
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
@@ -113,10 +113,11 @@ group :development, :test do
   # gem 'binding_of_caller'
 end
 
-
 group :test do
-  gem 'simplecov', '~> 0.7.1', :require => false  
+  gem 'simplecov', '~> 0.7.1', :require => false
   # database_cleaner is not required, but highly recommended
   gem 'database_cleaner', '~> 0.9.1'
   gem 'spork', '~> 1.0rc'
 end
+
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10+

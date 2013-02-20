@@ -7,7 +7,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index    
+  def index        
     node = current_shop.category
 
     @categories = Category.sort_by_ancestry(node.descendants)
@@ -19,10 +19,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category_root = current_shop.category
   end
 
-  def create
-    debugger
+  def create       
     @product = current_shop.products.create(params[:product].merge(dispose_options))
-
     if @product.valid?
       render :action => :show
     else
