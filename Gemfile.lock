@@ -139,6 +139,7 @@ GEM
     factory_girl_rails (4.2.1)
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
+    fakefs (0.4.2)
     faraday (0.8.4)
       multipart-post (~> 1.1)
     faye (0.8.8)
@@ -368,6 +369,7 @@ DEPENDENCIES
   debugger (~> 1.2.2)
   ejs (~> 1.1.1)
   factory_girl_rails
+  fakefs
   faye-rails (~> 1.0.6)
   friendly_id (~> 4.0.9)
   github-markup (~> 0.7.4)
