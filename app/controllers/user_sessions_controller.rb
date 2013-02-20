@@ -6,24 +6,22 @@ class UserSessionsController < ApplicationController
   # omniauth callback method
   def create
     omniauth = env['omniauth.auth']
+
     logger.debug "+++ #{omniauth}"
     user = User.where(:uid => omniauth['uid']).first
     if not user
       # New user registration
       user = User.new(:uid => omniauth['uid'])
+      user.login = omniauth["info"]["login"]
+      user.save
+      
     end           
-    user.login = omniauth["info"]["login"]
-
-#    user.first_name = omniauth['extra']['first_name']
-#    user.last_name  = omniauth['extra']['last_name']
-    user.save
 
     #p omniauth
-
     # Currently storing all the info
     session[:user_id] = omniauth
 
-    flash[:notice] = "Successfully logged in"
+    flash[:notice] = t(:successfully_login, "Successfully logged in")
     redirect_to root_path
   end
 
