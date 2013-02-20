@@ -1,7 +1,8 @@
 class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
     
     #ajax upload file
-    def upload        
+    def upload
+        debugger                
         file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[:attachable]
         attachment = Attachment.new
         attachment.file = file        

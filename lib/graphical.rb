@@ -22,14 +22,16 @@
 #    #使用
 #    <%= image_tag @model.photos.icon %>
 module Graphical
-    module Display        
+    module Display
         def self.config(options = {})        
-            @config ||= {                
+            default_config = {                
                 :icon => "30x30",
                 :header => "100x100",
                 :avatar => "240x240",                
                 :preview => "420x420"                
-            }.merge(options)            
+            }
+            @config ||= default_config
+            @config = default_config.merge(options) unless options.empty?
             @config[:default] = ""
             @config
         end
@@ -47,7 +49,7 @@ module Graphical
                 options = { 
                     :handler => :attachment , 
                     :allow => [:icon, :avatar, :preview, :header]
-                }.merge(options || {})                                
+                }.merge(options || {})
                 options[:allow].push(:default)
 
                self.instance_eval do
@@ -68,11 +70,12 @@ module Graphical
             attr_accessor :klass, :options
 
             def initialize(klass, options)
-                @klass, @options  = klass, options                
+                @klass, @options = klass, options                
                 config = @klass.class.configrue_graphical
                 @options[:allow].each do | type |                    
-                    define_singleton_method type do 
-                        @klass.send(@options[:handler]).url(config[type])
+                    define_singleton_method type do                         
+                        file = @klass.send(@options[:handler])                        
+                        file.url(config[type]) if file 
                     end
                 end              
             end
