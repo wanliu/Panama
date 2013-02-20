@@ -10,8 +10,10 @@ describe Graphical do
     PHOTO_SIZE = {:icon => "50x50", :preview => "200x200", :customer_type => "600x600"}
 
     class PhotoUploader
-        def url(version_name = nil)
-            "#{PHOTO_URL}!#{version_name}"
+        def url(version_name = nil)            
+            temp = nil
+            temp = "!#{version_name}" unless version_name.nil? || version_name.empty?            
+            "#{PHOTO_URL}#{temp}"
         end
     end
 
@@ -59,7 +61,11 @@ describe Graphical do
         subject.photos.is_a?(Graphical::Display::ImageType).should be_true        
     end
 
-    it "allow photo type and size" do 
-        ALLOW_TYPE.select{|t| subject.photos.send(t).should eq("#{PHOTO_URL}!#{PHOTO_SIZE[t]}") } 
+    it "allow photo type and size" do         
+        ALLOW_TYPE.select{|t| subject.photos.send(t).should eq("#{PHOTO_URL}!#{PHOTO_SIZE[t]}") if t != :default } 
+    end
+
+    it "default photo type" do 
+        subject.photos.default.should eq(PHOTO_URL) 
     end
 end
