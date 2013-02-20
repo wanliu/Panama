@@ -8,14 +8,14 @@ class Product < ActiveRecord::Base
   define_graphical_attr :photos, :handler => :default_photo  
 
   has_many :sub_products, :dependent => :destroy
-  accepts_nested_attributes_for :sub_products
+  # accepts_nested_attributes_for :sub_products
 
   has_many :styles, :dependent => :destroy, :class_name => "StyleGroup" do
     def [](style_name)
       where(:name => style_name.to_s).first
     end
   end
-  accepts_nested_attributes_for :styles
+  # accepts_nested_attributes_for :styles
 
   belongs_to :shop
   belongs_to :category

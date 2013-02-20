@@ -1,5 +1,5 @@
-<%= simple_form_for form, 
-    :url => admins_products(form), 
+<%= simple_form_for @product, 
+    :url => admins_products(@product), 
     :remote => true,
     :html => {
         :class => "form-horizontal"
@@ -7,17 +7,17 @@
     <%= f.input :name %>    
     <%= f.association :attachments, 
                       :as => :album, 
-                      :upload_url => shop_admins_attachments_path(current_shop),                      
-                      :collection => form.format_attachment %>    
+                      :upload_url => shop_admins_attachments_path(current_shop),
+                      :collection => @product.format_attachment %>
 
 		<%= render_styles %>
 
     <%= f.input :price %>    
-    <%= f.association :category, :collection => category_root, :value => form.category  , :as => :columnview %>
+    <%= f.association :category, :collection => category_root, :value => @product.category  , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
    
-    <%= link_to_if(form.new_record?, :cancel, '#', :class => 'btn cancel') do 
+    <%= link_to_if(@product.new_record?, :cancel, '#', :class => 'btn cancel') do 
         link_to :close, '#', :class => 'btn close'
     end %> 
 <% end %>
@@ -25,12 +25,6 @@
 
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
-
-	require(['jquery', 'backbone', 'rails.view'], function($, Backbone, Rails){
-		var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
-			model: <%= raw form.to_json %>
-		});
-	})
 
 	require(['lib/table_bander'], function(tblBander){
 		var bander = new tblBander.TableBander({
@@ -43,15 +37,15 @@
 
 	<%= data_2_talbe %>
 
-  require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
-      var form = new Rails.FormView("form#<%= options_dom_id(form) %>", {
-          model: <%= raw form.to_json %>
-      });
-  })
-
 	require(['lib/colorpicker/js/bootstrap-colorpicker'], function(){
     $('.color').colorpicker();
   })
+
+    require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
+        var form = new Rails.FormView("form#<%= options_dom_id(@product) %>", {
+            model: <%= raw @product.to_json %>
+        });
+    })
 
 </script>
 <% end %>

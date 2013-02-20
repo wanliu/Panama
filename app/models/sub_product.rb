@@ -1,18 +1,15 @@
-class SubProduct
-  include Mongoid::Document
-  include Mongoid::Timestamps::Created
+class SubProduct < ActiveRecord::Base
+  attr_accessible :quantity, :price
 
-  field :color, type: String
-  field :size, type: String
-  field :price, type: Float
-  field :quantity, type: Float
-
+  has_many :style_pairs
+  has_many :items, through: :style_pairs, source: :style_item
   belongs_to :product
 
-  validates :price, presence: true
-  validates :price, numericality: true
-  validates :quantity, presence: true
-  validates :quantity, numericality: true
-
-  validates_presence_of :product
+  def styles
+  	result = { quantity: quantity, price: price }
+  	items.each do |item|
+  		result[item.style_group.name.singularize.to_sym] = item.title
+  	end
+  	result
+  end
 end

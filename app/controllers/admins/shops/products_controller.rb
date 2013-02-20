@@ -26,6 +26,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     end
 
     @product = Product.new
+    @category_root = current_shop.category
 
     #模拟数据库对象
     def @product.styles
@@ -37,7 +38,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
         },
         {'name' => 'sizes', 'items' =>
           [ {title: 'M', value: 'M'}, {title: 'ML', value: 'ML'}, {title: 'L', value: 'L'},
-            {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XL'}, {title: 'XXXL', value: 'XL'}
+            {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XXL'}, {title: 'XXXL', value: 'XXXL'}
           ]
         }
       ]
@@ -112,8 +113,21 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def create_subs
     params[:sub_products].values.each do |sub|
-      @product.sub_products.create!(sub)
+      sub = sub.dup
+      debugger
+      sub_product = @product.sub_products.create!(:price => sub.delete(:price).to_f,
+                                                  :quantity => sub.delete(:quantity).to_f)
+
+      build_style_sub_relationship(sub, sub_product)
     end unless params[:sub_products].blank?
+  end
+
+  def build_style_sub_relationship(sub, sub_product)
+    sub.each do |group_name, item_title|
+      group = StyleGroup.where(:product_id => @product.id, :name => group_name.pluralize).first
+      item = StyleItem.where(:style_group_id => group.id, :title => item_title).first
+      sub_product.items << item
+    end
   end
 
   def create_style
