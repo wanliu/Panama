@@ -106,12 +106,12 @@ module Admins::Shops::ProductsHelper
             begin
                 # temp_subs
                 sub.last.each_pair do |k, v|
-                    object.push "#{k.to_s} : '#{v}'" if !filters.include?(k)
+                    object.push "#{k.to_s} : '#{v}'" unless filters.include?(k)
                 end
             rescue
                 # sub_products
-                sub.attributes.each_pair do |k, v|
-                    object.push "#{k.to_s} : '#{v}'" if !filters.include?(k)
+                sub.styles.each_pair do |k, v|
+                    object.push "#{k.to_s} : '#{v}'" unless filters.include?(k)
                 end
             end
             "{" + object.join(',') + "}"
