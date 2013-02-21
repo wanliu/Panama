@@ -2,9 +2,9 @@
 
 FactoryGirl.define do
 
-	factory :root_category, :class => Category do
+	factory :root_category, :class => Category do | f |
 		name "root_test"
-		association :shop
+		f.shop :shop
 	end
 
 	factory :category do
