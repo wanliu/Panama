@@ -12,7 +12,7 @@ describe Admins::Shops::ProductsController do
   end
 
   let(:shop){ FactoryGirl.create(:shop, :user => get_session[:user] ) }
-  let(:category){ FactoryGirl.create(:root_category, :shop => shop) }
+  let(:category){ FactoryGirl.create(:yifu, :shop => shop) }
   let(:product){ FactoryGirl.create(:product, :shop => shop, :category => category) }
   let(:current_shop){ {:shop_id => shop.name} }
   let(:default_attachment){ FactoryGirl.create(:attachment, :file => upload_file) }
@@ -138,5 +138,29 @@ describe Admins::Shops::ProductsController do
     end
   end
 
+  describe "GET accept_product" do
+
+    it "修改产品分类" do
+      kuzhi = FactoryGirl.create(:kuzhi, :shop => shop)
+      options = {
+        :product_id => product.id,
+        :category_id => kuzhi.id
+      }.merge(current_shop)
+
+      get "accept_product", options, get_session
+      response.should be_success
+      assigns(:product).category_id.should eq(kuzhi.id)
+    end
+  end
+
+  describe "get products_by_category" do
+
+    it "获取分类产品" do
+
+      get "products_by_category", {:category_id => category.id}, get_session
+      response.should be_success
+      assigns(:products).each{ | p | p.category_id.should eq(category.id) }
+    end
+  end
 
 end
