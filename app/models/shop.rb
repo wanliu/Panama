@@ -28,6 +28,10 @@ class Shop < ActiveRecord::Base
     "/_shops/#{name}".to_dir
   end
 
+  def lookup_content(name)
+    contents.where(:name => name).first
+  end
+
   private
 
   def create_shop
@@ -72,9 +76,9 @@ class Shop < ActiveRecord::Base
   end
 
   def remove_standardization_files
-    fs['**/*'].each do |path|
-      path.destroy
-    end
+    # fs['**/*'].each do |path|
+    #   path.destroy
+    # end
   end
 
   def default_shop_path
