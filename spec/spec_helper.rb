@@ -105,4 +105,5 @@ RSpec.configure do |config|
   #   DatabaseCleaner.clean
   # end
   config.include Session::Helpers
+  config.include FactoryGirl::Syntax::Methods
 end
