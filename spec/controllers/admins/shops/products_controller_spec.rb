@@ -7,6 +7,7 @@ describe Admins::Shops::ProductsController do
 
   describe "GET 'index'" do
     it "returns http success" do
+      debugger
       get 'index', {:shop_id => shop.name}, session
       response.should be_success
       assigns(:categories).should_not be_nil
