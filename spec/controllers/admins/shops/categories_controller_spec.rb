@@ -8,7 +8,6 @@ describe Admins::Shops::CategoriesController do
     let(:root) { pepsi.category }
 
     it "首页" do
-      debugger
       get :index, { shop_id: pepsi.name }, get_session
       assigns(:categories).should eql(Category.sort_by_ancestry(root.descendants))
     end
