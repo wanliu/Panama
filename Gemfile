@@ -109,13 +109,13 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.12.0'
   gem 'shoulda-matchers'
   gem 'cucumber-rails', '~> 1.3.0', :require => false
+  gem 'simplecov', '~> 0.7.1', :require => false
 
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
 
 group :test do
-  gem 'simplecov', '~> 0.7.1', :require => false
   # database_cleaner is not required, but highly recommended
   gem 'database_cleaner', '~> 0.9.1'
   gem 'spork', '~> 1.0rc'
