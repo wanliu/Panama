@@ -65,13 +65,21 @@ describe Admins::Shops::ProductsController do
       get 'new',current_shop , get_session
       response.should be_success
       response.should render_template(:new)
+      assigns(:product).should be_a_new(Product)
     end
   end
 
   describe 'POST create' do
 
+    it "变动产品信息" do
+      expect{
+        post :create, @options, get_session
+      }.to change(Product, :count).by(1)
+    end
+
     it "添加产品基本信息" do
       post 'create', @options, get_session
+
       response.should be_success
       response.should render_template(:show)
       attachment_ids = @options[:product].delete(:attachment_ids)
@@ -82,6 +90,7 @@ describe Admins::Shops::ProductsController do
     it "添加产品信息不完整" do
       @options[:product].delete(:name)
       post 'create', @options, get_session
+
       response.should be_success
       response.should render_template(:edit)
     end

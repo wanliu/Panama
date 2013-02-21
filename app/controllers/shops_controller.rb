@@ -8,9 +8,9 @@ class ShopsController < ApplicationController
   end
 
   respond_to :erb
-  
+
   admin
-  
+
   layout 'shops'
 
   # GET /shops
@@ -114,14 +114,14 @@ class ShopsController < ApplicationController
   end
 
   def render_shop_content(shop, name, *opts)
-    content = shop.contents.lookup(name)
+    content = shop.lookup_content(name)
     begin
       tpl = shop.fs[content.template].read
       generate_template(tpl) do |tpl_name, options|
         prepend_tpl_view_path
         inital = extract_temp_options opts
         render_content_template tpl_name, inital
-      end      
+      end
     rescue Vfs::Error => e
       raise "template file :#{content.template} not found"
     end
@@ -134,7 +134,7 @@ class ShopsController < ApplicationController
   def prepend_tpl_view_path
     tmpdir = Rails.root.join(content_tpl_path)
     `mkdir #{tmpdir}`
-    prepend_view_path tmpdir    
+    prepend_view_path tmpdir
   end
 
   def extract_temp_options(*args)
