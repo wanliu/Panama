@@ -2,9 +2,11 @@
 
 FactoryGirl.define do
     factory :product do
-        sequence(:name){ |n| "测试产品#{n}" }
+        name "测试产品"
         price 1.5
         summary "某某公司"
         description "描述某某公司"
+        association :shop
+        association :category
     end
 end
