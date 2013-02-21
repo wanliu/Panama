@@ -93,7 +93,7 @@ describe Category do
       require "fileutils"
       require "fakefs/safe"
 
-      before :each do
+      before :all do
         FakeFS.activate!
 
         path = "/tmp/faketest"
@@ -118,6 +118,10 @@ category:
             name: node6
 YAML
         end
+      end
+
+      after :all do
+        FakeFS.deactivate!
       end
 
       it "节点文件 `load_file`" do
