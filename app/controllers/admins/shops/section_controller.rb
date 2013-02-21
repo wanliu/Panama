@@ -1,6 +1,6 @@
 class Admins::Shops::SectionController < Admins::BaseController
   include Apotomo::Rails::ControllerMethods
-  
+
   before_filter :current_shop, :only => [:new, :index, :edit]
   helper_method :current_section, :current_shop
 
@@ -18,7 +18,7 @@ class Admins::Shops::SectionController < Admins::BaseController
   cattr_accessor :ajaxify_pages_names
   @@ajaxify_pages_names = []
 
-  def current_shop    
+  def current_shop
     @current_shop = Shop.find_by(:name => params[:shop_id])
   end
 

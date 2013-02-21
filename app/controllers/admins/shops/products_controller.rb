@@ -7,7 +7,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index        
+  def index
     node = current_shop.category
 
     @categories = Category.sort_by_ancestry(node.descendants)
@@ -19,7 +19,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category_root = current_shop.category
   end
 
-  def create       
+  def create
     @product = current_shop.products.create(params[:product].merge(dispose_options))
     if @product.valid?
       render :action => :show
@@ -62,21 +62,21 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     else
       render :text => :error
     end
-  end  
+  end
 
   def products_by_category
     category = Category.find(params[:category_id])
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
   end
-  
+
   private
   def dispose_options
-    args = { :attachment_ids => [] }    
+    args = { :attachment_ids => [] }
     attachments = params[:product].fetch(:attachment_ids, {})
     attachments.each do | k, v |
       args[:attachment_ids] << v
     end
     args
-  end     
+  end
 end
