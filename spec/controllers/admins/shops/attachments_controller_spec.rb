@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe Admins::Shops::AttachmentsController do
-    let(:session) { {user: FactoryGirl.create(:user) }}
+    let(:session) { {user: FactoryGirl.build(:user) }}
 
     before :each do
         photo_path = [Rails.root, "public/default_img/file_blank.gif"].join("/")
