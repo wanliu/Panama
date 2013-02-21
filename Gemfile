@@ -110,7 +110,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'cucumber-rails', '~> 1.3.0', :require => false
   gem 'simplecov', '~> 0.7.1', :require => false
-
+  gem 'jasmine'
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
