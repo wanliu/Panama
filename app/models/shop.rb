@@ -8,7 +8,7 @@ class Shop < ActiveRecord::Base
 
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
-  has_many :transactions, class_name: "OrderTransaction"
+  has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_one :category
   belongs_to :user
 
