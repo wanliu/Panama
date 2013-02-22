@@ -8,7 +8,7 @@ class Shop < ActiveRecord::Base
 
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
-  has_many :transactions, class_name: "OrderTransaction"
+  has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_one :category
   belongs_to :user
 
@@ -19,6 +19,8 @@ class Shop < ActiveRecord::Base
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  validates_presence_of :user
+
   mount_uploader :photo, ImageUploader
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
@@ -26,6 +28,18 @@ class Shop < ActiveRecord::Base
 
   def fs
     "/_shops/#{name}".to_dir
+  end
+
+  class << self
+    attr_reader :slient_state
+
+    def slient!
+      @@slient_state = true
+    end
+
+    def unslient!
+      @@slient_state = false
+    end
   end
 
   def lookup_content(name)
@@ -43,7 +57,7 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-    @category = create_category(:name => name + "_" + "root") unless category
+    @category = category.blank? ? create_category(:name => name + "_" + "root") : category
     @category.load_default
   end
 
@@ -96,7 +110,7 @@ class Shop < ActiveRecord::Base
   def copy_local_to_vfs file, root
     path = File.join default_shop_path, file
     File.open(path, 'r') do |f|
-      puts file
+      puts file if Shop.slient_state
       root[file].write f.read
     end
   end

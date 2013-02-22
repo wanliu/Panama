@@ -1,19 +1,20 @@
 Panama::Application.routes.draw do
-
-  faye_server '/realtime', timeout: 25 do
-    map '/notice' => RealtimeNoticeController
-    map default: :block
+  unless FayeRails.server('/realtime')
+    faye_server '/realtime', timeout: 25 do
+      map '/notice' => RealtimeNoticeController
+      map default: :block
+    end
   end
 
   resources :people, :key => :login do
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
-      member do 
+      member do
         post "event/:event", :to => "people/transactions#event", :as => :trigger_event
       end
     end
-    
-    member do 
+
+    member do
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
@@ -44,18 +45,18 @@ Panama::Application.routes.draw do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
   #     match "admins/:section_name", :to => 'shop#section'
-  #     # resources :shop, :path => "admins", :as => "admins" do 
+  #     # resources :shop, :path => "admins", :as => "admins" do
   #     #   collection :section
   #     # end
   #   end
   # end
-  # 
+  #
 
   resources :category
   # shop admins routes
-  
-  resources :shops, :key => :name do 
-    
+
+  resources :shops, :key => :name do
+
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post
@@ -67,38 +68,38 @@ Panama::Application.routes.draw do
 
       resources :menu, :controller => "shops/menu"
 
-      resources :categories, :controller => "shops/categories" 
-      
+      resources :categories, :controller => "shops/categories"
+
       resources :products, :controller => "shops/products"
 
-      match "pending", :to => "shops/transactions#pending"    
+      match "pending", :to => "shops/transactions#pending"
 
       resources :complete, :controller => "shops/complete"
 
-      resources :complaint, :controller => "shops/complaint" 
+      resources :complaint, :controller => "shops/complaint"
 
       resources :transport, :controller => "shops/transport"
 
       resources :templates, :controller => "shops/templates"
     end
-  end  
+  end
 
 
-  match "shops/:shop_id/admins/products/category/:category_id", 
+  match "shops/:shop_id/admins/products/category/:category_id",
     :to => "admins/shops/products#products_by_category"
 
-  match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id", 
+  match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id",
     :to => "admins/shops/products#accept_product"
 
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
   resources :search
-  
-  
+
+
   # omniauth
   match '/auth/:provider/callback', :to => 'user_sessions#create'
   match '/auth/failure', :to => 'user_sessions#failure'
-  
+
   # Custom logout
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
