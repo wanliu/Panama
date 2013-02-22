@@ -13,7 +13,11 @@
 
 # Ignore all logfiles and tempfiles.
 /config/sso.yml
+/config/database.yml
 /log/*.log
+/coverage
 /tmp
 /vendor/bundle
 /vendor/cache
+/public/uploads
+/public/attachment

@@ -1,0 +1,116 @@
+// Place all the styles related to the people controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "compass/css3";
+@import "variables";
+@import "banks";
+@import "progress";
+@import "caret";
+@import "widget";
+@import "transaction";
+
+#wrapper {
+	padding-top :10px;
+
+}
+
+#people-sidebar {
+	width: 200px;
+	position: absolute;
+
+	.icon-chevron-right {
+		float: right;
+		margin-top: 2px;
+		margin-right: -6px;
+		opacity: .25;
+	}
+
+	.nav-list > .active > a, 
+	.nav-list > .active > a:hover {
+		margin-left: -35px;
+		padding-left: 35px;
+		margin-right: -35px;
+		padding-right: 35px;			
+	}
+
+	.nav > li > a:hover {
+		margin-left: -35px;
+		padding-left: 35px;
+		margin-right: -35px;
+		padding-right: 35px;
+	}	
+}
+
+#main-body {
+	margin-left: 210px;
+}
+
+.sidebar_panel {
+	position: relative;
+}
+
+.main-sidebar {
+	margin-right: 310px;
+}
+
+.right-sidebar {
+	width: 300px;
+	position: absolute;	
+	right: 0px;
+}
+
+
+
+.cards {
+	list-style: none;
+	margin: 0;
+
+	li {
+		list-style-type: none;
+		padding: 1em;
+		border-bottom: 1px solid $tableBorder;
+	}
+
+	.img {
+		width: 48px;
+		height: 48px;
+		float: left;
+		margin-right: 1em;
+		margin-bottom: 1em;	
+	}
+
+	.stats {
+		.time {
+			float: right;
+		}
+	}
+}
+
+.product-item {
+	margin-bottom: 10px;
+	padding: 10px;
+	border: 1px solid $tableBorder;
+
+	h1 {
+		font-size: 18px;
+		line-height: 18px;
+	}
+
+	&:hover {
+		border-color: $blue;
+		@include box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
+	}
+}
+
+.controls {
+	.inline {
+		display: inline;		
+	}
+}
+
+.depend_select {
+
+	width: 90px;
+}
+

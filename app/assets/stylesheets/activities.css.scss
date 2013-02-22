@@ -4,6 +4,8 @@
 @import 'launch_bootstrap';
 @import "compass/css3";
 @import "variables";
+@import "my_cart";
+@import 'bootstrap-spinner';
 
 body {
 	@include background(
@@ -54,7 +56,6 @@ body {
 }
 
 #main {
-	position: absolute;
 	top:0px;
 	left:0px;
 	padding-top: 10px;
@@ -65,15 +66,27 @@ body {
 	border-right: 1px solid #ccc;
 }
 
-#social_sidebar {
-	position: fixed;
-	// width: 400px;
+#main_drag{
 	top:0px;
+	left:0px;
+	position: absolute;
+	min-height: 500px;
+	width: 0px;
+	border-right: 5px solid #ccc; 
+	cursor: w-resize;
+    z-index: 1000;
+}
+
+#social_sidebar {
+	position: absolute;
+	// width: 400px;
+	top: 0px;
 	left: 996px;
 	right: 0px;
 	bottom: 0px;
+	/*height: 665px;*/
 	background: $grayLighter;
-	bottom: 0px;
+	/*overflow-y: scroll;*/
 	// @include box-shadow(inset 2px 2px 3px rgba(0,0,0,.075));
 }
 
@@ -107,4 +120,8 @@ body {
 	right:0px;
 	left:0px;
 	position: fixed!important;
+}
+
+#social_sidebar.affix{
+	top: 40px;
 }
