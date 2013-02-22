@@ -11,5 +11,9 @@ require 'spec_helper'
 #   end
 # end
 describe Admins::Shops::ProductsHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  describe "render_styles" do
+    
+  end
+
 end

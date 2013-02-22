@@ -23,7 +23,7 @@ module Admins::Shops::ProductsHelper
 
     #区分商品编辑与表单错误返回
     def filter_styles
-        @temp_styles || @product.styles
+        @temp_styles || @product.styles || {}
     end
 
     def filter_attribtues
