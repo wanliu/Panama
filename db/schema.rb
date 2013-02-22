@@ -11,7 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130219090151) do
+
+ActiveRecord::Schema.define(:version => 20130221062851) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
@@ -167,6 +168,7 @@ ActiveRecord::Schema.define(:version => 20130219090151) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "photo"
+    t.integer  "user_id"
   end
 
   create_table "style_groups", :force => true do |t|

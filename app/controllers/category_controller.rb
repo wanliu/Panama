@@ -1,6 +1,8 @@
 class CategoryController < ApplicationController
   layout "category"
 
+  before_filter :login_required
+
   def index
     @category = Category.where(:name => '_products_root').first
     @products = Product.limit(60)

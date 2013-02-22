@@ -8,7 +8,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
 
-  def index        
+  def index
     node = current_shop.category
 
     @categories = Category.sort_by_ancestry(node.descendants)
@@ -47,7 +47,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    @category_root = current_shop.category
     @product = current_shop.products.create(params[:product].merge(dispose_options))
     if @product.valid?
       @product.create_style_and_subs(params)
@@ -95,7 +94,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     else
       render :text => :error
     end
-  end  
+  end
 
   def products_by_category
     category = Category.find(params[:category_id])
@@ -105,67 +104,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   private
 
-  # def create_style_and_subs
-  #   yield if block_given?
-  #   create_style and create_subs
-  # end
-
-  # def create_subs
-  #   params[:sub_products].values.each do |sub|
-  #     sub = sub.dup
-  #     sub_product = @product.sub_products.create!(:price => sub.delete(:price).to_f,
-  #                                                 :quantity => sub.delete(:quantity).to_f)
-
-  #     build_style_sub_relationship(sub, sub_product)
-  #   end unless params[:sub_products].blank?
-  # end
-
-  # def build_style_sub_relationship(sub, sub_product)
-  #   sub.each do |group_name, item_title|
-  #     group = StyleGroup.where(:product_id => @product.id, :name => group_name.pluralize).first
-  #     item = StyleItem.where(:style_group_id => group.id, :title => item_title).first
-  #     sub_product.items << item
-  #   end
-  # end
-
-  # def create_style
-  #   params[:style].each_pair do |name, value|
-  #     create_style_group(name, value)
-  #   end unless params[:style].blank?
-  # end
-
-  # def create_style_group(name, value)
-  #   the_group = @product.styles.create!(:name => name)
-  #   value.values.each do |item|
-  #     item = item.dup
-  #     item[:checked] = !item[:checked].blank?
-  #     the_group.items.create!(item)
-  #   end
-  # end
-
-  # def updata_style_and_subs
-  #   create_style_and_subs do
-  #     @product.sub_products.clear
-  #     @product.styles.clear
-  #   end
-  # end
-
-  # def subs_back_for_edit
-  #   params[:sub_products]
-  # end
-
-  # def sytles_back_for_edit
-  #   params[:style].map do |name, items|
-  #     { 'name' => name, 'items' => items.values }
-  #   end unless params[:style].blank?
-  # end
-
   def dispose_options
-    args = { :attachment_ids => [] }    
+    args = { :attachment_ids => [] }
     attachments = params[:product].fetch(:attachment_ids, {})
     attachments.each do | k, v |
       args[:attachment_ids] << v
     end unless params[:product][:attachment_ids].blank?
     args
-  end     
+  end
 end

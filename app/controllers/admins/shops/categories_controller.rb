@@ -29,8 +29,8 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
 
   def destroy
     @category = Category.find(params[:id])
-    if !(@category == current_shop.category || @category.descendant_of?(current_shop.category))
-      throw IncorretDescentantNode.new(t('errors.incorret_descentant_node', 
+    if @category == current_shop.category || !@category.descendant_of?(current_shop.category)
+      throw IncorretDescentantNode.new(t('errors.incorret_descentant_node',
         :node => params[:id],
         :parent => @current_shop.category.id))
     end
@@ -46,8 +46,9 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
 
   def form_params
     @parent = params[:parent_id].blank? ? current_shop.category : Category.find(params[:parent_id])
+    # FIXED: don't use raise error ,change redirect_to
     if !(@parent == current_shop.category || @parent.descendant_of?(current_shop.category))
-      throw IncorretDescentantNode.new(t('errors.incorret_descentant_node', 
+      throw IncorretDescentantNode.new(t('errors.incorret_descentant_node',
         :node => params[:parent_id],
         :parent => @parent.id))
     end
