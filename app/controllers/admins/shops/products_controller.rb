@@ -17,43 +17,43 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def new
     #模拟数据库对象的属性操作
-    Hash.class_eval do
-      ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
-        define_method method do
-          self[method]
-        end
-      end
-    end
+    # Hash.class_eval do
+    #   ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
+    #     define_method method do
+    #       self[method]
+    #     end
+    #   end
+    # end
 
     @product = Product.new
     @category_root = current_shop.category
 
     #模拟数据库对象
-    def @product.styles
-      [
-        {'name' => 'colours', 'items' =>
-          [ {value: '#FFB6C1', title: '浅粉红'}, {value: '#FFC0CB', title: '粉红'},
-            {value: '#7B68EE', title: '中板岩蓝'}, {value: '#00FA9A', title: '中春绿'}
-          ]
-        },
-        {'name' => 'sizes', 'items' =>
-          [ {title: 'M', value: 'M'}, {title: 'ML', value: 'ML'}, {title: 'L', value: 'L'},
-            {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XXL'}, {title: 'XXXL', value: 'XXXL'}
-          ]
-        }
-      ]
-    end
+    # def @product.styles
+    #   [
+    #     {'name' => 'colours', 'items' =>
+    #       [ {value: '#FFB6C1', title: '浅粉红'}, {value: '#FFC0CB', title: '粉红'},
+    #         {value: '#7B68EE', title: '中板岩蓝'}, {value: '#00FA9A', title: '中春绿'}
+    #       ]
+    #     },
+    #     {'name' => 'sizes', 'items' =>
+    #       [ {title: 'M', value: 'M'}, {title: 'ML', value: 'ML'}, {title: 'L', value: 'L'},
+    #         {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XXL'}, {title: 'XXXL', value: 'XXXL'}
+    #       ]
+    #     }
+    #   ]
+    # end
 
   end
 
   def create
     @product = current_shop.products.create(params[:product].merge(dispose_options))
     if @product.valid?
-      @product.create_style_and_subs(params)
+      @product.create_style_subs(params)
       render :action => :show
     else
-      @temp_subs = @product.subs_back_for_edit(params)
-      @temp_styles = @product.sytles_back_for_edit(params)
+      @temp_subs = @product.subs_editing(params)
+      @temp_styles = @product.sytles_editing(params)
       render :action => :edit
     end
   end
@@ -66,9 +66,10 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def update
     @product = Product.find(params[:id])
     @product.update_attributes(params[:product].merge(dispose_options))
+    @category_root = current_shop.category
 
     if @product.valid?
-      updata_style_and_subs
+      @product.update_style_subs(params)
       render :action => :show
     else
       render :action => :edit
@@ -109,7 +110,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     attachments = params[:product].fetch(:attachment_ids, {})
     attachments.each do | k, v |
       args[:attachment_ids] << v
-    end unless params[:product][:attachment_ids].blank?
+    end
     args
   end
 end

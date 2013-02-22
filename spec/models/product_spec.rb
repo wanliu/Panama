@@ -8,7 +8,7 @@ describe Product do
   end
 
   describe "methods that create subs and styles" do
-  	let(:category) { Category.root }
+  	let(:category) { Category.where(name: 'test_root').first_or_create }
   	let(:shop) { Shop.where(name: 'shop_for_style_items').first_or_create }
   	let(:product) { Product.where(name: 'iphone4s',
                                 price: 5999,
@@ -29,12 +29,12 @@ describe Product do
       product.sub_products.clear
     end
 
-    describe "updata_style_subs and create_style_subs" do
+    describe "update_style_subs and create_style_subs" do
       it "updata should call create method, which will call create_style and create_subs method" do
         product.should_receive(:create_style).with(style)
         product.should_receive(:create_subs).with(sub_products)
 
-        product.updata_style_subs(params)
+        product.update_style_subs(params)
       end
     end
 
@@ -65,17 +65,17 @@ describe Product do
       end
     end
 
-    describe "subs_back_for_edit" do
+    describe "subs_editing" do
       it "should return params[:sub_products]" do
-        back = product.subs_back_for_edit(params)
+        back = product.subs_editing(params)
         back.should eql(sub_products)
       end
     end
 
-    describe "sytles_back_for_edit" do
+    describe "sytles_editing" do
       it "should return changed style" do
         expect = style.map { |name, items| { 'name' => name, 'items' => items.values } }
-        back = product.sytles_back_for_edit(params)
+        back = product.sytles_editing(params)
         back.should eql(expect)
       end
     end

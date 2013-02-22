@@ -3,21 +3,21 @@
 require 'spec_helper'
 
 describe "样式使用场景" do
-  let(:category) { Category.root }
-  let(:shop) { Shop.find_or_create_by :name => 'pepsi' }
-  let(:product) { Product.find_or_create_by :name => 'iphone4s', :price => 5999, :category => category, :shop => shop }
+  let(:category) { Category.where(name: 'test_root').first_or_create }
+  let(:shop) { Shop.where(name: 'pepsi').first_or_create }
+  let(:product) { Product.where(name: 'iphone4s', price: 5999, category_id: category.id, shop_id: shop.id).first_or_create }
 
   it "访问产品样式 通过 sytles 方法" do
-    product.should respond_to(:styles)
+    product.should have_many(:styles)
   end
 
   describe "访问 styles" do
-    let(:colour) { product.styles.find_or_create_by(:name => :colour) }
-    let(:items) { product.styles.find_or_create_by(:name => :items) }
-    let(:sizes) { product.styles.find_or_create_by(:name => :sizes) }
+    let(:colour) { product.styles.where(:name => :colour).first_or_create }
+    let(:items) { product.styles.where(:name => :items).first_or_create }
+    let(:sizes) { product.styles.where(:name => :sizes).first_or_create }
 
     it "访问产品样式 通过 styles" do
-      product.styles.where(:name => 'colour')
+      product.styles.where(:name => 'colour').first_or_create
       product.styles[:colour].should eql(colour)
     end
 
