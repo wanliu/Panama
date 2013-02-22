@@ -19,7 +19,6 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe ContentsController do
-  let(:shop){ FactoryGirl.create(:shop, :user => get_session[:user]) }
 
   # This should return the minimal set of attributes required to create a valid
   # Content. As you add validations to Content, be sure to
@@ -28,7 +27,7 @@ describe ContentsController do
     {
       :name => "index",
       :template => "templates/index.html.erb",
-      :shop_id => shop.id
+      :shop_id => nil
     }
   end
 
