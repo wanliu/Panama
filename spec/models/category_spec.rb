@@ -16,26 +16,26 @@ describe Category do
   it { should belong_to(:shop) }
   it { should validate_presence_of(:name) }
 
-  context "db:seed" do
-    hash_condition = { name: '_products_root', ancestry: nil }
-    let(:root) { Category
-                   .where(hash_condition)
-                   .first_or_create(hash_condition) }
+  # context "db:seed" do
+  #   hash_condition = { name: '_products_root', ancestry: nil }
+  #   let(:root) { Category
+  #                  .where(hash_condition)
+  #                  .first_or_create(hash_condition) }
 
-    before(:each) do
-      Category.destroy_all
-    end
+  #   before(:each) do
+  #     Category.destroy_all
+  #   end
 
-    it "#root" do
-      Category.root.should be_nil
-    end
+  #   it "#root" do
+  #     Category.root.should be_nil
+  #   end
 
-    it "run load category task" do
-      rake['db:seed'].invoke
-      root.should be_a_kind_of(Category)
-      root.should have_at_most(100).children
-    end
-  end
+  #   it "run load category task" do
+  #     rake['db:seed'].invoke
+  #     root.should be_a_kind_of(Category)
+  #     root.should have_at_most(100).children
+  #   end
+  # end
 
   context "载入数据" do
 
