@@ -70,19 +70,15 @@ describe Admins::Shops::CategoriesController do
     end
 
     describe "无效的分类" do
-      before (:all) do
-        # Category.where(shop_id: pepsi.id).destroy_all
-        # Shop.destroy_all
+
+      it "删除非了孙类的分类" do
+        node1 = FactoryGirl.create(:category, options)
+
+        expect { xhr :post, :destroy, { shop_id: pepsi.name,
+                               id: node1.id
+                             }, get_session }.to raise_error(ArgumentError)
+
       end
-
-      # it "删除非了孙类的分类" do
-      #   node1 = FactoryGirl.create(:category, options)
-
-      #   expect { xhr :post, :destroy, { shop_id: pepsi.name,
-      #                          id: node1.id
-      #                        }, get_session }.to raise_error(ArgumentError)
-
-      # end
 
       it "分类不能删除自己" do
         node1 = pepsi.category
@@ -94,14 +90,14 @@ describe Admins::Shops::CategoriesController do
 
       end
 
-      # it "创建分类的父分类必须属于,当前根节点" do
-      #   parent = Category.create('name'    => 'test_category')
-      #   indent =  parent.indent
+      it "创建分类的父分类必须属于,当前根节点" do
+        parent = FactoryGirl.create(:category, 'name' => 'test_category')
+        indent =  parent.indent
 
-      #   expect {  xhr :post, :create, { shop_id: pepsi.name,
-      #                         parent_id: parent.id,
-      #                         category: options }, get_session }.to raise_error(ArgumentError)
-      # end
+        expect {  xhr :post, :create, { shop_id: pepsi.name,
+                              parent_id: parent.id,
+                              category: options }, get_session }.to raise_error(ArgumentError)
+      end
     end
   end
 
