@@ -2,7 +2,7 @@ class Attachment < ActiveRecord::Base
   attr_accessible :description, :file, :filename, :file_filename
   attr_accessor :uploader_secure_token
 
-  belongs_to :attachable, :polymorphic => true
+  # belongs_to :attachable, :polymorphic => true
   has_many :default_product, :class_name => "Product"
   has_and_belongs_to_many :products, :class_name => "Product"
 
