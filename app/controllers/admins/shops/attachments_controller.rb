@@ -10,12 +10,12 @@ class Admins::Shops::AttachmentsController <  Admins::Shops::SectionController
             _attachment = @attachment.get_attributes(params[:version_name])
             render :json => { :success => true, :attachment => _attachment.to_json   }.to_json
         rescue Exception => e
-            if @attachment.file
-                path = File.dirname(attachment.file.file.file)
+            unless @attachment.new_record?
+                path = File.dirname(@attachment.file.file.file)
                 @attachment.file.remove!
                 FileUtils.rm_rf(path)
+                @attachment.destroy
             end
-            @attachment.destroy
             render :json => { :success => false, :message => e.message }.to_json
         end
     end
