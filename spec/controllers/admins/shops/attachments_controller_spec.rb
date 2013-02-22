@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe Admins::Shops::AttachmentsController do
-    let(:session) { {user: FactoryGirl.build(:user) }}
 
     before :each do
         photo_path = [Rails.root, "public/default_img/file_blank.gif"].join("/")
@@ -14,7 +13,7 @@ describe Admins::Shops::AttachmentsController do
 
     describe "POST upload" do
       it "成功上传图片" do
-        post "upload", {version_name: '100x100', file: @file}, session
+        post "upload", {version_name: '100x100', file: @file}, get_session
         response.should be_success
         attachment = assigns[:attachment]
         attachment.should_not be_nil
@@ -26,7 +25,7 @@ describe Admins::Shops::AttachmentsController do
     describe "DELETE destroy" do
         it "删除上传图片" do
             a = Attachment.create(:file => @file)
-            delete "destroy", {:id => a}, session
+            delete "destroy", {:id => a}, get_session
             response.should be_success
         end
     end

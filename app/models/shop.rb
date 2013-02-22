@@ -40,6 +40,10 @@ class Shop < ActiveRecord::Base
     end
   end
 
+  def lookup_content(name)
+    contents.where(:name => name).first
+  end
+
   private
 
   def create_shop
@@ -51,7 +55,11 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
+<<<<<<< HEAD
     @category = category.blank? ? create_category(:name => name + "_" + "root") : category
+=======
+    @category = create_category(:name => name + "_" + "root") unless @category
+>>>>>>> 4e737811a724070543e9fb056b799e1b185d96ee
     @category.load_default
   end
 
@@ -84,9 +92,9 @@ class Shop < ActiveRecord::Base
   end
 
   def remove_standardization_files
-    fs['**/*'].each do |path|
-      path.destroy
-    end
+    # fs['**/*'].each do |path|
+    #   path.destroy
+    # end
   end
 
   def default_shop_path
