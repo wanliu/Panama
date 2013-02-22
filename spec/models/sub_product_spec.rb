@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe SubProduct do
-  let(:category) { Category.root }
+  let(:category) { Category.where(name: 'test_root').first_or_create }
   let(:shop) { Shop.where(name: 'shop_for_style_items').first_or_create }
   let(:product) { Product.where(name: 'iphone4s',
                                 price: 5999,

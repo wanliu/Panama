@@ -91,18 +91,18 @@ class Product < ActiveRecord::Base
     end
   end
 
-  def updata_style_subs(params)
+  def update_style_subs(params)
     create_style_subs(params) do
       sub_products.clear
       styles.clear
     end
   end
 
-  def subs_back_for_edit(params)
+  def subs_editing(params)
     params[:sub_products]
   end
 
-  def sytles_back_for_edit(params)
+  def sytles_editing(params)
     params[:style].map do |name, items|
       { 'name' => name, 'items' => items.values }
     end unless params[:style].blank?
