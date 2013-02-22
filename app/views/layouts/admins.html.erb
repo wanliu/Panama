@@ -24,8 +24,19 @@
     <%#= render "javascripts" %>
 	<%= javascripts_codes %>
 	<script type="text/javascript">
-		require(['ajaxify'], function(Ajaxify){
+		require(['ajaxify', 'panama'], function(Ajaxify, Panama){
 			Ajaxify.start();
+
+			// <span class="badge badge-important">6</span>
+
+			Panama.realtime.subscribe('/notice', function(payload){
+				var notice = $("#pending");
+				var badge = notice.find("badge");
+				if (badge.length == 0)
+					$("<span class=\"pull-right badge badge-important\">0</span>").appendTo(notice.find('a'));
+				var number = parseInt(badge.text() || '0');
+				badge.text(number++);
+			});
 		});
 	</script>
 </body>

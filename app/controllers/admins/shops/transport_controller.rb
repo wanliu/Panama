@@ -1,4 +1,4 @@
 class Admins::Shops::TransportController < Admins::Shops::SectionController
-  def index
+  def index  	
   end
 end

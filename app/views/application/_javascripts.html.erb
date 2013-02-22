@@ -1,13 +1,15 @@
 <%= requirejs_include_tag "application" %>
 <script type="text/javascript">
-	require.config({
-		deps: ["application"],
+    require.config({
+        deps: ["application"],
 
 		paths: {
 			"jquery": "jquery"
 			, "jqueryui": "lib/jqueryui"
 			, "underscore": "lib/underscore"
 			, "templates": "templates"
+			, "jquery_columnview": "lib/jquery.columnview"
+			, "fileuploader": "lib/fileuploader"
 		},
 
 		shim: {
@@ -35,13 +37,22 @@
 				deps: ["lib/underscore"], 
 				exports: "Backbone"
 			},
-			"bootstrap": ['jquery']
+			"bootstrap": ['jquery'],
+			"jquery_columnview" : {
+				exports : "$",
+				deps : ["jquery"]
+			},
+			"fileuploader": {
+				exports: "qq"
+			}
 		}
 	});	
 </script>
 
 <%# Append your own using content_for :javascripts %>
 <%= yield :javascripts %>
+
+
 
 <%# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet %>
 <%# Looks for google_account_id first in ENV['GOOGLE_ACCOUNT_ID'] then in config/html5_rails.yml %>

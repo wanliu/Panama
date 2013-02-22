@@ -1,4 +1,30 @@
 Panama::Application.routes.draw do
+  unless FayeRails.server('/realtime')
+    faye_server '/realtime', timeout: 25 do
+      map '/notice' => RealtimeNoticeController
+      map default: :block
+    end
+  end
+
+  resources :people, :key => :login do
+    resources :cart, :controller => "people/cart"
+    resources :transactions, :controller => "people/transactions" do
+      member do
+        post "event/:event", :to => "people/transactions#event", :as => :trigger_event
+      end
+    end
+
+    member do
+      post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
+      put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
+      post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
+      post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
+    end
+  end
+
+
+  resources :city
+  resources :addresses
 
   resources :activities
 
@@ -10,102 +36,70 @@ Panama::Application.routes.draw do
 
   get "pending/index"
 
+  resources :users
   resources :contents
-  resources :newsletter_receivers
+
+  resources :products
 
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
   #     match "admins/:section_name", :to => 'shop#section'
-  #     # resources :shop, :path => "admins", :as => "admins" do 
+  #     # resources :shop, :path => "admins", :as => "admins" do
   #     #   collection :section
   #     # end
   #   end
   # end
-  # 
+  #
 
   resources :category
   # shop admins routes
-  resources :shops do 
-    namespace :admins do 
+
+  resources :shops, :key => :name do
+
+    namespace :admins do
+      match "attachments", :to => "shops/attachments#index"
+      match "attachments/upload", :to => "shops/attachments#upload", :via => :post
+      match "attachments/destroy/:id", :to => "shops/attachments#destroy", :via => :delete
+
       resources :dashboard, :controller => "shops/dashboard"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :contents, :controller => "shops/contents"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :menu, :controller => "shops/menu"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :categories, :controller => "shops/categories"
-    end
-  end
 
-  match "shops/:shop_id/admins/products/category/:category_id", 
-    :to => "admins/shops/products#products_by_category"
+      resources :products, :controller => "shops/products"
 
-  match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id", 
-    :to => "admins/shops/products#accept_product"
+      match "pending", :to => "shops/transactions#pending"
 
-  resources :shops do 
-    namespace :admins do 
-      resources :products, :controller => "shops/products" 
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
-      resources :pending, :controller => "shops/pending"
-    end
-  end
-
-  resources :shops do 
-    namespace :admins do 
       resources :complete, :controller => "shops/complete"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :complaint, :controller => "shops/complaint"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :transport, :controller => "shops/transport"
-    end
-  end
 
-  resources :shops do 
-    namespace :admins do 
       resources :templates, :controller => "shops/templates"
     end
-  end  
-
-  match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index"
+  end
 
 
-  # match "shops/:shop_id/admins/contents", :to => "admins/shops/contents"
+  match "shops/:shop_id/admins/products/category/:category_id",
+    :to => "admins/shops/products#products_by_category"
 
-  # match "shops/:shop_id/admins/", :to => "admins/shops#index"
+  match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id",
+    :to => "admins/shops/products#accept_product"
 
+
+  match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
   resources :search
-  
-  
+
+
   # omniauth
   match '/auth/:provider/callback', :to => 'user_sessions#create'
   match '/auth/failure', :to => 'user_sessions#failure'
-  
+
   # Custom logout
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
@@ -115,4 +109,6 @@ Panama::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
+
+
 end

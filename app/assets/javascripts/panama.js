@@ -1,10 +1,14 @@
 define(function(require, exports, module){
+    
     var $ = require('jquery');      
     var $ = require('jquery-ui');
     var h5bp = require('h5bp');
     var chosen = require('lib/chosen.ex');
     var pm = require("lib/postmessage");
-    var ajax_auth = require('wanliu/ajax_auth_client');    
+    var ajax_auth = require('wanliu/ajax_auth_client');
+    var Faye = require('lib/faye-browser');
+
+    var realtime = new Faye.Client('/realtime');
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
@@ -39,6 +43,8 @@ define(function(require, exports, module){
         $.get(url, {ajaxify: true}, function(data){
             $(query).replaceWith(data);
         });
-    }   
+    }
+
+    exports.realtime = realtime;
 });
 

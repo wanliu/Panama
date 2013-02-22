@@ -8,9 +8,9 @@ class ShopsController < ApplicationController
   end
 
   respond_to :erb
-  
+
   admin
-  
+
   layout 'shops'
 
   # GET /shops
@@ -26,8 +26,9 @@ class ShopsController < ApplicationController
 
   # GET /shops/1
   # GET /shops/1.json
+
   def show
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
 
     respond_to do |format|
       format.html { render_shop_content @shop, :index, @shop }
@@ -48,7 +49,7 @@ class ShopsController < ApplicationController
 
   # GET /shops/1/edit
   def edit
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
   end
 
   # POST /shops
@@ -70,7 +71,7 @@ class ShopsController < ApplicationController
   # PUT /shops/1
   # PUT /shops/1.json
   def update
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
 
     respond_to do |format|
       if @shop.update_attributes(params[:shop])
@@ -86,7 +87,7 @@ class ShopsController < ApplicationController
   # DELETE /shops/1
   # DELETE /shops/1.json
   def destroy
-    @shop = Shop.find(params[:id])
+    @shop = Shop.find_by(:name => params[:id])
     @shop.destroy
 
     respond_to do |format|
@@ -113,14 +114,14 @@ class ShopsController < ApplicationController
   end
 
   def render_shop_content(shop, name, *opts)
-    content = shop.contents.lookup(name)
+    content = shop.lookup_content(name)
     begin
       tpl = shop.fs[content.template].read
       generate_template(tpl) do |tpl_name, options|
         prepend_tpl_view_path
         inital = extract_temp_options opts
         render_content_template tpl_name, inital
-      end      
+      end
     rescue Vfs::Error => e
       raise "template file :#{content.template} not found"
     end
@@ -133,7 +134,7 @@ class ShopsController < ApplicationController
   def prepend_tpl_view_path
     tmpdir = Rails.root.join(content_tpl_path)
     `mkdir #{tmpdir}`
-    prepend_view_path tmpdir    
+    prepend_view_path tmpdir
   end
 
   def extract_temp_options(*args)

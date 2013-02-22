@@ -1,7 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
 # Pick the frameworks you want:
-# require "active_record/railtie"
+require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "active_resource/railtie"
@@ -67,6 +67,13 @@ module Panama
 
     config.default_shop_path = Rails.root.join('app/_default_shop')
 
+    config.middleware.use 'Rack::RawUpload'
+
     config.assets.logger = false
+
+    config.generators do |g|
+      g.orm :active_record
+      g.fixture_replacement :factory_girl
+    end
   end
 end
