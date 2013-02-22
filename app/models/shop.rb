@@ -55,11 +55,7 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-<<<<<<< HEAD
     @category = category.blank? ? create_category(:name => name + "_" + "root") : category
-=======
-    @category = create_category(:name => name + "_" + "root") unless @category
->>>>>>> 4e737811a724070543e9fb056b799e1b185d96ee
     @category.load_default
   end
 
