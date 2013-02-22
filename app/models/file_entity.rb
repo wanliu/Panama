@@ -1,35 +1,34 @@
-class FileEntity
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  include Mongoid::Tree
-  include Mongoid::Tree::Traversal  
+class FileEntity < ActiveRecord::Base
 
-  field :name, type: String
-  field :stat, type: String
-  field :size, type: Fixnum
-  field :data, type: Moped::BSON::Binary
-  field :path, type: String
+  attr_accessible :data, :name, :path, :size, :stat
 
-  index({stat: 1, name: 1})
+  # FIXED: acts_as_tree
+  #   include Mongoid::Tree
+  #   include Mongoid::Tree::Traversal
 
-#  validates :name, presence: true
+  # FIXED: add_index
+  #   index({stat: 1, name: 1})
+
+  # validates :name, presence: true
   validates :stat, presence: true
 
-  after_rearrange :rebuild_path
+  has_ancestry
 
-  before_destroy :delete_descendants
-  
+  # after_rearrange :rebuild_path
+
+  # before_destroy :delete_descendants
+
   def create_dir(name)
     if name.blank?
       raise 'must specify a name'
     end
 
-    begin 
+    begin
       dir = children.find_by(name: name, stat: 'directory')
     rescue Mongoid::Errors::DocumentNotFound
       dir = children.create(name: name, stat: 'directory')
     ensure
-      dir 
+      dir
     end
   end
 
@@ -56,7 +55,7 @@ class FileEntity
       raise 'must a directory can do match'
     end
     base = self.path.blank? ? "/" : self.path + '/'
-    traverse(:breadth_first) do |n|
+    descendants.each do |n|
       path = n.path.sub base, ''
       if File.fnmatch?(filter, path, File::FNM_PATHNAME)
         block.call(n) if block
@@ -73,14 +72,19 @@ class FileEntity
     end
   end
 
+  def self.root
+    roots.first
+  end
+
   private
 
   def rebuild_path
     self.path = self.ancestors_and_self.collect(&:name).compact.join('/') unless name.blank?
-  end  
+  end
 end
 
-FileEntity.root || begin 
+
+FileEntity.root or begin
   root = FileEntity.new(:stat => :directory)
   root.save :validate => false
 end

@@ -1,0 +1,11 @@
+<%= simple_form_for @transaction, :url => transaction_path(@people, @transaction) do |f| %>
+  <%= f.error_notification %>
+  <%= f.association :seller, :collection => Shop.all %>
+
+  <div class="form-inputs">
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

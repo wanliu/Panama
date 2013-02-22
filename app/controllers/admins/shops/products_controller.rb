@@ -9,17 +9,18 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def index
     node = current_shop.category
-    @categories = node.traverse(:depth_first)
-    @categories.shift
+
+    @categories = Category.sort_by_ancestry(node.descendants)
     @products = current_shop.products
   end
 
   def new
     @product = Product.new
+    @category_root = current_shop.category
   end
 
   def create
-    @product = current_shop.products.create params[:product]
+    @product = current_shop.products.create(params[:product].merge(dispose_options))
     if @product.valid?
       render :action => :show
     else
@@ -29,11 +30,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = current_shop.category
   end
 
   def update
     @product = Product.find(params[:id])
-    @product.update_attributes(params[:product])
+    @product.update_attributes(params[:product].merge(dispose_options))
     if @product.valid?
       render :action => :show
     else
@@ -60,11 +62,21 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     else
       render :text => :error
     end
-  end  
+  end
 
   def products_by_category
     category = Category.find(params[:category_id])
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
+  end
+
+  private
+  def dispose_options
+    args = { :attachment_ids => [] }
+    attachments = params[:product].fetch(:attachment_ids, {})
+    attachments.each do | k, v |
+      args[:attachment_ids] << v
+    end
+    args
   end
 end

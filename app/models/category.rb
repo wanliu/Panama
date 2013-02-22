@@ -1,20 +1,18 @@
-class Category
-  include Mongoid::Document
-  include Mongoid::Tree
-  include Mongoid::Tree::Ordering
-  include Mongoid::Tree::Traversal
+class Category < ActiveRecord::Base
+  # include Mongoid::Tree
+  # include Mongoid::Tree::Ordering
+  # include Mongoid::Tree::Traversal
+  #
+  attr_accessible :name, :shop_id
+
+  has_many :products
+  belongs_to :shop
+  has_ancestry :cache_depth => true
+
+  validates :name, presence: true
 
   attr_accessor :indent
-
-  field :name, type: String
-
   mount_uploader :cover, ImageUploader
-  
-  has_many :products
-  
-  belongs_to :shop
-
-  before_destroy :delete_descendants
 
   def load_default
     config_file = shop.fs["config/default_category.yml"].file
@@ -25,7 +23,7 @@ class Category
 
   def load_category(config_root)
     # clear all category children
-    root.destroy_children
+    root.descendants.destroy_all
     create_node(config_root, root)
     root.save
   end
@@ -45,10 +43,18 @@ class Category
     end
   end
 
+  def descendant_of?(node)
+    node.descendants.include?(self)
+  end
+
   def indent
     parent_indent = self.parent.nil? ? -1 : self.parent.indent
     parent_indent+=1
   end
+
+  def self.root
+    where(name: 'root', ancestry: nil).first
+  end
 end
 
-Category.root = Category.create(:name => :root) unless Category.root
+# Category.create(:name => :root) unless Category.root

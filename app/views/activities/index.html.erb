@@ -3,7 +3,7 @@
 </div>
 <%= link_to 'New Activity', new_activity_path %>
 <script type="text/javascript">
-  require(['jquery', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($){
+  require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($,Mousemove){
     var $container = $('#activities');
 
     $container.imagesLoaded( function(){
@@ -11,6 +11,7 @@
         itemSelector : '.activity'
       });
     });
+
 
     $("#activities img").on('click', function(){
     	var $this = $(this);
@@ -37,5 +38,7 @@
 			.show()
 			.addClass('animated ' + effect);
     })
+
+    new Mousemove.Drag
   });
 </script>

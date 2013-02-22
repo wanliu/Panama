@@ -243,3 +243,7 @@ zh-CN:
       bonus: 优惠
 
   frontpage: 首页
+  checkout: 去柜台结算
+  clear_list: 清空列表
+  enter_shop: '进入商铺 %{name}'
+  successfully_login: '登陆成功'

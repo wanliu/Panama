@@ -2,11 +2,13 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+# database orm adapter
+gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
-gem 'mongoid-tree', :require => 'mongoid/tree'
+
+# acts_as_tree
+gem 'mongoid-tree',  '~> 1.0.1', :require => 'mongoid/tree'
+gem 'ancestry', '~> 1.3.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -15,47 +17,41 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  gem 'therubyracer', :platforms => :ruby
+  gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
   gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
-  gem 'compass-rails'
-  gem 'compass-h5bp'  
+  gem 'compass-rails', '~> 1.0.3'
+  gem 'compass-h5bp', '~> 0.1.0'
+  gem 'ejs', '~> 1.1.1'
 end
 
-gem 'cache_digests'
-gem 'jquery-rails'
-gem 'html5-rails'
-gem 'requirejs-rails'
+gem 'cache_digests', '~> 0.2.0'
+gem 'jquery-rails', '~> 2.1.3'
+gem 'html5-rails', '~> 0.0.6'
+gem 'requirejs-rails', '~> 0.9.0'
 
-gem 'omniauth'
-gem 'omniauth-oauth2'
+gem 'omniauth', '~> 1.1.1'
+gem 'omniauth-oauth2', '~> 1.1.1'
 
 # gem 'cells'
-gem 'apotomo' #, :github => 'hysios/apotomo', :branch => 'add_render_widget_with_block'
+gem 'apotomo', '~> 1.2.3'
 
 # gem 'widget_ui', :github => 'hysios/widget_ui'
 
 # markup
 
-gem 'github-markup'
-gem 'redcarpet'
-
-gem 'rspec'
-gem 'rspec-rails'
-group :test do
-  gem "rspec-cells"
-end
+gem 'github-markup', '~> 0.7.4'
+gem 'redcarpet', '~> 2.2.2'
 
 
 # form helper
-gem 'simple_form'
+gem 'simple_form', '~> 2.0.4'
 
-gem 'vfs'
+gem 'vfs', '~> 0.4.8'
 
 # css arrow
-gem 'compass-css-arrow'
+gem 'compass-css-arrow', '~> 0.0.3'
 
-gem 'hirb'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -69,22 +65,61 @@ gem 'hirb'
 # gem 'capistrano'
 
 # image uploader
-gem "carrierwave"
-gem "carrierwave-mongoid", :require => 'carrierwave/mongoid'
-gem "carrierwave-upyun"
-gem "rest-client"
+gem "carrierwave", '~> 0.8.0'
+gem "carrierwave-mongoid", '~> 0.1.0', :require => 'carrierwave/mongoid'
+gem "carrierwave-upyun", '~> 0.1.6'
+gem 'rack-raw-upload', '~> 1.1.1'
+gem "rest-client", '~> 1.6.7'
 
 # rmagick
-gem "mini_magick"
+gem "mini_magick", '~> 3.4'
 
-gem 'rb-readline'
+gem "amqp", "~> 0.9.0" # optionally: :git => "git://github.com/ruby-amqp/amqp.git", :branch => "0.9.x-stable"
+
+
+
 # To use debugger
-gem 'debugger'
+#
+# Pagination
+gem 'kaminari', '~> 0.14.1'
 
-gem 'omniauth-wanliu', "0.0.9", :github => "wanliu/omniauth-wanliu"
+# Faye
+gem 'faye-rails', '~> 1.0.6'
 
-group :development do 
-  gem 'thin'
+gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
+
+gem 'state_machine', '~> 1.1.2'
+
+group :development, :test do
+  gem 'debugger', '~> 1.2.2'
+  gem 'thin', '~> 1.5.0'
+  gem 'hirb', '~> 0.7.0'
+  gem 'rb-readline', '~> 0.4.2'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'
+  gem 'guard-spork'
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
+  gem 'ruby_gntp'
+  gem 'growl'
+  gem 'factory_girl_rails'
+  gem 'rspec', '~> 2.12.0'
+  gem 'rspec-rails', '~> 2.12.0'
+  gem 'shoulda-matchers'
+  gem 'cucumber-rails', '~> 1.3.0', :require => false
+  gem 'simplecov', '~> 0.7.1', :require => false
+  gem 'jasmine'
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
+
+group :test do
+  # database_cleaner is not required, but highly recommended
+  gem 'database_cleaner', '~> 0.9.1'
+  gem 'spork', '~> 1.0rc'
+  gem "fakefs", :require => "fakefs/safe"
+end
+
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10

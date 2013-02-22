@@ -9,12 +9,19 @@ module ApplicationHelper
   end
 
   def current_user
-    return nil unless session[:user_id]
-    @current_user ||= User.where(:uid => session[:user_id]['uid']).first
+    session[:user] ||= session[:omniauth] && User.where(:uid => session[:omniauth]['uid']).first
+  end
+
+  def default_img_url(version_name)
+    ImageUploader.new.url(version_name)
+  end
+
+  def my_cart
+    current_user.cart
   end
 
   def accounts_provider_url
-    OmniAuth::Wanliu.config["provider_url"]    
+    OmniAuth::Wanliu.config["provider_url"]
   end
 
   def action_controller
@@ -36,11 +43,11 @@ module ApplicationHelper
   end
 
   def link_to_admin
-    link_to l(:admin, '管理'), action_controller.admin_path if action_controller.respond_to?(:admin?)
+    link_to l(:admin, '管理'), shop_admins_path(@shop.name) if action_controller.respond_to?(:admin?)
   end
 
   def link_to_account
-    link_to current_user.login, '#'
+    link_to current_user.login, person_path(current_user)
   end
 
   def search_box(name, value = nil, options = { size: 40})
@@ -61,7 +68,7 @@ module ApplicationHelper
   def register_javascript(name, options = {}, &block)
     code = capture { yield } if block_given?
     if request.xhr?
-      code 
+      code
     else
       unless options[:only] == :ajax
         @@javascripts_codes[name] = code
@@ -74,8 +81,8 @@ module ApplicationHelper
     content_tag :i, nil, :class => "icon-#{name}"
   end
 
-  def caret(position = :down)
-    content_tag :span, nil, :class => [:caret, position]
+  def caret(position = :down, *styles)
+    content_tag :span, nil, :class => [:caret, position, *styles]
   end
 
   def options_dom_id(object, options = {})
@@ -84,19 +91,19 @@ module ApplicationHelper
     as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
   end
 
-  def build_menu(root)
+  def build_menu(root, element_id = nil)
     output = ActiveSupport::SafeBuffer.new
     if root.children && root.children.size && root.children.size > 0
-      content_tag(:ul, :class => "dropdown-menu") do 
+      content_tag(:ul, :class => "dropdown-menu", :id => element_id) do
         root.children.map do |node|
           if node.children && node.children.size > 0
-            output.concat(content_tag(:li, :class => 'dropdown-submenu') do 
-              link_to(node.name.humanize, node, :html => {tabindex: -1}) + 
+            output.concat(content_tag(:li, :class => 'dropdown-submenu') do
+              link_to(node.name, node, :html => {tabindex: -1}, 'data-id' => node.id, 'data-name' => node.name) +
               build_menu(node)
             end)
           else
-            output.concat(content_tag(:li) do 
-              link_to node.name.humanize, node
+            output.concat(content_tag(:li) do
+              link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name
             end)
           end
         end
