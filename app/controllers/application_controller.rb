@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
       respond_to do |format|
         format.js{
           ajax_set_response_headers
-          render :text => :ok }
+          render :text => :ok, :status => 403 }
         format.html  {
           redirect_to '/auth/wanliuid' }
         format.json {

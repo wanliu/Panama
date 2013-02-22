@@ -4,18 +4,18 @@ class Product < ActiveRecord::Base
   attr_accessible :description, :name, :price, :summary, :category_id, :default_attachment_id, :attachment_ids
 
   attr_accessor :uploader_secure_token
-  
-  define_graphical_attr :photos, :handler => :default_photo  
+
+  define_graphical_attr :photos, :handler => :default_photo
 
   belongs_to :shop
   belongs_to :category
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
-    
+
   accepts_nested_attributes_for :attachments,
-                                :reject_if => proc { |att| att['file_filename'].blank? }, 
+                                :reject_if => proc { |att| att['file_filename'].blank? },
                                 :allow_destroy => true
-                                
+
   validates :name, presence: true
   validates :price, presence: true
   validates :price, numericality: true
@@ -29,14 +29,9 @@ class Product < ActiveRecord::Base
 
   def format_attachment
     temp = []
-    temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank? 
+    temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank?
     attachments.each{| atta | temp << atta.get_attributes }
-    temp 
+    temp
   end
 
-  # after_initialize do 
-  #   if default_attachment.nil?
-  #     build_default_attachment
-  #   end
-  # end  
-end  
+end
