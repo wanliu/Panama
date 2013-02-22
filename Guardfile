@@ -1,6 +1,8 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
+notification :gntp
+
 guard 'spork',
       :cucumber_env => { 'RAILS_ENV' => 'test' },
       :rspec_env => { 'RAILS_ENV' => 'test' },

@@ -4,8 +4,8 @@ class FileEntity < ActiveRecord::Base
 
   # FIXED: acts_as_tree
   #   include Mongoid::Tree
-  #   include Mongoid::Tree::Traversal  
-  
+  #   include Mongoid::Tree::Traversal
+
   # FIXED: add_index
   #   index({stat: 1, name: 1})
 
@@ -16,19 +16,19 @@ class FileEntity < ActiveRecord::Base
 
   # after_rearrange :rebuild_path
 
-  before_destroy :delete_descendants
-  
+  # before_destroy :delete_descendants
+
   def create_dir(name)
     if name.blank?
       raise 'must specify a name'
     end
 
-    begin 
+    begin
       dir = children.find_by(name: name, stat: 'directory')
     rescue Mongoid::Errors::DocumentNotFound
       dir = children.create(name: name, stat: 'directory')
     ensure
-      dir 
+      dir
     end
   end
 
@@ -80,11 +80,11 @@ class FileEntity < ActiveRecord::Base
 
   def rebuild_path
     self.path = self.ancestors_and_self.collect(&:name).compact.join('/') unless name.blank?
-  end  
+  end
 end
 
 
-FileEntity.root or begin 
+FileEntity.root or begin
   root = FileEntity.new(:stat => :directory)
   root.save :validate => false
 end

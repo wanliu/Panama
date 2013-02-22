@@ -12,13 +12,15 @@ class User < ActiveRecord::Base
 
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
-  has_many :transactions, 
-           class_name: "OrderTransaction", 
+  has_one :shop
+
+  has_many :transactions,
+           class_name: "OrderTransaction",
            foreign_key: 'buyer_id'
 
   has_many :addresses, class_name: "Address"
-  
-  after_initialize do 
+
+  after_initialize do
     if cart.nil?
       create_cart
       save
@@ -28,5 +30,5 @@ class User < ActiveRecord::Base
       create_photo
       save
     end
-  end  
+  end
 end
