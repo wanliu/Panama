@@ -22,14 +22,16 @@
 #    #使用
 #    <%= image_tag @model.photos.icon %>
 module Graphical
-    module Display        
+    module Display
         def self.config(options = {})        
-            @config ||= {                
+            default_config = {                
                 :icon => "30x30",
                 :header => "100x100",
                 :avatar => "240x240",                
                 :preview => "420x420"                
-            }.merge(options)            
+            }
+            @config ||= default_config
+            @config = default_config.merge(options) unless options.empty?
             @config[:default] = ""
             @config
         end
@@ -68,7 +70,7 @@ module Graphical
             attr_accessor :klass, :options
 
             def initialize(klass, options)
-                @klass, @options  = klass, options                
+                @klass, @options = klass, options                
                 config = @klass.class.configrue_graphical
                 @options[:allow].each do | type |                    
                     define_singleton_method type do                         

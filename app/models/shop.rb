@@ -1,39 +1,35 @@
 require 'orm_fs'
 
 class Shop < ActiveRecord::Base
-  include Graphical::Display 
+  include Graphical::Display
   extend FriendlyId
 
   attr_accessible :name
 
-  define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
-
-  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
-  
-  friendly_id :name
-
-  has_many :contents, dependent: :destroy do 
-    def lookup(name)
-      where(:name => name).first
-    end
-  end
-
+  has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :transactions, class_name: "OrderTransaction"
+  has_one :category
+  belongs_to :user
 
   before_create :create_shop
   after_create :initial_shop_data
   before_destroy :delete_shop
 
-  has_one :category
-
-  mount_uploader :photo, ImageUploader
-
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  mount_uploader :photo, ImageUploader
+  define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
+  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
+  friendly_id :name
+
   def fs
     "/_shops/#{name}".to_dir
+  end
+
+  def lookup_content(name)
+    contents.where(:name => name).first
   end
 
   private
@@ -80,9 +76,9 @@ class Shop < ActiveRecord::Base
   end
 
   def remove_standardization_files
-    fs['**/*'].each do |path|
-      path.destroy
-    end
+    # fs['**/*'].each do |path|
+    #   path.destroy
+    # end
   end
 
   def default_shop_path
@@ -101,7 +97,7 @@ class Shop < ActiveRecord::Base
     path = File.join default_shop_path, file
     File.open(path, 'r') do |f|
       puts file
-      root[file].write f.read 
+      root[file].write f.read
     end
-  end  
+  end
 end

@@ -1,19 +1,20 @@
 class ApplicationController < ActionController::Base
   include ApplicationHelper
-  include OmniAuth::Wanliu::AjaxHelpers 
+  include OmniAuth::Wanliu::AjaxHelpers
 
   protect_from_forgery
-  
+
   layout 'bootstrap'
 
   has_widgets do |root|
     root << widget(:cart, :my_cart)
   end
-  
+
   helper_method :current_user, :my_cart, :get_city
 
-  def login_required    
+  def login_required
     if !current_user
+
       respond_to do |format|
         format.js{
           ajax_set_response_headers
@@ -26,7 +27,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def load_category    
+  def load_category
     @category_root = Category.where(:name => "_products_root")[0]
   end
 
