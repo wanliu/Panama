@@ -1,9 +1,10 @@
 class SubProduct < ActiveRecord::Base
   attr_accessible :quantity, :price
 
+  belongs_to :product
+
   has_many :style_pairs
   has_many :items, through: :style_pairs, source: :style_item
-  belongs_to :product
 
   def styles
   	result = { quantity: quantity, price: price }
