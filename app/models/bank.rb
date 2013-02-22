@@ -14,5 +14,5 @@ class Bank < ActiveRecord::Base
       bank_attribute = bank.values[0]
       Bank.create bank_attribute
     end
-  end  
+  end
 end

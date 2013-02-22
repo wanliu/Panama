@@ -1,6 +1,6 @@
 bank:
     -
-        中国银行: 
+        中国银行:
             name: 中国银行
             code: boc
     -
@@ -36,7 +36,7 @@ bank:
             name: 兴业银行
             code: cib
 
-    -   
+    -
         中信银行:
             name: 中信银行
             code: ecitic
