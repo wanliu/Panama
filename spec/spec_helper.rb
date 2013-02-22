@@ -6,19 +6,6 @@ require 'spork'
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
 
-Spork.prefork do
-  # Loading more in this block will cause your tests to run faster. However,
-  # if you change any configuration or code from libraries loaded here, you'll
-  # need to restart spork for it take effect.
-
-end
-
-
-Spork.each_run do
-  # This code will be run each time you run your specs.
-
-end
-
 # --- Instructions ---
 # Sort the contents of this file into a Spork.prefork and a Spork.each_run
 # block.
@@ -58,6 +45,22 @@ require 'rspec/rails'
 require 'rspec/autorun'
 #
 require File.expand_path('../session', __FILE__)
+
+
+Spork.prefork do
+  # Loading more in this block will cause your tests to run faster. However,
+  # if you change any configuration or code from libraries loaded here, you'll
+  # need to restart spork for it take effect.
+
+end
+
+
+Spork.each_run do
+  # This code will be run each time you run your specs.
+  # load "#{Rails.root}/config/routes.rb"
+  Dir["#{Rails.root}/app/**/*.rb"].each { |f| require f}
+  # files.each {|f| load f}
+end
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
