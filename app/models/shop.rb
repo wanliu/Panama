@@ -43,7 +43,7 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-    @category = create_category(:name => name + "_" + "root") unless category
+    @category = create_category(:name => name + "_" + "root") unless @category
     @category.load_default
   end
 
