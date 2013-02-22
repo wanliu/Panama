@@ -1,11 +1,11 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require 'spec_helper'
 require 'orm_fs'
 
 describe "ORMFS" do
   let :root do
   	'/'.to_dir
   end
-  
+
   it "root is existy" do
   	root.should_not be_nil
   end
@@ -31,16 +31,15 @@ describe "ORMFS" do
   it "delete a dir" do
   	dir = root["test"]
   	readme = dir['readme.txt'].write('hello world')
-	dir.destroy
-	dir.exist?.should be_false
-	dir["readme.txt"].file?.should be_false
+  	dir.destroy
+  	dir.exist?.should be_false
+  	dir["readme.txt"].file?.should be_false
   end
 
   it "list a dir all content" do
   	dir = root["test"]
   	readme = dir["readme.txt"].write("hello world")
   	rakefile = dir["Rakefile"].write('puts "this is ruby file #{__FILE__}"')
-
   	dir["*"].map(&:name).should include(*[readme, rakefile].map(&:name))
   end
 end
