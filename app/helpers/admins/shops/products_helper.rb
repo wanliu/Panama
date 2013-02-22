@@ -12,13 +12,15 @@ module Admins::Shops::ProductsHelper
       end
     end
 
-    def render_styles
-        filter_styles.map { |style_group|
-            value = style_group.items
-            title = style_group.name
-            color_span = (title == 'Colours' || title == 'colours') # ? true : false
-            sub_product_property(title, value, {:class => title.downcase}, :title, color_span)
-        }.join('').html_safe
+    def render_styles(styles = filter_styles)
+        styles.map { |style| render_style(style) }.join('').html_safe
+    end
+
+    def render_style(style)
+        values = style.items
+        title = style.name
+        color_span = (title == 'Colours' || title == 'colours')
+        sub_product_property(title, values, {:class => title.downcase}, :title, color_span)
     end
 
     #区分商品编辑与表单错误返回
@@ -30,25 +32,29 @@ module Admins::Shops::ProductsHelper
         filter_styles.map{|style_group| style_group.name}
     end
 
-    def sub_product_property(name, instance_var, html_options={}, method = nil, color_span = nil)
-        className = html_options[:class] || ''
-        html = marker_and_mq_element
-        html << div_open(className, name)
+    def sub_product_property(name, values, html_options = {}, method = nil, color_span = nil)
+        class_name = html_options[:class] || ''
+        html = marker_element
+        html << div_open(class_name, name)
 
-        instance_var.each_with_index do |item, index|
-            field = method ? item.send(method) : item
-            html << label_open
-            html << hidden_title(name, field, index)
-            html << checked(item, name, field, index)
-            html << hidden_value(name, item, index) unless color_span
-            html << color_special(name, item, index) if color_span
-            html << label_close(field)
+        values.each_with_index do |item, index|
+            append_content(item, index, html, name, method, color_span)
         end
         html << div_close
     end
 
+    def append_content(item, index, html, name, method, color_span)
+        field = method ? item.send(method) : item
+        html << label_open
+        html << hidden_title(name, field, index)
+        html << checked(item, name, field, index)
+        html << hidden_value(name, item, index) unless color_span
+        html << color_special(name, item, index) if color_span
+        html << label_close(field)
+    end
+
     # the element for information exchanges between two js view
-    def marker_and_mq_element
+    def marker_element
         "<a class='button trigger-data-filled' href='javascript:void()' style='display:none;'></a>"
     end
 
