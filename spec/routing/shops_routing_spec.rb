@@ -1,34 +1,39 @@
+#encoding: utf-8
 require "spec_helper"
 
 describe ShopsController do
-  describe "routing" do
+  describe "商店路由" do
 
-    it "routes to #index" do
-      get("/shops").should route_to("shops#index")
+    def shop_name
+      "asdf"
     end
 
-    it "routes to #new" do
-      get("/shops/new").should route_to("shops#new")
+    it "到 主页面" do
+      get("/shops").should route_to("shops#index", :key => :name)
     end
 
-    it "routes to #show" do
-      get("/shops/1").should route_to("shops#show", :id => "1")
+    it "到 添加页面" do
+      get("/shops/new").should route_to("shops#new", :key => :name)
     end
 
-    it "routes to #edit" do
-      get("/shops/1/edit").should route_to("shops#edit", :id => "1")
+    it "到 显示页面" do
+      get("/shops/#{shop_name}").should route_to("shops#show", :id => shop_name, :key => :name)
     end
 
-    it "routes to #create" do
-      post("/shops").should route_to("shops#create")
+    it "到 编辑页面" do
+      get("/shops/#{shop_name}/edit").should route_to("shops#edit", :id => shop_name, :key => :name)
     end
 
-    it "routes to #update" do
-      put("/shops/1").should route_to("shops#update", :id => "1")
+    it "到 创建" do
+      post("/shops").should route_to("shops#create", :key => :name)
     end
 
-    it "routes to #destroy" do
-      delete("/shops/1").should route_to("shops#destroy", :id => "1")
+    it "到 更新" do
+      put("/shops/#{shop_name}").should route_to("shops#update", :id => shop_name, :key => :name)
+    end
+
+    it "到 删除" do
+      delete("/shops/#{shop_name}").should route_to("shops#destroy", :id => shop_name, :key => :name)
     end
 
   end
