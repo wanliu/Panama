@@ -3,7 +3,7 @@ class Category < ActiveRecord::Base
   # include Mongoid::Tree::Ordering
   # include Mongoid::Tree::Traversal
   #
-  attr_accessible :name
+  attr_accessible :name, :shop_id
 
   has_many :products
   belongs_to :shop
@@ -43,6 +43,10 @@ class Category < ActiveRecord::Base
     end
   end
 
+  def descendant_of?(node)
+    node.descendants.include?(self)
+  end
+
   def indent
     parent_indent = self.parent.nil? ? -1 : self.parent.indent
     parent_indent+=1
@@ -53,4 +57,4 @@ class Category < ActiveRecord::Base
   end
 end
 
-Category.create(:name => :root) unless Category.root
+# Category.create(:name => :root) unless Category.root

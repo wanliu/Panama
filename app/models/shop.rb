@@ -28,6 +28,18 @@ class Shop < ActiveRecord::Base
     "/_shops/#{name}".to_dir
   end
 
+  class << self
+    attr_reader :slient_state
+
+    def slient!
+      @@slient_state = true
+    end
+
+    def unslient!
+      @@slient_state = false
+    end
+  end
+
   private
 
   def create_shop
@@ -39,7 +51,7 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-    @category = create_category(:name => name + "_" + "root") unless category
+    @category = category.blank? ? create_category(:name => name + "_" + "root") : category
     @category.load_default
   end
 
@@ -92,7 +104,7 @@ class Shop < ActiveRecord::Base
   def copy_local_to_vfs file, root
     path = File.join default_shop_path, file
     File.open(path, 'r') do |f|
-      puts file
+      puts file if Shop.slient_state
       root[file].write f.read
     end
   end
