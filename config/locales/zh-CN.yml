@@ -246,3 +246,4 @@ zh-CN:
   checkout: 去柜台结算
   clear_list: 清空列表
   enter_shop: '进入商铺 %{name}'
+  successfully_login: '登陆成功'
