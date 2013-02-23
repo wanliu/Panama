@@ -62,4 +62,11 @@ describe Shop, "商店模型" do
             @shop.lookup_content(:indexdsa).should be_nil
         end
     end
+
+    it "删除商店数据" do
+        name = @shop.name
+        @shop.destroy
+        fs = "/_shops/#{name}".to_dir
+        fs["*"].length.should == 0
+    end
 end
