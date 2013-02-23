@@ -23,8 +23,7 @@ class People::CartController < People::BaseController
 
   def items_build(param)
     @item = my_cart.items.build(param)
-    total = @item.price * @item.amount
-    @item.total = total
+    @item.total = @item.price * @item.amount
     @item.save
     my_cart.save
     @item
