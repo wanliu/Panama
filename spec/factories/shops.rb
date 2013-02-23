@@ -2,6 +2,6 @@
 FactoryGirl.define do
 	factory :shop do |f|
 		sequence(:name){ |n| "测试商店#{n}" }
-    	f.user :user
+    association :user, factory: :user
 	end
 end

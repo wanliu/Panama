@@ -7,20 +7,17 @@ class Product < ActiveRecord::Base
 
   define_graphical_attr :photos, :handler => :default_photo  
 
+  belongs_to :shop
+  belongs_to :category
+  belongs_to :default_attachment, :class_name => "Attachment"
+  has_and_belongs_to_many :attachments, :class_name => "Attachment"
   has_many :sub_products, :dependent => :destroy
-  # accepts_nested_attributes_for :sub_products
 
   has_many :styles, :dependent => :destroy, :class_name => "StyleGroup" do
     def [](style_name)
       where(:name => style_name.to_s).first
     end
   end
-  # accepts_nested_attributes_for :styles
-
-  belongs_to :shop
-  belongs_to :category
-  belongs_to :default_attachment, :class_name => "Attachment"
-  has_and_belongs_to_many :attachments, :class_name => "Attachment"
     
   accepts_nested_attributes_for :attachments,
                                 :reject_if => proc { |att| att['file_filename'].blank? }, 
@@ -52,7 +49,7 @@ class Product < ActiveRecord::Base
   def create_style_subs(params)
     yield if block_given?
     create_style(params[:style])
-    create_subs(params[:sub_products])  
+    create_subs(params[:sub_products])
   end
 
   def create_style(the_styles)
