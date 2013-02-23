@@ -14,7 +14,7 @@
 				<%= simple_form_for @item, :url => @product, :html => {:class => 'form-horizontal' } do |f| %>
 					<%= f.input :title, :as => :hidden %>
 					<%= f.input :price, :as => :hidden %>
-					<%= f.input :amount, :as => :hidden %>
+					<!-- <%= f.input :amount, :as => :hidden %> -->
 					<%= f.input :product_id, :as => :hidden, :input_html => { :value => @product.id } %>
 					<div class="control-group">
  						<label class="control-label" for="inputEmail">价格</label>
@@ -42,7 +42,8 @@
 					<div class="control-group">
 					    <label class="control-label" for="inputEmail">数量</label>
 					    <div class="controls">
-							<div id="MySpinner" class="spinner">
+					    	<%= f.input :amount, :as => :spinner %>
+							<!-- <div id="MySpinner" class="spinner">
 						      <input type="text" class="input-mini spinner-input" maxlength="3" value='1'>
 						      <div class="spinner-buttons  btn-group btn-group-vertical">
 						        <button class="btn spinner-up">
@@ -52,7 +53,7 @@
 						          <i class="icon-chevron-down"></i>
 						        </button>
 						      </div>
-						    </div>
+						    </div> -->
 					    </div>
 				    </div>		
 					<div class="control-group">

@@ -3,9 +3,10 @@
 require 'spec_helper'
 
 describe "样式使用场景" do
-  let(:category) { FactoryGirl.create(:category) }
-  let(:shop) { FactoryGirl.create(:shop) }
-  let(:product) { FactoryGirl.create(:product) }
+  let(:user)     { FactoryGirl.create(:user) }
+  let(:shop)     { FactoryGirl.create(:shop, user: user) }
+  let(:category) { FactoryGirl.create(:category, shop: shop) }
+  let(:product)  { FactoryGirl.create(:product, shop: shop, category: category) }
 
   it "访问产品样式 通过 sytles 方法" do
     product.should have_many(:styles)

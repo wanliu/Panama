@@ -2,8 +2,11 @@
 require 'spec_helper'
 
 describe StyleItem do
-  let(:product)     { FactoryGirl.create(:product) }
-  let(:style_group) { FactoryGirl.create(:style_group) }
+  let(:user)        { FactoryGirl.create(:user) }
+  let(:shop)        { FactoryGirl.create(:shop, user: user) }
+  let(:category)    { FactoryGirl.create(:category, shop: shop) }
+  let(:product)     { FactoryGirl.create(:product, shop: shop, category: category) }
+  let(:style_group) { FactoryGirl.create(:style_group, product: product) }
 
   describe "关联测试" do
     it "belongs_to :style_group" do

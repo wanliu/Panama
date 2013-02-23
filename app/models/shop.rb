@@ -8,7 +8,7 @@ class Shop < ActiveRecord::Base
 
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
-  has_many :transactions, class_name: "OrderTransaction"
+  has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_one :category
   belongs_to :user
 
@@ -18,6 +18,8 @@ class Shop < ActiveRecord::Base
 
   validates :name, presence: true
   validates :name, uniqueness: true
+
+  validates_presence_of :user
 
   mount_uploader :photo, ImageUploader
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]

@@ -1,9 +1,9 @@
 #encoding: utf-8
 
 FactoryGirl.define do
-  factory :sub_product do
+  factory :sub_product do |f|
     sequence(:price, 1000) { |n| n }
     sequence(:quantity, 5) { |n| n }
-    association :product, factory: :product
+    f.product :product
   end
 end
