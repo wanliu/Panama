@@ -44,15 +44,22 @@ describe Address, "地址" do
                                      addressable: nil) }
 
   describe "数据验证" do
-    context "普通情况" do
-      it("验证通过") { address.should be_valid }
-    end
-
-    context "缺少省份" do
-      it "验证失败" do
+    it ("默认") { address.should be_valid }
+    it "缺少省份" do
         address.province = nil
         address.should_not be_valid
-      end
+    end
+    it "缺少用户" do
+        address.user = nil
+        address.should be_valid
+    end
+    it "缺少市" do
+        address.city = nil
+        address.should be_valid
+    end
+    it "缺少县" do
+        address.area = nil
+        address.should be_valid
     end
   end
 
