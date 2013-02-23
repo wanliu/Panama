@@ -5,27 +5,26 @@ class People::CartController < People::BaseController
 
   def add_to_cart
     param = params[:product_item]
-    product_obj = my_cart.items.find_by_product_id(param[:product_id])
-    if product_obj
-      @item = items_update product_obj,param
+    @product_obj = my_cart.items.find_by_product_id(param[:product_id])
+    if @product_obj
+      @item = items_update @product_obj,param
     else
       @item = items_build param
     end
-    item = item_as_json @item
-    render :json => item
+    items = item_as_json @item
+    render :json => items
   end
 
-  def items_update(product_obj,param)
-    product_obj.amount = product_obj.amount + param[:amount].to_i
-    product_obj.total = product_obj.price * product_obj.amount
-    product_obj.save
-    my_cart.save
+  def items_update(product_obj,param) 
+    product_obj.update_attributes({:amount => product_obj.amount + param[:amount].to_i, 
+                                   :total => product_obj.price * product_obj.amount})
     product_obj
   end
 
   def items_build(param)
     @item = my_cart.items.build(param)
-    @item.total = @item.price * @item.amount
+    total = @item.price * @item.amount
+    @item.total = total
     @item.save
     my_cart.save
     @item
@@ -33,7 +32,8 @@ class People::CartController < People::BaseController
 
   def item_as_json(items)
     item = items.as_json()
-    item["product_item"]["img"] = items.product.photos.icon
+    img_url = items.product ? items.product.photos.icon : ""
+    item["product_item"]["img"] = img_url
     item
   end
 
