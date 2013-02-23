@@ -23,7 +23,10 @@ describe ShopsController do
 
 
   def valid_attributes
-    { :name => "某某商店" }
+    {
+      :name => "某某商店",
+      :user_id => get_session[:user].id
+    }
   end
 
 
