@@ -2,15 +2,8 @@
 require 'spec_helper'
 
 describe StyleItem do
-  let(:category) { Category.where(name: 'test_root').first_or_create }
-  let(:shop) { Shop.where(name: 'shop_for_style_items').first_or_create }
-  let(:product) { Product.where(name: 'iphone4s',
-                                price: 5999,
-                                category_id: category.id,
-                                shop_id: shop.id).first_or_create }
-
-  let(:style_group) { StyleGroup.where(name: 't_group',
-                                       product_id: product.id).first_or_create }
+  let(:product)     { FactoryGirl.create(:product) }
+  let(:style_group) { FactoryGirl.create(:style_group) }
 
   describe "关联测试" do
     it "belongs_to :style_group" do
