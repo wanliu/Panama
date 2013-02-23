@@ -4,16 +4,21 @@ FactoryGirl.define do
 
 	factory :root_category, :class => Category do | f |
 		name "root_test"
-		association :shop, factory: :shop
+		f.shop :shop
+	end
+
+	factory :category do |f|
+		name "test_category"
+		f.shop :shop
 	end
 
 	factory :yifu, :class => Category do | f |
 		name "衣服test"
-		association :shop, factory: :shop
+		f.shop :shop
 	end
 
 	factory :kuzhi, :class => Category do | f |
 		name "裤子"
-		association :shop, factory: :shop
+		f.shop :shop
 	end
 end

@@ -111,7 +111,7 @@ module Vfs
           raise('root always existy')
         else
           paths = path.split('/')
-          file_entity = paths.inject(root) do |parent, path| 
+          file_entity = paths.inject(root) do |parent, path|
             begin
               parent.children.where(:name => path, :stat => 'directory').first
             rescue Mongoid::Errors::DocumentNotFound
@@ -134,12 +134,12 @@ module Vfs
         base = path.blank? ? '/' : path
         if current_path && current_path.directory?
           if query
-            current_path.match query do |file_entity|
-              block.call file_entity.path, ->{file_entity.directory? ? :dir : :file}
+            current_path.match query do |f|
+              block.call f.full_path, ->{f.directory? ? :dir : :file}
             end
           else
-            current_path.descendants do |file_entity|
-              block.call file_entity.path, ->{file_entity.directory? ? :dir : :file}
+            current_path.descendants do |f|
+              block.call f.full_path, ->{f.directory? ? :dir : :file}
             end
           end
         end
@@ -155,14 +155,8 @@ module Vfs
             root
           else
             paths = path.split('/')
-            begin
-              file_entity = paths.inject(root) do |parent, path| 
-                parent.children.where(:name => path).first
-              end
-            rescue Mongoid::Errors::DocumentNotFound
-              nil
-            ensure
-              file_entity
+            file_entity = paths.inject(root) do |parent, path|
+              parent.children.where(:name => path).first unless parent.nil?
             end
           end
         end
@@ -173,7 +167,7 @@ module Vfs
           else
             paths = path.split('/')
             begin
-              file_entity = paths.inject(root) do |parent, path| 
+              file_entity = paths.inject(root) do |parent, path|
                 pa = parent.children.where(:name => path, :stat => 'directory').first
                 unless pa
                   pa = parent.children.create(:name => path, :stat => 'directory')
@@ -183,7 +177,7 @@ module Vfs
 
               file_entity
             end
-          end          
+          end
         end
     end
   end

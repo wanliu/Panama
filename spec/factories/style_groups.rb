@@ -1,8 +1,8 @@
 # encoding: utf-8
 
 FactoryGirl.define do
-  factory :style_group do
+  factory :style_group do |f|
   	sequence(:name) { |n| "name#{n}" }
-    association :product, factory: :product
+    f.product :product
   end
 end
