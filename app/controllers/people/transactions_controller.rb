@@ -14,7 +14,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1.json
   def show
     @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
-    
+
     @transaction = OrderTransaction.find(params[:id])
 
     respond_to do |format|
