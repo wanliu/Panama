@@ -5,7 +5,7 @@ class Template
 
   def initialize(name = nil, file_storage = nil)
     unless name.blank?
-      @name = name
+      @name = name      
       fs = file_storage || shop.fs
       @fs = fs["templates/#{@name}.html.erb"]
     end
