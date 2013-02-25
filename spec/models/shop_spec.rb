@@ -31,7 +31,7 @@ describe Shop, "商店模型" do
     end
 
     it "验证数据" do
-        @shop.user_id.should be_nil
+        @shop.user_id = be_nil
         @shop.save.should be_false
         @shop.user_id = get_session[:user].id
         @shop.save.should be_true
