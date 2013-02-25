@@ -1,10 +1,11 @@
 #encoding: utf-8
-require 'spec_helper' 
+require 'spec_helper'
+require 'spec_helper'
 
 describe People::CartController do
 
 	def product_item
-		{ 
+		{
 			:title =>  "1111",
 			:amount => 11,
 			:price => 11,
@@ -47,8 +48,7 @@ describe People::CartController do
 		describe "post 'clear_list' 购物车 册除" do
 			it "clear_list" do
 				my_cart.items.create! product_item
-				my_cart.items.create! product_item  
-				post 'clear_list',{}, session_obj 
+				post 'clear_list',{}, session_obj
 				my_cart.items.length.should eq(0)
 			end
 		end
