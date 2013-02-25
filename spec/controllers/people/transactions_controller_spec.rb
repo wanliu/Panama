@@ -13,13 +13,20 @@ describe People::TransactionsController, "用户交易流通" do
     }
   end
 
+  def person_params
+    {
+      :person_id => get_session[:user].login
+    }
+  end
+
   def valid_session
     get_session
   end
 
   describe "GET index" do
     it "获取用户所有记录" do
-      get :index, {:person_id => get_session[:user].login}, valid_session
+      transaction = OrderTransaction.create! valid_attributes
+      get :index, person_params, valid_session
       assigns(:transactions).should eq([transaction])
     end
   end
@@ -27,7 +34,7 @@ describe People::TransactionsController, "用户交易流通" do
   describe "GET show" do
     it "查看一张单" do
       transaction = OrderTransaction.create! valid_attributes
-      get :show, {:id => transaction.to_param, :person_id => get_session[:user].login}, valid_session
+      get :show, person_params.merge({:id => transaction.to_param}), valid_session
       assigns(:transaction).should eq(transaction)
     end
   end
@@ -49,21 +56,25 @@ describe People::TransactionsController, "用户交易流通" do
 
   describe "POST create" do
     describe "with valid params" do
+      before :each do
+        @options = person_params.merge({:transaction => valid_attributes})
+      end
+
       it "附加一条记录" do
         expect {
-          post :create, {:transaction => valid_attributes}, valid_session
+          post :create, @options, valid_session
         }.to change(OrderTransaction, :count).by(1)
       end
 
       it "添加 OrderTransaction对象" do
-        post :create, {:transaction => valid_attributes}, valid_session
-        assigns(:people_transaction).should be_a(OrderTransaction)
-        assigns(:people_transaction).should be_persisted
+        post :create, @options, valid_session
+        assigns(:transaction).should be_a(OrderTransaction)
+        assigns(:transaction).should be_persisted
       end
 
       it "添加记录重定向" do
-        post :create, {:transaction => valid_attributes}, valid_session
-        response.should redirect_to(OrderTransaction.last)
+        post :create, @options, valid_session
+        response.should redirect_to(person_transaction_path(get_session[:user].login, assigns(:transaction)))
       end
     end
 
@@ -71,14 +82,14 @@ describe People::TransactionsController, "用户交易流通" do
       it "添加记录失败" do
         # Trigger the behavior that occurs when invalid params are submitted
         OrderTransaction.any_instance.stub(:save).and_return(false)
-        post :create, {:transaction => {  }}, valid_session
-        assigns(:transactions).should be_a_new(OrderTransaction)
+        post :create, person_params.merge({:transaction => {  }}), valid_session
+        assigns(:transaction).should be_a_new(OrderTransaction)
       end
 
       it "添加失败重新显示new" do
         # Trigger the behavior that occurs when invalid params are submitted
         OrderTransaction.any_instance.stub(:save).and_return(false)
-        post :create, {:transaction => {  }}, valid_session
+        post :create, person_params.merge({:transaction => {  }}), valid_session
         response.should render_template("new")
       end
     end
@@ -88,33 +99,40 @@ describe People::TransactionsController, "用户交易流通" do
     describe "with valid params" do
       it "修改记录" do
         transaction = OrderTransaction.create! valid_attributes
-        OrderTransaction.any_instance.should_receive(:update_attributes).with("items_count" => 3, "total" => 6)
-        put :update, {:id => transaction.to_param, :transaction => { :items_count => 3, :total => 6 }}, valid_session
+        OrderTransaction.any_instance.should_receive(:update_attributes).with("items_count" => "3", "total" => "6")
+        put :update, person_params.merge({
+          :id => transaction.to_param,
+          :transaction => { :items_count => 3, :total => 6 }}), valid_session
       end
 
-      it "assigns the requested people_transaction as @people_transaction" do
+      it "修改成功" do
         transaction = OrderTransaction.create! valid_attributes
-        put :update, {:id => transaction.to_param, :transaction => valid_attributes}, valid_session
+        put :update, person_params.merge({
+          :id => transaction.to_param,
+          :transaction => valid_attributes}), valid_session
         assigns(:transaction).should eq(transaction)
       end
 
-      it "redirects to the people_transaction" do
+      it "修改成功跳转" do
         transaction = OrderTransaction.create! valid_attributes
-        put :update, {:id => transaction.to_param, :transaction => valid_attributes}, valid_session
-        response.should redirect_to(transaction)
+        put :update, person_params.merge({
+          :id => transaction.to_param,
+          :transaction => valid_attributes}), valid_session
+        url = person_transactions_path(get_session[:user].login)
+        response.should redirect_to("#{url}/#{transaction.id}")
       end
     end
 
     describe "with invalid params" do
-      it "assigns the people_transaction as @people_transaction" do
+      it "修改失败" do
         transaction = OrderTransaction.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         OrderTransaction.any_instance.stub(:save).and_return(false)
         put :update, {:id => transaction.to_param, :transaction => {  }}, valid_session
-        assigns(:people_transaction).should eq(transaction)
+        assigns(:transaction).should eq(transaction)
       end
 
-      it "re-renders the 'edit' template" do
+      it "修改失败显示编辑状态" do
         transaction = OrderTransaction.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         OrderTransaction.any_instance.stub(:save).and_return(false)
@@ -125,17 +143,17 @@ describe People::TransactionsController, "用户交易流通" do
   end
 
   describe "DELETE destroy" do
-    it "destroys the requested people_transaction" do
+    it "删除记录" do
       transaction = OrderTransaction.create! valid_attributes
       expect {
-        delete :destroy, {:id => transaction.to_param}, valid_session
+        delete :destroy, person_params.merge({:id => transaction.to_param}), valid_session
       }.to change(OrderTransaction, :count).by(-1)
     end
 
-    it "redirects to the people_transactions list" do
+    it "删除成功跳向url" do
       transaction = OrderTransaction.create! valid_attributes
-      delete :destroy, {:id => transaction.to_param}, valid_session
-      response.should redirect_to(people_transactions_url)
+      delete :destroy, person_params.merge({:id => transaction.to_param}), valid_session
+      response.should redirect_to(person_transactions_path(get_session[:user].login))
     end
   end
 
