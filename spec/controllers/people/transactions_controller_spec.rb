@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe People::TransactionsController, "用户交易流通" do
+describe People::TransactionsController, "用户订单交易流通" do
 
   def valid_attributes
     {
