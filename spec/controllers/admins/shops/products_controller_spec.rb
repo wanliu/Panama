@@ -44,7 +44,7 @@ describe Admins::Shops::ProductsController do
       assigns(:categories).should_not be_nil
       assigns(:products).should_not be_nil
       assigns(:products).count.should eq(1)
-      assigns(:products).first.should eq(product)
+      assigns(:products).should eq([product])
     end
   end
 
