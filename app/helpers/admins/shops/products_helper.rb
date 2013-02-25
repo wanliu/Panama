@@ -17,10 +17,10 @@ module Admins::Shops::ProductsHelper
     end
 
     def render_style(style)
-        values = style.items
+        items = style.items
         title = style.name
         color_span = (title == 'Colours' || title == 'colours')
-        sub_product_property(title, values, {:class => title.downcase}, :title, color_span)
+        sub_product_property(title, items, {:class => title.downcase}, :title, color_span)
     end
 
     #区分商品编辑与表单错误返回
@@ -32,12 +32,12 @@ module Admins::Shops::ProductsHelper
         filter_styles.map{|style_group| style_group.name}
     end
 
-    def sub_product_property(name, values, html_options = {}, method = nil, color_span = nil)
+    def sub_product_property(name, items, html_options = {}, method = nil, color_span = nil)
         class_name = html_options[:class] || ''
         html = marker_element
         html << div_open(class_name, name)
 
-        values.each_with_index do |item, index|
+        items.each_with_index do |item, index|
             append_content(item, index, html, name, method, color_span)
         end
         html << div_close
@@ -97,10 +97,9 @@ module Admins::Shops::ProductsHelper
         </div>"
     end
 
-    #############################################################################################
+
     ## fill data to the table created by js,
     ## if the @product isn't new or it's form return for in correct input
-    ############################################################################################
     def data_2_talbe
         return if @product.new_record? && @temp_subs.blank?
 
