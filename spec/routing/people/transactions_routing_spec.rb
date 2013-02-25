@@ -6,8 +6,7 @@ describe People::TransactionsController, "用户订单交易流通" do
 
     def params
       {
-        :person_id => "lishi",
-        :key => :login
+        :person_id => "lishi"
       }
     end
 
