@@ -24,25 +24,28 @@ describe ShopsController do
 
   def valid_attributes
     {
-      :name => "某某商店",
-      :user_id => get_session[:user].id
+      :name => "某某商店"
     }
+  end
+
+  before :each do
+    @shop = Shop.new valid_attributes
+    @shop.user_id = get_session[:user].id
+    @shop.save
   end
 
 
   describe "GET index" do
     it "assigns all shops as @shops" do
-      shop = Shop.create! valid_attributes
       get :index, {}, get_session
-      assigns(:shops).should eq([shop])
+      assigns(:shops).should eq([@shop])
     end
   end
 
   describe "GET show" do
     it "assigns the requested shop as @shop" do
-      shop = Shop.create! valid_attributes
-      get :show, {:id => shop.to_param}, get_session
-      assigns(:shop).should eq(shop)
+      get :show, {:id => @shop.to_param}, get_session
+      assigns(:shop).should eq(@shop)
     end
   end
 
@@ -55,9 +58,8 @@ describe ShopsController do
 
   describe "GET edit" do
     it "assigns the requested shop as @shop" do
-      shop = Shop.create! valid_attributes
-      get :edit, {:id => shop.to_param}, get_session
-      assigns(:shop).should eq(shop)
+      get :edit, {:id => @shop.to_param}, get_session
+      assigns(:shop).should eq(@shop)
     end
   end
 
@@ -101,42 +103,35 @@ describe ShopsController do
   describe "PUT update" do
     describe "with valid params" do
       it "updates the requested shop" do
-        shop = Shop.create! valid_attributes
         # Assuming there are no other shops in the database, this
         # specifies that the Shop created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Shop.any_instance.should_receive(:update_attributes).with({ "these" => "params" })
-        put :update, {:id => shop.to_param, :shop => { "these" => "params" }}, get_session
+        put :update, {:id => @shop.to_param, :shop => { "these" => "params" }}, get_session
       end
 
       it "assigns the requested shop as @shop" do
-        shop = Shop.create! valid_attributes
-        put :update, {:id => shop.to_param, :shop => valid_attributes}, get_session
-        assigns(:shop).should eq(shop)
+        put :update, {:id => @shop.to_param, :shop => valid_attributes}, get_session
+        assigns(:shop).should eq(@shop)
       end
 
       it "redirects to the shop" do
-        shop = Shop.create! valid_attributes
-        put :update, {:id => shop.to_param, :shop => valid_attributes}, get_session
-        response.should redirect_to(shop)
+        put :update, {:id => @shop.to_param, :shop => valid_attributes}, get_session
+        response.should redirect_to(@shop)
       end
     end
 
     describe "with invalid params" do
       it "assigns the shop as @shop" do
-        shop = Shop.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
         Shop.any_instance.stub(:save).and_return(false)
-        put :update, {:id => shop.to_param, :shop => {  }}, get_session
-        assigns(:shop).should eq(shop)
+        put :update, {:id => @shop.to_param, :shop => {  }}, get_session
+        assigns(:shop).should eq(@shop)
       end
 
       it "re-renders the 'edit' template" do
-        shop = Shop.create! valid_attributes
-        # Trigger the behavior that occurs when invalid params are submitted
         Shop.any_instance.stub(:save).and_return(false)
-        put :update, {:id => shop.to_param, :shop => {  }}, get_session
+        put :update, {:id => @shop.to_param, :shop => {  }}, get_session
         response.should render_template("edit")
       end
     end
@@ -144,15 +139,13 @@ describe ShopsController do
 
   describe "DELETE destroy" do
     it "destroys the requested shop" do
-      shop = Shop.create! valid_attributes
       expect {
-        delete :destroy, {:id => shop.to_param}, get_session
+        delete :destroy, {:id => @shop.to_param}, get_session
       }.to change(Shop, :count).by(-1)
     end
 
     it "redirects to the shops list" do
-      shop = Shop.create! valid_attributes
-      delete :destroy, {:id => shop.to_param}, get_session
+      delete :destroy, {:id => @shop.to_param}, get_session
       response.should redirect_to(shops_url)
     end
   end
