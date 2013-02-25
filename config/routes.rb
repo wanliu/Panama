@@ -6,7 +6,7 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :people, :key => :login do
+  resources :people do
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
       member do
