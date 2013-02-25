@@ -73,6 +73,7 @@ module Panama
 
     config.generators do |g|
       g.orm :active_record
-    end    
+      g.fixture_replacement :factory_girl
+    end
   end
 end
