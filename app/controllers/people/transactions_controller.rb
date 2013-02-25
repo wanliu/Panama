@@ -16,7 +16,6 @@ class People::TransactionsController < People::BaseController
     @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
 
     @transaction = OrderTransaction.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @transaction }
