@@ -13,6 +13,14 @@ class OrderTransaction < ActiveRecord::Base
            foreign_key: 'transaction_id',
            autosave: true
 
+  validates :state, :presence => true
+  validates :items_count, :numericality => true
+  validates :total, :numericality => true
+
+  validates_presence_of :buyer
+  validates_presence_of :seller
+  validates_presence_of :address
+
   state_machine :initial => :order do
 
     event :buy do
