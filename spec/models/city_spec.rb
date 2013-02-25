@@ -3,9 +3,7 @@ require 'spec_helper'
 
 describe City, "城市地址" do
 
-    # describe "关联检查" do  
-	   #  it { should has_one(:address) } 
-    # end
+    it { have_one :address }
     
     describe "属性验证" do 
     	let(:city) { City.new }

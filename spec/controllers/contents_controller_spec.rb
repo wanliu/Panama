@@ -42,7 +42,8 @@ describe ContentsController do
     it "assigns all contents as @contents" do
       content = Content.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:contents).should eq([content])
+      assigns(:contents).should include(content)
+      response.should be_success
     end
   end
 
@@ -51,6 +52,7 @@ describe ContentsController do
       content = Content.create! valid_attributes
       get :show, {:id => content.to_param}, valid_session
       assigns(:content).should eq(content)
+      response.should be_success
     end
   end
 
@@ -58,6 +60,7 @@ describe ContentsController do
     it "assigns a new content as @content" do
       get :new, {}, valid_session
       assigns(:content).should be_a_new(Content)
+      response.should be_success
     end
   end
 
@@ -66,6 +69,7 @@ describe ContentsController do
       content = Content.create! valid_attributes
       get :edit, {:id => content.to_param}, valid_session
       assigns(:content).should eq(content)
+      response.should be_success
     end
   end
 
