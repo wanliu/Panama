@@ -69,5 +69,4 @@ describe Address, "地址" do
         "#{address.country}#{address.province}#{address.city}#{address.area}#{address.road}"
     end
   end
-
 end
