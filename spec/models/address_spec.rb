@@ -32,9 +32,9 @@ describe Address, "地址" do
   end
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:city) { FactoryGirl.create(:city) }
-  let(:area) { FactoryGirl.create(:area) }
   let(:province) { FactoryGirl.create(:province) }
+  let(:city) { province.children.create(name: "衡阳", ancestry: province) }
+  let(:area) { city.children.create(name: "耒阳", ancestry: city) } 
   let(:address) { FactoryGirl.create(:address,
                                      transaction: nil,
                                      user: user,
@@ -54,12 +54,12 @@ describe Address, "地址" do
         address.should be_valid
     end
     it "缺少市" do
-        address.city = nil
-        address.should be_valid
+        address.city = nil 
+        address.should_not be_valid
     end
     it "缺少县" do
         address.area = nil
-        address.should be_valid
+        address.should_not be_valid
     end
   end
 
@@ -69,4 +69,40 @@ describe Address, "地址" do
         "#{address.country}#{address.province}#{address.city}#{address.area}#{address.road}"
     end
   end
+
+  describe "验证检查上级" do
+    it "正常验证检查  'city' 上级" do
+      event = address_obj
+      event.valid?.should == true
+    end
+
+    it "出错验证检查  'city' 上级" do
+      event = address_obj
+      event.city_id = '-0'
+      event.valid?.should == false
+    end
+
+    it "正常验证检查  'area' 上级" do
+      event = address_obj
+      event.valid?.should == true
+    end
+
+    it "出错验证检查  'area' 上级" do
+      event = address_obj
+      event.area_id = '-0'
+      event.valid?.should == false
+    end
+  end
+
+  def address_obj
+    event = Address.new()
+    event.transaction = nil
+    event.user_id = user.id
+    event.province_id = province.id
+    event.city_id = city.id
+    event.area_id = area.id
+    event.addressable = nil
+    event
+  end
+ 
 end
