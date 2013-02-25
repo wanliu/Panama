@@ -4,31 +4,31 @@ describe People::TransactionsController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/people/transactions").should route_to("people/transactions#index")
+      get("/people/hysios/transactions").should route_to("people/transactions#index", :person_id => 'hysios')
     end
 
     it "routes to #new" do
-      get("/people/transactions/new").should route_to("people/transactions#new")
+      get("/people/hysios/transactions/new").should route_to("people/transactions#new", :person_id => 'hysios')
     end
 
     it "routes to #show" do
-      get("/people/transactions/1").should route_to("people/transactions#show", :id => "1")
+      get("/people/hysios/transactions/1").should route_to("people/transactions#show", :id => "1", :person_id => 'hysios')
     end
 
     it "routes to #edit" do
-      get("/people/transactions/1/edit").should route_to("people/transactions#edit", :id => "1")
+      get("/people/hysios/transactions/1/edit").should route_to("people/transactions#edit", :id => "1", :person_id => 'hysios')
     end
 
     it "routes to #create" do
-      post("/people/transactions").should route_to("people/transactions#create")
+      post("/people/hysios/transactions").should route_to("people/transactions#create", :person_id => 'hysios')
     end
 
     it "routes to #update" do
-      put("/people/transactions/1").should route_to("people/transactions#update", :id => "1")
+      put("/people/hysios/transactions/1").should route_to("people/transactions#update", :id => "1", :person_id => 'hysios')
     end
 
     it "routes to #destroy" do
-      delete("/people/transactions/1").should route_to("people/transactions#destroy", :id => "1")
+      delete("/people/hysios/transactions/1").should route_to("people/transactions#destroy", :id => "1", :person_id => 'hysios')
     end
 
   end
