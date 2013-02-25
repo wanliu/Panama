@@ -8,9 +8,11 @@ class Admins::Shops::TemplatesController < Admins::Shops::SectionController
   end
 
   def index
-    @templates = current_shop.fs["templates/*"].map do |f|
-      {:name => f.name, :path => f.path, :created_at => f.created_at, :updated_at  => f.updated_at }
-    end
+    templates = current_shop.fs["templates"]
+    @templates = templates["*"]
+    # .map do |f|
+    #   {:name => f.name, :path => f.path, :created_at => f.created_at, :updated_at  => f.updated_at }
+    # end
     @heads = [:name, :path, :created_at, :updated_at]
   end
 

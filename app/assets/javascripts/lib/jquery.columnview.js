@@ -1,18 +1,14 @@
 (function($){
   $.fn.columnview = function(options){
-
-    this.settings = $.extend({}, $.fn.columnview.defaults, options);   
+    this.settings = $.extend({}, $.fn.columnview.defaults, options);
     this.origid = this.attr('id');
     this.hide();
-
     var that = this
-
+    
     function initialize(){      
       that.attr('id', that.origid + "-processed");
-
       generate_view();
-         
-      if($.browser.msie) { this.topdiv.width('150px'); }    
+      if($.browser.msie) { this.topdiv.width('150px'); }
       generate_item(that.children('li'))
       bind_event();
     }
@@ -33,6 +29,8 @@
         }
       });
     }
+
+
 
     function bind_event(){
       that.container.on("click", "a", function(event){
@@ -64,6 +62,8 @@
         event.preventDefault();
       })
 
+      init();
+
       that.container.on("click", "a", function(event){
         var divs = that.container.find(">div:not(.feature)");
         var results = [], current_data = {};
@@ -71,34 +71,14 @@
           var $node = $(this).find(">a.active, >a.inpath");
           if($node){
             var data = {id:  $node.attr("data-id"), name: $node.attr("data-name") }
-            $node.hasClass("active") ? current_data = data : results.push(data)
+            $node.hasClass("active") ? current_data = data : results.push(data);
           }
         });
-        that.settings.selector(results, current_data)
-      })
-
-      that.container.on("keydown", "a", function(event){
-          var el = $(event.currentTarget)
-          switch(event.keyCode){
-            case(37): //left
-              el.parent().prev().children('.inpath').focus().trigger("click");
-              break;
-            case(38): //up
-              el.prev().focus().trigger("click");
-              break;
-            case(39): //right
-              if(el.hasClass('hasChildMenu')){
-                el.parent().next().children('a:first').focus().trigger("click");
-              }
-              break;
-            case(40): //down
-              el.next().focus().trigger("click");
-              break;
-            case(13): //enter
-              el.trigger("dblclick");
-              break;
-          }
-          event.preventDefault();
+        if("" != options['ihid']){
+          $("#" + that.origid + " input[id=" + options['ihid'] + "_id]").val(current_data.id);
+        } else{
+          that.settings.selector(results, current_data);
+        }
       })
 
     }
@@ -109,12 +89,26 @@
         delete event.metaKey;
       }
     }
+
     initialize()
+
+    function init(){
+      if("" != options['ihid']){
+        $("<input type='hidden' id="+ options['ihid'] + "_id name="+ options['ihname'] +" value= "+ options['category_id'] +" >").appendTo("#" + that.origid);
+        if(1 != options['length']){
+          for (var i = 1; i <= options['length']; i++) {
+            $("#" + that.origid + " a[data-id="+ options['ancestry'].split('/')[i] + "]").trigger("click");
+          }
+        }
+        $("#" + that.origid + " a[data-id="+ options['category_id'] + "]").trigger("click");
+      }
+    }
+    
   };
   
   $.fn.columnview.defaults = {
     multi: false,
-    selector: function(data, current_data){ } 
+    selector: function(data, current_data){ }
   };
 
   // Generate deeper level menus
@@ -134,6 +128,7 @@
       }
     });
   }
+
   // Uses canvas, if available, to draw a triangle to denote that item is a parent
   function addWidget(item, color){
     var triheight = $(item).height();
@@ -161,4 +156,6 @@
       event.preventDefault();
     });
   }
+
+
 })(jQuery);
