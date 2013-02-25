@@ -118,8 +118,7 @@ describe People::TransactionsController, "用户订单交易流通" do
         put :update, person_params.merge({
           :id => transaction.to_param,
           :transaction => valid_attributes}), valid_session
-        url = person_transactions_path(get_session[:user].login)
-        response.should redirect_to("#{url}/#{transaction.id}")
+        response.should redirect_to(person_transaction_path(get_session[:user].login, transaction))
       end
     end
 
@@ -157,4 +156,22 @@ describe People::TransactionsController, "用户订单交易流通" do
     end
   end
 
+  describe "POST event" do
+
+    it "订单状态变更" do
+      transaction = OrderTransaction.create! valid_attributes
+      post :event, person_params.merge({
+        :event => :buy,
+        :id => transaction.to_param}), valid_session
+      assigns(:transaction).state.should_not eq(:order)
+    end
+
+    it "订单状态变更成功跳转页面" do
+      transaction = OrderTransaction.create! valid_attributes
+      post :event, person_params.merge({
+        :event => :buy,
+        :id => transaction.to_param}), valid_session
+      response.should redirect_to(person_transaction_path(get_session[:user].login, transaction))
+    end
+  end
 end
