@@ -21,11 +21,12 @@ require 'spec_helper'
 
 describe ShopsController do
 
+  let(:pepsi) { Shop.create! valid_attributes }
 
   def valid_attributes
     {
       :name => "某某商店",
-      :user_id => get_session[:user].id
+      :user => get_session[:user]
     }
   end
 
@@ -63,20 +64,23 @@ describe ShopsController do
 
   describe "POST create" do
     describe "with valid params" do
+      let(:current_user) { get_session[:user] }
+      let(:shop_attributes) {{ name: 'shop_test', user_id: current_user.id }}
+
       it "creates a new Shop" do
         expect {
-          post :create, {:shop => valid_attributes}, get_session
+          post :create, {:shop => shop_attributes}, get_session
         }.to change(Shop, :count).by(1)
       end
 
       it "assigns a newly created shop as @shop" do
-        post :create, {:shop => valid_attributes}, get_session
+        post :create, {:shop => shop_attributes}, get_session
         assigns(:shop).should be_a(Shop)
         assigns(:shop).should be_persisted
       end
 
       it "redirects to the created shop" do
-        post :create, {:shop => valid_attributes}, get_session
+        post :create, {:shop => shop_attributes}, get_session
         response.should redirect_to(Shop.last)
       end
     end
@@ -98,45 +102,48 @@ describe ShopsController do
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested shop" do
-        shop = Shop.create! valid_attributes
+  describe "更新操作" do
+
+
+    describe "有效参数" do
+      let(:shop_attributes) {{ name: 'shop_test' }}
+
+      it "更新请求的 shop" do
         # Assuming there are no other shops in the database, this
         # specifies that the Shop created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Shop.any_instance.should_receive(:update_attributes).with({ "these" => "params" })
-        put :update, {:id => shop.to_param, :shop => { "these" => "params" }}, get_session
+        Shop.any_instance.should_receive(:update_attributes).with({ "name" => "apple" })
+        put :update, {:id => pepsi.to_param, :shop => { "name" => "apple" }}, get_session
       end
 
       it "assigns the requested shop as @shop" do
-        shop = Shop.create! valid_attributes
-        put :update, {:id => shop.to_param, :shop => valid_attributes}, get_session
-        assigns(:shop).should eq(shop)
+        put :update, {:id => pepsi.to_param, :shop => shop_attributes}, get_session
+        assigns(:shop).should eq(pepsi)
       end
 
       it "redirects to the shop" do
-        shop = Shop.create! valid_attributes
-        put :update, {:id => shop.to_param, :shop => valid_attributes}, get_session
-        response.should redirect_to(shop)
+        shop_attributes = pepsi.attributes.slice(:name)
+
+        put :update, {:id => pepsi.to_param, :shop => shop_attributes}, get_session
+        response.should redirect_to(pepsi)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the shop as @shop" do
-        shop = Shop.create! valid_attributes
+    describe "无效参数" do
+      let(:invalid_attributes) {{ :name => nil }}
+
+      it "分配 shop 为 @shop" do
         # Trigger the behavior that occurs when invalid params are submitted
         Shop.any_instance.stub(:save).and_return(false)
-        put :update, {:id => shop.to_param, :shop => {  }}, get_session
-        assigns(:shop).should eq(shop)
+        put :update, {:id => pepsi.to_param, :shop => invalid_attributes }, get_session
+        assigns(:shop).should eq(pepsi)
       end
 
       it "re-renders the 'edit' template" do
-        shop = Shop.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Shop.any_instance.stub(:save).and_return(false)
-        put :update, {:id => shop.to_param, :shop => {  }}, get_session
+        put :update, {:id => pepsi.to_param, :shop => invalid_attributes }, get_session
         response.should render_template("edit")
       end
     end
