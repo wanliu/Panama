@@ -20,7 +20,7 @@ describe ShopsController do
   describe "GET index" do
     it "assigns all shops as @shops" do
       get :index, {}, get_session
-      assigns(:shops).should eq([@shop])
+      assigns(:shops).should include(shop)
     end
   end
 
