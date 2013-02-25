@@ -55,7 +55,7 @@ Panama::Application.routes.draw do
   resources :category
   # shop admins routes
 
-  resources :shops, :key => :name do
+  resources :shops, :except => :index do
 
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
