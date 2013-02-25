@@ -102,7 +102,7 @@ describe People::TransactionsController, "用户订单交易流通" do
         OrderTransaction.any_instance.should_receive(:update_attributes).with("items_count" => "3", "total" => "6")
         put :update, person_params.merge({
           :id => transaction.to_param,
-          :transaction => { :items_count => 3, :total => 6 }}), valid_session
+          :order_transaction => { :items_count => 3, :total => 6 }}), valid_session
       end
 
       it "修改成功" do

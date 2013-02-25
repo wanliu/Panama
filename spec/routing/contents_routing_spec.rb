@@ -4,9 +4,9 @@ require "spec_helper"
 describe ContentsController do
   describe "模板内容路由" do
 
-    it "到 主页面" do
-      get("/contents").should route_to("contents#index")
-    end
+    # it "到 主页面" do
+    #   get("/contents").should route_to("contents#index")
+    # end
 
     it "到 显示添加信息" do
       get("/contents/new").should route_to("contents#new")
