@@ -133,7 +133,7 @@ class ShopsController < ApplicationController
 
   def prepend_tpl_view_path
     tmpdir = Rails.root.join(content_tpl_path)
-    `mkdir #{tmpdir}`
+    o = `mkdir #{tmpdir}`
     prepend_view_path tmpdir
   end
 
