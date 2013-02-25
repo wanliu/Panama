@@ -4,7 +4,7 @@ class Shop < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
 
-  attr_accessible :name
+  attr_accessible :name, :user
 
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
