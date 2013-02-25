@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Category.root = Category.create(:name => :root) unless Category.root
+Category.create(:name => :root) unless Category.root
 
 @root = Category.where(name: '_products_root').first_or_create(:name => '_products_root')
 product_category_file = Rails.root.join("config/product_category.yml")

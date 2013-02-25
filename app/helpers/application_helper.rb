@@ -8,9 +8,8 @@ module ApplicationHelper
     t(sym, :default => default)
   end
 
-  def current_user    
-    return nil unless session[:user_id]
-    @current_user ||= User.where(:uid => session[:user_id]['uid']).first
+  def current_user
+    session[:user] ||= session[:omniauth] && User.where(:uid => session[:omniauth]['uid']).first
   end
 
   def default_img_url(version_name)
@@ -22,7 +21,7 @@ module ApplicationHelper
   end
 
   def accounts_provider_url
-    OmniAuth::Wanliu.config["provider_url"]    
+    OmniAuth::Wanliu.config["provider_url"]
   end
 
   def action_controller
@@ -48,7 +47,7 @@ module ApplicationHelper
   end
 
   def link_to_account
-    link_to current_user.login, person_path(current_user.login)
+    link_to current_user.login, person_path(current_user)
   end
 
   def search_box(name, value = nil, options = { size: 40})
@@ -69,7 +68,7 @@ module ApplicationHelper
   def register_javascript(name, options = {}, &block)
     code = capture { yield } if block_given?
     if request.xhr?
-      code 
+      code
     else
       unless options[:only] == :ajax
         @@javascripts_codes[name] = code
@@ -92,18 +91,18 @@ module ApplicationHelper
     as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
   end
 
-  def build_menu(root, element_id = nil)        
-    output = ActiveSupport::SafeBuffer.new    
+  def build_menu(root, element_id = nil)
+    output = ActiveSupport::SafeBuffer.new
     if root.children && root.children.size && root.children.size > 0
-      content_tag(:ul, :class => "dropdown-menu", :id => element_id) do 
+      content_tag(:ul, :class => "dropdown-menu", :id => element_id) do
         root.children.map do |node|
           if node.children && node.children.size > 0
-            output.concat(content_tag(:li, :class => 'dropdown-submenu') do 
-              link_to(node.name, node, :html => {tabindex: -1}, 'data-id' => node.id, 'data-name' => node.name) + 
+            output.concat(content_tag(:li, :class => 'dropdown-submenu') do
+              link_to(node.name, node, :html => {tabindex: -1}, 'data-id' => node.id, 'data-name' => node.name) +
               build_menu(node)
             end)
           else
-            output.concat(content_tag(:li) do 
+            output.concat(content_tag(:li) do
               link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name
             end)
           end

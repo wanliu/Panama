@@ -2,9 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
 # database orm adapter
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
@@ -46,12 +43,6 @@ gem 'apotomo', '~> 1.2.3'
 gem 'github-markup', '~> 0.7.4'
 gem 'redcarpet', '~> 2.2.2'
 
-gem 'rspec', '~> 2.12.0'
-gem 'rspec-rails', '~> 2.12.0'
-group :test do
-  gem "rspec-cells", '~> 0.1.6'
-end
-
 
 # form helper
 gem 'simple_form', '~> 2.0.4'
@@ -88,7 +79,7 @@ gem "amqp", "~> 0.9.0" # optionally: :git => "git://github.com/ruby-amqp/amqp.gi
 
 
 # To use debugger
-# 
+#
 # Pagination
 gem 'kaminari', '~> 0.14.1'
 
@@ -99,11 +90,37 @@ gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 
 gem 'state_machine', '~> 1.1.2'
 
-group :development, :test do 
+group :development, :test do
   gem 'debugger', '~> 1.2.2'
   gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'
   gem 'rb-readline', '~> 0.4.2'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'
+  gem 'guard-spork'
+  gem 'rb-inotify', :require => false
+  gem 'rb-fsevent', :require => false
+  gem 'rb-fchange', :require => false
+  gem 'ruby_gntp'
+  gem 'growl'
+  gem 'factory_girl_rails'
+  gem 'rspec', '~> 2.12.0'
+  gem 'rspec-rails', '~> 2.12.0'
+  gem 'shoulda-matchers'
+  gem 'cucumber-rails', '~> 1.3.0', :require => false
+  gem 'simplecov', '~> 0.7.1', :require => false
+  gem 'jasmine'
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
+
+group :test do
+  # database_cleaner is not required, but highly recommended
+  gem 'database_cleaner', '~> 0.9.1'
+  gem 'spork', '~> 1.0rc'
+  gem "fakefs", :require => "fakefs/safe"
+end
+
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10
+gem "ac_uniquify", "~> 0.1.0"
