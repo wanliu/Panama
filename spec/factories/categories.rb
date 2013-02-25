@@ -7,6 +7,11 @@ FactoryGirl.define do
 		f.shop :shop
 	end
 
+	factory :category do |f|
+		name "test_category"
+		f.shop :shop
+	end
+
 	factory :yifu, :class => Category do | f |
 		name "衣服test"
 		f.shop :shop

@@ -1,4 +1,4 @@
-define ['jquery', 'backbone', 'exports'] , ($, Backbone, exports) ->
+define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 
 	class HoverManager
 
@@ -61,8 +61,21 @@ define ['jquery', 'backbone', 'exports'] , ($, Backbone, exports) ->
 
 		cartAddAction: (url, form) ->
 			$.post url, form.serialize(), (item) =>
+				if $("#cart_box table #product_item#{item.product_item.id}").length > 0
+					trOjb = $("#cart_box table #product_item#{item.product_item.id} td")
+					$(trOjb[2]).html(item.product_item.amount)
+					$(trOjb[3]).html(item.product_item.total)
+				else
+					$("#cart_box table").append(@trHtml(item.product_item))
 
-
+		trHtml: (product_item) ->
+			strHmtl = "<tr id= 'product_item#{product_item.id}'>"
+			strHmtl += "<td><img src='#{product_item.img}''></td>" 
+			strHmtl += "<td>#{product_item.title}</td>"
+			strHmtl += "<td>#{product_item.amount}</td>"
+			strHmtl += "<td>#{product_item.total}</td></tr>"
+			strHmtl
+			
 		targetAttributes: (target) ->
 			top: target.position().top
 			left: target.position().left

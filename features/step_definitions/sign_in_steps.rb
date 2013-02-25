@@ -1,7 +1,7 @@
  # encoding: utf-8
 begin require 'rspec/expectations'; rescue LoadError; require 'spec/expectations'; end
 require 'cucumber/formatter/unicode'
-$:.unshift(File.dirname(__FILE__) + '/../../lib') 
+$:.unshift(File.dirname(__FILE__) + '/../../lib')
 
 
 Before do
@@ -14,13 +14,13 @@ Before do
 end
 
 After do
-  OmniAuth.config.test_mode = false 
+  OmniAuth.config.test_mode = false
 end
 
-Given /我已经在首页了/ do 
-  visit "/"
+When /^我已经在 Accounts 上登陆了$/ do
+  visit '/'
 end
 
-Then /我将看到一个(.*)的信息/ do |msg|
+Then /我将在本站上看到一个(.*)的信息/ do |msg|
   page.should have_content msg
 end
