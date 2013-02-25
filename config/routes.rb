@@ -6,7 +6,7 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :people, :key => :login do
+  resources :people do
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -55,7 +55,7 @@ Panama::Application.routes.draw do
   resources :category
   # shop admins routes
 
-  resources :shops, :key => :name do
+  resources :shops, :except => :index do
 
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
