@@ -2,7 +2,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions
   # GET /people/transactions.json
   def index
-    @transactions = OrderTransaction.where(:buyer_id => @people).page params[:page]
+    @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +14,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1.json
   def show
     @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
-    
+
     @transaction = OrderTransaction.find(params[:id])
 
     respond_to do |format|
@@ -63,7 +63,7 @@ class People::TransactionsController < People::BaseController
   # POST /people/transactions
   # POST /people/transactions.json
   def create
-    @transaction = @people.transactions.build(params[:transaction])
+    @transaction = @people.transactions.build(params[:order_transaction])
 
     respond_to do |format|
       if @transaction.save
@@ -82,7 +82,7 @@ class People::TransactionsController < People::BaseController
     @transaction = OrderTransaction.find(params[:id])
 
     respond_to do |format|
-      if @transaction.update_attributes(params[:transaction])
+      if @transaction.update_attributes(params[:order_transaction])
         format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
         format.json { head :no_content }
       else
