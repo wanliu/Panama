@@ -35,7 +35,7 @@ describe ShopsController do
     it "assigns all shops as @shops" do
       shop = Shop.create! valid_attributes
       get :index, {}, get_session
-      assigns(:shops).should eq([shop])
+      assigns(:shops).should include(shop)
     end
   end
 
