@@ -20,6 +20,10 @@ describe FileEntity do
 
     end
 
+    it "不给名字就会出错" do
+      expect { root.create_dir '' }.to raise_error(StandardError)
+    end
+
     it "建立目录?" do
       dir = root.create_dir("test_dir")
       dir.directory?.should be_true
@@ -28,6 +32,10 @@ describe FileEntity do
     it "建立文件" do
       file = root.create_file("test_file")
       file.should be_a_kind_of(FileEntity)
+    end
+
+    it "不给名字就会出错" do
+      expect { root.create_file '' }.to raise_error(StandardError)
     end
 
     it "文件判断?" do
@@ -45,6 +53,11 @@ describe FileEntity do
       files = root.match "_shops"
       files.length.should == 1
       files.first.name.should match "_shops"
+    end
+
+    it "只有目录可以进行匹配" do
+      f = root.create_file("test_file")
+      expect { f.match "*" }.to raise_error(StandardError)
     end
   end
 end
