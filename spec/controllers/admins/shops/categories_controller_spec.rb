@@ -91,7 +91,7 @@ describe Admins::Shops::CategoriesController do
       end
 
       it "创建分类的父分类必须属于,当前根节点" do
-        parent = FactoryGirl.create(:category, 'name' => 'test_category')
+        parent = FactoryGirl.create(:category, 'name' => 'test_category', :shop => nil)
         indent =  parent.indent
 
         expect {  xhr :post, :create, { shop_id: pepsi.name,
