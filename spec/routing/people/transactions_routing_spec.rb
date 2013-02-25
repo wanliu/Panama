@@ -1,34 +1,46 @@
+#encoding: utf-8
 require "spec_helper"
 
-describe People::TransactionsController do
-  describe "routing" do
+describe People::TransactionsController, "用户订单交易流通" do
+  describe "路由" do
 
-    it "routes to #index" do
-      get("/people/transactions").should route_to("people/transactions#index")
+    def params
+      {
+        :person_id => "lishi",
+        :key => :login
+      }
     end
 
-    it "routes to #new" do
-      get("/people/transactions/new").should route_to("people/transactions#new")
+    def one_params
+      params.merge({:id => "1"})
     end
 
-    it "routes to #show" do
-      get("/people/transactions/1").should route_to("people/transactions#show", :id => "1")
+    it "获取所有记录" do
+      get("/people/lishi/transactions").should route_to("people/transactions#index", params)
     end
 
-    it "routes to #edit" do
-      get("/people/transactions/1/edit").should route_to("people/transactions#edit", :id => "1")
+    it "显示添加页面" do
+      get("/people/lishi/transactions/new").should route_to("people/transactions#new", params)
     end
 
-    it "routes to #create" do
-      post("/people/transactions").should route_to("people/transactions#create")
+    it "显示一条记录页面" do
+      get("/people/lishi/transactions/1").should route_to("people/transactions#show", one_params)
     end
 
-    it "routes to #update" do
-      put("/people/transactions/1").should route_to("people/transactions#update", :id => "1")
+    it "编辑" do
+      get("/people/lishi/transactions/1/edit").should route_to("people/transactions#edit", one_params)
     end
 
-    it "routes to #destroy" do
-      delete("/people/transactions/1").should route_to("people/transactions#destroy", :id => "1")
+    it "添加" do
+      post("/people/lishi/transactions").should route_to("people/transactions#create", params)
+    end
+
+    it "更改" do
+      put("/people/lishi/transactions/1").should route_to("people/transactions#update", one_params)
+    end
+
+    it "删除" do
+      delete("/people/lishi/transactions/1").should route_to("people/transactions#destroy", one_params)
     end
 
   end
