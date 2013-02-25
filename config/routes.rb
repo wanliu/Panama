@@ -36,10 +36,10 @@ Panama::Application.routes.draw do
 
   get "pending/index"
 
-  resources :users
-  resources :contents
+  resources :users, :except => :index
+  resources :contents, :except => :index
 
-  resources :products
+  resources :products, :except => :index
 
   # resources :shops do
   #   scope :module => "admins" do

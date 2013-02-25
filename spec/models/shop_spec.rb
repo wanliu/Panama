@@ -49,7 +49,7 @@ describe Shop, "商店模型" do
         it "创建成功" do
             @shop.user_id = get_session[:user].id
             @shop.save.should be_true
-            puts @shop.id
+            # puts @shop.id
         end
     end
 
