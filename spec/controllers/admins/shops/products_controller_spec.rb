@@ -3,20 +3,12 @@ require 'spec_helper'
 
 describe Admins::Shops::ProductsController do
 
-  def upload_file
-    photo_path = [Rails.root, "public/default_img/file_blank.gif"].join("/")
-    ActionDispatch::Http::UploadedFile.new(
-        :filename => "a.gif",
-        :type => "image/jpeg",
-        :tempfile => File.new(photo_path) )
-  end
-
   let(:shop){ FactoryGirl.create(:shop, :user => get_session[:user] ) }
   let(:category){ FactoryGirl.create(:yifu, :shop => shop) }
   let(:product){ FactoryGirl.create(:product, :shop => shop, :category => category) }
   let(:current_shop){ {:shop_id => shop.name} }
-  let(:default_attachment){ FactoryGirl.create(:attachment, :file => upload_file) }
-  let(:attachment){ FactoryGirl.create(:attachment, :file => upload_file) }
+  let(:default_attachment){ FactoryGirl.create(:attachment) }
+  let(:attachment){ FactoryGirl.create(:attachment) }
 
   before :each do
     @options = {
