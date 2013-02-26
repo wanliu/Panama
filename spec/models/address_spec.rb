@@ -73,24 +73,24 @@ describe Address, "地址" do
   describe "验证检查上级" do
     it "正常验证检查  'city' 上级" do
       event = address_obj
-      event.valid?.should == true
+      event.should be_a_validate(true)
     end
 
     it "出错验证检查  'city' 上级" do
       event = address_obj
-      event.city_id = '-0'
-      event.valid?.should == false
+      event.city_id = '-0' 
+      event.should be_a_validate(false)
     end
 
     it "正常验证检查  'area' 上级" do
       event = address_obj
-      event.valid?.should == true
+      event.should be_a_validate(true)
     end
 
     it "出错验证检查  'area' 上级" do
       event = address_obj
       event.area_id = '-0'
-      event.valid?.should == false
+      event.should be_a_validate(false)
     end
   end
 
@@ -106,3 +106,4 @@ describe Address, "地址" do
   end
  
 end
+ 

@@ -13,3 +13,9 @@ FactoryGirl.define do
     f.addressable :addressable
   end
 end
+
+RSpec::Matchers.define :be_a_validate do |expected|
+  match do |actual|
+    actual.valid? == expected
+  end
+end
