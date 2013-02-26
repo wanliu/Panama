@@ -47,7 +47,7 @@ describe Template do
       end
 
       it "模型名" do
-        puts Template.model_name
+        Template.model_name.should == "Template"
       end
 
       it "查找功能" do
