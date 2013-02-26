@@ -3,11 +3,11 @@ class Template
 
   attr_accessor :name, :path, :created_at, :updated_at, :data
 
-  def initialize(name = nil)
-    if name.blank?
-    else
-      @name = name
-      @fs = shop.fs["templates/#{@name}.html.erb"]
+  def initialize(name = nil, file_storage = nil)
+    unless name.blank?
+      @name = name      
+      fs = file_storage || shop.fs
+      @fs = fs["templates/#{@name}.html.erb"]
     end
   end
 
@@ -41,5 +41,16 @@ class Template
 
   def self.setup(shop)
     Template.shop = shop
+  end
+
+  def ==(other)
+    if other.equal?(self)
+      return true
+    elsif !other.instance_of?(self.class)
+      return false
+    end
+    if name == other.name
+      @fs.path == other.instance_variable_get(:@fs).path
+    end
   end
 end

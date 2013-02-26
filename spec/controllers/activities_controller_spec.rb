@@ -38,7 +38,7 @@ describe ActivitiesController do
     it "assigns all activities as @activities" do
       activity = Activity.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:activities).should eq([activity])
+      assigns(:activities).should include(activity)
     end
   end
 
