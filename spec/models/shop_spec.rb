@@ -31,7 +31,7 @@ describe Shop, "商店模型" do
     end
 
     it "验证数据" do
-        @shop.user_id.should be_nil
+        @shop.user_id = be_nil
         @shop.save.should be_false
         @shop.user_id = get_session[:user].id
         @shop.save.should be_true
@@ -49,7 +49,7 @@ describe Shop, "商店模型" do
         it "创建成功" do
             @shop.user_id = get_session[:user].id
             @shop.save.should be_true
-            puts @shop.id
+            # puts @shop.id
         end
     end
 
@@ -61,5 +61,12 @@ describe Shop, "商店模型" do
             @shop.lookup_content(:index).should be_an_instance_of(Content)
             @shop.lookup_content(:indexdsa).should be_nil
         end
+    end
+
+    it "删除商店数据" do
+        name = @shop.name
+        @shop.destroy
+        fs = "/_shops/#{name}".to_dir
+        fs["*"].length.should == 0
     end
 end

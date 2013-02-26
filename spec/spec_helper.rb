@@ -1,6 +1,4 @@
 require 'simplecov'
-SimpleCov.start 'rails'
-
 require 'rubygems'
 require 'spork'
 #uncomment the following line to use spork with the debugger
@@ -58,7 +56,7 @@ end
 Spork.each_run do
   # This code will be run each time you run your specs.
   # load "#{Rails.root}/config/routes.rb"
-  Dir["#{Rails.root}/app/**/*.rb"].each { |f| require f}
+  # Dir["#{Rails.root}/app/**/*.rb"].each { |f| require f}
   # files.each {|f| load f}
 end
 
