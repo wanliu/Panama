@@ -48,7 +48,6 @@ describe Admins::Shops::TemplatesController, "模板信息控制器" do
     }
 
     it "修改" do
-      debugger
       form_hash = { template: { data: "asss" } } 
       put :update, template_attributes(template, form_hash), get_session
       response.should be_success
