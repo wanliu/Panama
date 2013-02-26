@@ -25,13 +25,11 @@ describe "样式使用场景" do
     it "增加一个颜色值" do
       red = colour.add_colour_item('red', 0xFF0000)
       blue = colour.add_colour_item('blue', [0,255,0])
-
       colour.items.should include(red, blue)
     end
 
     it "增加一个 item" do
       up = items.add_item('上衣', 'up')
-
       items.items.should include(up)
     end
 
