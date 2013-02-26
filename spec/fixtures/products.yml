@@ -1,0 +1,6 @@
+---
+    Apple:
+        id: 10001
+        name: Apple
+        price: 100.05
+        shop_id: 1001
