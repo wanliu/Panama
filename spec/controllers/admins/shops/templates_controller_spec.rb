@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Admins::Shops::TemplatesController, "模板信息控制器" do
 
-  let(:current_shop){ FactoryGirl.create(:shop, :user => get_session[:user]) }
+  let(:current_shop){ FactoryGirl.create(:shop, :user => current_user) }
 
   def shop_attributes
     { :shop_id => current_shop.name }
@@ -48,7 +48,7 @@ describe Admins::Shops::TemplatesController, "模板信息控制器" do
     }
 
     it "修改" do
-      form_hash = { template: { data: "asss" } } 
+      form_hash = { template: { data: "asss" } }
       put :update, template_attributes(template, form_hash), get_session
       response.should be_success
       assigns(:template).data.should == form_hash[:template][:data]

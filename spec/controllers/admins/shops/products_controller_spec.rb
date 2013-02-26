@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Admins::Shops::ProductsController do
 
-  let(:shop){ FactoryGirl.create(:shop, :user => get_session[:user] ) }
+  let(:shop){ FactoryGirl.create(:shop, :user => current_user ) }
   let(:category){ FactoryGirl.create(:yifu, :shop => shop) }
   let(:product){ FactoryGirl.create(:product, :shop => shop, :category => category) }
   let(:current_shop){ {:shop_id => shop.name} }

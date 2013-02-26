@@ -1,0 +1,4 @@
+---
+    test_user:
+        uid: 12345
+        login: test_user
