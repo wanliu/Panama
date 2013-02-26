@@ -14,8 +14,9 @@ FactoryGirl.define do
   end
 end
 
-RSpec::Matchers.define :be_a_validate do |expected|
-  match do |actual|
-    actual.valid? == expected
+RSpec::Matchers.define :validate_superior_of do |expected, target|
+  match do |actual| 
+    actual.send(target).children.include?(actual.send(expected))
   end
 end
+
