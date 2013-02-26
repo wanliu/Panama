@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe Product, "产品模型" do
 
-    let(:shop){ FactoryGirl.create(:shop, :user => get_session[:user]) }
+    let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
     let(:yifu){ FactoryGirl.create(:yifu, :shop => shop) }
     let(:attachment){ FactoryGirl.create(:attachment) }
 
