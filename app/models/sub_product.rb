@@ -6,6 +6,10 @@ class SubProduct < ActiveRecord::Base
   has_many :style_pairs
   has_many :items, through: :style_pairs, source: :style_item
 
+  validates :product_id, presence: true
+  validates :quantity, presence: true, numericality: true
+  validates :price, presence: true, numericality: true
+
   def styles
   	result = { quantity: quantity, price: price }
   	items.each do |item|
