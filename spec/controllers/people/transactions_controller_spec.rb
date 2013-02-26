@@ -24,7 +24,6 @@ describe People::TransactionsController, "用户订单交易流通" do
 
   describe "GET index" do
     it "获取用户所有记录" do
-      debugger
       transaction = OrderTransaction.create! valid_attributes
       get :index, person_params, valid_session
       assigns(:transactions).should eq([transaction])
