@@ -6,11 +6,13 @@ class StyleItem < ActiveRecord::Base
   has_many :style_pairs
   has_many :sub_products, through: :style_pairs
 
+  validates :title, presence: true
   validates :title, uniqueness: { scope: :style_group_id,
-  	                              message: "this tltle: %{value} has been taken alreadly in this product's styles"}
+  	                              message: "this tltle: %{value} exsits under the same stylegroup" }
 
+  validates :value, presence: true
   validates :value, uniqueness: { scope: :style_group_id,
-  	                              message: "this value: %{value} has been taken alreadly in this product's styles"}
+  	                              message: "this value: %{value} exsits under the same stylegroup" }
 
   validates :style_group_id, presence: true
 
