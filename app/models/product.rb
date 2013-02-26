@@ -1,7 +1,14 @@
 class Product < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :description, :name, :price, :summary, :category_id, :default_attachment_id, :attachment_ids
+  attr_accessible :description,
+                  :name,
+                  :price,
+                  :summary,
+                  :category_id,
+                  :shop_id,
+                  :default_attachment_id,
+                  :attachment_ids
 
   attr_accessor :uploader_secure_token
 
