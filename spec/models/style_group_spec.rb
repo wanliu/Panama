@@ -8,7 +8,7 @@ describe "样式使用场景" do
   let(:category) { FactoryGirl.create(:category, shop: shop) }
   let(:product)  { FactoryGirl.create(:product, shop: shop, category: category) }
 
-  it "访问产品样式 通过 sytles 方法" do
+  it "关联检查" do
     product.should have_many(:styles)
   end
 
