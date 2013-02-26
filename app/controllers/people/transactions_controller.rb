@@ -45,17 +45,23 @@ class People::TransactionsController < People::BaseController
   end
 
   def batch_create
-    flag = false
-    my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
-      transaction = @people.transactions.build seller_id: shop.id
-      items.each {|item| transaction.items.build item.attributes }
-      transaction.items_count = items.inject(0) { |s, item| s + item.amount }
-      transaction.total = items.inject(0) { |s, item| s + item.total }
-      flag = transaction.save
+    # flag = false
+    # my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
+    #   transaction = @people.transactions.build seller_id: shop.id
+    #   items.each {|item| transaction.items.build item.attributes }
+    #   transaction.items_count = items.inject(0) { |s, item| s + item.amount }
+    #   transaction.total = items.inject(0) { |s, item| s + item.total }
+    #   flag = transaction.save
+    # end
+    # cart.destroy if flag
+    # debugger
+    if my_cart.create_transaction(@people) # should be my_cart.clear?
+      redirect_to person_transactions_path(@people.login),
+                  notice: 'Transaction was successfully created.'
+    else
+      redirect_to person_cart_path,
+                  notice: 'We are sorry, but the transaction was not successfully created.'
     end
-    my_cart.destroy if flag
-    redirect_to person_transactions_path(@people.login),
-                notice: 'Transaction was successfully created.'
   end
 
   # POST /people/transactions

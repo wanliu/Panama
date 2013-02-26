@@ -19,6 +19,10 @@ describe People::TransactionsController, "用户订单交易流通" do
     }
   end
 
+  def my_cart
+    get_session[:user].cart
+  end
+
   def valid_session
     get_session
   end
@@ -51,6 +55,21 @@ describe People::TransactionsController, "用户订单交易流通" do
       transaction = OrderTransaction.create! valid_attributes
       get :edit, {:id => transaction.to_param}, valid_session
       assigns(:transaction).should eq(transaction)
+    end
+  end
+
+  describe "POST batch_create" do
+
+    let(:my_cart) { controller.stub(:current_user) }
+
+    it "成功" do
+      # user = session[:omniauth] && User.where(:uid => session[:omniauth]['uid']).first
+      # my_cart = user.cart
+      # my_cart = double("my_cart")
+      # my_cart.stub(:items).and_return([item_1, item_2, item_3, item_4])
+
+      my_cart.should_receive(:create_transaction)
+      post :batch_create, person_params, valid_session
     end
   end
 
