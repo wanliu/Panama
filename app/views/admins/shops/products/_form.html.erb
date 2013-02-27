@@ -7,8 +7,11 @@
     <%= f.input :name %>    
     <%= f.association :attachments, 
                       :as => :album, 
-                      :upload_url => shop_admins_attachments_path(current_shop),                      
-                      :collection => @product.format_attachment %>    
+                      :upload_url => shop_admins_attachments_path(current_shop),
+                      :collection => @product.format_attachment %>
+
+		<%= render_styles %>
+
     <%= f.input :price %>    
     <%= f.association :category, :collection => category_root, :value => @product.category  , :as => :columnview %>
     <%= f.input :summary , as: :text %>
@@ -22,10 +25,27 @@
 
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
+
+	require(['lib/table_bander'], function(tblBander){
+		var bander = new tblBander.TableBander({
+			// els : [$('div.colours'), $('div.sizes')],
+			els    : [<%= filter_attribtues.map{ |item| "$('div.#{item.downcase}')" }.join(', ').html_safe %>],
+			fields : [{title: '价格', value: 'price'}, {title: '数量', value: 'quantity'}],
+			depth  : ['colour', 'size']
+		})
+	})
+
+	<%= data_2_talbe %>
+
+	require(['lib/colorpicker/js/bootstrap-colorpicker'], function(){
+    $('.color').colorpicker();
+  })
+
     require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
         var form = new Rails.FormView("form#<%= options_dom_id(@product) %>", {
             model: <%= raw @product.to_json %>
         });
     })
+
 </script>
 <% end %>
