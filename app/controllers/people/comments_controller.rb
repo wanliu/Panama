@@ -13,22 +13,13 @@ class People::Comments < People::BaseController
     end
 
     def edit
-        @comment = Comment.find(params[:id])
+       @comment = Comment.find(params[:id])
     end
 
-    def create
-        @comment = Comment.new(params[:comment])
-        if @comment.save
-            render :action => :show
-        else
-            render :action => :edit
-        end
-    end
-
-    def update
-        @comment = Comment.find(params[:id])
-        @comment.update_attribute(params[:comment])
-        if @comment.save
+    #活动评论
+    def activity
+        @comment = Comment.activity(params[:comment])
+        if @comment.valid?
             render :action => :show
         else
             render :action => :edit
