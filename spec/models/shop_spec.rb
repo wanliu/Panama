@@ -17,7 +17,7 @@ describe Shop, "商店模型" do
     def option_attachment
         {
             :name => "测试商店32a",
-            :user_id => get_session[:user].id
+            :user_id => anonymous.id
         }
     end
 
@@ -33,7 +33,7 @@ describe Shop, "商店模型" do
     it "验证数据" do
         @shop.user_id = be_nil
         @shop.save.should be_false
-        @shop.user_id = get_session[:user].id
+        @shop.user_id = anonymous.id
         @shop.save.should be_true
     end
 
@@ -47,7 +47,7 @@ describe Shop, "商店模型" do
     describe "检查模板" do
 
         it "创建成功" do
-            @shop.user_id = get_session[:user].id
+            @shop.user_id = anonymous.id
             @shop.save.should be_true
             # puts @shop.id
         end
@@ -56,7 +56,7 @@ describe Shop, "商店模型" do
     describe "method lookup_content" do
 
         it "获取主页模板内容 " do
-            @shop.user_id = get_session[:user].id
+            @shop.user_id = anonymous.id
             @shop.save
             @shop.lookup_content(:index).should be_an_instance_of(Content)
             @shop.lookup_content(:indexdsa).should be_nil

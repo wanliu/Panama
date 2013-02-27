@@ -11,6 +11,9 @@ class Category < ActiveRecord::Base
 
   validates :name, presence: true
 
+  # field :name, type: String
+  # field :styles, type: Array
+
   attr_accessor :indent
   mount_uploader :cover, ImageUploader
 

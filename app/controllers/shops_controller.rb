@@ -1,4 +1,5 @@
 require 'tempfile'
+require 'fileutils'
 
 class ShopsController < ApplicationController
   include Apotomo::Rails::ControllerMethods
@@ -133,7 +134,7 @@ class ShopsController < ApplicationController
 
   def prepend_tpl_view_path
     tmpdir = Rails.root.join(content_tpl_path)
-    o = `mkdir #{tmpdir}`
+    FileUtils.mkdir_p tmpdir
     prepend_view_path tmpdir
   end
 

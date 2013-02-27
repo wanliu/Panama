@@ -5,6 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+require 'rake'
 
 Category.create(:name => :root) unless Category.root
 
@@ -15,3 +16,13 @@ product_category_file = Rails.root.join("config/product_category.yml")
 bank_file = Rails.root.join("config/bank.yml")
 
 Bank.load_file(bank_file)
+
+def rake
+  rake = Rake::Application.new
+  Rake.application = rake
+  rake.init
+  rake.load_rakefile
+  rake
+end
+
+rake['city:load'].invoke

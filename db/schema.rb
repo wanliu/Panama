@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130223095848) do
+ActiveRecord::Schema.define(:version => 20130226060301) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(:version => 20130223095848) do
     t.integer  "buyer_id"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
+    t.integer  "address_id"
   end
 
   create_table "product_items", :force => true do |t|
@@ -168,6 +169,35 @@ ActiveRecord::Schema.define(:version => 20130223095848) do
     t.datetime "updated_at", :null => false
     t.string   "photo"
     t.integer  "user_id"
+  end
+
+  create_table "style_groups", :force => true do |t|
+    t.string   "name"
+    t.integer  "product_id", :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "style_items", :force => true do |t|
+    t.string   "title"
+    t.string   "value"
+    t.boolean  "checked",        :default => false
+    t.integer  "style_group_id"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "style_pairs", :force => true do |t|
+    t.integer "style_item_id",  :null => false
+    t.integer "sub_product_id", :null => false
+  end
+
+  create_table "sub_products", :force => true do |t|
+    t.float    "price"
+    t.float    "quantity"
+    t.integer  "product_id", :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

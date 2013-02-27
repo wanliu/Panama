@@ -54,11 +54,14 @@ class People::TransactionsController < People::BaseController
     #   flag = transaction.save
     # end
     # cart.destroy if flag
-    if my_cart.create_transaction(@people) # should be my_cart.clear?
+
+    # FIXME @people这个参数是不是多余？ cart的user不就是@people么？
+    if my_cart.create_transaction(@people)
       redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'
     else
-      redirect_to person_cart_path,
+      # FIXME
+      redirect_to person_cart_index_path(@people.login),
                   notice: 'We are sorry, but the transaction was not successfully created.'
     end
   end
