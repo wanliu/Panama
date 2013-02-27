@@ -23,7 +23,7 @@ class Comment < ActiveRecord::Base
   end
 
 
-  class < self
+  class << self
 
     def activity(args)
         create(:Activity, args)
