@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     root << widget(:cart, :my_cart)
   end
 
-  helper_method :current_user, :my_cart, :get_city
+  helper_method :current_user, :current_admin, :my_cart, :get_city
 
   def login_required
     if !current_user
@@ -21,6 +21,18 @@ class ApplicationController < ActionController::Base
           render :text => :ok, :status => 403 }
         format.html  {
           redirect_to '/auth/wanliuid' }
+        format.json {
+          render :json => { 'error' => 'Access Denied' }.to_json  }
+      end
+    end
+  end
+
+  def admin_required
+    if !current_admin
+
+      respond_to do |format|
+        format.html  {
+          redirect_to '/auth/wanliuadminid' }
         format.json {
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
