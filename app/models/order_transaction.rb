@@ -23,4 +23,15 @@ class OrderTransaction < ActiveRecord::Base
       transition [:waiting_paid] => :order
     end
   end
+
+  def create_items(item_ar)
+    item_ar.each { |item| items.create(item) }
+    self
+  end
+
+  def update_total_count
+    items_count = items.inject(0) { |s, item| s + item.amount }
+    total = items.inject(0) { |s, item| s + item.total }
+    save
+  end
 end
