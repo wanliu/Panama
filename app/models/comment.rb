@@ -3,7 +3,6 @@
 class Comment < ActiveRecord::Base
   attr_accessible :content, :user_id, :targeable_id
 
-
   belongs_to :user
   belongs_to :targeable, :polymorphic => true
   has_many :replies
@@ -26,19 +25,19 @@ class Comment < ActiveRecord::Base
   class << self
 
     def activity(args)
-        create(:Activity, args)
+      create(:Activity, args)
     end
 
     def product(args)
-        create!(:Product, args)
+      create!(:Product, args)
     end
 
     private
     def create!(type, args)
-        comment = new args
-        comment.targeable_type = type
-        comment.save
-        comment
+      comment = new args
+      comment.targeable_type = type
+      comment.save
+      comment
     end
   end
 end
