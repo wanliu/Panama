@@ -5,4 +5,9 @@ FactoryGirl.define do
     uid '12345'
     login 'test'
   end
+
+  factory :anonymous, class: User do
+    uid '12346'
+    login 'aonoymous'
+  end
 end

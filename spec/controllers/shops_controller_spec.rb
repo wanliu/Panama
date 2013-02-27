@@ -6,13 +6,13 @@ describe ShopsController do
   def valid_attributes
     {
       :name => "某某商店",
-      :user_id => get_session[:user].id
+      :user_id => current_user.id
     }
   end
 
   before :each do
     @shop = Shop.new valid_attributes
-    @shop.user_id = get_session[:user].id
+    @shop.user_id = current_user.id
     @shop.save
   end
 
@@ -47,7 +47,6 @@ describe ShopsController do
 
   describe "POST create" do
     describe "with valid params" do
-      let(:current_user) { get_session[:user] }
       let(:shop_attributes) {{ name: 'shop_test', user_id: current_user.id }}
 
       it "creates a new Shop" do

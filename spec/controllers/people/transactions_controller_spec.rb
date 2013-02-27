@@ -4,23 +4,22 @@ require 'spec_helper'
 
 describe People::TransactionsController, "用户订单交易流通" do
 
+  let(:valid_session) { get_session }
+
   def valid_attributes
     {
-      :buyer_id => get_session[:user].id,
+      :buyer_id => current_user.id,
       :items_count => 2,
       :seller_id => 3,
-      :total => 5
+      :total => 5,
+      :address_id => 3
     }
   end
 
   def person_params
     {
-      :person_id => get_session[:user].login
+      :person_id => current_user.login
     }
-  end
-
-  def valid_session
-    get_session
   end
 
   describe "GET index" do
@@ -57,7 +56,7 @@ describe People::TransactionsController, "用户订单交易流通" do
   describe "POST create" do
     describe "with valid params" do
       before :each do
-        @options = person_params.merge({:transaction => valid_attributes})
+        @options = person_params.merge({:order_transaction => valid_attributes})
       end
 
       it "附加一条记录" do
@@ -74,7 +73,7 @@ describe People::TransactionsController, "用户订单交易流通" do
 
       it "添加记录重定向" do
         post :create, @options, valid_session
-        response.should redirect_to(person_transaction_path(get_session[:user].login, assigns(:transaction)))
+        response.should redirect_to(person_transaction_path(current_user.login, assigns(:transaction)))
       end
     end
 
@@ -118,7 +117,7 @@ describe People::TransactionsController, "用户订单交易流通" do
         put :update, person_params.merge({
           :id => transaction.to_param,
           :transaction => valid_attributes}), valid_session
-        response.should redirect_to(person_transaction_path(get_session[:user].login, transaction))
+        response.should redirect_to(person_transaction_path(current_user.login, transaction))
       end
     end
 
@@ -152,7 +151,7 @@ describe People::TransactionsController, "用户订单交易流通" do
     it "删除成功跳向url" do
       transaction = OrderTransaction.create! valid_attributes
       delete :destroy, person_params.merge({:id => transaction.to_param}), valid_session
-      response.should redirect_to(person_transactions_path(get_session[:user].login))
+      response.should redirect_to(person_transactions_path(current_user.login))
     end
   end
 
@@ -171,7 +170,7 @@ describe People::TransactionsController, "用户订单交易流通" do
       post :event, person_params.merge({
         :event => :buy,
         :id => transaction.to_param}), valid_session
-      response.should redirect_to(person_transaction_path(get_session[:user].login, transaction))
+      response.should redirect_to(person_transaction_path(current_user.login, transaction))
     end
   end
 end

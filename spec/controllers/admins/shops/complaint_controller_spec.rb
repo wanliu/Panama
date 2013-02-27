@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Admins::Shops::ComplaintController do
-  let(:current_user) { get_session[:user]}
   let(:pepsi) { FactoryGirl.create(:shop, user: current_user) }
   let(:valid_shop) {{ shop_id: pepsi.to_param }}
 

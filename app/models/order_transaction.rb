@@ -18,8 +18,8 @@ class OrderTransaction < ActiveRecord::Base
   validates :total, :numericality => true
 
   validates_presence_of :buyer
-  validates_presence_of :seller
-  validates_presence_of :address
+  validates_presence_of :seller_id
+  # validates_presence_of :address
 
   state_machine :initial => :order do
 

@@ -70,39 +70,24 @@ describe Address, "地址" do
     end
   end
 
-  describe "验证检查上级" do
+  describe "验证检查上级" do 
     it "正常验证检查  'city' 上级" do
-      event = address_obj
-      event.valid?.should == true
+      address.should validate_superior_of(:city, :province )
     end
 
     it "出错验证检查  'city' 上级" do
-      event = address_obj
-      event.city_id = '-0'
-      event.valid?.should == false
+      address.city_id = nil 
+      address.should_not validate_superior_of(:city, :province )
     end
 
     it "正常验证检查  'area' 上级" do
-      event = address_obj
-      event.valid?.should == true
+      address.should validate_superior_of(:area, :city )
     end
 
     it "出错验证检查  'area' 上级" do
-      event = address_obj
-      event.area_id = '-0'
-      event.valid?.should == false
+      address.area_id = nil 
+      address.should_not validate_superior_of(:area, :city )
     end
   end
-
-  def address_obj
-    event = Address.new()
-    event.transaction = nil
-    event.user_id = user.id
-    event.province_id = province.id
-    event.city_id = city.id
-    event.area_id = area.id
-    event.addressable = nil
-    event
-  end
- 
 end
+ 

@@ -13,3 +13,10 @@ FactoryGirl.define do
     f.addressable :addressable
   end
 end
+
+RSpec::Matchers.define :validate_superior_of do |expected, target|
+  match do |actual| 
+    actual.send(target).children.include?(actual.send(expected))
+  end
+end
+
