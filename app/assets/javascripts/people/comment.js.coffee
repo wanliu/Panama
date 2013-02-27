@@ -1,7 +1,7 @@
 #author: huxinghai
 #describe: 评论
 
-define(["jquery", "backbone", "exports"], -> ($, Backbone, exports)
+define(["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
     class Comment extends Backbone.View
         comment_type: null
