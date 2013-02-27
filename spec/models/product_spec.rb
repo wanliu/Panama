@@ -55,11 +55,6 @@ describe Product, "产品模型" do
     it "数据验证" do
         options = _attributes
         product = Product.new options
-
-        product.shop_id.should be_nil
-        product.valid?.should be_false
-
-        product.shop_id = shop.id
         product.valid?.should be_true
 
         product.name = nil

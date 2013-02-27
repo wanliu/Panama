@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :user do
-    uid '12345'
-    login 'test'
+    sequence(:uid) { |n| "12345#{n}" }
+    sequence(:login) { |n| "test#{n}" }
   end
 
   factory :anonymous, class: User do
