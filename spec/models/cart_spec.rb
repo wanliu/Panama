@@ -15,15 +15,19 @@ describe Cart, "model 购物车 " do
   end
 
   describe "实例方法" do
-  	let(:people) { FactoryGirl.create(:user) }
+  	let(:people)     { FactoryGirl.create(:user) }
   	let(:shop_owner) { FactoryGirl.create(:user) }
    	let(:shop_a) { FactoryGirl.create(:shop, user: shop_owner) }
     let(:shop_b) { FactoryGirl.create(:shop, user: shop_owner) }
-    let(:category) { FactoryGirl.create(:category, shop: shop_a) }
-    let(:product_i) { FactoryGirl.create(:product, shop: shop_a, category: category) }
-    let(:product_ii) { FactoryGirl.create(:product, shop: shop_b, category: category) }
-    let(:product_iii) { FactoryGirl.create(:product, shop: shop_b, category: category) }
-    let(:product_iv) { FactoryGirl.create(:product, shop: shop_a, category: category) }
+    let(:shop_c) { FactoryGirl.create(:shop, user: shop_owner) }
+    let(:category_a) { FactoryGirl.create(:category, shop: shop_a) }
+    let(:category_b) { FactoryGirl.create(:category, shop: shop_b) }
+    let(:category_c) { FactoryGirl.create(:category, shop: shop_c) }
+    let(:category_d) { FactoryGirl.create(:category, shop: shop_b) }
+    let(:product_i) { FactoryGirl.create(:product, shop: shop_a, category: category_a) }
+    let(:product_ii) { FactoryGirl.create(:product, shop: shop_b, category: category_b) }
+    let(:product_iii) { FactoryGirl.create(:product, shop: shop_b, category: category_d) }
+    let(:product_iv)  { FactoryGirl.create(:product, shop: shop_c, category: category_c) }
     let(:item_1) { FactoryGirl.create(:product_item, product: product_i, cart: nil, transaction: nil) }
     let(:item_2) { FactoryGirl.create(:product_item, product: product_ii, cart: nil, transaction: nil) }
     let(:item_3) { FactoryGirl.create(:product_item, product: product_iii, cart: nil, transaction: nil) }
@@ -33,7 +37,7 @@ describe Cart, "model 购物车 " do
     let(:the_items) { [item_1, item_2, item_3, item_4, item_5, item_6].map { |item| item.attributes } }
 
     describe "create_transaction" do
-  		it "ok" do
+  		it "按商店分单" do
   			cart = Cart.new
 	  		the_items.each { |item| cart.items << ProductItem.create(item) }
 
@@ -46,21 +50,22 @@ describe Cart, "model 购物车 " do
   	end
 
   	describe "save_transcation" do
-      let(:cart) { Cart.new }
-      let(:people) { User.where(login: 'tt_name1').first_or_create }
+      let(:cart) { Cart.new(items_count: 0, total: 0) }
+      let(:people) { User.where(login: 'tt_name').first_or_create }
 
-  		it 'change the transactions size' do
-  			expect { cart.save_transcation(shop_a, the_items, people) }
-  				.to change { people.transactions.size }.by(1)
-  		end
+      it '数据库增一个订单' do
+        expect { cart.save_transcation(shop_a, the_items, people) }
+          .to change { people.transactions.size }.by(1)
+      end
 
-  		it 'invoke the transactions instance method' do
+  		it '调用订单成员方法' do
         uer = mock_model("User")
         ordertransaction = mock_model("OrderTransaction")
-        uer.stub_chain(:transactions, :create).with(seller_id: shop_a.id).and_return(ordertransaction)
+        uer.stub_chain(:transactions, :build).with(seller_id: shop_a.id).and_return(ordertransaction)
 
-  			ordertransaction.should_receive(:create_items).with(the_items).exactly(1).times
+  			ordertransaction.should_receive(:build_items).with(the_items).exactly(1).times
         ordertransaction.should_receive(:update_total_count).exactly(1).times
+        ordertransaction.should_receive(:save).exactly(1).times
 
         cart.save_transcation(shop_a, the_items, uer)
   		end

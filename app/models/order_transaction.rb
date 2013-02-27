@@ -13,6 +13,14 @@ class OrderTransaction < ActiveRecord::Base
            foreign_key: 'transaction_id',
            autosave: true
 
+  validates :state, :presence => true
+  validates :items_count, :numericality => true
+  validates :total, :numericality => true
+
+  validates_presence_of :buyer
+  validates_presence_of :seller_id
+  # validates_presence_of :address
+
   state_machine :initial => :order do
 
     event :buy do
@@ -24,14 +32,13 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def create_items(item_ar)
-    item_ar.each { |item| items.create(item) }
+  def build_items(item_ar)
+    item_ar.each { |item| items.build(item) }
     self
   end
 
   def update_total_count
-    items_count = items.inject(0) { |s, item| s + item.amount }
-    total = items.inject(0) { |s, item| s + item.total }
-    save
+    self.items_count = items.inject(0) { |s, item| s + item.amount }
+    self.total = items.inject(0) { |s, item| s + item.total }
   end
 end

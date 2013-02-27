@@ -14,7 +14,7 @@ describe Admins::Shops::CategoriesController do
 
   describe "需要管理权才能进入" do
     let(:pepsi) { FactoryGirl.create(:shop,
-                                     user: get_session[:user]) }
+                                     user: current_user) }
     let(:root) { pepsi.category }
 
     it "首页" do
@@ -102,7 +102,7 @@ describe Admins::Shops::CategoriesController do
   end
 
   describe "无管理权拒绝" do
-    let(:pepsi) { FactoryGirl.create(:shop, user: get_session[:user]) }
+    let(:pepsi) { FactoryGirl.create(:shop, user: current_user) }
     let(:root) { pepsi.category }
 
     it "首页" do
