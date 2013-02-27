@@ -14,6 +14,8 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :product_comments
+
     member do
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
