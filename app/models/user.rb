@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   has_many :addresses, class_name: "Address"
 
-  def self.exists?(:user_id)
+  def self.exists?(user_id)
     begin
       find(user_id)
     rescue
