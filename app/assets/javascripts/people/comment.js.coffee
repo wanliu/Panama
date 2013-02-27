@@ -29,9 +29,6 @@ define(["jquery", "backbone", "exports"], -> ($, Backbone, exports)
         send_comment: (params, callback = ->) ->
             $.post("#{@root_url()}/#{@switch_action()}", params, callback)
 
-        renderNew: (callback = ->) ->
-            $.get("#{@root_url()}/new", null, callback)
-
 
     class CommentActivity extends Comment
         comment_type: "Activity"
