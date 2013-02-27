@@ -1,4 +1,4 @@
-class People::Comments < People::BaseController
+class People::CommentsController < People::BaseController
 
     def index
         @comments = Comment.where("targeable_type=?", params[:targeable_type])
