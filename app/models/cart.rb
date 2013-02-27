@@ -2,6 +2,7 @@ class Cart < ActiveRecord::Base
   attr_accessible :items_count
 
   belongs_to :user
+
   has_many :items, inverse_of: :cart, class_name: 'ProductItem', autosave: true
 
   def add_to(attributes, be_merge = true)
@@ -29,4 +30,22 @@ class Cart < ActiveRecord::Base
       items.build attributes
     end
   end
+
+  def create_transaction(people)
+    done = shop_items.map { |shop, pro_items| save_transcation(shop, pro_items, people) }.all?
+    destroy if done # FIXME :should't be items.clear?
+    done
+  end
+
+  def shop_items
+    items.group_by { |item| item.product.shop }
+  end
+
+  def save_transcation(shop, pro_items, people)
+    transaction = people.transactions.build(seller_id: shop.id)
+    transaction.build_items(pro_items)
+    transaction.update_total_count
+    transaction.save
+  end
+
 end

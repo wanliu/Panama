@@ -5,12 +5,13 @@ require 'spec_helper'
 describe People::TransactionsController, "用户订单交易流通" do
 
   let(:valid_session) { get_session }
+  let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
 
   def valid_attributes
     {
       :buyer_id => current_user.id,
       :items_count => 2,
-      :seller_id => 3,
+      :seller_id => shop.id,
       :total => 5,
       :address_id => 3
     }
@@ -50,6 +51,20 @@ describe People::TransactionsController, "用户订单交易流通" do
       transaction = OrderTransaction.create! valid_attributes
       get :edit, {:id => transaction.to_param}, valid_session
       assigns(:transaction).should eq(transaction)
+    end
+  end
+
+  describe "POST batch_create" do
+    it "生成成功" do
+      Cart.any_instance.should_receive(:create_transaction).with(current_user).and_return(true)
+      post :batch_create, person_params, valid_session
+      response.should redirect_to(person_transactions_path(current_user.login))
+    end
+
+    it "生成失败" do
+      Cart.any_instance.should_receive(:create_transaction).with(current_user).and_return(false)
+      post :batch_create, person_params, valid_session
+      response.should redirect_to(person_cart_index_path(current_user.login))
     end
   end
 
