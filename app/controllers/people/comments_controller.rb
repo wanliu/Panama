@@ -18,7 +18,7 @@ class People::CommentsController < People::BaseController
 
     #活动评论
     def activity
-        @comment = Comment.activity(params[:comment])
+        @comment = Comment.activity(params[:comment].merge(:user_id => current_user.id))
         if @comment.valid?
             render :action => :show
         else
@@ -28,7 +28,7 @@ class People::CommentsController < People::BaseController
 
     #产品评论
     def product
-        @comment = Comment.product(params[:comment])
+        @comment = Comment.product(params[:comment].merge(:user_id => current_user.id))
         if @comment.valid?
             render :action => :show
         else

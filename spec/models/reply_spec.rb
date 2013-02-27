@@ -1,5 +1,9 @@
+#encoding: utf-8
 require 'spec_helper'
 
-describe Reply do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Reply, "评论回复模型" do
+
+  it{ should belong_to(:comment) }
+  it{ should belong_to(:user) }
+
 end
