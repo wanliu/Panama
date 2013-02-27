@@ -1,4 +1,4 @@
-source 'http://ruby.taobao.org'
+source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
@@ -124,3 +124,4 @@ end
 
 gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10
 gem "ac_uniquify", "~> 0.1.0"
+gem 'draper', '~> 1.0'
