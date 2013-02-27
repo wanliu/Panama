@@ -54,7 +54,6 @@ class People::TransactionsController < People::BaseController
     #   flag = transaction.save
     # end
     # cart.destroy if flag
-    # debugger
     if my_cart.create_transaction(@people) # should be my_cart.clear?
       redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'
