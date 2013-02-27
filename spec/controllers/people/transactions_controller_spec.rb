@@ -5,12 +5,13 @@ require 'spec_helper'
 describe People::TransactionsController, "用户订单交易流通" do
 
   let(:valid_session) { get_session }
+  let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
 
   def valid_attributes
     {
       :buyer_id => current_user.id,
       :items_count => 2,
-      :seller_id => 3,
+      :seller_id => shop.id,
       :total => 5,
       :address_id => 3
     }
