@@ -13,9 +13,9 @@ describe OrderTransaction, "订单流通记录" do
 
 	it "检查属性" do
 		transaction = OrderTransaction.new
-		transaction.should response_to(:items_count)
-		transaction.should response_to(:total)
-		transaction.should response_to(:state)
+		transaction.should respond_to(:items_count)
+		transaction.should respond_to(:total)
+		transaction.should respond_to(:state)
 	end
 
 	it "数据验证" do

@@ -9,7 +9,11 @@ module ApplicationHelper
   end
 
   def current_user
-    session[:user] ||= session[:omniauth] && User.where(:uid => session[:omniauth]['uid']).first
+    return nil unless session[:omniauth]
+    session[:user_id] = session[:omniauth]['uid']
+    if session[:user_id]
+      @current_user ||= User.where(:uid => session[:user_id]).first
+    end
   end
 
   def default_img_url(version_name)
