@@ -9,6 +9,7 @@ describe Cart, "model 购物车 " do
   end
 
   describe "属性验证" do
+    let(:cart) { Cart.new }
     it { cart.should respond_to(:items_count) }
     it { cart.should respond_to(:user_id) }
   end
@@ -45,20 +46,23 @@ describe Cart, "model 购物车 " do
   	end
 
   	describe "save_transcation" do
+      let(:cart) { Cart.new }
+      let(:people) { User.where(login: 'tt_name1').first_or_create }
+
   		it 'change the transactions size' do
-  			cart = Cart.new
-  			people = User.where(login: 'tt_name1').first_or_create
   			expect { cart.save_transcation(shop_a, the_items, people) }
   				.to change { people.transactions.size }.by(1)
   		end
 
   		it 'invoke the transactions instance method' do
-        cart = Cart.new
-        people = User.where(login: 'tt_name1'). first_or_create
+        uer = mock_model("User")
+        ordertransaction = mock_model("OrderTransaction")
+        uer.stub_chain(:transactions, :create).with(seller_id: shop_a.id).and_return(ordertransaction)
 
-  			OrderTransaction.any_instance.should_receive(:create_items).with(the_items).exactly(1).times
-        OrderTransaction.any_instance.should_receive(:update_total_count).exactly(1).times
-        cart.save_transcation(shop_a, the_items, people)
+  			ordertransaction.should_receive(:create_items).with(the_items).exactly(1).times
+        ordertransaction.should_receive(:update_total_count).exactly(1).times
+
+        cart.save_transcation(shop_a, the_items, uer)
   		end
   	end
   end
