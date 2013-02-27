@@ -21,19 +21,18 @@ class Comment < ActiveRecord::Base
     errors.add(:targeable_id, "#{targeable_type} 不存在！") if targ.nil?
   end
 
+  def self.activity(args)
+    create("Activity", args)
+  end
+
+  def self.product(args)
+    create("Product", args)
+  end
 
   class << self
 
-    def activity(args)
-      create(:Activity, args)
-    end
-
-    def product(args)
-      create!(:Product, args)
-    end
-
     private
-    def create!(type, args)
+    def create(type, args)
       comment = new args
       comment.targeable_type = type
       comment.save
