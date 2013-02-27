@@ -5,8 +5,8 @@
 	<div class="container-fluid property">
 		<div class="row-fluid">
 			<div class="span12">
-			<%= link_to t(:enter_shop, :name => @product.shop.name), 
-						shop_path(@product.shop.name), 
+			<%= link_to t(:enter_shop, :name => @product.shop.name),
+						shop_path(@product.shop.name),
 						:class => 'btn pull-right' %>
 			<h5><%= @product.name %></h5>
 			<p><small><%= @product.summary %></small></P>
@@ -24,7 +24,7 @@
  						<label class="control-label" for="inputEmail">配送</label>
  						<div class="controls">
 							<p class="text-surprised"><%= @product.price %></p>
-						</div>						
+						</div>
  						<label class="control-label" for="inputEmail">商品评分</label>
  						<div class="controls">
 							<p class="star"></p>
@@ -55,7 +55,7 @@
 						      </div>
 						    </div> -->
 					    </div>
-				    </div>		
+				    </div>
 					<div class="control-group">
 						<div class="controls pull-right">
 							<button class="btn btn-primary btn-large">BUY</button>
@@ -63,7 +63,7 @@
 						</div>
 					</div>
 				<% end %>
-			</div>	
-		</div>			
+			</div>
+		</div>
 	</div>
 </div>

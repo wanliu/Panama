@@ -18,7 +18,7 @@ class People::Comments < People::BaseController
 
     def create
         @comment = Comment.new(params[:comment])
-        if @product_comment.save
+        if @comment.save
             render :action => :show
         else
             render :action => :edit
