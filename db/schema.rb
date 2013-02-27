@@ -58,9 +58,9 @@ ActiveRecord::Schema.define(:version => 20130227030334) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -81,6 +81,15 @@ ActiveRecord::Schema.define(:version => 20130227030334) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "ancestry"
+  end
+
+  create_table "comments", :force => true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "targeable_id"
+    t.string   "targeable_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "contents", :force => true do |t|
@@ -119,15 +128,6 @@ ActiveRecord::Schema.define(:version => 20130227030334) do
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
     t.integer  "address_id"
-  end
-
-  create_table "product_comments", :force => true do |t|
-    t.string   "title"
-    t.string   "content"
-    t.integer  "user_id"
-    t.integer  "product_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "product_items", :force => true do |t|
