@@ -1,7 +1,7 @@
 class People::Comments < People::BaseController
 
     def index
-        @comments = Comment.where(:product_id => params[:product_id])
+        @comments = Comment.where("targeable_type=?", params[:targeable_type])
     end
 
     def show
