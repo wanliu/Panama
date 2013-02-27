@@ -1,5 +1,5 @@
-class UserSessionsController < ApplicationController
-  before_filter :login_required, :only => [ :destroy ]
+class SystemSessionsController < ApplicationController
+  before_filter :login_admin, :only => [ :destroy ]
 
   respond_to :html
 
@@ -8,21 +8,21 @@ class UserSessionsController < ApplicationController
     omniauth = env['omniauth.auth']
 
     logger.debug "+++ #{omniauth}"
-    user = User.where(:uid => omniauth['uid']).first
-    if not user
+    admin = Admin.where(:uid => omniauth['uid']).first
+    if not admin
       # New user registration
-      user = User.new(:uid => omniauth['uid'])
-      user.login = omniauth["info"]["login"]
-      user.save
+      admin = Admin.new(:uid => omniauth['uid'])
+      admin.login = omniauth["info"]["login"]
+      admin.save
 
     end
 
     #p omniauth
     # Currently storing all the info
-    session[:user_id] = omniauth['uid']
+    session[:admin_id] = omniauth['uid']
 
-    flash[:notice] = t(:successfully_login, "Successfully logged in")
-    redirect_to root_path
+    flash[:notice] = t(:admin_successfully_login, "Successfully logged in")
+    redirect_to system_index_path
   end
 
   # Omniauth failure callback
@@ -34,8 +34,7 @@ class UserSessionsController < ApplicationController
   # logout - Clear our rack session BUT essentially redirect to the provider
   # to clean up the Devise session from there too !
   def destroy
-    session[:user_id] = nil
-    session[:omniauth] = nil
+    session[:admin_id] = nil
 
     flash[:notice] = 'You have successfully signed out!'
     redirect_to "#{accounts_provider_url}accounts/logout?callback_redirect_uri=http://#{request.env['HTTP_HOST']}"

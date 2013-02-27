@@ -22,6 +22,7 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :system
 
   resources :city
   resources :addresses
@@ -99,6 +100,8 @@ Panama::Application.routes.draw do
   # omniauth
   match '/auth/:provider/callback', :to => 'user_sessions#create'
   match '/auth/failure', :to => 'user_sessions#failure'
+
+  match '/auth/admin/:provider/callback', :to => 'system_sessions#create'
 
   # Custom logout
   match '/logout', :to => 'user_sessions#destroy'
