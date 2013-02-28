@@ -36,9 +36,9 @@ module PeopleHelper
 
   # return string like "{ colour_style_id: 3, size_style_id: 5, price: 22, quantity: 15 }"
   def get_attributes(sub) # FIXME n+1
-  	html = ["price: #{ sub.price }", "quantity: #{ sub.quantity }"]
+  	html = ["id: #{ sub.id }, price: #{ sub.price }", "quantity: #{ sub.quantity }"]
   	sub.items.each do |attr|
-  		html << "#{attr.style_group.name}_style_id: '#{attr.id}'"
+  		html << "#{ attr.style_group.name }_style_id: '#{ attr.id }'"
   	end
     html = "{" << html.join(', ')
   	html << "}"
