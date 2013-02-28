@@ -3,7 +3,8 @@ class People::CommentsController < People::BaseController
     def index
         @activities = Activity.all
         @comment = Comment.new
-        @comments = Comment.where("targeable_type=?", params[:targeable_type])
+        @comments = Comment.where("targeable_type=? and targeable_id=?",
+            params[:targeable_type], params[:targeable_id])
     end
 
     def show
