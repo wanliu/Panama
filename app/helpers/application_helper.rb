@@ -13,7 +13,7 @@ module ApplicationHelper
   end
 
   def current_admin
-    @current_admin ||= Admin.where(:uid => session[:admin_id]).first if session[:admin_id]
+    @current_admin ||= AdminUser.where(:uid => session[:admin_id]).first if session[:admin_id]
   end
 
   def default_img_url(version_name)
