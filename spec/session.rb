@@ -2,9 +2,7 @@ module Session
   module Helpers
     def get_session(*args)
       {
-        omniauth: {
-          'uid' => current_user.uid
-        }
+        user_id: current_user.uid
       }
     end
 

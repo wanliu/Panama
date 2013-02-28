@@ -1,34 +1,34 @@
 require "spec_helper"
 
-describe SystemsController do
+describe SystemController do
   describe "routing" do
 
     it "routes to #index" do
-      get("/systems").should route_to("systems#index")
+      get("/system").should route_to("system#index")
     end
 
     it "routes to #new" do
-      get("/systems/new").should route_to("systems#new")
+      get("/system/new").should route_to("system#new")
     end
 
     it "routes to #show" do
-      get("/systems/1").should route_to("systems#show", :id => "1")
+      get("/system/1").should route_to("system#show", :id => "1")
     end
 
     it "routes to #edit" do
-      get("/systems/1/edit").should route_to("systems#edit", :id => "1")
+      get("/system/1/edit").should route_to("system#edit", :id => "1")
     end
 
     it "routes to #create" do
-      post("/systems").should route_to("systems#create")
+      post("/system").should route_to("system#create")
     end
 
     it "routes to #update" do
-      put("/systems/1").should route_to("systems#update", :id => "1")
+      put("/system/1").should route_to("system#update", :id => "1")
     end
 
     it "routes to #destroy" do
-      delete("/systems/1").should route_to("systems#destroy", :id => "1")
+      delete("/system/1").should route_to("system#destroy", :id => "1")
     end
 
   end
