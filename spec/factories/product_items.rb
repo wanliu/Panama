@@ -7,7 +7,7 @@ FactoryGirl.define do
     sequence(:total, 5)  { |n| n * (1000 + n) }
     sequence(:title) { |n| "title_#{n}" }
     f.cart :cart
-    f.product :product
+    f.sub_product :sub_product
     f.transaction :transaction
   end
 end
