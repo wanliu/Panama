@@ -10,7 +10,7 @@ require 'rake'
 Category.create(:name => :root) unless Category.root
 
 @root = Category.where(name: '_products_root').first_or_create(:name => '_products_root')
-shops_category_file = Rails.root.join("config/shops_category.yml")
+shops_category_file = Rails.root.join("config/product_category.yml")
 @root.load_file(shops_category_file)
 
 bank_file = Rails.root.join("config/bank.yml")
