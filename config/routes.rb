@@ -1,4 +1,8 @@
 Panama::Application.routes.draw do
+   ActiveAdmin.routes(self)
+
+  # devise_for :admin_users, ActiveAdmin::Devise.config
+
   unless FayeRails.server('/realtime')
     faye_server '/realtime', timeout: 25 do
       map '/notice' => RealtimeNoticeController
@@ -24,7 +28,7 @@ Panama::Application.routes.draw do
 
   match '/system/logout', :to => 'system_sessions#destroy'
 
-  resources :system
+  # resources :system
 
   resources :city
   resources :addresses

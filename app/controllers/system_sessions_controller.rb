@@ -8,10 +8,10 @@ class SystemSessionsController < ApplicationController
     omniauth = env['omniauth.auth']
 
     logger.debug "+++ #{omniauth}"
-    admin = Admin.where(:uid => omniauth['uid']).first
+    admin = AdminUser.where(:uid => omniauth['uid']).first
     if not admin
       # New user registration
-      admin = Admin.new(:uid => omniauth['uid'])
+      admin = AdminUser.new(:uid => omniauth['uid'])
       admin.login = omniauth["info"]["login"]
       admin.save
 

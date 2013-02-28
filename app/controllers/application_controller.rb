@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :current_admin, :my_cart, :get_city
 
+  before_filter :set_locale
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+
   def login_required
     if !current_user
 
