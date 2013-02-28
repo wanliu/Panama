@@ -11,7 +11,7 @@ class Comment < ActiveRecord::Base
   validate :validate_user_exists?, :validate_targeable_exists_and_nil?
 
   def validate_user_exists?
-    errors.add(:user_id, "用户不存！") unless User.exists?(user_id)
+    errors.add(:user_id, "用户不存在！") unless User.exists?(user_id)
   end
 
   def validate_targeable_exists_and_nil?
