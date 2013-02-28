@@ -1,5 +1,5 @@
 class SystemSessionsController < ApplicationController
-  before_filter :login_admin, :only => [ :destroy ]
+  before_filter :admin_required, :only => [ :destroy ]
 
   respond_to :html
 
@@ -37,6 +37,6 @@ class SystemSessionsController < ApplicationController
     session[:admin_id] = nil
 
     flash[:notice] = 'You have successfully signed out!'
-    redirect_to "#{accounts_provider_url}accounts/logout?callback_redirect_uri=http://#{request.env['HTTP_HOST']}"
+    redirect_to "#{accounts_provider_url}/system/logout?callback_redirect_uri=http://#{request.env['HTTP_HOST']}"
   end
 end

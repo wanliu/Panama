@@ -22,6 +22,8 @@ Panama::Application.routes.draw do
     end
   end
 
+  match '/system/logout', :to => 'system_sessions#destroy'
+
   resources :system
 
   resources :city
