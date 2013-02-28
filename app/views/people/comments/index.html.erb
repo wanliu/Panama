@@ -1,10 +1,12 @@
 
 <div>
   <% @activities.each do |activity| %>
-    <img src="<%= activity.url %>">
-    <%= activity.id %>
-    <%= render :partial=> "comments/new_activity" %>
+    <p>
+        <img src="<%= activity.url %>">
+        <input type='hidden' value="<%= activity.id %>" name='id' />
+        <%=render :template => "people/comments/new_activity" %>
+    </p>
   <% end %>
-  
+
 </div>
 
