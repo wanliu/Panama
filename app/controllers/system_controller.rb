@@ -4,7 +4,6 @@ class SystemController < ApplicationController
   # GET /systems
   # GET /systems.json
   def index
-    debugger
     self
     # @systems = System.all
 
