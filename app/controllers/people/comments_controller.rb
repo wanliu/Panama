@@ -1,6 +1,8 @@
 class People::CommentsController < People::BaseController
 
     def index
+        @activities = Activity.all
+        @comment = Comment.new
         @comments = Comment.where("targeable_type=?", params[:targeable_type])
     end
 
