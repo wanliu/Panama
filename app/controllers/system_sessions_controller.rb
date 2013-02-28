@@ -22,7 +22,7 @@ class SystemSessionsController < ApplicationController
     session[:admin_id] = omniauth['uid']
 
     flash[:notice] = t(:admin_successfully_login, "Successfully logged in")
-    redirect_to system_index_path
+    redirect_to system_root_path
   end
 
   # Omniauth failure callback
