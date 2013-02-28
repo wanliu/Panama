@@ -20,6 +20,14 @@ class User < ActiveRecord::Base
 
   has_many :addresses, class_name: "Address"
 
+  def self.exists?(user_id)
+    begin
+      find(user_id)
+    rescue
+      false
+    end
+  end
+
   after_initialize do
     if cart.nil?
       create_cart
