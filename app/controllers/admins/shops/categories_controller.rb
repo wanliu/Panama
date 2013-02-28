@@ -11,47 +11,60 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   end
 
   def index
-    # @categories = current_shop.category.descendants
-    node = current_shop.category
-    @categories = Category.sort_by_ancestry(node.descendants)
-    #@children = @category.children
+    # @shops_categories = current_shop.shops_category.descendants
+    node = current_shop.shops_category
+    @shops_categories = ShopsCategory.sort_by_ancestry(node.descendants)
+    #@children = @shops_category.children
   end
 
   def new
     @indent += 1
-    @category = @parent.children.build
+    @shops_category = @parent.children.build
   end
 
   def create
-    @category = @parent.children.create(params[:category])
+    @shops_category = @parent.children.build(params[:shops_category])
+    @shops_category.shop = current_shop
+    @shops_category.save
     render :action => :edit
   end
 
   def destroy
-    @category = Category.find(params[:id])
-    if @category == current_shop.category || !@category.descendant_of?(current_shop.category)
+    @shops_category = ShopsCategory.find(params[:id])
+    if @shops_category == current_shop.shops_category || !@shops_category.descendant_of?(current_shop.shops_category)
       throw IncorretDescentantNode.new(t('errors.incorret_descentant_node',
         :node => params[:id],
-        :parent => @current_shop.category.id))
+        :parent => @current_shop.shops_category.id))
     end
-    @category.destroy
+    @shops_category.destroy
     render "report_destroy"
   end
 
   def update
-    @category = Category.find(params[:id])
-    @category.update_attributes(params[:category])
+    @shops_category = ShopsCategory.find(params[:id])
+    @shops_category.update_attributes(safe_params)
     render :action => :edit
   end
 
   def form_params
-    @parent = params[:parent_id].blank? ? current_shop.category : Category.find(params[:parent_id])
+    @parent = params[:parent_id].blank? ? current_shop.shops_category : ShopsCategory.find(params[:parent_id])
     # FIXED: don't use raise error ,change redirect_to
-    if !(@parent == current_shop.category || @parent.descendant_of?(current_shop.category))
+    if !(@parent == current_shop.shops_category || @parent.descendant_of?(current_shop.shops_category))
       throw IncorretDescentantNode.new(t('errors.incorret_descentant_node',
         :node => params[:parent_id],
         :parent => @parent.id))
     end
     @indent = @parent.indent
   end
+
+  private
+
+  def safe_params
+    params[:shops_category].slice(*white_list)
+  end
+
+  def white_list
+    ShopsCategory.accessible_attributes
+  end
+
 end

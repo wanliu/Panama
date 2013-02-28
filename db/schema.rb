@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228042642) do
+ActiveRecord::Schema.define(:version => 20130228081850) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(:version => 20130228042642) do
     t.string   "name"
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
-    t.integer  "shop_id"
     t.string   "ancestry"
     t.string   "cover"
     t.integer  "ancestry_depth", :default => 0
@@ -173,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20130228042642) do
     t.integer  "shop_id"
     t.integer  "category_id"
     t.integer  "default_attachment_id"
+    t.integer  "shops_category_id"
   end
 
   create_table "resources", :force => true do |t|
@@ -199,6 +199,16 @@ ActiveRecord::Schema.define(:version => 20130228042642) do
     t.datetime "updated_at", :null => false
     t.string   "photo"
     t.integer  "user_id"
+  end
+
+  create_table "shops_categories", :force => true do |t|
+    t.string   "name"
+    t.string   "cover"
+    t.integer  "shop_id"
+    t.string   "ancestry"
+    t.integer  "ancestry_depth"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "style_groups", :force => true do |t|

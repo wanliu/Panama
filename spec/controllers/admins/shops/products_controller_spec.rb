@@ -4,8 +4,12 @@ require 'spec_helper'
 describe Admins::Shops::ProductsController do
 
   let(:shop){ FactoryGirl.create(:shop, :user => current_user ) }
-  let(:category){ FactoryGirl.create(:yifu, :shop => shop) }
-  let(:product){ FactoryGirl.create(:product, :shop => shop, :category => category) }
+  let(:category){ FactoryGirl.create(:category) }
+  let(:shops_category){ FactoryGirl.create(:yifu, :shop => shop) }
+  let(:product){ FactoryGirl.create(:product,
+                                    :shop => shop,
+                                    :category => category,
+                                    :shops_category => shops_category) }
   let(:current_shop){ {:shop_id => shop.name} }
   let(:default_attachment){ FactoryGirl.create(:attachment) }
   let(:attachment){ FactoryGirl.create(:attachment) }
@@ -19,6 +23,7 @@ describe Admins::Shops::ProductsController do
         :description => "描述产品",
         :shop_id => shop.id,
         :category_id => category.id,
+        :shops_category_id => shops_category.id,
         :default_attachment_id => default_attachment.id,
         :attachment_ids => {
           "test" => attachment.id
@@ -145,12 +150,12 @@ describe Admins::Shops::ProductsController do
       kuzhi = FactoryGirl.create(:kuzhi, :shop => shop)
       options = {
         :product_id => product.id,
-        :category_id => kuzhi.id
+        :shops_category_id => kuzhi.id
       }.merge(current_shop)
 
       get "accept_product", options, get_session
       response.should be_success
-      assigns(:product).category_id.should eq(kuzhi.id)
+      assigns(:product).shops_category.id.should eq(kuzhi.id)
     end
   end
 
@@ -158,9 +163,9 @@ describe Admins::Shops::ProductsController do
 
     it "获取分类产品" do
 
-      get "products_by_category", {:category_id => category.id}, get_session
+      get "products_by_category", {:shops_category_id => shops_category.id}, get_session
       response.should be_success
-      assigns(:products).each{ | p | p.category_id.should eq(category.id) }
+      assigns(:products).each{ | p | p.shops_category.id.should eq(shops_category.id) }
     end
   end
 

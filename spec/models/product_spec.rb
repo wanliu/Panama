@@ -4,6 +4,7 @@ require 'spec_helper'
 describe Product, "产品模型" do
 
     let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
+    let(:category) { FactoryGirl.create(:category) }
     let(:yifu){ FactoryGirl.create(:yifu, :shop => shop) }
     let(:attachment){ FactoryGirl.create(:attachment) }
 
@@ -13,7 +14,7 @@ describe Product, "产品模型" do
     it{ should have_and_belong_to_many(:attachments) }
     it{ should have_many(:styles) }
 
-    it{ should validate_presence_of(:category) }
+    it{ should validate_presence_of(:shops_category) }
     it{ should validate_presence_of(:shop) }
     it{ should validate_presence_of(:name) }
     it{ should validate_presence_of(:price) }
@@ -32,7 +33,8 @@ describe Product, "产品模型" do
             :price => 5,
             :description => "电子产品",
             :summary => "电子",
-            :category_id => yifu.id,
+            :category_id => category.id,
+            :shops_category_id => yifu.id,
             :attachment_ids => [attachment.id],
             :default_attachment_id => attachment.id,
             :shop_id => shop.id
@@ -51,33 +53,6 @@ describe Product, "产品模型" do
         product.should respond_to(:attachment_ids)
         product.should respond_to(:shop_id)
     end
-
-    it "数据验证" do
-        options = _attributes
-        product = Product.new options
-        product.valid?.should be_true
-
-        product.name = nil
-        product.valid?.should be_false
-
-        product.name = "test name"
-        product.valid?.should be_true
-
-        product.price = "a"
-        product.valid?.should be_false
-
-        product.price = 5
-        product.valid?.should be_true
-
-        product.category_id = nil
-        product.valid?.should be_false
-
-        product.category_id = yifu.id
-        product.valid?.should be_true
-
-        product.save.should be_true
-    end
-
 
     it "验证关系" do
         @product.valid?.should be_true
@@ -107,8 +82,12 @@ describe Product, "产品模型" do
   describe "methods that create subs and styles" do
     let(:user)    { FactoryGirl.create(:user) }
     let(:shop)    { FactoryGirl.create(:shop, user: user) }
-    let(:category){ FactoryGirl.create(:category, shop: shop) }
-    let(:product) { FactoryGirl.create(:product, shop: shop, category: category) }
+    let(:shops_category){
+                    FactoryGirl.create(:shops_category, shop: shop) }
+    let(:category){ FactoryGirl.create(:category) }
+    let(:product) { FactoryGirl.create(:product, shop: shop,
+                                       category: category,
+                                       shops_category: shops_category) }
     let(:colours) { { "0" => {title: "浅粉红", checked: "浅粉红", value: "#FFB6C1" },
                       "1" => {title: "粉红", checked: "粉红", value: "#FFC0CB" } }.symbolize_keys }
     let(:sizes)   { { "0" => {title: "M", value: "M" },
