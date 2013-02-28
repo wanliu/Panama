@@ -91,6 +91,7 @@ gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 gem 'state_machine', '~> 1.1.2'
 
 group :development, :test do
+  gem "selenium-webdriver", "~> 2.27.0"
   gem 'debugger', '~> 1.2.2'
   gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'

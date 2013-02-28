@@ -93,4 +93,12 @@ describe OrderTransaction, "订单流通记录" do
             end
         end
     end
+
+    describe "模型装饰" do
+        it "模型装饰  total " do
+            pr = OrderTransaction.create! params
+            pr_de = pr.decorate
+            pr_de.source.total.should eq(pr_de.total.delete(', ¥').to_f) 
+        end
+    end
 end

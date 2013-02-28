@@ -89,6 +89,14 @@ describe Product, "产品模型" do
         @product.category.should be_an_instance_of(Category)
     end
 
+    describe "模型装饰" do
+        it "模型装饰  price " do
+            pr = Product.create! _attributes
+            pr_de = pr.decorate
+            pr_de.source.price.should eq(pr_de.price.delete(', ¥').to_f) 
+        end
+    end
+    
     describe "method default_photo" do
         it "图型化handler方法" do
 
