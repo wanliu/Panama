@@ -1,7 +1,10 @@
+
 <div>
-  <% @comments.each do |comment| %>
-    <div>
-      <%= comment.content %>
-    </div>
+  <% @activities.each do |activity| %>
+    <img src="<%= activity.url %>">
+    <%= activity.id %>
+    <%= render :partial=> "comments/new_activity" %>
   <% end %>
+  
 </div>
+
