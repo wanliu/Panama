@@ -8,5 +8,6 @@ FactoryGirl.define do
         description "描述某某公司"
         f.shop :shop
         f.category :category
+        f.shops_category :shops_category
     end
 end
