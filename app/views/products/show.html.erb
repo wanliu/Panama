@@ -15,7 +15,7 @@
 					<%= f.input :title, :as => :hidden %>
 					<%= f.input :price, :as => :hidden %>
 					<!-- <%= f.input :amount, :as => :hidden %> -->
-					<%= f.input :product_id, :as => :hidden, :input_html => { :value => @product.id } %>
+					<!-- <%= f.input :product_id, :as => :hidden, :input_html => { :value => @product.id } %> -->
 					<%= f.input :sub_product_id, :as => :hidden %>
 					<div class="control-group">
  						<label class="control-label" for="inputEmail">价格</label>
@@ -141,7 +141,10 @@ require(['jquery'], function($){
 		function render_the_object(the_object) {
 			var quantity = the_object['quantity'];
 			var price = the_object['price'];
+			var object_id = the_object['id']
+			form.find('#product_item_sub_product_id').val(object_id);
 			form.find('.sub-product-quantity').text(quantity);
+			form.find('#product_item_price').val(price);
 			form.find('.sub-product-price').text(price);
 			form.find('.send-product-price').text(price);
 		}
