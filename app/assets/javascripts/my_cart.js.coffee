@@ -69,7 +69,10 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
                     $("#cart_box table").append(@trHtml(item.product_item))
                     $("#shop_count").html($("#cart_box table tr").size())
 
-                
+                # @all_total = $(".cart_bottom tr td").html()
+                # @all_total += item.product_item.total
+                # alert(@all_total)
+                # alert($(".cart_bottom tr td").html())
 
         trHtml: (product_item) ->
             strHmtl = "<tr id= 'product_item#{product_item.id}'>"
