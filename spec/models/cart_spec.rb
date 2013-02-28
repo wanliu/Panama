@@ -28,12 +28,16 @@ describe Cart, "model 购物车 " do
     let(:product_ii) { FactoryGirl.create(:product, shop: shop_b, category: category_b) }
     let(:product_iii) { FactoryGirl.create(:product, shop: shop_b, category: category_d) }
     let(:product_iv)  { FactoryGirl.create(:product, shop: shop_c, category: category_c) }
-    let(:item_1) { FactoryGirl.create(:product_item, product: product_i, cart: nil, transaction: nil) }
-    let(:item_2) { FactoryGirl.create(:product_item, product: product_ii, cart: nil, transaction: nil) }
-    let(:item_3) { FactoryGirl.create(:product_item, product: product_iii, cart: nil, transaction: nil) }
-    let(:item_4) { FactoryGirl.create(:product_item, product: product_iv, cart: nil, transaction: nil) }
-    let(:item_5) { FactoryGirl.create(:product_item, product: product_i, cart: nil, transaction: nil) }
-    let(:item_6) { FactoryGirl.create(:product_item, product: product_iii, cart: nil, transaction: nil) }
+    let(:sub_product_i) { FactoryGirl.create(:sub_product, product: product_i) }
+    let(:sub_product_ii) { FactoryGirl.create(:sub_product, product: product_ii) }
+    let(:sub_product_iii) { FactoryGirl.create(:sub_product, product: product_iii) }
+    let(:sub_product_iv)  { FactoryGirl.create(:sub_product, product: product_iv) }
+    let(:item_1) { FactoryGirl.create(:product_item, sub_product: sub_product_i, cart: nil, transaction: nil) }
+    let(:item_2) { FactoryGirl.create(:product_item, sub_product: sub_product_ii, cart: nil, transaction: nil) }
+    let(:item_3) { FactoryGirl.create(:product_item, sub_product: sub_product_iii, cart: nil, transaction: nil) }
+    let(:item_4) { FactoryGirl.create(:product_item, sub_product: sub_product_iv, cart: nil, transaction: nil) }
+    let(:item_5) { FactoryGirl.create(:product_item, sub_product: sub_product_i, cart: nil, transaction: nil) }
+    let(:item_6) { FactoryGirl.create(:product_item, sub_product: sub_product_iii, cart: nil, transaction: nil) }
     let(:the_items) { [item_1, item_2, item_3, item_4, item_5, item_6].map { |item| item.attributes } }
 
     describe "create_transaction" do

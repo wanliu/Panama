@@ -10,7 +10,7 @@ class ProductItem < ActiveRecord::Base
   delegate :photos, :to => :product
   delegate :icon, :header, :avatar, :preview, :to => :photos
 
-  validates :sub_product_id, presence: true
+  # validates :sub_product_id, presence: true
 
   def product
     sub_product.product
