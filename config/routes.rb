@@ -18,6 +18,8 @@ Panama::Application.routes.draw do
       collection do
         post 'activity'
         post 'product'
+        get 'new_activity'
+        get 'new_product'
       end
     end
 
