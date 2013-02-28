@@ -8,7 +8,11 @@ class People::CommentsController < People::BaseController
         @comment = Comment.find(params[:id])
     end
 
-    def new
+    def new_activity
+        @comment = Comment.new
+    end
+
+    def new_product
         @comment = Comment.new
     end
 
