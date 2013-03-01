@@ -11,7 +11,7 @@ module Extract
             def extract_attributes(*attributes)
                 attributes.each do | attr |
                     self.instance_eval do
-                        define_method "#{attr}_extract" do
+                        define_method "#{attr}_extract_users" do
                             extract_login attr
                         end
                     end
