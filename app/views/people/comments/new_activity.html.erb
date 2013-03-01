@@ -1,12 +1,20 @@
-<div>
+
+<div class="comment">
     <%=simple_form_for @comment,
-    :remote => true, :url => activity_person_comments_path  do | f | %>
-        <div>
-            <textarea name='comment[content]'>
-            </textarea>
-        </div>
-        <div>
-            <%=f.button :submit, "评论" %>
-        </div>
+    :remote => true, :url => product_person_comments_path  do | f | %>
+    <div>
+        <textarea name='comment[content]'></textarea>
+        <%= @comment.content %>
+        <input type='hidden' value="<%= activity.id %>" name='comment[targeable_id]' />
+    </div>
+    <div>
+        <%=f.button :submit, "评论" %>
+    </div>
     <% end %>
 </div>
+
+<script type="text/javascript">
+    require(["commit_comment", "jquery"], function(view, $) {
+       new view.CommitComment({ login: "<%= @people.login %>", el: $(".comment") })
+    })
+</script>

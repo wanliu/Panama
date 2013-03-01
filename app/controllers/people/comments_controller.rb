@@ -1,10 +1,12 @@
 class People::CommentsController < People::BaseController
 
+    def index_activities
+
+    end
+
     def index
         @activities = Activity.all
         @comment = Comment.new
-        @comments = Comment.where("targeable_type=? and targeable_id=?",
-            params[:targeable_type], params[:targeable_id])
     end
 
     def show
