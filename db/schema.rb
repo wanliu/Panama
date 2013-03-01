@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301064205) do
+ActiveRecord::Schema.define(:version => 20130301090453) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
@@ -124,8 +124,9 @@ ActiveRecord::Schema.define(:version => 20130301064205) do
     t.integer  "mentionable_user_id"
     t.integer  "mentionable_id"
     t.string   "mentionable_type"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "read",                :default => false
   end
 
   create_table "order_transactions", :force => true do |t|
