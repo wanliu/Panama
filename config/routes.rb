@@ -20,6 +20,7 @@ Panama::Application.routes.draw do
         post 'product'
         get 'new_activity'
         get 'new_product'
+        get "index_activities"
       end
     end
 
