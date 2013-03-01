@@ -1,7 +1,12 @@
 <div class='row-fluid'>
 	<div class="preview">
-		<%= image_tag @product.photos.preview %>
+		<%= image_tag @product.photos.preview, :id => 'zoom_01', "data-zoom-image" => "http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg" %>
 	</div>
+	<script type="text/javascript">
+		require(['jquery', 'lib/JNMagnifier'], function($){
+			$("#zoom_01").elevateZoom();
+		});
+	</script>
 	<div class="container-fluid property">
 		<div class="row-fluid">
 			<div class="span12">
