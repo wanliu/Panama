@@ -9,7 +9,7 @@ class Shop < ActiveRecord::Base
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
-  has_one :category
+  has_one :shops_category
   belongs_to :user
 
   before_create :create_shop
@@ -57,7 +57,7 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-    @category = category.blank? ? create_category(:name => name + "_" + "root") : category
+    @category = shops_category.blank? ? create_shops_category(:name => name + "_" + "root") : shops_category
     @category.load_default
   end
 

@@ -4,11 +4,11 @@ require 'spec_helper'
 describe Admins::Shops::AttachmentsController, "附件控制器" do
 
     before :each do
-        photo_path = [Rails.root, "public/default_img/file_blank.gif"].join("/")
+        photo_path = Rails.root.join("public/default_img/file_blank.gif")
         @file = ActionDispatch::Http::UploadedFile.new(
             :filename => "a.gif",
             :type => "image/jpeg",
-            :tempfile => File.new(photo_path) )
+            :tempfile => File.new(photo_path))
     end
 
     describe "POST upload" do
