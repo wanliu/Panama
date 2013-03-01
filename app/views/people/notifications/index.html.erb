@@ -1,11 +1,26 @@
 <div class='notification_panle'>
-	<ul>
-	<% @notifications.each do | n | %>
-		<li>
-			<img src="<%=n.mentionable_user.photos.icon %>" />
-			<a href="javascript:void(0)"><%=n.mentionable_user.login %></a>
-				在<a href="<%=person_comment_path(current_user.login, n.mentionable.id) %>"><%=n.mentionable.content %>提及到您
-		</li>
-	<% end %>
-	</ul>
+    <ul>
+    <% @notifications.each do | n | %>
+        <li>
+            <div class='row'>
+                <div class='people-info span1'>
+                    <div>
+                        <img src="<%=n.mentionable_user.photos.icon %>" />
+                    </div>
+                    <div>
+                        <a href="javascript:void(0)"><%=n.mentionable_user.login %></a>
+                    </div>
+                </div>
+
+                <div class='content well span11'>
+                    在<%=t "activerecord.models.#{n.mentionable.class.name.underscore}" %>
+                    提及您,内容如下：<br />
+                    <a href="<%=person_comment_path(current_user.login, n.mentionable.id) %>">
+                        <%=n.mentionable.content %>
+                    </a>
+                </div>
+            </div>
+        </li>
+    <% end %>
+    </ul>
 </div>
