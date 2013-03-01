@@ -1,5 +1,4 @@
-# source 'https://rubygems.org'
-source 'http://ruby.taobao.org'
+source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
@@ -92,6 +91,7 @@ gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 gem 'state_machine', '~> 1.1.2'
 
 group :development, :test do
+  gem "selenium-webdriver", "~> 2.27.0"
   gem 'debugger', '~> 1.2.2'
   gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'
@@ -125,3 +125,4 @@ end
 
 gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10
 gem "ac_uniquify", "~> 0.1.0"
+gem 'draper', '~> 1.0'
