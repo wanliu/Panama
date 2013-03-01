@@ -20,14 +20,18 @@ describe Cart, "model 购物车 " do
    	let(:shop_a) { FactoryGirl.create(:shop, user: shop_owner) }
     let(:shop_b) { FactoryGirl.create(:shop, user: shop_owner) }
     let(:shop_c) { FactoryGirl.create(:shop, user: shop_owner) }
-    let(:category_a) { FactoryGirl.create(:category, shop: shop_a) }
-    let(:category_b) { FactoryGirl.create(:category, shop: shop_b) }
-    let(:category_c) { FactoryGirl.create(:category, shop: shop_c) }
-    let(:category_d) { FactoryGirl.create(:category, shop: shop_b) }
-    let(:product_i) { FactoryGirl.create(:product, shop: shop_a, category: category_a) }
-    let(:product_ii) { FactoryGirl.create(:product, shop: shop_b, category: category_b) }
-    let(:product_iii) { FactoryGirl.create(:product, shop: shop_b, category: category_d) }
-    let(:product_iv)  { FactoryGirl.create(:product, shop: shop_c, category: category_c) }
+    let(:category_a) { FactoryGirl.create(:category) }
+    let(:category_b) { FactoryGirl.create(:category) }
+    let(:category_c) { FactoryGirl.create(:category) }
+    let(:category_d) { FactoryGirl.create(:category) }
+    let(:shops_category_a) { FactoryGirl.create(:shops_category, shop: shop_a) }
+    let(:shops_category_b) { FactoryGirl.create(:shops_category, shop: shop_b) }
+    let(:shops_category_c) { FactoryGirl.create(:shops_category, shop: shop_c) }
+    let(:shops_category_d) { FactoryGirl.create(:shops_category, shop: shop_b) }
+    let(:product_i) { FactoryGirl.create(:product, shop: shop_a, category: category_a, shops_category: shops_category_a) }
+    let(:product_ii) { FactoryGirl.create(:product, shop: shop_b, category: category_b, shops_category: shops_category_b) }
+    let(:product_iii) { FactoryGirl.create(:product, shop: shop_b, category: category_d, shops_category: shops_category_d) }
+    let(:product_iv)  { FactoryGirl.create(:product, shop: shop_c, category: category_c, shops_category: shops_category_c) }
     let(:sub_product_i) { FactoryGirl.create(:sub_product, product: product_i) }
     let(:sub_product_ii) { FactoryGirl.create(:sub_product, product: product_ii) }
     let(:sub_product_iii) { FactoryGirl.create(:sub_product, product: product_iii) }

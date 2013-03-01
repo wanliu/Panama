@@ -34,8 +34,13 @@ describe ProductItem, "购物车 商品 " do
       describe "product" do
         let(:user) { FactoryGirl.create(:user)}
         let(:shop) { FactoryGirl.create(:shop, user: user) }
-        let(:category)    { FactoryGirl.create(:category, shop: shop) }
-        let(:product)     { FactoryGirl.create(:product, category: category, shop: shop) }
+        let(:category)    { FactoryGirl.create(:category) }
+        let(:shops_category) {
+                            FactoryGirl.create(:shops_category, shop: shop) }
+        let(:product)     { FactoryGirl.create(:product,
+                                               category: category,
+                                               shops_category: shops_category,
+                                               shop: shop) }
         let(:sub_product) { FactoryGirl.create(:sub_product, product: product) }
 
         it "返回product" do
