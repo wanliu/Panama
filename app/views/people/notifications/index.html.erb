@@ -5,7 +5,7 @@
             <div class='row'>
                 <div class='people-info span1'>
                     <div>
-                        <img src="<%=n.mentionable_user.photos.icon %>" />
+                        <img class="img-circle" src="<%=n.mentionable_user.photos.icon %>" />
                     </div>
                     <div>
                         <a href="javascript:void(0)"><%=n.mentionable_user.login %></a>
@@ -15,7 +15,7 @@
                 <div class='content well span11'>
                     在<%=t "activerecord.models.#{n.mentionable.class.name.underscore}" %>
                     提及您,内容如下：<br />
-                    <a href="<%=person_comment_path(current_user.login, n.mentionable.id) %>">
+                    <a href="<%=activity_path(n.mentionable.targeable.id) %>">
                         <%=n.mentionable.content %>
                     </a>
                 </div>
