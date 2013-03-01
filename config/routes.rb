@@ -14,6 +14,10 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :notifications, :controller => "people/notifications" do
+
+    end
+
     resources :comments, :controller => "people/comments" do
       collection do
         post 'activity'
