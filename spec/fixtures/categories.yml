@@ -5,7 +5,6 @@
     name: pepsi_root
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-18 09:52:09.000000000 Z
-    shop_id: 8
     ancestry:
     cover:
     ancestry_depth: 0
@@ -15,7 +14,6 @@
     name: 新品上市
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: '53'
     cover:
     ancestry_depth: 1
@@ -25,7 +23,6 @@
     name: 最新潮装
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 53/54
     cover:
     ancestry_depth: 2
@@ -35,7 +32,6 @@
     name: 最新潮裤
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 53/54
     cover:
     ancestry_depth: 2
@@ -45,7 +41,6 @@
     name: 冬款
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 53/54/56
     cover:
     ancestry_depth: 3
@@ -55,7 +50,6 @@
     name: 夏款
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 53/54/56
     cover:
     ancestry_depth: 3
@@ -65,7 +59,6 @@
     name: 秋款
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 53/54/56
     cover:
     ancestry_depth: 3
@@ -75,7 +68,6 @@
     name: 企业介绍
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: '53'
     cover:
     ancestry_depth: 1
@@ -85,7 +77,6 @@
     name: 诚招精英
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: '53'
     cover:
     ancestry_depth: 1
@@ -95,7 +86,6 @@
     name: 加盟合作
     created_at: 2013-02-18 09:52:09.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: '53'
     cover:
     ancestry_depth: 1
@@ -105,7 +95,6 @@
     name: _products_root
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-18 09:56:25.000000000 Z
-    shop_id:
     ancestry:
     cover:
     ancestry_depth: 0
@@ -115,7 +104,6 @@
     name: 服饰/鞋帽/配饰
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: '63'
     cover:
     ancestry_depth: 1
@@ -125,7 +113,6 @@
     name: 女装
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64
     cover:
     ancestry_depth: 2
@@ -135,7 +122,6 @@
     name: 上衣
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65
     cover:
     ancestry_depth: 3
@@ -145,7 +131,6 @@
     name: 羽绒服
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65/66
     cover:
     ancestry_depth: 4
@@ -155,7 +140,6 @@
     name: 棉衣棉服
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65/66
     cover:
     ancestry_depth: 4
@@ -165,7 +149,6 @@
     name: 皮衣皮草
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65/66
     cover:
     ancestry_depth: 4
@@ -175,7 +158,6 @@
     name: 风衣
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65/66
     cover:
     ancestry_depth: 4
@@ -185,7 +167,6 @@
     name: 短外套
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65/66
     cover:
     ancestry_depth: 4
@@ -195,7 +176,6 @@
     name: 吊带/背心
     created_at: 2013-02-18 09:56:25.000000000 Z
     updated_at: 2013-02-19 03:05:16.000000000 Z
-    shop_id:
     ancestry: 63/64/65/66
     cover:
     ancestry_depth: 4

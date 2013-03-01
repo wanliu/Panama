@@ -64,4 +64,41 @@ describe OrderTransaction, "订单流通记录" do
         o.back.should be_true
         o.state.should eq("order")
     end
+
+    describe "实例方法" do
+        let(:item_1) { FactoryGirl.create(:product_item, sub_product: nil, cart: nil, transaction: nil) }
+        let(:item_2) { FactoryGirl.create(:product_item, sub_product: nil, cart: nil, transaction: nil) }
+        let(:item_3) { FactoryGirl.create(:product_item, sub_product: nil, cart: nil, transaction: nil) }
+        let(:itemes) { [item_1, item_2, item_3].map { |item| item.attributes.symbolize_keys! } }
+        let(:order) { OrderTransaction.new(items_count: 0, total: 0) }
+
+        describe "build_items" do
+            it "批量建立订单产品" do
+                size = itemes.size
+                expect { order.build_items(itemes) }.to change { order.items.size }.by(size)
+            end
+        end
+
+        describe "update_total_count" do
+            before(:each) { order.build_items(itemes) }
+
+            it "计算产品数" do
+                count_sum = itemes.reduce(0) { |s, i| s + i[:amount] }
+                expect { order.update_total_count }.to change { order.items_count }.by(count_sum)
+            end
+
+            it "总金额" do
+                total_sum = itemes.reduce(0) { |s, i| s + i[:total] }
+                expect { order.update_total_count }.to change { order.total }.by(total_sum)
+            end
+        end
+    end
+
+    describe "模型装饰" do
+        it "模型装饰  total " do
+            pr = OrderTransaction.create! params
+            pr_de = pr.decorate
+            pr_de.source.total.should eq(pr_de.total.delete(', ¥').to_f) 
+        end
+    end
 end

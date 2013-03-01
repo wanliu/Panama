@@ -6,6 +6,7 @@ class Product < ActiveRecord::Base
                   :price,
                   :summary,
                   :category_id,
+                  :shops_category_id,
                   :shop_id,
                   :default_attachment_id,
                   :attachment_ids
@@ -16,6 +17,7 @@ class Product < ActiveRecord::Base
 
   belongs_to :shop
   belongs_to :category
+  belongs_to :shops_category
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
   has_many :sub_products, :dependent => :destroy
@@ -35,7 +37,17 @@ class Product < ActiveRecord::Base
   validates :price, numericality: true
 
   validates_presence_of :category
+  validates_presence_of :shops_category
   validates_presence_of :shop
+
+  def quantity
+    sub_products.reduce(0) { |s, i| s + i.quantity }
+  end
+
+  def price_range
+    range = sub_products.map { |item| item.price }.minmax
+    range.first < range.last ? "#{range.first} - #{range.last}" : "#{range.first}"
+  end
 
   def default_photo
     default_attachment ? default_attachment.file : Attachment.new.file

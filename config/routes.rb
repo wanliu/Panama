@@ -1,4 +1,7 @@
 Panama::Application.routes.draw do
+
+  # devise_for :admin_users, ActiveAdmin::Devise.config
+
   unless FayeRails.server('/realtime')
     faye_server '/realtime', timeout: 25 do
       map '/notice' => RealtimeNoticeController
@@ -35,6 +38,9 @@ Panama::Application.routes.draw do
     end
   end
 
+  match '/system/logout', :to => 'system_sessions#destroy'
+
+  # resources :system
 
   resources :city
   resources :addresses
@@ -113,6 +119,8 @@ Panama::Application.routes.draw do
   match '/auth/:provider/callback', :to => 'user_sessions#create'
   match '/auth/failure', :to => 'user_sessions#failure'
 
+  match '/auth/admin/:provider/callback', :to => 'system_sessions#create'
+
   # Custom logout
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
@@ -123,5 +131,5 @@ Panama::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
 
-
+  ActiveAdmin.routes(self)
 end

@@ -5,8 +5,13 @@ require 'spec_helper'
 describe "样式使用场景" do
   let(:user)     { FactoryGirl.create(:user) }
   let(:shop)     { FactoryGirl.create(:shop, user: user) }
-  let(:category) { FactoryGirl.create(:category, shop: shop) }
-  let(:product)  { FactoryGirl.create(:product, shop: shop, category: category) }
+  let(:category) { FactoryGirl.create(:category) }
+  let(:shops_category) {
+                   FactoryGirl.create(:shops_category, shop: shop) }
+  let(:product)  { FactoryGirl.create(:product,
+                                      shop: shop,
+                                      category: category,
+                                      shops_category: shops_category) }
 
   it "关联检查" do
     product.should have_many(:styles)

@@ -1,25 +1,25 @@
-<%= simple_form_for @product, 
-    :url => admins_products(@product), 
+<%= simple_form_for @product,
+    :url => admins_products(@product),
     :remote => true,
     :html => {
         :class => "form-horizontal"
     } do |f| %>
-    <%= f.input :name %>    
-    <%= f.association :attachments, 
-                      :as => :album, 
+    <%= f.input :name %>
+    <%= f.association :attachments,
+                      :as => :album,
                       :upload_url => shop_admins_attachments_path(current_shop),
                       :collection => @product.format_attachment %>
 
 		<%= render_styles %>
 
-    <%= f.input :price %>    
-    <%= f.association :category, :collection => category_root, :value => @product.category  , :as => :columnview %>
+    <%= f.input :price %>
+    <%= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
-   
-    <%= link_to_if(@product.new_record?, :cancel, '#', :class => 'btn cancel') do 
+
+    <%= link_to_if(@product.new_record?, :cancel, '#', :class => 'btn cancel') do
         link_to :close, '#', :class => 'btn close'
-    end %> 
+    end %>
 <% end %>
 
 

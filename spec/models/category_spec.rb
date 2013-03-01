@@ -13,7 +13,7 @@ end
 describe Category do
 
   it { should have_many(:products) }
-  it { should belong_to(:shop) }
+  # it { should belong_to(:shop) }
   it { should validate_presence_of(:name) }
 
   # context "db:seed" do
