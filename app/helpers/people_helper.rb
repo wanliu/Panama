@@ -6,7 +6,7 @@ module PeopleHelper
     end
   end
 
-  def render_styles
+  def render_the_styles
   	@product.styles.map do |style_group| # FIXME n+1
 			"<label class='control-label'> #{ style_group.name } </label>
 				<div class='controls'>
