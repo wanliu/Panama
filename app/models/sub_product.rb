@@ -5,6 +5,7 @@ class SubProduct < ActiveRecord::Base
 
   has_many :style_pairs
   has_many :items, through: :style_pairs, source: :style_item
+  has_many :product_items
 
   validates :product_id, presence: true
   validates :quantity, presence: true, numericality: true

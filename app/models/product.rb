@@ -37,6 +37,15 @@ class Product < ActiveRecord::Base
   validates_presence_of :category
   validates_presence_of :shop
 
+  def quantity
+    sub_products.reduce(0) { |s, i| s + i.quantity }
+  end
+
+  def price_range
+    range = sub_products.map { |item| item.price }.minmax
+    range.first < range.last ? "#{range.first} - #{range.last}" : "#{range.first}"
+  end
+
   def default_photo
     default_attachment ? default_attachment.file : Attachment.new.file
   end
