@@ -9,9 +9,9 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
 
   def index
-    node = current_shop.category
+    node = current_shop.shops_category
 
-    @categories = Category.sort_by_ancestry(node.descendants)
+    @categories = ShopsCategory.sort_by_ancestry(node.descendants)
     @products = current_shop.products
   end
 
@@ -26,7 +26,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     # end
 
     @product = Product.new
-    @category_root = current_shop.category
+    @category_root = Category.root
+    @shops_category_root = current_shop.shops_category
 
     #模拟数据库对象
     # def @product.styles
@@ -60,13 +61,13 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
-    @category_root = current_shop.category
+    @shops_category_root = current_shop.shops_category
   end
 
   def update
     @product = Product.find(params[:id])
     @product.update_attributes(params[:product].merge(dispose_options))
-    @category_root = current_shop.category
+    @shops_category_root = current_shop.shops_category
 
     if @product.valid?
       @product.update_style_subs(params)
@@ -88,8 +89,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def accept_product
     @product = Product.find(params[:product_id])
-    @category = Category.find(params[:category_id])
-    @product.category = @category
+    @shops_category = ShopsCategory.find(params[:shops_category_id])
+    @product.shops_category = @shops_category
     if @product.save
       render :text => :ok
     else
@@ -98,7 +99,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def products_by_category
-    category = Category.find(params[:category_id])
+    category = ShopsCategory.find(params[:shops_category_id])
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
   end

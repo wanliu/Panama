@@ -8,7 +8,7 @@ describe Shop, "商店模型" do
     it{ should have_many(:contents) }
     it{ should have_many(:products) }
     it{ should have_many(:transactions) }
-    it{ should have_one(:category) }
+    it{ should have_one(:shops_category) }
 
     it{ should validate_presence_of(:name) }
     it{ should validate_uniqueness_of(:name) }
