@@ -1,0 +1,27 @@
+  <% @activities.each do |activity| %>
+    <div id="activity_<%= activity.id %>">
+      <p>
+        <img src="<%= activity.url %>">
+      </p>
+      <div class='comments'>
+      </div>
+    </div>
+    <script type="text/javascript">
+      require(["commit_comment", "jquery", "hogan"], function(view, $, Hogan){
+        template = Hogan.compile($("#comment_template").html());
+        new view.CommitComment({
+          login: "<%= @people.login %>",
+          targeable_id: "<%= activity.id %>",
+          el: $("#activity_<%= activity.id %>"),
+          template: template
+        });
+      });
+    </script>
+  <% end %>
+
+<template id="comment_template" style="display:none">
+    {{ comment.user.login }}
+    {{ comment.created_at }}<br>
+    {{ comment.content }}
+    <p>-------------------------------------------</p>
+</template> 

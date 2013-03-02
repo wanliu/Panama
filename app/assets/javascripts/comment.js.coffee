@@ -8,9 +8,9 @@ define(["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
         login: null
 
-        all: (callback = ->)->
+        all: (targeable_id, callback = ->)->
             if @comment_type?
-                $.get @root_url(), comment_type: @comment_type, callback
+                $.get @root_url(),{ targeable_type: @comment_type, targeable_id: targeable_id}, callback
             else
                 console.error("请设置comment type!")
 
@@ -27,7 +27,8 @@ define(["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                 else console.error("没有comment typea action")
 
         send_comment: (params, callback = ->) ->
-            $.post("#{@root_url()}/#{@switch_action()}", params, callback)
+            $.post("#{@root_url()}/#{@switch_action()}", params, $.proxy(callback, @), "json")
+
 
 
     class CommentActivity extends Comment
