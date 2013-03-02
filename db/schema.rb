@@ -11,10 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130301090453) do
-=======
-ActiveRecord::Schema.define(:version => 20130228081850) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -30,7 +27,6 @@ ActiveRecord::Schema.define(:version => 20130228081850) do
   add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
   add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
->>>>>>> master
 
   create_table "activities", :force => true do |t|
     t.string   "url"
@@ -67,13 +63,6 @@ ActiveRecord::Schema.define(:version => 20130228081850) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
-
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "attachments", :force => true do |t|
     t.string   "filename"
