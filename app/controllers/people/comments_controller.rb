@@ -1,12 +1,16 @@
 class People::CommentsController < People::BaseController
 
     def index_activities
-
+        @activities = Activity.all
     end
 
     def index
-        @activities = Activity.all
+        @comments = Comment.where("targeable_id=? and targeable_type=?", params[:targeable_id], params[:targeable_type])            
+        @activity = Activity.find(params[:targeable_id])
         @comment = Comment.new
+        respond_to do | format |
+            format.html{ render :layout => false }
+        end
     end
 
     def show
@@ -28,10 +32,13 @@ class People::CommentsController < People::BaseController
     #活动评论
     def activity
         @comment = Comment.activity(params[:comment].merge(:user_id => current_user.id))
-        if @comment.valid?
-            render :action => :show
-        else
-            render :action => :edit
+        respond_to do |format|
+            if @comment.valid?
+                format.html { render :action => :show }
+                format.js { render :json => @comment.as_json(:include => :user) }
+            else
+                render :action => :edit
+            end
         end
     end
 
