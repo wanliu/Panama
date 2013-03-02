@@ -5,7 +5,7 @@ define ["jquery", "backbone", "exports", "comment"], ($, Backbone, exports, view
       _.extend(this, options)
 
       @$comments = @$(".comments")
-
+      $("#comment_template").hide()
       @all(this.targeable_id, (data, xhr) =>
         @$comments.html(data)
         @bind_event()
@@ -17,9 +17,8 @@ define ["jquery", "backbone", "exports", "comment"], ($, Backbone, exports, view
 
     commitComment: () ->
       array = @$("form").serializeArray()
-
       @send_comment(array, (data, xhr) =>
-        $(".comments").append(@template.render(data))
+        $(".comment").before(@template.render(data))
       )
       false
 
