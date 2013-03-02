@@ -6,13 +6,7 @@ define(function(require, exports, module){
     var chosen = require('lib/chosen.ex');
     var pm = require("lib/postmessage");
     var ajax_auth = require('wanliu/ajax_auth_client');
-    var Faye = require('lib/faye-browser');
-
-    try{
-        var realtime = new Faye.Client('/realtime');
-    }catch(e){
-        console.error("faye client not exists!");
-    }
+    var realtime = require("lib/faye_client");
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
