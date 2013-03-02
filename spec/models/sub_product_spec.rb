@@ -25,8 +25,13 @@ describe SubProduct do
   describe "实例方法" do
     let(:user)     { FactoryGirl.create(:user) }
     let(:shop)     { FactoryGirl.create(:shop, user: user) }
-    let(:category) { FactoryGirl.create(:category, shop: shop) }
-    let(:product)  { FactoryGirl.create(:product, shop: shop, category: category) }
+    let(:category) { FactoryGirl.create(:category) }
+    let(:shops_category){
+                     FactoryGirl.create(:shops_category, shop: shop) }
+    let(:product)  { FactoryGirl.create(:product,
+                                        shop: shop,
+                                        category: category,
+                                        shops_category: shops_category) }
     let(:sub)         { FactoryGirl.create(:sub_product, product: product) }
     let(:style_group) {FactoryGirl.create(:style_group, product: product)}
     let(:item)        {FactoryGirl.create(:style_item, style_group: style_group)}

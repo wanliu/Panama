@@ -72,3 +72,25 @@
     font-size: 21px;
     line-height: 30px;
 }
+
+// p.style-group {
+//     font-size: 15px;
+// }
+
+a.style-items {
+    display: inline-block;
+    background-color: white;
+    white-space: nowrap;
+    width: auto!important;
+    min-width: 10px;
+    width: 10px;
+    padding: 0 6px;
+    text-align: center;
+    border: 1px solid #E2E1E3;
+    color: black;
+    text-decoration: none;
+    margin-right: 6px;
+}
+a.active.style-items {
+    border: 1px solid red;
+}

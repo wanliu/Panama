@@ -4,11 +4,11 @@ class User < ActiveRecord::Base
 
   attr_accessible :uid, :login, :first_name, :last_name
 
-  define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
-
-  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
+  define_graphical_attr :photos, :handler => :avatar
 
   friendly_id :login
+
+  mount_uploader :avatar, ImageUploader
 
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
