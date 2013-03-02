@@ -16,4 +16,6 @@ class StyleItem < ActiveRecord::Base
 
   validates :style_group_id, presence: true
 
+  scope :checked_items, where("checked", true)
+
 end

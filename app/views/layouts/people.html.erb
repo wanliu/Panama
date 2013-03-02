@@ -12,7 +12,7 @@
 				<h1><%= @people.login %></h1>
 				<span class="label">Default</span>
 				<span class="label">Default</span>
-				<span class="label">Default</span>				
+				<span class="label">Default</span>
 				<hr>
 				<div class="well">
 				<ul class="nav nav-list">
@@ -20,6 +20,7 @@
 					<li><a class="people-cart" href="<%= person_cart_index_path(current_user.login) %>"><i class="icon-chevron-right"></i> 购物车</a></li>
 					<li><a class="people-transaction" href="<%= person_transactions_path(current_user.login) %>"><i class="icon-chevron-right"></i> 订单</a></li>
 					<li class="nav-header">活动</li>
+					<li><a href="<%=person_notifications_path(current_user.login) %>"><i class="icon-chevron-right"></i>提醒</a></li>
 					<li><a href="my_activity"><i class="icon-chevron-right"></i> 我参于的活动</a></li>
 					<li><a href="about_to_happen"><i class="icon-chevron-right"></i> 马上要发生的</a></li>
 					<li><a href="expired"><i class="icon-chevron-right"></i> 往期活动</a></li>
@@ -34,7 +35,7 @@
 					<li><a href="#alerts"><i class="icon-chevron-right"></i> Alerts</a></li>
 					<li><a href="#progress"><i class="icon-chevron-right"></i> Progress bars</a></li>
 					<li><a href="#media"><i class="icon-chevron-right"></i> Media object</a></li>
-					<li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>					
+					<li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>
 				</ul>
 				<script type="text/javascript">
 					require(['jquery'], function($){

@@ -1,6 +1,6 @@
 define(function(require, exports, module){
-    
-    var $ = require('jquery');      
+
+    var $ = require('jquery');
     var $ = require('jquery-ui');
     var h5bp = require('h5bp');
     var chosen = require('lib/chosen.ex');
@@ -8,16 +8,20 @@ define(function(require, exports, module){
     var ajax_auth = require('wanliu/ajax_auth_client');
     var Faye = require('lib/faye-browser');
 
-    var realtime = new Faye.Client('/realtime');
+    try{
+        var realtime = new Faye.Client('/realtime');
+    }catch(e){
+        console.error("faye client not exists!");
+    }
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
         panle_modal.find("iframe").attr("src", url);
-        panle_modal.modal("show");               
+        panle_modal.modal("show");
     })
 
     AjaxAuthClient.registreLoginSuccess(function(user){
-        panle_modal.modal("hide");        
+        panle_modal.modal("hide");
     })
 
     var load_modal_head_with_height = function(title, height){
@@ -38,7 +42,7 @@ define(function(require, exports, module){
     AjaxAuthClient.registreLoadCreateUser(function(){
         load_modal_head_with_height("用户注册", "310px");
     })
-    
+
     exports.loadPage = function(query, url){
         $.get(url, {ajaxify: true}, function(data){
             $(query).replaceWith(data);

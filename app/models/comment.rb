@@ -1,6 +1,9 @@
 #encoding: utf-8
 #describe: 评论模型
+
 class Comment < ActiveRecord::Base
+  include Extract::Mention
+
   attr_accessible :content, :user_id, :targeable_id
 
   belongs_to :user
@@ -9,6 +12,17 @@ class Comment < ActiveRecord::Base
 
   validates :content, :presence => true
   validate :validate_user_exists?, :validate_targeable_exists_and_nil?
+
+  extract_attributes :content
+
+  after_save :notification_user
+
+  def notification_user
+    users = content_extract_users
+    (users - [user]).each do | u |
+      Notification.create!(:user_id => u.id, :mentionable_user_id => user.id, :mentionable => self)
+    end
+  end
 
   def validate_user_exists?
     errors.add(:user_id, "用户不存在！") unless User.exists?(user_id)

@@ -54,6 +54,20 @@ describe People::TransactionsController, "用户订单交易流通" do
     end
   end
 
+  describe "POST batch_create" do
+    it "生成成功" do
+      Cart.any_instance.should_receive(:create_transaction).with(current_user).and_return(true)
+      post :batch_create, person_params, valid_session
+      response.should redirect_to(person_transactions_path(current_user.login))
+    end
+
+    it "生成失败" do
+      Cart.any_instance.should_receive(:create_transaction).with(current_user).and_return(false)
+      post :batch_create, person_params, valid_session
+      response.should redirect_to(person_cart_index_path(current_user.login))
+    end
+  end
+
   describe "POST create" do
     describe "with valid params" do
       before :each do

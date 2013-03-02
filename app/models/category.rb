@@ -3,10 +3,9 @@ class Category < ActiveRecord::Base
   # include Mongoid::Tree::Ordering
   # include Mongoid::Tree::Traversal
   #
-  attr_accessible :name, :shop_id
+  attr_accessible :name
 
   has_many :products
-  belongs_to :shop
   has_ancestry :cache_depth => true
 
   validates :name, presence: true
@@ -16,13 +15,6 @@ class Category < ActiveRecord::Base
 
   attr_accessor :indent
   mount_uploader :cover, ImageUploader
-
-  def load_default
-    config_file = shop.fs["config/default_category.yml"].file
-    config_root = YAML.load(config_file.read)["category"]
-
-    load_category(config_root)
-  end
 
   def load_category(config_root)
     # clear all category children
