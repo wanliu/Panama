@@ -10,6 +10,7 @@
 			, "templates": "templates"
 			, "jquery_columnview": "lib/jquery.columnview"
 			, "fileuploader": "lib/fileuploader"
+			, "faye" : "faye"
 		},
 
 		shim: {
@@ -34,7 +35,7 @@
 				deps: ['backbone']
 			},
 			"backbone": {
-				deps: ["lib/underscore"], 
+				deps: ["lib/underscore"],
 				exports: "Backbone"
 			},
 			"bootstrap": ['jquery'],
@@ -46,7 +47,7 @@
 				exports: "qq"
 			}
 		}
-	});	
+	});
 </script>
 
 <%# Append your own using content_for :javascripts %>
