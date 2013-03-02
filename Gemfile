@@ -112,6 +112,7 @@ group :development, :test do
   gem 'cucumber-rails', '~> 1.3.0', :require => false
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
+  gem 'rvm-capistrano'
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
@@ -127,3 +128,4 @@ gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.
 gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'
+gem 'passenger'
