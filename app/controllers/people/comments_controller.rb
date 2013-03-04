@@ -5,7 +5,12 @@ class People::CommentsController < People::BaseController
     end
 
     def index
-        @comments = Comment.where("targeable_id=? and targeable_type=?", params[:targeable_id], params[:targeable_type])            
+        @comments = Comment.where("targeable_id=? and targeable_type=?", 
+            params[:targeable_id], 
+            params[:targeable_type])
+        if "0" != params[:limit]
+            @comments = @comments.order("created_at desc").limit(params[:limit]).reverse()
+        end
         @activity = Activity.find(params[:targeable_id])
         @comment = Comment.new
         respond_to do | format |
@@ -35,7 +40,7 @@ class People::CommentsController < People::BaseController
         respond_to do |format|
             if @comment.valid?
                 format.html { render :action => :show }
-                format.js { render :json => @comment.as_json(:include => :user) }
+                format.js { render :json => @comment.as_json.merge(@comment.user.as_json) }
             else
                 render :action => :edit
             end

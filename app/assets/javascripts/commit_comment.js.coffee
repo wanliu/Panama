@@ -1,24 +1,38 @@
 define ["jquery", "backbone", "exports", "comment"], ($, Backbone, exports, view) ->  
   class CommitComment extends view.CommentActivity
 
+
     initialize : (options) ->
-      _.extend(this, options)
+      _.extend(@, options)
 
       @$comments = @$(".comments")
-      $("#comment_template").hide()
-      @all(this.targeable_id, (data, xhr) =>
-        @$comments.html(data)
-        @bind_event()
+      @all(@targeable_id, 3, (data, xhr) =>
+        @data_and_event(data)
       )
+
 
     bind_event: () ->
       @$("form").on('submit', _.bind(@commitComment, @))
+      @$(".more").on("click", _.bind(@comment_all, @))
+
+
+    comment_all: () ->
+      @all(@targeable_id, 0, (data, xhr) =>
+        @data_and_event(data)
+        @$(".more").hide()
+      )
+
+
+    data_and_event: (data) ->
+      @$comments.html(data)
+      @bind_event()
 
 
     commitComment: () ->
       array = @$("form").serializeArray()
       @send_comment(array, (data, xhr) =>
-        $(".comment").before(@template.render(data))
+        @$(".comments_div").append(@template.render(data))
+        @$("textarea").val("")
       )
       false
 
