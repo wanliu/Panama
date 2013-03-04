@@ -8,9 +8,9 @@ define(["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
         login: null
 
-        all: (targeable_id, callback = ->)->
+        all: (targeable_id, limit, callback = ->)->
             if @comment_type?
-                $.get @root_url(),{ targeable_type: @comment_type, targeable_id: targeable_id}, callback
+                $.get @root_url(),{ targeable_type: @comment_type, targeable_id: targeable_id, limit: limit}, callback
             else
                 console.error("请设置comment type!")
 

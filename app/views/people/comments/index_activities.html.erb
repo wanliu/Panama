@@ -18,9 +18,13 @@
       });
     </script>
   <% end %>
-<template id="comment_template">
-    {{ comment.user.login }}
-    {{ comment.created_at }}<br>
-    {{ comment.content }}
-    <p>-------------------------------------------</p>
+<template id="comment_template" style="display:none;">
+    <ul class="comment_main">
+      <li>{{ comment.content }}</li>
+      <li><span>
+        <img src="{{ user.photos.icon }}">
+        {{ user.login }}
+        {{ comment.created_at }}
+      </span></li>
+    </ul>
 </template>

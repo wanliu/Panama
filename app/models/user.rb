@@ -28,6 +28,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def as_json(*args)
+    options = super *args
+    ps = options["user"]["photos"] ||= {}
+    ps["icon"] = photos.icon
+    ps["avatar"] = photos.avatar
+    options
+  end
+
   after_initialize do
     if cart.nil?
       create_cart
