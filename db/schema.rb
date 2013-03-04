@@ -240,11 +240,9 @@ ActiveRecord::Schema.define(:version => 20130301090453) do
 
   create_table "style_groups", :force => true do |t|
     t.string   "name"
-    t.integer  "product_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.integer  "sort_number"
-    t.integer  "category_id"
+    t.integer  "product_id", :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "style_items", :force => true do |t|
