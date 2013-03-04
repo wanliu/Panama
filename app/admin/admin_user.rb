@@ -25,11 +25,16 @@ ActiveAdmin.register Category do
     column :name
     column :ancestry
     column :created_at
-    column 'tool' do
-      link_to "View Site", "/", :class => 'btn'
-    end
-
+    default_actions
+    # column 'tool' do
+    #   link_to "View Site", "/", :class => 'btn'
+    # end
   end
+
+  # form do |f|
+  #   f.label 'name'
+  #   f.text_field :name
+  # end
 
   member_action :comments do
     category = Category.find(params[:id])
