@@ -10,8 +10,8 @@
 	<div class="container-fluid property">
 		<div class="row-fluid">
 			<div class="span12">
-			<%= link_to t(:enter_shop, :name => @product.shop.name), 
-						shop_path(@product.shop.name), 
+			<%= link_to t(:enter_shop, :name => @product.shop.name),
+						shop_path(@product.shop.name),
 						:class => 'btn pull-right' %>
 			<h5><%= @product.name %></h5>
 			<p><small><%= @product.summary %></small></P>
@@ -63,10 +63,6 @@
 						      </div>
 						    </div> -->
 					    </div>
-					    <!-- <label class="control-label" for="inputEmail">数量</label>
-	 						<div class="controls">
-								<p class="text-surprised"><%= @product.quantity %></p>
-							</div> -->
 				    </div>
 					<div class="control-group">
 						<div class="controls pull-right">

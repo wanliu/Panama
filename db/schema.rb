@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301070033) do
+ActiveRecord::Schema.define(:version => 20130301090453) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -64,13 +64,6 @@ ActiveRecord::Schema.define(:version => 20130301070033) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "attachments", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",      :null => false
@@ -119,6 +112,15 @@ ActiveRecord::Schema.define(:version => 20130301070033) do
     t.string   "ancestry"
   end
 
+  create_table "comments", :force => true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "targeable_id"
+    t.string   "targeable_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "contents", :force => true do |t|
     t.string   "name"
     t.string   "template"
@@ -144,6 +146,16 @@ ActiveRecord::Schema.define(:version => 20130301070033) do
     t.datetime "updated_at",     :null => false
     t.integer  "imageable_id"
     t.string   "imageable_type"
+  end
+
+  create_table "notifications", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "mentionable_user_id"
+    t.integer  "mentionable_id"
+    t.string   "mentionable_type"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "read",                :default => false
   end
 
   create_table "order_transactions", :force => true do |t|
@@ -180,6 +192,14 @@ ActiveRecord::Schema.define(:version => 20130301070033) do
     t.integer  "category_id"
     t.integer  "default_attachment_id"
     t.integer  "shops_category_id"
+  end
+
+  create_table "replies", :force => true do |t|
+    t.integer  "comment_id"
+    t.string   "content"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "resources", :force => true do |t|
