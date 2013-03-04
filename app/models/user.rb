@@ -4,11 +4,9 @@ class User < ActiveRecord::Base
 
   attr_accessible :uid, :login, :first_name, :last_name
 
-  define_graphical_attr :photos, :handler => :avatar
+  define_graphical_attr :photos, :handler => :grapical_handler
 
   friendly_id :login
-
-  mount_uploader :avatar, ImageUploader
 
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
@@ -20,6 +18,11 @@ class User < ActiveRecord::Base
 
   has_many :addresses, class_name: "Address"
 
+  #暂时方法
+  def grapical_handler
+    ImageUploader.new
+  end
+
   def self.exists?(user_id)
     begin
       find(user_id)
@@ -30,13 +33,13 @@ class User < ActiveRecord::Base
 
   after_initialize do
     if cart.nil?
-      create_cart
-      save
+      build_cart
+      # save
     end
 
     if photo.nil?
-      create_photo
-      save
+      build_photo
+      # save
     end
   end
 end
