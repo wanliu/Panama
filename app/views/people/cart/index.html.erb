@@ -3,27 +3,29 @@
   <h1>购物车 <small>你挑选的宝贝都在这里吗?</small></h1>
 </div>
 <% @items.each do |item| %>
-	<div class="product-item row-fluid">
-		<div class="span2">
-			<%= link_to '#', :class => "img-polaroid" do %>
-				<%= image_tag item.header %>
-			<% end %>
-		</div>
-		<div class="span10">
-			<h1><%= item.title %></h1>
-			<amount><%= item.amount %></amount>
-			<price><%= item.price %></price>
-			<div class="controls pull-right">
-				<button class="btn btn-mini">不想要了</button>
+	<div class='product-item'>
+		<div class="row-fluid">
+			<div class="span2">
+				<%= link_to '#', :class => "img-polaroid" do %>
+					<%= image_tag item.header %>
+				<% end %>
+			</div>
+			<div class="span10">
+				<h1><%= item.title %></h1>
+				<amount><%= item.amount %></amount>
+				<price><%= item.price %></price>
+				<div class="controls pull-right">
+					<button class="btn btn-mini">不想要了</button>
 
+				</div>
 			</div>
 		</div>
 	</div>
 <% end %>
 <%= paginate @items %>
-<%= button_to "生成订单", 
-			  batch_create_person_path(@people.login), 
-			  :method => :post, 
-			  :remote => true , 
+<%= button_to "生成订单",
+			  batch_create_person_path(@people.login),
+			  :method => :post,
+			  :remote => true ,
 			  :class => "btn btn-primary btn-large" %>
 <button class="btn btn-large">清空列表</button>

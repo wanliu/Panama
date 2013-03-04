@@ -17,6 +17,19 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :notifications, :controller => "people/notifications" do
+
+    end
+
+    resources :comments, :controller => "people/comments" do
+      collection do
+        post 'activity'
+        post 'product'
+        get 'new_activity'
+        get 'new_product'
+      end
+    end
+
     member do
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
