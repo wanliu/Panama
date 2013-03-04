@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301090453) do
+ActiveRecord::Schema.define(:version => 20130302091736) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -63,6 +63,13 @@ ActiveRecord::Schema.define(:version => 20130301090453) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
+
+  create_table "admins", :force => true do |t|
+    t.string   "uid"
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "attachments", :force => true do |t|
     t.string   "filename"
@@ -146,6 +153,29 @@ ActiveRecord::Schema.define(:version => 20130301090453) do
     t.datetime "updated_at",     :null => false
     t.integer  "imageable_id"
     t.string   "imageable_type"
+  end
+
+  create_table "inventory_caches", :force => true do |t|
+    t.integer "product_id"
+    t.string  "styles"
+    t.decimal "count",      :precision => 10, :scale => 0
+    t.string  "warhouse"
+    t.decimal "last_time",  :precision => 20, :scale => 10
+  end
+
+  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
+  add_index "inventory_caches", ["styles"], :name => "index_inventory_caches_on_styles"
+  add_index "inventory_caches", ["warhouse"], :name => "index_inventory_caches_on_warhouse"
+
+  create_table "item_in_outs", :force => true do |t|
+    t.integer  "product_id"
+    t.integer  "product_item_id"
+    t.decimal  "quantity",        :precision => 10, :scale => 0
+    t.string   "styles"
+    t.string   "warehouse"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
   end
 
   create_table "notifications", :force => true do |t|
