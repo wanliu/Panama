@@ -1,0 +1,48 @@
+---
+weight:
+    id: 1
+    name: weight
+    title: Weight
+    property_type: integer
+    created_at: 2013-03-04 10:17:20.000000000 Z
+    updated_at: 2013-03-04 10:17:20.000000000 Z
+
+material:
+    id: 2
+    name: material
+    title: Material
+    property_type: string
+    created_at: 2013-03-04 10:17:59.000000000 Z
+    updated_at: 2013-03-04 10:17:59.000000000 Z
+
+clothes_type:
+    id: 3
+    name: clothes_type
+    title: Clothes Type
+    property_type: set
+    created_at: 2013-03-04 10:18:34.000000000 Z
+    updated_at: 2013-03-05 03:08:07.000000000 Z
+# 26.4226
+longitude:
+    id: 4
+    name: longitude
+    title: Longitude
+    property_type: decimal
+    created_at: 2013-03-04 10:18:34.000000000 Z
+    updated_at: 2013-03-05 03:08:07.000000000 Z
+# 112.831113
+latitude:
+    id: 5
+    name: latitude
+    title: Latitude
+    property_type: decimal
+    created_at: 2013-03-04 10:18:34.000000000 Z
+    updated_at: 2013-03-05 03:08:07.000000000 Z
+
+production_date:
+    id: 6
+    name: production_date
+    title: Production date
+    property_type: datetime
+    created_at: 2013-03-04 10:18:34.000000000 Z
+    updated_at: 2013-03-05 03:08:07.000000000 Z
