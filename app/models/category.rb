@@ -6,6 +6,7 @@ class Category < ActiveRecord::Base
   attr_accessible :name
 
   has_many :products
+  has_and_belongs_to_many :properties, :autosave => true
   has_ancestry :cache_depth => true
 
   validates :name, presence: true
