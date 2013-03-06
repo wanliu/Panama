@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
 
   has_widgets do |root|
     root << widget(:cart, :my_cart)
+    root << widget(:notification)
   end
 
   helper_method :current_user, :current_admin, :my_cart, :get_city
