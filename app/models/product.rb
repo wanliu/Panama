@@ -1,5 +1,9 @@
+require 'panama_core'
+
 class Product < ActiveRecord::Base
   include Graphical::Display
+  include PanamaCore::DynamicProperty
+  include PanamaCore::InventoryCache
 
   attr_accessible :description,
                   :name,
@@ -22,10 +26,6 @@ class Product < ActiveRecord::Base
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
   has_many :sub_products, :dependent => :destroy
-  has_and_belongs_to_many :properties
-  has_many :properties_values,
-           :class_name => "ProductPropertyValue",
-           :autosave => true
 
   has_many :styles, :dependent => :destroy, :class_name => "StyleGroup" do
     def [](style_name)
@@ -44,10 +44,6 @@ class Product < ActiveRecord::Base
   validates_presence_of :category
   validates_presence_of :shops_category
   validates_presence_of :shop
-
-  define_callbacks :category_attribute_changed
-
-  set_callback :category_attribute_changed, :after, :after_category_changed
 
   # delegate :properties, :to => :category, :allow_nil => true
 
@@ -128,120 +124,5 @@ class Product < ActiveRecord::Base
     params[:style].map do |name, items|
       { 'name' => name, 'items' => items.values }
     end unless params[:style].blank?
-  end
-
-  def inventory
-    @inventory = InventoryCache
-      .where("product_id = ?", id)
-      .order("last_time DESC")
-      .first_or_create(:product_id => id, :count => 0, :last_time => Time.now.to_f)
-
-    time = @inventory.last_time + 0.0001
-
-    addition_quantity = ItemInOut
-      .where("product_id = ? and created_at >= ?", id, Time.at(time))
-      .sum("quantity") || 0
-
-    @inventory = if addition_quantity != 0
-      InventoryCache.create(:product_id => id,
-                            :count => @inventory.count + addition_quantity,
-                            :last_time => Time.now.to_f)
-    else
-      @inventory
-    end
-
-    @inventory.count
-  end
-
-
-
-  after_find do
-    delegate_property_setup
-  end
-
-  def write_attribute(attr_name, value)
-    super
-    if attr_name == 'category_id'
-      @last_changed_attr = attr_name
-      run_callbacks(:category_attribute_changed)
-    end
-  end
-
-  def property_methods
-    @delegate_properties ||= []
-  end
-
-  def attach_properties!
-    unless category.nil?
-      properties.destroy_all
-      category.properties.each do |property|
-        properties << property
-      end
-      save
-    end
-  end
-
-  # def properties
-  #   puts 'property'
-  #   @properties = super
-  #   category.properites.map do |property|
-  #     p2 = @properties.select { |p1| p1.name == property.name }.first
-  #     p2 = @properties.build(name: property.name, property_type: property.property_type) if p2.nil?
-  #   end
-
-  # end
-
-  protected
-
-  def after_category_changed
-    old_val, new_val = category_id_change
-    delegate_property_setup
-  end
-
-  def delegate_property_setup
-    @delegate_properties ||= []
-
-    @delegate_properties.each do |method_name|
-      @@_delete_method_name = method_name.to_sym
-      class << self
-        remove_method @@_delete_method_name
-      end
-    end
-
-    @delegate_properties = []
-
-    properties.each do |property|
-      if RUBY_VERSION[/1.9.3/] == "1.9.3"
-        name = property.name
-        method_name = name
-        define_singleton_method(method_name) do
-          pv = product_property_values(name)
-          pv.value unless pv.nil?
-        end
-        @delegate_properties << method_name
-
-        define_singleton_method("#{method_name}=") do |other|
-          pv = product_property_values(name)
-          # conds = { :product_id => id, :property_id => property.id }
-          pv = properties_values.create(:product_id => id, :property_id => property.id) if pv.nil?
-          pv.value = other
-        end
-        @delegate_properties << "#{method_name}="
-      end
-    end
-    puts 'setup property ...'
-  end
-
-  def product_property_values(name)
-    property = properties.where("name = ?", name).first
-    properties_values.select { |pv| pv.property.id == property.id }.first
-  end
-  # def properties_values(name)
-  #   properties.select { |property| property.name == name }.first
-  # end
-  after_save do
-    properties_values.each do |value|
-      value.save
-    end
   end
 end
