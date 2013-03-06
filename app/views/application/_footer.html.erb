@@ -12,15 +12,4 @@
         <iframe name='account_login_client' frameborder='0' style='width:100%;' ></iframe>
     </div>
 </div>
-
-<script type='text/javascript'>
-    <% unless current_user.nil? %>
-        require(["jquery", "lib/realtime_client"], function($, realtime_client){
-
-            realtime_client.monitor_people_notification("<%= current_user.login %>", function(data){
-                var notice = $("#my_notification")
-                notice.html(parseInt(notice.html())+1)
-            })
-        })
-    <% end %>
-</script>
+<%= render_widget :notification %>
