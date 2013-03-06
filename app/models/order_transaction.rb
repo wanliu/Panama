@@ -29,7 +29,7 @@ class OrderTransaction < ActiveRecord::Base
     Notification.create!(
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
-      :url => "/shops/#{seller.name}/admins/pending/#{id}",
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
   end
 
