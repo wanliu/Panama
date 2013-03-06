@@ -11,3 +11,13 @@
     </div>
     <% end %>
 </div>
+<script type="text/javascript">
+    var names = ["Jacob","Isabella","Ethan","Emma"];
+    var names = $.map(names,function (value,i) {
+      return {'id':i,'name':value,'email':value+"@email.com"};
+    });
+    require(["jquery", "jquery.atwho"], function ($, fdsa){
+        $('textarea').atWho('@', { data: names })
+    })
+      
+</script>

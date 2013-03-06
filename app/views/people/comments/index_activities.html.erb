@@ -1,11 +1,9 @@
   <% @activities.each do |activity| %>
-    <div id="activity_<%= activity.id %>">
-      <p>
-        <img src="<%= activity.url %>">
-      </p>
-      <div class='comments'>
-      </div>
+    <div id="activity_<%= activity.id %>" class="comment_body">
+      <p><img src="<%= activity.url %>"></p>
+      <div class='comments'></div>
     </div>
+    <br>
     <script type="text/javascript">
       require(["commit_comment", "jquery", "hogan"], function(view, $, Hogan){
         template = Hogan.compile($("#comment_template").html());
@@ -19,12 +17,14 @@
     </script>
   <% end %>
 <template id="comment_template" style="display:none;">
-    <ul class="comment_main">
+  <div class="comment_main">
+    <ul>
       <li>{{ comment.content }}</li>
       <li><span>
-        <img src="{{ user.photos.icon }}">
-        {{ user.login }}
-        {{ comment.created_at }}
+      <img src="{{ user.photos.icon }}">
+      {{ user.login }}
+      {{ comment.created_at }}
       </span></li>
     </ul>
+  </div>
 </template>
