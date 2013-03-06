@@ -30,7 +30,7 @@ class OrderTransaction < ActiveRecord::Base
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/pending/#{id}",
-      :body => "有新订单")
+      :body => "你有新订单")
   end
 
   state_machine :initial => :order do
