@@ -1,14 +1,16 @@
 .comment_main {
-	width: 300px;
-	border:1px;
 	height: auto;
-	list-style-type: none;
-	border-style: dashed;
+
 	margin: 3px;
+
+	ul {
+	    list-style-type: none;
+	    margin: 0 0 10px 5px;
+	}
 
 	li {
 		margin-left: 10px;
-		line-height: 50px;
+		line-height: 30px;
 	}
 }
 
@@ -16,6 +18,15 @@
 	cursor: pointer;
 }
 
+.comment_body {
+	width: 500px;
+	border: 1px solid #e3e3e3;
+
+	p {
+		margin: 20px 0 10px 20px;
+	}
+}
+
 .comment {
-	width: 300px;
+	margin-left: 15px;
 }

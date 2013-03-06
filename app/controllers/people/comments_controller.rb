@@ -24,6 +24,7 @@ class People::CommentsController < People::BaseController
 
     def new_activity
         @comment = Comment.new
+        @user = User.where("1 = 1")
     end
 
     def new_product

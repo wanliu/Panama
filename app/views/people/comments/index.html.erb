@@ -1,14 +1,16 @@
 <div class="comments_div">
   <% @comments.each do |comment| %>
-  	<ul class="comment_main">
-  		<li><%= comment.content %></li>
-  		<li><span>
-			<img src="<%=comment.user.photos.icon %>">
-			<%= comment.user.login %>
-			<%= comment.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
-  		</span></li>
-  	</ul>
+    <div class="comment_main">
+    	<ul>
+    		<li><%= comment.content %></li>
+    		<li><span>
+  			<img src="<%=comment.user.photos.icon %>">
+  			<%= comment.user.login %>
+  			<%= comment.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
+    		</span></li>
+    	</ul>
+    </div>
   <% end %>
-</div>
 <%=render :template => "people/comments/new_activity",
       :locals=> { :activity => @activity  } %>
+</div>
