@@ -1,5 +1,5 @@
 <script type='text/javascript'>
-    <% unless current_user.nil? %>
+    <% unless current_user.nil? || true %>
         require(["jquery", "lib/realtime_client"], function($, realtime_client){
             realtime_client.monitor_people_notification("<%= current_user.login %>", function(data){
                 var notice = $("#my_notification")

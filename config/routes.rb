@@ -2,7 +2,6 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
-
   faye_server '/realtime', timeout: 25 do
     map "/notification/**" => RealtimeNoticeController
     map default: :block
@@ -98,6 +97,8 @@ Panama::Application.routes.draw do
       resources :categories, :controller => "shops/categories"
 
       resources :products, :controller => "shops/products"
+
+      resources :transactions, :controller => "shops/transactions"
 
       match "pending", :to => "shops/transactions#pending"
 

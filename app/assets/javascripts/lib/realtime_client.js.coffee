@@ -10,7 +10,5 @@ define(["faye"], () ->
                 callback(data)
             )
 
-
-
     new RealtimeClient
 )
