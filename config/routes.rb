@@ -24,8 +24,10 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :notifications, :controller => "people/notifications" do
-
+    resources :notifications, :controller => "people/notifications",:except => :show do
+      collection do
+        get "/:id/enter", :to => "people/notifications#show"
+      end
     end
 
     resources :comments, :controller => "people/comments" do
