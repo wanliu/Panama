@@ -54,6 +54,15 @@ module ApplicationHelper
     link_to current_user.login, person_path(current_user)
   end
 
+  def link_to_notice
+    span = content_tag :span, unread_notification_count, :id => "my_notification", :class => "badge badge-warning notification"
+    link_to span, person_notifications_path(current_user.login)
+  end
+
+  def unread_notification_count
+    Notification.unreads.where(:user_id => current_user.id).count
+  end
+
   def search_box(name, value = nil, options = { size: 40})
     text_field_tag name, value, options
     button_tag l(:search, '搜索')

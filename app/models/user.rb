@@ -31,15 +31,11 @@ class User < ActiveRecord::Base
     end
   end
 
-  after_initialize do
-    if cart.nil?
-      build_cart
-      # save
-    end
+  after_initialize :init_user_info
 
-    if photo.nil?
-      build_photo
-      # save
-    end
+  def init_user_info
+    return if new_record?
+    create_photo if photo.nil?
+    create_cart if cart.nil?
   end
 end
