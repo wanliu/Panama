@@ -2,6 +2,7 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
+
   faye_server '/realtime', timeout: 25 do
     map "/notification/**" => RealtimeNoticeController
     map default: :block

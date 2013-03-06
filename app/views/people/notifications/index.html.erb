@@ -12,13 +12,33 @@
                     </div>
                 </div>
 
-                <div class='content well span11'>
-                    <a href="<%=n.url %>">
+                <div class='content well span11' style='position:relative;'>
+                    <p>
                         <%=n.body %>
-                    </a>
+                    </p>
+                    <p>
+                        <span class="label <%= n.read ? "" : "label-important" %>" style='position: absolute;top: 0px;right: 0px;'>
+                            <%= n.read ? "已读取" : "未读取" %>
+                        </span>
+                        <span>
+                            <a href="<%=person_notification_path(current_user.login, n.id) %>">
+                                查看
+                            </a>
+                        </span>
+                        <% unless n.read %>
+                            <span style='margin-left: 20px'>
+                                <span class="label">不提醒</span>
+                            </span>
+                        <% end %>
+                    </p>
                 </div>
             </div>
         </li>
     <% end %>
     </ul>
+    <% unless params[:all] == "1" %>
+        <div>
+            <a href="<%= person_notifications_path(current_user.login) %>?all=1">查看所有提醒</a>
+        </div>
+    <% end %>
 </div>

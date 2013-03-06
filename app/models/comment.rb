@@ -24,7 +24,7 @@ class Comment < ActiveRecord::Base
         :user_id => u.id,
         :mentionable_user_id => user.id,
         :url => "/activities/#{targeable.id}",
-        :body => "在活动评论，提到你")
+        :body => "在评论，提到你")
     end
   end
 
