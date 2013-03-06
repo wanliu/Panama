@@ -13,10 +13,8 @@
                 </div>
 
                 <div class='content well span11'>
-                    在<%=t "activerecord.models.#{n.mentionable.class.name.underscore}" %>
-                    提及您,内容如下：<br />
-                    <a href="<%=activity_path(n.mentionable.targeable.id) %>">
-                        <%=n.mentionable.content %>
+                    <a href="<%=n.url %>">
+                        <%=n.body %>
                     </a>
                 </div>
             </div>
