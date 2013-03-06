@@ -22,7 +22,7 @@
                             <%= n.read ? "已读取" : "未读取" %>
                         </span>
                         <span>
-                            <a href="<%=person_notification_path(current_user.login, n.id) %>">
+                            <a href="<%=person_notification_path(current_user.login, n.id) %>/enter">
                                 查看
                             </a>
                         </span>
