@@ -1,6 +1,16 @@
 ---
-    Apple:
-        id: 10001
-        name: Apple
-        price: 100.05
-        shop_id: 1001
+Apple:
+    id: 10001
+    name: Apple
+    price: 100.05
+    shop_id: 1001
+    category_id: 73
+    shops_category_id: 54
+
+iPhone4s:
+    id: 10002
+    name: iPhone 4s
+    price: 4999.05
+    shop_id: 1001
+    category_id: 74
+    shops_category_id: 55

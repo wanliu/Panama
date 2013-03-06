@@ -129,3 +129,4 @@ gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'
 gem 'passenger'
+gem "default_value_for"
