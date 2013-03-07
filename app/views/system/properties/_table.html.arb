@@ -1,0 +1,3 @@
+table_for items, :class => 'index_table' do
+	column :value
+end

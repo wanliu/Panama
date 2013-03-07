@@ -1,4 +1,5 @@
 ActiveAdmin.register Property do
+
   index do
     column :title
     column :name
@@ -11,6 +12,14 @@ ActiveAdmin.register Property do
   end
 
   member_action :items do
+    @property = Property.find(params[:id])
+    # @items = @property.items
+  end
+
+  member_action :append_item, :method => :post do
+    @property = Property.find(params[:id])
+    @property.items << PropertyItem.create(params[:property_item])
+    redirect_to items_system_property_path(@property)
   end
 
   # form do |f|
