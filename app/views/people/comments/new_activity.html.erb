@@ -1,0 +1,12 @@
+<div>
+    <%=simple_form_for @comment,
+    :remote => true, :url => activity_person_comments_path  do | f | %>
+        <div>
+            <textarea name='comment[content]'>
+            </textarea>
+        </div>
+        <div>
+            <%=f.button :submit, "评论" %>
+        </div>
+    <% end %>
+</div>
