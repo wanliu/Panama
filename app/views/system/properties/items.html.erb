@@ -1,0 +1,10 @@
+<%= render :partial => "table", :locals => { :items => @property.items } %>
+
+<% @item = PropertyItem.new %>
+
+<%= active_admin_form_for @item, :url => append_item_system_property_path(@property) do |f| %>
+  <% f.inputs "Values" do %>
+    <%= f.input :value %>
+  <% end %>
+  <%= f.buttons %>
+<% end %>
