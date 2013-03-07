@@ -64,13 +64,6 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "attachments", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",      :null => false
@@ -126,6 +119,15 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.string   "ancestry"
   end
 
+  create_table "comments", :force => true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "targeable_id"
+    t.string   "targeable_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "contents", :force => true do |t|
     t.string   "name"
     t.string   "template"
@@ -161,6 +163,11 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.decimal "last_time",  :precision => 20, :scale => 10
   end
 
+  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
+  add_index "inventory_caches", ["styles"], :name => "index_inventory_caches_on_styles"
+  add_index "inventory_caches", ["warhouse"], :name => "index_inventory_caches_on_warhouse"
+
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
@@ -169,6 +176,16 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.string   "warehouse"
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
+  end
+
+  create_table "notifications", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "mentionable_user_id"
+    t.integer  "mentionable_id"
+    t.string   "mentionable_type"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "read",                :default => false
   end
 
   create_table "order_transactions", :force => true do |t|
@@ -183,13 +200,13 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
   end
 
   create_table "product_items", :force => true do |t|
-    t.integer  "transaction_id"
     t.string   "title"
     t.decimal  "amount",         :precision => 10, :scale => 0
     t.decimal  "price",          :precision => 10, :scale => 0
     t.decimal  "total",          :precision => 10, :scale => 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "transaction_id"
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.integer  "cart_id"
     t.integer  "sub_product_id"
   end
@@ -238,6 +255,14 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.string   "value"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "replies", :force => true do |t|
+    t.integer  "comment_id"
+    t.string   "content"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "resources", :force => true do |t|
