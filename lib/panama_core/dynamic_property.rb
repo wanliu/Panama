@@ -51,13 +51,6 @@ module PanamaCore
       end
     end
 
-    protected
-
-    def after_category_changed
-      old_val, new_val = category_id_change
-      delegate_property_setup
-    end
-
     def delegate_property_setup
       @delegate_properties ||= []
 
@@ -90,6 +83,13 @@ module PanamaCore
         end
         @delegate_properties << "#{method_name}="
       end
+    end
+
+    protected
+
+    def after_category_changed
+      old_val, new_val = category_id_change
+      delegate_property_setup
     end
 
     def factory_property(name, &block)
