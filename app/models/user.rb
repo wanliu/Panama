@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
 
-  attr_accessible :uid, :login, :first_name, :last_name
+  attr_accessible :uid, :login, :first_name, :last_name, :email
 
   define_graphical_attr :photos, :handler => :grapical_handler
 
@@ -17,6 +17,12 @@ class User < ActiveRecord::Base
            foreign_key: 'buyer_id'
 
   has_many :addresses, class_name: "Address"
+
+  def as_json(*args)
+    user = super(*args)
+    user["user"]["url"] = photos.default
+    user
+  end
 
   #暂时方法
   def grapical_handler

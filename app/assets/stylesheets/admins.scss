@@ -5,6 +5,8 @@
 //= require 'arrow'
 //= require './lib/jquery.columnview'
 //= require './lib/fileuploader'
+//= require './lib/typeahead'
+//= require './lib/search_user_typeahead'
 //= require 'bootstrap_extend'
 //= require 'admins/shops'
 //= require products
@@ -19,7 +21,7 @@
 $left-side-admin-width :200px;
 
 
-#admin_content { 
+#admin_content {
 	margin-top: 20px;
 }
 
@@ -29,7 +31,7 @@ $left-side-admin-width :200px;
 	min-height: 500px;
 	top: 0px;
 	left: 0px;
-	bottom: 0px;	
+	bottom: 0px;
 }
 
 #admin_main {

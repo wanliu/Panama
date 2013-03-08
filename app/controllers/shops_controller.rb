@@ -1,7 +1,10 @@
+#encoding: utf-8
 require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
+  before_filter :login_required, :only => [:show_invite]
+
   include Apotomo::Rails::ControllerMethods
 
   has_widgets do |root|
@@ -23,6 +26,14 @@ class ShopsController < ApplicationController
       format.html # index.html.erb
       format.json { render json: @shops }
     end
+  end
+
+  def show_invite
+    valid_invite_options
+  end
+
+  def agree_invite
+
   end
 
   # GET /shops/1
@@ -140,5 +151,32 @@ class ShopsController < ApplicationController
 
   def extract_temp_options(*args)
     args.last
+  end
+
+  private
+  def decrypt_options
+    {
+      :date => DateTime.parse(Crypto.decrypt(params[:date])) + 3.day,
+      :name => Crypto.decrypt(params[:name]),
+      :login => Crypto.decrypt(params[:login])
+    }
+  end
+
+  def valid_invite_options
+    options = decrypt_options
+    @user = User.find_by(:login => options[:login])
+    @shop = Shop.find_by(:name => options[:name])
+
+    if options[:date] < DateTime.now
+      render :text => "邀请信息已经过期！"
+      return false
+    elsif @user != current_user
+      render :text => "出错了!你不是邀请的对象"
+      return false
+    elsif @shop.nil?
+      render :text => "商店不存在"
+      return false
+    end
+    options
   end
 end
