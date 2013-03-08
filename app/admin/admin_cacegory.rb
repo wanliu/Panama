@@ -20,6 +20,12 @@ ActiveAdmin.register Category do
     redirect_to properties_system_category_path(@category)
   end
 
+  member_action :delete_relation, :method => :put do
+    @category = Category.find(params[:id])
+    @category.properties.delete(Property.find(params[:property][:id]))
+    redirect_to properties_system_category_path(@category)
+  end
+
   member_action :comments do
     category = Category.find(params[:id])
   end
