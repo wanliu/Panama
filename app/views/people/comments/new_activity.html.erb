@@ -1,23 +1,22 @@
 <div class="comment">
-    <span class="more">更多评论...</span>
-    <%= simple_form_for @comment,
-    :remote => true, :url => product_person_comments_path  do | f | %>
+  <span class="more">更多评论...</span>
+  <%= simple_form_for @comment,
+  :remote => true, :url => product_person_comments_path  do | f | %>
     <div>
-        <textarea name='comment[content]'></textarea>
-        <input type='hidden' value="<%= activity.id %>" name='comment[targeable_id]' />
+      <textarea name='comment[content]'></textarea>
+      <input type='hidden' value="<%= activity.id %>" name='comment[targeable_id]' />
     </div>
     <div>
-        <%= f.button :submit, "评论" %>
+      <%= f.button :submit, "评论" %>
     </div>
-    <% end %>
+  <% end %>
 </div>
 <script type="text/javascript">
-    var names = ["Jacob","Isabella","Ethan","Emma"];
-    var names = $.map(names,function (value,i) {
-      return {'id':i,'name':value,'email':value+"@email.com"};
-    });
-    require(["jquery", "jquery.atwho"], function ($, fdsa){
-        $('textarea').atWho('@', { data: names })
-    })
-      
+
+  require(["jquery", "lib/at_who"], function ($, at_who){
+    new at_who({el: $(".comment")});
+  })
+
 </script>
+
+

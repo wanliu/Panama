@@ -9,7 +9,6 @@ gem 'mongoid', '~> 3.0.0'
 # acts_as_tree
 gem 'mongoid-tree',  '~> 1.0.1', :require => 'mongoid/tree'
 gem 'ancestry', '~> 1.3.0'
-gem "jquery-atwho-rails", '0.1.7'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

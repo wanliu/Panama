@@ -56,7 +56,7 @@ Panama::Application.routes.draw do
 
   get "pending/index"
 
-  resources :users, :except => :index
+  resources :users
   resources :contents, :except => :index
 
   resources :products, :except => :index
