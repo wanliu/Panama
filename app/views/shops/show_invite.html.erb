@@ -1,0 +1,13 @@
+<div>
+    <p style='font-size: 14px;margin-bottom: 15px;margin-top: 15px;'>
+        <%= form_for @shop,:url => "/shops/#{params[:name]}/agree_invite/#{params[:login]}" do |f| %>
+            <%=@shop.name %> 商店邀请你加入他们，是否同意？<br /><br />
+            <input type='hidden' name='date' value="<%=params[:date] %>" />
+            <input type='submit' class='btn btn-primary' value='同意' />
+            <input type='button' class='btn' value='拒绝' />
+        <% end %>
+    </p>
+    <p>
+        谢谢！
+    </p>
+</div>
