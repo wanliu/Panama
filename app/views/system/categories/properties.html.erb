@@ -1,4 +1,4 @@
-<%= render partial: 'form', :locals => { properties: @category.properties } %>
+<%= render partial: 'form', :locals => { properties: @category.properties, category: @category } %>
 
 <% @property = Property.new %>
 <%= semantic_form_for @property, url: relate_property_system_category_path(@category) do |f| %>
