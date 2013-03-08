@@ -18,6 +18,12 @@
 						<%#= f.hidden_field :id %>
 						<%#= f.submit '删除'%>
 					<%# end %>
+					<span>
+						<%= link_to "属性", system_property_path(property) %>
+					</span>
+					<span style='margin-left:20px;'>
+						<%= link_to "items", items_system_property_path(property) %>
+					</span>
 				</td>
 			</tr>
 		<% end %>
