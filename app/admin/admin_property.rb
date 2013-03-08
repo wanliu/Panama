@@ -8,11 +8,12 @@ ActiveAdmin.register Property do
       link_to "Has #{property.items.size} items",items_system_property_path(property)
     end
     # column :user
-    default_actions
+    # default_actions
   end
 
   member_action :items do
     @property = Property.find(params[:id])
+
     # @items = @property.items
   end
 

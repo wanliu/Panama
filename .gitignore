@@ -20,4 +20,4 @@
 /vendor/bundle
 /vendor/cache
 /public/uploads
-# /public/attachment
+/public/attachment
