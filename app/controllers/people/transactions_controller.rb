@@ -54,7 +54,6 @@ class People::TransactionsController < People::BaseController
     #   flag = transaction.save
     # end
     # cart.destroy if flag
-
     # FIXME @people这个参数是不是多余？ cart的user不就是@people么？
     if my_cart.create_transaction(@people)
       redirect_to person_transactions_path(@people.login),

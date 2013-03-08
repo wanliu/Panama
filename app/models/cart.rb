@@ -43,7 +43,7 @@ class Cart < ActiveRecord::Base
 
   def save_transcation(shop, pro_items, people)
     transaction = people.transactions.build(seller_id: shop.id)
-    transaction.build_items(pro_items)
+    transaction.items = pro_items
     transaction.update_total_count
     transaction.save
   end

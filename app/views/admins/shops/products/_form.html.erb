@@ -13,13 +13,6 @@
 		<%= render_styles %>
 
     <%= f.input :price %>
-    <%= f.input :weight %>
-    <%= f.input :material %>
-    <%= f.input :clothers_type,
-                :collection => PropertySetItem.all,
-                :label_method => :value,
-                :value_method => :id
-                 %>
     <%#= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
