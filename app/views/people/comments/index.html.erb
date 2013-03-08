@@ -2,12 +2,12 @@
   <% @comments.each do |comment| %>
     <div class="comment_main">
     	<ul>
-    		<li><%= comment.content %></li>
-    		<li><span>
-  			<img src="<%=comment.user.photos.icon %>">
-  			<%= comment.user.login %>
-  			<%= comment.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
-    		</span></li>
+        <li><span>
+        <img src="<%=comment.user.photos.icon %>">
+        <a href=""><%= comment.user.login %></a>
+        <%= comment.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
+        </span></li>
+    		<li class="content"><%= comment.content %></li>
     	</ul>
     </div>
   <% end %>
