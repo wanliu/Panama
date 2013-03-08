@@ -24,7 +24,7 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :notifications, :controller => "people/notifications",:except => :show do
+    resources :notifications,:except => :show, :controller => "people/notifications" do
       collection do
         get "/:id/enter", :to => "people/notifications#show"
       end
@@ -84,7 +84,9 @@ Panama::Application.routes.draw do
   # shop admins routes
 
   resources :shops, :except => :index do
-
+    collection do
+      get ":name/show_invite/:login", :to => "shops#show_invite"
+    end
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post
@@ -103,6 +105,12 @@ Panama::Application.routes.draw do
       resources :transactions, :controller => "shops/transactions"
 
       match "pending", :to => "shops/transactions#pending"
+
+      resources :employees, :controller => "shops/employees" do
+        collection do
+          post "invite", :to => "shops/employees#invite"
+        end
+      end
 
       resources :complete, :controller => "shops/complete"
 
@@ -123,7 +131,11 @@ Panama::Application.routes.draw do
 
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
-  resources :search
+  resources :search do
+    collection do
+      get "users"
+    end
+  end
 
 
   # omniauth

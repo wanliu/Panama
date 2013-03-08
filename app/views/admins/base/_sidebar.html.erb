@@ -1,35 +1,39 @@
 <%= content_tag :div, :id => name do %>
 <div class="well">
 <ul class="nav nav-list">
-	<% sections(:top).each do |section| %>
-		<%= render :partial => "section", :locals => section %>
-	<% end %>
-	<li class="nav-header">订单<li>
-	<% sections(:transactions).each do |section| %>
-		<%= render :partial => "section", :locals => section %>
-	<% end %>
-	<li class="nav-header">物流<li>
-	<% sections(:transportation).each do |section| %>
-		<%= render :partial => "section", :locals => section %>
-	<% end %>	
-	<li class="nav-header">售后<li>
-	<% sections(:service).each do |section| %>
-		<%= render :partial => "section", :locals => section %>
-	<% end %>
-	<li class="nav-header">商品<li>
-	<% sections(:products).each do |section| %>
-		<%= render :partial => "section", :locals => section %>
-	<% end %>
-	<li class="nav-header">设计</li>	
-	<% sections(:design).each do |section| %>
-		<%= render :partial => "section", :locals => section %>
-	<% end %>
+    <% sections(:top).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="nav-header">订单<li>
+    <% sections(:transactions).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="nav-header">物流<li>
+    <% sections(:transportation).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="nav-header">售后<li>
+    <% sections(:service).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="nav-header">商品<li>
+    <% sections(:products).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="nav-header">设计</li>
+    <% sections(:design).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="nav-header">管理</li>
+    <% sections(:admins).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+    <% end %>
 </ul>
 </div>
 <% end %>
 
 <script type="text/javascript">
-	var section = "<%= current_section %>";
-	$("#<%= name%> ul li#" + section ).addClass("active");
+    var section = "<%= current_section %>";
+    $("#<%= name%> ul li#" + section ).addClass("active");
 </script>
 

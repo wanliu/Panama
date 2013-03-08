@@ -11,6 +11,8 @@
 			, "jquery_columnview": "lib/jquery.columnview"
 			, "fileuploader": "lib/fileuploader"
 			, "faye" : "faye"
+			, "hogan" : "lib/hogan"
+			, "typeahead" : "lib/typeahead"
 		},
 
 		shim: {
@@ -45,6 +47,9 @@
 			},
 			"fileuploader": {
 				exports: "qq"
+			},
+			"typeahead": {
+				deps : ["jquery"]
 			}
 		}
 	});

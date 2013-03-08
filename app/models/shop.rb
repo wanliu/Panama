@@ -8,7 +8,10 @@ class Shop < ActiveRecord::Base
 
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
+  has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
+  has_and_belongs_to_many :employee_users, class_name: "User"
+
   has_one :shops_category
   belongs_to :user
 
@@ -53,6 +56,8 @@ class Shop < ActiveRecord::Base
 
     load_default_contents
 
+    load_group
+
     write_default_options
   end
 
@@ -63,14 +68,20 @@ class Shop < ActiveRecord::Base
 
   def delete_shop
     remove_standardization_files
+  end
 
+  def load_group
+    puts "======================================="
+    _config = YAML.load(fs['config/shop_group.yml'].read)
+    puts _config
+    _config["shop_group"].each do |group|
+      self.groups << ShopGroup.create(group)
+    end
   end
 
   def load_default_contents
-
     _config = YAML.load(fs['config/contents.yml'].read)
-    contents_config = _config['contents']
-    contents_config.each do |content|
+    _config['contents'].each do |content|
       self.contents << Content.create(content)
     end
   end

@@ -13,6 +13,7 @@ class UserSessionsController < ApplicationController
       # New user registration
       user = User.new(:uid => omniauth['uid'])
       user.login = omniauth["info"]["login"]
+      user.login = omniauth["info"]["email"]
       user.save
 
     end
