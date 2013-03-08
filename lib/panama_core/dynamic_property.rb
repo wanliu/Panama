@@ -17,7 +17,7 @@ module PanamaCore
       has_and_belongs_to_many :property_items do
         def [](name)
           property = @association.owner.properties[name]
-          select { |pi| pi.property.id == property.id }.first
+          select { |pi| pi.property.id == property.id }
         end
       end
 
