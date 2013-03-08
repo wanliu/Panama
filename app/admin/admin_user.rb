@@ -17,4 +17,61 @@ ActiveAdmin.register AdminUser do
     end
     f.actions
   end
+ 
 end
+
+ActiveAdmin.register Category do
+  index do
+    column :id
+    column :name
+    column :ancestry
+    column :created_at
+    column 'tool' do
+      link_to "View Site", "/", :class => 'btn'
+    end
+
+  end
+
+  member_action :comments do
+    category = Category.find(params[:id])
+  end
+end
+
+ActiveAdmin.register Product do
+  index do
+    column :id
+    column :name
+  end
+end
+
+ActiveAdmin.register Shop do
+  index do
+    column :id
+    column :name
+    column :user
+  end
+end
+
+ActiveAdmin.register Activity do
+  index do
+    column :id
+    column :name
+    # column :user
+  end
+end
+
+
+ActiveAdmin.register Property do
+  index do
+    column :title
+    column :name
+    column :property_type
+    column :items do |property|
+      link_to "Has #{property.items.size} items",items_system_property_path(property)
+    end
+    # column :user
+  end
+
+  member_action :items do
+  end
+end 
