@@ -6,4 +6,11 @@ class Property < ActiveRecord::Base
   has_and_belongs_to_many :categories
   has_many :items, :class_name => "PropertyItem"
 
+  validates :name, uniqueness: true
+  validates :property_type, exclusion: { in: %w(string set datetime integer float decimal) }
+
+  def property_types
+  	%w(string set datetime integer float decimal)
+  end
+
 end

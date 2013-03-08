@@ -126,6 +126,15 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.string   "ancestry"
   end
 
+  create_table "comments", :force => true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "targeable_id"
+    t.string   "targeable_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
   create_table "contents", :force => true do |t|
     t.string   "name"
     t.string   "template"
@@ -169,6 +178,16 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.string   "warehouse"
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
+  end
+
+  create_table "notifications", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "mentionable_user_id"
+    t.integer  "mentionable_id"
+    t.string   "mentionable_type"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "read",                :default => false
   end
 
   create_table "order_transactions", :force => true do |t|
@@ -238,6 +257,14 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.string   "value"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "replies", :force => true do |t|
+    t.integer  "comment_id"
+    t.string   "content"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "resources", :force => true do |t|

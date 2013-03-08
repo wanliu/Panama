@@ -17,6 +17,7 @@ ActiveAdmin.register AdminUser do
     end
     f.actions
   end
+ 
 end
 
 ActiveAdmin.register Category do
@@ -73,4 +74,4 @@ ActiveAdmin.register Property do
 
   member_action :items do
   end
-end
+end 

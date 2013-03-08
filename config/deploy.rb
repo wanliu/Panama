@@ -1,5 +1,5 @@
 set :application, "panama"
-set :repository, "git@github.com:wanliu/panama.git"
+set :repository, "git@github.com:wanliu/Panama.git"
 
 set :user, "root"
 set :password, "asdfasdf"

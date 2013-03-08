@@ -18,7 +18,7 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 	class MyCart extends Backbone.View
 		el: "#my_cart"
 
-		events: 
+		events:
 			"click .handle": "toggleCartBox"
 
 		initialize: (@options) ->
@@ -27,9 +27,9 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 		toggleCartBox: (event) ->
 			$("#cart_box")
 				.toggle () ->
-					if $(@).hasClass "fadeInUpBig" 
+					if $(@).hasClass "fadeInUpBig"
 						'animate fadeInDownBig show'
-					else 
+					else
 						'animate fadeInUpBig'
 
 		hoverProcess: (event) ->
@@ -50,8 +50,8 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 			moveTarget = $element
 				.clone()
 				.appendTo("body")
-			
-			moveTarget      
+
+			moveTarget
 				.css('position', "fixed")
 				.animate targetPosition, () =>
 					$(@el)
@@ -76,7 +76,7 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 			strHmtl += "<td>#{product_item.amount}</td>"
 			strHmtl += "<td>#{product_item.total}</td></tr>"
 			strHmtl
-			
+
 		targetAttributes: (target) ->
 			top: target.position().top
 			left: target.position().left
