@@ -10,6 +10,38 @@ ActiveAdmin.register Category do
     default_actions
   end
 
+  show do |category|
+    div do
+      panel("Product Base") do
+        attributes_table_for(category) do
+          attrbute_names = category.attributes.map { |attr, _| attr }
+          attrbute_names.each do |column|
+            row column
+          end
+        end
+      end
+    end
+
+    div do
+      panel("Category Properties") do
+        table_for(category.properties) do
+          column :name
+          column :property_type
+        end
+      end
+    end
+
+    div do
+      @property = Property.new
+      active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
+        f.inputs "Properties" do
+          f.input :id, as: :select, collection: Property.all { |property| property.title }
+        end
+        f.buttons
+      end
+    end
+  end
+
   member_action :properties do
     @category = Category.find(params[:id])
   end
@@ -28,5 +60,9 @@ ActiveAdmin.register Category do
 
   member_action :comments do
     category = Category.find(params[:id])
+  end
+
+  action_item :only => :show do
+    link_to 'Manager Properties', properties_system_category_path(params[:id])
   end
 end

@@ -2,6 +2,8 @@
 
 <% @property = Property.new %>
 <%= semantic_form_for @property, url: relate_property_system_category_path(@category) do |f| %>
+	<%= f.inputs "Properties" do %>
 		<%= f.input :id, as: :select, collection: Property.all { |property| property.title } %>
-		<%= f.actions %>
+	<% end %>
+	<%= f.actions %>
 <% end %>
