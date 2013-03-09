@@ -138,6 +138,8 @@ Panama::Application.routes.draw do
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
 
+  match 'vfs/:file_path', :to => 'vfs#show'
+
   root :to => 'activities#index'
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
