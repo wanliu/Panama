@@ -62,6 +62,21 @@ class ApplicationController < ActionController::Base
     RUBY
   end
 
+  def generate_auth_string
+    now = DateTime.now
+    r1, r2 = rand(999), rand(999)
+    Crypto.encrypt("#{now}|#{r1}|#{r2}|#{r1+r2}")
+  end
+
+  #验证算法,但是没有验证生效日期
+  def validate_auth_string(auth_string)
+    auth = Crypto.decrypt(auth_string) rescue nil
+    return false if auth.nil?
+    time, r1, r2, result = auth.split("|")
+    return false unless r1.to_i + r2.to_i == result.to_i
+    DateTime.parse(time)
+  end
+
   def get_city
     City.first && City.first.children || []
   end
