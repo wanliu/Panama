@@ -18,6 +18,20 @@ class People::CommentsController < People::BaseController
         end
     end
 
+    def index
+        @comments = Comment.where("targeable_id=? and targeable_type=?", 
+            params[:targeable_id], 
+            params[:targeable_type])
+        if "0" != params[:limit]
+            @comments = @comments.order("created_at desc").limit(params[:limit]).reverse()
+        end
+        @activity = Activity.find(params[:targeable_id])
+        @comment = Comment.new
+        respond_to do | format |
+            format.html{ render :layout => false }
+        end
+    end
+
     def show
         @comment = Comment.find(params[:id])
     end
