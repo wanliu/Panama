@@ -3,7 +3,7 @@ require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
-  before_filter :login_required, :only => [:show_invite]
+  before_filter :login_required, :only => [:show_invite, :agree_invite, :show_email_invite]
 
   include Apotomo::Rails::ControllerMethods
 
@@ -29,11 +29,17 @@ class ShopsController < ApplicationController
   end
 
   def show_invite
-    valid_invite_options
+    valid_invite_user
   end
 
   def agree_invite
 
+  end
+
+  def show_email_invite
+    if valid_invite_options(decrypt_options)
+      render :action => :show_invite
+    end
   end
 
   # GET /shops/1
@@ -156,27 +162,36 @@ class ShopsController < ApplicationController
   private
   def decrypt_options
     {
-      :date => DateTime.parse(Crypto.decrypt(params[:date])) + 3.day,
-      :name => Crypto.decrypt(params[:name]),
-      :login => Crypto.decrypt(params[:login])
+      :auth => Crypto.decrypt(params[:auth]) rescue nil,
+      :name => Crypto.decrypt(params[:name]) rescue nil,
+      :login => Crypto.decrypt(params[:login]) rescue nil
     }
   end
 
-  def valid_invite_options
+  def valid_invite_user
     options = decrypt_options
     @user = User.find_by(:login => options[:login])
-    @shop = Shop.find_by(:name => options[:name])
+    if valid_invite_options(options)
+      if @user != current_user
+        render :text => "出错了!你不是邀请的对象"
+      end
+    end
+  end
 
-    if options[:date] < DateTime.now
-      render :text => "邀请信息已经过期！"
+  def valid_invite_options(options)
+    @shop = Shop.find_by(:name => options[:name])
+    now = validate_auth_string(options[:auth])
+
+    if !now
+      render :text => "无效的信息"
       return false
-    elsif @user != current_user
-      render :text => "出错了!你不是邀请的对象"
+    elsif now+3.day < DateTime.now
+      render :text => "邀请信息已经过期！"
       return false
     elsif @shop.nil?
       render :text => "商店不存在"
       return false
     end
-    options
+    return true
   end
 end

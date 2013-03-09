@@ -86,6 +86,7 @@ Panama::Application.routes.draw do
   resources :shops, :except => :index do
     collection do
       get ":name/show_invite/:login", :to => "shops#show_invite"
+      get ":name/show_email_invite", :to => "shops#show_email_invite"
     end
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
