@@ -85,8 +85,7 @@ module PanamaCore
 
         define_singleton_method("#{method_name}=") do |other|
 
-          factory_property name do |pv|
-            pv.product_id = id
+          factory_property name, :product => self do |pv|
             pv.property_id = property.id
             pv.value = other
           end
@@ -102,10 +101,9 @@ module PanamaCore
       delegate_property_setup
     end
 
-    def factory_property(name, &block)
+    def factory_property(name, options = {}, &block)
       method = persisted? ? :create : :build
-
-      pv = product_property_values(name) || properties_values.send(method)
+      pv = product_property_values(name) || properties_values.send(method, options)
       yield pv
     end
 
