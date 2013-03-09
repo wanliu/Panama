@@ -1,0 +1,82 @@
+<%= requirejs_include_tag "application" %>
+<%= stylesheet_link_tag   "jquery.treeview" %>
+<style type="text/css">
+	body.active_admin ul#browser { 
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		background-color: white;
+		margin-top: 4px;
+	}
+	body.active_admin .treeview li { 
+		list-style: none;	
+		margin: 0;
+		padding: 3px 0pt 3px 16px;
+	}
+</style>
+
+<div>
+	<ul id="browser" class="filetree treeview">
+		<% root.each do |r| %> 
+			<li class="collapsable" onclick="aaa('/<%= r.name %>','<%= r.name %>')">
+				<div class="hitarea collapsable-hitarea"></div>
+				<span class="folder"><%= r.name %></span>
+				<ul class="<%= r.name %>_click">
+					<li class="last"><span class="file"></span></li>
+				</ul>
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+
+<ul id="browser" class="filetree treeview">
+		<li class="collapsable">
+			<div class="hitarea collapsable-hitarea"></div>
+			<span class="folder">Folder 1</span>
+			<ul>
+				<li class="last"><span class="file">Item 1.1</span></li>
+			</ul>
+		</li>
+		<li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span class="folder">Folder 2</span>
+			<ul>
+				<li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span class="folder">Subfolder 2.1</span>
+					<ul id="folder21">
+						<li><span class="file">File 2.1.1</span></li>
+						<li class="last"><span class="file">File 2.1.2</span></li>
+					</ul>
+				</li>
+				<li class="last"><span class="file">File 2.2</span></li>
+			</ul>
+		</li>
+		<li class="closed expandable"><div class="hitarea closed-hitarea expandable-hitarea"></div><span class="folder">Folder 3 (closed at start)</span>
+			<ul style="display: none; ">
+				<li class="last"><span class="file">File 3.1</span></li>
+			</ul>
+		</li>
+		<li class="last"><span class="file">File 4</span></li>
+	</ul>
+
+
+<SCRIPT type='text/javascript'>
+	require(['jquery', 'lib/jquery.treeview', 'lib/jquery.cookie'], function($){
+	    $(document).ready(function(){ 
+	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol" });
+		});
+    }); 
+    function aaa(treeview, treeview_class){ 
+    	$.get("/vfs/path",
+    	     {p: treeview},
+    	     function(data){ 
+    	     	$("."+treeview_class+"_click").parent("li").attr("onclick","")
+    	     	$("."+treeview_class+"_click").html("")
+    	     	for(var i=0; data.n.length > i; i++){
+    	     		name = data.n[i].name
+    	     		var branches = $("<li class='collapsable' onclick=aaa('"+treeview+"/"+name+"','"+treeview+name+"')><div class='hitarea collapsable-hitarea'></div> <span class='folder'>"+name+"</span><ul style='display: none;' class='"+treeview+name+"_click' > <li class='last'><span class='file'></span></li> </ul></li>").appendTo("."+treeview_class+"_click")
+			  	    $("#browser").treeview({ add: branches });
+    	     	}
+             }
+        )
+	}
+ 
+</SCRIPT>

@@ -72,7 +72,8 @@ class FileEntity < ActiveRecord::Base
       raise 'must a directory can do match'
     end
     base = path
-    descendants.select do |n|
+    # descendants.select do |n|
+    children.select do |n|
       path = n.full_path.sub base, ''
       if File.fnmatch?(filter, path, flag)
         block.call(n) if block
