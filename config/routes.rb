@@ -2,11 +2,18 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
-  unless FayeRails.server('/realtime')
-    faye_server '/realtime', timeout: 25 do
-      map '/notice' => RealtimeNoticeController
-      map default: :block
+  faye_server '/realtime', timeout: 25 do
+    map "/notification/**" => RealtimeNoticeController
+    map default: :block
+    class MockExtension
+      def incoming(message, callback)
+         callback.call(message)
+      end
+      def outgoing(message, callback)
+          callback.call(message)
+      end
     end
+    add_extension(MockExtension.new)
   end
 
   resources :people do
@@ -90,6 +97,8 @@ Panama::Application.routes.draw do
       resources :categories, :controller => "shops/categories"
 
       resources :products, :controller => "shops/products"
+
+      resources :transactions, :controller => "shops/transactions"
 
       match "pending", :to => "shops/transactions#pending"
 

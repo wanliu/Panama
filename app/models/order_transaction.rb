@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 class OrderTransaction < ActiveRecord::Base
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total
@@ -20,6 +22,16 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :buyer
   validates_presence_of :seller_id
   # validates_presence_of :address
+
+  after_create :notice_user
+
+  def notice_user
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "你有新的订单")
+  end
 
   state_machine :initial => :order do
 

@@ -183,11 +183,11 @@ ActiveRecord::Schema.define(:version => 20130308070409) do
   create_table "notifications", :force => true do |t|
     t.integer  "user_id"
     t.integer  "mentionable_user_id"
-    t.integer  "mentionable_id"
-    t.string   "mentionable_type"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.boolean  "read",                :default => false
+    t.string   "url"
+    t.text     "body"
   end
 
   create_table "order_transactions", :force => true do |t|
