@@ -17,14 +17,14 @@
     </script>
   <% end %>
 <template id="comment_template" style="display:none;">
-  <div class="comment_main">
+  <div class="comment_main container-fluid">
     <ul>
-      <li>{{ comment.content }}</li>
       <li><span>
       <img src="{{ user.photos.icon }}">
-      {{ user.login }}
+      <a href="">{{ user.login }}</a>
       {{ comment.created_at }}
       </span></li>
+      <li class="content"><span class="span10">{{{ comment.content }}}</span></li>
     </ul>
   </div>
 </template>

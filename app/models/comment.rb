@@ -15,7 +15,7 @@ class Comment < ActiveRecord::Base
 
   extract_attributes :content
 
-  after_save :notification_user
+  after_create :notification_user
 
   def notification_user
     users = content_extract_users

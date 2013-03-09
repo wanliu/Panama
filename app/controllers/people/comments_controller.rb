@@ -37,6 +37,12 @@ class People::CommentsController < People::BaseController
     #活动评论
     def activity
         @comment = Comment.activity(params[:comment].merge(:user_id => current_user.id))
+        users = @comment.content_extract_users
+        users.each do |user|
+            @comment.content = @comment.content.gsub(/@#{user.login}/,
+                "<a href='#'>@#{user.login}</a>")
+        end
+        @comment.save
         respond_to do |format|
             if @comment.valid?
                 format.html { render :action => :show }
