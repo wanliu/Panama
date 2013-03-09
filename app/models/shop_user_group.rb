@@ -1,10 +1,9 @@
-# describe: 商店雇员组
+# describe: 商店雇员组用户
 class ShopUserGroup < ActiveRecord::Base
-  attr_accessible :shop_group_id, :user_id
+  attr_accessible :shop_group_id, :shop_user_id
 
   belongs_to :shop_group
-  belongs_to :user
+  belongs_to :shop_user, :class_name => "ShopsUsers"
 
-  validates :user
-  validates :shop_group
+  delegate :user, :to => :shop_user
 end

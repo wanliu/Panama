@@ -32,8 +32,22 @@ class ShopsController < ApplicationController
     valid_invite_user
   end
 
-  def agree_invite
+  def agree_invite_user
+    if valid_invite_user
+      @shop.employee_users << current_user
+      respond_to do | format |
+        format.html{ redirect_to person_path(current_user) }
+      end
+    end
+  end
 
+  def agree_email_invite_user
+    if valid_invite_options(decrypt_options)
+      @shop.employee_users << current_user
+      respond_to do | format |
+        format.html{ redirect_to person_path(current_user) }
+      end
+    end
   end
 
   def show_email_invite
@@ -162,36 +176,46 @@ class ShopsController < ApplicationController
   private
   def decrypt_options
     {
-      :auth => Crypto.decrypt(params[:auth]) rescue nil,
-      :name => Crypto.decrypt(params[:name]) rescue nil,
-      :login => Crypto.decrypt(params[:login]) rescue nil
+      :auth => (params[:auth] rescue nil),
+      :name => (Crypto.decrypt(params[:name]) rescue nil),
+      :login => (Crypto.decrypt(params[:login]) rescue nil)
     }
   end
 
   def valid_invite_user
     options = decrypt_options
-    @user = User.find_by(:login => options[:login])
     if valid_invite_options(options)
-      if @user != current_user
-        render :text => "出错了!你不是邀请的对象"
-      end
+      return valid_user(options[:login])
     end
+  end
+
+  def valid_user(login)
+      @user = User.find_by(:login => login)
+      if @user != current_user
+        @error_messages = "出错了!你不是邀请的对象"
+        render :template => "errors/errors_403", :status => 403
+        return false
+      end
+      return true
   end
 
   def valid_invite_options(options)
     @shop = Shop.find_by(:name => options[:name])
     now = validate_auth_string(options[:auth])
 
-    if !now
-      render :text => "无效的信息"
-      return false
+    @error_messages = if !now
+      "无效的邀请信息"
     elsif now+3.day < DateTime.now
-      render :text => "邀请信息已经过期！"
-      return false
+      "邀请信息已经过期！"
     elsif @shop.nil?
-      render :text => "商店不存在"
+      "商店不存在"
+    end
+
+    if @error_messages
+      render :template => "errors/errors_403", :status => 403
       return false
     end
     return true
   end
+
 end

@@ -87,6 +87,8 @@ Panama::Application.routes.draw do
     collection do
       get ":name/show_invite/:login", :to => "shops#show_invite"
       get ":name/show_email_invite", :to => "shops#show_email_invite"
+      post ":name/show_invite", :to => "shops#agree_invite_user"
+      post ":name/show_email_invite", :to => "shops#agree_email_invite_user"
     end
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"

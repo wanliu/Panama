@@ -37,7 +37,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     private
     def email_invite_url(url)
-        "#{accounts_provider_url}/accounts/login?redirect_uri=#{request.env['HTTP_HOST']}#{url}"
+        "#{accounts_provider_url}/accounts/login?redirect_uri=http://#{request.env['HTTP_HOST']}#{url}"
     end
 
     def email_match
