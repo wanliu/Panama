@@ -68,6 +68,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = Category.root
     @shops_category_root = current_shop.shops_category
   end
 

@@ -49,7 +49,7 @@ class Category < ActiveRecord::Base
   end
 
   def self.root
-    where(name: 'root', ancestry: nil).first
+    where(name: '_products_root', ancestry: nil).first
   end
 end
 
