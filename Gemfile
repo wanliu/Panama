@@ -78,8 +78,6 @@ gem "mini_magick", '~> 3.4'
 
 gem "amqp", "~> 0.9.0" # optionally: :git => "git://github.com/ruby-amqp/amqp.git", :branch => "0.9.x-stable"
 
-
-
 # To use debugger
 #
 # Pagination

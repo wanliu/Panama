@@ -1,6 +1,6 @@
 class RealtimeNoticeController < FayeRails::Controller
-
-  observe OrderTransaction, :after_create do |new_transaction|
-    RealtimeNoticeController.publish '/notice/transactions', new_transaction.attributes
-  end 
+    observe Notification, :after_create do |notice|
+    	puts "notice: #{notice.user.login}"
+        RealtimeNoticeController.publish("/notification/#{notice.user.login}", notice.attributes)
+    end
 end

@@ -15,12 +15,16 @@ class Comment < ActiveRecord::Base
 
   extract_attributes :content
 
-  after_save :notification_user
+  after_create :notification_user
 
   def notification_user
     users = content_extract_users
     (users - [user]).each do | u |
-      Notification.create!(:user_id => u.id, :mentionable_user_id => user.id, :mentionable => self)
+      Notification.create!(
+        :user_id => u.id,
+        :mentionable_user_id => user.id,
+        :url => "/activities/#{targeable.id}",
+        :body => "在评论，提到你")
     end
   end
 
