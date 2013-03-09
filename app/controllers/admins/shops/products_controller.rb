@@ -112,6 +112,10 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     render :partial => "products_table", :locals => { :products => @products }
   end
 
+  def category_page
+    render :layout => false
+  end
+
   private
 
   def dispose_options
