@@ -8,6 +8,7 @@ class ShopGroup < ActiveRecord::Base
   has_many :shop_user_groups
 
   validates :name, :presence => true, :uniqueness => true
+  validates_presence_of :shop
 
   def users
     shop_user_groups.map{| u | u.user}

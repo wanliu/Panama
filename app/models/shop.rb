@@ -33,6 +33,11 @@ class Shop < ActiveRecord::Base
     "/_shops/#{name}".to_dir
   end
 
+  #查询这个商店是否有这个雇员
+  def employee_user(userid)
+    ShopsUsers.find_by(:shop_id => id, :user_id => userid)
+  end
+
   class << self
     attr_reader :slient_state
 

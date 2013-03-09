@@ -1,8 +1,19 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :shop_group do
-    shop_id 1
-    name "MyString"
+  factory :sale_group, :class => ShopGroup do | f |
+    f.shop :shop
+    name "sale"
   end
+
+  factory :inventor_group, :class => ShopGroup do |f|
+  	f.shop :shop
+  	name "inventory"
+  end
+
+  factory :admin_group, :class => ShopGroup do |f|
+  	f.shop :shop
+  	name "admin"
+  end
+
 end

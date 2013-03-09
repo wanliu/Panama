@@ -3,4 +3,5 @@ class ShopsUsers < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :shop
+  has_many :shop_user_groups, :dependent => :destroy
 end
