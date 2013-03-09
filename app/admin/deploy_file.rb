@@ -25,6 +25,6 @@ ActiveAdmin.register_page "VFS" do
 
   content do
     @root = '/'.to_dir 
-    render "index", :root => @root['*']
+    render "index", :root => @root['/_shops']['*']
   end
 end
