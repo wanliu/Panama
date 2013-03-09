@@ -15,6 +15,9 @@
 
 	.content {
 		margin-left: 45px;
+		white-space:normal;
+		word-break:break-all;
+		word-wrap:break-word;
 		
 	}
 }
@@ -24,7 +27,7 @@
 }
 
 .comment_body {
-	width: 500px;
+	max-width: 400px;
 	border: 1px solid #e3e3e3;
 
 	p {
