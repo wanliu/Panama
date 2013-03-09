@@ -1,0 +1,69 @@
+<%= requirejs_include_tag "application" %>
+<%= stylesheet_link_tag   "jquery.treeview" %>
+<style type="text/css">
+	body.active_admin ul#browser { 
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		background-color: white;
+		margin-top: 4px;
+	}
+	body.active_admin .treeview li { 
+		list-style: none;	
+		margin: 0;
+		padding: 3px 0pt 3px 16px;
+	}
+</style>
+
+
+
+<% root.each do |r| %> 
+	<div>
+		<ul id="browser" class="filetree treeview">
+			<% debugger %>
+			<% arr = r.path.split('/') %>
+			<% arr.each do |a| %> 
+					<li class="last"><span class="file">Item 1.1</span></li> 
+				 
+			<% end %>
+		</ul>
+	</div>
+
+<% end %>
+
+
+<ul id="browser" class="filetree treeview">
+		<li class="collapsable">
+			<div class="hitarea collapsable-hitarea"></div>
+			<span class="folder">Folder 1</span>
+			<ul>
+				<li class="last"><span class="file">Item 1.1</span></li>
+			</ul>
+		</li>
+		<li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span class="folder">Folder 2</span>
+			<ul>
+				<li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span class="folder">Subfolder 2.1</span>
+					<ul id="folder21">
+						<li><span class="file">File 2.1.1</span></li>
+						<li class="last"><span class="file">File 2.1.2</span></li>
+					</ul>
+				</li>
+				<li class="last"><span class="file">File 2.2</span></li>
+			</ul>
+		</li>
+		<li class="closed expandable"><div class="hitarea closed-hitarea expandable-hitarea"></div><span class="folder">Folder 3 (closed at start)</span>
+			<ul style="display: none; ">
+				<li class="last"><span class="file">File 3.1</span></li>
+			</ul>
+		</li>
+		<li class="last"><span class="file">File 4</span></li>
+	</ul>
+
+
+<SCRIPT type='text/javascript'>
+	require(['jquery', 'lib/jquery.treeview', 'lib/jquery.cookie'], function($){
+	    $(document).ready(function(){ 
+	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol" });
+		});
+    });
+</SCRIPT>
