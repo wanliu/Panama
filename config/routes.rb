@@ -96,7 +96,11 @@ Panama::Application.routes.draw do
 
       resources :categories, :controller => "shops/categories"
 
-      resources :products, :controller => "shops/products"
+      resources :products, :controller => "shops/products" do
+        collection do
+          get :category_page
+        end
+      end
 
       resources :transactions, :controller => "shops/transactions"
 

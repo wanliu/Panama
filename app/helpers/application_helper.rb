@@ -124,4 +124,24 @@ module ApplicationHelper
       end
     end
   end
+
+  def breadcrumb_button(name, array)
+    output = "".html_safe
+    array.shift
+    last = array.pop
+    output = link_to '#CategoryModel', 'data-taggle' => 'modal' do
+      content_tag :ul, :class => [:breadcrumb, :btn, name] do
+        array.each do |e|
+          output << content_tag(:li) do
+            link_to(e.name, '#') +
+            content_tag(:span, '|', :class => "divider")
+          end
+        end
+
+        output << content_tag(:li) do
+          last.name
+        end
+      end
+    end
+  end
 end
