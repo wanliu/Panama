@@ -1,5 +1,8 @@
+#encoding: utf-8
+# author: huxinghai
+
 require 'spec_helper'
 
-describe ShopUserGroup do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe ShopUserGroup, "商店雇员权限组" do
+
 end
