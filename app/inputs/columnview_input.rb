@@ -7,7 +7,7 @@ class ColumnviewInput < SimpleForm::Inputs::Base
         @builder.hidden_field(attribute_name, input_html_options.merge(:value => input_options[:value] ? input_options[:value].id : "" ))
     end
     <<-HTML
-        #{template.build_menu(input_options[:collection], element_id)}
+        #{template.build_menu(input_options[:root], element_id)}
         <script type="text/javascript">
         if("" != '#{category}' ){
           require(["jquery_columnview"], function($){
@@ -40,5 +40,5 @@ class ColumnviewInput < SimpleForm::Inputs::Base
 
   def field_name
     "#{lookup_model_names.join("_")}_#{reflection_or_attribute_name}"
-  end 
+  end
 end

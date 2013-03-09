@@ -1,5 +1,5 @@
 class ProductPropertyValue < ActiveRecord::Base
-  attr_accessible :product_id, :property_id
+  attr_accessible :product_id, :product, :property_id
 
   belongs_to :property
   belongs_to :product
@@ -31,7 +31,7 @@ class ProductPropertyValue < ActiveRecord::Base
     when /datetime/
       send(:dtvalue=, other)
     when /set/
-      send(:svalue=, other) if property.items.select { |item| item.value == other }.size > 0
+      send(:svalue=, other) if product.property_items.select { |item| item.value == other }.size > 0
     end
   end
 end

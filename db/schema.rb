@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130304073658) do
+ActiveRecord::Schema.define(:version => 20130308070409) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -181,11 +181,11 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
   create_table "notifications", :force => true do |t|
     t.integer  "user_id"
     t.integer  "mentionable_user_id"
-    t.integer  "mentionable_id"
-    t.string   "mentionable_type"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.boolean  "read",                :default => false
+    t.string   "url"
+    t.text     "body"
   end
 
   create_table "order_transactions", :force => true do |t|
@@ -240,6 +240,13 @@ ActiveRecord::Schema.define(:version => 20130304073658) do
     t.integer  "property_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "products_property_items", :force => true do |t|
+    t.integer  "product_id"
+    t.integer  "property_item_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "properties", :force => true do |t|
