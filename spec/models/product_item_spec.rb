@@ -54,13 +54,13 @@ describe ProductItem, "购物车 商品 " do
     	it "模型装饰  price " do
 	    	pr = ProductItem.create! prod_item
 	    	pr_de = pr.decorate
-	    	pr_de.source.price.should eq(pr_de.price.delete(', ¥').to_f)
+	    	pr_de.source.price.should eq(pr_de.price.delete(', ¥$').to_f)
 	    end
 
 	    it "模型装饰  total " do
 	    	pr = ProductItem.create! prod_item
 	    	pr_de = pr.decorate
-	    	pr_de.source.total.should eq(pr_de.total.delete(', ¥').to_f)
+	    	pr_de.source.total.should eq(pr_de.total.delete(', ¥$').to_f)
 	    end
     end
 

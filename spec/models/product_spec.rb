@@ -199,7 +199,7 @@ describe Product, "产品模型" do
             end
 
             it "material 存值" do
-                apple.material.should be_nil
+                apple.material.should eql("cotton")
                 apple.material = "leather"
                 apple.material.should == "leather"
             end
@@ -218,7 +218,7 @@ describe Product, "产品模型" do
 
             describe "存储有效" do
                 it "material 存值" do
-                    apple.material.should be_nil
+                    apple.material.should eql("cotton")
                     apple.material = "leather"
                     apple.material.should == "leather"
                     apple.save
@@ -321,6 +321,15 @@ describe Product, "产品模型" do
                     Product.first.make_in.should eql("China")
                     Product.first.flavor.should eql("rich")
                     Product.first.provider.should eql("WanLiu")
+                end
+
+                it "更换分类移出原有值" do
+                    apple.material.should == "cotton"
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+                    apple.properties_values.size.should == 0
+                    apple.save
+                    ProductPropertyValue.all.size.should == 0
                 end
             end
         end

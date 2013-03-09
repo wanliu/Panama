@@ -14,9 +14,17 @@ module PanamaCore
         end
       end
 
+      has_and_belongs_to_many :property_items do
+        def [](name)
+          property = @association.owner.properties[name]
+          select { |pi| pi.property.id == property.id }
+        end
+      end
+
       has_many :properties_values,
                :class_name => "ProductPropertyValue",
-               :autosave => true do
+               :autosave => true,
+               :dependent => :delete_all do
         def [](property_name)
           property = @association.owner.properties[property_name]
           select { |pv| pv.property.id == property.id }.first
@@ -43,8 +51,10 @@ module PanamaCore
     def attach_properties!
       unless category.nil?
         properties.clear if properties.size > 0
+        properties_values.clear if properties_values.size > 0
         category.properties.each do |property|
           properties << property
+          property_items << property.items
         end
         delegate_property_setup
         # save
@@ -75,8 +85,7 @@ module PanamaCore
 
         define_singleton_method("#{method_name}=") do |other|
 
-          factory_property name do |pv|
-            pv.product_id = id
+          factory_property name, :product => self do |pv|
             pv.property_id = property.id
             pv.value = other
           end
@@ -92,10 +101,9 @@ module PanamaCore
       delegate_property_setup
     end
 
-    def factory_property(name, &block)
+    def factory_property(name, options = {}, &block)
       method = persisted? ? :create : :build
-
-      pv = product_property_values(name) || properties_values.send(method)
+      pv = product_property_values(name) || properties_values.send(method, options)
       yield pv
     end
 

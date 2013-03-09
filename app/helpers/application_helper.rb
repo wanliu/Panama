@@ -54,6 +54,15 @@ module ApplicationHelper
     link_to current_user.login, person_path(current_user)
   end
 
+  def link_to_notice
+    span = content_tag :span, unread_notification_count, :id => "my_notification", :class => "badge badge-warning notification"
+    link_to span, person_notifications_path(current_user.login)
+  end
+
+  def unread_notification_count
+    Notification.unreads.where(:user_id => current_user.id).count
+  end
+
   def search_box(name, value = nil, options = { size: 40})
     text_field_tag name, value, options
     button_tag l(:search, '搜索')
@@ -112,6 +121,26 @@ module ApplicationHelper
           end
         end
         output
+      end
+    end
+  end
+
+  def breadcrumb_button(name, array)
+    output = "".html_safe
+    array.shift
+    last = array.pop
+    output = link_to '#CategoryModel', 'data-taggle' => 'modal' do
+      content_tag :ul, :class => [:breadcrumb, :btn, name] do
+        array.each do |e|
+          output << content_tag(:li) do
+            link_to(e.name, '#') +
+            content_tag(:span, '|', :class => "divider")
+          end
+        end
+
+        output << content_tag(:li) do
+          last.name
+        end
       end
     end
   end

@@ -1,103 +1,144 @@
-<% seller = transaction.seller %>
-<div class="transaction">
-	<div class="transaction-header">
-		<div class="avatar">
-			<%= image_tag seller.photos.header, :class => 'img-polaroid' %>
-		</div>
-		<div class="container-fluid info-header">
-			<div class="page-header">
-			  <h1><%= seller.name %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-				<%= distance_of_time_in_words Time.now, transaction.created_at %>
-			  </small>
+<% buyer = transaction.buyer %>
+<div class='row-fluid' style='margin-bottom: 20px'>
+	<div class="transaction">
+		<div class="transaction-header">
+			<div class="avatar">
+				<%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
+			</div>
+			<div class="container-fluid info-header">
+				<div class="page-header">
+				  <h1><%= buyer.login %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+					<%= distance_of_time_in_words Time.now, transaction.created_at %>
+				  </small>
 
-			  	<button type="button" class="close" data-dismiss="alert">&times;</button>
-			  	<%= render "state_buttons", :transaction => transaction %>
-			  </h1>
-				<div class="progress progress-mini progress-striped active">
-					<div class="bar bar-success" style="width: 35%;"></div>
-					<div class="bar bar-warning" style="width: 20%;"></div>
-					<div class="bar bar-danger" style="width: 10%;"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="transaction-body">
-		<%= render state, transaction: transaction, people: people %>
-	</div>
-	<div class="transaction-footer">
-		<div class="toolbar">
-		</div>
-		<div class="messages">
-			<div class="row-msg">
-				<div class="self">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p><%= current_user.login %>:</p>
-						</div>
-						<div class="msg">
-							<p>老板,这件衣服多少钱啊?</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row-msg">
-				<div class="people">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p>pepsi:</p>					
-						</div>
-						<div class="msg">
-							<p>488</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row-msg">
-				<div class="self">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p><%= current_user.login %>:</p>					
-						</div>
-						<div class="msg">
-							<p>看上去还挺不错的</p>
-						</div>
-					</div>
-				</div>
-			</div>
-<!-- 			<div class="row-msg">
-				<div class="self">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p><%= current_user.login %>:</p>					
-						</div>
-						<div class="msg">
-							<p>还能不能便宜一点?</p>
-						</div>
-					</div>
-				</div>
-			</div> -->
-			<div class="row-msg">
-				<div class="people">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p>pepsi:</p>					
-						</div>
-						<div class="msg">
-							<p>亲, 真的少不了,已经是最优惠了</p>
-						</div>
+				  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+				  	<%= render "state_buttons", :transaction => transaction %>
+				  </h1>
+					<div class="progress progress-mini progress-striped active">
+						<div class="bar bar-success" style="width: 35%;"></div>
+						<div class="bar bar-warning" style="width: 20%;"></div>
+						<div class="bar bar-danger" style="width: 10%;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="me">
-			<%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
-			<p><%= current_user.login %></p>
+		<div class="transaction-body">
+			<p>
+				送货地址：<%= transaction.address.nil? ? "暂无" : transaction.address.location %>
+			</p>
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th colspan=2 class="relative">
+						<div class="left-frame"></div>
+						<% transaction.items[0...5].each do |item| %>
+							<%= image_tag item.product.photos.icon %>
+						<% end %>
+						<span class='ellipsis'>...</span>
+					</th>
+					<th>
+						<%= transaction.items_count %>
+					</th>
+					<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
+					</th>
+					<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+					</th>
+					<th class="relative">
+							<%= link_to '#', :class => "btn btn-large" do %>
+								<%= icon :download %>
+							<% end %>
+						<div class="right-frame"></div>
+					</th>
+				</tr>
+				</thead>
+				<% transaction.items.each do |item| %>
+				<tr>
+					<td>
+						<%= image_tag item.product.photos.icon %>
+					</td>
+					<td>
+						<%= item.title %>
+					</td>
+					<td>
+						<%= item.amount %>
+					</td>
+					<td>
+						<%= item.price %>
+					</td>
+					<td>
+						<%= item.total %>
+					</td>
+					<td></td>
+				</tr>
+				<% end %>
+			</table>
 		</div>
-		<div class='input-msg'>
-			<form>
-				<textarea rows=3 class="span12">
-				</textarea>
-			</form>
+		<div class="transaction-footer">
+			<div class="toolbar">
+			</div>
+			<div class="messages">
+				<div class="row-msg">
+					<div class="self">
+						<div class='wrapper'>
+							<div class="people-name">
+								<p><%= current_user.login %>:</p>
+							</div>
+							<div class="msg">
+								<p>老板,这件衣服多少钱啊?</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-msg">
+					<div class="people">
+						<div class='wrapper'>
+							<div class="people-name">
+								<p>pepsi:</p>
+							</div>
+							<div class="msg">
+								<p>488</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-msg">
+					<div class="self">
+						<div class='wrapper'>
+							<div class="people-name">
+								<p><%= current_user.login %>:</p>
+							</div>
+							<div class="msg">
+								<p>看上去还挺不错的</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row-msg">
+					<div class="people">
+						<div class='wrapper'>
+							<div class="people-name">
+								<p>pepsi:</p>
+							</div>
+							<div class="msg">
+								<p>亲, 真的少不了,已经是最优惠了</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class='row-msg'>
+				<div class="me">
+					<%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
+					<p><%= current_user.login %></p>
+				</div>
+				<div class='input-msg'>
+					<form>
+						<textarea rows=3 class="span12">
+						</textarea>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
