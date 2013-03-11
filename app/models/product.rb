@@ -125,4 +125,12 @@ class Product < ActiveRecord::Base
       { 'name' => name, 'items' => items.values }
     end unless params[:style].blank?
   end
+
+  def category_ancestors_and_self
+    if category.nil?
+      []
+    else
+      category.ancestors + [category]
+    end
+  end
 end
