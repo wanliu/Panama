@@ -129,7 +129,7 @@ module ApplicationHelper
     output = "".html_safe
     array.shift
     last = array.pop
-    output = link_to '#CategoryModel', 'data-taggle' => 'modal' do
+    output = link_to '#CategoryModal', 'data-remote' => category_page_shop_admins_products_path, 'data-toggle' => 'modal' do
       content_tag :ul, :class => [:breadcrumb, :btn, name] do
         array.each do |e|
           output << content_tag(:li) do
