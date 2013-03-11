@@ -8,7 +8,7 @@
     <div class="control-group string required">
         <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> Category</label>
         <div class="controls">
-            <%= breadcrumb_button(dom_id(@product, :category), @product.category.ancestors + [@product.category]) %>
+            <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
 
             <script type="text/javascript">
                 var button = ".<%= dom_id(@product, :category) %>";
@@ -43,7 +43,7 @@
                         window.onmousewheel = document.onmousewheel = undefined;
                     });
 
-                    $(button).click(function(){
+                    $(button).click(function(e){
                         $('#CategoryModal').modal('show');
                     });
                 })

@@ -128,17 +128,20 @@ module ApplicationHelper
   def breadcrumb_button(name, array)
     output = "".html_safe
     array.shift
-    last = array.pop
-    output = link_to '#CategoryModal', 'data-remote' => category_page_shop_admins_products_path, 'data-toggle' => 'modal' do
+    # ISSUE: 临时方案, 需要修改 rails.view.js 的 提交 bug
+    last = array.pop || OpenStruct.new(:name => 'Noselected')
+    output = link_to '#', 'data-remote' => category_page_shop_admins_products_path, 'data-toggle' => 'modal' do
       content_tag :ul, :class => [:breadcrumb, :btn, name] do
         array.each do |e|
           output << content_tag(:li) do
             link_to(e.name, '#') +
+            # e.name +
             content_tag(:span, '|', :class => "divider")
           end
         end
 
         output << content_tag(:li) do
+          link_to(nil, '#') +
           last.name
         end
       end
