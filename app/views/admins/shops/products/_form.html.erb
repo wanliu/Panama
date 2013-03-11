@@ -5,52 +5,7 @@
         :class => "form-horizontal"
     } do |f| %>
     <%= f.input :name %>
-    <div class="control-group string required">
-        <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> Category</label>
-        <div class="controls">
-            <%= breadcrumb_button(dom_id(@product, :category), @product.category.ancestors + [@product.category]) %>
-
-            <script type="text/javascript">
-                var button = ".<%= dom_id(@product, :category) %>";
-
-                require(['jquery', 'twitter/bootstrap/modal'], function($){
-                    var dialog_base_top = 0;
-                    var window_top = 0;
-                    var scrollDialog = function(e){
-                        dialog_base_top = parseInt($("#CategoryModal").css('top'));
-                        scroll_top = dialog_base_top + (e.wheelDelta);
-
-                        $("#CategoryModal").css('top', scroll_top);
-                        e = e || window.event;
-                        if (e.preventDefault)
-                            e.preventDefault();
-                        e.returnValue = false;
-                    };
-
-                    $("#CategoryModal").on('show', function() {
-                        dialog_base_top = $(this).position().top;
-                        window_top = $(window).scrollTop();
-                        $(this)
-                            .find(".modal-body")
-                            .load("<%= category_page_shop_admins_products_path%>");
-
-                        window.onmousewheel = document.onmousewheel = scrollDialog;
-
-                    });
-
-
-                    $("#CategoryModal").on('hide', function(){
-                        window.onmousewheel = document.onmousewheel = undefined;
-                    });
-
-                    $(button).click(function(){
-                        $('#CategoryModal').modal('show');
-                    });
-                })
-            </script>
-        </div>
-    </div>
-
+    <%= f.association :category, :as => :chosen %>
     <%= f.association :shops_category, :as => :chosen %>
     <%= f.association :attachments,
                       :as           => :album,
