@@ -7,14 +7,10 @@ define(["jquery", "backbone", "lib/jquery.atwho"], ($, Backbone, atwho) ->
 
         initialize : (options) ->
             _.extend(@, options)
-            @names = []
             @all_user((data, xhr) =>
-                    _.each(data,(d) =>
-                        @names.push(d["user"]["login"])
-                    )
-                    @bind_atwho(@names)
+                    # @bind_atwho(data)
                 )
-            # @bind_atwho(@names)
+            @bind_atwho()
 
 
         all_user : (callback = ->) ->
@@ -22,8 +18,12 @@ define(["jquery", "backbone", "lib/jquery.atwho"], ($, Backbone, atwho) ->
 
 
         bind_atwho : (names) ->
+            
             @$("textarea").atwho('@', {
-                data: names
+                name: "users"
+                data: "http://localhost:3000/users",
+                limit: 7
+                # data: names
                 # data: "http://localhost:3000/users",
                 # callback: {
                 #     remote_filter: (params, url, render_view) -> 
