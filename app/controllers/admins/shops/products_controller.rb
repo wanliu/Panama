@@ -106,6 +106,22 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     end
   end
 
+  def additional_properties
+    @category = Category.find(params[:category_id])
+    @content = Content.lookup_name(dom_id(@category, :additional_properties))
+    if @content.nil?
+      @content = Content.lookup_name(:default_category)
+    end
+
+    if not @content.nil?
+      render :text => :ok
+    else
+      render_content(content.template)
+    end
+    # content = @category.to_content(:additional_properties)
+    # render_content(content.template)
+  end
+
   def products_by_category
     category = ShopsCategory.find(params[:shops_category_id])
     @products = category.products

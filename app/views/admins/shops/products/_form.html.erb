@@ -16,6 +16,7 @@
 
     <%= f.input :price %>
     <%#= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
+    <div class="additional_properties"></div>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
 
@@ -40,8 +41,8 @@
 	<%= data_2_talbe %>
 
 	require(['lib/colorpicker/js/bootstrap-colorpicker'], function(){
-    $('.color').colorpicker();
-  })
+      $('.color').colorpicker();
+    })
 
     require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
         var form = new Rails.FormView("form#<%= options_dom_id(@product) %>", {
