@@ -75,5 +75,7 @@ module Panama
       g.orm :active_record
       g.fixture_replacement :factory_girl
     end
+
+    config.contents = YAML.load_file(Rails.root.join('config/contents.yml'))
   end
 end

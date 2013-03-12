@@ -113,6 +113,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
     @category = Category.find(params[:category_id])
     @content = Content.lookup_name(dom_id(@category, :additional_properties)).first
+    puts dom_id(@category, :additional_properties)
     if @content.nil?
       @content = Content.lookup_name(:default_category).first
     end
@@ -120,7 +121,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     if @content.nil?
       render :text => :ok
     else
-      render_content(@content, root)
+      render_content(@content, root, {category: @category})
     end
     # content = @category.to_content(:additional_properties)
     # render_content(content.template)
