@@ -11,6 +11,15 @@
             <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
 
             <script type="text/javascript">
+                function getBrowserHeight(){ 
+                    if($.browser.msie){ 
+                        return document.compatMode == "CSS1Compat"? document.documentElement.clientHeight : document.body.clientHeight; 
+                    } 
+                    else { 
+                        return self.innerHeight; 
+                    } 
+                } 
+
                 var button = ".<%= dom_id(@product, :category) %>";
 
                 require(['jquery', 'twitter/bootstrap/modal'], function($){
@@ -20,11 +29,19 @@
                         dialog_base_top = parseInt($("#CategoryModal").css('top'));
                         scroll_top = dialog_base_top + (e.wheelDelta);
 
-                        $("#CategoryModal").css('top', scroll_top);
+                        screen_height = getBrowserHeight(); 
+                        dialog_height = $("#CategoryModal").height();
+                        dialog_top = $("#CategoryModal").offset().top; 
+                        dialog_bottom = dialog_top + dialog_height;
+
+                        if ((e.wheelDelta > 0 && dialog_top < 0)||(e.wheelDelta < 0 && dialog_bottom > screen_height)) {
+                            $("#CategoryModal").css('top', scroll_top);
+                        }
                         e = e || window.event;
                         if (e.preventDefault)
                             e.preventDefault();
                         e.returnValue = false;
+
                     };
 
                     $("#CategoryModal").on('show', function() {
