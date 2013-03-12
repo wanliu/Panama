@@ -12,6 +12,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     node = current_shop.shops_category
 
     @categories = ShopsCategory.sort_by_ancestry(node.descendants)
+
     @products = current_shop.products
   end
 
@@ -113,7 +114,13 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def category_page
-    render :layout => false
+    @categorys = Category.where(:name => '_products_root').first
+    render :layout => false         
+  end
+
+  def category_children
+    @categorys = Category.where(:name => params[:category_name]).first
+    render :json => @categorys 
   end
 
   private
