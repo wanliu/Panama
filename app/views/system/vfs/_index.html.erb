@@ -32,11 +32,11 @@
 <SCRIPT type='text/javascript'>
 	require(['jquery', 'lib/jquery.treeview', 'lib/jquery.cookie'], function($){
 	    $(document).ready(function(){ 
-	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol" });
+	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol", url: "/vfs/path", });
 		});
     }); 
     function treeview_click(treeview, treeview_class){
-    	$.get("/vfs/path",
+    	$.get("/vfs/path/expansion",
     	     {p: treeview},
     	     function(data){ 
     	     	$("."+treeview_class+"_click").parent("li").removeAttr("onclick")
@@ -45,9 +45,9 @@
     	     		name = data.n[i].name
     	     		var branches = ""
     	     		if(name.indexOf('.') >= 0)
-    	     			branches = $("<li class='last'><span class='file'>"+name+"</span></li>").appendTo("."+treeview_class+"_click") 
+    	     			branches = $(html_file(treeview, name)).appendTo("."+treeview_class+"_click") 
     	     		else
-    	     			branches = $(treeview_html(treeview,treeview_class,name)).appendTo("."+treeview_class+"_click") 
+    	     			branches = $(html_folder(treeview, treeview_class, name)).appendTo("."+treeview_class+"_click") 
 
 			  	    $("#browser").treeview({ add: branches });
     	     	}
@@ -55,14 +55,23 @@
         )
 	}
 
-	function treeview_html(treeview,treeview_class,name){
+	function html_file(treeview,name){
+		var strHTML = "<li class='last'>"
+		    strHTML += "   <span class='file'>"
+		    strHTML += "      <a href='/system/vfs_file?file_path="+name+"'>"+name+"</a>"
+		    strHTML += "   </span>"
+		    strHTML += "</li>"
+		return strHTML
+	}
+
+	function html_folder(treeview,treeview_class,name){
 		var strHTML = "<li class='collapsable' onclick=treeview_click('"+treeview+"/"+name+"','"+treeview_class+name+"')>"
-		strHTML += "      <div class='hitarea collapsable-hitarea'></div>"
-		strHTML += "      <span class='folder'>"+name+"</span>"
-		strHTML += "      <ul style='display: none;' class='"+treeview_class+name+"_click' > "
-		strHTML += "         <li class='last'><span class='file'></span></li>"
-		strHTML += "      </ul>"
-		strHTML += "   </li>"
+			strHTML += "   <div class='hitarea collapsable-hitarea'></div>"
+			strHTML += "   <span class='folder'>"+name+"</span>"
+			strHTML += "   <ul style='display: none;' class='"+treeview_class+name+"_click' > "
+			strHTML += "     <li class='last'><span class='file'></span></li>"
+			strHTML += "   </ul>"
+			strHTML += "</li>"
 		return strHTML;
 	}
 </SCRIPT>
