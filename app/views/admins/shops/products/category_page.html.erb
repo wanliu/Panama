@@ -17,9 +17,9 @@
 		<ul class="nav nav-tabs nav-stacked span3">
 		  <li class="active">
 		  	<a href="#">婴幼食品</a><br>
-		  	<a href="#">1段奶粉</a>
-		  	<a href="#">2段奶粉</a>
-		  	<a href="#">3段奶粉</a>
+		  	<% @categorys.children.each do |c| %>
+		  		<a href="#" class="categorys_root"><%= c.name %></a>
+		  	<% end %>
 		  </li>
 		  <li><a href="#">Library</a></li>
 		</ul>
@@ -89,4 +89,16 @@
 			pagination: false
 		});
 	});
+
+	$(".categorys_root").click(function (){
+		$.ajax({
+          type: "get",
+          dataType: "json",
+          data: "category_name=" + $(this).html(),
+          url:  "/shops/test/admins/products/category_children", 
+          success: function (data){
+          	alert(data)
+          }
+        })
+	})
 </script>
