@@ -138,7 +138,8 @@ Panama::Application.routes.draw do
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
 
-  match 'vfs/:file_path', :to => 'vfs#show'
+  match 'vfs/:file_path/expansion', :to => 'vfs#expansion'
+  match 'system/vfs/show_file', :to => 'vfs#show_file'
 
   root :to => 'activities#index'
 
