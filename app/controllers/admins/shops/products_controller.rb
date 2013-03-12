@@ -1,4 +1,6 @@
 #encoding: utf-8
+require 'orm_fs'
+
 class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   ajaxify_pages :new, :edit, :create, :index, :show, :update
@@ -107,16 +109,18 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def additional_properties
+    root = '/panama'.to_dir
+
     @category = Category.find(params[:category_id])
-    @content = Content.lookup_name(dom_id(@category, :additional_properties))
+    @content = Content.lookup_name(dom_id(@category, :additional_properties)).first
     if @content.nil?
-      @content = Content.lookup_name(:default_category)
+      @content = Content.lookup_name(:default_category).first
     end
 
-    if not @content.nil?
+    if @content.nil?
       render :text => :ok
     else
-      render_content(content.template)
+      render_content(@content, root)
     end
     # content = @category.to_content(:additional_properties)
     # render_content(content.template)

@@ -155,6 +155,7 @@ module Vfs
             root
           else
             paths = path.split('/')
+            paths.shift if paths.first.blank?
             file_entity = paths.inject(root) do |parent, path|
               parent.children.where(:name => path).first unless parent.nil?
             end
@@ -166,6 +167,7 @@ module Vfs
             root
           else
             paths = path.split('/')
+            paths.shift if paths.first.blank?
             begin
               file_entity = paths.inject(root) do |parent, path|
                 pa = parent.children.where(:name => path, :stat => 'directory').first
