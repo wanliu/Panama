@@ -4,7 +4,7 @@ class UsersController < ApplicationController
     	users = User.where("login like ?", "%#{params[:q]}").select(:login)
     	# users = User.select(:login)
 	    respond_to do | format |
-	        format.json { render :json => users.map{|u| u.login} }
+	        format.json { render :json => users.map{|u| {login: u.login} } }
 	    end
 	end
 
