@@ -75,6 +75,7 @@ class FileEntity < ActiveRecord::Base
     # descendants.select do |n|
     children.select do |n|
       path = n.full_path.sub base, ''
+      puts "path: #{path}, filter: #{filter}"
       if File.fnmatch?(filter, path, flag)
         block.call(n) if block
         true

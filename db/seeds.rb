@@ -6,16 +6,30 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'rake'
+require 'panama_core'
 
-Category.create(:name => :root) unless Category.root
 
-@root = Category.where(name: '_products_root').first_or_create(:name => '_products_root')
-shops_category_file = Rails.root.join("config/product_category.yml")
-@root.load_file(shops_category_file)
+def initialize_data
+  PanamaCore::VFS.load_panama_files
 
-bank_file = Rails.root.join("config/bank.yml")
+  load_categories
 
-Bank.load_file(bank_file)
+  load_banks
+
+  load_cities
+end
+
+def load_categories
+
+  @root = Category.root
+  product_category_file = Rails.root.join("config/product_category.yml")
+  @root.load_file(product_category_file)
+end
+
+def load_banks
+  bank_file = Rails.root.join("config/bank.yml")
+  Bank.load_file(bank_file)
+end
 
 def rake
   rake = Rake::Application.new
@@ -25,4 +39,10 @@ def rake
   rake
 end
 
-rake['city:load'].invoke
+def load_cities
+  rake['city:load'].invoke
+end
+
+
+initialize_data
+

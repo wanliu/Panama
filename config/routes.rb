@@ -99,6 +99,7 @@ Panama::Application.routes.draw do
       resources :products, :controller => "shops/products" do
         collection do
           get :category_page
+          get "additional_properties/:category_id", :to => "shops/products#additional_properties"
         end
       end
 
