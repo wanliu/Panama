@@ -68,11 +68,6 @@
 			<div class="category_buttons btn-group btn-group-vertical">
 				<button class='btn'>返回<%= caret(:left) %></button>
 				<button class='btn'>1段奶粉<%= caret(:right) %></button>
-				<button class='btn'>2段奶粉<%= caret(:right) %></button>
-				<button class='btn'>3段奶粉<%= caret(:right) %></button>
-				<button class='btn'>羊奶粉<%= caret(:right) %></button>
-				<button class='btn'>妈妈奶</button>
-				<button class='btn'>特配奶粉</button>
 			</div>
 		</div>
 
@@ -90,15 +85,21 @@
 		});
 	});
 
-	$(".categorys_root").click(function (){
-		$.ajax({
-          type: "get",
-          dataType: "json",
-          data: "category_name=" + $(this).html(),
-          url:  "/shops/test/admins/products/category_children", 
-          success: function (data){
-          	alert(data)
-          }
-        })
-	})
+
+	require(['jquery', 'hogan', 'category'], function ($, Hogan, view){
+		template = Hogan.compile($("#categorys_template").html());
+		new view.Category({
+			shop_name: "<%= current_shop.name %>",
+			el: $(".container-fluid"),
+			template: template
+		});
+	});
 </script>
+<template id="categorys_template" style="display:none;">
+	<button class='btn'>返回{{caret("left")}}</button>
+
+        {{#categorys}}
+            <button class='btn'>{{category.name}}</button>
+        {{/categorys}}
+
+</template>
