@@ -1,0 +1,16 @@
+---
+apple_clothes_type_hat:
+    product_id: 10001
+    property_item_id: 1
+
+apple_clothes_type_pants:
+    product_id: 10001
+    property_item_id: 2
+
+apple_clothes_type_coat:
+    product_id: 10001
+    property_item_id: 3
+
+apple_clothes_type_shoes:
+    product_id: 10001
+    property_item_id: 3
