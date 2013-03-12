@@ -3,6 +3,7 @@ require 'zlib'
 
 module ApplicationHelper
   include WidgetHelper
+  include ContentsHelper
 
   def l(sym, default)
     t(sym, :default => default)

@@ -105,6 +105,7 @@ define [
 
 		newProduct: () ->
 			$("#table table").append(@render('new').el)
+			@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
 
 		editProduct: () ->
 			@render('edit')
