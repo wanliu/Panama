@@ -15,7 +15,7 @@
 	}
 </style>
 
-<div style="height: 320px; overflow:auto; scrollbar-3dlight-color:#595959; scrollbar-arrow-color:#ffffff; scrollbar-base-color:#cfcfcf; scrollbar-darkshadow-color:#ffffff; scrollbar-face-color:#cfcfcf; scrollbar-highlight-color:#ffffff; scrollbar-shadow-color:#595959">
+<div style="height: 400px; overflow:auto; scrollbar-3dlight-color:#595959; scrollbar-arrow-color:#ffffff; scrollbar-base-color:#cfcfcf; scrollbar-darkshadow-color:#ffffff; scrollbar-face-color:#cfcfcf; scrollbar-highlight-color:#ffffff; scrollbar-shadow-color:#595959">
 	<ul id="browser" class="filetree treeview">
 		<% root.each do |r| %> 
 			<li class="collapsable" onclick="treeview_click('/<%= r.name %>','<%= r.name %>')">
@@ -58,7 +58,7 @@
 	function html_file(treeview,name){
 		var strHTML = "<li class='last'>"
 		    strHTML += "   <span class='file'>"
-		    strHTML += "      <a href='/system/vfs_file?file_path="+name+"'>"+name+"</a>"
+		    strHTML += "      <a href='/system/vfs_file?file_path="+treeview+"/"+name+"'>"+name+"</a>"
 		    strHTML += "   </span>"
 		    strHTML += "</li>"
 		return strHTML

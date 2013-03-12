@@ -1,7 +1,7 @@
 class VfsController < ApplicationController
 	def expansion  
 		root = '/'.to_dir
-		json_obj = z_json root["/_shops#{params[:p]}"]['*'], params[:file_path]
+		json_obj = z_json root["#{params[:p]}"]['*'], params[:file_path]
 		render :json => json_obj
 	end
   
