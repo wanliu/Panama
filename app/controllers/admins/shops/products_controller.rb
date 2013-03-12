@@ -48,8 +48,15 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    @product = current_shop.products.create(params[:product].merge(dispose_options))
-    if @product.valid?
+    @product = current_shop.products.build(params[:product].merge(dispose_options))
+    @product.attach_properties!
+    @product.properties.each do |property|
+      property_name = property.name.to_sym
+      @product.send("#{property_name}=", params[:product][property_name])
+      # @product.write_property(name, params[:product][property_name])
+    end
+
+    if @product.save
       @product.create_style_subs(params)
       render :action => :show
     else
@@ -61,6 +68,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def edit
     @product = Product.find(params[:id])
+    @category_root = Category.root
     @shops_category_root = current_shop.shops_category
   end
 
@@ -102,6 +110,10 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     category = ShopsCategory.find(params[:shops_category_id])
     @products = category.products
     render :partial => "products_table", :locals => { :products => @products }
+  end
+
+  def category_page
+    render :layout => false
   end
 
   private

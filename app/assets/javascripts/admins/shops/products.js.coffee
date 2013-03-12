@@ -3,23 +3,23 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 define [
-	'jquery-ui', 
-	'backbone', 
+	'jquery-ui',
+	'backbone',
 	'admins/shops/categories',
-	'rails.view', 
+	'rails.view',
 	'models/element_model',
 	'lib/spin',
 	'exports'], (
-		$, 
-		Backbone, 
-		Category, 
-		Rails, 
-		ElementModel, 
-		Spinner, 
+		$,
+		Backbone,
+		Category,
+		Rails,
+		ElementModel,
+		Spinner,
 		exports) ->
 
 	class CategoryMiniRow extends Category.AbstractRow
-		 
+
 		events:
 			"click .category"               : "toggleChildren"
 			"click .list_category_products" : "getCategoryProducts"
@@ -64,7 +64,7 @@ define [
 			target = $("<i class=icon-space></i>").get(0);
 			btn.html(target)
 			spinner = new Spinner(opts).spin(target)
-			$("#table").load url, () -> 
+			$("#table").load url, () ->
 				btn.html(icon)
 
 		moveToCategory: (product) ->
@@ -75,7 +75,7 @@ define [
 		onDroppable: (event, ui) ->
 			ui.draggable.draggable({revert: 'invalid'})
 			product = new ElementModel(ui.draggable, {
-				name: "td[1]", 
+				name: "td[1]",
 				price: "td[2]",
 				id: "td[6]"
 			})
@@ -87,7 +87,7 @@ define [
 	class ProductRow extends Rails.ResourceView
 		tagName: "tr"
 
-		events: 
+		events:
 			"click .edit"		: "editProduct"
 			"click .delete"		: "removeProduct"
 			"submitted form"	: "createdProduct"
@@ -116,7 +116,7 @@ define [
 		createdProduct: (event, data, model) ->
 			$(@el).html(data)
 			model = new ElementModel(@el, {
-				name: "td[1]", 
+				name: "td[1]",
 				price: "td[2]",
 				id: "td[6]"
 			})
@@ -127,7 +127,7 @@ define [
 
 		cancelEditor: () ->
 			@remove()
-			
+
 		updateProduct: () ->
 			@no_implementation()
 
