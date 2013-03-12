@@ -57,6 +57,16 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     @indent = @parent.indent
   end
 
+  def category_children
+    @category_children = Category.find_by(:name => params[:category_name]).children
+    result = @category_children.map do | c |
+      category = c.as_json
+      category["category"].merge(:status => true) if c.children.count > 0
+      category
+    end
+    render :json => result
+  end
+
   private
 
   def safe_params

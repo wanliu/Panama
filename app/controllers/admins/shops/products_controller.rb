@@ -118,11 +118,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     render :layout => false         
   end
 
-  def category_children
-    @categorys = Category.where(:name => params[:category_name]).first
-    render :json => @categorys 
-  end
-
   private
 
   def dispose_options
