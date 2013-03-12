@@ -97,8 +97,8 @@
           data: "category_name=" + $(this).html(),
           url:  "/shops/test/admins/products/category_children", 
           success: function (data){
-          	alert(data)
+          	console.log(data);
           }
-        })
-	})
+        });
+	});
 </script>
