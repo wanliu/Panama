@@ -19,9 +19,12 @@ class Category < ActiveRecord::Base
 
   def load_category(config_root)
     # clear all category children
-    root.descendants.destroy_all
     create_node(config_root, root)
     root.save
+  end
+
+  def clear_categories
+    root.descendants.destroy_all
   end
 
   def load_file(file)
@@ -49,8 +52,8 @@ class Category < ActiveRecord::Base
   end
 
   def self.root
-    where(name: '_products_root', ancestry: nil).first
+    hash = {name: '_products_root', ancestry: nil}
+    where(hash).first_or_create(hash)
   end
 end
 
-# Category.create(:name => :root) unless Category.root

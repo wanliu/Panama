@@ -1,7 +1,8 @@
 module Admins::Shops::ProductsHelper
+    include ActionController::RecordIdentifier
 
-    def picture_and_name(record)        
-      content_tag :div, :class => 'btn-group' do                
+    def picture_and_name(record)
+      content_tag :div, :class => 'btn-group' do
         imgs = record.attachments.map do | a |
             image_tag(a.file.url("30x30"))
         end
