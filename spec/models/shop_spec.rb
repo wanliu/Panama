@@ -9,7 +9,7 @@ describe Shop, "商店模型" do
     it{ should have_many(:products) }
     it{ should have_many(:transactions) }
     it{ should have_one(:shops_category) }
-    it{ should have_and_belong_to_many(:employee_users) }
+    it{ should have_many(:shop_users) }
 
     it{ should validate_presence_of(:name) }
     it{ should validate_uniqueness_of(:name) }
@@ -75,8 +75,8 @@ describe Shop, "商店模型" do
         @shop.user_id = anonymous.id
         @shop.save
 
-        @shop.employee_users << current_user
-        @shop.employee_user(current_user.id).should_not be_nil
-        @shop.employee_users.should eq([current_user])
+        @shop.shop_users.build(:user_id => current_user.id).save
+        @shop.find_employee(current_user.id).should_not be_nil
+        @shop.employees.should eq([current_user])
     end
 end

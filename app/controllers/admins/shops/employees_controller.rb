@@ -2,40 +2,98 @@
 class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     def index
-        @groups = ShopGroup.where(:shop_id => current_shop.id)
-        @employees = current_shop.employee_users
+        @employees = current_shop.employees
     end
 
+    #邀请
     def invite
         @user = User.find_by(:login => params[:login])
-        shop_name = encrypt(current_shop.name)
 
         respond_to do |form|
             if @user
-                login = encrypt(@user.login)
-                url = "/shops/#{shop_name}/show_invite/#{login}?auth=#{generate_auth_string}"
                 Notification.create!(
                     :user_id => @user.id,
                     :mentionable_user_id => current_user.id,
-                    :url => url,
+                    :url => notification_url(@user.login),
                     :body => "#{current_shop.name} 商店邀请你加入")
                 form.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
             else
-                email = params[:login]
-                url = "/shops/#{shop_name}/show_email_invite?auth=#{generate_auth_string}"
                 #如果email发送信息给它
-                if email =~ email_match
-                    UserMailer.invite_employee(email, current_user,
-                        current_shop, email_invite_url(url)).deliver
+                if params[:login] =~ email_match
+                    UserMailer.invite_employee(params[:login], current_user,
+                        current_shop, email_invite_url(email_callback_url)).deliver
                     form.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
                 else
-                    form.json{ render :text => "用户不存在！",:status => 403 }
+                    form.json{ render :json => {message: "用户不存在！"}, :status => 403 }
                 end
             end
         end
     end
 
+    def destroy
+        employee = current_shop.find_employee(params[:user_id])
+        respond_to do | format |
+            if employee
+                employee.destroy
+                format.json{ render :json => {} }
+            else
+                format.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
+            end
+        end
+    end
+
+    def find_by_group
+        @employees = current_shop.groups.find_by(:id => params[:group_id]).users
+
+        respond_to do |format|
+            format.json{ render :json => @employees.as_json(root: false, methods: :icon) }
+            format.html
+        end
+    end
+
+    #雇员入加权限组
+    def group_join_employee
+        employee = current_shop.find_employee(params[:shop_user_id])
+        group = current_shop.groups.find_by(id: params[:shop_group_id])
+
+        return unless valid_employee_group(employee, group)
+
+        unless group.shop_user_groups.find_by(:shop_user_id => employee.id).nil?
+            respond_block({message: "该组别已经有这个雇员了!" }, 403)
+            return
+        end
+        user_group = group.create_user(params[:shop_user_id])
+        unless user_group.valid?
+            respond_block({message: "加入雇员失败！" }, 403)
+            return
+        end
+        respond_block(user_group.user.as_json(root: false, methods: :icon), 200)
+    end
+
+    #删除雇员在权限组
+    def group_remove_employee
+        employee = current_shop.find_employee(params[:shop_user_id])
+        group = current_shop.groups.find_by(id: params[:shop_group_id])
+
+        return unless valid_employee_group(employee, group)
+
+        if group.shop_user_groups.find_by(:shop_user_id => employee.id).nil?
+            respond_block({message: "该组别没有这个雇员了!" }, 403)
+            return
+        end
+        group.remove_user(params[:shop_user_id])
+        respond_block({}, 200)
+    end
+
     private
+    def notification_url(login)
+        "/shops/#{encrypt(current_shop.name)}/show_invite/#{encrypt(login)}?auth=#{generate_auth_string}"
+    end
+
+    def email_callback_url
+        "/shops/#{encrypt(current_shop.name)}/show_email_invite?auth=#{generate_auth_string}"
+    end
+
     def email_invite_url(url)
         "#{accounts_provider_url}/accounts/login?redirect_uri=http://#{request.env['HTTP_HOST']}#{url}"
     end
@@ -46,5 +104,24 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     def encrypt(val)
         Crypto.encrypt(val)
+    end
+
+    def valid_employee_group(employee, group)
+        if employee.nil?
+            respond_block({message: "商店不存在雇员信息！"}, 403)
+            return false
+        end
+
+        if group.nil?
+            respond_block({message: "商店不存权限组!" }, 403)
+            return false
+        end
+        return true
+    end
+
+    def respond_block(_json, _status)
+        respond_to do |format|
+            format.json{ render json: _json, status: _status }
+        end
     end
 end

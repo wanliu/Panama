@@ -112,6 +112,14 @@ Panama::Application.routes.draw do
       resources :employees, :controller => "shops/employees" do
         collection do
           post "invite", :to => "shops/employees#invite"
+          get 'find_by_group', :to => "shops/employees#find_by_group"
+          post "group_join_employee", :to => "shops/employees#group_join_employee"
+          delete "group_remove_employee", :to => "shops/employees#group_remove_employee"
+        end
+      end
+
+      resources :groups, :controller => "shops/groups" do
+        collection do
         end
       end
 

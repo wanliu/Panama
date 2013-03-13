@@ -10,7 +10,7 @@ class Shop < ActiveRecord::Base
   has_many :products, dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
-  has_and_belongs_to_many :employee_users, class_name: "User"
+  has_many :shop_users
 
   has_one :shops_category
   belongs_to :user
@@ -33,9 +33,14 @@ class Shop < ActiveRecord::Base
     "/_shops/#{name}".to_dir
   end
 
+  #所有商店的雇员
+  def employees
+    shop_users.map{| su | su.user }
+  end
+
   #查询这个商店是否有这个雇员
-  def employee_user(userid)
-    ShopsUsers.find_by(:shop_id => id, :user_id => userid)
+  def find_employee(userid)
+    ShopUser.find_by(:shop_id => id, :user_id => userid)
   end
 
   class << self
@@ -61,14 +66,14 @@ class Shop < ActiveRecord::Base
 
     load_default_contents
 
-    load_group
-
     write_default_options
   end
 
   def initial_shop_data
     @category = shops_category.blank? ? create_shops_category(:name => name + "_" + "root") : shops_category
     @category.load_default
+
+    load_group
   end
 
   def delete_shop
@@ -76,11 +81,9 @@ class Shop < ActiveRecord::Base
   end
 
   def load_group
-    puts "======================================="
     _config = YAML.load(fs['config/shop_group.yml'].read)
-    puts _config
     _config["shop_group"].each do |group|
-      self.groups << ShopGroup.create(group)
+      self.groups.build(group).save
     end
   end
 

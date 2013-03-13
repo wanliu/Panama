@@ -1,16 +1,5 @@
-<h4>成员</h4>
-<div>
-    <div>
-        <% @employees.each do |e| %>
-            <div class='alert alert-info' style='float:left;'>
-                <img class='img-rounded' style='width:20px;height:20px;' src="<%=e.photos.icon %>" /> <%=e.login %>
-                <span style='margin-left:50px'>
-                    <a href='#'>移除</a>
-                </span>
-            </div>
-        <% end %>
-    </div>
-    <div style='clear:both'>
+<div class='employee-groups'>
+    <div class='invite-employee'>
         <form class="form-search-user">
             <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>" />
             <div class="alert alert-message" style='display:none'>
@@ -21,68 +10,46 @@
             <button type="submit" class="btn">邀请</button>
         </form>
     </div>
-
-</div>
-
-<h4>雇员组</h4>
-<div class="user-groups">
-    <ul class="nav nav-tabs user-group-header">
-      <% @groups.each do |g| %>
-        <li>
-            <a href="#group-<%=g.name %>" data-toggle="tab">
-                <%=t("activerecord.models.shop_group.#{g.name}") %>
-            </a>
-        </li>
-      <% end %>
-    </ul>
-    <div class="tab-content">
-      <% @groups.each do |g| %>
-          <div class="tab-pane fade" id="group-<%=g.name %>">
-            <% unless g.users.empty? %>
-                <% g.users.each do |u| %>
-                    <div class='alert alert-info' style='float:left;'>
-                        <img class='img-rounded' style='width:20px;height:20px;' src="<%=u.photos.icon %>" /> <%=u.login %>
-                        <span style='margin-left:50px'>
-                            <a href='#'>移除</a>
-                        </span>
-                    <div>
+    <div class='employees'>
+        <h4>成员</h4>
+        <div class='content'>
+            <% if @employees.count > 0 %>
+                <% @employees.each do |e| %>
+                    <div class='alert alert-info employee' data-value="<%=e.id %>" style=''>
+                        <img class='img-rounded avatar' src="<%=e.photos.icon %>" />
+                        <%=e.login %>
+                        <a href='javascript:void(0)' class='remove'>移除</a>
+                    </div>
                 <% end %>
             <% else %>
-                <div class='alert'>暂时没有用户</div>
+                <div class='alert alert-warning'>暂无雇员</div>
             <% end %>
-          </div>
-      <% end %>
+        </div>
+    </div>
+    <div class="user-groups">
+        <h4>雇员组</h4>
+        <ul class="nav nav-tabs user-group-header">
+        </ul>
+        <div class="tab-content user-group-content">
+        </div>
     </div>
 </div>
 
+<template class='group-user-template' style='display:none'>
+    <div class='alert alert-info group-user'>
+        <img class='img-rounded avatar' />
+        {{login}}
+        <a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
+    </div>
+</template>
+
 <script type='text/javascript' >
-    require(["jquery", "user_typeahead", "admins/shops/employee_invite", "twitter/bootstrap/tab"],
-        function($, UserTypeahead, EmployeeInvite){
-
-            var form = $("form.form-search-user");
-            var alert = form.find(".alert-message");
-
-            new UserTypeahead(form.find("input[name=login]"))
-            new EmployeeInvite({
-                form_el: form,
-                url: "<%=invite_shop_admins_employees_path(current_shop.name)  %>",
-                success_callback: function(data, xhr){
-                    alert.removeClass("alert-error").addClass("alert-success")
-                    alert.find(".content").html(data.message);
-                    alert.show();
-                },
-                error_callback: function(data, xhr){
-                    alert.removeClass("alert-success").addClass("alert-error")
-                    alert.find(".content").html(data.message);
-                    alert.show();
-                }
+    require(["admins/shops/employee_group", "jquery", "hogan"], function(EmployeeGroup, $, hogan){
+            template = Hogan.compile($(".group-user-template").html())
+            new EmployeeGroup({
+                el: $(".employee-groups"),
+                shop: "<%=current_shop.name %>",
+                group_user_template: template
             })
-
-            $("ul.user-group-header a").click(function (e) {
-              e.preventDefault();
-              $(this).tab('show');
-            })
-
-            $("ul.user-group-header a:first").tab("show")
         })
 </script>
