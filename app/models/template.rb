@@ -5,7 +5,7 @@ class Template
 
   def initialize(name = nil, file_storage = nil)
     unless name.blank?
-      @name = name      
+      @name = name
       fs = file_storage || shop.fs
       @fs = fs["templates/#{@name}.html.erb"]
     end
@@ -20,6 +20,7 @@ class Template
   end
 
   def data
+    @fs.write unless @fs.exist?
     @fs.read
   end
 
@@ -35,8 +36,8 @@ class Template
     ActiveModel::Name.new(self)
   end
 
-  def self.find(id)
-    new id
+  def self.find(id, *args)
+    new id, *args
   end
 
   def self.setup(shop)
