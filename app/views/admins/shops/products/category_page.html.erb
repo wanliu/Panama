@@ -18,7 +18,7 @@
 		  <li class="active">
 		  	<a href="#">婴幼食品</a><br>
 		  	<% @categorys.children.each do |c| %>
-		  		<a href="#" class="categorys_root"><%= c.name %></a>
+		  		<a href="#" class="categorys_root" data-value="<%= c.name %>"><%= c.name %></a>
 		  	<% end %>
 		  </li>
 		  <li><a href="#">Library</a></li>
@@ -66,8 +66,6 @@
 			<div class='shadow'>
 			</div>
 			<div class="category_buttons btn-group btn-group-vertical">
-				<button class='btn'>返回<%= caret(:left) %></button>
-				<button class='btn'>1段奶粉<%= caret(:right) %></button>
 			</div>
 		</div>
 
@@ -97,10 +95,12 @@
     
 </script>
 <template id="categorys_template" style="display:none;">
-	<button class='btn'>返回{{caret("left")}}</button>
-
-        {{#categorys}}
-            <button class='btn'>{{category.name}}</button>
-        {{/categorys}}
-
+    <button class='btn' data-value="返回">返回<span class="caret left"></span></button>
+    {{#categorys}}
+    <button class='btn' data-value="{{category.name}}">{{category.name}}
+        {{#category.status}}
+            <span class="caret right"></span>
+        {{/category.status}}
+    </button>
+    {{/categorys}}
 </template>
