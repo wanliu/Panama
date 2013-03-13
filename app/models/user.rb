@@ -41,14 +41,6 @@ class User < ActiveRecord::Base
 
   after_initialize :init_user_info
 
-  def as_json(*args)
-    options = super *args
-    ps = options["user"]["photos"] ||= {}
-    ps["icon"] = photos.icon
-    ps["avatar"] = photos.avatar
-    options
-  end
-
   after_initialize do
     if cart.nil?
       build_cart

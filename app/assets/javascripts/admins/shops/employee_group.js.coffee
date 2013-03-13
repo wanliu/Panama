@@ -5,7 +5,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
  ,"twitter/bootstrap/tab", "backbone", "hogan"],
  ($, UserTypeahead, jqueryui, tab, Backbone) ->
 
-    #组权限
+    #组权限模型
     class Group extends Backbone.Model
         set_url: (shop) ->
             @url = "/shops/#{shop}/admins/groups"
@@ -13,6 +13,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
             @set_url(shop)
             super attrs
 
+    #组列表集合
     class GrupList extends Backbone.Collection
         model: Group
         set_url: (shop) ->
@@ -78,6 +79,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
                 data: data
             )
 
+    #组的雇员视图
     class GroupEmployeeView extends Backbone.View
         events: {
             "click .remove-shop-user-group" : "remove"
@@ -104,6 +106,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
             @el.remove()
             @trigger("remove_employee", @model.id)
 
+    #组的雇员视图列表
     class GroupEmployeeListView extends Backbone.View
         className: "tab-pane fade"
         notice_template: $("<div class='alert alert-warning notice'>暂无雇员</div>")
@@ -180,6 +183,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
 
             null
 
+    #组视图
     class GroupView extends Backbone.View
         tagName: "li"
         template: Hogan.compile("<a href='#group-{{name}}' data-toggle='tab'>{{name}}</a>")
@@ -197,6 +201,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
             @trigger("load_employee")
             $(@el).find("a").tab("show")
 
+    #组视图列表
     class GroupViewList extends Backbone.View
         default_opts: {
             shop: "",
@@ -243,6 +248,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
 
         render: () ->
 
+    #雇员视图
     class EmployeeView extends Backbone.View
         events: {
             "click .remove" : "remove"
