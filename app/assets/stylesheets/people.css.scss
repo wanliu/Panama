@@ -1,7 +1,8 @@
 // Place all the styles related to the people controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
+//= require people/comment
+//= require jquery.atwho
 @import "compass/css3";
 @import "variables";
 @import "banks";
