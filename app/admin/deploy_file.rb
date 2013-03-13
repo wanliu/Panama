@@ -43,6 +43,8 @@ ActiveAdmin.register_page "vfs_file" do
   content do
     root = '/'.to_dir
     text = root[params[:file_path]].read
-    render "show", :text => text
+    debugger
+    @app_file = AppFile.new
+    render "show", :text => text, :new_app_file => @app_file
   end
 end
