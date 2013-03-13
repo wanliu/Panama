@@ -443,7 +443,6 @@ DEPENDENCIES
   carrierwave (~> 0.8.0)
   carrierwave-mongoid (~> 0.1.0)
   carrierwave-upyun (~> 0.1.6)
-  coderay
   coffee-rails (~> 3.2.1)
   coffee-script-source (~> 1.4.0)
   compass-css-arrow (~> 0.0.3)

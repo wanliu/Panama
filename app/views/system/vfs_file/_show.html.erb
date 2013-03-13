@@ -2,3 +2,10 @@
 <div style="height: 450px; overflow:auto; scrollbar-3dlight-color:#595959; scrollbar-arrow-color:#ffffff; scrollbar-base-color:#cfcfcf; scrollbar-darkshadow-color:#ffffff; scrollbar-face-color:#cfcfcf; scrollbar-highlight-color:#ffffff; scrollbar-shadow-color:#595959">
 	<%= text %>
 </div>
+
+ 
+<%= simple_form_for new_app_file  do |f| %>
+	<% debugger %>
+	<%= f.input :name %>
+	<%= f.input :data %>
+<% end %>	
