@@ -5,15 +5,79 @@
         :class => "form-horizontal"
     } do |f| %>
     <%= f.input :name %>
+    <div class="control-group string required">
+        <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> Category</label>
+        <div class="controls">
+            <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
+
+            <script type="text/javascript">
+                function getBrowserHeight(){ 
+                    if($.browser.msie){ 
+                        return document.compatMode == "CSS1Compat"? document.documentElement.clientHeight : document.body.clientHeight; 
+                    } 
+                    else { 
+                        return self.innerHeight; 
+                    } 
+                } 
+
+                var button = ".<%= dom_id(@product, :category) %>";
+
+                require(['jquery', 'twitter/bootstrap/modal'], function($){
+                    var dialog_base_top = 0;
+                    var window_top = 0;
+                    var scrollDialog = function(e){
+                        dialog_base_top = parseInt($("#CategoryModal").css('top'));
+                        scroll_top = dialog_base_top + (e.wheelDelta);
+
+                        screen_height = getBrowserHeight(); 
+                        dialog_height = $("#CategoryModal").height();
+                        dialog_top = $("#CategoryModal").offset().top; 
+                        dialog_bottom = dialog_top + dialog_height;
+
+                        if ((e.wheelDelta > 0 && dialog_top < 0)||(e.wheelDelta < 0 && dialog_bottom > screen_height)) {
+                            $("#CategoryModal").css('top', scroll_top);
+                        }
+                        e = e || window.event;
+                        if (e.preventDefault)
+                            e.preventDefault();
+                        e.returnValue = false;
+
+                    };
+
+                    $("#CategoryModal").on('show', function() {
+                        dialog_base_top = $(this).position().top;
+                        window_top = $(window).scrollTop();
+                        $(this)
+                            .find(".modal-body")
+                            .load("<%= category_page_shop_admins_products_path%>");
+
+                        window.onmousewheel = document.onmousewheel = scrollDialog;
+
+                    });
+
+
+                    $("#CategoryModal").on('hide', function(){
+                        window.onmousewheel = document.onmousewheel = undefined;
+                    });
+
+                    $(button).click(function(e){
+                        $('#CategoryModal').modal('show');
+                    });
+                })
+            </script>
+        </div>
+    </div>
+
+    <%= f.association :shops_category, :as => :chosen %>
     <%= f.association :attachments,
-                      :as => :album,
-                      :upload_url => shop_admins_attachments_path(current_shop),
-                      :collection => @product.format_attachment %>
+                      :as           => :album,
+                      :upload_url   => shop_admins_attachments_path(current_shop),
+                      :collection   => @product.format_attachment %>
 
 		<%= render_styles %>
 
     <%= f.input :price %>
-    <%= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
+    <%#= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
 
@@ -49,3 +113,18 @@
 
 </script>
 <% end %>
+
+<!-- Modal -->
+<div id="CategoryModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">产品类型</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>

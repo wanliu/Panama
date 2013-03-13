@@ -1,0 +1,5 @@
+table_for properties, :class => 'index_table' do
+	column :name
+	column :title
+	column :property_type
+end
