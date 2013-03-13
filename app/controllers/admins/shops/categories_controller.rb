@@ -59,20 +59,20 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
 
   def category_children
     @category_children = Category.find_by(:name => params[:category_name])
-    id = @category_children.ancestry.split('/')[-2]
     if params[:flag] == "true"
-      @category_children = Category.find_by(:id => id) unless id.nil?
+      @category_children = @category_children.parent.parent
     end
-    unless @category_children.nil?
-      @category_children =  @category_children.children
-      result = @category_children.map do | c |
-        category = c.as_json
-        category["category"].merge!(:status => true) if c.children.count > 0
-        category
+    if @category_children.children.count > 0
+      @category_children = @category_children.children
+      if @category_children.first.id != 3
+        result = @category_children.map do | c |
+          category = c.as_json
+          category["category"].merge!(:status => true) if c.children.count > 0
+          category
+        end
       end
     end
     render :json => result
-    
   end
 
   private
