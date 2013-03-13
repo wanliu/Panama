@@ -34,7 +34,7 @@ class ShopsController < ApplicationController
 
   def agree_invite_user
     if valid_invite_user
-      @shop.employee_users << current_user
+      @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
         format.html{ redirect_to person_path(current_user) }
       end
@@ -43,7 +43,7 @@ class ShopsController < ApplicationController
 
   def agree_email_invite_user
     if valid_invite_options(decrypt_options)
-      @shop.employee_users << current_user
+      @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
         format.html{ redirect_to person_path(current_user) }
       end

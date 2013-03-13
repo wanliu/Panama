@@ -18,10 +18,12 @@ class User < ActiveRecord::Base
 
   has_many :addresses, class_name: "Address"
 
-  def as_json(*args)
-    user = super(*args)
-    user["user"]["url"] = photos.default
-    user
+  def icon
+    photos.icon
+  end
+
+  def avatar
+    photos.avatar
   end
 
   #暂时方法

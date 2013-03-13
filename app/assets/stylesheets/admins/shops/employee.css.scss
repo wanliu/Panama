@@ -1,0 +1,47 @@
+.group-user{
+	float:left;
+
+	img.avatar{
+		width:20px;
+		height:20px;
+	}
+
+	.remove-shop-user-group{
+		margin-left: 20px;
+	}
+}
+
+.user-groups{
+
+	clear: both;
+
+	.user-group-content{
+		.tab-pane{
+			height: 400px;
+
+			.group-user{
+				margin-left: 15px;
+			}
+		}
+	}
+}
+
+.employee-groups{
+
+	.employees{
+
+		.employee{
+			float:left;
+
+
+			img.avatar{
+				width:20px;
+				height:20px;
+			}
+
+			.remove{
+				margin-left: 50px;
+			}
+		}
+	}
+}

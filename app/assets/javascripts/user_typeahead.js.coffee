@@ -14,7 +14,7 @@ define(["typeahead", "hogan"], (typeahead, hogan) ->
                 name: "users",
                 remote: "/search/users?q=%QUERY&limit=10",
                 template: [
-                    '<span class="repo-avatar"><img class="img-rounded user-avatar" src="{{url}}" />{{login}}</span>',
+                    '<span class="repo-avatar"><img class="img-rounded user-avatar" src="{{icon}}" />{{login}}</span>',
                     '<span class="repo-email">{{login}}@test.com</span>'
                 ].join(''),
                 engine: Hogan

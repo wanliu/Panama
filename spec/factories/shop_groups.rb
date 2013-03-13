@@ -7,13 +7,13 @@ FactoryGirl.define do
   end
 
   factory :inventor_group, :class => ShopGroup do |f|
-  	f.shop :shop
-  	name "inventory"
+    f.shop :shop
+    name "inventory"
   end
 
   factory :admin_group, :class => ShopGroup do |f|
-  	f.shop :shop
-  	name "admin"
+    f.shop :shop
+    name "admin"
   end
 
 end

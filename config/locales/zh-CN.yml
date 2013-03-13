@@ -201,10 +201,7 @@ zh-CN:
     models:
       user: "用户"
       comment: "评论"
-      shop_group:
-        sale: "销售组"
-        inventory: "仓库组"
-        admin: "管理组"
+      shop_group: "权限组"
 
   mongoid:
     models:
@@ -234,6 +231,11 @@ zh-CN:
   create: 新增
   templates: 模板
   employees: 雇员
+
+  shop_group:
+    sale: "销售组"
+    inventory: "仓库组"
+    admin: "管理组"
 
   table:
     heads:
