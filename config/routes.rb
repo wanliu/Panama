@@ -95,9 +95,17 @@ Panama::Application.routes.draw do
 
       resources :menu, :controller => "shops/menu"
 
-      resources :categories, :controller => "shops/categories"
+      resources :categories, :controller => "shops/categories" do
+        collection do
+          get :category_children
+        end
+      end
 
-      resources :products, :controller => "shops/products"
+      resources :products, :controller => "shops/products" do
+        collection do
+          get :category_page
+        end
+      end
 
       resources :transactions, :controller => "shops/transactions"
 
@@ -134,6 +142,8 @@ Panama::Application.routes.draw do
   # Custom logout
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
+
+  match 'vfs/:file_path', :to => 'vfs#show'
 
   root :to => 'activities#index'
 

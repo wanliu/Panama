@@ -1,6 +1,6 @@
 define [
-	'jquery-ui', 
-	'backbone', 
+	'jquery-ui',
+	'backbone',
 	'models/form_model',
 	'lib/dnd',
 	'exports'], ($, Backbone, FormModel, DND, exports) ->
@@ -11,7 +11,7 @@ define [
 		constructor: (@el, @options) ->
 			super(@options)
 			$(@el).on 'ajax:before', $.proxy(@prependForm, @)
-			$(@el).on 'ajax:success', $.proxy(@submitted, @)
+			$(@el).on 'submit:success', $.proxy(@submitted, @)
 			$(@el).on 'submit', $.proxy(@submit, @)
 
 		prependForm: () ->
@@ -26,7 +26,7 @@ define [
 		submit: () ->
 			$(@el).submit(false);
 
-	class FormView extends AbstractFormView		
+	class FormView extends AbstractFormView
 
 	class AbstractResourceView extends DND.DNDView
 
@@ -59,7 +59,7 @@ define [
 				url: url
 				async: false
 				data: {ajaxify: true}
-				success: (_data, _status, _jqxhr) -> 
+				success: (_data, _status, _jqxhr) ->
 					jqxhr = _jqxhr
 					data = _data
 					status = _status
@@ -104,7 +104,7 @@ define [
 
 	class ResourceView extends AbstractResourceView
 
-	
+
 	exports.ResourceView = ResourceView
 	exports.FormView = FormView
 	exports
