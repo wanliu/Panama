@@ -21,54 +21,10 @@
 		  		<a href="#" class="categorys_root" data-value="<%= c.name %>"><%= c.name %></a>
 		  	<% end %>
 		  </li>
-		  <li><a href="#">Library</a></li>
 		</ul>
-		<div class="category_list span7">
-			<div class="category_cover ">
-				<div class="category_detail">
-					<p class="lead">奶粉 一般效果预览</p>
-					<div class="slides-box">
-					  <div class="slides">
-					    <img src="https://dl.dropbox.com/u/5992070/images/1.png">
-					    <img src="https://dl.dropbox.com/u/5992070/images/2.png">
-	 					<a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
-	      				<a href="#" class="slidesjs-next slidesjs-navigation"><i class="icon-chevron-right icon-large"></i></a>
-					  </div>
-					</div>
-					<p>页面构成 <strong>商品层示图片</strong> <strong> 商品略缩图</strong> <strong>价目信息</strong> <strong> 一般属性</strong> <strong>商品层示图片</strong></p>
-					<div class="controls">
-						<button class="btn btn-success">选择这种</button>
-					</div>
-				</div>
-				<hr>
-			</div>
-
-			<div class="category_cover ">
-				<div class="category_detail">
-					<p class="lead">营养品 一般效果预览</p>
-					<div class="slides-box">
-					  <div class="slides">
-					    <img src="https://dl.dropbox.com/u/5992070/images/1.png">
-					    <img src="https://dl.dropbox.com/u/5992070/images/2.png">
-	 					<a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
-	      				<a href="#" class="slidesjs-next slidesjs-navigation"><i class="icon-chevron-right icon-large"></i></a>
-					  </div>
-					</div>
-					<p>页面构成 <strong>商品层示图片</strong> <strong> 商品略缩图</strong> <strong>价目信息</strong> <strong> 一般属性</strong> <strong>商品层示图片</strong></p>
-					<div class="controls">
-						<button class="btn btn-success">选择这种</button>
-					</div>
-				</div>
-				<hr>
-			</div>
+		<div class="category-preview  span9">
+			
 		</div>
-		<div class="sub_category span2">
-			<div class='shadow'>
-			</div>
-			<div class="category_buttons btn-group btn-group-vertical">
-			</div>
-		</div>
-
 	</div>
 
 </div>
@@ -83,7 +39,6 @@
 		});
 	});
 
-
 	require(['jquery', 'hogan', 'category'], function ($, Hogan, view){
 		template = Hogan.compile($("#categorys_template").html());
 		new view.Category({
@@ -95,12 +50,43 @@
     
 </script>
 <template id="categorys_template" style="display:none;">
-    <button class='btn' data-value="返回">返回<span class="caret left"></span></button>
-    {{#categorys}}
-    <button class='btn' data-value="{{category.name}}">{{category.name}}
-        {{#category.status}}
-            <span class="caret right"></span>
-        {{/category.status}}
-    </button>
-    {{/categorys}}
+
+	<div class="category_list span9">
+		<div class="category_cover ">
+			<div class="category_detail">
+				 {{#categorys}}
+				<p class="lead">{{category.name}}类预览效果</p>
+				<div class="slides-box">
+				  <div class="slides">
+				    <img src="https://dl.dropbox.com/u/5992070/images/1.png">
+				    <img src="https://dl.dropbox.com/u/5992070/images/2.png">
+ 					<a href="#" class="slidesjs-previous slidesjs-navigation"><i class="icon-chevron-left icon-large"></i></a>
+      				<a href="#" class="slidesjs-next slidesjs-navigation"><i class="icon-chevron-right icon-large"></i></a>
+				  </div>
+				</div>
+				<p>页面构成 <strong>商品层示图片</strong> <strong> 商品略缩图</strong> <strong>价目信息</strong> <strong> 一般属性</strong> <strong>商品层示图片</strong></p>
+				<div class="controls">
+					<button class="btn btn-success">选择这种</button>
+				</div>
+				{{/categorys}}
+			</div>
+			<hr>
+		</div>
+	</div>
+
+	<div class="sub_category span3">
+		<div class='shadow'>
+		</div>
+		<div class="category_buttons btn-group btn-group-vertical">
+			<button class='btn' data-value="back">返回<span class="caret left"></span></button>
+		    {{#categorys}}
+		    <button class='btn' data-value="{{category.name}}">{{category.name}}
+		        {{#category.status}}
+		            <span class="caret right"></span>
+		        {{/category.status}}
+		    </button>
+		    {{/categorys}}
+		</div>
+	</div>
+
 </template>
