@@ -11,5 +11,9 @@ require 'spec_helper'
 #   end
 # end
 describe ContentsHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it "render_content_ex" do
+    @content = Content.create(:name => 'test', :template => '/templates')
+     # helper.render_content_ex()
+  end
 end

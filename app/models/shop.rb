@@ -27,6 +27,7 @@ class Shop < ActiveRecord::Base
   friendly_id :name
 
   def fs
+    require "orm_fs"
     "/_shops/#{name}".to_dir
   end
 

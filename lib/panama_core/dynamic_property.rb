@@ -68,7 +68,10 @@ module PanamaCore
         @@_delete_method_name = method_name.to_sym
         class << self
           remove_method @@_delete_method_name
+
         end
+        # 删除之前的 安全 attributes
+        _accessible_attributes[:default].delete(method_name)
       end
 
       @delegate_properties = []
@@ -90,6 +93,8 @@ module PanamaCore
             pv.value = other
           end
         end
+        _accessible_attributes[:default] << method_name
+
         @delegate_properties << "#{method_name}="
       end
     end
