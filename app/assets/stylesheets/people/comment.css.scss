@@ -1,0 +1,40 @@
+.comment_main {
+	height: auto;
+
+	margin: 3px;
+
+	ul {
+	    list-style-type: none;
+	    margin: 0 0 10px 5px;
+	}
+
+	li {
+		margin-left: 10px;
+		line-height: 30px;
+	}
+
+	.content {
+		margin-left: 45px;
+		white-space:normal;
+		word-break:break-all;
+		word-wrap:break-word;
+		
+	}
+}
+
+.more {
+	cursor: pointer;
+}
+
+.comment_body {
+	max-width: 400px;
+	border: 1px solid #e3e3e3;
+
+	p {
+		margin: 20px 0 10px 20px;
+	}
+}
+
+.comment {
+	margin-left: 15px;
+}

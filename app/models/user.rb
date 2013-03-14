@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
 
-  attr_accessible :uid, :login, :first_name, :last_name
+  attr_accessible :uid, :login, :first_name, :last_name, :email
 
   define_graphical_attr :photos, :handler => :grapical_handler
 
@@ -18,6 +18,14 @@ class User < ActiveRecord::Base
 
   has_many :addresses, class_name: "Address"
 
+  def icon
+    photos.icon
+  end
+
+  def avatar
+    photos.avatar
+  end
+
   #暂时方法
   def grapical_handler
     ImageUploader.new
@@ -32,6 +40,13 @@ class User < ActiveRecord::Base
   end
 
   after_initialize :init_user_info
+
+  after_initialize do
+    if cart.nil?
+      build_cart
+      # save
+    end
+  end
 
   def init_user_info
     return if new_record?
