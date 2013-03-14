@@ -1,5 +1,9 @@
+require 'panama_core'
+
 class Product < ActiveRecord::Base
   include Graphical::Display
+  include PanamaCore::DynamicProperty
+  include PanamaCore::InventoryCache
 
   attr_accessible :description,
                   :name,
@@ -8,6 +12,7 @@ class Product < ActiveRecord::Base
                   :category_id,
                   :shops_category_id,
                   :shop_id,
+                  :shop,
                   :default_attachment_id,
                   :attachment_ids
 
@@ -16,7 +21,7 @@ class Product < ActiveRecord::Base
   define_graphical_attr :photos, :handler => :default_photo
 
   belongs_to :shop
-  belongs_to :category
+  belongs_to :category, :autosave => true
   belongs_to :shops_category
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
@@ -39,6 +44,8 @@ class Product < ActiveRecord::Base
   validates_presence_of :category
   validates_presence_of :shops_category
   validates_presence_of :shop
+
+  # delegate :properties, :to => :category, :allow_nil => true
 
   def quantity
     sub_products.reduce(0) { |s, i| s + i.quantity }
@@ -118,5 +125,4 @@ class Product < ActiveRecord::Base
       { 'name' => name, 'items' => items.values }
     end unless params[:style].blank?
   end
-
 end

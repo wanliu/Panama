@@ -91,6 +91,21 @@ describe Admins::Shops::ProductsController do
       response.should be_success
       response.should render_template(:edit)
     end
+
+    it "附加产品属性" do
+      @options[:product][:category_id] = 72
+      @options[:product].merge!({
+        color: 0xFF0000,
+        make_in: 'China',
+        flavor: 'fragrancy'
+      })
+
+      post 'create', @options, get_session
+      assigns(:product).make_in.should eql('China')
+      assigns(:product).color.should eql(0xFF0000)
+      assigns(:product).flavor.should eql('fragrancy')
+      response.should be_success
+    end
   end
 
   describe "GET edit" do

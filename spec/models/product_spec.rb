@@ -68,10 +68,10 @@ describe Product, "产品模型" do
         it "模型装饰  price " do
             pr = Product.create! _attributes
             pr_de = pr.decorate
-            pr_de.source.price.should eq(pr_de.price.delete(', ¥').to_f) 
+            pr_de.source.price.should eq(pr_de.price.delete(', ¥$').to_f)
         end
     end
-    
+
     describe "method default_photo" do
         it "图型化handler方法" do
 
@@ -161,5 +161,178 @@ describe Product, "产品模型" do
       end
     end
 
+    # 为产品增加一些附加属性,这些属性可以通过系统配置来进行管理, 同时产品的属性,默认来至于所属的分类
+    # 所为,必须要测试分类的属性的转换,对其产生的影响
+    describe "附加属性" do
+        let(:apple) { Product.first }
+        let(:material) { Property.where(:name => 'material').first }
+        let(:weight) { Property.where(:name => 'weight').first }
+        let(:clothes_type) { Property.where(:name => 'clothes_type').first }
+
+        let(:pants) { ProductPropertyValue.first }
+
+        # properties 将包含 产品的属性表 Property
+        # Property
+        #   name: string 类型,属性的名称
+        #   title: string 类型, 标题显示
+        #   property_type: string 类型, 属性类型, 包含 Integer, String , BigDecimal, DateTime, Set(集合)等
+        it "包含属性" do
+            apple.properties.should include(material, weight, clothes_type)
+        end
+
+        # properties_values
+        it "属性存值" do
+            apple.properties_values.should include(pants)
+        end
+
+        describe "直接访问属性方法" do
+            it "material" do
+                apple.should respond_to(:material)
+            end
+
+            it "weight" do
+                apple.should respond_to(:weight)
+            end
+
+            it "clothes_type" do
+                apple.should respond_to(:clothes_type)
+            end
+
+            it "material 存值" do
+                apple.material.should eql("cotton")
+                apple.material = "leather"
+                apple.material.should == "leather"
+            end
+
+            it "weight 存值" do
+                apple.weight.should be_nil
+                apple.weight = 28
+                apple.weight.should == 28
+            end
+
+            it "clothes_type 存值" do
+                apple.clothes_type.should == "Pants"
+                apple.clothes_type = "Hat"
+                apple.clothes_type.should == "Hat"
+            end
+
+            describe "存储有效" do
+                it "material 存值" do
+                    apple.material.should eql("cotton")
+                    apple.material = "leather"
+                    apple.material.should == "leather"
+                    apple.save
+
+                    Product.first.material.should == "leather"
+                end
+
+                it "weight 存值" do
+                    apple.weight.should be_nil
+                    apple.weight = 28
+                    apple.weight.should == 28
+                    apple.save
+
+                    Product.first.weight.should == 28
+                end
+
+                it "clothes_type 存值" do
+                    apple.clothes_type.should == "Pants"
+                    apple.clothes_type = "Hat"
+                    apple.clothes_type.should == "Hat"
+                    apple.save
+
+                    Product.first.clothes_type.should == "Hat"
+                end
+            end
+
+            describe "不同的分类,产品属性不一样" do
+                let(:make_in) { Property.where(:name => 'make_in').first }
+                let(:flavor) { Property.where(:name => 'flavor').first }
+                let(:color) { Property.where(:name => 'color').first }
+
+                it "挂接分类" do
+                    apple.properties.should include(material, weight, clothes_type)
+                    apple.category = Category.find(73)
+                    apple.attach_properties!
+                    apple.should have(0).properties
+                end
+
+                it "挂接另一个有属性的分类" do
+                    apple.properties.should include(material, weight, clothes_type)
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+                    apple.properties.should include(make_in, flavor, color)
+                end
+
+
+                it "直接访问新的有属性" do
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+
+                    apple.should_not respond_to(:material)
+                    apple.should respond_to(:make_in)
+                    apple.should respond_to(:flavor)
+                    apple.should respond_to(:color)
+                end
+
+                it "直接写新的属性" do
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+
+                    apple.make_in = "China"
+                    apple.flavor = "rich"
+                    apple.make_in.should eql("China")
+                    apple.flavor.should eql("rich")
+                end
+
+                it "直接写新的属性 - 保存" do
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+
+                    apple.make_in = "China"
+                    apple.flavor = "rich"
+                    apple.save
+
+                    Product.first.make_in.should eql("China")
+                    Product.first.flavor.should eql("rich")
+                end
+
+                it "直接写新的属性 - 保存" do
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+
+                    apple.make_in = "China"
+                    apple.flavor = "rich"
+                    apple.save
+
+                    Product.first.make_in.should eql("China")
+                    Product.first.flavor.should eql("rich")
+                end
+
+                it "未建立 product_property 关系的写值 - 保存" do
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+
+                    apple.make_in = "China"
+                    apple.flavor = "rich"
+                    apple.provider = "WanLiu"
+                    apple.save
+
+                    Product.first.make_in.should eql("China")
+                    Product.first.flavor.should eql("rich")
+                    Product.first.provider.should eql("WanLiu")
+                end
+
+                it "更换分类移出原有值" do
+                    apple.material.should == "cotton"
+                    apple.category = Category.find(72)
+                    apple.attach_properties!
+                    apple.properties_values.size.should == 0
+                    apple.save
+                    ProductPropertyValue.all.size.should == 0
+                end
+            end
+        end
+    end
   end
 end

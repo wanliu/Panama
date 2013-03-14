@@ -96,7 +96,13 @@ Panama::Application.routes.draw do
 
       resources :categories, :controller => "shops/categories"
 
-      resources :products, :controller => "shops/products"
+      resources :products, :controller => "shops/products" do
+        collection do
+          get :category_page
+          get "additional_properties/:category_id",
+              :to => "shops/products#additional_properties"
+        end
+      end
 
       resources :transactions, :controller => "shops/transactions"
 
@@ -133,6 +139,9 @@ Panama::Application.routes.draw do
   # Custom logout
   match '/logout', :to => 'user_sessions#destroy'
   # See how all your routes lay out with "rake routes"
+
+  match 'vfs/:file_path/expansion', :to => 'vfs#expansion'
+  match 'system/vfs/show_file', :to => 'vfs#show_file'
 
   root :to => 'activities#index'
 
