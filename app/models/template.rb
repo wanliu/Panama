@@ -1,13 +1,17 @@
+# encoding: utf-8
+#
 class Template
-  cattr_accessor :shop
-
   attr_accessor :name, :path, :created_at, :updated_at, :data
+
+  def fs
+    @fs
+  end
 
   def initialize(name = nil, file_storage = nil)
     unless name.blank?
       @name = name
-      fs = file_storage || shop.fs
-      @fs = fs["templates/#{@name}.html.erb"]
+      fs = file_storage || '/'.to_dir
+      @fs = fs[@name]
     end
   end
 
@@ -29,7 +33,7 @@ class Template
   end
 
   def to_key
-    [@name]
+    [File.basename(@name, '.html.erb')]
   end
 
   def self.model_name
@@ -41,7 +45,10 @@ class Template
   end
 
   def self.setup(shop)
-    Template.shop = shop
+    warning = "setup(shop: Shop) 方法已经废弃," +
+              "请使用 Template.new(name: String, fs = nil:VFS) 这种方式创建 Template"
+    ActiveSupport::Deprecation.warn(warning)
+    # Template.shop = shop
   end
 
   def ==(other)
