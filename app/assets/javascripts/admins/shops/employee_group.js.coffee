@@ -319,23 +319,27 @@ define(["jquery", "user_typeahead", "jquery-ui"
 
         bind_invite_employee: () ->
             form = @invite_employee.find("form.form-search-user")
-            alert = form.find(".alert-message");
-
+            input = form.find("input[name=login]")
             form.submit(() =>
-                login = form.find("input[name=login]").val()
+                @invite_notice("success", "正在发送信息，请等待...")
+                login = input.val()
                 employee = new Employee({}, @default_params.shop)
                 employee.invite(login,
-                    (model, data) ->
-                        alert.removeClass("alert-error").addClass("alert-success")
-                        alert.find(".content").html(data.message)
-                        alert.show()
-                    (model, data) ->
-                        alert.removeClass("alert-success").addClass("alert-error")
-                        alert.find(".content").html(data.message)
-                        alert.show()
+                    (model, data) =>
+                        @invite_notice("success", data.message)
+
+                    (model, data) =>
+                        @invite_notice("error", data.message)
                 )
                 false
             )
+
+        invite_notice: (status, message) ->
+            reverse_status = if status=="success" then "error" : "success"
+            alert = @invite_employee.find("form.form-search-user .alert-message")
+            alert.removeClass("alert-#{reverse_status}").addClass("alert-#{status}")
+            alert.find(".content").html(message)
+            alert.show()
 
         load_group: () ->
             @group_view_list = new GroupViewList(@group_panle, {
