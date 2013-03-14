@@ -1,0 +1,77 @@
+<%= requirejs_include_tag "application" %>
+<%= stylesheet_link_tag   "jquery.treeview" %>
+<style type="text/css">
+	body.active_admin ul#browser { 
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		background-color: white;
+		margin-top: 4px;
+	}
+	body.active_admin .treeview li { 
+		list-style: none;	
+		margin: 0;
+		padding: 3px 0pt 3px 16px;
+	}
+</style>
+
+<div style="height: 400px; overflow:auto; scrollbar-3dlight-color:#595959; scrollbar-arrow-color:#ffffff; scrollbar-base-color:#cfcfcf; scrollbar-darkshadow-color:#ffffff; scrollbar-face-color:#cfcfcf; scrollbar-highlight-color:#ffffff; scrollbar-shadow-color:#595959">
+	<ul id="browser" class="filetree treeview">
+		<% root.each do |r| %> 
+			<li class="collapsable" onclick="treeview_click('/<%= r.name %>','<%= r.name %>')">
+				<div class="hitarea collapsable-hitarea"></div>
+				<span class="folder"><%= r.name %></span>
+				<ul class="<%= r.name %>_click">
+					<li class="last"><span class="file"></span></li>
+				</ul>
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+<SCRIPT type='text/javascript'>
+	require(['jquery', 'lib/jquery.treeview', 'lib/jquery.cookie'], function($){
+	    $(document).ready(function(){ 
+	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol", url: "/vfs/path", });
+		});
+    }); 
+    function treeview_click(treeview, treeview_class){
+    	$.get("/vfs/path/expansion",
+    	     {p: treeview},
+    	     function(data){ 
+    	     	$("."+treeview_class+"_click").parent("li").removeAttr("onclick")
+    	     	$("."+treeview_class+"_click").html("")
+    	     	for(var i=0; data.n.length > i; i++){
+    	     		name = data.n[i].name
+    	     		var branches = ""
+    	     		if(name.indexOf('.') >= 0)
+    	     			branches = $(html_file(treeview, name)).appendTo("."+treeview_class+"_click") 
+    	     		else
+    	     			branches = $(html_folder(treeview, treeview_class, name)).appendTo("."+treeview_class+"_click") 
+
+			  	    $("#browser").treeview({ add: branches });
+    	     	}
+             }
+        )
+	}
+
+	function html_file(treeview,name){
+		var strHTML = "<li class='last'>"
+		    strHTML += "   <span class='file'>"
+		    strHTML += "      <a href='/system/vfs_file?file_path="+treeview+"/"+name+"'>"+name+"</a>"
+		    strHTML += "   </span>"
+		    strHTML += "</li>"
+		return strHTML
+	}
+
+	function html_folder(treeview,treeview_class,name){
+		var strHTML = "<li class='collapsable' onclick=treeview_click('"+treeview+"/"+name+"','"+treeview_class+name+"')>"
+			strHTML += "   <div class='hitarea collapsable-hitarea'></div>"
+			strHTML += "   <span class='folder'>"+name+"</span>"
+			strHTML += "   <ul style='display: none;' class='"+treeview_class+name+"_click' > "
+			strHTML += "     <li class='last'><span class='file'></span></li>"
+			strHTML += "   </ul>"
+			strHTML += "</li>"
+		return strHTML;
+	}
+</SCRIPT>
