@@ -17,6 +17,13 @@ Panama::Application.routes.draw do
   end
 
   resources :people do
+    collection do
+      get ":shop_name/show_invite/:login", :to => "people#show_invite"
+      get ":shop_name/show_email_invite", :to => "people#show_email_invite"
+      post ":shop_name/show_invite", :to => "people#agree_invite_user"
+      post ":shop_name/show_email_invite", :to => "people#agree_email_invite_user"
+    end
+
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -24,8 +31,10 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :notifications, :controller => "people/notifications" do
-
+    resources :notifications,:except => :show, :controller => "people/notifications" do
+      collection do
+        get "/:id/enter", :to => "people/notifications#show"
+      end
     end
 
     resources :comments, :controller => "people/comments" do
@@ -34,6 +43,7 @@ Panama::Application.routes.draw do
         post 'product'
         get 'new_activity'
         get 'new_product'
+        get "index_activities"
       end
     end
 
@@ -62,7 +72,7 @@ Panama::Application.routes.draw do
 
   get "pending/index"
 
-  resources :users, :except => :index
+  resources :users
   resources :contents, :except => :index
 
   resources :products, :except => :index
@@ -82,7 +92,6 @@ Panama::Application.routes.draw do
   # shop admins routes
 
   resources :shops, :except => :index do
-
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post
@@ -108,6 +117,20 @@ Panama::Application.routes.draw do
 
       match "pending", :to => "shops/transactions#pending"
 
+      resources :employees, :controller => "shops/employees" do
+        collection do
+          post "invite", :to => "shops/employees#invite"
+          get 'find_by_group', :to => "shops/employees#find_by_group"
+          post "group_join_employee", :to => "shops/employees#group_join_employee"
+          delete "group_remove_employee", :to => "shops/employees#group_remove_employee"
+        end
+      end
+
+      resources :groups, :controller => "shops/groups" do
+        collection do
+        end
+      end
+
       resources :complete, :controller => "shops/complete"
 
       resources :complaint, :controller => "shops/complaint"
@@ -127,7 +150,11 @@ Panama::Application.routes.draw do
 
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
-  resources :search
+  resources :search do
+    collection do
+      get "users"
+    end
+  end
 
 
   # omniauth

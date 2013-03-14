@@ -9,6 +9,7 @@ describe Shop, "商店模型" do
     it{ should have_many(:products) }
     it{ should have_many(:transactions) }
     it{ should have_one(:shops_category) }
+    it{ should have_many(:shop_users) }
 
     it{ should validate_presence_of(:name) }
     it{ should validate_uniqueness_of(:name) }
@@ -68,5 +69,14 @@ describe Shop, "商店模型" do
         @shop.destroy
         fs = "/_shops/#{name}".to_dir
         fs["*"].length.should == 0
+    end
+
+    it "查询这商店某个雇员" do
+        @shop.user_id = anonymous.id
+        @shop.save
+
+        @shop.shop_users.build(:user_id => current_user.id).save
+        @shop.find_employee(current_user.id).should_not be_nil
+        @shop.employees.should eq([current_user])
     end
 end
