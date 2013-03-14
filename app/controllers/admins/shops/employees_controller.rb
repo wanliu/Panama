@@ -87,11 +87,11 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     private
     def notification_url(login)
-        "/shops/#{encrypt(current_shop.name)}/show_invite/#{encrypt(login)}?auth=#{generate_auth_string}"
+        "/people/#{encrypt(current_shop.name)}/show_invite/#{encrypt(login)}?auth=#{generate_auth_string}"
     end
 
     def email_callback_url
-        "/shops/#{encrypt(current_shop.name)}/show_email_invite?auth=#{generate_auth_string}"
+        "/people/#{encrypt(current_shop.name)}/show_email_invite?auth=#{generate_auth_string}"
     end
 
     def email_invite_url(url)

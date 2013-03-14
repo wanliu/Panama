@@ -28,34 +28,6 @@ class ShopsController < ApplicationController
     end
   end
 
-  def show_invite
-    valid_invite_user
-  end
-
-  def agree_invite_user
-    if valid_invite_user
-      @shop.shop_users.create(:user_id => current_user.id)
-      respond_to do | format |
-        format.html{ redirect_to person_path(current_user) }
-      end
-    end
-  end
-
-  def agree_email_invite_user
-    if valid_invite_options(decrypt_options)
-      @shop.shop_users.create(:user_id => current_user.id)
-      respond_to do | format |
-        format.html{ redirect_to person_path(current_user) }
-      end
-    end
-  end
-
-  def show_email_invite
-    if valid_invite_options(decrypt_options)
-      render :action => :show_invite
-    end
-  end
-
   # GET /shops/1
   # GET /shops/1.json
 
@@ -174,48 +146,4 @@ class ShopsController < ApplicationController
   end
 
   private
-  def decrypt_options
-    {
-      :auth => (params[:auth] rescue nil),
-      :name => (Crypto.decrypt(params[:name]) rescue nil),
-      :login => (Crypto.decrypt(params[:login]) rescue nil)
-    }
-  end
-
-  def valid_invite_user
-    options = decrypt_options
-    if valid_invite_options(options)
-      return valid_user(options[:login])
-    end
-  end
-
-  def valid_user(login)
-      @user = User.find_by(:login => login)
-      if @user != current_user
-        @error_messages = "出错了!你不是邀请的对象"
-        render :template => "errors/errors_403", :status => 403
-        return false
-      end
-      return true
-  end
-
-  def valid_invite_options(options)
-    @shop = Shop.find_by(:name => options[:name])
-    now = validate_auth_string(options[:auth])
-
-    @error_messages = if !now
-      "无效的邀请信息"
-    elsif now+3.day < DateTime.now
-      "邀请信息已经过期！"
-    elsif @shop.nil?
-      "商店不存在"
-    end
-
-    if @error_messages
-      render :template => "errors/errors_403", :status => 403
-      return false
-    end
-    return true
-  end
-
 end

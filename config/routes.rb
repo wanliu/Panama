@@ -17,6 +17,13 @@ Panama::Application.routes.draw do
   end
 
   resources :people do
+    collection do
+      get ":shop_name/show_invite/:login", :to => "people#show_invite"
+      get ":shop_name/show_email_invite", :to => "people#show_email_invite"
+      post ":shop_name/show_invite", :to => "people#agree_invite_user"
+      post ":shop_name/show_email_invite", :to => "people#agree_email_invite_user"
+    end
+
     resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -85,12 +92,6 @@ Panama::Application.routes.draw do
   # shop admins routes
 
   resources :shops, :except => :index do
-    collection do
-      get ":name/show_invite/:login", :to => "shops#show_invite"
-      get ":name/show_email_invite", :to => "shops#show_email_invite"
-      post ":name/show_invite", :to => "shops#agree_invite_user"
-      post ":name/show_email_invite", :to => "shops#agree_email_invite_user"
-    end
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post
