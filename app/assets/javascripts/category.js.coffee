@@ -1,4 +1,4 @@
-define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
+define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports) ->
     class Category extends Backbone.View
 
 
@@ -20,10 +20,14 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                 url: "/shops/#{@shop_name}/admins/categories/category_children"
                 success : (data) =>
                     if data != null && data.length > 0 
-                        @$(".category-preview").html("")
-                        @$(".category-preview").append(@template.render({categorys: data}))
+                        @$(".category-preview").html(@template.render({categorys: data}))
                         @$(".category-preview .category_buttons .btn").on('click', _.bind(@root_click, @))
-
+                        $(".slides").slidesjs({
+                            width: 200,
+                            height: 133,
+                            navigation: false,
+                            pagination: false
+                        })
 
     exports.Category = Category
     exports
