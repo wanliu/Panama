@@ -141,6 +141,9 @@ Panama::Application.routes.draw do
 
   match 'vfs/:file_path/expansion', :to => 'vfs#expansion'
   match 'system/vfs/show_file', :to => 'vfs#show_file'
+  match 'vfs/destroy_file', :to => 'vfs#destroy_file'
+  post 'vfs/edit_file', :to => 'vfs#edit_file'
+  post 'vfs/create_file', :to => 'vfs#create_file'
 
   root :to => 'activities#index'
 
