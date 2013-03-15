@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311034002) do
+ActiveRecord::Schema.define(:version => 20130315024156) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(:version => 20130311034002) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -140,6 +140,13 @@ ActiveRecord::Schema.define(:version => 20130311034002) do
     t.string   "ancestry"
   end
 
+  create_table "group_permissions", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "images", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",     :null => false
@@ -167,6 +174,13 @@ ActiveRecord::Schema.define(:version => 20130311034002) do
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
     t.integer  "address_id"
+  end
+
+  create_table "permissions", :force => true do |t|
+    t.string   "resource"
+    t.string   "ability"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "product_items", :force => true do |t|

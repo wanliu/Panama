@@ -3,13 +3,16 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
-    if user.has_group?
+    if user.has_group?(:admin)
       can :manage, :all
-    else
-      can :read, Comment
-      can :create, Comment
-      can :update, Comment
-      can :destroy, Comment
+    elsif user.has_group?(:sale)
+
+      can :read, OrderTransaction
+      can :create, OrderTransaction
+    elsif user.has_group?(:inventory)
+
+      can :read, OrderTransaction
+      can :update, OrderTransaction
     end
 
   end
