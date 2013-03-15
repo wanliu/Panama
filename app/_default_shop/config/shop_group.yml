@@ -1,0 +1,4 @@
+shop_group:
+  - name: "sale"
+  - name: "inventory"
+  - name: "admin"

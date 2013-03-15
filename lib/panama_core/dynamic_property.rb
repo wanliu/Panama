@@ -14,10 +14,32 @@ module PanamaCore
         end
       end
 
-      has_and_belongs_to_many :property_items do
+      has_many :products_property_items do
+        def [](property_item)
+          # property_item = case object_or_name
+          # when PropertyItem
+          #   object_or_name
+          # when String, Symbol
+          #   @association.owner.property_items.find()
+
+          select { |ppi| ppi.property_item == property_item }.first
+        end
+      end
+
+      has_many :property_items,
+               :select => ['property_items.*',
+                           'products_property_items.id as products_property_items_id',
+                           'products_property_items.title'],
+               :autosave => true,
+               :through => :products_property_items do
         def [](name)
           property = @association.owner.properties[name]
           select { |pi| pi.property.id == property.id }
+        end
+
+        def set_value_title(value, title)
+          val = select { |pi| pi.value = value }.first
+          val.title = title
         end
       end
 
@@ -52,6 +74,7 @@ module PanamaCore
       unless category.nil?
         properties.clear if properties.size > 0
         properties_values.clear if properties_values.size > 0
+        property_items.clear if property_items.size > 0
         category.properties.each do |property|
           properties << property
           property_items << property.items

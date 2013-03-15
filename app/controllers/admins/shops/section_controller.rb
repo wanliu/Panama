@@ -14,6 +14,7 @@ class Admins::Shops::SectionController < Admins::BaseController
   section :contents, :design
   section :menu, :design
   section :templates, :design
+  section :employees, :admins
 
   cattr_accessor :ajaxify_pages_names
   @@ajaxify_pages_names = []

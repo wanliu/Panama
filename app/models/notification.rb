@@ -10,6 +10,9 @@ class Notification < ActiveRecord::Base
   belongs_to :user
   belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"
 
+  validates_presence_of :user
+  validates_presence_of :mentionable_user
+
   def self.create!(options)
     notic = new options
     notic.save!

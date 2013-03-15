@@ -8,7 +8,10 @@ class Shop < ActiveRecord::Base
 
   has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
+  has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
+  has_many :shop_users
+
   has_one :shops_category
   belongs_to :user
 
@@ -29,6 +32,16 @@ class Shop < ActiveRecord::Base
   def fs
     require "orm_fs"
     "/_shops/#{name}".to_dir
+  end
+
+  #所有商店的雇员
+  def employees
+    shop_users.map{| su | su.user }
+  end
+
+  #查询这个商店是否有这个雇员
+  def find_employee(userid)
+    ShopUser.find_by(:shop_id => id, :user_id => userid)
   end
 
   class << self
@@ -60,18 +73,24 @@ class Shop < ActiveRecord::Base
   def initial_shop_data
     @category = shops_category.blank? ? create_shops_category(:name => name + "_" + "root") : shops_category
     @category.load_default
+
+    load_group
   end
 
   def delete_shop
     remove_standardization_files
+  end
 
+  def load_group
+    _config = YAML.load(fs['config/shop_group.yml'].read)
+    _config["shop_group"].each do |group|
+      self.groups.build(group).save
+    end
   end
 
   def load_default_contents
-
     _config = YAML.load(fs['config/contents.yml'].read)
-    contents_config = _config['contents']
-    contents_config.each do |content|
+    _config['contents'].each do |content|
       self.contents << Content.create(content)
     end
   end

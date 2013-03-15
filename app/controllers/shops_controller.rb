@@ -1,8 +1,9 @@
+#encoding: utf-8
 require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :only => [:show_invite, :agree_invite, :show_email_invite]
 
   include Apotomo::Rails::ControllerMethods
 
@@ -146,4 +147,6 @@ class ShopsController < ApplicationController
   def extract_temp_options(*args)
     args.last
   end
+
+  private
 end

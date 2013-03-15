@@ -21,8 +21,10 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 		events:
 			"click .handle": "toggleCartBox"
 
+
 		initialize: (@options) ->
 			@hm = new HoverManager(@$("a.handle, #cart_box"))
+
 
 		toggleCartBox: (event) ->
 			$("#cart_box")
@@ -54,8 +56,7 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 			moveTarget
 				.css('position', "fixed")
 				.animate targetPosition, () =>
-					$(@el)
-						.addClass("bounce")
+					$(@el).addClass("bounce")
 					moveTarget.remove()
 					@cartAddAction(urlAction, form)
 
@@ -66,8 +67,13 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 					$(trOjb[2]).html(item.product_item.amount)
 					$(trOjb[3]).html(item.product_item.total)
 				else
-					$("#cart_box table").append(@trHtml(item.product_item))
-					$("#shop_count").html($("#cart_box table tr").size())
+					$(".cart_main").append(@trHtml(item.product_item))
+
+				$("#shop_count").html($(".cart_main tr").size())
+				# totals = $(".cart_bottom tr td").html().split("")[5]
+				# totals = totals + item.product_item.total
+				# alert(totals)
+				# $(".cart_bottom tr td").html("商品总价：" + totals)
 
 		trHtml: (product_item) ->
 			strHmtl = "<tr id= 'product_item#{product_item.id}'>"
