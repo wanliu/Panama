@@ -58,6 +58,9 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   end
 
   def category_children
+    puts "----------------------------"
+    puts params[:category_name]
+    puts "----------------------------"
     @category_children = Category.find_by(:name => params[:category_name])
     if params[:flag] == "true"
       @category_children = @category_children.parent.parent
@@ -66,13 +69,23 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
       @category_children = @category_children.children
       if @category_children.first.id != 3
         result = @category_children.map do | c |
-          category = c.as_json
-          category["category"].merge!(:status => true) if c.children.count > 0
+          category = c.as_json(root: false)
+          category.merge!(:status => true) if c.children.count > 0
           category
         end
       end
     end
-    render :json => result
+    # @category_children = Category.find_by(:name => params[:category_name]).
+    # children.as_json(root: false)
+    # render :json => @category_children
+    render :json => result || []
+  end
+
+  def category_page
+    @categories = Category.find_by(:name => '_products_root').children    
+    respond_to do | format |
+      format.json{ render :json => @categories.as_json(root: false) }
+    end    
   end
 
   private
