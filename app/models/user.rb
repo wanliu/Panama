@@ -57,7 +57,7 @@ class User < ActiveRecord::Base
     create_cart if cart.nil?
   end
 
-  def has_group?
-
+  def has_group?(group)
+    groups.include?(group)
   end
 end
