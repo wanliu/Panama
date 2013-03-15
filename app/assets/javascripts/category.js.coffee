@@ -9,7 +9,7 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
         category_childrens: (data) ->
             @fetch({
                 url: "#{@url}/category_children",
-                data: data, 
+                data: data,
                 type: "get"
             })
 
@@ -19,7 +19,7 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             })
 
     class CategoryChildrenView extends Backbone.View
-        
+
         events: {
             "click" : "children"
         }
@@ -45,9 +45,13 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
 
     class CategoryChildrenViewList extends Backbone.View
-        return_el: $("<button class='btn' data-value='back'>
+        return_el: $("<button class='btn back-parent' data-value='back'>
                         返回<span class='caret left'></span>
                       </button>")
+        events: {
+            "click button.back-parent" : "back"
+        }
+
         className: "btn-group btn-group-vertical"
 
         initialize: (options) ->
@@ -57,11 +61,11 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             @category_list.category_childrens({ category_name: @model.get("name") })
             @$el = $(@el)
             @$el.addClass("children-#{@model.get('id')}")
-            @return_el.bind("click", _.bind(@back, @))
+            @$el.append(@return_el.clone())
+            #@return_el.bind("click", _.bind(@back, @))
 
 
         all_children: (collection) ->
-            @$el.append(@return_el)
             @children_el.append(@$el)
             collection.each (model) =>
                 @add_one_children(model)
