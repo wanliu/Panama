@@ -6,7 +6,7 @@
     } do |f| %>
     <%= f.input :name %>
     <div class="control-group string required">
-        <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> Category</label>
+        <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> 类别</label>
         <div class="controls">
             <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
 
@@ -19,6 +19,26 @@
                         return self.innerHeight; 
                     } 
                 } 
+
+                function scrollVertical(div_id) {
+                    if (document.getElementById('div_id')) {
+                        function scrollVertically(e) {
+                            e = window.event || e;
+                            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+                            document.getElementById('div_id').scrollHeight -= (delta*40); // Multiplied by 40
+                            e.preventDefault();
+                        }
+                        if (document.getElementById('div_id').addEventListener) {
+                            // IE9, Chrome, Safari, Opera
+                            document.getElementById('div_id').addEventListener("mousewheel", scrollVertically, false);
+                            // Firefox
+                            document.getElementById('div_id').addEventListener("DOMMouseScroll", scrollVertically, false);
+                        } else {
+                            // IE 6/7/8
+                            document.getElementById('div_id').attachEvent("onmousewheel", scrollVertically);
+                        }
+                    }
+                }
 
                 var button = ".<%= dom_id(@product, :category) %>";
 
@@ -37,12 +57,15 @@
                         if ((e.wheelDelta > 0 && dialog_top < 0)||(e.wheelDelta < 0 && dialog_bottom > screen_height)) {
                             $("#CategoryModal").css('top', scroll_top);
                         }
+                        
                         e = e || window.event;
                         if (e.preventDefault)
                             e.preventDefault();
                         e.returnValue = false;
 
                     };
+
+                    
 
                     $("#CategoryModal").on('show', function() {
                         dialog_base_top = $(this).position().top;
@@ -51,7 +74,7 @@
                             .find(".modal-body")
                             .load("<%= category_page_shop_admins_products_path%>");
 
-                        window.onmousewheel = document.onmousewheel = scrollDialog;
+                        window.onmousewheel = document.onmousewheel = scrollDialog = scrollVertical("category_list");
 
                     });
 
@@ -124,7 +147,7 @@
     <p>One fine body…</p>
   </div>
   <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary">Save changes</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+    <button class="btn btn-primary">保存</button>
   </div>
 </div>
