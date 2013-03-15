@@ -1,7 +1,7 @@
-<%= active_admin_form_for @template, :url => update_category_template_system_category_path, :method => :put do |f| %>
+<%= active_admin_form_for @content.template, :url => update_category_template_system_category_path, :method => :put do |f| %>
   <% f.inputs "Template" do %>
   	<%= f.input :name, :as => :hidden %>
     <%= f.input :data, :as => :text %>
   <% end %>
-  <%= f.buttons %>
+  <%= f.actions %>
 <% end %>

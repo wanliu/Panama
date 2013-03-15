@@ -110,16 +110,17 @@ ActiveAdmin.register Category do
   member_action :fetch_category_template do
     @category = Category.find(params[:id])
     @content = Content.fetch_for(@category, :additional_properties)
+    @content.template ||= "panama/templates/#{@content.name}.html.erb"
+    @content.save if @content.new_record?
     @content
-    root = '/panama'.to_dir
-    @template = Template.new(@content.name, root)
   end
 
   member_action :update_category_template, :method => :put do
     root = '/panama'.to_dir
     @category = Category.find(params[:id])
+    # TODO: refactory template
     template_name = params[:template][:name]
-    @template = Template.find(template_name, root)
+    @template = Template.find(template_name)
     @template.data = params[:template][:data]
     redirect_to system_category_path
   end

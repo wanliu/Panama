@@ -1,4 +1,4 @@
-require 'vfs'
+require 'orm_fs'
 require 'action_controller/record_identifier'
 
 
@@ -20,13 +20,24 @@ class Content < ActiveRecord::Base
     resources.first
   end
 
+  def template
+    fs = shop.nil? ? '/'.to_dir : shop.fs
+    template = Template.new(super, fs) unless super.nil?
+  end
+
   class << self
     include ActionController::RecordIdentifier
 
-    def fetch_for(resource, name = nil)
+    def fetch_for(resource, name = nil, options = {autocreate: true})
       content_name = dom_id(resource, name)
-      conds = { name: content_name, template: "templates/#{content_name}.html.erb" }
-      where(conds).first_or_create(conds)
+      cond = { name: content_name }
+      @content = if options[:autocreate]
+                   where(cond).first_or_initialize(cond)
+                 else
+                   where(cond).first
+                 end
+      yield @content if block_given?
+      @content
     end
   end
 

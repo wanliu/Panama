@@ -117,7 +117,10 @@ define [
 
 		changeAdditionProperties: (e) ->
 			category_id = $(e.target).val()
-			url = "#{@urlRoot}/additional_properties/#{category_id}"
+			product_id = @$("#product_id").text()
+
+
+			url = "#{@urlRoot}/additional_properties/#{category_id}?product_id=#{product_id}"
 
 			@$(".additional_properties").load(url)
 
