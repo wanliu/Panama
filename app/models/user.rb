@@ -11,12 +11,15 @@ class User < ActiveRecord::Base
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_one :shop
+  has_one :shop_user
 
   has_many :transactions,
            class_name: "OrderTransaction",
            foreign_key: 'buyer_id'
 
   has_many :addresses, class_name: "Address"
+
+  delegate :groups, :jshop, :to => :shop_user
 
   def icon
     photos.icon
@@ -52,5 +55,9 @@ class User < ActiveRecord::Base
     return if new_record?
     create_photo if photo.nil?
     create_cart if cart.nil?
+  end
+
+  def has_group?
+
   end
 end
