@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe ProductsPropertyItem do
+describe Pattern do
   pending "add some examples to (or delete) #{__FILE__}"
 end
