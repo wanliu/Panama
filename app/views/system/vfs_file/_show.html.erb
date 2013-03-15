@@ -1,11 +1,8 @@
- 
-<div style="height: 450px; overflow:auto; scrollbar-3dlight-color:#595959; scrollbar-arrow-color:#ffffff; scrollbar-base-color:#cfcfcf; scrollbar-darkshadow-color:#ffffff; scrollbar-face-color:#cfcfcf; scrollbar-highlight-color:#ffffff; scrollbar-shadow-color:#595959">
-	<%= text %>
-</div>
-
- 
-<%= simple_form_for new_app_file  do |f| %>
-	<% debugger %>
-	<%= f.input :name %>
-	<%= f.input :data %>
+  
+<%= simple_form_for new_app_file, :url => '/vfs/edit_file' do |f| %>
+	<%= f.input :name %> 
+	<%= f.input :data, as: :text %> 
+	<%= hidden_field_tag :file_path, file_path %>
+	<%= hidden_field_tag :file_name, new_app_file.name %>
+	<%= f.button :submit, :save %>
 <% end %>	
