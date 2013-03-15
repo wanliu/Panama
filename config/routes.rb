@@ -98,6 +98,7 @@ Panama::Application.routes.draw do
       resources :categories, :controller => "shops/categories" do
         collection do
           get :category_children
+          get :category_page
         end
       end
 
