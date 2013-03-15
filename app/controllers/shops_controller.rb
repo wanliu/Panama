@@ -2,6 +2,8 @@ require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
+  before_filter :login_required
+
   include Apotomo::Rails::ControllerMethods
 
   has_widgets do |root|
@@ -30,9 +32,12 @@ class ShopsController < ApplicationController
 
   def show
     @shop = Shop.find_by(:name => params[:id])
+    shop_fs = @shop.fs
+    @content = Content.where("name = ? and shop_id = ?", "index", @shop.id).first
 
     respond_to do |format|
-      format.html { render_shop_content @shop, :index, @shop }
+      # format.html { render_shop_content @shop, :index, @shop }
+      format.html { render_content_ex @content }
       format.json { render json: @shop }
     end
   end
@@ -117,7 +122,7 @@ class ShopsController < ApplicationController
   def render_shop_content(shop, name, *opts)
     content = shop.lookup_content(name)
     begin
-      tpl = shop.fs[content.template].read
+      tpl = content.template.data
       generate_template(tpl) do |tpl_name, options|
         prepend_tpl_view_path
         inital = extract_temp_options opts

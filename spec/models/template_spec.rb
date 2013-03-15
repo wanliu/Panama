@@ -8,6 +8,7 @@ describe Template do
   let(:fs) { '/tmp/sandbox'.to_dir }
   let(:bob) { FactoryGirl.create(:user, login: 'bob') }
   let(:pepsi) { FactoryGirl.create(:shop, user: bob) }
+  let(:shop_fs) { fs[pepsi.name] }
 
   describe "创建模板" do
 
@@ -17,23 +18,28 @@ describe Template do
     end
 
     it "通过商店" do
-      Template.setup(pepsi)
-      template = Template.new('index')
+      # 废弃 Template.setup(pepsi)
+
+      template = Template.new('index', shop_fs)
       template.should be_a_kind_of(Template)
     end
   end
 
   describe "属性访问" do
     it "新记录" do
-      Template.setup(pepsi)
+      # shop_fs = fs[pepsi.name]
       template = Template.new()
       template.new_record?.should be_true
     end
 
     describe '存在的属性' do
-      let(:template) { Template.setup(pepsi); Template.new('index') }
+      require 'orm_fs'
+      let(:pepsi) { Shop.first }
+      let(:pepsi_fs) { "/_shops/#{pepsi.name.underscore}".to_dir }
+      let(:template) { Template.new('templates/index.html.erb', pepsi_fs) }
 
       it "旧记录(已经保存了)" do
+
         template.persisted?.should be_true
       end
 
@@ -51,8 +57,7 @@ describe Template do
       end
 
       it "查找功能" do
-        Template.setup(pepsi)
-        temp = Template.find('index')
+        temp = Template.find('templates/index.html.erb', pepsi_fs)
         temp.should == template
       end
     end
