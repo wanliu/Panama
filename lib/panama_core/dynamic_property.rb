@@ -14,24 +14,23 @@ module PanamaCore
         end
       end
 
-      has_many :products_property_items do
-        def [](property_item)
-          # property_item = case object_or_name
-          # when PropertyItem
-          #   object_or_name
-          # when String, Symbol
-          #   @association.owner.property_items.find()
+      # has_many :products_property_items do
+      #   def [](property_item)
+      #     # property_item = case object_or_name
+      #     # when PropertyItem
+      #     #   object_or_name
+      #     # when String, Symbol
+      #     #   @association.owner.property_items.find()
 
-          select { |ppi| ppi.property_item == property_item }.first
-        end
-      end
+      #     select { |ppi| ppi.property_item == property_item }.first
+      #   end
+      # end
 
-      has_many :property_items,
+      has_and_belongs_to_many :property_items,
                :select => ['property_items.*',
                            'products_property_items.id as products_property_items_id',
                            'products_property_items.title'],
-               :autosave => true,
-               :through => :products_property_items do
+               :autosave => true do
         def [](name)
           property = @association.owner.properties[name]
           select { |pi| pi.property.id == property.id }

@@ -7,8 +7,12 @@ class PropertyItem < ActiveRecord::Base
 
 
   after_save do |item|
-    ppid = products_property_items_id if respond_to?(:products_property_items_id)
-    ProductsPropertyItem.update(ppid, :title => title) if respond_to?(:title)
+    ppid = if respond_to?(:products_property_items_id)
+      ActiveRecord::Base.connection.quote(products_property_items_id)
+    end
+    _title = ActiveRecord::Base.connection.quote(title)
+    update_sql = "update products_property_items set title=#{_title} where id=#{ppid}"
+    ActiveRecord::Base.connection.execute(update_sql)
   end
 
   def title
