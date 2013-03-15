@@ -109,7 +109,11 @@
         var item, results, text, _i, _len;
         if (!query) {
           return items.sort(function(a, b) {
-            return a[search_key].toLowerCase() > b[search_key].toLowerCase();
+            if (a[search_key].toLowerCase() > b[search_key].toLowerCase()) {
+              return 1;
+            } else {
+              return -1;
+            }
           });
         }
         results = [];
@@ -191,8 +195,12 @@
         return this.$inputor.trigger("" + name + ".atwho", data);
       };
 
-      Controller.prototype.data = function() {
-        return this.get_opt("data");
+      Controller.prototype.data = function(data) {
+        if (data) {
+          return this.$inputor.data("atwho-data", data);
+        } else {
+          return this.$inputor.data("atwho-data");
+        }
       };
 
       Controller.prototype.callbacks = function(func_name) {
@@ -360,6 +368,7 @@
         search_key = this.get_opt("search_key");
         data = this.callbacks("sorter").call(this, this.query.text, data, search_key);
         data = data.splice(0, this.get_opt('limit'));
+        this.data(data);
         return this.view.render(data);
       };
 
@@ -370,10 +379,7 @@
           limit: this.get_opt("limit")
         };
         _callback = function(data) {
-          this.reg(this.current_flag, {
-            data: data
-          });
-          return this.render_view(this.data());
+          return this.render_view(data);
         };
         _callback = $.proxy(_callback, this);
         return this.callbacks('remote_filter').call(this, params, data, _callback);
@@ -385,7 +391,7 @@
         if (!query) {
           return false;
         }
-        data = this.data();
+        data = this.get_opt("data");
         search_key = this.get_opt("search_key");
         if (typeof data === "string") {
           this.remote_call(data, query);
