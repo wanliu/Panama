@@ -114,8 +114,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def category_page
-    @categorys = Category.where(:name => '_products_root').first
-    render :layout => false         
+    # @categorys = Category.where(:name => '_products_root').first
+     render :layout => false         
   end
 
   private
