@@ -58,9 +58,6 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   end
 
   def category_children
-    puts "----------------------------"
-    puts params[:category_name]
-    puts "----------------------------"
     @category_children = Category.find_by(:name => params[:category_name])
     if params[:flag] == "true"
       @category_children = @category_children.parent.parent
@@ -79,9 +76,6 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
         end
       end
     end
-    # @category_children = Category.find_by(:name => params[:category_name]).
-    # children.as_json(root: false)
-    # render :json => @category_children
     render :json => result || []
   end
 
