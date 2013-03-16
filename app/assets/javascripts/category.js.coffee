@@ -1,5 +1,26 @@
 define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
+    class CategoryBase extends Backbone.View
+
+        initialize: () ->
+            @temp = new CategoryList([], "")
+
+        set_options: (el) ->
+            @el = el
+
+        add_current_category: (@model) ->
+            @temp.add(model)
+
+        remove_current_category: (@model) ->
+            @temp.remove(model)
+
+        remove_current_categorys: () ->
+            @temp.models = []
+
+        current_categories: () ->
+            @temp
+
+    
     class CategoryList extends Backbone.Collection
 
         constructor: (models, shop) ->
@@ -31,17 +52,21 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             _.extend(@, options)
             @$el = $(@el)
             @$el.html(@model.get("name"))
+            if @model.get("status") == 1
+                 @$el.append("<span class='caret right'></span>")
 
         render: () ->
             @$el
 
         children: () ->
-            @model.trigger("parent_hide")
-            category_children_view = new CategoryChildrenViewList({
-                model: @model,
-                shop_name: @shop_name,
-                children_el: @children_el
-            })
+            category_base.add_current_category(@model)
+            if @model.get("status") == 1
+                @model.trigger("parent_hide")
+                category_children_view = new CategoryChildrenViewList({
+                    model: @model,
+                    shop_name: @shop_name,
+                    children_el: @children_el
+                })
 
 
     class CategoryChildrenViewList extends Backbone.View
@@ -61,19 +86,18 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             @category_list.category_childrens({ category_name: @model.get("name") })
             @$el = $(@el)
             @$el.addClass("children-#{@model.get('id')}")
-            @$el.append(@return_el.clone())
-            #@return_el.bind("click", _.bind(@back, @))
+            unless @model.get("ancestry_depth") == 1
+                @$el.append(@return_el.clone())
 
 
         all_children: (collection) ->
             @children_el.append(@$el)
-            collection.each (model) =>
-                @add_one_children(model)
+            if collection.length > 0
+                collection.each (model) =>
+                    @add_one_children(model)
 
 
         add_one_children: (model) ->
-            model.unbind("parent_hide")
-            model.unbind("parent_show")
             model.bind("parent_hide", _.bind(@hide, @))
             model.bind("parent_show", _.bind(@show, @))
 
@@ -94,8 +118,10 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             @$el.show()
 
         back: () ->
-            @hide()
-            @model.trigger("parent_show")
+            unless @model.get("ancestry_depth") == 1
+                @hide()
+                @model.trigger("parent_show")
+                category_base.remove_current_category(@model)
 
 
     class CategoryRootView extends Backbone.View
@@ -109,17 +135,17 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
         initialize: (options) ->
             _.extend(@, options)
-
             @$el = $(@el)
-
             @$el.html(@model.get("name"))
 
         render: () ->
             @$el
 
-
         category_children: () ->
             @children_el.html("")
+            category_base.remove_current_categorys(@model)
+            category_base.add_current_category(@model)
+            
             new CategoryChildrenViewList({
                     model: @model,
                     children_el: @children_el,
@@ -133,16 +159,16 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             _.extend(@, options)
             @category_root_el = @el.find(".category_roots")
             @category_children_el = @el.find(".category_buttons")
-
+            @navigation = @el.find(".navigation")
+            category_base.set_options(@navigation)
+            
             @category_root = new CategoryList([], @shop_name)
             @category_root.bind("reset", @all_root, @)
             @category_root.category_root()
 
-
         all_root: (collection) ->
             collection.each (model) =>
                 @add_one_root(model)
-
 
         add_one_root: (model) ->
             @category_root_view = new CategoryRootView({
@@ -151,7 +177,13 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                 shop_name: @shop_name
             })
             @category_root_el.append(@category_root_view.render())
+        
+        current_categories: () ->
+            category_base.current_categories()
 
+
+    category_base = new CategoryBase()
+        
 
     exports.Category = Category
     exports

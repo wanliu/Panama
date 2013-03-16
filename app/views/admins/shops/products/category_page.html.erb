@@ -15,6 +15,7 @@
     </div>
     <div class="row-fluid">
         <ul class="nav nav-tabs nav-stacked span3">
+          <a href="#" class="navigation"></a>
           <li class="active category_roots">
 
           </li>
@@ -83,9 +84,9 @@
 
 
     require(['jquery', 'category'], function ($, view){
-        new view.Category({
+        var view = new view.Category({
             shop_name: "<%= current_shop.name %>",
-            el: $(".container-fluid"),
+            el: $(".container-fluid")
         });
     });
 
