@@ -15,12 +15,13 @@
     </div>
     <div class="row-fluid">
         <ul class="nav nav-tabs nav-stacked span3">
+          <a href="#" class="navigation"></a>
           <li class="active category_roots">
-            
+
           </li>
           <li><a href="#">Library</a></li>
         </ul>
-        <div class="category_list span7">
+        <div class="category_list span7" style="overflow-x: hidden; overflow-y: auto; border:0; width: 525px; height: 450px;">
             <div class="category_cover ">
                 <div class="category_detail">
                     <p class="lead">奶粉 一般效果预览</p>
@@ -63,7 +64,7 @@
             <div class='shadow'>
             </div>
             <div class="category_buttons">
-                
+
             </div>
         </div>
 
@@ -145,19 +146,10 @@
 
 
     require(['jquery', 'category'], function ($, view){
-        new view.Category({
+        var view = new view.Category({
             shop_name: "<%= current_shop.name %>",
-            el: $(".container-fluid"),
+            el: $(".container-fluid")
         });
     });
-    
-	// require(['jquery', 'hogan', 'category'], function ($, Hogan, view){
-	// 	template = Hogan.compile($("#categorys_template").html());
-	// 	new view.Category({
-	// 		shop_name: "<%#= current_shop.name %>",
-	// 		el: $(".container-fluid"),
-	// 		template: template
-	// 	});
-	// });
 
 </script>

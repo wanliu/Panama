@@ -70,7 +70,11 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
       if @category_children.first.id != 3
         result = @category_children.map do | c |
           category = c.as_json(root: false)
-          category.merge!(:status => true) if c.children.count > 0
+          if c.children.count > 0
+            category.merge!(:status => 1) 
+          else
+            category.merge!(:status => 0)
+          end
           category
         end
       end
