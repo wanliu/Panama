@@ -16,7 +16,7 @@
     <div class="row-fluid">
         <ul class="nav nav-tabs nav-stacked span3">
           <li class="active category_roots">
-            <a href="#" class="navigation">aaaaaaaaaaa</a><br>
+            <a href="#" class="navigation">导航</a><br>
 
           </li>
           <li><a href="#">Library</a></li>
@@ -80,9 +80,9 @@
 	<div class="row-fluid">
 		<ul class="nav nav-tabs nav-stacked span3">
 		  <li class="active">
-		  	<% @categorys.children.each do |c| %>
-		  		<a href="#" class="categorys_root" data-value="<%= c.name %>"><%= c.name %></a>
-		  	<% end %>
+		  	<%# @categorys.children.each do |c| %>
+		  		<!-- <a href="#" class="categorys_root" data-value="<%#= c.name %>"><%#= c.name %></a> -->
+		  	<%# end %>
 		  </li>
 		</ul>
 		<div class="category-preview  span9">
@@ -90,9 +90,9 @@
 	</div>
 
 </div>
-<template id="categorys_template" style="display:none;">
+<!-- <template id="categorys_template" style="display:none;"> -->
 
-	<div id="category_list" class="category_list span9" style="overflow-x: hidden; overflow-y: auto; border:0; width: 525px; height: 450px;">
+	<!-- <div id="category_list" class="category_list span9" style="overflow-x: hidden; overflow-y: auto; border:0; width: 525px; height: 450px;"> -->
 	<!-- <div class="category_list span9">
 		<div class="category_cover ">
 			{{#categorys}}
@@ -117,9 +117,9 @@
 			{{/categorys}}
 		</div>
 	</div>
-	<!-- <div class='shadow'></div> -->
+	<div class='shadow'></div> -->
 
-	<div class="sub_category span3">
+	<!-- <div class="sub_category span3">
 		<div class="category_buttons btn-group btn-group-vertical">
 			<button class='btn' data-value="back">返回<span class="caret left"></span></button>
 		    {{#categorys}}
@@ -132,7 +132,7 @@
 		</div>
 	</div> -->
 
-</template>
+<!-- </template> -->
 
 <script type="text/javascript">
     require(['jquery', 'jquery.slides'], function($){
