@@ -35,7 +35,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
             this.fetch(
                 url: "#{@url}/destroy",
                 type: "delete"
-                data: {user_id: @get('user_id')},
+                data: {user_id: @get("id")},
                 success: callback
             )
 
@@ -95,13 +95,14 @@ define(["jquery", "user_typeahead", "jquery-ui"
             @$el
 
         remove: () ->
-            @model.group_remove_employee({
-                    shop_user_id: @model.id,
-                    shop_group_id: @group_id
-                }, (data, xhr) =>
-                    @remove_el()
+            if confirm("是否确认删除#{@model.get('login')}用户权限?")
+                @model.group_remove_employee({
+                        shop_user_id: @model.id,
+                        shop_group_id: @group_id
+                    }, (data, xhr) =>
+                        @remove_el()
 
-            )
+                )
         remove_el: () ->
             @el.remove()
             @trigger("remove_employee", @model.id)
@@ -255,7 +256,10 @@ define(["jquery", "user_typeahead", "jquery-ui"
         }
         initialize: (options) ->
             _.extend(@, options)
-            @model = new Employee({user_id: parseInt(@el.attr("data-value"))}, @shop)
+            @model = new Employee({
+                id: parseInt(@el.attr("data-value-id"))
+                login: @el.attr("data-value-login")
+            }, @shop)
             @bind_drag_employee()
 
 
@@ -269,11 +273,11 @@ define(["jquery", "user_typeahead", "jquery-ui"
             })
 
         remove: () ->
-            @model.destroy((data) =>
-                @el.remove()
-                @trigger("remove_group_employee", @model.get("user_id"))
-                @trigger("inspect_employee")
-            )
+            if confirm("是否确认解雇#{@model.get('login')}用户？")
+                @model.destroy (data) =>
+                    @el.remove()
+                    @trigger("remove_group_employee", @model.get("user_id"))
+                    @trigger("inspect_employee")
 
     class EmployeeGroup
         notice_template: $("<div class='alert alert-warning notice'>暂无雇员</div>")

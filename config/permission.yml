@@ -1,8 +1,26 @@
 permission:
-  - Comment: ["create", "update", "destroy"]
-  - Shop: ["update", "destroy"]
-  - Product: ["create", "update", "destroy"]
-  - OrderTransaction: ["create", "update"]
-  - Category: ["create", "update", "destroy"]
-  - ShopUser: ["create", "destroy"]
-  - ShopGroup: ["create", "destroy"]
+  Comment:
+    - create
+    - update
+    - destroy
+  Shop:
+    - update
+    - destroy
+  Product:
+    - create
+    - update
+    - destroy
+  OrderTransaction:
+    - create
+    - update
+    - read
+  Category:
+    - create
+    - update
+    - destroy
+  ShopUser:
+    - create
+    - destroy
+  ShopGroup:
+    - create
+    - destroy

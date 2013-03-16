@@ -1,3 +1,5 @@
+#encoding: utf-8
+# describe: 商店雇员
 class ShopUser < ActiveRecord::Base
   attr_accessible :user_id
 
@@ -6,11 +8,20 @@ class ShopUser < ActiveRecord::Base
 
   has_many :shop_user_groups, :dependent => :destroy
 
+  validate :valid_user_join_multi_shop?
+
   def groups
-  	shop_user_groups.map{|g| g.shop_group }
+  	shop_user_groups.includes(:shop_group).map{|g| g.shop_group }
   end
 
   def jshop
   	shop
+  end
+
+  def valid_user_join_multi_shop?
+    if ShopUser.where("user_id=? and id<>?",
+      user_id, id).count
+      errors.add(:user_id, "用户已经加入其它商店!")
+    end
   end
 end

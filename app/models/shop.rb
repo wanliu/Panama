@@ -40,7 +40,7 @@ class Shop < ActiveRecord::Base
 
   #查询这个商店是否有这个雇员
   def find_employee(userid)
-    ShopUser.find_by(:shop_id => id, :user_id => userid)
+    shop_users.find_by(:user_id => userid)
   end
 
   class << self
@@ -74,6 +74,8 @@ class Shop < ActiveRecord::Base
     @category.load_default
 
     load_group
+    load_group_permission
+    load_admin_permission
   end
 
   def delete_shop
@@ -83,8 +85,23 @@ class Shop < ActiveRecord::Base
   def load_group
     _config = YAML.load(fs['config/shop_group.yml'].read)
     _config["shop_group"].each do |group|
-      self.groups.build(group).save
+      if self.groups.find_by(group).nil?
+        self.groups.create(group)
+      end
     end
+  end
+
+  def load_group_permission
+    _config = YAML.load(fs['config/group_permission.yml'].read)
+    _config["group_permission"].each do |group_name, permissions|
+      group = self.groups.find_by(name: group_name)
+      group.give_permission(permissions) unless group.nil?
+    end
+  end
+
+  def load_admin_permission
+    group = self.groups.find_by(name: "admin")
+    group.give_all_permission unless group.nil?
   end
 
   def load_default_contents

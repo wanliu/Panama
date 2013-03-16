@@ -2,11 +2,20 @@
 
 namespace "permission" do
   desc "load define permission"
-  task :load => :environment do |t, args|
+  task :load => :environment do
     permissions = YAML::load_file("#{Rails.root}/config/permission.yml")["permission"]
-    permissions.each do | permission |
-        key = permission.keys.first
-        Permission.define(key, permission[key])
+    permissions.each do | key, vals |
+        Permission.define(key, vals)
     end
   end
 end
+
+# namespace "group:permission" do
+#     desc "load group permission"
+#     task :load => :environment do
+#         group_permissions = YAML::load_file("#{Rails.root}/config/permission.yml")["group_permission"]
+#         group_permissions.each do | group, permissions |
+#             ShopGroup.give_permission(group, permissions)
+#         end
+#     end
+# end

@@ -47,7 +47,6 @@ class User < ActiveRecord::Base
   after_initialize do
     if cart.nil?
       build_cart
-      # save
     end
   end
 
@@ -59,5 +58,9 @@ class User < ActiveRecord::Base
 
   def has_group?(group)
     groups.include?(group)
+  end
+
+  def permissions
+    groups.map{| g | g.permissions}
   end
 end
