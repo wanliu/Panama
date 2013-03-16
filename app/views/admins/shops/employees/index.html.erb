@@ -18,7 +18,7 @@
         <div class='content'>
             <% if @employees.count > 0 %>
                 <% @employees.each do |e| %>
-                    <div class='alert alert-info employee' data-value="<%=e.id %>" style=''>
+                    <div class='alert alert-info employee' data-value-id="<%=e.id %>" data-value-login="<%=e.login %>">
                         <img class='img-rounded avatar' src="<%=e.photos.icon %>" />
                         <%=e.login %>
                         <a href='javascript:void(0)' class='remove'>移除</a>

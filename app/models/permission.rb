@@ -6,6 +6,8 @@ class Permission < ActiveRecord::Base
   validates :ability, :presence => true
   validates :resource, :presence => true
 
+  has_many :group_permissions, dependent: :destroy
+
   def self.define(resource, abilities)
     unless abilities.is_a?(Array)
         abilities = [abilities]
