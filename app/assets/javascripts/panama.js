@@ -4,8 +4,7 @@ define(function(require, exports, module){
     var $ = require('jquery-ui');
     var h5bp = require('h5bp');
     var chosen = require('lib/chosen.ex');
-    var pm = require("lib/postmessage");
-    var ajax_auth = require('wanliu/ajax_auth_client');
+    var ajax_auth = require('ajax_auth_client');
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){

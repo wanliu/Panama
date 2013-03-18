@@ -122,6 +122,8 @@ Panama::Application.routes.draw do
 
       resources :groups, :controller => "shops/groups" do
         collection do
+          get "permissions/:id", :to => "shops/groups#permissions"
+          post "check_permissions/:id", :to => "shops/groups#check_permissions"
         end
       end
 

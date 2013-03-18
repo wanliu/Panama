@@ -1,47 +1,88 @@
+
+.group-user-template{
+    display: none;
+}
+
+.permission-group-template{
+    display: none;
+}
+
+.permission-group{
+
+    .resource-panel{
+        display: inline-block;
+        margin: 10px;
+
+        .abilities{
+
+            .ability{
+                display: inline-block;
+            }
+        }
+    }
+}
+
 .group-user{
-	float:left;
+    display: inline-block;
 
-	img.avatar{
-		width:20px;
-		height:20px;
-	}
+    img.avatar{
+        width: 20px;
+        height: 20px;
+    }
 
-	.remove-shop-user-group{
-		margin-left: 20px;
-	}
+    .remove-shop-user-group{
+        margin-left: 20px;
+    }
 }
 
 .user-groups{
 
-	clear: both;
+    clear: both;
+    .user-group-header{
+        li{
+            position: relative;
 
-	.user-group-content{
-		.tab-pane{
-			height: 400px;
+            .close-group{
+                display:none;
+            }
+        }
 
-			.group-user{
-				margin-left: 15px;
-			}
-		}
-	}
+        li.active{
+            .close-group{
+                position: absolute;
+                top: -8px;
+                right: -3px;
+                display: block;
+            }
+        }
+    }
+
+    .user-group-content{
+        .tab-pane{
+
+            .group-user{
+                margin-left: 15px;
+            }
+        }
+    }
 }
 
 .employee-groups{
 
-	.employees{
+    .employees{
 
-		.employee{
-			float:left;
-			margin-right: 10px;
+        .employee{
+            float:left;
+            margin-right: 10px;
 
-			img.avatar{
-				width:20px;
-				height:20px;
-			}
+            img.avatar{
+                width:20px;
+                height:20px;
+            }
 
-			.remove{
-				margin-left: 30px;
-			}
-		}
-	}
+            .remove{
+                margin-left: 30px;
+            }
+        }
+    }
 }

@@ -6,7 +6,7 @@ class ShopGroup < ActiveRecord::Base
   attr_accessible :name
 
   belongs_to :shop
-  has_many :shop_user_groups
+  has_many :shop_user_groups, :dependent => :destroy
   has_many :group_permissions, :dependent => :destroy, :foreign_key => "group_id"
 
   validates :name, :presence => true
@@ -42,6 +42,18 @@ class ShopGroup < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def add_permission(permission_ids)
+    Permission.where(:id => permission_ids).each do |p|
+      group_permissions.create(permission_id: p.id)
+    end
+  end
+
+  def remove_permission(group_permission_ids)
+    pids = group_permission_ids
+    pids = [group_permission_ids] unless group_permission_ids.is_a?(Array)
+    group_permissions.where(:permission_id => pids).destroy_all
   end
 
   def give_all_permission
