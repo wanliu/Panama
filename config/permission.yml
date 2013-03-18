@@ -24,3 +24,14 @@ permission:
   ShopGroup:
     - create
     - destroy
+
+group_permission:
+  sale:
+    OrderTransaction:
+      - create
+      - read
+
+  inventory:
+    OrderTransaction:
+      - update
+      - read
