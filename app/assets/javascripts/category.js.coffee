@@ -1,4 +1,5 @@
-define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
+define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"], 
+($, Backbone, exports, typeahead) ->
 
     class CategoryBase extends Backbone.View
 
@@ -58,6 +59,7 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                 url: "#{@url}/category_page"
             })
 
+
     class CategoryChildrenView extends Backbone.View
 
         events: {
@@ -71,7 +73,7 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             _.extend(@, options)
             @$el = $(@el)
             @$el.html(@model.get("name"))
-            if @model.get("status") == 1
+            if @model.get("flag") == 1
                  @$el.append("<span class='caret right'></span>")
 
         render: () ->
@@ -79,13 +81,34 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
 
         children: () ->
             category_base.add_current_category(@model)
-            if @model.get("status") == 1
+            if @model.get("flag") == 1
                 @model.trigger("parent_hide")
                 category_children_view = new CategoryChildrenViewList({
                     model: @model,
                     shop_name: @shop_name,
                     children_el: @children_el
                 })
+
+    class CategoryChildrenSearch extends Backbone.View
+        # events: {
+        #     "click #search" : "search"
+        # }
+
+        initialize : (options) ->
+            _.extend(@, options)
+            @$el = $(@search_el)
+            debugger
+            @category_list = new CategoryList([], @shop_name)
+            @(".search-query").typeahead({
+                name: "产品类型",
+                prefetch: '/shops/#{shop_name}/admins/categories/category_search'
+            })
+            # @category_list.bind("reset", @all_children, @)
+            # @category_list.category_search({ category_name: @$(".search-query").val() })
+
+
+        # search: () ->
+        #     alert(@$(".search-query").val())
 
 
     class CategoryChildrenViewList extends Backbone.View
@@ -174,10 +197,17 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             _.extend(@, options)
             @category_root_el = @el.find(".category_roots")
             @category_children_el = @el.find(".category_buttons")
+            @search_el = @el.find(".search")
             navigation = @el.find(".navigation")
             @category_root = new CategoryList([], @shop_name)
             @category_root.bind("reset", @all_root, @)
             @category_root.category_root()
+
+            @category_picture_view = new CategoryChildrenSearch({
+                model: @model,
+                search_el: @search_el,
+                shop_name: @shop_name
+            })
 
         all_root: (collection) ->
             collection.each (model) =>
@@ -190,6 +220,7 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                 shop_name: @shop_name
             })
             @category_root_el.append(@category_root_view.render())
+
 
 
         # root_click : (event) ->
