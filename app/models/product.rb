@@ -14,7 +14,8 @@ class Product < ActiveRecord::Base
                   :shop_id,
                   :shop,
                   :default_attachment_id,
-                  :attachment_ids
+                  :attachment_ids,
+                  :prices
 
   attr_accessor :uploader_secure_token
 
@@ -26,6 +27,31 @@ class Product < ActiveRecord::Base
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
   has_many :sub_products, :dependent => :destroy
+
+  # prices[:colour => "red", :sizes => "S"]
+  # =>
+  has_many :prices, :class_name => "ProductPrice" do
+    def [](query_hash)
+      owner = @association.owner
+      pis = query_hash.map do |k, v|
+        owner.property_items[k].select { |_pi| _pi.value == v }.first
+      end
+
+      select { |price| price.items == pis }.first
+
+    end
+
+    def create(attributes)
+      owner = @association.owner
+      price = attributes.delete(:price)
+      pis = attributes.map do |k, v|
+        owner.property_items[k].select { |_pi| _pi.value == v }.first
+      end
+      super(:property_items => pis, :price => price )
+    end
+  end
+
+  accepts_nested_attributes_for :prices
 
   has_many :styles, :dependent => :destroy, :class_name => "StyleGroup" do
     def [](style_name)

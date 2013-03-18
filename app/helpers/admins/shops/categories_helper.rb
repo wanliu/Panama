@@ -8,7 +8,7 @@ module Admins::Shops::CategoriesHelper
     {
       :indent => indent,
       :class => "indent_#{indent}"
-    }.map     
+    }.map
   end
 
   def tr_category_attributes(category)
@@ -21,22 +21,22 @@ module Admins::Shops::CategoriesHelper
 
   def category_util_field(category)
     if category.new_record?
-      content_tag :div, :class => 'btn-group' do 
+      content_tag :div, :class => 'btn-group' do
         link_to(icon(:ok), "#/#{category.id}/", :class => 'btn utils save') +
-        link_to(icon(:remove), "#", 
-          :'data-delete-url' => "#{category.id}", 
+        link_to(icon(:remove), "#",
+          :'data-delete-url' => "#{category.id}",
           :class             => 'btn utils cancel')
       end
     else
-      content_tag :div, :class => 'btn-group' do 
+      content_tag :div, :class => 'btn-group' do
 #        link_to(icon(:edit), "#/#{category.id}/edit", :class => 'btn utils edit') +
         link_to(icon(:ok), "#/#{category.id}/", :class => 'btn utils update') +
-        link_to(icon(:remove), "#", 
-          :'data-delete-url' => admins_categories(category), 
+        link_to(icon(:remove), "#",
+          :'data-delete-url' => admins_categories(category),
           :class             => 'btn utils delete')
       end
     end +
-    register_javascript(:changed_highlight_save) do 
+    register_javascript(:changed_highlight_save) do
       javascript_tag <<-JAVASCRIPT
         require(['jquery'], function($){
           $("#table tr td :input").on('keydown', function(){
@@ -61,7 +61,7 @@ module Admins::Shops::CategoriesHelper
   def category_name_field(category)
     disabled = category.new_record? ? " disabled" : ""
     content_tag(:div, :class => 'btn-group') do
-      collapse_button(true, :class => "category") + 
+      collapse_button(true, :class => "category") +
       text_field_tag(:name, category.name)
     end +
     content_tag(:div, :class => 'btn-group') do
@@ -69,16 +69,25 @@ module Admins::Shops::CategoriesHelper
     end +
     content_tag(:div, :class => 'btn-group') do
       link_to(icon(:picture), "#", :class =>'btn')
-    end    
+    end
   end
 
   def category_mini_field(category)
     content_tag(:div, :class => 'btn-group') do
-      collapse_button(true, :class => "category") + 
+      collapse_button(true, :class => "category") +
       label_tag(category.name, nil, :class => "category")
     end +
     content_tag(:div, :class => ["btn-group", "pull-right"]) do
       link_to(icon(:list), "#", :class => 'btn list_category_products btn-mini')
     end
+  end
+
+  def property_palette(form, field)
+    form.input field,
+               :as => :check_boxes,
+               :collection => @product.property_items[field],
+               :value_method => :value,
+               :checked => @product.property_items[field].map { |item| item.value }
+
   end
 end

@@ -48,7 +48,7 @@ define ['jquery', 'backbone', 'lib/table_creater', 'exports'], ($, Backbone, Tbl
 
 			if not @drawed
 				@drawed = true
-				@table = new TblCreater.TableCreater(@loadEl, @schema)
+				@table = new TblCreater.TableCreater(@loadEl, schema: @schema)
 			else
 				@table.checkRow()
 

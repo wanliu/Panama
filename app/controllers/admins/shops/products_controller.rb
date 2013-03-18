@@ -84,13 +84,19 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def update
     @product = Product.find(params[:id])
+    prices_attributes = params[:product].delete(:prices)
     @product.update_attributes(params[:product].merge(dispose_options))
     @shops_category_root = current_shop.shops_category
     @category = @product.category
     @content = additional_properties_content(@category)
-
     if @product.valid?
-      @product.update_style_subs(params)
+      prices_attributes.each do |k, v|
+        price = v.delete(:price)
+        pprice = @products.prices[v]
+        pprice.price = price
+      end
+
+      # @product.update_style_subs(params)
       render :action => :show
     else
       render :action => :edit

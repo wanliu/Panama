@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315023332) do
+ActiveRecord::Schema.define(:version => 20130315100602) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -211,6 +211,18 @@ ActiveRecord::Schema.define(:version => 20130315023332) do
     t.datetime "updated_at"
     t.integer  "cart_id"
     t.integer  "sub_product_id"
+  end
+
+  create_table "product_prices", :force => true do |t|
+    t.integer  "product_id"
+    t.decimal  "price",      :precision => 10, :scale => 2
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "product_prices_property_items", :id => false, :force => true do |t|
+    t.integer "product_price_id"
+    t.integer "property_item_id"
   end
 
   create_table "product_property_values", :force => true do |t|
