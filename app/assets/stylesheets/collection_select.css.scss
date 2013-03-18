@@ -1,0 +1,14 @@
+.control-group.check_boxes {
+	.checkbox {
+		display: inline-block;
+		padding-left: 0px;
+		padding-right: 5px;
+		padding-top: 5px;
+		margin-bottom: 0;
+		vertical-align: middle;
+		input[type="checkbox"] {
+			margin-left: 0px;
+			margin-right: 5px;
+		}
+	}
+}
