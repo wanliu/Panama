@@ -1,4 +1,4 @@
-define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
+define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports) ->
 
     class CategoryBase extends Backbone.View
 
@@ -87,6 +87,10 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                     children_el: @children_el
                 })
 
+                new CategoryListView({
+                    model: @model,
+                    shop_name: @shop_name
+                })
 
     class CategoryChildrenViewList extends Backbone.View
         return_el: $("<button class='btn back-parent' data-value='back'>
@@ -166,6 +170,12 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
                     shop_name: @shop_name
                 })
 
+            new CategoryListView({
+                    model: @model,
+                    shop_name: @shop_name
+            })
+
+
     navigation = ""
 
     class Category extends Backbone.View
@@ -192,57 +202,80 @@ define ["jquery", "backbone", "exports"], ($, Backbone, exports) ->
             @category_root_el.append(@category_root_view.render())
 
 
-        # root_click : (event) ->
-        #     @target_button = $(event.target)
-        #     children_name = $(event.currentTarget).attr("data-value")
-        #     flag = false
-        #     if "back" is children_name
-        #         children_name = @$(".category-preview .category_buttons .btn").last().attr("data-value")
-        #         flag = true
-        #     $.ajax
-        #         type: "get"
-        #         dataType: "json"
-        #         data: {"category_name": children_name, "flag": flag}
-        #         url: "/shops/#{@shop_name}/admins/categories/category_children"
-        #         success : (data) =>
-        #             if data != null && data.length > 0 
-        #                 @$(".category-preview").html(@template.render({categorys: data}))
-        #                 @$(".category-preview .category_buttons .btn").on('click', _.bind(@root_click, @))
-                        
-        #                 $(".slides").slidesjs({
-        #                     width: 200,
-        #                     height: 133,
-        #                     navigation: false,
-        #                     pagination: false
-        #                 })
-        #             else if data == null
-        #                 init_top = $(".category_detail:first").offset().top
-        #                 scroll_offset = $("#"+@target_button.attr("id")).offset();
-        #                 $("#category_list").animate({
-        #                    scrollTop : scroll_offset.top-init_top
-        #                 },100);
-        # root_click : (event) ->
-        #     children_name = $(event.currentTarget).attr("data-value")
-        #     flag = false
-        #     if "back" is children_name
-        #         children_name = @$(".category-preview .category_buttons .btn").last().attr("data-value")
-        #         flag = true
-        #     $.ajax
-        #         type: "get"
-        #         dataType: "json"
-        #         data: {"category_name": children_name, "flag": flag}
-        #         url: "/shops/#{@shop_name}/admins/categories/category_children"
-        #         success : (data) =>
-        #             if data != null && data.length > 0 
-        #                 @$(".category-preview").html(@template.render({categorys: data}))
-        #                 @$(".category-preview .category_buttons .btn").on('click', _.bind(@root_click, @))
-        #                 $(".slides").slidesjs({
-        #                     width: 200,
-        #                     height: 133,
-        #                     navigation: false,
-        #                     pagination: false
-        #                 })
+    class CategoryDetailView extends Backbone.View
+        el: $(".category_cover")
+
+        detail_template: _.template($('#list-template').html())
+
+        initialize: (options) ->
+            @listenTo(@model, 'change', @render)
+            @listenTo(@model, 'destroy', @remove)
+
+        render: () ->
+            @$el = $(@el)
+            @$el.append(@detail_template(@model.toJSON()))
+            @$(".slides").slidesjs({
+                width: 200,
+                height: 133,
+                navigation: false,
+                pagination: false
+            });
+            @
+
+
+    class CategoryListView extends Backbone.View
+        el: $(".category_list")           
+
+        initialize: (options) ->
+            _.extend(@, options)
+            @CategoryDetails = new CategoryList([], @shop_name)
+            @CategoryDetails.bind("reset", @all_children, @)
+            @CategoryDetails.category_childrens({ category_name: @model.get("name") })
+            @$el = $(@el)
+
+        all_children: (collection) ->
+            if collection.length > 0
+                $(".category_cover").html("")
+                collection.each (model) =>
+                    @add_one_children(model)
+
+        add_one_children: (model) ->
+            @category_detail_view = new CategoryDetailView({
+                    model: model,
+                    shop_name: @shop_name
+                })
+            @$el.append(@category_detail_view.render(model))
+
+    # root_click : (event) ->
+    #     @target_button = $(event.target)
+    #     children_name = $(event.currentTarget).attr("data-value")
+    #     flag = false
+    #     if "back" is children_name
+    #         children_name = @$(".category-preview .category_buttons .btn").last().attr("data-value")
+    #         flag = true
+    #     $.ajax
+    #         type: "get"
+    #         dataType: "json"
+    #         data: {"category_name": children_name, "flag": flag}
+    #         url: "/shops/#{@shop_name}/admins/categories/category_children"
+    #         success : (data) =>
+    #             if data != null && data.length > 0 
+    #                 @$(".category-preview").html(@template.render({categorys: data}))
+    #                 @$(".category-preview .category_buttons .btn").on('click', _.bind(@root_click, @))
+                    
+    #                 $(".slides").slidesjs({
+    #                     width: 200,
+    #                     height: 133,
+    #                     navigation: false,
+    #                     pagination: false
+    #                 })
+    #             else if data == null
+    #                 init_top = $(".category_detail:first").offset().top
+    #                 scroll_offset = $("#"+@target_button.attr("id")).offset();
+    #                 $("#category_list").animate({
+    #                    scrollTop : scroll_offset.top-init_top
+    #                 },100);
+
     category_base = new CategoryBase()
-        
     exports.Category = Category
     exports
