@@ -19,6 +19,16 @@ class ApplicationController < ActionController::Base
     redirect_to root_url, :alert => exception.message
   end
 
+  def draw_errors_message(ist_model)
+    messages = []
+    ist_model.errors.messages.each do |attr, ms|
+      ms.each do |m|
+        messages << "#{attr}: #{m}"
+      end
+    end
+    messages
+  end
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end

@@ -3,7 +3,6 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     def index
         @employees = current_shop.employees
-        @groups = current_shop.groups
         @resources = Permission.group(:resource)
     end
 
