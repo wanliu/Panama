@@ -8,11 +8,12 @@ class UserSessionsController < ApplicationController
     omniauth = env['omniauth.auth']
 
     logger.debug "+++ #{omniauth}"
-    user = User.where(:uid => omniauth['uid']).first
+    user = User.find_by(:uid => omniauth['uid'])
     if not user
       # New user registration
       user = User.new(:uid => omniauth['uid'])
       user.login = omniauth["info"]["login"]
+      user.email = omniauth["info"]["email"]
       user.save
 
     end

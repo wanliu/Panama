@@ -2,7 +2,7 @@ class Mongodb::FileEntity
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Tree
-  include Mongoid::Tree::Traversal  
+  include Mongoid::Tree::Traversal
 
   field :name, type: String
   field :stat, type: String
@@ -18,18 +18,18 @@ class Mongodb::FileEntity
   after_rearrange :rebuild_path
 
   before_destroy :delete_descendants
-  
+
   def create_dir(name)
     if name.blank?
       raise 'must specify a name'
     end
 
-    begin 
+    begin
       dir = children.find_by(name: name, stat: 'directory')
     rescue Mongoid::Errors::DocumentNotFound
       dir = children.create(name: name, stat: 'directory')
     ensure
-      dir 
+      dir
     end
   end
 
@@ -77,10 +77,10 @@ class Mongodb::FileEntity
 
   def rebuild_path
     self.path = self.ancestors_and_self.collect(&:name).compact.join('/') unless name.blank?
-  end  
+  end
 end
 
-FileEntity.root || begin 
-  root = FileEntity.new(:stat => :directory)
-  root.save :validate => false
-end
+# FileEntity.root || begin
+#   root = FileEntity.new(:stat => :directory)
+#   root.save :validate => false
+# end

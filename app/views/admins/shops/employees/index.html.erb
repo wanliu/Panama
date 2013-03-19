@@ -1,0 +1,55 @@
+<div class='employee-groups'>
+    <div class='invite-employee'>
+        <form class="form-search-user">
+            <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>" />
+            <div class="alert alert-message" style='display:none'>
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <p class='content'></p>
+            </div>
+            <input type="text" name='login' />
+            <button type="submit" class="btn">邀请</button>
+        </form>
+    </div>
+    <div class='employees'>
+        <h4>成员</h4>
+        <div class='content'>
+            <% if @employees.count > 0 %>
+                <% @employees.each do |e| %>
+                    <div class='alert alert-info employee' data-value="<%=e.id %>" style=''>
+                        <img class='img-rounded avatar' src="<%=e.photos.icon %>" />
+                        <%=e.login %>
+                        <a href='javascript:void(0)' class='remove'>移除</a>
+                    </div>
+                <% end %>
+            <% else %>
+                <div class='alert alert-warning'>暂无雇员</div>
+            <% end %>
+        </div>
+    </div>
+    <div class="user-groups">
+        <h4>权限组</h4>
+        <ul class="nav nav-tabs user-group-header">
+        </ul>
+        <div class="tab-content user-group-content">
+        </div>
+    </div>
+</div>
+
+<template class='group-user-template' style='display:none'>
+    <div class='alert alert-info group-user'>
+        <img class='img-rounded avatar' />
+        {{login}}
+        <a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
+    </div>
+</template>
+
+<script type='text/javascript' >
+    require(["admins/shops/employee_group", "jquery", "hogan"], function(EmployeeGroup, $, hogan){
+            template = Hogan.compile($(".group-user-template").html())
+            new EmployeeGroup({
+                el: $(".employee-groups"),
+                shop: "<%=current_shop.name %>",
+                group_user_template: template
+            })
+        })
+</script>
