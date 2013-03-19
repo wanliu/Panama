@@ -93,7 +93,7 @@ class Shop < ActiveRecord::Base
   end
 
   def load_group_permission
-    _config = YAML.load("#{Rails.root}config/group_permission.yml")
+    _config = YAML.load("#{Rails.root}config/permission.yml")
     _config["group_permission"].each do |group_name, permissions|
       group = self.groups.find_by(name: group_name)
       group.give_permission(permissions) unless group.nil?

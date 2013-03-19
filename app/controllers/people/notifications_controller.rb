@@ -1,6 +1,7 @@
 class People::NotificationsController < People::BaseController
 
     def index
+        authorize! :index, Notification
         @notifications = Notification
         unless params[:all] == "1"
             @notifications = Notification.unreads
@@ -14,7 +15,7 @@ class People::NotificationsController < People::BaseController
 
     def show
         @notification = Notification.find_by(:user_id => @people.id, :id => params[:id])
-
+        authorize! :read, @notification
         respond_to do | format |
             unless @notification.nil?
                 @notification.update_attribute(:read, true)
