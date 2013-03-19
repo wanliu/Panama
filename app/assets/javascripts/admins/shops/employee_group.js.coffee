@@ -41,7 +41,6 @@ define(["jquery", "user_typeahead", "jquery-ui"
                 success: callback
             })
 
-
     #组列表集合
     class GrupList extends Backbone.Collection
         model: Group
@@ -145,6 +144,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
             @$el = $(@el)
             @$el.attr("id", "group-#{@group.get('id')}")
             @bind_droppable()
+
             @employee_list = new EmployeeList([], @shop)
             @employee_list.bind("reset", @all_employee, @)
             @employee_list.bind("add", @add_employee, @)
@@ -215,6 +215,12 @@ define(["jquery", "user_typeahead", "jquery-ui"
         remove: () ->
             @$el.remove()
 
+        render_group: () ->
+            li = $("<li data-value-id=#{@group.id} />")
+            li.html("<span class='close-group icon-remove'></span>")
+            li.append($("<a href='#group-#{@group.id}' data-toggle='tab'>#{@group.get('name')}</a>"))
+            li
+
     #组视图列表
     class GroupViewList extends Backbone.View
         events: {
@@ -227,14 +233,13 @@ define(["jquery", "user_typeahead", "jquery-ui"
             @$group_header = @$('ul.user-group-header')
             @$group_content = @$('.user-group-content')
             @groups.bind("add", @add_group, @)
+            @groups.bind("reset", @all_group, @)
+            @groups.fetch()
 
-            @find_all()
 
-        find_all: () ->
-            $("li", @$group_header).each (i, li) =>
-                _id = $(li).attr("data-value-id")
-                _name = $(li).attr("data-value-name")
-                @groups.add({id: _id, name: _name})
+        all_group: (collection) ->
+            collection.each (model) =>
+                @add_group(model)
 
             @show_first()
 
@@ -246,18 +251,12 @@ define(["jquery", "user_typeahead", "jquery-ui"
                 employee_template: @group_user_template,
                 shop: @shop
             })
+            @$group_header.append(group_employee_view.render_group())
             @$group_content.append(group_employee_view.render())
 
         remove_group_user: (user_id) ->
             @groups.each (model) =>
                 model.trigger("group_remove_employee", user_id)
-
-        add_group_view: (data) ->
-            li = $("<li data-value-id=#{data.id} data-value-name=#{data.name}>")
-            li.html("<span class='close-group icon-remove'></span>")
-            li.append($("<a href='#group-#{data.id}' data-toggle='tab'>#{data.name}</a>"))
-            @$group_header.append(li)
-            @groups.add(data)
 
         remove_group: (event) ->
             li = $(event.currentTarget.parentElement)
@@ -268,7 +267,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
                     li.remove()
                     model.trigger("destroy")
                     @show_first()
-                    @trigger("remove_group_view", model.id)
+                    @groups.remove(model)
 
         show_first: () ->
             $("li>a:first", @$group_header).click()
@@ -300,12 +299,13 @@ define(["jquery", "user_typeahead", "jquery-ui"
             if confirm("是否确认解雇#{@model.get('login')}用户？")
                 @model.destroy (data) =>
                     @el.remove()
-                    @trigger("remove_group_employee", @model.get("user_id"))
+                    @trigger("remove_group_employee", @model.id)
                     @trigger("inspect_employee")
 
     #组权限视图
     class PermissionGroupView extends Backbone.View
         className: "tab-pane permission-group"
+
         events: {
             "click .resource" : "check_resource"
             "click .abilities input:checkbox" : "check_permission"
@@ -379,6 +379,10 @@ define(["jquery", "user_typeahead", "jquery-ui"
         remove: () ->
             @$el.remove()
 
+        render_group: () ->
+            li = $("<li class='permission-group-list-#{@model.id}'>")
+            li.html($("<a href='#permission-group-#{@model.id}' data-toggle='tab'>#{@model.get('name')}</a>"))
+            li
     #组权限视图列表
     class PermissionGroupList extends Backbone.View
         events: {
@@ -388,34 +392,34 @@ define(["jquery", "user_typeahead", "jquery-ui"
         }
         initialize: (opts) ->
             _.extend(@, opts)
-            @groups = new GrupList([], @shop)
-            @group = new Group([], @shop)
+
+            @groups.bind("reset", @all_group, @)
+            @groups.bind("remove", @remove_group_view, @)
             @groups.bind("add", @add_group, @)
+            @group = new Group([], @shop)
             @group_header = @$("ul.permission-groups-header")
             @group_content = @$(".permission-groups-content")
             @form = @$("form.add-group-form")
 
-            @all_group()
-
         all_group: () ->
-            @group_header.find(">li").each (i, li) =>
-                _id = $(li).attr("data-value-id")
-                _name = $(li).attr("data-value-name")
-                @groups.add({id: _id, name: _name})
+            @groups.each (model) =>
+                @add_group(model)
 
             @group_header.find("li>a:first").click()
 
         add_group: (model) ->
             model.set_url(@shop)
             permission_group_view = new PermissionGroupView({
-                model: model
+                model: model,
                 template: @permission_template
             })
             @group_content.append(permission_group_view.render())
+            @group_header.append(permission_group_view.render_group())
 
         show_add_group: () ->
             @form.find("span.error").html("")
             @$(".group-panel").modal("show")
+            @form.find("input:text").focus()
 
         create_shop_group: () ->
             data = @form.serialize()
@@ -424,19 +428,13 @@ define(["jquery", "user_typeahead", "jquery-ui"
                 false
 
             @group.create(data, (model, data) =>
-                @add_group_view(data)
+                @groups.add(data)
+                @form.find("input:text").val('')
                 @$(".group-panel").modal("hide")
             )
             false
-        add_group_view: (data) ->
-            li = $("<li class='group-list-#{data.id}' data-value-id=#{data.id} data-value-name=#{data.name}>")
-            li.html($("<a href='#permission-group-#{data.id}' data-toggle='tab'>#{data.name}</a>"))
-            @group_header.append(li)
-            @groups.add(data)
-            @trigger("add_group_view", data)
 
-        remove_group_view: (group_id) ->
-            model = @groups.get(group_id)
+        remove_group_view: (model) ->
             model.trigger("destroy")
             @group_header.find(">li.permission-group-list-#{model.id}").remove()
 
@@ -520,14 +518,9 @@ define(["jquery", "user_typeahead", "jquery-ui"
         load_permission_group: () ->
             @permission_group_list = new PermissionGroupList({
                 el: @permission_group_panle,
-                shop: @default_params.shop
-                permission_template: @permission_template
+                shop: @default_params.shop,
+                permission_template: @permission_template,
+                groups: @group_view_list.groups
             })
-            @permission_group_list.bind("add_group_view",
-            _.bind(@group_view_list.add_group_view, @group_view_list))
-
-            @group_view_list.bind("remove_group_view",
-            _.bind(@permission_group_list.remove_group_view, @permission_group_list))
-
     EmployeeGroup
 )

@@ -29,12 +29,7 @@
     <div class="user-groups">
         <h4>用户组</h4>
         <ul class="nav nav-tabs user-group-header">
-            <% @groups.each do |g| %>
-            <li data-value-id="<%=g.id %>" data-value-name="<%=g.name %>">
-                <span class='close-group icon-remove'></span>
-                <a href='#group-<%=g.id %>' data-toggle='tab'><%=g.name %></a>
-            </li>
-            <%end%>
+
         </ul>
         <div class="tab-content user-group-content">
         </div>
@@ -46,11 +41,7 @@
         </div>
         <div class="tabbable tabs-left">
           <ul class="nav nav-tabs permission-groups-header">
-            <% @groups.each do |g| %>
-            <li class="permission-group-list-<%=g.id %>" data-value-id="<%=g.id %>" data-value-name="<%=g.name %>">
-                <a href='#permission-group-<%=g.id %>' data-toggle='tab'><%=g.name %></a>
-            </li>
-            <% end %>
+
           </ul>
           <div class="tab-content permission-groups-content">
           </div>

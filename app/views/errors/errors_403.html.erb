@@ -1,5 +1,15 @@
-<p class="alert alert-error" style='margin-top:50px;'>
-	很抱歉出错了！ <br />
-	错误信息：<%=@error_messages %>
-<p>
+<div class="alert alert-error" style='margin-top:50px;'>
+    很抱歉出错了！ <br />
+    错误信息：
+    <p>
+        <%=@error_messages if @error_messages.is_a?(String) %>
+    </p>
+    <% if @error_messages.is_a?(Array) %>
+        <% @error_messages.each do |m| %>
+        <p>
+            <%=m %>
+        </p>
+        <% end %>
+    <% end %>
+<div>
 <a href="/">返回主页</a>
