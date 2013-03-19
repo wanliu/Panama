@@ -64,6 +64,10 @@ module ApplicationHelper
     Notification.unreads.where(:user_id => current_user.id).count
   end
 
+  def find_resource_by(resource)
+    Permission.where(resource: resource)
+  end
+
   def search_box(name, value = nil, options = { size: 40})
     text_field_tag name, value, options
     button_tag l(:search, '搜索')
