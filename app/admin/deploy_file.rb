@@ -15,7 +15,9 @@ ActiveAdmin.register_page "VFS" do
 
   sidebar :所有条件 do
     ul do
-      li "没有可用条件" 
+      li do
+        input
+      end
     end
   end
 
