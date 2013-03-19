@@ -72,7 +72,7 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     render :json => result || []
   end
 
-  def category_page
+  def category_root
     @categories = Category.find_by(:name => '_products_root').children
     respond_to do | format |
       format.json{ render :json => @categories.as_json(root: false) }
@@ -80,13 +80,37 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   end
 
   def category_search
-    @category_children = Category.where("name like ?", "%params[:category_name]%")
+    @category_children = Category.where("name like ?", "%#{params[:q]}%").limit(params[:limit])
     respond_to do | format |
-      format.json{ render :json => @categories.as_json(root: false) }
+      categories = []
+      @category_children.each do |category|
+        if category.ancestry_depth > 2
+          category["value"] = "#{parent_name(category)} | #{category["name"]}"
+          categories << category
+        end
+      end
+      format.json{ render :json => categories.as_json(root: false) }
     end
   end
 
   private
+
+  def parent_name(children)
+    if children["ancestry_depth"] == 3
+      @parent_name = children.parent.parent['name']
+    end
+    if children["ancestry_depth"] == 4
+      @parent_name = children.parent.parent.parent['name']
+      @parent_name += " | #{children.parent.parent['name']}"
+    end
+    if children["ancestry_depth"] == 5
+      @parent_name = children.parent.parent.parent.parent['name']
+      @parent_name += " | #{children.parent.parent.parent['name']}"
+      @parent_name += " | #{children.parent.parent['name']}"
+    end
+    @parent_name += " | #{children.parent['name']}"
+    @parent_name
+  end
 
   def safe_params
     params[:shops_category].slice(*white_list)

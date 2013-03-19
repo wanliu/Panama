@@ -135,11 +135,11 @@ module Vfs
         if current_path && current_path.directory?
           if query
             current_path.match query do |f|
-              block.call f.full_path, ->{f.directory? ? :dir : :file}
+              block.call f.name, ->{f.directory? ? :dir : :file}
             end
           else
             current_path.descendants do |f|
-              block.call f.full_path, ->{f.directory? ? :dir : :file}
+              block.call f.name, ->{f.directory? ? :dir : :file}
             end
           end
         end
@@ -155,6 +155,7 @@ module Vfs
             root
           else
             paths = path.split('/')
+            paths.shift if paths.first.blank?
             file_entity = paths.inject(root) do |parent, path|
               parent.children.where(:name => path).first unless parent.nil?
             end
@@ -166,6 +167,7 @@ module Vfs
             root
           else
             paths = path.split('/')
+            paths.shift if paths.first.blank?
             begin
               file_entity = paths.inject(root) do |parent, path|
                 pa = parent.children.where(:name => path, :stat => 'directory').first

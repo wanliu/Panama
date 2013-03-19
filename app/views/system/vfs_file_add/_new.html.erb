@@ -1,0 +1,6 @@
+  
+<%= simple_form_for new_app_file, :url => '/vfs/create_file' do |f| %>
+	<%= f.input :name %> 
+	<%= f.input :data, as: :text %>  
+	<%= f.button :submit, :save %>
+<% end %>	

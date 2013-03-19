@@ -5,7 +5,12 @@ describe Comment,"评论模型" do
 
     let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
     let(:yifu){ FactoryGirl.create(:yifu, :shop => shop) }
-    let(:product){ FactoryGirl.create(:product, :shop => shop, :category => yifu) }
+    let(:category){ FactoryGirl.create(:category) }
+    let(:product){ FactoryGirl.create(:product,
+        :shop => shop,
+        :shops_category => yifu,
+        :category => category) }
+
     let(:activity){ FactoryGirl.create(:activity) }
 
     it{ should belong_to :user }

@@ -1,4 +1,4 @@
-define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"], 
+define ["jquery", "backbone", "exports", "typeahead"], 
 ($, Backbone, exports, typeahead) ->
 
     class CategoryBase extends Backbone.View
@@ -21,14 +21,14 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
 
         reset_navigation: () ->
             if @navigations.length > 1
-                navigation.html("")
+                $(".input_search").val("")
                 _.each @navigations.models, (m, i) =>
                     if i == 0
-                        navigation.append(m.get("name"))
+                        $(".input_search").val(m.get("name"))
                     else
-                        navigation.append(" - " + m.get("name"))
+                        $(".input_search").val($(".input_search").val() + " | " + m.get("name"))
             if @navigations.length == 1
-                navigation.html(@navigations.first().get("name"))
+                $(".input_search").val(@navigations.first().get("name"))
 
         remove_last_model: () ->
             @remove_current_category(@navigations.last())
@@ -56,7 +56,7 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
 
         category_root: () ->
             @fetch({
-                url: "#{@url}/category_page"
+                url: "#{@url}/category_root"
             })
 
 
@@ -67,7 +67,7 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
         }
         tagName: "button"
 
-        className: "btn"
+        className: "btn category_children"
 
         initialize: (options) ->
             _.extend(@, options)
@@ -88,33 +88,49 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
                     shop_name: @shop_name,
                     children_el: @children_el
                 })
+            _.each $(".category_children"), (btn) =>
+                $(btn).attr("class", "btn category_children")
+            @$el.addClass("active")
+
 
     class CategoryChildrenSearch extends Backbone.View
-        # events: {
-        #     "click #search" : "search"
-        # }
+        events: {
+            "keyup .input_search" : "keyup_choose"
+            "click #search"       : "click_choose"
+        }
 
         initialize : (options) ->
             _.extend(@, options)
             @$el = $(@search_el)
-            debugger
-            @category_list = new CategoryList([], @shop_name)
-            @(".search-query").typeahead({
-                name: "产品类型",
-                prefetch: '/shops/#{shop_name}/admins/categories/category_search'
+            @$(".search-query").typeahead({
+                remote: "/shops/#{@shop_name}/admins/categories/category_search?q=%QUERY&limit=10",
+                limit: 10
             })
-            # @category_list.bind("reset", @all_children, @)
-            # @category_list.category_search({ category_name: @$(".search-query").val() })
+            @$(".twitter-typeahead").addClass("span12 search-query")
+            @$(".tt-query").after("<button type='button' class='btn' id='search'>选择</button>")
 
+        keyup_choose: () ->
+            unless $(".input_search").val() == ""
+                if event.keyCode == 13
+                    @click_keyup()
 
-        # search: () ->
-        #     alert(@$(".search-query").val())
+        click_choose: () ->
+            unless $(".input_search").val() == ""
+                @click_keyup()
+
+        click_keyup: () ->
+            @children_el.html("")
+            search_value = $(".input_search").val()
+            alert(search_value)
+            _.each $(".category_root"), (c) =>
+                $(c).attr("class", "category_root")
 
 
     class CategoryChildrenViewList extends Backbone.View
         return_el: $("<button class='btn back-parent' data-value='back'>
                         返回<span class='caret left'></span>
                       </button>")
+
         events: {
             "click button.back-parent" : "back"
         }
@@ -182,6 +198,9 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
 
         category_children: () ->
             @children_el.html("")
+            _.each $(".category_root"), (c) =>
+                $(c).attr("class", "category_root")
+            @$el.addClass("on")
             category_base.remove_current_categorys(@model)
             new CategoryChildrenViewList({
                     model: @model,
@@ -189,7 +208,6 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
                     shop_name: @shop_name
                 })
 
-    navigation = ""
 
     class Category extends Backbone.View
 
@@ -198,7 +216,6 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
             @category_root_el = @el.find(".category_roots")
             @category_children_el = @el.find(".category_buttons")
             @search_el = @el.find(".search")
-            navigation = @el.find(".navigation")
             @category_root = new CategoryList([], @shop_name)
             @category_root.bind("reset", @all_root, @)
             @category_root.category_root()
@@ -206,6 +223,7 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/typeahead"],
             @category_picture_view = new CategoryChildrenSearch({
                 model: @model,
                 search_el: @search_el,
+                children_el: @category_children_el,
                 shop_name: @shop_name
             })
 
