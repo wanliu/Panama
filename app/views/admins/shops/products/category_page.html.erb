@@ -49,7 +49,11 @@
         </div>
         <p>页面构成 <strong>商品层示图片</strong> <strong> 商品略缩图</strong> <strong>价目信息</strong> <strong> 一般属性</strong> <strong>商品层示图片</strong></p>
         <div class="controls">
-            <button class="btn btn-success">选择这种</button>
+            <%% if (status==1) {{%>
+                <button class="btn btn-primary enter_children">选择子类</button>
+            <%% }} else {{%>
+                <button class="btn btn-success select_category" >选择这类</button>
+            <%% }} %>
         </div>
     </div>
     <hr>
