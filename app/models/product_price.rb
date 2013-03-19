@@ -3,7 +3,7 @@ class ProductPrice < ActiveRecord::Base
 
   alias_method :items, :property_items
 
-  attr_accessible :price
+  attr_accessible :price, :property_items, :items
   #
   def delegate_property_setup
     @delegate_properties ||= []

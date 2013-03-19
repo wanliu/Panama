@@ -143,4 +143,18 @@ module Admins::Shops::ProductsHelper
             })
         })""".html_safe
     end
+
+    def property_palette(form, field)
+        form.input field,
+                   :as => :check_boxes,
+                   :collection => @product.properties[field].items,
+                   :value_method => :value,
+                   :checked => @product.property_items[field].map { |item| item.value }
+
+    end
+
+    def propoerty_prices(form, *args)
+        form.input :price_definition, :as => :hidden, :input_html => { :value => args.join(',') }
+    end
+
 end

@@ -81,13 +81,4 @@ module Admins::Shops::CategoriesHelper
       link_to(icon(:list), "#", :class => 'btn list_category_products btn-mini')
     end
   end
-
-  def property_palette(form, field)
-    form.input field,
-               :as => :check_boxes,
-               :collection => @product.property_items[field],
-               :value_method => :value,
-               :checked => @product.property_items[field].map { |item| item.value }
-
-  end
 end

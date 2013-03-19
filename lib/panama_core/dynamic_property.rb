@@ -14,18 +14,6 @@ module PanamaCore
         end
       end
 
-      # has_many :products_property_items do
-      #   def [](property_item)
-      #     # property_item = case object_or_name
-      #     # when PropertyItem
-      #     #   object_or_name
-      #     # when String, Symbol
-      #     #   @association.owner.property_items.find()
-
-      #     select { |ppi| ppi.property_item == property_item }.first
-      #   end
-      # end
-
       has_and_belongs_to_many :property_items,
                :select => ['property_items.*',
                            'products_property_items.id as products_property_items_id',
@@ -55,6 +43,7 @@ module PanamaCore
       after_find do
         delegate_property_setup
       end
+
     end
 
     def write_attribute(attr_name, value)
