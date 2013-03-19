@@ -79,6 +79,7 @@ GEM
     builder (3.0.4)
     cache_digests (0.2.0)
       actionpack (>= 3.2)
+    cancan (1.6.9)
     capistrano (2.14.2)
       highline
       net-scp (>= 1.0.0)
@@ -440,6 +441,7 @@ DEPENDENCIES
   anjlab-bootstrap-rails (>= 2.2)
   apotomo (~> 1.2.3)
   cache_digests (~> 0.2.0)
+  cancan
   carrierwave (~> 0.8.0)
   carrierwave-mongoid (~> 0.1.0)
   carrierwave-upyun (~> 0.1.6)

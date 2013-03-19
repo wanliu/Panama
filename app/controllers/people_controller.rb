@@ -18,9 +18,14 @@ class PeopleController < ApplicationController
 
   def agree_invite_user
     if valid_invite_user
-      @shop.shop_users.create(:user_id => current_user.id)
+      shop_user = @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
-        format.html{ redirect_to person_path(current_user.login) }
+        if shop_user.valid?
+          format.html{ redirect_to person_path(current_user.login) }
+        else
+          @error_messages = draw_errors_message(shop_user)
+          format.html{ render template: "errors/errors_403", status: 403, layout: "error" }
+        end
       end
     end
   end
@@ -28,9 +33,14 @@ class PeopleController < ApplicationController
   def agree_email_invite_user
     @people = User.find_by(:login => current_user.login)
     if valid_invite_options(decrypt_options)
-      @shop.shop_users.create(:user_id => current_user.id)
+      shop_user = @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
-        format.html{ redirect_to person_path(current_user.login) }
+        if shop_user.valid?
+          format.html{ redirect_to person_path(current_user.login) }
+        else
+          @error_messages = draw_errors_message(shop_user)
+          format.html{ render template: "errors/errors_403", status: 403, layout: "error" }
+        end
       end
     end
   end
