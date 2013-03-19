@@ -121,7 +121,6 @@ define ["jquery", "backbone", "exports", "typeahead"],
         click_keyup: () ->
             @children_el.html("")
             search_value = $(".input_search").val()
-            alert(search_value)
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
