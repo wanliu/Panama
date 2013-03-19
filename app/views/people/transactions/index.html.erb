@@ -6,7 +6,6 @@
       <h2>已下订单</h2>
       <ul class="cards">
       <% @transactions.each do |transaction| %>
-          <% debugger %>
           <%= render :partial => 'trans_card', :locals => { :transaction => transaction, :state => transaction.state, :people => @people } %>
       <% end %>
       </ul>
