@@ -1,7 +1,8 @@
 module Admins::Shops::ProductsHelper
+    include ActionController::RecordIdentifier
 
-    def picture_and_name(record)        
-      content_tag :div, :class => 'btn-group' do                
+    def picture_and_name(record)
+      content_tag :div, :class => 'btn-group' do
         imgs = record.attachments.map do | a |
             image_tag(a.file.url("30x30"))
         end
@@ -122,10 +123,11 @@ module Admins::Shops::ProductsHelper
             "{" + object.join(',') + "}"
         end
 
-        "require(['lib/data_2_table'], function(data2table){
+        """require(['lib/data_2_table'], function(data2table){
+
             var load = new data2table.Data2Table({
                 collection : [#{objects.join(',')}]
             })
-        })".html_safe
+        })""".html_safe
     end
 end

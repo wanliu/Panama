@@ -13,70 +13,111 @@
 		margin: 0;
 		padding: 3px 0pt 3px 16px;
 	}
+
+    .vfs_css {
+    	height: 400px;
+    	overflow:auto;
+    	scrollbar-3dlight-color:#595959;
+    	scrollbar-arrow-color:#ffffff; 
+    	scrollbar-base-color:#cfcfcf; 
+    	scrollbar-darkshadow-color:#ffffff; 
+    	scrollbar-face-color:#cfcfcf; 
+    	scrollbar-highlight-color:#ffffff; 
+    	scrollbar-shadow-color:#595959
+    }
 </style>
 
-<div>
+<div class="vfs_css">
 	<ul id="browser" class="filetree treeview">
 		<% root.each do |r| %> 
-			<li class="collapsable" onclick="aaa('/<%= r.name %>','<%= r.name %>')">
+			<li class="collapsable" onclick="treeview_click('/<%= r.name %>','<%= r.name %>')">
 				<div class="hitarea collapsable-hitarea"></div>
-				<span class="folder"><%= r.name %></span>
-				<ul class="<%= r.name %>_click">
-					<li class="last"><span class="file"></span></li>
+				<span class="folder" onMouseOver="MouseOverDestroy('<%= r.name %>')" onMouseOut="MouseOutHide('<%= r.name %>')"><%= r.name %> &nbsp;&nbsp;&nbsp;&nbsp;
+					<span class="hover <%= r.name %>_mouse" style="display: none;" onclick="destroy_file('<%= r.name %>','<%= r.name %>')" >x</span>
+				</span>
+				<ul class="<%= r.name %>_click"> 
 				</ul>
 			</li>
 		<% end %>
 	</ul>
 </div>
 
-
-<ul id="browser" class="filetree treeview">
-		<li class="collapsable">
-			<div class="hitarea collapsable-hitarea"></div>
-			<span class="folder">Folder 1</span>
-			<ul>
-				<li class="last"><span class="file">Item 1.1</span></li>
-			</ul>
-		</li>
-		<li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span class="folder">Folder 2</span>
-			<ul>
-				<li class="collapsable"><div class="hitarea collapsable-hitarea"></div><span class="folder">Subfolder 2.1</span>
-					<ul id="folder21">
-						<li><span class="file">File 2.1.1</span></li>
-						<li class="last"><span class="file">File 2.1.2</span></li>
-					</ul>
-				</li>
-				<li class="last"><span class="file">File 2.2</span></li>
-			</ul>
-		</li>
-		<li class="closed expandable"><div class="hitarea closed-hitarea expandable-hitarea"></div><span class="folder">Folder 3 (closed at start)</span>
-			<ul style="display: none; ">
-				<li class="last"><span class="file">File 3.1</span></li>
-			</ul>
-		</li>
-		<li class="last"><span class="file">File 4</span></li>
-	</ul>
-
-
 <SCRIPT type='text/javascript'>
 	require(['jquery', 'lib/jquery.treeview', 'lib/jquery.cookie'], function($){
-	    $(document).ready(function(){ 
-	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol" });
+	    $(document).ready(function(){
+	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol", url: "/vfs/path", });
 		});
     }); 
-    function aaa(treeview, treeview_class){ 
-    	$.get("/vfs/path",
+    function treeview_click(treeview, treeview_class){
+    	$.get("/vfs/path/expansion",
     	     {p: treeview},
     	     function(data){ 
-    	     	$("."+treeview_class+"_click").parent("li").attr("onclick","")
+    	     	$("."+treeview_class+"_click").parent("li").removeAttr("onclick")
     	     	$("."+treeview_class+"_click").html("")
     	     	for(var i=0; data.n.length > i; i++){
     	     		name = data.n[i].name
-    	     		var branches = $("<li class='collapsable' onclick=aaa('"+treeview+"/"+name+"','"+treeview+name+"')><div class='hitarea collapsable-hitarea'></div> <span class='folder'>"+name+"</span><ul style='display: none;' class='"+treeview+name+"_click' > <li class='last'><span class='file'></span></li> </ul></li>").appendTo("."+treeview_class+"_click")
+    	     		var branches = ""
+    	     		if(name.indexOf('.') >= 0){
+    	     			var html_f = html_file(treeview, treeview_class, name)
+    	     			branches = $(html_f).appendTo("."+treeview_class+"_click") 
+    	     		}else{
+    	     			var html_fo = html_folder(treeview, treeview_class, name)
+    	     			branches = $(html_fo).appendTo("."+treeview_class+"_click") 
+    	     		}
+    	     			
 			  	    $("#browser").treeview({ add: branches });
     	     	}
              }
         )
 	}
- 
+
+	function html_file(treeview, treeview_class, name){
+		var strName = name.replace(/\./g,'')
+		var strHTML = "<li class='last'>"
+		    strHTML += "   <span class='file "+treeview_class+strName+"_click'  onMouseOver=MouseOverDestroy('"+treeview_class+strName+"')"
+			strHTML += "      onMouseOut=MouseOutHide('"+treeview_class+strName+"')>"
+		    strHTML += "      <a href='/system/vfs_file?file_path="+treeview+"/"+name+"'>"+name+"</a>&nbsp;&nbsp;&nbsp;&nbsp;"
+		    strHTML += "      <span class='hover "+treeview_class+strName+"_mouse' style='display: none;'"
+			strHTML += "      onclick=destroy_file('"+treeview+"/"+name+"','"+treeview_class+strName+"')>x</span>"
+		    strHTML += "   </span>"
+		    strHTML += "</li>"
+		return strHTML
+	}
+
+	function html_folder(treeview,treeview_class,name){
+		var strHTML = "<li class='collapsable' onclick=treeview_click('"+treeview+"/"+name+"','"+treeview_class+name+"')>"
+			strHTML += "   <div class='hitarea collapsable-hitarea'></div>"
+			strHTML += "   <span class='folder'  onMouseOver=MouseOverDestroy('"+treeview_class+name+"')"
+			strHTML += "      onMouseOut=MouseOutHide('"+treeview_class+name+"')>"+name+"&nbsp;&nbsp;&nbsp;&nbsp;"
+			strHTML += "      <span class='hover "+treeview_class+name+"_mouse' style='display: none;'"
+			strHTML += "      onclick=destroy_file('"+treeview+"/"+name+"','"+treeview_class+name+"')>x</span>"
+			strHTML += "   </span>"
+			strHTML += "   <ul style='display: none;' class='"+treeview_class+name+"_click' > "
+			strHTML += "   </ul>"
+			strHTML += "</li>"
+		return strHTML;
+	}
+
+
+	function MouseOverDestroy(clas){ 
+		$("."+clas+"_mouse").show()
+	}
+
+	function MouseOutHide(clas){ 
+		$("."+clas+"_mouse").hide()
+	}
+
+	function  destroy_file(file_path, clas){
+		if(confirm("您确定删除吗？")){
+			this.file_path = file_path
+			this.clas = clas
+			$.get("/vfs/destroy_file",
+	    	     {p: file_path},
+	    	     $.proxy(function(data){ 
+	    	        $("."+clas+"_click").parent("li").remove()
+	    	        $("#browser").treeview({});
+	             }, this)
+	        )
+		}
+	}
 </SCRIPT>
