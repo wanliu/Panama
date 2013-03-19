@@ -20,37 +20,6 @@
     <div class="product_prices"></div>
 
     </div>
-    <script type="text/javascript">
-      require(['jquery', 'lib/table_bander', 'lib/table_creater', 'models/property_item'], function($, TableBander, TableCreater, Model){
-        var bander = new TableBander.TableBander({
-          els    : [$("form div.check_boxes:nth(0)"), $("form div.check_boxes:nth(1)")],
-          fields : [{title: '价格', value: 'price'}],
-          depth  : ['colour', 'sizes']
-        });
-
-
-        <%= generate_prices_table %>
-        // property_items = new Model.PropertyItemCollection
-        // var getAll = function(){
-        //   pis = property_items.chain()
-        //     .groupBy(function(pi){
-        //       return pi.get("pid"); })
-        //     .map(function(ary){
-        //       var model = new Backbone.Model;
-        //       ary.map(function(i){
-        //         model.set(i.get("name"), i.get("value"));
-        //         model.set("price", i.get("price")); });
-        //       property_items.add(model);
-        //       return model; })
-        //     .value();
-        // }
-
-
-        // property_items.url = '<%= price_options_shop_admins_product_path %>';
-        // property_items.on('reset', getAll);
-        // property_items.fetch();
-      });
-    </script>
 
     <%= f.input :summary , as: :text %>
     <%= f.button :submit, :save %>
