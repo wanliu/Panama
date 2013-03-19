@@ -9,13 +9,3 @@ namespace "permission" do
     end
   end
 end
-
-# namespace "group:permission" do
-#     desc "load group permission"
-#     task :load => :environment do
-#         group_permissions = YAML::load_file("#{Rails.root}/config/permission.yml")["group_permission"]
-#         group_permissions.each do | group, permissions |
-#             ShopGroup.give_permission(group, permissions)
-#         end
-#     end
-# end
