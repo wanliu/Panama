@@ -43,13 +43,14 @@ require 'rspec/rails'
 require 'rspec/autorun'
 #
 require File.expand_path('../session', __FILE__)
+require 'rspec_load_data'
 
+Rspec::Data.load
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
   # if you change any configuration or code from libraries loaded here, you'll
   # need to restart spork for it take effect.
-
 end
 
 
