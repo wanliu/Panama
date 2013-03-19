@@ -42,7 +42,7 @@ gem 'apotomo', '~> 1.2.3'
 # markup
 
 gem 'github-markup', '~> 0.7.4'
-gem 'redcarpet', '~> 2.2.2' 
+gem 'redcarpet', '~> 2.2.2'
 
 
 # form helper
@@ -123,9 +123,11 @@ group :test do
   gem "fakefs", :require => "fakefs/safe"
 end
 
-gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10 
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10
 gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'
 gem 'passenger'
 gem "default_value_for"
+gem 'cancan'
+
