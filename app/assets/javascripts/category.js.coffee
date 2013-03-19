@@ -1,4 +1,5 @@
-define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports) ->
+define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"], 
+($, Backbone, exports, typeahead) ->
 
     class CategoryBase extends Backbone.View
 
@@ -20,14 +21,14 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
 
         reset_navigation: () ->
             if @navigations.length > 1
-                navigation.html("")
+                $(".input_search").val("")
                 _.each @navigations.models, (m, i) =>
                     if i == 0
-                        navigation.append(m.get("name"))
+                        $(".input_search").val(m.get("name"))
                     else
-                        navigation.append(" - " + m.get("name"))
+                        $(".input_search").val($(".input_search").val() + " | " + m.get("name"))
             if @navigations.length == 1
-                navigation.html(@navigations.first().get("name"))
+                $(".input_search").val(@navigations.first().get("name"))
 
         remove_last_model: () ->
             @remove_current_category(@navigations.last())
@@ -55,8 +56,9 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
 
         category_root: () ->
             @fetch({
-                url: "#{@url}/category_page"
+                url: "#{@url}/category_root"
             })
+
 
     class CategoryChildrenView extends Backbone.View
 
@@ -65,13 +67,13 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
         }
         tagName: "button"
 
-        className: "btn"
+        className: "btn category_children"
 
         initialize: (options) ->
             _.extend(@, options)
             @$el = $(@el)
             @$el.html(@model.get("name"))
-            if @model.get("status") == 1
+            if @model.get("flag") == 1
                  @$el.append("<span class='caret right'></span>")
 
         render: () ->
@@ -79,23 +81,61 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
 
         children: () ->
             category_base.add_current_category(@model)
-            if @model.get("status") == 1
+            if @model.get("flag") == 1
                 @model.trigger("parent_hide")
                 category_children_view = new CategoryChildrenViewList({
                     model: @model,
                     shop_name: @shop_name,
                     children_el: @children_el
                 })
-
-                new CategoryListView({
+            _.each $(".category_children"), (btn) =>
+                $(btn).attr("class", "btn category_children")
+            @$el.addClass("active")
+            new CategoryListView({
                     model: @model,
                     shop_name: @shop_name
                 })
+
+
+    class CategoryChildrenSearch extends Backbone.View
+        events: {
+            "keyup .input_search" : "keyup_choose"
+            "click #search"       : "click_choose"
+        }
+
+        initialize : (options) ->
+            _.extend(@, options)
+            @$el = $(@search_el)
+            @$(".search-query").typeahead({
+                remote: "/shops/#{@shop_name}/admins/categories/category_search?q=%QUERY&limit=10",
+                limit: 10
+            })
+            @$(".twitter-typeahead").addClass("span12 search-query")
+            @$(".tt-query").after("<button type='button' class='btn' id='search'>选择</button>")
+
+        keyup_choose: () ->
+            unless $(".input_search").val() == ""
+                if event.keyCode == 13
+                    @click_keyup()
+
+        click_choose: () ->
+            unless $(".input_search").val() == ""
+                @click_keyup()
+
+        click_keyup: () ->
+            @children_el.html("")
+            search_value = $(".input_search").val()
+            alert(search_value)
+            _.each $(".category_root"), (c) =>
+                $(c).attr("class", "category_root")
+
+                
 
     class CategoryChildrenViewList extends Backbone.View
         return_el: $("<button class='btn back-parent' data-value='back'>
                         返回<span class='caret left'></span>
                       </button>")
+
         events: {
             "click button.back-parent" : "back"
         }
@@ -163,6 +203,9 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
 
         category_children: () ->
             @children_el.html("")
+            _.each $(".category_root"), (c) =>
+                $(c).attr("class", "category_root")
+            @$el.addClass("on")
             category_base.remove_current_categorys(@model)
             new CategoryChildrenViewList({
                     model: @model,
@@ -175,19 +218,23 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
                     shop_name: @shop_name
             })
 
-
-    navigation = ""
-
     class Category extends Backbone.View
 
         initialize : (options) ->
             _.extend(@, options)
             @category_root_el = @el.find(".category_roots")
             @category_children_el = @el.find(".category_buttons")
-            navigation = @el.find(".navigation")
+            @search_el = @el.find(".search")
             @category_root = new CategoryList([], @shop_name)
             @category_root.bind("reset", @all_root, @)
             @category_root.category_root()
+
+            @category_picture_view = new CategoryChildrenSearch({
+                model: @model,
+                search_el: @search_el,
+                children_el: @category_children_el,
+                shop_name: @shop_name
+            })
 
         all_root: (collection) ->
             collection.each (model) =>
@@ -232,7 +279,7 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
 
 
     class CategoryListView extends Backbone.View
-        el: $(".category_list")           
+        el: $(".category_list")
 
         initialize: (options) ->
             _.extend(@, options)
@@ -254,36 +301,7 @@ define ["jquery", "backbone", "exports", "jquery.slides"], ($, Backbone, exports
                 })
             @$el.append(@category_detail_view.render(model))
 
-    # root_click : (event) ->
-    #     @target_button = $(event.target)
-    #     children_name = $(event.currentTarget).attr("data-value")
-    #     flag = false
-    #     if "back" is children_name
-    #         children_name = @$(".category-preview .category_buttons .btn").last().attr("data-value")
-    #         flag = true
-    #     $.ajax
-    #         type: "get"
-    #         dataType: "json"
-    #         data: {"category_name": children_name, "flag": flag}
-    #         url: "/shops/#{@shop_name}/admins/categories/category_children"
-    #         success : (data) =>
-    #             if data != null && data.length > 0 
-    #                 @$(".category-preview").html(@template.render({categorys: data}))
-    #                 @$(".category-preview .category_buttons .btn").on('click', _.bind(@root_click, @))
-                    
-    #                 $(".slides").slidesjs({
-    #                     width: 200,
-    #                     height: 133,
-    #                     navigation: false,
-    #                     pagination: false
-    #                 })
-    #             else if data == null
-    #                 init_top = $(".category_detail:first").offset().top
-    #                 scroll_offset = $("#"+@target_button.attr("id")).offset();
-    #                 $("#category_list").animate({
-    #                    scrollTop : scroll_offset.top-init_top
-    #                 },100);
-
     category_base = new CategoryBase()
+
     exports.Category = Category
     exports

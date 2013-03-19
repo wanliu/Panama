@@ -1,0 +1,8 @@
+  
+<%= simple_form_for new_app_file, :url => '/vfs/edit_file' do |f| %>
+	<%= f.input :name %> 
+	<%= f.input :data, as: :text %> 
+	<%= hidden_field_tag :file_path, file_path %>
+	<%= hidden_field_tag :file_name, new_app_file.name %>
+	<%= f.button :submit, :save %>
+<% end %>	

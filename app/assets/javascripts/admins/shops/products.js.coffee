@@ -105,13 +105,24 @@ define [
 
 		newProduct: () ->
 			$("#table table").append(@render('new').el)
+			@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
 
 		editProduct: () ->
 			@render('edit')
+			@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
 
 		removeProduct: () ->
 			@destroy()
 			false
+
+		changeAdditionProperties: (e) ->
+			category_id = $(e.target).val()
+			product_id = @$("#product_id").text()
+
+
+			url = "#{@urlRoot}/additional_properties/#{category_id}?product_id=#{product_id}"
+
+			@$(".additional_properties").load(url)
 
 		createdProduct: (event, data, model) ->
 			$(@el).html(data)

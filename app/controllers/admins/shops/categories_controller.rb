@@ -59,19 +59,12 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
 
   def category_children
     @category_children = Category.find_by(:name => params[:category_name])
-    if params[:flag] == "true"
-      @category_children = @category_children.parent.parent
-    end
     if @category_children.children.count > 0
       @category_children = @category_children.children
-      if @category_children.first.id != 3
+      unless @category_children.first.id == 3
         result = @category_children.map do | c |
           category = c.as_json(root: false)
-          if c.children.count > 0
-            category.merge!(:status => 1) 
-          else
-            category.merge!(:status => 0)
-          end
+          c.children.count > 0 ? category.merge!(:flag => 1) : category.merge!(:flag => 0)
           category
         end
       end
@@ -79,14 +72,45 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     render :json => result || []
   end
 
-  def category_page
-    @categories = Category.find_by(:name => '_products_root').children    
+  def category_root
+    @categories = Category.find_by(:name => '_products_root').children
     respond_to do | format |
       format.json{ render :json => @categories.as_json(root: false) }
-    end    
+    end
+  end
+
+  def category_search
+    @category_children = Category.where("name like ?", "%#{params[:q]}%").limit(params[:limit])
+    respond_to do | format |
+      categories = []
+      @category_children.each do |category|
+        if category.ancestry_depth > 2
+          category["value"] = "#{parent_name(category)} | #{category["name"]}"
+          categories << category
+        end
+      end
+      format.json{ render :json => categories.as_json(root: false) }
+    end
   end
 
   private
+
+  def parent_name(children)
+    if children["ancestry_depth"] == 3
+      @parent_name = children.parent.parent['name']
+    end
+    if children["ancestry_depth"] == 4
+      @parent_name = children.parent.parent.parent['name']
+      @parent_name += " | #{children.parent.parent['name']}"
+    end
+    if children["ancestry_depth"] == 5
+      @parent_name = children.parent.parent.parent.parent['name']
+      @parent_name += " | #{children.parent.parent.parent['name']}"
+      @parent_name += " | #{children.parent.parent['name']}"
+    end
+    @parent_name += " | #{children.parent['name']}"
+    @parent_name
+  end
 
   def safe_params
     params[:shops_category].slice(*white_list)

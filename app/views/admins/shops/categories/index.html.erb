@@ -10,7 +10,7 @@
 				</tr>
 			</thead>
 
-			<%= render @categories %>
+			<%= render :partial => "category", :collection => @shops_categories %>
 		</table>
 	</div>
 </div>
@@ -22,7 +22,7 @@
 		$trs.each(function(i, tr){
 			var models = new FormModel.ObjectFormModel($(tr).find("form"), "category");
 			var model = new Category.Model(models)
-			new Category.CategoryRow({el: tr, model: model});			
+			new Category.CategoryRow({el: tr, model: model});
 		});
 
 

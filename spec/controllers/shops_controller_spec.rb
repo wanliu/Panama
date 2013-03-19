@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe ShopsController do
+describe ShopsController, "商店控制器" do
 
   def valid_attributes
     {
@@ -18,64 +18,64 @@ describe ShopsController do
 
 
   describe "GET index" do
-    it "assigns all shops as @shops" do
+    it "获取所有商店" do
       get :index, {}, get_session
       assigns(:shops).should include(@shop)
     end
   end
 
   describe "GET show" do
-    it "assigns the requested shop as @shop" do
+    it "显示一个商店" do
       get :show, {:id => @shop.to_param}, get_session
       assigns(:shop).should eq(@shop)
     end
   end
 
   describe "GET new" do
-    it "assigns a new shop as @shop" do
+    it "创建商店的页面" do
       get :new, {}, get_session
       assigns(:shop).should be_a_new(Shop)
     end
   end
 
   describe "GET edit" do
-    it "assigns the requested shop as @shop" do
+    it "编辑商店的页面" do
       get :edit, {:id => @shop.to_param}, get_session
       assigns(:shop).should eq(@shop)
     end
   end
 
   describe "POST create" do
-    describe "with valid params" do
+    describe "验证有效的参数" do
       let(:shop_attributes) {{ name: 'shop_test', user_id: current_user.id }}
 
-      it "creates a new Shop" do
+      it "创建成功" do
         expect {
           post :create, {:shop => shop_attributes}, get_session
         }.to change(Shop, :count).by(1)
       end
 
-      it "assigns a newly created shop as @shop" do
+      it "创建成功返回商店" do
         post :create, {:shop => shop_attributes}, get_session
         assigns(:shop).should be_a(Shop)
         assigns(:shop).should be_persisted
       end
 
-      it "redirects to the created shop" do
+      it "创建成功跳转" do
         post :create, {:shop => shop_attributes}, get_session
         response.should redirect_to(Shop.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved shop as @shop" do
+    describe "无效的参数" do
+      it "商店保存失败" do
         # Trigger the behavior that occurs when invalid params are submitted
         Shop.any_instance.stub(:save).and_return(false)
         post :create, {:shop => {  }}, get_session
         assigns(:shop).should be_a_new(Shop)
       end
 
-      it "re-renders the 'new' template" do
+      it "保存失败重新render创建页面" do
         # Trigger the behavior that occurs when invalid params are submitted
         Shop.any_instance.stub(:save).and_return(false)
         post :create, {:shop => {  }}, get_session
