@@ -29,8 +29,4 @@ class PeopleAbility
             end
         end
     end
-
-    def basis_permission
-
-    end
 end

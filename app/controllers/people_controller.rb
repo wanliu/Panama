@@ -10,15 +10,14 @@ class PeopleController < ApplicationController
 
   def show
     @people = User.find_by(:login => params[:id])
+    @current_ability = PeopleAbility.new(current_user, @people)
   end
 
   def show_invite
-    authorize! :read, Notification
     valid_invite_user
   end
 
   def agree_invite_user
-    authorize! :create, ShopUser
     if valid_invite_user
       shop_user = @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
@@ -48,15 +47,10 @@ class PeopleController < ApplicationController
   end
 
   def show_email_invite
-    authorize! :read, Notification
     @people = User.find_by(:login => current_user.login)
     if valid_invite_options(decrypt_options)
       render :action => :show_invite
     end
-  end
-
-  def current_ability
-    @current_ability ||= PeopleAbility.new(current_user, @people)
   end
 
   private
