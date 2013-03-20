@@ -42,4 +42,5 @@
             <a href="<%= person_notifications_path(current_user.login) %>?all=1">查看所有提醒</a>
         </div>
     <% end %>
+    <%=will_paginate @notifications %>
 </div>
