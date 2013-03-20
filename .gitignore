@@ -22,3 +22,4 @@
 /public/uploads
 /public/attachment
 /config/email.yml
+/config/application.yml

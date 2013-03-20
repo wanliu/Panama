@@ -130,4 +130,6 @@ gem 'activeadmin'
 gem 'passenger'
 gem "default_value_for"
 gem 'cancan'
-
+gem 'rails-setting',:github => "huxinghai1988/rails-setting"
+gem 'will_paginate', '~> 3.0'
+gem 'bootstrap-will_paginate'

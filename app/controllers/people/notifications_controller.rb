@@ -6,7 +6,7 @@ class People::NotificationsController < People::BaseController
         unless params[:all] == "1"
             @notifications = Notification.unreads
         end
-        @notifications = @notifications.where(:user_id => @people.id)
+        @notifications = @notifications.where(:user_id => @people.id).paginate(:page => params[:page])
         respond_to do | format |
             format.html
             format.json
@@ -15,9 +15,9 @@ class People::NotificationsController < People::BaseController
 
     def show
         @notification = Notification.find_by(:user_id => @people.id, :id => params[:id])
-        authorize! :read, @notification
         respond_to do | format |
             unless @notification.nil?
+                authorize! :read, @notification
                 @notification.update_attribute(:read, true)
                 format.html{ redirect_to @notification.url }
             else

@@ -10,15 +10,14 @@ class PeopleController < ApplicationController
 
   def show
     @people = User.find_by(:login => params[:id])
+    current_ability(@people)
   end
 
   def show_invite
-    authorize! :read, Notification
     valid_invite_user
   end
 
   def agree_invite_user
-    authorize! :create, ShopUser
     if valid_invite_user
       shop_user = @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
@@ -48,18 +47,17 @@ class PeopleController < ApplicationController
   end
 
   def show_email_invite
-    authorize! :read, Notification
     @people = User.find_by(:login => current_user.login)
     if valid_invite_options(decrypt_options)
       render :action => :show_invite
     end
   end
 
-  def current_ability
-    @current_ability ||= PeopleAbility.new(current_user, @people)
+  private
+  def current_ability(people = nil)
+    @current_ability ||= PeopleAbility.new(current_user, people)
   end
 
-  private
   def decrypt_options
     {
       :auth => params[:auth],
@@ -79,7 +77,7 @@ class PeopleController < ApplicationController
       @people = User.find_by(:login => login)
 
       if @people != current_user
-        @error_messages = "出错了!你不是邀请的对象"
+        @error_messages = "你不是邀请的对象"
         render template: "errors/errors_403", status: 403, layout: "error"
         return false
       end
@@ -89,7 +87,7 @@ class PeopleController < ApplicationController
   def valid_invite_options(options)
     @shop = Shop.find_by(:name => options[:shop_name])
     now = validate_auth_string(options[:auth])
-
+    current_ability(current_user)
     @error_messages = if !now
       "无效的邀请信息"
     elsif now+3.day < DateTime.now
