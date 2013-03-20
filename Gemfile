@@ -130,4 +130,4 @@ gem 'activeadmin'
 gem 'passenger'
 gem "default_value_for"
 gem 'cancan'
-
+gem 'rails-setting',:github => "huxinghai1988/rails-setting"
