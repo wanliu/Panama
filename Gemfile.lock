@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/huxinghai1988/rails-setting.git
+  revision: becc0527e5d2445fda96afc5bf655ed77cdc84db
+  specs:
+    rails-setting (0.0.8)
+
+GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
   revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
@@ -71,6 +77,8 @@ GEM
       activesupport (>= 3.0.0)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    bootstrap-will_paginate (0.0.9)
+      will_paginate
     bourbon (3.1.1)
       sass (>= 3.2.0)
       thor
@@ -426,6 +434,7 @@ GEM
     warden (1.2.1)
       rack (>= 1.0)
     websocket (1.0.7)
+    will_paginate (3.0.4)
     xpath (1.0.0)
       nokogiri (~> 1.3)
     yajl-ruby (1.1.0)
@@ -440,6 +449,7 @@ DEPENDENCIES
   ancestry (~> 1.3.0)
   anjlab-bootstrap-rails (>= 2.2)
   apotomo (~> 1.2.3)
+  bootstrap-will_paginate
   cache_digests (~> 0.2.0)
   cancan
   carrierwave (~> 0.8.0)
@@ -481,6 +491,7 @@ DEPENDENCIES
   passenger
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.8)
+  rails-setting!
   rb-fchange
   rb-fsevent
   rb-inotify
@@ -503,3 +514,4 @@ DEPENDENCIES
   thin (~> 1.5.0)
   uglifier (>= 1.0.3)
   vfs (~> 0.4.8)
+  will_paginate (~> 3.0)

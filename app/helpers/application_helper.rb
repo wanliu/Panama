@@ -29,6 +29,10 @@ module ApplicationHelper
     OmniAuth::Wanliu.config["provider_url"]
   end
 
+  def faye_server_uri
+    Settings.defaults["faye_server"]
+  end
+
   def action_controller
     if controller.is_a?(ActionController::Base)
       controller
