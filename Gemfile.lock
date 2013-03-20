@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/huxinghai1988/rails-setting.git
+  revision: becc0527e5d2445fda96afc5bf655ed77cdc84db
+  specs:
+    rails-setting (0.0.8)
+
+GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
   revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
@@ -481,6 +487,7 @@ DEPENDENCIES
   passenger
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.8)
+  rails-setting!
   rb-fchange
   rb-fsevent
   rb-inotify
