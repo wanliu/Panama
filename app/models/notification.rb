@@ -4,7 +4,7 @@
 class Notification < ActiveRecord::Base
   scope :unreads, where(:read => false)
   scope :reads, where(:read => true)
-
+  self.per_page = 10
   attr_accessible :url, :body, :mentionable_user_id, :user_id
 
   belongs_to :user

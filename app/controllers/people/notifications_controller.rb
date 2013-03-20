@@ -6,7 +6,7 @@ class People::NotificationsController < People::BaseController
         unless params[:all] == "1"
             @notifications = Notification.unreads
         end
-        @notifications = @notifications.where(:user_id => @people.id)
+        @notifications = @notifications.where(:user_id => @people.id).paginate(:page => params[:page])
         respond_to do | format |
             format.html
             format.json
