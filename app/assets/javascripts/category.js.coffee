@@ -258,6 +258,14 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @listenTo(@model, 'change', @render)
             @listenTo(@model, 'destroy', @remove)
 
+        events:
+            "click .enter_children" : "enter_children"
+
+        enter_children: () ->
+            debugger
+
+        select_category: () ->
+
         render: () ->
             @$el = $(@el)
             @$el.append(@detail_template(@model.toJSON()))
