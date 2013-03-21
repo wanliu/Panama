@@ -26,6 +26,7 @@ class Product < ActiveRecord::Base
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
   has_many :sub_products, :dependent => :destroy
+  has_many :comments, :as => :targeable
 
   has_many :styles, :dependent => :destroy, :class_name => "StyleGroup" do
     def [](style_name)
