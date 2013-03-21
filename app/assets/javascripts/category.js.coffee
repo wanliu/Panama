@@ -65,6 +65,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         events: {
             "click" : "children"
         }
+
         tagName: "button"
 
         className: "btn category_children"
@@ -83,7 +84,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             category_base.add_current_category(@model)
             if @model.get("flag") == 1
                 @model.trigger("parent_hide")
-                category_children_view = new CategoryChildrenViewList({
+                new CategoryChildrenViewList({
                     model: @model,
                     shop_name: @shop_name,
                     children_el: @children_el
@@ -101,6 +102,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         events: {
             "keyup .input_search" : "keyup_choose"
             "click #search"       : "click_choose"
+            "focus .input_search" : "on_focus"
         }
 
         initialize : (options) ->
@@ -129,7 +131,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
-                
+        on_focus: () ->
+            $(".input_search").select()
 
     class CategoryChildrenViewList extends Backbone.View
         return_el: $("<button class='btn back-parent' data-value='back'>
@@ -153,7 +156,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 @$el.append(@return_el.clone())
 
         all_children: (collection) ->
-            @children_el.append(@$el)
+            if $(".children-#{@model.get('id')}").length < 1
+                @children_el.append(@$el)
+            else 
+                $(".children-#{@model.get('id')}").show()
             if collection.length > 0
                 collection.each (model) =>
                     @add_one_children(model)
@@ -168,6 +174,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     children_el: @children_el
                 })
             @$el.append(@category_children_view.render(model))
+            
 
         render: () ->
             @$el
@@ -229,7 +236,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @category_root.bind("reset", @all_root, @)
             @category_root.category_root()
 
-            @category_picture_view = new CategoryChildrenSearch({
+            new CategoryChildrenSearch({
                 model: @model,
                 search_el: @search_el,
                 children_el: @category_children_el,
