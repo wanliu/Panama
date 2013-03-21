@@ -95,3 +95,15 @@
 		padding-top: 0;
 	}
 }
+
+
+.well-msg:before {
+    border-right: 7px solid rgba(0,0,0,0.1);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    content: "";
+    display: inline-block;
+    position: relative;
+	left: -27px;
+	top: -10px;
+}

@@ -23,9 +23,33 @@
     }
 }
 
+.comments{
+    float: right;
+    width: 340px;
+
+    .title{
+        display: inline-block;
+    }
+
+    .my-comment{
+        margin-top: 10px;
+    }
+
+    .context{
+        margin-top: 10px;
+        .user-inof{
+
+            text-align: center;
+            .avatar{
+                width: 30px;
+            }
+        }
+    }
+}
+
 .property {
     margin-left: 380px;
-    margin-right: 300px;
+    margin-right: 340px;
     padding-left: 0px;
     zoom: 1;
 
