@@ -7,8 +7,15 @@
             $("#zoom_01").elevateZoom();
         });
     </script>
-    <div class='product_comment'>
-
+    <div class='comments'>
+        <div>
+            <h4 class='title'>
+                评论
+            </h4>
+        </div>
+        <div class='context'>
+            <%=render :partial => "people/comments/comment", :locals=>{ comments: @product.comments } %>
+        </div>
     </div>
     <div class="container-fluid property">
         <div class="row-fluid">
