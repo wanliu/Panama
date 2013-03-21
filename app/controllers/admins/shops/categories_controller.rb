@@ -61,12 +61,10 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     @category_children = Category.find_by(:name => params[:category_name])
     if @category_children.children.count > 0
       @category_children = @category_children.children
-      unless @category_children.first.id == 3
-        result = @category_children.map do | c |
-          category = c.as_json(root: false)
-          c.children.count > 0 ? category.merge!(:flag => 1) : category.merge!(:flag => 0)
-          category
-        end
+      result = @category_children.map do | c |
+        category = c.as_json(root: false)
+        c.children.count > 0 ? category.merge!(:flag => 1) : category.merge!(:flag => 0)
+        category
       end
     end
     render :json => result || []
