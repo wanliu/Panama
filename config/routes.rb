@@ -117,12 +117,13 @@ Panama::Application.routes.draw do
 
       match "pending", :to => "shops/transactions#pending"
 
-      resources :employees, :controller => "shops/employees" do
+      resources :employees, :controller => "shops/employees", :except => :destroy  do
         collection do
           post "invite", :to => "shops/employees#invite"
           get 'find_by_group', :to => "shops/employees#find_by_group"
           post "group_join_employee", :to => "shops/employees#group_join_employee"
           delete "group_remove_employee", :to => "shops/employees#group_remove_employee"
+          delete "destroy/:user_id", :to => "shops/employees#destroy"
         end
       end
 

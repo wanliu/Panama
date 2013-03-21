@@ -6,7 +6,7 @@ class ShopAbility
 
     if user == shop.user
       can :manage, :all
-    else
+    elsif shop.find_employee(user.id)
       user.groups.each do |g|
         g.permissions.each do |p|
           cls = Kernel.const_get(p.resource) rescue nil
