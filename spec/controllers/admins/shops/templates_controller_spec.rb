@@ -34,8 +34,8 @@ describe Admins::Shops::TemplatesController, "模板信息控制器" do
   end
 
   describe "GET edit" do
-    it "显示编辑" do
-      get :edit, template_attributes ,get_session
+    it "显示编辑" do 
+      get :edit, template_attributes.merge({:id => ""}) ,get_session
       response.should be_success
       assigns(:template).should be_a_instance_of(Template)
     end
