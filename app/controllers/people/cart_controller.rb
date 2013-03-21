@@ -1,6 +1,5 @@
 class People::CartController < People::BaseController
   def index
-    authorize! :index, Cart
     @items = ProductItem.where(:cart_id => my_cart.id).page params[:page]
   end
 

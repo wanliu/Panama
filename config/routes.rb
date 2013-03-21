@@ -24,10 +24,10 @@ Panama::Application.routes.draw do
       post ":shop_name/show_email_invite", :to => "people#agree_email_invite_user"
     end
 
-    resources :cart, :controller => "people/cart"
     resources :transactions, :controller => "people/transactions" do
       member do
         post "event/:event", :to => "people/transactions#event", :as => :trigger_event
+        post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
       end
     end
 
@@ -46,12 +46,14 @@ Panama::Application.routes.draw do
         get "index_activities"
       end
     end
+    
+    resources :cart, :controller => "people/cart"
 
     member do
       post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
       post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
-      post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
+      # post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
     end
   end
 
@@ -73,7 +75,7 @@ Panama::Application.routes.draw do
   get "pending/index"
 
   resources :users
-  resources :contents, :except => :index
+  resources :contents
 
   resources :products, :except => :index
 
@@ -91,7 +93,7 @@ Panama::Application.routes.draw do
   resources :category
   # shop admins routes
 
-  resources :shops, :except => :index do
+  resources :shops do
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post
@@ -148,6 +150,12 @@ Panama::Application.routes.draw do
     :to => "admins/shops/products#products_by_category"
 
   match "shops/:shop_id/admins/products/category/:category_id/accept/:product_id",
+    :to => "admins/shops/products#accept_product"
+
+  match "shops/:shop_id/admins/products/category/:shops_category_id",
+    :to => "admins/shops/products#products_by_category"
+
+  match "shops/:shop_id/admins/products/category/:shops_category_id/accept/:product_id",
     :to => "admins/shops/products#accept_product"
 
 
