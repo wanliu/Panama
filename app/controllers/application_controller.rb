@@ -22,9 +22,7 @@ class ApplicationController < ActionController::Base
   def draw_errors_message(ist_model)
     messages = []
     ist_model.errors.messages.each do |attr, ms|
-      ms.each do |m|
-        messages << "#{attr}: #{m}"
-      end
+      ms.each{| m | messages << "#{attr}: #{m}"}
     end
     messages
   end

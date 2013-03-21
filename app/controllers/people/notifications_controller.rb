@@ -1,3 +1,4 @@
+#describe: 提醒控制器
 class People::NotificationsController < People::BaseController
 
     def index
@@ -6,7 +7,9 @@ class People::NotificationsController < People::BaseController
         unless params[:all] == "1"
             @notifications = Notification.unreads
         end
-        @notifications = @notifications.where(:user_id => @people.id).paginate(:page => params[:page])
+        @notifications = @notifications.where(:user_id => @people.id)
+        .order(read: :asc)
+        .paginate(:page => params[:page])
         respond_to do | format |
             format.html
             format.json

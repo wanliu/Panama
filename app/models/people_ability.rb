@@ -9,7 +9,6 @@ class PeopleAbility
             can :read, Notification do |notice|
                 notice.user_id == current_user.id
             end
-
             can :index, Notification
             can :index, Cart
             can :create, Cart
@@ -17,7 +16,7 @@ class PeopleAbility
             can :activity, Comment
             can :product, Comment
             can :index, OrderTransaction
-            can :show, OrderTransaction do |order|
+            can :read, OrderTransaction do |order|
                 order.buyer_id == current_user.id
             end
             can :batch_create, OrderTransaction
