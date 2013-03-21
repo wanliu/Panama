@@ -58,13 +58,13 @@ describe Admins::Shops::EmployeesController, "商店雇员控制器" do
 
         it "删除有效雇员" do
             shop.shop_users.create(:user_id => @user.id)
-            delete :destroy, shop_param.merge({user_id: @user.id, format: :json}), get_session
+            delete :destroy, shop_param.merge({user_id: @user.id, format: :json, :id => ""}), get_session
             response.should be_success
             shop.find_employee(@user_id).should be_nil
         end
 
         it "删除无效雇员" do
-            delete :destroy, shop_param.merge({user_id: 0, format: :json}), get_session
+            delete :destroy, shop_param.merge({user_id: 0, format: :json, :id => ""}), get_session
             response.response_code.should eq(403)
         end
     end
