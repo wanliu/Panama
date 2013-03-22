@@ -33,5 +33,4 @@ class People::FollowingsController < People::BaseController
     end
   end
 
-
 end
