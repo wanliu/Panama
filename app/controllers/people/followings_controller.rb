@@ -4,7 +4,8 @@ class People::FollowingsController < People::BaseController
   before_filter :login_required, :except => [:index]
 
   def index
-    @followings = @people.followings
+    @u_followings = @people.followings.users
+    @s_followings = @people.followings.shops
     respond_to do |format|
       format.html
       format.json{ render :json => @followings }
@@ -46,6 +47,14 @@ class People::FollowingsController < People::BaseController
     respond_to do | format |
       format.html
       format.json{ head :no_content }
+    end
+  end
+
+  def followers
+    @followers = @people.followers
+    respond_to do |format|
+      format.html
+      format.json{ render :json => @followers }
     end
   end
 end
