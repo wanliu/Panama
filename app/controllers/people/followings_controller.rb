@@ -5,6 +5,10 @@ class People::FollowingsController < People::BaseController
 
   def index
     @followings = @people.followings
+    respond_to do |format|
+      format.html
+      format.json{ render :json => @followings }
+    end
   end
 
   def user

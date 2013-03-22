@@ -6,6 +6,10 @@ class Following < ActiveRecord::Base
   belongs_to :user
   belongs_to :follow, :polymorphic => true
 
+  validates :user_id, :presence => true
+  validates_presence_of :user
+  validates_presence_of :follow
+
   def self.user(user_id, uid = nil)
     opts = {follow_id: user_id, follow_type: "User"}
     opts.merge!(user_id: uid) unless uid.nil?
