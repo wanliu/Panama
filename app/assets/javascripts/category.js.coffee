@@ -82,7 +82,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el.html(@model.get("name"))
             if @model.get("flag") == 1
                 @$el.append("<span class='caret right'></span>")
-                @$el.addClass("category-"+@model.get('id'))
+            @$el.addClass("category-"+@model.get('id'))
 
         render: () ->
             @$el
@@ -97,8 +97,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     shop_name: @shop_name,
                     children_el: @children_el
                 })
-            _.each $(".category_children"), (btn) =>
-                $(btn).attr("class", "btn category_children")
+            
+            # _.each $(".category_children"), (btn) =>
+            #     $(btn).attr("class", "btn category_children")
+            @$el.siblings(".active").removeClass("active")
             @$el.addClass("active")
             
             category_base.refresh_category_list(@model, @shop_name)
@@ -192,8 +194,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el.show()
 
         back: () ->
-            # debugger
-            # category_base.refresh_category_list(@model, @shop_name)
             @hide()
             category_base.remove_last_model()
             @model.trigger("parent_show")
@@ -283,7 +283,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         select_category: () ->
             $("button.category-#{@model.get('id')}").click()
-            debugger
 
         render: () ->
             @$el.html(@detail_template(@model.toJSON()))
@@ -299,7 +298,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             if @model.get("flag") == 0
 
             else
-                @$el.find(".category_cover").hide()
+                @$el.find(".category_cover:visible").hide()
                 if $(@select_list).length > 0
                     @$el.find(@select_list).show()
                 else
