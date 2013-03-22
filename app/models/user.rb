@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
            foreign_key: 'buyer_id'
 
   has_many :addresses, class_name: "Address"
+  has_many :followings
 
   delegate :groups, :jshop, :to => :shop_user
 

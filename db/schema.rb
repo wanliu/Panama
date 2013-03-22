@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315024156) do
+ActiveRecord::Schema.define(:version => 20130321102657) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -145,6 +145,14 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "ancestry"
+  end
+
+  create_table "followings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "follow_id"
+    t.string   "follow_type"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "group_permissions", :force => true do |t|
@@ -311,10 +319,11 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
   end
 
   create_table "shop_user_groups", :force => true do |t|
-    t.integer  "shop_user_id"
+    t.integer  "user_id"
     t.integer  "shop_group_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "shop_user_id"
   end
 
   create_table "shop_users", :force => true do |t|
@@ -340,6 +349,13 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
     t.integer  "ancestry_depth"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "shops_employee_users", :force => true do |t|
+    t.integer  "shop_id"
+    t.integer  "employee_user_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "style_groups", :force => true do |t|
