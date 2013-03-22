@@ -2,6 +2,8 @@
 #describe: 关注
 class Following < ActiveRecord::Base
   attr_accessible :follow_id, :follow_type, :user_id
+  scope :shops, where(follow_type: "Shop")
+  scope :users, where(follow_type: "User")
 
   belongs_to :user
   belongs_to :follow, :polymorphic => true
@@ -21,4 +23,5 @@ class Following < ActiveRecord::Base
     opts.merge!(user_id: uid) unless uid.nil?
     create(opts)
   end
+
 end

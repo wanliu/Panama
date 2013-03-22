@@ -24,6 +24,8 @@ Panama::Application.routes.draw do
       end
     end
 
+    match "followers", :to => "people/followings#followers"
+
     resources :product_comments, :controller => "people/product_comments" do
     end
 
@@ -123,6 +125,9 @@ Panama::Application.routes.draw do
           delete "group_remove_employee", :to => "shops/employees#group_remove_employee"
           delete "destroy/:user_id", :to => "shops/employees#destroy"
         end
+      end
+
+      resources :followings, :controller => "shops/followings" do
       end
 
       resources :groups, :controller => "shops/groups" do

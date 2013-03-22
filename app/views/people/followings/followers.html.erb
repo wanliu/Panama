@@ -1,0 +1,22 @@
+<% active_section :followers %>
+<% if @followers.count > 0 %>
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>关注我的用户</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @followers.each do |f| %>
+      <tr>
+        <td>
+          <img src="<%=f.user.icon %>" class="img-polaroid" />
+          <%=f.user.login %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class='alert'>暂时没有关注的!</div>
+<% end %>
