@@ -11,6 +11,7 @@ class Shop < ActiveRecord::Base
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_many :shop_users
+  has_many :followings, :as => :follow
 
   has_one :shops_category
   belongs_to :user
