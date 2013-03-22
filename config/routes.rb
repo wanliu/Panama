@@ -2,20 +2,6 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
-  # faye_server '/realtime', timeout: 25 do
-  #   map "/notification/**" => RealtimeNoticeController
-  #   map default: :block
-  #   class MockExtension
-  #     def incoming(message, callback)
-  #        callback.call(message)
-  #     end
-  #     def outgoing(message, callback)
-  #         callback.call(message)
-  #     end
-  #   end
-  #   add_extension(MockExtension.new)
-  # end
-
   resources :people do
     collection do
       get ":shop_name/show_invite/:login", :to => "people#show_invite"
@@ -28,6 +14,13 @@ Panama::Application.routes.draw do
       member do
         post "event/:event", :to => "people/transactions#event", :as => :trigger_event
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
+      end
+    end
+
+    resources :followings, :controller => "people/followings" do
+      collection do
+        post "user/:user_id" => "people/followings#user"
+        post "shop/:shop_id" => "people/followings#shop"
       end
     end
 
@@ -49,7 +42,7 @@ Panama::Application.routes.draw do
         get "index_activities"
       end
     end
-    
+
     resources :cart, :controller => "people/cart"
 
     member do
