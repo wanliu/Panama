@@ -35,6 +35,7 @@ class People::FollowingsController < People::BaseController
 
   def destroy
     @follow = current_user.followings.find_by(id: params[:id])
+    @follow.destroy
     respond_to do | format |
       format.html
       format.json{ head :no_content }
