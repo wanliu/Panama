@@ -1,13 +1,14 @@
 #encoding: utf-8
 #describe: 关注控制器
 class People::FollowingsController < People::BaseController
-  before_filter :login_required
+  before_filter :login_required, :except => [:index]
 
   def index
-    @followings = current_user.followings
+    @followings = @people.followings
   end
 
   def user
+    authorize! :user, Following
     user = User.find(params[:user_id])
     @follow = current_user.followings.user(user.id)
     respond_to do | format |
@@ -21,6 +22,7 @@ class People::FollowingsController < People::BaseController
   end
 
   def shop
+    authorize! :shop, Following
     shop = Shop.find(params[:shop_id])
     @follow = current_user.followings.shop(shop.id)
     respond_to do | format |
@@ -35,6 +37,7 @@ class People::FollowingsController < People::BaseController
 
   def destroy
     @follow = current_user.followings.find_by(id: params[:id])
+    authorize! :destroy, @follow
     @follow.destroy
     respond_to do | format |
       format.html
