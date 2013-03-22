@@ -88,7 +88,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el
 
         children: () ->
-            # debugger
             category_base.add_current_category(@model)
             if @model.get("flag") == 1
                 @model.trigger("parent_hide")
@@ -197,7 +196,9 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @hide()
             category_base.remove_last_model()
             @model.trigger("parent_show")
-            
+
+            $(".category_cover.list-#{@model.get('id')}").hide()
+            $(".#{$('.category_list').attr('back_parent')}").show()                    
 
     class CategoryRootView extends Backbone.View
         events: {
@@ -227,7 +228,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     children_el: @children_el,
                     shop_name: @shop_name
                 })
-            # debugger
+            
             category_base.refresh_category_list(@model, @shop_name)
 
     class Category extends Backbone.View
@@ -278,6 +279,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             "click .select_category" : "select_category"
 
         enter_children: () ->
+            str = $(@el).parent().attr("class").split(" ")[1]
+            $(".category_list").attr("back_parent",str)
             $("button.category-#{@model.get('id')}").click()
             category_base.refresh_category_list(@model, @shop_name)
 
