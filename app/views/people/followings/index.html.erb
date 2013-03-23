@@ -1,42 +1,48 @@
 <% active_section :following %>
-<% if @u_followings.count > 0 %>
-  <table class='table'>
-    <thead>
-      <tr>
-        <th style='width: 90%'>关注的用户</th>
-        <th style='width: 10%'></th>
-      </tr>
-    </thead>
-    <tbody>
+<table class='table'>
+  <thead>
+    <tr>
+      <th style='width: 90%'>关注的用户</th>
+      <th style='width: 10%'></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @u_followings.count > 0 %>
       <% @u_followings.each do |f| %>
         <tr>
-          <td><%=f.follow.login %></td>
-          <td><input type='button' class='btn btn-small btn-primary' value='取消关注' /></td>
+          <td style='vertical-align:middle;'>
+            <img src="<%=f.follow.icon %>" class="img-polaroid" />
+            <%=f.follow.login %>
+          </td>
+          <td style='vertical-align:middle;'> <input type='button' class='btn btn-small btn-primary' value='取消关注' /></td>
         </tr>
       <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <div class='alert'>暂时没有关注的用户!</div>
-<% end %>
-
-<% if @s_followings.count > 0 %>
-  <table class='table'>
-    <thead>
+    <% else %>
       <tr>
-        <th style='width: 90%'>关注的商店</th>
-        <th style='width: 10%'></th>
+        <td colspan='2'>暂时没有关注的用户!</td>
       </tr>
-    </thead>
-    <tbody>
+    <% end %>
+  </tbody>
+</table>
+<table class='table'>
+  <thead>
+    <tr>
+      <th style='width: 90%'>关注的商店</th>
+      <th style='width: 10%'></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @s_followings.count > 0 %>
       <% @s_followings.each do |f| %>
         <tr>
           <td><%=f.follow.name %></td>
           <td><input type='button' class='btn btn-small btn-primary' value='取消关注' /></td>
         </tr>
       <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <div class='alert'>暂时没有关注的商店!</div>
-<% end %>
+    <% else %>
+      <tr>
+        <td colspan='2'>暂时没有关注的商店</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
