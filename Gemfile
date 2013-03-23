@@ -1,5 +1,5 @@
-# source 'https://rubygems.org'
-source 'http://ruby.taobao.org'
+source 'https://rubygems.org'
+# source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
 
@@ -15,7 +15,8 @@ gem 'ancestry', '~> 1.3.0'
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'coffee-script-source', '~> 1.4.0'
+  # gem 'coffee-script-source', '~> 1.4.0'
+  gem "coffee-script-source", "~> 1.6.2"
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
@@ -42,7 +43,7 @@ gem 'apotomo', '~> 1.2.3'
 # markup
 
 gem 'github-markup', '~> 0.7.4'
-gem 'redcarpet', '~> 2.2.2' 
+gem 'redcarpet', '~> 2.2.2'
 
 
 # form helper
@@ -112,6 +113,7 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
+  # gem 'coffee-rails-source-maps'
   # gem 'better_errors'
   # gem 'binding_of_caller'
 end
@@ -123,7 +125,7 @@ group :test do
   gem "fakefs", :require => "fakefs/safe"
 end
 
-gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10 
+gem "friendly_id", "~> 4.0.9" # Note: You MUST use 4.0.9 or greater for Rails 3.2.10
 gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'

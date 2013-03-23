@@ -33,16 +33,6 @@
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
 
-	require(['lib/table_bander'], function(tblBander){
-		var bander = new tblBander.TableBander({
-			// els : [$('div.colours'), $('div.sizes')],
-			els    : [<%= filter_attribtues.map{ |item| "$('div.#{item.downcase}')" }.join(', ').html_safe %>],
-			fields : [{title: '价格', value: 'price'}, {title: '数量', value: 'quantity'}],
-			depth  : ['colour', 'size']
-		})
-	})
-
-
 	require(['lib/colorpicker/js/bootstrap-colorpicker'], function(){
       $('.color').colorpicker();
     })

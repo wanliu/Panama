@@ -6,11 +6,11 @@ class Shop < ActiveRecord::Base
 
   attr_accessible :name, :user
 
-  has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_many :shop_users
+  has_many :contents, :as => :contentable, dependent: :destroy
 
   has_one :shops_category
   belongs_to :user

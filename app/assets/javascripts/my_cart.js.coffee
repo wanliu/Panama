@@ -100,11 +100,7 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 		urlAction = $(@).attr('add-to-action')
 		form = $(@).parents("form")
 
-		sub_id = form.find('#product_item_sub_product_id').val()
-		if sub_id
-			myCart.addToCart($(selector), form, urlAction)
-		else
-			alert("请选择样式！")
+		myCart.addToCart($(selector), form, urlAction)
 
 	exports.myCart = myCart
 	exports
