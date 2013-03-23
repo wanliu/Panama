@@ -26,6 +26,7 @@ class Product < ActiveRecord::Base
   belongs_to :shops_category
   belongs_to :default_attachment, :class_name => "Attachment"
   has_and_belongs_to_many :attachments, :class_name => "Attachment"
+  has_many   :contents, :as => :contentable
 
   # prices[:colour => "red", :sizes => "S"]
   # =>

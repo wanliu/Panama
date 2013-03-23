@@ -7,7 +7,7 @@ GIT
       railties (~> 3.1)
 
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://rubygems.org/
   specs:
     ac_uniquify (0.1.0)
     actionmailer (3.2.8)
@@ -114,7 +114,7 @@ GEM
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.4.0)
+    coffee-script-source (1.6.2)
     columnize (0.3.6)
     compass (0.12.2)
       chunky_png (~> 1.2)
@@ -444,7 +444,7 @@ DEPENDENCIES
   carrierwave-mongoid (~> 0.1.0)
   carrierwave-upyun (~> 0.1.6)
   coffee-rails (~> 3.2.1)
-  coffee-script-source (~> 1.4.0)
+  coffee-script-source (~> 1.6.2)
   compass-css-arrow (~> 0.0.3)
   compass-h5bp (~> 0.1.0)
   compass-rails (~> 1.0.3)
