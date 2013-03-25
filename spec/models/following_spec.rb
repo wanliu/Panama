@@ -5,8 +5,8 @@ describe Following, "关注模型" do
 
 	it{ should belong_to(:user) }
 	it{ should belong_to(:follow) }
-	it{ should validates_presence_of(:user) }
-	it{ should validates_presence_of(:follow) }
+	it{ should validate_presence_of(:user) }
+	it{ should validate_presence_of(:follow) }
 
 	describe "用户" do
 		before :each do

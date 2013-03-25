@@ -31,6 +31,18 @@ class User < ActiveRecord::Base
     photos.avatar
   end
 
+  def is_follow_user?(user_id)
+    followings.exists?(follow_id: user_id, follow_type: "User")
+  end
+
+  def is_follow_shop?(shop_id)
+    followings.exists?(follow_id: shop_id, follow_type: "Shop")
+  end
+
+  def is_follower?(user_id)
+    followers.exists?(user_id: user_id)
+  end
+
   #暂时方法
   def grapical_handler
     ImageUploader.new
