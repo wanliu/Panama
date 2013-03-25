@@ -10,6 +10,11 @@
             <div id='people-sidebar' class="span3">
                 <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
                 <h1><%= @people.login %></h1>
+                <div class="isfollowing">
+                    <button class="btn btn-primary following" data-value="1">关注TA</button>
+                    <button class="btn btn-primary unfollowing" data-value="2">取消关注</button>
+                </div>
+                <hr>
                 <span class="label">Default</span>
                 <span class="label">Default</span>
                 <span class="label">Default</span>
@@ -44,7 +49,7 @@
                         <i class="icon-chevron-right"></i>商品评论
                         </a>
                     </li>
-                    <li><a href="following"><i class="icon-chevron-right"></i> 我关注的</a></li>
+                    <li><a href="<%= person_followings_path(current_user.login) %>"><i class="icon-chevron-right"></i> 我关注的</a></li>
                     <li><a href="followers"><i class="icon-chevron-right"></i> 关注我的</a></li>
                     <li class="nav-header">圈子</li>
                     <li><a href="#labels-badges"><i class="icon-chevron-right"></i> Labels and badges</a></li>
@@ -60,6 +65,12 @@
                     require(['jquery'], function($){
                         $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
                     });
+                    require(["jquery", "people"], function($, following){
+                        new following({ 
+                            login: "<%= current_user.login %>",
+                            following_type: "User", 
+                            el: $(".isfollowing") })
+                    })
                 </script>
                 </div>
 

@@ -3,8 +3,6 @@ require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
-  before_filter :login_required, :only => [:show_invite, :agree_invite, :show_email_invite]
-
   include Apotomo::Rails::ControllerMethods
 
   has_widgets do |root|
