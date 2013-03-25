@@ -113,6 +113,8 @@ Panama::Application.routes.draw do
         end
       end
 
+      resources :communities, :controller => "shops/communities"
+
       resources :transactions, :controller => "shops/transactions"
 
       match "pending", :to => "shops/transactions#pending"

@@ -14,7 +14,15 @@
           <img src="<%=f.user.icon %>" class="img-polaroid" />
           <%=f.user.login %>
         </td>
-        <td><input type='button' value='关注' class='btn btn-small btn-primary' /></td>
+        <td>
+          <% unless current_user.nil? %>
+            <% if current_user.is_follower?(f.user_id) %>
+              <span>互相关注</span>
+            <% elsif current_user != f.user %>
+              <input type='button' value='关注' class='btn btn-small btn-primary' />
+            <% end %>
+          <% end %>
+        </td>
       </tr>
       <% end %>
     <% else %>
