@@ -99,8 +99,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     children_el: @children_el
                 })
             
-            # _.each $(".category_children"), (btn) =>
-            #     $(btn).attr("class", "btn category_children")
             @$el.siblings(".active").removeClass("active")
             @$el.addClass("active")
             
@@ -139,36 +137,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
-            # @category_name = (search_value.split(" "))[search_value.split(" ").length-1]
             category_base.refresh_category_list(null, @shop_name)
-            # @category_list = new CategoryList([], @shop_name)
-            # @category_list.bind("reset", @all_children, @)
-            # @category_list.category_childrens({ category_name: @category_name })
 
         on_focus: (options) ->
             $(".input_search").select()
-
-        # all_children: (collection) ->
-        #     if collection.length > 0
-        #         $(".category_list").find(".category_cover:visible").hide()
-        #         $(".category_cover.list-undefined").remove()
-        #         $(".category_list").append("<div class='category_cover list-undefined'></div>")
-        #         collection.each (model) =>
-        #             @add_one_children(model)
-
-        #         $(".slides").slidesjs({
-        #             width: 200,
-        #             height: 133,
-        #             navigation: false,
-        #             pagination: false
-        #         })          
-
-        # add_one_children: (model) ->
-        #     @category_detail_view = new CategoryDetailView({
-        #         model: model,
-        #         shop_name: @shop_name
-        #     })
-        #     $(".category_cover.list-undefined").append(@category_detail_view.render())
 
 
     class CategoryChildrenViewList extends Backbone.View
@@ -295,13 +267,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
     class CategoryDetailView extends Backbone.View
         tagName: 'div'
         className: 'category_detail'
-
         detail_template: _.template($('#list-template').html())
 
         initialize: (options) ->
             _.extend(@, options)
-            @listenTo(@model, 'change', @render)
-            @listenTo(@model, 'destroy', @remove)
             @$el = $(@el)
 
         events:
@@ -323,49 +292,54 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
 
     class CategoryListView extends Backbone.View
-        el: $(".category_list")
+        tagName: 'div'
+        className: 'category_cover'
         
         initialize: (options) ->
             _.extend(@, options)
-            return if (@model != null && @model.get("flag") == 0) 
+            @$el = $(@el)
             list_id = "list-undefined"
             if @model != null
                 @category_name = @model.get("name")
                 list_id = "list-#{@model.get('id')}"
+                return if @model.get("flag") == 0
             else
-                $(".category_list .#{list_id}").remove()
+                $(".list-undefined").remove()
                 search_value = $(".input_search").val()
                 @category_name = (search_value.split(" "))[search_value.split(" ").length-1]
-            @select_list = ".category_cover.#{list_id}"
 
-            @$el.find(".category_cover:visible").hide()
-            if @model != null && $(@select_list).length > 0
-                @$el.find(@select_list).show()
+            @select_list = ".category_cover.#{list_id}"
+            $(".category_cover:visible").hide()
+            if $(@select_list).length > 0
+                $(@select_list).show()
             else
-                @$el.append("<div class='category_cover #{list_id}'></div>")
+                @$el.addClass(list_id)
                 @CategoryDetails = new CategoryList([], @shop_name)
                 @CategoryDetails.bind("reset", @all_children, @)
+                @CategoryDetails.bind("reset", @render, @)
                 @model = @CategoryDetails.category_childrens({ category_name: @category_name })
-                @$el = $(@el)
- 
+            
         all_children: (collection) ->
             if collection.length > 0
                 collection.each (model) =>
                     @add_one_children(model)
-
-            $(".slides").slidesjs({
-                width: 200,
-                height: 133,
-                navigation: false,
-                pagination: false
-            })
 
         add_one_children: (model) ->
             @category_detail_view = new CategoryDetailView({
                     model: model,
                     shop_name: @shop_name
                 })
-            $(@select_list).append(@category_detail_view.render())
+            $(@el).append(@category_detail_view.render())
+
+        render: () ->
+            $(".category_list").append(@el)
+            $(@el).find(".slides").slidesjs({
+                width: 200,
+                height: 133,
+                navigation: false,
+                pagination: false
+            })
+            @
 
 
     category_base = new CategoryBase()
