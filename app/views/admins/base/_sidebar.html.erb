@@ -29,6 +29,21 @@
         <%= render :partial => "section", :locals => section %>
     <% end %>
 </ul>
+<hr style='margin:10px 0;' />
+  <div style='padding:0 20px 0px 20px'>
+    <div style='display:inline-block'>
+      <a href="<%=shop_admins_followings_path(current_shop) %>">
+        <span class='follow-number'><%=current_shop.followers.count %></span><br />
+        <span>关注</span>
+      </a>
+    </div>
+    <div style='display:inline-block;margin-left:20px'>
+      <a href='javascript:void(0)'>
+        <span class='follow-number'>6000</span><br />
+        <span>订单</span>
+      </a>
+    </div>
+  </div>
 </div>
 <% end %>
 
