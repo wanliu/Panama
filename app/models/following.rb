@@ -1,5 +1,5 @@
+#encoding: utf-8
 #describe: 关注
-
 class Following < ActiveRecord::Base
   attr_accessible :follow_id, :follow_type, :user_id
 
