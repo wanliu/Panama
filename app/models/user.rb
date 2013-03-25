@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
 
   has_many :addresses, class_name: "Address"
   has_many :followings
+  has_many :followers, :as => :follow, :class_name => "Following"
 
   delegate :groups, :jshop, :to => :shop_user
 

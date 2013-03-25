@@ -1,32 +1,31 @@
 define ["jquery", "backbone"], ($, Backbone) ->
 
-	class Following extends Backbone.View
+  class Following extends Backbone.View
 
-		events: {
-			"click .following"   : "following"
-			"click .unfollowing" : "unfollowing"
-		}
+    events: {
+      "click .following"   : "following"
+      "click .unfollowing" : "unfollowing"
+    }
 
-		initialize: (@options) ->
-			_.extend(@, options)
+    initialize: (@options) ->
+      _.extend(@, options)
 
-		url: () ->
-			if @following_type == "User"
-				"/people/#{@login}/followings/user/"
+    url: () ->
+      "/people/#{@login}/followings"
 
-			if @following_type == "Shop"
-				"/people/#{@login}/followings/shop/"
+    send_following: (following_id) ->
+      debugger
+      switch @following_type
+        when "User" then $.post("#{@url()}/user/#{following_id}", {user_id: following_id}, "json")
+        when "Shop" then $.post("#{@url()}/shop/#{following_id}", {shop_id: following_id}, "json")
 
-		send_following: (following_id) ->
-			$.post(@url(), {}following_id, "json")
+    following: () ->
+      following_id = $(".following").attr("data-value")
+      @send_following(following_id)
 
-		following: () ->
-			following_id = $(".following").attr("data-value")
-			@url(following_id)
-
-		unfollowing: () ->
-			following_id = $(".unfollowing").attr("data-value")
-			@url(following_id)
+    unfollowing: () ->
+      following_id = $(".unfollowing").attr("data-value")
+      @send_following(following_id)
 
 
-	Following
+  Following
