@@ -64,7 +64,6 @@
                         e.returnValue = false;
 
                     };
-
                     
 
                     $("#CategoryModal").on('show', function() {
@@ -74,13 +73,12 @@
                             .find(".modal-body")
                             .load("<%= category_page_shop_admins_products_path %>");
 
-                        window.onmousewheel = document.onmousewheel = scrollDialog;
-
+                        // window.onmousewheel = document.onmousewheel = scrollDialog;
                     });
 
 
                     $("#CategoryModal").on('hide', function(){
-                        window.onmousewheel = document.onmousewheel = undefined;
+                        // window.onmousewheel = document.onmousewheel = undefined;
                     });
 
                     $(button).click(function(e){
@@ -138,7 +136,7 @@
 <% end %>
 
 <!-- Modal -->
-<div id="CategoryModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="CategoryModal" class="modal hide fade in" style="position: absolute" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">产品类型</h3>
