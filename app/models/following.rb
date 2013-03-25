@@ -11,6 +11,7 @@ class Following < ActiveRecord::Base
   validates :user_id, :presence => true
   validates_presence_of :user
   validates_presence_of :follow
+  validate :valid_follow?
 
   def self.user(user_id, uid = nil)
     opts = {follow_id: user_id, follow_type: "User"}
@@ -22,6 +23,14 @@ class Following < ActiveRecord::Base
     opts = {follow_id: shop_id, follow_type: "Shop"}
     opts.merge!(user_id: uid) unless uid.nil?
     create(opts)
+  end
+
+
+  def valid_follow?
+    if Following.exists?(["follow_id=? and follow_type=? and id<>? and user_id=?",
+      follow_id, follow_type, id.to_s, user_id])
+      errors.add(:follow_id, "已经是你关注对象!")
+    end
   end
 
 end

@@ -3,12 +3,11 @@
 class Admins::Shops::FollowingsController < Admins::Shops::SectionController
 
   def index
-    @followings = current_shop.followings
+    @followings = current_shop.followers
     respond_to do |format|
       format.html
       format.json{ render :json => @followings }
     end
   end
-
 
 end

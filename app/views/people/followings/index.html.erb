@@ -1,48 +1,38 @@
 <% active_section :following %>
-<table class='table'>
+<table class='table followers follow-user'>
   <thead>
     <tr>
-      <th style='width: 90%'>关注的用户</th>
-      <th style='width: 10%'></th>
+      <th class='title'>关注的用户</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-    <% if @u_followings.count > 0 %>
-      <% @u_followings.each do |f| %>
-        <tr>
-          <td style='vertical-align:middle;'>
-            <img src="<%=f.follow.icon %>" class="img-polaroid" />
-            <%=f.follow.login %>
-          </td>
-          <td style='vertical-align:middle;'> <input type='button' class='btn btn-small btn-primary' value='取消关注' /></td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan='2'>暂时没有关注的用户!</td>
-      </tr>
-    <% end %>
+    <%= render :partial => "following_user", :locals => {followings: @u_followings} %>
   </tbody>
 </table>
-<table class='table'>
+<table class='table followers follow-shop'>
   <thead>
     <tr>
-      <th style='width: 90%'>关注的商店</th>
-      <th style='width: 10%'></th>
+      <th class='title'>关注的商店</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-    <% if @s_followings.count > 0 %>
-      <% @s_followings.each do |f| %>
-        <tr>
-          <td><%=f.follow.name %></td>
-          <td><input type='button' class='btn btn-small btn-primary' value='取消关注' /></td>
-        </tr>
-      <% end %>
-    <% else %>
-      <tr>
-        <td colspan='2'>暂时没有关注的商店</td>
-      </tr>
-    <% end %>
+    <%= render :partial => "following_shop", :locals => {followings: @s_followings } %>
   </tbody>
 </table>
+<script type='text/javascript'>
+  require(["jquery", "people/following"], function($, view){
+    new view.FollowListView({
+      el: $("table.follow-user"),
+      login: "<%=current_user.login %>",
+      follow_type: "user"
+    })
+
+    new view.FollowListView({
+      el: $("table.follow-shop"),
+      login: "<%=current_user.login %>",
+      follow_type: "shop"
+    })
+  })
+</script>
