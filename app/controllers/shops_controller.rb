@@ -35,7 +35,6 @@ class ShopsController < ApplicationController
     @content = Content.where("name = ? and shop_id = ?", "index", @shop.id).first
 
     respond_to do |format|
-      # format.html { render_shop_content @shop, :index, @shop }
       format.html { render_content_ex @content }
       format.json { render json: @shop }
     end

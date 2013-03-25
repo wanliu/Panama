@@ -11,7 +11,7 @@
                 <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
                 <h1><%= @people.login %></h1>
                 <div class="isfollowing">
-                    <button class="btn btn-primary following" data-value="1">关注TA</button>
+                    <button class="btn btn-primary following" data-value="<%= current_user.id %>">关注TA</button>
                     <button class="btn btn-primary unfollowing" data-value="2">取消关注</button>
                 </div>
                 <hr>
@@ -45,12 +45,12 @@
                     <li><a href="about_to_happen"><i class="icon-chevron-right"></i> 马上要发生的</a></li>
                     <li><a href="expired"><i class="icon-chevron-right"></i> 往期活动</a></li>
                     <li class="nav-header">社区</li>
-                    <li><a href="<%=person_product_comments_path(current_user.login) %>">
+                    <li><a class='people-product-comment' href="<%=person_product_comments_path(current_user.login) %>">
                         <i class="icon-chevron-right"></i>商品评论
                         </a>
                     </li>
-                    <li><a href="<%= person_followings_path(current_user.login) %>"><i class="icon-chevron-right"></i> 我关注的</a></li>
-                    <li><a href="followers"><i class="icon-chevron-right"></i> 关注我的</a></li>
+                    <li><a class='people-following' href="<%=person_followings_path(current_user.login) %>"><i class="icon-chevron-right"></i> 我关注的</a></li>
+                    <li><a class='people-followers' href="<%=person_followers_path(current_user.login) %>"><i class="icon-chevron-right"></i> 关注我的</a></li>
                     <li class="nav-header">圈子</li>
                     <li><a href="#labels-badges"><i class="icon-chevron-right"></i> Labels and badges</a></li>
                     <li class="divider"></li>
