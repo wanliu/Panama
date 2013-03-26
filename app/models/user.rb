@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
 
   delegate :groups, :jshop, :to => :shop_user
 
+  after_create :load_initialize_data
+
   def icon
     photos.icon
   end
@@ -43,6 +45,13 @@ class User < ActiveRecord::Base
 
   def is_follower?(user_id)
     followers.exists?(user_id: user_id)
+  end
+
+  def load_initialize_data
+    _config = YAML.load("#{Rails.root}/config/data/circle.yml")
+    _config["circle"].each do |circle|
+      self.circles.create(circle) if self.circles.find_by(circle)
+    end
   end
 
   #暂时方法

@@ -27,6 +27,7 @@
   <div class='span8 topics'>
     <div class="btn-group">
       <button class="btn active">全部</button>
+
       <button class="btn">朋友</button>
       <button class="btn">家人</button>
       <button class="btn">同事</button>
@@ -48,14 +49,9 @@
 
 <script type='text/javascript'>
   require(["jquery", "lib/chose-friend"], function($, ChoseFriend){
-    new ChoseFriend({
-      el: $(".friend-context"),
-      data: [
-        {name: "朋友", count: 2},
-        {name: "同事", count: 3},
-        {name: "芦友", count: 9}
-      ],
-      template: "<a><i class='icon-globe'></i>{{name}} ({{count}})</a>",
+    $(".friend-context").choseFriend({
+      data: "<%=shop_admins_circles_path(current_shop.name) %>",
+      template: "<a><i class='icon-globe'></i>{{name}} ({{friend_count}})</a>",
     })
   })
 </script>

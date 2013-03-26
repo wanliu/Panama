@@ -2,6 +2,6 @@
 class CircleFriends < ActiveRecord::Base
   attr_accessible :circle_id, :friend_id, :friend_type
 
-  belongs :circle
-  belongs :friend, :polymorphic => true
+  belongs_to :circle
+  belongs_to :friend, :polymorphic => true
 end
