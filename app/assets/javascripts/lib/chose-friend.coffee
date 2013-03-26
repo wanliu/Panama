@@ -3,8 +3,9 @@ define ["jquery"], ($) ->
   class ChoseDropDown
     el: $("<div class='chose-drop-down' />")
     ul_el: $("<ul class='chose-friend-menu' />")
-    match: /\{\{([a-z]*)\}\}/i
+    match: /\{\{(\w{1,})\}\}/i
     status: true
+    complete: (data) ->
 
     constructor: (opts) ->
       $.extend(@, opts)
@@ -19,17 +20,21 @@ define ["jquery"], ($) ->
     hide: () ->
       @el.hide() if @status
 
-    fetch: () ->
+    fetch: (callback) ->
+      @complete = callback if $.isFunction(callback)
       if $.isArray(@data)
         @all_data(@data)
       else if typeof @data == "string"
         @remote()
 
     remote: () ->
+      $.get(@data,{} ,$.proxy(@all_data, @), "json")
 
     all_data: (data) ->
       $.each data, (i, val) =>
         @add_one(val)
+
+      @complete(data)
 
     add_one: (val) ->
       index = @ul_el.find("li").length
@@ -77,6 +82,10 @@ define ["jquery"], ($) ->
         <li class='chose-item' data-value='external' index=2><a><i class='icon-eye-open'></i>外扩圈子</a></li>
         <li class='chose-item divider' index=3></li>
       "
+
+      value: ""
+
+      default_value: ""
     }
     options: { }
 
@@ -90,7 +99,7 @@ define ["jquery"], ($) ->
         template: @options["template"]
       )
       @drop_down.ul_el.append(@options.init_template)
-      @drop_down.fetch()
+      @drop_down.fetch($.proxy(@load_default_value, @))
       @options.el.append(@drop_down.render())
 
       @load_css()
@@ -126,6 +135,7 @@ define ["jquery"], ($) ->
         @show_item(data.html)
 
       $(parent_el).remove()
+
     show_item: (li) ->
       @drop_down.ul_el.append(li)
       @sort_item()
@@ -137,8 +147,17 @@ define ["jquery"], ($) ->
           aindex = parseInt($(ali).attr("index"))
           if bindex > aindex
             $(bli).before($(ali))
+    load_default_value: (_data) ->
+      if @options.value? && @options.default_value?
+        $("li", @drop_down.ul_el).each (i, li) =>
+          data = $.data(li, "data")
+          if data?
+            if data[@options.value] == @options.default_value
+              $(li).click()
+              @options.input.blur()
 
     selector: (data, li) ->
+      @options.input.focus()
       label = @options.chose_label.clone()
 
       unless data?
@@ -150,7 +169,6 @@ define ["jquery"], ($) ->
       label.append(@options.close_label.clone())
       @selector_panel.append(label)
       @options["selector"](data, li)
-      @options.input.focus()
 
     create_element: () ->
       @selector_panel = $("<span class='chose-item-selector' />")
@@ -160,5 +178,8 @@ define ["jquery"], ($) ->
       @input_panel.append(@selector_panel)
       @input_panel.append(@options.input)
 
-  ChoseFriend
+
+
+  $.fn.choseFriend = (opts) ->
+    new ChoseFriend($.extend({}, opts, {el: @}))
 

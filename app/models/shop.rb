@@ -80,23 +80,29 @@ class Shop < ActiveRecord::Base
     load_group
     load_group_permission
     load_admin_permission
+    load_friend_circle
   end
 
   def delete_shop
     remove_standardization_files
   end
 
+  def load_friend_circle
+    _config = YAML.load_file("#{Rails.root}/config/data/circle.yml")
+    _config["circle"].each do |circle|
+      self.circles.create(circle) if self.circles.find_by(circle)
+    end
+  end
+
   def load_group
     _config = YAML.load(fs['config/shop_group.yml'].read)
     _config["shop_group"].each do |group|
-      if self.groups.find_by(group).nil?
-        self.groups.create(group)
-      end
+      self.groups.create(group) if self.groups.find_by(group).nil?
     end
   end
 
   def load_group_permission
-    _config = YAML.load_file("#{Rails.root}/config/permission.yml")
+    _config = YAML.load_file("#{Rails.root}/config/data/permission.yml")
     _config["group_permission"].each do |group_name, permissions|
       group = self.groups.find_by(name: group_name)
       group.give_permission(permissions) unless group.nil?
