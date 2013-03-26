@@ -34,11 +34,8 @@
     <div>
       <textarea class='comment'></textarea>
     </div>
-    <div>
-      <input type="text" class='chose-friend dropdown-toggle' id="dLabel" role="button" data-toggle="dropdown" data-target="#" placeholder="添加联系人 圈子"  />
-      <div>
+    <div class='friend-context'>
 
-      </div>
     </div>
     <div>
       <input type='button' value='发送' class='btn btn-primary' />
@@ -48,6 +45,17 @@
 
   </div>
 </div>
-<script type='text/javascript'>
 
+<script type='text/javascript'>
+  require(["jquery", "lib/chose-friend"], function($, ChoseFriend){
+    new ChoseFriend({
+      el: $(".friend-context"),
+      data: [
+        {name: "朋友", count: 2},
+        {name: "同事", count: 3},
+        {name: "芦友", count: 9}
+      ],
+      template: "<a><i class='icon-globe'></i>{{name}} ({{count}})</a>",
+    })
+  })
 </script>
