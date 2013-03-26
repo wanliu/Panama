@@ -17,9 +17,11 @@ class User < ActiveRecord::Base
            class_name: "OrderTransaction",
            foreign_key: 'buyer_id'
 
-  has_many :addresses, class_name: "Address"
-  has_many :followings
-  has_many :followers, :as => :follow, :class_name => "Following"
+  has_many :addresses, class_name: "Address", dependent: :destroy
+  has_many :followings, dependent: :destroy
+  has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
+  has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
+  has_many :join_circles, as: :friend, class_name: "CircleFriend", dependent: :destroy
 
   delegate :groups, :jshop, :to => :shop_user
 
