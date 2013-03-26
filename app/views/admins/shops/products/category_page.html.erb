@@ -17,7 +17,11 @@
             <li class="active category_roots">
             </li>
         </ul>
-        <div class="category_list span7"></div>
+        <div class="category_list span7">
+            <div class="alert fade in no-result" style="display: none;">
+                <strong>没有搜索结果，试着换一个搜索词吧！</strong> 
+            </div>
+        </div>
         <div class="sub_category span2">
             <div class='shadow'></div>
             <div class="category_buttons">
@@ -43,7 +47,7 @@
         <%% if (flag==1) {{%>
             <button class="btn btn-primary enter_children">选择子类</button> 
         <%% }} else {{%>
-            <button class="btn btn-success select_category">选择这种</button>
+            <button class="btn select_category category-<%%= id %>">选择"<%%= name %>"</button>
         <%% }} %>
     </div>
     <hr>
