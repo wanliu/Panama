@@ -60,7 +60,9 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   def category_children
     @category_children = Category.find_by(:name => params[:category_name])
 
-    if @category_children != nil && @category_children.children.count == 0 
+    if @category_children.nil?
+      result = nil
+    elsif @category_children.children.count == 0 
       result = @category_children.attributes.merge(:flag => 0, :cover => {:url => @category_children.cover.url})
     elsif @category_children.children.count > 0
       @category_children = @category_children.children

@@ -100,7 +100,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 })
             
             @$el.siblings(".active").removeClass("active")
-            @$el.addClass("active")
+            @$el.toggleClass("active")
+
+            # id = @$el.attr("class").split("-")[1]
+            # $(".category_cover.list-#{id}").find("button.select_category ").removeClass("active")
             
             category_base.refresh_category_list(@model, @shop_name)
 
@@ -133,7 +136,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         click_keyup: (options) ->
             @children_el.html("")
-            # search_value = $(".input_search").val()
+            # search_value = $.trim($(".input_search").val())
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
@@ -284,7 +287,9 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             category_base.refresh_category_list(@model, @shop_name)
 
         select_category: () ->
-            $("button.category-#{@model.get('id')}").click()
+            @$el.siblings("").find(".select_category").removeClass("active")
+            $(@el).find(".select_category").toggleClass("active")
+            $(".category_buttons").find("button.category-#{@model.get('id')}").click()
 
         render: () ->
             @$el.html(@detail_template(@model.toJSON()))
@@ -305,20 +310,24 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 return if @model.get("flag") == 0
             else
                 $(".list-undefined").remove()
-                search_value = $(".input_search").val()
+                search_value = $.trim($(".input_search").val())
                 @category_name = (search_value.split(" "))[search_value.split(" ").length-1]
-
+            
             @select_list = ".category_cover.#{list_id}"
             $(".category_cover:visible").hide()
             if $(@select_list).length > 0
+                $(".no-result").hide()
                 $(@select_list).show()
             else
                 @$el.addClass(list_id)
-                @CategoryDetails = new CategoryList([], @shop_name)
-                @CategoryDetails.bind("reset", @all_children, @)
-                @CategoryDetails.bind("reset", @render, @)
-                @model = @CategoryDetails.category_childrens({ category_name: @category_name })
-            
+                @new_list(options)
+
+        new_list: (options) ->
+            @CategoryDetails = new CategoryList([], @shop_name)
+            @CategoryDetails.bind("reset", @all_children, @)
+            @CategoryDetails.bind("reset", @render, @)
+            @model = @CategoryDetails.category_childrens({ category_name: @category_name })
+        
         all_children: (collection) ->
             if collection.length > 0
                 collection.each (model) =>
@@ -331,6 +340,12 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 })
             $(@el).append(@category_detail_view.render())
 
+        show_tip: () ->
+            if $(".category_list").find(".category_cover:visible").children().length == 0 
+                $(".no-result").show()
+            else
+                $(".no-result").hide()
+
         render: () ->
             $(".category_list").append(@el)
             $(@el).find(".slides").slidesjs({
@@ -339,6 +354,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 navigation: false,
                 pagination: false
             })
+            @show_tip()
             @
 
 
