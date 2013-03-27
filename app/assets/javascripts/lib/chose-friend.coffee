@@ -112,6 +112,9 @@ define ["jquery"], ($) ->
       @options.el.addClass("chose-friend")
 
     events: () ->
+      @input_panel.bind "click", () =>
+        @options.input.focus()
+
       @options.input.blur () =>
         @drop_down.hide()
 
@@ -148,7 +151,8 @@ define ["jquery"], ($) ->
           if bindex > aindex
             $(bli).before($(ali))
     load_default_value: (_data) ->
-      if @options.value? && @options.default_value?
+      if @options.value? && @options.default_value? &&
+       @options.value != "" && @options.default_value != ""
         $("li", @drop_down.ul_el).each (i, li) =>
           data = $.data(li, "data")
           if data?
@@ -178,8 +182,5 @@ define ["jquery"], ($) ->
       @input_panel.append(@selector_panel)
       @input_panel.append(@options.input)
 
-
-
   $.fn.choseFriend = (opts) ->
     new ChoseFriend($.extend({}, opts, {el: @}))
-

@@ -1,0 +1,29 @@
+<div class="btn-group circle-panel">
+  <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">全部</a>
+  <% circles.each do |c| %>
+  <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>"><%=c.name %></a>
+  <% end %>
+</div>
+<div>
+  <textarea class='comment'></textarea>
+</div>
+<div class='friend-context'>
+</div>
+<div>
+  <input type='button' value='发送' class='btn btn-primary' />
+</div>
+
+<script type='text/javascript'>
+  require(["jquery", "lib/chose-friend"], function($, ChoseFriend){
+    $(".friend-context").choseFriend({
+      data: "<%=shop_admins_circles_path(current_shop.name) %>",
+      template: "<a><i class='icon-globe'></i>{{name}} ({{friend_count}})</a>",
+      value: "name",
+      default_value: '<%= default_value ||= "" %>'
+    })
+  })
+
+  $(".circle-panel>.circle-<%=yield :active_circle %>").addClass("active")
+</script>
+
+

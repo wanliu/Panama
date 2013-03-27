@@ -18,4 +18,12 @@ class People::CirclesController < People::BaseController
     end
   end
 
+  def show
+    @circles = @people.circles
+    @circle = @people.circles.find(params[:id])
+    respond_to do |format|
+      format.json{ render json: @circle }
+    end
+  end
+
 end
