@@ -1,26 +1,13 @@
 class People::CommentsController < People::BaseController
+    before_filter :login_required, :only => [:activity, :product]
 
     def index_activities
         @activities = Activity.all
     end
 
     def index
-        @comments = Comment.where("targeable_id=? and targeable_type=?", 
-            params[:targeable_id], 
-            params[:targeable_type])
-        if "0" != params[:limit]
-            @comments = @comments.order("created_at desc").limit(params[:limit]).reverse()
-        end
-        @activity = Activity.find(params[:targeable_id])
-        @comment = Comment.new
-        respond_to do | format |
-            format.html{ render :layout => false }
-        end
-    end
-
-    def index
-        @comments = Comment.where("targeable_id=? and targeable_type=?", 
-            params[:targeable_id], 
+        @comments = Comment.where("targeable_id=? and targeable_type=?",
+            params[:targeable_id],
             params[:targeable_type])
         if "0" != params[:limit]
             @comments = @comments.order("created_at desc").limit(params[:limit]).reverse()
@@ -42,6 +29,7 @@ class People::CommentsController < People::BaseController
 
     #活动评论
     def activity
+        authorize! :activity, Comment
         @comment = Comment.activity(params[:comment].merge(:user_id => current_user.id))
         users = @comment.content_extract_users
         users.each do |user|
@@ -61,6 +49,7 @@ class People::CommentsController < People::BaseController
 
     #产品评论
     def product
+        authorize! :product, Comment
         @comment = Comment.product(params[:comment].merge(:user_id => current_user.id))
         if @comment.valid?
             render :action => :show

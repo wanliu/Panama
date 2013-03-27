@@ -23,9 +23,14 @@
 	</div>
 <% end %>
 <%= paginate @items %>
+<% if can? :batch_create, OrderTransaction %>
 <%= button_to "生成订单",
 			  batch_create_person_path(@people.login),
 			  :method => :post,
 			  :remote => true ,
 			  :class => "btn btn-primary btn-large" %>
+<%end%>
+
+<% if can? :destroy, OrderTransaction %>
 <button class="btn btn-large">清空列表</button>
+<%end%>

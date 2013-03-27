@@ -4,6 +4,7 @@ class People::CartController < People::BaseController
   end
 
   def add_to_cart
+    authorize! :create, Cart
     @item = my_cart.add_to(params[:product_item])
     if @item.save
       render :json => @item
@@ -13,6 +14,7 @@ class People::CartController < People::BaseController
   end
 
   def clear_list
+    authorize! :destroy, Cart
     my_cart.items.destroy_all
     render :text => :ok
   end

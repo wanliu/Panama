@@ -2,6 +2,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions
   # GET /people/transactions.json
   def index
+    authorize! :index, OrderTransaction
     @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
 
     respond_to do |format|
@@ -15,6 +16,7 @@ class People::TransactionsController < People::BaseController
   def show
     @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
     @transaction = OrderTransaction.find(params[:id])
+    authorize! :show, @transaction
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @transaction }
@@ -23,6 +25,7 @@ class People::TransactionsController < People::BaseController
 
   def event
     @transaction = OrderTransaction.find(params[:id])
+    authorize! :event, @transaction
     if @transaction.fire_events!(params[:event])
       redirect_to person_transaction_path(@people.login, @transaction)
     end
@@ -55,6 +58,7 @@ class People::TransactionsController < People::BaseController
     # end
     # cart.destroy if flag
     # FIXME @people这个参数是不是多余？ cart的user不就是@people么？
+    authorize! :batch_create, OrderTransaction
     if my_cart.create_transaction(@people)
       redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'
@@ -100,6 +104,7 @@ class People::TransactionsController < People::BaseController
   # DELETE /people/transactions/1.json
   def destroy
     @transaction = OrderTransaction.find(params[:id])
+    authorize! :destroy, @transaction
     @transaction.destroy
 
     respond_to do |format|
