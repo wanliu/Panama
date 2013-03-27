@@ -9,7 +9,6 @@ class People::NotificationsController < People::BaseController
         end
         @notifications = @notifications.where(:user_id => @people.id)
         .order(read: :asc)
-        .paginate(:page => params[:page])
         respond_to do | format |
             format.html
             format.json
