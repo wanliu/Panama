@@ -1,3 +1,4 @@
+#encoding: utf-8
 require 'orm_fs'
 
 class Shop < ActiveRecord::Base
@@ -13,7 +14,6 @@ class Shop < ActiveRecord::Base
   has_many :shop_users
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
-  has_many :join_circles, as: :friend, class_name: "CircleFriend", dependent: :destroy
 
   has_one :shops_category
   belongs_to :user
@@ -88,9 +88,9 @@ class Shop < ActiveRecord::Base
   end
 
   def load_friend_circle
-    _config = YAML.load_file("#{Rails.root}/config/data/circle.yml")
+    _config = YAML.load_file("#{Rails.root}/config/data/shop_circle.yml")
     _config["circle"].each do |circle|
-      self.circles.create(circle) if self.circles.find_by(circle)
+      self.circles.create(circle) if self.circles.find_by(circle).nil?
     end
   end
 

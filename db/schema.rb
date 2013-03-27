@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130326062919) do
+ActiveRecord::Schema.define(:version => 20130327061613) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(:version => 20130326062919) do
     t.integer  "circle_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "user_id"
   end
 
   create_table "circles", :force => true do |t|
@@ -126,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20130326062919) do
     t.string   "owner_type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "user_id"
   end
 
   create_table "cities", :force => true do |t|
@@ -401,6 +403,25 @@ ActiveRecord::Schema.define(:version => 20130326062919) do
     t.integer  "product_id", :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "topic_receives", :force => true do |t|
+    t.integer  "topic_id"
+    t.integer  "receive_id"
+    t.string   "receive_type"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "user_id"
+  end
+
+  create_table "topics", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "content"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "context_html"
   end
 
   create_table "users", :force => true do |t|

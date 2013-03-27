@@ -20,4 +20,12 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
     end
   end
 
+  def show
+    @circles = current_shop.circles
+    @circle = current_shop.circles.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json{ render json: @circle }
+    end
+  end
 end

@@ -1,4 +1,4 @@
-<ul style='margin:0'>
+<!-- <ul style='margin:0'>
   <li style='display:inline-block;'>
     <a href='javascript:void(0)' style='width:80px;height:80px;-webkit-border-radius:40px;border-radius: 50%;border: 1px solid #DDD;display:block;'>
       <span style='display: table-cell;width: 80px;vertical-align: middle;height: 80px;text-align: center;'>
@@ -21,37 +21,15 @@
       </span>
     </a>
   </li>
-</ul>
-<hr />
+</ul> -->
+<% content_for(:active_circle){ "all" } %>
 <div class='row-fluid community-content'>
   <div class='span8 topics'>
-    <div class="btn-group">
-      <button class="btn active">全部</button>
-
-      <button class="btn">朋友</button>
-      <button class="btn">家人</button>
-      <button class="btn">同事</button>
-    </div>
-    <div>
-      <textarea class='comment'></textarea>
-    </div>
-    <div class='friend-context'>
-
-    </div>
-    <div>
-      <input type='button' value='发送' class='btn btn-primary' />
-    </div>
+    <%=render template: "admins/shops/send_message",
+    locals: {circles: @circles}  %>
   </div>
   <div class='span4'>
 
   </div>
 </div>
 
-<script type='text/javascript'>
-  require(["jquery", "lib/chose-friend"], function($, ChoseFriend){
-    $(".friend-context").choseFriend({
-      data: "<%=shop_admins_circles_path(current_shop.name) %>",
-      template: "<a><i class='icon-globe'></i>{{name}} ({{friend_count}})</a>",
-    })
-  })
-</script>
