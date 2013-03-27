@@ -5,7 +5,7 @@ class CreateTopics < ActiveRecord::Migration
       t.integer :owner_id
       t.string :owner_type
       t.string :content
-      t.string :context_html
+      t.string :content_html
 
       t.timestamps
     end

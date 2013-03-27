@@ -11,4 +11,7 @@ class TopicReceive < ActiveRecord::Base
 
   validates :topic_id, presence: true
   validates :user_id, presence: true
+
+  validates_presence_of :user
+  validates_presence_of :topic
 end

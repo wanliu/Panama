@@ -3,6 +3,7 @@
   <% circles.each do |c| %>
   <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>"><%=c.name %></a>
   <% end %>
+   <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">与我相关</a>
 </div>
 <div>
   <textarea class='comment'></textarea>
