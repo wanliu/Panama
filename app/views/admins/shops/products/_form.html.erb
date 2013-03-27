@@ -16,7 +16,7 @@
     <%= f.input :price %>
     <%#= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
     <div class="additional_properties">
-    <%= render_content_ex(@content, locals: { category: @category }) %>
+    <%= render_content(@content, locals: { category: @category }) %>
     <div class="product_prices"></div>
 
     </div>

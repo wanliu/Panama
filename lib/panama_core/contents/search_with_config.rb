@@ -1,30 +1,66 @@
 # encoding: utf-8
 require File.expand_path('../resource_type', __FILE__)
+require File.expand_path('../proxy_content', __FILE__)
 
 module PanamaCore
   module Contents
     class SearchWithConfig
 
-      attr_reader :rtype, :action, :resource
+      attr_reader :rtype, :action, :resource, :config
       cattr_accessor :default_data_adapter
 
       @@default_data_adapter = Content
 
-      def initialize(resource, action = nil)
-        @rtype = ResourceType.new(resource, action)
+      def initialize(resource, _action = nil, options = {})
+        @rtype = ResourceType.new(resource, _action)
         @resource = resource
-        @action = action
+        @config = options[:config] if options[:config].present?
+        @action = _action
+        set_rtype_action(default_action) if _action.nil?
+      end
+
+      def set_rtype_action(value)
+        @rtype.instance_variable_set(:@action, value)
       end
 
       def action
-        @action || config_list.default_action
+        @action
+      end
+
+      def default_action
+        config_list.default_action
+      end
+
+      def config
+        @config ||= if !@config.nil?
+                      @config
+                    else
+                      _action = action.nil? ? default_action : action
+                      if action.nil?
+                        revert_config(_action)
+                      else
+                        config_list[_action]
+                      end
+                    end
+      end
+
+      def revert_config(_action)
+        _config = config_list[_action]
+        parent = config_list.parent
+        while parent.present?
+          _config = parent[_action]
+          parent = parent.parent
+        end
+        _config
       end
 
       def fetch(options = {})
+        @config ||= options[:config]
+        locals_options = default_options.deep_merge(options[:locals] || {})
 
         if query.size > 0
           # 查找到
-          query.first
+          ProxyContent.new(query.first, config, locals_options)
         # elsif options[:autocreate]
         #   # 如果 options :autocreate 为真,将自动创建 resource for action 的 content 条目
         #   create_for(resource, action)
@@ -33,46 +69,45 @@ module PanamaCore
 
           return nil if config.nil?
           # 没有此规则, 只能返回空
-
-          if config.default_config.present?
+          if config.transfer.present? && config.transfer_config.present?
             # 此时是没有找到 Content 条目,但有配置项, 所以我们要检查,是不是有默认跳转?
 
-            transfer_name       = config.default_config[:config]
-            transfer_method     = config.default_config[:transfer_method]
-            transfer_action     = config.default_config[:transfer_action] || action
-            # transfer_autocreate = config.default_config[:autocreate]      || false
+            transfer_config = config.transfer_config
+            # transfer_name   = config.transfer_config[:config]
+            # debugger
+            transfer_method = config.transfer[:transfer_method]
+            transfer_action = config.transfer[:transfer_action] || transfer_config.name
+            # transfer_autocreate = config.transfer[:autocreate] || false
 
-            new_resource = resource.send(transfer_method)
-            self.class.fetch_for(new_resource, transfer_action)
+            new_resource = transfer_method.nil? ? resource : resource.send(transfer_method)
+            self.class.fetch_for(new_resource, transfer_action, config: transfer_config)
           else
             # 没有默认跳转的话,我们要返回一个非永久 content 条目
             result = generate_result(options)
-
-            path = File.join(result[:root], result[:template])
+            # path = File.join(result[:root], result[:template])
+            path = result[:template]
 
             params = { :name             => rtype.unique_name,
                        :template         => path,
-                       :contentable_type => rtype.resource_class,
+                       :contentable_type => rtype.resource_class.to_s,
                        :contentable_id   => rtype.resource_id }
-            query.first_or_initialize(params)
+
+            ProxyContent.new(query.first_or_initialize(params), config, locals_options)
           end
 
         end
 
       end
 
-      def config_list
-        rtype.config_list
-      end
-
       def compile_config(locals = default_options)
         locals ||= {}
         result = {}
         [:root, :template].each do |method_name|
-          result[method_name] = config.send(method_name).sub /\:(\w+)/ do |m|
-            name = m[1..-1].to_sym
-            locals[name]
-          end
+          _item = config[method_name]
+          result[method_name] = _item.sub /\:(\w+)/ do |m|
+                                  name = m[1..-1].to_sym
+                                  locals[name]
+                                end
         end
         result
       end
@@ -81,26 +116,8 @@ module PanamaCore
         compile_config(default_options.deep_merge(options))
       end
 
-      def config_list
-        klass_name = rtype.symbolize_resource_class
-        if rtype.resource_id > 0
-          contents_config[klass_name][:each]
-        else
-          contents_config[klass_name]
-        end
-      end
-
-      def config
-        config_list[action]
-      end
-
-      def contents_config
-        Rails.application.config.contents
-        # PanamaCore::Contents.contents_config
-      end
-
       def default_options
-        { :locals => { :name => action }}
+        { :name => action || default_action }
       end
 
       def query
@@ -136,6 +153,22 @@ module PanamaCore
         def create_for
           new(resource, action).query(options)
         end
+      end
+
+      private
+
+      def config_list
+        klass_name = rtype.symbolize_resource_class
+        if rtype.resource_id > 0
+          contents_config[klass_name][:each]
+        else
+          contents_config[klass_name]
+        end
+      end
+
+      def contents_config
+        Rails.application.config.contents
+        # PanamaCore::Contents.contents_config
       end
     end
   end

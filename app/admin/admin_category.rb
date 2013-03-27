@@ -62,9 +62,10 @@ ActiveAdmin.register Category do
     end
 
     div do
-      section = Category.to_s.underscore
+      contents_config = Rails.application.config.contents
+      section = Category.to_s.underscore.to_sym
       panel("Category Contents") do
-        contents = Rails.application.config.contents[section].map { |ctnt| ContentConfig.new(:name => ctnt) }
+        contents = contents_config[section][:each].map { |key, ctnt| ContentConfig.new(:name => ctnt) }
         table_for(contents) do
           column :name
           column :tool do
@@ -109,8 +110,9 @@ ActiveAdmin.register Category do
 
   member_action :fetch_category_template do
     @category = Category.find(params[:id])
-    @content = Content.fetch_for(@category, :additional_properties)
-    @content.template ||= "panama/templates/#{@content.name}.html.erb"
+    @content = PanamaCore::Contents.fetch_for(@category,
+                                              :additional_properties,
+                                              :autocreate => true)
     @content.save if @content.new_record?
     @content
   end

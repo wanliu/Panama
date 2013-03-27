@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe CategoryController do
-  fixtures :categories
 
   let(:category_root) { Category.where(:name => '_products_root').first }
 

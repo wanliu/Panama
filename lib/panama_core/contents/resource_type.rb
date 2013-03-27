@@ -7,7 +7,7 @@ module PanamaCore
 
       def initialize(resource, action = nil)
         @resource = resource
-        @action = @action
+        @action = action
       end
 
       def action
@@ -37,7 +37,12 @@ module PanamaCore
       end
 
       def resource_name
-        [resource_class.to_s.underscore, resource_id.to_s].join('_')
+        class_name = resource_class.to_s.underscore
+        if resource_id == 0
+          class_name
+        else
+          [class_name, resource_id].join('_')
+        end
       end
 
       def unique_name

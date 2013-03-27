@@ -4,6 +4,10 @@ module PanamaCore
     class Config < Hash
       TRANSFERS_WORD = [:root, :template, :layout_path, :default_action]
 
+      def name
+        get :name
+      end
+
       def root
         get :root
       end
@@ -20,12 +24,27 @@ module PanamaCore
         get :layout_path
       end
 
-      def default_config
-        get :default
+      def layout
+        _layout = get :layout
+        _layout = "#{_layout}.html.erb" if _layout.is_a?(Symbol)
+
+        File.join(layout_path, _layout)
+      end
+
+      def transfer
+        get :transfer
+      end
+
+      def transfer_config
+        transfer[:config]
       end
 
       def default_action
-        get [:default_action]
+        get :default_action
+      end
+
+      def top
+        parent.nil? ? self : parent.top
       end
 
       def [](key)
@@ -34,7 +53,7 @@ module PanamaCore
         when Hash
           Config[value]
         when NilClass
-          if TRANSFERS_WORD.include?(key)
+          if TRANSFERS_WORD.include?(key) # || top[:default_action].include?(key)
             parent[key] unless parent.nil?
           end
         else
