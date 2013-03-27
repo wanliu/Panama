@@ -1,0 +1,12 @@
+defaults: &defaults
+  faye_token: "panama"
+  faye_server: "http://192.168.2.167:9292/realtime"
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

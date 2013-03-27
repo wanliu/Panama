@@ -1,5 +1,6 @@
-<p id="notice"><%= notice %></p>
-
-
-<%= link_to 'Edit', edit_shop_path(@shop) %> |
-<%= link_to 'Back', shops_path %>
+<div>
+	name: <%=@shop.name %>
+</div>
+<div>
+	user: <%=@shop.user.login %>
+</div>

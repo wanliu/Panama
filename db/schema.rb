@@ -156,6 +156,13 @@ ActiveRecord::Schema.define(:version => 20130321022402) do
     t.string   "ancestry"
   end
 
+  create_table "group_permissions", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "images", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",     :null => false
@@ -201,6 +208,13 @@ ActiveRecord::Schema.define(:version => 20130321022402) do
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
     t.integer  "address_id"
+  end
+
+  create_table "permissions", :force => true do |t|
+    t.string   "resource"
+    t.string   "ability"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "product_items", :force => true do |t|
