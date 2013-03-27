@@ -33,11 +33,11 @@ class ShopsController < ApplicationController
 
   def show
     @shop = Shop.find_by(:name => params[:id])
-    @content = Content.fetch_for(@shop, :index, :locals => { :shop_name => @shop.name })
+    @content = PanamaCore::Contents.fetch_for(@shop, :index, :locals => { :shop_name => @shop.name })
 
     respond_to do |format|
       # format.html { render_shop_content @shop, :index, @shop }
-      format.html { render_content_ex @content }
+      format.html { render_content @content }
       format.json { render json: @shop }
     end
   end

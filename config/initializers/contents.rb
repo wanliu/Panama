@@ -7,6 +7,8 @@ PanamaCore::Contents.config do
 
   category do
 
+    default_additional_properties
+
     each do
       additional_properties
     end

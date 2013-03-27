@@ -1,11 +1,14 @@
 # encoding: utf-8
 require File.expand_path('../contents/builder', __FILE__)
 require File.expand_path('../contents/config', __FILE__)
+# require File.expand_path('../contents/render', __FILE__)
+require File.expand_path('../contents/proxy_content', __FILE__)
 require File.expand_path('../contents/search_with_config', __FILE__)
 
 module PanamaCore
   module Contents
     extend self
+    # include Render
     # 基础格式
     # PanamaCore::Contents.config do
     #

@@ -143,7 +143,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     if @content.nil?
       render :text => :ok
     else
-      render_content_ex(@content, locals: { category: @category })
+      render_content(@content, locals: { category: @category })
     end
   end
 
@@ -170,12 +170,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def additional_properties_content(category = nil)
-    if category.nil?
-      Content.lookup_name(:default_category).first
-    else
-      @content = Content.fetch_for(@category, :additional_properties, :autocreate => false)
-      @content ||= Content.lookup_name(:default_category).first
-    end
+    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties)
   end
 
   def form_builder(product)

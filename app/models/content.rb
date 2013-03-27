@@ -1,7 +1,7 @@
 require 'orm_fs'
 
 class Content < ActiveRecord::Base
-  attr_accessible :lock, :name, :template, :contentable
+  attr_accessible :lock, :name, :template, :contentable_type, :contentable_id, :contentable
   belongs_to :shop
 
   has_many :resources

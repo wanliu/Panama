@@ -135,7 +135,9 @@ describe PanamaCore::Contents::Config do
                  end
 
         config[:shop][:each][:index].root.should eql("/panama")
+        # 使用模板 :index
         config[:shop][:each][:index][:layout].should eql(:index)
+        config[:shop][:each][:index].layout.should eql('layouts/index.html.erb')
         config[:shop][:each][:index].template.should eql('templates/test.html.erb')
       end
     end
@@ -161,7 +163,7 @@ describe PanamaCore::Contents::Config do
 
                        # additional_properties 规则, 有一个默认回逆配制, 如果相应的配置没有在 Content 中
                        # 存在的话, 会自动转向默认配置, 使用默认配置的设置,来进行 render
-                       additional_properties :default => :default_additional_properties do
+                       additional_properties :transfer => :default_additional_properties do
                          # 配置项中的附加条款, created_copy_from_default 创建时会从默认回逆那里,拷贝数据过来
                          created_copy_from_default
                        end
@@ -175,12 +177,27 @@ describe PanamaCore::Contents::Config do
         config[:category][:default_additional_properties].root.should == "/panama/categories"
         config[:category][:default_additional_properties].template.should == "templates/additional_properties.html.erb"
 
-        config[:category][:each][:additional_properties].default_config.should == :default_additional_properties
+        transfer_config = config[:category][:each][:additional_properties].transfer_config
+        # transfer_config
+        debugger
+        transfer_config.template.should == 'templates/additional_properties.html.erb'
+        transfer_config.root.should == '/panama/categories'
       end
 
       it "夸规则转向" do
         config = do_config do
                    root '/panama'
+                   template 'templates/:name.html.erb'
+
+                   category do
+                    root '/panama/categories'
+                    template 'templates/:category_id.html.erb'
+
+                    each do
+                      sale_options
+                    end
+                   end
+
                    product do
                      # root '/panama'
                      root '/_shops/:shop_name'
@@ -193,7 +210,7 @@ describe PanamaCore::Contents::Config do
                        # 这种情况,保证了我们在找到此 Product 的 :sale_options Content 时,会转向 transfer 到另一资源
                        # 的这种情况, :transfer , :transfer_method 分别设定了, 转向的资源所执行的代码块或方法.
                        sale_options do
-                         default 'category#sale_options', :transfer_method => :category
+                         transfer 'category#sale_options', :transfer_method => :category
                        end
                      end
                    end
@@ -205,8 +222,35 @@ describe PanamaCore::Contents::Config do
 
         config[:product][:show].root.should == '/_shops/:shop_name'
 
-        config[:product][:each][:sale_options].default_config[:config]          == 'category#sale_options'
-        config[:product][:each][:sale_options].default_config[:transfer_method] == :category
+        transfer_config = config[:product][:each][:sale_options].transfer_config
+        transfer = config[:product][:each][:sale_options].transfer
+        transfer_config.root.should      == '/panama/categories'
+        transfer_config.template.should  == 'templates/:category_id.html.erb'
+        transfer[:transfer_method].should  == :category
+      end
+
+      it "默认 action" do
+        config = do_config do
+                   root '/panama'
+                   template 'templates/:name.html.erb'
+
+                   default_action :show
+
+                   category do
+                    root '/panama/categories'
+                    template 'templates/:category_id.html.erb'
+
+                    each do
+                      sale_options
+                    end
+                   end
+                 end
+
+        config.root.should == "/panama"
+        config[:category][:each][:sale_options].default_action.should == :show
+        config[:category][:each].default_action.should == :show
+        config[:category].default_action.should == :show
+
       end
     end
   end
