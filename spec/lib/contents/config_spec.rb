@@ -179,7 +179,6 @@ describe PanamaCore::Contents::Config do
 
         transfer_config = config[:category][:each][:additional_properties].transfer_config
         # transfer_config
-        debugger
         transfer_config.template.should == 'templates/additional_properties.html.erb'
         transfer_config.root.should == '/panama/categories'
       end
