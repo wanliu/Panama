@@ -15,6 +15,7 @@ class Shop < ActiveRecord::Base
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy
 
   has_one :shops_category
   belongs_to :user

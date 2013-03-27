@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :join_circles, class_name: "CircleFriend", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy
 
   delegate :groups, :jshop, :to => :shop_user
 
