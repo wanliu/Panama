@@ -25,4 +25,12 @@ class Topic < ActiveRecord::Base
   def convent_content_html
     content_html = content
   end
+
+  def self.users
+    where(options.merge(:owner_type => "User"))
+  end
+
+  def self.shops(options)
+    where(options.merge(:owner_type => "Shop"))
+  end
 end

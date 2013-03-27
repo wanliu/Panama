@@ -15,7 +15,7 @@ class Shop < ActiveRecord::Base
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
-  has_many :topic_receives, as: :receive, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
 
   has_one :shops_category
   belongs_to :user
@@ -33,6 +33,10 @@ class Shop < ActiveRecord::Base
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
   friendly_id :name
+
+  def all_friends
+    circles.map{|c| c.friends }
+  end
 
   def fs
     require "orm_fs"

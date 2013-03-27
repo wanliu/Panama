@@ -23,6 +23,9 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   def show
     @circles = current_shop.circles
     @circle = current_shop.circles.find(params[:id])
+    @topics = Topic.user(
+      :owner_id => @circle.friends.map{| f | f.user_id}
+    )
     respond_to do |format|
       format.html
       format.json{ render json: @circle }
