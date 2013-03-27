@@ -16,8 +16,13 @@ class Topic < ActiveRecord::Base
   has_many :receives, class_name: "TopicReceive"
 
   validates :content, :presence => true
-  validates :context_html, :presence => true
 
-  validate_presence_of :user
-  validate_presence_of :owner
+  validates_presence_of :user
+  validates_presence_of :owner
+
+  after_save :convent_content_html
+
+  def convent_content_html
+    content_html = content
+  end
 end

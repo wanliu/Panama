@@ -15,7 +15,9 @@ class CircleFriends < ActiveRecord::Base
   validate :valid_some_user_and_circle?
 
   def valid_some_user_and_circle?
-  	errors.add(:user_id, "已经存在用户了!") if exists?("circle_id=? and user_id=? and id<>'?'", circle_id, user_id, id)
+    if CircleFriends.exists?(["circle_id=? and user_id=? and id<>?", circle_id, user_id, id.to_s])
+        errors.add(:user_id, "已经存在用户了!")
+    end
   end
 
 end

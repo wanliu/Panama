@@ -1,7 +1,7 @@
 #describe: 圈子
 #
 # attributes:
-# 	name: 名称
+#   name: 名称
 #   owner: 所属者(商店与用户)
 #   user_id: 操作员
 class Circle < ActiveRecord::Base
@@ -14,12 +14,12 @@ class Circle < ActiveRecord::Base
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
 
   def friend_count
-  	friends.count
+    friends.count
   end
 
   def join_friend(user)
-  	uid = user
-  	uid = user if user_id.is_a?(User)
-  	friends.create(user_id: uid)
+    uid = user
+    uid = user.id if user.is_a?(User)
+    friends.create(user_id: uid)
   end
 end

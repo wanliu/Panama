@@ -18,7 +18,7 @@ define ["jquery"], ($) ->
       @el.show()
 
     hide: () ->
-      @el.hide() if @status
+      @el.hide()
 
     fetch: (callback) ->
       @complete = callback if $.isFunction(callback)
@@ -49,12 +49,6 @@ define ["jquery"], ($) ->
 
       $.data li[0], "data", val
       li.html(_template)
-
-    set_status: (event) ->
-      if event.type == "mouseover"
-        @status = false
-      else
-        @status = true
 
   class ChoseFriend
     defulat_opts: {
@@ -114,22 +108,22 @@ define ["jquery"], ($) ->
     events: () ->
       @input_panel.bind "click", () =>
         @options.input.focus()
-
-      @options.input.blur () =>
-        @drop_down.hide()
+        event.stopPropagation()
 
       @options.input.focus () =>
         @drop_down.show()
 
+      $(window).click () =>
+        @drop_down.hide()
+
       @drop_down.ul_el.on "click", "li", (event) =>
         data = $.data event.currentTarget, "data"
         @selector(data, $(event.currentTarget))
-
-      @drop_down.el.bind "mouseover mouseout", (event) =>
-        @drop_down.set_status(event)
+        event.stopPropagation()
 
       @selector_panel.on "click", ".close-label", (event) =>
         @close_item(event)
+        event.stopPropagation()
 
     close_item: (event) ->
       parent_el = event.currentTarget.parentElement
@@ -158,6 +152,7 @@ define ["jquery"], ($) ->
           if data?
             if data[@options.value] == @options.default_value
               $(li).click()
+              @drop_down.hide()
               @options.input.blur()
 
     selector: (data, li) ->
