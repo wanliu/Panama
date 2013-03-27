@@ -19,7 +19,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @navigations.remove(model)
             @reset_navigation()
 
-        reset_navigation: () ->
+        reset_navigation: (model) ->
             if @navigations.length > 1
                 $(".input_search").val("")
                 _.each @navigations.models, (m, i) =>
@@ -102,8 +102,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el.siblings(".active").removeClass("active")
             @$el.toggleClass("active")
 
-            # id = @$el.attr("class").split("-")[1]
-            # $(".category_cover.list-#{id}").find("button.select_category ").removeClass("active")
+            id = @$el.attr("class").split(" ")[2]
+            if $(".category_list .#{id}")[0] != $(".category_cover").find("button.select_category.active")[0]
+                $(".category_cover").find("button.select_category.active").removeClass("active")
+            $(".category_list .#{id}").toggleClass("active")
             
             category_base.refresh_category_list(@model, @shop_name)
 
@@ -128,6 +130,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         keyup_choose: (options) ->
             unless $(".input_search").val() == ""
                 if event.keyCode == 13
+                    $(".tt-dropdown-menu").addClass("tt-is-empty")
                     @click_keyup()
 
         click_choose: (options) ->
@@ -283,12 +286,16 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         enter_children: () ->
             str = $(@el).parent().attr("class").split(" ")[1]
             $(".category_list").attr("back_parent",str)
-            $("button.category-#{@model.get('id')}").click()
+            debugger
+            if $(".category_buttons").children().length != 0
+                $("button.category-#{@model.get('id')}").click()
+            else
+                category_base.reset_navigation(@model)
             category_base.refresh_category_list(@model, @shop_name)
 
         select_category: () ->
-            @$el.siblings("").find(".select_category").removeClass("active")
-            $(@el).find(".select_category").toggleClass("active")
+            # @$el.siblings("").find(".select_category").removeClass("active")
+            # $(@el).find(".select_category").toggleClass("active")
             $(".category_buttons").find("button.category-#{@model.get('id')}").click()
 
         render: () ->
