@@ -53,6 +53,12 @@ class Shop < ActiveRecord::Base
     CircleFriends.where(:circle_id => circle_ids)
   end
 
+  def all_topics(user_ids)
+    Topic.where("(owner_id=#{id} and owner_type='Shop') or (owner_id in (?) and owner_type ='User')",
+      user_ids
+    )
+  end
+
   def fs
     require "orm_fs"
     "/_shops/#{name}".to_dir
