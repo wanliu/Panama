@@ -21,13 +21,17 @@ class User < ActiveRecord::Base
   has_many :followings, dependent: :destroy
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
-  has_many :join_circles, class_name: "CircleFriend", dependent: :destroy
+  has_many :join_circles, class_name: "CircleFriends", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
-  has_many :topic_receives, as: :receive, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
 
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
+
+  def all_friends
+    circles.map{| c | c.friends }.flatten
+  end
 
   def icon
     photos.icon
@@ -52,7 +56,7 @@ class User < ActiveRecord::Base
   def load_initialize_data
     _config = YAML.load_file("#{Rails.root}/config/data/user_circle.yml")
     _config["circle"].each do |circle|
-      self.circles.create(circle) if self.circles.find_by(circle)
+      self.circles.create(circle) if self.circles.find_by(circle).nil?
     end
   end
 

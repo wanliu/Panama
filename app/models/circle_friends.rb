@@ -2,7 +2,7 @@
 # describe: 圈子与用户或者商店关系
 # attributes:
 #   circle_id: 圈子
-#   friend: 商店或者用户
+#   user_id: 用户
 class CircleFriends < ActiveRecord::Base
   attr_accessible :circle_id, :user_id
 
