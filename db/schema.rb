@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327065855) do
+ActiveRecord::Schema.define(:version => 20130327032048) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -113,12 +113,10 @@ ActiveRecord::Schema.define(:version => 20130327065855) do
   end
 
   create_table "circle_friends", :force => true do |t|
-    t.integer  "friend_id"
-    t.integer  "friend_type"
-    t.integer  "circle_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
     t.integer  "user_id"
+    t.integer  "circle_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "circles", :force => true do |t|
@@ -127,7 +125,6 @@ ActiveRecord::Schema.define(:version => 20130327065855) do
     t.string   "owner_type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "user_id"
   end
 
   create_table "cities", :force => true do |t|
@@ -403,7 +400,6 @@ ActiveRecord::Schema.define(:version => 20130327065855) do
     t.string   "receive_type"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-    t.integer  "user_id"
   end
 
   create_table "topics", :force => true do |t|
@@ -411,10 +407,9 @@ ActiveRecord::Schema.define(:version => 20130327065855) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.string   "content"
+    t.string   "content_html"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-    t.string   "context_html"
-    t.string   "content_html"
   end
 
   create_table "users", :force => true do |t|
