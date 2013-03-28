@@ -26,11 +26,11 @@ class Topic < ActiveRecord::Base
     content_html = content
   end
 
-  def self.users
-    where(options.merge(:owner_type => "User"))
+  def self.users(options = {})
+    where(options.merge(:owner_type => "User")).order('created_at desc')
   end
 
-  def self.shops(options)
-    where(options.merge(:owner_type => "Shop"))
+  def self.shops(options = {})
+    where(options.merge(:owner_type => "Shop")).order('created_at desc')
   end
 end

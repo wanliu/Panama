@@ -35,7 +35,7 @@ class Shop < ActiveRecord::Base
   friendly_id :name
 
   def all_friends
-    circles.map{|c| c.friends }
+    circles.map{|c| c.friends }.flatten
   end
 
   def fs
