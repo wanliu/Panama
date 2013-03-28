@@ -1,23 +1,54 @@
-<div class="btn-group circle-panel">
-  <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">全部</a>
-  <% circles.each do |c| %>
-  <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>"><%=c.name %></a>
-  <% end %>
-   <a href="#" class="btn circle-relation">与我相关</a>
+<div>
+  <div class="btn-group circle-panel">
+    <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">全部</a>
+    <% circles.each do |c| %>
+    <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>">
+      <%=c.name %>
+    </a>
+    <% end %>
+     <a href="#" class="btn circle-relation">与我相关</a>
+  </div>
+
+  <div class='topic-panel'>
+    <form class='topic-form'>
+      <div>
+        <textarea class='comment' name="content"></textarea>
+      </div>
+      <div class='friend-context'>
+      </div>
+      <div>
+        <input type='submit' value='发送' class='btn btn-primary send_topic' />
+      </div>
+    </form>
+    <div class='topics'>
+    </div>
+  </div>
+
 </div>
-<form class='topic-form'>
-  <div>
-    <textarea class='comment' name="content"></textarea>
+
+<template class='template-topic' style='display:none'>
+  <div class='row-fluid topic-panel'>
+    <div class='span1'>
+      <div>
+        <img class="img-polaroid" />
+      </div>
+      <div>
+        {{login}}
+      </div>
+    </div>
+    <div class='span11'>
+      <div class='well well-msg' style='margin-right:5px;'>
+        {{status}}, 日期: {{created_at}}
+        <hr style='margin:5px 0px' />
+        {{content}}
+      </div>
+    </div>
   </div>
-  <div class='friend-context'>
-  </div>
-  <div>
-    <input type='submit' value='发送' class='btn btn-primary send_topic' />
-  </div>
-</form>
+</template>
 
 <script type='text/javascript'>
-  require(["jquery", "lib/chose-friend", "admins/shops/topic"], function($, ChoseFriend, TopicView){
+  require(["jquery", "lib/chose-friend", "admins/shops/topic", "hogan"],
+    function($, ChoseFriend, TopicViewList){
     $(".friend-context").choseFriend({
       data: "<%=shop_admins_circles_path(current_shop.name) %>",
       template: "<a><i class='icon-globe'></i>{{name}} ({{friend_count}})</a>",
@@ -25,9 +56,10 @@
       default_value: '<%= default_value ||= "" %>'
     })
 
-    new TopicView({
-      el: $("form.topic-form"),
-      shop: "<%=current_shop.name %>"
+    new TopicViewList({
+      el: $(".topic-panel"),
+      shop: "<%=current_shop.name %>",
+      template: Hogan.compile($(".template-topic").html())
     })
   })
 

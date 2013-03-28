@@ -16,7 +16,7 @@ class Status
     new(num, defaults)
   end
 
-  def initialize(n, defaults)    
+  def initialize(n, defaults)
     @defaults = defaults.insert(0, :invalid).uniq
     unless n.is_a?(Fixnum)
       @state = 0
@@ -36,11 +36,15 @@ class Status
         other_state = obj.state
       else
         other_state = -1
-      end    
+      end
     state == other_state
   end
 
   def as_json(*params)
-    @state 
-  end  
+    @state
+  end
+
+  def name
+    @defaults[@state]
+  end
 end
