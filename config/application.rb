@@ -77,5 +77,6 @@ module Panama
     end
 
     config.contents = YAML.load_file(Rails.root.join('config/contents.yml'))
+    config.active_record.include_root_in_json = false
   end
 end

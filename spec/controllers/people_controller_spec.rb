@@ -14,7 +14,7 @@ describe PeopleController, "个人信息控制器" do
     it "访问个人页面" do
       get 'show', {id: current_user.login}, get_session
       response.should be_success
-      assigns(:people).should eq(current_user)
+      assigns(:people).should eql(current_user)
     end
   end
 
