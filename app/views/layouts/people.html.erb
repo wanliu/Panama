@@ -11,13 +11,16 @@
                 <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
                 <h1><%= @people.login %></h1>
                 <div class="isfollowing">
-                    <button class="btn btn-primary following" data-value="<%= current_user.id %>">关注TA</button>
-                    <button class="btn btn-primary unfollowing" data-value="2">取消关注</button>
+                    <span class="label">Default</span>
+                    <span class="label">Default</span>
+                    <% unless @people.id == current_user.id %>
+                        <% unless current_user.is_follow_user?(@people.id) %>
+                            <span class="label lf follow" data-value="<%= @people.id %>">关注</span>
+                        <% else %>
+                            <span class="label lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+                        <% end %>
+                    <% end %>
                 </div>
-                <hr>
-                <span class="label">Default</span>
-                <span class="label">Default</span>
-                <span class="label">Default</span>
                 <hr>
                 <div class="well">
                 <ul class="nav nav-list">
@@ -66,11 +69,12 @@
                         $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
                     });
                     require(["jquery", "people"], function($, following){
-                        new following({ 
+                        new following({
                             login: "<%= current_user.login %>",
-                            following_type: "User", 
+                            people_id: "<%= @people.id %>",
+                            follow_type: "User", 
                             el: $(".isfollowing") })
-                    })
+                    });
                 </script>
                 </div>
 
