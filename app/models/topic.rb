@@ -6,9 +6,9 @@
 #  owner: 所属者(商店与用户)
 #  user_id: 发贴人
 #  context_html: html内容
-#
+#  status: 状态
 class Topic < ActiveRecord::Base
-  attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html
+  attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html, :status
 
   belongs_to :owner, :polymorphic => true
   belongs_to :user
