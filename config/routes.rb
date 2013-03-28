@@ -17,6 +17,8 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :circles, :controller => "people/circles"
+
     resources :followings, :controller => "people/followings" do
       collection do
         post "user/:user_id" => "people/followings#user"
@@ -112,6 +114,8 @@ Panama::Application.routes.draw do
               :to => "shops/products#additional_properties"
         end
       end
+
+      resources :circles, :controller => "shops/circles"
 
       resources :communities, :controller => "shops/communities"
 
