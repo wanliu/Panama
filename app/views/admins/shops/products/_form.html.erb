@@ -9,7 +9,6 @@
         <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> 类别</label>
         <div class="controls">
             <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
-
             <script type="text/javascript">
                 function getBrowserHeight(){ 
                     if($.browser.msie){ 
@@ -73,8 +72,13 @@
                             .find(".modal-body")
                             .load("<%= category_page_shop_admins_products_path %>");
 
-                        // debugger
                         window.onmousewheel = document.onmousewheel = scrollDialog;
+                    });
+
+                    $("#CategoryModal .save_category").on('click', function(){
+                        selected_category = $(".input_search").val();
+                        console.log(selected_category.split("|"));
+                        $('#CategoryModal').modal('hide');
                     });
 
 
@@ -147,6 +151,6 @@
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
-    <button class="btn btn-primary">保存</button>
+    <button class="btn btn-primary save_category">保存</button>
   </div>
 </div>
