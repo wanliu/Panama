@@ -73,12 +73,13 @@
                             .find(".modal-body")
                             .load("<%= category_page_shop_admins_products_path %>");
 
-                        // window.onmousewheel = document.onmousewheel = scrollDialog;
+                        // debugger
+                        window.onmousewheel = document.onmousewheel = scrollDialog;
                     });
 
 
                     $("#CategoryModal").on('hide', function(){
-                        // window.onmousewheel = document.onmousewheel = undefined;
+                        window.onmousewheel = document.onmousewheel = undefined;
                     });
 
                     $(button).click(function(e){
