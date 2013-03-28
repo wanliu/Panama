@@ -29,6 +29,10 @@ class User < ActiveRecord::Base
 
   after_create :load_initialize_data
 
+  def all_friends
+    circles.map{| c | c.friends }.flatten
+  end
+
   def icon
     photos.icon
   end
