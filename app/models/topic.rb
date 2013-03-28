@@ -22,6 +22,8 @@ class Topic < ActiveRecord::Base
 
   after_save :convent_content_html
 
+  acts_as_status :status, [:puliceity, :external, :circle]
+
   def convent_content_html
     content_html = content
   end
