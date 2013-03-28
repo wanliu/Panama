@@ -4,7 +4,7 @@
       display:none;
     }
   </style>
-<div class='container-fluid'>
+<div class='container-fluid category_select'>
     <div class='row-fluid search'>
         <form class="form-search span12">
           <div class="input-append span12">
@@ -57,8 +57,14 @@
     require(['jquery', 'category'], function ($, view){
         var view = new view.Category({
             shop_name: "<%= current_shop.name %>",
-            el: $(".container-fluid")
+            el: $(".container-fluid.category_select")
         });
+
+        category_name = $(button).text();
+        if (category_name != "Noselected") {
+            $(".input_search").val(category_name);
+            $("#search").click();
+        };
     });
 
 </script>

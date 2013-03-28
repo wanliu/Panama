@@ -21,12 +21,11 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         reset_navigation: (model) ->
             if @navigations.length > 1
-                $(".input_search").val("")
                 _.each @navigations.models, (m, i) =>
                     if i == 0
                         $(".input_search").val(m.get("name"))
                     else
-                        $(".input_search").val($(".input_search").val() + " | " + m.get("name"))
+                        $(".input_search").val($(".input_search").val() + "|" + m.get("name"))
             if @navigations.length == 1
                 $(".input_search").val(@navigations.first().get("name"))
 
@@ -125,7 +124,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 limit: 10
             })
             @$(".twitter-typeahead").addClass("span12 search-query")
-            @$(".tt-query").after("<button type='button' class='btn' id='search'>选择</button>")
+            @$(".tt-query").after("<button type='button' class='btn' id='search'>搜索</button>")
 
         keyup_choose: (options) ->
             unless $(".input_search").val() == ""
@@ -138,8 +137,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 @click_keyup()
 
         click_keyup: (options) ->
-            @children_el.html("")
-            # search_value = $.trim($(".input_search").val())
+            @children_el.hide()
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
@@ -236,6 +234,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     children_el: @children_el,
                     shop_name: @shop_name
                 })
+            $(".category_buttons").show()
             
             category_base.refresh_category_list(@model, @shop_name)
 
@@ -243,6 +242,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         initialize : (options) ->
             _.extend(@, options)
+            # debugger
             @category_root_el = @el.find(".category_roots")
             @category_children_el = @el.find(".category_buttons")
             @search_el = @el.find(".search")
@@ -286,16 +286,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         enter_children: () ->
             str = $(@el).parent().attr("class").split(" ")[1]
             $(".category_list").attr("back_parent",str)
-            debugger
-            if $(".category_buttons").children().length != 0
-                $("button.category-#{@model.get('id')}").click()
-            else
-                category_base.reset_navigation(@model)
+            $("button.category-#{@model.get('id')}").click()
             category_base.refresh_category_list(@model, @shop_name)
 
         select_category: () ->
-            # @$el.siblings("").find(".select_category").removeClass("active")
-            # $(@el).find(".select_category").toggleClass("active")
             $(".category_buttons").find("button.category-#{@model.get('id')}").click()
 
         render: () ->
@@ -318,7 +312,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             else
                 $(".list-undefined").remove()
                 search_value = $.trim($(".input_search").val())
-                @category_name = (search_value.split(" "))[search_value.split(" ").length-1]
+                @category_name = (search_value.split("|"))[search_value.split("|").length-1]
             
             @select_list = ".category_cover.#{list_id}"
             $(".category_cover:visible").hide()

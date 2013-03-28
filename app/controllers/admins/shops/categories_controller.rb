@@ -89,7 +89,7 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
       categories = []
       @category_children.each do |category|
         if category.ancestry_depth > 2
-          category["value"] = "#{parent_name(category)} | #{category["name"]}"
+          category["value"] = "#{parent_name(category)}|#{category["name"]}"
           categories << category
         end
       end
