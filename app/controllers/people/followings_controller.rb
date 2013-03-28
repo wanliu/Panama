@@ -13,11 +13,9 @@ class People::FollowingsController < People::BaseController
   end
 
   def user
-    debugger
     authorize! :user, Following
     user = User.find(params[:user_id])
     @follow = current_user.followings.user(user.id)
-    debugger
     respond_to do | format |
       if @follow.valid?
         format.html
