@@ -46,7 +46,7 @@ Panama::Application.routes.draw do
         get "index_activities"
       end
     end
-    
+
     resources :cart, :controller => "people/cart"
 
     member do
@@ -75,7 +75,7 @@ Panama::Application.routes.draw do
   get "pending/index"
 
   resources :users
-  resources :contents
+  resources :contents, :except => :index
 
   resources :products, :except => :index
 
@@ -93,7 +93,7 @@ Panama::Application.routes.draw do
   resources :category
   # shop admins routes
 
-  resources :shops do
+  resources :shops, :except => :index do
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post

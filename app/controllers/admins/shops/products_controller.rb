@@ -33,8 +33,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     form_builder(@product)
     @category_root = Category.root
     @shops_category_root = current_shop.shops_category
-    @content = additional_properties_content
     @category = @product.build_category(:name => 'No Selected')
+    @content = additional_properties_content(@category)
     #模拟数据库对象
     # def @product.styles
     #   [
@@ -170,7 +170,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def additional_properties_content(category = nil)
-    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties)
+    @content = PanamaCore::Contents.fetch_for(category, :additional_properties)
   end
 
   def form_builder(product)

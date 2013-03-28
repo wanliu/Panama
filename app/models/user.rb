@@ -44,16 +44,14 @@ class User < ActiveRecord::Base
 
   after_initialize :init_user_info
 
-  after_initialize do
-    if cart.nil?
-      build_cart
-    end
-  end
-
   def init_user_info
-    return if new_record?
-    create_photo if photo.nil?
-    create_cart if cart.nil?
+    if new_record?
+      build_photo if photo.nil?
+      build_cart if cart.nil?
+    else
+      create_photo if photo.nil?
+      create_cart if cart.nil?
+    end
   end
 
   def has_group?(group)
