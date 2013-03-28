@@ -137,7 +137,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 @click_keyup()
 
         click_keyup: (options) ->
-            @children_el.hide()
+            @children_el.html("")
+            # @children_el.hide()
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
@@ -234,7 +235,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     children_el: @children_el,
                     shop_name: @shop_name
                 })
-            $(".category_buttons").show()
+            # $(".category_buttons").show()
             
             category_base.refresh_category_list(@model, @shop_name)
 
@@ -242,7 +243,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         initialize : (options) ->
             _.extend(@, options)
-            # debugger
             @category_root_el = @el.find(".category_roots")
             @category_children_el = @el.find(".category_buttons")
             @search_el = @el.find(".search")
@@ -349,7 +349,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         render: () ->
             $(".category_list").append(@el)
-            $(@el).find(".slides").slidesjs({
+            $(".slides").slidesjs({
                 width: 200,
                 height: 133,
                 navigation: false,

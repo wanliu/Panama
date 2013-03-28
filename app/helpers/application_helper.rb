@@ -127,6 +127,7 @@ module ApplicationHelper
   end
 
   def breadcrumb_button(name, array)
+    # debugger
     output = "".html_safe
     array.shift
     # ISSUE: 临时方案, 需要修改 rails.view.js 的 提交 bug
@@ -149,4 +150,5 @@ module ApplicationHelper
       end
     end
   end
+
 end
