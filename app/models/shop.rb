@@ -34,8 +34,23 @@ class Shop < ActiveRecord::Base
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
   friendly_id :name
 
+  #所有圈子好友
   def all_friends
-    circles.map{|c| c.friends }.flatten
+    CircleFriends.where(:circle_id => circles.map{|c| c.id})
+  end
+
+  #所有好友的圈子好友
+  def all_friend_circles
+    user_ids = all_friends.select(:user_id).map{|f| f.user_id}
+    cids = Circle.where(:owner_type => "User",
+      :owner_id => user_ids).select(:id).map{|c| c.id}
+    CircleFriends.where(:circle_id => cids)
+  end
+
+  #获取某个圈子好友
+  def find_friend_by_circle(circle_id)
+    circle_ids = circles.where(:id => circle_id).select("id").map{|c| c.id}
+    CircleFriends.where(:circle_id => circle_ids)
   end
 
   def fs
