@@ -9,25 +9,64 @@ define ["jquery", "backbone"], ($, Backbone) ->
       @seturl(shop)
       super attr
 
+  class TopicList extends Backbone.Collection
+    seturl: (shop) ->
+      @url = "/shops/#{shop}/admins/topics"
+
+    constructor: (models, shop) ->
+      @seturl(shop)
+      super models
+
   class TopicView extends Backbone.View
+
+    initialize: (options) ->
+      _.extend(@, options)
+      @$el = $(@el)
+      @$el.html(@template.render(@model.toJSON()))
+
+    render: () ->
+      @$el
+
+  class TopicViewList extends Backbone.View
     events: {
-      "submit": "create"
+      "submit form.topic-form": "create"
     }
 
     initialize: (options) ->
       _.extend(@, options)
 
+      @topic_list = new TopicList([], @shop)
+      @topic_list.bind("reset", @all_topic, @)
+      @topic_list.bind("add", @add_topic, @)
+      @topic_list.fetch()
+
+      @$content = @$("form.topic-form textarea[name=content]")
+
       @$el = $(@el)
 
     create: () ->
-      content = @$("textarea[name=content]").val().trim()
+      content = @$content.val().trim()
       return false if content is ""
 
       data = { content: content }
       data.friends = @get_friends()
       @topic = new Topic(data, @shop)
-      @topic.save()
+      @topic.save({}, {
+        success: _.bind(@add_one, @)
+      })
       false
+
+    all_topic: (collection) ->
+      collection.each (model) =>
+        @add_topic model
+
+
+    add_topic: (model) ->
+      topic_view = new TopicView(
+        model: model,
+        template: @template
+      )
+      @$(".topics").append(topic_view.render())
 
     get_friends: () ->
       items = @$(".chose-item-selector>.chose-label")
@@ -38,6 +77,7 @@ define ["jquery", "backbone"], ($, Backbone) ->
         data.push id
       data
 
+  TopicViewList
 
 
 
