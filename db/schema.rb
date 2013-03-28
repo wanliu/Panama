@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315024156) do
+ActiveRecord::Schema.define(:version => 20130321022402) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -64,6 +64,13 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
+  create_table "admins", :force => true do |t|
+    t.string   "uid"
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "attachments", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",      :null => false
@@ -88,9 +95,9 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -132,9 +139,11 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
     t.string   "name"
     t.string   "template"
     t.boolean  "lock"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "shop_id"
+    t.integer  "contentable_id"
+    t.string   "contentable_type"
   end
 
   create_table "file_entities", :force => true do |t|
@@ -169,11 +178,6 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
     t.string  "warhouse"
     t.decimal "last_time",  :precision => 20, :scale => 10
   end
-
-  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
-  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
-  add_index "inventory_caches", ["styles"], :name => "index_inventory_caches_on_styles"
-  add_index "inventory_caches", ["warhouse"], :name => "index_inventory_caches_on_warhouse"
 
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
@@ -214,15 +218,27 @@ ActiveRecord::Schema.define(:version => 20130315024156) do
   end
 
   create_table "product_items", :force => true do |t|
+    t.integer  "transaction_id"
     t.string   "title"
     t.decimal  "amount",         :precision => 10, :scale => 0
     t.decimal  "price",          :precision => 10, :scale => 0
     t.decimal  "total",          :precision => 10, :scale => 0
-    t.integer  "transaction_id"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "cart_id"
-    t.integer  "sub_product_id"
+    t.integer  "product_id"
+  end
+
+  create_table "product_prices", :force => true do |t|
+    t.integer  "product_id"
+    t.decimal  "price",      :precision => 10, :scale => 2
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "product_prices_property_items", :id => false, :force => true do |t|
+    t.integer "product_price_id"
+    t.integer "property_item_id"
   end
 
   create_table "product_property_values", :force => true do |t|

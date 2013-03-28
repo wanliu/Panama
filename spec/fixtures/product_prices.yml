@@ -1,0 +1,9 @@
+---
+1:
+    id: 1
+    product_id: 10001
+    price: 100.5
+2:
+    id: 2
+    product_id: 10001
+    price: 200.0

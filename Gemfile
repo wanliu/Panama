@@ -1,5 +1,5 @@
-# source 'https://rubygems.org'
-source 'http://ruby.taobao.org'
+source 'https://rubygems.org'
+# source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
 
@@ -16,6 +16,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'coffee-script-source', '~> 1.4.0'
+  # gem "coffee-script-source", "~> 1.6.2"
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
@@ -112,8 +113,10 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
-  # gem 'better_errors'
-  # gem 'binding_of_caller'
+  # gem 'zeus'
+  # gem 'coffee-rails-source-maps'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do

@@ -8,19 +8,7 @@ module ContentsHelper
     '/'.to_dir
   end
 
-  def render_content(content, fs = fs, render_options = {:layout => false})
-    begin
-      tpl = fs[content.template].read
-      generate_template(tpl) do |tpl_name, options|
-        prepend_tpl_view_path
-        render_content_template tpl_name, render_options
-      end
-    rescue Vfs::Error => e
-      raise "template file :#{content.template} not found"
-    end
-  end
-
-  def render_content_ex(content, render_options = { :layout => false })
+  def render_content(content, render_options = { :layout => false })
     begin
       tpl = content.template.data
       generate_template(tpl, render_options) do |tpl_name, options|

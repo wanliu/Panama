@@ -16,14 +16,6 @@ describe ShopsController, "商店控制器" do
     @shop.save
   end
 
-
-  describe "GET index" do
-    it "获取所有商店" do
-      get :index, {}, get_session
-      assigns(:shops).should include(@shop)
-    end
-  end
-
   describe "GET show" do
     it "显示一个商店" do
       get :show, {:id => @shop.to_param}, get_session

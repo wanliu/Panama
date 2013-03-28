@@ -66,9 +66,9 @@ describe OrderTransaction, "订单流通记录" do
     end
 
     describe "实例方法" do
-        let(:item_1) { FactoryGirl.create(:product_item, sub_product: nil, cart: nil, transaction: nil) }
-        let(:item_2) { FactoryGirl.create(:product_item, sub_product: nil, cart: nil, transaction: nil) }
-        let(:item_3) { FactoryGirl.create(:product_item, sub_product: nil, cart: nil, transaction: nil) }
+        let(:item_1) { FactoryGirl.create(:product_item, product: nil, cart: nil, transaction: nil) }
+        let(:item_2) { FactoryGirl.create(:product_item, product: nil, cart: nil, transaction: nil) }
+        let(:item_3) { FactoryGirl.create(:product_item, product: nil, cart: nil, transaction: nil) }
         let(:itemes) { [item_1, item_2, item_3].map { |item| item.attributes.symbolize_keys! } }
         let(:order) { OrderTransaction.new(items_count: 0, total: 0) }
 

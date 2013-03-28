@@ -38,14 +38,14 @@ describe ContentsController do
     get_session
   end
 
-  describe "GET index" do
-    it "assigns all contents as @contents" do
-      content = Content.create! valid_attributes
-      get :index, {}, valid_session
-      assigns(:contents).should include(content)
-      response.should be_success
-    end
-  end
+  # describe "GET index" do
+  #   it "assigns all contents as @contents" do
+  #     content = Content.create! valid_attributes
+  #     get :index, {}, valid_session
+  #     assigns(:contents).should include(content)
+  #     response.should be_success
+  #   end
+  # end
 
   describe "GET show" do
     it "assigns the requested content as @content" do
