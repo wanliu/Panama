@@ -28,7 +28,7 @@ module PanamaCore
         when Class
           0
         when ActiveRecord::Base
-          @resource.id
+          @resource.id || 1.0 / 0
         end
       end
 
