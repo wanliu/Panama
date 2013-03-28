@@ -1,3 +1,4 @@
+#encoding: utf-8
 require 'orm_fs'
 
 class Shop < ActiveRecord::Base
@@ -11,7 +12,10 @@ class Shop < ActiveRecord::Base
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_many :shop_users
-  has_many :followers, :as => :follow, :class_name => "Following"
+  has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
+  has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
+  has_many :topics, as: :owner, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy
 
   has_one :shops_category
   belongs_to :user
@@ -78,23 +82,29 @@ class Shop < ActiveRecord::Base
     load_group
     load_group_permission
     load_admin_permission
+    load_friend_circle
   end
 
   def delete_shop
     remove_standardization_files
   end
 
+  def load_friend_circle
+    _config = YAML.load_file("#{Rails.root}/config/data/shop_circle.yml")
+    _config["circle"].each do |circle|
+      self.circles.create(circle) if self.circles.find_by(circle).nil?
+    end
+  end
+
   def load_group
     _config = YAML.load(fs['config/shop_group.yml'].read)
     _config["shop_group"].each do |group|
-      if self.groups.find_by(group).nil?
-        self.groups.create(group)
-      end
+      self.groups.create(group) if self.groups.find_by(group).nil?
     end
   end
 
   def load_group_permission
-    _config = YAML.load_file("#{Rails.root}/config/permission.yml")
+    _config = YAML.load_file("#{Rails.root}/config/data/permission.yml")
     _config["group_permission"].each do |group_name, permissions|
       group = self.groups.find_by(name: group_name)
       group.give_permission(permissions) unless group.nil?

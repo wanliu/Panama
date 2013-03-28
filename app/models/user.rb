@@ -17,11 +17,17 @@ class User < ActiveRecord::Base
            class_name: "OrderTransaction",
            foreign_key: 'buyer_id'
 
-  has_many :addresses, class_name: "Address"
-  has_many :followings
-  has_many :followers, :as => :follow, :class_name => "Following"
+  has_many :addresses, class_name: "Address", dependent: :destroy
+  has_many :followings, dependent: :destroy
+  has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
+  has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
+  has_many :join_circles, class_name: "CircleFriend", dependent: :destroy
+  has_many :topics, as: :owner, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy
 
   delegate :groups, :jshop, :to => :shop_user
+
+  after_create :load_initialize_data
 
   def icon
     photos.icon
@@ -41,6 +47,13 @@ class User < ActiveRecord::Base
 
   def is_follower?(user_id)
     followers.exists?(user_id: user_id)
+  end
+
+  def load_initialize_data
+    _config = YAML.load_file("#{Rails.root}/config/data/user_circle.yml")
+    _config["circle"].each do |circle|
+      self.circles.create(circle) if self.circles.find_by(circle)
+    end
   end
 
   #暂时方法
