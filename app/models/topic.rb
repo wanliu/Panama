@@ -6,9 +6,9 @@
 #  owner: 所属者(商店与用户)
 #  user_id: 发贴人
 #  context_html: html内容
-#
+#  status: 状态
 class Topic < ActiveRecord::Base
-  attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html
+  attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html, :status
 
   belongs_to :owner, :polymorphic => true
   belongs_to :user
@@ -22,7 +22,17 @@ class Topic < ActiveRecord::Base
 
   after_save :convent_content_html
 
+  acts_as_status :status, [:puliceity, :external, :circle]
+
   def convent_content_html
     content_html = content
+  end
+
+  def self.users(options = {})
+    where(options.merge(:owner_type => "User")).order('created_at desc')
+  end
+
+  def self.shops(options = {})
+    where(options.merge(:owner_type => "Shop")).order('created_at desc')
   end
 end

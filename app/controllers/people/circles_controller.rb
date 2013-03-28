@@ -3,7 +3,7 @@ class People::CirclesController < People::BaseController
   def index
     @circles = @people.circles
     respond_to do |format|
-      format.json{ render :json => @circles }
+      format.json{ render json: @circles.as_json(methods: :friend_count) }
     end
   end
 

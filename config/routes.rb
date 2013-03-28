@@ -115,6 +115,8 @@ Panama::Application.routes.draw do
         end
       end
 
+      resources :topics, :controller => "shops/topics"
+
       resources :circles, :controller => "shops/circles"
 
       resources :communities, :controller => "shops/communities"
