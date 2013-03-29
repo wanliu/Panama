@@ -3,14 +3,15 @@ require 'panama_core/contents'
 PanamaCore::Contents.config do
 
   root '/panama'
-  template 'templates/:name.html.erb'
+  template 'templates/:action.html.erb'
 
   category do
 
     default_additional_properties
 
     each do
-      additional_properties
+      template 'templates/category_:id,_:action.html.erb'
+      additional_properties :transfer => :default_additional_properties
     end
   end
 
@@ -27,7 +28,7 @@ PanamaCore::Contents.config do
     # root '/panama'
 
     each do
-      sale_options
+      sale_options :transfer => 'category#sale_options', :transfer_method => :category
     end
   end
 end

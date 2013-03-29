@@ -21,14 +21,15 @@ class Product < ActiveRecord::Base
 
   define_graphical_attr :photos, :handler => :default_photo
 
-  belongs_to :shop
-  belongs_to :category, :autosave => true
-  belongs_to :shops_category
-  belongs_to :default_attachment, :class_name => "Attachment"
-  has_and_belongs_to_many :attachments, :class_name => "Attachment"
-  has_many :comments, :as => :targeable
-  has_many   :contents, :as => :contentable
+  belongs_to :shop                                                                # 所属商店
+  belongs_to :category, :autosave => true                                         # 产品类型
+  belongs_to :shops_category                                                      # 商店分类
+  belongs_to :default_attachment, :class_name => "Attachment"                     # 默认图片
+  has_and_belongs_to_many :attachments, :class_name => "Attachment"               # 图片相册
+  has_many   :comments, :as => :targeable                                         # 评论
+  has_many   :contents, :as => :contentable                                       # 产品内容配置组
 
+  has_many :price_options                                                         # 价格方案
   # prices[:colour => "red", :sizes => "S"]
   # =>
   has_many :prices, :class_name => "ProductPrice", :autosave => true do

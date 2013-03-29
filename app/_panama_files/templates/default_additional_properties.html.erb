@@ -1,0 +1,19 @@
+<h3>No Additional Properties in <%= @category.name %></h3>
+<% f = value_for(:form) %>
+
+<% @product.properties.each do |prop| %>
+   <% case prop.property_type %>
+   <% when "string" %>
+      <%= f.input prop.name %>
+   <% when "integer" %>
+     <%= f.input prop.name, :as => :spinner %>
+   <%# when "set" %>
+     <%#= f.input prop.name, :as => :select %>
+  <% end %>
+<% end %>
+
+<hr>
+
+<% @product.price_options do |po| %>
+
+<% end %>

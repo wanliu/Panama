@@ -94,15 +94,21 @@ module PanamaCore
       end
     end
 
-    def fetch_for(resource, aciton = nil, options = {})
-      SearchWithConfig.fetch_for(resource, aciton, options)
+    def fetch_for(resource, *args)
+      options = args.extract_options!
+      action = args.first
+      SearchWithConfig.fetch_for(resource, action, options)
     end
 
-    def create_for(resource, action = nil, options = {})
+    def create_for(resource, *args)
+      options = args.extract_options!
+      action = args.first
       SearchWithConfig.create_for(resource, aciton, options)
     end
 
-    def query_for(resource, aciton = nil, options = {})
+    def query_for(resource, *args)
+      options = args.extract_options!
+      action = args.first
       SearchWithConfig.query_for(resource, aciton, options)
     end
 
