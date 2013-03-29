@@ -41,7 +41,7 @@ describe People::TransactionsController, "用户订单交易流通" do
 
   describe "GET new" do
     it "显示添加页面" do
-      get :new, {}, valid_session
+      get :new, {:person_id => ""}, valid_session
       assigns(:transaction).should be_a_new(OrderTransaction)
     end
   end
@@ -49,7 +49,7 @@ describe People::TransactionsController, "用户订单交易流通" do
   describe "GET edit" do
     it "显示编辑页面" do
       transaction = OrderTransaction.create! valid_attributes
-      get :edit, {:id => transaction.to_param}, valid_session
+      get :edit, {:id => transaction.to_param,:person_id => ""}, valid_session
       assigns(:transaction).should eq(transaction)
     end
   end
@@ -57,13 +57,13 @@ describe People::TransactionsController, "用户订单交易流通" do
   describe "POST batch_create" do
     it "生成成功" do
       Cart.any_instance.should_receive(:create_transaction).with(current_user).and_return(true)
-      post :batch_create, person_params, valid_session
+      post :batch_create, person_params.merge(:id => ""), valid_session
       response.should redirect_to(person_transactions_path(current_user.login))
     end
 
     it "生成失败" do
       Cart.any_instance.should_receive(:create_transaction).with(current_user).and_return(false)
-      post :batch_create, person_params, valid_session
+      post :batch_create, person_params.merge(:id => ""), valid_session
       response.should redirect_to(person_cart_index_path(current_user.login))
     end
   end
@@ -141,7 +141,7 @@ describe People::TransactionsController, "用户订单交易流通" do
         transaction = OrderTransaction.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         OrderTransaction.any_instance.stub(:save).and_return(false)
-        put :update, {:id => transaction.to_param, :transaction => {  }}, valid_session
+        put :update, {:id => transaction.to_param, :transaction => {  },:person_id => ""}, valid_session
         assigns(:transaction).should eq(transaction)
       end
 
@@ -149,7 +149,7 @@ describe People::TransactionsController, "用户订单交易流通" do
         transaction = OrderTransaction.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         OrderTransaction.any_instance.stub(:save).and_return(false)
-        put :update, {:id => transaction.to_param, :transaction => {  }}, valid_session
+        put :update, {:id => transaction.to_param, :transaction => {  },:person_id => ""}, valid_session
         response.should render_template("edit")
       end
     end

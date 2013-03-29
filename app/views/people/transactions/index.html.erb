@@ -7,7 +7,7 @@
       <ul class="cards">
       <% @transactions.each do |transaction| %>
           <%= render :partial => 'trans_card', :locals => { :transaction => transaction, :state => transaction.state, :people => @people } %>
-      <% end %>     
+      <% end %>
       </ul>
      </div>
      <% end %>
@@ -28,8 +28,8 @@
           <td><%#= link_to 'Destroy', person_transaction_path(@people.login, transaction), method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr> -->
         <%= render :partial => 'item_trans', :locals => {
-                   :transaction => transaction, 
-                   :state => transaction.state, 
+                   :transaction => transaction,
+                   :state => transaction.state,
                    :people => @people } %>
       <% end %>
       <%= paginate @transactions %>

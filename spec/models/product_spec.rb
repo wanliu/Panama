@@ -12,7 +12,6 @@ describe Product, "产品模型" do
     it{ should belong_to(:default_attachment) }
     it{ should belong_to(:category) }
     it{ should have_and_belong_to_many(:attachments) }
-    it{ should have_many(:styles) }
 
     it{ should validate_presence_of(:shops_category) }
     it{ should validate_presence_of(:shop) }
@@ -105,61 +104,62 @@ describe Product, "产品模型" do
                            "2" => { size: "XL", colour: "粉红", price: "55", quantity: "2" } }.symbolize_keys }
     let(:params)  { { "style" => style, "sub_products" => sub_products }.symbolize_keys }
 
-    before(:each) do
-      product.styles.clear
-      product.sub_products.clear
+
+    describe "old style", :if => false do
+
+        describe "update_style_subs and create_style_subs" do
+          it "invoke create_style and create_subs method" do
+            product.should_receive(:create_style).with(style)
+            product.should_receive(:create_subs).with(sub_products)
+
+            product.update_style_subs(params)
+          end
+        end
+
+        describe "create_style" do
+          # FIXED: 替换成新的 属性
+          # it "add two styel_groups" do
+          #   expect { product.create_style(style) }.to change { product.styles.size }.from(0).to(2)
+          # end
+
+          # it "add four style_items" do
+          #   expect { product.create_style(style) }.to change { StyleItem.all.size }.by(4)
+          # end
+        end
+
+        describe "create_subs" do
+          before(:each) { product.create_style(style) }
+
+          it "invoke create_sub 2 times" do
+            product.should_receive(:create_sub).exactly(2).times
+            product.create_subs(sub_products)
+          end
+
+          it "create 2 sub_products" do
+            expect { product.create_subs(sub_products) }.to change { product.sub_products.size }.from(0).to(2)
+          end
+
+          it "create 4 sytle_pairs" do
+            expect { product.create_subs(sub_products) }.to change { StylePair.all.size }.by(4)
+          end
+        end
+
+        describe "subs_editing" do
+          it "return params[:sub_products]" do
+            back = product.subs_editing(params)
+            back.should eql(sub_products)
+          end
+        end
+
+        describe "sytles_editing" do
+          it "return changed style" do
+            expect = style.map { |name, items| { 'name' => name, 'items' => items.values } }
+            back = product.sytles_editing(params)
+            back.should eql(expect)
+          end
+        end
     end
 
-    describe "update_style_subs and create_style_subs" do
-      it "invoke create_style and create_subs method" do
-        product.should_receive(:create_style).with(style)
-        product.should_receive(:create_subs).with(sub_products)
-
-        product.update_style_subs(params)
-      end
-    end
-
-    describe "create_style" do
-      it "add two styel_groups" do
-        expect { product.create_style(style) }.to change { product.styles.size }.from(0).to(2)
-      end
-
-      it "add four style_items" do
-        expect { product.create_style(style) }.to change { StyleItem.all.size }.by(4)
-      end
-    end
-
-    describe "create_subs" do
-      before(:each) { product.create_style(style) }
-
-      it "invoke create_sub 2 times" do
-        product.should_receive(:create_sub).exactly(2).times
-        product.create_subs(sub_products)
-      end
-
-      it "create 2 sub_products" do
-        expect { product.create_subs(sub_products) }.to change { product.sub_products.size }.from(0).to(2)
-      end
-
-      it "create 4 sytle_pairs" do
-        expect { product.create_subs(sub_products) }.to change { StylePair.all.size }.by(4)
-      end
-    end
-
-    describe "subs_editing" do
-      it "return params[:sub_products]" do
-        back = product.subs_editing(params)
-        back.should eql(sub_products)
-      end
-    end
-
-    describe "sytles_editing" do
-      it "return changed style" do
-        expect = style.map { |name, items| { 'name' => name, 'items' => items.values } }
-        back = product.sytles_editing(params)
-        back.should eql(expect)
-      end
-    end
 
     # 为产品增加一些附加属性,这些属性可以通过系统配置来进行管理, 同时产品的属性,默认来至于所属的分类
     # 所为,必须要测试分类的属性的转换,对其产生的影响

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315023332) do
+ActiveRecord::Schema.define(:version => 20130321022402) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(:version => 20130315023332) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -132,9 +132,11 @@ ActiveRecord::Schema.define(:version => 20130315023332) do
     t.string   "name"
     t.string   "template"
     t.boolean  "lock"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.integer  "shop_id"
+    t.integer  "contentable_id"
+    t.string   "contentable_type"
   end
 
   create_table "file_entities", :force => true do |t|
@@ -145,6 +147,13 @@ ActiveRecord::Schema.define(:version => 20130315023332) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "ancestry"
+  end
+
+  create_table "group_permissions", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "images", :force => true do |t|
@@ -199,6 +208,13 @@ ActiveRecord::Schema.define(:version => 20130315023332) do
     t.integer  "address_id"
   end
 
+  create_table "permissions", :force => true do |t|
+    t.string   "resource"
+    t.string   "ability"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "product_items", :force => true do |t|
     t.string   "title"
     t.decimal  "amount",         :precision => 10, :scale => 0
@@ -208,7 +224,19 @@ ActiveRecord::Schema.define(:version => 20130315023332) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.integer  "cart_id"
-    t.integer  "sub_product_id"
+    t.integer  "product_id"
+  end
+
+  create_table "product_prices", :force => true do |t|
+    t.integer  "product_id"
+    t.decimal  "price",      :precision => 10, :scale => 2
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "product_prices_property_items", :id => false, :force => true do |t|
+    t.integer "product_price_id"
+    t.integer "property_item_id"
   end
 
   create_table "product_property_values", :force => true do |t|

@@ -27,6 +27,9 @@ Panama::Application.configure do
   # Do not compress assets
   config.assets.compress = false
 
+  # Enable source maps in the browser
+  config.sass.debug_info = true
+
   # Expands the lines which load the assets
   config.assets.debug = true
   # config.middleware.insert_before Rails::Rack::Logger, DisableAssetsLogger

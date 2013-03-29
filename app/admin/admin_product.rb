@@ -4,7 +4,7 @@ ActiveAdmin.register Product do
     column :name
     column :properties do |product|
       properties_string = product.properties.map do |prop|
-        "#{prop.name}: #{prop.property_type}<#{product.properties_values[prop.name]}>"
+        "#{prop.name}: #{prop.property_type}< #{product.send(prop.name).inspect} >"
       end
       link = link_to "have #{ product.properties.size } propertys.", system_product_path(product)
       link + "   " + properties_string.to_s

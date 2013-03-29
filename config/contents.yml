@@ -1,5 +1,16 @@
 ---
+# 基础格式
+# category: # Category 类
+#   each:  # 每个实体
+#       additional_properties: # 附加结点
+#           storage: '/panama' # 存储根位置
+#           template: 'templates/additional_properties.html.erb' # 模板字段
 category:
-    - additional_properties
+    each:
+        additional_properties: true
+
 shop:
     - index
+
+product:
+    - sale_options

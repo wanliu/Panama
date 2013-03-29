@@ -137,8 +137,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 @click_keyup()
 
         click_keyup: (options) ->
-            @children_el.html("")
-            # @children_el.hide()
+            # @children_el.html("")
+            @children_el.hide()
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
 
@@ -225,7 +225,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el
 
         category_children: () ->
-            @children_el.html("")
+            # @children_el.html("")
+            @children_el.hide()
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
             @$el.addClass("on")
@@ -235,7 +236,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                     children_el: @children_el,
                     shop_name: @shop_name
                 })
-            # $(".category_buttons").show()
+            $(".category_buttons").show()
             
             category_base.refresh_category_list(@model, @shop_name)
 
@@ -287,7 +288,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             str = $(@el).parent().attr("class").split(" ")[1]
             $(".category_list").attr("back_parent",str)
             $("button.category-#{@model.get('id')}").click()
-            category_base.refresh_category_list(@model, @shop_name)
+            # category_base.refresh_category_list(@model, @shop_name)
 
         select_category: () ->
             $(".category_buttons").find("button.category-#{@model.get('id')}").click()
@@ -320,6 +321,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 $(".no-result").hide()
                 $(@select_list).show()
             else
+                debugger
                 @$el.addClass(list_id)
                 @new_list(options)
 

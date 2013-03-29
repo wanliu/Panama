@@ -8,9 +8,10 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 		#	depth: [color, size]    #维度
 		#	structure: [[red, blue, white], [M, ML, XL, XXL], ....]  #初始表结构对象
 		#	data: [price, quantity]  #数据字段
-		initialize: (el, schema) ->
-			@render(el)
-			@schema = schema
+
+		initialize: (target, @options) ->
+			_.extend(@, @options)
+			@render(target)
 			@parseTable()
 
 		render: (el) ->
@@ -30,11 +31,11 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 
 	class TableUnitView extends Backbone.View
 		tagName: 'tr'
+		storeField: 'product[prices]'
+
 		initialize: () ->
-			@structure = @options.schema.structure
-			@schema = @options.schema
-			@position = @options.position
-			@parent_el = @options.parent_el
+			_.extend(@, @options)
+			@structure = @schema.structure
 
 			@initTitle() if !@options.isRoot
 			@parent = if @options.creater then @options.creater else null
@@ -55,10 +56,10 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 					name = @schema['depth'] if @schema['depth']
 					name = name[_.first(item['position'])]
 					to_filled = "#{item.value}-" + to_filled
-					"<input type='hidden' name='sub_products[#{counter}][#{name}]' value=#{item.value} >"
+					"<input type='hidden' name='#{@storeField}[#{counter}][#{name}]' value=#{item.value} >"
 
 				html = for data in @schema['data']
-					"<td>#{data.title}: &nbsp;&nbsp;&nbsp;&nbsp;<input class='#{to_filled + data.value}' name=sub_products[#{counter}][#{data.value}]  type='text'></td>"
+					"<td>#{data.title}: &nbsp;&nbsp;&nbsp;&nbsp;<input class='#{to_filled + data.value}' name=#{@storeField}[#{counter}][#{data.value}]  type='text'></td>"
 
 				$(@el).html('<td class="title">' + (if @title then @title else '') + '</td>' + html_front + html)
 

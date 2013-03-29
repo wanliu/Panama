@@ -26,4 +26,5 @@ describe Content do
     found = Content.lookup_name('found_me').last
     content.should == found
   end
+
 end

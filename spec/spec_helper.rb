@@ -2,7 +2,7 @@ require 'simplecov'
 require 'rubygems'
 require 'spork'
 #uncomment the following line to use spork with the debugger
-#require 'spork/ext/ruby-debug'
+require 'spork/ext/ruby-debug'
 
 # --- Instructions ---
 # Sort the contents of this file into a Spork.prefork and a Spork.each_run
@@ -41,9 +41,11 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
-#
-require File.expand_path('../session', __FILE__)
 
+require File.expand_path('../session', __FILE__)
+require 'rspec_load_data'
+
+Rspec::Data.load
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -54,9 +56,15 @@ end
 
 
 Spork.each_run do
-  # This code will be run each time you run your specs.
-  # load "#{Rails.root}/config/routes.rb"
-  # Dir["#{Rails.root}/app/**/*.rb"].each { |f| require f}
+  # ActiveSupport::Dependencies.clear
+  # ActiveRecord::Base.instantiate_observers
+  # # This code will be run each time you run your specs.
+  # silence_warnings do
+  #   load "#{Rails.root}/config/routes.rb"
+  #   Dir["#{Rails.root}/app/**/*.rb"].each { |f| load f }
+  #   Dir["#{Rails.root}/lib/**/*.rb"].each { |f| load f }
+
+  # end
   # files.each {|f| load f}
 end
 

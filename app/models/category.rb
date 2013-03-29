@@ -7,6 +7,7 @@ class Category < ActiveRecord::Base
 
   has_many :products
   has_and_belongs_to_many :properties, :autosave => true
+  has_many :contents, :as => :contentable
   has_ancestry :cache_depth => true
 
   validates :name, presence: true

@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe CategoryController do
-  fixtures :categories
 
   let(:category_root) { Category.where(:name => '_products_root').first }
 
@@ -28,7 +27,7 @@ describe CategoryController do
     end
 
     it "指定的分类页" do
-      get :show, {}
+      get :show, {:id => ""}
       assigns(:category).should be_nil
     end
   end

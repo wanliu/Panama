@@ -2,12 +2,12 @@ define ['jquery', 'exports'], ($, exports) ->
 	class exports.Data2Table
 		constructor: (collection) ->
 			@collection = collection.collection
-
 			#两种触发条件。触发类型取决于本js类与form中table的载入顺序
 			#①按键触发
 			@detect_if_button_clicked()
 			#②检测触发
 			@detect_if_draw_complited()
+			@trigger_filled()
 
 		detect_if_button_clicked: () ->
 			$('a.trigger-data-filled').click () =>

@@ -6,11 +6,11 @@ class Shop < ActiveRecord::Base
 
   attr_accessible :name, :user
 
-  has_many :contents, dependent: :destroy
   has_many :products, dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_many :shop_users
+  has_many :contents, :as => :contentable, dependent: :destroy
 
   has_one :shops_category
   belongs_to :user
@@ -41,7 +41,7 @@ class Shop < ActiveRecord::Base
 
   #查询这个商店是否有这个雇员
   def find_employee(userid)
-    ShopUser.find_by(:shop_id => id, :user_id => userid)
+    shop_users.find_by(:user_id => userid)
   end
 
   class << self
@@ -75,6 +75,8 @@ class Shop < ActiveRecord::Base
     @category.load_default
 
     load_group
+    load_group_permission
+    load_admin_permission
   end
 
   def delete_shop
@@ -84,8 +86,23 @@ class Shop < ActiveRecord::Base
   def load_group
     _config = YAML.load(fs['config/shop_group.yml'].read)
     _config["shop_group"].each do |group|
-      self.groups.build(group).save
+      if self.groups.find_by(group).nil?
+        self.groups.create(group)
+      end
     end
+  end
+
+  def load_group_permission
+    _config = YAML.load_file("#{Rails.root}/config/permission.yml")
+    _config["group_permission"].each do |group_name, permissions|
+      group = self.groups.find_by(name: group_name)
+      group.give_permission(permissions) unless group.nil?
+    end
+  end
+
+  def load_admin_permission
+    group = self.groups.find_by(name: "admin")
+    group.give_all_permission unless group.nil?
   end
 
   def load_default_contents
