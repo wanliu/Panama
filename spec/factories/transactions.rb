@@ -8,5 +8,7 @@ FactoryGirl.define do
     state "order"
     f.buyer :buyer
     f.seller :seller
+    items_count 5
+    total 10
   end
 end

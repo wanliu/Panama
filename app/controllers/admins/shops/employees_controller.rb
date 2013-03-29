@@ -3,6 +3,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     def index
         @employees = current_shop.employees
+        @resources = Permission.group(:resource)
     end
 
     #邀请

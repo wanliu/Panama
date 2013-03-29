@@ -29,6 +29,10 @@ module ApplicationHelper
     OmniAuth::Wanliu.config["provider_url"]
   end
 
+  def faye_server_uri
+    Settings.defaults["faye_server"]
+  end
+
   def action_controller
     if controller.is_a?(ActionController::Base)
       controller
@@ -62,6 +66,10 @@ module ApplicationHelper
 
   def unread_notification_count
     Notification.unreads.where(:user_id => current_user.id).count
+  end
+
+  def find_resource_by(resource)
+    Permission.where(resource: resource)
   end
 
   def search_box(name, value = nil, options = { size: 40})

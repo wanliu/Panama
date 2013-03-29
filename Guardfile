@@ -1,7 +1,8 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-notification :gntp
+notification :growl, :sticky => true, :host => 'localhost', :password => 'secret'
+# notification :growl_notify, :sticky => true, :priority => 0
 
 guard 'spork',
       :cucumber_env => { 'RAILS_ENV' => 'test' },

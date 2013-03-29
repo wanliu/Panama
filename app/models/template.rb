@@ -36,6 +36,10 @@ class Template
     [File.basename(@name, '.html.erb')]
   end
 
+  def path
+    @fs.path
+  end
+
   def self.model_name
     ActiveModel::Name.new(self)
   end

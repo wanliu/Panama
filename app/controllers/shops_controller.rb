@@ -3,7 +3,7 @@ require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
-  before_filter :login_required, :only => [:show_invite, :agree_invite, :show_email_invite]
+  before_filter :login_required, :only => [:show, :show_invite, :agree_invite, :show_email_invite]
 
   include Apotomo::Rails::ControllerMethods
 
@@ -33,12 +33,11 @@ class ShopsController < ApplicationController
 
   def show
     @shop = Shop.find_by(:name => params[:id])
-    shop_fs = @shop.fs
-    @content = Content.where("name = ? and shop_id = ?", "index", @shop.id).first
+    @content = PanamaCore::Contents.fetch_for(@shop, :index, :locals => { :shop_name => @shop.name })
 
     respond_to do |format|
       # format.html { render_shop_content @shop, :index, @shop }
-      format.html { render_content_ex @content }
+      format.html { render_content @content }
       format.json { render json: @shop }
     end
   end

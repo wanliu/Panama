@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/huxinghai1988/rails-setting.git
+  revision: becc0527e5d2445fda96afc5bf655ed77cdc84db
+  specs:
+    rails-setting (0.0.8)
+
+GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
   revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
@@ -7,7 +13,7 @@ GIT
       railties (~> 3.1)
 
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://rubygems.org/
   specs:
     ac_uniquify (0.1.0)
     actionmailer (3.2.8)
@@ -71,6 +77,11 @@ GEM
       activesupport (>= 3.0.0)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    better_errors (0.7.2)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.1)
+      debug_inspector (>= 0.0.1)
     bourbon (3.1.1)
       sass (>= 3.2.0)
       thor
@@ -79,6 +90,7 @@ GEM
     builder (3.0.4)
     cache_digests (0.2.0)
       actionpack (>= 3.2)
+    cancan (1.6.9)
     capistrano (2.14.2)
       highline
       net-scp (>= 1.0.0)
@@ -139,6 +151,7 @@ GEM
     daemon_controller (1.1.1)
     daemons (1.1.9)
     database_cleaner (0.9.1)
+    debug_inspector (0.0.2)
     debugger (1.2.4)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.1.1)
@@ -439,7 +452,10 @@ DEPENDENCIES
   ancestry (~> 1.3.0)
   anjlab-bootstrap-rails (>= 2.2)
   apotomo (~> 1.2.3)
+  better_errors
+  binding_of_caller
   cache_digests (~> 0.2.0)
+  cancan
   carrierwave (~> 0.8.0)
   carrierwave-mongoid (~> 0.1.0)
   carrierwave-upyun (~> 0.1.6)
@@ -479,6 +495,7 @@ DEPENDENCIES
   passenger
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.8)
+  rails-setting!
   rb-fchange
   rb-fsevent
   rb-inotify

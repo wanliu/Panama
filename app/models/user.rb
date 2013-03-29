@@ -11,12 +11,15 @@ class User < ActiveRecord::Base
   has_one :cart
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_one :shop
+  has_one :shop_user
 
   has_many :transactions,
            class_name: "OrderTransaction",
            foreign_key: 'buyer_id'
 
   has_many :addresses, class_name: "Address"
+
+  delegate :groups, :jshop, :to => :shop_user
 
   def icon
     photos.icon
@@ -41,16 +44,21 @@ class User < ActiveRecord::Base
 
   after_initialize :init_user_info
 
-  after_initialize do
-    if cart.nil?
-      build_cart
-      # save
+  def init_user_info
+    if new_record?
+      build_photo if photo.nil?
+      build_cart if cart.nil?
+    else
+      create_photo if photo.nil?
+      create_cart if cart.nil?
     end
   end
 
-  def init_user_info
-    return if new_record?
-    create_photo if photo.nil?
-    create_cart if cart.nil?
+  def has_group?(group)
+    groups.include?(group)
+  end
+
+  def permissions
+    groups.map{| g | g.permissions}
   end
 end

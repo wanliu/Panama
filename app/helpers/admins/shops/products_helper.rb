@@ -123,11 +123,38 @@ module Admins::Shops::ProductsHelper
             "{" + object.join(',') + "}"
         end
 
-        """require(['lib/data_2_table'], function(data2table){
+        render_data_table(objects)
+    end
 
+    def generate_prices_table
+        pis = PropertyItem
+            .joins(:property, :product_prices)
+            .select(['product_prices.id', 'property_items.property_id', 'property_items.value', 'properties.name', 'product_prices.price'])
+            .where("product_prices.product_id = ?", @product.id)
+            .group_by { |pi| pi.id }
+            .map { |k, ary| Hash['price', ary.first[:price].to_s, *(ary.map { |item| [item.name, item.value] }.flatten) ] }
+        render_data_table(pis)
+    end
+
+    def render_data_table(objects)
+        """require(['lib/data_2_table'], function(data2table){
             var load = new data2table.Data2Table({
-                collection : [#{objects.join(',')}]
+                collection : #{objects.to_json}
             })
         })""".html_safe
     end
+
+    def property_palette(form, field)
+        form.input field,
+                   :as => :check_boxes,
+                   :collection => @product.properties[field].items,
+                   :value_method => :value,
+                   :checked => @product.property_items[field].map { |item| item.value }
+
+    end
+
+    def propoerty_prices(form, *args)
+        form.input :price_definition, :as => :hidden, :input_html => { :value => args.join(',') }
+    end
+
 end

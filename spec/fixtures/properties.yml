@@ -70,3 +70,19 @@ provider:
     name: provider
     title: Provider
     property_type: string
+
+colour:
+    id: 11
+    name: colour
+    title: Colour
+    property_type: set
+    created_at: 2013-03-07 06:12:03.000000000 Z
+    updated_at: 2013-03-07 06:12:03.000000000 Z
+
+sizes:
+    id: 12
+    name: sizes
+    title: Sizes
+    property_type: set
+    created_at: 2013-03-15 10:19:11.000000000 Z
+    updated_at: 2013-03-15 10:19:11.000000000 Z

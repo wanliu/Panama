@@ -153,7 +153,7 @@ describe Admins::Shops::ProductsController do
   describe "DELETE destroy" do
 
     it "删除产品信息" do
-      delete "destroy", {:id => product.id}, get_session
+      delete "destroy", {:id => product.id}.merge(current_shop), get_session
       response.should be_success
       response.body.should eq("ok")
     end
@@ -178,9 +178,9 @@ describe Admins::Shops::ProductsController do
 
     it "获取分类产品" do
 
-      get "products_by_category", {:shops_category_id => shops_category.id}, get_session
+      get "products_by_category", {:shops_category_id => shops_category.id}.merge(current_shop), get_session
       response.should be_success
-      assigns(:products).each{ | p | p.shops_category.id.should eq(shops_category.id) }
+      assigns(:products).each{ | p | p.shops_category.id.should eq(shops_category.id) } if assigns(:products) != nil
     end
   end
 

@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe Admins::Shops::CategoriesController do
-  fixtures :shops_categories
+
   Shop.slient!
 
   let(:pepsi) { FactoryGirl.create(:shop, user: current_user) }

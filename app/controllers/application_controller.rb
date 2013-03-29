@@ -15,6 +15,18 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_locale
 
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
+
+  def draw_errors_message(ist_model)
+    messages = []
+    ist_model.errors.messages.each do |attr, ms|
+      ms.each{| m | messages << "#{attr}: #{m}"}
+    end
+    messages
+  end
+
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
   end

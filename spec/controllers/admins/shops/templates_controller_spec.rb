@@ -5,6 +5,11 @@ describe Admins::Shops::TemplatesController, "模板信息控制器" do
 
   let(:current_shop){ FactoryGirl.create(:shop, :user => current_user) }
 
+  let(:template) {
+    # Template.setup(current_shop)
+    Template.find("test", current_shop)
+  }
+
   def shop_attributes
     { :shop_id => current_shop.name }
   end
@@ -35,17 +40,14 @@ describe Admins::Shops::TemplatesController, "模板信息控制器" do
 
   describe "GET edit" do
     it "显示编辑" do
-      get :edit, template_attributes ,get_session
+      get :edit, template_attributes.merge({:id => ""}) ,get_session
       response.should be_success
       assigns(:template).should be_a_instance_of(Template)
     end
   end
 
   describe "PUT update" do
-    let(:template) {
-      Template.setup(current_shop)
-      Template.find(:name => "test")
-    }
+
 
     it "修改" do
       form_hash = { template: { data: "asss" } }

@@ -35,8 +35,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     form_builder(@product)
     @category_root = Category.root
     @shops_category_root = current_shop.shops_category
-    @content = additional_properties_content
     @category = @product.build_category(:name => 'No Selected')
+    @content = additional_properties_content(@category)
     #模拟数据库对象
     # def @product.styles
     #   [
@@ -56,22 +56,23 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    @product = current_shop.products.build(params[:product].merge(dispose_options))
+    prices_attributes = params[:product].delete(:prices)
+    prices_option = extract_prices_options(params[:product])
+    @product = current_shop.products.build(:category_id => params[:product][:category_id])
+    # @product = current_shop.products.build(params[:product].merge(dispose_options))
     @product.attach_properties!
-    @product.properties.each do |property|
-      property_name = property.name.to_sym
-      @product.send("#{property_name}=", params[:product][property_name])
-      # @product.write_property(name, params[:product][property_name])
-    end
+    @product.update_attributes(params[:product].merge(dispose_options))
+    @product.update_prices_option(prices_option) unless prices_option.nil?
+    @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @category = @product.category
     @content = additional_properties_content(@category)
 
     if @product.save
-      @product.create_style_subs(params)
+      #@product.create_style_subs(params)
       render :action => :show
     else
-      @temp_subs = @product.subs_editing(params)
-      @temp_styles = @product.sytles_editing(params)
+      # @temp_subs = @product.subs_editing(params)
+      # @temp_styles = @product.sytles_editing(params)
       render :action => :edit
     end
   end
@@ -86,13 +87,23 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def update
     @product = Product.find(params[:id])
+    prices_attributes = params[:product].delete(:prices)
+    prices_option = extract_prices_options(params[:product])
+
     @product.update_attributes(params[:product].merge(dispose_options))
+    @product.update_prices_option(prices_option) unless prices_option.nil?
+    @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @shops_category_root = current_shop.shops_category
     @category = @product.category
     @content = additional_properties_content(@category)
-
     if @product.valid?
-      @product.update_style_subs(params)
+      # prices_attributes.each do |k, v|
+      #   price = v.delete(:price)
+      #   pprice = @products.prices[v]
+      #   pprice.price = price
+      # end
+
+      # @product.update_style_subs(params)
       render :action => :show
     else
       render :action => :edit
@@ -134,7 +145,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     if @content.nil?
       render :text => :ok
     else
-      render_content_ex(@content, locals: { category: @category })
+      render_content(@content, locals: { category: @category })
     end
   end
 
@@ -162,12 +173,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def additional_properties_content(category = nil)
-    if category.nil?
-      Content.lookup_name(:default_category).first
-    else
-      @content = Content.fetch_for(@category, :additional_properties, :autocreate => false)
-      @content ||= Content.lookup_name(:default_category).first
-    end
+    @content = PanamaCore::Contents.fetch_for(category, :additional_properties)
   end
 
   def form_builder(product)
@@ -181,5 +187,14 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def content_product_form
     @product = Product.find(params[:id] || params[:product_id])
     form_builder @product
+  end
+
+  def extract_prices_options(product_attributes)
+    price_definition = product_attributes.delete(:price_definition)
+    if price_definition.present? && prices = price_definition.split(',')
+      hash = {}
+      prices.map {|pri| hash[pri] = product_attributes.delete(pri) }
+      hash
+    end
   end
 end
