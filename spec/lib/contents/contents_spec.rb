@@ -3,7 +3,50 @@ require 'spec_helper'
 
 describe PanamaCore::Contents do
 
+  def do_config(&block)
+    PanamaCore::Contents.config(&block)
+  end
+
   let(:pepsi) { Shop.first }
+
+  before :each do
+
+    config = do_config do
+      root '/panama'
+      template 'templates/:action.html.erb'
+      layout_path 'layouts'
+
+      default_action :show
+
+      category do
+        default_additional_properties
+
+        each do
+          template 'templates/category_:id,_:action.html.erb'
+          additional_properties :transfer => :default_additional_properties
+          sale_options
+        end
+      end
+
+      shop do
+        root '/_shops/:shop_name'
+
+        each do
+          index
+        end
+      end
+
+      product do
+        root '/_shops/:shop_name'
+        template 'templates/:class_name,_:id,_:action.html.erb'
+
+        each do
+          sale_options :transfer => 'category#sale_options'
+          additional_properties :transfer => 'category#additional_properties', :transfer_method => :category
+        end
+      end
+    end
+  end
 
   it "#to_result" do
     content = PanamaCore::Contents.fetch_for(pepsi, :index, :locals => { :shop_name => pepsi.name })
@@ -16,6 +59,57 @@ describe PanamaCore::Contents do
   # 例子:
   #   Content.create_for(pepsi, :index, :locals => { :shop_name => pepsi.name })
   describe "#create_for" do
+
+    describe "查询并创建" do
+      it "无附加名时,返回默认 show" do
+        @category = Category.first
+        content = PanamaCore::Contents.fetch_for(@category, :autocreate => true)
+        content.name.should match /show/
+        content.persisted?.should be_true
+      end
+
+      it "分类的 additional properties(附加属性)" do
+        @category = Category.first
+        content = PanamaCore::Contents.fetch_for(@category, :additional_properties, autocreate: true)
+        content.name.should match /category_\d+_additional_properties/
+        content.template.should be_a(Template)
+        content.template.path.should match %r(templates/category_\d+_additional_properties.html.erb)
+      end
+
+      it "Shop Index" do
+        content = PanamaCore::Contents.fetch_for(pepsi, :index, :autocreate => true, :locals => { :shop_name => pepsi.name })
+        content.name.should match /shop_\d+_index/
+        content.template.path.should match %r(/_shops/\w+/templates/index.html.erb)
+        content.persisted?.should be_true
+      end
+
+      it "Shop 默认" do
+        content = PanamaCore::Contents.fetch_for(pepsi, :autocreate => true, :locals => { :shop_name => pepsi.name })
+        content.name.should match /shop_\d+_show/
+        content.template.path.should match %r(/_shops/\w+/templates/show.html.erb)
+        content.persisted?.should be_true
+      end
+
+      it "product :sale_options" do
+        content = PanamaCore::Contents.fetch_for(Product.first,
+                                                 :sale_options,
+                                                 :autocreate => true,
+                                                 :locals => { :shop_name => pepsi.name })
+        content.name.should match /product_\d+_sale_options/
+        content.template.path.should match %r(templates/product_\d+_sale_options)
+        content.persisted?.should be_true
+      end
+
+      it "product :additional_properties" do
+        content = PanamaCore::Contents.fetch_for(Product.first,
+                                                 :additional_properties,
+                                                 :autocreate => true,
+                                                 :locals => { :shop_name => pepsi.name })
+        content.name.should match /product_\d+_additional_properties/
+        content.template.path.should match %r(templates/product_\d+_additional_properties)
+        content.persisted?.should be_true
+      end
+    end
   end
 
   # fetch_for(resource, name, options, &block)
@@ -26,46 +120,7 @@ describe PanamaCore::Contents do
   # fetch_for 依据
   # ## fetch_for 会在
   describe "#getch_for" do
-    def do_config(&block)
-      PanamaCore::Contents.config(&block)
-    end
-    before :each do
 
-      config = do_config do
-        root '/panama'
-        template 'templates/:name.html.erb'
-        layout_path 'layouts'
-
-        default_action :show
-
-        category do
-
-          default_additional_properties
-
-          each do
-            additional_properties :transfer => :default_additional_properties
-            sale_options
-          end
-        end
-
-        shop do
-          root '/_shops/:shop_name'
-
-          each do
-            index
-          end
-        end
-
-        product do
-
-          each do
-            sale_options :transfer => 'category#sale_options'
-            additional_properties :transfer => 'category#additional_properties', :transfer_method => :category
-          end
-        end
-      end
-
-    end
 
     describe "默认 fetch_for 测试, 无设定 content" do
 
@@ -91,7 +146,7 @@ describe PanamaCore::Contents do
       end
 
       it "Shop 默认" do
-        content = PanamaCore::Contents.fetch_for(pepsi)
+        content = PanamaCore::Contents.fetch_for(pepsi, :locals => { :shop_name => pepsi.name })
         content.name.should match /shop_\d+_show/
         content.template.path.should match %r(templates/show.html.erb)
       end
@@ -99,7 +154,7 @@ describe PanamaCore::Contents do
       it "product :sale_options" do
         content = PanamaCore::Contents.fetch_for(Product.first, :sale_options)
         content.name.should match /category_\d+_sale_options/
-        content.template.path.should match %r(templates/sale_options)
+        content.template.path.should match %r(templates/category_\d+_sale_options.html.erb)
         content.persisted?.should be_false
       end
 
@@ -110,7 +165,6 @@ describe PanamaCore::Contents do
         # 会转向默认配置 default_additional_properties
         content.persisted?.should be_false
       end
-
     end
 
     describe "有 Content 数据的情况下的 fetch_for" do
@@ -151,20 +205,24 @@ describe PanamaCore::Contents do
       end
 
       it "Shop 默认" do
-        content = PanamaCore::Contents.fetch_for(pepsi)
+        content = PanamaCore::Contents.fetch_for(pepsi, :locals => { :shop_name => pepsi.name })
         content.name.should match /shop_\d+_show/
         content.template.path.should match %r(templates/pepsi_show.html.erb)
       end
 
       it "product :sale_options" do
-        content = PanamaCore::Contents.fetch_for(Product.first, :sale_options)
+        content = PanamaCore::Contents.fetch_for(Product.first,
+                                                 :sale_options,
+                                                 :locals => { :shop_name => pepsi.name })
         content.name.should match /product_\d+_sale_options/
         content.template.path.should match %r(templates/product_\d+_sale_options)
         content.persisted?.should be_true
       end
 
       it "product :additional_properties" do
-        content = PanamaCore::Contents.fetch_for(Product.first, :additional_properties)
+        content = PanamaCore::Contents.fetch_for(Product.first,
+                                                 :additional_properties,
+                                                 :locals => { :shop_name => pepsi.name })
         content.name.should match /product_\d+_additional_properties/
         content.template.path.should match %r(templates/product_\d+_additional_properties)
         # 会转向默认配置 default_additional_properties

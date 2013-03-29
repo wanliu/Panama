@@ -186,7 +186,7 @@ describe PanamaCore::Contents::Config do
       it "夸规则转向" do
         config = do_config do
                    root '/panama'
-                   template 'templates/:name.html.erb'
+                   template 'templates/:action.html.erb'
 
                    category do
                     root '/panama/categories'
@@ -231,7 +231,7 @@ describe PanamaCore::Contents::Config do
       it "默认 action" do
         config = do_config do
                    root '/panama'
-                   template 'templates/:name.html.erb'
+                   template 'templates/:action.html.erb'
 
                    default_action :show
 

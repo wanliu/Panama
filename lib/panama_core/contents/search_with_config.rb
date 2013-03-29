@@ -37,7 +37,7 @@ module PanamaCore
                     else
                       _action = action.nil? ? default_action : action
                       if action.nil?
-                        revert_config(_action)
+                        generate_config(_action)
                       else
                         config_list[_action]
                       end
@@ -54,6 +54,14 @@ module PanamaCore
         _config
       end
 
+      def generate_config(_action)
+        Config[{ name:         _action,
+                 root:         config_list.root,
+                 template:     config_list.template,
+                 parent:       config_list,
+                 layout_path:  config_list.layout_path }]
+      end
+
       def fetch(options = {})
         @config ||= options[:config]
         locals_options = default_options.deep_merge(options[:locals] || {})
@@ -61,9 +69,9 @@ module PanamaCore
         if query.size > 0
           # 查找到
           ProxyContent.new(query.first, config, locals_options)
-        # elsif options[:autocreate]
-        #   # 如果 options :autocreate 为真,将自动创建 resource for action 的 content 条目
-        #   create_for(resource, action)
+        elsif options[:autocreate]
+          # 如果 options :autocreate 为真,将自动创建 resource for action 的 content 条目
+          self.class.create_for(resource, action, options)
         else
           # contents 里没有记录
 
@@ -73,8 +81,6 @@ module PanamaCore
             # 此时是没有找到 Content 条目,但有配置项, 所以我们要检查,是不是有默认跳转?
 
             transfer_config = config.transfer_config
-            # transfer_name   = config.transfer_config[:config]
-            # debugger
             transfer_method = config.transfer[:transfer_method]
             transfer_action = config.transfer[:transfer_action] || transfer_config.name
             # transfer_autocreate = config.transfer[:autocreate] || false
@@ -83,7 +89,7 @@ module PanamaCore
             self.class.fetch_for(new_resource, transfer_action, config: transfer_config)
           else
             # 没有默认跳转的话,我们要返回一个非永久 content 条目
-            result = generate_result(options)
+            result = generate_result(locals_options)
             # path = File.join(result[:root], result[:template])
             path = result[:template]
 
@@ -104,8 +110,10 @@ module PanamaCore
         result = {}
         [:root, :template].each do |method_name|
           _item = config[method_name]
-          result[method_name] = _item.sub /\:(\w+)/ do |m|
-                                  name = m[1..-1].to_sym
+          result[method_name] = _item.gsub /\:(\w+),?/ do |m|
+                                  e = m[-1] == ',' ? -2 : -1
+                                  name = m[1..e].to_sym
+                                  raise ArgumentError.new("lost named: #{name} parameter in this locals of options") if locals[name].nil?
                                   locals[name]
                                 end
         end
@@ -117,24 +125,31 @@ module PanamaCore
       end
 
       def default_options
-        { :name => action || default_action }
+        { :action => action || default_action,
+          :id => rtype.resource_id,
+          :unique_name => rtype.unique_name,
+          :class_name => rtype.symbolize_resource_class
+        }
       end
 
       def query
         adapter.where(:name => rtype.unique_name)
       end
 
-      def create( options = {})
+      def create(options = {})
+        locals_options = default_options.deep_merge(options[:locals] || {})
         raise ArgumentError.new('invalid resource or action') if config.nil?
 
-        result = generate_result(options)
+        result = generate_result(locals_options)
 
-        path = File.join(result[:root], result[:template])
+        path = result[:template]
 
-        adapter.create(:name             => rtype.unique_name,
-                       :template         => path,
-                       :contentable_type => rtype.resource_class,
-                       :contentable_id   => rtype.resource_id)
+        ProxyContent.new(adapter.create(:name             => rtype.unique_name,
+                                        :template         => path,
+                                        :contentable_type => rtype.resource_class,
+                                        :contentable_id   => rtype.resource_id),
+                         config,
+                         locals_options)
       end
 
       # alias_method :generate_result, :compile_config
@@ -150,8 +165,8 @@ module PanamaCore
           new(resource, action).query
         end
 
-        def create_for
-          new(resource, action).query(options)
+        def create_for(resource, action = nil, options = {})
+          new(resource, action).create(options)
         end
       end
 

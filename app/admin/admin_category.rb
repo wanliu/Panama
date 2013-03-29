@@ -65,28 +65,18 @@ ActiveAdmin.register Category do
       contents_config = Rails.application.config.contents
       section = Category.to_s.underscore.to_sym
       panel("Category Contents") do
-        contents = contents_config[section][:each].map { |key, ctnt| ContentConfig.new(:name => ctnt) }
+        expects = [:name, :parent, :transfer]
+        configs = contents_config[section][:each]
+        contents = (configs.keys - expects).map { |k| ContentConfig.new(:name => configs[k]) }
         table_for(contents) do
           column :name
           column :tool do
-            link_to 'edit the template', fetch_category_template_system_category_path
+            link_to 'create the template', fetch_category_template_system_category_path
           end
         end
       end
     end
   end
-
-  # edit do |category|
-  #   div do
-  #     @property = Property.new
-  #     active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
-  #       f.inputs "Properties" do
-  #         f.input :id, as: :select, collection: Property.all { |property| property.title }
-  #       end
-  #       f.buttons
-  #     end
-  #   end
-  # end
 
   member_action :properties do
     @category = Category.find(params[:id])

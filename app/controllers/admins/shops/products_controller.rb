@@ -55,12 +55,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def create
     prices_attributes = params[:product].delete(:prices)
-    prices_option = extract_prices_options(params[:product])
+    @price_options = extract_prices_options(params[:product])
     @product = current_shop.products.build(:category_id => params[:product][:category_id])
     # @product = current_shop.products.build(params[:product].merge(dispose_options))
     @product.attach_properties!
     @product.update_attributes(params[:product].merge(dispose_options))
-    @product.update_prices_option(prices_option) unless prices_option.nil?
+    @product.update_prices_option(@price_options) unless @price_options.nil?
     @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @category = @product.category
     @content = additional_properties_content(@category)
@@ -86,10 +86,10 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   def update
     @product = Product.find(params[:id])
     prices_attributes = params[:product].delete(:prices)
-    prices_option = extract_prices_options(params[:product])
+    @price_options = extract_prices_options(params[:product])
 
     @product.update_attributes(params[:product].merge(dispose_options))
-    @product.update_prices_option(prices_option) unless prices_option.nil?
+    @product.update_prices_option(@price_options) unless @price_options.nil?
     @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @shops_category_root = current_shop.shops_category
     @category = @product.category
