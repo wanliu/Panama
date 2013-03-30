@@ -39,24 +39,22 @@ class Shop < ActiveRecord::Base
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
   end
 
-  #所有好友的圈子好友
+  #所有好友的圈子
   def all_friend_circles
     user_ids = all_friends.select(:user_id).map{|f| f.user_id}
-    cids = Circle.where(:owner_type => "User",
-      :owner_id => user_ids).select(:id).map{|c| c.id}
-    CircleFriends.where(:circle_id => cids)
+    Circle.where(:owner_type => "User",
+      :owner_id => user_ids)
   end
 
   #获取某个圈子好友
-  def find_friend_by_circle(circle_id)
-    circle_ids = circles.where(:id => circle_id).select("id").map{|c| c.id}
-    CircleFriends.where(:circle_id => circle_ids)
+  def find_friend_by_circle(circle_id = nil)
+    _circles = circle_id.nil? ? circles : circles.where(:id => circle_id)
+    circle_ids = _circles.select("id").map{|c| c.id}
+    CircleFriends.where(:circle_id => circle_ids).joins(:user).map{|u| u.user}
   end
 
-  def all_topics(user_ids)
-    Topic.where("(owner_id=#{id} and owner_type='Shop') or (owner_id in (?) and owner_type ='User')",
-      user_ids
-    )
+  def all_circle_topics(circles)
+    Topic.find_shop_or_friends(id, circles)
   end
 
   def fs

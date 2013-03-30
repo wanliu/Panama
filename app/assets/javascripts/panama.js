@@ -5,6 +5,7 @@ define(function(require, exports, module){
     var h5bp = require('h5bp');
     var chosen = require('lib/chosen.ex');
     var ajax_auth = require('ajax_auth_client');
+    var timeago = require("timeago");
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
@@ -14,6 +15,10 @@ define(function(require, exports, module){
 
     AjaxAuthClient.registreLoginSuccess(function(user){
         panle_modal.modal("hide");
+    })
+
+    $(document).ready(function(){
+        $("abbr.timeago").timeago();
     })
 
     var load_modal_head_with_height = function(title, height){

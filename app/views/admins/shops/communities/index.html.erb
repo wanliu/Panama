@@ -22,11 +22,11 @@
     </a>
   </li>
 </ul> -->
-<% content_for(:active_circle){ "all" } %>
+<% community_active(:all) %>
 <div class='row-fluid community-content'>
-  <div class='span8 topics'>
-    <%=render template: "admins/shops/send_message",
-    locals: {circles: @circles}  %>
+  <div class='span8 topics-panel'>
+    <%=render template: "admins/shops/topics",
+    locals: {circles: @circles, circle: nil}  %>
   </div>
   <div class='span4'>
 
