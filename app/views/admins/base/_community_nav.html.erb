@@ -1,0 +1,15 @@
+<div class="navbar">
+  <div class="navbar-inner community-nav">
+    <ul class="nav">
+      <li class="active home"><a href="#">主页</a></li>
+      <li class='circle'><a href="#">圈子</a></li>
+      <li class='activity'><a href="#">活动</a></li>
+      <li class='setting'><a href="#">设置</a></li>
+    </ul>
+  </div>
+</div>
+<script type="text/javascript">
+	var nav = $(".community-nav>ul")
+	nav.find(">li").removeClass("active")
+	nav.find(">li.<%= yield :active_community %>").addClass("active")
+</script>
