@@ -1,16 +1,11 @@
+<% community_active :home  %>
 <div class='row-fluid community-content'>
   <div class='span10 topics-panel'>
     <%=render :partial => "admins/base/community_nav" %>
     <div>
       <div class='row-fluid'>
-        <div class="btn-group circle-panel span12">
-          <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">全部</a>
-          <% circles.each do |c| %>
-          <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>">
-            <%=c.name %>
-          </a>
-          <% end %>
-          <a href='<%=my_related_shop_admins_topics_path(current_shop.name) %>' class='btn circle-related'>与我相关</a>
+        <div class="circle-panel span12">
+          <%=render :partial => "admins/base/circle_nav", :locals =>{ circles: circles }  %>
         </div>
       </div>
       <div class='row-fluid'>
@@ -45,10 +40,14 @@
               <div class='title'><%=circle.name %>圈子好友</div>
               <div class='content'>
                 <ul class='friend-list'>
-                  <% circle.friends.each do |f| %>
-                  <li class='friend'>
-                    <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
-                  </li>
+                  <% if circle.friends.count > 0 %>
+                    <% circle.friends.each do |f| %>
+                    <li class='friend'>
+                      <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+                    </li>
+                    <% end %>
+                  <% else %>
+                    <li>暂时没有好友</li>
                   <% end %>
                 </ul>
               </div>
@@ -101,8 +100,6 @@
           circle_id: "<%=circle_id %>"
         })
       })
-
-      $(".circle-panel>.circle-<%=yield :active_circle %>").addClass("active")
     </script>
   </div>
   <div class='span2'>
