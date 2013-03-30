@@ -1,8 +1,8 @@
-<% content_for(:active_circle){ @circle.id.to_s } %>
+<% community_active(@circle.id) %>
 <div class='row-fluid community-content'>
-  <div class='span8 topics'>
-    <%=render template: "admins/shops/send_message",
-    locals: {circles: @circles, default_value: @circle.name}  %>
+  <div class='span8 topics-panel'>
+    <%=render template: "admins/shops/topics",
+    locals: {circles: @circles, circle: @circle}  %>
   </div>
   <div class='span4'>
 

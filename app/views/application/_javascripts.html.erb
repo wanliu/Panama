@@ -16,6 +16,7 @@
 			, "typeahead" : "lib/typeahead"
 			, "ajax_auth_client" : "wanliu/ajax_auth_client"
 			, "postmessage" : "lib/postmessage"
+			, "timeago" : "lib/jquery.timeago"
 		},
 
 		shim: {
@@ -59,6 +60,9 @@
 			},
 			"ajax_auth_client": {
 				deps: ["postmessage"]
+			},
+			"timeago": {
+				deps: ["jquery"]
 			}
 		}
 	});

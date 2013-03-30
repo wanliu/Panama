@@ -12,6 +12,7 @@ class Circle < ActiveRecord::Base
   validates :name, :presence => true
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
+  has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
 
   def friend_count
     friends.count
