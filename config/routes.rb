@@ -115,7 +115,11 @@ Panama::Application.routes.draw do
         end
       end
 
-      resources :topics, :controller => "shops/topics"
+      resources :topics, :controller => "shops/topics" do
+        collection do
+          get :my_related
+        end
+      end
 
       resources :circles, :controller => "shops/circles"
 

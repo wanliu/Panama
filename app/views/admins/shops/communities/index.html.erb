@@ -24,14 +24,5 @@
 </ul> -->
 <% circle_active :all %>
 <% community_active :home  %>
-<div class='row-fluid community-content'>
-  <div class='span8 topics-panel'>
-    <%=render :partial => "admins/base/community_nav" %>
-    <%=render template: "admins/shops/topics/topics_info",
-    locals: {circles: @circles, circle: nil}  %>
-  </div>
-  <div class='span4'>
-
-  </div>
-</div>
+<%=render :partial => "admins/shops/topics/topics_info", locals: {circles: @circles, circle: nil} %>
 

@@ -1,0 +1,114 @@
+<div class='row-fluid community-content'>
+  <div class='span10 topics-panel'>
+    <%=render :partial => "admins/base/community_nav" %>
+    <div>
+      <div class='row-fluid'>
+        <div class="btn-group circle-panel span12">
+          <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">全部</a>
+          <% circles.each do |c| %>
+          <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>">
+            <%=c.name %>
+          </a>
+          <% end %>
+          <a href='<%=my_related_shop_admins_topics_path(current_shop.name) %>' class='btn circle-related'>与我相关</a>
+        </div>
+      </div>
+      <div class='row-fluid'>
+        <div class='topic-panel span9'>
+          <form class='topic-form'>
+            <div>
+              <textarea class='comment' name="content"></textarea>
+            </div>
+            <div class='friend-context'>
+            </div>
+            <div>
+              <input type='button' value='发送' class='btn btn-primary send_topic disabled' />
+            </div>
+          </form>
+          <div class='topics'>
+          </div>
+        </div>
+        <div class='topic-right span3'>
+          <div>
+            <% if circle.nil? %>
+              <div class='title'>最近加入好友</div>
+              <div class='content'>
+                <ul class='friend-list'>
+                  <% recently_friends.each do |f| %>
+                  <li class='friend'>
+                    <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% else %>
+              <div class='title'><%=circle.name %>圈子好友</div>
+              <div class='content'>
+                <ul class='friend-list'>
+                  <% circle.friends.each do |f| %>
+                  <li class='friend'>
+                    <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+          </div>
+          <div>
+            <div class='title'>我可能认识的人</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template class='template-topic' style='display:none'>
+      <div class='row-fluid topic-panel'>
+        <div class='span1 user-info'>
+          <div>
+            <img class="img-polaroid avatar" />
+          </div>
+          <div>
+            {{login}}
+          </div>
+        </div>
+        <div class='span11'>
+          <div class='well well-msg' style='margin-right:5px;'>
+            <a class="{{status}}" style='margin-right: 20px'>{{status_name}}</a> <abbr class='timeago' title='{{created_at}}'></abbr>
+            <hr style='margin:5px 0px' />
+            {{content}}
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <% default_value = circle ? circle.name : "" %>
+    <% circle_id = circle.nil? ? "" : circle.id %>
+
+    <script type='text/javascript'>
+      require(["jquery", "lib/chose-friend", "admins/shops/topic", "hogan"],
+        function($, ChoseFriend, TopicViewList){
+        $(".friend-context").choseFriend({
+          data: "<%=shop_admins_circles_path(current_shop.name) %>",
+          template: "<a><i class='icon-globe'></i>{{name}} ({{friend_count}})</a>",
+          value: "name",
+          default_value: "<%=default_value %>"
+        })
+
+        new TopicViewList({
+          el: $(".topic-panel"),
+          shop: "<%=current_shop.name %>",
+          template: Hogan.compile($(".template-topic").remove().html()),
+          circle_id: "<%=circle_id %>"
+        })
+      })
+
+      $(".circle-panel>.circle-<%=yield :active_circle %>").addClass("active")
+    </script>
+  </div>
+  <div class='span2'>
+
+  </div>
+</div>
+
+
+
