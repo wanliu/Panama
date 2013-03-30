@@ -1,0 +1,63 @@
+<% community_active :home  %>
+<% circle_active :related %>
+<div class='row-fluid followers-content'>
+  <div class='span10 topics-panel'>
+    <%=render :partial => "admins/base/community_nav" %>
+    <div class='row-fluid'>
+      <div class='span12'>
+        <%=render :partial => "admins/base/circle_nav", locals: { circles: @circles }  %>
+      </div>
+    </div>
+    <div class='row-fluid topics-panel'>
+      <div class='span12'>
+        <form class='topic-form'>
+          <div>
+            <textarea class='comment' name="content"></textarea>
+          </div>
+          <div class='topics-category'>
+            <select>
+              <%=current_shop.topic_categories.each do |c| %>
+              <option value="<%=c.id %>"><%=c.name %></option>
+              <% end %>
+            </select>
+          </div>
+          <div>
+            <input type='button' value='发送' class='btn btn-primary send_topic disabled' />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class='span2'>
+
+  </div>
+</div>
+
+<template class='template-topic' style='display:none'>
+  <div class='row-fluid topic-panel'>
+    <div class='span1 user-info'>
+      <div>
+        <img class="img-polaroid avatar" />
+      </div>
+      <div>
+        {{login}}
+      </div>
+    </div>
+    <div class='span11'>
+      <div class='well well-msg' style='margin-right:5px;'>
+        <a class="{{status}}" style='margin-right: 20px'>{{status_name}}</a> <abbr class='timeago' title='{{created_at}}'></abbr>
+        <hr style='margin:5px 0px' />
+        {{content}}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script type="text/javascript">
+  require(["jquery", "admins/shops/topic_related", "hogan"], function($, TopicRelatedView){
+    new TopicRelatedView({
+      el: $(".followers-content"),
+      template: Hogan.compile($(".template-topic").remove().html())
+    })
+  })
+</script>
