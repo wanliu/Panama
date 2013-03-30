@@ -26,7 +26,6 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     unless params[:circle_id].blank?
       @circles = @circles.where(:id => params[:circle_id])
     end
-
     @topics = current_shop.all_circle_topics(@circles).limit(30).order("created_at desc")
     respond_to do |format|
       format.json{ render json: @topics }
@@ -34,6 +33,12 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     end
   end
 
+  def my_related
+    @topics = current_shop.topic_receives.joins(:topic).limit(30).order("created_at desc")
+    respond_to do |format|
+      format.json{ render json: @topics }
+    end
+  end
 
   private
   def respond_format(json, status = 200)

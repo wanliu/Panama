@@ -18,4 +18,22 @@
       margin-bottom: 10px;
     }
   }
+
+  .topic-right{
+    .title{
+      border-bottom: 1px solid #DDD;
+      margin-bottom: 5px;
+    }
+
+    .content{
+      margin: 10px 0;
+      .friend-list{
+        list-style: none;
+
+        .friend{
+          margin: 5px 0px
+        }
+      }
+    }
+  }
 }
