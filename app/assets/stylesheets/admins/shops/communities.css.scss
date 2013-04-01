@@ -2,9 +2,12 @@
 
   .topics-panel{
 
-    border-right: 1px solid #DDD;
     margin-right: -5px;
     padding-right: 5px;
+
+    .errors{
+      margin: 5px 0px;
+    }
 
     textarea.comment{
       width:400px;
@@ -33,6 +36,24 @@
         .friend{
           margin: 5px 0px
         }
+      }
+    }
+  }
+
+  .topic-panel{
+    .topic-comment{
+      margin-right:5px;
+
+      .status{
+        margin-right: 30px
+      }
+
+      hr.line{
+        margin:5px 0px
+      }
+
+      .middle-line{
+        margin: 0px 8px;
       }
     }
   }
