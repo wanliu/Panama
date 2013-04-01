@@ -1,4 +1,4 @@
-<h3>No Additional Properties in <%= @category.name %></h3>
+<hr>
 <% f = value_for(:form) %>
 
 <% @product.properties.each do |prop| %>
@@ -12,8 +12,8 @@
   <% end %>
 <% end %>
 
-<hr>
-
-<% @product.price_options do |po| %>
-
+<% @product.prices_definition.each do |prop| %>
+     <%= property_palette(f, prop.name) %>
 <% end %>
+
+<%= render_prices_table %>

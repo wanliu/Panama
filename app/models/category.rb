@@ -5,10 +5,12 @@ class Category < ActiveRecord::Base
   #
   attr_accessible :name
 
-  has_many :products
+  has_many    :products
   has_and_belongs_to_many :properties, :autosave => true
-  has_many :contents, :as => :contentable
+  has_many    :contents, :as => :contentable
   has_ancestry :cache_depth => true
+  has_many    :price_options, :as => :optionable, :autosave => true
+  has_many    :prices_definition, :through => :price_options, :source => :property # 价格方案
 
   validates :name, presence: true
 

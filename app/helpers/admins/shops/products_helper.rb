@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Admins::Shops::ProductsHelper
     include ActionController::RecordIdentifier
 
@@ -126,6 +127,27 @@ module Admins::Shops::ProductsHelper
         render_data_table(objects)
     end
 
+    def render_prices_table
+
+        javascript_tag <<-JAVASCRIPT
+
+            require(['lib/table_bander'], function(tblBander){
+
+                var bander = new tblBander.TableBander({
+                    // els : [$('div.colours'), $('div.sizes')],
+                    els    : $("form div[price_attrib*=prices]").map(function(i, ele) { return $(ele); }),
+                    fields : [{title: '价格', value: 'price'}, {title: '数量', value: 'quantity'}],
+                    depth  : ['colour']
+                });
+
+            })
+
+            #{generate_prices_table}
+
+        JAVASCRIPT
+        .html_safe
+    end
+
     def generate_prices_table
         pis = PropertyItem
             .joins(:property, :product_prices)
@@ -145,12 +167,15 @@ module Admins::Shops::ProductsHelper
     end
 
     def property_palette(form, field)
-        form.input field,
-                   :as => :check_boxes,
-                   :collection => @product.properties[field].items,
-                   :value_method => :value,
-                   :checked => @product.property_items[field].map { |item| item.value }
+        field = field.to_sym
+        content_tag :div, :price_attrib => "prices_#{field}" do
+            form.input field,
+                       :as => :check_boxes,
+                       :collection => @product.properties[field].items,
+                       :value_method => :value,
+                       :checked => @product.property_items[field].map { |item| item.value }
 
+        end
     end
 
     def propoerty_prices(form, *args)

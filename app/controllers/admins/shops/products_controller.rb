@@ -137,7 +137,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-
     @content = additional_properties_content(@category)
 
     if @content.nil?
@@ -187,8 +186,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def extract_prices_options(product_attributes)
-    price_definition = product_attributes.delete(:price_definition)
-    if price_definition.present? && prices = price_definition.split(',')
+    prices_definition = @product.prices_definition
+    if prices_definition.present? && prices = prices_definition.map { |pri| pri.name }
       hash = {}
       prices.map {|pri| hash[pri] = product_attributes.delete(pri) }
       hash
