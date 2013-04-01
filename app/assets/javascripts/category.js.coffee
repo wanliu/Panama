@@ -105,6 +105,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             if $(".category_list .#{id}")[0] != $(".category_cover").find("button.select_category.active")[0]
                 $(".category_cover").find("button.select_category.active").removeClass("active")
             $(".category_list .#{id}").toggleClass("active")
+            $(".category_select").attr("data-select",@model.id)
             
             category_base.refresh_category_list(@model, @shop_name)
 
@@ -129,6 +130,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         keyup_choose: (options) ->
             unless $(".input_search").val() == ""
                 if event.keyCode == 13
+                    # $(".input_search").val($(".tt-suggestion:first").find("p").html())
+                    # $(".tt-suggestion:first").addClass("tt-is-under-cursor")
                     $(".tt-dropdown-menu").addClass("tt-is-empty")
                     @click_keyup()
 
@@ -225,8 +228,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el
 
         category_children: () ->
-            # @children_el.html("")
-            @children_el.hide()
+            @children_el.html("")
+            # @children_el.hide()
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
             @$el.addClass("on")
@@ -287,11 +290,19 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         enter_children: () ->
             str = $(@el).parent().attr("class").split(" ")[1]
             $(".category_list").attr("back_parent",str)
-            $("button.category-#{@model.get('id')}").click()
-            # category_base.refresh_category_list(@model, @shop_name)
+            if $("button.category-#{@model.get('id')}").length != 0
+                $("button.category-#{@model.get('id')}").click()
+            else
+                category_base.refresh_category_list(@model, @shop_name)
+                # category_base.remove_current_categorys(@model)
 
         select_category: () ->
-            $(".category_buttons").find("button.category-#{@model.get('id')}").click()
+            $(".category_select").attr("data-select",@model.id)
+            if $(".category_buttons").find("button.category-#{@model.get('id')}").length != 0
+                $(".category_buttons").find("button.category-#{@model.get('id')}").click()
+            else
+                @$el.find(".select_category").toggleClass("active")
+                @$el.find(".select_category").parent().parent().siblings().find(".select_category.active").removeClass("active")
 
         render: () ->
             @$el.html(@detail_template(@model.toJSON()))
@@ -321,7 +332,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 $(".no-result").hide()
                 $(@select_list).show()
             else
-                debugger
                 @$el.addClass(list_id)
                 @new_list(options)
 
