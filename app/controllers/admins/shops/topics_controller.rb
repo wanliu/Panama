@@ -41,7 +41,11 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
   end
 
   def category
-
+    @topics = current_shop.topics.where(topic_category_id: params[:topic_category_id])
+    respond_to do |format|
+      format.json{ render json: @topics }
+      format.html
+    end
   end
 
   private
