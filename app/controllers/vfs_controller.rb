@@ -21,11 +21,11 @@ class VfsController < ApplicationController
 		file_load = FileLoad.new(original)
 		file_name = params[:app_file]["name"]
 		file_load.data = params[:app_file]["data"]
-
+		@new_file = params[:app_file]
 		if file_name != params[:file_name]
-			edit_name(original, file_name)
+			@new_file = edit_name(original, file_name)
 		end
-		redirect_to "/system/vfs"
+		redirect_to "/system/vfs_file?file_path=#{params[:file_path]}"
 	end
 
 	def  edit_name(original, file_name)
@@ -36,6 +36,7 @@ class VfsController < ApplicationController
 		new_file = root["#{paths}/#{file_name}"]
 		new_file.write file_obj.read
 		file_obj.destroy
+		new_file
 	end
 
 	def destroy_file
