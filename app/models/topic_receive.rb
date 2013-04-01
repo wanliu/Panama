@@ -2,9 +2,9 @@
 # describe: 帖子接收者
 # attributes:
 #   topic_id: 帖子
-#   receive_id: 接收者(用户或者商店)
+#   receive_id: 接收者(用户或者商店或者圈子)
 class TopicReceive < ActiveRecord::Base
-  attr_accessible :receive_id, :topic_id, :receive_type
+  attr_accessible :receive_id, :topic_id, :receive_type, :receive
 
   belongs_to :topic
   belongs_to :receive, :polymorphic => true
@@ -16,17 +16,46 @@ class TopicReceive < ActiveRecord::Base
   validates_presence_of :receive
   validates_presence_of :topic
 
+  validate :valid_receive_type?
+
+  def self.user_related(user_id)
+    where(receive_type: "User", receive_id: user_id)
+  end
+
+  def self.shop_related(shop_id)
+    where(receive_type: "Shop", receive_id: shop_id)
+  end
+
+  def self.circle_related(circle_id)
+    where(receive_type: "Circle", receive_id: circle_id)
+  end
+
   def self.user(user, topic_id = nil)
-    options = {receive_id: user, receive_type: "User"}
-    options[:receive_id] = user.id if user.is_a?(User)
-    options[:topic] = topic_id unless topic_id.nil?
-    create(options)
+    _create(User, user, topic_id)
   end
 
   def self.shop(shop, topic_id = nil)
-    options = {receive_id: shop, receive_type: "Shop"}
-    options[:receive_id] = shop.id if shop.is_a?(Shop)
-    options[:topic] = topic_id unless topic_id.nil?
-    create(options)
+    _create(Shop, shop, topic_id)
   end
+
+  def self.circle(circle, topic_id = nil)
+    _create(Circle, circle, topic_id)
+  end
+
+  class << self
+    private
+    def _create(receive, model, topic_id)
+      options = {receive_id: model, receive_type: receive.class.name}
+      options[:receive_id] = model.id if model.is_a?(receive)
+      options[:topic] = topic_id unless topic_id.nil?
+      create(options)
+    end
+  end
+
+  def valid_receive_type?
+    if receive.is_a?(User) && receive.is_a?(Shop) && receive.is_a?(Circle)
+      errors.add(:receive_type, "不是通知类型！")
+    end
+  end
+
 end

@@ -6,7 +6,6 @@
       <%=c.name %>
     </a>
     <% end %>
-     <a href="#" class="btn circle-relation">与我相关</a>
   </div>
 
   <div class='topic-panel'>
@@ -17,7 +16,7 @@
       <div class='friend-context'>
       </div>
       <div>
-        <input type='submit' value='发送' class='btn btn-primary send_topic' />
+        <input type='button' value='发送' class='btn btn-primary send_topic disabled' />
       </div>
     </form>
     <div class='topics'>
@@ -28,9 +27,9 @@
 
 <template class='template-topic' style='display:none'>
   <div class='row-fluid topic-panel'>
-    <div class='span1'>
+    <div class='span1 user-info'>
       <div>
-        <img class="img-polaroid" />
+        <img class="img-polaroid avatar" />
       </div>
       <div>
         {{login}}
@@ -38,13 +37,16 @@
     </div>
     <div class='span11'>
       <div class='well well-msg' style='margin-right:5px;'>
-        {{status}}, 日期: {{created_at}}
+        <a class="{{status}}" style='margin-right: 20px'>{{status_name}}</a> <abbr class='timeago' title='{{created_at}}'></abbr>
         <hr style='margin:5px 0px' />
         {{content}}
       </div>
     </div>
   </div>
 </template>
+
+<% default_value = circle ? circle.name : "" %>
+<% circle_id = circle.nil? ? "" : circle.id %>
 
 <script type='text/javascript'>
   require(["jquery", "lib/chose-friend", "admins/shops/topic", "hogan"],
@@ -53,13 +55,14 @@
       data: "<%=shop_admins_circles_path(current_shop.name) %>",
       template: "<a><i class='icon-globe'></i>{{name}} ({{friend_count}})</a>",
       value: "name",
-      default_value: '<%= default_value ||= "" %>'
+      default_value: "<%=default_value %>"
     })
 
     new TopicViewList({
       el: $(".topic-panel"),
       shop: "<%=current_shop.name %>",
-      template: Hogan.compile($(".template-topic").html())
+      template: Hogan.compile($(".template-topic").remove().html()),
+      circle_id: "<%=circle_id %>"
     })
   })
 

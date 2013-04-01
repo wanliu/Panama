@@ -2,50 +2,81 @@
 class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def create
-    receive_user_ids, status = max_level
-
+    opts = max_level(params[:friends])
+    if opts[:status] == :circle && opts[:circles].length <=0
+      respond_format({message: "没有选择范围!"}, 403)
+      return
+    end
     @topic = current_shop.topics.create(
-      status: status, content: params[:content], user_id: current_user.id)
-    respond_to do |format|
-      if @topic.valid?
-        receive_user_ids.uniq.each do |user_id|
-          @topic.receives.user(user_id)
-        end
-        format.json{ render json: format_json(@topic) }
-      else
-        format.json{ render json: draw_errors_message(@topic), status: 403 }
+      status: opts[:status],
+      content: params[:content],
+      user_id: current_user.id)
+    if @topic.valid?
+      opts[:circles].each do |circle|
+        @topic.receives.create(receive: circle)
       end
+      respond_format(format_json(@topic))
+    else
+      respond_format(draw_errors_message(@topic), 403)
     end
   end
 
   def index
-    @topics = current_shop.all_topics(@circle.friends.map{|f| f.user_id}).order("created_at desc")
+    @circles = current_shop.circles
+    unless params[:circle_id].blank?
+      @circles = @circles.where(:id => params[:circle_id])
+    end
+
+    @topics = current_shop.all_circle_topics(@circles).limit(30).order("created_at desc")
+    respond_to do |format|
+      format.json{ render json: @topics }
+      format.html
+    end
   end
+
 
   private
-  def format_json(topic)
-    _topic = topic.as_json
-    _topic[:status] = topic.status.name
-    _topic[:avatar_url] = topic.user.icon
-    _topic[:login] = topic.user.login
-    _topic
+  def respond_format(json, status = 200)
+    respond_to do |format|
+      format.json{ render json: json, status: status }
+    end
   end
 
-  def max_level
-    if params[:friends].include?("puliceity")
-      user_ids = current_shop.all_friends.select(:user_id).map{|f| f.user_id}
-      return [user_ids, :puliceity]
-    elsif params[:friends].include?("external")
-      uids = current_shop.all_friends.select(:user_id).map{|f| f.user_id}
-      user_ids = current_shop.all_friend_circles.select("distinct user_id").map{|f| f.user_id}
-      return [user_ids + uids, :external]
-    elsif params[:friends].include?("circle")
-      user_ids = current_shop.all_friends.select(:user_id).map{|f| f.user_id}
-      return [user_ids, :circle]
-    else
-      user_ids = current_shop.find_friend_by_circle(params[:friends]).
-      select("distinct user_id").map{|f| f.user_id}
-      return [user_ids, :circle]
+  def const_get(name)
+    Kernel.const_get(name)
+  end
+
+  def receive_other(friends)
+    receives = []
+    friends.each do |f|
+      receive = const_get(f[:status].classify).find_by(id: f[:id])
+      receives << receive unless receive.nil?
     end
+    {status: :circle, circles: receives}
+  end
+
+  def max_level(friends)
+    if is_level(friends, "puliceity")
+      return {status: :puliceity}
+    elsif is_level(friends, "external")
+      circles = current_shop.circles + current_shop.all_friend_circles
+      return {status: :external, circles: circles}
+    elsif is_level(friends, "circle")
+      return {status: :circle, circles: current_shop.circles}
+    else
+      return receive_other(friends)
+    end
+  end
+
+  def is_level(friends, id)
+    _status = false
+    friends.each do |f|
+      friend = f.symbolize_keys
+      if friend[:id] == id && friend[:status] == "scope"
+        _status = true
+        break
+      end
+    end
+    _status
   end
 end

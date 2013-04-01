@@ -1,19 +1,21 @@
 .community-content{
 
-	.topics{
+  .topics-panel{
 
-		border-right: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+    margin-right: -5px;
+    padding-right: 5px;
 
-		textarea.comment{
-			width:400px;
-			height:110px;
-			resize:none;
-			margin-top:10px;
-		}
+    textarea.comment{
+      width:400px;
+      height:110px;
+      resize:none;
+      margin-top:10px;
+    }
 
-		.chose-friend{
-			width: 320px;
-			margin-bottom: 10px;
-		}
-	}
+    .chose-friend{
+      width: 320px;
+      margin-bottom: 10px;
+    }
+  }
 }
