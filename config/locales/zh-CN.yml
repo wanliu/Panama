@@ -238,6 +238,11 @@ zh-CN:
     inventory: "仓库组"
     admin: "管理组"
 
+  topic:
+    circle: "限定范圈"
+    external: "外扩圈子"
+    puliceity: "公开"
+
   table:
     heads:
       name: "名称"

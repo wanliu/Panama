@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   after_create :load_initialize_data
 
   def join_circles
-    circle_friends.includes(:circle).map{|c| c}
+    circle_friends.joins(:circle).map{|c| c.circle }
   end
 
   def all_friends

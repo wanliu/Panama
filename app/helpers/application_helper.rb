@@ -9,6 +9,14 @@ module ApplicationHelper
     t(sym, :default => default)
   end
 
+  def community_active(name)
+    content_for(:active_community){ name.to_s }
+  end
+
+  def circle_active(name)
+    content_for(:active_circle){ name.to_s }
+  end
+
   def current_user
     @current_user ||= User.where(:uid => session[:user_id]).first if session[:user_id]
   end
