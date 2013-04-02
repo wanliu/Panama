@@ -17,6 +17,7 @@
 			, "ajax_auth_client" : "wanliu/ajax_auth_client"
 			, "postmessage" : "lib/postmessage"
 			, "timeago" : "lib/config_timeago"
+			, "bootstrap_popover" : "twitter/bootstrap/popover"
 		},
 
 		shim: {
@@ -64,8 +65,8 @@
 			"timeago": {
 				deps: ["jquery", "lib/jquery.timeago"]
 			},
-			"twitter/bootstrap/popover": {
-				deps: ["twitter/bootstrap/tooltip"]
+			"bootstrap_popover": {
+				deps: ['jquery', "twitter/bootstrap/tooltip"]
 			}
 		}
 	});
