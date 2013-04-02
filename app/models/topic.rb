@@ -49,6 +49,10 @@ class Topic < ActiveRecord::Base
     attribute["login"] = user.login
     attribute["status_name"] = I18n.t("topic.#{status.name}")
     attribute["topic_category_name"] = category.name unless category.nil?
+    if status == :puliceity && receives.count > 0
+      attribute["shop_name"] = receives.first.receive.name
+    end
+
     attribute
   end
 
