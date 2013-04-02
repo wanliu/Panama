@@ -20,7 +20,9 @@
   <div class='title'>分类</div>
   <div class='content topic_category'>
     <% @categories.each do | category | %>
-    <a class="badge badge-info"><%= category.name %></a>
+    <a href="/shops/<%=current_shop.name%>/admins/topics/category/<%=category.id %>" class="badge badge-info">
+      <%= category.name %>
+    </a>
     <% end %>
   </div>
 </div>
