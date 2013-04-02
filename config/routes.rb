@@ -119,6 +119,7 @@ Panama::Application.routes.draw do
         collection do
           get :my_related
           get "category/:topic_category_id", :to => "shops/topics#category"
+          get "receives/:topic_id", :to => "shops/topics#receives"
         end
       end
 

@@ -48,6 +48,14 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     end
   end
 
+  def receives
+    @topic = current_shop.topics.find(params[:topic_id])
+    respond_to do |format|
+      format.json{ render json: @topic.receive_users }
+      format.html
+    end
+  end
+
   private
   def receive_topic
     current_shop.topic_receives.joins(:topic)
