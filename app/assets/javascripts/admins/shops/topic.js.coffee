@@ -1,5 +1,5 @@
 #describe: 主题
-define ["jquery", "backbone", "timeago"], ($, Backbone) ->
+define ["jquery", "backbone", "timeago", "twitter/bootstrap/popover"], ($, Backbone) ->
 
   class Topic extends Backbone.Model
     seturl: (shop) ->
@@ -18,6 +18,11 @@ define ["jquery", "backbone", "timeago"], ($, Backbone) ->
       super models
 
   class TopicView extends Backbone.View
+    events: {
+      "mouseover .external" : "external_receive",
+      "mouseover .circle" : "circle_receive",
+      "mouseout .status" : "hide_receive"
+    }
 
     initialize: (options) ->
       _.extend(@, options)
@@ -25,9 +30,27 @@ define ["jquery", "backbone", "timeago"], ($, Backbone) ->
       @$el.html(@template.render(@model.toJSON()))
       @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
       @$("abbr.timeago").timeago()
+      if @model.get("status") is "puliceity"
+        @$(".puliceity").hide();
 
     render: () ->
       @$el
+
+    external_receive: () ->
+      @popover_basis('显示给您圈子中的所有成员，以及这些成员的圈子中的所有人。')
+
+    circle_receive: () ->
+      @popover_basis('<h6 style="margin:0px">此信息目前的分享对象：</h6>')
+
+    hide_receive: () ->
+      @$(".status").popover("hide")
+
+    popover_basis: (content) ->
+      @$(".status").popover({
+        content: content,
+        placement: "bottom",
+        html: true
+      }).popover("show")
 
   class TopicViewList extends Backbone.View
     notice_el: $("<div class='alert alert-block'>暂时没有信息!</div>")
