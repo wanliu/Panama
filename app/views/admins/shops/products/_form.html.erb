@@ -32,7 +32,7 @@
                     if (document.getElementById('div_id')) {
                         function scrollVertically(e) {
                             e = window.event || e;
-                            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+                            var delta = Math.max(-1, Math.min(1,(e.wheelDelta || -e.detail)));
                             document.getElementById('div_id').scrollHeight -= (delta*40); // Multiplied by 40
                             e.preventDefault();
                         }
@@ -51,39 +51,18 @@
                 var button = ".<%= dom_id(@product, :category) %>";
 
                 require(['jquery', 'twitter/bootstrap/modal'], function($){
-                    var dialog_base_top = 0;
-                    var window_top = 0;
-                    var scrollDialog = function(e){
-                        dialog_base_top = parseInt($("#CategoryModal").css('top'));
-                        scroll_top = dialog_base_top + (e.wheelDelta);
-
-                        screen_height = getBrowserHeight(); 
-                        dialog_height = $("#CategoryModal").height();
-                        dialog_top = $("#CategoryModal").offset().top; 
-                        dialog_bottom = dialog_top + dialog_height;
-
-                        if ((e.wheelDelta > 0 && dialog_top < 0)||(e.wheelDelta < 0 && dialog_bottom > screen_height)) {
-                            $("#CategoryModal").css('top', scroll_top);
-                        }
-                        
-                        e = e || window.event;
-                        if (e.preventDefault)
-                            e.preventDefault();
-                        e.returnValue = false;
-
-                    };
 
                     $("#CategoryModal").on('show', function() {
-                        dialog_base_top = $(this).position().top;
-                        window_top = $(window).scrollTop();
                         $(this).find(".modal-body")
                             .load("<%= category_page_shop_admins_products_path %>");
-
-                        window.onmousewheel = document.onmousewheel = scrollDialog;
                     });
 
                     $("#CategoryModal").on('shown',function(){
-                        setModalSize(0.8);
+                        $("body").css("overflow","hidden");
+                        setModalSize(0.75);
+                        window.onresize = function(){
+                            setModalSize($(".modal-resize").attr("modal-size"));
+                        };
                     });
 
                     $("#CategoryModal .save_category").on('click', function(){
@@ -93,25 +72,23 @@
                         // $(".breadcrumb").load("products/additional_properties/237");
                     });
 
-
                     $("#CategoryModal").on('hide', function(){
-                        // $("body").css("position","static")
-                        window.onmousewheel = document.onmousewheel = undefined;
+                        $("body").css("overflow","visible");
                     });
 
                     $(button).click(function(e){
-                        // $("body").css("position","fixed");
                         $('#CategoryModal').modal('show');
                     });
 
                     function setModalSize(percentage){
-                        browser_width = getBrowserWidth() - 17;
+                        browser_width = getBrowserWidth();
                         header_height = $("#CategoryModal .modal-header").height();
                         footer_height = $("#CategoryModal .modal-footer").height();
                         $("#CategoryModal").css("width",browser_width*percentage);
                         $("#CategoryModal").css("margin-left",-(browser_width/2)*percentage);
 
                         $("#CategoryModal .modal-body").css("min-height",(getBrowserHeight()-header_height-footer_height-76)*percentage);
+                        $("#CategoryModal .modal-body").css("height",getBrowserHeight()-138);
                         $(".modal-resize").attr("modal-size",percentage); 
                     }
                     
@@ -119,7 +96,7 @@
                         if ($(".modal-resize").attr("modal-size") != 1) {
                             setModalSize(1);
                         }else{
-                            setModalSize(0.8);
+                            setModalSize(0.75);
                         }
                         return false;
                     });
@@ -169,7 +146,7 @@
 <% end %>
 
 <!-- Modal -->
-<div id="CategoryModal" class="modal hide" style="position: absolute;" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="CategoryModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <button type="button" class="close modal-resize" modal-size="0.8" aria-hidden="true">口</button>
