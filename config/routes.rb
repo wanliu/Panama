@@ -113,6 +113,7 @@ Panama::Application.routes.draw do
           get :category_children
           get :category_root
           get :category_search
+          get :category_full_name
         end
       end
 

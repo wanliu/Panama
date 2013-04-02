@@ -132,6 +132,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 if event.keyCode == 13
                     # $(".input_search").val($(".tt-suggestion:first").find("p").html())
                     # $(".tt-suggestion:first").addClass("tt-is-under-cursor")
+                    # debugger
                     $(".tt-dropdown-menu").addClass("tt-is-empty")
                     @click_keyup()
 

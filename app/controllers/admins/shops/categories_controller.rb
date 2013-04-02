@@ -88,8 +88,8 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     respond_to do | format |
       categories = []
       @category_children.each do |category|
-        if category.ancestry_depth > 2
-          category["value"] = "#{parent_name(category)}|#{category["name"]}"
+        if category.ancestry_depth > 1
+          category["value"] = full_name(category)
           categories << category
         end
       end
@@ -97,23 +97,31 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     end
   end
 
+  def category_full_name
+    @category = Category.find(params[:category_id])
+    full_name = full_name(@category)
+    respond_to do | format |
+      format.json {render :json => full_name}
+    end
+  end
+
   private
 
-  def parent_name(children)
-    if children["ancestry_depth"] == 3
-      @parent_name = children.parent.parent['name']
+  def full_name(category)
+    if category["ancestry_depth"] == 2
+      @parent_name = category.parent['name']
+    elsif category["ancestry_depth"] == 3
+      @parent_name = category.parent.parent['name']
+      @parent_name += "|#{category.parent['name']}"
+    elsif category["ancestry_depth"] == 4
+      @parent_name = category.parent.parent.parent['name']
+      @parent_name += "|#{category.parent.parent['name']}"
+    elsif category["ancestry_depth"] == 5
+      @parent_name = category.parent.parent.parent.parent['name']
+      @parent_name += "|#{category.parent.parent.parent['name']}"
+      @parent_name += "|#{category.parent.parent['name']}"
     end
-    if children["ancestry_depth"] == 4
-      @parent_name = children.parent.parent.parent['name']
-      @parent_name += " | #{children.parent.parent['name']}"
-    end
-    if children["ancestry_depth"] == 5
-      @parent_name = children.parent.parent.parent.parent['name']
-      @parent_name += " | #{children.parent.parent.parent['name']}"
-      @parent_name += " | #{children.parent.parent['name']}"
-    end
-    @parent_name += " | #{children.parent['name']}"
-    @parent_name
+    "#{@parent_name}|#{category["name"]}"
   end
 
   def safe_params
