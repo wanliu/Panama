@@ -10,7 +10,6 @@ class Category < ActiveRecord::Base
   has_many    :contents, :as => :contentable
   has_ancestry :cache_depth => true
   has_many    :price_options, :as => :optionable, :autosave => true
-  has_many    :prices_definition, :through => :price_options, :source => :property # 价格方案
 
   validates :name, presence: true
 
@@ -24,6 +23,12 @@ class Category < ActiveRecord::Base
     # clear all category children
     create_node(config_root, root)
     root.save
+  end
+
+  def prices_definition
+    price_options.map do |po|
+      po.property
+    end
   end
 
   def clear_categories

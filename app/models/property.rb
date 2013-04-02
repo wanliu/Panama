@@ -1,5 +1,5 @@
 class Property < ActiveRecord::Base
-  attr_accessible :name, :property_type, :title#, :items_attributes
+  attr_accessible :id, :name, :property_type, :title#, :items_attributes
 
   attr_accessor :value
   has_and_belongs_to_many :products
