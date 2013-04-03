@@ -17,10 +17,6 @@ define(function(require, exports, module){
         panle_modal.modal("hide");
     })
 
-    $(document).ready(function(){
-        $("abbr.timeago").timeago();
-    })
-
     var load_modal_head_with_height = function(title, height){
         panle_modal.find(".modal-header>.context").html(title);
         panle_modal.find(".modal-body>iframe").animate({

@@ -8,10 +8,11 @@
 #  context_html: html内容
 #  status: 状态
 class Topic < ActiveRecord::Base
-  attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html, :status
+  attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html, :status, :topic_category_id
 
   belongs_to :owner, :polymorphic => true
   belongs_to :user
+  belongs_to :category, class_name: "TopicCategory", foreign_key: :topic_category_id
 
   has_many :receives, class_name: "TopicReceive", dependent: :destroy
 
@@ -20,6 +21,7 @@ class Topic < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :owner
 
+  #puliceity: 公开, external: 扩展, circle: 限定范围
   acts_as_status :status, [:puliceity, :external, :circle]
 
   def self.users(options = {})
@@ -46,6 +48,7 @@ class Topic < ActiveRecord::Base
     attribute["status"] = status.name
     attribute["login"] = user.login
     attribute["status_name"] = I18n.t("topic.#{status.name}")
+    attribute["topic_category_name"] = category.name unless category.nil?
     attribute
   end
 

@@ -23,15 +23,22 @@
   </li>
 </ul> -->
 <% circle_active :all %>
-<% community_active :home  %>
-<div class='row-fluid community-content'>
-  <div class='span8 topics-panel'>
-    <%=render :partial => "admins/base/community_nav" %>
-    <%=render template: "admins/shops/topics/topics_info",
-    locals: {circles: @circles, circle: nil}  %>
-  </div>
-  <div class='span4'>
-
+<% content_for :topic_right do %>
+<div>
+  <div class='title'>最近加入好友</div>
+  <div class='content'>
+    <ul class='friend-list'>
+      <% recently_friends.each do |f| %>
+      <li class='friend'>
+        <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+      </li>
+      <% end %>
+    </ul>
   </div>
 </div>
+<div>
+  <div class='title'>我可能认识的人</div>
+</div>
+<% end %>
 
+<%=render :partial => "admins/shops/topics/topics_info", locals: {circles: @circles, circle: :all} %>

@@ -1,5 +1,5 @@
 #describe: 主题
-define ["jquery", "backbone"], ($, Backbone) ->
+define ["jquery", "backbone", "timeago"], ($, Backbone) ->
 
   class Topic extends Backbone.Model
     seturl: (shop) ->
@@ -24,6 +24,7 @@ define ["jquery", "backbone"], ($, Backbone) ->
       @$el = $(@el)
       @$el.html(@template.render(@model.toJSON()))
       @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
+      @$("abbr.timeago").timeago()
 
     render: () ->
       @$el
@@ -41,7 +42,7 @@ define ["jquery", "backbone"], ($, Backbone) ->
 
       @topic_list = new TopicList([], @shop)
       @topic_list.bind("reset", @all_topic, @)
-      @topic_list.bind("add", @add_topic, @)
+      #@topic_list.bind("add", @add_topic, @)
 
       @topic_list.fetch(data: {circle_id: @circle_id})
 
@@ -59,10 +60,9 @@ define ["jquery", "backbone"], ($, Backbone) ->
         @$button.removeClass("disabled")
 
     create: () ->
-      content = @$content.val().trim()
-      return if content is ""
+      data = @form_serialize()
+      return if data.content is ""
 
-      data = { content: content }
       data.friends = @get_friends()
       if data.friends.length <= 0
         @$(".friend-context input:text").focus()
@@ -70,13 +70,27 @@ define ["jquery", "backbone"], ($, Backbone) ->
 
       @topic = new Topic(data, @shop)
       @topic.save({}, {
+        data: $.param({topic: data})
         success: (model) =>
-          @topic_list.add(model)
+          @$content.val('')
+          @textarea_status()
+          topic = @topic_list.add(model).last()
+          @$(".topics>:first").before @add_topic(topic)
+
+        error: (model, data) =>
+          @show_error(JSON.parse(data.responseText))
       })
+
+    form_serialize: () ->
+      forms = @$form.serializeArray()
+      data = {}
+      $.each forms, (i, v) ->
+        data[v.name] = v.value
+      data
 
     all_topic: (collection) ->
       collection.each (model) =>
-        @add_topic model
+        @$(".topics").append @add_topic(model)
 
       @notice_msg()
 
@@ -86,19 +100,25 @@ define ["jquery", "backbone"], ($, Backbone) ->
         model: model,
         template: @template
       )
-      @$(".topics").append(topic_view.render())
+      topic_view.render()
 
     notice_msg: () ->
       if @topic_list.length <= 0
-        @$(".topics").append(@notice_el())
+        @$(".topics").append(@notice_el)
       else
         @notice_el.remove()
+
+    show_error: (messages) ->
+      $.each messages, (i, m) =>
+        @$(".errors").append("#{m}")
+
+      @$(".errors").show()
 
     get_friends: () ->
       items = @$(".chose-item-selector>.chose-label")
       data = []
       items.each (i, item) =>
-        val = $.data(item, "data").values
+        val = $.data(item, "data").value
         if typeof val is "string"
           data.push {id: val, status: "scope"}
         else

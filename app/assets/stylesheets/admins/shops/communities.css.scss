@@ -1,14 +1,17 @@
-.community-content{
+.community-content, .followers-content{
 
   .topics-panel{
 
-    border-right: 1px solid #DDD;
     margin-right: -5px;
     padding-right: 5px;
 
+    .errors{
+      margin: 5px 0px;
+    }
+
     textarea.comment{
       width:400px;
-      height:110px;
+      height:90px;
       resize:none;
       margin-top:10px;
     }
@@ -16,6 +19,42 @@
     .chose-friend{
       width: 320px;
       margin-bottom: 10px;
+    }
+  }
+
+  .topic-right{
+    .title{
+      border-bottom: 1px solid #DDD;
+      margin-bottom: 5px;
+    }
+
+    .content{
+      margin: 10px 0;
+      .friend-list{
+        list-style: none;
+
+        .friend{
+          margin: 5px 0px
+        }
+      }
+    }
+  }
+
+  .topic-panel{
+    .topic-comment{
+      margin-right:5px;
+
+      .status{
+        margin-right: 30px
+      }
+
+      hr.line{
+        margin:5px 0px
+      }
+
+      .middle-line{
+        margin: 0px 8px;
+      }
     }
   }
 }

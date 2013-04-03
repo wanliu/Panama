@@ -9,6 +9,10 @@ module ApplicationHelper
     t(sym, :default => default)
   end
 
+  def recently_friends
+    current_shop.all_friends.order("created_at desc").limit(8)
+  end
+
   def community_active(name)
     content_for(:active_community){ name.to_s }
   end
