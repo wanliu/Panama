@@ -67,9 +67,7 @@ define ["jquery", "backbone", "timeago", "bootstrap_popover"], ($, Backbone) ->
       _.each data, (user) =>
         img_el = @avatar_img.clone().attr("src", user.icon)
         @$circle_users_el.append(img_el)
-        img_el.tooltip({
-          title: user.login
-        })
+        img_el.tooltip(title: user.login)
 
     hide_receive: () ->
       @$(".status").popover("hide")
