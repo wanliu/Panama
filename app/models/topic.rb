@@ -29,7 +29,6 @@ class Topic < ActiveRecord::Base
     receives.includes(:receive).each do |r|
       if r.receive
         users << if r.receive.is_a?(Circle)
-          debugger
           r.receive.friend_users
         else
           r.receive.as_json(methods: :icon)
@@ -49,12 +48,14 @@ class Topic < ActiveRecord::Base
 
   #获取某个商店的所有与它有关的贴
   def self.find_shop_or_friends(shop_id, circles)
-    scope_related(shop_id, "Shop", circles)
+    shop = Shop.find(shop_id)
+    scope_related(shop, circles)
   end
 
   #获取某个用户的所有与它有关的贴
   def self.find_user_or_friends(user_id, circles)
-    scope_related(user_id, "User", circles)
+    user = User.find(user_id)
+    scope_related(user, circles)
   end
 
   def as_json(*args)
@@ -75,16 +76,20 @@ class Topic < ActiveRecord::Base
   class << self
 
     private
-    def scope_related(owner_id, owner_type, circles)
+    def scope_related(_owner, circles)
+      wh = circles == :all ?  "" : " and status=1"
+      circles = _owner.circles if circles == :all
+
+      owner_type = _owner.class.name
+      owner_id = _owner.id
       #获取圈子的好友
       user_ids = circles.includes(:friends).map{|c| c.friends.map{|f| f.user_id} }.flatten
-
       #获取与我相关的贴,去除不是我好友的贴
       topic_ids = receive_topics(owner_type, owner_id)
       #获取圈子的发贴
       ctopic_ids = receive_topics("Circle", circles.map{|c| c.id})
 
-      where("(owner_id=? and owner_type=?)" +
+      where("(owner_id=? and owner_type=? #{wh})" +
        " or (owner_id in (?) and owner_type ='User' and status=1)" +
        " or (id in (?) and owner_type='User' and owner_id in (?) )" +
        " or id in (?)",

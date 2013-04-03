@@ -63,7 +63,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def circle_topics
     if params[:circle_id] == "all"
-      @circles = current_shop.circles
+      @circles = :all
     elsif not params[:circle_id].blank?
       @circles = current_shop.circles.where(:id => params[:circle_id])
     end

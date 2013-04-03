@@ -261,9 +261,9 @@
             unless data?
               data = $(li).attr("data-value")
               @set_data(li, data)
-            @default_value(data)
+            @default_value(data, li)
 
-      default_value: (data) ->
+      default_value: (data, li) ->
         if data?
           if (@options.value? && @options.value != "" &&
           data[@options.value] == @options.default_value) ||
