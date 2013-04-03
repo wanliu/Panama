@@ -2,40 +2,62 @@
 class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def create
-    opts = max_level(params[:friends])
-    if opts[:status] == :circle && opts[:circles].length <=0
+    opts = max_level(params[:topic].delete(:friends))
+    if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
     end
-    @topic = current_shop.topics.create(
-      status: opts[:status],
-      content: params[:content],
-      user_id: current_user.id)
+    @topic = current_shop.topics.create(params[:topic].merge({
+        status: opts[:status],
+        user_id: current_user.id
+      }))
     if @topic.valid?
       opts[:circles].each do |circle|
         @topic.receives.create(receive: circle)
       end
-      respond_format(format_json(@topic))
+      respond_format(@topic)
     else
       respond_format(draw_errors_message(@topic), 403)
     end
   end
 
   def index
-    @circles = current_shop.circles
-    unless params[:circle_id].blank?
-      @circles = @circles.where(:id => params[:circle_id])
-    end
-
-    @topics = current_shop.all_circle_topics(@circles).limit(30).order("created_at desc")
+    _topics = params[:circles]=="puliceity" ? receive_topic : circle_topics
+    @topics = _topics.limit(30).order("created_at desc")
     respond_to do |format|
       format.json{ render json: @topics }
       format.html
     end
   end
 
+  def my_related
+    @circles = current_shop.circles
+    @followers = current_shop.followers
+    @categories = current_shop.topic_categories
+    respond_to do |format|
+      format.html
+      format.json{ render json: @topics }
+    end
+  end
+
+  def category
+
+  end
 
   private
+  def receive_topic
+    current_shop.topic_receives.joins(:topic)
+  end
+
+  def circle_topics
+    if params[:circle_id] == "all"
+      @circles = current_shop.circles
+    elsif not params[:circle_id].blank?
+      @circles = current_shop.circles.where(:id => params[:circle_id])
+    end
+    current_shop.all_circle_topics(@circles)
+  end
+
   def respond_format(json, status = 200)
     respond_to do |format|
       format.json{ render json: json, status: status }
@@ -48,29 +70,34 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def receive_other(friends)
     receives = []
-    friends.each do |f|
-      receive = const_get(f[:status].classify).find_by(id: f[:id])
+    friends.each do |i, f|
+      friend = f.symbolize_keys
+      receive = const_get(friend[:status].classify).find_by(id: friend[:id])
       receives << receive unless receive.nil?
     end
     {status: :circle, circles: receives}
   end
 
   def max_level(friends)
+    data = {}
     if is_level(friends, "puliceity")
-      return {status: :puliceity}
+      return {status: :puliceity, circles: [current_shop]}
     elsif is_level(friends, "external")
       circles = current_shop.circles + current_shop.all_friend_circles
-      return {status: :external, circles: circles}
+      data = {status: :external, circles: circles}
     elsif is_level(friends, "circle")
-      return {status: :circle, circles: current_shop.circles}
+      data = {status: :circle, circles: current_shop.circles}
     else
-      return receive_other(friends)
+      data = receive_other(friends)
     end
+    params[:topic].delete(:topic_category_id)
+    data
   end
 
   def is_level(friends, id)
     _status = false
-    friends.each do |f|
+
+    friends.each do |i, f|
       friend = f.symbolize_keys
       if friend[:id] == id && friend[:status] == "scope"
         _status = true

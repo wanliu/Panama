@@ -70,6 +70,8 @@
 
         selector: (data, li) ->
 
+        close_item: (data, li) ->
+
         input: $("<input type='text'/>")
 
         chose_label: $("<span class='label label-success chose-label'>")
@@ -138,6 +140,7 @@
         if data?
           @show_item(data.html)
 
+        @options.close_item(data, parent_el)
         $(parent_el).remove()
 
       show_item: (li) ->
@@ -153,12 +156,18 @@
               $(bli).before($(ali))
 
       load_default_value: (_data) ->
-        if @options.value? && @options.default_value? &&
-         @options.value != "" && @options.default_value != ""
+        if @options.default_value? && @options.default_value != ""
+
           $("li", @drop_down.ul_el).each (i, li) =>
             data = $.data(li, "data")
+            unless data?
+              data = $(li).attr("data-value")
+              $.data(li, "data", data)
+
             if data?
-              if data[@options.value] == @options.default_value
+              if (@options.value? && @options.value != "" &&
+              data[@options.value] == @options.default_value) ||
+              data == @options.default_value
                 $(li).click()
                 @drop_down.hide()
                 @options.input.blur()
@@ -167,15 +176,13 @@
         @options.input.focus()
         label = @options.chose_label.clone()
 
-        unless data?
-          data = li.attr("data-value")
-
-        $.data label[0], "data", {values: data, html: li}
+        _data = {value: data, html: li}
+        $.data label[0], "data", _data
 
         label.html(li.remove().find("a").html())
         label.append(@options.close_label.clone())
         @selector_panel.append(label)
-        @options["selector"](data, li)
+        @options["selector"](_data, li)
 
       create_element: () ->
         @selector_panel = $("<span class='chose-item-selector' />")

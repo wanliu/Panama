@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130329024415) do
+ActiveRecord::Schema.define(:version => 20130401025453) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -394,6 +394,13 @@ ActiveRecord::Schema.define(:version => 20130329024415) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "topic_categories", :force => true do |t|
+    t.string   "name"
+    t.integer  "shop_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "topic_receives", :force => true do |t|
     t.integer  "topic_id"
     t.integer  "receive_id"
@@ -408,11 +415,10 @@ ActiveRecord::Schema.define(:version => 20130329024415) do
     t.string   "owner_type"
     t.string   "content"
     t.string   "content_html"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "status"
-    t.integer  "receive_id"
-    t.string   "receive_type"
+    t.integer  "topic_category_id"
   end
 
   create_table "users", :force => true do |t|

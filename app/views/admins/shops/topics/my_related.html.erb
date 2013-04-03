@@ -1,0 +1,28 @@
+<% circle_active :related %>
+<% content_for :topic_right do %>
+<div>
+  <div class='title'>关注我的好友</div>
+  <div class='content'>
+    <ul class='friend-list'>
+      <% if @followers.count > 0 %>
+        <% @followers.each do |f| %>
+        <li class='friend'>
+          <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+        </li>
+        <% end %>
+      <% else %>
+        <li>暂时没有好友</li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div>
+  <div class='title'>分类</div>
+  <div class='content topic_category'>
+    <% @categories.each do | category | %>
+    <a class="badge badge-info"><%= category.name %></a>
+    <% end %>
+  </div>
+</div>
+<% end %>
+<%=render :partial => "admins/shops/topics/topics_info", locals: {circles: @circles, circle: :puliceity} %>
