@@ -179,6 +179,7 @@ Panama::Application.routes.draw do
   resources :search do
     collection do
       get "users"
+      get "user_shop"
     end
   end
 
