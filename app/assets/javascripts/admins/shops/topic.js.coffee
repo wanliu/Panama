@@ -1,5 +1,5 @@
 #describe: 主题
-define ["jquery", "backbone", "timeago"], ($, Backbone) ->
+define ["jquery", "backbone", "timeago", "bootstrap_popover"], ($, Backbone) ->
 
   class Topic extends Backbone.Model
     seturl: (shop) ->
@@ -9,7 +9,15 @@ define ["jquery", "backbone", "timeago"], ($, Backbone) ->
       @seturl(shop)
       super attr
 
+    receives: (callback) ->
+      @fetch({
+        url: "#{@urlRoot}/receives/#{@id}",
+        success: callback
+      })
+
+
   class TopicList extends Backbone.Collection
+    model: Topic
     seturl: (shop) ->
       @url = "/shops/#{shop}/admins/topics"
 
@@ -18,6 +26,13 @@ define ["jquery", "backbone", "timeago"], ($, Backbone) ->
       super models
 
   class TopicView extends Backbone.View
+    avatar_img: $("<img class='img-circle user-avatar' />")
+
+    events: {
+      "click .external" : "external_receive",
+      "click .circle" : "circle_receive",
+      "click .close-label" : "hide_receive"
+    }
 
     initialize: (options) ->
       _.extend(@, options)
@@ -25,9 +40,46 @@ define ["jquery", "backbone", "timeago"], ($, Backbone) ->
       @$el.html(@template.render(@model.toJSON()))
       @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
       @$("abbr.timeago").timeago()
+      @puliceity_hide_status()
 
     render: () ->
       @$el
+
+    puliceity_hide_status: () ->
+      if @model.get("status") is "puliceity"
+        @$(".puliceity").hide();
+
+    external_receive: () ->
+      @popover_basis('显示给您圈子中的所有成员，以及这些成员的圈子中的所有人。')
+
+    circle_receive: () ->
+      @popover_basis('<h6 class="title-popover-topic">此信息目前的分享对象：</h6><div class="circle_users"></div>')
+      @$circle_users_el = @$(".circle_users")
+      @$circle_users_el.html("正在加载...")
+      @model.receives (model, data) =>
+        if data.length <= 0
+          @$circle_users_el.html("暂时没有分享用户")
+        else
+          @show_user(data)
+
+    show_user: (data) ->
+      @$circle_users_el.html("")
+      _.each data, (user) =>
+        img_el = @avatar_img.clone().attr("src", user.icon)
+        @$circle_users_el.append(img_el)
+        img_el.tooltip({
+          title: user.login
+        })
+
+    hide_receive: () ->
+      @$(".status").popover("hide")
+
+    popover_basis: (content) ->
+      @$(".status").popover({
+        content: content + "<a class='close-label'></a>",
+        placement: "bottom",
+        html: true
+      }).popover("show")
 
   class TopicViewList extends Backbone.View
     notice_el: $("<div class='alert alert-block'>暂时没有信息!</div>")
@@ -96,6 +148,7 @@ define ["jquery", "backbone", "timeago"], ($, Backbone) ->
 
     add_topic: (model) ->
       @notice_msg()
+      model.seturl(@shop)
       topic_view = new TopicView(
         model: model,
         template: @template

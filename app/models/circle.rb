@@ -18,6 +18,10 @@ class Circle < ActiveRecord::Base
     friends.count
   end
 
+  def friend_users
+    friends.joins(:user).map{|f| f.user.as_json(methods: :icon) }
+  end
+
   def join_friend(user)
     uid = user
     uid = user.id if user.is_a?(User)

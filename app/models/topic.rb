@@ -24,6 +24,16 @@ class Topic < ActiveRecord::Base
   #puliceity: 公开, external: 扩展, circle: 限定范围
   acts_as_status :status, [:puliceity, :external, :circle]
 
+  def receive_users
+    users = []
+    receives.includes(:receive).each do |r|
+      if r.receive
+        users = r.receive.is_a?(Circle) ? r.receive.friend_users : f.receive.as_json(methods: :icon)
+      end
+    end
+    users.flatten
+  end
+
   def self.users(options = {})
     where(options.merge(:owner_type => "User"))
   end
@@ -49,6 +59,10 @@ class Topic < ActiveRecord::Base
     attribute["login"] = user.login
     attribute["status_name"] = I18n.t("topic.#{status.name}")
     attribute["topic_category_name"] = category.name unless category.nil?
+    if status == :puliceity && receives.count > 0
+      attribute["shop_name"] = receives.first.receive.name
+    end
+
     attribute
   end
 

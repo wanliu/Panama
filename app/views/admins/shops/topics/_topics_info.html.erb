@@ -55,9 +55,12 @@
       <div class='well well-msg topic-comment'>
         <a class="{{status}} status">{{status_name}}</a>
         <abbr class='timeago topic_date' title='{{created_at}}'></abbr>
-        {{#topic_category_name}}
+        {{#shop_name}}
         <span clas='middle-line'>-</span>
-        <a href="#">{{topic_category_name}}</a>
+        <a href='/shops/{{shop_name}}'>{{shop_name}}</a>
+        {{/shop_name}}
+        {{#topic_category_name}}
+        ({{topic_category_name}})
         {{/topic_category_name}}
         <hr class='line' />
         {{content}}
