@@ -26,6 +26,11 @@
     .title{
       border-bottom: 1px solid #DDD;
       margin-bottom: 5px;
+      margin-top: 30px;
+    }
+
+    .title-first{
+      margin-top: 0px;
     }
 
     .content{
@@ -44,6 +49,14 @@
     .topic-comment{
       margin-right:5px;
 
+      .title-popover-topic{
+        margin: 0px;
+      }
+
+      .circle_users{
+        font-size: 9px;
+      }
+
       .status{
         margin-right: 30px
       }
@@ -54,6 +67,26 @@
 
       .middle-line{
         margin: 0px 8px;
+      }
+
+      .user-avatar{
+        width: 20px;
+        height: 20px;
+        margin:0px 5px;
+      }
+
+
+      .popover-content{
+        margin-top: 0px;
+        .close-label{
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          width: 12px;
+          height: 11px;
+          font-size: 1px;
+          background: url("/assets/select.png") right top no-repeat;
+        }
       }
     }
   }
