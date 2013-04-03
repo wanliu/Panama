@@ -35,6 +35,7 @@ class Shop < ActiveRecord::Base
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
   friendly_id :name
 
+
   #所有圈子好友
   def all_friends
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
@@ -87,6 +88,10 @@ class Shop < ActiveRecord::Base
 
   def lookup_content(name)
     contents.where(:name => name).first
+  end
+
+  def icon_url
+    photos.icon
   end
 
   private
