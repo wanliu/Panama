@@ -1,2 +1,9 @@
-<h1><%= @people.login %></h1>
-<p>Find me in app/views/people/show.html.erb</p>
+<div class="container-fluid">
+	<% content_for(:active_circle){ "all" } %>
+	<div class='row-fluid community-content'>
+	  <div class='span8 topics'>
+	    <%=render template: "people/send_message",
+	    locals: {circles: @circles}  %>
+	  </div>
+	</div>
+</div>
