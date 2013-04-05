@@ -1,11 +1,9 @@
 #describe: 选择圈子与范围
-((factory) ->
-  if typeof define is 'function' && define.amd
-    define ['jquery'], factory
-  else
-    factory(jQuery)
-)(
-  ($) ->
+
+define ["jquery",
+  "twitter/bootstrap/tooltip",
+  "twitter/bootstrap/popover"
+],($) ->
     class ChoseDropDown
       el: $("<div class='chose-drop-down' />")
       ul_el: $("<ul class='chose-friend-menu' />")
@@ -55,7 +53,7 @@
           _template = _template.replace @match, value
           attr = @match.exec _template
 
-        $.data li[0], "data", _.extend(val, {_status: "circle"})
+        $.data li[0], "data", $.extend(val, {_status: "circle"})
         li.html(_template)
 
     class ChoseInput
@@ -64,7 +62,7 @@
       el: $("<div class='user-shop-panel' />")
 
       constructor: (options) ->
-        _.extend(@, options)
+        $.extend(@, options)
         @events()
         @el.html(@ul_el)
         @results = {}
@@ -72,7 +70,7 @@
       events: () ->
         @input.bind "keyup", () =>
           clearTimeout(@time_id) if @time_id?
-          @time_id = setTimeout(_.bind(@fetch_user_shop, @), 300)
+          @time_id = setTimeout($.proxy(@fetch_user_shop, @), 300)
 
       fetch_user_shop: () ->
         search_val = @input.val().trim()
@@ -98,13 +96,13 @@
       all_result: (data) ->
         @show()
         @ul_el.html("")
-        _.each data, (model) =>
+        $.each data, (i, model) =>
           @add_user model
 
       add_user: (model) ->
         unless @find_user_id(model.id)
           li = @add_el(model.icon, model.login)
-          @set_data(li[0], _.extend({}, model, {_status: "user", value: model.login}))
+          @set_data(li[0], $.extend({}, model, {_status: "user", value: model.login}))
 
       set_data: (li, data) ->
         $.data li, "data", data
@@ -164,12 +162,12 @@
 
         @chose_view = new ChoseInput(
           input: @options.input,
-          selector_data: _.bind(@selector_data, @)
+          selector_data: $.proxy(@selector_data, @)
         )
 
-        @chose_view.el.bind("hide", _.bind(@drop_down.hide, @drop_down))
-        @chose_view.el.bind("show", _.bind(@drop_down.show, @drop_down))
-        @drop_down.el.bind("hide", _.bind(@chose_view.hide, @chose_view))
+        @chose_view.el.bind("hide", $.proxy(@drop_down.hide, @drop_down))
+        @chose_view.el.bind("show", $.proxy(@drop_down.show, @drop_down))
+        @drop_down.el.bind("hide", $.proxy(@chose_view.hide, @chose_view))
 
         @options.el.append(@chose_view.render())
         @options.el.append(@drop_down.render())
@@ -191,11 +189,11 @@
         @options.el.addClass("chose-friend")
 
       events: () ->
-        @input_panel.bind "click", () =>
+        @input_panel.bind "click", (event) =>
           @options.input.focus()
           event.stopPropagation()
 
-        @options.input.focus () =>
+        @options.input.focus (event) =>
           unless @chose_view.is_show()
             @drop_down.show()
 
@@ -353,4 +351,3 @@
 
     $.fn.choseFriend = (opts) ->
       new ChoseFriend($.extend({}, opts, {el: @}))
-)

@@ -15,7 +15,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
       opts[:circles].each do |circle|
         @topic.receives.create(receive: circle)
       end
-      respond_format(@topic)
+      respond_format(@topic.as_json(:include => :owner))
     else
       respond_format(draw_errors_message(@topic), 403)
     end
@@ -25,7 +25,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     _topics = params[:circles]=="puliceity" ? receive_topic : circle_topics
     @topics = _topics.limit(30).order("created_at desc")
     respond_to do |format|
-      format.json{ render json: @topics }
+      format.json{ render json: @topics.as_json(:include => :owner) }
       format.html
     end
   end
@@ -49,7 +49,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
   end
 
   def receives
-    @topic = current_shop.topics.find(params[:topic_id])
+    @topic = current_shop.topics.find(params[:id])
     respond_to do |format|
       format.json{ render json: @topic.receive_users }
       format.html
@@ -76,46 +76,20 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     end
   end
 
-  def const_get(name)
-    Kernel.const_get(name)
-  end
-
-  def receive_other(friends)
-    receives = []
-    friends.each do |i, f|
-      friend = f.symbolize_keys
-      receive = const_get(friend[:status].classify).find_by(id: friend[:id])
-      receives << receive unless receive.nil?
-    end
-    {status: :circle, circles: receives}
-  end
-
   def max_level(friends)
     data = {}
-    if is_level(friends, "puliceity")
+    if Topic.is_level(friends, "puliceity")
       return {status: :puliceity, circles: [current_shop]}
-    elsif is_level(friends, "external")
+    elsif Topic.is_level(friends, "external")
       circles = current_shop.circles + current_shop.all_friend_circles
       data = {status: :external, circles: circles}
-    elsif is_level(friends, "circle")
+    elsif Topic.is_level(friends, "circle")
       data = {status: :circle, circles: current_shop.circles}
     else
-      data = receive_other(friends)
+      data = Topic.receive_other(friends)
     end
     params[:topic].delete(:topic_category_id)
     data
   end
 
-  def is_level(friends, id)
-    _status = false
-
-    friends.each do |i, f|
-      friend = f.symbolize_keys
-      if friend[:id] == id && friend[:status] == "scope"
-        _status = true
-        break
-      end
-    end
-    _status
-  end
 end

@@ -60,20 +60,42 @@ class Topic < ActiveRecord::Base
 
   def as_json(*args)
     attribute = super *args
-    attribute["avatar_url"] = user.icon
+    attribute["avatar_url"] = owner.photos.icon if owner.is_a?(Shop)
+    attribute["avatar_url"] = owner.icon if owner.is_a?(User)
     attribute["status"] = status.name
-    attribute["login"] = user.login
+    attribute["send_login"] = user.login
     attribute["status_name"] = I18n.t("topic.#{status.name}")
     attribute["topic_category_name"] = category.name unless category.nil?
     if status == :puliceity && receives.count > 0
       attribute["receive_shop_name"] = receives.first.receive.name
     end
-    attribute["owner_shop"] = owner.name unless owner.nil? && owner.is_a?(Shop)
+    #attribute["owner_shop"] = owner.name unless owner.nil? && owner.is_a?(Shop)
 
     attribute
   end
 
   class << self
+    def receive_other(friends)
+      receives = []
+      friends.each do |i, f|
+        friend = f.symbolize_keys
+        receive = Kernel.const_get(friend[:status].classify).find_by(id: friend[:id])
+        receives << receive unless receive.nil?
+      end
+      {status: :circle, circles: receives}
+    end
+
+    def is_level(friends, id)
+      _status = false
+      friends.each do |i, f|
+        friend = f.symbolize_keys
+        if friend[:id] == id && friend[:status] == "scope"
+          _status = true
+          break
+        end
+      end
+      _status
+    end
 
     private
     def scope_related(_owner, circles)

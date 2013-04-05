@@ -1,0 +1,5 @@
+<% active_section :communities %>
+<% circle_active @circle.id %>
+<%=render partial: "people/topics/info", locals: {
+  circles: @circles,
+  circle: @circle} %>

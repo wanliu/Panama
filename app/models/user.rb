@@ -34,7 +34,14 @@ class User < ActiveRecord::Base
   end
 
   def all_friends
-    circles.map{| c | c.friends }.flatten
+    CircleFriends.where(:circle_id => circles.map{|c| c.id})
+  end
+
+  #所有好友的圈子
+  def all_friend_circles
+    user_ids = all_friends.select(:user_id).map{|f| f.user_id}
+    Circle.where(:owner_type => "User",
+      :owner_id => user_ids)
   end
 
   def icon

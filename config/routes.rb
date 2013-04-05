@@ -17,6 +17,14 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :topics, :controller => "people/topics" do
+      collection do
+        get "receives/:id", :to => "people/topics#receives"
+      end
+    end
+
+    resources :communities, :controller => "people/communities"
+
     resources :circles, :controller => "people/circles"
 
     resources :followings, :controller => "people/followings" do
@@ -119,7 +127,7 @@ Panama::Application.routes.draw do
         collection do
           get :my_related
           get "category/:topic_category_id", :to => "shops/topics#category"
-          get "receives/:topic_id", :to => "shops/topics#receives"
+          get "receives/:id", :to => "shops/topics#receives"
         end
       end
 

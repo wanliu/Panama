@@ -1,12 +1,12 @@
-#describe: 商店主题
+
 define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/bootstrap/popover"], ($, Backbone) ->
 
   class Topic extends Backbone.Model
-    seturl: (shop) ->
-      @urlRoot = "/shops/#{shop}/admins/topics"
+    seturl: (login) ->
+      @urlRoot = "/people/#{login}/topics"
 
-    constructor: (attr, shop) ->
-      @seturl(shop)
+    constructor: (attr, login) ->
+      @seturl(login)
       super attr
 
     receives: (callback) ->
@@ -17,11 +17,11 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
 
   class TopicList extends Backbone.Collection
     model: Topic
-    seturl: (shop) ->
-      @url = "/shops/#{shop}/admins/topics"
+    seturl: (login) ->
+      @url = "/people/#{login}/topics"
 
-    constructor: (models, shop) ->
-      @seturl(shop)
+    constructor: (models, login) ->
+      @seturl(login)
       super models
 
   class TopicView extends Backbone.View
@@ -39,29 +39,29 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
       @$el.html(@template.render(@model.toJSON()))
       @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
       @$("abbr.timeago").timeago()
-      @puliceity_hide_status()
       @$(".send_user").html(@find_owner())
+      @puliceity_hide_status()
       @switch_style()
-
-    switch_style: () ->
-      if @model.get("owner_type") == "Shop"
-        @$(".user_panel").html("由 #{@model.get("send_login")}发布")
 
     render: () ->
       @$el
 
-    find_owner: () ->
-      if @model.get("owner_type") == "User"
-        @model.get("owner").login
-      else
-        @model.get("owner").name
+    switch_style: () ->
+      if @model.get("owner_type") == "Shop"
+        @$(".user_panel").html("由 #{@model.get("send_login")}发布")
 
     puliceity_hide_status: () ->
       if @model.get("status") is "puliceity"
         @$(".puliceity").hide();
 
     external_receive: () ->
-      @popover_basis('显示给您圈子中的所有成员，以及这些成员的圈子中的所有人。')
+      @popover_basis("显示给#{@find_owner()}圈子中的所有成员，以及这些成员的圈子中的所有人。")
+
+    find_owner: () ->
+      if @model.get("owner_type") == "User"
+        @model.get("owner").login
+      else
+        @model.get("owner").name
 
     circle_receive: () ->
       @popover_basis('<h6 class="title-popover-topic">此信息目前的分享对象：</h6><div class="circle_users"></div>')
@@ -101,7 +101,7 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
     initialize: (options) ->
       _.extend(@, options)
 
-      @topic_list = new TopicList([], @shop)
+      @topic_list = new TopicList([], @login)
       @topic_list.bind("reset", @all_topic, @)
       #@topic_list.bind("add", @add_topic, @)
 
@@ -129,7 +129,7 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
         @$(".friend-context input:text").focus()
         return
 
-      @topic = new Topic(data, @shop)
+      @topic = new Topic(data, @login)
       @topic.save({}, {
         data: $.param({topic: data})
         success: (model) =>
@@ -157,7 +157,7 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
 
     add_topic: (model) ->
       @notice_msg()
-      model.seturl(@shop)
+      model.seturl(@login)
       topic_view = new TopicView(
         model: model,
         template: @template
