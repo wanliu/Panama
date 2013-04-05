@@ -29,7 +29,7 @@ module PanamaCore
         end
 
         def set_value_title(value, title)
-          val = select { |pi| pi.value = value }.first
+          val = select { |pi| pi.value == value }.first
           val.title = title
         end
       end
@@ -141,10 +141,10 @@ module PanamaCore
           pv = product_property_values(name)
           pv.value unless pv.nil?
         end
+
         @delegate_properties << method_name
 
         define_singleton_method("#{method_name}=") do |other|
-
           factory_property name, :product => self do |pv|
             pv.property_id = property.id
             pv.value = other
@@ -165,13 +165,13 @@ module PanamaCore
 
     def factory_property(name, options = {}, &block)
       method = persisted? ? :create : :build
-      pv = product_property_values(name) || properties_values.send(method, options)
+      pv = product_property_values(name) || properties_values.send(method, options, &block)
       yield pv
     end
 
     def product_property_values(name)
       property = properties.select { |property| property.name == name }.first
-      properties_values.select { |pv| pv.property.id == property.id }.first
+      properties_values.select { |pv| pv.property.id == property.id }.first unless property.nil?
     end
   end
 end

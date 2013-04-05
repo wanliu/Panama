@@ -1,0 +1,9 @@
+<%= render partial: 'price_options', :locals => { price_options: @category.price_options, category: @category } %>
+
+<% @price_option = PriceOption.new %>
+<%= semantic_form_for @price_option, url: add_price_options_system_category_path(@category) do |f| %>
+	<%= f.inputs "PriceOption" do %>
+		<%= f.input :id, as: :select, collection: Property.all { |property| property.title } %>
+	<% end %>
+	<%= f.actions %>
+<% end %>

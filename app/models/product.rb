@@ -99,6 +99,10 @@ class Product < ActiveRecord::Base
     temp
   end
 
+  def to_item
+    prices
+  end
+
   def update_prices_option(attributes)
     attributes.each do |k, names|
       pp_items = property_items[k]
