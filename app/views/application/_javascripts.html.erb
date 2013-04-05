@@ -3,73 +3,68 @@
     require.config({
         deps: ["application"],
 
-		paths: {
-			"jquery": "jquery"
-			, "jqueryui": "lib/jqueryui"
-			, "underscore": "lib/underscore"
-			, "templates": "templates"
-			, "jquery_columnview": "lib/jquery.columnview"
-			, "fileuploader": "lib/fileuploader"
-			, "hogan": "lib/hogan"
-			, "faye" : "faye"
-			, "hogan" : "lib/hogan"
-			, "typeahead" : "lib/typeahead"
-			, "ajax_auth_client" : "wanliu/ajax_auth_client"
-			, "postmessage" : "lib/postmessage"
-			, "timeago" : "lib/config_timeago"
-			, "bootstrap_popover" : "twitter/bootstrap/popover"
-		},
+    paths: {
+      "jquery": "jquery"
+      , "jqueryui": "lib/jqueryui"
+      , "underscore": "lib/underscore"
+      , "templates": "templates"
+      , "jquery_columnview": "lib/jquery.columnview"
+      , "fileuploader": "lib/fileuploader"
+      , "hogan": "lib/hogan"
+      , "faye" : "faye"
+      , "typeahead" : "lib/typeahead"
+      , "ajax_auth_client" : "wanliu/ajax_auth_client"
+      , "postmessage" : "lib/postmessage"
+      , "timeago" : "lib/config_timeago"
+    },
 
-		shim: {
-			"underscore": {
-				exports: "_"
-			},
-			"jquery": {
-				exports: "$",
-				deps: ["jquery", "jquery_ujs"]
-			},
-			"jquery-ui": {
-				exports: "$",
-				deps: [ "jquery"]
-			},
-			"hallo" : {
-				deps: ['annotate']
-			},
-			'annotate': {
-				deps: ['vie-2.1.0.debug']
-			},
-			'vie-2.1.0.debug': {
-				deps: ['backbone']
-			},
-			"backbone": {
-				deps: ["lib/underscore"],
-				exports: "Backbone"
-			},
-			"bootstrap": ['jquery'],
-			"jquery_columnview" : {
-				exports : "$",
-				deps : ["jquery"]
-			},
-			"fileuploader": {
-				exports: "qq"
-			},
-			"typeahead": {
-				deps : ["jquery"]
-			},
-			"hogan": {
-				exports: "Hogan"
-			},
-			"ajax_auth_client": {
-				deps: ["postmessage"]
-			},
-			"timeago": {
-				deps: ["jquery", "lib/jquery.timeago"]
-			},
-			"bootstrap_popover": {
-				deps: ['jquery', "twitter/bootstrap/tooltip"]
-			}
-		}
-	});
+    shim: {
+      "underscore": {
+        exports: "_"
+      },
+      "jquery": {
+        exports: "$",
+        deps: ["jquery", "jquery_ujs"]
+      },
+      "jquery-ui": {
+        exports: "$",
+        deps: [ "jquery"]
+      },
+      "hallo" : {
+        deps: ['annotate']
+      },
+      'annotate': {
+        deps: ['vie-2.1.0.debug']
+      },
+      'vie-2.1.0.debug': {
+        deps: ['backbone']
+      },
+      "backbone": {
+        deps: ["lib/underscore"],
+        exports: "Backbone"
+      },
+      "bootstrap": ['jquery'],
+      "jquery_columnview" : {
+        exports : "$",
+        deps : ["jquery"]
+      },
+      "fileuploader": {
+        exports: "qq"
+      },
+      "typeahead": {
+        deps : ["jquery"]
+      },
+      "hogan": {
+        exports: "Hogan"
+      },
+      "ajax_auth_client": {
+        deps: ["postmessage"]
+      },
+      "timeago": {
+        deps: ["jquery", "lib/jquery.timeago"]
+      }
+    }
+  });
 </script>
 
 <%# Append your own using content_for :javascripts %>

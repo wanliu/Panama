@@ -22,7 +22,7 @@ class People::CirclesController < People::BaseController
     @circles = @people.circles
     @circle = @people.circles.find(params[:id])
     respond_to do |format|
-      format.json{ render json: @circle }
+      format.html
     end
   end
 
