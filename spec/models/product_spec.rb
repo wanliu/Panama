@@ -252,7 +252,7 @@ describe Product, "产品模型" do
 
                 it "挂接分类" do
                     apple.properties.should include(material, weight, clothes_type)
-                    apple.category = Category.find(73)
+                    apple.category = Category.find(71)
                     apple.attach_properties!
                     apple.should have(0).properties
                 end
@@ -325,11 +325,11 @@ describe Product, "产品模型" do
 
                 it "更换分类移出原有值" do
                     apple.material.should == "cotton"
-                    apple.category = Category.find(72)
+                    apple.category = Category.find(71)
                     apple.attach_properties!
                     apple.properties_values.size.should == 0
                     apple.save
-                    ProductPropertyValue.all.size.should == 0
+                    ProductPropertyValue.all.size.should eql(3)
                 end
             end
         end

@@ -55,8 +55,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def create
     prices_attributes = params[:product].delete(:prices)
-    @price_options = extract_prices_options(params[:product])
     @product = current_shop.products.build(:category_id => params[:product][:category_id])
+    @price_options = extract_prices_options(params[:product])
     # @product = current_shop.products.build(params[:product].merge(dispose_options))
     @product.attach_properties!
     @product.update_attributes(params[:product].merge(dispose_options))
@@ -85,6 +85,10 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def update
     @product = Product.find(params[:id])
+    category_id = params[:product][:category_id]
+    @product.category_id = category_id unless category_id.nil?
+    @product.attach_properties!
+
     prices_attributes = params[:product].delete(:prices)
     @price_options = extract_prices_options(params[:product])
 
@@ -95,13 +99,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category = @product.category
     @content = additional_properties_content(@category)
     if @product.valid?
-      # prices_attributes.each do |k, v|
-      #   price = v.delete(:price)
-      #   pprice = @products.prices[v]
-      #   pprice.price = price
-      # end
-
-      # @product.update_style_subs(params)
       render :action => :show
     else
       render :action => :edit
