@@ -1,0 +1,32 @@
+<div class='row-fluid topic-panel'>
+  <div class='span1 user-info'>
+    <div>
+      <img class="img-polaroid avatar" />
+    </div>
+    <div class='send_user'>
+    </div>
+  </div>
+  <div class='span11'>
+    <div class='well well-msg topic'>
+      <a class="{{status}} status">{{status_name}}</a>
+      <abbr class='timeago topic_date' title='{{created_at}}'></abbr>
+      <span class='user_panel'></span>
+      {{#receive_shop_name}}
+      <span clas='middle-line'>-</span>
+      <a href='/shops/{{receive_shop_name}}'>{{receive_shop_name}}</a>
+      {{/receive_shop_name}}
+
+      {{#topic_category_name}}
+      ({{topic_category_name}})
+      {{/topic_category_name}}
+      <hr class='line' />
+      <p>
+        {{content}}
+      <p>
+      <div class='topic-comments'>
+        <div class='add_comment'>添加评论..</div>
+        <!-- <textarea></textarea> -->
+      </div>
+    </div>
+  </div>
+</div>

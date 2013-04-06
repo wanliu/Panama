@@ -15,6 +15,13 @@ class ShopsController < ApplicationController
 
   layout 'shops'
 
+  def topic_categories
+    @categories = Shop.find(params[:id]).topic_categories
+    respond_to do |format|
+      format.json{ render json: @categories }
+    end
+  end
+
   # GET /shops
   # GET /shops.json
   def index

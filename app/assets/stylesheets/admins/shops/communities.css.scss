@@ -2,6 +2,14 @@
 
   .topics-panel{
 
+    .topic-form{
+      margin-bottom: 0px;
+    }
+
+    .topics{
+      margin-top: 20px;
+    }
+
     margin-right: -5px;
     padding-right: 5px;
 
@@ -46,7 +54,7 @@
   }
 
   .topic-panel{
-    .topic-comment{
+    .topic{
       margin-right:5px;
 
       .title-popover-topic{
@@ -87,6 +95,19 @@
           font-size: 1px;
           background: url("/assets/select.png") right top no-repeat;
         }
+      }
+    }
+
+    .topic-comments{
+      margin-top: 15px;
+
+      .add_comment{
+        border: 1px solid #DDD;
+        line-height: 25px;
+        font-size: 9px;
+        width: 300px;
+        padding-left: 10px;
+        color: gray;
       }
     }
   }

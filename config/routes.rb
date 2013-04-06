@@ -20,6 +20,7 @@ Panama::Application.routes.draw do
     resources :topics, :controller => "people/topics" do
       collection do
         get "receives/:id", :to => "people/topics#receives"
+        get "following"
       end
     end
 
@@ -31,6 +32,7 @@ Panama::Application.routes.draw do
       collection do
         post "user/:user_id" => "people/followings#user"
         post "shop/:shop_id" => "people/followings#shop"
+        get :shops
       end
     end
 
@@ -102,6 +104,9 @@ Panama::Application.routes.draw do
   # shop admins routes
 
   resources :shops do
+    collection do
+      get "topic_categories/:id", :to => "shops#topic_categories"
+    end
     namespace :admins do
       match "attachments", :to => "shops/attachments#index"
       match "attachments/upload", :to => "shops/attachments#upload", :via => :post

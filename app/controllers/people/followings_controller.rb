@@ -4,11 +4,19 @@ class People::FollowingsController < People::BaseController
   before_filter :login_required, :except => [:index]
 
   def index
-    @u_followings = @people.followings.users
-    @s_followings = @people.followings.shops
+    @u_followings = current_user.followings.users
+    @s_followings = current_user.followings.shops
     respond_to do |format|
       format.html
-      format.json{ render :json => @followings }
+      format.json
+    end
+  end
+
+  def shops
+    @followings = current_user.followings.shops.includes(:follow)
+    respond_to do |format|
+      format.html
+      format.json{ render json: @followings.map{|f| f.follow.as_json(methods: :icon_url) } }
     end
   end
 
