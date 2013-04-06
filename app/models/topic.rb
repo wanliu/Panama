@@ -8,6 +8,11 @@
 #  context_html: html内容
 #  status: 状态
 class Topic < ActiveRecord::Base
+  scope :puliceity, where(:status => 1)
+  scope :external, where(:status => 2)
+  scope :circle, where(:status => 3)
+  scope :community, where(:status => 4)
+
   attr_accessible :content, :owner_id, :owner_type, :user_id, :content_html, :status, :topic_category_id
 
   belongs_to :owner, :polymorphic => true
@@ -21,8 +26,8 @@ class Topic < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :owner
 
-  #puliceity: 公开, external: 扩展, circle: 限定范围
-  acts_as_status :status, [:puliceity, :external, :circle]
+  #puliceity: 公开, external: 扩展, circle: 限定范围, community: 商家圈
+  acts_as_status :status, [:puliceity, :external, :circle, :community]
 
   def receive_users
     users = []
@@ -47,14 +52,14 @@ class Topic < ActiveRecord::Base
   end
 
   #获取某个商店的所有与它有关的贴
-  def self.find_shop_or_friends(shop_id, circles)
-    shop = Shop.find(shop_id)
+  def self.find_shop_or_friends(shop, circles)
+    shop = Shop.find(shop) unless shop.is_a?(Shop)
     scope_related(shop, circles)
   end
 
   #获取某个用户的所有与它有关的贴
-  def self.find_user_or_friends(user_id, circles)
-    user = User.find(user_id)
+  def self.find_user_or_friends(user, circles)
+    user = User.find(user) unless user.is_a?(User)
     scope_related(user, circles)
   end
 
@@ -66,23 +71,30 @@ class Topic < ActiveRecord::Base
     attribute["send_login"] = user.login
     attribute["status_name"] = I18n.t("topic.#{status.name}")
     attribute["topic_category_name"] = category.name unless category.nil?
-    if status == :puliceity && receives.count > 0
+    if status == :community && receives.count > 0
       attribute["receive_shop_name"] = receives.first.receive.name
     end
-    #attribute["owner_shop"] = owner.name unless owner.nil? && owner.is_a?(Shop)
 
     attribute
   end
 
   class << self
     def receive_other(friends)
-      receives = []
+      data = {status: :circle, circles: []}
       friends.each do |i, f|
-        friend = f.symbolize_keys
-        receive = Kernel.const_get(friend[:status].classify).find_by(id: friend[:id])
-        receives << receive unless receive.nil?
+        if f[:status] != "scope"
+          friend = f.symbolize_keys
+          receive = find_receive(friend[:status].classify, friend[:id])
+          if receive.is_a?(Shop)
+            data[:status] = :community
+            data[:circles] = [receive]
+            break
+          else
+            data[:circles] << receive unless receive.nil?
+          end
+        end
       end
-      {status: :circle, circles: receives}
+      data
     end
 
     def is_level(friends, id)
@@ -98,12 +110,14 @@ class Topic < ActiveRecord::Base
     end
 
     private
+    def find_receive(class_name, id)
+      Kernel.const_get(class_name).find_by(id: id)
+    end
+
     def scope_related(_owner, circles)
       wh = circles == :all ?  "" : " and status=1"
       circles = _owner.circles if circles == :all
-
-      owner_type = _owner.class.name
-      owner_id = _owner.id
+      owner_type, owner_id = _owner.class.name, _owner.id
       #获取圈子的好友
       user_ids = circles.includes(:friends).map{|c| c.friends.map{|f| f.user_id} }.flatten
       #获取与我相关的贴,去除不是我好友的贴

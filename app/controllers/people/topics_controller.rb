@@ -4,6 +4,8 @@ class People::TopicsController < People::BaseController
 
   def create
     opts = max_level(params[:topic].delete(:friends))
+    params[:topic].delete(:topic_category_id) unless opts[:status] == :community
+
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
@@ -23,8 +25,10 @@ class People::TopicsController < People::BaseController
   end
 
   def index
-    @topics = Topic.find_user_or_friends(current_user.id, :all)
-    .order("created_at desc")
+    circle_id = params[:circle_id]
+    _topics = circle_id == "community" ?  topic_following : circles(circle_id)
+    @topics = _topics.order("created_at desc").limit(30)
+
     respond_to do |format|
       format.json{ render json: @topics.as_json(:include => :owner) }
     end
@@ -37,7 +41,23 @@ class People::TopicsController < People::BaseController
     end
   end
 
+  def following
+    @circles = current_user.circles
+    respond_to do |format|
+      format.html
+    end
+  end
+
   private
+  def topic_following
+    current_user.following_shop_topics
+  end
+
+  def circles(circle_id)
+    @circles = circle_id == "all" ? :all : Circle.where(id: circle_id)
+    Topic.find_user_or_friends(current_user, @circles)
+  end
+
   def respond_format(json, status = 200)
     respond_to do |format|
       format.json{ render json: json, status: status }
@@ -45,18 +65,17 @@ class People::TopicsController < People::BaseController
   end
 
   def max_level(friends)
-    data = {}
     if Topic.is_level(friends, "puliceity")
       return {status: :puliceity, circles: [current_user]}
     elsif Topic.is_level(friends, "external")
       circles = current_user.circles + current_user.all_friend_circles
-      data = {status: :external, circles: circles}
+      return {status: :external, circles: circles}
     elsif Topic.is_level(friends, "circle")
-      data = {status: :circle, circles: current_user.circles}
+      receive = Topic.receive_other(friends)
+      receive[:circles] = current_user.circles + receive[:circles]
+      return receive
     else
-      data = Topic.receive_other(friends)
+      return Topic.receive_other(friends)
     end
-    params[:topic].delete(:topic_category_id)
-    data
   end
 end

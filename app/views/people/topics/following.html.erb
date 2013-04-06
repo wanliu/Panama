@@ -1,0 +1,16 @@
+<% circle_active :community %>
+<% content_for :topic_right do %>
+<div>
+  <div class='title'>关注的卖家</div>
+  <div class='content'>
+    <ul class='friend-list'>
+      <% current_user.followings.shops.each do |s| %>
+        <li><img class="img-polaroid" src="<%=s.follow.photos.icon %>" /><%=s.follow.name %></li>
+      <%end%>
+    </ul>
+  </div>
+</div>
+<% end %>
+<%=render partial: "people/topics/info", locals: {
+  circles: @circles,
+  circle: :community} %>

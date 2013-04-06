@@ -1,3 +1,4 @@
+<% active_section :communities %>
 <% community_active :home  %>
 <div class='row-fluid community-content'>
   <div class='span12 topics-panel'>
@@ -10,16 +11,7 @@
       </div>
       <div class='row-fluid'>
         <div class='topic-panel span9'>
-          <form class='topic-form'>
-            <div>
-              <textarea class='comment' name="content"></textarea>
-            </div>
-            <div class='friend-context'>
-            </div>
-            <div>
-              <input type='button' value='发送' class='btn btn-primary send_topic disabled' />
-            </div>
-          </form>
+          <%= render partial: "people/topics/form" %>
           <div class='topics'>
           </div>
         </div>
@@ -34,35 +26,6 @@
   </div>
 </div>
 
-<template class='template-topic' style='display:none'>
-  <div class='row-fluid topic-panel'>
-    <div class='span1 user-info'>
-      <div>
-        <img class="img-polaroid avatar" />
-      </div>
-      <div class='send_user'>
-      </div>
-    </div>
-    <div class='span11'>
-      <div class='well well-msg topic-comment'>
-        <a class="{{status}} status">{{status_name}}</a>
-        <abbr class='timeago topic_date' title='{{created_at}}'></abbr>
-        <span class='user_panel'></span>
-        {{#receive_shop_name}}
-        <span clas='middle-line'>-</span>
-        <a href='/shops/{{receive_shop_name}}'>{{receive_shop_name}}</a>
-        {{/receive_shop_name}}
-
-        {{#topic_category_name}}
-        ({{topic_category_name}})
-        {{/topic_category_name}}
-        <hr class='line' />
-        {{content}}
-      </div>
-    </div>
-  </div>
-</template>
-
 <% default_value = circle.is_a?(Circle) ? circle.name : circle %>
 <% circle_id = circle.is_a?(Circle) ? circle.id : circle %>
 
@@ -70,34 +33,48 @@
   require([
     "jquery",
     "lib/chose-friend",
-    "people/topic",
+    "topic",
+    "shop_category",
     "lib/hogan"
-  ], function($, ChoseFriend, TopicListView){
+  ], function($, ChoseFriend, TopicListView, ShopCategoryViewList){
+
+    var shop_category = new ShopCategoryViewList({el: $(".topic_category")})
 
     $(".friend-context").choseFriend({
-      data: "<%=person_circles_path(@people) %>",
-      template: "<a><i class='icon-globe'></i>{{name}}({{friend_count}})</a>",
-      <% if circle.is_a?(Circle) %>
-      value: "name",
-      <% end %>
-      default_value: "<%=default_value %>",
+      circle: {
+        data: "<%=person_circles_path(current_user) %>",
+        <% if circle.is_a?(Circle) %>
+        value: "name",
+        <% end %>
+        default_value: "<%=default_value %>"
+      },
+
+      followings: {
+        data: "<%=shops_person_followings_path(current_user) %>"
+      },
+
       selector: function(data, li){
-        if(data.value == "puliceity"){
-          $(".topic_category").show()
+        if(typeof data.value == "object"){
+          if(data.value._status == "shop"){
+            shop_category.add(data.value)
+          }
         }
       },
+
       close_item: function(data, li){
-        if(data.value == "puliceity"){
-          $(".topic_category").hide()
+        if(typeof data.value == "object"){
+          if(data.value._status == "shop"){
+            shop_category.hide()
+          }
         }
       }
     })
 
     new TopicListView({
       el: $(".topic-panel"),
-      login: "<%=@people.login %>",
-      template: Hogan.compile($(".template-topic").remove().html()),
-      circle_id: "<%=circle_id %>"
+      template: Hogan.compile("<%=j render partial: 'topics/topic'  %>"),
+      circle_id: "<%=circle_id %>",
+      remote_url: "<%=person_topics_path(current_user) %>"
     })
   })
 

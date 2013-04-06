@@ -3,6 +3,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def create
     opts = max_level(params[:topic].delete(:friends))
+    params[:topic].delete(:topic_category_id) unless opts[:status] == :community
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
@@ -22,7 +23,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
   end
 
   def index
-    _topics = params[:circles]=="puliceity" ? receive_topic : circle_topics
+    _topics = params[:circle_id]=="community" ? receive_topic : circle_topics
     @topics = _topics.limit(30).order("created_at desc")
     respond_to do |format|
       format.json{ render json: @topics.as_json(:include => :owner) }
@@ -58,7 +59,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   private
   def receive_topic
-    current_shop.topic_receives.joins(:topic)
+    Topic.where(:id => current_shop.topic_receives.map{|t| t.topic_id})
   end
 
   def circle_topics
@@ -77,19 +78,18 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
   end
 
   def max_level(friends)
-    data = {}
     if Topic.is_level(friends, "puliceity")
-      return {status: :puliceity, circles: [current_shop]}
+      return {status: :community, circles: [current_shop]}
     elsif Topic.is_level(friends, "external")
       circles = current_shop.circles + current_shop.all_friend_circles
-      data = {status: :external, circles: circles}
+      return {status: :external, circles: circles}
     elsif Topic.is_level(friends, "circle")
-      data = {status: :circle, circles: current_shop.circles}
+      recievs = Topic.receive_other(friends)
+      recievs[:circles] = current_shop.circles + recievs[:circles]
+      return recievs
     else
-      data = Topic.receive_other(friends)
+      return Topic.receive_other(friends)
     end
-    params[:topic].delete(:topic_category_id)
-    data
   end
 
 end

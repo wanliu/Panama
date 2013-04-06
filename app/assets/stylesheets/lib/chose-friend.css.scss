@@ -4,7 +4,7 @@
     height: 100%;
     width: 300px;
 
-    input{
+    input.user{
       border: 0;
       margin: 0;
       width: 150px;
@@ -31,6 +31,14 @@
         }
       }
     }
+
+    input.replace, input.cancel{
+      width: 45px;
+    }
+
+    input.replace{
+      margin: 0px 10px;
+    }
   }
 
    .user-shop-panel, .chose-drop-down{
@@ -51,9 +59,13 @@
       display: none;
     }
 
+    li.divider:last-child{
+      display: none;
+    }
+
     li.divider{
       height: 1px;
-      margin: 9px 1px;
+      margin: 5px 0px;
       overflow: hidden;
       background-color: #e5e5e5;
       border-bottom: 1px solid #ffffff;
@@ -75,6 +87,11 @@
       a:hover{
         background: rgba(0,0,0,.2);
         color: #ffffff;
+      }
+
+      img.avatar{
+        width: 20px;
+        height: 20px;
       }
     }
   }

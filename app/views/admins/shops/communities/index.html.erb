@@ -28,7 +28,7 @@
   <div class='title'>最近加入好友</div>
   <div class='content'>
     <ul class='friend-list'>
-      <% recently_friends.each do |f| %>
+      <% shop_recently_friends.each do |f| %>
       <li class='friend'>
         <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
       </li>
