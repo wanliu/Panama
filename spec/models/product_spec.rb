@@ -169,7 +169,7 @@ describe Product, "产品模型" do
         let(:weight) { Property.where(:name => 'weight').first }
         let(:clothes_type) { Property.where(:name => 'clothes_type').first }
 
-        let(:pants) { ProductPropertyValue.first }
+        let(:pants) { PropertyValue.first }
 
         # properties 将包含 产品的属性表 Property
         # Property
@@ -329,7 +329,7 @@ describe Product, "产品模型" do
                     apple.attach_properties!
                     apple.properties_values.size.should == 0
                     apple.save
-                    ProductPropertyValue.all.size.should eql(3)
+                    PropertyValue.all.size.should eql(3)
                 end
             end
         end
