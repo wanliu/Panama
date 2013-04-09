@@ -3,6 +3,7 @@ require 'panama_core'
 class Product < ActiveRecord::Base
   include Graphical::Display
   include PanamaCore::DynamicProperty
+  include PanamaCore::SynchronousProperty
   include PanamaCore::InventoryCache
 
   attr_accessible :description,
@@ -28,8 +29,41 @@ class Product < ActiveRecord::Base
   has_and_belongs_to_many :attachments, :class_name => "Attachment"               # 图片相册
   has_many   :comments, :as => :targeable                                         # 评论
   has_many   :contents, :as => :contentable                                       # 产品内容配置组
-
   has_many   :price_options, :as => :optionable, :autosave => true
+  has_and_belongs_to_many :properties do
+    def [](name)
+      if name.is_a?(String) || name.is_a?(Symbol)
+        select { |property| property.name == name.to_s }.first
+      else
+        super
+      end
+    end
+  end
+  has_and_belongs_to_many :property_items,
+           :select => ['property_items.*',
+                       'products_property_items.id as products_property_items_id',
+                       'products_property_items.title'],
+           :autosave => true do
+    def [](name)
+      property = @association.owner.properties[name]
+      select { |pi| pi.property.id == property.id }
+    end
+
+    def set_value_title(value, title)
+      val = select { |pi| pi.value == value }.first
+      val.title = title
+    end
+  end
+  has_many :properties_values,
+           :class_name => "PropertyValue",
+           :as         => :valuable,
+           :autosave   => true,
+           :dependent  => :delete_all do
+    def [](property_name)
+      property = @association.owner.properties[property_name]
+      select { |pv| pv.property.id == property.id }.first
+    end
+  end
 
   def prices_definition
     price_options.map do |po|
@@ -88,6 +122,18 @@ class Product < ActiveRecord::Base
 
   # delegate :properties, :to => :category, :allow_nil => true
 
+  after_attach_properties do
+    price_options.delete_if { true }
+
+    category.price_options.each do |po|
+      price_options.target << po
+    end
+  end
+
+  before_save do
+    replace_relations price_options
+  end
+
   def default_photo
     default_attachment ? default_attachment.file : Attachment.new.file
   end
@@ -134,5 +180,4 @@ class Product < ActiveRecord::Base
   def subtractive_items(items, names)
     items.reject { |item| names.select { |name| name == item.value }.first }
   end
-
 end

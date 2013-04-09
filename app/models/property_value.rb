@@ -1,8 +1,9 @@
-class ProductPropertyValue < ActiveRecord::Base
-  attr_accessible :product_id, :product, :property_id
+class PropertyValue < ActiveRecord::Base
+  attr_accessible :valuable, :valuable_type, :valuable_id, :property_id
 
   belongs_to :property
-  belongs_to :product
+  belongs_to :valuable, :polymorphic => true
+  # belongs_to :product
   # belongs_to :item, :class_name => "PropertyItem", :foreign_key => "svalue"
 
   def value
@@ -31,7 +32,7 @@ class ProductPropertyValue < ActiveRecord::Base
     when /datetime/
       send(:dtvalue=, other)
     when /set/
-      send(:svalue=, other) if product.property_items.select { |item| item.value == other }.size > 0
+      send(:svalue=, other) if valuable.property_items.select { |item| item.value == other }.size > 0
     end
   end
 end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe ProductPropertyValue do
+describe PropertyValue do
 
   let (:pepsi) { Shop.where(name: 'Pepsi').first }
   let (:apple) { Product.first }
