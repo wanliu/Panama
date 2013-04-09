@@ -30,7 +30,13 @@ class Product < ActiveRecord::Base
   has_many   :contents, :as => :contentable                                       # 产品内容配置组
 
   has_many   :price_options, :as => :optionable, :autosave => true
-  has_many   :prices_definition, :through => :price_options, :source => :property # 价格方案
+
+  def prices_definition
+    price_options.map do |po|
+      po.property
+    end
+  end
+
   # prices[:colour => "red", :sizes => "S"]
   # =>
   has_many :prices, :class_name => "ProductPrice", :autosave => true do
@@ -91,6 +97,10 @@ class Product < ActiveRecord::Base
     temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank?
     attachments.each{| atta | temp << atta.get_attributes }
     temp
+  end
+
+  def to_item
+    prices
   end
 
   def update_prices_option(attributes)

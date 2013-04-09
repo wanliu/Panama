@@ -8,9 +8,13 @@ module PanamaCore
       define_callbacks :category_attribute_changed
       set_callback :category_attribute_changed, :after, :after_category_changed
 
-      has_and_belongs_to_many :properties, :autosave => true do
+      has_and_belongs_to_many :properties do
         def [](name)
-          select { |property| property.name == name.to_s }.first
+          if name.is_a?(String) || name.is_a?(Symbol)
+            select { |property| property.name == name.to_s }.first
+          else
+            super
+          end
         end
       end
 
@@ -25,7 +29,7 @@ module PanamaCore
         end
 
         def set_value_title(value, title)
-          val = select { |pi| pi.value = value }.first
+          val = select { |pi| pi.value == value }.first
           val.title = title
         end
       end
@@ -44,6 +48,21 @@ module PanamaCore
         delegate_property_setup
       end
 
+      before_save do
+        replace_relations properties
+        replace_relations property_items
+        replace_relations price_options
+      end
+    end
+
+    def replace_relations(relation)
+        original = relation.reset
+        deleteions = original - relation
+        relation.delete(deleteions)
+        additionas = relation - original
+        additionas.each do |prop|
+          relation << prop
+        end
     end
 
     def write_attribute(attr_name, value)
@@ -60,25 +79,44 @@ module PanamaCore
 
     def attach_properties!
       unless category.nil?
-        properties.target.clear if properties.size > 0
-        properties_values.target.clear if properties_values.size > 0
-        property_items.target.clear if property_items.size > 0
+        properties.delete_if { true } if properties.size > 0
+        properties_values.delete_if { true } if properties_values.size > 0
+        property_items.delete_if { true } if property_items.size > 0
 
-        price_options.target.clear
-        prices_definition.target.clear
-        category.properties.each do |property|
-          properties.target << property
-          property_items.target.concat property.items
+        price_options.delete_if { true }
+        # prices_definition.delete_if { true }
+
+
+        category.properties.each do |prop|
+          properties.target << prop
+          # properties.build :id            => prop.id,
+          #                  :name          => prop.name,
+          #                  :title         => prop.title,
+          #                  :property_type => prop.property_type
+
+          # properties.target << property
+          property_items.target.concat prop.items
+          # prop.items.each do |pi|
+          #   property_items.build :id          => pi.id,
+          #                        :value       => pi.value,
+          #                        :property_id => pi.property_id
+          # end
         end
+
         category.price_options.each do |po|
-          price_options.build :name => po.name, :title => po.title, :property_id => po.property_id
-          prices_definition.target << po.property unless po.property.nil?
+          price_options.target << po
+          # prices_definition.target << po.property
+          # price_options.build :id           => po.id,
+          #                     :name         => po.name,
+          #                     :title        => po.title,
+          #                     :property_id  => po.property_id
         end
 
         delegate_property_setup
         # save
       end
     end
+
 
     def delegate_property_setup
       @delegate_properties ||= []
@@ -103,10 +141,10 @@ module PanamaCore
           pv = product_property_values(name)
           pv.value unless pv.nil?
         end
+
         @delegate_properties << method_name
 
         define_singleton_method("#{method_name}=") do |other|
-
           factory_property name, :product => self do |pv|
             pv.property_id = property.id
             pv.value = other
@@ -127,13 +165,13 @@ module PanamaCore
 
     def factory_property(name, options = {}, &block)
       method = persisted? ? :create : :build
-      pv = product_property_values(name) || properties_values.send(method, options)
+      pv = product_property_values(name) || properties_values.send(method, options, &block)
       yield pv
     end
 
     def product_property_values(name)
       property = properties.select { |property| property.name == name }.first
-      properties_values.select { |pv| pv.property.id == property.id }.first
+      properties_values.select { |pv| pv.property.id == property.id }.first unless property.nil?
     end
   end
 end
