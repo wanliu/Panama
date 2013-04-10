@@ -1,3 +1,4 @@
+
 .community-content, .followers-content{
 
   .topics-panel{
@@ -100,14 +101,105 @@
 
     .topic-comments{
       margin-top: 15px;
+    }
+  }
+}
 
-      .add_comment{
-        border: 1px solid #DDD;
-        line-height: 25px;
-        font-size: 9px;
-        width: 300px;
-        padding-left: 10px;
-        color: gray;
+.community-people{
+
+  .close-label{
+    width: 12px;
+    height: 11px;
+    font-size: 1px;
+    background: url("/assets/select.png") right top no-repeat;
+    display: block;
+  }
+
+  .search_user{
+    display: inline-block;
+
+    input{
+      margin-bottom: 0px;
+      width: 120px;
+    }
+  }
+
+  .circle_user_panel{
+    margin-top: 15px;
+
+    .circle_friend{
+      display: none;
+
+      .you_user{
+        position: relative;
+      }
+
+      .login, .name{
+        margin-left: 10px;
+      }
+
+      .remove_you_user{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+      }
+    }
+
+    .search_user{
+
+      .user{
+        margin-left: 10px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .circle-panel{
+
+    .title{
+      margin-bottom: 10px;
+
+      h4{
+        display: inline;
+      }
+
+      .add-circle{
+        float: right;
+      }
+    }
+
+    .circle-list{
+
+      .circle{
+        float: left;
+        margin-right: 20px;
+        width: 215px;
+        height: 180px;
+        position: relative;
+
+        .remove_circle{
+          position: absolute;
+          top: 5px;
+          right: 5px;
+        }
+
+        hr{
+          margin: 5px 0px;
+        }
+
+        .user-list{
+          color: black;
+
+          .user{
+            margin-right: 10px;
+            margin-bottom: 10px;
+
+            .remove_user{
+              margin-left: 10px;
+              float: right;
+            }
+          }
+        }
       }
     }
   }

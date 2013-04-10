@@ -10,11 +10,15 @@ module ApplicationHelper
   end
 
   def shop_recently_friends
-    current_shop.all_friends.order("created_at desc").limit(8)
+    ids = current_shop.all_friends.order("created_at desc").limit(8)
+    .map{|f| f.user_id}
+    User.where(id: ids)
   end
 
   def user_recently_friends
-    current_user.all_friends.order("created_at desc").limit(8)
+    ids = current_user.all_friends.order("created_at desc").limit(8)
+    .map{|f| f.user_id}
+    User.where(id: ids)
   end
 
   def community_active(name)

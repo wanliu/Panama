@@ -4,4 +4,6 @@ class People::CommunitiesController < People::BaseController
     @circles = @people.circles
   end
 
+  def people
+  end
 end

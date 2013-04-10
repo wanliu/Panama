@@ -1,4 +1,4 @@
-#describe: 个人帖子视图
+
 define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/bootstrap/popover"], ($, Backbone) ->
 
   class Topic extends Backbone.Model

@@ -8,7 +8,7 @@
       <% if friends.count > 0 %>
         <% friends.each do |f| %>
         <li class='friend'>
-          <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+          <img class='img-polaroid' src="<%=f.icon %>" /><%=f.login %>
         </li>
         <% end %>
       <% else %>

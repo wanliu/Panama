@@ -11,6 +11,8 @@ class CircleFriends < ActiveRecord::Base
 
   validates_presence_of :circle
   validates_presence_of :user_id
+  validates_presence_of :user
+
 
   validate :valid_some_user_and_circle?
 

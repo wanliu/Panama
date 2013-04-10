@@ -1,0 +1,71 @@
+<% active_section :communities %>
+<% community_active :people  %>
+<div class='row-fluid community-people'>
+  <div class='span12'>
+    <%=render :partial => "people/base/community_nav" %>
+    <div class='row-fluid'>
+      <div class='span6'>
+        <div class='friends_panel'>
+          <div class='btn-group navs'>
+            <input type='button' class='btn add_you_circle' value='添加您的' />
+            <input type='button' class='btn you_circle_user' value='您圈子中的人' />
+          </div>
+          <div class='search_user' >
+            <input type='text' placeholder='查找用户' />
+          </div>
+          <div class='circle_user_panel'>
+
+          </div>
+        </div>
+      </div>
+      <div class='span6'>
+        <div class='circle-panel'>
+          <div class='title'>
+            <h4>圈子</h4>
+            <input type='button' value='添加圈子' class='btn btn-mini btn-primary add-circle' />
+          </div>
+          <div class='circle-list'></div>
+
+          <div class="modal hide fade add_circle_panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3>添加圈子</h3>
+            </div>
+            <div class="modal-body">
+              <div class="control-group">
+                <label class="control-label">名称</label>
+                <div class="controls">
+                  <input type="text" name="circle[name]" class="circle_name" placeholder="名称">
+                  <span class='error' style='color: red;'></span>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+              <button class="btn btn-primary save-circle">保存</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template class='circle-template' style='display:none'>
+  <span>{{name}}</span>
+  <a class='close-label remove_circle' href="javascript:void(0)">
+  </a>
+  <hr />
+  <div class='user-list'>
+  </div>
+</template>
+<script text='text/javascript'>
+  require(["jquery", "people/community_people", "lib/hogan"], function($, CommunityPeopleView){
+    new CommunityPeopleView({
+      circle_template: Hogan.compile($(".circle-template").remove().html()),
+      login: "<%=current_user.login %>",
+      el: $(".community-people")
+    })
+  })
+</script>
