@@ -5,7 +5,7 @@
     }
   </style>
 <div class='container-fluid category_select' data-select="">
-    <div class='row-fluid search'>
+    <div class='row-fluid search modal-fixed'>
         <form class="form-search span12">
           <div class="input-append span12">
             <input type="text" class="span11 search-query input_search">
@@ -13,7 +13,7 @@
         </form>
     </div>
     <div class="row-fluid">
-        <ul class="nav nav-tabs nav-stacked span3">
+        <ul class="nav nav-tabs nav-stacked span3 modal-fixed">
             <li class="active category_roots">
             </li>
         </ul>
@@ -22,7 +22,7 @@
                 <strong>没有搜索结果，试着换一个搜索词吧！</strong> 
             </div>
         </div>
-        <div class="sub_category span2">
+        <div class="sub_category span2 modal-fixed">
             <div class='shadow'></div>
             <div class="category_buttons">
 
@@ -59,6 +59,16 @@
             shop_name: "<%= current_shop.name %>",
             el: $(".container-fluid.category_select")
         });
+        
+        setModalSize(1);
+        save_size(1);
+        // fix_modal(widths_max, heights_max, offsets_max);
+
+        setModalSize(0.75);
+        save_size(0.75);
+        fix_modal(widths, heights, offsets);
+        $(".category_list").css('position', "relative");
+        $(".category_list").css('top', 0);
 
         category_name = $(button).text();
         if (category_name != "Noselected") {
