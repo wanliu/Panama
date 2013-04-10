@@ -37,7 +37,6 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     @categories = current_shop.topic_categories
     respond_to do |format|
       format.html
-      format.json{ render json: @topics }
     end
   end
 

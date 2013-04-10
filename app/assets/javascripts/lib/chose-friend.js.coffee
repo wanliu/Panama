@@ -58,7 +58,7 @@ define ["jquery",
         $.get(url, {}, callback, "json")
 
       all_circle_data: (data) ->
-        @render_line_li(@circle_class) if data.length>0
+        @render_line_li(@circle_class) if data.length > 0
         $.each data, (i, val) =>
           @add_circle_one(val)
 
@@ -71,7 +71,7 @@ define ["jquery",
         @load_data(li[0], $.extend(val, {_status: "circle"}))
 
       all_following_data: (data) ->
-        @render_line_li(@followings_class) if data.length>0
+        @render_line_li(@followings_class) if data.length > 0
         $.each data, (i, val) =>
           @add_following_one(val)
 
@@ -121,7 +121,7 @@ define ["jquery",
           if @results.hasOwnProperty(search_val)
             @all_result @get_result(search_val)
           else
-            $.get "/search/users", {search_val: search_val, limit: 15}, (data) =>
+            $.get "/search/users", {q: search_val, limit: 15}, (data) =>
               @all_result(data)
               @cap_result search_val, data
         else
@@ -144,7 +144,7 @@ define ["jquery",
 
       add_user: (model) ->
         unless @find_user_id(model.id)
-          li = @add_el(model.icon, model.login)
+          li = @add_el(model.icon_url, model.login)
           @set_data(li[0], $.extend({}, model, {_status: "user", value: model.login}))
 
       set_data: (li, data) ->
@@ -200,8 +200,8 @@ define ["jquery",
           init_template: @options.init_template
         )
         @load_init_data()
-        @drop_down.fetch_circle($.proxy(@load_default_value, @))
-        @drop_down.fetch_following()
+        @drop_down.fetch_circle()
+        @drop_down.fetch_following($.proxy(@load_default_value, @))
 
         @chose_view = new ChoseUser(
           input: @options.input,

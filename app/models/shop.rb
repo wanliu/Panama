@@ -48,6 +48,13 @@ class Shop < ActiveRecord::Base
       :owner_id => user_ids)
   end
 
+  def as_json(*args)
+    attribute = super *args
+    attribute["icon_url"] = icon_url
+
+    attribute
+  end
+
   #获取某个圈子好友
   def find_friend_by_circle(circle_id = nil)
     _circles = circle_id.nil? ? circles : circles.where(:id => circle_id)

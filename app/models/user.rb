@@ -50,6 +50,14 @@ class User < ActiveRecord::Base
     Topic.community.where(:id => topic_ids)
   end
 
+  def as_json(*args)
+    attribute = super *args
+    attribute["icon_url"] = icon
+    attribute["avatar_url"] = avatar
+
+    attribute
+  end
+
   def icon
     photos.icon
   end
