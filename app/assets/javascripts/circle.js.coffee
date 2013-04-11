@@ -122,7 +122,7 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/modal"], ($, Backbon
   class CircleView extends Backbone.View
     className: "alert alert-info circle"
     events: {
-      "click .remove_circle" : "delete"
+      "click .remove_circle" : "delete_circle"
     }
     initialize: (options) ->
       _.extend(@, options)
@@ -144,14 +144,14 @@ define ["jquery", "backbone", "exports", "twitter/bootstrap/modal"], ($, Backbon
     render: () ->
       @$el
 
-    delete: () ->
+    delete_circle: () ->
       if confirm("是否确认删除#{@model.get('name')}圈子?")
         @model.destroy()
         @$el.remove()
 
     join_friend: (event, ui) ->
       user_id = $(ui.helper).attr("data-value-id")
-      circle = new Circle({id: @model.id}, @login)
+      circle = new Circle({id: @model.id}, @remote_url)
       circle.join_friend user_id,
         (model, data) =>
           @circle_user_list.user_list.add(data)
