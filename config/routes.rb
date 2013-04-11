@@ -149,9 +149,22 @@ Panama::Application.routes.draw do
         end
       end
 
-      resources :circles, :controller => "shops/circles"
+      resources :circles, :controller => "shops/circles" do
+        collection do
+          get :friends
+          get :all_friends
+          get :followers
+          post "/:id/join_friend/:user_id", :to => "shops/circles#join_friend"
+          delete "/:id/remove_friend/:user_id", :to => "shops/circles#remove_friend"
+          delete "circles_remove_friend/:user_id", :to => "shops/circles#circles_remove_friend"
+        end
+      end
 
-      resources :communities, :controller => "shops/communities"
+      resources :communities, :controller => "shops/communities" do
+        collection do
+          get :people
+        end
+      end
 
       resources :transactions, :controller => "shops/transactions"
 

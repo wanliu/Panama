@@ -105,8 +105,7 @@
   }
 }
 
-.community-people{
-
+.shop_community_people{
   .close-label{
     width: 12px;
     height: 11px;
@@ -115,41 +114,23 @@
     display: block;
   }
 
-  .search_user{
-    display: inline-block;
-
-    input{
-      margin-bottom: 0px;
-      width: 120px;
-    }
-  }
-
-  .circle_user_panel{
-    margin-top: 15px;
-
-    .circle_friend{
-      display: none;
-
-      .you_user{
-        position: relative;
-      }
-
-      .login, .name{
-        margin-left: 10px;
-      }
-
-      .remove_you_user{
-        position: absolute;
-        top: 0px;
-        right: 0px;
-      }
-    }
-
+  .friends_panel{
     .search_user{
+      display: inline-block;
 
-      .user{
+      input{
+        margin-bottom: 0px;
+        width: 120px
+      }
+    }
+
+    .circle_user_panel{
+      .circle_friend{
+        display: none;
+      }
+
+      .login{
         margin-left: 10px;
-        margin-bottom: 10px;
       }
     }
   }
@@ -173,7 +154,7 @@
       .circle{
         float: left;
         margin-right: 20px;
-        width: 215px;
+        width: 185px;
         height: 180px;
         position: relative;
 
