@@ -1,2 +1,6 @@
 <hr>
-<h2>NO Sale Options</h2>
+<% f = value_for(:form) %>
+
+<% @item.prices_definition.each do |prop| %>
+    <%= property_selector(f, prop.name) %>
+<% end %>

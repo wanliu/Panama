@@ -171,9 +171,20 @@ module Admins::Shops::ProductsHelper
         content_tag :div, :price_attrib => "prices_#{field}" do
             form.input field,
                        :as => :check_boxes,
-                       :collection => @product.properties[field].items,
+                       :collection => @product.properties[field].try(:items) || [],
                        :value_method => :value,
                        :checked => @product.property_items[field].map { |item| item.value }
+
+        end
+    end
+
+    def property_selector(form, field)
+        field = field.to_sym
+        content_tag :div, :price_attrib => "prices_#{field}" do
+            form.input field,
+                       :as => :radio_buttons,
+                       :collection => @item.properties[field].try(:items),
+                       :value_method => :value
 
         end
     end

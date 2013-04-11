@@ -118,3 +118,18 @@ a.style-items {
 a.active.style-items {
     border: 1px solid red;
 }
+
+.control-group.radio_buttons {
+    .radio {
+        display: inline-block;
+        padding-left: 0px;
+        padding-right: 5px;
+        padding-top: 5px;
+        margin-bottom: 0;
+        vertical-align: middle;
+        input[type="radio"] {
+            margin-left: 0px;
+            margin-right: 5px;
+        }
+    }
+}

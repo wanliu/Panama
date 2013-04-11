@@ -69,8 +69,11 @@ module PanamaCore
     def setup_dynamic_properties
       # debugger
       # self.class.reflect_on_association
-
-      self
+      #
+      _p_relation = dynamic_configuration[:properties_relation]
+      callback_fullname = "after_add_for_#{_p_relation}"
+      callback_methods = self.class.send(callback_fullname)
+      callback_methods << :add_property unless callback_methods.include?(:add_property)
     end
 
     def write_attribute(attr_name, value)
@@ -138,7 +141,7 @@ module PanamaCore
 
     def product_property_values(name)
       property = relation_properties.select { |property| property.name == name }.first
-      relation_values.select { |pv| pv.property.id == property.id }.first unless property.nil?
+      relation_values.select { |pv| pv.property_id == property.id }.first unless property.nil?
     end
 
     def relation_properties
@@ -151,6 +154,27 @@ module PanamaCore
 
     def relation_items
       send dynamic_configuration[:property_items_relation]
+    end
+
+    def add_property(property)
+      property.items.each do |item|
+        relation_items << item
+      end
+      # relation_properties << property
+    end
+
+    def remove_property(property)
+
+    end
+
+    def replace_relations(relation)
+      original = relation.reset
+      deleteions = original - relation
+      relation.delete(deleteions)
+      additionas = relation - original
+      additionas.each do |prop|
+        relation << prop
+      end
     end
   end
 end

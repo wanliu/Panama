@@ -48,7 +48,6 @@ module PanamaCore
         relation_values.delete_if { true } if relation_values.size > 0
         relation_items.delete_if { true } if relation_items.size > 0
 
-
         category.properties.each do |prop|
           relation_properties.target << prop
 
@@ -63,16 +62,6 @@ module PanamaCore
       end
     end
 
-    def replace_relations(relation)
-      original = relation.reset
-      deleteions = original - relation
-      relation.delete(deleteions)
-      additionas = relation - original
-      additionas.each do |prop|
-        relation << prop
-      end
-    end
-
     protected
 
     def after_attach_properties_callback
@@ -80,6 +69,5 @@ module PanamaCore
         instance_exec &callback if callback.is_a?(Proc)
       end
     end
-
   end
 end
