@@ -75,7 +75,11 @@ module ContentsHelper
   end
 
   def value_for(name)
-    view_context.instance_exec &values[name] if values[name].is_a?(Proc)
+    if in_view?
+      instance_exec &values[name] if values[name].is_a?(Proc)
+    else
+      view_context.instance_exec &values[name] if values[name].is_a?(Proc)
+    end
   end
 
   def register_value(name, &block)

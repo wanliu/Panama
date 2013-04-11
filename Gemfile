@@ -1,3 +1,4 @@
+# encoding: utf-8
 source 'https://rubygems.org'
 # source 'http://ruby.taobao.org'
 
@@ -132,6 +133,7 @@ gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'
 gem 'passenger'
+# 默认值
 gem "default_value_for"
 gem 'cancan'
 gem 'rails-setting',:github => "huxinghai1988/rails-setting"
