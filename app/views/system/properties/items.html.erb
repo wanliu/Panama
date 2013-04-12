@@ -8,3 +8,12 @@
   <% end %>
   <%= f.buttons %>
 <% end %>
+<SCRIPT type='text/javascript'>
+	function items_delete(opt){
+		$.get("/propertie_item/"+opt,
+    	    {p: ""},
+    	    function(data){
+    	    	if(data.success){ window.location.reload() }
+    	    });
+	}
+</SCRIPT>

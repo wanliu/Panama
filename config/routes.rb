@@ -188,6 +188,8 @@ Panama::Application.routes.draw do
   post 'vfs/edit_file', :to => 'vfs#edit_file'
   post 'vfs/create_file', :to => 'vfs#create_file'
 
+  match 'propertie_item/:id', :to => 'propertie_item#destroy'
+
   root :to => 'activities#index'
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
