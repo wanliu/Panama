@@ -169,7 +169,6 @@ class Product < ActiveRecord::Base
   end
 
   def update_prices(attributes)
-    debugger
     attributes.each do |i, attrib|
       price = attrib.delete("price")
       unless price.blank?
