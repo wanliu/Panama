@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    @product_content = PanamaCore::Contents.fetch_for(@product, :show)
     @sale_options_content = PanamaCore::Contents.fetch_for(@product, :sale_options)
     @item = ProductItem.new(:product => @product,
                             :title => @product.name,

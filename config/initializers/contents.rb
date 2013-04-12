@@ -5,17 +5,19 @@ PanamaCore::Contents.config do
   root '/panama'
   template 'templates/:action.html.erb'
 
+  default_action :show
 
 
   category do
     default_additional_properties
-
     default_sale_options
+    default_product_show
 
     each do
       template 'templates/category_:id,_:action.html.erb'
       additional_properties :transfer => :default_additional_properties
       sale_options :transfer => :default_sale_options
+      product_show :transfer => :default_product_show
     end
   end
 
@@ -32,6 +34,7 @@ PanamaCore::Contents.config do
     # root '/panama'
 
     each do
+      show         :transfer => 'category#product_show', :transfer_method => :category
       sale_options :transfer => 'category#sale_options', :transfer_method => :category
     end
   end
