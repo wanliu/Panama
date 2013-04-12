@@ -27,8 +27,12 @@ Panama::Application.routes.draw do
     resources :transactions, :controller => "people/transactions" do
       member do
         post "event/:event", :to => "people/transactions#event", :as => :trigger_event
+      end
+
+      collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
       end
+
     end
 
     resources :product_comments, :controller => "people/product_comments" do
@@ -52,13 +56,12 @@ Panama::Application.routes.draw do
 
     resources :cart, :controller => "people/cart"
 
-    member do
-      post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
-      put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
-      post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
-      # post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
-    end
   end
+
+
+
+  match "mycart", :to => "people/cart#add_to_cart", :as => :add_to_cart, :via => [:post, :put]
+  match "mycart/clear_list",:to => "people/cart#clear_list", :as => :clear_cart_list, :via => :post
 
   match '/system/logout', :to => 'system_sessions#destroy'
 

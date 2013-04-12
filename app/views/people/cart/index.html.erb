@@ -25,7 +25,7 @@
 <%= paginate @items %>
 <% if can? :batch_create, OrderTransaction %>
 <%= button_to "生成订单",
-			  batch_create_person_path(@people.login),
+			  batch_create_person_transactions_path(@people.login),
 			  :method => :post,
 			  :remote => true ,
 			  :class => "btn btn-primary btn-large" %>

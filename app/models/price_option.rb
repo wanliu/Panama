@@ -1,6 +1,7 @@
 class PriceOption < ActiveRecord::Base
   belongs_to :property
-  attr_accessible :id, :name, :title, :property_id, :property
+  belongs_to :optionable, :polymorphic => true
+  attr_accessible :id, :name, :title, :property_id, :property, :optionable
   #
   #
   def title

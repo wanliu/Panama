@@ -9,8 +9,7 @@ describe People::CartController do
 			:amount => 11,
 			:price => 11,
 			:total =>  111,
-			:product_id => '1',
-			:cart_id => '1'
+			:product_id => '10001',
 		}
 	end
 
@@ -34,7 +33,7 @@ describe People::CartController do
 
 		describe "post 'add_to_cart' 购物车  增加" do
 			it "add cart product_item" do
-				post 'add_to_cart', form_params(product_item).merge({:id => ""}), get_session
+				post 'add_to_cart', form_params(product_item), get_session
 				item = product_item
 				assigns(:item).total.should eq((item[:amount] * item[:price]))
 			end

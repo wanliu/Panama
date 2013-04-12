@@ -35,13 +35,18 @@ describe PanamaCore::DynamicProperty do
     end
 
     it "同步 category price_options" do
-      @apple.price_options.should eq(@apple.category.price_options)
+      price_option = @apple.price_options.first
+      price_option.optionable.should eq @apple
+      price_option.property.should eq @apple.category.price_options.first.property
     end
 
     it "同步 price_options 并保存" do
       @apple.save.should be_true
 
-      Product.first.price_options.should eq(@apple.category.price_options)
+      price_options = Product.first.price_options
+      price_option = Product.first.price_options.first
+      price_option.optionable.should eql Product.first
+      price_option.property.should eql Product.first.category.price_options.first.property
     end
 
     it "同步 category prices_definition" do
