@@ -101,6 +101,60 @@
 
     .topic-comments{
       margin-top: 15px;
+
+      .more_comment, .hide_more_comment{
+        float:right;
+      }
+
+      .hide_more_comment{
+        display: none;
+      }
+
+      .topic_nav{
+        text-align: right;
+      }
+
+      .comment_panel{
+        display: none;
+        margin-top: 5px;
+      }
+
+      .comments{
+        margin-top: 10px;
+      }
+
+      .comment_panel, .comments{
+
+        .notice{
+          text-align: center;
+        }
+
+        .comment{
+          margin-top: 20px;
+        }
+
+        .comment:first-child{
+          margin-top: 0px;
+        };
+
+
+        textarea{
+          width: 460px;
+          height: 75px;
+        }
+
+        .user_login{
+          text-align: center;
+        }
+
+        .user_avatar{
+          text-align: center;
+          img{
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
     }
   }
 }

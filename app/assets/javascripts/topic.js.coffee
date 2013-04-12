@@ -1,5 +1,7 @@
-
-define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/bootstrap/popover"], ($, Backbone) ->
+#describe: 社交帖子
+define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip",
+"twitter/bootstrap/popover"],
+($, Backbone, TopicCommentView) ->
 
   class Topic extends Backbone.Model
     seturl: (url) ->
@@ -27,11 +29,20 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
 
     initialize: (options) ->
       _.extend(@, options)
+
       @$el = $(@el)
       @$el.html(@template.render(@model.toJSON()))
+
+      new TopicCommentView(
+        el: @$(".topic-comments"),
+        topic: @model,
+        current_user: @current_user
+      )
+
       @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
       @$("abbr.timeago").timeago()
       @$(".send_user").html(@find_owner())
+
       @puliceity_hide_status()
       @switch_style()
 
@@ -157,7 +168,8 @@ define ["jquery","backbone","timeago","twitter/bootstrap/tooltip","twitter/boots
       model.seturl @remote_url
       topic_view = new TopicView(
         model: model,
-        template: @template
+        template: @template,
+        current_user: @current_user
       )
       topic_view.render()
 

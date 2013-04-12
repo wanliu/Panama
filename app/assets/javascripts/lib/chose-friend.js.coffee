@@ -1,9 +1,6 @@
 #describe: 选择圈子与范围
 
-define ["jquery",
-  "twitter/bootstrap/tooltip",
-  "twitter/bootstrap/popover"
-],($) ->
+define ["jquery", "twitter/bootstrap/tooltip", "twitter/bootstrap/popover"],($) ->
     class ChoseDropDown
       el: $("<div class='chose-drop-down' />")
       ul_el: $("<ul class='chose-friend-menu' />")
@@ -97,7 +94,6 @@ define ["jquery",
 
       load_data: (li, data) ->
         $.data li, "data", data
-
 
     class ChoseUser
       ul_el: $("<ul class='user-shop-list' />")

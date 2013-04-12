@@ -20,6 +20,7 @@ class Topic < ActiveRecord::Base
   belongs_to :category, class_name: "TopicCategory", foreign_key: :topic_category_id
 
   has_many :receives, class_name: "TopicReceive", dependent: :destroy
+  has_many :comments, as: :targeable
 
   validates :content, :presence => true
 
