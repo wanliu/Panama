@@ -20,37 +20,12 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def new
-    #模拟数据库对象的属性操作
-    # Hash.class_eval do
-    #   ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
-    #     define_method method do
-    #       self[method]
-    #     end
-    #   end
-    # end
-
     @product = Product.new
     form_builder(@product)
     @category_root = Category.root
     @shops_category_root = current_shop.shops_category
     @category = @product.build_category(:name => 'No Selected')
     @content = additional_properties_content(@category)
-    #模拟数据库对象
-    # def @product.styles
-    #   [
-    #     {'name' => 'colours', 'items' =>
-    #       [ {value: '#FFB6C1', title: '浅粉红'}, {value: '#FFC0CB', title: '粉红'},
-    #         {value: '#7B68EE', title: '中板岩蓝'}, {value: '#00FA9A', title: '中春绿'}
-    #       ]
-    #     },
-    #     {'name' => 'sizes', 'items' =>
-    #       [ {title: 'M', value: 'M'}, {title: 'ML', value: 'ML'}, {title: 'L', value: 'L'},
-    #         {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XXL'}, {title: 'XXXL', value: 'XXXL'}
-    #       ]
-    #     }
-    #   ]
-    # end
-
   end
 
   def create

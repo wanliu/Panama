@@ -50,9 +50,10 @@ class ProductItem < ActiveRecord::Base
 
   delegate :photos, :to => :product
   delegate :icon, :header, :avatar, :preview, :to => :photos
+  delegate :price_options, :prices_definition, :prices, :to => :product, :allow_nil => true
+
 
   memories :properties, :properties_values, :property_items
 
-  delegate :price_options, :prices_definition, :to => :product, :allow_nil => true
 
 end

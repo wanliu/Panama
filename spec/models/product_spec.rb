@@ -333,6 +333,19 @@ describe Product, "产品模型" do
                 end
             end
         end
+
+        describe "同步附加属性" do
+            let(:category) { apple.category }
+            let(:sizes) { Property.find(12) }
+            let(:colour) { Property.find(11) }
+
+            it "同步价格方案" do
+                category.price_options.create(:property => sizes)
+                category.price_options.create(:property => colour)
+                apple.attach_properties!
+                apple.prices_definition.should include(sizes, colour)
+            end
+        end
     end
   end
 end

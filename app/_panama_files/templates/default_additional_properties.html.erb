@@ -16,4 +16,4 @@
      <%= property_palette(f, prop.name) %>
 <% end %>
 
-<%= render_prices_table %>
+<%= render_prices_table(@product.prices_definition.map { |prop| prop.name }) %>

@@ -16,6 +16,9 @@ class ProductsController < ApplicationController
     @product.prices_definition.each do |prop|
       @item.properties << prop
     end
+
+    @item.property_items = @product.property_items
+
     @item.delegate_property_setup
   end
 

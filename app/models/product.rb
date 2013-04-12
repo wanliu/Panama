@@ -46,7 +46,7 @@ class Product < ActiveRecord::Base
            :autosave => true do
     def [](name)
       property = @association.owner.properties[name]
-      select { |pi| pi.property.id == property.id }
+      select { |pi| pi.property_id == property.id } unless property.nil?
     end
 
     def set_value_title(value, title)
@@ -61,7 +61,7 @@ class Product < ActiveRecord::Base
            :dependent  => :delete_all do
     def [](property_name)
       property = @association.owner.properties[property_name]
-      select { |pv| pv.property.id == property.id }.first
+      select { |pv| pv.property_id == property.id }.first unless property.nil?
     end
   end
 
@@ -77,9 +77,11 @@ class Product < ActiveRecord::Base
     def [](query_hash)
       owner = @association.owner
       pis = query_hash.map do |k, v|
-        owner.property_items[k].select { |_pi| _pi.value == v }.first
-      end
+        pitems = owner.property_items[k]
+        pitems.select { |_pi| _pi.value == v }.first unless pitems.blank?
+      end || []
 
+      pis -= [nil]
       select { |price| price.items.sort == pis.sort  }.first
 
     end
@@ -101,8 +103,10 @@ class Product < ActiveRecord::Base
     def build_property_items(attributes)
       owner = @association.owner
       pis = attributes.map do |k, v|
-        owner.property_items[k].select { |_pi| _pi.value == v }.first
-      end
+        pitems = owner.property_items[k]
+        pitems.select { |_pi| _pi.value == v }.first unless pitems.blank?
+      end || []
+      pis -= [nil]
     end
   end
 
@@ -126,7 +130,10 @@ class Product < ActiveRecord::Base
     price_options.delete_if { true }
 
     category.price_options.each do |po|
-      price_options.target << po
+      price_options.target << PriceOption.new(:property => po.property,
+                                              :optionable => self,
+                                              :name => po.name,
+                                              :title => po.title)
     end
   end
 
@@ -158,9 +165,11 @@ class Product < ActiveRecord::Base
       additional_ppi.map { |name| property_items << properties[k].items.select { |it| it.value == name }.first }
       subtractive_ppi.map { |ppi| property_items.delete(ppi) }
     end
+    save!
   end
 
   def update_prices(attributes)
+    debugger
     attributes.each do |i, attrib|
       price = attrib.delete("price")
       unless price.blank?
@@ -170,6 +179,7 @@ class Product < ActiveRecord::Base
         price_item.price = price unless price_item.nil?
       end
     end
+    save!
   end
 
 

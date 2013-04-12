@@ -4,3 +4,7 @@
 <% @item.prices_definition.each do |prop| %>
     <%= property_selector(f, prop.name) %>
 <% end %>
+
+<% @item.prices.each do |price| %>
+	<%= price_option_rule(price) %>
+<% end %>

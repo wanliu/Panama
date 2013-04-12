@@ -5,10 +5,10 @@ module CartHelper
       '#',
       :class => 'btn btn-large',
       'add-to-cart' => target,
-      'add-to-action' => add_to_cart_person_path(current_user.login)
+      'add-to-action' => add_to_cart_path(current_user.login)
   end
 
   def cart_clear_list
-    clear_cart_list_person_path(current_user)
+    clear_cart_list_path(current_user)
   end
 end
