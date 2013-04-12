@@ -60,16 +60,6 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :comments, :controller => "people/comments" do
-      collection do
-        post 'activity'
-        post 'product'
-        get 'new_activity'
-        get 'new_product'
-        get "index_activities"
-      end
-    end
-
     resources :cart, :controller => "people/cart"
 
     member do
@@ -83,6 +73,18 @@ Panama::Application.routes.draw do
   match '/system/logout', :to => 'system_sessions#destroy'
 
   # resources :system
+
+  resources :comments do
+    collection do
+      post 'activity'
+      post 'product'
+      post 'topic'
+      get 'new_activity'
+      get 'new_product'
+      get "index_activities"
+      get "count"
+    end
+  end
 
   resources :city
   resources :addresses

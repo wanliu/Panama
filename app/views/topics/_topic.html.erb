@@ -24,19 +24,36 @@
         {{content}}
       <p>
       <div class='topic-comments'>
-        <div>回复:</div>
-        <div style='text-align:center'>暂无回复信息!</div>
-        <div>
-          <button class='btn btn-mini'><i class='icon-edit'></i></button>
-
+        <div>回复:
+          <a href='javascript:void(0)' class='more_comment'></a>
+          <a href='javascript:void(0)' class='hide_more_comment'>隐藏评论</a>
+        </div>
+        <div class='comments'></div>
+        <div class='topic_nav'>
+          <button class='btn btn-mini show_comment'>
+            <i class='icon-edit'></i>
+          </button>
+        </div>
+        <div class="comment_panel">
+          <div class='row-fluid'>
+            <div class='span1'>
+              <div class='user_avatar'></div>
+              <div class='user_login'></div>
+            </div>
+            <div class='span11'>
+              <form class='comment_form'>
+                <div>
+                  <textarea name='content'></textarea>
+                </div>
+                <div>
+                  <input type='submit' value='发布评论' class='btn btn-primary' />
+                  <input type='button' value='取消' class='btn cancel' />
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<script type='text/javascript'>
-  require(["jquery", "backbone"], function($, Backbone){
-    el = $(".topic-panel")
-
-  })
-</script>

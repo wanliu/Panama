@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 .chose-friend{
   .chose-input{
     border: 1px solid #DDD;
@@ -11,6 +13,11 @@
       outline: none;
       padding: 0;
       height: 30px;
+    }
+
+    input.user:focus{
+      outline: none;
+      @include box-shadow(none);
     }
 
     .chose-item-selector{

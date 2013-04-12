@@ -17,6 +17,13 @@ class Comment < ActiveRecord::Base
 
   after_create :notification_user
 
+  def as_json(*args)
+    attrs = super *args
+    attrs["user_login"] = user.login
+    attrs["user_icon_url"] = user.photos.icon
+    attrs
+  end
+
   def notification_user
     users = content_extract_users
     (users - [user]).each do | u |
@@ -45,6 +52,10 @@ class Comment < ActiveRecord::Base
 
   def self.product(args)
     create("Product", args)
+  end
+
+  def self.topic(args)
+    create("Topic", args)
   end
 
   class << self

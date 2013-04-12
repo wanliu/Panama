@@ -79,11 +79,14 @@
     new TopicViewList({
       el: $(".topic-panel"),
       remote_url: "<%=shop_admins_topics_path(current_shop.name) %>",
-      template: Hogan.compile("<%=j render partial: 'topics/topic'  %>"),
-      circle_id: "<%=circle_id %>"
+      template: Hogan.compile("<%=j render partial: 'topics/topic' %>"),
+      circle_id: "<%=circle_id %>",
+      <% unless current_user.nil? %>
+      current_user: {
+        login: "<%=current_user.login %>",
+        icon_url: "<%=current_user.photos.icon %>"}
+      <% end %>
     })
-
-
   })
 </script>
 
