@@ -34,7 +34,7 @@ PanamaCore::Contents.config do
     # root '/panama'
 
     each do
-      show         :transfer => 'category#product_show', :transfer_method => :category
+      show :transfer => 'category#product_show', :transfer_method => :category
       sale_options :transfer => 'category#sale_options', :transfer_method => :category
     end
   end

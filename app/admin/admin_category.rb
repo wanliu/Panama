@@ -83,13 +83,14 @@ ActiveAdmin.register Category do
       contents_config = Rails.application.config.contents
       section = Category.to_s.underscore.to_sym
       panel("Category Contents") do
-        expects = [:name, :parent, :transfer]
+        expects = [:name, :parent, :transfer, :template]
         configs = contents_config[section][:each]
-        contents = (configs.keys - expects).map { |k| ContentConfig.new(:name => configs[k]) }
+        contents = (configs.keys - expects).map { |k| ContentConfig.new(name: configs[k].name) }
         table_for(contents) do
           column :name
-          column :tool do
-            link_to 'create the template', fetch_category_template_system_category_path
+          column :tool do |row|
+            link_to 'create or modify template',
+                    modify_template_system_category_path + "?action_name=#{row.name}"
           end
         end
       end
@@ -126,21 +127,21 @@ ActiveAdmin.register Category do
     category = Category.find(params[:id])
   end
 
-  member_action :fetch_category_template do
+  member_action :modify_template do
     @category = Category.find(params[:id])
+    @action_name = params[:action_name].to_sym
     @content = PanamaCore::Contents.fetch_for(@category,
-                                              :additional_properties,
+                                              @action_name,
                                               :autocreate => true)
     @content.save if @content.new_record?
     @content
   end
 
-  member_action :update_category_template, :method => :put do
+  member_action :update_template, :method => :put do
     root = '/panama'.to_dir
     @category = Category.find(params[:id])
-    # TODO: refactory template
     template_name = params[:template][:name]
-    @template = Template.find(template_name)
+    @template = Template.find(template_name, root)
     @template.data = params[:template][:data]
     redirect_to system_category_path
   end
