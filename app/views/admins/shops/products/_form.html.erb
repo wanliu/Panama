@@ -79,6 +79,58 @@
     var heights_max = new Array();
     var offsets_max = new Array();
 
+    function reset_size(percentage){
+        var resize_x = ($(window).width()*percentage)/widths[0];
+        var resize_y = ($(window).height())/(parseFloat($("#CategoryModal .modal-footer").css("top"))+$("#CategoryModal .modal-footer").outerHeight());
+        if (percentage == 1){
+            $(".modal-fixed").each(function(e,el){
+                widths_max[e] = $(el).width()*resize_x;
+                heights_max[e] = $(el).height()*resize_y;
+                offsets_max[e].left = ($(el).offset().left)*resize_x;
+                offsets_max[e].top = ($(el).offset().top)*resize_y;
+            });
+            offsets_max[offsets_max.length-1].left *=resize_x;
+            offsets_max[offsets_max.length-1].top *=resize_y;
+            fix_modal(widths_max, heights_max, offsets_max);
+
+            $(widths).each(function(e,el){
+                el *= resize_x;
+            });
+            $(heights).each(function(e,el){
+                el *= resize_y;
+            });
+            $(offsets).each(function(e,el){
+                el.left *= resize_x;
+                el.top *= resize_y;
+            });
+        }else{
+            $(".modal-fixed").each(function(e,el){
+                widths[e] = $(el).width()*resize_x;
+                heights[e] = $(el).height()*resize_y;
+                offsets[e].left = ($(el).offset().left)*resize_x;
+                offsets[e].top = ($(el).offset().top)*resize_y;
+            });
+            offsets[offsets.length-1].left *=resize_x;
+            offsets[offsets.length-1].top *=resize_y;
+            fix_modal(widths, heights, offsets);
+
+            $(widths_max).each(function(e,el){
+                el *= resize_x;
+            });
+            $(heights_max).each(function(e,el){
+                el *= resize_y;
+            });
+            $(offsets_max).each(function(e,el){
+                el.left *= resize_x;
+                el.top *= resize_y;
+            });
+        }
+        
+        $("#CategoryModal .modal-body").width($(window).width()*percentage);
+        $("#CategoryModal .modal-header").css("left", "auto");
+        $("#CategoryModal .modal-footer").css("left", "auto");
+    }
+
     function save_size(percentage){
         if (percentage == 1) {
             $(".modal-fixed").each(function(e,el){
@@ -113,18 +165,21 @@
     }
 
     function setModalSize(percentage){
-        browser_width = $(window).width();
         header_height = $("#CategoryModal .modal-header").height();
         footer_height = $("#CategoryModal .modal-footer").height();
 
-        $("#CategoryModal").css("width",browser_width*percentage);
-        $("#CategoryModal").css("margin-left",-(browser_width/2)*percentage);
+        $("#CategoryModal").css("width",$(window).width()*percentage);
+        $("#CategoryModal").css("margin-left",-($(window).width()/2)*percentage);
         $("#CategoryModal").css("height",$(window).height());
         
+        // $("#CategoryModal .modal-body").width($(window).width()*percentage);
         $("#CategoryModal .modal-body").css("min-height",$(window).height()-header_height-footer_height-76);
         $("#CategoryModal .modal-body").css("overflow-y","hidden");
         $("#CategoryModal").css("overflow-y","scroll");
         $("#CategoryModal").css("padding-right",$(window).width()*((1-percentage)/2));
+
+        $(".category_list").css("padding-bottom",$(".modal-footer").outerHeight());
+        $(".category_list").css("padding-top",$(".search").outerHeight());
         
         $("#CategoryModal").css("background","rgba(255,255,255,0)");
         $("#CategoryModal .modal-header").css("background-color","white");
@@ -142,9 +197,12 @@
 
         $("#CategoryModal").on('shown',function(){
             $("body").css("position","fixed");
-            window.onresize = function(){
-                setModalSize($(".modal-resize").attr("modal-size"));
-            };
+            $(window).resize(function(e){
+                percentage = $(".modal-resize").attr("modal-size");
+                setModalSize(percentage);
+                reset_size(percentage);
+                e.preventDefault();
+            });
         });
 
         $("#CategoryModal .save_category").on('click', function(){
