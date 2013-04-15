@@ -6,13 +6,13 @@ module ActsAsStatus
 
   module ClassMethods
     def acts_as_status(field, status)
-      
+
       self.instance_eval do
         attr = "#{field}".to_sym
 
-        define_method "#{field}" do          
+        define_method "#{field}" do
           Status.new(read_attribute(attr), status.uniq)
-          # Status.default_convert(self[attr], status)          
+          # Status.default_convert(self[attr], status)
         end
 
         define_method "#{field}=" do | value |
@@ -20,7 +20,7 @@ module ActsAsStatus
           write_attribute(attr, s.state)
           s
         end
-      end 
+      end
 
       # composed_of field,
       #       :class_name => 'Status',

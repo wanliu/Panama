@@ -119,18 +119,42 @@
         margin-top: 5px;
       }
 
-      .comments{
+      .comments_panel{
         margin-top: 10px;
       }
 
-      .comment_panel, .comments{
+      .comment_panel, .comments_panel{
 
         .notice{
           text-align: center;
         }
 
-        .comment{
+        .topic_comment{
           margin-top: 20px;
+
+          .comment_nav{
+            font-size: 10px;
+
+            .timeago{
+              margin-right: 15px;
+            }
+
+            .remove{
+              float: right;
+            }
+
+            .nav_tag{
+              display: none;
+            }
+          }
+
+          .content{
+            clear: both;
+          }
+        }
+
+        .edit_panel{
+          display: none;
         }
 
         .comment:first-child{
