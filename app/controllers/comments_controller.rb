@@ -75,4 +75,23 @@ class CommentsController < ApplicationController
       format.json{ render json: @comment }
     end
   end
+
+  def update
+    @comment = Comment.find_by(id: params[:id], user_id: current_user.id)
+    respond_to do |format|
+      if @comment.update_attributes(content: params[:content])
+        format.json{ render json: @comment  }
+      else
+        format.json{ render json: draw_errors_message(@comment), status: 403  }
+      end
+    end
+  end
+
+  def destroy
+    @comment = Comment.find_by(id: params[:id], user_id: current_user.id)
+    @comment.destroy
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
+  end
 end

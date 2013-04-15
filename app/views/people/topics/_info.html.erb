@@ -77,7 +77,7 @@
       circle_id: "<%=circle_id %>",
       remote_url: "<%=person_topics_path(current_user) %>",
       <% unless current_user.nil? %>
-      current_user: {login: "<%=current_user.login%>", icon_url: "<%=current_user.photos.icon %>"}
+      current_user: {login: "<%=current_user.login%>", icon_url: "<%=current_user.photos.icon %>", id: "<%=current_user.id %>"}
       <% end %>
     })
   })

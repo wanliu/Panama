@@ -3,6 +3,7 @@
 
 class Comment < ActiveRecord::Base
   include Extract::Mention
+  include Content::Html
 
   attr_accessible :content, :user_id, :targeable_id
 
@@ -15,7 +16,12 @@ class Comment < ActiveRecord::Base
 
   extract_attributes :content
 
-  after_create :notification_user
+  after_save :notification_user
+  before_save :convert_html_content
+
+  def convert_html_content
+    self.content = format_html(self.content)
+  end
 
   def as_json(*args)
     attrs = super *args
@@ -30,9 +36,13 @@ class Comment < ActiveRecord::Base
       Notification.create!(
         :user_id => u.id,
         :mentionable_user_id => user.id,
-        :url => "/activities/#{targeable.id}",
-        :body => "在评论，提到你")
+        :url => position_url,
+        :body => "在评论，提到你!")
     end
+  end
+
+  def position_url
+    "/#{targeable.class.to_s.tableize}/#{targeable_id}"
   end
 
   def validate_user_exists?

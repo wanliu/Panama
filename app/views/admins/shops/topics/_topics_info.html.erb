@@ -84,6 +84,7 @@
       <% unless current_user.nil? %>
       current_user: {
         login: "<%=current_user.login %>",
+        id: "<=current_user.id >",
         icon_url: "<%=current_user.photos.icon %>"}
       <% end %>
     })
