@@ -2,18 +2,34 @@
 #author: huxinghai
 require 'active_support/concern'
 
-module Content
+module Convert
   module Html
     extend ActiveSupport::Concern
-    include ActionView::Helpers::SanitizeHelper
+
+    module ClassMethods
+      def define_format_rule(reg, &block)
+        @customer_match_rule ||= CustomerMatch.new
+        @customer_match_rule.stores << [reg, block]
+      end
+
+      def customer_match_rule
+        @customer_match_rule
+      end
+    end
 
     module InstanceMethods
 
       def format_html(content)
-        text = HtmlTag.convert content
-        LinkMatch.convert text
+        text = HtmlTag.convert(LinkMatch.tag content)
+        text = LinkMatch.convert_tag(text)
+        text = _customer.convert(text) unless _customer.nil?
+        text
       end
 
+      private
+      def _customer
+        self.class.customer_match_rule
+      end
     end
 
     class HtmlTag
@@ -24,7 +40,7 @@ module Content
 
         private
         def space(text)
-          text.gsub(/( |\t)/){ "&nbsp" * $1.size }
+          text.gsub(/( |\t)/){ "&nbsp" }
         end
 
         def br(text)
@@ -36,20 +52,26 @@ module Content
     class LinkMatch
       class << self
 
-        def convert(text)
+        def tag(text)
           _text = text.gsub(local_match){
-            "<a href='#{$1}'>#{$1}</a>"
+            "<a>#{$1}</a>"
           }
 
           _text.gsub!(full_match){
-            "<a href='#{$1}'>#{$1}</a>"
+            "<a>#{$1}</a>"
           }
 
           _text.gsub!(no_prefix_match){
-            "<a href='http://#{$1}'>#{$1}</a>"
+            "<a>#{$1}</a>"
           }
-
           _text
+        end
+
+        def convert_tag(text)
+          content = tag text
+          content.gsub(/<a>(.+)<\/a>/){
+            "<a href='#{$1}'>#{$1}</a>"
+          }
         end
 
         private
@@ -79,11 +101,11 @@ module Content
         end
 
         def _begin
-          "(?:<br\/>|&nbsp|\s|^)"
+          "(?:\s|^)"
         end
 
         def _end
-          "(?:&nbsp|\s|$)"
+          "(?:\s|$)"
         end
 
         def suffix
@@ -95,6 +117,23 @@ module Content
             org.cn ac.cn mobi com.hk
           ).join("|")
         end
+      end
+    end
+
+    class CustomerMatch
+      attr_accessor :stores
+
+      def initialize
+        @stores = []
+      end
+
+      def convert(text)
+        @stores.each_index do |i|
+          text.gsub! @stores[i][0] do
+            @stores[i][1].call($~)
+          end
+        end
+        text
       end
     end
   end

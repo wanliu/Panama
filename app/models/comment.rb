@@ -3,7 +3,7 @@
 
 class Comment < ActiveRecord::Base
   include Extract::Mention
-  include Content::Html
+  include Convert::Html
 
   attr_accessible :content, :user_id, :targeable_id
 
@@ -15,6 +15,12 @@ class Comment < ActiveRecord::Base
   validate :validate_user_exists?, :validate_targeable_exists_and_nil?
 
   extract_attributes :content
+
+  define_format_rule /@(\w{3,20})/ do |mh|
+    login = mh[1]
+    user = User.find_by(login: login)
+    user.nil? ? "@#{login}" : "<a href='/users/#{user.id}'>@#{login}</a>"
+  end
 
   after_save :notification_user
   before_save :convert_html_content
