@@ -8,6 +8,9 @@
 #  context_html: html内容
 #  status: 状态
 class Topic < ActiveRecord::Base
+  include Extract::Mention
+  include TextFormat::Html
+
   scope :puliceity, where(:status => 1)
   scope :external, where(:status => 2)
   scope :circle, where(:status => 3)
@@ -33,7 +36,7 @@ class Topic < ActiveRecord::Base
   before_save :content_format_html
 
   def content_format_html
-    self.content_html = format_html(self.content)
+    self.content_html = text_format_html(self.content)
   end
 
   def receive_users

@@ -5,7 +5,7 @@ module Custom
         target = record.send(options[:target])
         att = options[:att] || attribute
         field = record.send(attribute)
-        if field.blank? && target.respond_to?(:children) && target.children.size > 0 
+        if field.blank? && target.respond_to?(:children) && target.children.size > 0
           record.errors.add att, "#{att}_message"
         end
       end
