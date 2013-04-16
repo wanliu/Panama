@@ -3,7 +3,7 @@
 
 class Comment < ActiveRecord::Base
   include Extract::Mention
-  include Convert::Html
+  include TextFormatHtml::Configure
 
   attr_accessible :content, :user_id, :targeable_id
 
@@ -16,17 +16,11 @@ class Comment < ActiveRecord::Base
 
   extract_attributes :content
 
-  define_format_rule /@(\w{3,20})/ do |mh|
-    login = mh[1]
-    user = User.find_by(login: login)
-    user.nil? ? "@#{login}" : "<a href='/users/#{user.id}'>@#{login}</a>"
-  end
-
   after_save :notification_user
   before_save :convert_html_content
 
   def convert_html_content
-    self.content_html = format_html(self.content)
+    self.content_html = text_format_html(self.content)
   end
 
   def as_json(*args)

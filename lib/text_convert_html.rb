@@ -2,7 +2,7 @@
 #author: huxinghai
 require 'active_support/concern'
 
-module Convert
+module TextFormat
   module Html
     extend ActiveSupport::Concern
 
@@ -17,90 +17,81 @@ module Convert
       end
     end
 
-    module InstanceMethods
+    def text_format_html(content)
+      text = LinkMatch.convert(content)
+      text = HtmlTag.convert(text)
+      text = _customer.convert(text) unless _customer.nil?
+      text
+    end
 
-      def format_html(content)
-        text = HtmlTag.convert(LinkMatch.tag content)
-        text = LinkMatch.convert_tag(text)
-        text = _customer.convert(text) unless _customer.nil?
-        text
-      end
-
-      private
-      def _customer
-        self.class.customer_match_rule
-      end
+    private
+    def _customer
+      self.class.customer_match_rule
     end
 
     class HtmlTag
       class << self
         def convert(text)
-          br(space text)
+          celar_el_space(br(space text))
         end
 
         private
         def space(text)
-          text.gsub(/( |\t)/){ "&nbsp" }
+          text.gsub(/( |\t)/, "&nbsp")
         end
 
         def br(text)
-          text.gsub(/((?:\r\n|\r|\n))/){ "<br/>" }
+          text.gsub(/((?:\r\n|\r|\n))/, "<br/>")
+        end
+
+        def celar_el_space(text)
+          text.gsub(/(?<=<[^>])&nbsp/, " ")
         end
       end
     end
 
     class LinkMatch
       class << self
-
-        def tag(text)
+        def convert(text)
           _text = text.gsub(local_match){
-            "<a>#{$1}</a>"
+            "#{$1}<a href='#{$2}'>#{$2}</a>#{$3}"
           }
 
           _text.gsub!(full_match){
-            "<a>#{$1}</a>"
+            "#{$1}<a href='#{$2}'>#{$2}</a>#{$3}"
           }
 
           _text.gsub!(no_prefix_match){
-            "<a>[http://]#{$1}</a>"
+            "#{$1}<a href='http://#{$2}'>#{$2}</a>#{$3}"
           }
           _text
-        end
-
-        def convert_tag(text)
-          content = tag text
-          content.gsub!(/<a>\[(.+)\](.+)<\/a>/){
-            "<a href='#{$1}#{$2}'>#{$2}</a>"
-          }
-          content.gsub(/<a>((.+))<\/a>/){
-            "<a href='#{$1}'>#{$1}</a>"
-          }
         end
 
         private
         #匹配本地url
         def local_match
-          /(?:\s|^)(
-            (?:http:\/\/|ftp:\/\/)(?:[a-zA-z_]+-?\.?[a-zA-z_]+|\d+\.\d+\.\d+\.\d+)
+          /((?:\s|^))(
+            (?:http:\/\/|ftp:\/\/)
+            (?:[a-zA-z_]+-?\.?[a-zA-z_]+|\d+\.\d+\.\d+\.\d+)
             (?::\d+)?(?:\/.+)*
-          )(?:\s|$)/x
+          )((?:\s|$))/ix
         end
 
         #匹配完整的url
         def full_match
-          /(?:\s|^)(
+          /((?:\s|^))(
             (?:http:\/\/|https:\/\/|ftp:\/\/)
             \w+-?\.?\w+\.(?:#{suffix})
             (?:\/.+)*
-          )(?:\s|$)/x
+          )((?:\s|$))/ix
         end
 
         def no_prefix_match
-          /(?:\s|^)(
+          /((?:\s|^))(
             (?:www.|\w+-?\.?\w+)
             \w+-?\.?\w+\.(?:#{suffix})
             (?:\/.+)*
-          )(?:\s|$)/x
+          )((?:\s|$))/ix
         end
 
         def suffix
@@ -124,8 +115,9 @@ module Convert
 
       def convert(text)
         @stores.each_index do |i|
-          text.gsub! @stores[i][0] do
-            @stores[i][1].call($~)
+          store = @stores[i]
+          text.gsub! store[0] do
+            store[1].call($~)
           end
         end
         text
