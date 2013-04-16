@@ -30,6 +30,12 @@ class Topic < ActiveRecord::Base
   #puliceity: 公开, external: 扩展, circle: 限定范围, community: 商家圈
   acts_as_status :status, [:puliceity, :external, :circle, :community]
 
+  before_save :content_format_html
+
+  def content_format_html
+    self.content_html = format_html(self.content)
+  end
+
   def receive_users
     users = []
     receives.includes(:receive).each do |r|

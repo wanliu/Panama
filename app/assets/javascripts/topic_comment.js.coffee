@@ -101,7 +101,7 @@ define ["jquery", "backbone", "timeago", "lib/hogan"], ($, Backbone) ->
 
     render_content: () ->
       @comment_content.html(
-        Hogan.compile("{{{content}}}").render @model.toJSON()
+        Hogan.compile("{{{content_html}}}").render @model.toJSON()
       )
 
     render: () ->

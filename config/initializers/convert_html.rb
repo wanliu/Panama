@@ -62,14 +62,17 @@ module Convert
           }
 
           _text.gsub!(no_prefix_match){
-            "<a>#{$1}</a>"
+            "<a>[http://]#{$1}</a>"
           }
           _text
         end
 
         def convert_tag(text)
           content = tag text
-          content.gsub(/<a>(.+)<\/a>/){
+          content.gsub!(/<a>\[(.+)\](.+)<\/a>/){
+            "<a href='#{$1}#{$2}'>#{$2}</a>"
+          }
+          content.gsub(/<a>((.+))<\/a>/){
             "<a href='#{$1}'>#{$1}</a>"
           }
         end
@@ -77,35 +80,27 @@ module Convert
         private
         #匹配本地url
         def local_match
-          /#{_begin}(
+          /(?:\s|^)(
             (?:http:\/\/|ftp:\/\/)(?:[a-zA-z_]+-?\.?[a-zA-z_]+|\d+\.\d+\.\d+\.\d+)
-            (?::\d+)?(?:\/\w+-?\.?\w+)*
-          )#{_end}/x
+            (?::\d+)?(?:\/.+)*
+          )(?:\s|$)/x
         end
 
         #匹配完整的url
         def full_match
-          /#{_begin}(
+          /(?:\s|^)(
             (?:http:\/\/|https:\/\/|ftp:\/\/)
             \w+-?\.?\w+\.(?:#{suffix})
-            (?:\/\w+-?\.?\w+)*
-          )#{_end}/x
+            (?:\/.+)*
+          )(?:\s|$)/x
         end
 
         def no_prefix_match
-          /#{_begin}(
+          /(?:\s|^)(
             (?:www.|\w+-?\.?\w+)
             \w+-?\.?\w+\.(?:#{suffix})
-            (?:\/\w+-?\.?\w+)*
-          )#{_end}/x
-        end
-
-        def _begin
-          "(?:\s|^)"
-        end
-
-        def _end
-          "(?:\s|$)"
+            (?:\/.+)*
+          )(?:\s|$)/x
         end
 
         def suffix
