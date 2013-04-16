@@ -26,7 +26,7 @@ class Comment < ActiveRecord::Base
   before_save :convert_html_content
 
   def convert_html_content
-    self.content = format_html(self.content)
+    self.content_html = format_html(self.content)
   end
 
   def as_json(*args)
