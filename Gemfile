@@ -119,6 +119,8 @@ group :development, :test do
   # gem 'coffee-rails-source-maps'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'mongo'
+  gem 'mysql'
 end
 
 group :test do
