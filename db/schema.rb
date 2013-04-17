@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(:version => 20130408083928) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
