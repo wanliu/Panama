@@ -64,34 +64,46 @@ module TextFormat
           _text.gsub!(no_prefix_match){
             "#{$1}<a href='http://#{$2}'>#{$2}</a>#{$3}"
           }
+
+          _text.gsub!(mail_match){
+            "#{$1}<a href='mailto:#{$2}'>#{$2}</a>#{$3}"
+          }
           _text
         end
 
-        private
+        # private
         #匹配本地url
         def local_match
-          /((?:\s|^))(
+          /(\s|^)(
             (?:http:\/\/|ftp:\/\/)
             (?:[a-zA-z_]+-?\.?[a-zA-z_]+|\d+\.\d+\.\d+\.\d+)
-            (?::\d+)?(?:\/.+)*
-          )((?:\s|$))/ix
+            (?::\d+)?
+            (?:\/[\+~%\/.\w-_]*)?
+            (?:\?[-\+=&;:\/%@\.\w_]*)?
+          )(\s|$)/ix
         end
 
         #匹配完整的url
         def full_match
-          /((?:\s|^))(
+          /(\s|^)(
             (?:http:\/\/|https:\/\/|ftp:\/\/)
-            \w+-?\.?\w+\.(?:#{suffix})
-            (?:\/.+)*
-          )((?:\s|$))/ix
+            \w+[-\.]*\w+\.(?:#{suffix})
+            (?:\/[\+~%\/.\w-_]*)?
+            (?:\?[-\+=&;:\/%@\.\w_]*)?
+          )(\s|$)/ix
         end
 
         def no_prefix_match
-          /((?:\s|^))(
-            (?:www.|\w+-?\.?\w+)
-            \w+-?\.?\w+\.(?:#{suffix})
-            (?:\/.+)*
-          )((?:\s|$))/ix
+          /(\s|^)(
+            (?:www.|\w+[-\.]*\w+)
+            \w+[-\.]*\w+\.(?:#{suffix})
+            (?:\/[\+~%\/.\w-_]*)?
+            (?:\?[-\+=&;:\/%@\.\w_]*)?
+          )(\s|$)/ix
+        end
+
+        def mail_match
+          /(\s|^)(\w+[-\.]*\w+@\w+\.(?:#{suffix}))(\s|$)/i
         end
 
         def suffix
