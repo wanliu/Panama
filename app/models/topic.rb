@@ -9,7 +9,7 @@
 #  status: 状态
 class Topic < ActiveRecord::Base
   include Extract::Mention
-  include TextFormat::Html
+  include TextFormatHtml::Configure
 
   scope :puliceity, where(:status => 1)
   scope :external, where(:status => 2)

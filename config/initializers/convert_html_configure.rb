@@ -1,4 +1,4 @@
-require File.expand_path('lib/text_convert_html', Rails.root)
+require "text_format_html"
 
 module TextFormatHtml
   module Configure

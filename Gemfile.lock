@@ -5,6 +5,12 @@ GIT
     rails-setting (0.0.8)
 
 GIT
+  remote: git://github.com/huxinghai1988/text_format_html.git
+  revision: 0bcdc1e4747e5f7d93cf693b5cf578586e3f1543
+  specs:
+    text_format_html (0.0.1)
+
+GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
   revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
@@ -516,6 +522,7 @@ DEPENDENCIES
   simplecov (~> 0.7.1)
   spork (~> 1.0rc)
   state_machine (~> 1.1.2)
+  text_format_html!
   therubyracer (~> 0.10.2)
   thin (~> 1.5.0)
   uglifier (>= 1.0.3)

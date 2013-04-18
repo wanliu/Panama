@@ -1,0 +1,44 @@
+.attachment_uploader{
+  .upload_nav{
+
+    .image_upload{
+
+      input[type=file]{
+        display: none;
+      }
+
+      .qq-upload-success{
+        display: none;
+      }
+
+      .qq-upload-failed-text{
+        display: none;
+      }
+    }
+  }
+
+  .upload_preview{
+    .preview_img{
+      margin-left: 20px;
+      display: inline-block;
+      cursor: pointer;
+      position: relative;
+
+      .img_nav{
+        position: absolute;
+        bottom:0px;
+        width: 100%;
+        opacity: 0.6;
+        background: gray;
+        display: none;
+        text-align: center;
+        font-size: 10px;
+
+        .delete{
+          color: black;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

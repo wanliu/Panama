@@ -7,7 +7,8 @@
 //= require people/following
 //= require communities
 //= require ./lib/chose-friend
-//= require people/community
+//= require people/community_people
+//= require attachment_uploader
 
 @import "compass/css3";
 @import "variables";
