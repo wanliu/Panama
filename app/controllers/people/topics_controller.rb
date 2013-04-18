@@ -3,21 +3,22 @@ class People::TopicsController < People::BaseController
   before_filter :login_required
 
   def create
-    opts = max_level(params[:topic].delete(:friends))
-    params[:topic].delete(:topic_category_id) unless opts[:status] == :community
+    ptopic = params[:topic]
+    opts = max_level(ptopic.delete(:friends))
+    ptopic.delete(:topic_category_id) unless opts[:status] == :community
+    atta_opts = ptopic.delete(:attachments)
 
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
     end
-    @topic = current_user.topics.create(params[:topic].merge({
+    @topic = current_user.topics.create(ptopic.merge({
         status: opts[:status],
         user_id: current_user.id
       }))
     if @topic.valid?
-      opts[:circles].each do |circle|
-        @topic.receives.create(receive: circle)
-      end
+      @topic.receives.creates(opts[:circles])
+      @topic.attachments.creates(atta_opts.values)
       respond_format(@topic.as_json(:include => :owner))
     else
       respond_format(draw_errors_message(@topic), 403)

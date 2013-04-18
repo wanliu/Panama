@@ -32,6 +32,7 @@ define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip
 
       @$el = $(@el)
       @$el.html(@template.render(@model.toJSON()))
+      @show_attachments()
 
       new TopicCommentView(
         el: @$(".topic-comments"),
@@ -68,6 +69,10 @@ define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip
         @model.get("owner").login
       else
         @model.get("owner").name
+
+    show_attachments: () ->
+      _.each @model.get("attachments"), (atta) =>
+        @$(".attachments").append("<img src='#{atta}' class='attachment' />")
 
     circle_receive: () ->
       @popover_basis('<h6 class="title-popover-topic">此信息目前的分享对象：</h6><div class="circle_users"></div>')
@@ -145,6 +150,7 @@ define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip
           @textarea_status()
           topic = @topic_list.add(model).last()
           @$(".topics>:first").before @add_topic(topic)
+          @$(".topic_upload").html('')
 
         error: (model, data) =>
           @show_error(JSON.parse(data.responseText))

@@ -18,6 +18,13 @@ class TopicReceive < ActiveRecord::Base
 
   validate :valid_receive_type?
 
+  def self.creates(receives, topic_id = nil)
+    options = topic_id.nil? ? {} : {topic_id: topic_id}
+    receives.each do |receive|
+      create(options.merge(receive: receive))
+    end
+  end
+
   def self.user_related(user_id)
     where(receive_type: "User", receive_id: user_id)
   end
