@@ -149,7 +149,7 @@ define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip
           @$content.val('')
           @textarea_status()
           topic = @topic_list.add(model).last()
-          @$(".topics>:first").before @add_topic(topic)
+          @before_append(@add_topic(topic))
           @$(".topic_upload").html('')
 
         error: (model, data) =>
@@ -162,6 +162,13 @@ define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip
       $.each forms, (i, v) ->
         data[v.name] = v.value
       data
+
+    before_append: (view) ->
+      topics = @$(".topics>:first")
+      if topics.length <= 0
+        @$(".topics").append view
+      else
+        topics.before view
 
     all_topic: (collection) ->
       collection.each (model) =>
