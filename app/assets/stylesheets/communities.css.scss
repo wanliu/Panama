@@ -1,10 +1,13 @@
-
 .community-content, .followers-content{
 
   .topics-panel{
 
     .topic-form{
       margin-bottom: 0px;
+
+      .topic_upload{
+        margin-bottom: 10px;
+      }
     }
 
     .topics{
@@ -177,97 +180,6 @@
           img{
             width: 20px;
             height: 20px;
-          }
-        }
-      }
-    }
-  }
-}
-
-.shop_community_people{
-  .close-label{
-    width: 12px;
-    height: 11px;
-    font-size: 1px;
-    background: url("/assets/select.png") right top no-repeat;
-    display: block;
-  }
-
-  .friends_panel{
-    .search_user{
-      display: inline-block;
-
-      input{
-        margin-bottom: 0px;
-        width: 120px
-      }
-    }
-
-    .circle_user_panel{
-      .circle_friend{
-        display: none;
-      }
-
-      .login{
-        margin-left: 10px;
-      }
-
-      .you_circle_user{
-        position: relative;
-        .remove_you_user{
-          position: absolute;
-          top: 0;
-          right: 0;
-        }
-      }
-
-    }
-  }
-
-  .circle-panel{
-
-    .title{
-      margin-bottom: 10px;
-
-      h4{
-        display: inline;
-      }
-
-      .add-circle{
-        float: right;
-      }
-    }
-
-    .circle-list{
-
-      .circle{
-        float: left;
-        margin-right: 20px;
-        width: 185px;
-        height: 180px;
-        position: relative;
-
-        .remove_circle{
-          position: absolute;
-          top: 5px;
-          right: 5px;
-        }
-
-        hr{
-          margin: 5px 0px;
-        }
-
-        .user-list{
-          color: black;
-
-          .user{
-            margin-right: 10px;
-            margin-bottom: 10px;
-
-            .remove_user{
-              margin-left: 10px;
-              float: right;
-            }
           }
         }
       }

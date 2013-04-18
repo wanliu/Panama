@@ -1,6 +1,6 @@
 #describe: 评论控制器
 class CommentsController < ApplicationController
-  before_filter :login_required, :only => [:activity, :product]
+  before_filter :login_required, :only => [:activity, :product, :topic, :update, :destroy]
 
   def index_activities
     @activities = Activity.all
@@ -28,42 +28,27 @@ class CommentsController < ApplicationController
     end
   end
 
-  def show
-    @comment = Comment.find(params[:id])
-  end
-
-  def edit
-    @comment = Comment.find(params[:id])
-  end
-
   #活动评论
   def activity
-    authorize! :activity, Comment
     @comment = Comment.activity(params[:comment].merge(:user_id => current_user.id))
-    users = @comment.content_extract_users
-    users.each do |user|
-        @comment.content = @comment.content.gsub(/@#{user.login}/,
-            "<a href='#'>@#{user.login}</a>")
-    end
-    @comment.save
     respond_to do |format|
-        if @comment.valid?
-            format.html { render :action => :show }
-            format.js { render :json => @comment.as_json.merge(@comment.user.as_json) }
-        else
-            render :action => :edit
-        end
+      if @comment.valid?
+        format.js { render :json => @comment.as_json.merge(@comment.user.as_json) }
+      else
+        format.js{ render :json => {}, :status => 403 }
+      end
     end
   end
 
   #产品评论
   def product
-    authorize! :product, Comment
     @comment = Comment.product(params[:comment].merge(:user_id => current_user.id))
-    if @comment.valid?
-      render :action => :show
-    else
-      render :action => :edit
+    respond_to do |format|
+      if @comment.valid?
+        format.json{ render json: @comment }
+      else
+        format.json{ render json: draw_errors_message(@comment), status: 403 }
+      end
     end
   end
 

@@ -123,10 +123,6 @@ Panama::Application.routes.draw do
       get "topic_categories/:id", :to => "shops#topic_categories"
     end
     namespace :admins do
-      match "attachments", :to => "shops/attachments#index"
-      match "attachments/upload", :to => "shops/attachments#upload", :via => :post
-      match "attachments/destroy/:id", :to => "shops/attachments#destroy", :via => :delete
-
       resources :dashboard, :controller => "shops/dashboard"
 
       resources :contents, :controller => "shops/contents"
@@ -202,6 +198,9 @@ Panama::Application.routes.draw do
     end
   end
 
+  match "attachments", :to => "shops/attachments#index"
+  match "attachments/upload", :to => "shops/attachments#upload", :via => :post
+  match "attachments/:id", :to => "shops/attachments#destroy", :via => :delete
 
   match "shops/:shop_id/admins/products/category/:category_id",
     :to => "admins/shops/products#products_by_category"
