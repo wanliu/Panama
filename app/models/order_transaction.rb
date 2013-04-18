@@ -3,6 +3,8 @@
 class OrderTransaction < ActiveRecord::Base
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total
+  attr_accessor :total
+
   has_one :address,
           foreign_key: 'transaction_id'
 
@@ -10,10 +12,10 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :buyer,
              class_name: "User"
 
-  has_many :items,
-           class_name: "ProductItem",
-           foreign_key: 'transaction_id',
-           autosave: true
+  has_many  :items,
+            class_name: "ProductItem",
+            foreign_key: 'transaction_id',
+            autosave: true
 
   validates :state, :presence => true
   validates :items_count, :numericality => true

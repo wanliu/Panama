@@ -4,6 +4,7 @@ class People::BaseController < ApplicationController
 
   before_filter :identity
 
+
   def identity
     @people = User.find_by(:login => params[:person_id] || params[:id])
   end

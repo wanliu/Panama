@@ -27,6 +27,8 @@ class Product < ActiveRecord::Base
   belongs_to :shops_category                                                      # 商店分类
   belongs_to :default_attachment, :class_name => "Attachment"                     # 默认图片
   has_and_belongs_to_many :attachments, :class_name => "Attachment"               # 图片相册
+  has_many   :inventory_caches, :class_name => "InventoryCache"                   #
+  has_many   :item_in_outs
   has_many   :comments, :as => :targeable                                         # 评论
   has_many   :contents, :as => :contentable                                       # 产品内容配置组
   has_many   :price_options, :as => :optionable, :autosave => true

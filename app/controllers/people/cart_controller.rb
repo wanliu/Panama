@@ -1,4 +1,7 @@
 class People::CartController < People::BaseController
+
+  skip_before_filter :identity, :only => [:add_to_cart, :clear_list]
+
   def index
     @items = ProductItem.where(:cart_id => my_cart.id).page params[:page]
   end

@@ -1,10 +1,12 @@
 class ProductItemDecorator < Draper::Decorator
+  decorates_association :product
+  delegate_all
 
   def price
     h.number_to_currency(source.price).delete("CN")
   end
 
-  def total 
+  def total
     h.number_to_currency(source.total).delete("CN")
   end
 
@@ -16,8 +18,8 @@ class ProductItemDecorator < Draper::Decorator
   #     left = "-"
   #   end
   #   a = m.split(".")
-  #   l = a[0].reverse() 
-  #   r = a[1] 
+  #   l = a[0].reverse()
+  #   r = a[1]
   #   t = ""
   #   i = 0
   #   l.length.times do

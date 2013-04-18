@@ -4,6 +4,11 @@ class ProductItem < ActiveRecord::Base
 
   attr_accessible :amount, :price, :title, :total, :transaction_id, :cart, :product_id, :product
 
+  attr_accessor :options
+
+  cattr_accessor :product_options
+  @@product_options = {}
+
 
   has_and_belongs_to_many   :properties do
       def [](name)
@@ -55,5 +60,34 @@ class ProductItem < ActiveRecord::Base
 
   memories :properties, :properties_values, :property_items
 
+  after_create do
+    if product.present? && !@product_options.blank?
+      product.prices_definition.each do |prop|
+        properties << prop
+      end
+
+      property_items = product.property_items
+
+      delegate_property_setup
+
+      price_options.each do |option|
+        option_name = option.name.to_sym
+        send("#{option_name}=", @product_options[option_name])
+      end
+      save!
+    end
+  end
+
+  def options
+    super || properties_values.map { |prop| prop.value }.join('/')
+  end
+
+  def initialize(attributes = nil, options = {}, &block)
+    if attributes && attributes.is_a?(Hash)
+      @product_options = (attributes.delete(:options) || {}).symbolize_keys
+    end
+
+    super
+  end
 
 end
