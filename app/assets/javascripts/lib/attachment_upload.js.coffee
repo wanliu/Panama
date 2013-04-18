@@ -29,7 +29,7 @@ define ["jquery", "backbone", "fileuploader", "twitter/bootstrap/tooltip"],
       "<img src='#{@model.get("url")}' />"
 
     val_template: () ->
-      "<input type='hidden' name='attachment[#{@model.id}]' value='#{@model.id}' />"
+      "<input type='hidden' name='attachments[#{@model.id}]' value='#{@model.id}' />"
 
     render: () ->
       @$el
@@ -66,6 +66,7 @@ define ["jquery", "backbone", "fileuploader", "twitter/bootstrap/tooltip"],
         debug : true,
         multiple : false,
         action : "#{@remote}/upload",
+        dragText: "",
         inputName : "attachable",
         cancelButtonText : "取消上传",
         uploadButtonText : @upload_button(),

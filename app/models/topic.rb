@@ -23,7 +23,8 @@ class Topic < ActiveRecord::Base
   belongs_to :category, class_name: "TopicCategory", foreign_key: :topic_category_id
 
   has_many :receives, class_name: "TopicReceive", dependent: :destroy
-  has_many :comments, as: :targeable
+  has_many :comments, as: :targeable, dependent: :destroy
+  has_many :attachments, class_name: "TopicAttachment", dependent: :destroy
 
   validates :content, :presence => true
 
@@ -83,6 +84,10 @@ class Topic < ActiveRecord::Base
     attribute["topic_category_name"] = category.name unless category.nil?
     if status == :community && receives.count > 0
       attribute["receive_shop_name"] = receives.first.receive.name
+    end
+    attribute["attachments"] = []
+    attachments.each do |atta|
+      attribute["attachments"] << atta.attachment.file.url
     end
 
     attribute
