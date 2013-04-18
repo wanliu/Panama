@@ -6,7 +6,7 @@ class People::TopicsController < People::BaseController
     ptopic = params[:topic]
     opts = max_level(ptopic.delete(:friends))
     ptopic.delete(:topic_category_id) unless opts[:status] == :community
-    atta_opts = ptopic.delete(:attachments)
+    atta_opts = ptopic.delete(:attachments) || {}
 
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)

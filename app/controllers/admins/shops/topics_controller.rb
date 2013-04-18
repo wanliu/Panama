@@ -4,6 +4,7 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
   def create
     opts = max_level(params[:topic].delete(:friends))
     params[:topic].delete(:topic_category_id) unless opts[:status] == :community
+    atta_opts = params[:topic].delete(:attachments) || {}
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
@@ -13,9 +14,8 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
         user_id: current_user.id
       }))
     if @topic.valid?
-      opts[:circles].each do |circle|
-        @topic.receives.create(receive: circle)
-      end
+      @topic.receives.creates(opts[:circles])
+      @topic.attachments.creates(atta_opts.values)
       respond_format(@topic.as_json(:include => :owner))
     else
       respond_format(draw_errors_message(@topic), 403)

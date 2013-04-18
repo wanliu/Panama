@@ -1,3 +1,4 @@
+#encoding: utf-8
 require "spec_helper"
 
 describe AttachmentsController, "附件控制器" do

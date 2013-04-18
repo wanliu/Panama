@@ -14,9 +14,7 @@
             <div>
               <textarea class='comment' name="content"></textarea>
             </div>
-            <div>
-              <input type='button' class='btn btn-mini' value='上传图片' >
-              <input type='button' class='btn btn-mini' value='上传视频' >
+            <div class='topic_upload'>
             </div>
             <div class='friend-context'>
             </div>
@@ -55,8 +53,9 @@
     "jquery",
     "lib/chose-friend",
     "topic",
+    "lib/attachment_upload",
     "lib/hogan"
-  ], function($, ChoseFriend, TopicViewList){
+  ], function($, ChoseFriend, TopicViewList, AttachmentUpload){
 
     $(".friend-context").choseFriend({
       circle: {
@@ -91,6 +90,11 @@
         id: "<=current_user.id >",
         icon_url: "<%=current_user.photos.icon %>"}
       <% end %>
+    })
+
+    new AttachmentUpload({
+      el: $(".topic_upload"),
+      remote: "<%=attachments_path %>"
     })
   })
 </script>

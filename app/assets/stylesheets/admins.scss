@@ -4,7 +4,6 @@
 //= require 'annotate'
 //= require 'arrow'
 //= require './lib/jquery.columnview'
-//= require './lib/fileuploader'
 //= require './lib/typeahead'
 //= require './lib/search_user_typeahead'
 //= require ./lib/chose-friend
@@ -13,6 +12,7 @@
 //= require 'communities'
 //= require products
 //= require attachments
+//= require attachment_uploader
 //= require_self
 
 @import "variables";
