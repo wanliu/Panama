@@ -43,21 +43,13 @@ namespace "panama" do
       }
 
       MONGO_OPTION = {
-        # :host => "192.168.2.120",
-        # :database => "neza_public_development",
-        :host => args[:mongo_host],
-        :database => args[:mongo_dbname],
+        :host => args[:mongo_host] || "127.0.0.1",
+        :database => args[:mongo_dbname] || "neza_public_development",
         :port => "27017"
       }
-      
-      mysql_db = Mysql.init
-      mysql_db.options(Mysql::SET_CHARSET_NAME,"utf8")
-      mysql_db = Mysql.real_connect(MYSQL_OPTION[:host], MYSQL_OPTION[:username], MYSQL_OPTION[:password], MYSQL_OPTION[:database])
-      mysql_db.query("SET NAMES utf8")
-
-      mong_cn = Mongo::Connection.new(MONGO_OPTION[:host],MONGO_OPTION[:port])
-      mong_db = mong_cn.db(MONGO_OPTION[:database])
-      products = mong_db.collection("products").find
+      mysql_db = Mysql2::Client.new(MYSQL_OPTION)
+      mongo_db = Moped::Session.new([MONGO_OPTION[:host]+":27017"]).use(MONGO_OPTION[:database])
+      products = mongo_db["products"].find
       
       if products.count > 0
         sql_insert = ""
