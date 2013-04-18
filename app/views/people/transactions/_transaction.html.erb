@@ -1,5 +1,6 @@
 <% seller = transaction.seller %>
-<div class="transaction">
+<div class="transaction transaction-<%=transaction.id %>">
+	<div class="wrapper-box">
 	<div class="transaction-header">
 		<div class="avatar">
 			<%= image_tag seller.photos.header, :class => 'img-polaroid' %>
@@ -44,7 +45,7 @@
 				<div class="people">
 					<div class='wrapper'>
 						<div class="people-name">
-							<p>pepsi:</p>					
+							<p>pepsi:</p>
 						</div>
 						<div class="msg">
 							<p>488</p>
@@ -56,7 +57,7 @@
 				<div class="self">
 					<div class='wrapper'>
 						<div class="people-name">
-							<p><%= current_user.login %>:</p>					
+							<p><%= current_user.login %>:</p>
 						</div>
 						<div class="msg">
 							<p>看上去还挺不错的</p>
@@ -68,7 +69,7 @@
 				<div class="self">
 					<div class='wrapper'>
 						<div class="people-name">
-							<p><%= current_user.login %>:</p>					
+							<p><%= current_user.login %>:</p>
 						</div>
 						<div class="msg">
 							<p>还能不能便宜一点?</p>
@@ -80,7 +81,7 @@
 				<div class="people">
 					<div class='wrapper'>
 						<div class="people-name">
-							<p>pepsi:</p>					
+							<p>pepsi:</p>
 						</div>
 						<div class="msg">
 							<p>亲, 真的少不了,已经是最优惠了</p>
@@ -100,7 +101,12 @@
 			</form>
 		</div>
 	</div>
+	</div>
 </div>
 <script type="text/javascript">
-	require(["jquery_ujs"], function(){});
+	require(["jquery", "jquery_ujs", "people/transaction_card"], function($, a, Transaction ){
+		var id = ".transaction-<%=transaction.id %>";
+		var card = new Transaction.TransactionCard({el: $(id), initial: "<%= transaction.state %>" });
+		console.log(card);
+	});
 </script>

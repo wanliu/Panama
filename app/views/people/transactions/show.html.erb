@@ -8,17 +8,18 @@
       <ul class="cards">
       <% @transactions.each do |transaction| %>
           <%= render :partial => 'trans_card', :locals => { :transaction => transaction, :state => transaction.state, :people => @people } %>
-      <% end %>     
+      <% end %>
       </ul>
      </div>
      <% end %>
   </div>
   <div class="main-sidebar container-fluid">
-    <%= render partial: 'transaction', 
-               object:  @transaction, 
+    <%= render partial: 'transaction',
+               object:  @transaction,
                locals: {
-                 state:  @transaction.state, 
-                 people: @people 
+                 state:  @transaction.state,
+                 people: @people
                } %>
+
   </div>
 </div>

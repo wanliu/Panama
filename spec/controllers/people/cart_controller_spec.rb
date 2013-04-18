@@ -25,9 +25,9 @@ describe People::CartController do
 	describe " 购物车 " do
 		describe " get 'index' " do
 			it "add cart product_item" do
-				cart = my_cart.items.create! product_item
+				item = my_cart.items.create! product_item
 				get 'index', {:person_id => "", :page => 1}, get_session
-				assigns(:items).should eq([cart])
+				assigns(:items).should eq([item])
 			end
 		end
 
@@ -54,6 +54,25 @@ describe People::CartController do
 				post 'clear_list', form_params.merge({:id => ""}), get_session
 				my_cart.should have(0).items
 			end
+		end
+
+		let(:apple) { Product.find(product_item[:product_id]) }
+		let(:colour) { Property.find_by_name("colour") }
+		let(:sizes) { Property.find_by_name("sizes") }
+
+		describe "附加属性来购物" do
+			it "选择 红色大码" do
+				apple.properties << colour
+				apple.properties << sizes
+				apple.price_options.create(property: colour)
+				apple.price_options.create(property: sizes)
+
+				_prod_item = product_item.merge sizes: "L", colour: "red"
+
+				post 'add_to_cart', form_params(_prod_item), get_session
+				assigns(:item).sizes.should eql "L"
+				assigns(:item).colour.should eql "red"
+		  end
 		end
 	end
 

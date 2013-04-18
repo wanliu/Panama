@@ -157,8 +157,8 @@ describe Admins::Shops::ProductsController do
         color: 0xFF0000,
         make_in: 'China',
         flavor: 'fragrancy',
-        colour: ["red", "yellow", "green", "blue", "black", ""],
-        sizes: ["S", "M", "XXL", "XL", ""]
+        colour: ["red", "yellow", "green", "blue", "black"],
+        sizes: ["S", "M", "XXL", "XL"]
       })
 
       post 'create', @options, get_session

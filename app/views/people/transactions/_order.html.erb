@@ -1,31 +1,38 @@
 <!-- 订单 -->
-<%= simple_form_for transaction, 
+<div class="container-fluid">
+<%= simple_form_for transaction,
 					:url => transaction_path(people, transaction),
 					:html => { :class => "form-horizontal"}   do |f| %>
-	<%= f.input :address, 
-				:as => :chosen, 
-				:collection => people.addresses, 
-				:label_method => :location, 
+	<div class="adddress_input">
+	<%= f.input :address,
+				:as => :chosen,
+				:collection => people.addresses,
+				:label_method => :location,
 				:value_method => :id,
 				:input_html => { :class => :span12 } %>
+	<div class="btn-group address-add">
+		<%= button_tag icon(:list), :class => "btn" %>
+	</div>
+	</div>
 
+	<div class="address-panel">
 	<%= simple_fields_for :addresses do |address_form| %>
 		<div class="control-group">
 			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
 			<div class="controls controls-row">
 				<div class="span8">
-				<%= address_form.input :province, 
-									   :as => :depend_select, 
-									   :children => :city, 
+				<%= address_form.input :province,
+									   :as => :depend_select,
+									   :children => :city,
 									   :wrapper => :inline,
 									   :collection => get_city %>
-				<%= address_form.input :city, 
-									   :as => :depend_select, 
-									   :children => :area, 
+				<%= address_form.input :city,
+									   :as => :depend_select,
+									   :children => :area,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
-				<%= address_form.input :area, 
-									   :as => :depend_select, 
+				<%= address_form.input :area,
+									   :as => :depend_select,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
 				</div>
@@ -34,55 +41,48 @@
 			</div>
 		</div>
 
-		<%= address_form.input :road, :input_html => { :class => :span12 } %> 
-
-
+		<%= address_form.input :road, :input_html => { :class => :span12 } %>
 	<% end %>
+	</div>
 
 <% end %>
-<table class="table table-striped">
-	<thead>
-	<tr>
-		<th colspan=2 class="relative">
-			<div class="left-frame"></div>
+</div>
+<div class="products">
+	<div class="products-head">
 			<% transaction.items[0...5].each do |item| %>
-				<%= image_tag item.product.photos.icon %>
+				<div class="img-header">
+				<%= image_tag item.product.photos.header %>
+				</div>
 			<% end %>
 			<span class='ellipsis'>...</span>
-		</th>
-		<th>
-			<%= transaction.items_count %>
-		</th>
-		<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
-		</th>
-		<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
-		</th>
-		<th class="relative">
-				<%= link_to '#', :class => "btn btn-large" do %>
+			<div class="toolbar ">
+			<%= link_to '#', :class => "btn btn-large item-detail" do %>
 					<%= icon :download %>
 				<% end %>
-			<div class="right-frame"></div>
-		</th>
-	</tr>
-	</thead>
+			</div>
+	</div>
+	<div class="item-details">
 	<% transaction.items.each do |item| %>
-	<tr>
-		<td>
+	<div class="detail-row">
+		<div class="detail-icon">
 			<%= image_tag item.product.photos.icon %>
-		</td>
-		<td>
+		</div>
+		<div class="detail-title">
 			<%= item.title %>
-		</td>
-		<td>
+		</div>
+		<div class="detail-amount">
 			<%= item.amount %>
-		</td>
-		<td>
+		</div>
+		<div class="detail-price">
 			<%= item.price %>
-		</td>
-		<td>
+		</div>
+		<div class="detail-total">
 			<%= item.total %>
-		</td>
-		<td></td>
-	</tr>
+		</div>
+	</div>
 	<% end %>
-</table>
+	</div>
+</div>
+<div class='total'>
+<strong>合计: <%= transaction.total %></strong>
+</div>

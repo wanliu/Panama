@@ -3,9 +3,14 @@
 
 .transaction {
 	padding-top: 40px;
+	margin-bottom: 20px;
 
-
+	.wrapper-box {
+		@include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+		background: $white;
+	}
 	.transaction-header {
+
 		.avatar {
 			margin-left: 40px;
 			margin-top: - 40px;
@@ -24,8 +29,8 @@
 					margin-right: 20px;
 					form{
 						display: inline-block;
-						margin-bottom: 0px;	
-					}					
+						margin-bottom: 0px;
+					}
 				}
 				.progress {
 					margin-top: 25px;
@@ -39,66 +44,88 @@
 		border-bottom: none;
 	}
 
-	table {
-		border-top:  1px solid $tableBorder;
+	$headerHeight: 100px;
+
+	.products {
+		border-top: 1px solid $tableBorder;
 		border-bottom: 1px solid $tableBorder;
-		// background-image: url(http://wbpreview.com/previews/WB0TFD2S0/img/bg-body-bar.jpg);
-		.ellipsis {
-			opacity: 0.5
-		}
-
-		thead {
-			// @include background-image(linear-gradient($btnBackground, $btnBackgroundHighlight));
-
-			th:first-child {
-				height: 45px;
-			};
-			
-			strong{
-				font-size:25px;
-				line-height: 40px;
-			}
-
-			img {
-				margin-bottom: 5px;
-				width: 30px;
-			}
-		}
-
-		thead form  {
-			margin: 0px;
-		}
-
-		.left-frame {
-			// @include background-image(linear-gradient($btnBackground, $btnBackgroundHighlight));
+		position: relative;
+		padding-top: $headerHeight;
+		// margin: 0 -20px 0px -20px;
+		.products-head {
 			position: absolute;
 			top: -1px;
-			left: -25px;
+			left: -5px;
+			right: -5px;
 			border: 1px solid $tableBorder;
-			border-right: none;
-			width: 25px;
-			height: 61px;
 			background: $white;
+			// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+
+			.img-header {
+				width: $headerHeight;
+				height: $headerHeight;
+				float: left;
+			}
+
+			.toolbar {
+				position: absolute;
+				right: 20px;
+			}
 		}
 
-		.right-frame {
-			// @include background-image(linear-gradient($btnBackground, $btnBackgroundHighlight));
-			position: absolute;
-			top: -1px;
-			right: -25px;
-			border: 1px solid $tableBorder;
-			border-left: none;
-			width: 25px;
-			height: 61px;
-			background: $white;
+		.item-details {
+			color: #c6c6c6;
+			background: url('linen-light.png');
+			padding: 0 10px;
+
+			.detail-row {
+
+				border-bottom: 1px solid #121212;
+				@include box-shadow(rgba(255, 255, 255, 0.07) 0 1px 0);
+				height: 30px;
+				padding: 10px;
+				line-height: 30px;
+
+				.detail-icon {
+					width: 10%;
+					float: left;
+				}
+				.detail-title {
+					width: 50%;
+					float: left;
+				}
+				.detail-amount {
+					width: 10%;
+					float: left;
+					text-align: right
+				}
+				.detail-price {
+					width: 15%;
+					float: left;
+					text-align: right
+				}
+				.detail-total {
+					width: 15%;
+					float: left;
+					text-align: right
+				}
+			}
 		}
 	}
 
+	.total {
+		text-align: right;
+		font-size: 30px;
+		padding: 15px;
+	}
+
 	.transaction-body {
+		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+
 		border-left: 1px solid $tableBorder;
 		border-right: 1px solid $tableBorder;
 		border-bottom: 1px solid $tableBorder;
-		padding: 0 20px 20px 20px;
+		// padding: 0 20px 20px 20px;
 
 		.control-label {
 			width: 100px;
@@ -107,12 +134,34 @@
 
 			margin-left: 120px;
 		}
+
+
+
+		.adddress_input {
+			padding-right: 60px;
+			position: relative;
+		}
+
+		.address-add {
+			position: absolute;
+			top: 0px;
+			right: 0px;
+		}
+
+		.address-panel {
+			display: none;
+		}
+
 	}
 
 	.transaction-footer {
+		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+
 		margin-left: 5px;
 		margin-right: 5px;
 		padding: 5px;
+		background: $grayLighter;
+		display: none;
 		border-left: 1px solid $tableBorder;
 		border-right: 1px solid $tableBorder;
 		border-bottom: 1px solid $tableBorder;
@@ -145,8 +194,8 @@
 					@include border-radius(5px);
 					@include box-shadow(2px 2px 5px $gray);
 					background: #FAFAFA;
-					border: 1px solid $tableBorder;		
-				}				
+					border: 1px solid $tableBorder;
+				}
 
 				p {
 					margin-bottom: 0px;
@@ -211,7 +260,7 @@
 		}
 
 
- 
+
 	}
 		.actions {
 			margin-top: 130px;

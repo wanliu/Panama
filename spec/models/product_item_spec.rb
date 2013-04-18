@@ -83,6 +83,10 @@ describe ProductItem, "购物车 商品 " do
                                             :product => Product.first,
                                             :transaction => order1) }
 
+    let(:colour)       { Property.find_by_name("colour") }
+    let(:sizes)       { Property.find_by_name("sizes") }
+
+
     it "添加属性" do
       product_item.properties << Property.first
       product_item.delegate_property_setup
@@ -98,6 +102,18 @@ describe ProductItem, "购物车 商品 " do
       product_item.save
       ProductItem.last.sizes.should == "S"
     end
+
+    it "扩展的 create" do
+      apple = Product.first
+      apple.properties << sizes
+      apple.properties << colour
+      apple.price_options.create(:property => sizes)
+      apple.price_options.create(:property => colour)
+      item = ProductItem.create(:product => apple, :options => { :sizes => "L", :colour => "red" })
+      item.sizes.should == "L"
+      item.colour.should == "red"
+    end
+
   end
 
   describe "内存关联" do
