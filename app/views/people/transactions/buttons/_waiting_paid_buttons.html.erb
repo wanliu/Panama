@@ -1,10 +1,13 @@
 <div class="controls pull-right">
 	<div class="btn-group">
-		<%= link_to '#', :class => 'btn btn-large' do %>
+		<%= link_to '#',
+					:class => 'btn btn-large btn-primary',
+					'event-name' => 'back',
+					'event-url' => trigger_event_person_transaction_path(@people, transaction, :back) do %>
 			<%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
 		<% end %>
 
-		<%= link_to '#', :class => 'btn btn-large btn-primary' do %>
+		<%= link_to '#', :class => 'btn btn-large btn-primary', 'event-name' => 'paid' do %>
 			<%=raw "确认付款&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
 		<%#= button_to event,

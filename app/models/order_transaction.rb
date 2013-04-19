@@ -2,7 +2,7 @@
 
 class OrderTransaction < ActiveRecord::Base
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address
   attr_accessor :total
 
   has_one :address,
@@ -23,6 +23,10 @@ class OrderTransaction < ActiveRecord::Base
 
   validates_presence_of :buyer
   validates_presence_of :seller_id
+  validates_associated :address
+  # validates_presence_of :address
+
+  accepts_nested_attributes_for :address
   # validates_presence_of :address
 
   after_create :notice_user

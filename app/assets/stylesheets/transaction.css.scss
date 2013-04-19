@@ -149,7 +149,7 @@
 		}
 
 		.address-panel {
-			display: none;
+			display: block;
 		}
 
 	}
@@ -216,6 +216,12 @@
 			margin-left: 50px;
 		}
 	}
+}
+
+.slide-box {
+	// border: 1px solid red;
+	overflow: hidden;
+	position: relative;
 }
 
 .info {

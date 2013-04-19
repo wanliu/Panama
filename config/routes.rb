@@ -16,7 +16,7 @@ Panama::Application.routes.draw do
   #   add_extension(MockExtension.new)
   # end
 
-  resources :people do
+  resources :people, :key => :person_id do
     collection do
       get ":shop_name/show_invite/:login", :to => "people#show_invite"
       get ":shop_name/show_email_invite", :to => "people#show_email_invite"
@@ -26,7 +26,8 @@ Panama::Application.routes.draw do
 
     resources :transactions, :controller => "people/transactions" do
       member do
-        post "event/:event", :to => "people/transactions#event", :as => :trigger_event
+        post "event(/:event)", :to => "people/transactions#event", :as => :trigger_event
+        put "address", :to => "people/transactions#address", :as => :update_address
       end
 
       collection do

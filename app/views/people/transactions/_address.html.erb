@@ -1,0 +1,47 @@
+<%= simple_form_for transaction,
+					:url => update_address_person_transaction_path(people, transaction),
+					:html => { :class => "form-horizontal address"},
+					:remote=>true do |f| %>
+	<div class="adddress_input">
+	<%= f.input :address,
+				:as => :chosen,
+				:collection => people.addresses,
+				:label_method => :location,
+				:value_method => :id,
+				:input_html => { :class => :span12 } %>
+	<div class="btn-group address-add">
+		<%= button_tag icon(:list), :class => "btn" %>
+	</div>
+	</div>
+
+	<div class="address-panel">
+	<%= simple_fields_for :addresses do |address_form| %>
+		<div class="control-group">
+			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
+			<div class="controls controls-row">
+				<div class="span8">
+				<%= address_form.input :province_id,
+									   :as => :depend_select,
+									   :children => :city,
+									   :wrapper => :inline,
+									   :collection => get_city %>
+				<%= address_form.input :city_id,
+									   :as => :depend_select,
+									   :children => :area,
+									   :wrapper => :inline,
+									   :collection_url => "/city/" %>
+				<%= address_form.input :area_id,
+									   :as => :depend_select,
+									   :wrapper => :inline,
+									   :collection_url => "/city/" %>
+				</div>
+				<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
+
+			</div>
+		</div>
+
+		<%= address_form.input :road, :input_html => { :class => :span12 } %>
+	<% end %>
+	</div>
+
+<% end %>
