@@ -1,14 +1,15 @@
 <!-- 等待付款 -->
-<div class="info">
+<div class="container-fluid">
+	<div class="info">
 	<div class="row-fluid">
 		<div class="span2">
 			<label class="control-label" for="inputEmail">收货地址</label>
-		</div>	
+		</div>
 		<div class="span8">
-			<%= @transaction.address.location %>
+			<%= transaction.address.try(:location) %>
 		</div>
 		<div class="span2">
-			邮编 <small><%= @transaction.address.zip_code %></small>			
+			邮编 <small><%= transaction.address.try(:zip_code) %></small>
 		</div>
 	</div>
 
@@ -17,9 +18,9 @@
 			<label class="control-label" for="inputEmail">购买的宝贝</label>
 		</div>
 		<div class="span10">
-			<% @transaction.items[0...10].each do |item| %>
+			<% transaction.items[0...10].each do |item| %>
 				<%= image_tag item.product.photos.icon %><small>x<%= item.amount.to_i %></small>
-			<% end %>			
+			<% end %>
 		</div>
 	</div>
 </div>
@@ -30,11 +31,11 @@
 				<div class="left-frame"></div>
 			</th>
 			<th>
-				<%= @transaction.items_count %>
+				<%= transaction.items_count %>
 			</th>
-			<th><strong>小计: <%= number_to_currency(@transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
+			<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
 			</th>
-			<th><strong>合计: <%= number_to_currency(@transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+			<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
 			</th>
 			<th class="relative">
 				<div class="right-frame"></div>
@@ -71,7 +72,7 @@
 					<div class="controls">
 						<input name="password" class="input-xlarge" type="password" />
 					</div>
-				</div>				
+				</div>
 
 				<div class="control-group actions">
 					<div class="controls pull-right">
@@ -86,3 +87,4 @@
 			</blockquote>
 		</div>
 	</div>
+</div>

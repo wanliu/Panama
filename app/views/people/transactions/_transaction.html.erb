@@ -1,5 +1,5 @@
 <% seller = transaction.seller %>
-<div class="transaction transaction-<%=transaction.id %>">
+<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>">
 	<div class="wrapper-box">
 	<div class="transaction-header">
 		<div class="avatar">
@@ -105,8 +105,10 @@
 </div>
 <script type="text/javascript">
 	require(["jquery", "jquery_ujs", "people/transaction_card"], function($, a, Transaction ){
-		var id = ".transaction-<%=transaction.id %>";
-		var card = new Transaction.TransactionCard({el: $(id), initial: "<%= transaction.state %>" });
+		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
+		var card = new Transaction.TransactionCard({el: $(id),
+													initial: "<%= transaction.state %>",
+													event_url: "<%= trigger_event_person_transaction_path(@people, transaction) %>"	});
 		console.log(card);
 	});
 </script>

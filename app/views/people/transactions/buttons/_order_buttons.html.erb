@@ -1,6 +1,9 @@
 <div class="controls pull-right">
 	<div class="btn-group">
-		<%= link_to '#', :class => 'btn btn-large btn-primary' do %>
+		<%= link_to '#',
+					:class => 'btn btn-large btn-primary',
+					'event-name' => 'buy',
+					'event-url' => trigger_event_person_transaction_path(@people, transaction, :buy) do %>
 			<%=raw "确认订单&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
 		<%#= button_to "确认订单",

@@ -27,7 +27,14 @@ class People::TransactionsController < People::BaseController
     @transaction = OrderTransaction.find(params[:id])
     authorize! :event, @transaction
     if @transaction.fire_events!(params[:event])
-      redirect_to person_transaction_path(@people.login, @transaction)
+      render partial: 'transaction',
+                   object:  @transaction,
+                   locals: {
+                     state:  @transaction.state,
+                     people: @people
+                   }
+      # render :partial => 'transaction', :transaction => @transaction, :layout => false
+      # redirect_to person_transaction_path(@people.login, @transaction)
     end
   end
 
@@ -94,8 +101,33 @@ class People::TransactionsController < People::BaseController
         format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: "edit", :layout => false }
         format.json { render json: @transaction.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def address
+    @transaction = OrderTransaction.find(params[:id])
+    respond_to do |format|
+      debugger
+      address_params = params[:addresses]
+      address_id = params[:order_transaction][:address_id]
+      if address_id.present?
+        @transaction.update_attribute(:address_id, address_id)
+      else
+        @transaction.create_address(address_params)
+        if @transaction.save
+          # format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
+          format.html { render :text => :OK }
+        else
+          format.html { render partial: "address",
+                               layout: false,
+                               status: '400 Validation Error',
+                               locals: {
+                                 transaction: @transaction,
+                                 :people => @people }}
+        end
       end
     end
   end
