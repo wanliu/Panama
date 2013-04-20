@@ -1,0 +1,61 @@
+<div class='row-fluid topic-panel'>
+  <div class='span1 user-info'>
+    <div>
+      <img class="img-polaroid avatar" />
+    </div>
+    <div class='send_user'>
+    </div>
+  </div>
+  <div class='span11'>
+    <div class='well well-msg topic'>
+      <a class="{{status}} status">{{status_name}}</a>
+      <abbr class='timeago topic_date' title='{{created_at}}'></abbr>
+      <span class='user_panel'></span>
+      {{#receive_shop_name}}
+      <span clas='middle-line'>-</span>
+      <a href='/shops/{{receive_shop_name}}'>{{receive_shop_name}}</a>
+      {{/receive_shop_name}}
+
+      {{#topic_category_name}}
+      ({{topic_category_name}})
+      {{/topic_category_name}}
+      <hr class='line' />
+      <p>
+        {{{content_html}}}
+      <p>
+      <div class='attachments'>
+      </div>
+      <div class='topic-comments'>
+        <div>回复:
+          <a href='javascript:void(0)' class='more_comment'></a>
+          <a href='javascript:void(0)' class='hide_more_comment'>隐藏评论</a>
+        </div>
+        <div class='comments_panel'></div>
+        <div class='topic_nav'>
+          <button class='btn btn-mini show_comment'>
+            <i class='icon-edit'></i>
+          </button>
+        </div>
+        <div class="comment_panel">
+          <div class='row-fluid'>
+            <div class='span1'>
+              <div class='user_avatar'></div>
+              <div class='user_login'></div>
+            </div>
+            <div class='span11'>
+              <form class='comment_form'>
+                <div>
+                  <textarea name='content'></textarea>
+                </div>
+                <div>
+                  <input type='submit' value='发布评论' class='btn btn-primary disabled' />
+                  <input type='button' value='取消' class='btn cancel' />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

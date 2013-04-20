@@ -4,6 +4,11 @@
 //= require people/comment
 //= require jquery.atwho
 //= require product_comment
+//= require people/following
+//= require communities
+//= require ./lib/chose-friend
+//= require people/community_people
+//= require attachment_uploader
 
 @import "compass/css3";
 @import "variables";
@@ -116,5 +121,9 @@
 .depend_select {
 
 	width: 90px;
+}
+
+.lf {
+	cursor: pointer;
 }
 

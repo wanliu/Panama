@@ -116,7 +116,7 @@ define(["jquery", "user_typeahead", "jquery-ui"
             _.extend(@, options)
             @$el = $(@el)
             @$el.html(@template.render(@model.toJSON()))
-            $("img.avatar", @$el).attr("src", @model.get('icon'))
+            $("img.avatar", @$el).attr("src", @model.get('icon_url'))
             @model.bind("remove_employee_el", _.bind(@remove_el, @))
 
         render: () ->

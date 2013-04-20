@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
-
+gem "rails_autolink", ">= 1.0.9"
 # database orm adapter
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
@@ -46,6 +46,8 @@ gem 'apotomo', '~> 1.2.3'
 gem 'github-markup', '~> 0.7.4'
 gem 'redcarpet', '~> 2.2.2'
 
+# Markdown 格式
+gem "rouge", "~> 0.2.14"
 
 # form helper
 gem 'simple_form', '~> 2.0.4'
@@ -137,3 +139,4 @@ gem 'passenger'
 gem "default_value_for"
 gem 'cancan'
 gem 'rails-setting',:github => "huxinghai1988/rails-setting"
+gem 'text_format_html',:github => "huxinghai1988/text_format_html"
