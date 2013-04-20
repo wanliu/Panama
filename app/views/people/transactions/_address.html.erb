@@ -1,6 +1,7 @@
-<%= simple_form_for transaction,
+<div class="address-form">
+<%= simple_nested_form_for transaction,
 					:url => update_address_person_transaction_path(people, transaction),
-					:html => { :class => "form-horizontal address"},
+					:html => { :class => "form-horizontal"},
 					:remote=>true do |f| %>
 	<div class="adddress_input">
 	<%= f.input :address,
@@ -15,8 +16,8 @@
 	</div>
 
 	<div class="address-panel">
-	<%= simple_fields_for :addresses do |address_form| %>
-		<div class="control-group">
+	<%= simple_fields_for :address, transaction.address do |address_form| %>
+		<div class="control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
 			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
 			<div class="controls controls-row">
 				<div class="span8">
@@ -25,15 +26,18 @@
 									   :children => :city,
 									   :wrapper => :inline,
 									   :collection => get_city %>
+				<%= address_form.error :province_id %>
 				<%= address_form.input :city_id,
 									   :as => :depend_select,
 									   :children => :area,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
+				<%= address_form.error :city_id %>
 				<%= address_form.input :area_id,
 									   :as => :depend_select,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
+				<%= address_form.error :area_id %>
 				</div>
 				<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
 
@@ -45,3 +49,4 @@
 	</div>
 
 <% end %>
+</div>

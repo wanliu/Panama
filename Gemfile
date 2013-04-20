@@ -29,7 +29,7 @@ group :assets do
 end
 
 gem 'cache_digests', '~> 0.2.0'
-gem 'jquery-rails', '~> 2.1.3'
+# gem 'jquery-rails', '~> 2.1.3'
 gem 'html5-rails', '~> 0.0.6'
 gem 'requirejs-rails', '~> 0.9.0'
 
@@ -133,7 +133,11 @@ gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'
 gem 'passenger'
+gem "nested_form"
 # 默认值
 gem "default_value_for"
 gem 'cancan'
 gem 'rails-setting',:github => "huxinghai1988/rails-setting"
+
+gem 'activemerchant'
+gem 'activemerchant_patch_for_china'
