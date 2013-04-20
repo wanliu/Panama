@@ -29,7 +29,7 @@ describe TopicReceive, "贴子接收人" do
     }
   end
 
-  describe "实体方法" do
+  describe "实例方法" do
 
     it '拥有属性' do
       treceive = TopicReceive.new
