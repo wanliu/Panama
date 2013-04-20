@@ -5,6 +5,7 @@ define(function(require, exports, module){
     var h5bp = require('h5bp');
     var chosen = require('lib/chosen.ex');
     var ajax_auth = require('ajax_auth_client');
+    var timeago = require("timeago");
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
@@ -40,5 +41,11 @@ define(function(require, exports, module){
             $(query).replaceWith(data);
         });
     }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr){
+            xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+        }
+    })
 });
 

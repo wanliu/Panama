@@ -6,4 +6,6 @@ class GroupPermission < ActiveRecord::Base
   belongs_to :group ,:class_name => "ShopGroup"
   belongs_to :permission
 
+  validates_presence_of :group
+  validates_presence_of :permission
 end

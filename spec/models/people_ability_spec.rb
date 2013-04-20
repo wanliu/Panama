@@ -89,4 +89,14 @@ describe PeopleAbility, "个人页面权限" do
             @current_ability.can?(:batch_create, transaction).should be_false
         end
     end
+
+    describe "没登陆访问" do
+        before :each do
+            @current_ability = PeopleAbility.new(nil, anonymous)
+        end
+
+        it "没有权限" do
+            @current_ability.cannot :manage, :all
+        end
+    end
 end
