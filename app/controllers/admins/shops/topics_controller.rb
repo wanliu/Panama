@@ -2,15 +2,15 @@
 class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def create
-    ptopic = params[:topic]
-    opts = max_level(ptopic.delete(:friends))
-    ptopic.delete(:topic_category_id) unless opts[:status] == :community
-    atta_opts = ptopic.delete(:attachments) || {}
+    topic = params[:topic]
+    opts = max_level(topic.delete(:friends))
+    topic.delete(:topic_category_id) unless opts[:status] == :community
+    atta_opts = topic.delete(:attachments) || {}
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
     end
-    @topic = current_shop.topics.create(ptopic.merge({
+    @topic = current_shop.topics.create(topic.merge({
       status: opts[:status],
       user_id: current_user.id
     }))
@@ -75,17 +75,18 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
   end
 
   def max_level(friends)
-    if Topic.is_level(friends, "puliceity")
-      return {status: :community, circles: [current_shop]}
-    elsif Topic.is_level(friends, "external")
+    case
+    when Topic.is_level(friends, "puliceity")
+      {status: :community, circles: [current_shop]}
+    when Topic.is_level(friends, "external")
       circles = current_shop.circles + current_shop.all_friend_circles
-      return {status: :external, circles: circles}
-    elsif Topic.is_level(friends, "circle")
+      {status: :external, circles: circles}
+    when Topic.is_level(friends, "circle")
       recievs = Topic.receive_other(friends)
       recievs[:circles] = current_shop.circles + recievs[:circles]
-      return recievs
+      recievs
     else
-      return Topic.receive_other(friends)
+      Topic.receive_other(friends)
     end
   end
 end

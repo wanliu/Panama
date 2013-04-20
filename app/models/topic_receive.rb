@@ -38,29 +38,29 @@ class TopicReceive < ActiveRecord::Base
   end
 
   def self.user(user, topic_id = nil)
-    _create(User, user, topic_id)
+    _create("User", user, topic_id)
   end
 
   def self.shop(shop, topic_id = nil)
-    _create(Shop, shop, topic_id)
+    _create("Shop", shop, topic_id)
   end
 
   def self.circle(circle, topic_id = nil)
-    _create(Circle, circle, topic_id)
+    _create("Circle", circle, topic_id)
   end
 
   class << self
     private
-    def _create(receive, model, topic_id)
-      options = {receive_id: model, receive_type: receive.class.name}
-      options[:receive_id] = model.id if model.is_a?(receive)
+    def _create(receive_type, model, topic_id)
+      options = {receive_id: model, receive_type: receive_type}
+      options[:receive_id] = model.id if model.class.name == receive_type
       options[:topic] = topic_id unless topic_id.nil?
       create(options)
     end
   end
 
   def valid_receive_type?
-    if receive.is_a?(User) && receive.is_a?(Shop) && receive.is_a?(Circle)
+    if !receive.is_a?(User) && !receive.is_a?(Shop) && !receive.is_a?(Circle)
       errors.add(:receive_type, "不是通知类型！")
     end
   end

@@ -1,13 +1,13 @@
 #encoding: utf-8
 require "spec_helper"
 
-describe Admins::Shops::TopicsController, "商店帖子控制器" do
-  let(:shop){ FactoryGirl.create(:shop, user: current_user) }
+describe People::TopicsController, "个人帖子控制器" do
+  let(:shop){ FactoryGirl.create(:shop, user: anonymous) }
+  let(:topic_category){ FactoryGirl.create(:topic_category, shop: shop) }
   let(:circle){ new_cricle("客户") }
-  let(:category){ FactoryGirl.create(:topic_category, shop: shop) }
 
   def request_opt
-    { shop_id: shop.name }
+    { person_id: current_user.login }
   end
 
   def basis_opt
@@ -15,17 +15,14 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
   end
 
   def new_cricle(name)
-    temp_cricle = shop.circles.find_by(name: name)
-    temp_cricle.nil? ? shop.circles.create(name: name) : temp_cricle
+    tcricle = current_user.circles.find_by(name: name)
+    tcricle.nil? ? current_user.circles.create(name: name) : tcricle
   end
 
   describe "POST create" do
 
     def topic_options
-      {
-        content: "我们商店做活动!",
-        topic_category_id: category.id
-      }
+      { content: "我们商店做活动!" }
     end
 
     it "公开发帖" do
@@ -37,9 +34,8 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
       response.should be_success
       topic = assigns(:topic)
       topic.valid?.should be_true
-      topic.status.name.should eq(:community)
-      topic.category.should eq(category)
-      topic.receives.map{|r| r.receive }.should eq([shop])
+      topic.status.name.should eq(:puliceity)
+      topic.receives.map{|r| r.receive }.should eq([current_user])
     end
 
     it "发给某个圈子" do
@@ -60,7 +56,7 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
       options = topic_options.merge(friends: {
         "0" => {id: "circle", status: "scope"}
       })
-      ancircle = shop.circles.create(name: "某圈子")
+      ancircle = current_user.circles.create(name: "某圈子")
 
       xhr :post, :create, request_opt.merge(topic: options), get_session
       response.should be_success
@@ -68,7 +64,7 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
       topic.valid?.should be_true
       topic.status.name.should eq(:circle)
       topic.category.should be_nil
-      topic.receives.map{|r| r.receive }.should eq(shop.circles)
+      topic.receives.map{|r| r.receive }.should eq(current_user.circles)
     end
 
     it "发给某个用户" do
@@ -117,6 +113,18 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
       topic.attachments.map{|a| a.attachment}.should eq([atta])
     end
 
+    it "发给商圈帖子" do
+      options = topic_options.merge(
+        topic_category_id: topic_category.id,
+        friends: { "1" => {id: shop.id, status: "Shop" }})
+      xhr :post, :create, request_opt.merge(topic: options), get_session
+      topic = assigns(:topic)
+      topic.valid?.should be_true
+      topic.status.name.should eq(:community)
+      topic.category.should eq(topic_category)
+      topic.receives.map{|r| r.receive }.should eq([shop])
+    end
+
     it "没有接收对象" do
       anon = anonymous
       options = topic_options.merge(friends: {})
@@ -127,10 +135,10 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
   end
 
   describe "GET index" do
-    let(:topic1){ shop.topics.create(basis_opt.merge(content: "去买东西啊！")) }
-    let(:topic2){ shop.topics.create(basis_opt.merge(content: "帮我看看这东西怎么样!")) }
-    let(:topic3){ shop.topics.create(basis_opt.merge(content: "你买过这东西吗？")) }
-    let(:topic4){ shop.topics.create(basis_opt.merge(status: :community,content: "32432fdsa")) }
+    let(:topic1){ current_user.topics.create(basis_opt.merge(content: "去买东西啊！")) }
+    let(:topic2){ current_user.topics.create(basis_opt.merge(content: "帮我看看这东西怎么样!")) }
+    let(:topic3){ current_user.topics.create(basis_opt.merge(content: "你买过这东西吗？")) }
+    let(:topic4){ current_user.topics.create(basis_opt.merge(status: :community, content: "32432fdsa")) }
 
     before :each do
       topic1.receives.creates([circle])
@@ -154,7 +162,8 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
       assigns(:topics).select{|t| t[:id] == topic3.id}.should_not be_empty
     end
 
-    it "获取与我相关的帖子" do
+    it "获取关注商家帖子" do
+      current_user.followings.shop(shop.id)
       xhr :get, :index, request_opt.merge(circle_id: "community"), get_session
       assigns(:topics).select{|t| t[:id] == topic4.id}.should_not be_empty
       assigns(:topics).select{|t| t[:id] == topic1.id}.should be_empty
@@ -163,32 +172,8 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
     end
   end
 
-  describe "GET my_related" do
-    it "与我相关" do
-      following = anonymous.followings.shop(shop.id)
-      get :my_related, request_opt, get_session
-      response.should be_success
-      assigns(:circles).should eq(shop.circles)
-      assigns(:followers).should eq([following])
-      assigns(:categories).should eq(shop.topic_categories)
-    end
-  end
-
-  describe "GET category" do
-    let(:topic1){ shop.topics.create(basis_opt.merge(
-      topic_category_id: category.id,
-      status: :community,
-      content: "去买东西啊！")) }
-    let(:topic2){ shop.topics.create(basis_opt.merge(content: "帮我看看这东西怎么样!")) }
-
-    it "根据分类查询帖子" do
-      get :category, request_opt.merge(topic_category_id: category.id), get_session
-      assigns(:topics).should eq([topic1])
-    end
-  end
-
   describe "GET receives" do
-    let(:topic2){ shop.topics.create(basis_opt.merge(content: "帮我看看这东西怎么样!")) }
+    let(:topic2){ current_user.topics.create(basis_opt.merge(content: "帮我看看这东西怎么样!")) }
 
     before do
       @anonymous1, @anonymous2 = anonymous, anonymous
@@ -203,5 +188,4 @@ describe Admins::Shops::TopicsController, "商店帖子控制器" do
       topic.receive_users.select{|r| r["id"]==@anonymous2.id }.should_not be_empty
     end
   end
-
 end
