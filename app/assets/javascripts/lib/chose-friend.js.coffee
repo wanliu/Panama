@@ -32,7 +32,7 @@ define ["jquery", "twitter/bootstrap/tooltip", "twitter/bootstrap/popover"],($) 
     show: () ->
       if @el.css("display") is "none"
         @el.show()
-        @el.trigger("hide")
+        @el.trigger("hideChoseView")
 
     hide: () ->
       @el.hide()
@@ -157,11 +157,11 @@ define ["jquery", "twitter/bootstrap/tooltip", "twitter/bootstrap/popover"],($) 
 
     hide: () ->
       @el.hide()
-      @el.trigger("show")
+      @el.trigger("showDropdown")
 
     show: () ->
       @el.show()
-      @el.trigger("hide")
+      @el.trigger("hideDropdown")
 
     create_panel: () ->
       $("<a />")
@@ -196,7 +196,7 @@ define ["jquery", "twitter/bootstrap/tooltip", "twitter/bootstrap/popover"],($) 
         init_template: @options.init_template
       )
       @load_init_data()
-      @drop_down.fetch_circle()
+      @drop_down.fetch_circle($.proxy(@load_default_value, @))
       @drop_down.fetch_following($.proxy(@load_default_value, @))
 
       @chose_view = new ChoseUser(
@@ -204,9 +204,9 @@ define ["jquery", "twitter/bootstrap/tooltip", "twitter/bootstrap/popover"],($) 
         selector_data: $.proxy(@selector_data, @)
       )
 
-      @chose_view.el.bind("hide", $.proxy(@drop_down.hide, @drop_down))
-      @chose_view.el.bind("show", $.proxy(@drop_down.show, @drop_down))
-      @drop_down.el.bind("hide", $.proxy(@chose_view.hide, @chose_view))
+      @chose_view.el.bind("hideDropdown", $.proxy(@drop_down.hide, @drop_down))
+      @chose_view.el.bind("showDropdown", $.proxy(@drop_down.show, @drop_down))
+      @drop_down.el.bind("hideChoseView", $.proxy(@chose_view.hide, @chose_view))
 
       @options.el.append(@chose_view.render())
       @options.el.append(@drop_down.render())
@@ -288,24 +288,25 @@ define ["jquery", "twitter/bootstrap/tooltip", "twitter/bootstrap/popover"],($) 
       @sort_item()
 
     sort_item: () ->
-      $("li", @drop_down.ul_el).each (i, bli) =>
-        $("li", @drop_down.ul_el).each (j, ali) ->
+      @each_ul_items (i, bli) =>
+        @each_ul_items (i, ali) =>
           bindex = parseInt($(bli).attr("index"))
           aindex = parseInt($(ali).attr("index"))
-          if bindex > aindex
-            $(bli).before($(ali))
+          $(bli).before($(ali)) if bindex > aindex
 
     load_init_data: () ->
-      $("li", @drop_down.ul_el).each (i, li) =>
+      @each_ul_items (i, li) =>
         unless data?
           data = $(li).attr("data-value")
           @set_data(li, data)
 
-    load_default_value: (_data) ->
+    each_ul_items: (callback) ->
+      $("li", @drop_down.ul_el).each callback
+
+    load_default_value: (items) ->
       if @options.circle.default_value? && @options.circle.default_value != ""
-        $("li", @drop_down.ul_el).each (i, li) =>
-          data = @get_data(li)
-          @default_value(data, li)
+        @each_ul_items (i, li) =>
+          @default_value(@get_data(li), li)
 
     default_value: (data, li) ->
       if data?

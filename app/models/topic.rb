@@ -31,6 +31,8 @@ class Topic < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :owner
 
+  validate :valid_status?
+
   #puliceity: 公开, external: 扩展, circle: 限定范围, community: 商家圈
   acts_as_status :status, [:puliceity, :external, :circle, :community]
 
@@ -43,11 +45,11 @@ class Topic < ActiveRecord::Base
   def receive_users
     users = []
     receives.includes(:receive).each do |r|
-      if r.receive
+      unless r.receive.is_a?(Shop)
         users << if r.receive.is_a?(Circle)
           r.receive.friend_users
         else
-          r.receive.as_json(methods: :icon)
+          r.receive.as_json
         end
       end
     end
@@ -134,11 +136,11 @@ class Topic < ActiveRecord::Base
       circles = _owner.circles if circles == :all
       owner_type, owner_id = _owner.class.name, _owner.id
       #获取圈子的好友
-      user_ids = circles.includes(:friends).map{|c| c.friends.map{|f| f.user_id} }.flatten
+      user_ids = circle_friends(circles)
       #获取与我相关的贴,去除不是我好友的贴
       topic_ids = receive_topics(owner_type, owner_id)
       #获取圈子的发贴
-      ctopic_ids = receive_topics("Circle", circles.map{|c| c.id})
+      ctopic_ids = receive_topics("Circle", circle_ids(circles))
 
       where("(owner_id=? and owner_type=? #{wh})" +
        " or (owner_id in (?) and owner_type ='User' and status=1)" +
@@ -148,10 +150,36 @@ class Topic < ActiveRecord::Base
       )
     end
 
+    def circle_ids(circle)
+      if circle.is_a?(Circle)
+        [circle.id]
+      else
+        circle.map{|c| c.id}
+      end
+    end
+
+    def circle_friends(circle)
+      if circle.is_a?(Circle)
+        circle.friends.map{|f| f.user_id}
+      else
+        circle.includes(:friends).map{|c| c.friends.map{|f| f.user_id} }.flatten
+      end
+    end
+
     def receive_topics(receive_type, receive_id)
       TopicReceive.where(receive_type: receive_type, receive_id: receive_id)
       .select("distinct topic_id").order('created_at desc').map{|t| t.topic_id}
     end
+  end
 
+  private
+  def valid_status?
+    errors.add(:status, "无效的状态！") if status == :invalid
+  end
+
+  def valid_category?
+    if category.nil? && status == :community
+      errors.add(:category_id, "没有选择分类")
+    end
   end
 end
