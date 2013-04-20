@@ -35,7 +35,6 @@ class Shop < ActiveRecord::Base
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
   friendly_id :name
 
-
   #所有圈子好友
   def all_friends
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
@@ -53,13 +52,6 @@ class Shop < ActiveRecord::Base
     attribute["icon_url"] = icon_url
 
     attribute
-  end
-
-  #获取某个圈子好友
-  def find_friend_by_circle(circle_id = nil)
-    _circles = circle_id.nil? ? circles : circles.where(:id => circle_id)
-    circle_ids = _circles.select("id").map{|c| c.id}
-    CircleFriends.where(:circle_id => circle_ids).joins(:user).map{|u| u.user}
   end
 
   def all_circle_topics(circles)

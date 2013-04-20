@@ -132,30 +132,40 @@ class Topic < ActiveRecord::Base
     end
 
     def scope_related(_owner, circles)
-      wh = circles == :all ?  "" : " and status=1"
       circles = _owner.circles if circles == :all
-      owner_type, owner_id = _owner.class.name, _owner.id
       #获取圈子的好友
       user_ids = circle_friends(circles)
       #获取与我相关的贴,去除不是我好友的贴
-      topic_ids = receive_topics(owner_type, owner_id)
+      topic_ids = receive_topics(_owner.class.name, _owner.id)
       #获取圈子的发贴
       ctopic_ids = receive_topics("Circle", circle_ids(circles))
+      where("#{owner_condit(_owner, circles)} " +
+        " or #{user_condit} or #{receive_oneself_condit} or #{circle_condit}",
+        user_ids, topic_ids, user_ids, ctopic_ids)
+    end
 
-      where("(owner_id=? and owner_type=? #{wh})" +
-       " or (owner_id in (?) and owner_type ='User' and status=1)" +
-       " or (id in (?) and owner_type='User' and owner_id in (?) )" +
-       " or id in (?)",
-        owner_id, owner_type, user_ids, topic_ids, user_ids, ctopic_ids
-      )
+    #所属的公开或者所属的条件
+    def owner_condit(_owner, circles)
+      wh = circles == :all ?  "" : " and status=1"
+      "(owner_id=#{_owner.id} and owner_type='#{_owner.class.name}' #{wh})"
+    end
+
+    #好友的公开条件
+    def user_condit
+      "(owner_id in (?) and owner_type ='User' and status=1)"
+    end
+
+    #好友指定接收者的帖子条件
+    def receive_oneself_condit
+      "(id in (?) and owner_type='User' and owner_id in (?) )"
+    end
+
+    def circle_condit
+      "id in (?)"
     end
 
     def circle_ids(circle)
-      if circle.is_a?(Circle)
-        [circle.id]
-      else
-        circle.map{|c| c.id}
-      end
+      circle.is_a?(Circle) ? [circle.id] : circle.map{|c| c.id}
     end
 
     def circle_friends(circle)

@@ -36,7 +36,7 @@ describe Topic, "贴子模型" do
     }
   end
 
-  describe "实体方法" do
+  describe "实例方法" do
     it "拥有属性" do
       topic = Topic.new
       topic.should respond_to :user_id
