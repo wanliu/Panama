@@ -26,6 +26,7 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
             event_name = btn.attr('event-name')
             url = @eventUrl(event)
             @[event_name].call(@)
+            false
             # if event == 'back'
             #     @slideBeforeEvent(event_name)
             # else
@@ -107,18 +108,40 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
 
 
         enterOrder: (event, from ,to , msg ) ->
-            # @$(".address-panel").slideToggle()
-            # $.rails.handleRemote(@$("form.address"))
-            @$("form.address").bind 'ajax:success.rails', (xhr, data, status) =>
-                @fsm.transition()
-                false
+            @$(".address-form>form").submit(_.bind(@saveAddress, @))
 
-            @$("form.address").bind 'ajax:error.rails', (xhr, data, status) =>
-                @$("form.address").html(data.responseText)
+            # @$(".address-form>form").bind 'ajax:success.rails', (xhr, data, status) =>
+            #     @transition()
+            #     @slideAfterEvent(event)
+            #     false
+
+            # @$(".address-form>form").bind 'ajax:error.rails', (xhr, data, status) =>
+            #     @$(".address-form").html(data.responseText)
+            #     # $.rails.remoteHandle(@$(".address-form"))
+            #     @alarm()
+            #     @transition.cancel()
+            #     false
 
         leaveOrder: (event, from ,to , msg) ->
-            @$("form.address").submit()
+            @$(".address-form>form").submit()
             StateMachine.ASYNC
+
+        saveAddress: (event) ->
+            params = @$(".address-form>form").serialize()
+            url = @$(".address-form>form").attr("action")
+            $.post(url, params)
+                .success (xhr, data, status) =>
+                    @transition()
+                    @slideAfterEvent(event)
+                    false
+                .error (xhr, status) =>
+                    @$(".address-form").html(xhr.responseText)
+                    @$(".address-form>form").submit(_.bind(@saveAddress, @))
+                    @alarm()
+                    @transition.cancel()
+                    false
+            false
+
 
         alarm: () ->
             effect = "bounce"

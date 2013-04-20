@@ -110,7 +110,6 @@ class People::TransactionsController < People::BaseController
   def address
     @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
-      debugger
       address_params = params[:addresses]
       address_id = params[:order_transaction][:address_id]
       if address_id.present?

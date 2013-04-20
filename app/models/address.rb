@@ -15,7 +15,8 @@ class Address < ActiveRecord::Base
     "#{country}#{province}#{city}#{area}#{road}"
   end
 
-  validates :province_id, {:presence => true }
+  validates :road, :presence => true
+  validates :province_id, :presence => true
   validates :city, :superior => {:target => :province, :att => :city_id }
   validates :area, :superior => {:target => :city , :att => :area_id }
 
