@@ -22,7 +22,7 @@ class Circle < ActiveRecord::Base
   end
 
   def friend_users
-    friends.joins(:user).map{|f| f.user.as_json(methods: :icon) }
+    friends.joins(:user).map{|f| f.user.as_json }
   end
 
   def join_friend(user)

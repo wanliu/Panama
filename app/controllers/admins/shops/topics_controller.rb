@@ -2,17 +2,18 @@
 class Admins::Shops::TopicsController < Admins::Shops::SectionController
 
   def create
-    opts = max_level(params[:topic].delete(:friends))
-    params[:topic].delete(:topic_category_id) unless opts[:status] == :community
-    atta_opts = params[:topic].delete(:attachments) || {}
+    ptopic = params[:topic]
+    opts = max_level(ptopic.delete(:friends))
+    ptopic.delete(:topic_category_id) unless opts[:status] == :community
+    atta_opts = ptopic.delete(:attachments) || {}
     if opts[:circles].length <= 0
       respond_format({message: "没有选择范围!"}, 403)
       return
     end
-    @topic = current_shop.topics.create(params[:topic].merge({
-        status: opts[:status],
-        user_id: current_user.id
-      }))
+    @topic = current_shop.topics.create(ptopic.merge({
+      status: opts[:status],
+      user_id: current_user.id
+    }))
     if @topic.valid?
       @topic.receives.creates(opts[:circles])
       @topic.attachments.creates(atta_opts.values)
@@ -27,7 +28,6 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     @topics = _topics.limit(30).order("created_at desc")
     respond_to do |format|
       format.json{ render json: @topics.as_json(:include => :owner) }
-      format.html
     end
   end
 
@@ -44,7 +44,6 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     @topics = current_shop.topics.where(topic_category_id: params[:topic_category_id])
     respond_to do |format|
       format.json{ render json: @topics }
-      format.html
     end
   end
 
@@ -52,7 +51,6 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
     @topic = current_shop.topics.find(params[:id])
     respond_to do |format|
       format.json{ render json: @topic.receive_users }
-      format.html
     end
   end
 
@@ -90,5 +88,4 @@ class Admins::Shops::TopicsController < Admins::Shops::SectionController
       return Topic.receive_other(friends)
     end
   end
-
 end
