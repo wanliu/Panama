@@ -8,7 +8,7 @@
 		<div class="container-fluid info-header">
 			<div class="page-header">
 			  <h1><%= seller.name %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-				<%= distance_of_time_in_words Time.now, transaction.created_at %>
+				<%= time_ago_in_words transaction.created_at %>
 			  </small>
 
 			  	<button type="button" class="close" data-dismiss="alert">&times;</button>

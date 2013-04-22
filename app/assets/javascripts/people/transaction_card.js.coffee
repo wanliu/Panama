@@ -13,7 +13,8 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
             initial: 'none'
 
             events:  [
-                { name: 'buy',   from: 'order',             to: 'waiting_paid' }
+                { name: 'buy',   from: 'order',             to: 'waiting_paid' },
+                { name: 'back',  from: 'waiting_paid',      to: 'order'        }
             ]
 
             callbacks:
@@ -33,6 +34,8 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
             #     @slideAfterEvent(event_name)
             # false
 
+        beforeBack: (event, from ,to ) ->
+            @slideBeforeEvent(event)
 
         closeThis: (event) ->
             if confirm("要取消这笔交易吗?")
@@ -61,66 +64,57 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
         slideEvent: (event, direction = 'right') ->
 
             $.post @eventUrl(event), (data) =>
-                $side1 = $("<div class='slide-1'></div>")
-                $side2 = $("<div class='slide-2'></div>")
-
-                @$el.wrap($("<div class='slide-box'></div>"))
-                @$el.wrap($("<div class='slide-container'></div>"))
-                @$el.wrap($side1)
-                $slideBox = @$el.parents(".slide-box")
-                $slideContainer = @$el.parents(".slide-container")
-                $side2 = $("<div class='slide-2'></div>").html(data)
-                $side1 = @$el
-                $slideContainer.append($side2)
-
-                height =  Math.max($side2.height(), $side1.height())
-                length = $slideBox.width()
-                width = @$el.width()
-
-                $slideBox.height(height)
-                $slideBox.width(width)
-                $slideContainer.width( width * 2)
-                $slideContainer.height( height )
-
-                $side1.width(width)
-                      .height($side1.height())
-
-                overSlide = () ->
-                    $side1.unwrap()
-                          .remove()
-                    $side2.find(">.transaction")
-                          .unwrap()
-                          .unwrap()
-                          .unwrap()
+                @slidePage(data, direction)
 
 
-                if direction == 'right'
-                    $side1.css('float', 'left')
-                    $side2.width(width)
-                          .css('float', 'left')
-                    $slideBox.animate { scrollLeft: length }, "slow", overSlide
-                else
-                    $side1.css('float', 'right')
-                    $side2.width(width)
-                          .css('float', 'left')
-                    $slideBox.scrollLeft(length)
-                    $slideBox.animate { scrollLeft: -length }, "slow", overSlide
+        slidePage: (page, direction = 'right') ->
+            $side1 = $("<div class='slide-1'></div>")
+            $side2 = $("<div class='slide-2'></div>")
+
+            @$el.wrap($("<div class='slide-box'></div>"))
+            @$el.wrap($("<div class='slide-container'></div>"))
+            @$el.wrap($side1)
+            $slideBox = @$el.parents(".slide-box")
+            $slideContainer = @$el.parents(".slide-container")
+            $side2 = $("<div class='slide-2'></div>").html(page)
+            $side1 = @$el
+            $slideContainer.append($side2)
+
+            height =  Math.max($side2.height(), $side1.height())
+            length = $slideBox.width()
+            width = @$el.width()
+
+            $slideBox.height(height)
+            $slideBox.width(width)
+            $slideContainer.width( width * 2)
+            $slideContainer.height( height )
+
+            $side1.width(width)
+                  .height($side1.height())
+
+            overSlide = () ->
+                $side1.unwrap()
+                      .remove()
+                $side2.find(">.transaction")
+                      .unwrap()
+                      .unwrap()
+                      .unwrap()
 
 
-        enterOrder: (event, from ,to , msg ) ->
+            if direction == 'right'
+                $side1.css('float', 'left')
+                $side2.width(width)
+                      .css('float', 'left')
+                $slideBox.animate { scrollLeft: length }, "slow", overSlide
+            else
+                $side1.css('float', 'right')
+                $side2.width(width)
+                      .css('float', 'left')
+                $slideBox.scrollLeft(length)
+                $slideBox.animate { scrollLeft: -length }, "slow", overSlide
+
+        enterOrder: (event, from, to, msg ) ->
             @$(".address-form>form").submit(_.bind(@saveAddress, @))
-
-            # @$(".address-form>form").bind 'ajax:success.rails', (xhr, data, status) =>
-            #     @transition()
-            #     @slideAfterEvent(event)
-            #     false
-
-            # @$(".address-form>form").bind 'ajax:error.rails', (xhr, data, status) =>
-            #     @$(".address-form").html(data.responseText)
-            #     # $.rails.remoteHandle(@$(".address-form"))
-            #     @alarm()
-            #     @transition.cancel()
-            #     false
 
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
@@ -132,7 +126,7 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
             $.post(url, params)
                 .success (xhr, data, status) =>
                     @transition()
-                    @slideAfterEvent(event)
+                    @slideAfterEvent('buy')
                     false
                 .error (xhr, status) =>
                     @$(".address-form").html(xhr.responseText)
