@@ -34,7 +34,7 @@ class People::CirclesController < People::BaseController
     end
   end
 
-  #添加你的圈子对象
+  #获取把你加入的圈子对象
   def addedyou
     circle_ids = @people.circle_friends.map{|c| c.circle_id }
     @circles = Circle.where(:id => circle_ids).includes(:owner)
@@ -59,7 +59,7 @@ class People::CirclesController < People::BaseController
     @circle = @people.circles.find(params[:id])
     respond_to do |format|
       if circle_find_user(params[:user_id], @circle).nil?
-        if @circle.join_friend(params[:user_id])
+        if @circle.join_friend(params[:user_id]).valid?
           format.json{ render json: circle_find_user(params[:user_id], @circle).user }
         else
           format.json{ render json: {message: "加入失败！"}, status: 403 }
@@ -82,7 +82,7 @@ class People::CirclesController < People::BaseController
     end
   end
 
-  #移除某个用户所有圈子的这个好友
+  #移除所有圈子中的某个好友
   def circles_remove_friend
     @friends = current_user.all_friends.where(user_id: params[:user_id])
     @friends.destroy_all

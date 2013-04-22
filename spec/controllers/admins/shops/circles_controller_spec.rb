@@ -1,17 +1,18 @@
 #encoding: utf-8
 require "spec_helper"
 
-describe People::CirclesController, "个人圈子控制器" do
+describe Admins::Shops::CirclesController, "商店圈子控制器" do
+  let(:shop){ FactoryGirl.create(:shop, user: current_user) }
 
   def circle_opt
-    { :person_id => current_user.login }
+    { :shop_id => shop.name }
   end
 
   describe "GET index " do
-    it "获取个人所有圈子" do
-      current_user.circles.create(:name => "认识的人")
+    it "获取商店所有圈子" do
+      shop.circles.create(:name => "认识的人")
       get :index, circle_opt, get_session
-      assigns(:circles).should eq(current_user.circles)
+      assigns(:circles).should eq(shop.circles)
     end
   end
 
@@ -26,9 +27,9 @@ describe People::CirclesController, "个人圈子控制器" do
 
   describe "GET show" do
     it "浏览一个圈子" do
-      circle = current_user.circles.create(:name => "佰生人")
+      circle = shop.circles.create(:name => "佰生人")
       get :show, circle_opt.merge(:id => circle.id), get_session
-      assigns(:circles).should eq(current_user.circles)
+      assigns(:circles).should eq(shop.circles)
       assigns(:circle).should eq(circle)
     end
   end
@@ -36,7 +37,7 @@ describe People::CirclesController, "个人圈子控制器" do
   describe "GET friends" do
     it "获取某个圈子的好友" do
       anon1, anon2 = anonymous, anonymous
-      circle = current_user.circles.create(:name => "佰生人")
+      circle = shop.circles.create(:name => "佰生人")
       circle.join_friend(anon1)
       circle.join_friend(anon2)
       xhr :get, :friends, circle_opt.merge(:circle_id => circle.id), get_session
@@ -45,24 +46,11 @@ describe People::CirclesController, "个人圈子控制器" do
     end
   end
 
-  describe "GET addedyou" do
-    before do
-      anon = anonymous
-      @circle = anon.circles.create(:name => "佰生人")
-      @circle.join_friend(current_user)
-    end
-
-    it "把你加入的圈子对象" do
-      xhr :get, :addedyou, circle_opt, get_session
-      assigns(:circles).should eq([@circle])
-    end
-  end
-
   describe "GET all_friends" do
     before do
       @anon1, @anon2 = anonymous, anonymous
-      current_user.circles.create(:name => "佰生人").join_friend(@anon1)
-      current_user.circles.create(:name => "不熟悉的人").join_friend(@anon2)
+      shop.circles.create(:name => "佰生人").join_friend(@anon1)
+      shop.circles.create(:name => "不熟悉的人").join_friend(@anon2)
     end
 
     it "获取所有圈子好友" do
@@ -73,7 +61,7 @@ describe People::CirclesController, "个人圈子控制器" do
 
   describe "POST join_friend" do
     before do
-      @circle = current_user.circles.create(:name => "佰生人")
+      @circle = shop.circles.create(:name => "佰生人")
     end
 
     it "跟某个圈子成功加入好友" do
@@ -105,7 +93,7 @@ describe People::CirclesController, "个人圈子控制器" do
 
   describe "DELETE remove_friend" do
     before do
-      @circle = current_user.circles.create(:name => "佰生人")
+      @circle = shop.circles.create(:name => "佰生人")
     end
 
     it "移除某个圈子的某个好友" do
@@ -122,22 +110,30 @@ describe People::CirclesController, "个人圈子控制器" do
   describe "DELETE circles_remove_friend" do
     before do
       @anon = anonymous
-      current_user.circles.create(:name => "佰生人").join_friend(@anon)
-      current_user.circles.create(:name => "熟悉人").join_friend(@anon)
-      current_user.circles.create(:name => "不了解的人").join_friend(@anon)
+      shop.circles.create(:name => "佰生人").join_friend(@anon)
+      shop.circles.create(:name => "熟悉人").join_friend(@anon)
+      shop.circles.create(:name => "不了解的人").join_friend(@anon)
     end
 
     it "移除所有圈子的某个好友" do
-      current_user.all_friends.find_by(user_id: @anon.id).should_not be_nil
+      shop.all_friends.find_by(user_id: @anon.id).should_not be_nil
       xhr :delete, :circles_remove_friend, circle_opt.merge(user_id: @anon.id), get_session
       response.should be_success
-      current_user.all_friends.find_by(user_id: @anon.id).should be_nil
+      shop.all_friends.find_by(user_id: @anon.id).should be_nil
+    end
+  end
+
+  describe "GET followers" do
+
+    it "获取关注商店的用户" do
+      xhr :get, :followers, circle_opt, get_session
+      assigns(:users).should eq(shop.followers.map{|u| u.user})
     end
   end
 
   describe "DELETE destroy" do
     before do
-      @circle = current_user.circles.create(:name => "佰生人")
+      @circle = shop.circles.create(:name => "佰生人")
     end
 
     it "删除某个圈子" do

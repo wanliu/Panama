@@ -12,7 +12,6 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
     @circle = current_shop.circles.create(params[:circle])
     respond_to do |format|
       if @circle.valid?
-        format.html
         format.json{ render json: @circle }
       else
         format.json{ render json: draw_errors_message(@circle), status: 403 }
@@ -34,7 +33,7 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
     @circle = current_shop.circles.find(params[:id])
     respond_to do |format|
       if circle_find_user(params[:user_id], @circle).nil?
-        if @circle.join_friend(params[:user_id])
+        if @circle.join_friend(params[:user_id]).valid?
           format.json{ render json: circle_find_user(params[:user_id], @circle).user }
         else
           format.json{ render json: {message: "加入失败！"}, status: 403 }
