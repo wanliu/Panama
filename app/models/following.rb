@@ -15,12 +15,14 @@ class Following < ActiveRecord::Base
 
   def self.user(user_id, uid = nil)
     opts = {follow_id: user_id, follow_type: "User"}
+    opts[:follow_id] = user_id.id if user_id.is_a?(User)
     opts.merge!(user_id: uid) unless uid.nil?
     create(opts)
   end
 
   def self.shop(shop_id, uid = nil)
     opts = {follow_id: shop_id, follow_type: "Shop"}
+    opts[:follow_id] = shop_id.id if shop_id.is_a?(Shop)
     opts.merge!(user_id: uid) unless uid.nil?
     create(opts)
   end
