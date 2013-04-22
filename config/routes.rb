@@ -28,6 +28,8 @@ Panama::Application.routes.draw do
       member do
         post "event(/:event)", :to => "people/transactions#event", :as => :trigger_event
         put "address", :to => "people/transactions#address", :as => :update_address
+        put "notify", :to => "people/transactions#notify"
+        put "done", :to => "people/transactions#done"
       end
 
       collection do

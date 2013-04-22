@@ -1,13 +1,13 @@
 <!-- 等待付款 -->
 <div class="container-fluid">
-<% payment_service_for 'payment code', ActiveMerchant::Billing::Integrations::Alipay::ACCOUNT,
+<% payment_service_for 'payment code', 'hysios',
                             :service => :alipay,
                             :html => { :id => 'payment-form', :method => :get } do |service| %>
   <% service.total_fee 0.02 %>
-  <% service.seller :email => ActiveMerchant::Billing::Integrations::Alipay::EMAIL %>
-  <% service.notify_url url_for(:only_path => false, :action => 'notify') %>
-  <% service.return_url url_for(:only_path => false, :action => 'done') %>
-  <% service.show_url url_for(:only_path => false, :action => 'show') %>
+  <% service.seller :email => 'hysios@msn.com' %>
+  <% service.notify_url notify_person_transaction_url(@people, transaction) %>
+  <% service.return_url done_person_transaction_url(@people, transaction) %>
+  <% service.show_url person_transaction_url(@people, transaction) %>
   <% service.body 'payment body' %>
   <% service.charset "utf-8" %>
   <% service.service ActiveMerchant::Billing::Integrations::Alipay::Helper::CREATE_DIRECT_PAY_BY_USER %>
@@ -15,7 +15,7 @@
   <% service.subject 'payment subject' %>
   <% service.sign %>
 <% end %>
-<%= button_to_function "Submit", "document.getElementById('payment-form').submit()" %>
+<%= button_to_function "Submit", "document.getElementById('payment-form').firstChild.remove();document.getElementById('payment-form').submit()", :class=> 'btn' %>
 	<div class="info">
 	<div class="row-fluid">
 		<div class="span2">

@@ -4,7 +4,7 @@
 					:html => { :class => "form-horizontal"},
 					:remote=>true do |f| %>
 	<div class="adddress_input">
-	<%= f.input :address,
+	<%= f.input :address_id,
 				:as => :chosen,
 				:collection => people.addresses,
 				:label_method => :location,
@@ -23,13 +23,13 @@
 				<div class="span8">
 				<%= address_form.input :province_id,
 									   :as => :depend_select,
-									   :children => :city,
+									   :children => :city_id,
 									   :wrapper => :inline,
 									   :collection => get_city %>
 				<%= address_form.error :province_id %>
 				<%= address_form.input :city_id,
 									   :as => :depend_select,
-									   :children => :area,
+									   :children => :area_id,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
 				<%= address_form.error :city_id %>

@@ -12,7 +12,7 @@ class Address < ActiveRecord::Base
   belongs_to :addressable, :polymorphic => true
 
   def location
-    "#{country}#{province}#{city}#{area}#{road}"
+    "#{country.try(:name)}#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}#{road}"
   end
 
   validates :road, :presence => true

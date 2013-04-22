@@ -114,11 +114,16 @@ class People::TransactionsController < People::BaseController
       address_id = params[:order_transaction][:address_id]
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
+        format.html { render :text => :OK }
       else
         @transaction.create_address(address_params)
         if @transaction.save
           # format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
-          format.html { render :text => :OK }
+          format.html { render partial: "address",
+                               layout: false,
+                               locals: {
+                                 transaction: @transaction,
+                                 :people => @people }}
         else
           format.html { render partial: "address",
                                layout: false,
@@ -129,6 +134,12 @@ class People::TransactionsController < People::BaseController
         end
       end
     end
+  end
+
+  def notify
+  end
+
+  def done
   end
 
   # DELETE /people/transactions/1

@@ -6,5 +6,6 @@ require 'wanliu_id'
 require 'active_merchant'
 require 'active_merchant/billing/integrations/action_view_helper'
 
+ActiveMerchant::Billing::Integrations::Alipay::Helper::KEY = 'asdf'
 ActionView::Base.send(:include, ActiveMerchant::Billing::Integrations::ActionViewHelper)
 Panama::Application.initialize!
