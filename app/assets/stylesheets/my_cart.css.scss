@@ -1,5 +1,5 @@
 #my_cart {
-    position: fixed;
+/*    position: fixed;
     bottom: -5px;
     right: 100px;
     height: 45px;
@@ -9,7 +9,8 @@
     text-align: center;
     @include border-radius(5px);
     @include box-shadow(1px 1px 3px $grayDarker);
-    z-index: 1200;
+    z-index: 1200;*/
+
     #shop_count{
         position: absolute;
         top: -10px;

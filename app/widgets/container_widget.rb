@@ -1,5 +1,5 @@
 class ContainerWidget < CommonWidget
-  responds_to_event :change  
+  responds_to_event :change
 
   def display(content = nil)
     content_type, @content = if content.nil?
@@ -9,7 +9,7 @@ class ContainerWidget < CommonWidget
                             end
 
     render_content(content_type, @content)
-#    trigger(:change, {:value => 'article'})    
+#    trigger(:change, {:value => 'article'})
 #    render
   end
 

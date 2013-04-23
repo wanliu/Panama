@@ -1,0 +1,17 @@
+.footer_nav{
+ 	position: fixed;
+  right: 100px;
+  z-index: 1200;
+  bottom: -5px;
+
+  .nav_item{
+    line-height: 40px;
+    padding: 0px 10px;
+    margin-right: 5px;
+    display: inline-block;
+    border-left: 1px solid #DDD;
+    @include border-radius(5px);
+    background: $white;
+    @include box-shadow(1px 1px 3px $grayDarker);
+  }
+}

@@ -116,10 +116,10 @@ describe Admins::Shops::CirclesController, "商店圈子控制器" do
     end
 
     it "移除所有圈子的某个好友" do
-      shop.all_friends.find_by(user_id: @anon.id).should_not be_nil
+      shop.circle_all_friends.find_by(user_id: @anon.id).should_not be_nil
       xhr :delete, :circles_remove_friend, circle_opt.merge(user_id: @anon.id), get_session
       response.should be_success
-      shop.all_friends.find_by(user_id: @anon.id).should be_nil
+      shop.circle_all_friends.find_by(user_id: @anon.id).should be_nil
     end
   end
 
