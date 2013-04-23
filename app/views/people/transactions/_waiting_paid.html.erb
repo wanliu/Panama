@@ -15,7 +15,7 @@
   <% service.subject 'payment subject' %>
   <% service.sign %>
 <% end %>
-<%= button_to_function "Submit", "document.getElementById('payment-form').firstChild.remove();document.getElementById('payment-form').submit()", :class=> 'btn' %>
+<%#= button_to_function "Submit", "document.getElementById('payment-form').firstChild.remove();document.getElementById('payment-form').submit()", :class=> 'btn' %>
 	<div class="info">
 	<div class="row-fluid">
 		<div class="span2">
@@ -61,12 +61,14 @@
 	</table>
 	<div class="row-fluid">
 		<div class="bank-wrapper">
+
 		<% Bank.all.each do |bank| %>
-			<%= link_to '#' do %>
+			<%#= link_to '#' do %>
 			<%= content_tag :div, :class => 'bank_card' do %>
-				<span><%= bank.name %></span>
-				<%= content_tag :div, nil, :class => ['cart', "banks-#{bank.code}"] %>
-			<% end %>
+				<%= radio_button_tag :bank, bank.code %>
+				<%= label_tag "bank_#{bank.code}" do %>
+					<span class="banks bank-<%= bank.code %>"><%= bank.name %></span>
+				<% end %>
 			<% end %>
 		<% end %>
 		</div>

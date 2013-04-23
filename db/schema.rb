@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130415062615) do
+ActiveRecord::Schema.define(:version => 20130423031148) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -144,6 +144,14 @@ ActiveRecord::Schema.define(:version => 20130415062615) do
     t.integer  "shop_id"
     t.integer  "contentable_id"
     t.string   "contentable_type"
+  end
+
+  create_table "credits", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "bank_id"
+    t.string   "code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "file_entities", :force => true do |t|
@@ -419,9 +427,10 @@ ActiveRecord::Schema.define(:version => 20130415062615) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "email"
+    t.decimal  "money",      :precision => 20, :scale => 4
   end
 
   create_table "warehouses", :force => true do |t|

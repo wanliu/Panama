@@ -14,13 +14,18 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
 
             events:  [
                 { name: 'buy',   from: 'order',             to: 'waiting_paid' },
-                { name: 'back',  from: 'waiting_paid',      to: 'order'        }
+                { name: 'back',  from: 'waiting_paid',      to: 'order'        },
             ]
 
             callbacks:
                 onenterstate: (event, from, to, msg) ->
                     console.log "event: #{event} from #{from} to #{to}"
 
+        initialize:(@option) ->
+            super
+            @$el.bind('click', @activeThis)
+
+        activeThis: () ->
 
         clickAction: (event) ->
             btn = $(event.target)
