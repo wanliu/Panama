@@ -53,25 +53,16 @@
 
 <script type="text/javascript">
     require(['jquery', 'category'], function ($, view){
-        var view = new view.Category({
+        var view = new view.CategoryView({
             shop_name: "<%= current_shop.name %>",
             el: $(".container-fluid.category_select")
         });
-        
-        setModalSize(1);
-        save_size(1);
 
-        setModalSize(0.75);
-        save_size(0.75);
-        fix_modal(widths, heights, offsets);
-        $(".category_list").css('position', "relative");
-        $(".category_list").css('top', 0);
-
-        category_name = $(button).text();
-        if (category_name != "Noselected") {
-            $(".input_search").val(category_name);
-            $("#search").click();
-        }
+        // category_name = $(button).text();
+        // if (category_name != "Noselected") {
+        //     $(".input_search").val(category_name);
+        //     $("#search").click();
+        // }
     });
 
 </script>
