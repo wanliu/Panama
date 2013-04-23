@@ -15,23 +15,26 @@
 	</div>
 
 	<div class="address-panel">
-	<%= simple_fields_for :addresses do |address_form| %>
+	<%= simple_fields_for :addresses, transaction.address do |address_form| %>
 		<div class="control-group">
 			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
 			<div class="controls controls-row">
 				<div class="span8">
 				<%= address_form.input :province_id,
 									   :as => :depend_select,
-									   :children => :city,
+									   :children => :city_id,
+									   :object => transaction,
 									   :wrapper => :inline,
 									   :collection => get_city %>
 				<%= address_form.input :city_id,
 									   :as => :depend_select,
-									   :children => :area,
+									   :children => :area_id,
+									   :object => transaction,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
 				<%= address_form.input :area_id,
 									   :as => :depend_select,
+									   :object => transaction,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
 				</div>
