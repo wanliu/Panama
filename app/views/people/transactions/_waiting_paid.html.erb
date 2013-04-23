@@ -46,12 +46,10 @@
 			<th colspan=2 class="relative">
 				<div class="left-frame"></div>
 			</th>
-			<th>
-				<%= transaction.items_count %>
-			</th>
-			<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
-			</th>
+
 			<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+			</th>
+			<th><strong>你的余额: <%= current_user.money %></strong>
 			</th>
 			<th class="relative">
 				<div class="right-frame"></div>
@@ -59,6 +57,20 @@
 		</tr>
 		</thead>
 	</table>
+	<% if current_user.credits.size > 0 %>
+	<hr>
+	<div class="row-fluid">
+		<%= current_user.credits.each do |card| %>
+			<%= content_tag :div, :class => 'bank_card' do %>
+				<%= radio_button_tag :bank, card.bank.code %>
+				<%= label_tag "bank_#{card.bank.code}" do %>
+					<span class="banks bank-<%= bank.code %>"><%= card.bank.name %></span>
+				<% end %>
+			<% end %>
+		<% end %>
+	</div>
+	<% end %>
+	<hr>
 	<div class="row-fluid">
 		<div class="bank-wrapper">
 
@@ -72,8 +84,12 @@
 			<% end %>
 		<% end %>
 		</div>
+		<div class='clearfix'></div>
+		<div class="form-actions">
+		  <a href='#' class="btn btn-primary">转到银行付款</a>
+		</div>
 	</div>
-	<div id="creditcard" class="row-fluid">
+<!-- 	<div id="creditcard" class="row-fluid">
 		<div class="span5">
 			<img class="creditcard-preview" src="/assets/creditcard.png"></img>
 		</div>
@@ -104,5 +120,5 @@
 不要向他人透露您的密码，也不要设定简单数字排列（如888888）或本人生日日期作为密码，刷卡进入自助银行的门禁无需输入密码
 			</blockquote>
 		</div>
-	</div>
+	</div> -->
 </div>

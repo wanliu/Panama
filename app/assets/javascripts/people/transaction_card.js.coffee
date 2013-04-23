@@ -1,4 +1,4 @@
-define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'], ($, Backbone, StateMachine, StateView, exports) ->
+define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jsclock-0.8", 'exports'], ($, Backbone, StateMachine, StateView, n$, exports) ->
 
 
     class TransactionCard extends StateView.AbstructStateView
@@ -14,7 +14,12 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
 
             events:  [
                 { name: 'buy',   from: 'order',             to: 'waiting_paid' },
-                { name: 'back',  from: 'waiting_paid',      to: 'order'        },
+                { name: 'back_order',  from: 'waiting_paid',      to: 'order'        },
+                { name: 'paid',  from: 'waiting_paid',      to: 'waiting_delivery' },
+                { name: 'back_paid',  from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
+                { name: 'delivered',  from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
+                { name: 'back_deliver',  from: 'waiting_sign',  to: 'waiting_delivery' }, # only for development
+
             ]
 
             callbacks:
@@ -29,9 +34,11 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
 
         clickAction: (event) ->
             btn = $(event.target)
-            event_name = btn.attr('event-name')
-            url = @eventUrl(event)
-            @[event_name].call(@)
+            if !btn.hasClass("disabled")
+                event_name = btn.attr('event-name')
+
+                url = @eventUrl(event)
+                @[event_name].call(@)
             false
             # if event == 'back'
             #     @slideBeforeEvent(event_name)
@@ -39,8 +46,14 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
             #     @slideAfterEvent(event_name)
             # false
 
-        beforeBack: (event, from ,to ) ->
-            @slideBeforeEvent(event)
+        beforeBackOrder: (event, from ,to ) ->
+            @slideBeforeEvent('back')
+
+        beforeBackPaid: (event, from ,to ) ->
+            @slideBeforeEvent('back')
+
+        beforeBackDeliver: (event, from ,to ) ->
+            @slideBeforeEvent('back')
 
         closeThis: (event) ->
             if confirm("要取消这笔交易吗?")
@@ -118,12 +131,23 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", 'exports'],
                 $slideBox.scrollLeft(length)
                 $slideBox.animate { scrollLeft: -length }, "slow", overSlide
 
+        ############################################################################
+        # 状态事件
         enterOrder: (event, from, to, msg ) ->
             @$(".address-form>form").submit(_.bind(@saveAddress, @))
 
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
             StateMachine.ASYNC
+
+        enterWaitingDelivery: (event, from, to, msg) ->
+            @$(".clock").jsclock();
+
+        leaveWaitingPaid: (event, from, to, msg) ->
+            @slideAfterEvent(event)
+
+        leaveWaitingDelivery: (event, from, to, msg) ->
+            @slideAfterEvent(event)
 
         saveAddress: (event) ->
             params = @$(".address-form>form").serialize()
