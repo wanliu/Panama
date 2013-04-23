@@ -1,0 +1,39 @@
+<div class="products">
+	<div class="products-head">
+			<% transaction.items[0...5].each do |item| %>
+				<div class="img-header">
+				<%= image_tag item.product.photos.header %>
+				</div>
+			<% end %>
+			<span class='ellipsis'>...</span>
+			<div class="toolbar ">
+			<%= link_to '#', :class => "btn btn-large item-detail" do %>
+					<%= icon :download %>
+				<% end %>
+			</div>
+	</div>
+	<div class="item-details">
+	<% transaction.items.each do |item| %>
+	<div class="detail-row">
+		<div class="detail-icon">
+			<%= image_tag item.product.photos.icon %>
+		</div>
+		<div class="detail-title">
+			<%= item.title %>
+		</div>
+		<div class="detail-amount">
+			<%= item.amount %>
+		</div>
+		<div class="detail-price">
+			<%= item.price %>
+		</div>
+		<div class="detail-total">
+			<%= item.total %>
+		</div>
+	</div>
+	<% end %>
+	</div>
+</div>
+<div class='total'>
+<strong>合计: <%= transaction.total %></strong>
+</div>

@@ -46,7 +46,19 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     event :back do
-      transition [:waiting_paid] => :order
+      transition :waiting_paid => :order, :waiting_delivery => :waiting_paid, :waiting_sign => :waiting_delivery
+    end
+
+    event :paid do
+      transition [:waiting_paid] => :waiting_delivery # 等待发货
+    end
+
+    event :delivered do  # 发货
+      transition :waiting_delivery => :waiting_sign
+    end
+
+    event :sign do
+      transition [:waiting_sign] => :complete
     end
   end
 

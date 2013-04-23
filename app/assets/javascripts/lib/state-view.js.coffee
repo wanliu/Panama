@@ -5,6 +5,9 @@ define ["jquery", "backbone", "lib/state-machine", 'exports'], ($, Backbone, Sta
 		capitalize : (string) ->
 			string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
 
+		camel: (string) ->
+			string.replace /(\_[a-z])/g, ($1) ->
+				$1.toUpperCase().replace('_','')
 
 	class AbstructStateView extends Backbone.View
 
@@ -46,7 +49,7 @@ define ["jquery", "backbone", "lib/state-machine", 'exports'], ($, Backbone, Sta
 		cbMethods: (name, set, handle) ->
 			for prefix in set
 				attribute = "on#{prefix}#{name}"
-				func = "#{prefix}#{_(name).capitalize()}"
+				func = "#{prefix}#{_(_(name).capitalize()).camel()}"
 				if _.isFunction(@[func])
 					handle.call @, attribute, @[func]
 
