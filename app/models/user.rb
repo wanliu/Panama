@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
   has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
+  has_many :friend_groups, dependent: :destroy
 
   delegate :groups, :jshop, :to => :shop_user
 
@@ -33,13 +34,13 @@ class User < ActiveRecord::Base
     circle_friends.joins(:circle).map{|c| c.circle }
   end
 
-  def all_friends
+  def circle_all_friends
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
   end
 
   #所有好友的圈子
   def all_friend_circles
-    user_ids = all_friends.select(:user_id).map{|f| f.user_id}
+    user_ids = circle_all_friends.select(:user_id).map{|f| f.user_id}
     Circle.where(:owner_type => "User",
       :owner_id => user_ids)
   end
@@ -79,10 +80,8 @@ class User < ActiveRecord::Base
   end
 
   def load_initialize_data
-    _config = YAML.load_file("#{Rails.root}/config/data/user_circle.yml")
-    _config["circle"].each do |circle|
-      self.circles.create(circle) if self.circles.find_by(circle).nil?
-    end
+    load_circle
+    load_friend_group
   end
 
   #暂时方法
@@ -116,5 +115,20 @@ class User < ActiveRecord::Base
 
   def permissions
     groups.map{| g | g.permissions}
+  end
+
+  private
+  def load_circle
+    _config = YAML.load_file("#{Rails.root}/config/data/user_circle.yml")
+    _config["circle"].each do |circle|
+      self.circles.create(circle) if self.circles.find_by(circle).nil?
+    end
+  end
+
+  def load_friend_group
+    _config = YAML.load_file("#{Rails.root}/config/data/friend_group.yml")
+    _config["friend_group"].each do |name|
+      self.friend_groups.create(name) if self.friend_groups.find_by(name).nil?
+    end
   end
 end

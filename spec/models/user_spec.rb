@@ -55,7 +55,7 @@ describe User, "用户模型" do
       anon1, anon2 = anonymous, anonymous
       current_user.circles.create(:name => "熟悉人").join_friend(anon1)
       current_user.circles.create(:name => "了解的人").join_friend(anon2)
-      current_user.all_friends.map{|f| f.user}.should eq([anon1, anon2])
+      current_user.circle_all_friends.map{|f| f.user}.should eq([anon1, anon2])
     end
 
     it "所有好友的圈子" do

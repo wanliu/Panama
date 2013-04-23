@@ -48,7 +48,7 @@ class People::CirclesController < People::BaseController
 
   #所有的好友
   def all_friends
-    @users = @people.all_friends.joins(:user).map{|f| f.user.as_json }
+    @users = @people.circle_all_friends.joins(:user).map{|f| f.user.as_json }
     respond_to do |format|
       format.json{ render json: @users }
     end
@@ -84,7 +84,7 @@ class People::CirclesController < People::BaseController
 
   #移除所有圈子中的某个好友
   def circles_remove_friend
-    @friends = current_user.all_friends.where(user_id: params[:user_id])
+    @friends = current_user.circle_all_friends.where(user_id: params[:user_id])
     @friends.destroy_all
     respond_to do |format|
       format.json{  head :no_content  }
