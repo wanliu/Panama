@@ -1,0 +1,32 @@
+.chat_friend_panel{
+  position: fixed;
+  bottom: 50px;
+  right: 55px;
+  width: 180px;
+  @include border-radius(5px);
+  @include box-shadow(1px 1px 3px $grayDarker);
+  background: white;
+  display: none;
+
+  .title{
+    text-align: left;
+    font-size: 10px;
+    line-height: 25px;
+    border-bottom:1px solid #DDD;
+
+    .close_list{
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      width: 12px;
+      height: 11px;
+      font-size: 1px;
+      background: url("/assets/select.png") right top no-repeat;
+    }
+  }
+
+  .friend_list{
+    height: 260px;
+    margin: 5px;
+  }
+}

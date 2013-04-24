@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
   has_many :topics, as: :owner, dependent: :destroy
   has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   has_many :friend_groups, dependent: :destroy
+  has_many :contact_friends, dependent: :destroy
 
   delegate :groups, :jshop, :to => :shop_user
 

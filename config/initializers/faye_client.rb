@@ -5,7 +5,7 @@ class FayeClient
         Thread.new do
             uri = URI.parse(Settings.defaults['faye_server'])
             token = Settings.defaults['faye_token']
-            message = { :channel => channel, :data => { :token => token }.merge(params) }
+            message = { :channel => channel, :data => params.merge(:token => token) }
             Net::HTTP.post_form(uri, :message => message.to_json)
         end
     end
