@@ -53,16 +53,9 @@
 
 <script type="text/javascript">
     require(['jquery', 'category'], function ($, view){
-        var view = new view.CategoryView({
+        var categoryView = new view.CategoryView({
             shop_name: "<%= current_shop.name %>",
             el: $(".container-fluid.category_select")
         });
-
-        // category_name = $(button).text();
-        // if (category_name != "Noselected") {
-        //     $(".input_search").val(category_name);
-        //     $("#search").click();
-        // }
     });
-
 </script>

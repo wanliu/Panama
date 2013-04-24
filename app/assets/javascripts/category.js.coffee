@@ -11,7 +11,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
                 _.each @navigations.models, (m) =>
                     if m.get("ancestry_depth") == model.get("ancestry_depth")
                         @remove_current_category(m)
-
             @navigations.add(model)
             @reset_navigation()
 
@@ -88,12 +87,14 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @children_el.hide()
             _.each $(".category_root"), (c) =>
                 $(c).attr("class", "category_root")
-            search_value = $.trim(@search_el.find(".input_search").val())
-            category_name = (search_value.split("|"))[search_value.split("|").length-1]
-            mainView.show_category(category_name)
+            mainView = @parentView.getMainView()
+            mainView.search_category(@search_el.find(".input_search").val())
 
         on_focus: () ->
             $(".input_search").select()
+
+        render: () ->
+            @
 
 
     class CategoryChildrenView extends Backbone.View
@@ -109,19 +110,19 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$el.html(@model.get("name"))
             if @model.get("flag") == 1
                 @$el.append("<span class='caret right'></span>")
-            @$el.addClass("category-"+@model.get('id'))
+            @$el.addClass("category-" + @model.id)
 
         render: () ->
             @
 
         enter_children: () ->
             if @model.get("flag") == 0
-                mainView.select_category(@model)
+                @parentView.parentView.select_category(@model)
             else
                 @$el.siblings(".active").removeClass("active")
                 @$el.toggleClass("active")
                 @model.trigger("parent_hide")
-                mainView.enter_children(@model)
+                @parentView.parentView.enter_children(@model)
 
 
     class CategoryChildrenViewList extends Backbone.View
@@ -137,15 +138,18 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         initialize: (options) ->
             _.extend(@, options)
             @$el = $(@el)
-            @$el.addClass("children-#{@model.get('id')}")
+            @children_id = "undefined"
+            unless @model == null 
+                @children_id = @model.id
+            @$el.addClass("children-#{@children_id}")
             unless @model.get("ancestry_depth") == 1
                 @$el.append(@return_el.clone())
 
         all_children: (collection) ->
-            if $(".children-#{@model.get('id')}").length < 1
+            if $(".children-#{@children_id}").length < 1
                 @children_el.append(@$el)
             else 
-                $(".children-#{@model.get('id')}").show()
+                $(".children-#{@children_id}").show()
             if collection.length > 0
                 collection.each (model) =>
                     @add_one_children(model)
@@ -154,6 +158,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             model.bind("parent_hide", _.bind(@hide, @))
             model.bind("parent_show", _.bind(@show, @))
             @category_children_view = new CategoryChildrenView({
+                    parentView: @,
                     model: model,
                     shop_name: @shop_name,
                     children_el: @children_el
@@ -171,7 +176,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         back: () ->
             @hide()
-            mainView.list_el.find(".category_cover:visible").hide()
+            @parentView.list_el.find(".category_cover:visible").hide()
             # mainView.children_el.find(".btn-group:visible").hide()
             category_base.remove_last_model()
             @model.trigger("parent_show")                   
@@ -180,9 +185,8 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
     class CategoryRootView extends Backbone.View
         tagName: "a"
         className: "category_root"
-        events: {
+        events:
             "click" : "category_children"
-        }
 
         initialize: (options) ->
             _.extend(@, options)
@@ -201,60 +205,63 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             category_base.is_search = false
             category_base.remove_current_categorys(@model)
             
-            window.mainView = new MainView({
-                model: @model,
-                shop_name: @shop_name,
-                children_el: @children_el,
-                list_el: @list_el
-            })
+            mainView = @parentView.getMainView()
+            mainView.attach_model(@model)
 
 
     class MainView extends Backbone.View
         initialize: (options) ->
             _.extend(@, options)
             @$el = $(@el)
-            if @model != null
-                @enter_children(@model)
+
+        attach_model: (model) ->
+            if model != null
+                @enter_children(model)
 
         select_category: (model) ->
             category_base.add_current_category(model)
-            $(".category_select").attr("data-select",model.id)
+            $(".category_select").attr("data-select", model.id)
 
-            category_el = mainView.list_el.find(".category_cover:visible")
+            category_el = @list_el.find(".category_cover:visible")
             category_btn = category_el.find(".category-#{model.id}")
             category_btn.parent().parent().siblings().find(".select_category.active").removeClass("active")
             category_btn.toggleClass("active")
 
-            children_el = mainView.children_el.find(".btn-group:visible")
+            children_el = @children_el.find(".btn-group:visible")
             children_btn = children_el.find(".category-#{model.id}")
             children_btn.siblings(".active").removeClass("active")
             children_btn.toggleClass("active")
 
-        show_category: (category_name) ->
+        search_category: (search_value) ->
+            search_value = $.trim(search_value)
+            category_name = (search_value.split("|"))[search_value.split("|").length-1]
             @list_el.empty()
             @children_el.empty()
             @category_list = new CategoryList([], @shop_name)
             @category_list.bind("reset", @refresh_list, @)
+            @category_list.bind("reset", @render, @)
             @category_list.category_childrens({ category_name: category_name })
 
         refresh_list: (collection) ->
-            model = @model
-            @model.id = "undefined"
             category_base.is_search = true
-            new CategoryListView({
-                model: model,
+            @list_view = new CategoryListView({
+                parentView: @,
+                model: null,
                 shop_name: @shop_name,
                 list_el: @list_el
-            }).all_children(collection)
+            })
+            @list_view.all_children(collection)
 
         enter_children: (model) ->
             category_base.add_current_category(model)
             @children_view = new CategoryChildrenViewList({
+                parentView: @,
                 model: model,
                 shop_name: @shop_name,
                 children_el: @children_el
             })
             @list_view = new CategoryListView({
+                parentView: @,
                 model: model,
                 shop_name: @shop_name,
                 list_el: @list_el
@@ -271,12 +278,12 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         render: () ->
             @children_el.show()
             # @list_el.show()
-            # @list_el.find(".slides").slidesjs({
-            #     width: 200,
-            #     height: 133,
-            #     navigation: false,
-            #     pagination: false
-            # })
+            @list_el.find(".slides").slidesjs({
+                width: 200,
+                height: 133,
+                navigation: false,
+                pagination: false
+            })
             @
 
 
@@ -287,28 +294,24 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @category_children_el = @el.find(".category_buttons")
             @category_list_el = @el.find(".category_list")
             @search_el = @el.find(".search")
-            @is_first = true
             @show_root()
 
         show_root: () ->
             @category_root = new CategoryList([], @shop_name)
             @category_root.bind("reset", @all_root, @)
-            @category_root.bind("reset", @render, @)
             @category_root.bind("reset", @new_search, @)
+            @category_root.bind("reset", @render, @)
             @category_root.category_root()
 
         new_search: () ->
             search_view = new CategoryChildrenSearch({
+                parentView: @,
                 model: @model,
                 search_el: @search_el,
                 children_el: @category_children_el,
                 list_el: @category_list_el,
                 shop_name: @shop_name
             })
-            category_name = $(button).text()
-            if category_name != "Noselected"
-                $(".input_search").val(category_name)
-                $("#search").click()
 
         all_root: (collection) ->
             collection.each (model) =>
@@ -316,6 +319,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         add_one_root: (model) ->
             category_root_view = new CategoryRootView({
+                parentView: @,
                 model: model,
                 children_el: @category_children_el,
                 list_el: @category_list_el,
@@ -323,16 +327,20 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             })
             @category_root_el.append(category_root_view.render().el)
 
-            if @is_first
-                window.mainView = new MainView({
-                    model: model,
-                    shop_name: @shop_name,
-                    children_el: @category_children_el,
-                    list_el: @category_list_el
-                })
-                @is_first = false
+        getMainView: () ->
+            @mainView ||= new MainView({
+                shop_name: @shop_name,
+                children_el: @category_children_el,
+                list_el: @category_list_el
+            })
 
         render: () ->
+            search_value = $(button).text()
+            if search_value == "" || search_value == "Noselected"
+                @getMainView().search_category("_products_root")
+            else
+                $(".input_search").val(search_value)
+                @getMainView().search_category(search_value)
             @
             
 
@@ -351,10 +359,10 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         enter_children: () ->
             @model.trigger("parent_hide")
-            mainView.enter_children(@model)
+            @parentView.parentView.enter_children(@model)
 
         select_category: () ->
-            mainView.select_category(@model)
+            @parentView.parentView.select_category(@model)
 
         render: () ->
             @$el.html(@detail_template(@model.toJSON()))
@@ -368,21 +376,26 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
         initialize: (options) ->
             _.extend(@, options)
             @$el = $(@el)
-            @$el.addClass("list-#{@model.get('id')}")
+            @list_id = "undefined"
+            unless @model == null
+                @list_id = @model.id
+            @$el.addClass("list-#{@list_id}")
 
         all_children: (collection) ->
-            if $(".list-#{@model.get('id')}").length > 0
-                $(".list-#{@model.get('id')}").show()
+            if $(".list-#{@list_id}").length > 0
+                $(".list-#{@list_id}").show()
             else
                 @list_el.append(@$el)
                 if collection.length > 0
                     collection.each (model) =>
                         @add_one_children(model)
+            @show_tip()
 
         add_one_children: (model) ->
             model.bind("parent_hide", _.bind(@hide, @))
             model.bind("parent_show", _.bind(@show, @))
             @category_detail_view = new CategoryDetailView({
+                    parentView: @,
                     model: model,
                     list_el: @list_el
                     shop_name: @shop_name
@@ -390,10 +403,13 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             $(@el).append(@category_detail_view.render().el)
 
         show_tip: () ->
-            if $(".category_list").find(".category_cover:visible").children().length == 0 
-                $(".no-result").show()
+            if @list_el.find(".category_cover:visible").children().length == 0
+                @list_el.append('<div class="alert fade in no-result" style="display: none;">
+                <strong>没有搜索结果，试着换一个搜索词吧！</strong> 
+            </div>')
+                @list_el.find(".no-result").show()
             else
-                $(".no-result").hide()
+                @list_el.find(".no-result").hide()
 
         hide: () ->
             @$el.hide()
@@ -406,7 +422,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @model.trigger("parent_show")
 
         render: () ->
-            @show_tip()
             @
 
     category_base = new CategoryBase()
