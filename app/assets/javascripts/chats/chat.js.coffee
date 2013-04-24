@@ -1,10 +1,6 @@
 #encoding: utf-8
 #describe: 聊天视图
-define [
-"jquery",
-"backbone",
-"chats/contact_friend",
-"chats/chat_realtime_client"],
+define ["jquery", "backbone", "chats/contact_friend", "chats/chat_realtime_client"],
 ($, Backbone, ContactFriendViewList, RealtimeClient) ->
 
   class ChatViewList extends Backbone.View

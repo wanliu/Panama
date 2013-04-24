@@ -204,7 +204,9 @@ Panama::Application.routes.draw do
   end
 
   resources :contact_friends do
-    get "join_friend/:friend_id", :to => "contact_friends#join_friend"
+    collection do
+      get "join_friend/:friend_id", :to => "contact_friends#join_friend"
+    end
   end
   match "attachments", :to => "attachments#index"
   match "attachments/upload", :to => "attachments#upload", :via => :post
