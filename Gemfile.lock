@@ -5,6 +5,12 @@ GIT
     rails-setting (0.0.8)
 
 GIT
+  remote: git://github.com/mrichie/geocoder.git
+  revision: b3e5c31d39729166cb55291247a82a3747eec15e
+  specs:
+    geocoder (1.0.4)
+
+GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
   revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
@@ -491,6 +497,7 @@ DEPENDENCIES
   fakefs
   faye-rails (~> 1.0.6)
   friendly_id (~> 4.0.9)
+  geocoder!
   github-markup (~> 0.7.4)
   growl
   guard

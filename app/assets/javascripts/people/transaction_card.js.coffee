@@ -59,6 +59,9 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
             if confirm("要取消这笔交易吗?")
                 if Modernizr.cssanimations?
                     $(@el).addClass("animated fadeOutUp")
+                    setTimeout () =>
+                        @$el.hide()
+                    , 1300
                 else
                     $(@el).fadeOut()
 

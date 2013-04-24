@@ -1,0 +1,7 @@
+<div class="container-fluid">
+<p>
+	送货地址：<%= transaction.address.nil? ? "暂无" : transaction.address.location %>
+</p>
+
+</div>
+<%= render "products", :transaction => transaction %>

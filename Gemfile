@@ -141,3 +141,4 @@ gem 'rails-setting',:github => "huxinghai1988/rails-setting"
 
 gem 'activemerchant'
 gem 'activemerchant_patch_for_china'
+gem 'geocoder', :github => 'mrichie/geocoder'
