@@ -1,14 +1,19 @@
 define(["faye"], () ->
 
-    class RealtimeClient
+  class RealtimeClient
 
-        constructor: (server_uri) ->
-            @client = new Faye.Client(server_uri)
+    constructor: (server_uri) ->
+      @client = new Faye.Client(server_uri)
 
-        monitor_people_notification: (uid, callback = (data) -> ) ->
-            @client.subscribe("/notification/#{uid}", (data) ->
-                callback(data)
-            )
+    monitor_people_notification: (uid, callback = (data) -> ) ->
+      @client.subscribe("/notification/#{uid}", (data) ->
+        callback(data)
+      )
 
-    RealtimeClient
+    monitor_event: (event_name, uid, callback = (data) ->) ->
+      @client.subscribe("/events/#{uid}/#{event_name}", (data) ->
+        callback(data)
+      )
+
+  RealtimeClient
 )
