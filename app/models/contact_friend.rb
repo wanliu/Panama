@@ -9,33 +9,40 @@ class ContactFriend < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :friend
 
+  validate :valid_friend?, :valid_friend_and_user?
+
   def self.join_friend(friend, uid = nil)
     options = {friend_id: friend}
     options[:friend_id] = friend.id if friend.is_a?(User)
     options[:user_id] = uid unless uid.nil?
-    contact_friend = self.find_by(options)
-    if contact_friend.nil?
-      contact_friend = create(options)
+    cfriend = self.find_by(options)
+    if cfriend.nil?
+      cfriend = create(options.merge(:last_contact_date => DateTime.now))
     else
-      contact_friend.update_attribute(:last_contact_date, DateTime.now)
+      cfriend.update_attribute(:last_contact_date, DateTime.now)
     end
-    FayeClient.send("/contact_friends/#{contact_friend.user_id}",
-      contact_friend.as_json(:include => :friend))
-    contact_friend
+    if cfriend.valid?
+      FayeClient.send("/contact_friends/#{cfriend.user_id}",cfriend.as_json)
+    end
+    cfriend
   end
 
-  # after_create :add_friend_contact
-  # def add_friend_contact
-  #   ContactFriend.create(
-  #     user_id: friend_id,
-  #     last_contact_date: DateTime.now,
-  #     friend_id: user_id)
-  # end
+  def as_json(*args)
+    attrs = super *args
+    attrs["friend"] = friend.as_json
+    attrs
+  end
 
   private
   def valid_friend?
-    unless ContactFriend.find_by("friend_id=? and user_id=? and id<>?",friend_id, user_id, id.to_s).nil?
+    if ContactFriend.exists?("friend_id=#{friend_id} and user_id=#{user_id} and id<>#{id.to_s}")
       errors.add(:friend_id, "好友已经存在了!")
+    end
+  end
+
+  def valid_friend_and_user?
+    if friend_id == user_id
+      errors.add(:friend_id, "不能与自己对话!")
     end
   end
 end

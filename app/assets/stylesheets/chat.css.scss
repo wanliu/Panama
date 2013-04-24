@@ -28,5 +28,45 @@
   .friend_list{
     height: 260px;
     margin: 5px;
+
+    ul{
+      list-style: none;
+      margin-left: 0px;
+
+      li{
+        margin: 5px -5px;
+        position: relative;
+
+        a.item{
+          line-height: 25px;
+          width: 100%;
+          display: block;
+
+          img{
+            height: 20px;
+            width:20px;
+            margin-left: 5px;
+          }
+
+          .login{
+            margin-left: 10px;
+          }
+        }
+
+        a.item:hover{
+          background: #DDD;
+
+          .close_label{
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 12px;
+            height: 11px;
+            font-size: 1px;
+            background: url("/assets/select.png") right top no-repeat;
+          }
+        }
+      }
+    }
   }
 }
