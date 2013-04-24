@@ -1,6 +1,6 @@
 #describe: 最近联系人
 
-define ["jquery", "backbone", "chat/dialogue"],
+define ["jquery", "backbone", "chats/dialogue"],
 ($, Backbone, DialogueListView) ->
 
   class ContactFriend extends Backbone.Model
@@ -35,7 +35,6 @@ define ["jquery", "backbone", "chat/dialogue"],
 
     show_dialog: () ->
       @trigger("show_dilogue", @friend)
-
 
   class ContactFriendViewList extends Backbone.View
     tagName: "ul",
