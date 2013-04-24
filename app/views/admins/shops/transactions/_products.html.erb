@@ -1,0 +1,52 @@
+<table class="table table-striped">
+	<thead>
+	<tr>
+		<th colspan=2 class="relative">
+			<div class="left-frame"></div>
+			<% transaction.items[0...5].each do |item| %>
+				<%= image_tag item.product.photos.icon %>
+			<% end %>
+			<span class='ellipsis'>...</span>
+		</th>
+		<th>
+			<%= transaction.items_count %>
+		</th>
+		<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
+		</th>
+		<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+		</th>
+		<th class="relative">
+			<div class="btn-group">
+				<%= link_to '#', :class => "btn detials " do %>
+					<%= icon :download %>
+				<% end %>
+				<%= link_to '#', :class => "btn print" do %>
+					<%= icon :print %>
+				<% end %>
+			</div>
+
+			<div class="right-frame"></div>
+		</th>
+	</tr>
+	</thead>
+	<% transaction.items.each do |item| %>
+	<tr>
+		<td>
+			<%= image_tag item.product.photos.icon %>
+		</td>
+		<td>
+			<%= item.title %>
+		</td>
+		<td>
+			<%= item.amount %>
+		</td>
+		<td>
+			<%= item.price %>
+		</td>
+		<td>
+			<%= item.total %>
+		</td>
+		<td></td>
+	</tr>
+	<% end %>
+</table>
