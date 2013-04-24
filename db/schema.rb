@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130423070203) do
+ActiveRecord::Schema.define(:version => 20130424063802) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -112,6 +112,14 @@ ActiveRecord::Schema.define(:version => 20130423070203) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "chat_messages", :force => true do |t|
+    t.integer  "send_user_id"
+    t.integer  "receive_user_id"
+    t.text     "content"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "circle_friends", :force => true do |t|
     t.integer  "friend_id"
     t.integer  "friend_type"
@@ -166,6 +174,14 @@ ActiveRecord::Schema.define(:version => 20130423070203) do
     t.string   "contentable_type"
   end
 
+  create_table "credits", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "bank_id"
+    t.string   "code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "file_entities", :force => true do |t|
     t.string   "name"
     t.string   "stat"
@@ -215,23 +231,23 @@ ActiveRecord::Schema.define(:version => 20130423070203) do
 
   create_table "inventory_caches", :force => true do |t|
     t.integer "product_id"
-    t.string  "styles"
-    t.decimal "count",      :precision => 10, :scale => 0
-    t.string  "warhouse"
-    t.decimal "last_time",  :precision => 20, :scale => 10
+    t.string  "options"
+    t.decimal "count",        :precision => 10, :scale => 0
+    t.integer "warehouse_id"
+    t.decimal "last_time",    :precision => 20, :scale => 10
   end
 
   add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
   add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
-  add_index "inventory_caches", ["styles"], :name => "index_inventory_caches_on_styles"
-  add_index "inventory_caches", ["warhouse"], :name => "index_inventory_caches_on_warhouse"
+  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
 
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
     t.decimal  "quantity",        :precision => 10, :scale => 0
-    t.string   "styles"
-    t.string   "warehouse"
+    t.string   "options"
+    t.integer  "warehouse_id"
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
   end
@@ -512,9 +528,18 @@ ActiveRecord::Schema.define(:version => 20130423070203) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.string   "email"
+    t.decimal  "money",      :precision => 20, :scale => 4
+    t.string   "im_token"
+  end
+
+  create_table "warehouses", :force => true do |t|
+    t.string   "title"
+    t.integer  "shop_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "email"
   end
 
 end

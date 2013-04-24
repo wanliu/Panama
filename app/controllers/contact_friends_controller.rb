@@ -21,6 +21,10 @@ class ContactFriendsController < ApplicationController
     end
   end
 
+  def dialogue
+    current_user.contact_friends
+  end
+
   def destroy
     # current_user.contact_friends.find()
   end

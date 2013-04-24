@@ -119,7 +119,7 @@ Panama::Application.routes.draw do
   #
   resources :chat_messages do
     collection do
-      get ""
+      get "dialogue/:friend_id", :to => "chat_messages#dialogue"
     end
   end
 
