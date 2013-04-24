@@ -407,6 +407,7 @@ GEM
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
+    ruby-hmac (0.4.0)
     ruby_gntp (0.3.4)
     rubyzip (0.9.9)
     rvm-capistrano (1.2.7)
@@ -529,6 +530,7 @@ DEPENDENCIES
   rest-client (~> 1.6.7)
   rspec (~> 2.12.0)
   rspec-rails (~> 2.12.0)
+  ruby-hmac
   ruby_gntp
   rvm-capistrano
   sass-rails (~> 3.2.3)

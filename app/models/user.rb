@@ -22,6 +22,12 @@ class User < ActiveRecord::Base
 
   delegate :groups, :jshop, :to => :shop_user
 
+  before_create :generate_token
+
+  def generate_token
+    self.im_token = SecureRandom.hex
+  end
+
   def icon
     photos.icon
   end
