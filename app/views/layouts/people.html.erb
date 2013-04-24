@@ -17,77 +17,100 @@
     })
 
  </script>
-    <%= render "header-fluid" %>
-    <%= render "category_breadcrumbs" %>
-    <div id='wrapper' class='container-fluid'>
-        <div class="row-fluid ">
-            <div id='people-sidebar' class="span3 leftfix" >
-                <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
-                <h1><%= @people.login %></h1>
-                <span class="label">Default</span>
-                <span class="label">Default</span>
-                <span class="label">Default</span>
-                <hr>
-                <div class="well">
-                    <ul class="nav nav-list" >
-                        <% if can?(:index, Cart) || can?(:index, OrderTransaction) %>
-                        <li class="nav-header">购物</li>
-                        <% end %>
-                        <% if can? :index, Cart %>
-                        <li>
-                            <a class="people-cart" href="<%=person_cart_index_path(current_user.login) %>">
-                                <i class="icon-chevron-right"></i> 购物车
-                            </a>
-                        </li>
-                        <%end%>
-                        <%if can? :index, OrderTransaction %>
-                        <li><a class="people-transaction" href="<%= person_transactions_path(current_user.login) %>"><i class="icon-chevron-right"></i> 订单</a></li>
-                        <%end%>
-                        <li class="nav-header">活动</li>
-                        <% if can? :index, Notification %>
-                        <li>
-                            <a class='people-notification' href="<%=person_notifications_path(current_user.login) %>">
-                                <i class="icon-chevron-right"></i>提醒</a>
-                        </li>
-                        <%end%>
-                        <li><a href="my_activity"><i class="icon-chevron-right"></i> 我参于的活动</a></li>
-                        <li><a href="about_to_happen"><i class="icon-chevron-right"></i> 马上要发生的</a></li>
-                        <li><a href="expired"><i class="icon-chevron-right"></i> 往期活动</a></li>
-                        <li class="nav-header">社区</li>
-                        <li><a href="<%=person_product_comments_path(current_user.login) %>">
-                            <i class="icon-chevron-right"></i>商品评论
-                            </a>
-                        </li>
-                        <li><a href="following"><i class="icon-chevron-right"></i> 我关注的</a></li>
-                        <li><a href="followers"><i class="icon-chevron-right"></i> 关注我的</a></li>
-                        <li class="nav-header">圈子</li>
-                        <li><a href="#labels-badges"><i class="icon-chevron-right"></i> Labels and badges</a></li> 
 
-                        <li class="divider"></li>
-                        <li><a href="#typography"><i class="icon-chevron-right"></i> Typography</a></li>
-                        <li><a href="#thumbnails"><i class="icon-chevron-right"></i> Thumbnails</a></li>
-                        <li><a href="#alerts"><i class="icon-chevron-right"></i> Alerts</a></li>
-                        <li><a href="#progress"><i class="icon-chevron-right"></i> Progress bars</a></li>
-                        <li><a href="#media"><i class="icon-chevron-right"></i> Media object</a></li>
-                        <li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>
-                    </ul>
-
-                    <script type="text/javascript">
-                        require(['jquery'], function($){
-                            $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
-                        });
-                    </script>
-                </div>
-
-            </div>
-            <div id='main-body' class="container-fluid">
-                <div class="row-fluid ">
-                    <%= yield %>
-                </div>
-            </div>
-            <%= render "footer" %>
+  <%= render "header-fluid" %>
+  <%= render "category_breadcrumbs" %>
+  <div id='wrapper' class='container-fluid'>
+    <div class="row-fluid">
+      <div id='people-sidebar' class="span3 leftfix">
+        <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
+        <h1><%= @people.login %></h1>
+        <div class="isfollowing">
+          <span class="label">Default</span>
+          <span class="label">Default</span>
+          <% unless @people.id == current_user.id %>
+            <% unless current_user.is_follow_user?(@people.id) %>
+              <span class="label lf follow" data-value="<%= @people.id %>">关注</span>
+            <% else %>
+              <span class="label lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+            <% end %>
+          <% end %>
         </div>
+        <hr>
+        <div class="well">
+        <ul class="nav nav-list">
+          <% if can?(:index, Cart) || can?(:index, OrderTransaction) %>
+          <li class="nav-header">购物</li>
+          <% end %>
+          <% if can? :index, Cart %>
+          <li>
+            <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>">
+              <i class="icon-chevron-right"></i> 购物车
+            </a>
+          </li>
+          <%end%>
+          <%if can? :index, OrderTransaction %>
+          <li><a class="people-transaction" href="<%= person_transactions_path(@people.login) %>"><i class="icon-chevron-right"></i> 订单</a></li>
+          <%end%>
+          <li class="nav-header">活动</li>
+          <% if can? :index, Notification %>
+          <li>
+            <a class='people-notification' href="<%=person_notifications_path(@people.login) %>">
+              <i class="icon-chevron-right"></i>提醒</a>
+          </li>
+          <%end%>
+          <li><a href="my_activity"><i class="icon-chevron-right"></i> 我参于的活动</a></li>
+          <li><a href="about_to_happen"><i class="icon-chevron-right"></i> 马上要发生的</a></li>
+          <li><a href="expired"><i class="icon-chevron-right"></i> 往期活动</a></li>
+          <li class="nav-header">社区</li>
+          <li><a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">
+            <i class="icon-chevron-right"></i>商品评论
+            </a>
+          </li>
+          <li>
+            <a class='people-communities' href="<%=person_communities_path(@people.login) %>">
+              社交
+            </a>
+          </li>
+          <li>
+            <a class='people-following' href="<%=person_followings_path(@people.login) %>">
+              <i class="icon-chevron-right"></i> 我关注的
+            </a>
+          </li>
+          <li><a class='people-followers' href="<%=person_followers_path(@people.login) %>"><i class="icon-chevron-right"></i> 关注我的</a></li>
+          <li class="nav-header">圈子</li>
+          <li><a href="#labels-badges"><i class="icon-chevron-right"></i> Labels and badges</a></li>
+          <li class="divider"></li>
+          <li><a href="#typography"><i class="icon-chevron-right"></i> Typography</a></li>
+          <li><a href="#thumbnails"><i class="icon-chevron-right"></i> Thumbnails</a></li>
+          <li><a href="#alerts"><i class="icon-chevron-right"></i> Alerts</a></li>
+          <li><a href="#progress"><i class="icon-chevron-right"></i> Progress bars</a></li>
+          <li><a href="#media"><i class="icon-chevron-right"></i> Media object</a></li>
+          <li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>
+        </ul>
+        <script type="text/javascript">
+          require(['jquery'], function($){
+            $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
+          });
+          require(["jquery", "people"], function($, following){
+            new following({
+              login: "<%= current_user.login %>",
+              people_id: "<%= @people.id %>",
+              follow_type: "User",
+              el: $(".isfollowing") })
+          });
+        </script>
+        </div>
+
+      </div>
+      <div id='main-body' class="container-fluid">
+        <div class="row-fluid">
+          <%= yield %>
+        </div>
+      </div>
+      <%= render "footer" %>
     </div>
-    <%= render_widget :my_cart %>
+  </div>
+  <%= render_widget :my_cart %>
 </body>
 </html>
