@@ -1,5 +1,9 @@
 #encoding: utf-8
 #describe: 最近联系人
+#attribute:
+# friend_id: 好友id
+# user_id: 用户id
+# last_contact_date: 最后一次联系日期
 class ContactFriend < ActiveRecord::Base
   attr_accessible :friend_id, :user_id, :last_contact_date
 
