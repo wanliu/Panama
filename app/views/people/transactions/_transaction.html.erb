@@ -104,11 +104,10 @@
 	</div>
 </div>
 <script type="text/javascript">
-	require(["jquery", "jquery_ujs", "people/transaction_card"], function($, a, Transaction ){
+	require(["jquery", "jquery_ujs", "people/transaction_card"], function($, _a, Transaction ){
 		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
 		var card = new Transaction.TransactionCard({el: $(id),
 													initial: "<%= transaction.state %>",
 													event_url: "<%= trigger_event_person_transaction_path(@people, transaction) %>"	});
-		console.log(card);
 	});
 </script>

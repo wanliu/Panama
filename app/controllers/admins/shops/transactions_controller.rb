@@ -10,4 +10,20 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   		format.html
   	end
   end
+
+
+  def event
+    @transaction = OrderTransaction.find(params[:id])
+    # authorize! :event, @transaction
+    if @transaction.fire_events!(params[:event])
+      render partial: 'transaction',
+                   object:  @transaction,
+                   locals: {
+                     state:  @transaction.state,
+                     people: @people
+                   }
+      # render :partial => 'transaction', :transaction => @transaction, :layout => false
+      # redirect_to person_transaction_path(@people.login, @transaction)
+    end
+  end
 end

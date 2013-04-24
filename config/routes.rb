@@ -125,7 +125,11 @@ Panama::Application.routes.draw do
 
       end
 
-      resources :transactions, :controller => "shops/transactions"
+      resources :transactions, :controller => "shops/transactions" do
+        member do
+          post "event(/:event)", :to => "shops/transactions#event", :as => :trigger_event
+        end
+      end
 
       match "pending", :to => "shops/transactions#pending"
 

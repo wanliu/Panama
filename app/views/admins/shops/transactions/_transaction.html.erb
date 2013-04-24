@@ -13,11 +13,6 @@
 
 				  	<button type="button" class="close" data-dismiss="alert">&times;</button>
 				  	<%= render "state_buttons", :transaction => transaction %>
-				  	<div class='controls pull-right'>
-					  	<button class="btn btn-large btn-primary" type="button">
-							确认发货
-						</button>
-					</div>
 				  </h1>
 					<div class="progress progress-mini progress-striped active">
 						<div class="bar bar-success" style="width: 35%;"></div>
@@ -28,55 +23,8 @@
 			</div>
 		</div>
 		<div class="transaction-body">
-			<p>
-				送货地址：<%= transaction.address.nil? ? "暂无" : transaction.address.location %>
-			</p>
-			<table class="table table-striped">
-				<thead>
-				<tr>
-					<th colspan=2 class="relative">
-						<div class="left-frame"></div>
-						<% transaction.items[0...5].each do |item| %>
-							<%= image_tag item.product.photos.icon %>
-						<% end %>
-						<span class='ellipsis'>...</span>
-					</th>
-					<th>
-						<%= transaction.items_count %>
-					</th>
-					<th><strong>小计: <%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
-					</th>
-					<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
-					</th>
-					<th class="relative">
-							<%= link_to '#', :class => "btn btn-large" do %>
-								<%= icon :download %>
-							<% end %>
-						<div class="right-frame"></div>
-					</th>
-				</tr>
-				</thead>
-				<% transaction.items.each do |item| %>
-				<tr>
-					<td>
-						<%= image_tag item.product.photos.icon %>
-					</td>
-					<td>
-						<%= item.title %>
-					</td>
-					<td>
-						<%= item.amount %>
-					</td>
-					<td>
-						<%= item.price %>
-					</td>
-					<td>
-						<%= item.total %>
-					</td>
-					<td></td>
-				</tr>
-				<% end %>
-			</table>
+			<%= render state, transaction: transaction %>
+
 		</div>
 		<div class="transaction-footer">
 			<div class="toolbar">
@@ -148,5 +96,12 @@
 	</div>
 </div>
 <script type="text/javascript">
-	require(["jquery_ujs"], function(){});
+	require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card"], function($, _a, Transaction){
+
+		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
+		var card = new Transaction.ShopTransactionCard({el: $(id),
+														initial: "<%= transaction.state %>",
+														event_url: "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"	});
+
+	});
 </script>
