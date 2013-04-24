@@ -17,6 +17,10 @@ module ApplicationHelper
     @current_admin ||= AdminUser.where(:uid => session[:admin_id]).first if session[:admin_id]
   end
 
+  def current_user_token
+    @current_user.im_token
+  end
+
   def default_img_url(version_name)
     ImageUploader.new.url(version_name)
   end

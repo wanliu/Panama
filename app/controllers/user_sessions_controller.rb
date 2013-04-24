@@ -14,9 +14,10 @@ class UserSessionsController < ApplicationController
       user = User.new(:uid => omniauth['uid'])
       user.login = omniauth["info"]["login"]
       user.email = omniauth["info"]["email"]
-      user.save
-
+    else
+      user.generate_token
     end
+    user.save
 
     #p omniauth
     # Currently storing all the info
