@@ -1,0 +1,38 @@
+<% active_section :following %>
+<table class='table followers follow-user'>
+  <thead>
+    <tr>
+      <th class='title'>关注的用户</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render :partial => "following_user", :locals => {followings: @u_followings} %>
+  </tbody>
+</table>
+<table class='table followers follow-shop'>
+  <thead>
+    <tr>
+      <th class='title'>关注的商店</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render :partial => "following_shop", :locals => {followings: @s_followings } %>
+  </tbody>
+</table>
+<script type='text/javascript'>
+  require(["jquery", "people/following"], function($, view){
+    new view.FollowListView({
+      el: $("table.follow-user"),
+      login: "<%=current_user.login %>",
+      follow_type: "user"
+    })
+
+    new view.FollowListView({
+      el: $("table.follow-shop"),
+      login: "<%=current_user.login %>",
+      follow_type: "shop"
+    })
+  })
+</script>

@@ -1,0 +1,13 @@
+<div class="btn-group circle-list">
+  <a href="<%=shop_admins_communities_path(current_shop.name) %>" class="btn circle-all">全部</a>
+  <% circles.each do |c| %>
+  <a href="<%=shop_admins_circle_path(current_shop.name, c.id) %>" class="btn circle-<%=c.id %>">
+    <%=c.name %>
+  </a>
+  <% end %>
+  <a href='<%=my_related_shop_admins_topics_path(current_shop.name) %>' class='btn circle-related'>与我相关</a>
+</div>
+
+<script type="text/javascript">
+  $(".circle-list>.circle-<%=yield :active_circle %>").addClass("active")
+</script>
