@@ -117,6 +117,11 @@ Panama::Application.routes.draw do
   #   end
   # end
   #
+  resources :chat_messages do
+    collection do
+      get ""
+    end
+  end
 
   resources :category
   # shop admins routes

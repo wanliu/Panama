@@ -26,6 +26,8 @@ class User < ActiveRecord::Base
   has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   has_many :friend_groups, dependent: :destroy
   has_many :contact_friends, dependent: :destroy
+  has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
+  has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
 
   delegate :groups, :jshop, :to => :shop_user
 
