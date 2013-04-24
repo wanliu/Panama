@@ -2,6 +2,10 @@
   <%= render :partial => "activity", :collection => @activities %>
 </div>
 <%= link_to 'New Activity', new_activity_path %>
+<br />
+<% User.all.each do |u| %>
+<a href="/contact_friends/join_friend/<%=u.id %>"><%=u.login %></a>
+<% end %>
 <script type="text/javascript">
   require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($,Mousemove){
     var $container = $('#activities');
@@ -14,29 +18,29 @@
 
 
     $("#activities img").on('click', function(){
-    	var $this = $(this);
-    		html = "<div id='center_image'><img src='" + $this.attr('src') + "' alt='#' /> </div>",
-    		$dialog = $('#center_image').get(0) ? $('#center_image') : $(html).appendTo('body'),
-    		naturalWidth = $this.naturalWidth(),
-    		naturalHeight = $this.naturalHeight(),
-    		windowWidth = $(window).width(),
-    		windowHeight = $(window).height();
+      var $this = $(this);
+        html = "<div id='center_image'><img src='" + $this.attr('src') + "' alt='#' /> </div>",
+        $dialog = $('#center_image').get(0) ? $('#center_image') : $(html).appendTo('body'),
+        naturalWidth = $this.naturalWidth(),
+        naturalHeight = $this.naturalHeight(),
+        windowWidth = $(window).width(),
+        windowHeight = $(window).height();
 
-    	var top = naturalHeight > windowHeight ? 0 : (windowHeight - naturalHeight) / 2,
-    		left = naturalWidth > windowWidth ? 0 : (windowWidth - naturalWidth) / 2;
+      var top = naturalHeight > windowHeight ? 0 : (windowHeight - naturalHeight) / 2,
+        left = naturalWidth > windowWidth ? 0 : (windowWidth - naturalWidth) / 2;
 
 
-    	$dialog.find("img").attr('src', $this.attr('src'));
-    	effect = "fadeIn"
-    	$dialog.removeClass("animated " + effect);
-    	$dialog
-    		.css('position', 'absolute')
-    		.width(naturalWidth)
-    		.height(naturalHeight)
-    		.offset({top: top, left: left})
-    		.css('z-index', 2000)
-			.show()
-			.addClass('animated ' + effect);
+      $dialog.find("img").attr('src', $this.attr('src'));
+      effect = "fadeIn"
+      $dialog.removeClass("animated " + effect);
+      $dialog
+        .css('position', 'absolute')
+        .width(naturalWidth)
+        .height(naturalHeight)
+        .offset({top: top, left: left})
+        .css('z-index', 2000)
+      .show()
+      .addClass('animated ' + effect);
     })
 
     new Mousemove.Drag

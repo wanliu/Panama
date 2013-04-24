@@ -1,7 +1,28 @@
-<div class='chat_panel nav_item'>
-  <a href='javascript:void(0)'>聊天</a>
+<div class='nav_item'>
+  <a href='javascript:void(0)' class='chat_nav'>聊天</a>
+</div>
+<div class='chat_friend_panel'>
+  <div class='title'>
+    最近联系
+    <a href='javascript:void(0)' class='close_list'></a>
+  </div>
+  <div class='friend_list'>
+  </div>
 </div>
 
 <script type="text/javascript">
 
+  require(["chats/chat"], function(ChatViewList){
+    chat_view = new ChatViewList({
+      el: $(".chat_friend_panel"),
+      faye_url: "<%=faye_server_uri %>",
+      current_user: {
+        id: "<%=current_user.id %>",
+        login: "<%=current_user.login %>"}
+    })
+
+    $(".chat_nav").click(function(){
+      chat_view.toggle();
+    })
+  })
 </script>
