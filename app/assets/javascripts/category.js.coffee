@@ -72,6 +72,13 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             })
             @$(".twitter-typeahead").addClass("span12 search-query")
             @$(".tt-query").after("<button type='button' class='btn' id='search'>搜索</button>")
+            @$(".search-query").find(".tt-hint").addClass("span11")
+            
+            @search_el.css("padding-top","20px")
+            @search_el.css("padding-bottom","20px")
+            @search_el.css("z-index",8888)
+            @search_el.css("background-color","white")
+            @search_el.width($("#CategoryModal .modal-body").width())
 
         keyup_choose: () ->
             unless $(".input_search").val() == ""
