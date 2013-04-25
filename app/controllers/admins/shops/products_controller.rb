@@ -22,47 +22,22 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def new
-    #模拟数据库对象的属性操作
-    # Hash.class_eval do
-    #   ['name', 'colours', 'sizes', 'items', :title, :value, :id, :checked].each do |method|
-    #     define_method method do
-    #       self[method]
-    #     end
-    #   end
-    # end
-
     @product = Product.new
     form_builder(@product)
     @category_root = Category.root
     @shops_category_root = current_shop.shops_category
     @category = @product.build_category(:name => 'No Selected')
     @content = additional_properties_content(@category)
-    #模拟数据库对象
-    # def @product.styles
-    #   [
-    #     {'name' => 'colours', 'items' =>
-    #       [ {value: '#FFB6C1', title: '浅粉红'}, {value: '#FFC0CB', title: '粉红'},
-    #         {value: '#7B68EE', title: '中板岩蓝'}, {value: '#00FA9A', title: '中春绿'}
-    #       ]
-    #     },
-    #     {'name' => 'sizes', 'items' =>
-    #       [ {title: 'M', value: 'M'}, {title: 'ML', value: 'ML'}, {title: 'L', value: 'L'},
-    #         {title: 'XL', value: 'XL'}, {title: 'XXL', value: 'XXL'}, {title: 'XXXL', value: 'XXXL'}
-    #       ]
-    #     }
-    #   ]
-    # end
-
   end
 
   def create
     prices_attributes = params[:product].delete(:prices)
-    prices_option = extract_prices_options(params[:product])
     @product = current_shop.products.build(:category_id => params[:product][:category_id])
+    @price_options = extract_prices_options(params[:product])
     # @product = current_shop.products.build(params[:product].merge(dispose_options))
     @product.attach_properties!
     @product.update_attributes(params[:product].merge(dispose_options))
-    @product.update_prices_option(prices_option) unless prices_option.nil?
+    @product.update_prices_option(@price_options) unless @price_options.nil?
     @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @category = @product.category
     @content = additional_properties_content(@category)
@@ -87,23 +62,20 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def update
     @product = Product.find(params[:id])
+    category_id = params[:product][:category_id]
+    @product.category_id = category_id unless category_id.nil?
+    @product.attach_properties!
+
     prices_attributes = params[:product].delete(:prices)
-    prices_option = extract_prices_options(params[:product])
+    @price_options = extract_prices_options(params[:product])
 
     @product.update_attributes(params[:product].merge(dispose_options))
-    @product.update_prices_option(prices_option) unless prices_option.nil?
+    @product.update_prices_option(@price_options) unless @price_options.nil?
     @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @shops_category_root = current_shop.shops_category
     @category = @product.category
     @content = additional_properties_content(@category)
     if @product.valid?
-      # prices_attributes.each do |k, v|
-      #   price = v.delete(:price)
-      #   pprice = @products.prices[v]
-      #   pprice.price = price
-      # end
-
-      # @product.update_style_subs(params)
       render :action => :show
     else
       render :action => :edit
@@ -139,7 +111,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-
     @content = additional_properties_content(@category)
 
     if @content.nil?
@@ -190,8 +161,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def extract_prices_options(product_attributes)
-    price_definition = product_attributes.delete(:price_definition)
-    if price_definition.present? && prices = price_definition.split(',')
+    prices_definition = @product.prices_definition
+    if prices_definition.present? && prices = prices_definition.map { |pri| pri.name }
       hash = {}
       prices.map {|pri| hash[pri] = product_attributes.delete(pri) }
       hash

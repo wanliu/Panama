@@ -1,7 +1,8 @@
 ---
 1:
     id: 1
-    product_id: 10001
+    valuable_id: 10001
+    valuable_type: Product
     property_id: 3
     svalue: Pants
     nvalue:
@@ -11,7 +12,8 @@
     updated_at: 2013-03-05 06:52:20.000000000 Z
 2:
     id: 2
-    product_id: 10001
+    valuable_id: 10001
+    valuable_type: Product
     property_id: 2
     svalue: cotton
     nvalue:
@@ -21,7 +23,8 @@
     updated_at: 2013-03-05 06:25:46.000000000 Z
 3:
     id: 3
-    product_id: 10001
+    valuable_id: 10001
+    valuable_type: Product
     property_id: 1
     svalue:
     nvalue:

@@ -16,7 +16,7 @@
     <%= f.association :shops_category, :as => :chosen %>
     <%= f.association :attachments,
                       :as           => :album,
-                      :upload_url   => shop_admins_attachments_path(current_shop),
+                      :upload_url   => attachments_path,
                       :collection   => @product.format_attachment %>
 
     <%= f.input :price %>
@@ -88,7 +88,7 @@
 
             modal.find(".modal-header").width(modal.find(".modal-body").width());
             modal.find(".modal-footer").width(modal.find(".modal-body").width());
-            modal.find(".search").width(modal.find(".modal-body").width());
+            modal.find(".search").css("max-width", modal.find(".modal-body").width());
             modal.find(".modal-resize").attr("modal-size",percentage);
         }
 
@@ -101,10 +101,16 @@
             $("body").css("position","fixed");
             setModalSize(0.75);
             $(window).bind("resize", function(e){
-                debugger
                 percentage = $(".modal-resize").attr("modal-size");
                 setModalSize(percentage);
                 e.preventDefault();
+            });
+            $("#CategoryModal").one("click", function(e){
+                pointerX = $("#CategoryModal .modal-body").outerWidth() 
+                    + $("#CategoryModal").offset().left;
+                if(e.pageX > pointerX){
+                    $('#CategoryModal').modal('hide');
+                }
             });
         });
 

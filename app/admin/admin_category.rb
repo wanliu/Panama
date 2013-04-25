@@ -33,6 +33,14 @@ ActiveAdmin.register Category do
           column :property_type
         end
       end
+
+      panel("Category PriceOption") do
+        table_for(category.price_options) do
+          column :name
+          column :title
+          column :property
+        end
+      end
     end
 
     div do
@@ -40,6 +48,16 @@ ActiveAdmin.register Category do
       active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
         f.inputs "Properties" do
           f.input :id, as: :select, collection: Property.all { |property| property.title }
+        end
+        f.buttons
+      end
+    end
+
+    div do
+      @price_option = PriceOption.new
+      active_admin_form_for @price_option, url: add_price_options_system_category_path(params[:id]) do |f|
+        f.inputs "Price Option" do
+          f.input :id, as: :select, collection: Property.all { | prop| prop.title }
         end
         f.buttons
       end
@@ -65,30 +83,24 @@ ActiveAdmin.register Category do
       contents_config = Rails.application.config.contents
       section = Category.to_s.underscore.to_sym
       panel("Category Contents") do
-        contents = contents_config[section][:each].map { |key, ctnt| ContentConfig.new(:name => ctnt) }
+        expects = [:name, :parent, :transfer]
+        configs = contents_config[section][:each]
+        contents = (configs.keys - expects).map { |k| ContentConfig.new(:name => configs[k]) }
         table_for(contents) do
           column :name
           column :tool do
-            link_to 'edit the template', fetch_category_template_system_category_path
+            link_to 'create the template', fetch_category_template_system_category_path
           end
         end
       end
     end
   end
 
-  # edit do |category|
-  #   div do
-  #     @property = Property.new
-  #     active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
-  #       f.inputs "Properties" do
-  #         f.input :id, as: :select, collection: Property.all { |property| property.title }
-  #       end
-  #       f.buttons
-  #     end
-  #   end
-  # end
-
   member_action :properties do
+    @category = Category.find(params[:id])
+  end
+
+  member_action :price_options do
     @category = Category.find(params[:id])
   end
 
@@ -96,6 +108,12 @@ ActiveAdmin.register Category do
     @category = Category.find(params[:id])
     @category.properties << Property.find(params[:property][:id])
     redirect_to properties_system_category_path(@category)
+  end
+
+  member_action :add_price_options, :method => :post do
+    @category = Category.find(params[:id])
+    @category.price_options.create(:property_id => params[:price_option][:id])
+    redirect_to price_options_system_category_path(@category)
   end
 
   member_action :delete_relation, :method => :put do

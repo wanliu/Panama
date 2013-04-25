@@ -1,0 +1,20 @@
+<% circle_active @circle.id %>
+<% content_for :topic_right do %>
+<div>
+  <div class='title'><%=@circle.name %>圈子好友</div>
+  <div class='content'>
+    <ul class='friend-list'>
+      <% if @circle.friends.count > 0 %>
+        <% @circle.friends.each do |f| %>
+        <li class='friend'>
+          <img class='img-polaroid' src="<%=f.user.icon %>" /><%=f.user.login %>
+        </li>
+        <% end %>
+      <% else %>
+        <li>暂时没有好友</li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<% end %>
+<%=render :partial => "admins/shops/topics/topics_info", locals: {circles: @circles, circle: @circle} %>

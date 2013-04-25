@@ -19,7 +19,16 @@ class Cart < ActiveRecord::Base
       yield item
       item
     else
-      items.build attributes
+      @product = Product.find(product_id)
+      @item = items.build attributes.slice(:title, :price, :amount)
+      @product.prices_definition.each do |prop|
+        @item.properties << prop
+      end
+      @item.delegate_property_setup
+      attributes.each do |k, v|
+        @item.send("#{k}=", v)
+      end
+      @item
     end
   end
 
