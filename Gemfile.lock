@@ -5,6 +5,12 @@ GIT
     rails-setting (0.0.8)
 
 GIT
+  remote: git://github.com/huxinghai1988/text_format_html.git
+  revision: 0bcdc1e4747e5f7d93cf693b5cf578586e3f1543
+  specs:
+    text_format_html (0.0.1)
+
+GIT
   remote: git://github.com/wanliu/omniauth-wanliu.git
   revision: fd28572ffd2c4ce2594d31a5c2927e55581fe140
   specs:
@@ -347,6 +353,8 @@ GEM
       activesupport (= 3.2.8)
       bundler (~> 1.0)
       railties (= 3.2.8)
+    rails_autolink (1.0.9)
+      rails (~> 3.1)
     railties (3.2.8)
       actionpack (= 3.2.8)
       activesupport (= 3.2.8)
@@ -371,6 +379,8 @@ GEM
       railties (~> 3.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rouge (0.2.14)
+      thor
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
@@ -496,6 +506,7 @@ DEPENDENCIES
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.8)
   rails-setting!
+  rails_autolink (>= 1.0.9)
   rb-fchange
   rb-fsevent
   rb-inotify
@@ -503,6 +514,7 @@ DEPENDENCIES
   redcarpet (~> 2.2.2)
   requirejs-rails (~> 0.9.0)
   rest-client (~> 1.6.7)
+  rouge (~> 0.2.14)
   rspec (~> 2.12.0)
   rspec-rails (~> 2.12.0)
   ruby_gntp
@@ -514,6 +526,7 @@ DEPENDENCIES
   simplecov (~> 0.7.1)
   spork (~> 1.0rc)
   state_machine (~> 1.1.2)
+  text_format_html!
   therubyracer (~> 0.10.2)
   thin (~> 1.5.0)
   uglifier (>= 1.0.3)

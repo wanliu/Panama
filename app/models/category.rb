@@ -5,10 +5,11 @@ class Category < ActiveRecord::Base
   #
   attr_accessible :name
 
-  has_many :products
+  has_many    :products
   has_and_belongs_to_many :properties, :autosave => true
-  has_many :contents, :as => :contentable
+  has_many    :contents, :as => :contentable
   has_ancestry :cache_depth => true
+  has_many    :price_options, :as => :optionable, :autosave => true
 
   validates :name, presence: true
 
@@ -22,6 +23,12 @@ class Category < ActiveRecord::Base
     # clear all category children
     create_node(config_root, root)
     root.save
+  end
+
+  def prices_definition
+    price_options.map do |po|
+      po.property
+    end
   end
 
   def clear_categories

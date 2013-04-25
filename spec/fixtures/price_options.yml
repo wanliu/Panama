@@ -1,0 +1,19 @@
+---
+1:
+    id: 6
+    name:
+    title:
+    property_id: 3
+    optionable_id: 73
+    optionable_type: Category
+    created_at: 2013-03-30 08:45:34.000000000 Z
+    updated_at: 2013-03-30 08:45:34.000000000 Z
+2:
+    id: 11
+    name: clothes_type
+    title: Clothes Type
+    property_id: 3
+    optionable_id: 10001
+    optionable_type: Product
+    created_at: 2013-04-01 05:17:59.000000000 Z
+    updated_at: 2013-04-01 05:17:59.000000000 Z

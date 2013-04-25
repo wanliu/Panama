@@ -1,0 +1,5 @@
+table_for price_options, :class => 'index_table' do
+  column :name
+  column :title
+  column :property
+end

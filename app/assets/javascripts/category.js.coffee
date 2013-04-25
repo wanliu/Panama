@@ -65,6 +65,11 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
 
         initialize : (options) ->
             _.extend(@, options)
+            @search_el.css("padding-top","20px")
+            @search_el.css("padding-bottom","20px")
+            @search_el.css("z-index",8888)
+            @search_el.css("background-color","white")
+            @search_el.width($("#CategoryModal .modal-body").width())
             @$el = $(@search_el)
             @$(".search-query").typeahead({
                 remote: "/shops/#{@shop_name}/admins/categories/category_search?q=%QUERY&limit=10",
@@ -74,12 +79,6 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$(".tt-query").after("<button type='button' class='btn' id='search'>搜索</button>")
             @$(".search-query").find(".tt-hint").addClass("span11")
             
-            @search_el.css("padding-top","20px")
-            @search_el.css("padding-bottom","20px")
-            @search_el.css("z-index",8888)
-            @search_el.css("background-color","white")
-            @search_el.width($("#CategoryModal .modal-body").width())
-
         keyup_choose: () ->
             unless $(".input_search").val() == ""
                 if event.keyCode == 13

@@ -10,5 +10,10 @@ define(["faye"], () ->
                 callback(data)
             )
 
+        monitor_event: (event_name, uid, callback = (data) ->) ->
+            @client.subscribe("/events/#{uid}/#{event_name}", (data) ->
+                callback(data)
+            )
+
     RealtimeClient
 )

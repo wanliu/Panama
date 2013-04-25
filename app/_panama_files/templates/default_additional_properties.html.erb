@@ -1,0 +1,19 @@
+<hr>
+<% f = value_for(:form) %>
+
+<% @product.properties.each do |prop| %>
+   <% case prop.property_type %>
+   <% when "string" %>
+      <%= f.input prop.name %>
+   <% when "integer" %>
+     <%= f.input prop.name, :as => :spinner %>
+   <%# when "set" %>
+     <%#= f.input prop.name, :as => :select %>
+  <% end %>
+<% end %>
+
+<% @product.prices_definition.each do |prop| %>
+     <%= property_palette(f, prop.name) %>
+<% end %>
+
+<%= render_prices_table(@product.prices_definition.map { |prop| prop.name }) %>

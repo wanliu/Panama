@@ -1,8 +1,9 @@
+# encoding: utf-8
 source 'https://rubygems.org'
 # source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
-
+gem "rails_autolink", ">= 1.0.9"
 # database orm adapter
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
@@ -45,6 +46,8 @@ gem 'apotomo', '~> 1.2.3'
 gem 'github-markup', '~> 0.7.4'
 gem 'redcarpet', '~> 2.2.2'
 
+# Markdown 格式
+gem "rouge", "~> 0.2.14"
 
 # form helper
 gem 'simple_form', '~> 2.0.4'
@@ -113,6 +116,7 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
+  # gem 'pry-rails'
   # gem 'zeus'
   # gem 'coffee-rails-source-maps'
   gem 'better_errors'
@@ -131,6 +135,8 @@ gem "ac_uniquify", "~> 0.1.0"
 gem 'draper', '~> 1.0'
 gem 'activeadmin'
 gem 'passenger'
+# 默认值
 gem "default_value_for"
 gem 'cancan'
 gem 'rails-setting',:github => "huxinghai1988/rails-setting"
+gem 'text_format_html',:github => "huxinghai1988/text_format_html"

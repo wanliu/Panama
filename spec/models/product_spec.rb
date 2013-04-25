@@ -169,7 +169,7 @@ describe Product, "产品模型" do
         let(:weight) { Property.where(:name => 'weight').first }
         let(:clothes_type) { Property.where(:name => 'clothes_type').first }
 
-        let(:pants) { ProductPropertyValue.first }
+        let(:pants) { PropertyValue.first }
 
         # properties 将包含 产品的属性表 Property
         # Property
@@ -252,7 +252,7 @@ describe Product, "产品模型" do
 
                 it "挂接分类" do
                     apple.properties.should include(material, weight, clothes_type)
-                    apple.category = Category.find(73)
+                    apple.category = Category.find(71)
                     apple.attach_properties!
                     apple.should have(0).properties
                 end
@@ -325,12 +325,25 @@ describe Product, "产品模型" do
 
                 it "更换分类移出原有值" do
                     apple.material.should == "cotton"
-                    apple.category = Category.find(72)
+                    apple.category = Category.find(71)
                     apple.attach_properties!
                     apple.properties_values.size.should == 0
                     apple.save
-                    ProductPropertyValue.all.size.should == 0
+                    PropertyValue.all.size.should eql(3)
                 end
+            end
+        end
+
+        describe "同步附加属性" do
+            let(:category) { apple.category }
+            let(:sizes) { Property.find(12) }
+            let(:colour) { Property.find(11) }
+
+            it "同步价格方案" do
+                category.price_options.create(:property => sizes)
+                category.price_options.create(:property => colour)
+                apple.attach_properties!
+                apple.prices_definition.should include(sizes, colour)
             end
         end
     end

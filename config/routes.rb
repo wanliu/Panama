@@ -2,20 +2,6 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
-  # faye_server '/realtime', timeout: 25 do
-  #   map "/notification/**" => RealtimeNoticeController
-  #   map default: :block
-  #   class MockExtension
-  #     def incoming(message, callback)
-  #        callback.call(message)
-  #     end
-  #     def outgoing(message, callback)
-  #         callback.call(message)
-  #     end
-  #   end
-  #   add_extension(MockExtension.new)
-  # end
-
   resources :people do
     collection do
       get ":shop_name/show_invite/:login", :to => "people#show_invite"
@@ -27,9 +13,47 @@ Panama::Application.routes.draw do
     resources :transactions, :controller => "people/transactions" do
       member do
         post "event/:event", :to => "people/transactions#event", :as => :trigger_event
+      end
+
+      collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
       end
+
     end
+
+    resources :topics, :controller => "people/topics" do
+      collection do
+        get "receives/:id", :to => "people/topics#receives"
+        get "following"
+      end
+    end
+
+    resources :communities, :controller => "people/communities" do
+      collection do
+        get "people"
+      end
+    end
+
+    resources :circles, :controller => "people/circles" do
+      collection do
+        get "friends"
+        get "addedyou"
+        get "all_friends"
+        post "/:id/join_friend/:user_id", :to => "people/circles#join_friend"
+        delete "/:id/remove_friend/:user_id", :to => "people/circles#remove_friend"
+        delete "circles_remove_friend/:user_id", :to => "people/circles#circles_remove_friend"
+      end
+    end
+
+    resources :followings, :controller => "people/followings" do
+      collection do
+        post "user/:user_id" => "people/followings#user"
+        post "shop/:shop_id" => "people/followings#shop"
+        get :shops
+      end
+    end
+
+    match "followers", :to => "people/followings#followers"
 
     resources :product_comments, :controller => "people/product_comments" do
     end
@@ -40,29 +64,30 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :comments, :controller => "people/comments" do
-      collection do
-        post 'activity'
-        post 'product'
-        get 'new_activity'
-        get 'new_product'
-        get "index_activities"
-      end
-    end
-
     resources :cart, :controller => "people/cart"
 
-    member do
-      post "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
-      put "add_to_cart", :to => "people/cart#add_to_cart", :as => :add_to_cart
-      post "clear_list", :to => "people/cart#clear_list", :as => :clear_cart_list
-      # post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
-    end
   end
+
+
+
+  match "mycart", :to => "people/cart#add_to_cart", :as => :add_to_cart, :via => [:post, :put]
+  match "mycart/clear_list",:to => "people/cart#clear_list", :as => :clear_cart_list, :via => :post
 
   match '/system/logout', :to => 'system_sessions#destroy'
 
   # resources :system
+
+  resources :comments do
+    collection do
+      post 'activity'
+      post 'product'
+      post 'topic'
+      get 'new_activity'
+      get 'new_product'
+      get "index_activities"
+      get "count"
+    end
+  end
 
   resources :city
   resources :addresses
@@ -97,11 +122,11 @@ Panama::Application.routes.draw do
   # shop admins routes
 
   resources :shops, :except => :index do
-    namespace :admins do
-      match "attachments", :to => "shops/attachments#index"
-      match "attachments/upload", :to => "shops/attachments#upload", :via => :post
-      match "attachments/destroy/:id", :to => "shops/attachments#destroy", :via => :delete
+    collection do
+      get "topic_categories/:id", :to => "shops#topic_categories"
+    end
 
+    namespace :admins do
       resources :dashboard, :controller => "shops/dashboard"
 
       resources :contents, :controller => "shops/contents"
@@ -126,6 +151,31 @@ Panama::Application.routes.draw do
 
       end
 
+      resources :topics, :controller => "shops/topics" do
+        collection do
+          get :my_related
+          get "category/:topic_category_id", :to => "shops/topics#category"
+          get "receives/:id", :to => "shops/topics#receives"
+        end
+      end
+
+      resources :circles, :controller => "shops/circles" do
+        collection do
+          get :friends
+          get :all_friends
+          get :followers
+          post "/:id/join_friend/:user_id", :to => "shops/circles#join_friend"
+          delete "/:id/remove_friend/:user_id", :to => "shops/circles#remove_friend"
+          delete "circles_remove_friend/:user_id", :to => "shops/circles#circles_remove_friend"
+        end
+      end
+
+      resources :communities, :controller => "shops/communities" do
+        collection do
+          get :people
+        end
+      end
+
       resources :transactions, :controller => "shops/transactions"
 
       match "pending", :to => "shops/transactions#pending"
@@ -138,6 +188,9 @@ Panama::Application.routes.draw do
           delete "group_remove_employee", :to => "shops/employees#group_remove_employee"
           delete "destroy/:user_id", :to => "shops/employees#destroy"
         end
+      end
+
+      resources :followings, :controller => "shops/followings" do
       end
 
       resources :groups, :controller => "shops/groups" do
@@ -157,6 +210,9 @@ Panama::Application.routes.draw do
     end
   end
 
+  match "attachments", :to => "attachments#index"
+  match "attachments/upload", :to => "attachments#upload", :via => :post
+  match "attachments/:id", :to => "attachments#destroy", :via => :delete
 
   match "shops/:shop_id/admins/products/category/:category_id",
     :to => "admins/shops/products#products_by_category"
@@ -194,6 +250,8 @@ Panama::Application.routes.draw do
   match 'vfs/destroy_file', :to => 'vfs#destroy_file'
   post 'vfs/edit_file', :to => 'vfs#edit_file'
   post 'vfs/create_file', :to => 'vfs#create_file'
+
+  match 'propertie_item/:id', :to => 'propertie_item#destroy'
 
   root :to => 'activities#index'
 

@@ -1,0 +1,14 @@
+<hr>
+<% f = value_for(:form) %>
+
+<% @item.prices_definition.each do |prop| %>
+     <%= property_selector(f, prop.name) %>
+<% end %>
+
+<%@rules = @item.prices.map do |price| %>
+	<% price_option_rule(price) %>
+<% end %>
+
+<script type="text/javascript" >
+   rules = <%=raw @rules.to_json %>;
+</script>

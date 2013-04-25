@@ -9,6 +9,26 @@ module ApplicationHelper
     t(sym, :default => default)
   end
 
+  def shop_recently_friends
+    ids = current_shop.all_friends.order("created_at desc").limit(8)
+    .map{|f| f.user_id}
+    User.where(id: ids)
+  end
+
+  def user_recently_friends
+    ids = current_user.all_friends.order("created_at desc").limit(8)
+    .map{|f| f.user_id}
+    User.where(id: ids)
+  end
+
+  def community_active(name)
+    content_for(:active_community){ name.to_s }
+  end
+
+  def circle_active(name)
+    content_for(:active_circle){ name.to_s }
+  end
+
   def current_user
     @current_user ||= User.where(:uid => session[:user_id]).first if session[:user_id]
   end

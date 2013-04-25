@@ -10,6 +10,7 @@ class PeopleController < ApplicationController
 
   def show
     @people = User.find_by(:login => params[:id])
+    @circles = current_user.circles
     current_ability(@people)
   end
 
