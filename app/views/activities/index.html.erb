@@ -4,7 +4,7 @@
 <%= link_to 'New Activity', new_activity_path %>
 <br />
 <% User.all.each do |u| %>
-<a href="javascript:void(0)" class='chat_user' data-value="<%=u.id %>"><%=u.login %></a>
+<a href="javascript:void(0)" class='chat_user' data-event='chat' data-value="<%=u.id %>"><%=u.login %></a>
 <% end %>
 <script type="text/javascript">
   require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($,Mousemove){
@@ -45,11 +45,4 @@
 
     new Mousemove.Drag
   });
-
-  require(["jquery"], function($){
-    $(".chat_user").click(function(event){
-      $.get("/contact_friends/join_friend/"+$(event.currentTarget).attr("data-value"), function(data){
-      })
-    })
-  })
 </script>

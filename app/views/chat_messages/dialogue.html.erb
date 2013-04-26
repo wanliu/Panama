@@ -1,22 +1,42 @@
-<div>
-	<div class='title'>
-		在线-<%=@friend.login %>
-	</div>
-	<div class='content_panel row-fluid'>
-		<div class='row8'>
-			<div class='content_list'>
-			</div>
-			<div class='content_nav'>das</div>
-			<div class='send_content_panel'>
-				<textarea></textarea>
-				<input type='button' value='发送' />
-			</div>
-		</div>
-		<div class='row4'>
-			<ul>
-				<li>用户名: <%=@friend.login %></li>
-				<li>邮箱: <%=@friend.email %></li>
-			</ul>
-		</div>
-	</div>
+<div class='chat_dialog_panel'>
+  <div class='dialog_head'>
+    在线-<%=@friend.login %>
+  </div>
+  <div class='dialog_content_panel'>
+    <div class='dialog_content'>
+      <ul></ul>
+    </div>
+    <div class='dialog_foot'>
+      <form>
+        <div class='content'>
+          <textarea name='content'></textarea>
+        </div>
+        <div class='foot_nav'>
+          <input type='submit' value='发送' />
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
+<script type="text/javascript">
+  require(["jquery", "chats/chat"], function($, ChatView){
+    var chat_view = new ChatView({
+      el: $(".chat_dialog_panel")
+    })
+
+    chat_view.set_options({
+      user: {
+        id: "<%=current_user.id %>",
+        login: "<%=current_user.login %>",
+        icon_url: "<%=current_user.icon %>",
+        token: "<%=current_user.id %>"},
+      friend: {
+        id: "<%=@friend.id %>",
+        login: "<%=@friend.login %>",
+        icon_url: "<%=@friend.icon %>"},
+      faye_url: "<%=faye_server_uri %>"
+    })
+
+    chat_view.fetch()
+  })
+</script>

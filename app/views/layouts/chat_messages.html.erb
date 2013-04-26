@@ -1,6 +1,14 @@
 <html>
   <head>
     <title></title>
+    <%= stylesheet_link_tag :bootstrap_application, :chat %>
+    <%= render "javascripts" %>
+    <style>
+      body{
+        padding: 0px;
+      }
+    </style>
+    <%= csrf_meta_tag %>
   </head>
   <body>
     <%=yield %>

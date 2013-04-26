@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
 
   after_create :load_initialize_data
 
+  def messages(friend_id)
+    ChatMessage.all(id, friend_id)
+  end
+
   def join_circles
     circle_friends.joins(:circle).map{|c| c.circle }
   end
