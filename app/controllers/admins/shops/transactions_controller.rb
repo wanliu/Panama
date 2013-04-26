@@ -11,6 +11,15 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   	end
   end
 
+  def render(*args)
+    options = args.extract_options!
+    if request.xhr?
+      options[:layout] = false
+    end
+
+    super *args, options
+  end
+
 
   def event
     @transaction = OrderTransaction.find(params[:id])

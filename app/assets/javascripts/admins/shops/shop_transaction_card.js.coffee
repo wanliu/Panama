@@ -1,25 +1,40 @@
-define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jsclock-0.8", 'exports'], ($, Backbone, StateMachine, StateView, n$, exports) ->
+define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 'exports'],
+    ($, Backbone, Transaction, StateMachine, exports) ->
+
+        class ShopTransactionCard extends Transaction.TransactionCardBase
+
+            events:
+                "click .page-header .btn"   : "clickAction"
+                "click button.close"        : "closeThis"
+                "click .detail"        : "toggleItemDetail"
+
+            states:
+                initial: 'none'
+
+                events:  [
+                    { name: 'refresh',       from: 'order',             to: 'waiting_paid' },
+                    { name: 'refresh',       from: 'waiting_paid',      to: 'waiting_delivery' },
+                    { name: 'back',          from: 'waiting_paid',      to: 'order'         },
+                    { name: 'back',          from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
+                    { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
+                    { name: 'back_deliver',  from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
+
+                ]
+
+                callbacks:
+                    onenterstate: (event, from, to, msg) ->
+                        console.log "event: #{event} from #{from} to #{to}"
+
+            getNotifyName: () ->
+                super + "-seller"
 
 
-    class ShopTransactionCard extends StateView.AbstructStateView
+            toggleItemDetail: (event) ->
+                @$(".item-details").slideToggle()
+                false
 
-        states:
-            initial: 'none'
+            leaveWaitingDelivery: (event, from, to, msg) ->
+                @slideAfterEvent(event) unless /back/.test event
 
-            events:  [
-                { name: 'buy',   from: 'order',             to: 'waiting_paid' },
-                { name: 'back_order',  from: 'waiting_paid',      to: 'order'        },
-                { name: 'paid',  from: 'waiting_paid',      to: 'waiting_delivery' },
-                { name: 'back_paid',  from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
-                { name: 'delivered',  from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
-                { name: 'back_deliver',  from: 'waiting_sign',  to: 'waiting_delivery' }, # only for development
-
-            ]
-
-            callbacks:
-                onenterstate: (event, from, to, msg) ->
-                    console.log "event: #{event} from #{from} to #{to}"
-
-
-    exports.ShopTransactionCard = ShopTransactionCard
-    exports
+        exports.ShopTransactionCard = ShopTransactionCard
+        exports

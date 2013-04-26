@@ -23,6 +23,15 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def page
+    @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
+    @transaction = OrderTransaction.find(params[:id])
+    authorize! :show, @transaction
+    respond_to do |format|
+      format.html # show.html.erb
+    end
+  end
+
   def event
     @transaction = OrderTransaction.find(params[:id])
     authorize! :event, @transaction
@@ -153,5 +162,14 @@ class People::TransactionsController < People::BaseController
       format.html { redirect_to person_transactions_path(@people.login) }
       format.json { head :no_content }
     end
+  end
+
+  def render(*args)
+    options = args.extract_options!
+    if request.xhr?
+      options[:layout] = false
+    end
+
+    super *args, options
   end
 end
