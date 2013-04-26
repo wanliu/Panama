@@ -2,18 +2,13 @@
 	<div class="btn-group">
 		<%= link_to '#',
 					:class => 'btn btn-large',
-					'event-name' => 'back_deliver' do %>
+					'event-name' => 'back' do %>
 			<%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
 		<% end %>
 
 		<%= link_to '#', :class => 'btn btn-large btn-primary', 'event-name' => 'sign' do %>
 			<%=raw "确认收货&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
-		<%#= button_to event,
-			  trigger_event_person_transaction_path(@people.login, @transaction, event),
-			  	:class => 'btn btn-large',
-		  		:method => :post %>
-		<%# end %>
 	</div>
 
 </div>

@@ -21,17 +21,6 @@
     </ul>
     <% if @transactions.size > 0 %>
       <% @transactions.each do |transaction| %>
-      <!--   <tr>
-          <td><%#= transaction.created_at %></td>
-          <td><%#= link_to 'Show', person_transaction_path(@people.login, transaction) %></td>
-          <td><%#= link_to 'Edit', edit_person_transaction_path(@people.login, transaction) %></td>
-          <td><%#= link_to 'Destroy', person_transaction_path(@people.login, transaction), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        </tr> -->
-        <%#= render :partial => 'item_trans', :locals => {
-                   :transaction => transaction,
-                   :state => transaction.state,
-                   :people => @people } %>
-
         <%= render partial: 'transaction',
                    object:  transaction,
                    locals: {
@@ -48,18 +37,4 @@
 </div>
 
 
-<!-- <table class='table'>
-  <tr>
-    <th>日期</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr> -->
-
-<!-- </table> -->
-
-<!-- <br />
-
-<%#= link_to 'New Transaction', new_person_transaction_path(@people.login) %>
- -->
 

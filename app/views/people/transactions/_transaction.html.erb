@@ -9,6 +9,7 @@
 			<div class="page-header">
 			  <h1><%= seller.name %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
 				<%= time_ago_in_words transaction.created_at %>
+				<span class="display-state"></span>
 			  </small>
 
 			  	<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -108,6 +109,11 @@
 		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
 		var card = new Transaction.TransactionCard({el: $(id),
 													initial: "<%= transaction.state %>",
-													event_url: "<%= trigger_event_person_transaction_path(@people, transaction) %>"	});
+													url: "<%= page_person_transaction_path(@people, transaction) %>",
+													event_url: "<%= trigger_event_person_transaction_path(@people, transaction) %>",
+													realtime: {
+														url: '<%= faye_server_uri %>',
+														token: '<%= token %>' }
+													});
 	});
 </script>

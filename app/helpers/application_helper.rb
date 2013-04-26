@@ -17,7 +17,7 @@ module ApplicationHelper
     @current_admin ||= AdminUser.where(:uid => session[:admin_id]).first if session[:admin_id]
   end
 
-  def current_user_token
+  def token
     @current_user.im_token
   end
 
