@@ -76,6 +76,7 @@
         
         function setModalSize(percentage){
             var modal = $("#CategoryModal");
+            modal.offset({top: 0});
             modal.css("min-height",$(window).height());
             modal.css("max-height",$(window).height());
             modal.css("width",$(window).width()*percentage);
