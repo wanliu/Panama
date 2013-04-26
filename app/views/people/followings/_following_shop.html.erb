@@ -1,0 +1,12 @@
+<% if followings.count > 0 %>
+  <% followings.each do |f| %>
+    <tr data-value-id="<%=f.id %>" data-value-follow-id="<%=f.follow_id %>">
+      <td><%=f.follow.name %></td>
+      <td><input type='button' class='btn btn-small btn-primary unfollow' value='取消关注' /></td>
+    </tr>
+  <% end %>
+<% else %>
+  <tr>
+    <td colspan='2'>暂时没有关注的商店</td>
+  </tr>
+<% end %>

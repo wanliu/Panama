@@ -1,0 +1,15 @@
+class ContactFriendsController < ApplicationController
+  before_filter :login_required
+
+  def index
+    @friends = current_user.contact_friends.joins(:friend)
+    .order("last_contact_date desc").limit(10)
+    respond_to do |format|
+      format.json{ render :json => @friends }
+    end
+  end
+
+  def destroy
+    # current_user.contact_friends.find()
+  end
+end

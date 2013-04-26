@@ -1,0 +1,34 @@
+<% active_section :followers %>
+<table class='table followers'>
+  <thead>
+    <tr>
+      <th class='title'>关注我的用户</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @followers.count > 0 %>
+      <% @followers.each do |f| %>
+      <tr>
+        <td>
+          <img src="<%=f.user.icon %>" class="img-polaroid" />
+          <%=f.user.login %>
+        </td>
+        <td>
+          <% unless current_user.nil? %>
+            <% if current_user.is_follower?(f.user_id) %>
+              <span>互相关注</span>
+            <% elsif current_user != f.user %>
+              <input type='button' value='关注' class='btn btn-small btn-primary' />
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan='2'>暂时没有关注的</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

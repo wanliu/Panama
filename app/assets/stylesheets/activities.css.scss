@@ -4,8 +4,10 @@
 @import 'launch_bootstrap';
 @import "compass/css3";
 @import "variables";
+@import "footer_nav";
 @import "my_cart";
 @import 'bootstrap-spinner';
+@import 'contact_friend';
 
 body {
 	@include background(
@@ -41,7 +43,7 @@ body {
 
 #content {
 	// &.container {
-	// 
+	//
 	// 	width: 100%;
 	// }
 }
@@ -72,7 +74,7 @@ body {
 	position: absolute;
 	min-height: 500px;
 	width: 0px;
-	border-right: 5px solid #ccc; 
+	border-right: 5px solid #ccc;
 	cursor: w-resize;
     z-index: 1000;
 }
@@ -103,7 +105,7 @@ body {
 	border: 1px solid #ccc;
 	float:left;
 	background: $white;
-	@include box-shadow(#ccc 0 0 1px); 
+	@include box-shadow(#ccc 0 0 1px);
 
 	img:active {
 		margin: 2px;

@@ -3,6 +3,7 @@
 
 class Comment < ActiveRecord::Base
   include Extract::Mention
+  include TextFormatHtml::Configure
 
   attr_accessible :content, :user_id, :targeable_id
 
@@ -15,7 +16,19 @@ class Comment < ActiveRecord::Base
 
   extract_attributes :content
 
-  after_create :notification_user
+  after_save :notification_user
+  before_save :convert_html_content
+
+  def convert_html_content
+    self.content_html = text_format_html(self.content)
+  end
+
+  def as_json(*args)
+    attrs = super *args
+    attrs["user_login"] = user.login
+    attrs["user_icon_url"] = user.photos.icon
+    attrs
+  end
 
   def notification_user
     users = content_extract_users
@@ -23,9 +36,13 @@ class Comment < ActiveRecord::Base
       Notification.create!(
         :user_id => u.id,
         :mentionable_user_id => user.id,
-        :url => "/activities/#{targeable.id}",
-        :body => "在评论，提到你")
+        :url => position_url,
+        :body => "在评论，提到你!")
     end
+  end
+
+  def position_url
+    "/#{targeable.class.to_s.tableize}/#{targeable_id}"
   end
 
   def validate_user_exists?
@@ -45,6 +62,10 @@ class Comment < ActiveRecord::Base
 
   def self.product(args)
     create("Product", args)
+  end
+
+  def self.topic(args)
+    create("Topic", args)
   end
 
   class << self
