@@ -6,8 +6,8 @@
 @import "variables";
 @import "footer_nav";
 @import "my_cart";
-@import "chat";
 @import 'bootstrap-spinner';
+@import 'contact_friend';
 
 body {
 	@include background(

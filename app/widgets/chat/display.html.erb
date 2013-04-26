@@ -11,18 +11,24 @@
 </div>
 
 <script type="text/javascript">
-
-  require(["chats/chat"], function(ChatViewList){
-    chat_view = new ChatViewList({
+  require(["chats/contact"], function(ChatContact){
+    chat_view = new ChatContact({
       el: $(".chat_friend_panel"),
       faye_url: "<%=faye_server_uri %>",
       current_user: {
         id: "<%=current_user.id %>",
-        login: "<%=current_user.login %>"}
+        login: "<%=current_user.login %>",
+        token: "<%=current_user.id %>"
+      }
     })
 
     $(".chat_nav").click(function(){
       chat_view.toggle();
+    })
+
+    $("[data-event='chat']").click(function(event){
+      user_id = $(event.currentTarget).attr("data-value")
+      chat_view.show_dialogue(user_id)
     })
   })
 </script>

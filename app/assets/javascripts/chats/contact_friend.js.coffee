@@ -5,6 +5,10 @@ define ["jquery", "backbone", "chats/dialogue"],
 
   class ContactFriend extends Backbone.Model
     urlRoot: "/contact_friends"
+    join_friend: () ->
+      @fetch(
+        url: "#{@urlRoot}/join_friend",
+      )
 
   class ContactFriendList extends Backbone.Collection
     model: ContactFriend
@@ -12,6 +16,8 @@ define ["jquery", "backbone", "chats/dialogue"],
 
   class ContactFriendView extends Backbone.View
     tagName: "li",
+    notice_class: "notice",
+
     events:{
       "click .close_label" : "remove_friend",
       "click " : "show_dialog"
@@ -35,6 +41,9 @@ define ["jquery", "backbone", "chats/dialogue"],
 
     show_dialog: () ->
       @trigger("show_dilogue", @friend)
+
+    show_notic: () ->
+      @$el.addClass(@notice_class)
 
   class ContactFriendViewList extends Backbone.View
     tagName: "ul",
@@ -62,10 +71,21 @@ define ["jquery", "backbone", "chats/dialogue"],
       @$el.append(cf_view.render())
 
     add: (model) ->
-      @contact_friends.add(model)
+      contact_friend = @find_friend(model.friend_id)
+      if contact_friend?
+        contact_friend.set("last_contact_date", model.last_contact_date)
+      else
+        @contact_friends.add(model)
 
     show_dilogue: (model) ->
       @dilogue_views.add(model)
+
+    receive_notic: (message) ->
+
+    find_friend: (friend_id) ->
+      for model in @contact_friends.models
+        if model.get("friend_id") is friend_id
+          return model
 
     render: () ->
       @$el
