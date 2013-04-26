@@ -9,7 +9,7 @@
     padding: 0px 5px;
 
     .dialog_content{
-      height: 227px;
+      height: 248px;
       overflow-y: auto;
 
       ul{
@@ -51,6 +51,7 @@
         textarea{
           resize: none;
           width: 100%;
+          padding: 0px;
           margin: 0px;
           height: 100%;
         }
