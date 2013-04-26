@@ -5,19 +5,19 @@ define ['jquery', 'backbone', 'lib/XPath'], ($, Backbone,XPath) ->
 		constructor: (@el, @paths, @options) ->
 			super @options
 			el = $(@el)[0];
-
 			@parseXPaths(el)
 
 
 		parseXPaths: (parent, paths = @paths) ->
 			for name, query of paths
 				results = document.evaluate(
-					query,
+					".//#{query}",
 					parent,
 					null,
 					""
 					null)
-
-				for element in results.value
-					@set name, $.trim(element.innerText)
+				
+				if results.value
+					for element in results.value
+						@set name, $.trim(element.innerText)
 
