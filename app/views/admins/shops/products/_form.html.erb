@@ -10,7 +10,7 @@
     <%= f.association :shops_category, :as => :chosen %>
     <%= f.association :attachments,
                       :as           => :album,
-                      :upload_url   => shop_admins_attachments_path(current_shop),
+                      :upload_url   => attachments_path,
                       :collection   => @product.format_attachment %>
 
     <%= f.input :price %>

@@ -231,11 +231,18 @@ zh-CN:
   create: 新增
   templates: 模板
   employees: 雇员
+  communities: 社区
 
   shop_group:
     sale: "销售组"
     inventory: "仓库组"
     admin: "管理组"
+
+  topic:
+    circle: "限定范圈"
+    external: "外扩圈子"
+    puliceity: "公开"
+    community: "商家"
 
   table:
     heads:

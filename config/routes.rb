@@ -2,20 +2,6 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
-  # faye_server '/realtime', timeout: 25 do
-  #   map "/notification/**" => RealtimeNoticeController
-  #   map default: :block
-  #   class MockExtension
-  #     def incoming(message, callback)
-  #        callback.call(message)
-  #     end
-  #     def outgoing(message, callback)
-  #         callback.call(message)
-  #     end
-  #   end
-  #   add_extension(MockExtension.new)
-  # end
-
   resources :people, :key => :person_id do
     collection do
       get ":shop_name/show_invite/:login", :to => "people#show_invite"
@@ -38,22 +24,46 @@ Panama::Application.routes.draw do
 
     end
 
+    resources :topics, :controller => "people/topics" do
+      collection do
+        get "receives/:id", :to => "people/topics#receives"
+        get "following"
+      end
+    end
+
+    resources :communities, :controller => "people/communities" do
+      collection do
+        get "people"
+      end
+    end
+
+    resources :circles, :controller => "people/circles" do
+      collection do
+        get "friends"
+        get "addedyou"
+        get "all_friends"
+        post "/:id/join_friend/:user_id", :to => "people/circles#join_friend"
+        delete "/:id/remove_friend/:user_id", :to => "people/circles#remove_friend"
+        delete "circles_remove_friend/:user_id", :to => "people/circles#circles_remove_friend"
+      end
+    end
+
+    resources :followings, :controller => "people/followings" do
+      collection do
+        post "user/:user_id" => "people/followings#user"
+        post "shop/:shop_id" => "people/followings#shop"
+        get :shops
+      end
+    end
+
+    match "followers", :to => "people/followings#followers"
+
     resources :product_comments, :controller => "people/product_comments" do
     end
 
     resources :notifications,:except => :show, :controller => "people/notifications" do
       collection do
         get "/:id/enter", :to => "people/notifications#show"
-      end
-    end
-
-    resources :comments, :controller => "people/comments" do
-      collection do
-        post 'activity'
-        post 'product'
-        get 'new_activity'
-        get 'new_product'
-        get "index_activities"
       end
     end
 
@@ -69,6 +79,18 @@ Panama::Application.routes.draw do
   match '/system/logout', :to => 'system_sessions#destroy'
 
   # resources :system
+
+  resources :comments do
+    collection do
+      post 'activity'
+      post 'product'
+      post 'topic'
+      get 'new_activity'
+      get 'new_product'
+      get "index_activities"
+      get "count"
+    end
+  end
 
   resources :city
   resources :addresses
@@ -98,16 +120,21 @@ Panama::Application.routes.draw do
   #   end
   # end
   #
+  resources :chat_messages do
+    collection do
+      get "dialogue/:friend_id", :to => "chat_messages#dialogue"
+    end
+  end
 
   resources :category
   # shop admins routes
 
   resources :shops, :except => :index do
-    namespace :admins do
-      match "attachments", :to => "shops/attachments#index"
-      match "attachments/upload", :to => "shops/attachments#upload", :via => :post
-      match "attachments/destroy/:id", :to => "shops/attachments#destroy", :via => :delete
+    collection do
+      get "topic_categories/:id", :to => "shops#topic_categories"
+    end
 
+    namespace :admins do
       resources :dashboard, :controller => "shops/dashboard"
 
       resources :contents, :controller => "shops/contents"
@@ -120,7 +147,7 @@ Panama::Application.routes.draw do
         collection do
           get :category_page
           get "additional_properties/:category_id",
-              :to => "shops/products#additional_properties"
+            :to => "shops/products#additional_properties"
         end
 
       end
@@ -128,6 +155,31 @@ Panama::Application.routes.draw do
       resources :transactions, :controller => "shops/transactions" do
         member do
           post "event(/:event)", :to => "shops/transactions#event", :as => :trigger_event
+        end
+      end
+
+      resources :topics, :controller => "shops/topics" do
+        collection do
+          get :my_related
+          get "category/:topic_category_id", :to => "shops/topics#category"
+          get "receives/:id", :to => "shops/topics#receives"
+        end
+      end
+
+      resources :circles, :controller => "shops/circles" do
+        collection do
+          get :friends
+          get :all_friends
+          get :followers
+          post "/:id/join_friend/:user_id", :to => "shops/circles#join_friend"
+          delete "/:id/remove_friend/:user_id", :to => "shops/circles#remove_friend"
+          delete "circles_remove_friend/:user_id", :to => "shops/circles#circles_remove_friend"
+        end
+      end
+
+      resources :communities, :controller => "shops/communities" do
+        collection do
+          get :people
         end
       end
 
@@ -141,6 +193,9 @@ Panama::Application.routes.draw do
           delete "group_remove_employee", :to => "shops/employees#group_remove_employee"
           delete "destroy/:user_id", :to => "shops/employees#destroy"
         end
+      end
+
+      resources :followings, :controller => "shops/followings" do
       end
 
       resources :groups, :controller => "shops/groups" do
@@ -160,6 +215,14 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :contact_friends do
+    collection do
+      get "join_friend/:friend_id", :to => "contact_friends#join_friend"
+    end
+  end
+  match "attachments", :to => "attachments#index"
+  match "attachments/upload", :to => "attachments#upload", :via => :post
+  match "attachments/:id", :to => "attachments#destroy", :via => :delete
 
   match "shops/:shop_id/admins/products/category/:category_id",
     :to => "admins/shops/products#products_by_category"

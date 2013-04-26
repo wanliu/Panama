@@ -112,6 +112,14 @@ ActiveRecord::Schema.define(:version => 20130424063802) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "chat_messages", :force => true do |t|
+    t.integer  "send_user_id"
+    t.integer  "receive_user_id"
+    t.text     "content"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "circle_friends", :force => true do |t|
     t.integer  "friend_id"
     t.integer  "friend_type"
