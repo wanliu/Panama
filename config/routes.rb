@@ -133,7 +133,14 @@ Panama::Application.routes.draw do
 
       resources :menu, :controller => "shops/menu"
 
-      resources :categories, :controller => "shops/categories"
+      resources :categories, :controller => "shops/categories" do
+        collection do
+          get :category_children
+          get :category_root
+          get :category_search
+          get :category_full_name
+        end
+      end
 
       resources :products, :controller => "shops/products" do
         collection do
