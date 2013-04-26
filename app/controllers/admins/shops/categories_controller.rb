@@ -108,20 +108,15 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   private
 
   def full_name(category)
-    if category["ancestry_depth"] == 2
-      @parent_name = category.parent['name']
-    elsif category["ancestry_depth"] == 3
-      @parent_name = category.parent.parent['name']
-      @parent_name += "|#{category.parent['name']}"
-    elsif category["ancestry_depth"] == 4
-      @parent_name = category.parent.parent.parent['name']
-      @parent_name += "|#{category.parent.parent['name']}"
-    elsif category["ancestry_depth"] == 5
-      @parent_name = category.parent.parent.parent.parent['name']
-      @parent_name += "|#{category.parent.parent.parent['name']}"
-      @parent_name += "|#{category.parent.parent['name']}"
+    ancestor_arr = category.ancestors.after_depth(0)
+    ancestor_arr.each do |parent|
+      if parent.ancestry_depth == 1
+        @full_name = parent.name
+      else
+        @full_name = "#{@full_name}|#{parent.name}"
+      end
     end
-    "#{@parent_name}|#{category["name"]}"
+    @full_name = "#{@full_name}|#{category.name}"
   end
 
   def safe_params

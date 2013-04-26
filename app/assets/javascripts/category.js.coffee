@@ -79,7 +79,7 @@ define ["jquery", "backbone", "exports", "typeahead", "jquery.slides"],
             @$(".tt-query").after("<button type='button' class='btn' id='search'>搜索</button>")
             @$(".search-query").find(".tt-hint").addClass("span11")
             
-        keyup_choose: () ->
+        keyup_choose: (event) ->
             unless $(".input_search").val() == ""
                 if event.keyCode == 13
                     $(".tt-dropdown-menu").addClass("tt-is-empty")
