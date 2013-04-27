@@ -21,7 +21,7 @@ class OrderTransaction < ActiveRecord::Base
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
-  validates :total, :numericality => true
+  validates :total, :numericality => true, :allow_nil => true
 
   validates_presence_of :buyer
   validates_presence_of :seller_id
@@ -70,12 +70,14 @@ class OrderTransaction < ActiveRecord::Base
       token = order.operator.try(:im_token)
       FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
                       :name => transition.to_name) unless token.blank?
+      true
     end
 
     ## only for development
     if Rails.env.development?
-      after_transition :waiting_paid            => :order,
-                       :waiting_delivery        => :waiting_paid do |order, transition|
+      after_transition :waiting_paid      => :order,
+                       :waiting_delivery  => :waiting_paid,
+                       :waiting_sign      => :waiting_delivery do |order, transition|
         token = order.operator.try(:im_token)
         FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
                         :name => transition.to_name,

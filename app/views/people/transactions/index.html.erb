@@ -13,12 +13,12 @@
      <% end %>
   </div>
   <div class="main-sidebar container-fluid">
-    <div class="page-header">
+<!--     <div class="page-header">
       <h1>已下单 <small>你挑选的宝贝都在这里吗?</small></h1>
     </div>
     <ul class="item-summary">
 
-    </ul>
+    </ul> -->
     <% if @transactions.size > 0 %>
       <% @transactions.each do |transaction| %>
         <%= render partial: 'transaction',
@@ -28,6 +28,8 @@
                      people: @people
                    } %>
       <% end %>
+
+
       <%= paginate @transactions %>
 
     <% else %>
@@ -35,6 +37,18 @@
     <% end %>
   </div>
 </div>
+
+<script type="text/javascript">
+  require(["jquery", "jquery_ujs", "people/transaction_card"], function($, _a, Transaction ){
+    $(".transaction").each(function(i, elem){
+      var card = new Transaction.TransactionCard({el: elem,
+                            realtime: {
+                              url: '<%= faye_server_uri %>',
+                              token: '<%= token %>' }
+                            });
+    });
+  });
+</script>
 
 
 

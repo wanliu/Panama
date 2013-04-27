@@ -1,10 +1,17 @@
 <% seller = transaction.seller %>
-<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>">
+<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
+	 state-id="<%= transaction.id %>"
+	 state-initial="<%= transaction.state %>"
+	 state-url="<%= page_person_transaction_path(@people, transaction) %>"
+	 state-event-url= "<%= trigger_event_person_transaction_path(@people, transaction) %>" >
 	<div class="wrapper-box">
-	<div class="transaction-header">
+		<div class="transaction-header">
+
 		<div class="avatar">
 			<%= image_tag seller.photos.header, :class => 'img-polaroid' %>
 		</div>
+
+
 		<div class="container-fluid info-header">
 			<div class="page-header">
 			  <h1><%= seller.name %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
@@ -15,11 +22,15 @@
 			  	<button type="button" class="close" data-dismiss="alert">&times;</button>
 			  	<%= render "state_buttons", :transaction => transaction %>
 			  </h1>
+			  <div class="state-progress">
 				<div class="progress progress-mini progress-striped active">
 					<div class="bar bar-success" style="width: 35%;"></div>
 					<div class="bar bar-warning" style="width: 20%;"></div>
 					<div class="bar bar-danger" style="width: 10%;"></div>
 				</div>
+				<span class="state-position badge">1<div class="state-title">等待发货</div></span>
+
+		      </div>
 			</div>
 		</div>
 	</div>
@@ -104,16 +115,3 @@
 	</div>
 	</div>
 </div>
-<script type="text/javascript">
-	require(["jquery", "jquery_ujs", "people/transaction_card"], function($, _a, Transaction ){
-		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
-		var card = new Transaction.TransactionCard({el: $(id),
-													initial: "<%= transaction.state %>",
-													url: "<%= page_person_transaction_path(@people, transaction) %>",
-													event_url: "<%= trigger_event_person_transaction_path(@people, transaction) %>",
-													realtime: {
-														url: '<%= faye_server_uri %>',
-														token: '<%= token %>' }
-													});
-	});
-</script>
