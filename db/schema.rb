@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130424084900) do
+ActiveRecord::Schema.define(:version => 20130426083412) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -119,6 +119,15 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "chat_messages", :force => true do |t|
+    t.integer  "send_user_id"
+    t.integer  "receive_user_id"
+    t.text     "content"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "read",            :default => false
+  end
+
   create_table "circle_friends", :force => true do |t|
     t.integer  "user_id"
     t.integer  "circle_id"
@@ -149,6 +158,14 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.text     "content_html"
+  end
+
+  create_table "contact_friends", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.datetime "last_contact_date"
   end
 
   create_table "contents", :force => true do |t|
@@ -186,6 +203,20 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.string   "follow_type"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "friend_group_users", :force => true do |t|
+    t.integer  "friend_group_id"
+    t.integer  "user_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "friend_groups", :force => true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "group_permissions", :force => true do |t|
