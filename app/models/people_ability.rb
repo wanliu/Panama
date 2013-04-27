@@ -28,6 +28,19 @@ class PeopleAbility
             can :index, Cart
             can :create, Cart
             can :destroy, Cart
+            basic_ability
+            can :destroy, Following do |following|
+                following.user_id = current_user.id
+            end
+        elsif current_user.new_record? == false
+            basic_ability
+        elsif current_user.new_record?
+            cannot :manage, :all
         end
+    end
+
+    def basic_ability
+        can :user, Following
+        can :shop, Following
     end
 end

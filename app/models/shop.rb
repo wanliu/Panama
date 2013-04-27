@@ -1,3 +1,4 @@
+#encoding: utf-8
 require 'orm_fs'
 
 class Shop < ActiveRecord::Base
@@ -11,6 +12,11 @@ class Shop < ActiveRecord::Base
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_many :shop_users
   has_many :contents, :as => :contentable, dependent: :destroy
+  has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
+  has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
+  has_many :topics, as: :owner, dependent: :destroy
+  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
+  has_many :topic_categories, dependent: :destroy
 
   has_one :shops_category
   belongs_to :user
@@ -28,6 +34,29 @@ class Shop < ActiveRecord::Base
   define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
   configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
   friendly_id :name
+
+  #所有圈子好友
+  def all_friends
+    CircleFriends.where(:circle_id => circles.map{|c| c.id})
+  end
+
+  #所有好友的圈子
+  def all_friend_circles
+    user_ids = all_friends.select(:user_id).map{|f| f.user_id}
+    Circle.where(:owner_type => "User",
+      :owner_id => user_ids)
+  end
+
+  def as_json(*args)
+    attribute = super *args
+    attribute["icon_url"] = icon_url
+
+    attribute
+  end
+
+  def all_circle_topics(circles)
+    Topic.find_shop_or_friends(id, circles)
+  end
 
   def fs
     require "orm_fs"
@@ -60,6 +89,10 @@ class Shop < ActiveRecord::Base
     contents.where(:name => name).first
   end
 
+  def icon_url
+    photos.icon
+  end
+
   private
 
   def create_shop
@@ -77,23 +110,37 @@ class Shop < ActiveRecord::Base
     load_group
     load_group_permission
     load_admin_permission
+    load_friend_circle
+    load_topic_category
   end
 
   def delete_shop
     remove_standardization_files
   end
 
+  def load_friend_circle
+    _config = YAML.load_file("#{Rails.root}/config/data/shop_circle.yml")
+    _config["circle"].each do |circle|
+      self.circles.create(circle) if self.circles.find_by(circle).nil?
+    end
+  end
+
+  def load_topic_category
+    _config = YAML.load_file("#{Rails.root}/config/data/topic_category.yml")
+    _config["topic_categories"].each do |category|
+      self.topic_categories.create(category) if self.topic_categories.find_by(category).nil?
+    end
+  end
+
   def load_group
     _config = YAML.load(fs['config/shop_group.yml'].read)
     _config["shop_group"].each do |group|
-      if self.groups.find_by(group).nil?
-        self.groups.create(group)
-      end
+      self.groups.create(group) if self.groups.find_by(group).nil?
     end
   end
 
   def load_group_permission
-    _config = YAML.load_file("#{Rails.root}/config/permission.yml")
+    _config = YAML.load_file("#{Rails.root}/config/data/permission.yml")
     _config["group_permission"].each do |group_name, permissions|
       group = self.groups.find_by(name: group_name)
       group.give_permission(permissions) unless group.nil?

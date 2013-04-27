@@ -191,4 +191,12 @@ class Product < ActiveRecord::Base
   def subtractive_items(items, names)
     items.reject { |item| names.select { |name| name == item.value }.first }
   end
+
+  def category_ancestors_and_self
+    if category.nil?
+      []
+    else
+      category.ancestors + [category]
+    end
+  end
 end
