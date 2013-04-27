@@ -1,5 +1,6 @@
 #describe: 提醒控制器
 class People::NotificationsController < People::BaseController
+    before_filter :login_required
 
     def index
         authorize! :index, Notification

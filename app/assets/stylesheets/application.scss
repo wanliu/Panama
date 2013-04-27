@@ -8,10 +8,10 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require ./lib/fileuploader.css
+ *= require ./lib/fileuploader
  *= require ./lib/jquery.columnview
  *= require_self
- *= require_tree . 
+ *= require_tree .
  *
  */
 
@@ -146,7 +146,7 @@ body {
 
 .slide-box .pagination li{
 	float: left;
-	list-style-type: none;	
+	list-style-type: none;
 }
 
 .slides_container {
@@ -161,7 +161,7 @@ body {
 
 .slides_container div img {
     width:1024px;
-    height:768px;            	
+    height:768px;
 }
 
 .wrapper {
