@@ -93,7 +93,7 @@ describe Shop, "商店模型" do
     end
 
     it "圈子好友" do
-      shop.all_friends.map{|f| f.user}.should eq([@anon1, @anon2])
+      shop.circle_all_friends.map{|f| f.user}.should eq([@anon1, @anon2])
     end
 
     it "所有好友圈子" do
