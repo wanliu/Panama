@@ -36,13 +36,13 @@ class Shop < ActiveRecord::Base
   friendly_id :name
 
   #所有圈子好友
-  def all_friends
+  def circle_all_friends
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
   end
 
   #所有好友的圈子
   def all_friend_circles
-    user_ids = all_friends.select(:user_id).map{|f| f.user_id}
+    user_ids = circle_all_friends.select(:user_id).map{|f| f.user_id}
     Circle.where(:owner_type => "User",
       :owner_id => user_ids)
   end

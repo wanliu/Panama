@@ -1,0 +1,34 @@
+<div class='nav_item'>
+  <a href='javascript:void(0)' class='chat_nav'>聊天</a>
+</div>
+<div class='chat_friend_panel'>
+  <div class='title'>
+    最近联系
+    <a href='javascript:void(0)' class='close_list'></a>
+  </div>
+  <div class='friend_list'>
+  </div>
+</div>
+
+<script type="text/javascript">
+  require(["chats/contact"], function(ChatContact){
+    chat_view = new ChatContact({
+      el: $(".chat_friend_panel"),
+      faye_url: "<%=faye_server_uri %>",
+      current_user: {
+        id: "<%=current_user.id %>",
+        login: "<%=current_user.login %>",
+        token: "<%=current_user.id %>"
+      }
+    })
+
+    $(".chat_nav").click(function(){
+      chat_view.toggle();
+    })
+
+    $("[data-event='chat']").click(function(event){
+      user_id = $(event.currentTarget).attr("data-value")
+      chat_view.show_dialogue(user_id)
+    })
+  })
+</script>

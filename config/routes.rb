@@ -121,6 +121,11 @@ Panama::Application.routes.draw do
   #   end
   # end
   #
+  resources :chat_messages do
+    collection do
+      get "dialogue/:friend_id", :to => "chat_messages#dialogue"
+    end
+  end
 
   resources :category
   # shop admins routes
@@ -150,7 +155,7 @@ Panama::Application.routes.draw do
         collection do
           get :category_page
           get "additional_properties/:category_id",
-              :to => "shops/products#additional_properties"
+            :to => "shops/products#additional_properties"
         end
 
       end
@@ -218,6 +223,11 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :contact_friends do
+    collection do
+      get "join_friend/:friend_id", :to => "contact_friends#join_friend"
+    end
+  end
   match "attachments", :to => "attachments#index"
   match "attachments/upload", :to => "attachments#upload", :via => :post
   match "attachments/:id", :to => "attachments#destroy", :via => :delete

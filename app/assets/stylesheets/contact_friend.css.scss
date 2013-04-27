@@ -1,0 +1,74 @@
+@import "compass/css3";
+
+.chat_friend_panel{
+  display: none;
+  position: fixed;
+  right: 75px;
+  bottom: 40px;
+  background: white;
+  width: 160px;
+  height: 260px;
+  @include border-radius(5px);
+  @include box-shadow(1px 1px 3px $grayDarker);
+
+  .title{
+    font-size: 10px;
+    line-height: 25px;
+    border-bottom: 1px solid #DDD;
+    position: relative;
+
+    .close_list{
+      position: absolute;
+      top: 5px;
+      right: 3px;
+      width: 12px;
+      height: 11px;
+      font-size: 1px;
+      background: url('/assets/select.png') right top no-repeat;
+    }
+  }
+
+  .friend_list{
+    ul{
+      list-style: none;
+      margin: 0px;
+
+      li{
+        line-height: 25px;
+
+        a.item{
+          display: block;
+
+          img{
+            height: 18px;
+            width: 18px;
+            margin-left: 5px;
+          }
+
+          .login{
+            margin-left: 10px;
+          }
+        }
+
+        a:hover{
+          background: #DDD;
+        }
+
+      }
+    }
+
+
+  }
+}
+
+.chat_dialogue_panel{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 372px;
+
+  iframe{
+    border: none;
+    height: 100%;
+  }
+}

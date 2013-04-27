@@ -65,7 +65,7 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
 
   #移除某个用户所有圈子的这个好友
   def circles_remove_friend
-    @friends = current_shop.all_friends.where(user_id: params[:user_id])
+    @friends = current_shop.circle_all_friends.where(user_id: params[:user_id])
     @friends.destroy_all
     respond_to do |format|
       format.json{  head :no_content  }
@@ -74,7 +74,7 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
 
   #所有的好友
   def all_friends
-    @users = current_shop.all_friends.joins(:user).map{|f| f.user.as_json }
+    @users = current_shop.circle_all_friends.joins(:user).map{|f| f.user.as_json }
     respond_to do |format|
       format.json{ render json: @users }
     end
