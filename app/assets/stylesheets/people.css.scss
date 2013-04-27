@@ -4,6 +4,11 @@
 //= require people/comment
 //= require jquery.atwho
 //= require product_comment
+//= require people/following
+//= require communities
+//= require ./lib/chose-friend
+//= require people/community_people
+//= require attachment_uploader
 
 @import "compass/css3";
 @import "variables";
@@ -18,9 +23,20 @@ body {
 	background: #f1f1f1;
 }
 
+.nav.nav-list.affix{
+	top:0;
+	position: fixed;
+}
+
+
 #wrapper {
 	padding-top :10px;
 
+}
+
+.leftfix.affix {
+	position: fixed!important;
+	top:0px;
 }
 
 #people-sidebar {
@@ -119,5 +135,9 @@ body {
 .depend_select {
 
 	width: 90px;
+}
+
+.lf {
+	cursor: pointer;
 }
 

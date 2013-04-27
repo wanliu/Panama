@@ -27,4 +27,40 @@ namespace "panama" do
       @root.clear_categories
     end
   end
+
+  namespace "test" do
+    desc "load product data from mongo to mysql,args[:mongo_host, :mongo_dbname]"
+    task :load_product_from_mongo, [:mongo_host, :mongo_dbname] => :environment do |t, args|
+      puts "----------------begin--------------------"
+      shop_id = Shop.first.id
+      shops_category_id = ShopsCategory.first.id
+
+      MYSQL_OPTION = {
+        :host => "localhost",
+        :username => "root",
+        :password => "",
+        :database => "panama_development"
+      }
+
+      MONGO_OPTION = {
+        :host => args[:mongo_host] || "127.0.0.1",
+        :database => args[:mongo_dbname] || "neza_public_development",
+        :port => "27017"
+      }
+      mysql_db = Mysql2::Client.new(MYSQL_OPTION)
+      mongo_db = Moped::Session.new([MONGO_OPTION[:host]+":27017"]).use(MONGO_OPTION[:database])
+      products = mongo_db["products"].find
+      
+      if products.count > 0
+        sql_insert = ""
+        products.each do |slice|
+          category_id = slice["product_category_id"] || "null"
+          sql_insert = "insert into products (shop_id, shops_category_id, name, price, category_id) values(#{shop_id}, #{shops_category_id}, \"#{slice["name"]}\", #{slice["price"]}, #{category_id});"
+          print "."
+          mysql_db.query(sql_insert)
+        end
+      end
+      puts "----------------end--------------------"
+    end
+  end
 end

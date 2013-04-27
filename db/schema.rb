@@ -119,6 +119,21 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "circle_friends", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "circle_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "circles", :force => true do |t|
+    t.string   "name"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "cities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -133,6 +148,7 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.string   "targeable_type"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.text     "content_html"
   end
 
   create_table "contents", :force => true do |t|
@@ -162,6 +178,14 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "ancestry"
+  end
+
+  create_table "followings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "follow_id"
+    t.string   "follow_type"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "group_permissions", :force => true do |t|
@@ -423,6 +447,40 @@ ActiveRecord::Schema.define(:version => 20130424084900) do
     t.integer  "product_id", :null => false
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "topic_attachments", :force => true do |t|
+    t.integer  "topic_id"
+    t.integer  "attachment_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "topic_categories", :force => true do |t|
+    t.string   "name"
+    t.integer  "shop_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "topic_receives", :force => true do |t|
+    t.integer  "topic_id"
+    t.integer  "receive_id"
+    t.string   "receive_type"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "topics", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "content"
+    t.string   "content_html"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "status"
+    t.integer  "topic_category_id"
   end
 
   create_table "users", :force => true do |t|

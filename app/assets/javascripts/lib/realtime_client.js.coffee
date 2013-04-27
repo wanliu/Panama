@@ -31,12 +31,9 @@ define ["faye", "lib/underscore"], ( faye, d) ->
           handles.push handle_str
           @client.subscribe(path, handle)
 
-
-
-
-
   root.client = (uri) ->
     @clients[uri] ?= new RealtimeClient(uri)
 
   root
+
 
