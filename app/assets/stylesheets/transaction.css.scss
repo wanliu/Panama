@@ -18,9 +18,10 @@
 
 		.avatar {
 			margin-left: 40px;
-			margin-top: - 40px;
+			margin-top: -40px;
 			position: absolute;
 			width: 100px;
+			z-index: 1030
 		}
 
 		.info-header {
@@ -41,6 +42,24 @@
 					margin-top: 25px;
 					margin-bottom: 0px;
 				}
+
+				.state-progress {
+					position: relative;
+				}
+
+				.state-position {
+					position: absolute;
+					top: -5px;
+
+					.state-title {
+						position: absolute;
+						bottom: -15px;
+						left: -12px;
+						color: $gray;
+					}
+				}
+
+
 			}
 
 		}

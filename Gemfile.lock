@@ -400,7 +400,7 @@ GEM
       railties (~> 3.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    rouge (0.2.14)
+    rouge (0.2.15)
       thor
     rspec (2.12.0)
       rspec-core (~> 2.12.0)

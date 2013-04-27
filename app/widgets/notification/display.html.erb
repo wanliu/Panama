@@ -1,11 +1,11 @@
 <script type='text/javascript'>
-<% unless current_user.nil? %>
-require(["jquery", "lib/realtime_client"], function($, RealtimeClient){
-  var realtime_client = new RealtimeClient("<%=faye_server_uri %>")
-  realtime_client.monitor_people_notification("<%= current_user.login %>", function(data){
-      $("#my_notification").html(data.count)
-    }
-  )
-})
-<% end %>
+    <% unless current_user.nil? %>
+        require(["jquery", "lib/realtime_client"], function($, RealtimeClient){
+        	var client = RealtimeClient.client("<%=faye_server_uri %>")
+            client.monitor_people_notification("<%= current_user.login %>", function(data){
+                	$("#my_notification").html(data.count)
+            	}
+            )
+        })
+    <% end %>
 </script>

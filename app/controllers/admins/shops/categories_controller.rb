@@ -57,7 +57,67 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
     @indent = @parent.indent
   end
 
+  def category_children
+    @category_children = Category.find_by(:name => params[:category_name])
+
+    if @category_children.nil?
+      result = nil
+    elsif @category_children.children.count == 0 
+      result = @category_children.attributes.merge(:flag => 0, :cover => {:url => @category_children.cover.url})
+    elsif @category_children.children.count > 0
+      @category_children = @category_children.children
+      result = @category_children.map do | c |
+        category = c.as_json(root: false)
+        c.children.count > 0 ? category.merge!(:flag => 1) : category.merge!(:flag => 0)
+        category
+      end
+    end
+
+    render :json => result || []
+  end
+
+  def category_root
+    @categories = Category.find_by(:name => '_products_root').children
+    respond_to do | format |
+      format.json{ render :json => @categories.as_json(root: false) }
+    end
+  end
+
+  def category_search
+    @category_children = Category.where("name like ?", "%#{params[:q]}%").limit(params[:limit])
+    respond_to do | format |
+      categories = []
+      @category_children.each do |category|
+        if category.ancestry_depth > 1
+          category["value"] = full_name(category)
+          categories << category
+        end
+      end
+      format.json{ render :json => categories.as_json(root: false) }
+    end
+  end
+
+  def category_full_name
+    @category = Category.find(params[:category_id])
+    full_name = full_name(@category)
+    respond_to do | format |
+      format.json {render :json => full_name}
+    end
+  end
+
   private
+
+  def full_name(category)
+    ancestor_arr = category.ancestors.after_depth(0)
+    ancestor_arr.each do |parent|
+      if parent.ancestry_depth == 1
+        @full_name = parent.name
+      else
+        @full_name = "#{@full_name}|#{parent.name}"
+      end
+    end
+    @full_name = "#{@full_name}|#{category.name}"
+  end
 
   def safe_params
     params[:shops_category].slice(*white_list)

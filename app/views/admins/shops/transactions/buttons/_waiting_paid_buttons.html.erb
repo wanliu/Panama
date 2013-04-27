@@ -3,11 +3,7 @@
 		<%= link_to '#', :class => 'btn btn-large disabled', 'event-name' => 'paid' do %>
 			<%=raw "等待付款&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
-		<%#= button_to event,
-			  trigger_event_person_transaction_path(@people.login, @transaction, event),
-			  	:class => 'btn btn-large',
-		  		:method => :post %>
-		<%# end %>
+
 	</div>
 
 </div>
