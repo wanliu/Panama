@@ -12,6 +12,7 @@ Panama::Application.routes.draw do
 
     resources :transactions, :controller => "people/transactions" do
       member do
+        get "page", :to => "people/transactions#page"
         post "event(/:event)", :to => "people/transactions#event", :as => :trigger_event
         put "address", :to => "people/transactions#address", :as => :update_address
         put "notify", :to => "people/transactions#notify"
@@ -142,7 +143,14 @@ Panama::Application.routes.draw do
 
       resources :menu, :controller => "shops/menu"
 
-      resources :categories, :controller => "shops/categories"
+      resources :categories, :controller => "shops/categories" do
+        collection do
+          get :category_children
+          get :category_root
+          get :category_search
+          get :category_full_name
+        end
+      end
 
       resources :products, :controller => "shops/products" do
         collection do

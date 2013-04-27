@@ -43,6 +43,15 @@ class User < ActiveRecord::Base
     ChatMessage.all(id, friend_id)
   end
 
+  delegate :groups, :jshop, :to => :shop_user
+
+  before_create :generate_token
+  after_initialize :init_user_info
+
+  def generate_token
+    self.im_token = SecureRandom.hex
+  end
+
   def join_circles
     circle_friends.joins(:circle).map{|c| c.circle }
   end
@@ -110,7 +119,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  after_initialize :init_user_info
 
   def init_user_info
     if new_record?

@@ -37,7 +37,7 @@ module ApplicationHelper
     @current_admin ||= AdminUser.where(:uid => session[:admin_id]).first if session[:admin_id]
   end
 
-  def current_user_token
+  def token
     @current_user.im_token
   end
 
@@ -159,14 +159,19 @@ module ApplicationHelper
   end
 
   def breadcrumb_button(name, array)
+    # debugger
     output = "".html_safe
     array.shift
-    last = array.pop
-    output = link_to '#CategoryModal', 'data-remote' => category_page_shop_admins_products_path, 'data-toggle' => 'modal' do
+    # ISSUE: 临时方案, 需要修改 rails.view.js 的 提交 bug
+    last = array.pop || OpenStruct.new(:name => 'Noselected')
+    # BUG: 'data-remote' => category_page_shop_admins_products_path, 设置这个参数,会触发
+    #   jquery_ujs 不正常的功能
+    output = link_to '#',  'data-toggle' => 'modal' do
       content_tag :ul, :class => [:breadcrumb, :btn, name] do
         array.each do |e|
           output << content_tag(:li) do
             link_to(e.name, '#') +
+            # e.name +
             content_tag(:span, '|', :class => "divider")
           end
         end
@@ -177,4 +182,5 @@ module ApplicationHelper
       end
     end
   end
+
 end

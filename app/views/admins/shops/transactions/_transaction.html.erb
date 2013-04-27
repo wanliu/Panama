@@ -1,107 +1,100 @@
 <% buyer = transaction.buyer %>
-<div class='row-fluid' style='margin-bottom: 20px'>
-	<div class="transaction">
-		<div class="transaction-header">
-			<div class="avatar">
-				<%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
-			</div>
-			<div class="container-fluid info-header">
-				<div class="page-header">
-				  <h1><%= buyer.login %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-					<%= distance_of_time_in_words Time.now, transaction.created_at %>
-				  </small>
-
-				  	<button type="button" class="close" data-dismiss="alert">&times;</button>
-				  	<%= render "state_buttons", :transaction => transaction %>
-				  </h1>
-					<div class="progress progress-mini progress-striped active">
-						<div class="bar bar-success" style="width: 35%;"></div>
-						<div class="bar bar-warning" style="width: 20%;"></div>
-						<div class="bar bar-danger" style="width: 10%;"></div>
-					</div>
-				</div>
-			</div>
+<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
+	 state-id="<%= transaction.id %>"
+	 state-initial="<%= transaction.state %>"
+	 state-url="<%= shop_admins_transaction_path(current_shop, transaction) %>"
+	 state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>" >
+	<div class="transaction-header">
+		<div class="avatar">
+			<%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
 		</div>
-		<div class="transaction-body">
-			<%= render state, transaction: transaction %>
+		<div class="container-fluid info-header">
+			<div class="page-header">
+			  <h1><%= buyer.login %> <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+				<%= distance_of_time_in_words Time.now, transaction.created_at %>
+				<%= transaction.state if Rails.env.development? %>
+			  </small>
 
-		</div>
-		<div class="transaction-footer">
-			<div class="toolbar">
-			</div>
-			<div class="messages">
-				<div class="row-msg">
-					<div class="self">
-						<div class='wrapper'>
-							<div class="people-name">
-								<p><%= current_user.login %>:</p>
-							</div>
-							<div class="msg">
-								<p>老板,这件衣服多少钱啊?</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row-msg">
-					<div class="people">
-						<div class='wrapper'>
-							<div class="people-name">
-								<p>pepsi:</p>
-							</div>
-							<div class="msg">
-								<p>488</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row-msg">
-					<div class="self">
-						<div class='wrapper'>
-							<div class="people-name">
-								<p><%= current_user.login %>:</p>
-							</div>
-							<div class="msg">
-								<p>看上去还挺不错的</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row-msg">
-					<div class="people">
-						<div class='wrapper'>
-							<div class="people-name">
-								<p>pepsi:</p>
-							</div>
-							<div class="msg">
-								<p>亲, 真的少不了,已经是最优惠了</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class='row-msg'>
-				<div class="me">
-					<%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
-					<p><%= current_user.login %></p>
-				</div>
-				<div class='input-msg'>
-					<form>
-						<textarea rows=3 class="span12">
-						</textarea>
-					</form>
+			  	<button type="button" class="close" data-dismiss="alert">&times;</button>
+			  	<%= render "state_buttons", :transaction => transaction %>
+			  </h1>
+				<div class="progress progress-mini progress-striped active">
+					<div class="bar bar-success" style="width: 35%;"></div>
+					<div class="bar bar-warning" style="width: 20%;"></div>
+					<div class="bar bar-danger" style="width: 10%;"></div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="transaction-body">
+		<%= render state, transaction: transaction %>
+
+	</div>
+	<div class="transaction-footer">
+		<div class="toolbar">
+		</div>
+		<div class="messages">
+			<div class="row-msg">
+				<div class="self">
+					<div class='wrapper'>
+						<div class="people-name">
+							<p><%= current_user.login %>:</p>
+						</div>
+						<div class="msg">
+							<p>老板,这件衣服多少钱啊?</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-msg">
+				<div class="people">
+					<div class='wrapper'>
+						<div class="people-name">
+							<p>pepsi:</p>
+						</div>
+						<div class="msg">
+							<p>488</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-msg">
+				<div class="self">
+					<div class='wrapper'>
+						<div class="people-name">
+							<p><%= current_user.login %>:</p>
+						</div>
+						<div class="msg">
+							<p>看上去还挺不错的</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-msg">
+				<div class="people">
+					<div class='wrapper'>
+						<div class="people-name">
+							<p>pepsi:</p>
+						</div>
+						<div class="msg">
+							<p>亲, 真的少不了,已经是最优惠了</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class='row-msg'>
+			<div class="me">
+				<%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
+				<p><%= current_user.login %></p>
+			</div>
+			<div class='input-msg'>
+				<form>
+					<textarea rows=3 class="span12">
+					</textarea>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
-<script type="text/javascript">
-	require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card"], function($, _a, Transaction){
-
-		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
-		var card = new Transaction.ShopTransactionCard({el: $(id),
-														initial: "<%= transaction.state %>",
-														event_url: "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"	});
-
-	});
-</script>

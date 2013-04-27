@@ -12,6 +12,8 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :buyer,
              class_name: "User"
 
+  belongs_to :operator, :class_name => "User", :foreign_key => :operator_id
+
   has_many  :items,
             class_name: "ProductItem",
             foreign_key: 'transaction_id',
@@ -19,7 +21,7 @@ class OrderTransaction < ActiveRecord::Base
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
-  validates :total, :numericality => true
+  validates :total, :numericality => true, :allow_nil => true
 
   validates_presence_of :buyer
   validates_presence_of :seller_id
@@ -46,7 +48,9 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     event :back do
-      transition :waiting_paid => :order, :waiting_delivery => :waiting_paid, :waiting_sign => :waiting_delivery
+      transition :waiting_paid     => :order,
+                 :waiting_delivery => :waiting_paid,
+                 :waiting_sign     => :waiting_delivery
     end
 
     event :paid do
@@ -59,6 +63,33 @@ class OrderTransaction < ActiveRecord::Base
 
     event :sign do
       transition [:waiting_sign] => :complete
+    end
+
+    after_transition :order            => :waiting_paid,
+                     :waiting_paid     => :waiting_delivery do |order, transition|
+      token = order.operator.try(:im_token)
+      FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
+                      :name => transition.to_name) unless token.blank?
+      true
+    end
+
+    ## only for development
+    if Rails.env.development?
+      after_transition :waiting_paid      => :order,
+                       :waiting_delivery  => :waiting_paid,
+                       :waiting_sign      => :waiting_delivery do |order, transition|
+        token = order.operator.try(:im_token)
+        FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
+                        :name => transition.to_name,
+                        :event => :back) unless token.blank?
+      end
+    end
+
+    after_transition :waiting_delivery => :waiting_sign do |order, transition|
+      token = order.buyer.try(:im_token)
+      FayeClient.send("/events/#{token}/transaction-#{order.id}-buyer",
+                      :name => transition.to_name,
+                      :event => :delivered) unless token.blank?
     end
   end
 

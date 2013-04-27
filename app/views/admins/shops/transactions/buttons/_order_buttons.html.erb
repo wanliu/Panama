@@ -5,11 +5,6 @@
 					'event-name' => 'buy' do %>
 			<%=raw "等待确认&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
-		<%#= button_to "确认订单",
-			  trigger_event_person_transaction_path(@people.login, @transaction, :buy),
-			  	:class => 'btn btn-large btn-primary',
-		  		:method => :post %>
-		<%# end %>
 	</div>
 
 </div>
