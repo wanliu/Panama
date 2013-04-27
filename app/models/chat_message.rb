@@ -5,6 +5,9 @@
 #  receive_user_id: 接收人
 #  content: 内容
 class ChatMessage < ActiveRecord::Base
+  scope :read, where(:read => true)
+  scope :unread, where(:read => false)
+
   attr_accessible :content, :receive_user_id, :send_user_id
 
   belongs_to :receive_user, class_name: "User"
@@ -35,8 +38,20 @@ class ChatMessage < ActiveRecord::Base
     receive_user.contact_friends.join_friend(send_user_id)
   end
 
+  #变更状态
+  def change_state
+    self.update_attribute(:read, true)
+    ChatMessage.notice_read_state(receive_user, send_user_id)
+  end
+
+  #通知接收人
   def notic_receive_user
-    FayeClient.send("/chat/receive/#{receive_user.id}", as_json)
+    FayeClient.send("/chat/receive/#{receive_user.im_token}", as_json)
+  end
+
+  #通知接收人已经读取信息
+  def self.notice_read_state(receive_user, send_user_id)
+    FayeClient.send("/chat/change/message/#{receive_user.im_token}", send_user_id)
   end
 
   def as_json(*args)

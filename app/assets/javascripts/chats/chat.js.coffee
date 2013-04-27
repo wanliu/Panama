@@ -3,6 +3,12 @@ define ["jquery", "backbone", "chats/realtime_client"],
 ($, Backbone, ChatRealtimeClient) ->
   class ChatMessage extends Backbone.Model
     urlRoot: "/chat_messages"
+    read: (callback = (message) -> ) ->
+      @fetch(
+        url: "#{@urlRoot}/read/#{@id}",
+        type: "POST",
+        success: callback
+      )
 
   class ChatMessages extends Backbone.Collection
     model: ChatMessage
@@ -50,6 +56,7 @@ define ["jquery", "backbone", "chats/realtime_client"],
     initialize: (options) ->
       @set_options(options)
       @form = @$("form")
+      @content_el = @$(".dialog_content")
       @chat_messages = new ChatMessages()
       @chat_messages.bind("reset", @all_message, @)
       @chat_messages.bind("add", @add_message, @)
@@ -63,10 +70,16 @@ define ["jquery", "backbone", "chats/realtime_client"],
 
     add_message: (model) ->
       view = new MessageView(model: model)
-      @$(".dialog_content>ul").append(view.render())
+      @content_el.find(">ul").append(view.render())
+      @content_el.scrollTop(99999999)
 
     add: (model) ->
       @chat_messages.add(model)
+
+    notice_add:(model) ->
+      @add(model)
+      m = @chat_messages.get(model.id)
+      m.read()
 
     set_options: (options) ->
       _.extend(@, options)
@@ -102,14 +115,9 @@ define ["jquery", "backbone", "chats/realtime_client"],
     connect_faye_server: () ->
       @realtime = new ChatRealtimeClient(@faye_url)
       @realtime.receive_message(@user.token, (message) =>
-        @msgs_view.add(message)
+        @msgs_view.notice_add(message)
       )
 
     fetch: () ->
       @msgs_view.fetch()
       @connect_faye_server()
-
-
-
-
-
