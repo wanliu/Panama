@@ -10,14 +10,14 @@ class ServerAuth
   def incoming(message, callback)
     puts message
     if message['channel'] !~ %r{^/meta/}
-        if message['data']
-            if message['data']['token'] != FAYE_TOKEN
-                puts "Invalid authentication token..."
-                message['error'] = 'Invalid authentication token'
-            else
-                message['data'].delete("token")
-            end
+      if message['data']
+        if message['token'] != FAYE_TOKEN
+          puts "Invalid authentication token..."
+          message['error'] = 'Invalid authentication token'
+        else
+          message.delete("token")
         end
+      end
     end
     callback.call(message)
   end
