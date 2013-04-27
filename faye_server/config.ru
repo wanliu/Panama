@@ -11,11 +11,11 @@ class ServerAuth
     puts message
     if message['channel'] !~ %r{^/meta/}
       if message['data']
-        if message['data']['token'] != FAYE_TOKEN
+        if message['token'] != FAYE_TOKEN
           puts "Invalid authentication token..."
           message['error'] = 'Invalid authentication token'
         else
-          message['data'].delete("token")
+          message.delete("token")
         end
       end
     end

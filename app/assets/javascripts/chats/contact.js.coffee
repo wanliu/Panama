@@ -25,13 +25,17 @@ define ["jquery", "backbone", "chats/contact_friend", "chats/realtime_client"],
       @bind_relatime()
 
     bind_relatime: () ->
-      @realtime_client = new ChatRealtimeClient(@faye_url)
-      @realtime_client.show_contact_friend(@current_user.token, (friend) =>
+      @realtime = new ChatRealtimeClient(@faye_url)
+      @realtime.show_contact_friend(@current_user.token, (friend) =>
         @cfv_list.add(friend)
       )
 
-      @realtime_client.receive_message(@current_user.token, (message) =>
+      @realtime.receive_message(@current_user.token, (message) =>
+        @cfv_list.receive_notic(message.send_user_id)
+      )
 
+      @realtime.read_message_notic(@current_user.token, (send_user_id) =>
+        @cfv_list.read_notice(send_user_id)
       )
 
     show_dialogue: (user_id) ->

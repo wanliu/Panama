@@ -26,7 +26,7 @@ class ContactFriend < ActiveRecord::Base
       cfriend.update_attribute(:last_contact_date, DateTime.now)
     end
     if cfriend.valid?
-      FayeClient.send("/contact_friends/#{cfriend.user_id}",cfriend.as_json)
+      FayeClient.send("/contact_friends/#{cfriend.user.im_token}",cfriend.as_json)
     end
     cfriend
   end
@@ -34,6 +34,7 @@ class ContactFriend < ActiveRecord::Base
   def as_json(*args)
     attrs = super *args
     attrs["friend"] = friend.as_json
+    attrs["unread_count"] = user.messages(friend_id).unread.count
     attrs
   end
 
