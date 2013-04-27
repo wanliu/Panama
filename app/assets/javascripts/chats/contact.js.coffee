@@ -1,7 +1,7 @@
 #encoding: utf-8
 #describe: 聊天视图
-define ["jquery", "backbone", "chats/contact_friend", "chats/realtime_client"],
-($, Backbone, ContactFriendViewList, ChatRealtimeClient) ->
+define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
+($, Backbone, ContactFriendViewList, Realtime) ->
   class User extends Backbone.Model
     urlRoot: "/users"
     show: (user_id, callback) ->
@@ -25,18 +25,22 @@ define ["jquery", "backbone", "chats/contact_friend", "chats/realtime_client"],
       @bind_relatime()
 
     bind_relatime: () ->
-      @realtime = new ChatRealtimeClient(@faye_url)
-      @realtime.show_contact_friend(@current_user.token, (friend) =>
+      @realtime = Realtime.client(@faye_url)
+      @client = @realtime.client
+      @client.subscribe @contact_show_url(), (friend) =>
         @cfv_list.add(friend)
-      )
 
-      @realtime.receive_message(@current_user.token, (message) =>
+      @realtime.receive_message @current_user.token, (message) =>
         @cfv_list.receive_notic(message.send_user_id)
-      )
 
-      @realtime.read_message_notic(@current_user.token, (send_user_id) =>
+      @client.subscribe @change_state_notic_url(), (send_user_id) =>
         @cfv_list.read_notice(send_user_id)
-      )
+
+    contact_show_url: () ->
+      "/contact_friends/#{@current_user.token}"
+
+    change_state_notic_url: () ->
+      "/chat/change/message/#{@current_user.token}"
 
     show_dialogue: (user_id) ->
       user = new User()

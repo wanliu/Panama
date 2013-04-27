@@ -1,6 +1,6 @@
 #describe: 聊天
-define ["jquery", "backbone", "chats/realtime_client"],
-($, Backbone, ChatRealtimeClient) ->
+define ["jquery", "backbone", "lib/realtime_client"],
+($, Backbone, Realtime) ->
   class ChatMessage extends Backbone.Model
     urlRoot: "/chat_messages"
     read: (callback = (message) -> ) ->
@@ -113,10 +113,9 @@ define ["jquery", "backbone", "chats/realtime_client"],
       @msgs_view.set_options(user: @user, friend: @friend)
 
     connect_faye_server: () ->
-      @realtime = new ChatRealtimeClient(@faye_url)
-      @realtime.receive_message(@user.token, (message) =>
+      @realtime = Realtime.client(@faye_url)
+      @realtime.receive_message @user.token, (message) =>
         @msgs_view.notice_add(message)
-      )
 
     fetch: () ->
       @msgs_view.fetch()
