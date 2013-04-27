@@ -34,6 +34,7 @@
       margin: 0px;
 
       li{
+        position: relative;
         line-height: 25px;
 
         a.item{
@@ -46,7 +47,7 @@
           }
 
           .login{
-            margin-left: 10px;
+            margin-left: 25px;
           }
         }
 
@@ -54,7 +55,27 @@
           background: #DDD;
         }
 
+        .state{
+          height: 15px;
+          width: 15px;
+          position: absolute;
+          top: 5px;
+          left: 27px;
+        }
+
+        .offline{
+          background: no-repeat url("/assets/chat_sprites.png") 0 -327px;
+        }
+
+        .online{
+          background: no-repeat url("/assets/chat_sprites.png");
+        }
+
+        .notice{
+          background: no-repeat url("/assets/chat_sprites.png") 0 -253px;
+        }
       }
+
     }
 
 
@@ -63,12 +84,14 @@
 
 .chat_dialogue_panel{
   position: absolute;
-  bottom: 0;
+  bottom: 3px;
   left: 0;
   height: 372px;
+  @include box-shadow(1px 1px 3px $grayDarker);
 
   iframe{
     border: none;
     height: 100%;
+    overflow: hidden;
   }
 }
