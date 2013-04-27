@@ -77,15 +77,13 @@
       }
 
     }
-
-
   }
 }
 
 .chat_dialogue_panel{
   position: absolute;
-  bottom: 3px;
-  left: 0;
+  bottom: 5px;
+  left: 5px;
   height: 372px;
   @include box-shadow(1px 1px 3px $grayDarker);
 
