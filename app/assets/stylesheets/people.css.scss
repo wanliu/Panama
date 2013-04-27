@@ -4,6 +4,11 @@
 //= require people/comment
 //= require jquery.atwho
 //= require product_comment
+//= require people/following
+//= require communities
+//= require ./lib/chose-friend
+//= require people/community_people
+//= require attachment_uploader
 
 @import "compass/css3";
 @import "variables";
@@ -14,6 +19,14 @@
 @import "transaction";
 @import "notification";
 
+
+.nav.nav-list.affix{
+	top:0;
+	position: fixed;
+}
+
+
+
 #wrapper {
 	padding-top :10px;
 
@@ -21,8 +34,8 @@
 
 #people-sidebar {
 	width: 200px;
-	position: absolute;
-
+	top:20px;
+	
 	.icon-chevron-right {
 		float: right;
 		margin-top: 2px;
@@ -116,5 +129,9 @@
 .depend_select {
 
 	width: 90px;
+}
+
+.lf {
+	cursor: pointer;
 }
 

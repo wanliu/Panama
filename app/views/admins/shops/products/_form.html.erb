@@ -4,17 +4,24 @@
     :html => {
         :class => "form-horizontal"
     } do |f| %>
-    <div id="product_id" class="hide"><%= @product.id %></div>
     <%= f.input :name %>
-    <%= f.association :category, :as => :chosen, :collection => @category_root.descendants %>
+    <div class="control-group string required">
+        <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> 类别</label>
+        <div class="controls">
+            <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
+            
+        </div>
+    </div>
+
     <%= f.association :shops_category, :as => :chosen %>
     <%= f.association :attachments,
                       :as           => :album,
-                      :upload_url   => shop_admins_attachments_path(current_shop),
+                      :upload_url   => attachments_path,
                       :collection   => @product.format_attachment %>
 
     <%= f.input :price %>
     <%#= f.association :category, :collection => category_root, :value => Category.root , :as => :columnview %>
+
     <div class="additional_properties">
     <%= render_content(@content, locals: { category: @category }) %>
     <div class="product_prices"></div>
@@ -34,8 +41,8 @@
 <script type="text/javascript">
 
 	require(['lib/colorpicker/js/bootstrap-colorpicker'], function(){
-      $('.color').colorpicker();
-    })
+    $('.color').colorpicker();
+  })
 
     require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
         var form = new Rails.FormView("form#<%= options_dom_id(@product) %>", {
@@ -47,16 +54,105 @@
 <% end %>
 
 <!-- Modal -->
-<div id="CategoryModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">产品类型</h3>
-  </div>
-  <div class="modal-body">
-    <p>One fine body…</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary">Save changes</button>
-  </div>
+<div id="CategoryModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-header affix" data-offset-top="0px">
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+        <button type="button" class="close modal-resize" modal-size="0.75" aria-hidden="true"><i class="icon-zoom-in"></i></button>
+        <h3 id="myModalLabel">产品类型</h3>
+    </div>
+    <div class="modal-body">
+        <p>One fine body…</p>
+    </div>
+    <div class="modal-footer affix-bottom">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+        <button class="btn btn-primary save_category">保存</button>
+    </div>
 </div>
+
+<script type="text/javascript">
+    var button = ".<%= dom_id(@product, :category) %>";
+
+    require(['jquery','twitter/bootstrap/modal','twitter/bootstrap/affix'],function($){
+        
+        function setModalSize(percentage){
+            var modal = $("#CategoryModal");
+            modal.offset({top: 0});
+            modal.css("min-height",$(window).height());
+            modal.css("max-height",$(window).height());
+            modal.css("width",$(window).width()*percentage);
+            
+            header_height = modal.find(".modal-header").height();
+            footer_height = modal.find(".modal-footer").height();
+            modal.find(".modal-body").css("min-height",$(window).height()-header_height-footer_height);
+            modal.css("padding-right",$(window).width()*((1-percentage)/2));
+            modal.css("margin-left",parseInt(modal.css("padding-right"))-parseInt(modal.css("left"))-2);
+
+            modal.find(".modal-header").width(modal.find(".modal-body").width());
+            modal.find(".modal-footer").width(modal.find(".modal-body").width());
+            modal.find(".search").css("max-width", modal.find(".modal-body").width());
+            modal.find(".modal-resize").attr("modal-size",percentage);
+        }
+
+        $("#CategoryModal").on('show', function() {
+            $(this).find(".modal-body")
+                .load("<%= category_page_shop_admins_products_path %>");
+        });
+
+        $("#CategoryModal").on('shown',function(){
+            $("body").css("position","fixed");
+            setModalSize(0.75);
+            $(window).bind("resize", function(e){
+                percentage = $(".modal-resize").attr("modal-size");
+                setModalSize(percentage);
+                e.preventDefault();
+            });
+            $("#CategoryModal").one("click", function(e){
+                pointerX = $("#CategoryModal .modal-body").outerWidth() 
+                    + $("#CategoryModal").offset().left;
+                if(e.pageX > pointerX){
+                    $('#CategoryModal').modal('hide');
+                }
+            });
+        });
+
+        $("#CategoryModal .save_category").on('click', function(){
+            $('#CategoryModal').modal('hide');
+            category_id = $(".category_select").attr("data-select");
+            $(".breadcrumb").load("/shops/<%= current_shop.name %>/admins/categories/category_full_name?category_id="+category_id,function(response, status, xhr) {
+                    if(status == "success"){
+                        $(".breadcrumb").html(breadcrumb(response));
+                    }
+            });
+        });
+
+        function breadcrumb(category_full_name){
+            html = '<a href="#" data-toggle="modal"></a>';
+            $(category_full_name.split("|")).each(function(e,el){
+                if(e+1 < (category_full_name.split("|")).length){
+                    html += '<li><a href="#">'+el+'</a><span class="divider">|</span></li>';
+                }else{
+                   html += '<li class="active">'+el+'</li>';
+                } 
+            });
+            return html;
+        }
+
+        $("#CategoryModal").on('hide', function(){
+            $("body").css("position","static");
+            $(window).unbind("resize");
+        });
+
+        $(button).click(function(e){
+            $('#CategoryModal').modal('show');
+        });
+
+        $(".modal-resize").click(function(){
+            percentage = 1;
+            if($(".modal-resize").attr("modal-size") == 1){
+                percentage = 0.75;
+            }
+            setModalSize(percentage);
+            return false;
+        });
+    })
+</script>

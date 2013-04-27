@@ -10,13 +10,12 @@ class Permission < ActiveRecord::Base
 
   def self.define(resource, abilities)
     unless abilities.is_a?(Array)
-        abilities = [abilities]
+      abilities = [abilities]
     end
     abilities.each do |ability|
-        if find_by(resource: resource, ability: ability).nil?
-            puts "create permission #{resource} #{ability}"
-            create(resource: resource, ability: ability)
-        end
+      if find_by(resource: resource, ability: ability).nil?
+        create(resource: resource, ability: ability)
+      end
     end
   end
 end
