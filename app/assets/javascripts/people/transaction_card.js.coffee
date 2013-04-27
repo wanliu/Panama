@@ -8,6 +8,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             "click button.close"        : "closeThis"
             "click .address-add>button" : "toggleAddress"
             "click .item-detail"        : "toggleItemDetail"
+            "submit .address-form>form" : "saveAddress"
 
         states:
             initial: 'none'
@@ -44,8 +45,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
 
         ############################################################################
         # 状态事件
-        enterOrder: (event, from, to, msg ) ->
-            @$(".address-form>form").submit(_.bind(@saveAddress, @))
+        # enterOrder: (event, from, to, msg ) ->
+        #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
 
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()

@@ -4,3 +4,16 @@
         state: transaction.state,
         people: current_user } %>
 <% end %>
+
+<script type="text/javascript">
+	require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card"], function($, _a, Transaction){
+
+		$(".transaction").each(function(i, elem){
+			var card = card = new Transaction.ShopTransactionCard({el: elem,
+																   realtime: {
+																       url: '<%= faye_server_uri %>',
+																       token: '<%= token %>' }
+																  });
+	    });
+	});
+</script>

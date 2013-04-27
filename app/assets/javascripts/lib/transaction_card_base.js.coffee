@@ -6,20 +6,19 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
 
             initialize:(@option) ->
                 super
+                @options['initial']   ?= @$el.attr('state-initial')
+                @options['id']        ?= @$el.attr('state-id')
+                @options['url']       ?= @$el.attr('state-url')
+                @options['event_url'] ?= @$el.attr('state-event-url')
+
                 @rt_options = @options['realtime']
                 if @rt_options.url?
                     @realtime = RealtimeClient.client(@rt_options.url)
                     @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
                 # @$el.bind('click', @activeThis)
-                setInterval _.bind(@displayState, @), 1000
-
-            displayState: () ->
-                @$(".display-state").text(@current)
 
             getNotifyName: () ->
-                if m = @$el.selector.match(/transaction-\d+/)
-                    m[0]
-
+                "transaction-#{@options['id']}"
 
             clickAction: (event) ->
                 btn = $(event.target)
@@ -37,7 +36,15 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                     @effect 'flipInY'
 
                     setTimeout () =>
-                        @$el.replaceWith(data)
+                        # @$el.wrap("<p>")
+                        # p = @$el.parent()
+                        # p.html(data)
+                        # @$el.unwrap()
+                        html = $(data)
+                        @$el.replaceWith(html)
+                        @$el = html
+
+                        @delegateEvents()
                         # .html(data).unwrap()
                     , 300
 
@@ -67,10 +74,8 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                 @slideEvent(event, 'right')
 
             slideEvent: (event, direction = 'right') ->
-
                 $.post @eventUrl(event), (data) =>
                     @slidePage(data, direction)
-
 
             slidePage: (page, direction = 'right') ->
                 $side1 = $("<div class='slide-1'></div>")
@@ -82,6 +87,7 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                 $slideBox = @$el.parents(".slide-box")
                 $slideContainer = @$el.parents(".slide-container")
                 $side2 = $("<div class='slide-2'></div>").html(page)
+
                 $side1 = @$el
                 $slideContainer.append($side2)
 
@@ -97,14 +103,15 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                 $side1.width(width)
                       .height($side1.height())
 
-                overSlide = () ->
+                overSlide = () =>
                     $side1.unwrap()
                           .remove()
+                    @$el = $side2.find(">.transaction")
+                    @delegateEvents()
                     $side2.find(">.transaction")
                           .unwrap()
                           .unwrap()
                           .unwrap()
-
 
                 if direction == 'right'
                     $side1.css('float', 'left')

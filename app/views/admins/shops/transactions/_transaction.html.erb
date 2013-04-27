@@ -1,5 +1,9 @@
 <% buyer = transaction.buyer %>
-<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>">
+<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
+	 state-id="<%= transaction.id %>"
+	 state-initial="<%= transaction.state %>"
+	 state-url="<%= shop_admins_transaction_path(current_shop, transaction) %>"
+	 state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>" >
 	<div class="transaction-header">
 		<div class="avatar">
 			<%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
@@ -94,18 +98,3 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
-	require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card"], function($, _a, Transaction){
-
-		var id = ".transaction-<%=transaction.id %>-<%= transaction.state %>";
-		var card = new Transaction.ShopTransactionCard({el: $(id),
-														initial: "<%= transaction.state %>",
-														url: "<%= shop_admins_transaction_path(current_shop, transaction) %>",
-														event_url: "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>",
-														realtime: {
-															url: '<%= faye_server_uri %>',
-															token: '<%= token %>' }
-													});
-
-	});
-</script>
