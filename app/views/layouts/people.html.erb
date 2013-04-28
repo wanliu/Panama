@@ -4,11 +4,17 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => ["people"] %>
 <body class="<%= controller.controller_name %>">
+<script type="text/javascript" language="javascript">
+    $(window).scroll(function(){
+         var ttop = $(document).scrollTop();  
+         var top1 = $("#main-body").height();
 
- <script type="text/javascript">
-    $(document).scroll(function(){
-         ttop = $(document).scrollTop();  
-            if (ttop > 200 ){ 
+         var top2 = $("#people-sidebar").height();
+         console.log(top2);
+         console.log(top1);
+         
+
+            if (ttop > 200 && top1>top2){ 
                 $(".span3.leftfix").addClass("affix");
             }else{
                 $(".span3.leftfix.affix").removeClass("affix");
@@ -17,6 +23,7 @@
     })
 
  </script>
+ 
 
   <%= render "header-fluid" %>
   <%= render "category_breadcrumbs" %>
