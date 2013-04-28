@@ -5,6 +5,8 @@ describe Admins::Shops::CategoriesController do
 
   Shop.slient!
 
+  let(:pepsi) { FactoryGirl.create(:shop, user: current_user) }
+
   def options
     {
       'name'    => 'test_category',
@@ -13,8 +15,6 @@ describe Admins::Shops::CategoriesController do
   end
 
   describe "需要管理权才能进入" do
-    let(:pepsi) { FactoryGirl.create(:shop,
-                                     user: current_user) }
     let(:root) { pepsi.shops_category }
 
     it "首页" do
@@ -71,7 +71,7 @@ describe Admins::Shops::CategoriesController do
 
     describe "无效的分类" do
 
-      it "删除非了孙类的分类" do
+      it "删除了非孙类的分类" do
         node1 = FactoryGirl.create(:shops_category, options)
 
         expect { xhr :post, :destroy, { shop_id: pepsi.name,
@@ -102,7 +102,7 @@ describe Admins::Shops::CategoriesController do
   end
 
   describe "无管理权拒绝" do
-    let(:pepsi) { FactoryGirl.create(:shop, user: current_user) }
+    
     let(:root) { pepsi.shops_category }
 
     it "首页" do
@@ -151,4 +151,28 @@ describe Admins::Shops::CategoriesController do
       response.response_code.should == 403 # redirect
     end
   end
+
+  describe "分类" do
+    
+
+    it "获取分类第一级子节点" do
+      get :category_root, { shop_id: pepsi.name }, get_session
+      assigns(:categories).first.should_not be_nil
+      assigns(:categories).first.ancestry_depth.should == 1
+    end
+
+    it "获取子节点" do
+      get :category_children, {shop_id: pepsi, category_name: "服饰/鞋帽/配饰"}, get_session
+      assigns(:category_children).first.children.should_not be_nil
+      assigns(:category_children).first.parent.id.should eq 64
+    end
+
+    it "搜索子节点" do
+      get :category_search, {shop_id: pepsi, q: "款", limit: 10}, get_session
+      assigns(:category_children).first.children.should_not be_nil
+      assigns(:category_children).first.ancestry_depth.should > 2
+    end
+
+  end
+
 end

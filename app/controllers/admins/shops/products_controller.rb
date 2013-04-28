@@ -4,7 +4,8 @@ require 'orm_fs'
 class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   helper_method :value_for
-  before_filter :content_product_form, :except => [:new, :create, :index, :additional_properties, :products_by_category]
+  before_filter :content_product_form, 
+    :except => [:new, :create, :index, :additional_properties, :products_by_category, :category_page]
 
   ajaxify_pages :new, :edit, :create, :index, :show, :update
 
@@ -16,6 +17,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     node = current_shop.shops_category
 
     @categories = ShopsCategory.sort_by_ancestry(node.descendants)
+
     @products = current_shop.products
   end
 
@@ -126,7 +128,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def category_page
-    render :layout => false
+    # @categorys = Category.where(:name => '_products_root').first
+     render :layout => false         
   end
 
   private
