@@ -7,14 +7,9 @@
 <script type="text/javascript" language="javascript">
     $(window).scroll(function(){
          var ttop = $(document).scrollTop();  
-         var top1 = $("#main-body").height();
-
-         var top2 = $("#people-sidebar").height();
-         console.log(top2);
-         console.log(top1);
-         
-
-            if (ttop > 200 && top1>top2){ 
+         var mainHeight = $("#main-body").height();
+         var leftHeight = $("#people-sidebar").height();
+            if (ttop > 200 && mainHeight>leftHeight){ 
                 $(".span3.leftfix").addClass("affix");
             }else{
                 $(".span3.leftfix.affix").removeClass("affix");
