@@ -32,8 +32,8 @@ define ["jquery", "backbone", "chats/dialogue"],
       @$el = $(@el)
       @friend = @model.get('friend')
       @init_el()
-      @bind_event()
       @change_state()
+      @model.bind("change:unread_count", @change_state, @)
 
     init_el: () ->
       @$el.html("<a href='javascript:void(0)' class='item' />")
@@ -48,10 +48,6 @@ define ["jquery", "backbone", "chats/dialogue"],
       .append(@login_label)
       .append(@close_label)
 
-    bind_event: () ->
-      @model.bind("show_notic", _.bind(@show_notic, @))
-      @model.bind("hide_notice", _.bind(@hide_notice, @))
-
     render: () ->
       @$el
 
@@ -65,7 +61,7 @@ define ["jquery", "backbone", "chats/dialogue"],
       @notice_label.removeClass(@notice_class)
 
     change_state: () ->
-      if @model.get("unread_count") > 0 then @show_notic() else @hide_notice
+      if @model.get("unread_count") > 0 then @show_notic() else @hide_notice()
 
   class ContactFriendViewList extends Backbone.View
     tagName: "ul",
@@ -108,11 +104,11 @@ define ["jquery", "backbone", "chats/dialogue"],
 
     receive_notic: (friend_id) ->
       m = @find_friend(friend_id)
-      m.trigger("show_notic") if m?
+      m.set("unread_count", 1 + parseInt(m.get("unread_count"))) if m?
 
     read_notice: (friend_id) ->
       m = @find_friend(friend_id)
-      m.trigger("hide_notice") if m?
+      m.set("unread_count", 0) if m?
 
     find_friend: (friend_id) ->
       for model in @friends.models

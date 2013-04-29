@@ -34,11 +34,17 @@ class ContactFriend < ActiveRecord::Base
   def as_json(*args)
     attrs = super *args
     attrs["friend"] = friend.as_json
-    attrs["unread_count"] = user.messages(friend_id).unread.count
+    attrs["unread_count"] = unread_count
+
     attrs
   end
 
   private
+  def unread_count
+    ChatMessage.unread
+    .where(send_user_id: friend_id, receive_user_id: user.id).count
+  end
+
   def valid_friend?
     if ContactFriend.exists?("friend_id=#{friend_id} and user_id=#{user_id} and id<>#{id.to_s}")
       errors.add(:friend_id, "好友已经存在了!")

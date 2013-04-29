@@ -113,8 +113,8 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @msgs_view.set_options(user: @user, friend: @friend)
 
     connect_faye_server: () ->
-      @realtime = Realtime.client(@faye_url)
-      @realtime.receive_message @user.token, (message) =>
+      @client = Realtime.client(@faye_url)
+      @client.receive_message @user.token, (message) =>
         @msgs_view.notice_add(message)
 
     fetch: () ->

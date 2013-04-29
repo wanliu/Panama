@@ -46,9 +46,6 @@ gem 'apotomo', '~> 1.2.3'
 gem 'github-markup', '~> 0.7.4'
 gem 'redcarpet', '~> 2.2.2'
 
-# Markdown 格式
-gem "rouge", "~> 0.2.14"
-
 # form helper
 gem 'simple_form', '~> 2.0.4'
 

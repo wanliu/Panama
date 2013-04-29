@@ -10,13 +10,13 @@ define ["faye", "lib/underscore"], ( faye, d) ->
       @events = {}
 
     monitor_people_notification: (token, callback = (data) -> ) ->
-      @client.subscribe("/notification/#{token}", (data) ->
+      @subscribe("/notification/#{token}", (data) ->
         callback(data)
       )
 
     #接收信息
     receive_message: (token, callback) ->
-      @client.subscribe("/chat/receive/#{token}", callback)
+      @subscribe("/chat/receive/#{token}", callback)
 
     monitor_event: (event_name, token, callback = (data) ->) ->
       @subscribe("/events/#{token}/#{event_name}", (data) ->

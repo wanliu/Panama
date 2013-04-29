@@ -6,7 +6,6 @@
   }
 
   .dialog_content_panel{
-    padding: 0px 5px;
 
     .dialog_content{
       height: 248px;
@@ -47,6 +46,7 @@
 
       .content{
         height: 60px;
+        padding: 0px 5px;
 
         textarea{
           resize: none;
@@ -58,7 +58,7 @@
       }
 
       .foot_nav{
-        padding: 5px 0px;
+        padding: 5px 5px;
       }
     }
   }
