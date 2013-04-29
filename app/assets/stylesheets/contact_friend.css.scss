@@ -84,6 +84,7 @@
   position: absolute;
   bottom: 5px;
   left: 5px;
+  z-index: 9999;
   height: 372px;
   @include box-shadow(1px 1px 3px $grayDarker);
 
@@ -91,5 +92,16 @@
     border: none;
     height: 100%;
     overflow: hidden;
+  }
+
+  .close_label{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 12px;
+    height: 11px;
+    font-size: 1px;
+    display: block;
+    background: url('/assets/select.png') right top no-repeat;
   }
 }

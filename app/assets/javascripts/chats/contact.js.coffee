@@ -25,12 +25,12 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
       @bind_relatime()
 
     bind_relatime: () ->
-      @realtime = Realtime.client(@faye_url)
-      @client = @realtime.client
+      @client = Realtime.client(@faye_url)
+
       @client.subscribe @contact_show_url(), (friend) =>
         @cfv_list.add(friend)
 
-      @realtime.receive_message @current_user.token, (message) =>
+      @client.receive_message @current_user.token, (message) =>
         @cfv_list.receive_notic(message.send_user_id)
 
       @client.subscribe @change_state_notic_url(), (send_user_id) =>
