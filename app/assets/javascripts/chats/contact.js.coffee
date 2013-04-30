@@ -10,6 +10,11 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
         success: callback
       )
 
+    connect: () ->
+      @fetch(
+        url: "#{@urlRoot}/connect/#{@id}"
+      )
+
   class ChatContact extends Backbone.View
     events: {
       "click .close_list" : "hide"
@@ -20,13 +25,13 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
 
       @friend_list_el = @el.find(".friend_list")
       #最近联系人
-      @cfv_list = new ContactFriendViewList()
+      @cfv_list = new ContactFriendViewList(faye_url: @faye_url)
       @friend_list_el.html(@cfv_list.render())
       @bind_relatime()
+      @connect()
 
     bind_relatime: () ->
       @client = Realtime.client(@faye_url)
-
       @client.subscribe @contact_show_url(), (friend) =>
         @cfv_list.add(friend)
 
@@ -37,7 +42,7 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
         @cfv_list.read_notice(send_user_id)
 
     contact_show_url: () ->
-      "/contact_friends/#{@current_user.token}"
+      "/chat/contact_friends/#{@current_user.token}"
 
     change_state_notic_url: () ->
       "/chat/change/message/#{@current_user.token}"
@@ -46,6 +51,10 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
       user = new User()
       user.show user_id, (model, data) =>
         @cfv_list.show_dilogue data
+
+    connect: () ->
+      user = new User(id: @current_user.id)
+      user.connect()
 
     hide: () ->
       @el.hide()

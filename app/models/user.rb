@@ -35,18 +35,18 @@ class User < ActiveRecord::Base
   after_create :load_initialize_data
   before_create :generate_token
 
-  def generate_token
-    self.im_token = SecureRandom.hex
-  end
+  delegate :groups, :jshop, :to => :shop_user
+
+  before_create :generate_token
+  after_initialize :init_user_info
 
   def messages(friend_id)
     ChatMessage.all(id, friend_id)
   end
 
-  delegate :groups, :jshop, :to => :shop_user
-
-  before_create :generate_token
-  after_initialize :init_user_info
+  def connect
+    FayeClient.send("/chat/user/connect/#{id}", id)
+  end
 
   def generate_token
     self.im_token = SecureRandom.hex

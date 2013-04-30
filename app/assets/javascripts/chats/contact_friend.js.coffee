@@ -1,7 +1,7 @@
 #describe: 最近联系人
 
-define ["jquery", "backbone", "chats/dialogue"],
-($, Backbone, DialogueListView) ->
+define ["jquery", "backbone", "chats/dialogue", "lib/realtime_client"],
+($, Backbone, DialogueListView, Realtime) ->
 
   class ContactFriend extends Backbone.Model
     urlRoot: "/contact_friends"
@@ -24,6 +24,9 @@ define ["jquery", "backbone", "chats/dialogue"],
   class ContactFriendView extends Backbone.View
     tagName: "li",
     notice_class: "notice"
+    online_class: "online"
+    offline_class: "offline"
+
     events:{
       "click " : "show_dialog"
     }
@@ -32,8 +35,11 @@ define ["jquery", "backbone", "chats/dialogue"],
       @$el = $(@el)
       @friend = @model.get('friend')
       @init_el()
-      @change_state()
-      @model.bind("change:unread_count", @change_state, @)
+
+      @model.set("state", false)
+      @change_message()
+      @model.bind("change:state", @change_state, @)
+      @model.bind("change:unread_count", @change_message, @)
 
     init_el: () ->
       @$el.html("<a href='javascript:void(0)' class='item' />")
@@ -55,13 +61,33 @@ define ["jquery", "backbone", "chats/dialogue"],
       @trigger("show_dilogue", @friend)
 
     show_notic: () ->
+      @clear_all_state()
       @notice_label.addClass(@notice_class)
 
     hide_notice: () ->
       @notice_label.removeClass(@notice_class)
+      @change_state()
+
+    online: () ->
+      if @model.get("unread_count") <= 0
+        @clear_all_state()
+        @notice_label.addClass @online_class
+
+    offline: () ->
+      if @model.get("unread_count") <= 0
+        @clear_all_state()
+        @notice_label.addClass @offline_class
+
+    change_message: () ->
+      if @model.get("unread_count") > 0 then @show_notic() else @hide_notice()
 
     change_state: () ->
-      if @model.get("unread_count") > 0 then @show_notic() else @hide_notice()
+      if @model.get("state") then @online() else @offline()
+
+    clear_all_state: () ->
+      @notice_label.removeClass @notice_class
+      @notice_label.removeClass @offline_class
+      @notice_label.removeClass @online_class
 
   class ContactFriendViewList extends Backbone.View
     tagName: "ul",
@@ -76,9 +102,11 @@ define ["jquery", "backbone", "chats/dialogue"],
       @friends.bind("sort", @all_contact_friend, @)
       @friends.fetch()
 
-      @dilogue_views = new DialogueListView({
+      @dilogue_views = new DialogueListView(
         current_user: @current_user
-      })
+      )
+
+      @client = Realtime.client(@faye_url)
 
     all_contact_friend: (collection) ->
       @$el.html('')
@@ -88,7 +116,11 @@ define ["jquery", "backbone", "chats/dialogue"],
     add_contact_friend: (model) ->
       cf_view = new ContactFriendView(model: model)
       cf_view.bind("show_dilogue", _.bind(@show_dilogue, @))
+
       @$el.append(cf_view.render())
+      friend_id = model.get("friend_id")
+      @client.online(friend_id, _.bind(@online_friend, @))
+      @client.offline(friend_id, _.bind(@offline_friend, @))
 
     add: (model) ->
       friend = @find_friend(model.friend_id)
@@ -98,6 +130,14 @@ define ["jquery", "backbone", "chats/dialogue"],
         @friends.add(model)
 
       @sort_friend()
+
+    offline_friend: (friend_id) ->
+      model = @friends.where(friend_id: friend_id)[0]
+      model.set("state", false)  if model?
+
+    online_friend: (friend_id) ->
+      model = @friends.where(friend_id: friend_id)[0]
+      model.set("state", true)  if model?
 
     show_dilogue: (model) ->
       @dilogue_views.add(model)

@@ -14,4 +14,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def connect
+    @user = User.find(params[:id])
+    @user.connect
+    respond_to do |format|
+      format.json{ render :json => @user }
+    end
+  end
 end
