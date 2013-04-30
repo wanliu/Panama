@@ -45,7 +45,8 @@ class User < ActiveRecord::Base
   end
 
   def connect
-    FayeClient.send("/chat/user/connect/#{id}", id)
+    RedisClient.redis.set("online_user_#{id}", true)
+    FayeClient.send("/chat/friend/connect/#{id}", id)
   end
 
   def generate_token
