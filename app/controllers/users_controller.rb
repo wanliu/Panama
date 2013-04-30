@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   end
 
   def connect
-    @user = User.find(params[:id])
+    @user = User.find_by(:im_token => params[:token])
     @user.connect
     respond_to do |format|
       format.json{ render :json => @user }

@@ -10,9 +10,9 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
         success: callback
       )
 
-    connect: () ->
+    connect: (token) ->
       @fetch(
-        url: "#{@urlRoot}/connect/#{@id}"
+        url: "#{@urlRoot}/connect/#{token}"
       )
 
   class ChatContact extends Backbone.View
@@ -32,6 +32,7 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
 
     bind_relatime: () ->
       @client = Realtime.client(@faye_url)
+
       @client.subscribe @contact_show_url(), (friend) =>
         @cfv_list.add(friend)
 
@@ -40,6 +41,11 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
 
       @client.subscribe @change_state_notic_url(), (send_user_id) =>
         @cfv_list.read_notice(send_user_id)
+
+      @client.subscribe @disconnect_url(), () =>
+
+    disconnect_url: () ->
+      "/chat/user/disconnect/#{@current_user.id}"
 
     contact_show_url: () ->
       "/chat/contact_friends/#{@current_user.token}"
@@ -53,8 +59,8 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
         @cfv_list.show_dilogue data
 
     connect: () ->
-      user = new User(id: @current_user.id)
-      user.connect()
+      user = new User()
+      user.connect(@current_user.token)
 
     hide: () ->
       @el.hide()

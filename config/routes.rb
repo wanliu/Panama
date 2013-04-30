@@ -107,7 +107,7 @@ Panama::Application.routes.draw do
 
   resources :users do
     collection do
-      get "connect/:id", :to => "users#connect"
+      get "connect/:token", :to => "users#connect"
     end
   end
 
