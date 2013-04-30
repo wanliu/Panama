@@ -6,7 +6,6 @@ class DependSelectInput < SimpleForm::Inputs::CollectionSelectInput
     children = input_options[:children].blank? ? "" : children_name
     url = input_options[:collection_url] || ""
     @collection = input_options[:collection] ?  collection :  []
-    
     label_method, value_method = detect_collection_methods
     @builder.collection_select(
       attribute_name, @collection, value_method, label_method,
