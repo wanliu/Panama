@@ -22,7 +22,6 @@ Panama::Application.routes.draw do
       collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
       end
-
     end
 
     resources :topics, :controller => "people/topics" do
@@ -106,7 +105,12 @@ Panama::Application.routes.draw do
 
   get "pending/index"
 
-  resources :users
+  resources :users do
+    collection do
+      get "connect/:id", :to => "users#connect"
+    end
+  end
+
   resources :contents, :except => :index
 
   resources :products, :except => :index

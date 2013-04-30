@@ -14,6 +14,12 @@ define ["faye", "lib/underscore"], ( faye, d) ->
         callback(data)
       )
 
+    online: (id, callback) ->
+      @subscribe("/chat/user/connect/#{id}", callback)
+
+    offline: (id, callback) ->
+      @subscribe("/chat/user/disconnect/#{id}", callback)
+
     #接收信息
     receive_message: (token, callback) ->
       @subscribe("/chat/receive/#{token}", callback)
