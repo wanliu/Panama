@@ -4,12 +4,14 @@
 					:html => { :class => "form-horizontal"},
 					:remote=>true do |f| %>
 	<div class="address_input">
-	<%= f.input :address_id,
-				:as => :chosen,
-				:collection => people.addresses,
-				:label_method => :location,
-				:value_method => :id,
-				:input_html => { :class => :span12 } %>
+		<%= f.input :address_id,
+					# :as => :chosen,
+					:collection => people.addresses,
+					:selected => "",
+					:include_blank => true,
+					:label_method => :location,
+					:value_method => :id,
+					:input_html => { :class => :span12 } %>
 		<div class="btn-group address-add">
 			<%= button_tag icon(:list), :class => "btn" %>
 		</div>
@@ -53,6 +55,8 @@
 
 <script type="text/javascript">
     require(['jquery', 'people/address_order'], function ($, view){
-        var addressOrderView = new view.AddressOrderView();
+        var addressOrderView = new view.AddressOrderView({
+        	el: $(".address-form>form")
+        });
     });
 </script>
