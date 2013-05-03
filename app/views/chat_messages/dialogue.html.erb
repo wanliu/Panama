@@ -1,6 +1,7 @@
 <div class='chat_dialog_panel'>
   <div class='dialog_head'>
-    在线-<%=@friend.login %>
+    <span class='state offline'></span>
+    <span class='name'><%=@friend.login %></span>
   </div>
   <div class='dialog_content_panel'>
     <div class='dialog_content'>
@@ -33,7 +34,8 @@
       friend: {
         id: "<%=@friend.id %>",
         login: "<%=@friend.login %>",
-        icon_url: "<%=@friend.icon %>"},
+        icon_url: "<%=@friend.icon %>",
+        connect_state: <%=@friend.connect_state %>},
       faye_url: "<%=faye_server_uri %>"
     })
 

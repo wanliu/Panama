@@ -36,10 +36,10 @@ define ["jquery", "backbone", "chats/dialogue", "lib/realtime_client"],
       @friend = @model.get('friend')
       @init_el()
 
-      @model.set("state", false)
-      @change_message()
       @model.bind("change:state", @change_state, @)
       @model.bind("change:unread_count", @change_message, @)
+      @change_state()
+      @change_message()
 
     init_el: () ->
       @$el.html("<a href='javascript:void(0)' class='item' />")
@@ -69,14 +69,17 @@ define ["jquery", "backbone", "chats/dialogue", "lib/realtime_client"],
       @change_state()
 
     online: () ->
-      if @model.get("unread_count") <= 0
+      if @message_state()
         @clear_all_state()
         @notice_label.addClass @online_class
 
     offline: () ->
-      if @model.get("unread_count") <= 0
+      if @message_state()
         @clear_all_state()
         @notice_label.addClass @offline_class
+
+    message_state: () ->
+      @model.get("unread_count") <= 0
 
     change_message: () ->
       if @model.get("unread_count") > 0 then @show_notic() else @hide_notice()
@@ -132,11 +135,11 @@ define ["jquery", "backbone", "chats/dialogue", "lib/realtime_client"],
       @sort_friend()
 
     offline_friend: (friend_id) ->
-      model = @friends.where(friend_id: friend_id)[0]
+      model = @friends.where(friend_id: parseInt(friend_id))[0]
       model.set("state", false)  if model?
 
     online_friend: (friend_id) ->
-      model = @friends.where(friend_id: friend_id)[0]
+      model = @friends.where(friend_id: parseInt(friend_id))[0]
       model.set("state", true)  if model?
 
     show_dilogue: (model) ->

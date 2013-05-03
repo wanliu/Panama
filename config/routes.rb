@@ -108,6 +108,7 @@ Panama::Application.routes.draw do
   resources :users do
     collection do
       get "connect/:token", :to => "users#connect"
+      get "disconnect/:id", :to => "users#disconnect"
     end
   end
 
@@ -128,7 +129,7 @@ Panama::Application.routes.draw do
   resources :chat_messages do
     collection do
       get "dialogue/:friend_id", :to => "chat_messages#dialogue"
-      post "read/:id", :to => "chat_messages#read"
+      post "read/:friend_id", :to => "chat_messages#read"
     end
   end
 

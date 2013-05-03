@@ -1,6 +1,6 @@
 #describe: 与好友对话
 
-define ["jquery", "backbone"], ($, Backbone) ->
+define ["jquery", "backbone", "postmessage"], ($, Backbone) ->
 
   class Dialogs extends Backbone.Collection
     url : "/dialogues"
@@ -15,23 +15,24 @@ define ["jquery", "backbone"], ($, Backbone) ->
   class DialogueView extends Backbone.View
     sort_dialogs: () ->
     className: "chat_dialogue_panel"
-
     events: {
       "click .close_label" : "change_hide_state"
     }
+
     initialize: (options) ->
       _.extend(@, options)
       @$el = $(@el)
 
       @friend.bind("change:state", @change_state, @)
       @friend.bind("change:dialog_index", @set_position, @)
-      @$el.html("<iframe src='/chat_messages/dialogue/#{@friend.id}'></iframe>")
+      @$el.html("<iframe name='dialog_#{@friend.id}' src='/chat_messages/dialogue/#{@friend.id}'></iframe>")
       @$el.append("<a class='close_label' href='javascript:void(0)'></a>")
+      @$iframe = @$("iframe")
+
+      $("body").append(@$el)
 
       @set_position()
       @show()
-
-      $("body").append(@$el)
 
     render: () ->
       @$el
@@ -48,10 +49,18 @@ define ["jquery", "backbone"], ($, Backbone) ->
       @$el.css(left: position)
 
     show: () ->
+      @bind_pm(true)
       @$el.show()
 
     hide: () ->
+      @bind_pm(false)
       @$el.hide()
+
+    bind_pm: (state) ->
+      $.pm(
+        target: window.frames["dialog_#{@friend.id}"],
+        type: "chat_dialogue_state",
+        data: state)
 
   class DialogueListView extends Backbone.View
     marginLeft: 5,
@@ -99,9 +108,9 @@ define ["jquery", "backbone"], ($, Backbone) ->
 
     calculation_width: () ->
       if (@show_dialog_number() * (@dialogWith + @marginLeft))  > ($("body").width() - @navRight)
-        @hide_first_show()
+        @hide_first_dialog()
 
-    hide_first_show: () ->
+    hide_first_dialog: () ->
       model = @dialogs.where({"state": true})[0]
       model.set("state", false) if model?
 

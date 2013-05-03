@@ -3,6 +3,31 @@
   .dialog_head{
     border-bottom: 1px solid #DDD;
     padding: 3px 0px;
+    position: relative;
+
+    .state{
+      height: 15px;
+      width: 15px;
+      position: absolute;
+      top: 5px;
+      left: 8px;
+    }
+
+    .name{
+      margin-left: 25px;
+    }
+
+    .offline{
+      background: no-repeat url("/assets/chat_sprites.png") 0 -327px;
+    }
+
+    .online{
+      background: no-repeat url("/assets/chat_sprites.png");
+    }
+
+    .notice{
+      background: no-repeat url("/assets/chat_sprites.png") 0 -253px;
+    }
   }
 
   .dialog_content_panel{
@@ -20,6 +45,7 @@
 
           .title{
             line-height: 28px;
+            margin-left: 3px;
 
             img{
               height: 18px;

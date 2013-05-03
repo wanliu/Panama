@@ -45,8 +45,14 @@ class User < ActiveRecord::Base
   end
 
   def connect
-    RedisClient.redis.set("online_user_#{id}", true)
+    key = "#{Settings.defaults['redis_key_prefix']}#{id}"
+    RedisClient.redis.set(key, true)
     FayeClient.send("/chat/friend/connect/#{id}", id)
+  end
+
+  def connect_state
+    key = "#{Settings.defaults['redis_key_prefix']}#{id}"
+    RedisClient.redis.exists(key)
   end
 
   def generate_token
@@ -78,6 +84,7 @@ class User < ActiveRecord::Base
     attribute = super *args
     attribute["icon_url"] = icon
     attribute["avatar_url"] = avatar
+    attribute["connect_state"] = connect_state
 
     attribute
   end
