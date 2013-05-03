@@ -7,16 +7,6 @@
 <a href="javascript:void(0)" class='chat_user' data-event='chat' data-value="<%=u.id %>"><%=u.login %></a>
 <% end %>
 <br />
-<input value='disconnect' type='button' class='btn-dom' />
-<script>
-  require(["jquery", "lib/realtime_client"],function($, realtimeClient){
-    var client = realtimeClient.client("<%=faye_server_uri %>")
-    $(".btn-dom").click(function(){
-      debugger
-      client
-    })
-  })
-</script>
 <script type="text/javascript">
   require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($,Mousemove){
     var $container = $('#activities');

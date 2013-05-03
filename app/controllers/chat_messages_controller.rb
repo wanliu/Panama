@@ -8,7 +8,6 @@ class ChatMessagesController < ApplicationController
       :send_user_id => params[:friend_id],
       :receive_user_id => current_user.id
     ).update_all(read: true)
-
     ChatMessage.notice_read_state(current_user, params[:friend_id])
     respond_to do |format|
       format.json{ render :json => @messages }
@@ -34,10 +33,13 @@ class ChatMessagesController < ApplicationController
   end
 
   def read
-    @message = current_user.receive_messages.find(params[:id])
-    @message.change_state
+    @messages = current_user.receive_messages.unread
+    .where(send_user_id: params[:friend_id])
+    @messages.update_all(read: true)
+
+    ChatMessage.notice_read_state(current_user, params[:friend_id])
     respond_to do |format|
-      format.json{ render :json => @message }
+      format.json{ render :json => @messages }
     end
   end
 end

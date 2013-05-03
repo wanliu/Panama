@@ -1,11 +1,12 @@
 #describe: 聊天
-define ["jquery", "backbone", "lib/realtime_client"],
+define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
 ($, Backbone, Realtime) ->
+
   class ChatMessage extends Backbone.Model
     urlRoot: "/chat_messages"
-    read: (callback = (message) -> ) ->
+    read: (friend_id, callback = (message) -> ) ->
       @fetch(
-        url: "#{@urlRoot}/read/#{@id}",
+        url: "#{@urlRoot}/read/#{friend_id}",
         type: "POST",
         success: callback
       )
@@ -49,6 +50,8 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @$el
 
   class MessageViewList extends Backbone.View
+    scrollTopMax: 99999999
+
     events: {
       "submit form" : "send_message"
     }
@@ -71,13 +74,12 @@ define ["jquery", "backbone", "lib/realtime_client"],
     add_message: (model) ->
       view = new MessageView(model: model)
       @content_el.find(">ul").append(view.render())
-      @content_el.scrollTop(99999999)
+      @content_el.scrollTop(@scrollTopMax)
 
     add: (model) ->
       @chat_messages.add(model)
 
-    notice_add:(model) ->
-      @add(model)
+    read_notice:(friend_id) ->
       m = @chat_messages.get(model.id)
       m.read()
 
@@ -101,22 +103,56 @@ define ["jquery", "backbone", "lib/realtime_client"],
       data
 
   class ChatView extends Backbone.View
+    on_class: "online",
+    off_class: "offline",
+    display_state: true,
     initialize: () ->
       @init_el()
+      @msg_view = new ChatMessage()
       @msgs_view = new MessageViewList(el: @$content_panel)
 
     init_el: () ->
       @$content_panel = @$(".dialog_content_panel")
+      @$head_panel = @$(".dialog_head")
+      @state_el = @$head_panel.find(">.state")
 
     set_options: (options) ->
       _.extend(@, options)
       @msgs_view.set_options(user: @user, friend: @friend)
+      @init_state()
+      @bind_pm()
 
     connect_faye_server: () ->
       @client = Realtime.client(@faye_url)
       @client.receive_message @user.token, (message) =>
-        @msgs_view.notice_add(message)
+        model = @msgs_view.add(message)
+        if @display_state
+          @read_friend_messsage()
+
+      @client.online @friend.id, _.bind(@online, @)
+
+      @client.offline @friend.id, _.bind(@offline, @)
 
     fetch: () ->
       @msgs_view.fetch()
       @connect_faye_server()
+
+    init_state: () ->
+      if @friend.connect_state then @online() else @offline()
+
+    bind_pm: () ->
+      pm.bind "chat_dialogue_state", _.bind(@change_display_state, @)
+
+    change_display_state: (state) ->
+      @display_state = state
+      if @display_state
+        @read_friend_messsage()
+
+    online: (friend_id) ->
+      @state_el.addClass(@on_class).removeClass(@off_class)
+
+    offline: (friend_id) ->
+      @state_el.addClass(@off_class).removeClass(@on_class)
+
+    read_friend_messsage: () ->
+      @msg_view.read(@friend.id)

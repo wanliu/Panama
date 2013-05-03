@@ -35,6 +35,7 @@ class ContactFriend < ActiveRecord::Base
     attrs = super *args
     attrs["friend"] = friend.as_json
     attrs["unread_count"] = unread_count
+    attrs["state"] = friend.connect_state
 
     attrs
   end
