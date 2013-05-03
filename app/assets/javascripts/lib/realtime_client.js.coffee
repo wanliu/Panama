@@ -30,13 +30,10 @@ define ["faye", "lib/underscore"], ( faye, d) ->
       )
 
     subscribe: (path, handle) ->
-      console.log @events
       @events[path] ?= []
       handles = @events[path]
       if handles? && _(handles).isArray()
         handle_str = handle.toString()
-        console.log handles
-        console.log handle_str
         unless _(handles).contains(handle_str)
           handles.push handle_str
           @client.subscribe(path, handle)
