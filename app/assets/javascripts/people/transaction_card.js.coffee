@@ -6,7 +6,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         events:
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
-            "click .address-add>button" : "toggleAddress"
+            # "click .address-add>button" : "toggleAddress"
             "click .item-detail"        : "toggleItemDetail"
             "submit .address-form>form" : "saveAddress"
 
@@ -35,9 +35,9 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @slideBeforeEvent('back')
             true
 
-        toggleAddress: (event) ->
-            @$(".address-panel").slideToggle()
-            false
+        # toggleAddress: (event) ->
+        #     @$(".address-panel").slideToggle()
+        #     false
 
         toggleItemDetail: (event) ->
             @$(".item-details").slideToggle()
