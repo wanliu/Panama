@@ -5,8 +5,8 @@ define ['jquery', 'backbone', 'exports', 'lib/chosen.jquery'],
 		initialize: (options) ->
 			_.extend(@, options)
 			@$el = $(@el)
-			@option_el = $(".address_input")
-			@custom_el = $(".address-panel")
+			@option_el = @$(".address_input")
+			@custom_el = @$(".address-panel")
 			optionView = new AddressOptionView({
 				parentView: @,
 				el: @option_el
