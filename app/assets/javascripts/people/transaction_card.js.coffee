@@ -1,5 +1,5 @@
-define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], ($, Backbone, Transaction, StateMachine, exports) ->
-
+define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], 
+($, Backbone, Transaction, StateMachine, exports) ->
 
     class TransactionCard extends Transaction.TransactionCardBase
 
@@ -43,7 +43,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @$(".item-details").slideToggle()
             false
 
-        ############################################################################
         # 状态事件
         # enterOrder: (event, from, to, msg ) ->
         #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
