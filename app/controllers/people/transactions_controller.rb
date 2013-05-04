@@ -119,7 +119,7 @@ class People::TransactionsController < People::BaseController
   def address
     @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
-      address_params = params[:addresses]
+      address_params = params[:address]
       address_id = params[:order_transaction][:address_id]
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
