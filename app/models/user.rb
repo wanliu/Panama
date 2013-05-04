@@ -45,18 +45,20 @@ class User < ActiveRecord::Base
   end
 
   def connect
-    key = "#{Settings.defaults['redis_key_prefix']}#{id}"
-    RedisClient.redis.set(key, true)
+    RedisClient.redis.set(redis_key, true)
     FayeClient.send("/chat/friend/connect/#{id}", id)
   end
 
   def connect_state
-    key = "#{Settings.defaults['redis_key_prefix']}#{id}"
-    RedisClient.redis.exists(key)
+    RedisClient.redis.exists(redis_key)
   end
 
   def generate_token
     self.im_token = SecureRandom.hex
+  end
+
+  def redis_key
+    "#{Settings.defaults['redis_key_prefix']}#{id}"
   end
 
   def join_circles
