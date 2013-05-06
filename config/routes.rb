@@ -2,13 +2,12 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
 
-  resources :people, :key => :person_id do
-    collection do
-      get ":shop_name/show_invite/:login", :to => "people#show_invite"
-      get ":shop_name/show_email_invite", :to => "people#show_email_invite"
-      post ":shop_name/show_invite", :to => "people#agree_invite_user"
-      post ":shop_name/show_email_invite", :to => "people#agree_email_invite_user"
-    end
+  match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
+  match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
+  match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
+  match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post
+
+  resources :people do
 
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -52,11 +51,10 @@ Panama::Application.routes.draw do
       collection do
         post "user/:user_id" => "people/followings#user"
         post "shop/:shop_id" => "people/followings#shop"
-        get :shops
       end
     end
 
-    match "followers", :to => "people/followings#followers"
+    # match "followers", :to => "people/followings#followers"
 
     resources :product_comments, :controller => "people/product_comments" do
     end
