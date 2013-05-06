@@ -23,13 +23,14 @@ class ServerAuth
 
   private
   def filter_data(message)
-    if message['data']
-      if message["data"].delete("token") != FAYE_TOKEN
+    if data = message['data']
+      if data.delete("token") != FAYE_TOKEN
         puts "Invalid authentication token..."
-        message["data"]["values"] = 'Invalid authentication token'
+        data["values"] = 'Invalid authentication token'
       end
     end
-    message["data"] = message["data"].delete("values")
+
+    message["data"] = data.delete("values")
     message
   end
 end

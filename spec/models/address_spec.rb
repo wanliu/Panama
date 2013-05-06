@@ -34,7 +34,7 @@ describe Address, "地址" do
   let(:user) { FactoryGirl.create(:user) }
   let(:province) { FactoryGirl.create(:province) }
   let(:city) { province.children.create(name: "衡阳", ancestry: province) }
-  let(:area) { city.children.create(name: "耒阳", ancestry: city) } 
+  let(:area) { city.children.create(name: "耒阳", ancestry: city) }
   let(:address) { FactoryGirl.create(:address,
                                      transaction: nil,
                                      user: user,
@@ -54,7 +54,7 @@ describe Address, "地址" do
         address.should be_valid
     end
     it "缺少市" do
-        address.city = nil 
+        address.city = nil
         address.should_not be_valid
     end
     it "缺少县" do
@@ -66,17 +66,17 @@ describe Address, "地址" do
   describe "实例方法" do
     it "location" do
       address.location.should ==
-        "#{address.country}#{address.province}#{address.city}#{address.area}#{address.road}"
+        "#{address.country}#{address.province.name}#{address.city.name}#{address.area.name}#{address.road}"
     end
   end
 
-  describe "验证检查上级" do 
+  describe "验证检查上级" do
     it "正常验证检查  'city' 上级" do
       address.should validate_superior_of(:city, :province )
     end
 
     it "出错验证检查  'city' 上级" do
-      address.city_id = nil 
+      address.city_id = nil
       address.should_not validate_superior_of(:city, :province )
     end
 
@@ -85,9 +85,8 @@ describe Address, "地址" do
     end
 
     it "出错验证检查  'area' 上级" do
-      address.area_id = nil 
+      address.area_id = nil
       address.should_not validate_superior_of(:area, :city )
     end
   end
 end
- 
