@@ -54,7 +54,7 @@ Panama::Application.routes.draw do
       end
     end
 
-    # match "followers", :to => "people/followings#followers"
+    match "followers", :to => "people/followings#followers"
 
     resources :product_comments, :controller => "people/product_comments" do
     end

@@ -4,7 +4,7 @@ require 'orm_fs'
 class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   helper_method :value_for
-  before_filter :content_product_form, 
+  before_filter :content_product_form,
     :except => [:new, :create, :index, :additional_properties, :products_by_category, :category_page]
 
   ajaxify_pages :new, :edit, :create, :index, :show, :update
@@ -129,7 +129,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def category_page
     # @categorys = Category.where(:name => '_products_root').first
-     render :layout => false         
+     render :layout => false
   end
 
   private
