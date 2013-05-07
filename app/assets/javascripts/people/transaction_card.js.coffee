@@ -6,7 +6,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         events:
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
-            # "click .address-add>button" : "toggleAddress"
+            "click .address-add>button" : "toggleAddress"
             "click .item-detail"        : "toggleItemDetail"
             "submit .address-form>form" : "saveAddress"
 
@@ -35,17 +35,28 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @slideBeforeEvent('back')
             true
 
-        # toggleAddress: (event) ->
-        #     @$(".address-panel").slideToggle()
-        #     false
+        toggleAddress: (event) ->
+            @$(".address-panel").slideToggle()
+            false
 
         toggleItemDetail: (event) ->
             @$(".item-details").slideToggle()
             false
 
         # 状态事件
-        # enterOrder: (event, from, to, msg ) ->
-        #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
+        enterOrder: (event, from, to, msg ) ->
+            @option_el = @$(".address_input")
+            @optionView = new AddressOptionView({
+                parentView: @,
+                el: @option_el
+            })
+        
+            @custom_el = @$(".address-panel")
+            @customView = new AddressCustomView({
+                parentView: @,
+                el: @custom_el
+            })
+            # @$(".address-form>form").submit(_.bind(@saveAddress, @))
 
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
@@ -73,6 +84,33 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     @transition.cancel()
                     false
             false
+
+
+    class AddressOptionView extends Backbone.View
+        initialize: (options) ->
+            _.extend(@, options)
+            @$el = $(@el)
+
+        events:
+            "click .address-add>button"  :  "add_address"
+            "click .chzn-results>li"     :  "option_select"
+
+        add_address: () ->
+            @$el.find("abbr:first").trigger("mouseup")
+            # @parentView.custom_el.slideToggle()
+            # false
+
+        option_select: () ->
+            @parentView.custom_el.slideUp()
+
+
+    class AddressCustomView extends Backbone.View
+        initialize: (options) ->
+            _.extend(@, options)
+            @$el = $(@el)
+            if @parentView.option_el.find("abbr").length
+                @$el.slideDown()
+
 
     exports.TransactionCard = TransactionCard
     exports
