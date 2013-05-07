@@ -1,4 +1,4 @@
-define ['jquery', 'backbone', 'exports', 'lib/chosen.jquery'], 
+define ['jquery', 'backbone', 'exports'], 
 ($, Backbone, exports) ->
 
 	class AddressOrderView extends Backbone.View
@@ -21,9 +21,6 @@ define ['jquery', 'backbone', 'exports', 'lib/chosen.jquery'],
 		initialize: (options) ->
 			_.extend(@, options)
 			@$el = $(@el)
-			@$el.find("select").chosen({
-				allow_single_deselect : true
-			})
 
 		events:
 			"mouseup abbr:first"	     :  "option_reset"

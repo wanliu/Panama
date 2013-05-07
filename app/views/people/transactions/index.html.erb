@@ -20,7 +20,7 @@
 
     </ul> -->
     <% if @transactions.size > 0 %>
-      <% @transactions.each do |transaction| %>
+      <% @transactions.reverse.each do |transaction| %>
         <%= render partial: 'transaction',
                    object:  transaction,
                    locals: {
@@ -39,13 +39,20 @@
 </div>
 
 <script type="text/javascript">
-  require(["jquery", "jquery_ujs", "people/transaction_card"], function($, _a, Transaction ){
+  require(["jquery", "jquery_ujs", "people/transaction_card", 'lib/chosen.jquery'], function($, _a, Transaction ){
     $(".transaction").each(function(i, elem){
       var card = new Transaction.TransactionCard({el: elem,
                             realtime: {
                               url: '<%= faye_server_uri %>',
                               token: '<%= token %>' }
                             });
+    });
+    $($(".transaction").get().reverse()).each(function(i, elem){
+      $(elem).find("#order_transaction_address_id").chosen({
+        allow_single_deselect : true,
+        placeholder_text : "选择一个地址",
+        no_results_text : "没有以该关键词开头的地址"
+      })
     });
   });
 </script>
