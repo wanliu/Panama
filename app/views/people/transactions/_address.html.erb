@@ -58,11 +58,3 @@
 
 <% end %>
 </div>
-
-<script type="text/javascript">
-    require(['jquery', 'people/address_order'], function ($, view){
-        new view.AddressOrderView({
-        	el: $('.transaction-<%= transaction.id %>-<%= transaction.state %>').find(".address-form>form")
-        });
-    });
-</script>
