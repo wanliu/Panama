@@ -9,6 +9,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             "click .address-add>button" : "toggleAddress"
             "click .item-detail"        : "toggleItemDetail"
             "submit .address-form>form" : "saveAddress"
+            "click .chzn-results>li"    : "selectAddress"
 
         states:
             initial: 'none'
@@ -37,6 +38,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
 
         toggleAddress: (event) ->
             @$(".address-panel").slideToggle()
+            @$el.find("abbr:first").trigger("mouseup")
             false
 
         toggleItemDetail: (event) ->
@@ -44,19 +46,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             false
 
         # 状态事件
-        enterOrder: (event, from, to, msg ) ->
-            @option_el = @$(".address_input")
-            @optionView = new AddressOptionView({
-                parentView: @,
-                el: @option_el
-            })
-        
-            @custom_el = @$(".address-panel")
-            @customView = new AddressCustomView({
-                parentView: @,
-                el: @custom_el
-            })
-            # @$(".address-form>form").submit(_.bind(@saveAddress, @))
+        # enterOrder: (event, from, to, msg ) ->
+        #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
 
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
@@ -72,11 +63,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         saveAddress: (event) ->
             params = @$(".address-form>form").serialize()
             url = @$(".address-form>form").attr("action")
-            address = new Array
-            for el in @$(".depend_select select", ".address-form")
-                do (el) -> 
-                    address.push($("option:selected", el).attr("value"))
-
             $.post(url, params)
                 .success (xhr, data, status) =>
                     @transition()
@@ -85,40 +71,13 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 .error (xhr, status) =>
                     @$(".address-form").html(xhr.responseText)
                     @$("#address_province_id option:first", ".address-form").attr("selected", true)
-                    for el,e in @$(".depend_select select", ".address-form")
-                        do (el,e) ->
-                            $("option[value='#{address[e]}']", el).attr("selected",true)
-                    @$(".address-form>form").submit(_.bind(@saveAddress, @))
                     @alarm()
                     @transition.cancel()
                     false
             false
 
-
-    class AddressOptionView extends Backbone.View
-        initialize: (options) ->
-            _.extend(@, options)
-            @$el = $(@el)
-
-        events:
-            "click .address-add>button"  :  "add_address"
-            "click .chzn-results>li"     :  "option_select"
-
-        add_address: () ->
-            @$el.find("abbr:first").trigger("mouseup")
-            # @parentView.custom_el.slideToggle()
-            # false
-
-        option_select: () ->
-            @parentView.custom_el.slideUp()
-
-
-    class AddressCustomView extends Backbone.View
-        initialize: (options) ->
-            _.extend(@, options)
-            @$el = $(@el)
-            if @parentView.option_el.find("abbr").length
-                @$el.slideDown()
+        selectAddress: () ->
+            @$(".address-panel").slideUp()
 
 
     exports.TransactionCard = TransactionCard

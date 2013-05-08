@@ -20,39 +20,33 @@
 
 	<div class="address-panel">
 	<%= simple_fields_for :address, transaction.address do |address_form| %>
-		<div class="control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
-			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
-			<div class="controls controls-row">
-				<div class="span8">
-					<%= address_form.input :province_id,
-										   :as => :depend_select,
-										   :children => :city_id,
-										   :object => transaction,
-										   :wrapper => :inline,
-										   :collection => get_city %>
-					<%= address_form.error :province_id %>
+		<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
+		<div class="controls controls-row">
+			<div class="span8 control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
+				<%= address_form.input :province_id,
+									   :as => :depend_select,
+									   :children => :city_id,
+									   :object => transaction,
+									   :wrapper => :inline,
+									   :collection => get_city %>
 
-					<%= address_form.input :city_id,
-										   :as => :depend_select,
-										   :children => :area_id,
-										   :object => transaction,
-										   :wrapper => :inline,
-										   :collection_url => "/city/" %>
-					<%= address_form.error :city_id %>
-					
-					<%= address_form.input :area_id,
-										   :as => :depend_select,
-										   :object => transaction,
-										   :wrapper => :inline,
-										   :collection_url => "/city/" %>
-					<%= address_form.error :area_id %>
-					
-				</div>
-				<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
-				<%= address_form.error :zip_code %>
+				<%= address_form.input :city_id,
+									   :as => :depend_select,
+									   :children => :area_id,
+									   :object => transaction,
+									   :wrapper => :inline,
+									   :collection_url => "/city/" %>
+				
+				<%= address_form.input :area_id,
+									   :as => :depend_select,
+									   :object => transaction,
+									   :wrapper => :inline,
+									   :collection_url => "/city/" %>
+
+				<%= address_form.error :province_id %>
 			</div>
+			<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
 		</div>
-
 		<%= address_form.input :road, :input_html => { :class => :span12 } %>
 	<% end %>
 	</div>
