@@ -69,8 +69,6 @@ Panama::Application.routes.draw do
 
   end
 
-
-
   match "mycart", :to => "people/cart#add_to_cart", :as => :add_to_cart, :via => [:post, :put]
   match "mycart/clear_list",:to => "people/cart#clear_list", :as => :clear_cart_list, :via => :post
 
@@ -129,8 +127,12 @@ Panama::Application.routes.draw do
       get "dialogue/:friend_id", :to => "chat_messages#dialogue"
       post "read/:friend_id", :to => "chat_messages#read"
       get "transaction/:transaction_id", :to => "chat_messages#transaction"
+      get "transaction_dialogue/:transaction_id", :to => "chat_messages#transaction_dialogue"
     end
   end
+
+  resources :receive_order_messages
+
 
   resources :category
   # shop admins routes

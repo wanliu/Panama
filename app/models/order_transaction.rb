@@ -19,7 +19,7 @@ class OrderTransaction < ActiveRecord::Base
             foreign_key: 'transaction_id',
             autosave: true
 
-  has_one :receive_order_message
+  has_many :receive_order_messages
   has_many :chat_messages, :as => :owner
 
   validates :state, :presence => true
@@ -100,8 +100,21 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def message_create(options)
+    #没有人接单
+    if operator.nil?
+      receive_order_messages.create(options)
+    else
+      chat_messages.create(options)
+    end
+  end
+
   def messages
-    receive_order_message.try(:state) ? [receive_order_message] : chat_messages
+    if receive_order_messages.any?{|m| m.state}
+      chat_messages
+    else
+      receive_order_messages
+    end
   end
 
   def build_items(item_ar)

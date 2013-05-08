@@ -9,7 +9,7 @@ class ChatMessage < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
 
-  attr_accessible :content, :receive_user
+  attr_accessible :content, :receive_user, :send_user
   attr_protected :send_user_id, :receive_user_id, :read
 
   belongs_to :receive_user, class_name: "User"

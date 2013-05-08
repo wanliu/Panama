@@ -13,5 +13,5 @@ class ReceiveOrderMessage < ActiveRecord::Base
   validates_presence_of :send_user
 
   belongs_to :order_transaction
-  belongs_to :send_user
+  belongs_to :send_user, :class_name => "User"
 end

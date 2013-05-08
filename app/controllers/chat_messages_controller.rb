@@ -39,8 +39,8 @@ class ChatMessagesController < ApplicationController
   end
 
   #交易聊天框
-  def transaction
-    @messages = OrderTransaction.find(params[:transaction_id]).messages
+  def transaction_dialogue
+    @transaction = OrderTransaction.find(params[:transaction_id])
     respond_to do |format|
       format.html
     end
