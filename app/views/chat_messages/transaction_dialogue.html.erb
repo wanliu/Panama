@@ -1,0 +1,39 @@
+<div class='transaction_dialog_panel'>
+  <div class="toolbar">
+  </div>
+  <div class="message_panel">
+    <div class="messages">
+    <% @transaction.messages.each do |m| %>
+      <%= render :partial => "transaction_message", :locals => {
+        :message => m
+      }  %>
+    <% end %>
+    </div>
+  </div>
+  <div class='foot row-fluid'>
+    <form>
+      <div class="me">
+        <%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
+        <p><%= current_user.login %></p>
+      </div>
+      <div class='input-msg'>
+        <textarea rows=3 class="span12" name='content'></textarea>
+      </div>
+      <div class='message_send'>
+        <input type='submit' value='提交' class='btn btn-primary disabled' />
+      </div>
+      <input type='hidden' value='<%=@transaction.id %>' name='transaction_id' />
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  require(["jquery", "people/transaction_message"],
+    function($, TransactionMessage){
+
+    new TransactionMessage({
+      el: $(".transaction_dialog_panel")
+    })
+
+  })
+</script>
