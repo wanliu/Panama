@@ -8,10 +8,12 @@ class ChatMessage < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
 
-  attr_accessible :content, :receive_user_id, :send_user_id
+  attr_accessible :content, :receive_user
+  attr_protected :send_user_id, :receive_user_id, :read
 
   belongs_to :receive_user, class_name: "User"
   belongs_to :send_user, class_name: "User"
+  belongs_to :owner, :polymorphic => true
 
   validates :receive_user_id, :presence => true
   validates :send_user_id, :presence => true

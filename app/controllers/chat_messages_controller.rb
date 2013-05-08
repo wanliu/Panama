@@ -17,7 +17,9 @@ class ChatMessagesController < ApplicationController
   end
 
   def create
-    @message = current_user.chat_messages.create(params[:chat_message])
+    receive_user = User.find(params[:chat_message].delete(:receive_user_id))
+    @message = current_user.chat_messages.create(
+      params[:chat_message].merge(:receive_user receive_user))
     respond_to do |format|
       if @message.valid?
         format.json{ render :json => @message }
