@@ -4,21 +4,6 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => ["people"] %>
 <body class="<%= controller.controller_name %>">
-
-<script type="text/javascript" language="javascript">
-    $(window).scroll(function(){
-         var ttop = $(document).scrollTop();
-         var mainHeight = $("#main-body").height();
-         var leftHeight = $("#people-sidebar").height();
-            if (ttop > 200 && mainHeight>leftHeight){
-                $(".span3.leftfix").addClass("affix");
-            }else{
-                $(".span3.leftfix.affix").removeClass("affix");
-            }
-
-    })
- </script>
-
   <%= render "header-fluid" %>
   <%= render "category_breadcrumbs" %>
   <div id='wrapper' class='container-fluid'>

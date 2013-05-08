@@ -4,6 +4,7 @@
 #  send_user_id: 发送人
 #  receive_user_id: 接收人
 #  content: 内容
+#  owner: 所属者
 class ChatMessage < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
@@ -18,6 +19,7 @@ class ChatMessage < ActiveRecord::Base
   validates :receive_user_id, :presence => true
   validates :send_user_id, :presence => true
   validates :content, :presence => true
+  validates :owner, :presence => true, :if => :owner_exists?
 
   validates_presence_of :receive_user
   validates_presence_of :send_user
@@ -26,7 +28,7 @@ class ChatMessage < ActiveRecord::Base
   before_create :join_contact_friend
 
   def self.all(user_id = nil, friend_id = nil)
-    if !user_id.nil? && !friend_id.nil?
+    if user_id.present? && friend_id.present?
       where("(send_user_id=? and receive_user_id=?)
         or (send_user_id=? and receive_user_id=?)",
         user_id, friend_id, friend_id, user_id)
@@ -61,5 +63,10 @@ class ChatMessage < ActiveRecord::Base
     attra["receive_user"] = receive_user.as_json
     attra["send_user"] = send_user.as_json
     attra
+  end
+
+  private
+  def owner_exists?
+    owner_id.present? && owner_type.present?
   end
 end
