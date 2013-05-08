@@ -1,14 +1,15 @@
-define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], ($, Backbone, Transaction, StateMachine, exports) ->
-
+define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], 
+($, Backbone, Transaction, StateMachine, exports) ->
 
     class TransactionCard extends Transaction.TransactionCardBase
 
         events:
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
-            # "click .address-add>button" : "toggleAddress"
+            "click .address-add>button" : "toggleAddress"
             "click .item-detail"        : "toggleItemDetail"
             "submit .address-form>form" : "saveAddress"
+            "click .chzn-results>li"    : "selectAddress"
 
         states:
             initial: 'none'
@@ -35,15 +36,15 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @slideBeforeEvent('back')
             true
 
-        # toggleAddress: (event) ->
-        #     @$(".address-panel").slideToggle()
-        #     false
+        toggleAddress: (event) ->
+            @$(".address-panel").slideToggle()
+            @$el.find("abbr:first").trigger("mouseup")
+            false
 
         toggleItemDetail: (event) ->
             @$(".item-details").slideToggle()
             false
 
-        ############################################################################
         # 状态事件
         # enterOrder: (event, from, to, msg ) ->
         #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
@@ -69,11 +70,15 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     false
                 .error (xhr, status) =>
                     @$(".address-form").html(xhr.responseText)
-                    @$(".address-form>form").submit(_.bind(@saveAddress, @))
+                    @$("#address_province_id option:first", ".address-form").attr("selected", true)
                     @alarm()
                     @transition.cancel()
                     false
             false
+
+        selectAddress: () ->
+            @$(".address-panel").slideUp()
+
 
     exports.TransactionCard = TransactionCard
     exports
