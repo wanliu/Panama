@@ -19,6 +19,9 @@ class OrderTransaction < ActiveRecord::Base
             foreign_key: 'transaction_id',
             autosave: true
 
+  has_one :receive_order_message
+  has_many :chat_messages, :as => :owner
+
   validates :state, :presence => true
   validates :items_count, :numericality => true
   validates :total, :numericality => true, :allow_nil => true
@@ -95,6 +98,10 @@ class OrderTransaction < ActiveRecord::Base
                       :name => transition.to_name,
                       :event => :delivered) unless token.blank?
     end
+  end
+
+  def messages
+    receive_order_message.try(:state) ? [receive_order_message] : chat_messages
   end
 
   def build_items(item_ar)

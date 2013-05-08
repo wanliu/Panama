@@ -180,8 +180,6 @@
 	}
 
 	.transaction-footer {
-		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-
 		margin-left: 5px;
 		margin-right: 5px;
 		padding: 5px;
@@ -191,54 +189,11 @@
 		border-right: 1px solid $tableBorder;
 		border-bottom: 1px solid $tableBorder;
 
-		.messages {
-			position: relative;
-			max-height: 300px;
-			overflow-y: auto;
-
-			.row-msg {
-
-				margin-bottom: 5px;
-				min-height: 30px;
-				padding: 5px;
-
-				.people {
-
-				}
-
-				.self {
-					float: right;
-				}
-
-				.wrapper {
-					display: inline-block;
-					padding: 5px 15px;
-					.people-name {
-						opacity: 0.5
-					}
-					@include border-radius(5px);
-					@include box-shadow(2px 2px 5px $gray);
-					background: #FAFAFA;
-					border: 1px solid $tableBorder;
-				}
-
-				p {
-					margin-bottom: 0px;
-				}
-			}
-
-		}
-
-		.me {
-			position: absolute;
-
-			p {
-				margin-top: 5px;
-			}
-		}
-
-		.input-msg {
-			margin-left: 50px;
+		iframe{
+			border: none;
+			width: 100%;
+			height: 380px;
+			overflow: hidden;
 		}
 	}
 }

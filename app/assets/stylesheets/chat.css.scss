@@ -1,3 +1,6 @@
+@import "_variables";
+@import "compass/css3";
+
 .chat_dialog_panel{
 
   .dialog_head{
@@ -87,5 +90,58 @@
         padding: 5px 5px;
       }
     }
+  }
+}
+
+.transaction_dialog_panel{
+  .messages {
+    position: relative;
+    height: 300px;
+    overflow-y: auto;
+
+    .row-msg {
+
+      margin-bottom: 5px;
+      min-height: 30px;
+      padding: 5px;
+
+      .people {
+
+      }
+
+      .self {
+        float: right;
+      }
+
+      .wrapper {
+        display: inline-block;
+        padding: 5px 15px;
+        .people-name {
+          opacity: 0.5
+        }
+        @include border-radius(5px);
+        @include box-shadow(2px 2px 5px $gray);
+        background: #FAFAFA;
+        border: 1px solid $tableBorder;
+      }
+
+      p {
+        margin-bottom: 0px;
+      }
+    }
+
+  }
+
+  .me {
+    position: absolute;
+    left: 5px;
+
+    p {
+      margin-top: 5px;
+    }
+  }
+
+  .input-msg {
+    margin-left: 50px;
   }
 }

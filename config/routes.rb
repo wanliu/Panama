@@ -128,6 +128,7 @@ Panama::Application.routes.draw do
     collection do
       get "dialogue/:friend_id", :to => "chat_messages#dialogue"
       post "read/:friend_id", :to => "chat_messages#read"
+      get "transaction/:transaction_id", :to => "chat_messages#transaction"
     end
   end
 

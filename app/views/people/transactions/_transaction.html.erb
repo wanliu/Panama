@@ -40,67 +40,7 @@
     <%= render state, transaction: transaction, people: people %>
   </div>
   <div class="transaction-footer">
-    <div class="toolbar">
-    </div>
-    <div class="messages">
-      <div class="row-msg">
-        <div class="self">
-          <div class='wrapper'>
-            <div class="people-name">
-              <p><%= current_user.login %>:</p>
-            </div>
-            <div class="msg">
-              <p>老板,这件衣服多少钱啊?</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row-msg">
-        <div class="people">
-          <div class='wrapper'>
-            <div class="people-name">
-              <p>pepsi:</p>
-            </div>
-            <div class="msg">
-              <p>488</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row-msg">
-        <div class="self">
-          <div class='wrapper'>
-            <div class="people-name">
-              <p><%= current_user.login %>:</p>
-            </div>
-            <div class="msg">
-              <p>看上去还挺不错的</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row-msg">
-        <div class="people">
-          <div class='wrapper'>
-            <div class="people-name">
-              <p>pepsi:</p>
-            </div>
-            <div class="msg">
-              <p>亲, 真的少不了,已经是最优惠了</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="me">
-      <%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
-      <p><%= current_user.login %></p>
-    </div>
-    <div class='input-msg'>
-      <form>
-        <textarea rows=3 class="span12"></textarea>
-      </form>
-    </div>
+    <iframe name="transaction_<%= transaction.id %>" src="/chat_messages/transaction/<%= transaction.id %>" />
   </div>
   </div>
 </div>
