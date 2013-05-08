@@ -27,6 +27,7 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :seller_id
   validates_associated :address
   # validates_presence_of :address
+  validate :valid_address?
 
   accepts_nested_attributes_for :address
   # validates_presence_of :address
@@ -53,14 +54,17 @@ class OrderTransaction < ActiveRecord::Base
                  :waiting_sign     => :waiting_delivery
     end
 
+    # 等待发货
     event :paid do
-      transition [:waiting_paid] => :waiting_delivery # 等待发货
+      transition [:waiting_paid] => :waiting_delivery
     end
 
-    event :delivered do  # 发货
+    # 发货
+    event :delivered do
       transition :waiting_delivery => :waiting_sign
     end
 
+    # 签收
     event :sign do
       transition [:waiting_sign] => :complete
     end
@@ -101,5 +105,13 @@ class OrderTransaction < ActiveRecord::Base
   def update_total_count
     self.items_count = items.inject(0) { |s, item| s + item.amount }
     self.total = items.inject(0) { |s, item| s + item.total }
+  end
+
+  private
+  def valid_address?
+    puts "state: #{state_name}"
+    unless state_name == :order
+      errors.add(:address, "地址不存在！") if address.nil?
+    end
   end
 end
