@@ -4,7 +4,7 @@ class CreateReceiveOrderMessages < ActiveRecord::Migration
       t.integer :order_transaction_id
       t.integer :send_user_id
       t.text :message
-      t.boolean :state
+      t.boolean :state, :default => false
 
       t.timestamps
     end
