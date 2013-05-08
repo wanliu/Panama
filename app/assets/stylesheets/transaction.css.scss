@@ -26,6 +26,8 @@
 
 		.info-header {
 			margin-left: 150px;
+			position: relative;
+
 			.page-header {
 				border-bottom:none;
 				margin-bottom: 20px;
@@ -61,7 +63,6 @@
 
 
 			}
-
 		}
 
 		border: 1px solid $tableBorder;
@@ -185,7 +186,7 @@
 		margin-right: 5px;
 		padding: 5px;
 		background: $grayLighter;
-		display: none;
+		/*display: none;*/
 		border-left: 1px solid $tableBorder;
 		border-right: 1px solid $tableBorder;
 		border-bottom: 1px solid $tableBorder;

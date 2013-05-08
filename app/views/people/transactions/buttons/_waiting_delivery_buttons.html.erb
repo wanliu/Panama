@@ -1,17 +1,17 @@
 <div class="controls pull-right">
-	<div class="btn-group">
-		<%= link_to '#',
-					:class => 'btn btn-large',
-					'event-name' => 'back' do %>
-			<%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
-		<% end %>
+  <div class="btn-group">
+    <%= link_to '#',
+          :class => 'btn btn-large',
+          'event-name' => 'back' do %>
+      <%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
+    <% end %>
 
-		<%= link_to '#', :class => 'btn btn-large disabled', 'event-name' => 'delivered' do %>
-			<%=raw "等待发货&nbsp" %>
-			<span class="clock"></span>
-			<%= caret(:right) %>
-		<% end %>
+    <%= link_to '#', :class => 'btn btn-large disabled', 'event-name' => 'delivered' do %>
+      <%=raw "等待发货&nbsp" %>
+      <span class="clock"></span>
+      <%= caret(:right) %>
+    <% end %>
 
-	</div>
+  </div>
 
 </div>
