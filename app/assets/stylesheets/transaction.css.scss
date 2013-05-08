@@ -151,15 +151,20 @@
 		border-bottom: 1px solid $tableBorder;
 		// padding: 0 20px 20px 20px;
 
+		.control-group.error {
+			.control-label  {
+				color: black;
+			}
+		}
+
 		.control-label {
 			width: 100px;
 		}
+
 		.controls {
 
 			margin-left: 120px;
 		}
-
-
 
 		.address_input {
 			padding-right: 60px;
