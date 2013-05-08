@@ -72,6 +72,11 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         saveAddress: (event) ->
             params = @$(".address-form>form").serialize()
             url = @$(".address-form>form").attr("action")
+            address = new Array
+            for el in @$(".depend_select select", ".address-form")
+                do (el) -> 
+                    address.push($("option:selected", el).attr("value"))
+
             $.post(url, params)
                 .success (xhr, data, status) =>
                     @transition()
@@ -79,6 +84,10 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     false
                 .error (xhr, status) =>
                     @$(".address-form").html(xhr.responseText)
+                    @$("#address_province_id option:first", ".address-form").attr("selected", true)
+                    for el,e in @$(".depend_select select", ".address-form")
+                        do (el,e) ->
+                            $("option[value='#{address[e]}']", el).attr("selected",true)
                     @$(".address-form>form").submit(_.bind(@saveAddress, @))
                     @alarm()
                     @transition.cancel()

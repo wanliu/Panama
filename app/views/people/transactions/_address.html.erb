@@ -5,14 +5,14 @@
 					:remote=>true do |f| %>
 	<div class="address_input">
 		<%= f.input :address_id,
-					:as => :chosen,
+					# :as => :chosen,
 					:collection => people.addresses,
 					:object => transaction,
 					:selected => "",
 					:include_blank => true,
 					:label_method => :location,
 					:value_method => :id,
-					:input_html => { :class => :span12 } %>
+					:input_html => { :class => :span12, id: "address_id_"+transaction.id.to_s } %>
 		<div class="btn-group address-add">
 			<%= button_tag icon(:list), :class => "btn" %>
 		</div>
@@ -24,31 +24,32 @@
 			<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
 			<div class="controls controls-row">
 				<div class="span8">
-				<%= address_form.input :province_id,
-									   :as => :depend_select,
-									   :children => :city_id,
-									   :object => transaction,
-									   :wrapper => :inline,
-									   :collection => get_city %>
-				<%= address_form.error :province_id %>
+					<%= address_form.input :province_id,
+										   :as => :depend_select,
+										   :children => :city_id,
+										   :object => transaction,
+										   :wrapper => :inline,
+										   :collection => get_city %>
+					<%= address_form.error :province_id %>
 
-				<%= address_form.input :city_id,
-									   :as => :depend_select,
-									   :children => :area_id,
-									   :object => transaction,
-									   :wrapper => :inline,
-									   :collection_url => "/city/" %>
-				<%= address_form.error :city_id %>
-				
-				<%= address_form.input :area_id,
-									   :as => :depend_select,
-									   :object => transaction,
-									   :wrapper => :inline,
-									   :collection_url => "/city/" %>
-				<%= address_form.error :area_id %>
+					<%= address_form.input :city_id,
+										   :as => :depend_select,
+										   :children => :area_id,
+										   :object => transaction,
+										   :wrapper => :inline,
+										   :collection_url => "/city/" %>
+					<%= address_form.error :city_id %>
+					
+					<%= address_form.input :area_id,
+										   :as => :depend_select,
+										   :object => transaction,
+										   :wrapper => :inline,
+										   :collection_url => "/city/" %>
+					<%= address_form.error :area_id %>
+					
 				</div>
 				<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
-
+				<%= address_form.error :zip_code %>
 			</div>
 		</div>
 
@@ -58,3 +59,12 @@
 
 <% end %>
 </div>
+<script type="text/javascript">
+  require(["jquery", 'lib/chosen.jquery'], function($){
+    $("#address_id_<%=transaction.id%>", ".transaction-<%=transaction.id%>-order").chosen({
+        allow_single_deselect : true,
+        placeholder_text : "选择一个地址",
+        no_results_text : "没有以该关键词开头的地址"
+    });
+  });
+</script>
