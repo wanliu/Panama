@@ -76,6 +76,17 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
             slideEvent: (event, direction = 'right') ->
                 $.post @eventUrl(event), (data) =>
                     @slidePage(data, direction)
+                    @changeProgress()
+
+            changeProgress: () ->
+                for el,e in @$(".state-progress span")
+                    if $(el).hasClass(@current)
+                        setTimeout () =>
+                            @$(".state-progress span:lt(#{e})").show()
+                            @$(".state-progress span:eq(#{e})").show()
+                            @$(".state-progress span:gt(#{e})").hide()
+                        ,1000
+                        return
 
             slidePage: (page, direction = 'right') ->
                 $side1 = $("<div class='slide-1'></div>")

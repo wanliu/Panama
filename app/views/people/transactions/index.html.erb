@@ -20,7 +20,7 @@
 
     </ul> -->
     <% if @transactions.size > 0 %>
-      <% @transactions.reverse.each do |transaction| %>
+      <% @transactions.each do |transaction| %>
         <%= render partial: 'transaction',
                    object:  transaction,
                    locals: {
