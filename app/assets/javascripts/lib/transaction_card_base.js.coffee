@@ -79,14 +79,14 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                     @changeProgress()
 
             changeProgress: () ->
-                for el,e in @$(".state-progress span")
-                    if $(el).hasClass(@current)
-                        setTimeout () =>
-                            @$(".state-progress span:lt(#{e})").show()
-                            @$(".state-progress span:eq(#{e})").show()
-                            @$(".state-progress span:gt(#{e})").hide()
-                        ,1000
-                        return
+                bar_class = ["bar-success", "bar-warning", "bar-danger", "bar-info"]
+                badge_class = ["badge-success", "badge-warning", "badge-important", "badge-info"]
+                setTimeout () =>
+                    for el,e in @$(".state-progress .state-position")
+                        $(el).addClass(badge_class[e])
+                        return if $(el).hasClass(@current)
+                        @$(".progress-mini .state-bar:eq(#{e})").addClass("bar #{bar_class[e]}")
+                , 1000
 
             slidePage: (page, direction = 'right') ->
                 $side1 = $("<div class='slide-1'></div>")
