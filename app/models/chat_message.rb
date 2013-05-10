@@ -50,7 +50,11 @@ class ChatMessage < ActiveRecord::Base
 
   #通知接收人
   def notic_receive_user
-    FayeClient.send("/chat/receive/#{receive_user.im_token}", as_json)
+    if owner.nil?
+      FayeClient.send("/chat/receive/#{receive_user.im_token}", as_json)
+    else
+      FayeClient.send("/chat/receive/#{owner_type}_#{owner.id}/#{receive_user.im_token}", as_json)
+    end
   end
 
   #通知接收人已经读取信息

@@ -38,14 +38,6 @@ class ChatMessagesController < ApplicationController
     end
   end
 
-  #交易聊天框
-  def transaction_dialogue
-    @transaction = OrderTransaction.find(params[:transaction_id])
-    respond_to do |format|
-      format.html
-    end
-  end
-
   #读取信息通知
   def read
     @messages = current_user.receive_messages.unread

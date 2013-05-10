@@ -3,11 +3,6 @@
   </div>
   <div class="message_panel">
     <div class="messages">
-    <% @transaction.messages.each do |m| %>
-      <%= render :partial => "transaction_message", :locals => {
-        :message => m
-      }  %>
-    <% end %>
     </div>
   </div>
   <div class='foot row-fluid'>
@@ -22,17 +17,27 @@
       <div class='message_send'>
         <input type='submit' value='提交' class='btn btn-primary disabled' />
       </div>
-      <input type='hidden' value='<%=@transaction.id %>' name='transaction_id' />
     </form>
   </div>
 </div>
 
 <script type="text/javascript">
-  require(["jquery", "people/transaction_message"],
-    function($, TransactionMessage){
+  require(["jquery", "people/transaction_message", "lib/hogan"],
+    function($, TransactionMessageView){
 
-    new TransactionMessage({
-      el: $(".transaction_dialog_panel")
+    var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
+
+    new TransactionMessageView({
+      el: $(".transaction_dialog_panel"),
+      remote_url: "<%=transaction_message_url %>",
+      template: template,
+      current_user: {
+        id: <%=current_user.id %>,
+        token: "<%=current_user.im_token %>",
+        login: "<%=current_user.login %>"
+      },
+      faye_url: "<%=faye_server_uri %>",
+      tansaction_id: <%=transaction.id %>
     })
 
   })

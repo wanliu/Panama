@@ -16,6 +16,9 @@ Panama::Application.routes.draw do
         put "address", :to => "people/transactions#address", :as => :update_address
         put "notify", :to => "people/transactions#notify"
         put "done", :to => "people/transactions#done"
+        get "dialogue", :to => "people/transactions#dialogue"
+        post "send_message", :to => "people/transactions#send_message"
+        get "messages", :to => "people/transactions#messages"
       end
 
       collection do
@@ -126,8 +129,6 @@ Panama::Application.routes.draw do
     collection do
       get "dialogue/:friend_id", :to => "chat_messages#dialogue"
       post "read/:friend_id", :to => "chat_messages#read"
-      get "transaction/:transaction_id", :to => "chat_messages#transaction"
-      get "transaction_dialogue/:transaction_id", :to => "chat_messages#transaction_dialogue"
     end
   end
 
@@ -170,6 +171,10 @@ Panama::Application.routes.draw do
       resources :transactions, :controller => "shops/transactions" do
         member do
           post "event(/:event)", :to => "shops/transactions#event", :as => :trigger_event
+          post "dispose", :to => "shops/transactions#dispose"
+          get "dialogue", :to => "shops/transactions#dialogue"
+          post "send_message", :to => "shops/transactions#send_message"
+          get "messages", :to => "shops/transactions#messages"
         end
       end
 
@@ -227,6 +232,9 @@ Panama::Application.routes.draw do
       resources :transport, :controller => "shops/transport"
 
       resources :templates, :controller => "shops/templates"
+
+      resources :receive_order_messages, :controller => "shops/receive_order_messages"
+
     end
   end
 
