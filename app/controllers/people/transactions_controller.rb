@@ -119,13 +119,14 @@ class People::TransactionsController < People::BaseController
   def address
     @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
-      address_params = params[:address]
       address_id = params[:order_transaction][:address_id]
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
         format.html { render :text => :OK }
       else
+        address_params = params[:address]
         @transaction.create_address(address_params)
+        @transaction.address.user_id = current_user.id
         if @transaction.save
           # format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
           format.html { render partial: "address",
