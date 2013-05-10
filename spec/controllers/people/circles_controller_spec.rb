@@ -4,7 +4,10 @@ require "spec_helper"
 describe People::CirclesController, "个人圈子控制器" do
 
   def circle_opt
-    { :person_id => current_user.login }
+    {
+      :person_id => current_user.login,
+      :key => :person_id
+    }
   end
 
   describe "GET index " do

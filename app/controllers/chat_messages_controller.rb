@@ -4,10 +4,12 @@ class ChatMessagesController < ApplicationController
 
   def index
     @messages = current_user.messages(params[:friend_id])
+
     @messages.where(
       :send_user_id => params[:friend_id],
       :receive_user_id => current_user.id
     ).update_all(read: true)
+
     ChatMessage.notice_read_state(current_user, params[:friend_id])
     respond_to do |format|
       format.json{ render :json => @messages }

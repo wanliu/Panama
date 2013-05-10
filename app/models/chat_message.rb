@@ -23,11 +23,11 @@ class ChatMessage < ActiveRecord::Base
   after_create :notic_receive_user
   before_create :join_contact_friend
 
-  def self.all(send_user_id = nil, receive_user_id = nil)
-    if !send_user_id.nil? && !receive_user_id.nil?
+  def self.all(user_id = nil, friend_id = nil)
+    if !user_id.nil? && !friend_id.nil?
       where("(send_user_id=? and receive_user_id=?)
         or (send_user_id=? and receive_user_id=?)",
-        send_user_id, receive_user_id, receive_user_id, send_user_id)
+        user_id, friend_id, friend_id, user_id)
     else
       super
     end

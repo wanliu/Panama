@@ -5,7 +5,9 @@ require 'yaml'
 Faye::WebSocket.load_adapter('thin')
 
 config = YAML.load_file("config/application.yml")[ENV['RACK_ENV']]
-FAYE_TOKEN = config["faye_token"]
+_tokens = config["faye_token"]
+
+FAYE_TOKENS = _tokens.is_a(String) ?  [_tokens] : _tokens
 REDIS_PORT = config["redis_port"]
 REDIS_SERVER = config["redis_server"]
 REDIS_KEY = config["redis_key_prefix"]
@@ -23,13 +25,14 @@ class ServerAuth
 
   private
   def filter_data(message)
-    if message['data']
-      if message["data"].delete("token") != FAYE_TOKEN
+    if data = message['data']
+      unless FAYE_TOKENS.include?(data.delete("token"))
         puts "Invalid authentication token..."
-        message["data"]["values"] = 'Invalid authentication token'
+        data["values"] = 'Invalid authentication token'
       end
     end
-    message["data"] = message["data"].delete("values")
+
+    message["data"] = data.delete("values")
     message
   end
 end

@@ -26,10 +26,6 @@ describe People::TransactionsController, "用户订单交易流通" do
       get("/people/lishi/transactions/1").should route_to("people/transactions#show", one_params)
     end
 
-    it "编辑" do
-      get("/people/lishi/transactions/1/edit").should route_to("people/transactions#edit", one_params)
-    end
-
     it "添加" do
       post("/people/lishi/transactions").should route_to("people/transactions#create", params)
     end

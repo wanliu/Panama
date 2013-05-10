@@ -28,14 +28,14 @@ describe PeopleAbility, "个人页面权限" do
         end
 
         it "有购物车权限" do
-            @current_ability.can?(:index, Cart).should be_true
-            @current_ability.can?(:create, Cart).should be_true
-            @current_ability.can?(:destroy, Cart).should be_true
+          @current_ability.can?(:index, Cart).should be_true
+          @current_ability.can?(:create, Cart).should be_true
+          @current_ability.can?(:destroy, Cart).should be_true
         end
 
         it "有留言权限" do
-            @current_ability.can?(:activity, Comment).should be_true
-            @current_ability.can?(:product, Comment).should be_true
+          @current_ability.can?(:activity, Comment).should be_true
+          @current_ability.can?(:product, Comment).should be_true
         end
 
         it "有订单权限 " do
@@ -57,19 +57,19 @@ describe PeopleAbility, "个人页面权限" do
                 :user => current_user, :mentionable_user => anonymous)}
 
         before :each do
-            @current_ability = PeopleAbility.new(current_user, anonymous)
+          @current_ability = PeopleAbility.new(current_user, anonymous)
         end
 
         it "无提醒权限" do
-            @current_ability.can?(:index, Notification).should be_false
-            @current_ability.can?(:read, Notification).should be_false
-            @current_ability.can?(:read, notification).should be_false
+          @current_ability.can?(:index, Notification).should be_false
+          @current_ability.can?(:read, Notification).should be_false
+          @current_ability.can?(:read, notification).should be_false
         end
 
-        it "无购物车权限" do
-            @current_ability.can?(:index, Cart).should be_false
-            @current_ability.can?(:create, Cart).should be_false
-            @current_ability.can?(:destroy, Cart).should be_false
+        it "有购物车权限" do
+          @current_ability.can?(:index, Cart).should be_true
+          @current_ability.can?(:create, Cart).should be_true
+          @current_ability.can?(:destroy, Cart).should be_true
         end
 
         it "无留言权限" do

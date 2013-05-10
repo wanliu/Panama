@@ -8,7 +8,9 @@ describe People::FollowingsController, "关注控制器" do
   let(:shop){ FactoryGirl.create(:shop, user: anonymous) }
 
   def person_opts
-    {person_id: current_user.login}
+    {
+      :person_id => current_user.login
+    }
   end
 
   describe "GET index 所有关注" do

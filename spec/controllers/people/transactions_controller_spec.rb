@@ -185,7 +185,8 @@ describe People::TransactionsController, "用户订单交易流通" do
       post :event, person_params.merge({
         :event => :buy,
         :id => transaction.to_param}), valid_session
-      response.should redirect_to(person_transaction_path(current_user.login, transaction))
+      response.should render_template(:partial => "people/transactions/_transaction")
+      #response.should redirect_to(person_transaction_path(current_user.login, transaction))
     end
   end
 end

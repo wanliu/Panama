@@ -25,6 +25,10 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
                     onenterstate: (event, from, to, msg) ->
                         console.log "event: #{event} from #{from} to #{to}"
 
+                    onchangestate: (event, from, to) ->
+                        if from == "none"
+                            @changeProgress()
+
             getNotifyName: () ->
                 super + "-seller"
 
