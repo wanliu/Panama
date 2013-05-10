@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<%= html_tag :class => "no-js" %>
+  <head>
+    <title></title>
+    <%= stylesheet_link_tag :bootstrap_application, :transaction_message %>
+    <%= render "javascripts" %>
+    <style>
+      html,body{
+        padding: 0px;
+        margin: 0px;
+        height: 100%;
+      }
+    </style>
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <%=yield %>
+  </body>
+</html>

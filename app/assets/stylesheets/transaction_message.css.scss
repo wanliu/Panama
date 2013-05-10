@@ -1,0 +1,77 @@
+@import "_variables";
+@import "compass/css3";
+.transaction_dialog_panel{
+
+  .message_panel{
+    height: 300px;
+    overflow-y: auto;
+
+    .messages {
+      position: relative;
+
+      .row-msg {
+        min-height: 30px;
+        clear: both;
+
+        .people {
+          margin: 20px 20px;
+        }
+
+        .self {
+          float: right;
+          margin: 10px 20px;
+        }
+
+        .wrapper {
+          display: inline-block;
+          padding: 5px 15px;
+          .people-name {
+            opacity: 0.5
+          }
+          @include border-radius(5px);
+          @include box-shadow(2px 2px 5px $gray);
+          background: #FAFAFA;
+          border: 1px solid $tableBorder;
+        }
+
+        p {
+          margin-bottom: 0px;
+        }
+      }
+
+    }
+  }
+
+  .foot{
+    position: relative;
+
+    form{
+      margin: 0px;
+
+
+      .me {
+        position: absolute;
+        left: 5px;
+
+        p {
+          margin-top: 5px;
+        }
+      }
+
+      .input-msg {
+        margin-left: 50px;
+        margin-right: 70px;
+
+        textarea{
+          resize: none;
+        }
+      }
+
+      .message_send{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+      }
+    }
+  }
+}

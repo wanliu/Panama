@@ -1,9 +1,17 @@
 #encoding: utf-8
-
+#describe: 订单交易
+#attributes:
+#  operator_state: 订单处理状态(true有人处理，false没有处理)
+#  buyer_id: 买家(用户)
+#  seller_id: 卖家(商店)
+#  state: 交易状态
+#  total: 总金额
+#  address: 送货地址
+#  items_count: 商品总项
 class OrderTransaction < ActiveRecord::Base
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address
-  attr_accessor :total
+  # attr_accessor :total
 
   has_one :address,
           foreign_key: 'transaction_id'
@@ -12,7 +20,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :buyer,
              class_name: "User"
 
-  belongs_to :operator, :class_name => "User", :foreign_key => :operator_id
+  has_many :operators, class_name: "TransactionOperator"
 
   has_many  :items,
             class_name: "ProductItem",
@@ -85,10 +93,10 @@ class OrderTransaction < ActiveRecord::Base
       after_transition :waiting_paid      => :order,
                        :waiting_delivery  => :waiting_paid,
                        :waiting_sign      => :waiting_delivery do |order, transition|
-        token = order.operator.try(:im_token)
-        FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
-                        :name => transition.to_name,
-                        :event => :back) unless token.blank?
+        # token = order.operator.try(:im_token)
+        # FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
+        #                 :name => transition.to_name,
+        #                 :event => :back) unless token.blank?
       end
     end
 
@@ -100,17 +108,34 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def current_operator
+    operators.last.try(:operator)
+  end
+
+  def change_operator_state
+    self.update_attribute(:operator_state, true)
+    receive_order_messages.each do |m|
+      chat_messages.create(
+        send_user: m.send_user,
+        receive_user: current_operator,
+        created_at: m.created_at,
+        content: m.content)
+    end
+  end
+
+  #买家发送信息
   def message_create(options)
     #没有人接单
-    if operator.nil?
+    unless operator_state
       receive_order_messages.create(options)
     else
       chat_messages.create(options)
     end
   end
 
+  #获取信息
   def messages
-    if receive_order_messages.any?{|m| m.state}
+    if operator_state
       chat_messages
     else
       receive_order_messages

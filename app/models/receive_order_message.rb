@@ -14,4 +14,10 @@ class ReceiveOrderMessage < ActiveRecord::Base
 
   belongs_to :order_transaction
   belongs_to :send_user, :class_name => "User"
+
+  def as_json(*args)
+  	attra = super *args
+  	attra["send_user"] = send_user.as_json
+  	attra
+  end
 end

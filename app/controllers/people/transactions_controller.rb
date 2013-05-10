@@ -171,4 +171,32 @@ class People::TransactionsController < People::BaseController
 
     super *args, options
   end
+
+  def dialogue
+    @transaction = current_user.transactions.find(params[:id])
+    @transaction_message_url = person_transaction_path(current_user, @transaction)
+    render :partial => "transactions/dialogue", :layout => "transaction_message", :locals => {
+      :transaction_message_url => @transaction_message_url,
+      :transaction => @transaction }
+  end
+
+  def send_message
+    @transaction = current_user.transactions.find(params[:id])
+    receive_user = @transaction.current_operator
+    @message = @transaction.chat_messages.create(
+      params[:message].merge(
+        receive_user: receive_user,
+        send_user: current_user))
+
+    respond_to do |format|
+      format.json{ render :json => @message }
+    end
+  end
+
+  def messages
+    @transaction = current_user.transactions.find(params[:id])
+    respond_to do |format|
+      format.json{ render :json => @transaction.messages  }
+    end
+  end
 end
