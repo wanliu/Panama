@@ -9,7 +9,4 @@ class ContactFriendsController < ApplicationController
     end
   end
 
-  def destroy
-    # current_user.contact_friends.find()
-  end
 end

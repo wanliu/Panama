@@ -16,6 +16,9 @@ describe User, "用户模型" do
   it{ should have_many(:topics) }
   it{ should have_many(:topic_receives) }
   it{ should have_many(:followings) }
+  it{ should have_many(:contact_friends) }
+  it{ should have_many(:chat_messages) }
+  it{ should have_many(:receive_messages) }
 
 	it "检查属性" do
 		u = User.new
@@ -83,10 +86,33 @@ describe User, "用户模型" do
       anon1.following_shop_topics.should eq([topic])
     end
 
+    it "与某个用户聊天信息" do
+      anony = anonymous
+      ChatMessage.should_receive(:all).with(current_user.id, anony.id)
+      current_user.messages(anony.id)
+    end
+
+    it "连接状态" do
+      RedisClient.redis.should_receive(:exists).with(current_user.redis_key)
+      current_user.connect_state
+    end
+
+    it "用户连接" do
+      RedisClient.redis.should_receive(:set).with(current_user.redis_key, true)
+      FayeClient.should_receive(:send).with("/chat/friend/connect/#{current_user.id}", current_user.id)
+      current_user.connect
+    end
+
+    it "生成及时token" do
+      current_user.generate_token
+      current_user.im_token.should_not be_nil
+    end
+
     it "用户json" do
       attrs = current_user.as_json
       attrs.has_key?("icon_url").should be_true
       attrs.has_key?("avatar_url").should be_true
+      attrs.has_key?("connect_state").should be_true
     end
   end
 end

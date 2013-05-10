@@ -11,6 +11,8 @@ class PeopleAbility
         end
         can :index, Notification
         can :index, Cart
+        can :create, Cart
+        can :destroy, Cart
         can :activity, Comment
         can :product, Comment
         can :index, OrderTransaction
@@ -24,6 +26,11 @@ class PeopleAbility
         can :destroy, OrderTransaction do |order|
           order.buyer_id = current_user.id
         end
+
+        can :destroy, Following do |following|
+          following.user_id = current_user.id
+        end
+        basic_ability
       elsif current_user.persisted?
         can :index, Cart
         can :create, Cart
