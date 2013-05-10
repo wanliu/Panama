@@ -5,8 +5,8 @@ class OrderTransaction < ActiveRecord::Base
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address
   attr_accessor :total
 
-  has_one :address,
-          foreign_key: 'transaction_id'
+  belongs_to :address,
+          foreign_key: 'address_id'
 
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer,
