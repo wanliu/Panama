@@ -140,6 +140,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
 
     realtime_fetch: () ->
       @client = Realtime.client @faye_url
+
       @client.subscribe @receive_notice_url(), (message) =>
         @add_message(message)
 
