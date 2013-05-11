@@ -1,14 +1,15 @@
-define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], ($, Backbone, Transaction, StateMachine, exports) ->
-
+define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], 
+($, Backbone, Transaction, StateMachine, exports) ->
 
     class TransactionCard extends Transaction.TransactionCardBase
 
         events:
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
-            # "click .address-add>button" : "toggleAddress"
+            "click .address-add>button" : "toggleAddress"
             "click .item-detail"        : "toggleItemDetail"
             "submit .address-form>form" : "saveAddress"
+            "click .chzn-results>li"    : "selectAddress"
 
         states:
             initial: 'none'
@@ -17,7 +18,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 { name: 'buy',           from: 'order',             to: 'waiting_paid' },
                 { name: 'paid',          from: 'waiting_paid',      to: 'waiting_delivery' },
                 { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' },
-                { name: 'sign'     ,     from: 'waiting_sign',      to: 'evaluate' },
+                { name: 'sign',     from: 'waiting_sign',      to: 'evaluate' },
                 { name: 'back',          from: 'waiting_paid',      to: 'order' },
                 { name: 'back',          from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
                 { name: 'back',          from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
@@ -25,8 +26,10 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             ]
 
             callbacks:
-                onenterstate: (event, from, to, msg) ->
-                    console.log "event: #{event} from #{from} to #{to}"
+                onchangestate: (event, from, to) ->
+                    if from == "none"
+                        @changeProgress()
+                    # console.log "event: #{event} from #{from} to #{to}"
 
         getNotifyName: () ->
             super + "-buyer"
@@ -35,15 +38,15 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @slideBeforeEvent('back')
             true
 
-        # toggleAddress: (event) ->
-        #     @$(".address-panel").slideToggle()
-        #     false
+        toggleAddress: (event) ->
+            @$(".address-panel").slideToggle()
+            @$el.find("abbr:first").trigger("mouseup")
+            false
 
         toggleItemDetail: (event) ->
             @$(".item-details").slideToggle()
             false
 
-        ############################################################################
         # 状态事件
         # enterOrder: (event, from, to, msg ) ->
         #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
@@ -69,11 +72,15 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     false
                 .error (xhr, status) =>
                     @$(".address-form").html(xhr.responseText)
-                    @$(".address-form>form").submit(_.bind(@saveAddress, @))
+                    @$("#address_province_id option:first", ".address-form").attr("selected", true)
                     @alarm()
                     @transition.cancel()
                     false
             false
+
+        selectAddress: () ->
+            @$(".address-panel").slideUp()
+
 
     exports.TransactionCard = TransactionCard
     exports
