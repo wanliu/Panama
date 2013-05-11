@@ -127,6 +127,7 @@ class OrderTransaction < ActiveRecord::Base
   def message_create(options)
     #没有人接单
     unless operator_state
+      options.delete(:receive_user)
       receive_order_messages.create(options)
     else
       chat_messages.create(options)
