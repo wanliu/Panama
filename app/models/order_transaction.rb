@@ -82,7 +82,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :order            => :waiting_paid,
                      :waiting_paid     => :waiting_delivery do |order, transition|
-      token = order.operator.try(:im_token)
+      token = order.current_operator.try(:im_token)
       FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
                       :name => transition.to_name) unless token.blank?
       true
@@ -93,15 +93,15 @@ class OrderTransaction < ActiveRecord::Base
       after_transition :waiting_paid      => :order,
                        :waiting_delivery  => :waiting_paid,
                        :waiting_sign      => :waiting_delivery do |order, transition|
-        # token = order.operator.try(:im_token)
-        # FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
-        #                 :name => transition.to_name,
-        #                 :event => :back) unless token.blank?
+        token = order.current_operator.try(:im_token)
+        FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
+                        :name => transition.to_name,
+                        :event => :back) unless token.blank?
       end
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      token = order.buyer.try(:im_token)
+      token = order.current_operator.try(:im_token)
       FayeClient.send("/events/#{token}/transaction-#{order.id}-buyer",
                       :name => transition.to_name,
                       :event => :delivered) unless token.blank?
