@@ -10,10 +10,10 @@
 
 		$(".transaction").each(function(i, elem){
 			var card = card = new Transaction.ShopTransactionCard({el: elem,
-																   realtime: {
-																       url: '<%= faye_server_uri %>',
-																       token: '<%= token %>' }
-																  });
+			   realtime: {
+			       url: '<%= faye_server_uri %>',
+			       token: '<%= token %>' }
+			});
 	    });
 	});
 </script>
