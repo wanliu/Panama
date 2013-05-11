@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'panama_core'
 
 namespace "panama" do
@@ -25,6 +26,15 @@ namespace "panama" do
     task :clear => :environment do
       @root = Category.root
       @root.clear_categories
+    end
+  end
+
+  namespace :delivery_type do
+    desc "load seed data of delivery type"
+    task :load => :environment do
+      DeliveryType.create!( :name => "EMS", :description => "网点全，速度较快，价格较高")
+      DeliveryType.create!( :name => "快递", :description => "一般3到4天时间，价格适中")
+      DeliveryType.create!( :name => "平邮", :description => "价格低，时间长，网点全")
     end
   end
 

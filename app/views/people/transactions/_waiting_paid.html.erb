@@ -47,9 +47,9 @@
 				<div class="left-frame"></div>
 			</th>
 
-			<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+			<th><strong>合计：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
 			</th>
-			<th><strong>你的余额: <%= current_user.money %></strong>
+			<th><strong>你的余额：<%= current_user.money %></strong>
 			</th>
 			<th class="relative">
 				<div class="right-frame"></div>

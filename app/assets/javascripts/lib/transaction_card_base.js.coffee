@@ -76,6 +76,17 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
             slideEvent: (event, direction = 'right') ->
                 $.post @eventUrl(event), (data) =>
                     @slidePage(data, direction)
+                    @changeProgress()
+
+            changeProgress: () ->
+                bar_class = ["bar-success", "bar-warning", "bar-danger", "bar-info"]
+                badge_class = ["badge-success", "badge-warning", "badge-important", "badge-info"]
+                setTimeout () =>
+                    for el,e in @$(".state-progress .state-position")
+                        $(el).addClass(badge_class[e])
+                        return if $(el).hasClass(@current)
+                        @$(".progress-mini .state-bar:eq(#{e})").addClass("bar #{bar_class[e]}")
+                , 1000
 
             slidePage: (page, direction = 'right') ->
                 $side1 = $("<div class='slide-1'></div>")
