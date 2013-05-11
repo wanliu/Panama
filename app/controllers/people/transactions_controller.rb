@@ -120,6 +120,11 @@ class People::TransactionsController < People::BaseController
     @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
       address_id = params[:order_transaction][:address_id]
+      delivery_type_id = params[:order_transaction][:delivery_type_id]
+      if delivery_type_id.present?
+        @transaction.update_attribute(:delivery_type_id, delivery_type_id)
+      end
+
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
         format.html { render :text => :OK }

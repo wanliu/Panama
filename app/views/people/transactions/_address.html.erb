@@ -51,6 +51,16 @@
 	<% end %>
 	</div>
 
+	<div class="delivery-select">
+		<%= f.input :delivery_type_id,
+					# :as => :radio_buttons,
+					:object => transaction,
+					:include_blank => false,
+					# item_wrapper_class: 'inline',
+					:collection => get_delivery_type,
+					:input_html => { :class => :span2 }
+		%>
+	</div>
 <% end %>
 </div>
 <script type="text/javascript">
