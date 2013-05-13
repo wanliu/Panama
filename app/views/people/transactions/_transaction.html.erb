@@ -1,121 +1,46 @@
 <% seller = transaction.seller %>
 <div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
-	 state-id="<%= transaction.id %>"
-	 state-initial="<%= transaction.state %>"
-	 state-url="<%= page_person_transaction_path(@people, transaction) %>"
-	 state-event-url= "<%= trigger_event_person_transaction_path(@people, transaction) %>" >
-	<div class="wrapper-box">
-		<div class="transaction-header">
+   state-id="<%= transaction.id %>"
+   state-initial="<%= transaction.state %>"
+   state-url="<%= page_person_transaction_path(@people, transaction) %>"
+   state-event-url= "<%= trigger_event_person_transaction_path(@people, transaction) %>" >
+  <div class="wrapper-box">
+    <div class="transaction-header">
 
-		<div class="avatar">
-			<%= image_tag seller.photos.header, :class => 'img-polaroid' %>
-		</div>
+      <div class="avatar">
+        <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
+      </div>
 
+      <div class="container-fluid info-header">
+        <div class="page-header">
+          <h1>
+            <%= seller.name %>
+            <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+              <%= time_ago_in_words transaction.created_at %>
+              <span class="display-state"></span>
+            </small>
 
-		<div class="container-fluid info-header">
-			<div class="page-header">
-				<h1><%= seller.name %> 
-					<small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-					<%= time_ago_in_words transaction.created_at %>
-					<span class="display-state"></span>
-					</small>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= render "state_buttons", :transaction => transaction %>
+          </h1>
+          <div class="state-progress">
+          <div class="progress progress-mini progress-striped active">
+            <div class="bar bar-success" style="width: 35%;"></div>
+            <div class="bar bar-warning" style="width: 20%;"></div>
+            <div class="bar bar-danger" style="width: 10%;"></div>
+          </div>
+          <span class="state-position badge">1<div class="state-title">等待发货</div></span>
 
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<%= render "state_buttons", :transaction => transaction %>
-				</h1>
-				<div class="state-progress">
-					<div class="progress progress-mini progress-striped active">
-						<div class="state-bar" style="width: 30%;"></div>
-						<div class="state-bar" style="width: 25%;"></div>
-						<div class="state-bar" style="width: 20%;"></div>
-						<div class="state-bar" style="width: 15%;"></div>
-					</div>
-					<span class="state-position badge order">1<div class="state-title">确认订单</div></span>
-					<span class="state-position badge waiting_paid" style="left:30%">2<div class="state-title">等待付款</div></span>
-					<span class="state-position badge waiting_delivery" style="left:55%">3<div class="state-title">等待发货</div></span>
-					<span class="state-position badge waiting_sign" style="left:75%">3<div class="state-title">等待收货</div></span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="transaction-body">
-		<%= render state, transaction: transaction, people: people %>
-	</div>
-	<div class="transaction-footer">
-		<div class="toolbar">
-		</div>
-		<div class="messages">
-			<div class="row-msg">
-				<div class="self">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p><%= current_user.login %>:</p>
-						</div>
-						<div class="msg">
-							<p>老板,这件衣服多少钱啊?</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row-msg">
-				<div class="people">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p>pepsi:</p>
-						</div>
-						<div class="msg">
-							<p>488</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row-msg">
-				<div class="self">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p><%= current_user.login %>:</p>
-						</div>
-						<div class="msg">
-							<p>看上去还挺不错的</p>
-						</div>
-					</div>
-				</div>
-			</div>
-<!-- 			<div class="row-msg">
-				<div class="self">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p><%= current_user.login %>:</p>
-						</div>
-						<div class="msg">
-							<p>还能不能便宜一点?</p>
-						</div>
-					</div>
-				</div>
-			</div> -->
-			<div class="row-msg">
-				<div class="people">
-					<div class='wrapper'>
-						<div class="people-name">
-							<p>pepsi:</p>
-						</div>
-						<div class="msg">
-							<p>亲, 真的少不了,已经是最优惠了</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="me">
-			<%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
-			<p><%= current_user.login %></p>
-		</div>
-		<div class='input-msg'>
-			<form>
-				<textarea rows=3 class="span12">
-				</textarea>
-			</form>
-		</div>
-	</div>
-	</div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="transaction-body">
+      <%= render state, transaction: transaction, people: people %>
+    </div>
+    <div class="transaction-footer">
+      <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
+      </iframe>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,44 @@
+<div class='transaction_dialog_panel'>
+  <div class="toolbar">
+  </div>
+  <div class="message_panel">
+    <div class="messages">
+    </div>
+  </div>
+  <div class='foot row-fluid'>
+    <form>
+      <div class="me">
+        <%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
+        <p><%= current_user.login %></p>
+      </div>
+      <div class='input-msg'>
+        <textarea rows=3 class="span12" name='content'></textarea>
+      </div>
+      <div class='message_send'>
+        <input type='submit' value='提交' class='btn btn-primary disabled' />
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  require(["jquery", "people/transaction_message", "lib/hogan"],
+    function($, TransactionMessageView){
+
+    var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
+
+    new TransactionMessageView({
+      el: $(".transaction_dialog_panel"),
+      remote_url: "<%=transaction_message_url %>",
+      template: template,
+      current_user: {
+        id: <%=current_user.id %>,
+        token: "<%=current_user.im_token %>",
+        login: "<%=current_user.login %>"
+      },
+      faye_url: "<%=faye_server_uri %>",
+      tansaction_id: <%=transaction.id %>
+    })
+
+  })
+</script>

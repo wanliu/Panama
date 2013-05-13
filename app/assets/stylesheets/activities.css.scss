@@ -1,12 +1,13 @@
 // Place all the styles related to the Activities controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+//= require ./bootstrap_application
 @import 'launch_bootstrap';
 @import "compass/css3";
 @import "variables";
-@import "my_cart";
 @import 'bootstrap-spinner';
-@import 'contact_friend';
+
 
 body {
 	@include background(
