@@ -14,7 +14,7 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
                 events:  [
                     { name: 'refresh',       from: 'order',             to: 'waiting_paid' },
                     { name: 'refresh',       from: 'waiting_paid',      to: 'waiting_delivery' },
-                    { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
+                    { name: 'delivereddelivered',     from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
                     { name: 'back',          from: 'waiting_paid',      to: 'order'         },
                     { name: 'back',          from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
                     { name: 'back',          from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
