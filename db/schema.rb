@@ -119,6 +119,8 @@ ActiveRecord::Schema.define(:version => 20130511015644) do
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
     t.boolean  "read",            :default => false
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   create_table "circle_friends", :force => true do |t|
@@ -273,10 +275,10 @@ ActiveRecord::Schema.define(:version => 20130511015644) do
     t.decimal  "total",            :precision => 10, :scale => 0
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
     t.integer  "address_id"
-    t.integer  "operator_id"
+    t.boolean  "operator_state",                                  :default => false
     t.integer  "delivery_type_id"
   end
 
@@ -390,6 +392,15 @@ ActiveRecord::Schema.define(:version => 20130511015644) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.string   "valuable_type"
+  end
+
+  create_table "receive_order_messages", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.integer  "send_user_id"
+    t.text     "content"
+    t.boolean  "state",                :default => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
   end
 
   create_table "replies", :force => true do |t|
@@ -518,6 +529,13 @@ ActiveRecord::Schema.define(:version => 20130511015644) do
     t.datetime "updated_at",        :null => false
     t.integer  "status"
     t.integer  "topic_category_id"
+  end
+
+  create_table "transaction_operators", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.integer  "operator_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "users", :force => true do |t|

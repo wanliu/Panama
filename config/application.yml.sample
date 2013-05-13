@@ -1,6 +1,9 @@
 defaults: &defaults
-  faye_token: "panama"
-  faye_server: "http://192.168.2.167:9292/realtime"
+  faye_token: "panama_e891dbec62c031f1754b3324530ae095"
+  faye_server: "http://192.168.2.32:9292/realtime"
+  redis_port: 6379
+  redis_server: "192.168.2.32"
+  redis_key_prefix: "online_user_"
 
 development:
   <<: *defaults

@@ -1,12 +1,78 @@
-<% @transactions.each do |transaction| %>
-    <%= render :partial => "transaction" ,:locals => {
-        :transaction => transaction,
-        state: transaction.state,
-        people: current_user } %>
-<% end %>
+<div class='title'>
+  <h1>未处理</h1>
+  <hr />
+</div>
+<table class='table table-striped table-bordered table-hover untransactions'>
+  <thead>
+    <tr>
+      <th>买家</th>
+      <th>商品数量</th>
+      <th>总金额</th>
+      <th>下单日期</th>
+      <th>状态</th>
+      <th>地址</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @untransactions.each do |unorder| %>
+      <tr data-value-id="<%=unorder.id %>">
+        <td><%=unorder.buyer.login %></td>
+        <td><%=unorder.items_count %></td>
+        <td><%=unorder.total %></td>
+        <td><%=unorder.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
+        <td><%=unorder.state %></td>
+        <td><%=unorder.address.try("location") %></td>
+        <td>
+          <input type='button' class='btn dispose btn-primary' value='接单' />
+          <span class='badge badge-important'>1</span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class='title'>
+  <h1 >正在处理</h1>
+  <hr />
+</div>
+
+<div class='transaction_list'>
+  <% @transactions.each do |transaction| %>
+      <%= render :partial => "transaction" ,:locals => {
+          :transaction => transaction,
+          state: transaction.state,
+          people: current_user } %>
+  <% end %>
+</div>
 
 <script type="text/javascript">
-	require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card"], function($, _a, Transaction){
+  require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card", "admins/shops/transaction_dispose"], function($, _a, Transaction, TransactionDispose){
+
+    var transactionCard = function(elem){
+      var card = new Transaction.ShopTransactionCard({
+        el: elem,
+        realtime: {
+          url: '<%= faye_server_uri %>',
+          token: '<%= token %>'
+        }
+      });
+    }
+
+    $(".transaction").each(function(i, elem){
+      transactionCard(elem)
+    });
+
+    new TransactionDispose({
+      el: $("table.untransactions"),
+      realtime_url: '<%= faye_server_uri %>',
+      shop_name: "<%=current_shop.name %>",
+      tranOpts: {
+        tran_panel: $(".transaction_list"),
+        tran_card: transactionCard
+      }
+    })
+
 
 		$(".transaction").each(function(i, elem){
 			var card = card = new Transaction.ShopTransactionCard({el: elem,
@@ -16,4 +82,5 @@
 			});
 	    });
 	});
+
 </script>
