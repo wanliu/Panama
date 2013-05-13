@@ -19,19 +19,31 @@
 	<div class="info">
 	<div class="row-fluid">
 		<div class="span2">
-			<label class="control-label" for="inputEmail">收货地址</label>
+			<label class="control-label">收货地址：</label>
 		</div>
-		<div class="span8">
+		<div class="span6">
 			<%= transaction.address.try(:location) %>
 		</div>
 		<div class="span2">
-			邮编 <small><%= transaction.address.try(:zip_code) %></small>
+			<label class="control-label">邮编：</label>
+		</div>
+		<div class="span2">
+			<small><%= transaction.address.try(:zip_code) %></small>
 		</div>
 	</div>
 
 	<div class="row-fluid">
 		<div class="span2">
-			<label class="control-label" for="inputEmail">购买的宝贝</label>
+			<label class="control-label">配送方式：</label>
+		</div>
+		<div class="span6">
+			<%= transaction.delivery_type.try(:name) %>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2">
+			<label class="control-label" for="inputEmail">购买的宝贝：</label>
 		</div>
 		<div class="span10">
 			<% transaction.items[0...10].each do |item| %>
