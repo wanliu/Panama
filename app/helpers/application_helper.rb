@@ -183,4 +183,8 @@ module ApplicationHelper
     end
   end
 
+  def get_delivery_type
+    @delivery_types = DeliveryType.all
+  end
+
 end
