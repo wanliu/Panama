@@ -17,9 +17,13 @@
       , "ajax_auth_client" : "wanliu/ajax_auth_client"
       , "postmessage" : "lib/postmessage"
       , "timeago" : "lib/config_timeago"
+      , "notify" : "lib/notify"
     },
 
     shim: {
+      "jquery.pnotify" : {
+        deps: ["jquery", "jquery-ui"]
+      }
       "underscore": {
         exports: "_"
       },
