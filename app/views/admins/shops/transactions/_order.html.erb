@@ -1,7 +1,17 @@
 <div class="container-fluid">
-<p>
-	送货地址：<%= transaction.address.nil? ? "暂无" : transaction.address.location %>
-</p>
-
+	<div class="row-fluid">
+		<div class="span1">
+			<label class="control-label">送货地址：</label>
+		</div>
+		<div class="span5">
+			<%= transaction.address.nil? ? "暂无" : transaction.address.location %>
+		</div>
+		<div class="span1">
+			<label class="control-label">配送方式：</label>
+		</div>
+		<div class="span5">
+			<%= transaction.delivery_type.nil? ? "暂无" : transaction.delivery_type.name %>
+		</div>
+	</div>
 </div>
 <%= render "products", :transaction => transaction %>
