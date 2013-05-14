@@ -1,0 +1,59 @@
+<html>
+<head>
+	<title>PNotify Testing</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+    <script type="text/javascript" src="jquery.pnotify.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/ui-lightness/jquery-ui.css" />
+<!--     <link type="text/css" rel="stylesheet" href="includes/bootstrap/css/bootstrap.normal.css" /> -->
+    <link type="text/css" rel="stylesheet" href="jquery.pnotify.default.css" />
+
+    <script type="text/javascript" src="jquery.pnotify.js"></script>
+<script type="text/javascript">
+    /*位置变量*/
+    var stack_topleft = {"dir1": "down", "dir2": "right", "push": "top"};
+    var stack_bottomleft = {"dir1": "right", "dir2": "up", "push": "top"};
+    var stack_custom = {"dir1": "right", "dir2": "down"};
+    var stack_custom2 = {"dir1": "left", "dir2": "up", "push": "top"};
+    var stack_bar_top = {"dir1": "down", "dir2": "right", "push": "top", "spacing1": 0, "spacing2": 0};
+    var stack_bar_bottom = {"dir1": "up", "dir2": "right", "spacing1": 0, "spacing2": 0};
+
+    /*自定义的方法*/
+    function show_stack_bottomleft(type) {
+    $.pnotify.defaults.styling = "jqueryui";
+    $.pnotify.defaults.history = false;
+    var opts = {
+        title: "Over Here",
+        text: "Check me out. I'm in a different stack.",
+        addclass: "stack-bottomleft",
+        stack: stack_bottomleft
+    };
+    switch (type) {
+    case 'error':
+        opts.title = "Oh No";
+        opts.text = "Watch out for that water tower!";
+        opts.type = "error";
+        break;
+    case 'info':
+        opts.title = "Breaking News";
+        opts.text = "Have you met Ted?";
+        opts.type = "info";
+        break;
+    case 'success':
+        opts.title = "Good News Everyone";
+        opts.text = "I've invented a device that bites shiny metal asses.";
+        opts.type = "success";
+        break;
+    }
+    $.pnotify(opts);
+}
+</script>
+</head>                                                                                                                                                                        
+<body>                                                                 <button onclick="show_stack_bottomleft('error');">error</button> 
+<button onclick="show_stack_bottomleft('success');">success</button>
+ <button onclick="show_stack_bottomleft('info');">info</button> 
+ <button onclick="show_stack_bottomleft('notice');">Notice</button>                                           
+
+                                                                                                                                                                                                                                                                       
+</body>                                                                                                                                                                        
+</html>
