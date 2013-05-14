@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130511015644) do
+ActiveRecord::Schema.define(:version => 20130513082340) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -278,8 +278,9 @@ ActiveRecord::Schema.define(:version => 20130511015644) do
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
     t.integer  "address_id"
-    t.integer  "delivery_type_id"
     t.boolean  "operator_state",                                  :default => false
+    t.integer  "delivery_type_id"
+    t.decimal  "delivery_price",   :precision => 10, :scale => 0
   end
 
   create_table "permissions", :force => true do |t|
@@ -297,6 +298,14 @@ ActiveRecord::Schema.define(:version => 20130511015644) do
     t.string   "optionable_type"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+  end
+
+  create_table "product_delivery_types", :force => true do |t|
+    t.integer  "product_id"
+    t.integer  "delivery_type_id"
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
+    t.decimal  "delivery_price",   :precision => 10, :scale => 0
   end
 
   create_table "product_items", :force => true do |t|

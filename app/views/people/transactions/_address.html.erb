@@ -52,14 +52,26 @@
 	</div>
 
 	<div class="delivery-select">
-		<%= f.input :delivery_type_id,
-					# :as => :radio_buttons,
-					:object => transaction,
-					:include_blank => false,
-					# item_wrapper_class: 'inline',
-					:collection => get_delivery_type,
-					:input_html => { :class => :span2 }
-		%>
+		<label class="chosen control-label" for="transaction_delivery_type">运送方式：</label>
+		<div class="controls controls-row">
+			<div class="span12 control-group">
+				<%= f.input :delivery_type_id,
+							# :as => :radio_buttons,
+							:object => transaction,
+							:wrapper => :inline,
+							:include_blank => false,
+							:collection => get_delivery_type,
+							:input_html => { :class => :span3, :action => "/people/#{current_user.login}/transactions/#{transaction.id}/get_delivery_price"
+							}
+				%>
+				<%= f.input :delivery_price,
+							:object => transaction,
+							:wrapper => :inline,
+							:input_html => {:class => :span2}
+				%>
+				<div class="control-label delivery_price"><%= number_to_currency(0.0)%></div>
+			</div>
+		</div>
 	</div>
 <% end %>
 </div>

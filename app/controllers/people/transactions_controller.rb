@@ -123,6 +123,10 @@ class People::TransactionsController < People::BaseController
       if delivery_type_id.present?
         @transaction.update_attribute(:delivery_type_id, delivery_type_id)
       end
+      delivery_price = params[:order_transaction][:delivery_price]
+      if delivery_price.present?
+        @transaction.update_attribute(:delivery_price, delivery_price)
+      end
 
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
@@ -148,6 +152,21 @@ class People::TransactionsController < People::BaseController
         end
       end
     end
+  end
+
+  def get_delivery_price
+    product_items = ProductItem.where("transaction_id=#{params[:id]}")
+    delivery_prices = [0]
+    product_items.each { |pi| 
+      query = "product_id=#{pi.product_id} and delivery_type_id=#{params[:delivery_type_id]}"
+      pdt = ProductDeliveryType.where(query).first
+      unless pdt.nil?
+        unless pdt.delivery_price.nil?
+          delivery_prices << pdt.delivery_price                  
+        end
+      end
+    }
+    render :text => delivery_prices.max
   end
 
   def notify
