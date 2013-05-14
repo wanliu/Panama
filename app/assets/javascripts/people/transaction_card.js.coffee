@@ -27,8 +27,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
 
             callbacks:
                 onchangestate: (event, from, to) ->
-                    if from == "none"
-                        @changeProgress()
+                    @changeProgress()
                     # console.log "event: #{event} from #{from} to #{to}"
         
         initialize:() ->
