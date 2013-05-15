@@ -1,4 +1,4 @@
-define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports'], 
+define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports', 'lib/chosen.jquery'], 
 ($, Backbone, Transaction, StateMachine, exports) ->
 
     class TransactionCard extends Transaction.TransactionCardBase
@@ -10,6 +10,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             "click .item-detail"        : "toggleItemDetail"
             "submit .address-form>form" : "saveAddress"
             "click .chzn-results>li"    : "selectAddress"
+            "change .delivery-select"   : "selectDeliveryType"
 
         states:
             initial: 'none'
@@ -84,6 +85,14 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         selectAddress: () ->
             @$(".address-panel").slideUp()
 
+        selectDeliveryType: () ->
+            options_el = @$el.find(".delivery-select select")
+            delivery_type_id = options_el.find("option:selected").val()
+            url = "#{options_el.attr('action')}?delivery_type_id=#{delivery_type_id}"
+            $.get(url)
+                .success (data) =>
+                    @$el.find("#order_transaction_delivery_price").val(data);
+                    @$el.find(".delivery_price").html("¥ #{parseFloat(data).toFixed(2)}");
 
     exports.TransactionCard = TransactionCard
     exports

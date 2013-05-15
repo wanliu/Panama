@@ -21,13 +21,13 @@
 		<div class="span2">
 			<label class="control-label">收货地址：</label>
 		</div>
-		<div class="span6">
+		<div class="span4">
 			<%= transaction.address.try(:location) %>
 		</div>
 		<div class="span2">
 			<label class="control-label">邮编：</label>
 		</div>
-		<div class="span2">
+		<div class="span4">
 			<small><%= transaction.address.try(:zip_code) %></small>
 		</div>
 	</div>
@@ -36,8 +36,14 @@
 		<div class="span2">
 			<label class="control-label">配送方式：</label>
 		</div>
-		<div class="span6">
+		<div class="span4">
 			<%= transaction.delivery_type.try(:name) %>
+		</div>
+		<div class="span2">
+			<label class="control-label">配送费用：</label>
+		</div>
+		<div class="span4">
+			<%= number_to_currency(transaction.delivery_price) %>
 		</div>
 	</div>
 
@@ -59,7 +65,7 @@
 				<div class="left-frame"></div>
 			</th>
 
-			<th><strong>合计：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+			<th><strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  } + transaction.delivery_price) %></strong>
 			</th>
 			<th><strong>你的余额：<%= current_user.money %></strong>
 			</th>

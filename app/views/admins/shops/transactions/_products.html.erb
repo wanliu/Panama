@@ -13,7 +13,7 @@
 		</th>
 		<th><strong>小计：<%= number_to_currency(transaction.items.inject(0) {|s, n| s += n.price }) %></strong>
 		</th>
-		<th><strong>合计：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+		<th><strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  } + transaction.delivery_price) %></strong>
 		</th>
 		<th class="relative">
 			<div class="btn-group">
