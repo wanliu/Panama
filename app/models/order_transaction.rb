@@ -9,6 +9,7 @@
 #  address: 送货地址
 #  items_count: 商品总项
 class OrderTransaction < ActiveRecord::Base
+  include Realtime::Transaction
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address
   # attr_accessor :total
@@ -101,10 +102,11 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      token = order.current_operator.try(:im_token)
+      token = order.buyer.try(:im_token)
       FayeClient.send("/events/#{token}/transaction-#{order.id}-buyer",
                       :name => transition.to_name,
                       :event => :delivered) unless token.blank?
+
     end
   end
 

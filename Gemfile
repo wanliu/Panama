@@ -75,7 +75,7 @@ gem "rest-client", '~> 1.6.7'
 # rmagick
 gem "mini_magick", '~> 3.4'
 
-gem "amqp", "~> 0.9.0" # optionally: :git => "git://github.com/ruby-amqp/amqp.git", :branch => "0.9.x-stable"
+gem "bunny", "~> 0.9.0.pre9"
 
 # To use debugger
 #
