@@ -12,7 +12,9 @@
  *= require ./lib/jquery.columnview
  *= require_self
  *= require_tree .
- *
+ *= require ./lib/notify/jquery.pnotify.default
+ *= require ./lib/notify/jquery.pnotify.default.icons
+ *= require ./lib/bootstrap
  */
 
 $border_color  : #980905;

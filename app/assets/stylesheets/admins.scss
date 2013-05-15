@@ -16,6 +16,8 @@
 //= require attachments
 //= require attachment_uploader
 //= require_self
+//= require './lib/notify/jquery.pnotify.default'
+//= require './lib/notify/jquery.pnotify.default.icons'
 
 @import "variables";
 @import "caret";
