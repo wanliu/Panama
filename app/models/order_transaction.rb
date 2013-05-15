@@ -11,7 +11,7 @@
 class OrderTransaction < ActiveRecord::Base
 
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type, :delivery_price
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type
   attr_accessor :total
 
 
@@ -110,6 +110,10 @@ class OrderTransaction < ActiveRecord::Base
                       :name => transition.to_name,
                       :event => :delivered) unless token.blank?
     end
+  end
+
+  def delivery_price
+    delivery_type.try(:delivery_price) || 0
   end
 
   def current_operator

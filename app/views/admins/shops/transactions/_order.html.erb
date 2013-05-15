@@ -16,7 +16,7 @@
 			<label class="control-label">配送费用：</label>
 		</div>
 		<div class="span2">
-			<%= transaction.delivery_price.nil? ? "" : number_to_currency(transaction.delivery_price) %>
+			<%= transaction.delivery_price %>
 		</div>
 	</div>
 </div>
