@@ -9,6 +9,9 @@
 //= require ./lib/chose-friend
 //= require people/community_people
 //= require attachment_uploader
+//= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
+//= require './lib/notify/jquery.pnotify.default'
+//= require './lib/notify/jquery.pnotify.default.icons'
 
 @import "compass/css3";
 @import "variables";

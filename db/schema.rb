@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.integer  "address_id"
     t.boolean  "operator_state",                                  :default => false
     t.integer  "delivery_type_id"
+    t.decimal  "delivery_price",   :precision => 10, :scale => 0
   end
 
   create_table "permissions", :force => true do |t|

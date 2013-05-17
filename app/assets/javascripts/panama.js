@@ -6,6 +6,7 @@ define(function(require, exports, module){
     var chosen = require('lib/chosen.ex');
     var ajax_auth = require('ajax_auth_client');
     var timeago = require("timeago");
+    var requireErrorhanding = require("lib/requireErrorHanding");
 
     var panle_modal = $("#login-modal");
     AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
