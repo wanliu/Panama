@@ -42,6 +42,7 @@
       <%= render state, transaction: transaction, people: people %>
     </div>
     <div class="transaction-footer">
+      <div class="message-toggle"><%= button_tag icon(:list), :class => "btn" %></div>
       <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
       </iframe>
     </div>
