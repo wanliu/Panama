@@ -112,10 +112,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def delivery_price
-    delivery_type.try(:delivery_price) || 0
-  end
-
   def current_operator
     operators.last.try(:operator)
   end

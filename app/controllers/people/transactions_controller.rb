@@ -123,10 +123,10 @@ class People::TransactionsController < People::BaseController
       if delivery_type_id.present?
         @transaction.update_attribute(:delivery_type_id, delivery_type_id)
       end
-      # delivery_price = params[:order_transaction][:delivery_price]
-      # if delivery_price.present?
-      #   @transaction.update_attribute(:delivery_price, delivery_price)
-      # end
+      delivery_price = params[:order_transaction][:delivery_price]
+      if delivery_price.present?
+        @transaction.update_attribute(:delivery_price, delivery_price)
+      end
 
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
