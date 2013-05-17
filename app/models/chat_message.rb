@@ -73,4 +73,8 @@ class ChatMessage < ActiveRecord::Base
   def owner_exists?
     owner_id.present? && owner_type.present?
   end
+
+  def rabbitmq_exchange
+    @exchange ||= Rabbitmq.client.direct("chat.message.receive")
+  end
 end

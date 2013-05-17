@@ -127,7 +127,8 @@ Panama::Application.routes.draw do
   #
   resources :chat_messages do
     collection do
-      get "dialogue/:friend_id", :to => "chat_messages#dialogue"
+      post "dialogue/generate/:friend_id", :to => "chat_messages#dialogue"
+      get "dialogue/display/:token", :to => "chat_messages#display"
       post "read/:friend_id", :to => "chat_messages#read"
     end
   end

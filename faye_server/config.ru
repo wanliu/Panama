@@ -1,4 +1,6 @@
 require 'faye'
+require 'faye/redis'
+require 'debugger'
 require "redis"
 require 'yaml'
 require 'logger'
@@ -25,15 +27,15 @@ class ServerAuth
   end
 
   private
-  def filter_data(message)
-    if data = message['data']
-      unless FAYE_TOKENS.include?(data.delete("token"))
+  def filter_data(m)
+    if data = m['data']
+      unless data.is_a?(Hash) && FAYE_TOKENS.include?(data.delete("token"))
         logger.error "Invalid authentication token..."
-        data["values"] = 'Invalid authentication token'
+        data = {"values" => 'Invalid authentication token'}
       end
     end
-    message["data"] = data.delete("values")
-    message
+    m["data"] = data.delete("values")
+    m
   end
 
   def logger
@@ -41,18 +43,26 @@ class ServerAuth
   end
 end
 
-faye_server = Faye::RackAdapter.new(:mount => '/realtime', :timeout => 45)
-faye_server.add_extension(ServerAuth.new)
+server = Faye::RackAdapter.new(
+  :mount => '/realtime',
+  :timeout => 45,
+   :engine  => {
+    :type  => Faye::Redis,
+    :host  => REDIS_SERVER,
+    :port  => REDIS_PORT
+  })
 
-faye_server.bind(:unsubscribe) do |client_id, channel|
+server.add_extension(ServerAuth.new)
+
+server.bind(:disconnect) do |client_id, channel|
   reg = %r{^/chat/user/disconnect/(?<user_id>\w+)}
   if reg =~ channel
     m = reg.match(channel)
     key = "#{REDIS_KEY}#{m[:user_id]}"
     redis.del(key) if redis.exists(key)
-    faye_server.get_client.publish("/chat/friend/disconnect/#{m[:user_id]}",
+    server.get_client.publish("/chat/friend/disconnect/#{m[:user_id]}",
       {"token" => FAYE_TOKENS[0], "values" => m[:user_id]})
   end
 end
 
-run faye_server
+run server
