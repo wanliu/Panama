@@ -34,11 +34,11 @@ define ["jquery", "backbone", "postmessage"], ($, Backbone) ->
       @dialogue = new Dialog
       @friend.bind("change:state", @change_state, @)
       @friend.bind("change:dialog_index", @set_position, @)
-      @$el.append("<a class='close_label' href='javascript:void(0)'></a>")
       @dialogue.generate @friend.id, _.bind(@generate, @)
 
     generate: (model, data) ->
       @$el.html("<iframe name='dialog_#{@friend.id}' src='#{@frame_url(data.token)}'></iframe>")
+      @$el.append("<a class='close_label' href='javascript:void(0)'></a>")
       $("body").append(@$el)
       @set_position()
       @show()

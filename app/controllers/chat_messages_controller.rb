@@ -39,7 +39,7 @@ class ChatMessagesController < ApplicationController
   end
 
   #聊天框
-  def dialogue
+  def generate
     @dialogue = Dialogue.generate(params[:friend_id], current_user.id)
     respond_to do |format|
       format.json{ render :json => @dialogue }
