@@ -112,7 +112,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-
   def current_operator
     operators.last.try(:operator)
   end
