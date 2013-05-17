@@ -43,7 +43,7 @@
 			<label class="control-label">配送费用：</label>
 		</div>
 		<div class="span4">
-			<%= number_to_currency(transaction.delivery_price) %>
+			<%= number_to_currency(transaction.try(:delivery_price)) %>
 		</div>
 	</div>
 
@@ -65,7 +65,7 @@
 				<div class="left-frame"></div>
 			</th>
 
-			<th><strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  } + transaction.delivery_price) %></strong>
+			<th><strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  } + (transaction.try(:delivery_price) || 0)) %></strong>
 			</th>
 			<th><strong>你的余额：<%= current_user.money %></strong>
 			</th>
