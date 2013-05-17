@@ -2,14 +2,19 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
 ($, Backbone, Transaction, StateMachine, exports) ->
 
     class TransactionCard extends Transaction.TransactionCardBase
+        initialize:() ->
+            super
+            @hideAddress()
+            @toggleMessage()
 
         events:
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
-            "click .address-add>button" : "toggleAddress"
+            "click .address-add>button" : "addAddress"
             "click .item-detail"        : "toggleItemDetail"
+            "click .message-toggle"     : "toggleMessage"
             "submit .address-form>form" : "saveAddress"
-            "click .chzn-results>li"    : "selectAddress"
+            "click .chzn-results>li"    : "hideAddress"
             "change .delivery-select"   : "selectDeliveryType"
 
         states:
@@ -31,10 +36,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     @changeProgress()
                     # console.log "event: #{event} from #{from} to #{to}"
         
-        initialize:() ->
-            super
-            $(".address-panel").slideUp()
-
         getNotifyName: () ->
             super + "-buyer"
 
@@ -42,7 +43,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @slideBeforeEvent('back')
             true
 
-        toggleAddress: (event) ->
+        addAddress: (event) ->
             @$(".address-panel").slideToggle()
             @$el.find("abbr:first").trigger("mouseup")
             false
@@ -50,6 +51,12 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         toggleItemDetail: (event) ->
             @$(".item-details").slideToggle()
             false
+
+        hideAddress: () ->
+            @$(".address-panel").slideUp()
+
+        toggleMessage: (event) ->
+            @$("iframe", ".transaction-footer").slideToggle()
 
         # 状态事件
         # enterOrder: (event, from, to, msg ) ->
@@ -81,9 +88,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     @transition.cancel()
                     false
             false
-
-        selectAddress: () ->
-            @$(".address-panel").slideUp()
 
         selectDeliveryType: () ->
             options_el = @$el.find(".delivery-select select")
