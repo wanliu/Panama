@@ -11,7 +11,7 @@
 class OrderTransaction < ActiveRecord::Base
 
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type, :delivery_price
   attr_accessor :total
 
 
@@ -112,9 +112,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def delivery_price
-    delivery_type.try(:delivery_price) || 0
-  end
 
   def current_operator
     operators.last.try(:operator)
