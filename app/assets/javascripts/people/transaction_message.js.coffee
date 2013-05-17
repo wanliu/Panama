@@ -62,7 +62,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @model.send_message data, (model, data) =>
         @trigger('add_message', data)
         @$content.val('')
-
+        @filter_send_state()
       false
 
     form_serialize: () ->
@@ -129,6 +129,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @max_scrollTop()
 
     reset_message: (collection) ->
+      @$messages.html('')
       collection.each (model) =>
         @_add_msg(model)
 

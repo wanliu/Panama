@@ -4,6 +4,14 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
 
   class ChatMessage extends Backbone.Model
     urlRoot: "/chat_messages"
+    create: (callback) ->
+      @fetch(
+        url: "#{@urlRoot}",
+        data: {chat_message: @toJSON()}
+        type: "POST",
+        success: callback
+      )
+
     read: (friend_id, callback = (message) -> ) ->
       @fetch(
         url: "#{@urlRoot}/read/#{friend_id}",
@@ -68,6 +76,7 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
       @chat_messages.fetch(data: {friend_id: @friend.id})
 
     all_message: (collection) ->
+      @content_el.find(">ul>li").remove()
       collection.each (model) =>
         @add_message model
 
@@ -90,7 +99,7 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
       data = @form_data()
       data["receive_user_id"] = @friend.id
       model = new ChatMessage(data)
-      model.save {}, success: (model, data) =>
+      model.create (model, data) =>
         @add model
         @form.find("textarea").val('')
       false
