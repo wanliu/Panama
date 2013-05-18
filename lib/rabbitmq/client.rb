@@ -6,7 +6,7 @@ module Rabbitmq
     def initialize
       @conn ||= Bunny.new(options)
       @conn.start unless @conn.status == :connected
-      @ch = @conn.create_channel
+      @ch ||= @conn.create_channel
     end
 
     def channel
@@ -58,6 +58,6 @@ module Rabbitmq
   end
 
   def self.client
-    @client ||= MQClient.new
+    @client = MQClient.new
   end
 end
