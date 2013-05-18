@@ -15,20 +15,6 @@
     </tr>
   </thead>
   <tbody>
-    <% @untransactions.each do |unorder| %>
-      <tr data-value-id="<%=unorder.id %>">
-        <td><%=unorder.buyer.login %></td>
-        <td><%=unorder.items_count %></td>
-        <td><%=unorder.total %></td>
-        <td><%=unorder.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
-        <td><%=unorder.state %></td>
-        <td><%=unorder.address.try("location") %></td>
-        <td>
-          <input type='button' class='btn dispose btn-primary' value='接单' />
-          <span class='badge badge-important'>1</span>
-        </td>
-      </tr>
-    <% end %>
   </tbody>
 </table>
 
@@ -47,7 +33,7 @@
 </div>
 
 <script type="text/javascript">
-  require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card", "admins/shops/transaction_dispose"], function($, _a, Transaction, TransactionDispose){
+  require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card", "admins/shops/transaction_dispose", "lib/hogan"], function($, _a, Transaction, TransactionDispose){
 
     var transactionCard = function(elem){
       var card = new Transaction.ShopTransactionCard({
@@ -63,15 +49,31 @@
       transactionCard(elem)
     });
 
-    new TransactionDispose({
+    var dispose_view = new TransactionDispose({
       el: $("table.untransactions"),
       realtime_url: '<%= faye_server_uri %>',
-      shop_name: "<%=current_shop.name %>",
+      shop: {
+        name: "<%=current_shop.name %>",
+        id: "<%=current_shop.id %>"},
       tranOpts: {
         tran_panel: $(".transaction_list"),
         tran_card: transactionCard
-      }
+      },
+      template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
     })
 
+
+    <% @untransactions.each do |t| %>
+      dispose_view.add({
+        id: <%=t.id %>,
+        buyer_login: "<%=t.buyer.login %>",
+        items_count: "<%=t.items_count %>",
+        total: "<%=t.total %>",
+        created_at: "<%=t.created_at.strftime('%Y-%m-%d %H:%M:%S') %>",
+        state: "<%=t.state %>",
+        address: "<%=t.address.try(:location) %>",
+        unmessages_count: "<%=t.unmessages.count %>"
+      })
+    <% end %>
   });
 </script>

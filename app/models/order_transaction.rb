@@ -1,7 +1,8 @@
 #encoding: utf-8
 #describe: 订单交易
 #attributes:
-#  operator_state: 订单处理状态(true有人处理，false没有处理)
+#  operator_state: 订单处理状态(true: 有人处理, false: 没有人处理)
+#  operator_id: 当前操作员
 #  buyer_id: 买家(用户)
 #  seller_id: 卖家(商店)
 #  state: 交易状态
@@ -20,6 +21,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer,
              class_name: "User"
+  belongs_to :operator, class_name: "TransactionOperator"
 
   has_many :operators, class_name: "TransactionOperator"
 
@@ -52,6 +54,7 @@ class OrderTransaction < ActiveRecord::Base
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
+    FayeClient.send("/transaction/new/#{seller.id}/un_dispose", as_json)
   end
 
   state_machine :initial => :order do
@@ -111,38 +114,45 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def current_operator
-    operators.last.try(:operator)
+    operator.try(:operator)
   end
 
-  def change_operator_state
-    self.update_attribute(:operator_state, true)
-    receive_order_messages.each do |m|
-      chat_messages.create(
-        send_user: m.send_user,
-        receive_user: current_operator,
-        created_at: m.created_at,
-        content: m.content)
+  def operator_connect_state
+    state = current_operator.nil? || !current_operator.connect_state ? false : true
+    self.update_attribute(:operator_state, state)
+  end
+
+  def operator_create(toperator_id)
+    unless operator.try(:id) == toperator_id
+      _operator = operators.create(operator_id: toperator_id)
+      self.update_attribute(:operator_id, _operator.id)
     end
+    FayeClient.send("/transaction/#{seller.id}/dispose", as_json)
+    operator_connect_state
   end
 
   #买家发送信息
   def message_create(options)
-    #没有人接单
-    unless operator_state
-      options.delete(:receive_user)
-      receive_order_messages.create(options)
-    else
-      chat_messages.create(options)
+    #是否有销售组成员在线
+    unless seller.seller_group_employees.any?{|u| u.connect_state }
+
     end
+    operator_connect_state
+    if operator_state
+      options[:receive_user] = current_operator
+    else
+      options.delete(:receive_user)
+    end
+    chat_messages.create(options)
+  end
+
+  def unmessages
+    chat_messages.where("receive_user_id is null")
   end
 
   #获取信息
   def messages
-    if operator_state
-      chat_messages
-    else
-      receive_order_messages
-    end
+    chat_messages
   end
 
   def build_items(item_ar)
@@ -153,6 +163,14 @@ class OrderTransaction < ActiveRecord::Base
   def update_total_count
     self.items_count = items.inject(0) { |s, item| s + item.amount }
     self.total = items.inject(0) { |s, item| s + item.total }
+  end
+
+  def as_json(*args)
+    attra = super *args
+    attra["buyer_login"] = buyer.login
+    attra["address"] = address.try(:location)
+    attra["unmessages_count"] = unmessages.count
+    attra
   end
 
   private

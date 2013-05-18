@@ -16,12 +16,12 @@ class ChatMessage < ActiveRecord::Base
   belongs_to :send_user, class_name: "User"
   belongs_to :owner, :polymorphic => true
 
-  validates :receive_user_id, :presence => true
+  # validates :receive_user_id, :presence => true
   validates :send_user_id, :presence => true
   validates :content, :presence => true
   validates :owner, :presence => true, :if => :owner_exists?
 
-  validates_presence_of :receive_user
+  # validates_presence_of :receive_user
   validates_presence_of :send_user
 
   after_create :notic_receive_user
@@ -38,8 +38,10 @@ class ChatMessage < ActiveRecord::Base
   end
 
   def join_contact_friend
-    send_user.contact_friends.join_friend(receive_user_id)
-    receive_user.contact_friends.join_friend(send_user_id)
+    unless receive_user.nil?
+      send_user.contact_friends.join_friend(receive_user_id)
+      receive_user.contact_friends.join_friend(send_user_id)
+    end
   end
 
   #变更状态
@@ -50,21 +52,30 @@ class ChatMessage < ActiveRecord::Base
 
   #通知接收人
   def notic_receive_user
-    if owner.nil?
-      FayeClient.send("/chat/receive/#{receive_user.im_token}", as_json)
-    else
-      FayeClient.send("/chat/receive/#{owner_type}_#{owner.id}/#{receive_user.im_token}", as_json)
-    end
+    FayeClient.send("/chat/receive/#{routing_key}", as_json)
   end
 
   #通知接收人已经读取信息
   def self.notice_read_state(receive_user, send_user_id)
-    FayeClient.send("/chat/change/message/#{receive_user.im_token}", send_user_id)
+    FayeClient.send("/chat/change/message/#{receive_user.try(:im_token)}", send_user_id)
+  end
+
+  def routing_key
+    if owner.nil?
+      receive_user.im_token
+    elsif owner.is_a?(OrderTransaction)
+      if receive_user.present?
+        "#{owner_type}/#{owner.seller.id}/#{owner_id}_#{receive_user.try(:im_token)}"
+      else
+        "#{owner_type}/#{owner.seller.id}/un_dispose"
+      end
+    end
   end
 
   def as_json(*args)
     attra = super *args
-    attra["receive_user"] = receive_user.as_json
+    attra["receive_user"] = receive_user.nil? ? {} : receive_user.as_json
+    attra["owner"] = owner.nil? ? {} : owner.as_json
     attra["send_user"] = send_user.as_json
     attra
   end
@@ -72,9 +83,5 @@ class ChatMessage < ActiveRecord::Base
   private
   def owner_exists?
     owner_id.present? && owner_type.present?
-  end
-
-  def rabbitmq_exchange
-    @exchange ||= Rabbitmq.client.direct("chat.message.receive")
   end
 end
