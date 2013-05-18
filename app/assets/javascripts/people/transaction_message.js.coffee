@@ -117,6 +117,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @template = options.template
       @faye_url = options.faye_url
       @tansaction_id = options.tansaction_id
+      @shop = options.shop
 
     _add_msg: (model) ->
       @set_model_url model
@@ -146,7 +147,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
         @add_message(message)
 
     receive_notice_url: () ->
-      "/chat/receive/OrderTransaction_#{@tansaction_id}/#{@current_user.token}"
+      "/chat/receive/OrderTransaction/#{@shop.id}/#{@tansaction_id}_#{@current_user.token}"
 
     max_scrollTop: () ->
       @$message_panel.scrollTop(99999999)

@@ -1,4 +1,4 @@
-#describe: 对话框
+#describe: 聊天对话框
 class Dialogue < ActiveRecord::Base
   attr_accessible :friend_id, :user_id
 

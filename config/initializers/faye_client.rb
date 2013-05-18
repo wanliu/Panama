@@ -6,7 +6,6 @@ class FayeClient
 
   def self.receive(channel, &block)
     connect.subscribe(channel) do |data|
-      puts "==============client_receive: #{data}"
       yield data
     end
   end

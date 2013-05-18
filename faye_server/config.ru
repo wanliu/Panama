@@ -26,6 +26,10 @@ class ServerAuth
     callback.call(message)
   end
 
+  def logger
+    @logger ||= Logger.new("log/faye_server.log")
+  end
+
   private
   def filter_data(m)
     if data = m['data']
@@ -36,10 +40,6 @@ class ServerAuth
     end
     m["data"] = data.delete("values")
     m
-  end
-
-  def logger
-    @logger ||= Logger.new("log/faye_server.log")
   end
 end
 
@@ -52,12 +52,15 @@ server = Faye::RackAdapter.new(
     :port  => REDIS_PORT
   })
 
-server.add_extension(ServerAuth.new)
+extension = ServerAuth.new
 
-server.bind(:disconnect) do |client_id, channel|
+server.add_extension(extension)
+
+server.bind(:unsubscribe) do |client_id, channel|
   reg = %r{^/chat/user/disconnect/(?<user_id>\w+)}
   if reg =~ channel
     m = reg.match(channel)
+    extension.logger.info "=====disconnect: #{m[:user_id]}"
     key = "#{REDIS_KEY}#{m[:user_id]}"
     redis.del(key) if redis.exists(key)
     server.get_client.publish("/chat/friend/disconnect/#{m[:user_id]}",
