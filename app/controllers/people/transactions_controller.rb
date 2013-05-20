@@ -3,8 +3,6 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions.json
   def index
     authorize! :index, OrderTransaction
-    exchange = Rabbitmq.client.default_exchange
-    exchange.publish("dom is change", :routing_key => "people.dom")
     @transactions = OrderTransaction.where(:buyer_id => @people.id).page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
