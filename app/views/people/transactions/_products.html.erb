@@ -14,7 +14,7 @@
 	</div>
 	<div class="item-details">
 	<% transaction.items.each do |item| %>
-	<div class="detail-row">
+	<div class="detail-row" data-value-id="<%=item.id %>">
 		<div class="detail-icon">
 			<%= image_tag item.product.photos.icon %>
 		</div>
@@ -30,10 +30,21 @@
 		<div class="detail-total">
 			<%= number_to_currency(item.total) %>
 		</div>
+		<!-- 		
+		<div class="btn del-product-item"  style="float: right;text-align: center;">
+			<i class="icon-trash"></i> 
+		</div> 
+		-->
 	</div>
 	<% end %>
 	</div>
 </div>
+
+
 <div class='total'>
-<strong>合计：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+<strong>合计：
+	<span>
+		<%= number_to_currency(transaction.total) %>
+	</span>
+</strong>
 </div>

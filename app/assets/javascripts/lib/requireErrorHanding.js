@@ -2,7 +2,7 @@ define (["require","jquery","lib/jquery.pnotify"],function(_re,$){
 	require.config({catchError:true});
 	require.onError = function(err){
 		if (err.requireType === 'timeout'){
-			alert(err);	
+			showErr(err);
 		}else{
 			showErr(err);
 		}

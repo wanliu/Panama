@@ -27,6 +27,9 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :product_items, :controller => "people/product_items" do 
+    end
+
     resources :topics, :controller => "people/topics" do
       collection do
         get "receives/:id", :to => "people/topics#receives"
@@ -69,7 +72,11 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :cart, :controller => "people/cart"
+    resources :cart, :controller => "people/cart" do 
+      member do 
+        post 'move_out_cart/', :to => "people/cart#move_out_cart"
+      end
+    end
 
   end
 
