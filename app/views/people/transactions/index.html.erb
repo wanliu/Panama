@@ -39,7 +39,7 @@
 </div>
 
 <script type="text/javascript">
-  require(["jquery", "jquery_ujs", "people/transaction_card"], function($, _a, Transaction ){
+  require(["jquery", "jquery_ujs", "people/transaction_card", "postmessage", "notify"], function($, _a, Transaction ){
     $(".transaction").each(function(i, elem){
       var card = new Transaction.TransactionCard({
         el: elem,
@@ -48,6 +48,15 @@
           token: '<%= token %>' }
         });
     });
+
+    pm.bind("transaction_chat_notice", function(message){
+      $.pnotify({
+        title: "消息提醒",
+        text: message.send_user.login + ": "+ message.content,
+        addclass: "stack-bottomright",
+        stack: stack_bottomright
+      });
+    })
   });
 </script>
 

@@ -7,12 +7,15 @@ define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
 			$(document).scroll(_.bind(@autoScroll, @))
 			@$el.bind('fixed', _.bind(@onFixed, @))
 			@$el.bind('unfixed', _.bind(@onUnfixed, @))
+			this.mainHeight = $("#main-body").height();
+			this.peopleHeight = $("#people-sidebar").height();
 
 
 		autoScroll: (event) ->
-			if $(document).scrollTop() > TOP_POSITION
+			if $(document).scrollTop() > TOP_POSITION and this.mainHeight > this.peopleHeight
 				@$el.addClass("affix")
 				@$el.trigger('fixed')
+				
 			else
 				@$el.removeClass("affix")
 				@$el.trigger('unfixed')

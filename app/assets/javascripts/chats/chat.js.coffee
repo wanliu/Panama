@@ -4,10 +4,10 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
 
   class ChatMessage extends Backbone.Model
     urlRoot: "/chat_messages"
-    create: (callback) ->
+    create: (token, callback) ->
       @fetch(
         url: "#{@urlRoot}",
-        data: {chat_message: @toJSON()}
+        data: {chat_message: @toJSON(), authenticity_token: token}
         type: "POST",
         success: callback
       )
@@ -98,8 +98,10 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
     send_message: () ->
       data = @form_data()
       data["receive_user_id"] = @friend.id
+      token = data.authenticity_token
+      delete(data.authenticity_token)
       model = new ChatMessage(data)
-      model.create (model, data) =>
+      model.create token, (model, data) =>
         @add model
         @form.find("textarea").val('')
       false

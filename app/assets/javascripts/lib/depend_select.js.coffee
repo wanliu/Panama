@@ -9,7 +9,7 @@ define ['jquery','backbone'], ($,Backbone) ->
 
 		select_change: () -> 
 			@reset()
-			$("#"+@children).data().depend.load_data(@el.val())
+			$("."+@children).data().depend.load_data(@el.val())
 
 		load_data: (opt) ->
 			$.ajax({
@@ -25,5 +25,5 @@ define ['jquery','backbone'], ($,Backbone) ->
 			@el.html(strHtml)
 
 		reset: () -> 
-			$("#"+@children).data().depend.el.html("") if this.children != ""
-			$("#"+@children).data().depend.reset() if $("#"+@children).data().depend.children != ""
+			$("."+@children).data().depend.el.html("") if this.children != ""
+			$("."+@children).data().depend.reset() if $("."+@children).data().depend.children != ""

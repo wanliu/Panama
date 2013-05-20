@@ -12,11 +12,15 @@
 class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address
-  # attr_accessor :total
 
-  has_one :address,
-          foreign_key: 'transaction_id'
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type, :delivery_price
+  attr_accessor :total
+
+
+  belongs_to :address,
+          foreign_key: 'address_id'
+  belongs_to :delivery_type,
+          foreign_key: "delivery_type_id"
 
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer,

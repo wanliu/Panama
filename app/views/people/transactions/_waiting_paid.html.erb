@@ -19,19 +19,37 @@
 	<div class="info">
 	<div class="row-fluid">
 		<div class="span2">
-			<label class="control-label" for="inputEmail">收货地址</label>
+			<label class="control-label">收货地址：</label>
 		</div>
-		<div class="span8">
+		<div class="span4">
 			<%= transaction.address.try(:location) %>
 		</div>
 		<div class="span2">
-			邮编 <small><%= transaction.address.try(:zip_code) %></small>
+			<label class="control-label">邮编：</label>
+		</div>
+		<div class="span4">
+			<small><%= transaction.address.try(:zip_code) %></small>
 		</div>
 	</div>
 
 	<div class="row-fluid">
 		<div class="span2">
-			<label class="control-label" for="inputEmail">购买的宝贝</label>
+			<label class="control-label">配送方式：</label>
+		</div>
+		<div class="span4">
+			<%= transaction.delivery_type.try(:name) %>
+		</div>
+		<div class="span2">
+			<label class="control-label">配送费用：</label>
+		</div>
+		<div class="span4">
+			<%= number_to_currency(transaction.try(:delivery_price)) %>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span2">
+			<label class="control-label" for="inputEmail">购买的宝贝：</label>
 		</div>
 		<div class="span10">
 			<% transaction.items[0...10].each do |item| %>
@@ -46,10 +64,9 @@
 			<th colspan=2 class="relative">
 				<div class="left-frame"></div>
 			</th>
-
-			<th><strong>合计: <%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+			<th><strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  } + (transaction.try(:delivery_price) || 0)) %></strong>
 			</th>
-			<th><strong>你的余额: <%= current_user.money %></strong>
+			<th><strong>你的余额：<%= current_user.money %></strong>
 			</th>
 			<th class="relative">
 				<div class="right-frame"></div>

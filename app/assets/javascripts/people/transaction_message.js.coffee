@@ -1,16 +1,18 @@
 #describe: 交易聊天
 
-define ["jquery", "backbone", "lib/realtime_client"],
+define ["jquery", "backbone", "lib/realtime_client", "notify"],
 ($, Backbone, Realtime) ->
 
   class TransactionMessage extends Backbone.Model
     set_url: (url) -> @urlRoot = url
 
     send_message: (data, callback) ->
+      token = data.authenticity_token
+      delete(data.authenticity_token)
       @fetch(
         url: "#{@urlRoot}/send_message",
         type: "POST",
-        data: {message: data},
+        data: {message: data, authenticity_token: token},
         success: callback
       )
 
@@ -144,6 +146,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @client = Realtime.client @faye_url
 
       @client.subscribe @receive_notice_url(), (message) =>
+        @notice_bubbing(message)
         @add_message(message)
 
     receive_notice_url: () ->
@@ -154,4 +157,19 @@ define ["jquery", "backbone", "lib/realtime_client"],
       pheight = @$message_panel.height()
 
       @$message_panel.scrollTop(mheight-pheight)
+
+    notice_bubbing: (message) ->
+      pm({
+        target : window.parent,
+        type : "transaction_chat_notice",
+        data : message
+      });
+
+      #opts = {
+      #  title: "消息提醒",
+      #  text: "#{message.send_user.login}: #{message.content}",
+      #  stack: stack_topright
+      #}
+
+      #$.pnotify(opts);
 

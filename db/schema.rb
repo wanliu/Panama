@@ -186,6 +186,13 @@ ActiveRecord::Schema.define(:version => 20130518062351) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "delivery_types", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "dialogues", :force => true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
@@ -277,14 +284,16 @@ ActiveRecord::Schema.define(:version => 20130518062351) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",          :precision => 10, :scale => 0
+    t.decimal  "total",            :precision => 10, :scale => 0
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                       :null => false
-    t.datetime "updated_at",                                                       :null => false
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
     t.integer  "address_id"
     t.integer  "operator_id"
-    t.boolean  "operator_state",                                :default => false
+    t.boolean  "operator_state",                                  :default => false
+    t.integer  "delivery_type_id"
+    t.decimal  "delivery_price",   :precision => 10, :scale => 0
   end
 
   create_table "permissions", :force => true do |t|
@@ -302,6 +311,14 @@ ActiveRecord::Schema.define(:version => 20130518062351) do
     t.string   "optionable_type"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+  end
+
+  create_table "product_delivery_types", :force => true do |t|
+    t.integer  "product_id"
+    t.integer  "delivery_type_id"
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
+    t.decimal  "delivery_price",   :precision => 10, :scale => 0
   end
 
   create_table "product_items", :force => true do |t|

@@ -19,6 +19,7 @@ redis = Redis.new(:host => REDIS_SERVER, :port => REDIS_PORT)
 
 class ServerAuth
   def incoming(message, callback)
+    puts message
     if message['channel'] !~ %r{^/meta/}
       logger.info "message: #{message}"
       message = filter_data(message)

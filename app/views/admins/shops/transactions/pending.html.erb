@@ -1,3 +1,4 @@
+
 <div class='title'>
   <h1>未处理</h1>
   <hr />
@@ -17,6 +18,7 @@
   <tbody>
   </tbody>
 </table>
+
 
 <div class='title'>
   <h1 >正在处理</h1>
@@ -61,7 +63,6 @@
       },
       template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
     })
-
 
     <% @untransactions.each do |t| %>
       dispose_view.add({
