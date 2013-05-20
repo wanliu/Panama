@@ -11,6 +11,7 @@
   </div>
   <div class='foot row-fluid'>
     <form>
+      <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>" />
       <div class="me">
         <%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
         <p><%= current_user.login %></p>

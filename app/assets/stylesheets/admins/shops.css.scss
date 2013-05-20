@@ -1,8 +1,12 @@
+//= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
 //= require '/admins/shops/products'
-//= require '/lib/colorpicker/css/colorpicker'
+//= require '../lib/colorpicker/css/colorpicker'
 //= require './shops/employee'
 //= require './shops/following'
 //= require './shops/community_people'
+//= require '../lib/notify/jquery.pnotify.default'
+//= require '../lib/notify/jquery.pnotify.default.icons'
+
 
 form{
 	.sizes, .colours{

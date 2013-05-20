@@ -19,6 +19,7 @@ Panama::Application.routes.draw do
         get "dialogue", :to => "people/transactions#dialogue"
         post "send_message", :to => "people/transactions#send_message"
         get "messages", :to => "people/transactions#messages"
+        get "get_delivery_price", :to => "people/transactions#get_delivery_price"
       end
 
       collection do
@@ -93,6 +94,7 @@ Panama::Application.routes.draw do
 
   resources :city
   resources :addresses
+  resources :delivery_types
 
   resources :activities
 
