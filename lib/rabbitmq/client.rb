@@ -58,6 +58,6 @@ module Rabbitmq
   end
 
   def self.client
-    @client = MQClient.new
+    @client ||= MQClient.new
   end
 end

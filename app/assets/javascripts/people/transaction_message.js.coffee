@@ -150,7 +150,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       "/chat/receive/OrderTransaction/#{@shop.id}/#{@tansaction_id}_#{@current_user.token}"
 
     max_scrollTop: () ->
-      mheight = @$messages.height()
+      mheight = @$message_panel.find(">.message-list").height()
       pheight = @$message_panel.height()
 
       @$message_panel.scrollTop(mheight-pheight)

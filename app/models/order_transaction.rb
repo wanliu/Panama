@@ -10,7 +10,7 @@
 #  address: 送货地址
 #  items_count: 商品总项
 class OrderTransaction < ActiveRecord::Base
-  include Realtime::Transaction
+  include MessageQueue::Transaction
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address
   # attr_accessor :total
@@ -54,7 +54,7 @@ class OrderTransaction < ActiveRecord::Base
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
-    FayeClient.send("/transaction/new/#{seller.id}/un_dispose", as_json)
+    notice_new_order
   end
 
   state_machine :initial => :order do
@@ -86,9 +86,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :order            => :waiting_paid,
                      :waiting_paid     => :waiting_delivery do |order, transition|
-      token = order.current_operator.try(:im_token)
-      FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
-                      :name => transition.to_name) unless token.blank?
+      notice_change_seller(order, :name => transition.to_name)
       true
     end
 
@@ -97,19 +95,12 @@ class OrderTransaction < ActiveRecord::Base
       after_transition :waiting_paid      => :order,
                        :waiting_delivery  => :waiting_paid,
                        :waiting_sign      => :waiting_delivery do |order, transition|
-        token = order.current_operator.try(:im_token)
-        FayeClient.send("/events/#{token}/transaction-#{order.id}-seller",
-                        :name => transition.to_name,
-                        :event => :back) unless token.blank?
+        notice_change_seller(order, :name => transition.to_name, :event => :back)
       end
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      token = order.buyer.try(:im_token)
-      FayeClient.send("/events/#{token}/transaction-#{order.id}-buyer",
-                      :name => transition.to_name,
-                      :event => :delivered) unless token.blank?
-
+      notice_change_buyer(order, transition.to_name)
     end
   end
 
@@ -127,7 +118,7 @@ class OrderTransaction < ActiveRecord::Base
       _operator = operators.create(operator_id: toperator_id)
       self.update_attribute(:operator_id, _operator.id)
     end
-    FayeClient.send("/transaction/#{seller.id}/dispose", as_json)
+    notice_order_dispose
     operator_connect_state
   end
 
@@ -135,7 +126,7 @@ class OrderTransaction < ActiveRecord::Base
   def message_create(options)
     #是否有销售组成员在线
     unless seller.seller_group_employees.any?{|u| u.connect_state }
-
+      notice_system_manage(id.to_s)
     end
     operator_connect_state
     if operator_state
@@ -179,5 +170,25 @@ class OrderTransaction < ActiveRecord::Base
     unless state_name == :order
       errors.add(:address, "地址不存在！") if address.nil?
     end
+  end
+
+  def notice_new_order
+    FayeClient.send("/transaction/new/#{seller.id}/un_dispose", as_json)
+  end
+
+  def notice_order_dispose
+    FayeClient.send("/transaction/#{seller.id}/dispose", as_json)
+  end
+
+  def notice_change_buyer(order, name)
+    token = order.buyer.try(:im_token)
+    FayeClient.send("/events/#{token}/transaction-#{order.id}-buyer",
+                      :name => name,
+                      :event => :delivered)
+  end
+
+  def notice_change_seller(order, options)
+    token = order.current_operator.try(:im_token)
+    FayeClient.send("/events/#{token}/transaction-#{order.id}-seller", options)
   end
 end
