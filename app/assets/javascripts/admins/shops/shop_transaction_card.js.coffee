@@ -2,11 +2,15 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
     ($, Backbone, Transaction, StateMachine, exports) ->
 
         class ShopTransactionCard extends Transaction.TransactionCardBase
+            initialize:() ->
+                super
+                @toggleMessage()
 
             events:
-                "click .page-header .btn"   : "clickAction"
-                "click button.close"        : "closeThis"
-                "click .detail"        : "toggleItemDetail"
+                "click .page-header .btn" : "clickAction"
+                "click button.close"      : "closeThis"
+                "click .detail"           : "toggleItemDetail"
+                "click .message-toggle"   : "toggleMessage"
 
             states:
                 initial: 'none'
@@ -35,6 +39,9 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
             toggleItemDetail: (event) ->
                 @$(".item-details").slideToggle()
                 false
+
+            toggleMessage: (event) ->
+                @$("iframe", ".transaction-footer").slideToggle()
 
             leaveWaitingDelivery: (event, from, to, msg) ->
                 @slideAfterEvent(event) unless /back/.test event
