@@ -26,7 +26,6 @@ class PeopleAbility
         can :destroy, OrderTransaction do |order|
           order.buyer_id = current_user.id
         end
-
         can :destroy, Following do |following|
           following.user_id = current_user.id
         end

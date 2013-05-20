@@ -3,7 +3,7 @@
   <h1>购物车 <small>你挑选的宝贝都在这里吗?</small></h1>
 </div>
 <% @items.each do |item| %>
-	<div class='product-item'>
+	<div class='product-item' data-value-id="<%=item.id %>">
 		<div class="row-fluid">
 			<div class="span2">
 				<%= link_to '#', :class => "img-polaroid" do %>
@@ -12,11 +12,34 @@
 			</div>
 			<div class="span10">
 				<h1><%= item.title %></h1>
-				<amount><%= item.amount %></amount>
+				<!--xifengzhu-->
+				<div class="controls">		
+					<div id="MySpinner" class="spinner spinner_ProductItem_amount"> 
+	      				<input class="spinner optional input-mini spinner-input" id="product_item_amount" maxlength="3" name="product_item[amount]" size="3" type="text" value="<%= item.amount %>">
+	      			<div class="spinner-buttons  btn-group btn-group-vertical">
+		        		<button class="btn spinner-up">
+		          			<i class="icon-chevron-up"></i>
+		        		</button>
+		        		<button class="btn spinner-down">
+		          			<i class="icon-chevron-down"></i>
+		       			</button>
+	      			</div>
+	   			 </div> 
+			    <script type="text/javascript">
+			    	require(['jquery', 'lib/spinner'], function($, SpinnerView){
+			        	new SpinnerView({el: '.spinner_ProductItem_amount'})
+			        });
+			    </script>
+			</div>
+			<!--xifengzhu-->
+
 				<price><%= item.price %></price>
 				<div class="controls pull-right">
-					<button class="btn btn-mini">不想要了</button>
-
+					<%= button_to "不想要了",
+						move_out_cart_person_cart_path(@people.login, item.id),
+						:method => :post,
+						:remote => true,
+						:class => "btn btn-mini" %>
 				</div>
 			</div>
 		</div>
@@ -31,6 +54,10 @@
 			  :class => "btn btn-primary btn-large" %>
 <%end%>
 
-<% if can? :destroy, OrderTransaction %>
+<% if can? :destroy, Cart %>
 <button class="btn btn-large">清空列表</button>
 <%end%>
+
+
+
+
