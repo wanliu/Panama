@@ -1,6 +1,7 @@
 class FayeClient
   def self.send(channel, params)
     token = Settings.defaults['faye_token']
+    puts "===channel:#{channel}===params: #{params}"
     publish = connect.publish(channel, {values: params, token: token})
   end
 
