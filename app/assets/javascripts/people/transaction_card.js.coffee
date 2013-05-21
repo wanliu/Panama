@@ -1,4 +1,4 @@
-define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports', 'lib/chosen.jquery'], 
+define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports', 'lib/chosen.jquery'],
 ($, Backbone, Transaction, StateMachine, exports) ->
 
     class TransactionCard extends Transaction.TransactionCardBase
@@ -32,10 +32,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             ]
 
             callbacks:
-                onchangestate: (event, from, to) ->
-                    @changeProgress()
-                    # console.log "event: #{event} from #{from} to #{to}"
-        
+
+
         getNotifyName: () ->
             super + "-buyer"
 
