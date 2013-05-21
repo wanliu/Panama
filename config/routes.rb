@@ -69,7 +69,12 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :cart, :controller => "people/cart"
+    resources :cart, :controller => "people/cart" do 
+      member do 
+        post 'move_out_cart', :to => "people/cart#move_out_cart"
+        post 'change_number', :to => "people/cart#change_number" 
+      end
+    end
 
   end
 

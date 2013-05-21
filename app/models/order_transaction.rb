@@ -108,6 +108,10 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def total
+    items.inject(0){ |s, n| s += n.price * n.amount  }
+  end
+
   def current_operator
     operator.try(:operator)
   end

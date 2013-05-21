@@ -2,7 +2,9 @@ define (["require","jquery","notify"],function(_re,$){
 	require.config({catchError:true});
 	require.onError = function(err){
 		if (err.requireType === 'timeout'){
+
 			alert(err);
+
 		}else{
 			showErr(err);
 		}
