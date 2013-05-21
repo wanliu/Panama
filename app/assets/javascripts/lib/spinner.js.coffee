@@ -12,7 +12,10 @@ define ['jquery','backbone'], ($,Backbone) ->
 
 		spinnerDown: () -> 
 			$input = @getInput()
-			$input.val(parseInt($input.val())-1) 
+			if (parseInt($input.val())) > 0
+				$input.val(parseInt($input.val())-1) 
+			else
+				$input.val(0)
 			false
 
 		getInput: () ->

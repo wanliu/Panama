@@ -3,47 +3,35 @@
   <h1>购物车 <small>你挑选的宝贝都在这里吗?</small></h1>
 </div>
 <% @items.each do |item| %>
-	<div class='product-item' data-value-id="<%=item.id %>">
-		<div class="row-fluid">
-			<div class="span2">
-				<%= link_to '#', :class => "img-polaroid" do %>
-					<%= image_tag item.header %>
-				<% end %>
-			</div>
-			<div class="span10">
-				<h1><%= item.title %></h1>
+	<%debugger%>
+	<% simple_form_for item, :url => "/product_item" do |form| %>
+		<div class='product-item' id="product-item-<%=item.id %>" data-value-id="<%=item.id %>">
+			<div class="row-fluid">
+				<div class="span2">
+					<%= link_to '#', :class => "img-polaroid" do %>
+						<%= image_tag item.header %>
+					<% end %>
+				</div>
+				<div class="span10" style="padding-top:25px;">
+					<h1 class="span2"><%= item.title %></h1>
+					<!--xifengzhu-->				
+					<%=form.input :amount, :as => :spinner  %>
+			
+				</div>
 				<!--xifengzhu-->
-				<div class="controls">		
-					<div id="MySpinner" class="spinner spinner_ProductItem_amount"> 
-	      				<input class="spinner optional input-mini spinner-input" id="product_item_amount" maxlength="3" name="product_item[amount]" size="3" type="text" value="<%= item.amount %>">
-	      			<div class="spinner-buttons  btn-group btn-group-vertical">
-		        		<button class="btn spinner-up">
-		          			<i class="icon-chevron-up"></i>
-		        		</button>
-		        		<button class="btn spinner-down">
-		          			<i class="icon-chevron-down"></i>
-		       			</button>
-	      			</div>
-	   			 </div> 
-			    <script type="text/javascript">
-			    	require(['jquery', 'lib/spinner'], function($, SpinnerView){
-			        	new SpinnerView({el: '.spinner_ProductItem_amount'})
-			        });
-			    </script>
-			</div>
-			<!--xifengzhu-->
 
-				<price><%= item.price %></price>
-				<div class="controls pull-right">
-					<%= button_to "不想要了",
-						move_out_cart_person_cart_path(@people.login, item.id),
-						:method => :post,
-						:remote => true,
-						:class => "btn btn-mini" %>
+					<span class="span3" style="padding-top:5px;"><price><%= item.price %></price></span>
+					<div class="controls pull-right">
+						<%= button_to "不想要了",
+							move_out_cart_person_cart_path(@people.login, item.id),
+							:method => :post,
+							:remote => true,
+							:class => "btn btn-mini" %>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	<% end %>
 <% end %>
 <%= paginate @items %>
 <% if can? :batch_create, OrderTransaction %>
