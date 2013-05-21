@@ -1,4 +1,4 @@
-define (["require","jquery","lib/jquery.pnotify"],function(_re,$){
+define (["require","jquery","notify"],function(_re,$){
 	require.config({catchError:true});
 	require.onError = function(err){
 		if (err.requireType === 'timeout'){
