@@ -1,16 +1,18 @@
 #describe: 交易聊天
 
-define ["jquery", "backbone", "lib/realtime_client"],
+define ["jquery", "backbone", "lib/realtime_client", "notify"],
 ($, Backbone, Realtime) ->
 
   class TransactionMessage extends Backbone.Model
     set_url: (url) -> @urlRoot = url
 
     send_message: (data, callback) ->
+      token = data.authenticity_token
+      delete(data.authenticity_token)
       @fetch(
         url: "#{@urlRoot}/send_message",
         type: "POST",
-        data: {message: data},
+        data: {message: data, authenticity_token: token},
         success: callback
       )
 
@@ -62,7 +64,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @model.send_message data, (model, data) =>
         @trigger('add_message', data)
         @$content.val('')
-
+        @filter_send_state()
       false
 
     form_serialize: () ->
@@ -117,6 +119,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @template = options.template
       @faye_url = options.faye_url
       @tansaction_id = options.tansaction_id
+      @shop = options.shop
 
     _add_msg: (model) ->
       @set_model_url model
@@ -129,6 +132,7 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @max_scrollTop()
 
     reset_message: (collection) ->
+      @$messages.html('')
       collection.each (model) =>
         @_add_msg(model)
 
@@ -142,11 +146,30 @@ define ["jquery", "backbone", "lib/realtime_client"],
       @client = Realtime.client @faye_url
 
       @client.subscribe @receive_notice_url(), (message) =>
+        @notice_bubbing(message)
         @add_message(message)
 
     receive_notice_url: () ->
-      "/chat/receive/OrderTransaction_#{@tansaction_id}/#{@current_user.token}"
+      "/chat/receive/OrderTransaction/#{@shop.id}/#{@tansaction_id}_#{@current_user.token}"
 
     max_scrollTop: () ->
-      @$message_panel.scrollTop(99999999)
+      mheight = @$message_panel.find(">.message-list").height()
+      pheight = @$message_panel.height()
+
+      @$message_panel.scrollTop(mheight-pheight)
+
+    notice_bubbing: (message) ->
+      pm({
+        target : window.parent,
+        type : "transaction_chat_notice",
+        data : message
+      });
+
+      #opts = {
+      #  title: "消息提醒",
+      #  text: "#{message.send_user.login}: #{message.content}",
+      #  stack: stack_topright
+      #}
+
+      #$.pnotify(opts);
 

@@ -2,11 +2,13 @@ define (["require","jquery","lib/jquery.pnotify"],function(_re,$){
 	require.config({catchError:true});
 	require.onError = function(err){
 		if (err.requireType === 'timeout'){
-			showErr(err);
+
+			alert(err);
+
 		}else{
 			showErr(err);
 		}
-	}	
+	}
 
 	function showErr(err){
 		opts = {
@@ -18,6 +20,6 @@ define (["require","jquery","lib/jquery.pnotify"],function(_re,$){
 		opts.title = "错误";
 		opts.text = "加载页面错误:"+err.message+"请稍后重试";
 		opts.type = "error";
-		$.pnotify(opts); 
+		$.pnotify(opts);
 	}
 });

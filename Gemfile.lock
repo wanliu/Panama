@@ -80,14 +80,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.3)
-    amq-client (0.9.12)
-      amq-protocol (>= 1.2.0)
-      eventmachine
-    amq-protocol (1.2.0)
-    amqp (0.9.9)
-      amq-client (~> 0.9.12)
-      amq-protocol (~> 1.2.0)
-      eventmachine
+    amq-protocol (1.5.0)
     ancestry (1.3.0)
       activerecord (>= 2.3.14)
     anjlab-bootstrap-rails (2.3.0.0)
@@ -112,6 +105,8 @@ GEM
     bourne (1.1.2)
       mocha (= 0.10.5)
     builder (3.0.4)
+    bunny (0.9.0.pre10)
+      amq-protocol (>= 1.4.0)
     cache_digests (0.2.0)
       actionpack (>= 3.2)
     cancan (1.6.9)
@@ -195,6 +190,8 @@ GEM
       activesupport (>= 3.0)
       request_store (~> 1.0.3)
     ejs (1.1.1)
+    em-hiredis (0.1.0)
+      hiredis (~> 0.3.0)
     em-http-request (1.0.3)
       addressable (>= 2.2.3)
       cookiejar
@@ -224,9 +221,10 @@ GEM
       faye-websocket (>= 0.4.0)
       rack (>= 1.0.0)
       yajl-ruby (>= 1.0.0)
-    faye-rails (1.0.6)
-      eventmachine (~> 1.0.0)
-      faye (~> 0.8.8)
+    faye-redis (0.1.0)
+      em-hiredis (>= 0.0.1)
+      eventmachine (>= 0.12.0)
+      yajl-ruby (>= 1.0.0)
     faye-websocket (0.4.7)
       eventmachine (>= 0.12.0)
     ffi (1.4.0)
@@ -480,12 +478,12 @@ DEPENDENCIES
   activeadmin
   activemerchant
   activemerchant_patch_for_china
-  amqp (~> 0.9.0)
   ancestry (~> 1.3.0)
   anjlab-bootstrap-rails (>= 2.2)
   apotomo (~> 1.2.3)
   better_errors
   binding_of_caller
+  bunny (~> 0.9.0.pre9)
   cache_digests (~> 0.2.0)
   cancan
   carrierwave (~> 0.8.0)
@@ -504,7 +502,8 @@ DEPENDENCIES
   ejs (~> 1.1.1)
   factory_girl_rails
   fakefs
-  faye-rails (~> 1.0.6)
+  faye
+  faye-redis
   friendly_id (~> 4.0.9)
   geocoder!
   github-markup (~> 0.7.4)

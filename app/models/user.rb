@@ -37,7 +37,6 @@ class User < ActiveRecord::Base
 
   delegate :groups, :jshop, :to => :shop_user
 
-  before_create :generate_token
   after_initialize :init_user_info
 
   def messages(friend_id)

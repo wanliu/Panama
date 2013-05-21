@@ -4,6 +4,14 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
 
   class ChatMessage extends Backbone.Model
     urlRoot: "/chat_messages"
+    create: (token, callback) ->
+      @fetch(
+        url: "#{@urlRoot}",
+        data: {chat_message: @toJSON(), authenticity_token: token}
+        type: "POST",
+        success: callback
+      )
+
     read: (friend_id, callback = (message) -> ) ->
       @fetch(
         url: "#{@urlRoot}/read/#{friend_id}",
@@ -50,8 +58,6 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
       @$el
 
   class MessageViewList extends Backbone.View
-    scrollTopMax: 99999999
-
     events: {
       "submit form" : "send_message"
     }
@@ -68,16 +74,19 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
       @chat_messages.fetch(data: {friend_id: @friend.id})
 
     all_message: (collection) ->
+      @content_el.find(">ul>li").remove()
       collection.each (model) =>
         @add_message model
+
+      @max_top()
 
     add_message: (model) ->
       view = new MessageView(model: model)
       @content_el.find(">ul").append(view.render())
-      @content_el.scrollTop(@scrollTopMax)
 
     add: (model) ->
       @chat_messages.add(model)
+      @max_top()
 
     read_notice:(friend_id) ->
       m = @chat_messages.get(model.id)
@@ -89,8 +98,10 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
     send_message: () ->
       data = @form_data()
       data["receive_user_id"] = @friend.id
+      token = data.authenticity_token
+      delete(data.authenticity_token)
       model = new ChatMessage(data)
-      model.save {}, success: (model, data) =>
+      model.create token, (model, data) =>
         @add model
         @form.find("textarea").val('')
       false
@@ -101,6 +112,12 @@ define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
       _.each inputs, (input) =>
         data[input.name] = input.value
       data
+
+    max_top: () ->
+      mheight = @content_el.find(">ul").height()
+      pheight = @content_el.height()
+
+      @content_el.scrollTop(mheight-pheight)
 
   class ChatView extends Backbone.View
     on_class: "online",
