@@ -27,4 +27,11 @@ class People::CartController < People::BaseController
     @item.destroy
     redirect_to "/people/#{current_user.login}/cart"
   end
+
+  def change_number
+    @item = my_cart.items.find(params[:id])
+    @item.amount = params[:number]
+    @item.save
+    render :json => {}
+  end
 end
