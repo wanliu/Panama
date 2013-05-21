@@ -90,7 +90,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :order            => :waiting_paid,
                      :waiting_paid     => :waiting_delivery do |order, transition|
-      notice_change_seller(order, :name => transition.to_name)
+      order.notice_change_seller(:name => transition.to_name)
       true
     end
 
@@ -99,12 +99,12 @@ class OrderTransaction < ActiveRecord::Base
       after_transition :waiting_paid      => :order,
                        :waiting_delivery  => :waiting_paid,
                        :waiting_sign      => :waiting_delivery do |order, transition|
-        notice_change_seller(order, :name => transition.to_name, :event => :back)
+        order.notice_change_seller(:name => transition.to_name, :event => :back)
       end
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      notice_change_buyer(order, transition.to_name)
+      order.notice_change_buyer(transition.to_name)
     end
   end
 
@@ -168,6 +168,18 @@ class OrderTransaction < ActiveRecord::Base
     attra
   end
 
+  def notice_change_buyer(name)
+    token = buyer.try(:im_token)
+    FayeClient.send("/events/#{token}/transaction-#{id}-buyer",
+                      :name => name,
+                      :event => :delivered)
+  end
+
+  def notice_change_seller(options)
+    token = current_operator.try(:im_token)
+    FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
+  end
+
   private
   def valid_address?
     puts "state: #{state_name}"
@@ -182,17 +194,5 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_order_dispose
     FayeClient.send("/transaction/#{seller.id}/dispose", as_json)
-  end
-
-  def notice_change_buyer(order, name)
-    token = order.buyer.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{order.id}-buyer",
-                      :name => name,
-                      :event => :delivered)
-  end
-
-  def notice_change_seller(order, options)
-    token = order.current_operator.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{order.id}-seller", options)
   end
 end
