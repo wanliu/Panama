@@ -19,7 +19,7 @@ class ShopGroup < ActiveRecord::Base
   end
 
   def users
-    shop_user_groups.map{| u | u.user}
+    shop_user_groups.map{| u | u.user} + [shop.user]
   end
 
   def self.add(shop_id, opts)

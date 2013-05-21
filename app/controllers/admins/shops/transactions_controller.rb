@@ -1,8 +1,10 @@
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def pending
-    @untransactions = OrderTransaction.where(:seller_id => current_shop.id, :operator_state => false)
-    @transactions = OrderTransaction.where(:seller_id => current_shop.id, :operator_state => true)
+    transactions = OrderTransaction.where(:seller_id => current_shop.id)
+    @untransactions = transactions.where(:operator_state => false)
+    @transactions = transactions.where(:operator_state => true).joins(:operator)
+    .where("transaction_operators.operator_id=?", current_user.id)
   end
 
   def show
@@ -39,8 +41,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def dispose
     @transaction = OrderTransaction.find_by(:seller_id => current_shop.id, :id => params[:id])
-    if @transaction.operators.create(:operator_id => current_user.id)
-      @transaction.change_operator_state
+    if @transaction.operator_create(current_user.id)
+      @transaction.unmessages.update_all(
+        :read => true,
+        :receive_user_id => current_user.id)
+      ChatMessage.notice_read_state(current_user, @transaction.buyer.id)
       render partial: 'transaction',object:  @transaction,
        locals: {
          state:  @transaction.state,

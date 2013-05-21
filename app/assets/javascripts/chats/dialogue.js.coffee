@@ -2,8 +2,16 @@
 
 define ["jquery", "backbone", "postmessage"], ($, Backbone) ->
 
+  class Dialog extends Backbone.Model
+    urlRoot: "/chat_messages",
+    generate: (friend_id, callback) ->
+      @fetch(
+        url: "#{@urlRoot}/dialogue/generate/#{friend_id}",
+        type: "POST",
+        success: callback
+      )
+
   class Dialogs extends Backbone.Collection
-    url : "/dialogues"
     comparator: (a, b) ->
       if a.get("dialog_index") < b.get("dialog_index")
         -1
@@ -23,14 +31,15 @@ define ["jquery", "backbone", "postmessage"], ($, Backbone) ->
       _.extend(@, options)
       @$el = $(@el)
 
+      @dialogue = new Dialog
       @friend.bind("change:state", @change_state, @)
       @friend.bind("change:dialog_index", @set_position, @)
-      @$el.html("<iframe name='dialog_#{@friend.id}' src='/chat_messages/dialogue/#{@friend.id}'></iframe>")
+      @dialogue.generate @friend.id, _.bind(@generate, @)
+
+    generate: (model, data) ->
+      @$el.html("<iframe name='dialog_#{@friend.id}' src='#{@frame_url(data.token)}'></iframe>")
       @$el.append("<a class='close_label' href='javascript:void(0)'></a>")
-      @$iframe = @$("iframe")
-
       $("body").append(@$el)
-
       @set_position()
       @show()
 
@@ -62,9 +71,12 @@ define ["jquery", "backbone", "postmessage"], ($, Backbone) ->
         type: "chat_dialogue_state",
         data: state)
 
+    frame_url: (token) ->
+      "/chat_messages/dialogue/display/#{token}"
+
   class DialogueListView extends Backbone.View
     marginLeft: 5,
-    navRight: 300,   #工具width
+    navRight: 200,   #工具width
     dialogWith: 305, #框width
 
     initialize: (options) ->

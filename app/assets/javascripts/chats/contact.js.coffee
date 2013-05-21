@@ -25,7 +25,9 @@ define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
 
       @friend_list_el = @el.find(".friend_list")
       #最近联系人
-      @cfv_list = new ContactFriendViewList(faye_url: @faye_url)
+      @cfv_list = new ContactFriendViewList(
+        current_user: @current_user,
+        faye_url: @faye_url)
       @friend_list_el.html(@cfv_list.render())
 
       @bind_relatime()

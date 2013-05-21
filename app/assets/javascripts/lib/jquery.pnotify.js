@@ -862,7 +862,7 @@
 
 	$.pnotify.defaults = {
 		// The notice's title.
-    	
+
 		title: false,
 		// Whether to escape the content of the title. (Not allow HTML.)
 		title_escape: false,

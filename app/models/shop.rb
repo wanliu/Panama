@@ -65,7 +65,12 @@ class Shop < ActiveRecord::Base
 
   #所有商店的雇员
   def employees
-    shop_users.map{| su | su.user }
+    shop_users.includes(:user).map{| su | su.user } + [user]
+  end
+
+  def seller_group_employees
+    group = groups.find_by(:name => "seller")
+    group.nil? ? [] : group.users
   end
 
   #查询这个商店是否有这个雇员

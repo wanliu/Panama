@@ -12,7 +12,7 @@
       , "jquery_columnview": "lib/jquery.columnview"
       , "fileuploader": "lib/fileuploader"
       , "hogan": "lib/hogan"
-      , "faye" : "faye"
+      , "faye" : "<%=faye_server_uri %>/client"
       , "typeahead" : "lib/typeahead"
       , "ajax_auth_client" : "wanliu/ajax_auth_client"
       , "postmessage" : "lib/postmessage"
@@ -21,11 +21,11 @@
     },
 
     shim: {
-      "requireErrorhanding" :{
-        deps:["jquery","notify"]
-      },
       "notify" : {
         deps: ["jquery"]
+      },
+      "requireErrorhanding" :{
+        deps:["jquery","notify"]
       },
       "underscore": {
         exports: "_"

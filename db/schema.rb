@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130513082340) do
+ActiveRecord::Schema.define(:version => 20130518062351) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -124,10 +124,12 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
   end
 
   create_table "circle_friends", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.integer  "friend_type"
     t.integer  "circle_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "user_id"
   end
 
   create_table "circles", :force => true do |t|
@@ -136,6 +138,7 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.string   "owner_type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "user_id"
   end
 
   create_table "cities", :force => true do |t|
@@ -161,6 +164,7 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
     t.datetime "last_contact_date"
+    t.string   "token"
   end
 
   create_table "contents", :force => true do |t|
@@ -187,6 +191,14 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.string   "description"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "dialogues", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.string   "token"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "file_entities", :force => true do |t|
@@ -278,6 +290,7 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
     t.integer  "address_id"
+    t.integer  "operator_id"
     t.boolean  "operator_state",                                  :default => false
     t.integer  "delivery_type_id"
     t.decimal  "delivery_price",   :precision => 10, :scale => 0
@@ -446,10 +459,11 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
   end
 
   create_table "shop_user_groups", :force => true do |t|
-    t.integer  "shop_user_id"
+    t.integer  "user_id"
     t.integer  "shop_group_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "shop_user_id"
   end
 
   create_table "shop_users", :force => true do |t|
@@ -475,6 +489,13 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.integer  "ancestry_depth"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "shops_employee_users", :force => true do |t|
+    t.integer  "shop_id"
+    t.integer  "employee_user_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "style_groups", :force => true do |t|
@@ -526,6 +547,7 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.string   "receive_type"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "user_id"
   end
 
   create_table "topics", :force => true do |t|
@@ -533,10 +555,13 @@ ActiveRecord::Schema.define(:version => 20130513082340) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.string   "content"
-    t.string   "content_html"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "context_html"
+    t.string   "content_html"
     t.integer  "status"
+    t.integer  "receive_id"
+    t.string   "receive_type"
     t.integer  "topic_category_id"
   end
 

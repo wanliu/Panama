@@ -7,6 +7,7 @@ define ["faye", "lib/underscore"], ( faye, d) ->
 
     constructor: (server_uri = null) ->
       @client = new Faye.Client(server_uri) if server_uri?
+      @client.setHeader('Authorization', 'OAuth abcd-1234');
       @events = {}
 
     monitor_people_notification: (token, callback = (data) -> ) ->

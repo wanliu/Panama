@@ -1,5 +1,5 @@
 <% seller = transaction.seller %>
-<div class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
+<div id="order<%=transaction.id %>" class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
    state-id="<%= transaction.id %>"
    state-initial="<%= transaction.state %>"
    state-url="<%= page_person_transaction_path(@people, transaction) %>"

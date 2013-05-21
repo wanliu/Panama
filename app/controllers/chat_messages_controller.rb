@@ -4,6 +4,7 @@ class ChatMessagesController < ApplicationController
 
   def index
     @messages = current_user.messages(params[:friend_id])
+    .order("created_at desc").limit(30)
 
     @messages.where(
       :send_user_id => params[:friend_id],
@@ -12,7 +13,7 @@ class ChatMessagesController < ApplicationController
 
     ChatMessage.notice_read_state(current_user, params[:friend_id])
     respond_to do |format|
-      format.json{ render :json => @messages }
+      format.json{ render :json => @messages.reverse }
     end
   end
 
@@ -30,11 +31,18 @@ class ChatMessagesController < ApplicationController
     end
   end
 
-  #聊天框
-  def dialogue
-    @friend = User.find(params[:friend_id])
+  def display
+    @dialogue = Dialogue.display(params[:token], current_user.id)
     respond_to do |format|
       format.html
+    end
+  end
+
+  #聊天框
+  def generate
+    @dialogue = Dialogue.generate(params[:friend_id], current_user.id)
+    respond_to do |format|
+      format.json{ render :json => @dialogue }
     end
   end
 

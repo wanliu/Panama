@@ -2,11 +2,16 @@
   <div class="toolbar">
   </div>
   <div class="message_panel">
-    <div class="messages">
+    <div class='message-list'>
+      <div class="messages">
+        正在加载...
+      </div>
+      <div class='foot-line'></div>
     </div>
   </div>
   <div class='foot row-fluid'>
     <form>
+      <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>" />
       <div class="me">
         <%= image_tag current_user.photos.icon, :class => 'img-polaroid' %>
         <p><%= current_user.login %></p>
@@ -37,8 +42,11 @@
         login: "<%=current_user.login %>"
       },
       faye_url: "<%=faye_server_uri %>",
-      tansaction_id: <%=transaction.id %>
+      tansaction_id: <%=transaction.id %>,
+      shop: {
+        id: "<%=transaction.seller.id %>",
+        name: "<%=transaction.seller.name %>"
+      }
     })
-
   })
 </script>
