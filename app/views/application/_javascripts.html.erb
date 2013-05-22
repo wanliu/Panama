@@ -21,12 +21,6 @@
     },
 
     shim: {
-      "notify" : {
-        deps: ["jquery"]
-      },
-      "requireErrorhanding" :{
-        deps:["jquery","notify"]
-      },
       "underscore": {
         exports: "_"
       },
@@ -70,6 +64,12 @@
       },
       "timeago": {
         deps: ["jquery", "lib/jquery.timeago"]
+      },
+      "notify" : {
+        deps: ["jquery"]
+      },
+      "requireErrorhanding" :{
+        deps:["jquery","notify"]
       }
     }
   });
