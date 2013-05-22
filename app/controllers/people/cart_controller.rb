@@ -10,7 +10,7 @@ class People::CartController < People::BaseController
     authorize! :create, Cart
     @item = my_cart.add_to(params[:product_item])
     if @item.save
-      render :json => @item
+      render :json => @item.as_json.merge(:img_path => @item.photos.icon)
     else
       render json: @item.errors, status: :unprocessable_entity
     end
