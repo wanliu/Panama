@@ -2,20 +2,21 @@ class SpinnerInput < SimpleForm::Inputs::Base
 
   def input
   	input_html_options[:class].push("input-mini spinner-input")
+    input_html_options[:panel_class] ||= ""
   	input_html_options[:maxlength] = input_options[:maxlength] || "3"
   	input_html_options[:value] = input_options[:value] || "1"
 
-  	discern_class = "spinner_"+object.class.to_s+"_"+attribute_name.to_s
+  	discern_class = "spinner_"+object.class.to_s+"_"+attribute_name.to_s+"_#{input_html_options[:panel_class]}"
     <<-JAVASCRIPT 
 		<div id="MySpinner" class="spinner #{discern_class}"> 
 	      #{@builder.text_field(attribute_name, input_html_options)}
 	      <div class="spinner-buttons  btn-group btn-group-vertical">
-	        <button class="btn spinner-up">
+	        <a href='javascript:void(0)' class="btn spinner-up" style="height:9px;margin-top: -1px;">
 	          <i class="icon-chevron-up"></i>
-	        </button>
-	        <button class="btn spinner-down">
+	        </a>
+	        <a href='javascript:void(0)' class="btn spinner-down" style="height:9px;">
 	          <i class="icon-chevron-down"></i>
-	        </button>
+	        </a>
 	      </div>
 	    </div> 
     <SCRIPT type='text/javascript'>
