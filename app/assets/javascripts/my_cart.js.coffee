@@ -62,25 +62,27 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 
 		cartAddAction: (url, form) ->
 			$.post url, form.serialize(), (item) =>
-				if $("#cart_box table #product_item#{item.product_item.id}").length > 0
-					trOjb = $("#cart_box table #product_item#{item.product_item.id} td")
-					$(trOjb[2]).html(item.product_item.amount)
-					$(trOjb[3]).html(item.product_item.total)
+				if $("#product_item#{item.id}").length > 0
+					trOjb = $("#product_item#{item.id} td")
+					$(trOjb[2]).html(item.amount)
+					$(trOjb[3]).html(item.total)
 				else
-					$(".cart_main").append(@trHtml(item.product_item))
+					$(".cart_main").append(@trHtml(item))
 
 				$("#shop_count").html($(".cart_main tr").size())
+
+
 				# totals = $(".cart_bottom tr td").html().split("")[5]
 				# totals = totals + item.product_item.total
 				# alert(totals)
 				# $(".cart_bottom tr td").html("商品总价：" + totals)
 
-		trHtml: (product_item) ->
-			strHmtl = "<tr id= 'product_item#{product_item.id}'>"
-			strHmtl += "<td><img src='#{product_item.img}''></td>"
-			strHmtl += "<td>#{product_item.title}</td>"
-			strHmtl += "<td>#{product_item.amount}</td>"
-			strHmtl += "<td>#{product_item.total}</td></tr>"
+		trHtml: (item) ->
+			strHmtl = "<tr id= 'product_item#{item.id}'>"
+			strHmtl += "<td><img src='#{item.img_path}''></td>"
+			strHmtl += "<td>#{item.title}</td>"
+			strHmtl += "<td>#{item.amount}</td>"
+			strHmtl += "<td>#{item.total}</td></tr>"
 			strHmtl
 
 		targetAttributes: (target) ->
