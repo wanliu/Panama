@@ -143,5 +143,8 @@ gem 'geocoder', :github => 'mrichie/geocoder'
 gem 'ruby-hmac'
 gem 'text_format_html',:github => "huxinghai1988/text_format_html"
 
-gem "hiredis", "~> 0.3.1"
-gem "redis", "~> 2.2.0", :require => ["redis/connection/hiredis", "redis"]
+gem "hiredis", "~> 0.4.0"
+gem "redis", "~> 2.2.0"
+
+gem "wicked"
+# gem "redis", "~> 2.2.0", :require => ["redis/connection/hiredis", "redis"]

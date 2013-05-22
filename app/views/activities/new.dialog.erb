@@ -1,0 +1,26 @@
+<ul class="nav nav-tabs activity_select">
+  <li><a href="#auction" data-toggle="tab">竞价</a></li>
+  <li><a href="#score" data-toggle="tab">积分</a></li>
+  <li><a href="#package" data-toggle="tab">捆绑</a></li>
+  <li><a href="#focus" data-toggle="tab">聚焦</a></li>
+  <li><a href="#courage" data-toggle="tab">吞货</a></li>
+</ul>
+<div class="tab-content activity_forms">
+  <div class="tab-pane active" id="auction">
+    <%= render "activities/auction/new.html" %>
+  </div>
+  <div class="tab-pane" id="score">
+    <%= render "activities/score/new.html" %>
+  </div>
+  <div class="tab-pane" id="package">
+    <%= render "activities/package/new.html" %>
+  </div>
+  <div class="tab-pane" id="focus">
+    <%= render "activities/focus/new.html" %>
+  </div>
+  <div class="tab-pane" id="courage">
+    <%= render "activities/courage/new.html" %>
+  </div>
+</div>
+
+<%= link_to 'Back', activities_path %>

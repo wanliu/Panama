@@ -1,12 +1,14 @@
 class ActivitiesController < ApplicationController
-  before_filter :login_required 
-  before_filter :load_category, :only => [:index, :new, :show] 
+  before_filter :login_required
+  before_filter :load_category, :only => [:index, :new, :show]
   # GET /activities
   # GET /activities.json
   layout "activities"
-  
-  def index    
-    @activities = Activity.all        
+
+  respond_to :html, :dialog
+
+  def index
+    @activities = Activity.all
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @activities }
@@ -31,6 +33,7 @@ class ActivitiesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
+      format.dialog { render :new, layout: false }
       format.json { render json: @activity }
     end
   end

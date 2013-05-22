@@ -1,5 +1,8 @@
 <div id="activities" >
-  <%= render :partial => "activity", :collection => @activities %>
+  <% @activities.each do |activity| %>
+    <%= render_activity activity %>
+  <% end %>
+  <%#= render :partial => "activity", :collection => @activities %>
 </div>
 <%= link_to 'New Activity', new_activity_path %>
 <br />
