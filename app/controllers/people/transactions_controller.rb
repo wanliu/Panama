@@ -3,7 +3,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions.json
   def index
     authorize! :index, OrderTransaction
-    @transactions = OrderTransaction.where(:buyer_id => @people.id).page(params[:page])
+    @transactions = OrderTransaction.where(:buyer_id => @people.id).order("created_at desc").page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }
