@@ -7,7 +7,7 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">所有分类 <b class="caret"></b></a>
             <%= render "main_category" %>
           </li>
-          <li class="divider-vertical"></li>              
+          <li class="divider-vertical"></li>
           <li class="active"><a href="#">首页</a></li>
           <li><a href="#">品牌街</a></li>
           <li><a href="#">品牌特卖</a></li>
@@ -17,7 +17,47 @@
           <li><a href="#">医药馆</a></li>
           <li><a href="#">百事淘宝</a></li>
         </ul>
+        <ul class="nav pull-right publish_button">
+          <li class="divider-vertical"></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-plus"></i>&nbsp;发布</a>
+            <ul class="dropdown-menu">
+              <li><a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog">优惠活动</a></li>
+              <li><a href="#" class="create_buy">求购信息</a></li>
+            </ul>
+          </li>
+        </ul>
+
       </div>
     </div>
   </div>
 </div>
+<div id="active_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">发布您的活动</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary save_activity">确认</button>
+  </div>
+</div>
+
+<script type="text/javascript">
+require(['jquery','twitter/bootstrap'], function($){
+  $(".save_activity").on('click', function(type){
+    var $a = $(".activity_select>.active");
+    var content_id = $a.find(">a").attr('href')
+    var $form = $(".activity_forms>" + content_id + " form");
+
+    // 提交订单 $form.submit();
+    $("#active_dialog").modal('hide');
+
+  });
+
+  // var pb = new PublishButton({el: ".publish_button"})
+})
+</script>

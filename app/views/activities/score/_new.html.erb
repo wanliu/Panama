@@ -1,0 +1,42 @@
+<!-- 积分 -->
+<%= simple_form_for @activity, :html => { class: 'form-horizontal' } do %>
+
+  <div class="control-group">
+    <label class="control-label" for="inputProduct">产品</label>
+    <div class="controls">
+		<div class="input-append">
+		  <input class="span2" id="inputProduct" placeholder="Product" type="text">
+		  <div class="btn-group">
+		    <button class="btn dropdown-toggle" data-toggle="dropdown">
+		      选择
+		      <span class="caret"></span>
+		    </button>
+<!-- 		    <ul class="dropdown-menu">
+		      ...
+		    </ul>
+ -->		  </div>
+		</div>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">价格</label>
+    <div class="controls">
+	  <input class="span2" id="inputPrice" placeholder="价格" type="text">
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">&nbsp;</label>
+    <div class="controls">
+		  <div id="price_slider"></div>
+		  <script type="text/javascript">
+		  require(['jquery'], function($){
+			    $( "#price_slider" ).slider();
+		  });
+		  </script>
+    </div>
+  </div>
+
+
+<% end %>

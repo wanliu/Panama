@@ -7,10 +7,21 @@
 @import "my_cart";
 @import 'bootstrap-spinner';
 @import 'contact_friend';
+@import 'slider-ui';
 
 body {
 	@include background(
         radial-gradient(center, ellipse cover, #E9E9E9 0%,#D1D1D1 100%));
+}
+
+#active_dialog {
+	width: 800px;
+	margin-left: -400px;
+}
+
+#price_slider {
+	width: 250px;
+	height: 11px;
 }
 
 #header.navbar.navbar-fixed-top {

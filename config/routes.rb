@@ -1,6 +1,9 @@
 Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
+  resources :after_signup
+  resources :completing_people
+  resources :completing_shop
 
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
