@@ -3,35 +3,47 @@
   <h1>购物车 <small>你挑选的宝贝都在这里吗?</small></h1>
 </div>
 <% @items.each do |item| %>
-	<%debugger%>
-	<% simple_form_for item, :url => "/product_item" do |form| %>
-		<div class='product-item' id="product-item-<%=item.id %>" data-value-id="<%=item.id %>">
-			<div class="row-fluid">
-				<div class="span2">
-					<%= link_to '#', :class => "img-polaroid" do %>
-						<%= image_tag item.header %>
-					<% end %>
-				</div>
-				<div class="span10" style="padding-top:25px;">
-					<h1 class="span2"><%= item.title %></h1>
-					<!--xifengzhu-->				
-					<%=form.input :amount, :as => :spinner  %>
-			
-				</div>
+	<div class='product-item product-item-<%=item.id %>'  data-value-id="<%=item.id %>">
+		<div class="row-fluid">
+			<div class="span2">
+				<%= link_to '#', :class => "img-polaroid" do %>
+					<%= image_tag item.header %>
+				<% end %>
+			</div>
+			<div class="span10" style="padding-top:25px;">
+				<h1 class="span2"><%= item.title %></h1>
 				<!--xifengzhu-->
+				<%= simple_form_for item, :url =>""  do |f| %>	
+					<div class="control-group span2">
+              <label class="control-label" for="inputEmail">数量</label>
+              <div class="controls">
+                <%= f.input :amount, :value =>item.amount, :as => :spinner,input_html: {:panel_class =>"amount_#{item.id}"} %>
+              </div>
+              <script type="text/javascript">
+                require(['jquery','modify_number'], function($,ChangeNumber){
+                  new ChangeNumber({
+                    el : $(".product-item-<%=item.id %>"),
+                    login : "<%=current_user.login %>"})
+                });
+              </script>
+			    </div>
+        <% end %>
+			<!--xifengzhu-->
 
-					<span class="span3" style="padding-top:5px;"><price><%= item.price %></price></span>
-					<div class="controls pull-right">
-						<%= button_to "不想要了",
-							move_out_cart_person_cart_path(@people.login, item.id),
-							:method => :post,
-							:remote => true,
-							:class => "btn btn-mini" %>
-					</div>
+				<span class="span3" style="padding-top:5px;">
+          <price><%= item.price %></price>
+        </span>
+				<div class="controls pull-right">
+					<%= button_to "不想要了",
+						move_out_cart_person_cart_path(@people.login, item.id),
+						:method => :post,
+						:remote => true,
+						:class => "btn btn-mini" %>
 				</div>
 			</div>
+     
 		</div>
-	<% end %>
+	</div>
 <% end %>
 <%= paginate @items %>
 <% if can? :batch_create, OrderTransaction %>
@@ -45,7 +57,4 @@
 <% if can? :destroy, Cart %>
 <button class="btn btn-large">清空列表</button>
 <%end%>
-
-
-
 

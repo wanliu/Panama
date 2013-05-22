@@ -30,8 +30,10 @@ class People::CartController < People::BaseController
 
   def change_number
     @item = my_cart.items.find(params[:id])
-    @item.amount = params[:number]
+    @item.amount = params[:amount]
     @item.save
-    render :json => {}
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
   end
 end

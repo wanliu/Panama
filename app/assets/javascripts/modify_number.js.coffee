@@ -1,19 +1,21 @@
-define ["jquery",'backbone'], ($,@options) ->
+define ["jquery",'backbone'], ($, Backbone) ->
 
 	class ChangeNumber extends Backbone.View
 		
 		events : {
-			"click .spinner-up.up" : "change"
-			"click .spinner-down.down" : "change"
+			"click .spinner-up" : "change"
+			"click .spinner-down" : "change"
 		}
 
-		initialize: (@options) ->
+		initialize: (options) ->
+			debugger
 			_.extend(@, options)
 			@$el = $(@el)
 
 		change : () -> 
-			@amount = $(".spinner-input").val()
-			@item_id = $(".product-item").attr("data-value-id")       
+			debugger
+			@amount = @$el.find(".spinner-input").val()
+			@item_id = @$el.attr("data-value-id")       
 			$.ajax({
 				type: "post",
 				url: "/people/#{@login}/cart/#{@item_id }/change_number",  
