@@ -66,10 +66,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         enterWaitingDelivery: (event, from, to, msg) ->
             @$(".clock").jsclock();
 
-        leaveWaitingPaid: (event, from, to, msg) ->
-            false
-            # return @checkAndPay(event) if (from == "waiting_paid" && to == "waiting_delivery")
-            # @slideAfterEvent(event) unless /back/.test event
+        # leaveWaitingPaid: (event, from, to, msg) ->
+        #     @slideAfterEvent(event) unless /back/.test event
 
         checkAndPay: (event) ->
             button = @$("a.pay-button")
@@ -81,6 +79,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     button.addClass("disabled")
                     alert("支付失败，请确定您的余额是否足够！")
                     false
+            StateMachine.ASYNC
             false
 
         saveAddress: (event) ->
