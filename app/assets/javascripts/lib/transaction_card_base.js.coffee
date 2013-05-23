@@ -3,7 +3,6 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
 
         class TransactionCardBase extends StateView.AbstructStateView
 
-
             initialize:(@option) ->
                 super
                 @options['initial']   ?= @$el.attr('state-initial')
