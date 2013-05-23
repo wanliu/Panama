@@ -7,8 +7,14 @@
 </ul>
 <div class="tab-content activity_forms">
   <div class="tab-pane active" id="auction">
-    <%= render "activities/auction/new.html" %>
+    <%#= render "activities/auction/new.html" %>
+
   </div>
+  <script type="text/javascript">
+    require(['jquery'], function($){
+      $("#auction").load('/activities/auction/new');
+    });
+  </script>
   <div class="tab-pane" id="score">
     <%= render "activities/score/new.html" %>
   </div>
