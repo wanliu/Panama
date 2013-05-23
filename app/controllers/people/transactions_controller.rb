@@ -3,7 +3,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions.json
   def index
     authorize! :index, OrderTransaction
-    @transactions = OrderTransaction.where(:buyer_id => @people.id).page(params[:page])
+    @transactions = OrderTransaction.where(:buyer_id => @people.id).order("created_at desc").page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }
@@ -33,8 +33,9 @@ class People::TransactionsController < People::BaseController
 
   def event
     @transaction = OrderTransaction.find(params[:id])
+    event_name = params[:event]
     authorize! :event, @transaction
-    if @transaction.fire_events!(params[:event])
+    if @transaction.fire_events!(event_name)
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {
@@ -178,13 +179,13 @@ class People::TransactionsController < People::BaseController
     curr_sn = last_sn.to_i + 1
     @trade_income.serial_number = codes(Time.new.to_date, curr_sn, fixed_length)
 
-    TradeIncome.transaction do 
+    TradeIncome.transaction do
       @trade_income.save!
       user = User.find(current_user.id)
       user.update_attribute(:money, user.money + @trade_income.money)
       current_user.money = user.money
     render :text => "success recharge, todo..."
-    end 
+    end
   end
 
   def pay
@@ -197,7 +198,7 @@ class People::TransactionsController < People::BaseController
       fixed_length = 12
       last_sn = (last_payment.nil? ? "0" : last_payment.serial_number[8, fixed_length])
       curr_sn = last_sn.to_i + 1
-      payment = TradePayment.create({:serial_number => codes(Time.new.to_date, curr_sn, fixed_length), 
+      payment = TradePayment.create({:serial_number => codes(Time.new.to_date, curr_sn, fixed_length),
           :money => total_pay, :order_transaction_id => params[:id], :buyer_id => current_user.id })
 
       TradePayment.transaction do

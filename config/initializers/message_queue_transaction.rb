@@ -1,14 +1,21 @@
 module MessageQueue
   module Transaction
-    extend ::ActiveSupport::Concern
+    extend ActiveSupport::Concern
 
     module InstanceMethods
 
-      def notice_system_manage(message)
-        name = "#{routing_key}.system"
+      def not_service_online(message)
+        name = "#{routing_key}.not.service"
         client.queue(name, :auto_delete => true)
         exchange = client.default_exchange
         exchange.publish(message, :routing_key => name)
+      end
+
+      def expired_delivery_failer
+        name = "#{routing_key}.expired.delivery.failer"
+        client.queue(name, :auto_delete => true)
+        exchange = client.default_exchange
+        exchange.publish(id.to_s, :routing_key => name)
       end
 
       private
