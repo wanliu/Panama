@@ -157,12 +157,12 @@ class People::TransactionsController < People::BaseController
   def get_delivery_price
     product_items = ProductItem.where("transaction_id=#{params[:id]}")
     delivery_prices = [0]
-    product_items.each { |pi| 
+    product_items.each { |pi|
       query = "product_id=#{pi.product_id} and delivery_type_id=#{params[:delivery_type_id]}"
       pdt = ProductDeliveryType.where(query).first
       unless pdt.nil?
         unless pdt.delivery_price.nil?
-          delivery_prices << pdt.delivery_price                  
+          delivery_prices << pdt.delivery_price
         end
       end
     }
@@ -183,7 +183,7 @@ class People::TransactionsController < People::BaseController
       user = User.find(current_user.id)
       user.update_attribute(:money, user.money + @trade_income.money)
       current_user.money = user.money
-    render :text => "success, todo..."
+    render :text => "success recharge, todo..."
     end 
   end
 
@@ -205,7 +205,7 @@ class People::TransactionsController < People::BaseController
         user = User.find(current_user.id)
         user.update_attribute(:money, user.money - payment.money)
         current_user.money = user.money
-        render :text => "success, todo..."
+        render :text => "success payment, todo..."
       end
     end
   end
