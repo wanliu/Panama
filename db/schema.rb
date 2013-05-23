@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521094533) do
+ActiveRecord::Schema.define(:version => 20130523021809) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -124,10 +124,12 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
   end
 
   create_table "circle_friends", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.integer  "friend_type"
     t.integer  "circle_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "user_id"
   end
 
   create_table "circles", :force => true do |t|
@@ -136,6 +138,7 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.string   "owner_type"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "user_id"
   end
 
   create_table "cities", :force => true do |t|
@@ -161,6 +164,7 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
     t.datetime "last_contact_date"
+    t.string   "token"
   end
 
   create_table "contents", :force => true do |t|
@@ -286,10 +290,10 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
     t.integer  "address_id"
+    t.integer  "operator_id"
     t.boolean  "operator_state",                                  :default => false
     t.integer  "delivery_type_id"
     t.decimal  "delivery_price",   :precision => 10, :scale => 0
-    t.integer  "operator_id"
   end
 
   create_table "permissions", :force => true do |t|
@@ -455,10 +459,11 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
   end
 
   create_table "shop_user_groups", :force => true do |t|
-    t.integer  "shop_user_id"
+    t.integer  "user_id"
     t.integer  "shop_group_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "shop_user_id"
   end
 
   create_table "shop_users", :force => true do |t|
@@ -484,6 +489,13 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.integer  "ancestry_depth"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+  end
+
+  create_table "shops_employee_users", :force => true do |t|
+    t.integer  "shop_id"
+    t.integer  "employee_user_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "style_groups", :force => true do |t|
@@ -535,6 +547,7 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.string   "receive_type"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "user_id"
   end
 
   create_table "topics", :force => true do |t|
@@ -542,15 +555,18 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.string   "content"
-    t.string   "content_html"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "context_html"
+    t.string   "content_html"
     t.integer  "status"
+    t.integer  "receive_id"
+    t.string   "receive_type"
     t.integer  "topic_category_id"
   end
 
   create_table "trade_incomes", :force => true do |t|
-    t.string   "serial_number", :limit => 30
+    t.string   "serial_number", :limit => 20
     t.decimal  "money",                       :precision => 20, :scale => 4
     t.text     "decription"
     t.integer  "bank_id"
@@ -560,7 +576,7 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
   end
 
   create_table "trade_payments", :force => true do |t|
-    t.string   "serial_number",        :limit => 30
+    t.string   "serial_number",        :limit => 20
     t.decimal  "money",                              :precision => 20, :scale => 4
     t.text     "decription"
     t.integer  "order_transaction_id"
@@ -574,6 +590,17 @@ ActiveRecord::Schema.define(:version => 20130521094533) do
     t.integer  "operator_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+  end
+
+  create_table "transaction_state_details", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.string   "state"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.datetime "past_due"
+    t.datetime "expired"
+    t.boolean  "notify_state",         :default => true
+    t.boolean  "expired_state",        :default => true
   end
 
   create_table "users", :force => true do |t|
