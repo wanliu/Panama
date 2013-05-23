@@ -36,6 +36,7 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many :receive_order_messages
   has_many :chat_messages, :as => :owner
+  has_many :state_details, class_name: "TransactionStateDetail"
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
@@ -63,6 +64,7 @@ class OrderTransaction < ActiveRecord::Base
 
   state_machine :initial => :order do
 
+    #确认订单 到 等待侍
     event :buy do
       transition [:order] => :waiting_paid
     end
@@ -73,17 +75,33 @@ class OrderTransaction < ActiveRecord::Base
                  :waiting_sign     => :waiting_delivery
     end
 
-    # 等待发货
+    #过期事件
+    event :expired do
+      transition  :order             =>  :close,
+                  :waiting_paid      =>  :close,
+                  :waiting_delivery  =>  :delivery_failure,
+                  :waiting_sign      =>  :complete,
+                  :complete          =>  :close,
+                  :refund            =>  :close
+    end
+
+    #退货事件
+    event :returned do
+      #发货失败`等待发货`签收 到 退货
+      transition [:delivery_failure, :waiting_delivery, :complete] => :refund
+    end
+
+    # 等待付款 到 等待发货
     event :paid do
       transition [:waiting_paid] => :waiting_delivery
     end
 
-    # 发货
+    # 等待发货 到 等待签收
     event :delivered do
       transition :waiting_delivery => :waiting_sign
     end
 
-    # 签收
+    # 等待签收 到 完成
     event :sign do
       transition [:waiting_sign] => :complete
     end
@@ -106,6 +124,32 @@ class OrderTransaction < ActiveRecord::Base
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
       order.notice_change_buyer(transition.to_name)
     end
+
+    after_transition do |order|
+      order.state_change_detail
+    end
+
+    after_transition :waiting_delivery => :delivery_failure do |order, transition|
+      order.expired_delivery_failer
+    end
+  end
+
+  def self.state_expired
+    transactions = joins("left join transaction_state_details as details
+      on details.order_transaction_id = order_transactions.id and
+      details.state = order_transactions.state and details.expired_state=true")
+    .where("details.expired <=?", DateTime.now)
+    transactions.each{|t| t.fire_events(:expired) }
+    transactions
+  end
+
+  def readonly?
+    new_record?
+  end
+
+  #变更状态
+  def state_change_detail
+    state_details.create(:state => state)
   end
 
   def total
@@ -134,7 +178,7 @@ class OrderTransaction < ActiveRecord::Base
   def message_create(options)
     #是否有销售组成员在线
     unless seller.seller_group_employees.any?{|u| u.connect_state }
-      notice_system_manage(id.to_s)
+      not_service_online(id.to_s)
     end
     operator_connect_state
     if operator_state
@@ -187,7 +231,7 @@ class OrderTransaction < ActiveRecord::Base
   private
   def valid_address?
     puts "state: #{state_name}"
-    unless state_name == :order
+    unless state_name == :order || state_name == :close
       errors.add(:address, "地址不存在！") if address.nil?
     end
   end
