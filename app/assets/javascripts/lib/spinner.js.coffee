@@ -8,12 +8,13 @@ define ['jquery','backbone'], ($,Backbone) ->
 		spinnerUp: () -> 
 			$input = @getInput()
 			$input.val(parseInt($input.val())+1)
-			false
 
 		spinnerDown: () -> 
 			$input = @getInput()
-			$input.val(parseInt($input.val())-1) 
-			false
+			if (parseInt($input.val())) > 0
+				$input.val(parseInt($input.val())-1) 
+			else
+				$input.val(0)
 
 		getInput: () ->
 			@$el.find("input[type='text']") 

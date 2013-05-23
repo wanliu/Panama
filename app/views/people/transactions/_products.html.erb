@@ -14,7 +14,7 @@
 	</div>
 	<div class="item-details">
 	<% transaction.items.each do |item| %>
-	<div class="detail-row">
+	<div class="detail-row" data-value-id="<%=item.id %>">
 		<div class="detail-icon">
 			<%= image_tag item.product.photos.icon %>
 		</div>
@@ -30,10 +30,19 @@
 		<div class="detail-total">
 			<%= number_to_currency(item.total) %>
 		</div>
+
 	</div>
 	<% end %>
 	</div>
 </div>
+
+
 <div class='total'>
-<strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount } + (transaction.try(:delivery_price) || 0)) %></strong>
+
+	<strong>合计(含运费)：
+		<span>
+			<%= number_to_currency(transaction.total + (transaction.try(:delivery_price) || 0)) %>
+		</span>
+	</strong>
+
 </div>

@@ -10,7 +10,7 @@ class People::CartController < People::BaseController
     authorize! :create, Cart
     @item = my_cart.add_to(params[:product_item])
     if @item.save
-      render :json => @item
+      render :json => @item.as_json.merge(:img_path => @item.photos.icon)
     else
       render json: @item.errors, status: :unprocessable_entity
     end
@@ -20,5 +20,20 @@ class People::CartController < People::BaseController
     authorize! :destroy, Cart
     my_cart.items.destroy_all
     render :text => :ok
+  end
+
+  def move_out_cart    
+    @item = my_cart.items.find(params[:id])
+    @item.destroy
+    redirect_to "/people/#{current_user.login}/cart"
+  end
+
+  def change_number
+    @item = my_cart.items.find(params[:id])
+    @item.amount = params[:amount]
+    @item.save
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
   end
 end
