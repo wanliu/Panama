@@ -139,7 +139,7 @@ class OrderTransaction < ActiveRecord::Base
       on details.order_transaction_id = order_transactions.id and
       details.state = order_transactions.state and details.expired_state=true")
     .where("details.expired <=?", DateTime.now)
-    transactions.each{|t| t.fire_events(:expired) }
+    transactions.each{|t| t.fire_events!(:expired) }
     transactions
   end
 
