@@ -2,9 +2,6 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
     ($, Backbone, Transaction, StateMachine, exports) ->
 
         class ShopTransactionCard extends Transaction.TransactionCardBase
-            initialize:() ->
-                super
-                @toggleMessage()
 
             events:
                 "click .page-header .btn" : "clickAction"

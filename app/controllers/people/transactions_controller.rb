@@ -201,10 +201,10 @@ class People::TransactionsController < People::BaseController
           :money => total_pay, :order_transaction_id => params[:id], :buyer_id => current_user.id })
 
       TradePayment.transaction do
-        payment.save!
-        user = User.find(current_user.id)
-        user.update_attribute(:money, user.money - payment.money)
-        current_user.money = user.money
+        # payment.save!
+        # user = User.find(current_user.id)
+        # user.update_attribute(:money, user.money - payment.money)
+        # current_user.money = user.money
         render :text => "success payment, todo..."
       end
     end
