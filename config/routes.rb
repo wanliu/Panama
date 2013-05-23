@@ -98,6 +98,10 @@ Panama::Application.routes.draw do
 
   resources :activities
 
+  namespace :activities do
+    resources :auction
+  end
+
   get "transport/index"
 
   get "products/index"
