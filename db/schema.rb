@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130518062351) do
+ActiveRecord::Schema.define(:version => 20130523021809) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -570,6 +570,17 @@ ActiveRecord::Schema.define(:version => 20130518062351) do
     t.integer  "operator_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+  end
+
+  create_table "transaction_state_details", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.string   "state"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.datetime "past_due"
+    t.datetime "expired"
+    t.boolean  "notify_state",         :default => true
+    t.boolean  "expired_state",        :default => true
   end
 
   create_table "users", :force => true do |t|
