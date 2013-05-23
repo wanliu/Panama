@@ -17,6 +17,8 @@ def initialize_data
   load_banks
 
   load_cities
+
+  load_delivery_types
 end
 
 def load_categories
@@ -43,6 +45,9 @@ def load_cities
   rake['city:load'].invoke
 end
 
+def load_delivery_types
+  rake['panama:delivery_type:load'].invoke
+end
 
 initialize_data
 

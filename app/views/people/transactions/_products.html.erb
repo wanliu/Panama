@@ -35,5 +35,5 @@
 	</div>
 </div>
 <div class='total'>
-<strong>合计：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount  }) %></strong>
+<strong>合计(含运费)：<%= number_to_currency(transaction.items.inject(0) { |s, n| s += n.price * n.amount } + (transaction.try(:delivery_price) || 0)) %></strong>
 </div>

@@ -11,6 +11,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
             "click .address-add>button" : "addAddress"
+            "click a.pay-button"        : "checkAndPay"
             "click .item-detail"        : "toggleItemDetail"
             "click .message-toggle"     : "toggleMessage"
             "submit .address-form>form" : "saveAddress"
@@ -70,8 +71,21 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @$(".clock").jsclock();
 
         leaveWaitingPaid: (event, from, to, msg) ->
-            @slideAfterEvent(event) unless /back/.test event
+            false
+            # return @checkAndPay(event) if (from == "waiting_paid" && to == "waiting_delivery")
+            # @slideAfterEvent(event) unless /back/.test event
 
+        checkAndPay: (event) ->
+            button = @$("a.pay-button")
+            $.post(button.attr("href"))
+                .success (xhr, data, status) =>
+                    @slideAfterEvent("paid")
+                    false
+                .error (xhr, status) =>
+                    button.addClass("disabled")
+                    alert("支付失败，请确定您的余额是否足够！")
+                    false
+            false
 
         saveAddress: (event) ->
             params = @$(".address-form>form").serialize()
@@ -93,10 +107,10 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             options_el = @$el.find(".delivery-select select")
             delivery_type_id = options_el.find("option:selected").val()
             url = "#{options_el.attr('action')}?delivery_type_id=#{delivery_type_id}"
-            $.get(url)
+            $.post(url)
                 .success (data) =>
-                    @$el.find("#order_transaction_delivery_price").val(data);
-                    @$el.find(".delivery_price").html("¥ #{parseFloat(data).toFixed(2)}");
+                    @$el.find("#order_transaction_delivery_price").val(data)
+                    @$el.find(".delivery_price").html("¥ #{parseFloat(data).toFixed(2)}")
 
     exports.TransactionCard = TransactionCard
     exports
