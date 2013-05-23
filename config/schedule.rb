@@ -22,5 +22,5 @@
 set :output, "/home/kaka/cron_log.log"
 
 every 2.minutes do
-  runner "OrderTransaction.state_timeout", :environment => "development"
+  runner "OrderTransaction.state_expired", :environment => "development"
 end
