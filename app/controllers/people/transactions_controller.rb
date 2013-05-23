@@ -120,14 +120,7 @@ class People::TransactionsController < People::BaseController
     @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
       address_id = params[:order_transaction][:address_id]
-      delivery_type_id = params[:order_transaction][:delivery_type_id]
-      if delivery_type_id.present?
-        @transaction.update_attribute(:delivery_type_id, delivery_type_id)
-      end
-      delivery_price = params[:order_transaction][:delivery_price]
-      if delivery_price.present?
-        @transaction.update_attribute(:delivery_price, delivery_price)
-      end
+      @transaction.update_attributes(params[:order_transaction])
 
       if address_id.present?
         @transaction.update_attribute(:address_id, address_id)
@@ -171,42 +164,39 @@ class People::TransactionsController < People::BaseController
   end
 
   def recharge
-    @trade_income = TradeIncome.create(params[:trade_income])
-    @trade_income.buyer_id = current_user.id
-    last_trade_income = TradeIncome.order("serial_number DESC").first
-    fixed_length = 12
-    last_sn = (last_trade_income.nil? ? "0" : last_trade_income.serial_number[8, fixed_length])
-    curr_sn = last_sn.to_i + 1
-    @trade_income.serial_number = codes(Time.new.to_date, curr_sn, fixed_length)
-
-    TradeIncome.transaction do
-      @trade_income.save!
-      user = User.find(current_user.id)
-      user.update_attribute(:money, user.money + @trade_income.money)
-      current_user.money = user.money
-    render :text => "success recharge, todo..."
+    begin
+      TradeIncome.transaction do
+        @trade_income = TradeIncome.create(params[:trade_income])
+        @trade_income.update_attribute(:buyer_id, current_user.id)
+        raise "failed to recharge" unless @trade_income.valid?
+        user = User.find(current_user.id)
+        user.update_attribute(:money, user.money + @trade_income.money)
+        current_user.money = user.money
+        render :text => "success recharge, todo..."
+      end
+    rescue Exception => e
+      render :text => e
     end
   end
 
   def pay
     transaction = OrderTransaction.find(params[:id])
-    total_pay = transaction.items.inject(0) { |s, n| s += n.price * n.amount } + transaction.delivery_price
+    total_pay = transaction.total + transaction.delivery_price
     if total_pay > current_user.money
       render :status => 500
-    else
-      last_payment = TradeIncome.order("serial_number DESC").first
-      fixed_length = 12
-      last_sn = (last_payment.nil? ? "0" : last_payment.serial_number[8, fixed_length])
-      curr_sn = last_sn.to_i + 1
-      payment = TradePayment.create({:serial_number => codes(Time.new.to_date, curr_sn, fixed_length),
-          :money => total_pay, :order_transaction_id => params[:id], :buyer_id => current_user.id })
-
-      TradePayment.transaction do
-        # payment.save!
-        # user = User.find(current_user.id)
-        # user.update_attribute(:money, user.money - payment.money)
-        # current_user.money = user.money
-        render :text => "success payment, todo..."
+    else      
+      begin
+        TradePayment.transaction do
+          @payment = TradePayment.create({:money => total_pay, 
+            :order_transaction_id => params[:id], :buyer_id => current_user.id })
+          raise "failed to pay" unless @payment.valid?
+          user = User.find(current_user.id)
+          user.update_attribute(:money, user.money - @payment.money)
+          current_user.money = user.money
+          render :text => "success payment, todo..."
+        end
+      rescue Exception => e
+        render :text => e
       end
     end
   end
@@ -262,15 +252,4 @@ class People::TransactionsController < People::BaseController
       format.json{ render :json => @transaction.messages  }
     end
   end
-
-  private
-  def codes(time, code, fixed_length)
-    code_length = code.to_s.length
-    if(code_length > 0 && code_length <= fixed_length)
-      code_suffix = ""
-      (1..fixed_length-code_length).each{|e| code_suffix += "0"}
-      time.strftime("%Y%m%d") + code_suffix + code.to_s
-    end
-  end
-
 end
