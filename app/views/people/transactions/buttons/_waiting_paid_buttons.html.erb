@@ -6,7 +6,7 @@
 			<%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
 		<% end %>
 
-		<%= link_to '#', :class => 'btn btn-large btn-primary', 'event-name' => 'paid' do %>
+		<%= link_to pay_person_transaction_url(@people, transaction), :class => 'btn btn-large btn-primary pay-button', 'event-name' => 'paid' do %>
 			<%=raw "确认付款&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
 	</div>

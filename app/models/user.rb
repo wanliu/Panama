@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   extend FriendlyId
 
   attr_accessible :uid, :login, :first_name, :last_name, :email
+  attr_protected :money
 
   define_graphical_attr :photos, :handler => :grapical_handler
 
@@ -16,6 +17,9 @@ class User < ActiveRecord::Base
   has_many :transactions,
            class_name: "OrderTransaction",
            foreign_key: 'buyer_id'
+
+  has_many :trade_incomes, class_name: "TradeIncome", foreign_key: "trade_income_id"
+  has_many :trade_payments, class_name: "TradePayment", foreign_key: "trade_payment_id"
 
   has_many :credits
   has_many :addresses, class_name: "Address", dependent: :destroy
