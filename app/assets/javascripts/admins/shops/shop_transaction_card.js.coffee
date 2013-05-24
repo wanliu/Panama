@@ -3,7 +3,6 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
         class ShopTransactionCard extends Transaction.TransactionCardBase
             initialize:() ->
                 super
-                @toggleMessage()
                 @filter_delivery_code()
 
             events:
