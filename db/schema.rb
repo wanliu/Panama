@@ -289,8 +289,8 @@ ActiveRecord::Schema.define(:version => 20130523071142) do
     t.boolean  "operator_state",                                  :default => false
     t.integer  "delivery_type_id"
     t.decimal  "delivery_price",   :precision => 10, :scale => 0
-    t.string   "delivery_code"
     t.integer  "operator_id"
+    t.string   "delivery_code"
   end
 
   create_table "permissions", :force => true do |t|
