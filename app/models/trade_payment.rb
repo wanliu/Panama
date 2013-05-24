@@ -28,6 +28,7 @@ class TradePayment < ActiveRecord::Base
   end
 
   def calculate_money
-    User.connection.update("update users set money=money-#{money]} where id=#{buyer.id}")
+    sql = "update users set money=money-#{money} where id=#{buyer.id}"
+    User.connection.update(sql)
   end
 end

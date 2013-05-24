@@ -21,9 +21,7 @@ class TradeIncome < ActiveRecord::Base
   end
 
   def add_money
-    debugger
-    sql = "update users set money=money+#{money]} where id=#{buyer.id}"
-    debugger
+    sql = "update users set money=money+#{money} where id=#{buyer.id}"
     User.connection.update(sql)
   end
 end
