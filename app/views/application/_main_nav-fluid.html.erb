@@ -48,13 +48,13 @@
 </div>
 
 <script type="text/javascript">
-require(['jquery','twitter/bootstrap'], function($){
+require(['jquery', 'jquery_ujs', 'twitter/bootstrap'], function($){
   $(".save_activity").on('click', function(type){
     var $a = $(".activity_select>.active");
     var content_id = $a.find(">a").attr('href')
     var $form = $(".activity_forms>" + content_id + " form");
 
-    // 提交订单 $form.submit();
+    $form.submit();
     $("#active_dialog").modal('hide');
 
   });

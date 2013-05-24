@@ -1,10 +1,10 @@
 <!-- 积分 -->
-<%= simple_form_for @activity, :html => { class: 'form-horizontal' } do |f| %>
+<%= simple_form_for @activity, wrapper: :default, :url => activities_score_index_path, :remote => true, :html => { class: 'form-horizontal' } do |f| %>
   <div class="control-group">
     <label class="control-label" for="inputProduct">产品</label>
     <div class="controls">
 		<div class="input-append">
-		  <input class="span2" name="activity[product]" name="inputProduct" placeholder="Product" type="text">
+      <%= f.input :product, :wrapper => false, :label => false %>
 		  <div class="btn-group">
 		    <button class="btn dropdown-toggle" data-toggle="dropdown">
 		      选择
@@ -28,41 +28,38 @@
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="inputPrice">价格</label>
-    <div class="controls">
-	  <input class="span2" name="inputPrice" placeholder="价格" type="text">
-    </div>
+    <%= f.input :price, :wrapper => :bootstrap %>
   </div>
 
-  <div class="control-group span3" style="margin-left:-5px;">
-    <label class="control-label" for="inputUseScore">可抵用积分</label>
-    <div class="controls">
-	  <input class="span2" name="inputScore" placeholder="可抵用积分" type="text">
-    </div>
-  </div>
-
-  <div class="control-group span3" style="margin-left:-5px;">
+  <div class="control-group" >
     <label class="control-label" for="inputGiveScore">回赠积分</label>
-    <div class="controls" >
-	  <input class="span2" name="inputGiveScore" placeholder="回赠积分" type="text">
+    <div class="controls controls-row" >
+      <%= f.input :give_score, :wrapper => false, :label => false, :input_html => { class: :span2 } %>
+      <label class="control-label span2" for="inputUseScore">可抵用积分</label>
+      <%= f.input :limit_score,
+                  :wrapper => false,
+                  :label => false,
+                  :input_html => { :class => :span2 } %>
+
+      <!-- <input class="span2" name="inputScore" placeholder="可抵用积分" type="text"> -->
     </div>
   </div>
 
-
-
-  <div class="control-group span3" style="margin-left:-5px;">
+  <div class="control-group" >
     <label class="control-label" for="inputStartTime">起始时间</label>
-    <div class="controls">
-    <input class="span2" name="inputStartTime" placeholder="活动起始时间" type="text">
+    <div class="controls controls-row">
+      <%= f.input :start_time,
+                  :as         => :string,
+                  :wrapper    => false,
+                  :label      => false,
+                  :input_html => { class: :span2 } %>
+
+      <label class="control-label span2" for="inputEndTime">结束时间</label>
+      <%= f.input :end_time,
+                  :as         => :string,
+                  :wrapper    => false,
+                  :label      => false,
+                  :input_html => { class: :span2 } %>
     </div>
   </div>
-
-  <div class="control-group span3" style="margin-left:-5px;" >
-    <label class="control-label" for="inputEndTime">结束时间</label>
-    <div class="controls" >
-    <input class="span2" name="inputEndTime" placeholder="活动结束时间" type="text">
-    </div>
-  </div> 
-
-
 <% end %>
