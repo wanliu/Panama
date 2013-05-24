@@ -5,7 +5,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         initialize:() ->
             super
             @hideAddress()
-            @toggleMessage()
 
         events:
             "click .page-header .btn"   : "clickAction"
