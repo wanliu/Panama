@@ -1,5 +1,5 @@
 <!-- 竞价 -->
-<%= simple_form_for @activity, wrapper: :default, :url => activities_focus_index_path, :remote => true,  :html => { class: 'form-horizontal' } do |f|%>
+<%= simple_form_for @activity, wrapper: :default, :url => activities_focus_path, :remote => true,  :html => { class: 'form-horizontal' } do |f|%>
 
   <div class="control-group">
     <label class="control-label" for="inputMainProduct">产品</label>
@@ -31,15 +31,15 @@
   <div class="control-group controls-row">
     <label class="control-label" for="peopleNumber">人数</label>
     <div class="controls">
-        <%=f.input  :people_number, 
-                    :wrapper => false, 
+        <%=f.input  :people_number,
+                    :wrapper => false,
                     :label=>false,
                     :input_html =>{ class: :span2}%>
     </div>
     <label class="control-label" for="price">价格</label>
     <div class="controls">
       <%= f.input :price,
-                  :label=>false, 
+                  :label=>false,
                   :wrapper => false,
                   :input_html=>{class: :span2} %>
      </div>
@@ -57,7 +57,7 @@
     var insert = $(".bettwen1");
     $(".add1").bind("click",function(){
       $(".addLine1").prepend(insert);
-    });      
+    });
   });
 </script>
 
