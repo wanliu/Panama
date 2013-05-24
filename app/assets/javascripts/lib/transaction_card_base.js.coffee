@@ -6,7 +6,6 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
 
         class TransactionCardBase extends StateView.AbstructStateView
 
-
             initialize:(@option) ->
                 super
                 @options['initial']   ?= @$el.attr('state-initial')
@@ -21,7 +20,6 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                     @realtime = RealtimeClient.client(@rt_options.url)
                     @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
                 # @$el.bind('click', @activeThis)
-                @changeProgress()
 
             getNotifyName: () ->
                 "transaction-#{@options['id']}"
@@ -82,7 +80,6 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
             slideEvent: (event, direction = 'right') ->
                 $.post @eventUrl(event), (data) =>
                     @slidePage(data, direction)
-                    @changeProgress()
 
             changeProgress: () ->
                 bar_class = ["bar-success", "bar-warning", "bar-danger", "bar-info"]

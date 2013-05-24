@@ -30,7 +30,9 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 { name: 'back',       from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
             ]
 
-
+            callbacks:
+                onchangestate: (event, from, to) ->
+                    @changeProgress()
 
         getNotifyName: () ->
             super + "-buyer"
@@ -70,15 +72,17 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
 
         checkAndPay: (event) ->
             button = @$("a.pay-button")
-            $.post(button.attr("href"))
-                .success (xhr, data, status) =>
-                    @slideAfterEvent("paid")
-                    false
-                .error (xhr, status) =>
-                    button.addClass("disabled")
-                    alert("支付失败，请确定您的余额是否足够！")
-                    false
-            StateMachine.ASYNC
+            if !button.hasClass("disabled")
+                button.addClass("disabled")
+                $.post(button.attr("href"))
+                    .success (xhr, data, status) =>
+                        button.removeClass("disabled")
+                        @slideAfterEvent("paid")
+                        false
+                    .error (xhr, status) =>
+                        alert("支付失败，请确定您的余额是否足够！")
+                        false
+                StateMachine.ASYNC
             false
 
         saveAddress: (event) ->
