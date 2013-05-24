@@ -16,8 +16,8 @@ end
 
 module PackageExtension
 
-  attr_accessor  :mainProduct,:mainProductPicture,:mainProductPrice,:mainProductNumber,
-  	:attachProduct,:attachProductPrice,:attachProductNumber,:attachProductPicture,
-  	:attachType
+  attr_accessor  :main_product, :main_product_price, 
+  				 :main_product_number, :attach_product, :attach_product_price,
+  				 :attach_product_number, :attach_type
 end
 

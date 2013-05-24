@@ -1,22 +1,22 @@
 <!-- 吞货 -->
 <!-- 竞价 -->
-<%= simple_form_for @activity, :html => { class: 'form-horizontal' } do %>
+<%= simple_form_for @activity, wrapper: :default, :url => activities_courage_index_path, :remote => true, :html => { class: 'form-horizontal' } do |f|%>
 
   <div class="control-group">
     <label class="control-label" for="inputProduct">产品</label>
     <div class="controls">
-		<div class="input-append">
-		  <input class="span2" name="inputProduct" placeholder="Product" type="text">
-		  <div class="btn-group">
-		    <button class="btn dropdown-toggle" data-toggle="dropdown">
-		      选择
-		      <span class="caret"></span>
-		    </button>
-<!-- 		    <ul class="dropdown-menu">
-		      ...
-		    </ul>
- -->		  </div>
-		</div>
+    <div class="input-append">
+      <%= f.input :product, :wrapper => false, :label => false %>
+      <div class="btn-group">
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+          选择
+          <span class="caret"></span>
+        </button>
+<!--        <ul class="dropdown-menu">
+          ...
+        </ul>
+ -->      </div>
+    </div>
     </div>
   </div>
   <div class="control-group">
@@ -28,22 +28,23 @@
     </div>
   </div>
 
-<div class="controls-row" style="margin-left:-30px;">
-    <div class="control-group span3">
-      <label class="control-label" for="inputNumber">数量</label>
-      <div class="controls">
-        <input class="span2" name="inputNumber" placeholder="数量" type="text">
-      </div>
+<div class="control-group controls-row">
+    <label class="control-label" for="number">数量</label>
+    <div class="controls controls-row">
+        <%=f.input  :number, 
+                    :wrapper => false, 
+                    :label=>false,
+                    :input_html =>{ class: :span2}%>
     </div>
+    <div class="controls controls-row">
+    <label class="control-label" for="price">价格</label>
+      <%= f.input :price,
+                  :label=>false, 
+                  :wrapper => false,
+                  :input_html=>{class: :span2} %>
+     </div>
+  </div>
 
-
-    <div class="control-group span3" style="margin-left:-10px;">
-      <label class="control-label"  for="inputPrice">价格</label>
-      <div class="controls">
-        <input class="span2" name="inputPrice" placeholder="价格" type="text">
-      </div>
-    </div>
-</div>
 
   <div class="control-group addLine2" >
     <div class="pull-right" style="padding-right:100px;">
@@ -52,19 +53,24 @@
   </div>
 
 
-  <div class="control-group span3" style="margin-left:-5px;">
+ <div class="control-group controls-row" >
     <label class="control-label" for="inputStartTime">起始时间</label>
     <div class="controls">
-    <input class="span2" name="inputStartTime" placeholder="活动起始时间" type="text">
+      <%= f.input :start_time,
+                  :as         => :string,
+                  :wrapper    => false,
+                  :label      => false,
+                  :input_html => { class: :span2 } %>
+    </div>
+    <label class="control-label span2" for="inputEndTime">结束时间</label>
+    <div class="controls">
+      <%= f.input :end_time,
+                  :as         => :string,
+                  :wrapper    => false,
+                  :label      => false,
+                  :input_html => { class: :span2 } %>
     </div>
   </div>
-
-  <div class="control-group span3" style="margin-left:-5px;" >
-    <label class="control-label" for="inputEndTime">结束时间</label>
-    <div class="controls" >
-    <input class="span2" name="inputEndTime" placeholder="活动结束时间" type="text">
-    </div>
-  </div> 
 <% end %>
 
    <script type="text/javascript">
