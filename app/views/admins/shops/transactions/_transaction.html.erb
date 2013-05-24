@@ -20,16 +20,18 @@
 					<%= render "state_buttons", :transaction => transaction %>
 				</h1>
 				<div class="state-progress">
-					<div class="progress progress-mini progress-striped active">
+					<div class="progress progress-mini progress-striped active" style="width: 90%;">>
 						<div class="state-bar" style="width: 30%;"></div>
 						<div class="state-bar" style="width: 25%;"></div>
 						<div class="state-bar" style="width: 20%;"></div>
 						<div class="state-bar" style="width: 15%;"></div>
+						<div class="state-bar" style="width: 10%;"></div>
 					</div>
 					<span class="state-position badge order">1<div class="state-title">买家下单</div></span>
 					<span class="state-position badge waiting_paid" style="left:30%">2<div class="state-title">买家付款</div></span>
 					<span class="state-position badge waiting_delivery" style="left:55%">3<div class="state-title">确认发货</div></span>
-					<span class="state-position badge waiting_sign" style="left:75%">3<div class="state-title">等待收货</div></span>
+					<span class="state-position badge waiting_sign" style="left:75%">4<div class="state-title">等待收货</div></span>
+					<span class="state-position badge over" style="left:90%">5<div class="state-title">完成</div></span>
 				</div>
 			</div>
 		</div>
@@ -40,7 +42,7 @@
 	</div>
 	<div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
 		<div class="message-toggle"><%= button_tag icon(:list), :class => "btn" %></div>
-		<iframe src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
+		<iframe class="hide" src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
 		</iframe>
 	</div>
 </div>
