@@ -4,7 +4,7 @@ class People::RechargesController < People::BaseController
 
   def create
     @income = TradeIncome.new(params[:trade_income])
-    @income.buyer_id = current_user.id
+    @income.user = current_user
     respond_to do |format|
       if @income.save
         format.html{
