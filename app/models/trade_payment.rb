@@ -28,6 +28,6 @@ class TradePayment < ActiveRecord::Base
   end
 
   def calculate_money
-    buyer.update_attribute(:money, buyer.money - money)
+    User.connection.update("update users set money=money-#{money]} where id=#{buyer.id}")
   end
 end

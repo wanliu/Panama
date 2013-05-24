@@ -45,7 +45,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def delivery_code
     transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
-      if transaction.state_name == :waiting_sign
+      if transaction.state_name == :waiting_delivery
         transaction.delivery_code = params[:delivery_code]
         if transaction.save
           format.json{ head :no_content }
@@ -96,8 +96,9 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def messages
     @transaction = OrderTransaction.find_by(:seller_id => current_shop.id, :id => params[:id])
+    @messages = @transaction.messages.order("created_at desc").limit(30)
     respond_to do |format|
-      format.json{ render :json => @transaction.messages  }
+      format.json{ render :json =>   }
     end
   end
 end
