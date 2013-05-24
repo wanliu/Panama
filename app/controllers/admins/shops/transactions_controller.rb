@@ -25,20 +25,40 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   end
 
   def event
-    @transaction = OrderTransaction.find(params[:id])
+    @transaction = OrderTransaction.find_by(
+      :id => params[:id], :seller_id => current_shop.id)
     # authorize! :event, @transaction
-    if @transaction.fire_events!(params[:event])
-      render partial: 'transaction',
-                   object:  @transaction,
-                   locals: {
-                     state:  @transaction.state,
-                     people: @people
-                   }
-      # render :partial => 'transaction', :transaction => @transaction, :layout => false
-      # redirect_to person_transaction_path(@people.login, @transaction)
+    if params[:event] != "expired"
+      if @transaction.fire_events!(params[:event])
+        render partial: 'transaction',
+                     object:  @transaction,
+                     locals: {
+                       state:  @transaction.state,
+                       people: @people
+                     }
+      end
+    else
+      redirect_to shop_admins_pending_path(current_shop.name)
     end
   end
 
+  def delivery_code
+    transaction = OrderTransaction.find(params[:id])
+    respond_to do |format|
+      if transaction.state_name == :waiting_delivery
+        transaction.delivery_code = params[:delivery_code]
+        if transaction.save
+          format.json{ head :no_content }
+        else
+          format.json{ render :json => draw_errors_message(transaction), :status => 403 }
+        end
+      else
+        format.json{ render :json =>{message: 'invalid state'}, :status => 403 }
+      end
+    end
+  end
+
+  #处理订单
   def dispose
     @transaction = OrderTransaction.find_by(:seller_id => current_shop.id, :id => params[:id])
     if @transaction.operator_create(current_user.id)

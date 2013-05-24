@@ -1,4 +1,32 @@
 <div class="container-fluid">
-	<p class="lead">请打印出交易清单, 请准备好你的商品, 并联系好您的物流, 再点击确认你的发货状态</p>
+  <div class="row-fluid">
+    <div class="span1">
+      <label class="control-label">配送方式：</label>
+    </div>
+    <div class="span3">
+      <%= transaction.delivery_type.nil? ? "暂无" : transaction.delivery_type.name %>
+    </div>
+    <div class="span1">
+      <label class="control-label">配送费用：</label>
+    </div>
+    <div class="span3">
+      <%= transaction.delivery_price %>
+    </div>
+    <div class='span1'>
+      <label class="control-label">快递单号：</label>
+    </div>
+    <div class='span3'>
+      <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code' style='margin-bottom:0px;' />
+    </div>
+  </div>
+  <div class='row-fluid'>
+    <div class='span12'>
+      送货地址：
+      <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
+    </div>
+  </div>
+  <p class="lead">请打印出交易清单, 请准备好你的商品, 并联系好您的物流, 再点击确认你的发货状态</p>
 </div>
 <%= render "products", :transaction => transaction %>
+<script type='text/javascript'>
+</script>

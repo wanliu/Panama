@@ -1,5 +1,8 @@
 define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jsclock-0.8", 'lib/realtime_client', 'exports'],
     ($, Backbone, StateMachine, StateView, _a, RealtimeClient, exports) ->
+        class Transaction extends Backbone.Model
+            set_url: (url) ->
+                @urlRoot = url
 
         class TransactionCardBase extends StateView.AbstructStateView
 
@@ -10,6 +13,8 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                 @options['id']        ?= @$el.attr('state-id')
                 @options['url']       ?= @$el.attr('state-url')
                 @options['event_url'] ?= @$el.attr('state-event-url')
+                @transaction = new Transaction()
+                @transaction.set_url(@options['url'])
 
                 @rt_options = @options['realtime']
                 if @rt_options.url?

@@ -1,16 +1,17 @@
 define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 'exports'],
     ($, Backbone, Transaction, StateMachine, exports) ->
-
         class ShopTransactionCard extends Transaction.TransactionCardBase
             initialize:() ->
                 super
                 @toggleMessage()
+                @filter_delivery_code()
 
             events:
                 "click .page-header .btn" : "clickAction"
                 "click button.close"      : "closeThis"
                 "click .detail"           : "toggleItemDetail"
                 "click .message-toggle"   : "toggleMessage"
+                "keyup .delivery_code"    : "filter_delivery_code"
 
             states:
                 initial: 'none'
@@ -45,6 +46,29 @@ define ['jquery', 'backbone', "lib/transaction_card_base", 'lib/state-machine', 
 
             leaveWaitingDelivery: (event, from, to, msg) ->
                 @slideAfterEvent(event) unless /back/.test event
+
+            beforeDelivered: (event, from, to, msg) ->
+                @save_delivery_code()
+
+            filter_delivery_code: () ->
+                delivery_code = @$("input:text.delivery_code").val()
+                button = @$(".delivered")
+                if delivery_code == ""
+                    button.addClass("disabled")
+                else
+                    button.removeClass("disabled")
+
+            save_delivery_code: () ->
+                delivery_code = @$("input:text.delivery_code").val()
+                return if delivery_code == ""
+
+                urlRoot = @transaction.urlRoot
+                @transaction.fetch(
+                    url: "#{urlRoot}/delivery_code",
+                    type: "PUT",
+                    data: {delivery_code: delivery_code}
+                )
+
 
         exports.ShopTransactionCard = ShopTransactionCard
         exports
