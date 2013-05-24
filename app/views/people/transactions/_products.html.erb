@@ -41,7 +41,7 @@
 
 	<strong>合计(含运费)：
 		<span>
-			<%= number_to_currency(transaction.total + (transaction.try(:delivery_price) || 0)) %>
+			<%= number_to_currency(transaction.stotal) %>
 		</span>
 	</strong>
 

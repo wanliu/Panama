@@ -1,5 +1,4 @@
 #describe: 交易聊天
-
 define ["jquery", "backbone", "lib/realtime_client", "notify"],
 ($, Backbone, Realtime) ->
 

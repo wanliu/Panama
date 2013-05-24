@@ -10,7 +10,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             "click .page-header .btn"   : "clickAction"
             "click button.close"        : "closeThis"
             "click .address-add>button" : "addAddress"
-            "click a.pay-button"        : "checkAndPay"
             "click .item-detail"        : "toggleItemDetail"
             "click .message-toggle"     : "toggleMessage"
             "submit .address-form>form" : "saveAddress"
@@ -67,23 +66,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         enterWaitingDelivery: (event, from, to, msg) ->
             @$(".clock").jsclock();
 
-        # leaveWaitingPaid: (event, from, to, msg) ->
-        #     @slideAfterEvent(event) unless /back/.test event
-
-        checkAndPay: (event) ->
-            button = @$("a.pay-button")
-            if !button.hasClass("disabled")
-                button.addClass("disabled")
-                $.post(button.attr("href"))
-                    .success (xhr, data, status) =>
-                        button.removeClass("disabled")
-                        @slideAfterEvent("paid")
-                        false
-                    .error (xhr, status) =>
-                        alert("支付失败，请确定您的余额是否足够！")
-                        false
-                StateMachine.ASYNC
-            false
+        leaveWaitingPaid: (event, from, to, msg) ->
+            @slideAfterEvent(event) unless /back/.test event
 
         saveAddress: (event) ->
             params = @$(".address-form>form").serialize()

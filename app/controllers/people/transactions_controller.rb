@@ -179,28 +179,6 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  def pay
-    transaction = OrderTransaction.find(params[:id])
-    total_pay = transaction.total + transaction.delivery_price
-    if total_pay > current_user.money
-      render :status => 500
-    else      
-      begin
-        TradePayment.transaction do
-          @payment = TradePayment.create({:money => total_pay, 
-            :order_transaction_id => params[:id], :buyer_id => current_user.id })
-          raise "failed to pay" unless @payment.valid?
-          user = User.find(current_user.id)
-          user.update_attribute(:money, user.money - @payment.money)
-          current_user.money = user.money
-          render :text => "success payment, todo..."
-        end
-      rescue Exception => e
-        render :text => e
-      end
-    end
-  end
-
   def notify
   end
 

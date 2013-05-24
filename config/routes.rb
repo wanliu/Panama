@@ -21,7 +21,6 @@ Panama::Application.routes.draw do
         get "messages", :to => "people/transactions#messages"
         post "get_delivery_price", :to => "people/transactions#get_delivery_price"
         get "recharge", :to => "people/transactions#recharge"
-        post "pay", :to => "people/transactions#pay"
       end
 
       collection do

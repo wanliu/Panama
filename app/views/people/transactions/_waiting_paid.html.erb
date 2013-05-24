@@ -16,126 +16,105 @@
   <% service.sign %>
 <% end %>
 <%#= button_to_function "Submit", "document.getElementById('payment-form').firstChild.remove();document.getElementById('payment-form').submit()", :class=> 'btn' %>
-	<div class="info">
-	<div class="row-fluid">
-		<div class="span2">
-			<label class="control-label">收货地址：</label>
-		</div>
-		<div class="span4">
-			<%= transaction.address.try(:location) %>
-		</div>
-		<div class="span2">
-			<label class="control-label">邮编：</label>
-		</div>
-		<div class="span4">
-			<small><%= transaction.address.try(:zip_code) %></small>
-		</div>
-	</div>
+  <div class="info">
+  <div class="row-fluid">
+    <div class="span2">
+      <label class="control-label">收货地址：</label>
+    </div>
+    <div class="span4">
+      <%= transaction.address.try(:location) %>
+    </div>
+    <div class="span2">
+      <label class="control-label">邮编：</label>
+    </div>
+    <div class="span4">
+      <small><%= transaction.address.try(:zip_code) %></small>
+    </div>
+  </div>
 
-	<div class="row-fluid">
-		<div class="span2">
-			<label class="control-label">配送方式：</label>
-		</div>
-		<div class="span4">
-			<%= transaction.delivery_type.try(:name) %>
-		</div>
-		<div class="span2">
-			<label class="control-label">配送费用：</label>
-		</div>
-		<div class="span4">
-			<%= number_to_currency(transaction.try(:delivery_price)) %>
-		</div>
-	</div>
+  <div class="row-fluid">
+    <div class="span2">
+      <label class="control-label">配送方式：</label>
+    </div>
+    <div class="span4">
+      <%= transaction.delivery_type.try(:name) %>
+    </div>
+    <div class="span2">
+      <label class="control-label">配送费用：</label>
+    </div>
+    <div class="span4">
+      <%= number_to_currency(transaction.try(:delivery_price)) %>
+    </div>
+  </div>
 
-	<div class="row-fluid">
-		<div class="span2">
-			<label class="control-label" for="inputEmail">购买的宝贝：</label>
-		</div>
-		<div class="span10">
-			<% transaction.items[0...10].each do |item| %>
-				<%= image_tag item.product.photos.icon %><small>x<%= item.amount.to_i %></small>
-			<% end %>
-		</div>
-	</div>
+  <div class="row-fluid">
+    <div class="span2">
+      <label class="control-label" for="inputEmail">购买的宝贝：</label>
+    </div>
+    <div class="span10">
+      <% transaction.items[0...10].each do |item| %>
+        <%= image_tag item.product.photos.icon %><small>x<%= item.amount.to_i %></small>
+      <% end %>
+    </div>
+  </div>
 </div>
-	<table class="table table-striped">
-		<thead>
-		<tr>
-			<th colspan=2 class="relative">
-				<div class="left-frame"></div>
-			</th>
-			<th><strong>合计(含运费)：<%= number_to_currency(transaction.total + (transaction.try(:delivery_price) || 0)) %></strong>
-			</th>
-			<th><strong>你的余额：<%= number_to_currency(current_user.money) %></strong>
-			</th>
-			<th class="relative">
-				<div class="right-frame"></div>
-			</th>
-		</tr>
-		</thead>
-	</table>
-	<% if current_user.credits.size > 0 %>
-	<hr>
-	<div class="row-fluid">
-		<%= current_user.credits.each do |card| %>
-			<%= content_tag :div, :class => 'bank_card' do %>
-				<%= radio_button_tag :bank, card.bank.code %>
-				<%= label_tag "bank_#{card.bank.code}" do %>
-					<span class="banks bank-<%= bank.code %>"><%= card.bank.name %></span>
-				<% end %>
-			<% end %>
-		<% end %>
-	</div>
-	<% end %>
-	<hr>
-	<div class="row-fluid">
-		<div class="bank-wrapper">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th colspan=2 class="relative">
+        <div class="left-frame"></div>
+      </th>
+      <th><strong>合计(含运费)：<%= number_to_currency(transaction.stotal) %></strong>
+      </th>
+      <th><strong>你的余额：<%= number_to_currency(current_user.money) %></strong>
+      </th>
+      <th class="relative">
+        <div class="right-frame"></div>
+      </th>
+    </tr>
+    </thead>
+  </table>
+  <% if current_user.credits.size > 0 %>
+  <hr>
+  <div class="row-fluid">
+    <%= current_user.credits.each do |card| %>
+      <%= content_tag :div, :class => 'bank_card' do %>
+        <%= radio_button_tag :bank, card.bank.code %>
+        <%= label_tag "bank_#{card.bank.code}" do %>
+          <span class="banks bank-<%= bank.code %>"><%= card.bank.name %></span>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <% end %>
+  <hr>
+  <div class="row-fluid">
+    <div class="bank-wrapper">
 
-		<% Bank.all.each do |bank| %>
-			<%#= link_to '#' do %>
-			<%= content_tag :div, :class => 'bank_card' do %>
-				<%= radio_button_tag :bank, bank.code %>
-				<%= label_tag "bank_#{bank.code}" do %>
-					<span class="banks bank-<%= bank.code %>"><%= bank.name %></span>
-				<% end %>
-			<% end %>
-		<% end %>
-		</div>
-		<div class='clearfix'></div>
-		<div class="form-actions">
-		  <a href='transactions/1/recharge?trade_income[bank_id]=1&trade_income[money]=100' class="btn btn-primary">转到银行付款</a>
-		</div>
-	</div>
-<!-- 	<div id="creditcard" class="row-fluid">
-		<div class="span5">
-			<img class="creditcard-preview" src="/assets/creditcard.png"></img>
-		</div>
-		<div class="span5">
-			<form class="form-horizontal">
-				<div class="control-group">
-					<label class="control-label" for="inputEmail">卡号</label>
-					<div class="controls">
-						<input name="cardid" class="input-xlarge" type="text" />
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputEmail">支付密码</label>
-					<div class="controls">
-						<input name="password" class="input-xlarge" type="password" />
-					</div>
-				</div>
-
-				<div class="control-group actions">
-					<div class="controls pull-right">
-						<input class="btn btn-primary" name="commit" type="submit" value="付款">
-					</div>
-				</div>
-			</form>
-		</div>
-		<div class="span2">
-			<blockquote>
-不要向他人透露您的密码，也不要设定简单数字排列（如888888）或本人生日日期作为密码，刷卡进入自助银行的门禁无需输入密码
-			</blockquote>
-		</div>
-	</div> -->
+    <% Bank.all.each do |bank| %>
+      <%#= link_to '#' do %>
+      <%= content_tag :div, :class => 'bank_card' do %>
+        <%= radio_button_tag :bank, bank.code %>
+        <%= label_tag "bank_#{bank.code}" do %>
+          <span class="banks bank-<%= bank.code %>"><%= bank.name %></span>
+        <% end %>
+      <% end %>
+    <% end %>
+    </div>
+    <div class='clearfix'></div>
+    <div class="form-actions">
+      <a href='transactions/1/recharge?trade_income[bank_id]=1&trade_income[money]=100' class="btn btn-primary">转到银行付款</a>
+    </div>
+  </div>
 </div>
+<script type="text/javascript">
+  require(["jquery", "people/transaction_payment"], function($, TransactionPayment){
+      new TransactionPayment({
+        el: $("#order<%=transaction.id %>"),
+        model: {
+          total: <%=transaction.total %>,
+          money: <%=current_user.money %>
+        }
+      })
+  })
+</script>
