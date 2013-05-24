@@ -9,6 +9,7 @@
 #  total: 总金额
 #  address: 送货地址
 #  items_count: 商品总项
+#  delivery_code: 快递单号
 class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
@@ -46,12 +47,12 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :seller_id
   validates_associated :address
   # validates_presence_of :address
-  validate :valid_address?
+  validate :valid_address?, :valid_delivery_code?
 
   accepts_nested_attributes_for :address
   # validates_presence_of :address
 
-  after_create :notice_user
+  after_create :notice_user, :notice_new_order, :state_change_detail
 
   def notice_user
     Notification.create!(
@@ -59,7 +60,6 @@ class OrderTransaction < ActiveRecord::Base
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
-    notice_new_order
   end
 
   state_machine :initial => :order do
@@ -144,7 +144,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def readonly?
-    new_record?
+    false
   end
 
   #变更状态
@@ -230,9 +230,16 @@ class OrderTransaction < ActiveRecord::Base
 
   private
   def valid_address?
-    puts "state: #{state_name}"
-    unless state_name == :order || state_name == :close
+    unless %w(order close).include?(state)
       errors.add(:address, "地址不存在！") if address.nil?
+    end
+  end
+
+  def valid_delivery_code?
+    if %w(waiting_sign, waiting_delivery).include?(state)
+      if delivery_code.blank?
+        errors.add(:delivery_code, "没有发货运单号!")
+      end
     end
   end
 

@@ -71,10 +71,10 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :cart, :controller => "people/cart" do 
-      member do 
+    resources :cart, :controller => "people/cart" do
+      member do
         post 'move_out_cart', :to => "people/cart#move_out_cart"
-        post 'change_number', :to => "people/cart#change_number" 
+        post 'change_number', :to => "people/cart#change_number"
       end
     end
 
@@ -185,6 +185,7 @@ Panama::Application.routes.draw do
           get "dialogue", :to => "shops/transactions#dialogue"
           post "send_message", :to => "shops/transactions#send_message"
           get "messages", :to => "shops/transactions#messages"
+          put "delivery_code", :to => "shops/transactions#delivery_code"
         end
       end
 
