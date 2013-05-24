@@ -55,7 +55,14 @@ require(['jquery', 'jquery_ujs', 'twitter/bootstrap'], function($){
     var $form = $(".activity_forms>" + content_id + " form");
 
     $form.submit();
-    $("#active_dialog").modal('hide');
+
+    $form.on("ajax:success", function(){
+      $("#active_dialog").modal('hide');
+    });
+
+    $form.on("ajax:error", function(event, xhr, state){
+      $form.replaceWith(xhr.responseText);
+    });
 
   });
 

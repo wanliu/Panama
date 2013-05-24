@@ -9,9 +9,19 @@ class Activities::ScoreController < ApplicationController
     end
 
 	def create
-		params
-		debugger
-		self
+		activity_params = params[:activity].slice!(:product_id, :start_time, :end_time)
+		@activity = current_user.activities.build(activity_params)
+		@activity.activity_type = "score"
+		respond_to do |format|
+			if @activity.save
+				format.js { render "activities/score/add_activity" }
+			else
+				@activity.extend(ScoreExtension)
+				format.html { render :partial => "activities/score/form",
+														 :locals  => { :activity => @activity },
+														 :status  => 400 }
+			end
+		end
 	end
 end
 
