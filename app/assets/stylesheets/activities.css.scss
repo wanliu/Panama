@@ -109,17 +109,39 @@ body {
 }
 
 .activity {
-	width: 197px;
-	padding: 15px;
+	width: 227px;
+	// padding: 15px;
+	padding-bottom: 10px;
 	margin: 7.5px;
 	border: 1px solid #ccc;
 	float:left;
 	background: $white;
 	@include box-shadow(#ccc 0 0 1px);
 
-	img:active {
+	>img:active {
 		margin: 2px;
 	}
+
+	.buttons {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		display: none;
+	}
+	hr {
+		margin-bottom: 5px;
+	}
+	&:hover {
+		.buttons {
+			display: block;
+		}
+	}
+
+	.users {
+		padding: 5px;
+
+	}
+
 }
 
 .relative {
