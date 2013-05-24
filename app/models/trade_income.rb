@@ -1,7 +1,7 @@
 class TradeIncome < ActiveRecord::Base
   attr_accessible :money, :decription, :bank_id
 
-  belongs_to :buyer, class_name: "User"
+  belongs_to :user, class_name: "User"
   belongs_to :bank, class_name: "Bank"
 
   validates :serial_number, :presence => true
