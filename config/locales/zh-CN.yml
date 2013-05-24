@@ -345,3 +345,18 @@ zh-CN:
       links:
         sign_in: "登录"
         forgot_your_password: "忘记密码？"
+
+  order_states:
+    buyer:
+      order: 确认订单
+      waiting_paid: 等待付款
+      waiting_delivery: 卖家发货
+      waiting_sign: 等待收货
+      complete: 交易成功
+
+    seller:
+      order: 买家下单
+      waiting_paid: 买家付款
+      waiting_delivery: 确认发货
+      waiting_sign: 买家收货
+      complete: 交易成功

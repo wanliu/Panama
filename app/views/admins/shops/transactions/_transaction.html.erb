@@ -20,18 +20,18 @@
 					<%= render "state_buttons", :transaction => transaction %>
 				</h1>
 				<div class="state-progress">
-					<div class="progress progress-mini progress-striped active" style="width: 90%;">
-						<div class="state-bar" style="width: 30%;"></div>
-						<div class="state-bar" style="width: 25%;"></div>
-						<div class="state-bar" style="width: 20%;"></div>
-						<div class="state-bar" style="width: 15%;"></div>
-						<div class="state-bar" style="width: 10%;"></div>
+					<div class="progress progress-mini progress-striped active">
+					  <% transaction.state_details.each_with_index do |state_detail, index| %>
+					  <% if index != 0 %>
+					    <div class="state-bar bar bar-success" style="width: 20%;"></div>
+					  <% end %>
+					  <span class="state-position badge badge-warning" style="left: #{20*index}%">
+					    <%= index+1 %>
+					    <div class="state-title"><%= t('order_states.seller').values[index] %>
+					    </div>
+					  </span>
+					  <% end %>
 					</div>
-					<span class="state-position badge order">1<div class="state-title">买家下单</div></span>
-					<span class="state-position badge waiting_paid" style="left:30%">2<div class="state-title">买家付款</div></span>
-					<span class="state-position badge waiting_delivery" style="left:55%">3<div class="state-title">确认发货</div></span>
-					<span class="state-position badge waiting_sign" style="left:75%">4<div class="state-title">等待收货</div></span>
-					<span class="state-position badge over" style="left:90%">5<div class="state-title">完成</div></span>
 				</div>
 			</div>
 		</div>
