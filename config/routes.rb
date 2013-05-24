@@ -100,6 +100,10 @@ Panama::Application.routes.draw do
 
   namespace :activities do
     resources :auction
+    resources :courage
+    resources :focus
+    resources :package
+    resources :score
   end
 
   get "transport/index"
