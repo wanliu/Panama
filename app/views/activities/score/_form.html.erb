@@ -1,25 +1,8 @@
 <!-- 积分 -->
-<%= simple_form_for activity, wrapper: :default, :url => activities_score_index_path, :remote => true, :html => { class: 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <label class="control-label" for="inputProduct">产品</label>
-    <div class="controls">
-		<div class="input-append">
+<%= simple_form_for activity, :url => activities_score_index_path, :remote => true, :html => { class: 'form-horizontal' } do |f| %>
       <%= f.association :product,
-                        :wrapper      => false,
-                        :label        => false,
                         :collection   => Product.all %>
-		  <div class="btn-group">
-		    <button class="btn dropdown-toggle" data-toggle="dropdown">
-		      选择
-		      <span class="caret"></span>
-		    </button>
-<!-- 		    <ul class="dropdown-menu">
-		      ...
-		    </ul>
- -->		  </div>
-		</div>
-    </div>
-  </div>
+	
 
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
@@ -30,39 +13,17 @@
     </div>
   </div>
 
-  <div class="control-group">
-    <%= f.input :price, :wrapper => :bootstrap %>
-  </div>
 
-  <div class="control-group" >
-    <label class="control-label" for="inputGiveScore">回赠积分</label>
-    <div class="controls controls-row" >
-      <%= f.input :give_score, :wrapper => false, :label => false, :input_html => { class: :span2 } %>
-      <label class="control-label span2" for="inputUseScore">可抵用积分</label>
-      <%= f.input :limit_score,
-                  :wrapper => false,
-                  :label => false,
-                  :input_html => { :class => :span2 } %>
+    <%= f.input :price %>
 
-      <!-- <input class="span2" name="inputScore" placeholder="可抵用积分" type="text"> -->
-    </div>
-  </div>
+    <%= f.input :give_score %>
 
-  <div class="control-group" >
-    <label class="control-label" for="inputStartTime">起始时间</label>
-    <div class="controls controls-row">
-      <%= f.input :start_time,
-                  :as         => :string,
-                  :wrapper    => false,
-                  :label      => false,
-                  :input_html => { class: :span2 } %>
+    <%= f.input :limit_score %>
 
-      <label class="control-label span2" for="inputEndTime">结束时间</label>
-      <%= f.input :end_time,
-                  :as         => :string,
-                  :wrapper    => false,
-                  :label      => false,
-                  :input_html => { class: :span2 } %>
-    </div>
-  </div>
+    <%= f.input :start_time,
+                :as         => :string %>
+
+    <%= f.input :end_time,
+                :as         => :string%>
+
 <% end %>
