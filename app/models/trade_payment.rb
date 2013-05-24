@@ -1,5 +1,6 @@
+#付款
 class TradePayment < ActiveRecord::Base
-  attr_accessible :serial_number, :money, :decription, :order_transaction_id, :buyer_id
+  attr_accessible :money, :decription, :order_transaction
 
   belongs_to :buyer, class_name: "User"
   belongs_to :order_transaction, class_name: "OrderTransaction"
@@ -7,12 +8,26 @@ class TradePayment < ActiveRecord::Base
   # validates :serial_number, :presence => true
   validates :money, :presence => true
 
-  validates_presence_of :buyer
-  validates_presence_of :order_transaction_id
+  validates :buyer, :presence => true
+  validates :order_transaction, :presence => true
+  validates :serial_number, :presence => true
 
-  before_create :code_sn
+  after_create :calculate_money
+
+  before_validation(:on => :create) do
+    generate_buyer
+    code_sn
+  end
 
   def code_sn
-	self.serial_number = Time.now.strftime("%Y%m%d%H%M%S%4N")
+	  self.serial_number = Time.now.strftime("%Y%m%d%H%M%S%4N")
+  end
+
+  def generate_buyer
+    self.buyer = order_transaction.buyer
+  end
+
+  def calculate_money
+    buyer.update_attribute(:money, buyer.money - money)
   end
 end

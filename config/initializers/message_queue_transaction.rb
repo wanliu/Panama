@@ -1,31 +1,26 @@
 module MessageQueue
   module Transaction
-    extend ActiveSupport::Concern
+    def not_service_online(message)
+      name = "#{routing_key}.not.service"
+      client.queue(name, :auto_delete => true)
+      exchange = client.default_exchange
+      exchange.publish(message, :routing_key => name)
+    end
 
-    module InstanceMethods
+    def expired_delivery_failer
+      name = "#{routing_key}.expired.delivery.failer"
+      client.queue(name, :auto_delete => true)
+      exchange = client.default_exchange
+      exchange.publish(id.to_s, :routing_key => name)
+    end
 
-      def not_service_online(message)
-        name = "#{routing_key}.not.service"
-        client.queue(name, :auto_delete => true)
-        exchange = client.default_exchange
-        exchange.publish(message, :routing_key => name)
-      end
+    private
+    def routing_key
+      "transaction.notice"
+    end
 
-      def expired_delivery_failer
-        name = "#{routing_key}.expired.delivery.failer"
-        client.queue(name, :auto_delete => true)
-        exchange = client.default_exchange
-        exchange.publish(id.to_s, :routing_key => name)
-      end
-
-      private
-      def routing_key
-        "transaction.notice"
-      end
-
-      def client
-        Rabbitmq.client
-      end
+    def client
+      Rabbitmq.client
     end
   end
 end

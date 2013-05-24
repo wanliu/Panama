@@ -15,7 +15,7 @@ class OrderTransaction < ActiveRecord::Base
 
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type, :delivery_price
-  attr_accessor :total
+  # attr_accessor :total
 
 
   belongs_to :address,
@@ -47,11 +47,12 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :seller_id
   validates_associated :address
   # validates_presence_of :address
-  validate :valid_address?, :valid_delivery_code?
+  validate :valid_address?, :valid_delivery_code?, :valid_payment?
 
   accepts_nested_attributes_for :address
   # validates_presence_of :address
 
+  before_create :update_total_count
   after_create :notice_user, :notice_new_order, :state_change_detail
 
   def notice_user
@@ -125,6 +126,12 @@ class OrderTransaction < ActiveRecord::Base
       order.notice_change_buyer(transition.to_name)
     end
 
+    after_transition :waiting_paid => :waiting_delivery do |order, transaction|
+      TradePayment.create(
+        :money => order.stotal,
+        :order_transaction => order)
+    end
+
     after_transition do |order|
       order.state_change_detail
     end
@@ -150,10 +157,6 @@ class OrderTransaction < ActiveRecord::Base
   #变更状态
   def state_change_detail
     state_details.create(:state => state)
-  end
-
-  def total
-    items.inject(0){ |s, n| s += n.price * n.amount  }
   end
 
   def current_operator
@@ -208,6 +211,10 @@ class OrderTransaction < ActiveRecord::Base
     self.total = items.inject(0) { |s, item| s + item.total }
   end
 
+  def stotal
+    (total || 0) + (delivery_price || 0)
+  end
+
   def as_json(*args)
     attra = super *args
     attra["buyer_login"] = buyer.login
@@ -236,9 +243,17 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def valid_delivery_code?
-    if %w(waiting_sign, waiting_delivery).include?(state)
+    if :waiting_sign == state_name
       if delivery_code.blank?
         errors.add(:delivery_code, "没有发货运单号!")
+      end
+    end
+  end
+
+  def valid_payment?
+    if :waiting_delivery == state_name
+      if buyer.money < stotal
+        errors.add(:buyer, "您的金额不足!")
       end
     end
   end

@@ -45,7 +45,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def delivery_code
     transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
-      if transaction.state_name == :waiting_delivery
+      if transaction.state_name == :waiting_sign
         transaction.delivery_code = params[:delivery_code]
         if transaction.save
           format.json{ head :no_content }
