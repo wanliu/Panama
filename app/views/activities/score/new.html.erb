@@ -1,10 +1,10 @@
-<!-- 竞价 -->
-<%= simple_form_for @activity, :url => activities_auction_index_path, :html => { class: 'form-horizontal' } do |f| %>
+<!-- 积分 -->
+<%= simple_form_for @activity, :html => { class: 'form-horizontal' } do |f| %>
   <div class="control-group">
     <label class="control-label" for="inputProduct">产品</label>
     <div class="controls">
 		<div class="input-append">
-		  <input class="span2" name="inputProduct" placeholder="Product" type="text">
+		  <input class="span2" name="activity[product]" name="inputProduct" placeholder="Product" type="text">
 		  <div class="btn-group">
 		    <button class="btn dropdown-toggle" data-toggle="dropdown">
 		      选择
@@ -17,47 +17,43 @@
 		</div>
     </div>
   </div>
+
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
-      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
-      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
-      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+		<img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+		<img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+		<img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
     </div>
   </div>
 
-
-  <div class="control-group span3" style="margin-left:-5px;">
+  <div class="control-group">
     <label class="control-label" for="inputPrice">价格</label>
     <div class="controls">
 	  <input class="span2" name="inputPrice" placeholder="价格" type="text">
     </div>
   </div>
 
-   <div class="control-group span3"style="margin-left:-5px;" >
-    <label class="control-label"   for="inputNumber">数量</label>
+  <div class="control-group span3" style="margin-left:-5px;">
+    <label class="control-label" for="inputUseScore">可抵用积分</label>
     <div class="controls">
-    <input class="span2" name="inputNumber" placeholder="数量" type="text">
-    </div>
-  </div>
-
-
-  <div class="control-group">
-    <label class="control-label" for="inputPrice">&nbsp;</label>
-    <div class="controls" style="margin-top: 55px;">
-		  <div id="price_slider"></div>
-		  <script type="text/javascript">
-		  require(['jquery'], function($){
-			    $( "#price_slider" ).slider();
-		  });
-		  </script>
+	  <input class="span2" name="inputScore" placeholder="可抵用积分" type="text">
     </div>
   </div>
 
   <div class="control-group span3" style="margin-left:-5px;">
+    <label class="control-label" for="inputGiveScore">回赠积分</label>
+    <div class="controls" >
+	  <input class="span2" name="inputGiveScore" placeholder="回赠积分" type="text">
+    </div>
+  </div>
+
+
+
+  <div class="control-group span3" style="margin-left:-5px;">
     <label class="control-label" for="inputStartTime">起始时间</label>
     <div class="controls">
-    <input class="span2" name"inputStartTime" placeholder="活动起始时间" type="text">
+    <input class="span2" name="inputStartTime" placeholder="活动起始时间" type="text">
     </div>
   </div>
 
@@ -67,4 +63,6 @@
     <input class="span2" name="inputEndTime" placeholder="活动结束时间" type="text">
     </div>
   </div> 
+
+
 <% end %>

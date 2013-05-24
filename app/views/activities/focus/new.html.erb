@@ -1,5 +1,6 @@
 <!-- 竞价 -->
-<%= simple_form_for @activity, :url => activities_auction_index_path, :html => { class: 'form-horizontal' } do |f| %>
+<%= simple_form_for @activity, :html => { class: 'form-horizontal' } do %>
+
   <div class="control-group">
     <label class="control-label" for="inputProduct">产品</label>
     <div class="controls">
@@ -26,45 +27,51 @@
     </div>
   </div>
 
+<div class="controls-row" style="margin-left:-30px;">
+    <div class="control-group span3">
+      <label class="control-label" for="inputNumber">人数</label>
+      <div class="controls">
+        <input class="span2" name="inputNumber" placeholder="人数" type="text">
+      </div>
+    </div>
 
-  <div class="control-group span3" style="margin-left:-5px;">
-    <label class="control-label" for="inputPrice">价格</label>
-    <div class="controls">
-	  <input class="span2" name="inputPrice" placeholder="价格" type="text">
+
+    <div class="control-group span3" style="margin-left:-10px;">
+      <label class="control-label"  for="inputPrice">价格</label>
+      <div class="controls">
+        <input class="span2" name="inputPrice" placeholder="价格" type="text">
+      </div>
+    </div>
+</div>
+
+  <div class="control-group addLine1">
+    <div class="pull-right" style="padding-right:100px;">
+      <button class="btn add1"  type="button"><i class="icon-plus"></i>Add</li></button>
     </div>
   </div>
 
-   <div class="control-group span3"style="margin-left:-5px;" >
-    <label class="control-label"   for="inputNumber">数量</label>
-    <div class="controls">
-    <input class="span2" name="inputNumber" placeholder="数量" type="text">
-    </div>
-  </div>
-
-
-  <div class="control-group">
-    <label class="control-label" for="inputPrice">&nbsp;</label>
-    <div class="controls" style="margin-top: 55px;">
-		  <div id="price_slider"></div>
-		  <script type="text/javascript">
-		  require(['jquery'], function($){
-			    $( "#price_slider" ).slider();
-		  });
-		  </script>
-    </div>
-  </div>
+<script type="text/javascript">
+  require(['jquery'],function($){
+    var insert = $(".bettwen1");
+    $(".add1").bind("click",function(){
+      $(".addLine1").prepend(insert);
+    });      
+  });
+</script>
 
   <div class="control-group span3" style="margin-left:-5px;">
     <label class="control-label" for="inputStartTime">起始时间</label>
     <div class="controls">
-    <input class="span2" name"inputStartTime" placeholder="活动起始时间" type="text">
+    <input class="span2" name="inputStartTime" placeholder="活动起始时间" type="text">
     </div>
   </div>
 
   <div class="control-group span3" style="margin-left:-5px;" >
-    <label class="control-label" for="inputEndTime">结束时间</label>
-    <div class="controls" >
+    <label class="control-label"  for="inputEndTime">结束时间</label>
+    <div class="controls">
     <input class="span2" name="inputEndTime" placeholder="活动结束时间" type="text">
     </div>
   </div> 
+
+
 <% end %>

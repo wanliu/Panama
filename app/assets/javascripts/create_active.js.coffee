@@ -7,7 +7,7 @@ define ['jquery', 'backbone', 'twitter/bootstrap'], ($, Backbone) ->
 		initialize: (@options) ->
 			super
 			@on('show', @render, @)
-			@waitTemplate(false)
+			@waitTemplate()
 			@render()
 			$(@$el).modal(show:false)
 

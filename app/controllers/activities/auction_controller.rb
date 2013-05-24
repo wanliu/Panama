@@ -17,6 +17,6 @@ end
 
 module AuctionExtension
 
-  attr_accessor :price, :product
+  attr_accessor :price, :product,:pictrue, :number
 
 end
