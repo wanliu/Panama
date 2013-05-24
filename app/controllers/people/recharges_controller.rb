@@ -7,7 +7,9 @@ class People::RechargesController < People::BaseController
     @income.buyer_id = current_user.id
     respond_to do |format|
       if @income.save
-        format.json{ head :no_content }
+        format.html{
+          redirect_to person_transactions_path(current_user.login)
+        }
       else
         format.json{ render :json => draw_errors_message(@income) }
       end

@@ -69,6 +69,9 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         leaveWaitingPaid: (event, from, to, msg) ->
             @slideAfterEvent(event) unless /back/.test event
 
+        beforeSign: (event, from, to, msg) ->
+            @slideAfterEvent(event)
+
         saveAddress: (event) ->
             params = @$(".address-form>form").serialize()
             url = @$(".address-form>form").attr("action")
