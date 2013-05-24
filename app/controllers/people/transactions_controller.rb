@@ -163,22 +163,6 @@ class People::TransactionsController < People::BaseController
     render :text => delivery_prices.max
   end
 
-  def recharge
-    begin
-      TradeIncome.transaction do
-        @trade_income = TradeIncome.create(params[:trade_income])
-        @trade_income.update_attribute(:buyer_id, current_user.id)
-        raise "failed to recharge" unless @trade_income.valid?
-        user = User.find(current_user.id)
-        user.update_attribute(:money, user.money + @trade_income.money)
-        current_user.money = user.money
-        render :text => "success recharge, todo..."
-      end
-    rescue Exception => e
-      render :text => e
-    end
-  end
-
   def notify
   end
 
@@ -226,8 +210,9 @@ class People::TransactionsController < People::BaseController
 
   def messages
     @transaction = current_user.transactions.find(params[:id])
+    @messages = @transaction.messages.order("created_at desc").limit(30)
     respond_to do |format|
-      format.json{ render :json => @transaction.messages  }
+      format.json{ render :json => @messages  }
     end
   end
 end

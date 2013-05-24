@@ -20,13 +20,14 @@ Panama::Application.routes.draw do
         post "send_message", :to => "people/transactions#send_message"
         get "messages", :to => "people/transactions#messages"
         post "get_delivery_price", :to => "people/transactions#get_delivery_price"
-        get "recharge", :to => "people/transactions#recharge"
       end
 
       collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
       end
     end
+
+    match 'recharges/create', :to => "people/recharges#create"
 
     resources :topics, :controller => "people/topics" do
       collection do

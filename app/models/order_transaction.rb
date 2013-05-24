@@ -47,7 +47,7 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :seller_id
   validates_associated :address
   # validates_presence_of :address
-  validate :valid_address?, :valid_delivery_code?, :valid_payment?
+  validate :valid_address?
 
   accepts_nested_attributes_for :address
   # validates_presence_of :address
@@ -127,17 +127,27 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transaction|
-      TradePayment.create(
-        :money => order.stotal,
-        :order_transaction => order)
+      order.payment
     end
 
-    after_transition do |order|
-      order.state_change_detail
+    after_transition do |order, transaction|
+      if transaction.event == :back
+        order.state_details.last.destroy
+      else
+        order.state_change_detail
+      end
     end
 
     after_transition :waiting_delivery => :delivery_failure do |order, transition|
       order.expired_delivery_failer
+    end
+
+    before_transition :waiting_delivery => :waiting_sign do |order|
+      order.valid_delivery_code?
+    end
+
+    before_transition :waiting_paid => :waiting_delivery  do |order|
+      order.valid_payment?
     end
   end
 
@@ -148,6 +158,12 @@ class OrderTransaction < ActiveRecord::Base
     .where("details.expired <=?", DateTime.now)
     transactions.each{|t| t.fire_events!(:expired) }
     transactions
+  end
+
+  def payment
+    TradePayment.create(
+      :money => stotal,
+      :order_transaction => self)
   end
 
   def readonly?
@@ -235,26 +251,23 @@ class OrderTransaction < ActiveRecord::Base
     FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
   end
 
-  private
-  def valid_address?
-    unless %w(order close).include?(state)
-      errors.add(:address, "地址不存在！") if address.nil?
-    end
-  end
-
   def valid_delivery_code?
-    if :waiting_sign == state_name
-      if delivery_code.blank?
-        errors.add(:delivery_code, "没有发货运单号!")
-      end
+    if delivery_code.blank?
+      errors.add(:delivery_code, "没有发货运单号!")
     end
   end
 
   def valid_payment?
-    if :waiting_delivery == state_name
-      if buyer.money < stotal
-        errors.add(:buyer, "您的金额不足!")
-      end
+    if buyer.reload.money < stotal
+      errors.add(:buyer, "您的金额不足!")
+    end
+  end
+
+
+  private
+  def valid_address?
+    unless %w(order close).include?(state)
+      errors.add(:address, "地址不存在！") if address.nil?
     end
   end
 
