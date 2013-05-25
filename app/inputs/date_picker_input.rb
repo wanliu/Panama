@@ -1,7 +1,6 @@
 class DatePickerInput < SimpleForm::Inputs::Base
 
   def input
-    debugger
     # element_id = input_options[:id] || rand.to_s.split(".").last
     format = input_options[:value] || ""
     <<-JAVASCRIPT
@@ -15,7 +14,6 @@ class DatePickerInput < SimpleForm::Inputs::Base
     <script type="text/javascript">
       require(['jquery', 'lib/bootstrap-datetimepicker.min'], function($){
         $(function() {
-          debugger
           $("##{element_id}").datetimepicker({
              pickTime: false
           });
