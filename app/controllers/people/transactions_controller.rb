@@ -149,18 +149,10 @@ class People::TransactionsController < People::BaseController
   end
 
   def get_delivery_price
-    product_items = ProductItem.where("transaction_id=#{params[:id]}")
-    delivery_prices = [0]
-    product_items.each { |pi|
-      query = "product_id=#{pi.product_id} and delivery_type_id=#{params[:delivery_type_id]}"
-      pdt = ProductDeliveryType.where(query).first
-      unless pdt.nil?
-        unless pdt.delivery_price.nil?
-          delivery_prices << pdt.delivery_price
-        end
-      end
-    }
-    render :text => delivery_prices.max
+    @price = OrderTransaction.find(params[:id]).get_delivery_price(params[:delivery_type_id])
+    respond_to do |format|
+      format.json{ render :json => {delivery_price: @price} }
+    end
   end
 
   def notify

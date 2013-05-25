@@ -12,8 +12,9 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                 @options['id']        ?= @$el.attr('state-id')
                 @options['url']       ?= @$el.attr('state-url')
                 @options['event_url'] ?= @$el.attr('state-event-url')
+                @options['url_root'] ?= @$el.attr('url-root')
                 @transaction = new Transaction()
-                @transaction.set_url(@options['url'])
+                @transaction.set_url(@options['url_root'])
 
                 @rt_options = @options['realtime']
                 if @rt_options.url?

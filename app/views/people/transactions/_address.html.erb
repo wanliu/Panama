@@ -36,7 +36,7 @@
 									   :object => transaction,
 									   :wrapper => :inline,
 									   :collection_url => "/city/" %>
-				
+
 				<%= address_form.input :area_id,
 									   :as => :depend_select,
 									   :object => transaction,
@@ -61,15 +61,17 @@
 							:wrapper => :inline,
 							:include_blank => false,
 							:collection => get_delivery_type,
-							:input_html => { :class => :span3, :action => "/people/#{current_user.login}/transactions/#{transaction.id}/get_delivery_price"
-							}
+							:input_html => { :class => :span3}
 				%>
 				<%= f.input :delivery_price,
+							:as => :hidden,
 							:object => transaction,
 							:wrapper => :inline,
-							:input_html => {:class => :hide}
+							:input_html => {:class => :price}
 				%>
-				<div class="control-label delivery_price"><%= number_to_currency(0.0)%></div>
+				<div class="control-label delivery_price">
+					<%= number_to_currency(0.0)%>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -47,7 +47,7 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :seller_id
   validates_associated :address
   # validates_presence_of :address
-  validate :valid_address?
+  validate :valid_address_and_delivery_type?
 
   accepts_nested_attributes_for :address
   # validates_presence_of :address
@@ -68,7 +68,7 @@ class OrderTransaction < ActiveRecord::Base
 
   state_machine :initial => :order do
 
-    #确认订单 到 等待侍
+    #确认订单 到 等待
     event :buy do
       transition [:order] => :waiting_paid
     end
@@ -174,6 +174,12 @@ class OrderTransaction < ActiveRecord::Base
     false
   end
 
+  def get_delivery_price(delivery_id)
+    product_ids = items.map{|item| item.product_id}
+    ProductDeliveryType.where(:product_id => product_ids)
+    .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
+  end
+
   #变更状态
   def state_change_detail
     state_details.create(:state => state)
@@ -271,11 +277,11 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-
   private
-  def valid_address?
+  def valid_address_and_delivery_type?
     unless %w(order close).include?(state)
       errors.add(:address, "地址不存在！") if address.nil?
+      errors.add(:delivery_type, "请选择运送类型!") if delivery_type.nil?
     end
   end
 
