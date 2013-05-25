@@ -7,7 +7,7 @@ class TradeIncome < ActiveRecord::Base
   validates :serial_number, :presence => true
   validates :money, :presence => true
 
-  validates_presence_of :buyer
+  validates_presence_of :user
   validates_presence_of :bank
 
   before_validation(:on => :create) do
@@ -21,7 +21,7 @@ class TradeIncome < ActiveRecord::Base
   end
 
   def add_money
-    sql = "update users set money=money+#{money} where id=#{buyer.id}"
+    sql = "update users set money=money+#{money} where id=#{user.id}"
     User.connection.update(sql)
   end
 end
