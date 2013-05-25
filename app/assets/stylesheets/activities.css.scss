@@ -9,6 +9,7 @@
 @import 'contact_friend';
 @import 'slider-ui';
 @import 'bootstrap-datetimepicker.min';
+@import 'activities/image-picker';
 
 body {
 	@include background(
@@ -159,4 +160,9 @@ body {
 
 #social_sidebar.affix{
 	top: 40px;
+}
+
+.image_picker_image{
+	height: 140px;
+	width: 140px;
 }

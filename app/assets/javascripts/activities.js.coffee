@@ -3,6 +3,6 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 #= require twitter/bootstrap/affix
-
+#= require activities/image-picker
 require ['jquery', 'twitter/bootstrap'], ($) ->
 
