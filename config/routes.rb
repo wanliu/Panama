@@ -215,6 +215,7 @@ Panama::Application.routes.draw do
       end
 
       match "pending", :to => "shops/transactions#pending"
+      match "complete", :to => "shops/transactions#complete"
 
       resources :employees, :controller => "shops/employees", :except => :destroy  do
         collection do
@@ -235,8 +236,6 @@ Panama::Application.routes.draw do
           post "check_permissions/:id", :to => "shops/groups#check_permissions"
         end
       end
-
-      resources :complete, :controller => "shops/complete"
 
       resources :complaint, :controller => "shops/complaint"
 

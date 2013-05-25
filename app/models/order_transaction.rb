@@ -28,16 +28,16 @@ class OrderTransaction < ActiveRecord::Base
              class_name: "User"
   belongs_to :operator, class_name: "TransactionOperator"
 
-  has_many :operators, class_name: "TransactionOperator"
+  has_many :operators, class_name: "TransactionOperator", dependent: :destroy
 
   has_many  :items,
             class_name: "ProductItem",
             foreign_key: 'transaction_id',
-            autosave: true
+            autosave: true,
+            dependent: :destroy
 
-  has_many :receive_order_messages
   has_many :chat_messages, :as => :owner
-  has_many :state_details, class_name: "TransactionStateDetail"
+  has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
@@ -52,7 +52,10 @@ class OrderTransaction < ActiveRecord::Base
   accepts_nested_attributes_for :address
   # validates_presence_of :address
 
-  before_create :update_total_count
+  before_validation(:on => :create) do
+    update_total_count
+  end
+
   after_create :notice_user, :notice_new_order, :state_change_detail
 
   def notice_user
@@ -82,7 +85,7 @@ class OrderTransaction < ActiveRecord::Base
                   :waiting_paid      =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete,
-                  :complete          =>  :close,
+                  # :complete          =>  :close,
                   :refund            =>  :close
     end
 
@@ -157,7 +160,7 @@ class OrderTransaction < ActiveRecord::Base
       details.state = order_transactions.state and details.expired_state=true")
     .where("details.expired <=?", DateTime.now)
     transactions.each{|t| t.fire_events!(:expired) }
-    puts "=========#{DateTime.now}=============="
+    puts "===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
   end
 
