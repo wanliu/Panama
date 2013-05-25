@@ -25,7 +25,7 @@ class TransactionStateDetail < ActiveRecord::Base
     when "waiting_delivery"
       DateTime.now + 3.days
     when "waiting_sign"
-      DateTime.now + 5.days
+      DateTime.now + 10.days
     when "complete"
       DateTime.now + 10.days
     when "refund"

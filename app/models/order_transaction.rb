@@ -157,6 +157,7 @@ class OrderTransaction < ActiveRecord::Base
       details.state = order_transactions.state and details.expired_state=true")
     .where("details.expired <=?", DateTime.now)
     transactions.each{|t| t.fire_events!(:expired) }
+    puts "=========#{DateTime.now}=============="
     transactions
   end
 
@@ -177,6 +178,10 @@ class OrderTransaction < ActiveRecord::Base
 
   def current_operator
     operator.try(:operator)
+  end
+
+  def current_state_detail
+    state_details.find_by(:state => state)
   end
 
   def operator_connect_state
