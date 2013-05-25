@@ -10,7 +10,7 @@
 		<div class='span12'>
 			<span>
 				物流：<a href='javascript:void(0)'>
-					<%=transaction.delivery_type.name %>
+					<%=transaction.delivery_type.try(:name) %>
 				</a>
 			</span>
 			<span style='margin-left: 10px;'>
