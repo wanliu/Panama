@@ -1,0 +1,8 @@
+<div class='transaction_list'>
+  <% @transactions.each do |transaction| %>
+      <%= render :partial => "transaction" ,:locals => {
+          :transaction => transaction,
+          state: transaction.state,
+          people: current_user } %>
+  <% end %>
+</div>

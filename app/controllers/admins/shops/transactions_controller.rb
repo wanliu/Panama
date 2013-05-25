@@ -7,6 +7,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     .where("transaction_operators.operator_id=?", current_user.id)
   end
 
+  def complete
+    transactions = OrderTransaction.where(:seller_id => current_shop.id).order("created_at desc")
+    @transactions = transactions.where(:state => "complete")
+  end
+
   def show
     @transaction = OrderTransaction.find_by(
       :seller_id => current_shop.id, :id => params[:id])
