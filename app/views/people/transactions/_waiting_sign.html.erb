@@ -41,7 +41,7 @@
 <%= render "products", :transaction => transaction, :people => people %>
 <script type="text/javascript">
 	require(["countdown"], function(){
-		expired = new Date("<%=transaction.current_state_detail.expired %>")
+		expired = new Date("<%=transaction.current_state_detail.expired.strftime('%Y/%m/%d %H:%M:%S') %>")
 		$('.clock', '#order<%=transaction.id %>').countdown({until: expired});
 	})
 </script>
