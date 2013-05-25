@@ -1,5 +1,7 @@
 <!-- 竞价 -->
+
 <%= simple_form_for @activity, :url => activities_focus_path, :remote => true,  :html => { class: 'form-horizontal' } do |f|%>
+
 
 
        <%= f.input :product, :wrapper => false, :label => false %>
@@ -14,9 +16,11 @@
   </div>
 
 
+
         <%=f.input  :people_number %>
 
       <%= f.input :price %>
+
 
 
   <div class="control-group addLine1">
@@ -30,7 +34,7 @@
     var insert = $(".bettwen1");
     $(".add1").bind("click",function(){
       $(".addLine1").prepend(insert);
-    });      
+    });
   });
 </script>
 
