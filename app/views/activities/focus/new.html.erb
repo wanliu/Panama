@@ -1,24 +1,9 @@
 <!-- 竞价 -->
-<%= simple_form_for @activity, wrapper: :default, :url => activities_focus_index_path, :remote => true,  :html => { class: 'form-horizontal' } do |f|%>
+<%= simple_form_for @activity, :url => activities_focus_path, :remote => true,  :html => { class: 'form-horizontal' } do |f|%>
 
-  <div class="control-group">
-    <label class="control-label" for="inputMainProduct">产品</label>
-    <div class="controls">
-    <div class="input-append">
+
        <%= f.input :product, :wrapper => false, :label => false %>
-      <div class="btn-group">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">
-          选择
-          <span class="caret"></span>
-        </button>
-<!--        <ul class="dropdown-menu">
-          ...
-        </ul>
- -->      </div>
-    </div>
-    </div>
-  </div>
-
+      
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
@@ -28,22 +13,10 @@
     </div>
   </div>
 
-  <div class="control-group controls-row">
-    <label class="control-label" for="peopleNumber">人数</label>
-    <div class="controls">
-        <%=f.input  :people_number, 
-                    :wrapper => false, 
-                    :label=>false,
-                    :input_html =>{ class: :span2}%>
-    </div>
-    <label class="control-label" for="price">价格</label>
-    <div class="controls">
-      <%= f.input :price,
-                  :label=>false, 
-                  :wrapper => false,
-                  :input_html=>{class: :span2} %>
-     </div>
-  </div>
+
+        <%=f.input  :people_number %>
+
+      <%= f.input :price %>
 
 
   <div class="control-group addLine1">
@@ -61,23 +34,11 @@
   });
 </script>
 
-  <div class="control-group controls-row" >
-    <label class="control-label" for="inputStartTime">起始时间</label>
-    <div class="controls">
       <%= f.input :start_time,
-                  :as         => :string,
-                  :wrapper    => false,
-                  :label      => false,
-                  :input_html => { class: :span2 } %>
-    </div>
-    <label class="control-label span2" for="inputEndTime">结束时间</label>
-    <div class="controls">
+                  :as         => :string %>
+
       <%= f.input :end_time,
-                  :as         => :string,
-                  :wrapper    => false,
-                  :label      => false,
-                  :input_html => { class: :span2 } %>
-    </div>
-  </div>
+                  :as         => :string %>
+
 
 <% end %>

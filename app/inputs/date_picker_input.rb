@@ -1,10 +1,12 @@
-class DateControlInput < SimpleForm::Inputs::Base
+class DatePickerInput < SimpleForm::Inputs::Base
 
   def input
-  	discern_class = object.class.to_s
+    element_id = input_options[:id] || rand.to_s.split(".").last
+    format = input_options[:value] 
+
     <<-JAVASCRIPT
-    <div id="datetimepicker1" class="input-append date">
-      <input data-format="yyyy/MM/dd hh:mm:ss" type="text"></input>
+    <div id="#{element_id}" class="input-append date">
+      <input data-date-format="#{format}" type="text"></input>
       <span class="add-on">
         <i data-time-icon="icon-time" data-date-icon="icon-calendar">
         </i>
@@ -13,8 +15,9 @@ class DateControlInput < SimpleForm::Inputs::Base
     <script type="text/javascript">
       require(['jquery', 'lib/bootstrap-datetimepicker.min'], function($){
         $(function() {
-          $('##datetimepicker1').datetimepicker({
-             pickTime: false
+          $("##{element_id}").datetimepicker({
+            format: "#{format}"
+             //pickTime: false
           });
         });
       });

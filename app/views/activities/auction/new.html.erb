@@ -15,31 +15,23 @@
                   :label=>false, 
                   :wrapper => false,
                   :input_html=>{class: :span2} %>
-
-     <%=f.input  :number, 
-                    :wrapper => false, 
-                    :label=>false,
-                    :input_html =>{ class: :span2}%>
-         <%= f.input :start_time,
-                  :as         => :string,
-                  :wrapper    => false,
-                  :label      => false,
-                  :input_html => { class: :span2 } %>
-        <%= f.input :end_time,
-                   :as         => :string,
-                  :wrapper    => false,
-                  :label      => false,
-                  :input_html => { class: :span2 } %>
-
-  <div class="control-group">
-    <label class="control-label" for="inputPrice">&nbsp;</label>
-    <div class="controls" style="margin-top: 55px;">
-		  <div id="price_slider"></div>
-		  <script type="text/javascript">
-		  require(['jquery'], function($){
-			    $( "#price_slider" ).slider();
-		  });
-		  </script>
+      <div class="control-group">
+        <label class="control-label" for="inputPrice">&nbsp;</label>
+        <div class="controls" style="margin-top: 55px;">
+          <div id="price_slider"></div>
+            <script type="text/javascript">
+            require(['jquery'], function($){
+                $( "#price_slider" ).slider();
+            });
+            </script>
+        </div>
     </div>
-  </div>
+
+     <%=f.input  :number %>
+     <%= f.input :start_time,
+                  :as         => :string %>
+        <%= f.input :end_time,
+                   :as         => :string %>
+
+  
 <% end %>

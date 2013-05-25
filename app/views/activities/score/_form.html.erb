@@ -3,7 +3,6 @@
       <%= f.association :product,
                         :collection   => Product.all %>
 	
-
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
@@ -20,10 +19,15 @@
 
     <%= f.input :limit_score %>
 
+
     <%= f.input :start_time,
-                :as         => :string %>
+                :as         => :date_picker,
+                input_html: { id: 'start_time',value: 'yyyy/MM/dd hh:mm:ss' } %>
+
+
 
     <%= f.input :end_time,
-                :as         => :string%>
+                :as         => :date_picker,
+                input_html: { id: 'end_time',value: 'yyyy/MM/dd hh:mm:ss' } %>
 
 <% end %>
