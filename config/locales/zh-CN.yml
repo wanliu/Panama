@@ -202,6 +202,10 @@ zh-CN:
       user: "用户"
       comment: "评论"
       shop_group: "权限组"
+      activity: "活动"
+    attributes:
+      activity:
+        product: "商品"
 
   mongoid:
     models:
@@ -345,3 +349,8 @@ zh-CN:
       links:
         sign_in: "登录"
         forgot_your_password: "忘记密码？"
+
+  simple_form:
+    lables:
+      activity:
+        product: "产品"

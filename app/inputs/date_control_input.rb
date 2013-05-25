@@ -13,7 +13,7 @@ class DateControlInput < SimpleForm::Inputs::Base
     <script type="text/javascript">
       require(['jquery', 'lib/bootstrap-datetimepicker.min'], function($){
         $(function() {
-          $('##datetimepicker1').datetimepicker({
+          $('#datetimepicker1').datetimepicker({
              pickTime: false
           });
         });
