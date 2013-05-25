@@ -25,8 +25,13 @@
       <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
     </div>
   </div>
+  <div class='clock'></div>
   <p class="lead">请打印出交易清单, 请准备好你的商品, 并联系好您的物流, 再点击确认你的发货状态</p>
 </div>
 <%= render "products", :transaction => transaction %>
-<script type='text/javascript'>
+<script type="text/javascript">
+  require(["countdown"], function(){
+    expired = new Date("<%=transaction.current_state_detail.expired %>")
+    $('.clock', '#order<%=transaction.id %>').countdown({until: expired});
+  })
 </script>

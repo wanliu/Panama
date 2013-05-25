@@ -64,7 +64,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             StateMachine.ASYNC
 
         enterWaitingDelivery: (event, from, to, msg) ->
-            @$(".clock").jsclock();
+            #@$(".clock").jsclock();
 
         leaveWaitingPaid: (event, from, to, msg) ->
             @slideAfterEvent(event) unless /back/.test event
