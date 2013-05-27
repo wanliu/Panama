@@ -26,16 +26,6 @@
           </h1>
           <div class="state-progress">
             <div class="progress progress-mini progress-striped active">
-              <% transaction.state_details.each_with_index do |state_detail, index| %>
-              <% if index != 0 %>
-                <div class="state-bar bar bar-success" style="width: 20%;"></div>
-              <% end %>
-              <span class="state-position badge badge-warning" style="left: #{20*index}%">
-                <%= index+1 %>
-                <div class="state-title"><%= t('order_states.buyer').values[index] %>
-                </div>
-              </span>
-              <% end %>
             </div>
           </div>
         </div>
@@ -51,3 +41,12 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  require(["jquery", "lib/transaction_progress"], function($,TransactionProgress){
+    new TransactionProgress({
+      el: $("#order<%=transaction.id %> .state-progress>.progress"),
+      state: "<%= transaction.state %>",
+      localName: <%=t("order_states.buyer").to_json.html_safe %>
+    })
+  })
+</script>
