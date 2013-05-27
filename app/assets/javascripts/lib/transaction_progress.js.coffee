@@ -52,6 +52,7 @@ define ["jquery", "backbone"], ($, Backbone) ->
     ]
 
     initialize: (options) ->
+      debugger
       @$el = $(@el)
       @state = @options.state
       @localName = @options.localName

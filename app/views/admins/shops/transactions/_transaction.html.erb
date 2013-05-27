@@ -38,6 +38,7 @@
 </div>
 <script type="text/javascript">
   require(["jquery", "lib/transaction_progress"], function($,TransactionProgress){
+
     new TransactionProgress({
       el: $("#order<%=transaction.id %> .state-progress>.progress"),
       state: "<%= transaction.state %>",
