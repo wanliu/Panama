@@ -14,7 +14,7 @@ class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type, :delivery_price
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address_id, :delivery_type_id, :delivery_price
   # attr_accessor :total
 
 

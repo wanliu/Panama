@@ -118,32 +118,28 @@ class People::TransactionsController < People::BaseController
 
   def address
     @transaction = OrderTransaction.find(params[:id])
+    t, a = params[:order_transaction], params[:address]
     respond_to do |format|
-      address_id = params[:order_transaction][:address_id]
-      @transaction.update_attributes(params[:order_transaction])
-
-      if address_id.present?
-        @transaction.update_attribute(:address_id, address_id)
-        format.html { render :text => :OK }
+      options = if t[:address_id].present?
+        {:address_id => t[:address_id]}
       else
-        address_params = params[:address]
-        @transaction.create_address(address_params)
-        @transaction.address.user_id = current_user.id
-        if @transaction.save
-          # format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
-          format.html { render partial: "address",
-                               layout: false,
-                               locals: {
-                                 transaction: @transaction,
-                                 :people => @people }}
-        else
-          format.html { render partial: "address",
-                               layout: false,
-                               status: '400 Validation Error',
-                               locals: {
-                                 transaction: @transaction,
-                                 :people => @people }}
-        end
+        address = Address.new({
+          :province_id => a[:province_id],
+          :city_id => a[:city_id],
+          :area_id => a[:area_id],
+          :zip_code => a[:zip_code],
+          :road => a[:road]
+        })
+        address.user_id = current_user.id
+        address.save
+        {:address_id => address.id}
+      end
+      options[:delivery_price] = t[:delivery_price]
+      options[:delivery_type_id] = t[:delivery_type_id]
+      if @transaction.update_attributes(options)
+        format.json{ head :no_content }
+      else
+        format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
       end
     end
   end
