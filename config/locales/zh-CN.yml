@@ -349,9 +349,9 @@ zh-CN:
   order_states:
     buyer:
       order: 确认订单
-      waiting_paid: 等待付款
+      waiting_paid: 付款到卖家
       waiting_delivery: 卖家发货
-      waiting_sign: 等待收货
+      waiting_sign: 确认收货
       complete: 交易成功
 
     seller:

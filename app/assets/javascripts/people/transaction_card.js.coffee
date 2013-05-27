@@ -68,19 +68,18 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @slideAfterEvent(event)
 
         saveAddress: (event) ->
-            params = @$(".address-form>form").serialize()
-            url = @$(".address-form>form").attr("action")
+            form = @$(".address-form>form")
+            params = form.serialize()
+            url = form.attr("action")
             $.post(url, params)
                 .success (xhr, data, status) =>
                     @transition()
                     @slideAfterEvent('buy')
-                    false
                 .error (xhr, status) =>
                     @$(".address-form").html(xhr.responseText)
                     @$("#address_province_id option:first", ".address-form").attr("selected", true)
                     @alarm()
                     @transition.cancel()
-                    false
             false
 
         selectDeliveryType: () ->

@@ -95,8 +95,8 @@ class OrderTransaction < ActiveRecord::Base
       transition [:delivery_failure, :waiting_delivery, :complete] => :refund
     end
 
-    # 等待付款 到 等待发货
     event :paid do
+      # 等待付款 到 等待发货
       transition [:waiting_paid] => :waiting_delivery
     end
 
