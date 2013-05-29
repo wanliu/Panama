@@ -1,0 +1,44 @@
+<% seller = refund.order_transaction.seller %>
+<div id="refund<%=refund.id %>" class="transaction refund-<%=refund.id %>-<%=refund.state %>">
+  <div class="wrapper-box">
+    <div class="transaction-header">
+
+      <div class="avatar">
+        <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
+      </div>
+
+      <div class="container-fluid info-header">
+        <div class="page-header">
+          <h1>
+            <%= seller.name %>
+            <small rel='tooltip' title="<%=I18n.l refund.created_at, :format => :long %>">
+              <%= time_ago_in_words refund.created_at %>
+              <span class="display-state"></span>
+            </small>
+
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%=render "state_button", :refund => refund %>
+          </h1>
+          <div class="state-progress">
+            <div class="progress progress-mini progress-striped active">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="transaction-body">
+      <%=render refund.state, :refund => refund %>
+    </div>
+  </div>
+</div>
+<script type='text/javascript'>
+  require(["jquery", "lib/transaction_progress"],
+    function($, TransactionProgress){
+      new TransactionProgress({
+        el: $(".refund-<%=refund.id %>-<%=refund.state %> .state-progress>.progress"),
+        state_type: "returned",
+        state: "<%=refund.state %>",
+        localName: <%= t("order_refund_state").to_json.html_safe %>
+      })
+  })
+</script>

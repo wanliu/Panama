@@ -15,7 +15,7 @@ define ["jquery", "postmessage", "notify"], ($) ->
           title: "有新的消息",
           text: "#{message.send_user.login}: #{message.content}<br />#{@order_uri(message.owner.id)}",
           addclass: "stack-bottomright",
-          stack: stack_bottomright
+          stack: "stack_bottomright"
         });
       )
 

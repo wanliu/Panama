@@ -20,12 +20,15 @@ Panama::Application.routes.draw do
         post "send_message", :to => "people/transactions#send_message"
         get "messages", :to => "people/transactions#messages"
         post "get_delivery_price", :to => "people/transactions#get_delivery_price"
+        post "refund", :to => "people/transactions#refund"
       end
 
       collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
       end
     end
+
+    resources :order_refunds, :controller => "people/order_refunds"
 
     match 'recharges/create', :to => "people/recharges#create"
 
@@ -216,6 +219,8 @@ Panama::Application.routes.draw do
 
       match "pending", :to => "shops/transactions#pending"
       match "complete", :to => "shops/transactions#complete"
+
+      resources :order_refunds, :controller => "shops/order_refunds"
 
       resources :employees, :controller => "shops/employees", :except => :destroy  do
         collection do

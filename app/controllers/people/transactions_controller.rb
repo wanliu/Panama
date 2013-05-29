@@ -1,3 +1,4 @@
+#encoding: utf-8
 class People::TransactionsController < People::BaseController
   # GET /people/transactions
   # GET /people/transactions.json
@@ -35,7 +36,7 @@ class People::TransactionsController < People::BaseController
     @transaction = OrderTransaction.find(params[:id])
     event_name = params[:event]
     authorize! :event, @transaction
-    if @transaction.fire_events!(event_name)
+    if @transaction.buyer_fire_event!(event_name)
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {
@@ -45,22 +46,6 @@ class People::TransactionsController < People::BaseController
       # render :partial => 'transaction', :transaction => @transaction, :layout => false
       # redirect_to person_transaction_path(@people.login, @transaction)
     end
-  end
-
-  # GET /people/transactions/new
-  # GET /people/transactions/new.json
-  def new
-    @transaction = OrderTransaction.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @transaction }
-    end
-  end
-
-  # GET /people/transactions/1/edit
-  def edit
-    @transaction = OrderTransaction.find(params[:id])
   end
 
   def batch_create
@@ -148,6 +133,25 @@ class People::TransactionsController < People::BaseController
     @price = OrderTransaction.find(params[:id]).get_delivery_price(params[:delivery_type_id])
     respond_to do |format|
       format.json{ render :json => {delivery_price: @price} }
+    end
+  end
+
+  def refund
+    order = OrderTransaction.find(params[:id])
+    items = params[:order_refund].delete(:product_items)
+    respond_to do |format|
+      refund = order.refunds.create(params[:order_refund])
+      if refund.valid?
+        refund.create_items(items)
+        if refund.items.count <= 0
+          refund.destroy
+          format.json{ render :json => {message: "申请退货失败"}, :status => 403 }
+        else
+          format.json{ render :json => refund }
+        end
+      else
+        format.json{ render :json => draw_errors_message(refund), :status => 403 }
+      end
     end
   end
 

@@ -7,8 +7,15 @@ module MessageQueue
       exchange.publish(message, :routing_key => name)
     end
 
-    def expired_delivery_failer
-      name = "#{routing_key}.expired.delivery.failer"
+    def expired_delivery
+      name = "#{routing_key}.expired.delivery"
+      client.queue(name, :auto_delete => true)
+      exchange = client.default_exchange
+      exchange.publish(id.to_s, :routing_key => name)
+    end
+
+    def expired_refund
+      name = "#{routing_key}.expired.refund"
       client.queue(name, :auto_delete => true)
       exchange = client.default_exchange
       exchange.publish(id.to_s, :routing_key => name)

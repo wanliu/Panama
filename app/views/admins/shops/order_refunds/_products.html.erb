@@ -1,0 +1,47 @@
+<div class="products">
+  <div class="products-head">
+      <% refund.items[0...5].each do |item| %>
+        <div class="img-header">
+        <%= image_tag item.product_item.product.photos.header %>
+        </div>
+      <% end %>
+      <span class='ellipsis'>...</span>
+      <div class="toolbar ">
+      <%= link_to '#', :class => "btn btn-large item-detail" do %>
+          <%= icon :download %>
+        <% end %>
+      </div>
+  </div>
+  <div class="item-details">
+  <% refund.items.each do |refund_item| %>
+  <% item = refund_item.product_item %>
+  <div class="detail-row" data-value-id="<%=item.id %>">
+    <div class="detail-icon">
+      <%= image_tag item.product.photos.icon %>
+    </div>
+    <div class="detail-title">
+      <%= item.title %>
+    </div>
+    <div class="detail-amount">
+      <%= item.amount %>
+    </div>
+    <div class="detail-price">
+      <%= number_to_currency(item.price) %>
+    </div>
+    <div class="detail-total">
+      <%= number_to_currency(item.total) %>
+    </div>
+    <div class='detail-nav'>
+    </div>
+  </div>
+  <% end %>
+  </div>
+</div>
+
+<div class='total'>
+  <strong>合计：
+    <span>
+      <%= number_to_currency(refund.total) %>
+    </span>
+  </strong>
+</div>

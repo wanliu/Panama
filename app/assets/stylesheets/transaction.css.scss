@@ -135,9 +135,20 @@
 					text-align: right
 				}
 				.detail-total {
-					width: 15%;
+					width: 10%;
 					float: left;
 					text-align: right
+				}
+
+				.detail-chose{
+					float: left;
+					width: 5%;
+					text-align: right;
+
+					input{
+						margin: 0px;
+						display: none;
+					}
 				}
 			}
 		}
@@ -157,6 +168,9 @@
 		border-bottom: 1px solid $tableBorder;
 		// padding: 0 20px 20px 20px;
 
+		.returned_panel{
+			display: none;
+		}
 
 		.control-group.error {
 			.control-label  {

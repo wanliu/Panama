@@ -26,8 +26,17 @@
     </li>
     <%end%>
     <%if can? :index, OrderTransaction %>
-    <li><a class="people-transaction" href="<%= person_transactions_path(@people.login) %>"><i class="icon-chevron-right"></i> 订单</a></li>
+    <li>
+      <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>">
+        <i class="icon-chevron-right"></i> 订单
+      </a>
+    </li>
     <%end%>
+    <li>
+      <a class='people-refunds' href='<%= person_order_refunds_path(@people.login) %>'>
+        退货
+      </a>
+    </li>
     <li class="nav-header">活动</li>
     <% if can? :index, Notification %>
     <li>

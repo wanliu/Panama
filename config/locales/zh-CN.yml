@@ -232,6 +232,7 @@ zh-CN:
   templates: 模板
   employees: 雇员
   communities: 社区
+  order_refunds: 退货
 
   shop_group:
     sale: "销售组"
@@ -360,3 +361,9 @@ zh-CN:
       waiting_delivery: 确认发货
       waiting_sign: 买家收货
       complete: 交易成功
+
+  order_refund_state:
+    apply_refund: 申请退货
+    waiting_delivery: 等待发货
+    waiting_sign: 等待签收
+    complete: 完成
