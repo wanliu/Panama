@@ -27,6 +27,9 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 { name: 'back',       from: 'waiting_paid',      to: 'order' },
                 { name: 'back',       from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
                 { name: 'back',       from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
+                { name: "returned",   from: 'waiting_delivery',  to: 'apply_refund'},
+                { name: "returned",   from: 'waiting_sign',      to: 'apply_refund'},
+                { name: "returned",   from: 'complete',          to: 'apply_refund'}
             ]
 
 
@@ -52,14 +55,13 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         toggleMessage: (event) ->
             @$("iframe", ".transaction-footer").slideToggle()
 
-        # 状态事件
-        # enterOrder: (event, from, to, msg ) ->
-        #     @$(".address-form>form").submit(_.bind(@saveAddress, @))
-
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
             @selectDeliveryType()
             StateMachine.ASYNC
+
+        leaveWaitingDelivery: (event, from, to, msg) ->
+            @slideAfterEvent(event) if /returned/.test event
 
         leaveWaitingPaid: (event, from, to, msg) ->
             @slideAfterEvent(event) unless /back/.test event

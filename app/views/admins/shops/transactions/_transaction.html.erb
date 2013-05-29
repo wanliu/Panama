@@ -21,8 +21,7 @@
 					<%= render "state_buttons", :transaction => transaction %>
 				</h1>
 				<div class="state-progress">
-					<div class="progress progress-mini progress-striped active">
-					</div>
+					<%=render "progress", transaction: transaction %>
 				</div>
 			</div>
 		</div>
@@ -36,13 +35,3 @@
 		</iframe>
 	</div>
 </div>
-<script type="text/javascript">
-  require(["jquery", "lib/transaction_progress"], function($,TransactionProgress){
-
-    new TransactionProgress({
-      el: $("#order<%=transaction.id %> .state-progress>.progress"),
-      state: "<%= transaction.state %>",
-      localName: <%=t("order_states.seller").to_json.html_safe %>
-    })
-  })
-</script>

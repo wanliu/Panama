@@ -41,33 +41,46 @@ define ["jquery", "backbone"], ($, Backbone) ->
     render: () ->
       @$el
 
-
   class TransactionProgress extends Backbone.View
-    stateFlow: [
-      {state: "order", class_badge: "badge-info"},
-      {state: "waiting_paid", class_badge: "badge-important", class_progress: "bar-info"},
-      {state: "waiting_delivery", class_badge: "badge-warning", class_progress: "bar-success"},
-      {state: "waiting_sign", class_badge: "badge-inverse", class_progress: "bar-warning"},
-      {state: "complete", class_badge: "badge-success", class_progress: "bar-danger"}
-    ]
+    state_type: "transaction",
+
+    stateFlow: {
+      transaction: [
+        {state: "order", class_badge: "badge-info"},
+        {state: "waiting_paid", class_badge: "badge-important", class_progress: "bar-info"},
+        {state: "waiting_delivery", class_badge: "badge-warning", class_progress: "bar-success"},
+        {state: "waiting_sign", class_badge: "badge-inverse", class_progress: "bar-warning"},
+        {state: "complete", class_badge: "badge-success", class_progress: "bar-danger"}
+      ],
+      returned: [
+        {state: "apply_refund", class_badge: "badge-info"},
+        {state: "waiting_delivery", class_badge: "badge-important", class_progress: "bar-info"},
+        {state: "waiting_sign", class_badge: "badge-warning", class_progress: "bar-success"},
+        {state: "complete", class_badge: "badge-success", class_progress: "bar-danger"}
+      ]
+    }
 
     initialize: (options) ->
-      debugger
       @$el = $(@el)
       @state = @options.state
+      if @options.state_type?
+        @state_type = @options.state_type
+
       @localName = @options.localName
+
+      @states = @stateFlow[@state_type]
       @load_state()
 
     load_state: () ->
-      bar_width = 100 / (@stateFlow.length-1)
-      _.each @stateFlow, (info, i) =>
+      bar_width = 100 / (@states.length-1)
+      _.each @states, (info, i) =>
         complete_index = @state_index()
         if complete_index > i
           progress = new Progress( bar_width: bar_width, class_progress: info.class_progress )
           @$el.append(progress.render())
 
         badge = new Badge(_.extend({
-          width: @$el.width() / (@stateFlow.length - 1),
+          width: @$el.width() / (@states.length - 1),
           complete_index: complete_index,
           index: i,
           name: @localName[info.state],
@@ -77,10 +90,10 @@ define ["jquery", "backbone"], ($, Backbone) ->
 
 
     last_status: (i) ->
-      if @stateFlow.length is i then true else false
+      if @states.length is i then true else false
 
     state_index: () ->
-      for info, i in @stateFlow
+      for info, i in @states
         if info.state is @state
           return i
 

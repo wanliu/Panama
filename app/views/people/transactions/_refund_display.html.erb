@@ -1,0 +1,49 @@
+<div class='container-fluid returned_panel'>
+  <div class='span10'>
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label">
+          退货原因
+        </label>
+        <div class="controls">
+          <select name="order_reason_id">
+            <% OrderReason.all.each do |reason| %>
+            <option value="<%=reason.id %>"><%=reason.name %></option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          退款金额
+        </label>
+        <div class="controls">
+          <input type="text" name="total" placeholder="退款金额" value="<%=transaction.stotal %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">
+          退款说明
+        </label>
+        <div class="controls">
+          <textarea name="decription" style='margin: 0px; height: 80px; width: 642px;'></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">确认退货</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<%= render "products", :transaction => transaction, :people => people %>
+<script type='text/javascript'>
+require(["jquery", "people/transaction_refund"],
+  function($, TransactionRefundView){
+    new TransactionRefundView({
+      el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
+      remote_url: "<%= person_transaction_path(people, transaction)%>"
+    })
+  })
+</script>

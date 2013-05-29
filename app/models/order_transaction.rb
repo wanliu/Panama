@@ -38,6 +38,7 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many :chat_messages, :as => :owner
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
+  has_many :refunds, class_name: "OrderRefund"
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
@@ -85,28 +86,30 @@ class OrderTransaction < ActiveRecord::Base
                   :waiting_paid      =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete,
-                  # :complete          =>  :close,
-                  :refund            =>  :close
+                  :refund_failure    =>  :close
     end
 
     #退货事件
     event :returned do
       #发货失败`等待发货`签收 到 退货
-      transition [:delivery_failure, :waiting_delivery, :complete] => :refund
+      transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund
     end
 
+    #付款
     event :paid do
       # 等待付款 到 等待发货
       transition [:waiting_paid] => :waiting_delivery
     end
 
-    # 等待发货 到 等待签收
+    #发货
     event :delivered do
+      # 等待发货 到 等待签收
       transition :waiting_delivery => :waiting_sign
     end
 
-    # 等待签收 到 完成
+    #签收
     event :sign do
+      # 等待签收 到 完成
       transition [:waiting_sign] => :complete
     end
 
@@ -141,8 +144,9 @@ class OrderTransaction < ActiveRecord::Base
       end
     end
 
+    #商家发货延时
     after_transition :waiting_delivery => :delivery_failure do |order, transition|
-      order.expired_delivery_failer
+      order.expired_delivery
     end
 
     before_transition :waiting_delivery => :waiting_sign do |order|
@@ -164,6 +168,17 @@ class OrderTransaction < ActiveRecord::Base
     transactions
   end
 
+  def buyer_fire_event!(event)
+    events = %w(buy back paid sign)
+    filter_fire_event!(events, event)
+  end
+
+  def seller_fire_event!(event)
+    events = %w(back returned delivered)
+    filter_fire_event!(events, event)
+  end
+
+  #付款
   def payment
     TradePayment.create(
       :money => stotal,
@@ -265,6 +280,10 @@ class OrderTransaction < ActiveRecord::Base
     FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
   end
 
+  def valid_refund?
+    # if
+  end
+
   def valid_delivery_code?
     if delivery_code.blank?
       errors.add(:delivery_code, "没有发货运单号!")
@@ -291,5 +310,14 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_order_dispose
     FayeClient.send("/transaction/#{seller.id}/dispose", as_json)
+  end
+
+  def filter_fire_event!(events = [], event)
+    name = event.to_s
+    if events.include?(name)
+      fire_events!(name)
+    else
+      false
+    end
   end
 end

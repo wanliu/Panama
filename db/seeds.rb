@@ -19,10 +19,11 @@ def initialize_data
   load_cities
 
   load_delivery_types
+
+  load_order_reason
 end
 
 def load_categories
-
   @root = Category.root
   product_category_file = Rails.root.join("config/product_category.yml")
   @root.load_file(product_category_file)
@@ -47,6 +48,10 @@ end
 
 def load_delivery_types
   rake['panama:delivery_type:load'].invoke
+end
+
+def load_order_reason
+  rake['order_reason:load'].invoke
 end
 
 initialize_data

@@ -33,15 +33,14 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = OrderTransaction.find_by(
       :id => params[:id], :seller_id => current_shop.id)
     # authorize! :event, @transaction
-    if params[:event] != "expired"
-      if @transaction.fire_events!(params[:event])
-        render partial: 'transaction',
-                     object:  @transaction,
-                     locals: {
-                       state:  @transaction.state,
-                       people: @people
-                     }
-      end
+
+    if @transaction.seller_fire_event!(params[:event])
+      render partial: 'transaction',
+                   object:  @transaction,
+                   locals: {
+                     state:  @transaction.state,
+                     people: @people
+                   }
     else
       redirect_to shop_admins_pending_path(current_shop.name)
     end
