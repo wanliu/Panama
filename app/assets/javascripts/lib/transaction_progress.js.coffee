@@ -46,17 +46,54 @@ define ["jquery", "backbone"], ($, Backbone) ->
 
     stateFlow: {
       transaction: [
-        {state: "order", class_badge: "badge-info"},
-        {state: "waiting_paid", class_badge: "badge-important", class_progress: "bar-info"},
-        {state: "waiting_delivery", class_badge: "badge-warning", class_progress: "bar-success"},
-        {state: "waiting_sign", class_badge: "badge-inverse", class_progress: "bar-warning"},
-        {state: "complete", class_badge: "badge-success", class_progress: "bar-danger"}
+        {
+          state: "order",
+          class_badge: "badge-info",
+          class_progress: "bar-info",
+          to: "waiting_paid"
+        },
+        {
+          state: "waiting_paid",
+          class_badge: "badge-inverse",
+          class_progress: "bar-warning",
+          to: "waiting_delivery"
+        },
+        {
+          state: "waiting_delivery",
+          class_badge: "badge-warning",
+          class_progress: "bar-danger",
+          to: "waiting_sign"
+        },
+        {
+          state: "waiting_sign",
+          class_badge: "badge-important",
+          class_progress: "bar-success"
+          to: "complete"
+        },
+        {
+          state: "complete",
+          class_badge: "badge-success"
+        }
       ],
       returned: [
-        {state: "apply_refund", class_badge: "badge-info"},
-        {state: "waiting_delivery", class_badge: "badge-important", class_progress: "bar-info"},
-        {state: "waiting_sign", class_badge: "badge-warning", class_progress: "bar-success"},
-        {state: "complete", class_badge: "badge-success", class_progress: "bar-danger"}
+        {
+          state: "apply_refund",
+          class_badge: "badge-info",
+          class_progress: "bar-danger"},
+        {
+          state: "waiting_delivery",
+          class_badge: "badge-important",
+          class_progress: "bar-warning"
+        },
+        {
+          state: "waiting_sign",
+          class_badge: "badge-warning",
+          class_progress: "bar-success"
+        },
+        {
+          state: "complete",
+          class_badge: "badge-success"
+        }
       ]
     }
 

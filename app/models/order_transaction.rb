@@ -85,8 +85,7 @@ class OrderTransaction < ActiveRecord::Base
       transition  :order             =>  :close,
                   :waiting_paid      =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
-                  :waiting_sign      =>  :complete,
-                  :refund_failure    =>  :close
+                  :waiting_sign      =>  :complete
     end
 
     #退货事件
@@ -104,7 +103,7 @@ class OrderTransaction < ActiveRecord::Base
     #发货
     event :delivered do
       # 等待发货 到 等待签收
-      transition :waiting_delivery => :waiting_sign
+      transition [:waiting_delivery] => :waiting_sign
     end
 
     #签收
@@ -149,12 +148,16 @@ class OrderTransaction < ActiveRecord::Base
       order.expired_delivery
     end
 
-    before_transition :waiting_delivery => :waiting_sign do |order|
+    before_transition :waiting_delivery => :waiting_sign do |order, transition|
       order.valid_delivery_code?
     end
 
-    before_transition :waiting_paid => :waiting_delivery  do |order|
+    before_transition :waiting_paid => :waiting_delivery  do |order, transition|
       order.valid_payment?
+    end
+
+    before_transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund do |order, transition|
+      order.valid_refund?
     end
   end
 
@@ -280,8 +283,20 @@ class OrderTransaction < ActiveRecord::Base
     FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
   end
 
+  def refund_complete
+    refunds.where(:state => "complete")
+  end
+
   def valid_refund?
-    # if
+    product_item_ids = refund_complete.joins(:items).map do |refund|
+      refund.items.map{|item| item.product_item_id}
+    end.flatten
+    if items.where("id not in (?)", product_item_ids).limit(1).nil?
+      errors.add(:state, "订单还有其它产品没有退货！")
+      false
+    else
+      true
+    end
   end
 
   def valid_delivery_code?

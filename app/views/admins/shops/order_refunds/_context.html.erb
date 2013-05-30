@@ -1,5 +1,12 @@
 <% seller = refund.order_transaction.seller %>
-<div id="refund<%=refund.id %>" class="transaction refund-<%=refund.id %>-<%=refund.state %>">
+<div id="refund<%=refund.id %>"
+  class="transaction refund-<%=refund.id %>-<%=refund.state %>"
+  state-id='<%=refund.id %>'
+  state-url="<%=shop_admins_order_refund_path(current_shop, refund) %>"
+  state-initial="<%=refund.state %>"
+  state-event-url="<%=trigger_event_shop_admins_order_refund_path(current_shop, refund) %>"
+  url-root="<%=shop_admins_order_refund_path(current_shop, refund) %>"
+   >
   <div class="wrapper-box">
     <div class="transaction-header">
 
@@ -20,7 +27,9 @@
             <%=render "state_button", :refund => refund %>
           </h1>
           <div class="state-progress">
-            <%=render "progress", :refund => refund %>
+            <% unless refund.state == "failure" %>
+              <%=render "progress", :refund => refund %>
+            <% end %>
           </div>
         </div>
       </div>

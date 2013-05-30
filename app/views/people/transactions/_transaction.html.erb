@@ -3,7 +3,7 @@
    state-id="<%= transaction.id %>"
    state-initial="<%= transaction.state %>"
    state-url="<%= page_person_transaction_path(@people, transaction) %>"
-   state-event-url= "<%= trigger_event_person_transaction_path(@people, transaction) %>"
+   state-event-url= "<%=trigger_event_person_transaction_path(@people, transaction) %>"
    url-root="<%= person_transaction_path(@people, transaction) %>">
   <div class="wrapper-box">
     <div class="transaction-header">
