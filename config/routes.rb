@@ -28,7 +28,12 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :order_refunds, :controller => "people/order_refunds"
+    resources :order_refunds, :controller => "people/order_refunds" do
+      member do
+        post "event(/:event)", :to => "people/order_refunds#event", :as => :trigger_event
+        post 'delivery_code', :to => "people/order_refunds#delivery_code"
+      end
+    end
 
     match 'recharges/create', :to => "people/recharges#create"
 
@@ -220,7 +225,12 @@ Panama::Application.routes.draw do
       match "pending", :to => "shops/transactions#pending"
       match "complete", :to => "shops/transactions#complete"
 
-      resources :order_refunds, :controller => "shops/order_refunds"
+      resources :order_refunds, :controller => "shops/order_refunds" do
+        member do
+          post "event(/:event)", :to => "shops/order_refunds#event", :as => :trigger_event
+          post 'refuse_reason', :to => "shops/order_refunds#refuse_reason"
+        end
+      end
 
       resources :employees, :controller => "shops/employees", :except => :destroy  do
         collection do

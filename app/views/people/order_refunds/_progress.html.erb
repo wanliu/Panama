@@ -1,0 +1,13 @@
+<div class="progress progress-mini progress-striped active">
+</div>
+<script type='text/javascript'>
+  require(["jquery", "lib/transaction_progress"],
+    function($, TransactionProgress){
+      new TransactionProgress({
+        el: $(".refund-<%=refund.id %>-<%=refund.state %> .state-progress>.progress"),
+        state_type: "returned",
+        state: "<%=refund.state %>",
+        localName: <%= t("order_refund_state").to_json.html_safe %>
+      })
+  })
+</script>

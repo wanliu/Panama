@@ -9,7 +9,7 @@ class CreateOrderRefunds < ActiveRecord::Migration
       t.integer :buyer_id
       t.integer :seller_id
       t.text :refuse_reason
-      t.integer :operate_id
+      t.integer :operator_id
 
       t.timestamps
     end

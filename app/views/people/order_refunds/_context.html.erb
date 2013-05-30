@@ -1,5 +1,12 @@
 <% seller = refund.order_transaction.seller %>
-<div id="refund<%=refund.id %>" class="transaction refund-<%=refund.id %>-<%=refund.state %>">
+<div id="refund<%=refund.id %>"
+  class="transaction refund-<%=refund.id %>-<%=refund.state %>"
+  state-id='<%=refund.id %>'
+  state-url="<%=person_order_refund_path(@people, refund) %>"
+  state-initial="<%=refund.state %>"
+  state-event-url="<%=trigger_event_person_order_refund_path(@people, refund) %>"
+  url-root="<%=person_order_refund_path(@people, refund) %>"
+   >
   <div class="wrapper-box">
     <div class="transaction-header">
 
@@ -20,8 +27,9 @@
             <%=render "state_button", :refund => refund %>
           </h1>
           <div class="state-progress">
-            <div class="progress progress-mini progress-striped active">
-            </div>
+            <% unless refund.state == "failure" %>
+              <%=render "progress", :refund => refund %>
+            <% end %>
           </div>
         </div>
       </div>
@@ -31,14 +39,3 @@
     </div>
   </div>
 </div>
-<script type='text/javascript'>
-  require(["jquery", "lib/transaction_progress"],
-    function($, TransactionProgress){
-      new TransactionProgress({
-        el: $(".refund-<%=refund.id %>-<%=refund.state %> .state-progress>.progress"),
-        state_type: "returned",
-        state: "<%=refund.state %>",
-        localName: <%= t("order_refund_state").to_json.html_safe %>
-      })
-  })
-</script>

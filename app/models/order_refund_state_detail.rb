@@ -13,5 +13,12 @@ class OrderRefundStateDetail < ActiveRecord::Base
   before_create :generate_expired
 
   def generate_expired
+    case state
+    when "apply_refund"
+      expired = DateTime.now + 2.day
+    else
+      expired_state = false
+      expired = DateTime.now
+    end
   end
 end

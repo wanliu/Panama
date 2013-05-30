@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130529032829) do
+ActiveRecord::Schema.define(:version => 20130529082757) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -316,6 +316,8 @@ ActiveRecord::Schema.define(:version => 20130529032829) do
     t.integer  "seller_id"
     t.text     "refuse_reason"
     t.integer  "operate_id"
+    t.integer  "operator_id"
+    t.string   "delivery_code"
   end
 
   create_table "order_transactions", :force => true do |t|
