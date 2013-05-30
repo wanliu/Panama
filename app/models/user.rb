@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
   has_many :contact_friends, dependent: :destroy
   has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
   has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
+  has_many :money_bills, :dependent => :destroy
 
   delegate :groups, :jshop, :to => :shop_user
 
@@ -42,6 +43,18 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_initialize :init_user_info
+
+  def recharge(money, owner)
+    money_bills.create(
+      :owner => owner,
+      :money =>money)
+  end
+
+  def payment(money, owner)
+    money_bills.create(
+      :owner => owner,
+      :money => -money)
+  end
 
   def messages(friend_id)
     ChatMessage.all(id, friend_id)

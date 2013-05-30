@@ -181,11 +181,14 @@ class OrderTransaction < ActiveRecord::Base
     filter_fire_event!(events, event)
   end
 
+  def refund_items
+    OrderRefundItem.where(
+      :order_refund_id => refunds.map{|item| item.id})
+  end
+
   #付款
   def payment
-    TradePayment.create(
-      :money => stotal,
-      :order_transaction => self)
+    buyer.payment(stotal, self)
   end
 
   def readonly?
