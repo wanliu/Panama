@@ -351,16 +351,22 @@ zh-CN:
     buyer:
       order: 确认订单
       waiting_paid: 付款到卖家
-      waiting_delivery: 卖家发货
-      waiting_sign: 确认收货
+      waiting_delivery: 等待发货
+      waiting_sign: 等待收货
+      delivery_failure: 延时发货
       complete: 交易成功
+      refund: 退货
+      close: 关闭
 
     seller:
       order: 买家下单
       waiting_paid: 买家付款
       waiting_delivery: 确认发货
       waiting_sign: 买家收货
+      delivery_failure: 延时发货
       complete: 交易成功
+      refund: 退货
+      close: 关闭
 
   order_refund_state:
     apply_refund: 申请退货
