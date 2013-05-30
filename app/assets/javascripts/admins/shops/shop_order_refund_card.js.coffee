@@ -22,8 +22,11 @@ define ['jquery', 'backbone', "lib/transaction_card_base"],
         { name: 'sign',          from: 'waiting_sign',      to: 'complete'}
       ]
 
+    leaveApplyRefund: (event, from, to, msg) ->
+      @slideAfterEvent(event) if /agree/.test(event)
+
     leaveWaitingSign: (event, from, to, msg) ->
-      @slideAfterEvent(event)
+      @slideAfterEvent(event) if /sign/.test(event)
 
     afterRefuse: (event, from, to, msg) ->
       reason = @$('.refuse-panel textarea').val()
