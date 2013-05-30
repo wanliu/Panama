@@ -1,13 +1,20 @@
 <div class="progress progress-mini progress-striped active">
 </div>
 <script type='text/javascript'>
-  require(["jquery", "lib/transaction_progress"],
-    function($, TransactionProgress){
-      new TransactionProgress({
+  require(["jquery", "lib/state_progress"],
+    function($, StateProgress){
+    var complete_states = []
+    <% refund.state_details.each do |item| %>
+      complete_states.push({
+        state: "<%=item.state %>",
+        created_at: "<%=item.created_at %>"
+      })
+    <% end %>
+      new StateProgress({
         el: $(".refund-<%=refund.id %>-<%=refund.state %> .state-progress>.progress"),
         state_type: "returned",
-        state: "<%=refund.state %>",
-        localName: <%= t("order_refund_state").to_json.html_safe %>
+        localName: <%= t("order_refund_state").to_json.html_safe %>,
+        complete_states: complete_states
       })
   })
 </script>
