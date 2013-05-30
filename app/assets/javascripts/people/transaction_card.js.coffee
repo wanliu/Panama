@@ -4,7 +4,6 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
     class TransactionCard extends Transaction.TransactionCardBase
         initialize:() ->
             super
-            @hideAddress()
 
         events:
             "click .page-header .btn"   : "clickAction"
