@@ -1,80 +1,80 @@
 <div class="address-form">
 <%= simple_nested_form_for transaction,
-					:url => update_address_person_transaction_path(people, transaction),
-					:html => { :class => "form-horizontal"},
-					:remote=>true do |f| %>
-	<div class="address_input">
-		<%= f.input :address_id,
-					# :as => :chosen,
-					:collection => people.addresses,
-					:object => transaction,
-					:selected => "",
-					:include_blank => true,
-					:label_method => :location,
-					:value_method => :id,
-					:input_html => { :class => :span12, id: "address_id_"+transaction.id.to_s } %>
-		<div class="btn-group address-add">
-			<%= button_tag icon(:list), :class => "btn" %>
-		</div>
-	</div>
+          :url => update_address_person_transaction_path(people, transaction),
+          :html => { :class => "form-horizontal"},
+          :remote=>true do |f| %>
+  <div class="address_input">
+    <%= f.input :address_id,
+          # :as => :chosen,
+          :collection => people.addresses,
+          :object => transaction,
+          :selected => "",
+          :include_blank => true,
+          :label_method => :location,
+          :value_method => :id,
+          :input_html => { :class => :span12, id: "address_id_"+transaction.id.to_s } %>
+    <div class="btn-group address-add">
+      <%= button_tag icon(:list), :class => "btn" %>
+    </div>
+  </div>
 
-	<div class="address-panel">
-	<%= simple_fields_for :address, transaction.address do |address_form| %>
-		<label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
-		<div class="controls controls-row">
-			<div class="span8 control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
-				<%= address_form.input :province_id,
-									   :as => :depend_select,
-									   :children => :city_id,
-									   :object => transaction,
-									   :wrapper => :inline,
-									   :collection => get_city %>
+  <div class="address-panel">
+  <%= simple_fields_for :address, transaction.address do |address_form| %>
+    <label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
+    <div class="controls controls-row">
+      <div class="span8 control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
+        <%= address_form.input :province_id,
+                     :as => :depend_select,
+                     :children => :city_id,
+                     :object => transaction,
+                     :wrapper => :inline,
+                     :collection => get_city %>
 
-				<%= address_form.input :city_id,
-									   :as => :depend_select,
-									   :children => :area_id,
-									   :object => transaction,
-									   :wrapper => :inline,
-									   :collection_url => "/city/" %>
+        <%= address_form.input :city_id,
+                     :as => :depend_select,
+                     :children => :area_id,
+                     :object => transaction,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
 
-				<%= address_form.input :area_id,
-									   :as => :depend_select,
-									   :object => transaction,
-									   :wrapper => :inline,
-									   :collection_url => "/city/" %>
+        <%= address_form.input :area_id,
+                     :as => :depend_select,
+                     :object => transaction,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
 
-				<%= address_form.error :province_id %>
-			</div>
-			<%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
-		</div>
-		<%= address_form.input :road, :input_html => { :class => :span12 } %>
-	<% end %>
-	</div>
+        <%= address_form.error :province_id %>
+      </div>
+      <%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
+    </div>
+    <%= address_form.input :road, :input_html => { :class => :span12 } %>
+  <% end %>
+  </div>
 
-	<div class="delivery-select">
-		<label class="chosen control-label" for="transaction_delivery_type">运送方式：</label>
-		<div class="controls controls-row">
-			<div class="span12 control-group">
-				<%= f.input :delivery_type_id,
-							# :as => :radio_buttons,
-							:object => transaction,
-							:wrapper => :inline,
-							:include_blank => false,
-							:collection => get_delivery_type,
-							:input_html => { :class => :span3}
-				%>
-				<%= f.input :delivery_price,
-							:as => :hidden,
-							:object => transaction,
-							:wrapper => :inline,
-							:input_html => {:class => :price}
-				%>
-				<div class="control-label delivery_price">
-					<%= number_to_currency(0.0)%>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div class="delivery-select">
+    <label class="chosen control-label" for="transaction_delivery_type">运送方式</label>
+    <div class="controls controls-row">
+      <div class="span12 control-group">
+        <%= f.input :delivery_type_id,
+              # :as => :radio_buttons,
+              :object => transaction,
+              :wrapper => :inline,
+              :include_blank => false,
+              :collection => get_delivery_type,
+              :input_html => { :class => :span3}
+        %>
+        <%= f.input :delivery_price,
+              :as => :hidden,
+              :object => transaction,
+              :wrapper => :inline,
+              :input_html => {:class => :price}
+        %>
+        <div class="control-label delivery_price">
+          <%= number_to_currency(0.0)%>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>
 </div>
 <script type="text/javascript">
