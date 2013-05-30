@@ -56,7 +56,7 @@ class OrderRefund < ActiveRecord::Base
     end
 
     before_transition :waiting_sign => :complete do |refund, transition|
-      if refund.order_transaction.valid_refund?
+      unless refund.order_transaction.valid_refund?
         unless refund.order_transaction.seller_fire_event!(:returned)
           refund.errors.add(:state, "确认退货出错！")
         end

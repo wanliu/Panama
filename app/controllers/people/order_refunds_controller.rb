@@ -2,13 +2,13 @@ class People::OrderRefundsController < People::BaseController
   before_filter :login_required
 
   def index
-    @refunds = current_user_refunds
+    @refunds = current_user_refunds.order("created_at desc")
   end
 
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
     if @refund.buyer_fire_events!(params[:event])
-      render :partial => :content, :locals => {
+      render :partial => "context", :locals => {
         :refund => @refund
       }
     end

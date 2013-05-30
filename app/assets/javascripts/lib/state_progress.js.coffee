@@ -12,7 +12,7 @@ define ["jquery", "backbone"], ($, Backbone) ->
       @$el.append("<div class='state-title'>#{@name}</div>")
       @$el.css @badge_left
 
-      if @complete_index >= @index
+      if @complete_index > @index
         @$el.addClass(@class_badge)
 
     render: () ->
@@ -116,8 +116,9 @@ define ["jquery", "backbone"], ($, Backbone) ->
     load_state: () ->
       complete_index = @complete_states.length
       _.each @states, (info, i) =>
+        if i > 0 && complete_index > i
+          @render_progress(info.class_progress)
 
-        @render_progress(info.class_progress) if i > 0
         @render_badge(complete_index, i, info)
 
     load_state_flow: () ->
@@ -130,8 +131,8 @@ define ["jquery", "backbone"], ($, Backbone) ->
     load_define_state: (state) ->
       info = @get_state_flow(state)
       if info && info.to?
-        @states.push info
-        load_define_state(info.to)
+        @added_states info.to
+        @load_define_state(info.to)
 
     added_states: (state) ->
       info = @get_state_flow(state)
