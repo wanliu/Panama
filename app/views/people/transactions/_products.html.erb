@@ -13,7 +13,7 @@
 			</div>
 	</div>
 	<div class="item-details">
-	<% refund_items = OrderRefundItem.where(:order_refund_id => transaction.refunds.map{|item| item.id}) %>
+	<% refund_items = transaction.refund_items %>
 	<% transaction.items.each do |item| %>
 	<div class="detail-row" data-value-id="<%=item.id %>">
 		<div class="detail-icon">
@@ -23,7 +23,7 @@
 			<% if refund_items.find_by(:product_item_id => item.id).nil? %>
 				<%= item.title %>
 			<% else %>
-				<%= item.title %> <span class='icon-remove-circle'></span>已经退货
+				<%= item.title %> 已经退货
 			<% end %>
 		</div>
 		<div class="detail-amount">

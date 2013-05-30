@@ -29,13 +29,18 @@
 		</th>
 	</tr>
 	</thead>
+	<% refund_items = transaction.refund_items %>
 	<% transaction.items.each do |item| %>
 	<tr>
 		<td>
 			<%= image_tag item.product.photos.icon %>
 		</td>
 		<td>
-			<%= item.title %>
+			<% if refund_items.find_by(:product_item_id => item.id).nil? %>
+				<%= item.title %>
+			<% else %>
+				<%= item.title %> 已经退货
+			<% end %>
 		</td>
 		<td>
 			<%= item.amount %>
