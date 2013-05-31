@@ -86,21 +86,6 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  # PUT /people/transactions/1
-  # PUT /people/transactions/1.json
-  def update
-    @transaction = OrderTransaction.find(params[:id])
-    respond_to do |format|
-      if @transaction.update_attributes(params[:order_transaction])
-        format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit", :layout => false }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   def address
     @transaction = OrderTransaction.find(params[:id])
     t, a = params[:order_transaction], params[:address]
