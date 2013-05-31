@@ -9,6 +9,8 @@
 #  seller_id: 卖家
 #  operator_id: 操作员
 #  refuse_reason: 拒绝理由
+#  delivery_price: 退运费
+#  delivery_code: 运单号
 class OrderRefund < ActiveRecord::Base
   attr_accessible :decription, :order_reason_id
 
@@ -27,12 +29,16 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  after_create :create_state_detail, :valid_order_state?
+  after_create :create_state_detail, :valid_shipped_order_state?
 
   state_machine :state, :initial => :apply_refund do
 
-    event :agree do
+    event :shipped_agree do
       transition :apply_refund => :waiting_delivery
+    end
+
+    event :unshipped_agree do
+      transition :apply_refund => :complete
     end
 
     event :delivered do
@@ -59,15 +65,19 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_refuse_reason?
     end
 
-    before_transition :waiting_sign => :complete do |refund, transition|
+    before_transition :apply_refund => :complete do |refund, transition|
+      refund.valid_unshipped_order_state?
+    end
 
+    after_transition :waiting_sign => :complete do |refund, transition|
+      refund.seller_refund_money
     end
   end
 
   def change_order_state
     unless order_transaction.valid_refund?
       if order_transaction.seller_fire_event!(:returned)
-        order_transaction.handle_product_item(items.map{|it| it.product_id})
+        order_transaction.refund_handle_product_item(self)
       else
         errors.add(:state, "确认退货出错！")
       end
@@ -116,16 +126,45 @@ class OrderRefund < ActiveRecord::Base
     self.update_attribute(:total, sum)
   end
 
+  def stotal
+    total + delivery_price
+  end
+
+  #退款
+  def buyer_recharge
+    order_transaction.buyer.recharge(stotal, self)
+  end
+
+  def seller_payment
+    order_transaction.seller.user.payment(stotal, self)
+  end
+
+  #卖家退款
+  def seller_refund_money
+    if order_transaction.complete_state?
+      MoneyBill.transition do
+        buyer_recharge
+        seller_payment
+      end
+    end
+  end
+
   def valid_refuse_reason?
     if refuse_reason.blank?
-      errors.add(:refuse_reason, "没有拒绝理由!")
+      errors.add(:refuse_reason, "请填写拒绝理由!")
     end
   end
 
   private
 
-  def valid_order_state?
-    if order_transaction.valid_order_refund_state?
+  def valid_unshipped_order_state?
+    unless order_transaction.order_refund_delivery_state?
+      errors.add(:state, "卖家已经发送了!")
+    end
+  end
+
+  def valid_shipped_order_state?
+    unless order_transaction.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
     end
   end
