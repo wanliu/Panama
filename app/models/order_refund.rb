@@ -12,6 +12,8 @@
 #  delivery_price: 退运费
 #  delivery_code: 运单号
 class OrderRefund < ActiveRecord::Base
+  include MessageQueue::OrderRefund
+
   attr_accessible :decription, :order_reason_id
 
   belongs_to :order_reason
@@ -34,11 +36,16 @@ class OrderRefund < ActiveRecord::Base
   state_machine :state, :initial => :apply_refund do
 
     event :shipped_agree do
-      transition :apply_refund => :waiting_delivery
+      transition [:apply_refund, :apply_failure] => :waiting_delivery
     end
 
     event :unshipped_agree do
-      transition :apply_refund => :complete
+      transition [:apply_refund, :apply_failure] => :complete
+    end
+
+    event :expired do
+      transition :apply_refund => :apply_failure
+                 :waiting_sign => :complete
     end
 
     event :delivered do
@@ -72,6 +79,21 @@ class OrderRefund < ActiveRecord::Base
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
     end
+
+    after_transition :apply_refund => :apply_failure do |refund, transition|
+      refund.apply_failure_notice
+    end
+  end
+
+  def self.state_expired
+    refunds = joins("left join order_refund_state_details as detail
+      on  detail.order_transaction_id = order_refunds.id and
+      detail.expired_state=true and
+      detail.state=order_refunds.state")
+    .where("detail.expired<=", DateTime.now)
+    refunds.each{|ref| ref.fire_events!(:expired) }
+    puts "=refund===start: #{DateTime.now}=====count: #{refunds.count}===="
+    refunds
   end
 
   def change_order_state
@@ -103,6 +125,7 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def create_state_detail
+    state_details.update_all(:expired_state => false)
     state_details.create(:state => state)
   end
 
@@ -122,7 +145,7 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def update_total
-    sum = items.inject(0){|sum, item| sum += item }
+    sum = items.inject(0){|sum, item| sum += item.total }
     self.update_attribute(:total, sum)
   end
 

@@ -2,7 +2,7 @@
   <div class="products-head">
       <% refund.items[0...5].each do |item| %>
         <div class="img-header">
-        <%= image_tag item.product_item.product.photos.header %>
+        <%= image_tag item.product.photos.header %>
         </div>
       <% end %>
       <span class='ellipsis'>...</span>
@@ -13,8 +13,7 @@
       </div>
   </div>
   <div class="item-details">
-  <% refund.items.each do |refund_item| %>
-  <% item = refund_item.product_item %>
+  <% refund.items.each do |item| %>
   <div class="detail-row" data-value-id="<%=item.id %>">
     <div class="detail-icon">
       <%= image_tag item.product.photos.icon %>

@@ -1,0 +1,31 @@
+<div class="container-fluid">
+
+  <div class="row-fluid">
+    <div class="span1">
+      退货原因:
+    </div>
+    <div class="span3">
+      <%= refund.order_reason.name %>
+    </div>
+    <div class="span1">
+      <label class="control-label">退货金额:</label>
+    </div>
+    <div class="span3">
+      <%= number_to_currency(refund.total) %>
+    </div>
+    <div class="span1">
+    </div>
+    <div class="span3">
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span1">
+      <label class="control-label">退货说明:</label>
+    </div>
+    <div class="span11">
+      <%= refund.decription %>
+    </div>
+  </div>
+</div>
+<%=render "products", :refund => refund %>
