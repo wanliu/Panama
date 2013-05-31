@@ -1,0 +1,59 @@
+<div class='paymanner'>
+  <label class="chosen control-label">支付方式</label>
+  <div class="controls controls-row">
+    <div class='paymanner_panel'>
+      <span>在线支付</span><a href='javascript:void(0)' class='mdify_show'>修改支付方式</a>
+    </div>
+    <div class='chose_paymanner_panel'>
+      <ul>
+        <% PayManner.all.each do | pay_manner | %>
+        <li>
+          <span class='title'>
+            <input type="radio" name='paymanner' checked/>
+            <%=pay_manner.name %>
+          </span>
+          <span class='describe'>
+            <%=pay_manner.description %>
+          </span>
+        </li>
+        <% end %>
+      </ul>
+      <input type='button' value='确认修改' class='mdify btn btn-large btn-primary btn-small' />
+    </div>
+  </div>
+</div>
+
+<div class='delivery_manner'>
+  <label class="chosen control-label" for="transaction_delivery_type">配送方式</label>
+  <div class="controls controls-row">
+    <div class='delivery_manner_panel'>
+      快递运输<a href='javascript:void(0)' class='mdify_show'>修改运输方式</a>
+    </div>
+    <div class='chose_delivery_manner_panel'>
+      <ul>
+        <li>
+          <input type="radio" name='deliverymanner' checked/>
+          上门取货
+        </li>
+        <li>
+          <input type="radio" name='deliverymanner' checked/>
+          快递运输
+        </li>
+      </ul>
+      <input type='button' value='确认修改' class='mdify btn btn-large btn-primary btn-small' />
+    </div>
+  </div>
+</div>
+
+<script type='text/javascript' >
+  require(["jquery", "people/transaction_paymanner", "people/transaction_deliverymanner"],
+    function($, TransactionPayManner, TransactionDeliveryManner){
+    new TransactionPayManner({
+      el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .paymanner")
+    })
+
+    new TransactionDeliveryManner({
+      el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .delivery_manner")
+    })
+  })
+</script>
