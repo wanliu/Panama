@@ -132,7 +132,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transaction|
-      order.payment
+      order.buyer_payment
     end
 
     after_transition do |order, transaction|
@@ -159,6 +159,10 @@ class OrderTransaction < ActiveRecord::Base
     before_transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund do |order, transition|
       order.valid_refund?
     end
+
+    after_transition :waiting_sign => :complete do |order, transition|
+      order
+    end
   end
 
   def self.state_expired
@@ -172,27 +176,33 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   #处理订单退货明细
-  def handle_product_item(product_ids)
+  def refund_handle_product_item(refund)
+    product_ids = refund.items.map{|it| it.product_id}
     product_items = items.where(:product_id => product_ids)
-    if %w(delivery_failure waiting_delivery).include?(state)
+    if order_refund_delivery_state?
       product_items.destroy_all
       update_total_count
-      save
+      refund.buyer_recharge if save
     else
       product_items.update_all(:refund_state => false)
     end
   end
 
-  def valid_order_refund_state?
-    if %w(delivery_failure
+  def order_refund_delivery_state?
+    %w(delivery_failure waiting_delivery).include?(state)
+  end
+
+  #是否成功
+  def complete_state?
+    state == "complete"
+  end
+
+  def order_refund_state?
+    %w(delivery_failure
       waiting_delivery
       waiting_sign
       complete).include?(state)
-      return true
-    end
-    return false
   end
-
 
   def buyer_fire_event!(event)
     events = %w(buy back paid sign)
@@ -210,8 +220,13 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   #付款
-  def payment
+  def buyer_payment
     buyer.payment(stotal, self)
+  end
+
+  #卖家收款
+  def seller_recharge
+    seller.recharge(stotal, self)
   end
 
   def readonly?

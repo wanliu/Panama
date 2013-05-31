@@ -45,13 +45,13 @@ class User < ActiveRecord::Base
   after_initialize :init_user_info
 
   def recharge(money, owner)
-    money_bills.create(
+    money_bills.create!(
       :owner => owner,
       :money =>money)
   end
 
   def payment(money, owner)
-    money_bills.create(
+    money_bills.create!(
       :owner => owner,
       :money => -money)
   end
