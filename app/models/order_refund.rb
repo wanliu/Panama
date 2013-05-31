@@ -10,7 +10,7 @@
 #  operator_id: 操作员
 #  refuse_reason: 拒绝理由
 class OrderRefund < ActiveRecord::Base
-  attr_accessible :decription, :total, :order_reason_id, :order_transaction_id
+  attr_accessible :decription, :order_reason_id
 
   belongs_to :order_reason
   belongs_to :order_transaction
@@ -27,7 +27,7 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  after_create :create_state_detail
+  after_create :create_state_detail, :valid_order_state?
 
   state_machine :state, :initial => :apply_refund do
 
@@ -51,17 +51,31 @@ class OrderRefund < ActiveRecord::Base
       refund.create_state_detail
     end
 
+    before_transition :apply_refund => :waiting_delivery do |refund, transition|
+      refund.change_order_state
+    end
+
     before_transition :apply_refund => :failure do |refund, transition|
       refund.valid_refuse_reason?
     end
 
     before_transition :waiting_sign => :complete do |refund, transition|
-      unless refund.order_transaction.valid_refund?
-        unless refund.order_transaction.seller_fire_event!(:returned)
-          refund.errors.add(:state, "确认退货出错！")
-        end
+
+    end
+  end
+
+  def change_order_state
+    unless order_transaction.valid_refund?
+      if order_transaction.seller_fire_event!(:returned)
+        order_transaction.handle_product_item(items.map{|it| it.product_id})
+      else
+        errors.add(:state, "确认退货出错！")
       end
     end
+  end
+
+  def self.avaliable
+    where("state not in (apply_refund, failure)")
   end
 
   def seller_fire_events!(event)
@@ -84,9 +98,22 @@ class OrderRefund < ActiveRecord::Base
 
   def create_items(_items = [])
     _items = [_items] unless _items.is_a?(Array)
-    _items.each do |item|
-      items.create(:product_item_id => item)
+    _items.each do |item_id|
+      product_item = order_transaction.items.find_by(:id => item_id)
+      if product_item.present?
+        items.create(
+          :title => product_item.title,
+          :amount => product_item.amount,
+          :price => product_item.price,
+          :product_id => product_item.product_id)
+      end
     end
+    update_total
+  end
+
+  def update_total
+    sum = items.inject(0){|sum, item| sum += item }
+    self.update_attribute(:total, sum)
   end
 
   def valid_refuse_reason?
@@ -96,6 +123,12 @@ class OrderRefund < ActiveRecord::Base
   end
 
   private
+
+  def valid_order_state?
+    if order_transaction.valid_order_refund_state?
+      errors.add(:order_transaction_id, "订单属于不能退货状态！")
+    end
+  end
 
   def type_fire_events!(states, event)
     if states.include?(event.to_s)

@@ -2,11 +2,11 @@
   <label class="chosen control-label">支付方式</label>
   <div class="controls controls-row">
     <div class='paymanner_panel'>
-      <span>在线支付</span><a href='javascript:void(0)' class='mdify_show'>修改支付方式</a>
+      <span>在线支付</span><a href='javascript:void(0)' class='mdify_show'>修改</a>
     </div>
     <div class='chose_paymanner_panel'>
       <ul>
-        <% PayManner.all.each do | pay_manner | %>
+        <% PayManner.avaliable.each do | pay_manner | %>
         <li>
           <span class='title'>
             <input type="radio" name='paymanner' checked/>
@@ -27,7 +27,7 @@
   <label class="chosen control-label" for="transaction_delivery_type">配送方式</label>
   <div class="controls controls-row">
     <div class='delivery_manner_panel'>
-      快递运输<a href='javascript:void(0)' class='mdify_show'>修改运输方式</a>
+      快递运输<a href='javascript:void(0)' class='mdify_show'>修改</a>
     </div>
     <div class='chose_delivery_manner_panel'>
       <ul>

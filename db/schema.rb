@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530102934) do
+ActiveRecord::Schema.define(:version => 20130531062218) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -301,8 +301,13 @@ ActiveRecord::Schema.define(:version => 20130530102934) do
   create_table "order_refund_items", :force => true do |t|
     t.integer  "order_refund_id"
     t.integer  "product_item_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.text     "title"
+    t.decimal  "amount",          :precision => 10, :scale => 0
+    t.decimal  "price",           :precision => 10, :scale => 0
+    t.decimal  "total",           :precision => 10, :scale => 0
+    t.integer  "product_id"
   end
 
   create_table "order_refund_state_details", :force => true do |t|
@@ -387,11 +392,12 @@ ActiveRecord::Schema.define(:version => 20130530102934) do
     t.decimal  "price",          :precision => 10, :scale => 0
     t.decimal  "total",          :precision => 10, :scale => 0
     t.integer  "transaction_id"
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
     t.integer  "cart_id"
     t.integer  "product_id"
     t.string   "options"
+    t.boolean  "refund_state",                                  :default => true
   end
 
   add_index "product_items", ["options"], :name => "index_product_items_on_options"

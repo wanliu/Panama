@@ -171,6 +171,29 @@ class OrderTransaction < ActiveRecord::Base
     transactions
   end
 
+  #处理订单退货明细
+  def handle_product_item(product_ids)
+    product_items = items.where(:product_id => product_ids)
+    if %w(delivery_failure waiting_delivery).include?(state)
+      product_items.destroy_all
+      update_total_count
+      save
+    else
+      product_items.update_all(:refund_state => false)
+    end
+  end
+
+  def valid_order_refund_state?
+    if %w(delivery_failure
+      waiting_delivery
+      waiting_sign
+      complete).include?(state)
+      return true
+    end
+    return false
+  end
+
+
   def buyer_fire_event!(event)
     events = %w(buy back paid sign)
     filter_fire_event!(events, event)
@@ -286,15 +309,11 @@ class OrderTransaction < ActiveRecord::Base
     FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
   end
 
-  def refund_complete
-    refunds.where(:state => "complete")
-  end
-
   def valid_refund?
-    product_item_ids = refund_complete.joins(:items).map do |refund|
-      refund.items.map{|item| item.product_item_id}
+    product_ids = refunds.avaliable.joins(:items) do |ref|
+      ref.items.map{|item| item.product_id }
     end.flatten
-    if items.where("id not in (?)", product_item_ids).limit(1).nil?
+    if items.find_by("product_id not in (?)", product_ids).nil?
       errors.add(:state, "订单还有其它产品没有退货！")
       false
     else
