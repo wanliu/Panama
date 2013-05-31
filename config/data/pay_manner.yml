@@ -1,0 +1,11 @@
+pay_manner:
+  - name: 在线支付
+    description: 即时到帐，支持绝大数银行借记卡及部分银行信用卡
+  - name: 货到付款
+    description: 配送员将商品送到时支付
+  - name: 分期付款
+    description: 信用卡网上支付订单，按月还款，减轻资金周转压力
+  - name: 公司转帐
+    description: 通过快钱平台转账 转帐后1-3个工作日内到帐
+  - name: 邮局汇款
+    description: 通过快钱平台收款 汇款后1-3个工作日到账
