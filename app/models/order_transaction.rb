@@ -161,7 +161,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_sign => :complete do |order, transition|
-      order
+      # order
     end
   end
 
@@ -171,7 +171,7 @@ class OrderTransaction < ActiveRecord::Base
       details.state = order_transactions.state and details.expired_state=true")
     .where("details.expired <=?", DateTime.now)
     transactions.each{|t| t.fire_events!(:expired) }
-    puts "===start: #{DateTime.now}=====count: #{transactions.count}===="
+    puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
   end
 
@@ -241,6 +241,7 @@ class OrderTransaction < ActiveRecord::Base
 
   #变更状态
   def state_change_detail
+    state_details.update_all(:expired_state => false)
     state_details.create(:state => state)
   end
 
