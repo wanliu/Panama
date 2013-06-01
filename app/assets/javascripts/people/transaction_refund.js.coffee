@@ -43,6 +43,14 @@ define ["jquery", "backbone", "notify"], ($, Backbone) ->
         @notify("请选择退货商品!", "error")
         return false
 
+      if data.hasOwnProperty('delivery_price')
+        if _.isEmpty(data.delivery_price)
+          @$("input.delivery_price").val(0)
+
+        unless /^\d*\.?\d+$/.test data.delivery_price
+          @notify("请输入正确运费!", "error")
+          return false
+
       @refund = new TransactionRefund(data)
       @refund.set_url(@remote_url)
       @refund.create (model, data) =>

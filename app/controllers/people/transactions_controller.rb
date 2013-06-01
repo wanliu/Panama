@@ -104,7 +104,7 @@ class People::TransactionsController < People::BaseController
         address.save
         {:address_id => address.id}
       end
-      options[:delivery_price] = t[:delivery_price]
+      options[:delivery_price] = t[:delivery_price] || 0
       options[:delivery_type_id] = t[:delivery_type_id]
       if @transaction.update_attributes(options)
         format.json{ head :no_content }

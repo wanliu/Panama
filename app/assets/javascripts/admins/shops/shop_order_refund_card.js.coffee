@@ -17,16 +17,22 @@ define ['jquery', 'backbone', "lib/transaction_card_base"],
       initial: 'none'
 
       events:  [
-        { name: 'refuse',        from: 'apply_refund',      to: 'refuse' },
-        { name: 'agree',         from: 'apply_refund',      to: 'waiting_delivery' },
-        { name: 'sign',          from: 'waiting_sign',      to: 'complete'}
+        { name: 'refuse',          from: 'apply_refund',      to: 'refuse' },
+        { name: 'shipped_agree',   from: 'apply_refund',      to: 'waiting_delivery' },
+        { name: 'unshipped_agree', from: 'apply_refund',      to: 'complete' },
+        { name: 'sign',            from: 'waiting_sign',      to: 'complete'},
+        { name: 'unshipped_agree', from: 'apply_failure',     to: 'complete'},
+        { name: 'shipped_agree',   from: 'apply_failure',     to: 'complete' }
       ]
 
     leaveApplyRefund: (event, from, to, msg) ->
-      @slideAfterEvent(event) if /agree/.test(event)
+      @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
+
+    leaveApplyFailure: (event, from, to, msg) ->
+      @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
 
     leaveWaitingSign: (event, from, to, msg) ->
-      @slideAfterEvent(event) if /sign/.test(event)
+      @slideAfterEvent(event) if /^sign$/.test(event)
 
     afterRefuse: (event, from, to, msg) ->
       reason = @$('.refuse-panel textarea').val()

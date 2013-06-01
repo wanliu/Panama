@@ -13,6 +13,16 @@
           </select>
         </div>
       </div>
+      <% if transaction.shipped_state? %>
+        <div class="control-group">
+          <label class="control-label">
+            退运费
+          </label>
+          <div class="controls">
+            <input type='text' name='delivery_price' class='delivery_price' value='0' />
+          </div>
+        </div>
+      <% end %>
       <div class="control-group">
         <label class="control-label">
           退款说明
@@ -29,7 +39,6 @@
     </form>
   </div>
 </div>
-<%= render "products", :transaction => transaction, :people => people %>
 <script type='text/javascript'>
 require(["jquery", "people/transaction_refund"],
   function($, TransactionRefundView){

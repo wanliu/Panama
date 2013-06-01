@@ -1,6 +1,6 @@
 #资金帐目
 class MoneyBill < ActiveRecord::Base
-  attr_accessible :decription, :money, :owne, :user
+  attr_accessible :decription, :money, :owner, :user
 
   belongs_to :owner, :polymorphic => true
   belongs_to :user

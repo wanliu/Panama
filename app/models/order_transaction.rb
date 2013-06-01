@@ -36,9 +36,9 @@ class OrderTransaction < ActiveRecord::Base
             autosave: true,
             dependent: :destroy
 
-  has_many :chat_messages, :as => :owner
+  has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
-  has_many :refunds, class_name: "OrderRefund"
+  has_many :refunds, class_name: "OrderRefund", dependent: :destroy
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
@@ -179,7 +179,7 @@ class OrderTransaction < ActiveRecord::Base
   def refund_handle_product_item(refund)
     product_ids = refund.items.map{|it| it.product_id}
     product_items = items.where(:product_id => product_ids)
-    if order_refund_delivery_state?
+    if unshipped_state?
       product_items.destroy_all
       update_total_count
       refund.buyer_recharge if save
@@ -188,13 +188,21 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def order_refund_delivery_state?
+  def shipped_state?
+    %w(waiting_sign complete).include?(state)
+  end
+
+  def unshipped_state?
     %w(delivery_failure waiting_delivery).include?(state)
   end
 
   #是否成功
   def complete_state?
     state == "complete"
+  end
+
+  def refund_state?
+    state == "refund"
   end
 
   def order_refund_state?
@@ -326,10 +334,11 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def valid_refund?
-    product_ids = refunds.avaliable.joins(:items) do |ref|
-      ref.items.map{|item| item.product_id }
-    end.flatten
-    if items.find_by("product_id not in (?)", product_ids).nil?
+    # product_ids = refunds.avaliable.joins(:items) do |ref|
+    #   ref.items.map{|item| item.product_id }
+    # end.flatten
+    # if items.where("product_id not in (?)", product_ids).first.nil?
+    if items.exists?(:refund_state => true)
       errors.add(:state, "订单还有其它产品没有退货！")
       false
     else

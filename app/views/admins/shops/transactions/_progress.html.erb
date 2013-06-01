@@ -13,6 +13,7 @@
 
     new StateProgress({
       el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .state-progress>.progress"),
+      complete_states: complete_states,
       localName: <%=t("order_states.seller").to_json.html_safe %>
     })
   })

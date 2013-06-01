@@ -21,7 +21,7 @@
 		</div>
 		<div class="detail-title">
 			<%= item.title %>
-			<% unless item.refund_state %>
+			<% unless item.refund_state || transaction.refund_state? %>
 				已退货
 			<% end %>
 		</div>
