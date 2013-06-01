@@ -46,14 +46,14 @@ class User < ActiveRecord::Base
 
   def recharge(money, owner)
     money_bills.create!(
-      :owner => owner,
-      :money =>money)
+      :money =>money,
+      :owner => owner)
   end
 
   def payment(money, owner)
     money_bills.create!(
-      :owner => owner,
-      :money => -money)
+      :money => -money,
+      :owner => owner)
   end
 
   def messages(friend_id)

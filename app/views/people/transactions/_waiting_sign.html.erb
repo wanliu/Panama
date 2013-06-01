@@ -17,7 +17,7 @@
 				运单号：<%=transaction.delivery_code %>
 			</span>
 			<span>
-				<a href='javascript:void(0)'>申请退货</a>
+				<a href='javascript:void(0)' class='returned-event'>申请退货</a>
 			</span>
 			<span>
 				<a href='javascript:void(0)'>延长收货时间</a>
@@ -33,11 +33,11 @@
 		<div class="span4">
 		</div>
 		<div class="span8">
-
 			<img src="http://maps.googleapis.com/maps/api/staticmap?center=-15.800513,-47.91378&zoom=11&size=200x200&sensor=false">
 		</div>
 	</div>
 </div>
+<%= render "people/transactions/funcat/refund_display", :transaction => transaction, :people => people %>
 <%= render "products", :transaction => transaction, :people => people %>
 <script type="text/javascript">
 	require(["countdown"], function(){
