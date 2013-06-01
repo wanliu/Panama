@@ -55,12 +55,12 @@ define ["jquery", "backbone"], ($, Backbone) ->
         },
         delivery_failure:{
           class_badge: "badge-important",
-          class_progress: "bar-danger"
+          class_progress: "bar-danger",
           to: "refund"
         },
         waiting_sign: {
           class_badge: "badge-important",
-          class_progress: "bar-danger"
+          class_progress: "bar-danger",
           to: "complete"
         },
         complete: {
@@ -74,6 +74,11 @@ define ["jquery", "backbone"], ($, Backbone) ->
         refund:{
           class_badge: "badge-info",
           class_progress: "bar-info"
+        },
+        waiting_refund:{
+          class_badge: "badge-success",
+          class_progress: "bar-success"
+          to: "refund"
         }
       },
 

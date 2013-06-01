@@ -37,6 +37,6 @@ define ['jquery', 'backbone', "lib/transaction_card_base"],
         type: 'POST',
         data: {delivery_code: code},
         success: () =>
-          @slideBeforeEvent(event)
+          @slideAfterEvent(event)
       )
 

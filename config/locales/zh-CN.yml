@@ -356,6 +356,7 @@ zh-CN:
       delivery_failure: 延时发货
       complete: 交易成功
       refund: 退货
+      waiting_refund: 等待退货
       close: 关闭
 
     seller:
@@ -366,6 +367,7 @@ zh-CN:
       delivery_failure: 延时发货
       complete: 交易成功
       refund: 退货
+      waiting_refund: 等待退货
       close: 关闭
 
   order_refund_state:

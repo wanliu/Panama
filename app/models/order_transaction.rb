@@ -163,7 +163,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_sign => :complete do |order, transition|
-      # order
+      order.seller_recharge
     end
   end
 
@@ -177,17 +177,22 @@ class OrderTransaction < ActiveRecord::Base
     transactions
   end
 
-  #处理订单退货明细
-  def refund_handle_product_item(refund)
-    product_ids = refund.items.map{|it| it.product_id}
-    product_items = items.where(:product_id => product_ids)
+  #如果卖家没有发货直接删除明细，返还买家的金额
+  def refund_handle_detail_return_money(refund)
     if unshipped_state?
-      product_items.destroy_all
+      get_refund_items(refund).destroy_all
       update_total_count
       refund.buyer_recharge if save
-    else
-      product_items.update_all(:refund_state => false)
     end
+  end
+
+  def refund_handle_product_item(refund)
+    get_refund_items(refund).update_all(:refund_state => false)
+  end
+
+  def get_refund_items(refund)
+    product_ids = refund.items.map{|it| it.product_id}
+    items.where(:product_id => product_ids)
   end
 
   def shipped_state?
@@ -205,6 +210,10 @@ class OrderTransaction < ActiveRecord::Base
 
   def refund_state?
     state == "refund"
+  end
+
+  def wating_refund_state?
+    state == "waiting_refund"
   end
 
   def order_refund_state?
@@ -236,7 +245,7 @@ class OrderTransaction < ActiveRecord::Base
 
   #卖家收款
   def seller_recharge
-    seller.recharge(stotal, self)
+    seller.user.recharge(stotal, self)
   end
 
   def readonly?

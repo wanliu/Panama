@@ -80,18 +80,19 @@ class OrderRefund < ActiveRecord::Base
 
     after_transition :apply_refund => :waiting_delivery,
                      :apply_failure => :waiting_delivery do |refund, transition|
-      refund.handle_product_item
+      refund.handle_detail_return_money
       refund.change_order_state
     end
 
     after_transition :apply_refund => :complete,
                      :apply_failure => :complete do |refund, transition|
-      refund.handle_product_item
+      refund.handle_detail_return_money
       refund.change_order_state
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
+      refund.handle_product_item
       refund.change_order_state
     end
 
@@ -121,6 +122,10 @@ class OrderRefund < ActiveRecord::Base
         errors.add(:state, "确认退货出错！")
       end
     end
+  end
+
+  def handle_detail_return_money
+    order_transaction.refund_handle_detail_return_money(self)
   end
 
   def handle_product_item
@@ -186,7 +191,7 @@ class OrderRefund < ActiveRecord::Base
   #卖家退款
   def seller_refund_money
     if order_transaction.complete_state?
-      MoneyBill.transition do
+      MoneyBill.transaction do
         buyer_recharge
         seller_payment
       end
