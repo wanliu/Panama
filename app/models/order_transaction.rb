@@ -91,7 +91,9 @@ class OrderTransaction < ActiveRecord::Base
     #退货事件
     event :returned do
       #发货失败`等待发货`签收 到 退货
-      transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund
+      transition [:delivery_failure, :waiting_delivery, :waiting_refund] => :refund,
+                 [:waiting_sign, :complete]             => :waiting_refund
+
     end
 
     #付款
