@@ -92,6 +92,7 @@ class OrderRefund < ActiveRecord::Base
 
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
+      refund.change_order_state
     end
 
     after_transition :apply_refund => :apply_failure do |refund, transition|
