@@ -158,7 +158,7 @@ class OrderRefund < ActiveRecord::Base
   def create_items(_items = [])
     _items = [_items] unless _items.is_a?(Array)
     _items.each do |item_id|
-      product_item = order_transaction.items.find_by(:id => item_id)
+      product_item = order_transaction.items.find_by(:id => item_id, :refund_state => true)
       if product_item.present?
         items.create(
           :title => product_item.title,

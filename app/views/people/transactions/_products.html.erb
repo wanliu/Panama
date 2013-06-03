@@ -35,7 +35,9 @@
 			<%= number_to_currency(item.total) %>
 		</div>
 		<div class='detail-chose'>
-			<input type='checkbox' />
+			<% if item.refund_state %>
+				<input type='checkbox' />
+			<% end %>
 		</div>
 	</div>
 	<% end %>
