@@ -23,6 +23,8 @@ def initialize_data
   load_order_reason
 
   load_pay_manner
+
+  load_delivery_manner
 end
 
 def load_categories
@@ -58,6 +60,10 @@ end
 
 def load_pay_manner
   rake['pay_manner:load'].invoke
+end
+
+def load_delivery_manner
+  rake['delivery_manner:load'].invoke
 end
 
 initialize_data

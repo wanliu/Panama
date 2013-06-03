@@ -31,14 +31,12 @@
     </div>
     <div class='chose_delivery_manner_panel'>
       <ul>
+        <% DeliveryManner.avaliable.each do |item| %>
         <li>
-          <input type="radio" name='deliverymanner' checked/>
-          上门取货
+          <input type="radio" name='deliverymanner' value='<%=item.code %>' checked/>
+          <%=item.name %>
         </li>
-        <li>
-          <input type="radio" name='deliverymanner' checked/>
-          快递运输
-        </li>
+        <% end %>
       </ul>
       <input type='button' value='确认修改' class='mdify btn btn-large btn-primary btn-small' />
     </div>

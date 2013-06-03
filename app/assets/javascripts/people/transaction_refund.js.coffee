@@ -33,8 +33,9 @@ define ["jquery", "backbone", "notify"], ($, Backbone) ->
       state = if @$panel.css("display") == "none" then false else true
       @each_details (row) ->
         check = @row_checkbox(row)
-        if state then check.show() else check.hide()
-        check[0].checked = state
+        if check.length > 0
+          if state then check.show() else check.hide()
+          check[0].checked = state
 
     create: () ->
       data = @get_form_data()
@@ -68,7 +69,8 @@ define ["jquery", "backbone", "notify"], ($, Backbone) ->
     get_details: () ->
       product_items = []
       @each_details (row) ->
-        if @row_checkbox(row)[0].checked
+        check = @row_checkbox(row)
+        if check.length > 0 && check[0].checked
           product_items.push(row.attr('data-value-id'))
 
       product_items
