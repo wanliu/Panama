@@ -19,10 +19,41 @@ class ActivitiesController < ApplicationController
   # GET /activities/1.json
   def show
     @activity = Activity.find(params[:id])
+    @product_item = ProductItem.new({
+     :price       => @activity.price,
+     :amount      => 1,
+     :product_id  => @activity.product_id
+    })
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @activity }
+      format.dialog { render "show.dialog", :layout => false }
+      format.json { render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) }
+    end
+  end
+
+  def like
+    @activity = Activity.find(params[:id])
+    @activity.likes.find(current_user)
+  rescue ActiveRecord::RecordNotFound
+    @activity.likes << current_user
+  ensure
+    render :text => :OK
+  end
+
+  def unlike
+    @activity = Activity.find(params[:id])
+    @activity.likes.find(current_user)
+    @activity.likes.delete(current_user)
+    render :text => :OK
+  end
+
+  def to_cart
+    @item = my_cart.add_to(params[:product_item])
+    if @item.save
+      render :json => @item
+    else
+      render json: @item.errors, status: :unprocessable_entity
     end
   end
 

@@ -13,6 +13,7 @@ class Activities::ScoreController < ApplicationController
 		activity_params = params[:activity].slice!(:product_id, :start_time, :end_time)
 		@activity = current_user.activities.build(activity_params)
 		@activity.activity_type = "score"
+		@activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
 		respond_to do |format|
 			if @activity.save
 				format.js { render "activities/score/add_activity" }

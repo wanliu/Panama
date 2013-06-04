@@ -37,10 +37,11 @@
 	}
 
 	&.right {
+		margin-top: 5px;
 		@include caret-arrow('right', 5px, $black);
 	}
 
 	&.inverse.right {
 		@include caret-arrow('right', 5px, $white);
-	}	
+	}
 }

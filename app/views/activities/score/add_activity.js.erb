@@ -1,4 +1,5 @@
-$("#activities")
-	.prepend("<%= j render :partial => "activities/score/activity", :object => @activity %> ")
-	.masonry('reload')
+$activity = $("<%= j render :partial => "activities/score/activity", :object => @activity %> ").prependTo("#activities")
+$activity.find(">img").load(function(){
+	$("#activities").masonry('reload')
+})
 
