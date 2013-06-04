@@ -48,13 +48,16 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 			$el = $(@el)
 
 			targetPosition = @targetAttributes($el)
-
+			pos = $element.offset()
 			moveTarget = $element
 				.clone()
+				.addClass("moving")
 				.appendTo("body")
 
 			moveTarget
 				.css('position', "fixed")
+				.css('top', pos.top - $(window).scrollTop())
+				.css('left', pos.left - $(window).scrollLeft())
 				.animate targetPosition, () =>
 					$(@el).addClass("bounce")
 					moveTarget.remove()
@@ -84,8 +87,8 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 			strHmtl
 
 		targetAttributes: (target) ->
-			top: target.position().top
-			left: target.position().left
+			top: target.offset().top - $(window).scrollTop()
+			left: target.offset().left - $(window).scrollLeft()
 			width: target.width()
 			height: target.height()
 			opacity: 0.25
@@ -96,11 +99,12 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 	myCart = new MyCart
 
 	$("[add-to-cart]").on "click", (event) ->
-		selector = $(@).attr('add-to-cart')
+		$form     = $(@).parents("form")
+		selector  = $(@).attr('add-to-cart')
 		urlAction = $(@).attr('add-to-action')
-		form = $(@).parents("form")
 
-		myCart.addToCart($(selector), form, urlAction)
+		myCart.addToCart($(selector), $form, urlAction)
+		false
 
 	exports.myCart = myCart
 	exports

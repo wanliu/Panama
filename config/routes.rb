@@ -96,7 +96,13 @@ Panama::Application.routes.draw do
   resources :city
   resources :addresses
 
-  resources :activities
+  resources :activities do
+    member do
+      post 'like'
+      post 'unlike'
+      post 'to_cart'
+    end
+  end
 
   namespace :activities do
     resources :auction

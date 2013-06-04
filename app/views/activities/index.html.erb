@@ -11,7 +11,7 @@
 <% end %>
 <br />
 <script type="text/javascript">
-  require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($,Mousemove){
+  require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex', 'activity'], function($,Mousemove, _m, _n, _c, Activity){
     var $container = $('#activities');
 
     $container.imagesLoaded( function(){
@@ -19,33 +19,6 @@
         itemSelector : '.activity'
       });
     });
-
-
-    $("#activities img").on('click', function(){
-      var $this = $(this);
-        html = "<div id='center_image'><img src='" + $this.attr('src') + "' alt='#' /> </div>",
-        $dialog = $('#center_image').get(0) ? $('#center_image') : $(html).appendTo('body'),
-        naturalWidth = $this.naturalWidth(),
-        naturalHeight = $this.naturalHeight(),
-        windowWidth = $(window).width(),
-        windowHeight = $(window).height();
-
-      var top = naturalHeight > windowHeight ? 0 : (windowHeight - naturalHeight) / 2,
-        left = naturalWidth > windowWidth ? 0 : (windowWidth - naturalWidth) / 2;
-
-
-      $dialog.find("img").attr('src', $this.attr('src'));
-      effect = "fadeIn"
-      $dialog.removeClass("animated " + effect);
-      $dialog
-        .css('position', 'absolute')
-        .width(naturalWidth)
-        .height(naturalHeight)
-        .offset({top: top, left: left})
-        .css('z-index', 2000)
-      .show()
-      .addClass('animated ' + effect);
-    })
 
     new Mousemove.Drag
   });
