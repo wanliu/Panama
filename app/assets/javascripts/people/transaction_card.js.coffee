@@ -13,7 +13,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             "click .message-toggle"     : "toggleMessage"
             "submit .address-form>form" : "saveAddress"
             "click .chzn-results>li"    : "hideAddress"
-            "change select#order_transaction_delivery_type_id" : "selectDeliveryType"
+            "change select.order_delivery_type_id" : "selectDeliveryType"
 
         states:
             initial: 'none'

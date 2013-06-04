@@ -86,28 +86,17 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  def address
+  def base_info
     @transaction = OrderTransaction.find(params[:id])
-    t, a = params[:order_transaction], params[:address]
     respond_to do |format|
-      options = if t[:address_id].present?
-        {:address_id => t[:address_id]}
-      else
-        address = Address.new({
-          :province_id => a[:province_id],
-          :city_id => a[:city_id],
-          :area_id => a[:area_id],
-          :zip_code => a[:zip_code],
-          :road => a[:road]
-        })
-        address.user_id = current_user.id
-        address.save
-        {:address_id => address.id}
-      end
-      options[:delivery_price] = t[:delivery_price] || 0
-      options[:delivery_type_id] = t[:delivery_type_id]
-      if @transaction.update_attributes(options)
-        format.json{ head :no_content }
+      address = generate_address
+      if address.valid?
+        options = generate_base_option
+        if @transaction.update_attributes(options.merge(address: address))
+          format.json{ head :no_content }
+        else
+          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
+        end
       else
         format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
       end
@@ -191,5 +180,46 @@ class People::TransactionsController < People::BaseController
     respond_to do |format|
       format.json{ render :json => @messages  }
     end
+  end
+
+  private
+  def generate_address
+    t = params[:order_transaction]
+   if t[:address_id].present?
+      Address.find(t[:address_id])
+    else
+      address = Address.new(gener_address_arg(params[:address]))
+      address.user_id = current_user.id
+      address.save
+      address
+    end
+  end
+
+  def generate_base_option
+    t = params[:order_transaction]
+    options = {}
+    options[:pay_manner] = get_pay_manner t[:pay_manner_id]
+    options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
+    options[:delivery_price] = t[:delivery_price] || 0
+    options[:delivery_type_id] = t[:delivery_type_id]
+    options
+  end
+
+  def get_pay_manner(pay_manner_id)
+    PayManner.find_by(:id => pay_manner_id) || PayManner.default
+  end
+
+  def get_delivery_manner(delivery_manner_id)
+    DeliveryManner.find_by(:id => delivery_manner_id) || DeliveryManner.default
+  end
+
+  def gener_address_arg(a)
+    {
+      :province_id => a[:province_id],
+      :city_id => a[:city_id],
+      :area_id => a[:area_id],
+      :zip_code => a[:zip_code],
+      :road => a[:road]
+    }
   end
 end

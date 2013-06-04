@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130601094614) do
+ActiveRecord::Schema.define(:version => 20130604052310) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -189,9 +189,10 @@ ActiveRecord::Schema.define(:version => 20130601094614) do
   create_table "delivery_manners", :force => true do |t|
     t.string   "code"
     t.string   "name"
-    t.boolean  "state",      :default => true
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.boolean  "state",         :default => true
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.boolean  "default_state", :default => false
   end
 
   create_table "delivery_types", :force => true do |t|
@@ -356,27 +357,31 @@ ActiveRecord::Schema.define(:version => 20130601094614) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",            :precision => 10, :scale => 0
+    t.decimal  "total",              :precision => 10, :scale => 0
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
     t.integer  "address_id"
     t.integer  "operator_id"
-    t.boolean  "operator_state",                                  :default => false
+    t.boolean  "operator_state",                                    :default => false
     t.integer  "delivery_type_id"
-    t.decimal  "delivery_price",   :precision => 10, :scale => 0
+    t.decimal  "delivery_price",     :precision => 10, :scale => 0
     t.string   "delivery_code"
+    t.integer  "pay_manner_id"
+    t.integer  "delivery_manner_id"
+    t.integer  "transfer_sheet_id"
   end
 
   create_table "pay_manners", :force => true do |t|
     t.string   "name"
     t.text     "desciption"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "state",       :default => true
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.boolean  "state",         :default => true
     t.text     "description"
     t.string   "code"
+    t.boolean  "default_state", :default => false
   end
 
   create_table "permissions", :force => true do |t|
@@ -535,11 +540,27 @@ ActiveRecord::Schema.define(:version => 20130601094614) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
+  create_table "shop_delivery_manners", :force => true do |t|
+    t.integer  "shop_id"
+    t.integer  "delivery_manner_id"
+    t.boolean  "state"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
   create_table "shop_groups", :force => true do |t|
     t.integer  "shop_id"
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "shop_pay_manners", :force => true do |t|
+    t.integer  "shop_id"
+    t.integer  "pay_manner_id"
+    t.boolean  "state"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "shop_user_groups", :force => true do |t|
@@ -685,6 +706,15 @@ ActiveRecord::Schema.define(:version => 20130601094614) do
     t.datetime "expired"
     t.boolean  "notify_state",         :default => true
     t.boolean  "expired_state",        :default => true
+  end
+
+  create_table "transfer_sheets", :force => true do |t|
+    t.string   "person"
+    t.string   "code"
+    t.string   "bank"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.integer  "order_transaction_id"
   end
 
   create_table "users", :force => true do |t|

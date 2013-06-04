@@ -358,6 +358,8 @@ zh-CN:
       refund: 退货
       waiting_refund: 等待退货
       close: 关闭
+      waiting_transfer: "等待汇款"
+      waiting_audit: "等待审核"
 
     seller:
       order: 买家下单
@@ -369,6 +371,8 @@ zh-CN:
       refund: 退货
       waiting_refund: 等待退货
       close: 关闭
+      waiting_transfer: "等待汇款"
+      waiting_audit: "等待审核"
 
   order_refund_state:
     apply_refund: 申请退货
