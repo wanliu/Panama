@@ -10,11 +10,14 @@
 #  address: 送货地址
 #  items_count: 商品总项
 #  delivery_code: 快递单号
+#  pay_manner: 付款方式
+#  delivery_manner: 配送方式
+#  transfer_sheet: 汇款单
 class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address_id, :delivery_type_id, :delivery_price
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
   # attr_accessor :total
 
 
@@ -27,6 +30,8 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :buyer,
              class_name: "User"
   belongs_to :operator, class_name: "TransactionOperator"
+  belongs_to :pay_manner
+  belongs_to :delivery_manner
 
   has_many :operators, class_name: "TransactionOperator", dependent: :destroy
 
@@ -47,11 +52,9 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :buyer
   validates_presence_of :seller_id
   validates_associated :address
-  # validates_presence_of :address
-  validate :valid_address_and_delivery_type?
+  validate :valid_base_info?
 
   accepts_nested_attributes_for :address
-  # validates_presence_of :address
 
   before_validation(:on => :create) do
     update_total_count
@@ -69,9 +72,24 @@ class OrderTransaction < ActiveRecord::Base
 
   state_machine :initial => :order do
 
-    #确认订单 到 等待
-    event :buy do
+    #在线确认订单 到 等待
+    event :online_payment do
       transition [:order] => :waiting_paid
+    end
+
+    #银行汇款方式
+    event :bank_transfer do
+      transition :order => :waiting_transfer
+    end
+
+    #转帐
+    event :transfer do
+      transition :waiting_transfer => :waiting_audit
+    end
+
+    #货到付款方式
+    event :cash_on_delivery do
+      transition :order => :waiting_delivery
     end
 
     event :back do
@@ -88,7 +106,7 @@ class OrderTransaction < ActiveRecord::Base
                   :waiting_sign      =>  :complete
     end
 
-    #退货事件
+    #退货事件方式
     event :returned do
       #发货失败`等待发货`签收 到 退货
       transition [:delivery_failure, :waiting_delivery, :waiting_refund] => :refund,
@@ -224,7 +242,10 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_fire_event!(event)
-    events = %w(buy back paid sign)
+    events = %w(online_payment back paid sign bank_transfer cash_on_delivery)
+    if event == "buy"
+      event = pay_manner.code
+    end
     filter_fire_event!(events, event)
   end
 
@@ -370,10 +391,19 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   private
-  def valid_address_and_delivery_type?
+  def valid_base_info?
     unless %w(order close).include?(state)
+      errors.add(:pay_manner_id, "请选择付款方式!") if pay_manner.nil?
+      errors.add(:delivery_manner_id, "请选择配送方式!") if delivery_manner.nil?
       errors.add(:address, "地址不存在！") if address.nil?
-      errors.add(:delivery_type, "请选择运送类型!") if delivery_type.nil?
+      if delivery_type.nil? && !delivery_manner.local_delivery?
+        errors.add(:delivery_type_id, "请选择运送类型!")
+      end
+
+      if delivery_manner.local_delivery?
+        self.delivery_type_id = nil
+        self.delivery_price = 0
+      end
     end
   end
 

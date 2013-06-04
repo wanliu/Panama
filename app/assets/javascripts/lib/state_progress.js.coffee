@@ -75,11 +75,21 @@ define ["jquery", "backbone"], ($, Backbone) ->
           class_badge: "badge-info",
           class_progress: "bar-info"
         },
-        waiting_refund:{
+        waiting_refund: {
           class_badge: "badge-success",
           class_progress: "bar-success"
           to: "refund"
-        }
+        },
+        waiting_transfer: {
+          class_badge: "badge-inverse",
+          class_progress: "bar-info",
+          to: "waiting_audit"
+        },
+        waiting_audit: {
+          class_badge: "badge-warning",
+          class_progress: "bar-warning",
+          to: "waiting_delivery"
+        },
       },
 
       returned: {

@@ -161,14 +161,23 @@ body {
       ul{
         list-style: none;
         margin: 0px;
+        margin-bottom: 10px;
 
         li{
           line-height: 30px;
 
-          input[type=radio]{
-            margin-top: 0;
-            margin-right: 10px;
-          };
+          .title{
+            cursor: pointer;
+
+            input[type=radio]{
+              margin-top: 0;
+              margin-right: 10px;
+            };
+          }
+
+          .code{
+            display: none;
+          }
 
           .describe{
             color: gray;
@@ -180,7 +189,7 @@ body {
   }
 
   .delivery_manner{
-    margin-top: 20px;
+    margin-top: 10px;
 
     .delivery_manner_panel{
       line-height: 30px;
@@ -196,15 +205,29 @@ body {
       ul{
         list-style:none;
         margin: 0px;
+        margin-bottom: 10px;
 
         li{
-          input[type=radio]{
-            margin-top:0px;
-            margin-right: 10px;
+
+          .title{
+            cursor: pointer;
+            input[type=radio]{
+              margin-top:0px;
+              margin-right: 10px;
+            }
           }
           line-height: 30px;
+
+          .code{
+            display: none;
+          }
         }
       }
     }
+  }
+
+  .delivery-select{
+    margin-top: 10px;
+    /*display: none;*/
   }
 }

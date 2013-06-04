@@ -1,6 +1,6 @@
 <div class="address-form">
 <%= simple_nested_form_for transaction,
-          :url => update_address_person_transaction_path(people, transaction),
+          :url => base_info_person_transaction_path(people, transaction),
           :html => { :class => "form-horizontal"},
           :remote=>true do |f| %>
   <div class="address_input">
@@ -49,31 +49,6 @@
     </div>
     <%= address_form.input :road, :input_html => { :class => :span12 } %>
   <% end %>
-  </div>
-
-  <div class="delivery-select">
-    <label class="chosen control-label" for="transaction_delivery_type">运送方式</label>
-    <div class="controls controls-row">
-      <div class="span12 control-group">
-        <%= f.input :delivery_type_id,
-              # :as => :radio_buttons,
-              :object => transaction,
-              :wrapper => :inline,
-              :include_blank => false,
-              :collection => get_delivery_type,
-              :input_html => { :class => :span3}
-        %>
-        <%= f.input :delivery_price,
-              :as => :hidden,
-              :object => transaction,
-              :wrapper => :inline,
-              :input_html => {:class => :price}
-        %>
-        <div class="control-label delivery_price">
-          <%= number_to_currency(0.0)%>
-        </div>
-      </div>
-    </div>
   </div>
 
   <%= render "people/transactions/funcat/pay_manner", :transaction => transaction %>
