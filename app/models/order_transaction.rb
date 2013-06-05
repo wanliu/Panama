@@ -149,6 +149,8 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :order            => :waiting_paid,
+                     :order            => :waiting_transfer,
+                     :order            => :waiting_delivery,
                      :waiting_paid     => :waiting_delivery do |order, transition|
       order.notice_change_seller(:name => transition.to_name)
       true
