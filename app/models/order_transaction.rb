@@ -59,7 +59,6 @@ class OrderTransaction < ActiveRecord::Base
 
   before_validation(:on => :create) do
     update_total_count
-    update_delivery
   end
 
   after_create :notice_user, :notice_new_order, :state_change_detail
@@ -84,6 +83,11 @@ class OrderTransaction < ActiveRecord::Base
       transition :order => :waiting_transfer
     end
 
+    #货到付款方式
+    event :cash_on_delivery do
+      transition :order => :waiting_delivery
+    end
+
     #转帐
     event :transfer do
       transition :waiting_transfer => :waiting_audit
@@ -102,11 +106,6 @@ class OrderTransaction < ActiveRecord::Base
     #确认转帐信息
     event :confirm_transfer do
       transition :waiting_audit_failure => :waiting_audit
-    end
-
-    #货到付款方式
-    event :cash_on_delivery do
-      transition :order => :waiting_delivery
     end
 
     event :back do
@@ -185,6 +184,10 @@ class OrderTransaction < ActiveRecord::Base
       order.expired_delivery
     end
 
+    after_transition :waiting_sign => :complete do |order, transition|
+      order.seller_recharge
+    end
+
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
       order.valid_delivery_code?
     end
@@ -197,8 +200,8 @@ class OrderTransaction < ActiveRecord::Base
       order.valid_refund?
     end
 
-    after_transition :waiting_sign => :complete do |order, transition|
-      order.seller_recharge
+    before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
+      order.update_delivery
     end
   end
 
@@ -396,8 +399,10 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def valid_delivery_code?
-    if delivery_code.blank?
-      errors.add(:delivery_code, "没有发货运单号!")
+    if delivery_manner.express?
+      if delivery_code.blank?
+        errors.add(:delivery_code, "没有发货运单号!")
+      end
     end
   end
 
@@ -415,6 +420,15 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def update_delivery
+    if delivery_manner.local_delivery?
+      self.delivery_type_id = nil
+      self.delivery_price = 0
+    else
+      self.delivery_price = get_delivery_price(self.delivery_type_id)
+    end
+  end
+
   private
   def valid_base_info?
     unless %w(order close).include?(state)
@@ -424,15 +438,6 @@ class OrderTransaction < ActiveRecord::Base
       if delivery_type.nil? && !delivery_manner.local_delivery?
         errors.add(:delivery_type_id, "请选择运送类型!")
       end
-    end
-  end
-
-  def update_delivery
-    if delivery_manner.local_delivery?
-      self.delivery_type_id = nil
-      self.delivery_price = 0
-    else
-      self.delivery_price = get_delivery_price(self.delivery_type_id)
     end
   end
 
