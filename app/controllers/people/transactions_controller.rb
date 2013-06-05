@@ -191,7 +191,6 @@ class People::TransactionsController < People::BaseController
     options = {}
     options[:pay_manner] = get_pay_manner t[:pay_manner_id]
     options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
-    options[:delivery_price] = t[:delivery_price] || 0
     options[:delivery_type_id] = t[:delivery_type_id]
     options
   end
