@@ -1,6 +1,6 @@
 # encoding: utf-8
-source 'https://rubygems.org'
-# source 'http://ruby.taobao.org'
+# source 'https://rubygems.org'
+source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
 # database orm adapter
