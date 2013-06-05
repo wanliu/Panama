@@ -4,9 +4,8 @@ class People::RechargesController < People::BaseController
 
   #网上银行充值
   def ibank
-    @money_bill = current_user.recharge(
-      :owner => Bank.find(params[:trade_income][:bank_id]),
-      :money => params[:trade_income][:money])
+    t = params[:trade_income]
+    @money_bill = current_user.recharge(t[:money], Bank.find(t[:bank_id]))
 
     respond_to do |format|
       if @money_bill.valid?

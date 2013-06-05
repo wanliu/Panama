@@ -22,7 +22,11 @@ ActiveAdmin.register OrderTransaction do
       order.transfer_sheet.try(:bank)
     end
     column do |order|
-      link_to "审核", audit_system_order_transaction_path(order), :method => :post
+      content_tag :div do
+        link = link_to "通过", audit_system_order_transaction_path(order), :method => :post
+        link1 = link_to "未通过", audit_failure_system_order_transaction_path(order), :method => :post
+        "#{link}  #{link1}".html_safe
+      end
     end
   end
 
@@ -41,4 +45,9 @@ ActiveAdmin.register OrderTransaction do
     redirect_to system_order_transaction_path
   end
 
+  member_action :audit_failure, :method => :post do
+    order = OrderTransaction.find(params[:id])
+    order.fire_events!("audit_failure")
+    redirect_to system_order_transaction_path
+  end
 end
