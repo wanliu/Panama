@@ -17,6 +17,6 @@ class DeliveryManner < ActiveRecord::Base
   end
 
   def express?
-  	self.express == "express"
+  	self.code == "express"
   end
 end
