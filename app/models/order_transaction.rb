@@ -44,6 +44,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
   has_many :refunds, class_name: "OrderRefund", dependent: :destroy
+  has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy
 
   validates :state, :presence => true
   validates :items_count, :numericality => true
@@ -85,6 +86,11 @@ class OrderTransaction < ActiveRecord::Base
     #转帐
     event :transfer do
       transition :waiting_transfer => :waiting_audit
+    end
+
+    #审核转帐
+    event :audit_transfer do
+      transition :waiting_audit => :waiting_delivery
     end
 
     #货到付款方式
@@ -242,7 +248,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_fire_event!(event)
-    events = %w(online_payment back paid sign bank_transfer cash_on_delivery)
+    events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer)
     if event == "buy"
       event = pay_manner.code
     end
@@ -387,6 +393,14 @@ class OrderTransaction < ActiveRecord::Base
   def valid_payment?
     if buyer.reload.money < stotal
       errors.add(:buyer, "您的金额不足!")
+    end
+  end
+
+  def create_transfer(options = {})
+    if transfer_sheet.nil?
+      TransferSheet.create(options.merge(:order_transaction => self))
+    else
+      transfer_sheet.update_attributes(options)
     end
   end
 

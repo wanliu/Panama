@@ -4,6 +4,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
     class TransactionCard extends Transaction.TransactionCardBase
         initialize:() ->
             super
+            @urlRoot = @transaction.urlRoot
+            @body = @$(".transaction-body")
 
         events:
             "click .page-header .btn"   : "clickAction"
@@ -28,7 +30,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 { name: 'back',       from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
                 { name: "returned",   from: 'waiting_delivery',  to: 'apply_refund'},
                 { name: "returned",   from: 'waiting_sign',      to: 'apply_refund'},
-                { name: "returned",   from: 'complete',          to: 'apply_refund'}
+                { name: "returned",   from: 'complete',          to: 'apply_refund'},
+                { name: 'transfer',   from: 'waiting_transfer',  to: 'waiting_audit' }
             ]
 
 
@@ -54,9 +57,27 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
         toggleMessage: (event) ->
             @$("iframe", ".transaction-footer").slideToggle()
 
+        leaveWaitingTransfer: (event, from, to, msg) ->
+            form = @body.find("form.transfer_sheet")
+            data = form.serializeArray()
+            transfers = {}
+            _.each data, (d)  -> transfers[d.name] = d.value
+
+            if @validate_transfer(transfers, form)
+                @transaction.fetch(
+                    url: "#{@urlRoot}/transfer",
+                    data: {transfer: transfers},
+                    type: 'POST',
+                    success: (model, data) =>
+                        @slideAfterEvent(event)
+                )
+            else
+                @alarm()
+                @transition.cancel()
+
+
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
-            @selectDeliveryType()
             StateMachine.ASYNC
 
         leaveWaitingDelivery: (event, from, to, msg) ->
@@ -94,6 +115,22 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     @$("input:hidden.price").val(data.delivery_price)
                     @$(".delivery_price").html("¥ #{parseFloat(data.delivery_price).toFixed(2)}")
             )
+
+        validate_transfer: (transfers, form) ->
+            state = true
+            if _.isEmpty(transfers.person)
+                form.find(".person").addClass("error")
+                state = false
+
+            if _.isEmpty(transfers.code)
+                form.find(".code").addClass("error")
+                state = false
+
+            if _.isEmpty(transfers.bank)
+                form.find(".bank").addClass("error")
+                state = false
+
+            state
 
     exports.TransactionCard = TransactionCard
     exports
