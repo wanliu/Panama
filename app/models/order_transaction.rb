@@ -59,6 +59,7 @@ class OrderTransaction < ActiveRecord::Base
 
   before_validation(:on => :create) do
     update_total_count
+    update_delivery
   end
 
   after_create :notice_user, :notice_new_order, :state_change_detail
@@ -291,7 +292,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def get_delivery_price(delivery_id)
     product_ids = items.map{|item| item.product_id}
-    ProductDeliveryType.where(:product_id => product_ids)
+    ProductDeliveryType.where(:product_id => product_ids, :delivery_type_id => delivery_id)
     .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
   end
 
@@ -423,11 +424,15 @@ class OrderTransaction < ActiveRecord::Base
       if delivery_type.nil? && !delivery_manner.local_delivery?
         errors.add(:delivery_type_id, "请选择运送类型!")
       end
+    end
+  end
 
-      if delivery_manner.local_delivery?
-        self.delivery_type_id = nil
-        self.delivery_price = 0
-      end
+  def update_delivery
+    if delivery_manner.local_delivery?
+      self.delivery_type_id = nil
+      self.delivery_price = 0
+    else
+      self.delivery_price = get_delivery_price(self.delivery_type_id)
     end
   end
 
