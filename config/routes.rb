@@ -36,7 +36,8 @@ Panama::Application.routes.draw do
       end
     end
 
-    match 'recharges/create', :to => "people/recharges#create"
+    match 'recharges/ibank', :to => "people/recharges#ibank", :via => :post
+    match 'recharges/remittance', :to => "people/recharges#remittance", :via => :post
 
     resources :topics, :controller => "people/topics" do
       collection do

@@ -31,7 +31,8 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 { name: "returned",   from: 'waiting_delivery',  to: 'apply_refund'},
                 { name: "returned",   from: 'waiting_sign',      to: 'apply_refund'},
                 { name: "returned",   from: 'complete',          to: 'apply_refund'},
-                { name: 'transfer',   from: 'waiting_transfer',  to: 'waiting_audit' }
+                { name: 'transfer',   from: 'waiting_transfer',  to: 'waiting_audit' },
+                { name: 'confirm_transfer', from: 'waiting_audit_failure', to: 'waiting_audit' }
             ]
 
 
@@ -58,23 +59,10 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
             @$("iframe", ".transaction-footer").slideToggle()
 
         leaveWaitingTransfer: (event, from, to, msg) ->
-            form = @body.find("form.transfer_sheet")
-            data = form.serializeArray()
-            transfers = {}
-            _.each data, (d)  -> transfers[d.name] = d.value
+            @create_transfer_info(event)
 
-            if @validate_transfer(transfers, form)
-                @transaction.fetch(
-                    url: "#{@urlRoot}/transfer",
-                    data: {transfer: transfers},
-                    type: 'POST',
-                    success: (model, data) =>
-                        @slideAfterEvent(event)
-                )
-            else
-                @alarm()
-                @transition.cancel()
-
+        leaveWaitingAuditFailure: (event, from, to, msg) ->
+            @create_transfer_info(event)
 
         leaveOrder: (event, from ,to , msg) ->
             @$(".address-form>form").submit()
@@ -98,8 +86,7 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                     @transition()
                     @slideAfterEvent('buy')
                 .error (xhr, status) =>
-                    @$(".address-form").html(xhr.responseText)
-                    @$("#address_province_id option:first", ".address-form").attr("selected", true)
+                    @notify("错误信息", '请填写完整的信息！', "error")
                     @alarm()
                     @transition.cancel()
             false
@@ -131,6 +118,24 @@ define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine",
                 state = false
 
             state
+
+        create_transfer_info: (event_name) ->
+            form = @body.find("form.transfer_sheet")
+            data = form.serializeArray()
+            transfers = {}
+            _.each data, (d)  -> transfers[d.name] = d.value
+
+            if @validate_transfer(transfers, form)
+                @transaction.fetch(
+                    url: "#{@urlRoot}/transfer",
+                    data: {transfer: transfers},
+                    type: 'POST',
+                    success: (model, data) =>
+                        @slideAfterEvent(event_name)
+                )
+            else
+                @alarm()
+                @transition.cancel()
 
     exports.TransactionCard = TransactionCard
     exports

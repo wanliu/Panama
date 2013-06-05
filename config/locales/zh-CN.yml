@@ -360,6 +360,7 @@ zh-CN:
       close: 关闭
       waiting_transfer: "等待汇款"
       waiting_audit: "等待审核"
+      waiting_audit_failure: "审核失败"
 
     seller:
       order: 买家下单
@@ -373,6 +374,7 @@ zh-CN:
       close: 关闭
       waiting_transfer: "等待汇款"
       waiting_audit: "等待审核"
+      waiting_audit_failure: "审核失败"
 
   order_refund_state:
     apply_refund: 申请退货

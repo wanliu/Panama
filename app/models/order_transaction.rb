@@ -88,9 +88,19 @@ class OrderTransaction < ActiveRecord::Base
       transition :waiting_transfer => :waiting_audit
     end
 
-    #审核转帐
+    #审核转帐通过
     event :audit_transfer do
       transition :waiting_audit => :waiting_delivery
+    end
+
+    #审核未通过
+    event :audit_failure do
+      transition :waiting_audit => :waiting_audit_failure
+    end
+
+    #确认转帐信息
+    event :confirm_transfer do
+      transition :waiting_audit_failure => :waiting_audit
     end
 
     #货到付款方式
@@ -248,7 +258,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_fire_event!(event)
-    events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer)
+    events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer confirm_transfer)
     if event == "buy"
       event = pay_manner.code
     end

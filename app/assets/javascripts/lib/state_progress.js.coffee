@@ -90,6 +90,11 @@ define ["jquery", "backbone"], ($, Backbone) ->
           class_progress: "bar-warning",
           to: "waiting_delivery"
         },
+        waiting_audit_failure: {
+          class_badge: "badge-success",
+          class_progress: "bar-success"
+          to: "waiting_audit"
+        }
       },
 
       returned: {
