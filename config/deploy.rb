@@ -2,8 +2,8 @@ set :application, "panama"
 set :repository, "git@github.com:wanliu/Panama.git"
 
 set :user, "root"
-set :password, "asdfasdf"
-set :domain, "192.168.2.62"
+set :password, "321654"
+set :domain, "192.168.2.28"
 
 
 default_run_options[:pty] = true
