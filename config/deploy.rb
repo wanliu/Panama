@@ -1,5 +1,5 @@
 set :application, "panama"
-set :repository, "git@github.com:wanliu/Panama.git"
+set :repository, "git@192.168.2.54:panama.git"
 
 set :user, "root"
 set :password, "321654"
@@ -10,9 +10,10 @@ default_run_options[:pty] = true
 set :use_sudo,false
 set :scm,"git"
 set :scm_user,"root"
-set :scm_passphrase,"123456"
+set :scm_passphrase,"asdfasdf"
 set :deploy_to,     "/var/www/#{application}"
 set :rails_env,     'production'
+set :branch, "master"
 
 # set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
@@ -23,7 +24,7 @@ role :db,  domain, :primary => true # This is where Rails migrations will run
 
 set :rvm_path, "/usr/local/rvm"
 set :rvm_bin_path, "/usr/local/rvm/bin"
-set :rvm_ruby_string, 'ruby-1.9.3'
+set :rvm_ruby_string, 'ruby-1.9.3-p429'
 
 require 'rvm/capistrano'
 require "bundler/capistrano"
