@@ -4,7 +4,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions.json
   def index
     authorize! :index, OrderTransaction
-    @transactions = OrderTransaction.where(:buyer_id => @people.id).order("created_at desc").page(params[:page])
+    @transactions = current_order.order("created_at desc").page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }
@@ -14,8 +14,8 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
-    @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
-    @transaction = OrderTransaction.find(params[:id])
+    @transactions = current_order.page params[:page]
+    @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
       format.html # show.html.erb
@@ -24,8 +24,8 @@ class People::TransactionsController < People::BaseController
   end
 
   def page
-    @transactions = OrderTransaction.where(:buyer_id => @people.id).page params[:page]
-    @transaction = OrderTransaction.find(params[:id])
+    @transactions = current_order.page params[:page]
+    @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
       format.html # show.html.erb
@@ -33,7 +33,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def event
-    @transaction = OrderTransaction.find(params[:id])
+    @transaction = current_order.find(params[:id])
     event_name = params[:event]
     authorize! :event, @transaction
     if @transaction.buyer_fire_event!(event_name)
@@ -43,22 +43,14 @@ class People::TransactionsController < People::BaseController
                      state:  @transaction.state,
                      people: @people
                    }
+    else
+      render :json => {message: "#{event_name}不属性你的!"}, :status => 403
       # render :partial => 'transaction', :transaction => @transaction, :layout => false
       # redirect_to person_transaction_path(@people.login, @transaction)
     end
   end
 
   def batch_create
-    # flag = false
-    # my_cart.items.group_by { |item| item.product.shop }.each do |shop, items|
-    #   transaction = @people.transactions.build seller_id: shop.id
-    #   items.each {|item| transaction.items.build item.attributes }
-    #   transaction.items_count = items.inject(0) { |s, item| s + item.amount }
-    #   transaction.total = items.inject(0) { |s, item| s + item.total }
-    #   flag = transaction.save
-    # end
-    # cart.destroy if flag
-    # FIXME @people这个参数是不是多余？ cart的user不就是@people么？
     authorize! :batch_create, OrderTransaction
     if my_cart.create_transaction(@people)
       redirect_to person_transactions_path(@people.login),
@@ -70,24 +62,8 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  # POST /people/transactions
-  # POST /people/transactions.json
-  def create
-    @transaction = @people.transactions.build(params[:order_transaction])
-
-    respond_to do |format|
-      if @transaction.save
-        format.html { redirect_to person_transaction_path(@people.login, @transaction), notice: 'OrderTransaction was successfully created.' }
-        format.json { render json: @transaction, status: :created, location: @transaction }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @transaction.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   def base_info
-    @transaction = OrderTransaction.find(params[:id])
+    @transaction = current_order.find(params[:id])
     respond_to do |format|
       address = generate_address
       if address.valid?
@@ -103,15 +79,26 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def transfer
+    @transaction = current_order.find(params[:id])
+    respond_to do |format|
+      if @transaction.create_transfer(params[:transfer])
+        format.json{ head :no_content }
+      else
+        format.json{ render :json => draw_errors_message(@transfer), :status => 403 }
+      end
+    end
+  end
+
   def get_delivery_price
-    @price = OrderTransaction.find(params[:id]).get_delivery_price(params[:delivery_type_id])
+    @price = current_order.find(params[:id]).get_delivery_price(params[:delivery_type_id])
     respond_to do |format|
       format.json{ render :json => {delivery_price: @price} }
     end
   end
 
   def refund
-    order = OrderTransaction.find(params[:id])
+    order = current_order.find(params[:id])
     items = params[:order_refund].delete(:product_items)
     respond_to do |format|
       refund = order.refunds.create(params[:order_refund])
@@ -138,7 +125,7 @@ class People::TransactionsController < People::BaseController
   # DELETE /people/transactions/1
   # DELETE /people/transactions/1.json
   def destroy
-    @transaction = OrderTransaction.find(params[:id])
+    @transaction = current_order.find(params[:id])
     authorize! :destroy, @transaction
     @transaction.destroy
 
@@ -146,15 +133,6 @@ class People::TransactionsController < People::BaseController
       format.html { redirect_to person_transactions_path(@people.login) }
       format.json { head :no_content }
     end
-  end
-
-  def render(*args)
-    options = args.extract_options!
-    if request.xhr?
-      options[:layout] = false
-    end
-
-    super *args, options
   end
 
   def dialogue
@@ -183,6 +161,19 @@ class People::TransactionsController < People::BaseController
   end
 
   private
+  def current_order
+    OrderTransaction.where(:buyer_id => @people.id)
+  end
+
+  def render(*args)
+    options = args.extract_options!
+    if request.xhr?
+      options[:layout] = false
+    end
+
+    super *args, options
+  end
+
   def generate_address
     t = params[:order_transaction]
    if t[:address_id].present?

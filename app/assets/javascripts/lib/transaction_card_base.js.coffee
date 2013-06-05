@@ -1,5 +1,5 @@
-define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jsclock-0.8", 'lib/realtime_client', 'exports'],
-    ($, Backbone, StateMachine, StateView, _a, RealtimeClient, exports) ->
+define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jsclock-0.8", 'lib/realtime_client', 'exports', 'notify'],
+    ($, Backbone, StateMachine, StateView, _a, RealtimeClient, exports, pnotify) ->
         class Transaction extends Backbone.Model
             set_url: (url) ->
                 @urlRoot = url
@@ -81,6 +81,10 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
             slideEvent: (event, direction = 'right') ->
                 $.post @eventUrl(event), (data) =>
                     @slidePage(data, direction)
+                .fail (data) =>
+                    m = JSON.parse(data.responseText)
+                    @notify("错误信息", m.message, "error")
+
 
             slidePage: (page, direction = 'right') ->
                 $side1 = $("<div class='slide-1'></div>")
@@ -146,6 +150,13 @@ define ['jquery', 'backbone', "lib/state-machine", "lib/state-view", "lib/jscloc
                 wait = window.setTimeout () =>
                     @$el.removeClass("animated #{effect}")
                 , 1300
+
+            notify: (title, message, type) ->
+                pnotify({
+                  title: title,
+                  text: message,
+                  type: type
+                });
 
         exports.TransactionCardBase = TransactionCardBase
         exports

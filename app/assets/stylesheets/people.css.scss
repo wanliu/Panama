@@ -145,6 +145,14 @@ body {
 }
 
 .transaction-body{
+  .row-fluid{
+    line-height: 30px;
+
+    .title{
+      text-align: right;
+    }
+  }
+
   .paymanner{
 
     .paymanner_panel{
@@ -230,4 +238,23 @@ body {
     margin-top: 10px;
     /*display: none;*/
   }
+
+  .transfer_sheet{
+    margin-bottom: 0px;
+
+    .row-fluid{
+      line-height: 30px;
+
+      .title{
+        text-align: right;
+      }
+
+      .error{
+        input[type='text']{
+          border: 1px solid red;
+        };
+      }
+    }
+  }
+
 }
