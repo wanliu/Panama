@@ -30,10 +30,18 @@ require 'rvm/capistrano'
 require "bundler/capistrano"
 
 before 'deploy:setup' do
-    run 'echo insecure > ~/.curlrc', :shell => 'bash -c'
-    find_and_execute_task "rvm:install_rvm"
-    find_and_execute_task 'rvm:install_ruby'
+  run 'echo insecure > ~/.curlrc', :shell => 'bash -c'
+  find_and_execute_task "rvm:install_rvm"
+  find_and_execute_task 'rvm:install_ruby'
 end
+
+task :init_config_path, :roles => :web do
+  run "cp #{deploy_to}/current/config/sso.yml.sample #{deploy_to}/config/sso.yml"
+  run "cp #{deploy_to}/current/config/email.yml.sample #{deploy_to}/config/email.yml"
+  run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/config/application.yml"
+end
+
+after "deploy:finalize_update","deploy:symlink", :init_config_path
 
 load 'deploy/assets'
 
