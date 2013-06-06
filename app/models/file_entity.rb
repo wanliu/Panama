@@ -85,12 +85,18 @@ class FileEntity < ActiveRecord::Base
   alias_method :mkdir, :create_dir
 
   def self.root
-    first
+    first || create_root
+  end
+
+  def self.create_root
+    root = FileEntity.new(:stat => :directory)
+    root.save :validate => false
+    root
   end
 end
 
-
-FileEntity.root or begin
-  root = FileEntity.new(:stat => :directory)
-  root.save :validate => false
-end
+FileEntity.root
+# FileEntity.root or begin
+#   root = FileEntity.new(:stat => :directory)
+#   root.save :validate => false
+# end

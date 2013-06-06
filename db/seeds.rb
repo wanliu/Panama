@@ -10,6 +10,7 @@ require 'panama_core'
 
 
 def initialize_data
+  FileEntity.root
   PanamaCore::VFS.load_panama_files
 
   load_categories

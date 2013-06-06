@@ -35,20 +35,20 @@ before 'deploy:setup' do
   find_and_execute_task 'rvm:install_ruby'
 end
 
-task :init_configure_path, :roles => :web do
+task :init_configure_path, :roles => :app do
   run "cp #{deploy_to}/current/config/sso.yml.sample #{deploy_to}/current/config/sso.yml"
   run "cp #{deploy_to}/current/config/email.yml.sample #{deploy_to}/current/config/email.yml"
   run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/current/config/application.yml"
 end
 
 namespace :db do
-  task :seeds, :roles => :web do
+  task :seeds, :roles => :app do
     run "cd #{deploy_to}/current rake db:seeds RAILS_ENV=production"
   end
 end
 
 
-after "deploy:finalize_update", "deploy:symlink", :init_configure_path
+after "deploy:finalize_update", "deploy:symlink", :init_configure_path, "deploy:migrate"
 load 'deploy/assets'
 
 # if you want to clean up old releases on each deploy uncomment this:
