@@ -35,13 +35,20 @@ before 'deploy:setup' do
   find_and_execute_task 'rvm:install_ruby'
 end
 
-task :init_config_path, :roles => :web do
-  run "cp #{deploy_to}/current/config/sso.yml.sample #{deploy_to}/config/sso.yml"
-  run "cp #{deploy_to}/current/config/email.yml.sample #{deploy_to}/config/email.yml"
-  run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/config/application.yml"
+task :init_configure_path, :roles => :web do
+  run "cp #{deploy_to}/current/config/sso.yml.sample #{deploy_to}/current/config/sso.yml"
+  run "cp #{deploy_to}/current/config/email.yml.sample #{deploy_to}/current/config/email.yml"
+  run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/current/config/application.yml"
 end
 
-after "deploy:finalize_update","deploy:symlink", :init_config_path
+task :init_database, :roles => :web do
+  # run "cd #{deploy_to}/current rake db:create RAILS_ENV=production"
+  # run "cd #{deploy_to}/current rake db:migrate RAILS_ENV=production"
+  # run "cd #{deploy_to}/current rake db:seeds RAILS_ENV=production"
+end
+
+after "deploy:setup",           "db:setup"
+after "deploy:finalize_update","deploy:create_symlink", :init_configure_path, :init_database
 
 load 'deploy/assets'
 
