@@ -41,14 +41,15 @@ task :init_configure_path, :roles => :web do
   run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/current/config/application.yml"
 end
 
-task :init_database, :roles => :web do
-  # run "cd #{deploy_to}/current rake db:create RAILS_ENV=production"
-  # run "cd #{deploy_to}/current rake db:migrate RAILS_ENV=production"
-  # run "cd #{deploy_to}/current rake db:seeds RAILS_ENV=production"
-end
+namespace :db do
+  # task :init_database, :roles => :web do
+  #   run "cd #{deploy_to}/current rake db:migrate RAILS_ENV=production"
+  # end
 
-after "deploy:setup",           "db:setup"
-after "deploy:finalize_update","deploy:create_symlink", :init_configure_path, :init_database
+  task :seeds, :roles => :web do
+    run "cd #{deploy_to}/current rake db:seeds RAILS_ENV=production"
+  end
+end
 
 load 'deploy/assets'
 
