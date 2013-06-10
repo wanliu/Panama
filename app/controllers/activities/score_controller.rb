@@ -9,7 +9,6 @@ class Activities::ScoreController < Activities::BaseController
     end
 
 	def create
-
 		activity_params = params[:activity].slice!(:product_id, :start_time, :end_time)
 		@activity = current_user.activities.build(activity_params)
 		@activity.activity_type = "score"
