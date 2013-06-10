@@ -1,4 +1,4 @@
-class Activities::AuctionController < ApplicationController
+class Activities::AuctionController < Activities::BaseController
 
   def new
     @activity = Activity.new

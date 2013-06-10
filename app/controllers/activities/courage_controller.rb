@@ -1,4 +1,4 @@
-class Activities::CourageController < ApplicationController
+class Activities::CourageController < Activities::BaseController
 	def new
 	    @activity = Activity.new
 	    @activity.extend(CourageExtension)

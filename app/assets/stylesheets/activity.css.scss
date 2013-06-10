@@ -1,0 +1,153 @@
+@import "compass/css3/box-shadow";
+
+#active_dialog {
+	width: 800px;
+	margin-left: -400px;
+}
+
+.activity {
+	// width: 225px;
+	padding-bottom: 10px;
+	// margin-right: 12px;
+	margin-bottom: 12px;
+	padding-top: 3px;
+	padding-right: 3px;
+	overflow: hidden;
+	position: relative;
+	.out-box {
+		background: $white;
+
+		@include box-shadow(#ccc 0 0 1px);
+		border: 1px solid #ccc;
+
+		.in-box {
+			position: relative;
+			overflow: hidden;
+			border-bottom: 1px solid #e7e7e7;
+
+			.preview {
+
+			}
+
+			.right_bottom2 {
+				position: absolute;
+				bottom: 30px;
+				text-align: right;
+				right: 10px;
+				text-decoration: line-through;
+				@include text-shadow(0px 0px 2px rgba(255, 255, 255, 0.6));
+
+			}
+
+			.right_bottom1 {
+				position: absolute;
+				text-align: right;
+				bottom: 5px;
+				right: 10px;
+				color: $red;
+				@include text-shadow(0px 0px 2px rgba(255, 255, 255, 0.6));
+
+			}
+
+
+		}
+
+
+		.corner {
+			@include transform(rotate(45deg));
+			@include box-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+			position: absolute;
+			right:-30px;
+			top:20px;
+			width: 128px;
+			height: 30px;
+			background: $red;
+			text-align: center;
+
+			h4 {
+				line-height: 30px;
+				color: $white;
+				margin: 0px;
+			}
+		}
+
+		.info {
+
+			padding: 5px 10px;
+
+			.title {
+				font-size: 13px;
+				line-height: 17px;
+				padding: 0;
+				word-wrap: break-word;
+				margin-bottom: 0px;
+
+				font-family: inherit;
+				font-weight: bold;
+				line-height: 20px;
+				color: inherit;
+				text-rendering: optimizelegibility
+			}
+
+			span {
+				font-size: 0.8em;
+				margin-right: 20px;
+				opacity: 0.5
+			}
+			border-bottom: 1px solid #e7e7e7;
+
+		}
+
+		.comments_and_reply {
+			padding: 10px 10px 0px 10px;
+
+			.people-attribution {
+				margin-bottom: 10px;
+			}
+
+			.reply_form {
+				padding: 0px 10px 10px 34px;
+				.head-icon {
+					margin: 0 0 0 -34px;
+					float: left;
+					width: 20px;
+					height: 20px;
+				}
+
+				.message textarea {
+					width: 155px;
+					font-size: 1em;
+					border: 1px solid #ccc;
+					background: #f0f0f0;
+					// height: 30px;
+				}
+
+			}
+		}
+
+
+
+	}
+
+
+	>img:active {
+		margin: 2px;
+	}
+
+	.buttons {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		display: none;
+	}
+	hr {
+
+		margin: 5px 0px;
+	}
+	&:hover {
+		.buttons {
+			display: block;
+		}
+	}
+
+}

@@ -112,11 +112,12 @@ define ['jquery', 'backbone', 'lib/hogan', 'my_cart', 'exports'], ($, Backbone, 
 
 	class ActivityPreview extends Backbone.View
 
-		events: {
+		events:
 			"click .preview" 		: "launchActivity"
 			"click .like-button" 	: "like"
 			"click .unlike-button"  : "unlike"
-		}
+			"click .launch-button"  : "launchActivity"
+
 
 		like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
 		unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'

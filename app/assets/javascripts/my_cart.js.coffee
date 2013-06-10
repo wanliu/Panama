@@ -21,6 +21,13 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 		events:
 			"click .handle": "toggleCartBox"
 
+		item_row: """
+			<tr id= 'product_item{{id}}'>
+			<td><img src='{{icon}}' ></td>
+			<td><span class='title' data-toggle="tooltip" title="{{title}}">{{title}}</span></td>
+			<td>{{amount}}</td>
+			<td>{{total}}</td></tr>
+		"""
 
 		initialize: (@options) ->
 			@hm = new HoverManager(@$("a.handle, #cart_box"))
@@ -33,6 +40,7 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 						'animate fadeInDownBig show'
 					else
 						'animate fadeInUpBig'
+			false
 
 		hoverProcess: (event) ->
 			@$("#cart_box")
@@ -65,26 +73,23 @@ define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 
 		cartAddAction: (url, form) ->
 			$.post url, form.serialize(), (item) =>
-				if $("#cart_box table #product_item#{item.product_item.id}").length > 0
-					trOjb = $("#cart_box table #product_item#{item.product_item.id} td")
-					$(trOjb[2]).html(item.product_item.amount)
-					$(trOjb[3]).html(item.product_item.total)
+				if $("#cart_box table #product_item#{item.product_id}").length > 0
+					trObj = $("#cart_box table #product_item#{item.product_id}")
+					trObj.replaceWith(@trHtml(item))
+					# $(trOjb[2]).html(item.amount)
+					# $(trOjb[3]).html(item.total)
 				else
-					$(".cart_main").append(@trHtml(item.product_item))
+					@$(".cart_main").append(@trHtml(item))
 
-				$("#shop_count").html($(".cart_main tr").size())
+				@$("#shop_count").html($(".cart_main tr").size())
 				# totals = $(".cart_bottom tr td").html().split("")[5]
 				# totals = totals + item.product_item.total
 				# alert(totals)
 				# $(".cart_bottom tr td").html("商品总价：" + totals)
 
 		trHtml: (product_item) ->
-			strHmtl = "<tr id= 'product_item#{product_item.id}'>"
-			strHmtl += "<td><img src='#{product_item.img}''></td>"
-			strHmtl += "<td>#{product_item.title}</td>"
-			strHmtl += "<td>#{product_item.amount}</td>"
-			strHmtl += "<td>#{product_item.total}</td></tr>"
-			strHmtl
+			row_tpl = Hogan.compile(@item_row)
+			row_tpl.render(product_item)
 
 		targetAttributes: (target) ->
 			top: target.offset().top - $(window).scrollTop()

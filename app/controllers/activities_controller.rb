@@ -1,9 +1,9 @@
 class ActivitiesController < ApplicationController
   before_filter :login_required
   before_filter :load_category, :only => [:index, :new, :show]
-  # GET /activities
-  # GET /activities.json
-  layout "activities"
+
+  # layout "activities"
+  layout "stream"
 
   respond_to :html, :dialog
 
@@ -22,6 +22,7 @@ class ActivitiesController < ApplicationController
     @product_item = ProductItem.new({
      :price       => @activity.price,
      :amount      => 1,
+     :title       => @activity.description,
      :product_id  => @activity.product_id
     })
 

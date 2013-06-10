@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
+<%= html_tag :class => "no-js" %>
+<%= render "head", :styles => ["stream"] %>
+
+<body class="<%= controller.controller_name %>">
+  <%= render "header" %>
+  <%= render "main_nav" %>
+  <div id="main" class="container">
+    <div id="main-body">
+      <%= render "flashes" %>
+      <%#= render 'information' %>
+    <%= yield %>
+    </div>
+    <%= render "social_sidebar" %>
+
+
+    <%= render "footer" %>
+  </div>
+  <div class='footer_nav'>
+    <%= render_widget :chat %>
+    <%= render_widget :my_cart %>
+  </div>
+  <% if !google_account_id.blank? %>
+    <script>
+      //<![CDATA[
+        var _gaq=[['_setAccount','<%= google_account_id %>'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+      //]]>
+    </script>
+  <% end %>
+</body>
+</html>

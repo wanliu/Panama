@@ -7,10 +7,11 @@
 @import "variables";
 @import "footer_nav";
 @import "bootstrap-spinner";
-@import "contact_friend";
 @import "slider-ui";
 @import "bootstrap-datetimepicker.min";
 @import "activities/image-picker";
+@import "stream_item";
+@import "nanoscroller";
 
 body {
 	@include background(
@@ -24,10 +25,6 @@ body {
 	// user-select: none;
 }
 
-#active_dialog {
-	width: 800px;
-	margin-left: -400px;
-}
 
 #price_slider {
 	width: 250px;
@@ -36,6 +33,72 @@ body {
 
 #header.navbar.navbar-fixed-top {
 	position: relative;
+}
+
+#main-nav.navbar {
+	.navbar-inner {
+		padding-right: 0;
+		padding-left: 0;
+		@include border-radius(0);
+	}
+	position: relative;
+}
+
+
+#main-nav {
+
+	&.navbar.navbar-fixed-top  {
+		.navbar-inner {
+			padding-right: 0;
+			padding-left: 0;
+			@include border-radius(0);
+		}
+		position: relative;
+	}
+
+	margin-bottom: 0px;
+
+}
+
+.navbar-category {
+	.navbar-inner {
+		background: $grayLighter;
+	}
+}
+
+.information-panel {
+	margin: 0 7px;
+	// border: 1px solid #ccc;
+	// background: $white;
+	// padding: 0 10px;
+
+	&>:first-child.section {
+		border-top: none;
+	}
+
+	.section {
+		border-top: 1px dotted #ccc;
+		margin-bottom:5px;
+		padding-top: 5px;
+		padding-left: 80px;
+
+		.item-name {
+			float: left;
+			margin-left: -80px;
+		}
+
+		a {
+			margin-right: 20px;
+			color: $white;
+		}
+	}
+}
+
+ul.inline li {
+	padding: 0;
+	a span {
+		display: none;
+	}
 }
 
 #logo {
@@ -50,6 +113,7 @@ body {
 #topbar {
 	top: -5px;
 	right: 0px;
+	position: absolute;
 }
 
 #top_search {
@@ -68,25 +132,36 @@ body {
 	// }
 }
 
+#category {
+	margin-left: -10px;
+}
+
 #main-nav {
 	position: relative;
 	.navbar {
 		margin-bottom: 0px;
 	}
 	z-index: 1035;
-
+	right: 0;
+	left: 0;
 }
 
 #main {
-	top:0px;
-	left:0px;
-	padding-top: 10px;
-	margin-left: 0px;
 	// margin-right: 400px;
-	width: 996px;
 	min-height: 500px;
-	border-right: 1px solid #ccc;
+	// margin: 0 auto;
+	margin-right: 300px;
+	width: auto;
+	// border-right: 1px solid #ccc;
+	//
+	.main-body {
+		margin: 0 auto;
+		width: 972px;
+		padding-top: 30px;
+		display: table;
+	}
 }
+
 
 #main_drag{
 	top:0px;
@@ -100,13 +175,14 @@ body {
 }
 
 #social_sidebar {
-	position: absolute;
-	// width: 400px;
-	top: 0px;
-	left: 996px;
-	right: 0px;
-	bottom: 0px;
+	// position: absolute;
+	// top: 0px;
+	// left: 996px;
+	// right: 0px;
+	// bottom: 0px;
 	/*height: 665px;*/
+	float: right;
+	width: 300px;
 	background: $grayLighter;
 	/*overflow-y: scroll;*/
 	// @include box-shadow(inset 2px 2px 3px rgba(0,0,0,.075));
@@ -121,16 +197,23 @@ body {
 	display: none;
 }
 
+.column {
+	width: 230px;
+	display: inline-block;
+	vertical-align: top;
+	outline: none;
+	margin: 5px;
+}
+
 .activity {
-	width: 225px;
-	// padding: 15px;
+	// width: 225px;
 	padding-bottom: 10px;
-	margin: 7px;
-	float:left;
+	// margin-right: 12px;
+	margin-bottom: 12px;
 	padding-top: 3px;
 	padding-right: 3px;
 	overflow: hidden;
-
+	position: relative;
 	.out-box {
 		background: $white;
 
@@ -315,13 +398,14 @@ body {
 .affix {
 	top: 0px;
 	z-index: 1030;
-	right:0px;
-	left:0px;
+	// right:0px;
+	// left:0px;
 	position: fixed!important;
 }
 
 #social_sidebar.affix{
 	top: 40px;
+	right: 0px;
 }
 
 .image_picker_image{
@@ -402,6 +486,7 @@ body {
 	left: 0;
 	z-index: 1040;
 	background-color: rgba(255,255,255, 0.9);
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#e5ffffff', endColorstr='#e5ffffff');
 	overflow-y: scroll;
 
 	padding: 20px 0;
@@ -427,41 +512,6 @@ body {
 	margin-right: 5px;
 }
 
-#main-model {
-	.modal-body {
-		background: #f8f8f8;
-		max-height: none;
-		padding: 0px;
-		overflow: hidden;
-	}
-
-	.description {
-		position: absolute;
-		top: 20px;
-		left: 20px;
-	}
-
-	.right_bottom2 {
-		position: absolute;
-		bottom: 50px;
-		text-align: right;
-		right: 10px;
-		text-decoration: line-through;
-		@include text-shadow(0px 0px 2px rgba(255, 255, 255, 0.6));
-
-	}
-
-	.right_bottom1 {
-		position: absolute;
-		text-align: right;
-		bottom: 5px;
-		right: 10px;
-		color: $red;
-		@include text-shadow(0px 0px 2px rgba(255, 255, 255, 0.6));
-
-	}
-
-}
 
 .dialog {
 	background-color: white;
@@ -481,4 +531,11 @@ body {
 
 .moving {
 	z-index: 3000;
+}
+
+.nano > .pane {
+	left: 0;
+	right: none;
+	width: 8px;
+	margin: 5px;
 }
