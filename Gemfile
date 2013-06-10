@@ -147,4 +147,5 @@ gem "hiredis", "~> 0.4.0"
 gem "redis", "~> 2.2.0"
 
 gem "wicked"
+
 # gem "redis", "~> 2.2.0", :require => ["redis/connection/hiredis", "redis"]

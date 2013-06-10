@@ -14,9 +14,13 @@
 			喜欢 <span class='like-count'><%= activity.like || 0 %></span>
 		</div>
 		<div class="buttons">
-			<%= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
-				<%= icon(:'shopping-cart') + " 参与" %>
+			<%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
+				<%#= icon(:'shopping-cart') + " 参与" %>
+			<%# end %>
+			<%= link_to '#', class: 'btn btn-danger launch-button' do %>
+				<%= icon('shopping-cart') + " 参与" %>
 			<% end %>
+
 			<% if activity.likes.exists?(current_user) %>
 				<%= link_to '#', class: 'btn unlike-button active' do %>
 					<%= "取消喜欢" %>

@@ -1,25 +1,21 @@
 <div id="activities" >
-  <% @activities.each do |activity| %>
-    <%= render_activity activity %>
-  <% end %>
-  <%#= render :partial => "activity", :collection => @activities %>
+  <% @activities.each_slice(2) do |group| -%>
+    <div class="column">
+      <% group.each do |activity| %>
+        <%= render_activity activity %>
+      <% end %>
+    </div><% end %>
 </div>
-<%= link_to 'New Activity', new_activity_path %>
-<br />
-<% User.all.each do |u| %>
-<a href="javascript:void(0)" class='chat_user' data-event='chat' data-value="<%=u.id %>"><%=u.login %></a>
-<% end %>
-<br />
 <script type="text/javascript">
   require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex', 'activity'], function($,Mousemove, _m, _n, _c, Activity){
     var $container = $('#activities');
 
-    $container.imagesLoaded( function(){
-      $container.masonry({
-        itemSelector : '.activity'
-      });
-    });
+    // $container.imagesLoaded( function(){
+    //   $container.masonry({
+    //     itemSelector : '.activity'
+    //   });
+    // });
 
-    new Mousemove.Drag
+    // new Mousemove.Drag
   });
 </script>

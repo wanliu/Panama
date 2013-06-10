@@ -1,35 +1,33 @@
-<div id="main-nav" data-spy="affix" data-offset-top="100">
-  <div class="navbar">
-    <div class="navbar-inner">
-      <div class="container-fluid">
-        <ul class="nav">
-          <li id="category" class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">所有分类 <b class="caret"></b></a>
-            <%= render "main_category" %>
-          </li>
-          <li class="divider-vertical"></li>
-          <li class="active"><a href="#">首页</a></li>
-          <li><a href="#">品牌街</a></li>
-          <li><a href="#">品牌特卖</a></li>
-          <li><a href="#">天猫原创</a></li>
-          <li><a href="#">天猫预售</a></li>
-          <li><a href="#">电器城</a></li>
-          <li><a href="#">医药馆</a></li>
-          <li><a href="#">百事淘宝</a></li>
-        </ul>
-        <ul class="nav pull-right publish_button">
-          <li class="divider-vertical"></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="icon-plus"></i>&nbsp;发布</a>
-            <ul class="dropdown-menu">
-              <li><a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog">优惠活动</a></li>
-              <li><a href="#" class="create_buy">求购信息</a></li>
-            </ul>
-          </li>
-        </ul>
+<div class="navbar" id="main-nav" data-spy="affix" data-offset-top="100">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <ul class="nav">
+        <li id="category" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= icon(:home) %> 所有分类 <b class="caret"></b></a>
+          <%= render "main_category" %>
+        </li>
+        <li class="divider-vertical"></li>
+        <li class="active"><a href="#">首页</a></li>
+        <li><a href="/products">商城</a></li>
+<!--           <li><a href="#">品牌特卖</a></li>
+        <li><a href="#">天猫原创</a></li>
+        <li><a href="#">天猫预售</a></li>
+        <li><a href="#">电器城</a></li>
+        <li><a href="#">医药馆</a></li>
+        <li><a href="#">百事淘宝</a></li>
+-->        </ul>
+      <ul class="nav pull-right publish_button">
+        <li class="divider-vertical"></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="icon-plus"></i>&nbsp;发布</a>
+          <ul class="dropdown-menu">
+            <li><a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog">优惠活动</a></li>
+            <li><a href="#" class="create_buy">求购信息</a></li>
+          </ul>
+        </li>
+      </ul>
 
-      </div>
     </div>
   </div>
 </div>

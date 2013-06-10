@@ -1,4 +1,4 @@
-class Activities::FocusController < ApplicationController
+class Activities::FocusController < Activities::BaseController
 	def new
 	    @activity = Activity.new
 	    @activity.extend(FocusExtension)

@@ -10,6 +10,7 @@
       , "underscore": "lib/underscore"
       , "templates": "templates"
       , "jquery_columnview": "lib/jquery.columnview"
+      , "jquery_nanoscroller": "lib/jquery.nanoscroller"
       , "fileuploader": "lib/fileuploader"
       , "hogan": "lib/hogan"
       , "faye" : "faye"
@@ -46,6 +47,10 @@
       },
       "bootstrap": ['jquery'],
       "jquery_columnview" : {
+        exports : "$",
+        deps : ["jquery"]
+      },
+      "jquery_nanoscroller": {
         exports : "$",
         deps : ["jquery"]
       },

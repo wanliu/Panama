@@ -61,6 +61,7 @@
 
           <%= simple_form_for product_item, :url => to_cart_activity_path do |f| %>
             <%= f.input :price, :readonly => true %>
+            <%= f.input :title, :as => :hidden %>
             <%= f.input :product_id, :as => :hidden %>
             <%= f.input :amount %>
           <% end %>

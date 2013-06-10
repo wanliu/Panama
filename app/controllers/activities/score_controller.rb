@@ -1,4 +1,4 @@
-class Activities::ScoreController < ApplicationController
+class Activities::ScoreController < Activities::BaseController
 	def new
 	    @activity = Activity.new
 	    @activity.extend(ScoreExtension)
