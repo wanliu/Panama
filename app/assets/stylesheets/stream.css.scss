@@ -10,15 +10,22 @@
 @import "stream_item";
 @import "responsive-stream";
 
+
+body {
+	background: #eee;
+}
+
 .relative {
 	position: relative;
 }
 
 #header {
 	position: relative;
+	height: 80px;
 
 	#logo {
-		margin-top: 30px;
+		margin-top: 20px;
+
 		position: absolute;
 		a {
 			color: white;
@@ -36,16 +43,19 @@
 		padding-top: 30px;
 		padding-bottom: 20px;
 	}
-
-	#logo {
-		margin-top: 15px;
-	}
-
 }
 
 #main {
 	position: relative;
-	padding-top: 20px;
+	// padding-top: 20px;
+	//
+	#main-category {
+		margin-top: -5px;
+
+		.navbar-inner {
+			background: #ddd;
+		}
+	}
 }
 
 #main-nav {

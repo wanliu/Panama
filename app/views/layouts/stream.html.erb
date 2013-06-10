@@ -6,7 +6,28 @@
 <body class="<%= controller.controller_name %>">
   <%= render "header" %>
   <%= render "main_nav" %>
+
   <div id="main" class="container">
+    <div id="main-category" class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+            <li><a href='#' ><%=icon 'eye-open' %> </a></li>
+            <li><a href='#' >食品保健</a></li>
+            <li><a href="#">尿裤湿巾</a></li>
+            <li><a href="#">洗浴用品</a></li>
+            <li><a href="#">护肤用品</a></li>
+            <li><a href="#">出行车类</a></li>
+            <li><a href="#">出行安全</a></li>
+            <li><a href="#">玩具礼物</a></li>
+            <li><a href="#">哺喂用品</a></li>
+            <li><a href="#">健康安全</a></li>
+            <li><a href="#">妈妈专区</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div id="main-body">
       <%= render "flashes" %>
       <%#= render 'information' %>
