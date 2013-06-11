@@ -1,4 +1,5 @@
 $activity = $("<%= j render :partial => "activities/auction/activity", :object => @activity %> ").prependTo("#activities")
 $activity.find(">img").load(function(){
+	debugger
 	$("#activities").masonry('reload')
 })
