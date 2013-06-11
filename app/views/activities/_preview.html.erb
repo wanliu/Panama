@@ -4,8 +4,12 @@
 
 		<div class='in-box'>
 			<%= image_tag activity.url, :class => "preview a-#{activity.id}" %>
-			<h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
-			<h4 class="right_bottom1 ">现价: <span>1299</span></h4>
+			<div class='right_bottom2'>
+				<h5>原价: <span><%= activity.price %></span></h5>
+			</div>
+			<div class='right_bottom1'>
+				<h4>现价: <span>1299</span></h4>
+			</div>
 		</div>
 		<div class="corner"><h4>特价</h4></div>
 		<div class='info'>
