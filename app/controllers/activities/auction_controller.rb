@@ -10,7 +10,11 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def create
-    activity_params = params[:activity].slice(:product_id, :price, :start_time, :end_time)
+    slice_options = [:product_id, :price, :start_time, :end_time, :activity_price, :description]
+    activity_params = params[:activity].slice(*slice_options)
+
+    parse_time!(activity_params)
+
     @activity = current_user.activities.build(activity_params)
     @activity.activity_type = "auction"
     @activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
@@ -25,11 +29,21 @@ class Activities::AuctionController < Activities::BaseController
       end
     end
   end
+
+  private
+    def parse_time!(activity_params)
+      [:start_time, :end_time].each do |field|
+        unless activity_params[field].blank?
+          date = Date.strptime(activity_params[field], '%m/%d/%Y')
+          activity_params[field] = date.to_time.in_time_zone
+        end
+      end
+    end
 end
 
 
 module AuctionExtension
 
-  attr_accessor :price, :product, :pictrue, :number, :start_time, :end_time
+  attr_accessor :price, :product, :pictrue, :number, :start_time, :end_time, :activity_price, :description
 
 end
