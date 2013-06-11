@@ -1,4 +1,4 @@
-$activity = $("<%= j render :partial => "activities/auction/activity", :object => @activity %> ").prependTo("#activities")
-$activity.find(">img").load(function(){
+$activity = $("<%= j render :partial => 'activities/auction/activity', :object => @activity %> ").prependTo("#activities")
+$activity.find("img").load(function(){
 	$("#activities").masonry('reload')
 })
