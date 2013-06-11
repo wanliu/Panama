@@ -1,7 +1,7 @@
 class Activity < ActiveRecord::Base
 
-  attr_accessible :url, :product_id, :start_time, :end_time, :price, :description,
-                  :like, :participate, :author_id
+  attr_accessible :url, :product_id, :start_time, :end_time, :price, :activity_price,
+                  :description, :like, :participate, :author_id
 
   belongs_to :product
   belongs_to :author, :class_name => "User"

@@ -129,7 +129,11 @@ Panama::Application.routes.draw do
 
   resources :contents, :except => :index
 
-  resources :products, :except => :index
+  resources :products, :except => :index do
+    collection do
+      get 'price'
+    end
+  end
 
   # resources :shops do
   #   scope :module => "admins" do
