@@ -10,7 +10,7 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def create
-    slice_options = [:product_id, :price, :start_time, :end_time, :activity_price, :description]
+    slice_options = [:product_id, :price, :start_time, :end_time, :description]
     activity_params = params[:activity].slice(*slice_options)
 
     parse_time!(activity_params)
@@ -18,6 +18,13 @@ class Activities::AuctionController < Activities::BaseController
     @activity = current_user.activities.build(activity_params)
     @activity.activity_type = "auction"
     @activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
+
+    if params[:activity][:activity_price]
+      @activity.activity_rules.build(name: 'activity_price',
+                                     value_type: 'dvalue',
+                                     dvalue: params[:activity][:activity_price])
+    end
+
     respond_to do |format|
       if @activity.save
         format.js { render "activities/auction/add_activity" }
@@ -44,6 +51,7 @@ end
 
 module AuctionExtension
 
-  attr_accessor :price, :product, :pictrue, :number, :start_time, :end_time, :activity_price, :description
+  attr_accessor :price, :product, :pictrue, :number, :start_time,
+                :end_time, :activity_price, :description
 
 end

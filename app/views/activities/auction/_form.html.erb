@@ -17,12 +17,10 @@
 
   <%= f.input :price,
               :label => '价格',
-              :wrapper => false,
               :input_html=>{class: :span2} %>
 
   <%= f.input :activity_price,
               :label => '竞购价',
-              :wrapper => false,
               :input_html=>{class: :span2} %>
 
   <div class="control-group">
@@ -45,26 +43,24 @@
               :as         => :date_picker,
               input_html: { id: 'end_time', name: 'activity[end_time]' } %>
 
-<% end %>
-
-<!-- 选择商品后，自动填充价格 -->
-<script type="text/javascript">
-  require(['jquery'], function($){
-      $(function(){
-        $('#activity_product_id').change(function(e){
-          var product_id = $('#activity_product_id').val();
-          var product_name = $('#activity_product_id option[value=\'' + product_id + '\']').html()
-          $('#activity_description').val(product_name + '竞价')
-          $.ajax({
-            url: "products/price/?id=" + product_id,
-            beforeSend: function (xhr) {
-              xhr.overrideMimeType("text/json; charset=x-user-defined");
-            }
-          }).done(function (data) {
-            $('#activity_price').val(data.price);
-            $('#activity_activity_price').val(data.price);
-          });
-        })
+  <!-- 选择商品后，自动填充价格 -->
+  <script type="text/javascript">
+    require(['jquery'], function($){
+      $('#activity_product_id').change(function(e){
+        var product_id = $('#activity_product_id').val();
+        var product_name = $('#activity_product_id option[value=\'' + product_id + '\']').html()
+        $('#activity_description').val(product_name + '竞价')
+        $.ajax({
+          url: "products/price/?id=" + product_id,
+          beforeSend: function (xhr) {
+            xhr.overrideMimeType("text/json; charset=x-user-defined");
+          }
+        }).success(function (data) {
+          $('#activity_price').val(data.price);
+          $('#activity_activity_price').val(data.price);
+        });
       })
-  });
-</script>
+    });
+  </script>
+
+<% end %>
