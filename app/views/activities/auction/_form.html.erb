@@ -1,7 +1,19 @@
 <!-- 竞价 -->
 <%= simple_form_for @activity, :remote => true,:url => activities_auction_index_path, :html => { class: 'form-horizontal' } do |f| %>
 
-  <%= f.association :product, :collection => Product.all %>
+  <%= f.input :product,
+              :label => "商品",
+              :input_html => { class: :product, placeHolder: '请输入商品名称或条码...' } %>
+
+  <div class="control-group string optional" style='margin: 0;'>
+    <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
+        style='display: none; top: 100px; left: 195px; width: 220px; padding: '>
+      <!-- <li><a tabindex="-1" href="#">Action</a></li> -->
+    </ul>
+  </div>
+
+  <%= f.text_field :product_id, type: :hidden %>
+
   <%= f.input :description,
               :label => '活动名称',
               :warpper => false %>
@@ -43,23 +55,46 @@
               :as         => :date_picker,
               input_html: { id: 'end_time', name: 'activity[end_time]' } %>
 
-  <!-- 选择商品后，自动填充价格 -->
   <script type="text/javascript">
     require(['jquery'], function($){
-      $('#activity_product_id').change(function(e){
-        var product_id = $('#activity_product_id').val();
-        var product_name = $('#activity_product_id option[value=\'' + product_id + '\']').html()
-        $('#activity_description').val(product_name + '竞价')
+      // 根据用户输入的商品名称、条码，加载商品信息供选择
+      $('#activity_product').on('change', function(e){
+        var query_name = $('#activity_product').val()
         $.ajax({
-          url: "products/price/?id=" + product_id,
+          url: "product_search/?q=" + query_name,
           beforeSend: function (xhr) {
             xhr.overrideMimeType("text/json; charset=x-user-defined");
           }
         }).success(function (data) {
-          $('#activity_price').val(data.price);
-          $('#activity_activity_price').val(data.price);
+          var select_ul = "";
+          if (data.length > 0) {
+            $.each(data, function(){
+              select_ul += '<li product_id="' + this.id + '" '
+                            + 'product_price="' + this.price + '" '
+                            + '><a tabindex="-1" href="javascript: void(0);">'
+                            + this.title + '</a></li>';
+            })
+          }
+          select_ul = select_ul || '<li><a tabindex="-1" href="javascript: void(0);">没有相关商品！</a></li>';
+          $('ul.product_selector').html(select_ul);
+          $('ul.product_selector').show();
         });
-      })
+
+        // 侦测那个商品被选择, 根据选择的商品更新相关信息
+        $('ul.product_selector>li').live('click', function(){
+          if (!$(this).attr('product_id')) return;
+          var product_id = $(this).attr('product_id');
+          var product_price = $(this).attr('product_price');
+          var product_name = $(this).text()
+
+          $('#activity_product').val(product_name);
+          $('#activity_product_id').val(product_id);
+          $('#activity_price').val(product_price);
+          $('#activity_activity_price').val(product_price);
+          $('#activity_activity_name').val(product_name + 'jingjia');
+          $('ul.product_selector').hide();
+        })
+      });
     });
   </script>
 

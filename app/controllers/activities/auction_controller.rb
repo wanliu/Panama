@@ -10,6 +10,7 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def create
+    debugger
     slice_options = [:product_id, :price, :start_time, :end_time, :description]
     activity_params = params[:activity].slice(*slice_options)
 
