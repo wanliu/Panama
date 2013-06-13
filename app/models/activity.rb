@@ -1,12 +1,12 @@
 class Activity < ActiveRecord::Base
 
-  attr_accessible :url, :product_id, :start_time, :end_time, :price, :activity_price,
+  attr_accessible :url, :product_id, :start_time, :end_time, :price,
                   :description, :like, :participate, :author_id
 
   belongs_to :product
   belongs_to :author, :class_name => "User"
 
-  has_many :activity_rules
+  has_many :activity_rules, autosave: true
 
   has_many :comments, :as => :targeable
   has_many :activities_likes
@@ -38,4 +38,14 @@ class Activity < ActiveRecord::Base
               :user => {
                 :include => :photos }}}})
   end
+
+  def activity_price
+    rule = activity_rules.find { |rule| rule.name == 'activity_price' }
+    if rule.blank?
+      ""
+    else
+      rule[rule.value_type]
+    end
+  end
+
 end
