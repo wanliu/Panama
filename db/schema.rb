@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130611021138) do
+ActiveRecord::Schema.define(:version => 20130611080601) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -30,19 +30,18 @@ ActiveRecord::Schema.define(:version => 20130611021138) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
-    t.datetime "created_at",                                                  :null => false
-    t.datetime "updated_at",                                                  :null => false
-    t.string   "activity_type",  :limit => 14
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
+    t.string   "activity_type", :limit => 14
     t.string   "description"
     t.integer  "product_id"
-    t.decimal  "price",                        :precision => 10, :scale => 2
+    t.decimal  "price",                       :precision => 10, :scale => 2
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "author_id"
-    t.integer  "limit_count",    :limit => 8
+    t.integer  "limit_count",   :limit => 8
     t.integer  "like"
     t.integer  "participate"
-    t.decimal  "activity_price",               :precision => 10, :scale => 2
   end
 
   create_table "activities_likes", :force => true do |t|
@@ -58,9 +57,14 @@ ActiveRecord::Schema.define(:version => 20130611021138) do
   create_table "activity_rules", :force => true do |t|
     t.string   "name",        :limit => 25
     t.string   "value",       :limit => 25
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.integer  "activity_id"
+    t.string   "value_type",  :limit => 25
+    t.string   "svalue",      :limit => 25
+    t.integer  "nvalue"
+    t.decimal  "dvalue",                    :precision => 10, :scale => 2
+    t.datetime "dtvalue"
   end
 
   create_table "addresses", :force => true do |t|
