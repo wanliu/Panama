@@ -2,6 +2,8 @@
 #= require backbone
 #= require lib/XPath
 
+root = window || @
+
 class ElementModel extends Backbone.Model
 
 	constructor: (@el, @paths, @options) ->
@@ -23,3 +25,4 @@ class ElementModel extends Backbone.Model
 				for element in results.value
 					@set name, $.trim(element.innerText)
 
+root.ElementModel = ElementModel

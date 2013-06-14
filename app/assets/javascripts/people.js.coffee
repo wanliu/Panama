@@ -1,3 +1,12 @@
+#= require panama
+#= require ajaxify
+#= require jquery
+#= require jquery_ujs
+#= require jquery-ui
+#= require backbone
+#= require follow
+#= require models/element_model
+#= require people/people_side
 #= require lib/chosen.jquery
 #= require lib/chose-friend
 #= require people/followers
@@ -18,3 +27,4 @@
 #= require shop_category
 #= require lib/depend_select
 #= require topic
+
