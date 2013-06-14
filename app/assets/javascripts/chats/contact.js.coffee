@@ -1,7 +1,5 @@
 #encoding: utf-8
 #describe: 聊天视图
-#= require jquery
-#= require backbone
 #= require chats/contact_friend
 #= require lib/realtime_client
 root = window || @

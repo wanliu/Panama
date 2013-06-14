@@ -1,6 +1,4 @@
 #管理付款方式
-#= require jquery
-#= require backbone
 
 class PayManner extends Backbone.View
   events: {

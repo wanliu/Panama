@@ -1,7 +1,4 @@
 #管理配送方式
-#= require jquery
-#= require backbone
-
 class DeliveryManner extends Backbone.View
   events: {
     "click .title" : "chose_manner"

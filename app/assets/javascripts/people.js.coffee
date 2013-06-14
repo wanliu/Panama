@@ -16,3 +16,4 @@
 #= require lib/state_progress
 #= require lib/attachment_upload
 #= require shop_category
+#= require topic
