@@ -3,7 +3,8 @@
   <head>
     <title></title>
     <%= stylesheet_link_tag :bootstrap_application, :transaction_message %>
-    <%= render "javascripts" %>
+    <%= javascript_include_tag faye_server_uri + "/client.js" %>
+    <%= javascript_include_tag :chat %>
     <style>
       html,body{
         padding: 0px;

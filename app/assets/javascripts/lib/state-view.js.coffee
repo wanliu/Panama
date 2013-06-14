@@ -1,11 +1,9 @@
-#= require jquery
-#= require backbone
 #= require lib/state-machine
 
 exports = window || @
 
 _.mixin
-	capitalize : (string) ->
+	capitalize: (string) ->
 		string.charAt(0).toUpperCase() + string.substring(1).toLowerCase()
 
 	camel: (string) ->
@@ -14,7 +12,7 @@ _.mixin
 
 class AbstructStateView extends Backbone.View
 
-	constructor: (@options = {}) ->
+	initialize: (@options = {}) ->
 		super
 		# @$el = $(@el)
 		@initial = @options['initial'] || @initial

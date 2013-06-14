@@ -26,7 +26,7 @@ class TransactionCardBase extends AbstructStateView
 
         @rt_options = @options['realtime']
         if @rt_options.url?
-            @realtime = RealtimeClient.client(@rt_options.url)
+            @realtime = Realtime.client(@rt_options.url)
             @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
         # @$el.bind('click', @activeThis)
 
