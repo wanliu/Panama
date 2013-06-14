@@ -1,8 +1,9 @@
 #= require jquery
 #= require backbone
-#= require exports
 #= require typeahead
 #= require jquery.slides
+
+root = window || @
 
 class CategoryBase extends Backbone.View
     initialize: () ->
@@ -435,5 +436,4 @@ class CategoryListView extends Backbone.View
         @
 
 category_base = new CategoryBase()
-exports.CategoryView = CategoryView
-exports
+root.CategoryView = CategoryView

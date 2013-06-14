@@ -3,7 +3,7 @@
 #= require lib/typeahead
 #= require lib/hogan
 
-exports = window || @
+root = window || @
 
 class UserTypeahead
 
@@ -22,4 +22,4 @@ class UserTypeahead
             engine: Hogan
         )
 
-exports.UserTypeahead = UserTypeahead
+root.UserTypeahead = UserTypeahead

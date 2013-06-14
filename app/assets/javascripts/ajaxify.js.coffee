@@ -1,9 +1,9 @@
 #= require signals
 #= require hasher
 #= require crossroads
-exports = window || @
+root = window || @
 
-exports.Ajaxify = {
+root.Ajaxify = {
 	addRoute: (pattern, handle) ->
 		crossroads.addRoute pattern, handle
 

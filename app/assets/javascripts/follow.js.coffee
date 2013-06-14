@@ -1,7 +1,7 @@
 #= require jquery
 #= require backbone
 
-exports = window || @
+root = window || @
 
 class Follow extends Backbone.View
 
@@ -70,4 +70,4 @@ class Follow extends Backbone.View
     unfollow_id = $(".unfollow").attr("data-value")
     @send_unfollow(unfollow_id, @people_id)
 
-exports.Follow = Follow
+root.Follow = Follow
