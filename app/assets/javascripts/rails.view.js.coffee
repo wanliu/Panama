@@ -4,7 +4,7 @@
 #= require 'models/form_model'
 #= require 'lib/dnd'
 
-exports = window || @
+root = window || @
 
 class AbstractFormView extends DNDView
 	el: "form"
@@ -106,7 +106,7 @@ class AbstractResourceView extends DNDView
 class ResourceView extends AbstractResourceView
 
 
-exports.ResourceView = ResourceView
-exports.FormView = FormView
-exports
+root.ResourceView = ResourceView
+root.FormView = FormView
+root
 

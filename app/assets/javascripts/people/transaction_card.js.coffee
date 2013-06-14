@@ -4,6 +4,8 @@
 #= require lib/state-machine
 #= require lib/chosen.jquery
 
+root = window || @
+
 class TransactionCard extends TransactionCardBase
     initialize:() ->
         super
@@ -140,5 +142,4 @@ class TransactionCard extends TransactionCardBase
             @alarm()
             @transition.cancel()
 
-exports.TransactionCard = TransactionCard
-exports
+root.TransactionCard = TransactionCard

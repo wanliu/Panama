@@ -2,7 +2,8 @@
 #= require backbone
 #= require lib/hogan
 
-exports = window || @
+root = window || @
+
 class HoverManager
 
 	default_options = {
@@ -107,5 +108,5 @@ $("[add-to-cart]").on "click", (event) ->
 
 	myCart.addToCart($(selector), form, urlAction)
 
-exports.myCart = myCart
-exports
+root.myCart = myCart
+root

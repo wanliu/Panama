@@ -1,7 +1,6 @@
 #= require 'jquery'
 #= require 'lib/chosen.jquery'
 
-
 root = this
 $ = jQuery
 
@@ -23,23 +22,6 @@ $.fn.extend({
 	      $this.data('chosen', new ChosenEx(this, options)) unless $this.hasClass "chzn-done"
 	    )
 })
-
-# $('object').chooseEx( {
-#	remote: {
-#      url: '/products',
-#      method: 'GET',
-#      dataType: 'json',
-#      callback: function() {
-#
-#      }
-#   }
-# })
-
-# $('object').chosenEx({
-#   remote: '/product'
-# })
-
-#<%= f.input :name, :as => :chosen, :url => "http://192.168.2.235:3002/products/search", :remote_key => "title", :remote_value => "id", :param_name => "qq" %>
 
 class ChosenEx extends Chosen
 

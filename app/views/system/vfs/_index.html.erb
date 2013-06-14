@@ -1,15 +1,15 @@
 <%= requirejs_include_tag "application" %>
 <%= stylesheet_link_tag   "jquery.treeview" %>
 <style type="text/css">
-	body.active_admin ul#browser { 
+	body.active_admin ul#browser {
 		padding: 0;
 		margin: 0;
 		list-style: none;
 		background-color: white;
 		margin-top: 4px;
 	}
-	body.active_admin .treeview li { 
-		list-style: none;	
+	body.active_admin .treeview li {
+		list-style: none;
 		margin: 0;
 		padding: 3px 0pt 3px 16px;
 	}
@@ -18,24 +18,24 @@
     	height: 400px;
     	overflow:auto;
     	scrollbar-3dlight-color:#595959;
-    	scrollbar-arrow-color:#ffffff; 
-    	scrollbar-base-color:#cfcfcf; 
-    	scrollbar-darkshadow-color:#ffffff; 
-    	scrollbar-face-color:#cfcfcf; 
-    	scrollbar-highlight-color:#ffffff; 
+    	scrollbar-arrow-color:#ffffff;
+    	scrollbar-base-color:#cfcfcf;
+    	scrollbar-darkshadow-color:#ffffff;
+    	scrollbar-face-color:#cfcfcf;
+    	scrollbar-highlight-color:#ffffff;
     	scrollbar-shadow-color:#595959
     }
 </style>
 
 <div class="vfs_css">
 	<ul id="browser" class="filetree treeview">
-		<% root.each do |r| %> 
+		<% root.each do |r| %>
 			<li class="collapsable" onclick="treeview_click('/<%= r.name %>','<%= r.name %>')">
 				<div class="hitarea collapsable-hitarea"></div>
 				<span class="folder" onMouseOver="MouseOverDestroy('<%= r.name %>')" onMouseOut="MouseOutHide('<%= r.name %>')"><%= r.name %> &nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="hover <%= r.name %>_mouse" style="display: none;" onclick="destroy_file('<%= r.name %>','<%= r.name %>')" >x</span>
 				</span>
-				<ul class="<%= r.name %>_click"> 
+				<ul class="<%= r.name %>_click">
 				</ul>
 			</li>
 		<% end %>
@@ -43,15 +43,13 @@
 </div>
 
 <SCRIPT type='text/javascript'>
-	require(['jquery', 'lib/jquery.treeview', 'lib/jquery.cookie'], function($){
-	    $(document).ready(function(){
-	        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol", url: "/vfs/path", });
-		});
-    }); 
+    $(document).ready(function(){
+        $("#browser").treeview({ speed: "fast", collapsed: true, control: "#treecontrol", url: "/vfs/path", });
+	});
     function treeview_click(treeview, treeview_class){
     	$.get("/vfs/path/expansion",
     	     {p: treeview},
-    	     function(data){ 
+    	     function(data){
     	     	$("."+treeview_class+"_click").parent("li").removeAttr("onclick")
     	     	$("."+treeview_class+"_click").html("")
     	     	for(var i=0; data.n.length > i; i++){
@@ -59,12 +57,12 @@
     	     		var branches = ""
     	     		if(name.indexOf('.') >= 0){
     	     			var html_f = html_file(treeview, treeview_class, name)
-    	     			branches = $(html_f).appendTo("."+treeview_class+"_click") 
+    	     			branches = $(html_f).appendTo("."+treeview_class+"_click")
     	     		}else{
     	     			var html_fo = html_folder(treeview, treeview_class, name)
-    	     			branches = $(html_fo).appendTo("."+treeview_class+"_click") 
+    	     			branches = $(html_fo).appendTo("."+treeview_class+"_click")
     	     		}
-    	     			
+
 			  	    $("#browser").treeview({ add: branches });
     	     	}
              }
@@ -99,11 +97,11 @@
 	}
 
 
-	function MouseOverDestroy(clas){ 
+	function MouseOverDestroy(clas){
 		$("."+clas+"_mouse").show()
 	}
 
-	function MouseOutHide(clas){ 
+	function MouseOutHide(clas){
 		$("."+clas+"_mouse").hide()
 	}
 
@@ -113,7 +111,7 @@
 			this.clas = clas
 			$.get("/vfs/destroy_file",
 	    	     {p: file_path},
-	    	     $.proxy(function(data){ 
+	    	     $.proxy(function(data){
 	    	        $("."+clas+"_click").parent("li").remove()
 	    	        $("#browser").treeview({});
 	             }, this)
