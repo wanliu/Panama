@@ -40,11 +40,8 @@
   </div>
 </div>
 <script type='text/javascript'>
-require(["jquery", "people/transaction_refund"],
-  function($, TransactionRefundView){
-    new TransactionRefundView({
-      el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
-      remote_url: "<%= person_transaction_path(people, transaction)%>"
-    })
+  new TransactionRefundView({
+    el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
+    remote_url: "<%= person_transaction_path(people, transaction)%>"
   })
 </script>

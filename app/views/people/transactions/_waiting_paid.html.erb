@@ -108,13 +108,11 @@
   </div>
 </div>
 <script type="text/javascript">
-  require(["jquery", "people/transaction_payment"], function($, TransactionPayment){
-      new TransactionPayment({
-        el: $("#order<%=transaction.id %>"),
-        model: {
-          total: <%=transaction.total %>,
-          money: <%=current_user.money %>
-        }
-      })
+  new TransactionPayment({
+    el: $("#order<%=transaction.id %>"),
+    model: {
+      total: <%=transaction.total %>,
+      money: <%=current_user.money %>
+    }
   })
 </script>

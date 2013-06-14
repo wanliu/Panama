@@ -27,8 +27,6 @@
 </div>
 
 <script type="text/javascript">
-  require(["jquery", "people/transaction_message", "lib/hogan"],
-    function($, TransactionMessageView){
 
     var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
 
@@ -48,5 +46,4 @@
         name: "<%=transaction.seller.name %>"
       }
     })
-  })
 </script>

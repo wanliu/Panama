@@ -1,20 +1,20 @@
-<%= render_widget :table, :display, products, nil, 
+<%= render_widget :table, :display, products, nil,
 	:heads => [:name, :price, :amount, :bonus, :util],
-	:head_options => { 
+	:head_options => {
 		:class => %w(table table-striped table-bordered table-hover)
 	},
 	:modify_column => [{
 		:name => proc do |row|
 			picture_and_name(row)
-		end	
+		end
 	}],
 	:add_column => [ {
 		:util => proc do |row|
-			content_tag :div, :class => 'btn-group' do 
+			content_tag :div, :class => 'btn-group' do
 				link_to(icon(:edit), "#/#{row[:id]}/edit", :class => 'btn utils edit') +
 				link_to(icon(:remove), "#", :'data-delete-url' => "#{row[:id]}", :class => 'btn utils delete')
 			end
-		end 
+		end
 	}],
 	:hide_column => [:id]
 %>
@@ -22,20 +22,14 @@
 <%= register_javascript :all_product_row_tools do %>
 <script type="text/javascript">
 	var urlRoot = '<%= shop_admins_products_path %>';
-	
-	require([
-		'jquery', 
-		'admins/shops/products', 
-		'models/element_model'
-		], function($, Products, ElementModel){
-		$("#table tr:gt(0)").each(function(i, tr){
-			var model = new ElementModel(tr, {
-				name: "td[1]", 
-				price: "td[2]",
-				id: "td[6]"
-			});
-			var row = new Products.ProductRow({el: tr, urlRoot: urlRoot, model: model})
+
+	$("#table tr:gt(0)").each(function(i, tr){
+		var model = new ElementModel(tr, {
+			name: "td[1]",
+			price: "td[2]",
+			id: "td[6]"
 		});
+		var row = new Products.ProductRow({el: tr, urlRoot: urlRoot, model: model})
 	});
 </script>
 <% end %>

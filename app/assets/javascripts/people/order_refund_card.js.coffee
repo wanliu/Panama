@@ -3,7 +3,7 @@
 #= require backbone
 #= require lib/transaction_card_base
 
-class OrderRefundCard extends Transaction.TransactionCardBase
+class OrderRefundCard extends TransactionCardBase
 
   initialize: () ->
     super

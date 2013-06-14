@@ -22,6 +22,8 @@
 //= require lib/notify
 //= require commit_comment
 //= require lib/at_who
+//= require lib/jquery.treeview
+//= require lib/jquery.cookie
 
 root = window || this;
 
