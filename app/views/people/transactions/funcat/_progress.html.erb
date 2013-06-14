@@ -1,8 +1,6 @@
 <div class="progress progress-mini progress-striped active">
 </div>
 <script type="text/javascript">
-  require(["jquery", "lib/state_progress"],
-    function($, StateProgress){
 
     var complete_states = []
     <% transaction.state_details.each do |item| %>
@@ -17,5 +15,4 @@
       localName: <%=t("order_states.buyer").to_json.html_safe %>,
       complete_states: complete_states
     })
-  })
 </script>

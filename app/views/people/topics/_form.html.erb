@@ -13,10 +13,8 @@
   </div>
 </form>
 <script type='text/javascript' >
-  require(["jquery", "lib/attachment_upload"], function($, AttachmentUpload){
-    new AttachmentUpload({
-      el: $(".topic_upload"),
-      remote: "<%=attachments_path %>"
-    })
+  new AttachmentUpload({
+    el: $(".topic_upload"),
+    remote: "<%=attachments_path %>"
   })
 </script>

@@ -7,28 +7,26 @@
 	<% end %>
 </div>
 <script type="text/javascript">
-	require(['jquery-ui', 'hallo'], function($){
-		var query = "#<%= widget_id %> .editor";
-		console.log(query);
-		console.log($(query));
-		var hallo = $(query)
-			.hallo({
-				plugins: {
-					'halloformat': {},
-					'halloblock': {},
-					'hallojustify': {},
-					'hallolists': {},
-					'halloimage': {},
-					'halloannotate': {}
-				},
-				showAlways: true
-			});
-		hallo =	hallo.data('hallo');
-		hallo._setToolbarPosition(40);
+	// var query = "#<%= widget_id %> .editor";
+	// console.log(query);
+	// console.log($(query));
+	// var hallo = $(query)
+	// 	.hallo({
+	// 		plugins: {
+	// 			'halloformat': {},
+	// 			'halloblock': {},
+	// 			'hallojustify': {},
+	// 			'hallolists': {},
+	// 			'halloimage': {},
+	// 			'halloannotate': {}
+	// 		},
+	// 		showAlways: true
+	// 	});
+	// hallo =	hallo.data('hallo');
+	// hallo._setToolbarPosition(40);
 
-		$("#save_article").on('click', function(){
-			$.post("<%= url_for_event(:save) %>", {content: $(".editor").html()});
-			return false;
-		})
-	})
+	// $("#save_article").on('click', function(){
+	// 	$.post("<%= url_for_event(:save) %>", {content: $(".editor").html()});
+	// 	return false;
+	// })
 </script>

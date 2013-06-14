@@ -1,6 +1,6 @@
 #= require jquery
 #= require backbone
-#= require typeahead
+#= require lib/typeahead
 #= require jquery.slides
 
 root = window || @
