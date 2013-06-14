@@ -1,6 +1,6 @@
 # encoding: utf-8
-source 'https://rubygems.org'
-# source 'http://ruby.taobao.org'
+#source 'https://rubygems.org'
+source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
 # database orm adapter
@@ -20,7 +20,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
-  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
+  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails', :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails', '~> 1.0.3'
   gem 'compass-h5bp', '~> 0.1.0'

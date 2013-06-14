@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/anjlab/bootstrap-rails.git
+  revision: abe883cc6076420f31d08c8a1a3e967d7c3565db
+  specs:
+    anjlab-bootstrap-rails (2.3.1.2)
+      railties (>= 3.0)
+      sass (>= 3.2)
+
+GIT
   remote: git://github.com/huxinghai1988/rails-setting.git
   revision: becc0527e5d2445fda96afc5bf655ed77cdc84db
   specs:
@@ -19,7 +27,7 @@ GIT
       railties (~> 3.1)
 
 GEM
-  remote: https://rubygems.org/
+  remote: http://ruby.taobao.org/
   specs:
     ac_uniquify (0.1.0)
     actionmailer (3.2.8)
@@ -84,9 +92,6 @@ GEM
       eventmachine
     ancestry (1.3.0)
       activerecord (>= 2.3.14)
-    anjlab-bootstrap-rails (2.3.0.0)
-      railties (>= 3.0)
-      sass (>= 3.2)
     apotomo (1.2.3)
       cells (>= 3.6.7)
       hooks (~> 0.2.0)
@@ -479,7 +484,7 @@ DEPENDENCIES
   activemerchant_patch_for_china
   amqp (~> 0.9.0)
   ancestry (~> 1.3.0)
-  anjlab-bootstrap-rails (>= 2.2)
+  anjlab-bootstrap-rails (>= 2.2)!
   apotomo (~> 1.2.3)
   better_errors
   binding_of_caller

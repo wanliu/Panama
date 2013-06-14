@@ -9,9 +9,8 @@
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
-      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
-      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
-      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded private" alt="140x140" style="" src="<%= default_img_url('140x140') %>">
+      <ul class='attachment_panel'></ul>
     </div>
   </div>
 
@@ -43,24 +42,47 @@
               :as         => :date_picker,
               input_html: { id: 'end_time', name: 'activity[end_time]' } %>
 
+
   <!-- 选择商品后，自动填充价格 -->
   <script type="text/javascript">
-    require(['jquery'], function($){
+    require(["jquery", "admins/shops/product_upload"], function($, view){
       $('#activity_product_id').change(function(e){
         var product_id = $('#activity_product_id').val();
         var product_name = $('#activity_product_id option[value=\'' + product_id + '\']').html()
         $('#activity_description').val(product_name + '竞价')
         $.ajax({
-          url: "products/price/?id=" + product_id,
+          url: "products/" + product_id + "/base_info",
           beforeSend: function (xhr) {
             xhr.overrideMimeType("text/json; charset=x-user-defined");
           }
         }).success(function (data) {
-          $('#activity_price').val(data.price);
-          $('#activity_activity_price').val(data.price);
+          var product = data.product
+          var attachments = data.attachments
+          $('#activity_price').val(product.price);
+          $('#activity_activity_price').val(product.price);
+
+          $("img.private").remove()
+          $(".attachment_panel>li").remove()
+
+          new view.ProductUpload({
+            el: $("ul.attachment_panel"),
+            data: attachments,
+            default_disabled: false,
+            params: {
+              url_upload: "<%=attachments_path %>" ,
+              default_img_url: "<%=default_img_url('140x140') %>",
+              template: '<%=j render "product_upload" %>',
+              version_name: "140x140",
+              input_name: "activity[attachment_ids]",
+            }
+          })
+
+
         });
+
       })
-    });
+    })
+
   </script>
 
 <% end %>

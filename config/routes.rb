@@ -130,8 +130,8 @@ Panama::Application.routes.draw do
   resources :contents, :except => :index
 
   resources :products, :except => :index do
-    collection do
-      get 'price'
+    member do
+      get 'base_info'
     end
   end
 

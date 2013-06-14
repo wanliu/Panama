@@ -54,7 +54,8 @@ define([
             @model.bind("set_value_attr", _.bind(@set_value_attr, @))
 
         upload : () ->
-            @file_input.click()
+            unless @model.get("upload_state") is false
+                @file_input.click()
 
         init_template : () ->
             @$el.html(@default_params.template)
@@ -172,47 +173,49 @@ define([
 
 
     class exports.ProductUpload extends Backbone.View
-
+        data: []
+        default_disabled: true
         initialize : () ->
-            _.extend(@, @options)
-            @$el = $(@el)
-            @attachment_list = new AttachmentList
-            @attachment_list.bind("add", @add_one, @)
+          _.extend(@, @options)
+          @$el = $(@el)
+          @attachment_list = new AttachmentList
+          @attachment_list.bind("add", @add_one, @)
 
-            $.each(@data, (i, attachment)=>
-                @attachment_list.add(attachment)
-            )
-            @add_blank_product_attachment()
-            @default_choose_img(@get_default_model())
+          $.each(@data, (i, attachment)=>
+            @attachment_list.add(attachment)
+          )
+          @add_blank_product_attachment()
+          @default_choose_img(@get_default_model())
 
         add_one : (model) ->
-            product_attachment = new ProductAttachmentUpload(
-                model : model,
-                params : @options.params
-            )
-            product_attachment.bind("default_first_img", _.bind(@default_first_img, @))
-            product_attachment.bind("clear_blank_default", _.bind(@clear_blank_default, @))
-            product_attachment.bind("add_blank_product_attachment", _.bind(@add_blank_product_attachment, @))
-            @$el.append(product_attachment.render())
+          product_attachment = new ProductAttachmentUpload(
+            model : model,
+            params : @options.params
+          )
+          product_attachment.bind("default_first_img", _.bind(@default_first_img, @))
+          product_attachment.bind("clear_blank_default", _.bind(@clear_blank_default, @))
+          product_attachment.bind("add_blank_product_attachment", _.bind(@add_blank_product_attachment, @))
+          @$el.append(product_attachment.render())
 
         default_choose_img: (model) ->
+          if @default_disabled
             model.trigger("set_default_attr")
 
         default_first_img: (model) ->
-            @default_choose_img(@attachment_list.models[0])
+          @default_choose_img(@attachment_list.models[0])
 
         add_blank_product_attachment : () ->
-            @attachment_list.add( url : @options.params.default_img_url)
+          @attachment_list.add( url : @options.params.default_img_url)
 
         clear_blank_default : () ->
-            @attachment_list.each (model) ->  model.trigger("set_value_attr")
+          @attachment_list.each (model) ->  model.trigger("set_value_attr")
 
         get_default_model : () ->
-            temp = @attachment_list.models[0]
-            @attachment_list.each((model) ->
-                temp = model if model.get("default_state")?
-            )
-            temp
+          temp = @attachment_list.models[0]
+          @attachment_list.each (model) ->
+            temp = model if model.get("default_state")?
+
+          temp
 
     exports
 )
