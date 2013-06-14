@@ -1,4 +1,7 @@
 #管理配送方式
+
+root = window || @
+
 class DeliveryManner extends Backbone.View
   events: {
     "click .title" : "chose_manner"
@@ -16,7 +19,7 @@ class DeliveryManner extends Backbone.View
     @set_name(name: @name, code: @code)
 
 
-class TransactionDeliveryManner extends Backbone.View
+class root.TransactionDeliveryManner extends Backbone.View
   events: {
     "click .delivery_manner .mdify_show" : "toggleMdify",
     'click .delivery_manner input:button.mdify' : "toggle_delivery_manner"
