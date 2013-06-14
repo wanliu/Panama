@@ -39,7 +39,7 @@
 </div>
 <script type="text/javascript">
   $(".transaction").each(function(i, elem){
-    var card = new Transaction.TransactionCard({
+    var card = new TransactionCard({
       el: elem,
       realtime: {
         url: '<%= faye_server_uri %>',

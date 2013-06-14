@@ -3,6 +3,8 @@
 #= require backbone
 #= require lib/transaction_card_base
 
+root = window || @
+
 class OrderRefundCard extends TransactionCardBase
 
   initialize: () ->
@@ -41,3 +43,4 @@ class OrderRefundCard extends TransactionCardBase
         @slideAfterEvent(event)
     )
 
+root.OrderRefundCard = OrderRefundCard
