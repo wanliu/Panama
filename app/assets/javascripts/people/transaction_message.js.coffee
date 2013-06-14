@@ -142,7 +142,6 @@ class TransactionMessageView extends Backbone.View
   add_message: (data) ->
     @trans.add(data)
 
-root.TransactionMessageView = TransactionMessageView
   set_model_url: (model) ->
     model.set_url @remote_url
 
@@ -177,4 +176,4 @@ root.TransactionMessageView = TransactionMessageView
 
     #$.pnotify(opts);
 
-window.TransactionMessageView = TransactionMessageView
+root.TransactionMessageView = TransactionMessageView
