@@ -53,11 +53,9 @@
 </div>
 
 <script text='text/javascript'>
-  require(["jquery", "people/community_people", "lib/hogan"], function($, CommunityPeopleView){
     new CommunityPeopleView({
       circle_template: Hogan.compile("<%=j render :partial =>'circles/info' %>"),
       remote_url: "<%=person_circles_path(current_user.login) %>",
       el: $(".user-community-people")
     })
-  })
 </script>
