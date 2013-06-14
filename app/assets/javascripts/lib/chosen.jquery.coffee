@@ -5,6 +5,7 @@ Copyright (c) 2011 by Harvest
 #= require jquery
 #= require lib/select-parser
 #= require lib/abstract-chosen
+
 root = this
 $ = jQuery
 

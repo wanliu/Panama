@@ -3,7 +3,7 @@
 #= require jquery
 #= require backbone
 
-exports = window || @
+root = window || @
 
 class Comment extends Backbone.View
     comment_type: null
@@ -41,5 +41,5 @@ class CommentProduct extends Comment
     comment_type: "Product"
 
 
-exports.CommentActivity = CommentActivity
-exports.CommentProduct = CommentProduct
+root.CommentActivity = CommentActivity
+root.CommentProduct = CommentProduct

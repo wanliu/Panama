@@ -22,17 +22,15 @@
   </tbody>
 </table>
 <script type='text/javascript'>
-  require(["jquery", "people/following"], function($, view){
-    new view.FollowListView({
+    new FollowListView({
       el: $("table.follow-user"),
       login: "<%=current_user.login %>",
       follow_type: "user"
     })
 
-    new view.FollowListView({
+    new FollowListView({
       el: $("table.follow-shop"),
       login: "<%=current_user.login %>",
       follow_type: "shop"
     })
-  })
 </script>

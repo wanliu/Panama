@@ -4,6 +4,8 @@
 #= require lib/realtime_client
 #= require lib/notify
 
+root = window || @
+
 class TransactionMessage extends Backbone.Model
   set_url: (url) -> @urlRoot = url
 
@@ -140,6 +142,7 @@ class TransactionMessageView extends Backbone.View
   add_message: (data) ->
     @trans.add(data)
 
+root.TransactionMessageView = TransactionMessageView
   set_model_url: (model) ->
     model.set_url @remote_url
 

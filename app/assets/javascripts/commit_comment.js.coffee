@@ -2,7 +2,7 @@
 #= require backbone
 #= require comment
 
-exports = window || @
+root = window || @
 
 class CommitComment extends CommentActivity
 
@@ -41,5 +41,5 @@ class CommitComment extends CommentActivity
     )
     false
 
-exports.CommitComment = CommitComment
-exports
+root.CommitComment = CommitComment
+root

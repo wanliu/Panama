@@ -3,7 +3,8 @@
 #= require backbone
 #= require twitter/bootstrap/modal
 
-exports = (window || @)
+root = (window || @)
+
 class Circle extends Backbone.Model
   set_url: (url) ->
     @urlRoot = url
@@ -228,7 +229,6 @@ class CircleViewList extends Backbone.View
     @circles.each (model) =>
       model.trigger("remove_user", user_id)
 
-exports.Circle = Circle
-exports.CircleList = CircleList
-exports.CircleViewList = CircleViewList
-exports
+root.Circle = Circle
+root.CircleList = CircleList
+root.CircleViewList = CircleViewList

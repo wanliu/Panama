@@ -25,3 +25,4 @@
 #= require lib/jquery.countdown-zh-CN
 #= require lib/state_progress
 #= require lib/countdown
+#= require category

@@ -24,8 +24,10 @@
 //= require lib/notify
 //= require commit_comment
 //= require lib/at_who
+//= require lib/jquery.treeview
+//= require lib/jquery.cookie
 
-exports = window || this;
+root = window || this;
 
 var panle_modal = $("#login-modal");
 AjaxAuthClient.setupRetrieveLoginUrlCallback(function(url){
@@ -56,7 +58,7 @@ AjaxAuthClient.registreLoadCreateUser(function(){
     load_modal_head_with_height("用户注册", "310px");
 })
 
-exports.loadPage = function(query, url){
+root.loadPage = function(query, url){
     $.get(url, {ajaxify: true}, function(data){
         $(query).replaceWith(data);
     });

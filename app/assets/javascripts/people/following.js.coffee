@@ -2,7 +2,7 @@
 #= require jquery
 #= require backbone
 
-exports = window || @
+root = window || @
 
 class Follow extends Backbone.Model
   follow_type: null
@@ -69,5 +69,5 @@ class FollowListView extends Backbone.View
         el: $(tr)
       )
 
-exports.FollowListView = FollowListView
-exports
+root.FollowListView = FollowListView
+root
