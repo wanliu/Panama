@@ -1,5 +1,3 @@
-#= require jquery
-#= require backbone
 #= require lib/transaction_card_base
 #= require lib/state-machine
 #= require lib/chosen.jquery

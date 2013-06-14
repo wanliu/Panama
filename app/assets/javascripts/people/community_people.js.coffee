@@ -1,6 +1,4 @@
 #describe: 个人社区找人
-#= require jquery
-#= require backbone
 #= require circle
 #= require circle_search_user
 #= require jquery-ui

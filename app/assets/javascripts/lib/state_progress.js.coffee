@@ -1,6 +1,4 @@
 #交易订单进度条
-#= require jquery
-#= require backbone
 
 class Badge extends Backbone.View
   tagName: "span"

@@ -1,6 +1,4 @@
 #describe 买家退货
-#= require jquery
-#= require backbone
 #= require lib/transaction_card_base
 
 root = window || @

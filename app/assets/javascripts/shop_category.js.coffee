@@ -1,6 +1,4 @@
 #describe: 商店帖子分类
-#= require jquery
-#= require backbone
 
 root = window || @
 

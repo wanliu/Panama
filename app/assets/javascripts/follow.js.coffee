@@ -1,6 +1,3 @@
-#= require jquery
-#= require backbone
-
 root = window || @
 
 class Follow extends Backbone.View

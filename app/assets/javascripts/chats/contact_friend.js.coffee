@@ -1,6 +1,4 @@
 #describe: 最近联系人
-#= require jquery
-#= require backbone
 #= require chats/dialogue
 #= require lib/realtime_client
 

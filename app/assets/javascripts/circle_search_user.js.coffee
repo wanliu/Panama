@@ -1,6 +1,4 @@
 #describe: 搜索用户
-#= require jquery
-#= require backbone
 
 class UserList extends Backbone.Collection
   url: "/search/users"

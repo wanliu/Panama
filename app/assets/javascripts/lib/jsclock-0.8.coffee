@@ -72,7 +72,6 @@
 #
 # TODO: see ROADMAP file in this distribution.
 #
-#= require jquery
 
 $ = jQuery
 $.fn.jsclock = (sTime, oConfig) ->

@@ -1,5 +1,3 @@
-#= require jquery
-#= require backbone
 #= require lib/state-machine
 #= require lib/state-view
 #= require lib/jsclock-0.8

@@ -1,6 +1,4 @@
 #交易付款
-#= require jquery
-#= require backbone
 
 class TransactionPayment extends Backbone.View
 
