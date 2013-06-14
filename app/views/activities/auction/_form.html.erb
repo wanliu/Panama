@@ -3,7 +3,7 @@
 
   <%= f.input :product,
               :label => "商品",
-              :input_html => { class: :product, placeHolder: '请输入商品名称或条码...' } %>
+              :input_html => { class: :product, placeHolder: '请输入商品名称...' } %>
 
   <div class="control-group string optional" style='margin: 0;'>
     <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
@@ -66,32 +66,35 @@
             xhr.overrideMimeType("text/json; charset=x-user-defined");
           }
         }).success(function (data) {
-          var select_ul = "";
           if (data.length > 0) {
             $.each(data, function(){
-              select_ul += '<li product_id="' + this.id + '" '
-                            + 'product_price="' + this.price + '" '
-                            + '><a tabindex="-1" href="javascript: void(0);">'
-                            + this.title + '</a></li>';
+              select_ul = '<li product_id="' + this.id + '" '
+                          + 'product_price="' + this.price + '" '
+                          + '><a tabindex="-1" href="javascript: void(0);">'
+                          + this.title + '</a></li>';
             })
+            $('ul.product_selector').html(select_ul);
+            $('ul.product_selector').show();
+          } else {
+            $('ul.product_selector').hide();
           }
-          select_ul = select_ul || '<li><a tabindex="-1" href="javascript: void(0);">没有相关商品！</a></li>';
-          $('ul.product_selector').html(select_ul);
-          $('ul.product_selector').show();
         });
 
         // 侦测那个商品被选择, 根据选择的商品更新相关信息
         $('ul.product_selector>li').live('click', function(){
           if (!$(this).attr('product_id')) return;
-          var product_id = $(this).attr('product_id');
-          var product_price = $(this).attr('product_price');
-          var product_name = $(this).text()
 
-          $('#activity_product').val(product_name);
+          var product_id = $(this).attr('product_id');
           $('#activity_product_id').val(product_id);
+
+          var product_price = $(this).attr('product_price');
           $('#activity_price').val(product_price);
           $('#activity_activity_price').val(product_price);
-          $('#activity_activity_name').val(product_name + 'jingjia');
+
+          var product_name = $(this).text();
+          $('#activity_product').val(product_name);
+          $('#activity_description').val(product_name + '竞价');
+
           $('ul.product_selector').hide();
         })
       });
