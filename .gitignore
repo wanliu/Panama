@@ -21,5 +21,6 @@
 /vendor/cache
 /public/uploads
 /public/attachment
+/public/assets
 /config/email.yml
 /config/application.yml
