@@ -1,3 +1,6 @@
+<% content_for :javascripts do %>
+  <%= javascript_include_tag "activities" %>
+<% end %>
 <div id="activities" >
   <%= render :partial => "activity", :collection => @activities %>
 </div>
@@ -8,7 +11,7 @@
 <% end %>
 <br />
 <script type="text/javascript">
-  require(['jquery','lib/mousemove', 'jquery.masonry', 'lib/image_natural_size','lib/chosen.ex'], function($,Mousemove){
+
     var $container = $('#activities');
 
     $container.imagesLoaded( function(){
@@ -44,6 +47,5 @@
       .addClass('animated ' + effect);
     })
 
-    new Mousemove.Drag
-  });
+    new Drag
 </script>

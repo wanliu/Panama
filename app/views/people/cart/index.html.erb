@@ -1,4 +1,7 @@
 <% active_section :cart %>
+<% content_for :javascript do %>
+	<%= javascript_include_tag :modify_number %>
+<% end %>
 <div class="page-header">
   <h1>购物车 <small>你挑选的宝贝都在这里吗?</small></h1>
 </div>
@@ -13,18 +16,16 @@
 			<div class="span10" style="padding-top:25px;">
 				<h1 class="span2"><%= item.title %></h1>
 				<!--xifengzhu-->
-				<%= simple_form_for item, :url =>""  do |f| %>	
+				<%= simple_form_for item, :url =>""  do |f| %>
 					<div class="control-group span2">
               <label class="control-label" for="inputEmail">数量</label>
               <div class="controls">
                 <%= f.input :amount, :value =>item.amount, :as => :spinner,input_html: {:panel_class =>"amount_#{item.id}"} %>
               </div>
               <script type="text/javascript">
-                require(['jquery','modify_number'], function($,ChangeNumber){
                   new ChangeNumber({
                     el : $(".product-item-<%=item.id %>"),
                     login : "<%=current_user.login %>"})
-                });
               </script>
 			    </div>
         <% end %>
@@ -39,7 +40,7 @@
 						:remote => true,
 						:class => "btn btn-mini" %>
 				</div>
-			</div> 
+			</div>
 		</div>
 	</div>
 <% end %>

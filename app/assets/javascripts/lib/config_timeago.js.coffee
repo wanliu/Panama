@@ -1,7 +1,7 @@
+#=require jquery
+#=require lib/jquery.timeago
 
-define ["jquery", "timeago"], ($) ->
-
-  $.extend($.timeago.settings.strings, {
+$.extend $.timeago.settings.strings, {
     suffixAgo: "前",
     suffixFromNow: "刚刚",
     seconds: "不到1分钟",
@@ -15,4 +15,4 @@ define ["jquery", "timeago"], ($) ->
     months: "%d月",
     year: "1年",
     years: "%d年",
-  })
+}

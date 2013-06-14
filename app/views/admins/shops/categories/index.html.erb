@@ -16,8 +16,6 @@
 </div>
 <%= register_javascript :category_tools do %>
 <script type="text/javascript">
-	require(['jquery', 'admins/shops/categories', 'models/form_model'], function($, Category, FormModel){
-
 		var $trs = $("#table tr:gt(0)");
 		$trs.each(function(i, tr){
 			var models = new FormModel.ObjectFormModel($(tr).find("form"), "category");
@@ -34,6 +32,5 @@
 			var data = row.render('new');
 			tr.replaceWith(data);
 		});
-	});
 </script>
 <% end %>

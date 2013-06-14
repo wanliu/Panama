@@ -5,6 +5,8 @@
 
 <body class="<%= controller.controller_name %>">
   <%= javascript_include_tag "activities" %>
+  <%= javascript_include_tag faye_server_uri + "/client.js" %>
+
   <%= render "header-fluid" %>
   <%= render "main_nav-fluid" %>
   <div id="content" class="relative">

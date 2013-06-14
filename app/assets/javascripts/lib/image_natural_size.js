@@ -1,28 +1,26 @@
-define(['jquery'], function($){
+//= require jquery
+var
+props = ['Width', 'Height'],
+prop;
 
-  var
-  props = ['Width', 'Height'],
-  prop;
+while (prop = props.pop()) {
+  (function (natural, prop) {
+    $.fn[natural] = (natural in new Image()) ?
+    function () {
+      return this[0][natural];
+    } :
+    function () {
+      var
+      node = this[0],
+      img,
+      value;
 
-  while (prop = props.pop()) {
-    (function (natural, prop) {
-      $.fn[natural] = (natural in new Image()) ? 
-      function () {
-        return this[0][natural];
-      } : 
-      function () {
-        var 
-        node = this[0],
-        img,
-        value;
-
-        if (node.tagName.toLowerCase() === 'img') {
-          img = new Image();
-          img.src = node.src,
-          value = img[prop];
-        }
-        return value;
-      };
-    }('natural' + prop, prop.toLowerCase()));
-  }
-});
+      if (node.tagName.toLowerCase() === 'img') {
+        img = new Image();
+        img.src = node.src,
+        value = img[prop];
+      }
+      return value;
+    };
+  }('natural' + prop, prop.toLowerCase()));
+}

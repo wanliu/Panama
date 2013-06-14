@@ -24,7 +24,6 @@
     </div>
   </div>
   <script type="text/javascript">
-    require(["jquery", "chats/chat"], function($, ChatView){
       var chat_view = new ChatView({
         el: $(".chat_dialog_panel")
       })
@@ -44,7 +43,6 @@
       })
 
       chat_view.fetch()
-    })
   </script>
 <% else %>
   <div>无效的聊天框口</div>

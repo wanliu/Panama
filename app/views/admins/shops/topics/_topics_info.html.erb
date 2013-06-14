@@ -49,14 +49,6 @@
 <% circle_id = circle.is_a?(Circle) ? circle.id : circle %>
 
 <script type='text/javascript'>
-  require([
-    "jquery",
-    "lib/chose-friend",
-    "topic",
-    "lib/attachment_upload",
-    "lib/hogan"
-  ], function($, ChoseFriend, TopicViewList, AttachmentUpload){
-
     $(".friend-context").choseFriend({
       circle: {
         data: "<%=shop_admins_circles_path(current_shop.name) %>",
@@ -96,7 +88,6 @@
       el: $(".topic_upload"),
       remote: "<%=attachments_path %>"
     })
-  })
 </script>
 
 

@@ -130,16 +130,13 @@ module Admins::Shops::ProductsHelper
     def render_prices_table(columns)
         javascript_tag <<-JAVASCRIPT
 
-            require(['lib/table_bander'], function(tblBander){
+            var bander = new TableBander({
+                // els : [$('div.colours'), $('div.sizes')],
+                els    : $("form div[price_attrib*=prices]").map(function(i, ele) { return $(ele); }),
+                fields : [{title: '价格', value: 'price'}, {title: '数量', value: 'quantity'}],
+                depth  : #{columns.to_json}
+            });
 
-                var bander = new tblBander.TableBander({
-                    // els : [$('div.colours'), $('div.sizes')],
-                    els    : $("form div[price_attrib*=prices]").map(function(i, ele) { return $(ele); }),
-                    fields : [{title: '价格', value: 'price'}, {title: '数量', value: 'quantity'}],
-                    depth  : #{columns.to_json}
-                });
-
-            })
 
             #{generate_prices_table}
 
@@ -158,11 +155,11 @@ module Admins::Shops::ProductsHelper
     end
 
     def render_data_table(objects)
-        """require(['lib/data_2_table'], function(data2table){
-            var load = new data2table.Data2Table({
+        """
+            var load = new Data2Table({
                 collection : #{objects.to_json}
             })
-        })""".html_safe
+        """.html_safe
     end
 
     def property_palette(form, field)

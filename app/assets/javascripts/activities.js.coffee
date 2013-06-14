@@ -3,6 +3,8 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 #= require twitter/bootstrap/affix
-
-require ['jquery', 'twitter/bootstrap'], ($) ->
-
+#= require jquery
+#= require jquery.masonry
+#= require lib/mousemove
+#= require lib/image_natural_size
+#= require lib/chosen.ex

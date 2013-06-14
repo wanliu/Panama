@@ -1,3 +1,7 @@
+<% content_for :javascripts do %>
+	<%= javascript_include_tag 'lib/data_2_table' %>
+	<%= javascript_include_tag 'lib/table_bander' %>
+<% end %>
 <div id="page" >
 	<div class="row-fluid">
 		<div class="btn-toolbar">
@@ -10,7 +14,7 @@
 				    <input type="text" class=" search-query">
 				    <button type="submit" class="btn">Search</button>
 				  </div>
-				</form>				
+				</form>
 			</div>
 		</div>
 	</div>
@@ -40,25 +44,18 @@
 
 <%= register_javascript :products_tools do %>
 <script type="text/javascript">
-	require([
-		'jquery-ui', 
-		'admins/shops/products', 
-		'models/attribute_model'
-		], function($, Products, AttributeModel){
-		var urlRoot = '<%= shop_admins_products_path %>';
-		var $trs = $("#category_tree tr:gt(0)");
-		$trs.each(function(i, tr){
-			// var models = FormToModel($(tr).find("form"), "category");
-			// var model = new Category.Model(models)
-			var model = new AttributeModel(tr)
-			new Products.CategoryMiniRow({el: tr, model: model, urlRoot: urlRoot});
-		});
+	var urlRoot = '<%= shop_admins_products_path %>';
+	var $trs = $("#category_tree tr:gt(0)");
+	$trs.each(function(i, tr){
+		// var models = FormToModel($(tr).find("form"), "category");
+		// var model = new Category.Model(models)
+		var model = new AttributeModel(tr)
+		new Products.CategoryMiniRow({el: tr, model: model, urlRoot: urlRoot});
+	});
 
-		$("#new_product").on("click", function(){
-			var row = new Products.ProductRow({urlRoot: urlRoot})
-			row.newProduct();
-		});
-
+	$("#new_product").on("click", function(){
+		var row = new Products.ProductRow({urlRoot: urlRoot})
+		row.newProduct();
 	});
 </script>
 <% end %>

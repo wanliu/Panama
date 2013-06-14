@@ -2,17 +2,13 @@
   <%= render "context", :refund => refund %>
 <% end %>
 <script type='text/javascript'>
-  require(["jquery", "admins/shops/shop_order_refund_card"]
-    , function($, ShopOrderRefundCard){
-
-      $(".transaction").each(function(i, elem){
-        new ShopOrderRefundCard({
-          el: elem,
-          realtime: {
-            url: '<%= faye_server_uri %>',
-            token: '<%= token %>'
-          }
-        })
-      })
+  $(".transaction").each(function(i, elem){
+    new ShopOrderRefundCard({
+      el: elem,
+      realtime: {
+        url: '<%= faye_server_uri %>',
+        token: '<%= token %>'
+      }
+    })
   })
 </script>

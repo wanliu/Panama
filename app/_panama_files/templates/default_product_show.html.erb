@@ -3,9 +3,7 @@
 		<%= image_tag @product.photos.preview, :id => 'zoom_01', "data-zoom-image" => "http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg" %>
 	</div>
 	<script type="text/javascript">
-		require(['jquery', 'lib/JNMagnifier'], function($){
-			$("#zoom_01").elevateZoom();
-		});
+		$("#zoom_01").elevateZoom();
 	</script>
 	<div class="container-fluid property">
 		<div class="row-fluid">
@@ -33,13 +31,11 @@
  						<div class="controls">
 							<p class="star"></p>
 							<script type="text/javascript">
-								require(['jquery', 'lib/jquery.raty'], function($){
-									$(".star").raty({
-										readOnly : true,
-										score    : 4,
-										path     : "<%= asset_path 'raty' %>"
-									})
-								});
+								$(".star").raty({
+									readOnly : true,
+									score    : 4,
+									path     : "<%= asset_path 'raty' %>"
+								})
 							</script>
 						</div>
 					</div>
