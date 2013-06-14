@@ -24,9 +24,9 @@ class ProductsController < ApplicationController
   end
 
   def base_info
-    product = Product.find(params[:id])
+    @product = Product.find(params[:id])
     respond_to do |format|
-      format.json { render json: { product: product.as_json, attachments: product.format_attachment("140x140") } }
+      format.json{ render :json => @product }
     end
   end
 

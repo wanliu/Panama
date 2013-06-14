@@ -1,1 +1,1 @@
-#= require lib/activity_upload
+#= require lib/activity_base_info

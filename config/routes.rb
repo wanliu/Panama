@@ -135,6 +135,7 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :product_search
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
