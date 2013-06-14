@@ -1,7 +1,7 @@
 #describe 买家退货
-#= require jquery
-#= require backbone
 #= require lib/transaction_card_base
+
+root = window || @
 
 class OrderRefundCard extends TransactionCardBase
 
@@ -41,3 +41,4 @@ class OrderRefundCard extends TransactionCardBase
         @slideAfterEvent(event)
     )
 
+root.OrderRefundCard = OrderRefundCard

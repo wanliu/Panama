@@ -1,12 +1,13 @@
 //= require jquery
 //= require jquery-ui
+//= require lib/jquery.raty
 //= require lib/underscore
 //= require backbone
 //= require h5bp
+//= require lib/hogan
 //= require lib/chosen.ex
 //= require lib/postmessage
 //= require wanliu/ajax_auth_client
-//= require lib/config_timeago
 //= require lib/realtime_client
 //= require twitter/bootstrap/dropdown
 //= require chats/contact

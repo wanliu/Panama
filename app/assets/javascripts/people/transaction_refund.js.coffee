@@ -1,7 +1,5 @@
 #交易退货
-#= require jquery
-#= require backbone
-#= require notify
+#= require lib/notify
 
 class TransactionRefund extends Backbone.Model
   set_url: (url) ->
@@ -90,5 +88,4 @@ class TransactionRefundView extends Backbone.View
       type: type
     });
 
-
-
+window.TransactionRefundView = TransactionRefundView
