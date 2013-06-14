@@ -1,62 +1,65 @@
-define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
+#= require jquery
+#= require backbone
 
-	class AbstractFormModel extends Backbone.Model
+exports = window || @
 
-		constructor: (@el, @options) ->
-			super(@options)
-			
+class AbstractFormModel extends Backbone.Model
 
-		fetchAttributes: (el) ->
-			attributes = {}
-			$(el).find(":input").each (i, input) =>
-				name = $(input).attr "name"
-				value = $(input).attr "value"
-				attributes[name] = value
-			attributes
+	constructor: (@el, @options) ->
+		super(@options)
 
-		to_hash: () ->
-			@attributes
 
-	class FormModel extends AbstractFormModel
+	fetchAttributes: (el) ->
+		attributes = {}
+		$(el).find(":input").each (i, input) =>
+			name = $(input).attr "name"
+			value = $(input).attr "value"
+			attributes[name] = value
+		attributes
 
-		constructor: (@el, @options) ->
-			@set @fetchAttributes(@el)
-			super @options
+	to_hash: () ->
+		@attributes
 
-	class ObjectFormModel extends AbstractFormModel
+class FormModel extends AbstractFormModel
 
-		PAPAMS_NAME_REGEXP = /(\w+)\[(\w+)\]/
+	constructor: (@el, @options) ->
+		@set @fetchAttributes(@el)
+		super @options
 
-		constructor: (@el, @objectName, @options) ->
-			super @el, @options
+class ObjectFormModel extends AbstractFormModel
 
-			attributes = @fetchAttributes @el
-			@cleanupMember attributes
+	PAPAMS_NAME_REGEXP = /(\w+)\[(\w+)\]/
 
-		cleanupMember: (attributes) ->
+	constructor: (@el, @objectName, @options) ->
+		super @el, @options
 
-			for attr_name, value of attributes
-				field_name = @filterName attr_name
-				if field_name?
-					@set field_name, value
-				else
-					@trigger('cleanup_member', @, {name : attr_name, value: value})
+		attributes = @fetchAttributes @el
+		@cleanupMember attributes
 
-		filterName: (name) ->
-			if PAPAMS_NAME_REGEXP.test name
-				m = name.match(PAPAMS_NAME_REGEXP)
-				object_name = m[1]
-				if object_name == @objectName
-					m[2]
+	cleanupMember: (attributes) ->
 
-		to_hash: () ->
-			results = {}
-			for attr, value of @attributes
-				name = "#{@objectName}[#{attr}]"
-				results[name] = value
-			results
+		for attr_name, value of attributes
+			field_name = @filterName attr_name
+			if field_name?
+				@set field_name, value
+			else
+				@trigger('cleanup_member', @, {name : attr_name, value: value})
 
-	exports.AbstractFormModel = AbstractFormModel
-	exports.FormModel = FormModel
-	exports.ObjectFormModel = ObjectFormModel
-	exports
+	filterName: (name) ->
+		if PAPAMS_NAME_REGEXP.test name
+			m = name.match(PAPAMS_NAME_REGEXP)
+			object_name = m[1]
+			if object_name == @objectName
+				m[2]
+
+	to_hash: () ->
+		results = {}
+		for attr, value of @attributes
+			name = "#{@objectName}[#{attr}]"
+			results[name] = value
+		results
+
+exports.AbstractFormModel = AbstractFormModel
+exports.FormModel = FormModel
+exports.ObjectFormModel = ObjectFormModel
+exports

@@ -1,3 +1,3 @@
-
-define ['backbone'], (Backbone) ->
-	class AbstractView extends Backbone.View
+#= require backbone
+exports = window || @
+class exports.AbstractView extends Backbone.View

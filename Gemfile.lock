@@ -19,7 +19,7 @@ GIT
       railties (~> 3.1)
 
 GEM
-  remote: http://ruby.taobao.org/
+  remote: https://rubygems.org/
   specs:
     ac_uniquify (0.1.0)
     actionmailer (3.2.8)
@@ -185,8 +185,8 @@ GEM
       activesupport (>= 3.0)
       request_store (~> 1.0.3)
     ejs (1.1.1)
-    em-hiredis (0.1.0)
-      hiredis (~> 0.3.0)
+    em-hiredis (0.2.1)
+      hiredis (~> 0.4.0)
     em-http-request (1.0.3)
       addressable (>= 2.2.3)
       cookiejar
@@ -216,8 +216,8 @@ GEM
       faye-websocket (>= 0.4.0)
       rack (>= 1.0.0)
       yajl-ruby (>= 1.0.0)
-    faye-redis (0.1.0)
-      em-hiredis (>= 0.0.1)
+    faye-redis (0.1.1)
+      em-hiredis (>= 0.2.0)
       eventmachine (>= 0.12.0)
       yajl-ruby (>= 1.0.0)
     faye-websocket (0.4.7)
@@ -252,7 +252,7 @@ GEM
     highline (1.6.15)
     hike (1.2.1)
     hirb (0.7.1)
-    hiredis (0.3.2)
+    hiredis (0.4.5)
     hooks (0.2.2)
     html5-rails (0.0.6)
       jquery-rails (>= 2.0)
@@ -389,8 +389,6 @@ GEM
     redcarpet (2.2.2)
     redis (2.2.2)
     request_store (1.0.5)
-    requirejs-rails (0.9.1)
-      railties (>= 3.1.1, < 3.3)
     responders (0.9.3)
       railties (~> 3.1)
     rest-client (1.6.7)
@@ -503,7 +501,7 @@ DEPENDENCIES
   factory_girl_rails
   fakefs
   faye
-  faye-redis
+  faye-redis (~> 0.1.1)
   friendly_id (~> 4.0.9)
   geocoder!
   github-markup (~> 0.7.4)
@@ -513,7 +511,7 @@ DEPENDENCIES
   guard-rspec
   guard-spork
   hirb (~> 0.7.0)
-  hiredis (~> 0.3.1)
+  hiredis (~> 0.4.0)
   html5-rails (~> 0.0.6)
   jasmine
   kaminari (~> 0.14.1)
@@ -536,7 +534,6 @@ DEPENDENCIES
   rb-readline (~> 0.4.2)
   redcarpet (~> 2.2.2)
   redis (~> 2.2.0)
-  requirejs-rails (~> 0.9.0)
   rest-client (~> 1.6.7)
   rspec (~> 2.12.0)
   rspec-rails (~> 2.12.0)

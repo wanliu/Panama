@@ -1,3 +1,5 @@
+<%= javascript_include_tag :people %>
+<%= javascript_include_tag "people/people_side" %>
 <div id='people-sidebar' class="span3 leftfix">
   <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
   <h1><%= @people.login %></h1>
@@ -78,21 +80,15 @@
     <li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>
   </ul>
   <script type="text/javascript">
-    require(['jquery'], function($){
-      $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
-    });
+    $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
 
-    require(["jquery", "people"], function($, following){
-      new following({
-        login: "<%= current_user.login %>",
-        people_id: "<%= @people.id %>",
-        follow_type: "User",
-        el: $(".isfollowing") })
-    });
+    new Follow({
+      login: "<%= current_user.login %>",
+      people_id: "<%= @people.id %>",
+      follow_type: "User",
+      el: $(".isfollowing") })
 
-    require(["jquery", "people/people_side"], function($, PeopleSide){
-      var people_side = new PeopleSide.PeopleSideView({ el: $("#people-sidebar")});
-    });
+    var people_side = new PeopleSideView({ el: $("#people-sidebar")});
 
   </script>
   </div>

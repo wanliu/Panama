@@ -4,7 +4,7 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => ["people"] %>
 <body class="<%= controller.controller_name %>">
-
+  <%= javascript_include_tag faye_server_uri + "/client.js" %>
   <%= render "header-fluid" %>
   <%= render "category_breadcrumbs" %>
   <div id='wrapper' class='container-fluid'>

@@ -51,13 +51,9 @@
   </div>
 </div>
 <script text='text/javascript'>
-  require([
-    "jquery", "backbone" ,
-    "admins/shops/community_people" ,"lib/hogan"], function($, Backbone, CommunityPeopleView){
-      new CommunityPeopleView({
-        el: $(".shop_community_people"),
-        remote_url: "<%=shop_admins_circles_path(current_shop.name) %>",
-        circle_template: Hogan.compile("<%=j render :partial =>'circles/info' %>")
-      })
-    })
+  new CommunityPeopleView({
+    el: $(".shop_community_people"),
+    remote_url: "<%=shop_admins_circles_path(current_shop.name) %>",
+    circle_template: Hogan.compile("<%=j render :partial =>'circles/info' %>")
+  })
 </script>

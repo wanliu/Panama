@@ -1,200 +1,204 @@
 #describe: 商店社区找人
-define ["jquery", "backbone", "circle", "circle_search_user"],
- ($, Backbone, exports, SearchUserView) =>
-  class YouCircleUserView extends Backbone.View
-    events: {
-      "click .remove_you_user" : "delete_user"
-    }
-    className: "you_circle_user circle_friend"
+#= require jquery
+#= require backbone
+#= require circle
+#= require circle_search_user
+exports = window || @
 
-    initialize: (options) ->
-      _.extend(@, options)
-      @$el = $(@el)
-      @user_list = new exports.CircleList([], @remote_url)
-      @user_list.bind("reset", @all, @)
-      @user_list.bind("add", @add, @)
-      @user_list.bind("remove", @remove, @)
-      @refresh()
+class YouCircleUserView extends Backbone.View
+  events: {
+    "click .remove_you_user" : "delete_user"
+  }
+  className: "you_circle_user circle_friend"
 
-    render: () ->
-      @$el
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    @user_list = new exports.CircleList([], @remote_url)
+    @user_list.bind("reset", @all, @)
+    @user_list.bind("add", @add, @)
+    @user_list.bind("remove", @remove, @)
+    @refresh()
 
-    add: (model) ->
-      model.set_url(@remote_url)
-      @$el.append( @template(model) )
+  render: () ->
+    @$el
 
-    all: (collection) ->
-      @$el.html('')
-      collection.each (model) =>
-        @add(model)
-      @bind_drop()
-      @inspect_notice()
+  add: (model) ->
+    model.set_url(@remote_url)
+    @$el.append( @template(model) )
 
-    template: (model) ->
-      "<span class='panel-pj you_circle_user' data-value-id='#{model.id}'>
-        <img src='#{model.get('icon_url')}' class='img-polaroid'  />
-        <span class='login'>#{model.get('login')}</span>
-        <a href='javascript:void(0)' class='close-label remove_you_user'></a>
-      </span>"
+  all: (collection) ->
+    @$el.html('')
+    collection.each (model) =>
+      @add(model)
+    @bind_drop()
+    @inspect_notice()
 
-    show: () ->
-      @$el.show()
+  template: (model) ->
+    "<span class='panel-pj you_circle_user' data-value-id='#{model.id}'>
+      <img src='#{model.get('icon_url')}' class='img-polaroid'  />
+      <span class='login'>#{model.get('login')}</span>
+      <a href='javascript:void(0)' class='close-label remove_you_user'></a>
+    </span>"
 
-    hide: () ->
-      @$el.hide()
+  show: () ->
+    @$el.show()
 
-    refresh: () ->
-      @user_list.all_friends()
-    inspect_notice: () ->
-      if @user_list.length <= 0
-        @$el.html("暂时没有用户...")
+  hide: () ->
+    @$el.hide()
 
-    bind_drop: () ->
-      @$el.find(".you_circle_user").draggable({
-        helper: 'clone',
-        opacity: 0.7,
-        revert: true,
-        revertDuration: 200,
-        zIndex: 1
-      })
+  refresh: () ->
+    @user_list.all_friends()
+  inspect_notice: () ->
+    if @user_list.length <= 0
+      @$el.html("暂时没有用户...")
 
-    delete_user: (event) ->
-      span = $(event.currentTarget.parentElement)
-      model = @user_list.get(span.attr("data-value-id"))
-      if model?
-        if confirm("是否确认删除#{model.get('login')}?")
-          model.circles_remove_friend (model, data) =>
-            @user_list.remove model
-            span.remove()
+  bind_drop: () ->
+    @$el.find(".you_circle_user").draggable({
+      helper: 'clone',
+      opacity: 0.7,
+      revert: true,
+      revertDuration: 200,
+      zIndex: 1
+    })
 
-    remove: (model) ->
-      @trigger("remove_user", model.id)
-      @inspect_notice()
+  delete_user: (event) ->
+    span = $(event.currentTarget.parentElement)
+    model = @user_list.get(span.attr("data-value-id"))
+    if model?
+      if confirm("是否确认删除#{model.get('login')}?")
+        model.circles_remove_friend (model, data) =>
+          @user_list.remove model
+          span.remove()
 
-
-  class FollowingUserView extends Backbone.View
-    className: "follow_user circle_friend"
-    initialize: (options) ->
-      _.extend(@, options)
-      @$el = $(@el)
-      @followers_list = new exports.CircleList([], @remote_url)
-      @followers_list.bind("reset", @all, @)
-      @followers_list.bind("add", @add, @)
-      @refresh()
-
-    all: (collection) ->
-      @$el.html('')
-      collection.each (model) =>
-        @add model
-
-      @bind_drop()
-      @inspect_notice()
-
-    add: (model) ->
-      model.set_url(@remote_url)
-      @$el.append(@template(model))
-
-    render: () ->
-      @$el
-
-    show: () ->
-      @$el.show()
-
-    hide: () ->
-      @$el.hide()
-
-    template: (model) ->
-      "<span class='panel-pj follow_user' data-value-id='#{model.id}'>
-        <img src='#{model.get('icon_url')}' class='img-polaroid'  />
-        <span class='login'>#{model.get('login')}</span>
-      </span>"
-
-    refresh: () ->
-      @followers_list.followers()
-
-    inspect_notice: () ->
-      if @followers_list.length <= 0
-        @$el.html('暂时没有关注的用户...')
-
-    bind_drop: () ->
-      @$el.find(".follow_user").draggable({
-        helper: 'clone',
-        opacity: 0.7,
-        revert: true,
-        revertDuration: 200,
-        zIndex: 1
-      })
+  remove: (model) ->
+    @trigger("remove_user", model.id)
+    @inspect_notice()
 
 
-  class CircleFriendView extends Backbone.View
-    events: {
-      "click .you_circle_user" : "show_circle_user"
-      "click .follow_user" : "show_follow_user"
-    }
+class FollowingUserView extends Backbone.View
+  className: "follow_user circle_friend"
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    @followers_list = new exports.CircleList([], @remote_url)
+    @followers_list.bind("reset", @all, @)
+    @followers_list.bind("add", @add, @)
+    @refresh()
 
-    initialize: (options) ->
-      _.extend(@, options)
-      @circle_user_panel = @$(".circle_user_panel")
+  all: (collection) ->
+    @$el.html('')
+    collection.each (model) =>
+      @add model
 
-      @search_user_view = new SearchUserView( input_el: @$('.search_user') )
-      @follow_view = new FollowingUserView(remote_url: @remote_url)
-      @you_circle_view = new YouCircleUserView(remote_url: @remote_url)
+    @bind_drop()
+    @inspect_notice()
 
-      @you_circle_view.bind("remove_user", _.bind(@remove_user, @))
-      @search_user_view.bind("switch_show", _.bind(@switch_show, @))
-      @search_user_view.bind("hide_all", _.bind(@hide_all, @))
+  add: (model) ->
+    model.set_url(@remote_url)
+    @$el.append(@template(model))
 
-      @circle_user_panel.append(@search_user_view.render())
-      @circle_user_panel.append(@follow_view.render())
-      @circle_user_panel.append(@you_circle_view.render())
+  render: () ->
+    @$el
 
-    show_circle_user: () ->
-      @clear_active()
-      @$(".you_circle_user").addClass("active")
-      @follow_view.hide()
-      @search_user_view.hide()
-      @you_circle_view.show()
-      @you_circle_view.refresh()
+  show: () ->
+    @$el.show()
 
-    show_follow_user: () ->
-      @clear_active()
-      @$(".follow_user").addClass("active")
-      @you_circle_view.hide()
-      @search_user_view.hide()
-      @follow_view.show()
-      @follow_view.refresh()
+  hide: () ->
+    @$el.hide()
 
-    clear_active: () ->
-      @$(".navs>input:button").removeClass("active")
+  template: (model) ->
+    "<span class='panel-pj follow_user' data-value-id='#{model.id}'>
+      <img src='#{model.get('icon_url')}' class='img-polaroid'  />
+      <span class='login'>#{model.get('login')}</span>
+    </span>"
 
-    switch_show: () ->
-      @$(".navs>input:button.active").click()
+  refresh: () ->
+    @followers_list.followers()
 
-    hide_all: () ->
-      @you_circle_view.hide()
-      @follow_view.hide()
+  inspect_notice: () ->
+    if @followers_list.length <= 0
+      @$el.html('暂时没有关注的用户...')
 
-    remove_user: (user_id) ->
-      @trigger("remove_user", user_id)
+  bind_drop: () ->
+    @$el.find(".follow_user").draggable({
+      helper: 'clone',
+      opacity: 0.7,
+      revert: true,
+      revertDuration: 200,
+      zIndex: 1
+    })
 
-  class CommunityPeopleView extends Backbone.View
 
-    initialize: (options) ->
-      _.extend(@, options)
-      @circle_panel = @$(".circle-panel")
-      @friends_panel = @$(".friends_panel")
+class CircleFriendView extends Backbone.View
+  events: {
+    "click .you_circle_user" : "show_circle_user"
+    "click .follow_user" : "show_follow_user"
+  }
 
-      @circle_view_list = new exports.CircleViewList(
-        el: @circle_panel,
-        remote_url: @remote_url,
-        template: @circle_template
-      )
+  initialize: (options) ->
+    _.extend(@, options)
+    @circle_user_panel = @$(".circle_user_panel")
 
-      @circle_friend_view = new CircleFriendView({
-        el: @friends_panel,
-        remote_url: @remote_url
-      })
-      @circle_friend_view.bind("remove_user",
-        _.bind(@circle_view_list.remove_all_circle_user, @circle_view_list))
-      @circle_friend_view.show_circle_user()
+    @search_user_view = new SearchUserView( input_el: @$('.search_user') )
+    @follow_view = new FollowingUserView(remote_url: @remote_url)
+    @you_circle_view = new YouCircleUserView(remote_url: @remote_url)
+
+    @you_circle_view.bind("remove_user", _.bind(@remove_user, @))
+    @search_user_view.bind("switch_show", _.bind(@switch_show, @))
+    @search_user_view.bind("hide_all", _.bind(@hide_all, @))
+
+    @circle_user_panel.append(@search_user_view.render())
+    @circle_user_panel.append(@follow_view.render())
+    @circle_user_panel.append(@you_circle_view.render())
+
+  show_circle_user: () ->
+    @clear_active()
+    @$(".you_circle_user").addClass("active")
+    @follow_view.hide()
+    @search_user_view.hide()
+    @you_circle_view.show()
+    @you_circle_view.refresh()
+
+  show_follow_user: () ->
+    @clear_active()
+    @$(".follow_user").addClass("active")
+    @you_circle_view.hide()
+    @search_user_view.hide()
+    @follow_view.show()
+    @follow_view.refresh()
+
+  clear_active: () ->
+    @$(".navs>input:button").removeClass("active")
+
+  switch_show: () ->
+    @$(".navs>input:button.active").click()
+
+  hide_all: () ->
+    @you_circle_view.hide()
+    @follow_view.hide()
+
+  remove_user: (user_id) ->
+    @trigger("remove_user", user_id)
+
+class CommunityPeopleView extends Backbone.View
+
+  initialize: (options) ->
+    _.extend(@, options)
+    @circle_panel = @$(".circle-panel")
+    @friends_panel = @$(".friends_panel")
+
+    @circle_view_list = new exports.CircleViewList(
+      el: @circle_panel,
+      remote_url: @remote_url,
+      template: @circle_template
+    )
+
+    @circle_friend_view = new CircleFriendView({
+      el: @friends_panel,
+      remote_url: @remote_url
+    })
+    @circle_friend_view.bind("remove_user",
+      _.bind(@circle_view_list.remove_all_circle_user, @circle_view_list))
+    @circle_friend_view.show_circle_user()
 

@@ -39,8 +39,4 @@
     </table>
     </div>
 </div>
-<script type="text/javascript">
-    require(["jquery", 'my_cart'], function($, ShoppingCart){
-        var id = "#<%= widget_id %>";
-    });
-</script>
+<%= javascript_include_tag "my_cart" %>

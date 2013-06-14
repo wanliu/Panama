@@ -1,175 +1,177 @@
 #describe: 聊天
-define ["jquery", "backbone", "lib/realtime_client", "postmessage"],
-($, Backbone, Realtime) ->
+#= require jquery
+#= requrie backbone
+#= require lib/realtime_client
+#= require lib/postmessage
 
-  class ChatMessage extends Backbone.Model
-    urlRoot: "/chat_messages"
-    create: (token, callback) ->
-      @fetch(
-        url: "#{@urlRoot}",
-        data: {chat_message: @toJSON(), authenticity_token: token}
-        type: "POST",
-        success: callback
-      )
+class ChatMessage extends Backbone.Model
+  urlRoot: "/chat_messages"
+  create: (token, callback) ->
+    @fetch(
+      url: "#{@urlRoot}",
+      data: {chat_message: @toJSON(), authenticity_token: token}
+      type: "POST",
+      success: callback
+    )
 
-    read: (friend_id, callback = (message) -> ) ->
-      @fetch(
-        url: "#{@urlRoot}/read/#{friend_id}",
-        type: "POST",
-        success: callback
-      )
+  read: (friend_id, callback = (message) -> ) ->
+    @fetch(
+      url: "#{@urlRoot}/read/#{friend_id}",
+      type: "POST",
+      success: callback
+    )
 
-  class ChatMessages extends Backbone.Collection
-    model: ChatMessage
-    url: "/chat_messages"
+class ChatMessages extends Backbone.Collection
+  model: ChatMessage
+  url: "/chat_messages"
 
-  class MessageView extends Backbone.View
-    tagName: "li",
+class MessageView extends Backbone.View
+  tagName: "li",
 
-    initialize: (options) ->
-      _.extend(@, options)
-      @$el = $(@el)
-      @send_user = @model.get("send_user")
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    @send_user = @model.get("send_user")
 
-      @init_el()
-      @init_data()
+    @init_el()
+    @init_data()
 
-    init_data: () ->
-      @message_el.append("#{@model.get('content')}")
+  init_data: () ->
+    @message_el.append("#{@model.get('content')}")
 
-    init_el: () ->
-      @$el.html("<div class='title' /><div class='message' />")
-      @title_el = @$(".title")
-      @message_el = @$(".message")
+  init_el: () ->
+    @$el.html("<div class='title' /><div class='message' />")
+    @title_el = @$(".title")
+    @message_el = @$(".message")
 
-      @title_el.append("<img src='#{@send_user.icon_url}' class='img-polaroid' />")
-      @title_el.append("<span class='login'>#{@send_user.login}</span>")
-      @title_el.append("<span class='date'>#{@format_date()}</span>")
+    @title_el.append("<img src='#{@send_user.icon_url}' class='img-polaroid' />")
+    @title_el.append("<span class='login'>#{@send_user.login}</span>")
+    @title_el.append("<span class='date'>#{@format_date()}</span>")
 
-    format_date: () ->
-      d = new Date(@model.get('created_at'))
-      today = new Date()
-      if d.format("yyyy-MM-dd") == today.format("yyyy-MM-dd")
-        d.format("h:m")
-      else
-        d.format("yyyy-MM-dd h:m")
+  format_date: () ->
+    d = new Date(@model.get('created_at'))
+    today = new Date()
+    if d.format("yyyy-MM-dd") == today.format("yyyy-MM-dd")
+      d.format("h:m")
+    else
+      d.format("yyyy-MM-dd h:m")
 
-    render: () ->
-      @$el
+  render: () ->
+    @$el
 
-  class MessageViewList extends Backbone.View
-    events: {
-      "submit form" : "send_message"
-    }
+class MessageViewList extends Backbone.View
+  events: {
+    "submit form" : "send_message"
+  }
 
-    initialize: (options) ->
-      @set_options(options)
-      @form = @$("form")
-      @content_el = @$(".dialog_content")
-      @chat_messages = new ChatMessages()
-      @chat_messages.bind("reset", @all_message, @)
-      @chat_messages.bind("add", @add_message, @)
+  initialize: (options) ->
+    @set_options(options)
+    @form = @$("form")
+    @content_el = @$(".dialog_content")
+    @chat_messages = new ChatMessages()
+    @chat_messages.bind("reset", @all_message, @)
+    @chat_messages.bind("add", @add_message, @)
 
-    fetch: () ->
-      @chat_messages.fetch(data: {friend_id: @friend.id})
+  fetch: () ->
+    @chat_messages.fetch(data: {friend_id: @friend.id})
 
-    all_message: (collection) ->
-      @content_el.find(">ul>li").remove()
-      collection.each (model) =>
-        @add_message model
+  all_message: (collection) ->
+    @content_el.find(">ul>li").remove()
+    collection.each (model) =>
+      @add_message model
 
-      @max_top()
+    @max_top()
 
-    add_message: (model) ->
-      view = new MessageView(model: model)
-      @content_el.find(">ul").append(view.render())
+  add_message: (model) ->
+    view = new MessageView(model: model)
+    @content_el.find(">ul").append(view.render())
 
-    add: (model) ->
-      @chat_messages.add(model)
-      @max_top()
+  add: (model) ->
+    @chat_messages.add(model)
+    @max_top()
 
-    read_notice:(friend_id) ->
-      m = @chat_messages.get(model.id)
-      m.read()
+  read_notice:(friend_id) ->
+    m = @chat_messages.get(model.id)
+    m.read()
 
-    set_options: (options) ->
-      _.extend(@, options)
+  set_options: (options) ->
+    _.extend(@, options)
 
-    send_message: () ->
-      data = @form_data()
-      data["receive_user_id"] = @friend.id
-      token = data.authenticity_token
-      delete(data.authenticity_token)
-      model = new ChatMessage(data)
-      model.create token, (model, data) =>
-        @add model
-        @form.find("textarea").val('')
-      false
+  send_message: () ->
+    data = @form_data()
+    data["receive_user_id"] = @friend.id
+    token = data.authenticity_token
+    delete(data.authenticity_token)
+    model = new ChatMessage(data)
+    model.create token, (model, data) =>
+      @add model
+      @form.find("textarea").val('')
+    false
 
-    form_data: () ->
-      data = {}
-      inputs = @form.serializeArray()
-      _.each inputs, (input) =>
-        data[input.name] = input.value
-      data
+  form_data: () ->
+    data = {}
+    inputs = @form.serializeArray()
+    _.each inputs, (input) =>
+      data[input.name] = input.value
+    data
 
-    max_top: () ->
-      mheight = @content_el.find(">ul").height()
-      pheight = @content_el.height()
+  max_top: () ->
+    mheight = @content_el.find(">ul").height()
+    pheight = @content_el.height()
 
-      @content_el.scrollTop(mheight-pheight)
+    @content_el.scrollTop(mheight-pheight)
 
-  class ChatView extends Backbone.View
-    on_class: "online",
-    off_class: "offline",
-    display_state: true,
-    initialize: () ->
-      @init_el()
-      @msg_view = new ChatMessage()
-      @msgs_view = new MessageViewList(el: @$content_panel)
+class ChatView extends Backbone.View
+  on_class: "online",
+  off_class: "offline",
+  display_state: true,
+  initialize: () ->
+    @init_el()
+    @msg_view = new ChatMessage()
+    @msgs_view = new MessageViewList(el: @$content_panel)
 
-    init_el: () ->
-      @$content_panel = @$(".dialog_content_panel")
-      @$head_panel = @$(".dialog_head")
-      @state_el = @$head_panel.find(">.state")
+  init_el: () ->
+    @$content_panel = @$(".dialog_content_panel")
+    @$head_panel = @$(".dialog_head")
+    @state_el = @$head_panel.find(">.state")
 
-    set_options: (options) ->
-      _.extend(@, options)
-      @msgs_view.set_options(user: @user, friend: @friend)
-      @init_state()
-      @bind_pm()
+  set_options: (options) ->
+    _.extend(@, options)
+    @msgs_view.set_options(user: @user, friend: @friend)
+    @init_state()
+    @bind_pm()
 
-    connect_faye_server: () ->
-      @client = Realtime.client(@faye_url)
-      @client.receive_message @user.token, (message) =>
-        model = @msgs_view.add(message)
-        if @display_state
-          @read_friend_messsage()
-
-      @client.online @friend.id, _.bind(@online, @)
-
-      @client.offline @friend.id, _.bind(@offline, @)
-
-    fetch: () ->
-      @msgs_view.fetch()
-      @connect_faye_server()
-
-    init_state: () ->
-      if @friend.connect_state then @online() else @offline()
-
-    bind_pm: () ->
-      pm.bind "chat_dialogue_state", _.bind(@change_display_state, @)
-
-    change_display_state: (state) ->
-      @display_state = state
+  connect_faye_server: () ->
+    @client = Realtime.client(@faye_url)
+    @client.receive_message @user.token, (message) =>
+      model = @msgs_view.add(message)
       if @display_state
         @read_friend_messsage()
 
-    online: (friend_id) ->
-      @state_el.addClass(@on_class).removeClass(@off_class)
+    @client.online @friend.id, _.bind(@online, @)
 
-    offline: (friend_id) ->
-      @state_el.addClass(@off_class).removeClass(@on_class)
+    @client.offline @friend.id, _.bind(@offline, @)
 
-    read_friend_messsage: () ->
-      @msg_view.read(@friend.id)
+  fetch: () ->
+    @msgs_view.fetch()
+    @connect_faye_server()
+
+  init_state: () ->
+    if @friend.connect_state then @online() else @offline()
+
+  bind_pm: () ->
+    pm.bind "chat_dialogue_state", _.bind(@change_display_state, @)
+
+  change_display_state: (state) ->
+    @display_state = state
+    if @display_state
+      @read_friend_messsage()
+
+  online: (friend_id) ->
+    @state_el.addClass(@on_class).removeClass(@off_class)
+
+  offline: (friend_id) ->
+    @state_el.addClass(@off_class).removeClass(@on_class)
+
+  read_friend_messsage: () ->
+    @msg_view.read(@friend.id)

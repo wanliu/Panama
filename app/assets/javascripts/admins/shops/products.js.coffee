@@ -2,146 +2,140 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-define [
-	'jquery-ui',
-	'backbone',
-	'admins/shops/categories',
-	'rails.view',
-	'models/element_model',
-	'lib/spin',
-	'exports'], (
-		$,
-		Backbone,
-		Category,
-		Rails,
-		ElementModel,
-		Spinner,
-		exports) ->
+#= require jquery
+#= require jquery-ui
+#= require backbone
+#= require admins/shops/categories
+#= require rails.view
+#= require models/element_model
+#= require lib/spin
 
-	class CategoryMiniRow extends Category.AbstractRow
+exports = window || @
 
-		events:
-			"click .category"               : "toggleChildren"
-			"click .list_category_products" : "getCategoryProducts"
+class CategoryMiniRow extends AbstractRow
 
-		droppable: {
-			activeClass: "ui-state-hover"
-			hoverClass: "ui-state-active"
-			accept: "#table table tr"
+	events:
+		"click .category"               : "toggleChildren"
+		"click .list_category_products" : "getCategoryProducts"
+
+	droppable: {
+		activeClass: "ui-state-hover"
+		hoverClass: "ui-state-active"
+		accept: "#table table tr"
+	}
+
+	toggleChildren: (event) ->
+		$toggleBtn = $(@el).find(".category")
+		state = $toggleBtn.attr('state') == 'true'
+
+		for tr in @getChildren()
+			if (state) then $(tr).slideUp() else $(tr).slideDown()
+		state = !state;
+		$toggleBtn.attr 'state', state
+
+	getCategoryProducts: (event) ->
+		url = "#{@options['urlRoot']}/category/#{@model.get("id")}?ajaxify=true"
+		btn = @$('.list_category_products')
+		icon = btn.find("i")
+
+		opts = {
+		  lines: 13, # The number of lines to draw
+		  length: 3, # The length of each line
+		  width: 2, # The line thickness
+		  radius: 5, # The radius of the inner circle
+		  corners: 1, # Corner roundness (0..1)
+		  rotate: 0, # The rotation offset
+		  color: '#000', # #rgb or #rrggbb
+		  speed: 1, # Rounds per second
+		  trail: 60, # Afterglow percentage
+		  shadow: false, # Whether to render a shadow
+		  hwaccel: false, # Whether to use hardware acceleration
+		  className: 'spinner', # The CSS class to assign to the spinner
+		  zIndex: 2e9, # The z-index (defaults to 2000000000)
+		  top: 'auto', # Top position relative to parent in px
+		  left: 'auto' # Left position relative to parent in px
 		}
+		target = $("<i class=icon-space></i>").get(0);
+		btn.html(target)
+		spinner = new Spinner(opts).spin(target)
+		$("#table").load url, () ->
+			btn.html(icon)
 
-		toggleChildren: (event) ->
-			$toggleBtn = $(@el).find(".category")
-			state = $toggleBtn.attr('state') == 'true'
+	moveToCategory: (product) ->
+		url = "#{@options['urlRoot']}/category/#{@model.get("id")}/accept/#{product.get('id')}"
 
-			for tr in @getChildren()
-				if (state) then $(tr).slideUp() else $(tr).slideDown()
-			state = !state;
-			$toggleBtn.attr 'state', state
+		$.post(url)
 
-		getCategoryProducts: (event) ->
-			url = "#{@options['urlRoot']}/category/#{@model.get("id")}?ajaxify=true"
-			btn = @$('.list_category_products')
-			icon = btn.find("i")
+	onDroppable: (event, ui) ->
+		ui.draggable.draggable({revert: 'invalid'})
+		product = new ElementModel(ui.draggable, {
+			name: "td[1]",
+			price: "td[2]",
+			id: "td[6]"
+		})
+		@moveToCategory(product)
+		ui.draggable
+			.slideUp () ->
+				$(@).remove()
 
-			opts = {
-			  lines: 13, # The number of lines to draw
-			  length: 3, # The length of each line
-			  width: 2, # The line thickness
-			  radius: 5, # The radius of the inner circle
-			  corners: 1, # Corner roundness (0..1)
-			  rotate: 0, # The rotation offset
-			  color: '#000', # #rgb or #rrggbb
-			  speed: 1, # Rounds per second
-			  trail: 60, # Afterglow percentage
-			  shadow: false, # Whether to render a shadow
-			  hwaccel: false, # Whether to use hardware acceleration
-			  className: 'spinner', # The CSS class to assign to the spinner
-			  zIndex: 2e9, # The z-index (defaults to 2000000000)
-			  top: 'auto', # Top position relative to parent in px
-			  left: 'auto' # Left position relative to parent in px
-			}
-			target = $("<i class=icon-space></i>").get(0);
-			btn.html(target)
-			spinner = new Spinner(opts).spin(target)
-			$("#table").load url, () ->
-				btn.html(icon)
+class ProductRow extends ResourceView
+	tagName: "tr"
 
-		moveToCategory: (product) ->
-			url = "#{@options['urlRoot']}/category/#{@model.get("id")}/accept/#{product.get('id')}"
+	events:
+		"click .edit"		: "editProduct"
+		"click .delete"		: "removeProduct"
+		"submitted form"	: "createdProduct"
+		"click .update"		: "updateProduct"
+		"click .close"		: "closeProductEditor"
+		"click .cancel"		: "cancelEditor"
 
-			$.post(url)
+	draggable: {
+		revert: true
+		helper: "clone"
+	}
 
-		onDroppable: (event, ui) ->
-			ui.draggable.draggable({revert: 'invalid'})
-			product = new ElementModel(ui.draggable, {
-				name: "td[1]",
-				price: "td[2]",
-				id: "td[6]"
-			})
-			@moveToCategory(product)
-			ui.draggable
-				.slideUp () ->
-					$(@).remove()
+	no_implementation: () ->
+		alert "no implementation!"
 
-	class ProductRow extends Rails.ResourceView
-		tagName: "tr"
+	newProduct: () ->
+		$("#table table").append(@render('new').el)
+		@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
 
-		events:
-			"click .edit"		: "editProduct"
-			"click .delete"		: "removeProduct"
-			"submitted form"	: "createdProduct"
-			"click .update"		: "updateProduct"
-			"click .close"		: "closeProductEditor"
-			"click .cancel"		: "cancelEditor"
+	editProduct: () ->
+		@render('edit')
+		@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
 
-		draggable: {
-			revert: true
-			helper: "clone"
-		}
+	removeProduct: () ->
+		@destroy()
+		false
 
-		no_implementation: () ->
-			alert "no implementation!"
-
-		newProduct: () ->
-			$("#table table").append(@render('new').el)
-			@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
-
-		editProduct: () ->
-			@render('edit')
-			@$('#product_category_id').chosen().change(_.bind(@changeAdditionProperties, @))
-
-		removeProduct: () ->
-			@destroy()
-			false
-
-		changeAdditionProperties: (e) ->
-			category_id = $(e.target).val()
-			product_id = @$("#product_id").text()
+	changeAdditionProperties: (e) ->
+		category_id = $(e.target).val()
+		product_id = @$("#product_id").text()
 
 
-			url = "#{@urlRoot}/additional_properties/#{category_id}?product_id=#{product_id}"
+		url = "#{@urlRoot}/additional_properties/#{category_id}?product_id=#{product_id}"
 
-			@$(".additional_properties").load(url)
+		@$(".additional_properties").load(url)
 
-		createdProduct: (event, data, model) ->
-			$(@el).html(data)
-			model = new ElementModel(@el, {
-				name: "td[1]",
-				price: "td[2]",
-				id: "td[6]"
-			})
-			@model.set(model.attributes)
+	createdProduct: (event, data, model) ->
+		$(@el).html(data)
+		model = new ElementModel(@el, {
+			name: "td[1]",
+			price: "td[2]",
+			id: "td[6]"
+		})
+		@model.set(model.attributes)
 
-		closeProductEditor: () ->
-			@render('show')
+	closeProductEditor: () ->
+		@render('show')
 
-		cancelEditor: () ->
-			@remove()
+	cancelEditor: () ->
+		@remove()
 
-		updateProduct: () ->
-			@no_implementation()
+	updateProduct: () ->
+		@no_implementation()
 
-	exports.CategoryMiniRow = CategoryMiniRow
-	exports.ProductRow = ProductRow
-	exports
+exports.CategoryMiniRow = CategoryMiniRow
+exports.ProductRow = ProductRow
+exports

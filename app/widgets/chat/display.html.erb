@@ -11,7 +11,7 @@
 </div>
 
 <script type="text/javascript">
-  require(["chats/contact"], function(ChatContact){
+    //= require chats/contact
     chat_view = new ChatContact({
       el: $(".chat_friend_panel"),
       faye_url: "<%=faye_server_uri %>",
@@ -30,5 +30,4 @@
       user_id = $(event.currentTarget).attr("data-value")
       chat_view.show_dialogue(user_id)
     })
-  })
 </script>
