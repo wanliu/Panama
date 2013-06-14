@@ -2,8 +2,10 @@
 #= require ajaxify
 #= require jquery
 #= require jquery_ujs
+#= require jquery-ui
 #= require backbone
 #= require follow
+#= require models/element_model
 #= require people/people_side
 #= require people/community_people
 #= require people/order_refund_card
