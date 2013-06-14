@@ -2,7 +2,7 @@
 #= require jquery
 #= require backbone
 #= require lib/realtime_client
-#= require notify
+#= require lib/notify
 
 class TransactionMessage extends Backbone.Model
   set_url: (url) -> @urlRoot = url
@@ -174,3 +174,4 @@ class TransactionMessageView extends Backbone.View
 
     #$.pnotify(opts);
 
+window.TransactionMessageView = TransactionMessageView

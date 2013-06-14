@@ -38,22 +38,18 @@
   </div>
 </div>
 <script type="text/javascript">
-  require(["jquery", "jquery_ujs", "people/transaction_card", "lib/transaction_bubbling"], function($, _a, Transaction, TransactionBubbling){
-    $(".transaction").each(function(i, elem){
-      var card = new Transaction.TransactionCard({
-        el: elem,
-        realtime: {
-          url: '<%= faye_server_uri %>',
-          token: '<%= token %>' }
-        });
-    });
-
-    new TransactionBubbling({
-      url: "http://<%=request.env['HTTP_HOST'] %>/people/<%=current_user.login %>/transactions#order"
-    })
-
-
+  $(".transaction").each(function(i, elem){
+    var card = new TransactionCard({
+      el: elem,
+      realtime: {
+        url: '<%= faye_server_uri %>',
+        token: '<%= token %>' }
+      });
   });
+
+  new TransactionBubbling({
+    url: "http://<%=request.env['HTTP_HOST'] %>/people/<%=current_user.login %>/transactions#order"
+  })
 </script>
 
 

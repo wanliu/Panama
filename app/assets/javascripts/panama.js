@@ -3,6 +3,8 @@
 //= require lib/underscore
 //= require backbone
 //= require h5bp
+//= require faye
+//= require lib/hogan
 //= require lib/chosen.ex
 //= require lib/postmessage
 //= require wanliu/ajax_auth_client

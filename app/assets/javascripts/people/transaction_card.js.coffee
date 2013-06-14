@@ -4,7 +4,7 @@
 #= require lib/state-machine
 #= require lib/chosen.jquery
 
-class TransactionCard extends Transaction.TransactionCardBase
+class TransactionCard extends TransactionCardBase
     initialize:() ->
         super
         @urlRoot = @transaction.urlRoot
