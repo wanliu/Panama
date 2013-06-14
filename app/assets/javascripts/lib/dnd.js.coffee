@@ -2,6 +2,7 @@
 #= require jquery-ui
 #= require backbone
 #= require lib/abstract
+
 exports = window || @
 
 class DraggableView extends AbstractView

@@ -10,7 +10,7 @@
 #= require models/element_model
 #= require lib/spin
 
-exports = window || @
+root = window || @
 
 class CategoryMiniRow extends AbstractRow
 
@@ -136,6 +136,5 @@ class ProductRow extends ResourceView
 	updateProduct: () ->
 		@no_implementation()
 
-exports.CategoryMiniRow = CategoryMiniRow
-exports.ProductRow = ProductRow
-exports
+root.CategoryMiniRow = CategoryMiniRow
+root.ProductRow = ProductRow
