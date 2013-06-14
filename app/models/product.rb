@@ -147,10 +147,12 @@ class Product < ActiveRecord::Base
     default_attachment ? default_attachment.file : Attachment.new.file
   end
 
-  def format_attachment
+  def format_attachment(version_name = nil)
     temp = []
-    temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank?
-    attachments.each{| atta | temp << atta.get_attributes }
+    unless default_attachment.blank?
+      temp << default_attachment.get_attributes(version_name).merge(:default_state => true)
+    end
+    attachments.each{| atta | temp << atta.get_attributes(version_name) }
     temp
   end
 
