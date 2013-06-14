@@ -1,10 +1,11 @@
 #describe: 社交帖子
-#= require jquery
-#= require backbone
-#= require topic_comment
 #= require lib/timeago
+#= require topic_comment
 #= require twitter/bootstrap/tooltip
 #= require twitter/bootstrap/popover
+
+
+root = window || @
 
 class Topic extends Backbone.Model
   seturl: (url) ->
@@ -213,4 +214,4 @@ class TopicViewList extends Backbone.View
 
     data
 
-TopicViewList
+root.TopicViewList = TopicViewList

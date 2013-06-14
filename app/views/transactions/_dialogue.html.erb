@@ -27,23 +27,22 @@
 </div>
 
 <script type="text/javascript">
+  var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
 
-    var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
-
-    new TransactionMessageView({
-      el: $(".transaction_dialog_panel"),
-      remote_url: "<%=transaction_message_url %>",
-      template: template,
-      current_user: {
-        id: <%=current_user.id %>,
-        token: "<%=current_user.im_token %>",
-        login: "<%=current_user.login %>"
-      },
-      faye_url: "<%=faye_server_uri %>",
-      tansaction_id: <%=transaction.id %>,
-      shop: {
-        id: "<%=transaction.seller.id %>",
-        name: "<%=transaction.seller.name %>"
-      }
-    })
+  new TransactionMessageView({
+    el: $(".transaction_dialog_panel"),
+    remote_url: "<%=transaction_message_url %>",
+    template: template,
+    current_user: {
+      id: <%=current_user.id %>,
+      token: "<%=current_user.im_token %>",
+      login: "<%=current_user.login %>"
+    },
+    faye_url: "<%=faye_server_uri %>",
+    tansaction_id: <%=transaction.id %>,
+    shop: {
+      id: "<%=transaction.seller.id %>",
+      name: "<%=transaction.seller.name %>"
+    }
+  })
 </script>

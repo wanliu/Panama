@@ -1,7 +1,7 @@
 #订单聊天冒泡提醒
-#= require jquery
-#= require lib/postmessage
-#= require lib/notify
+
+
+root = window || @
 
 class TransactionBubbling
   channel_key: "transaction_chat_notice"
@@ -26,3 +26,4 @@ class TransactionBubbling
     "<a style='word-wrap:break-word;' href='#{url}'>#{url}</a>"
 
 
+root.TransactionBubbling = TransactionBubbling

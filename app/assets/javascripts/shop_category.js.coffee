@@ -1,6 +1,6 @@
 #describe: 商店帖子分类
-#= require jquery
-#= require backbone
+
+root = window || @
 
 class ShopCategory extends Backbone.Model
   urlRoot: "/shops"
@@ -56,4 +56,4 @@ class ShopCategoryViewList extends Backbone.View
     new ShopCategoryView(parent_el: @el, model: model)
 
 
-ShopCategoryViewList
+root.ShopCategoryViewList = ShopCategoryViewList

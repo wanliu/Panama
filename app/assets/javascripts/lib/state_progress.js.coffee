@@ -1,6 +1,4 @@
 #交易订单进度条
-#= require jquery
-#= require backbone
 
 class Badge extends Backbone.View
   tagName: "span"
@@ -199,3 +197,5 @@ class StateProgress extends Backbone.View
 
   last_status: (i) ->
     if @states.length-1 is i then true else false
+
+window.StateProgress = StateProgress

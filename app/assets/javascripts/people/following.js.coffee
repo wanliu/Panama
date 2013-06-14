@@ -1,7 +1,4 @@
-#describe: 关注
-#= require jquery
-#= require backbone
-
+#describe: 个人关注的对象
 root = window || @
 
 class Follow extends Backbone.Model
@@ -21,7 +18,6 @@ class Follow extends Backbone.Model
       type: "POST",
       success: success_callback,
     )
-
 
 class FollowView extends Backbone.View
   events: {

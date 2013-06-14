@@ -1,6 +1,8 @@
-root = window || @
+#describe: 关注某个人
 
-class Follow extends Backbone.View
+exports = window || @
+
+class Followers extends Backbone.View
 
   events: {
     "click .follow"   : "bind_follow"
@@ -67,4 +69,4 @@ class Follow extends Backbone.View
     unfollow_id = $(".unfollow").attr("data-value")
     @send_unfollow(unfollow_id, @people_id)
 
-root.Follow = Follow
+exports.Followers = Followers

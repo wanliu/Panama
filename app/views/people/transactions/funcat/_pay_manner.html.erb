@@ -75,8 +75,6 @@
 </div>
 
 <script type='text/javascript' >
-  require(["jquery", "people/transaction_paymanner", "people/transaction_deliverymanner"],
-    function($, TransactionPayManner, TransactionDeliveryManner){
     new TransactionPayManner({
       el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .paymanner")
     })
@@ -84,5 +82,4 @@
     new TransactionDeliveryManner({
       el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .delivery_panel")
     })
-  })
 </script>

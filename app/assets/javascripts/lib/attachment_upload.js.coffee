@@ -1,8 +1,8 @@
 #describe: 附件上传
-#= require jquery
-#= require backbone
 #= require lib/fileuploader
 #= require twitter/bootstrap/tooltip
+
+root = window || @
 
 class Attachment extends Backbone.Model
   set_url: (url) ->
@@ -139,3 +139,4 @@ class AttachmentUpload extends Backbone.View
 
     @$nav_el.append(image_upload_view.render())
 
+root.AttachmentUpload = AttachmentUpload

@@ -43,7 +43,7 @@
     },
 
     followings: {
-      data: "<%=shops_person_followings_path(current_user) %>"
+      data: "<%=person_followings_path(current_user) %>"
     },
 
     selector: function(data, li){
@@ -63,7 +63,7 @@
     }
   })
 
-  new TopicListView({
+  new TopicViewList({
     el: $(".topic-panel"),
     template: Hogan.compile("<%=j render partial: 'topics/topic'  %>"),
     circle_id: "<%=circle_id %>",
