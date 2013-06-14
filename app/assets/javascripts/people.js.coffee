@@ -1,4 +1,5 @@
 #= require lib/chosen.jquery
+#= require lib/chose-friend
 #= require people/followers
 #= require people/following
 #= require people/cart
@@ -13,4 +14,5 @@
 #= require people/transaction_refund
 #= require lib/transaction_bubbling
 #= require lib/state_progress
-
+#= require lib/attachment_upload
+#= require shop_category

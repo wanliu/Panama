@@ -1,9 +1,9 @@
 //= require jquery
 //= require jquery-ui
+//= require lib/jquery.raty
 //= require lib/underscore
 //= require backbone
 //= require h5bp
-//= require faye
 //= require lib/hogan
 //= require lib/chosen.ex
 //= require lib/postmessage
