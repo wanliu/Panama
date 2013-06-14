@@ -647,7 +647,7 @@
                                    /         \
                      <   I really [[HATE] IE []]>
                                               \_endRange end-point.
-          
+
                     " > -1" mean the start end-point will be the same or right to the end end-point
                    * simplelly, all in the end.
           */
@@ -661,7 +661,7 @@
                               I really[ [HATE] IE   ]>
                                     <-[
                             I reall[y  [HATE] IE   ]>
-            
+
                           will return how many unit have moved.
             */
 

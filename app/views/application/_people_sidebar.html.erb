@@ -82,13 +82,15 @@
   <script type="text/javascript">
     $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
 
-    new Follow({
+    new Followers({
       login: "<%= current_user.login %>",
       people_id: "<%= @people.id %>",
       follow_type: "User",
       el: $(".isfollowing") })
 
-    var people_side = new PeopleSideView({ el: $("#people-sidebar")});
+    new PeopleSideView({
+      el: $("#people-sidebar")
+    });
 
   </script>
   </div>

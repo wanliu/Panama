@@ -199,3 +199,5 @@ class StateProgress extends Backbone.View
 
   last_status: (i) ->
     if @states.length-1 is i then true else false
+
+window.StateProgress = StateProgress
