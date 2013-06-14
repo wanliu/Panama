@@ -202,7 +202,7 @@ class ProductUpload extends Backbone.View
       @default_choose_img(@attachment_list.models[0])
 
     add_blank_product_attachment : () ->
-      if @limit < @attachment_list.length
+      if @limit > @attachment_list.length
         @attachment_list.add( url : @options.params.default_img_url)
 
     clear_blank_default : () ->
