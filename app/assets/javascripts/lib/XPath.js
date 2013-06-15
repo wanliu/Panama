@@ -15,8 +15,12 @@
   You should have received a copy of the GNU Lesser General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-(function (w, d, f) {
-
+/**
+ * JavaScript implementation of XML Path Language (XPath) Version 1.0
+ * @file XPath.js
+ * @version 0.6
+ */
+(function (w, f) {
 
 function XPath (e) {
   this.e = e;
@@ -491,6 +495,7 @@ XPath.axes = {
   'self' : function (n) {
     return [n];
   },
+  // non standard
   'document-root' : function (n) {
     return [n.ownerDocument || n];
   }
@@ -571,9 +576,9 @@ if (w.Node) {
   if (f || !np.compareDocumentPosition)
     np.compareDocumentPosition = compareDocumentPosition;
   if (f || !np.contains) {
-  	np.contains = function (n) {
-		  return Boolean(this.compareDocumentPosition(n) & 16);
-	  };
+    np.contains = function (n) {
+      return Boolean(this.compareDocumentPosition(n) & 16);
+    };
   }
 }
 else 
@@ -979,8 +984,8 @@ if (f || !w.XPathEvaluator) {
   if (w.Document)
     e.install(w.Document.prototype, f);
   else 
-    e.install(document, f);
+    e.install(w.document, f);
   w.XPath = XPath;
 }
 
-})(window, document, /WebKit/.test(navigator.userAgent)); // force replace?
+})(window, /WebKit/.test(navigator.userAgent)); // force replace?

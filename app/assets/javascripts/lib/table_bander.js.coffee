@@ -2,9 +2,9 @@
 #= require backbone
 #= require lib/table_creater
 
-exports = window || @
+root = window || @
 
-class exports.TableBander
+class root.TableBander
 	constructor: (options) ->
 		@els = options.els
 		@data = options.fields
@@ -53,7 +53,7 @@ class exports.TableBander
 
 		if not @drawed
 			@drawed = true
-			@table = new TblCreater.TableCreater(@loadEl, schema: @schema)
+			@table = new TableCreater(@loadEl, schema: @schema)
 		else
 			@table.checkRow()
 
@@ -84,4 +84,3 @@ class exports.TableBander
 			$(event.srcElement).show()
 			@countChecked()
 
-exports

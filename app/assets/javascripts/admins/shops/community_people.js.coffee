@@ -3,7 +3,7 @@
 #= require backbone
 #= require circle
 #= require circle_search_user
-exports = window || @
+root = window || @
 
 class YouCircleUserView extends Backbone.View
   events: {
@@ -14,7 +14,7 @@ class YouCircleUserView extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @user_list = new exports.CircleList([], @remote_url)
+    @user_list = new CircleList([], @remote_url)
     @user_list.bind("reset", @all, @)
     @user_list.bind("add", @add, @)
     @user_list.bind("remove", @remove, @)
@@ -188,7 +188,7 @@ class CommunityPeopleView extends Backbone.View
     @circle_panel = @$(".circle-panel")
     @friends_panel = @$(".friends_panel")
 
-    @circle_view_list = new exports.CircleViewList(
+    @circle_view_list = new CircleViewList(
       el: @circle_panel,
       remote_url: @remote_url,
       template: @circle_template
@@ -202,3 +202,5 @@ class CommunityPeopleView extends Backbone.View
       _.bind(@circle_view_list.remove_all_circle_user, @circle_view_list))
     @circle_friend_view.show_circle_user()
 
+root.CircleFriendView = CircleFriendView
+root.CommunityPeopleView = CommunityPeopleView

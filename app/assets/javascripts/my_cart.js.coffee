@@ -1,7 +1,3 @@
-#= require jquery
-#= require backbone
-#= require lib/hogan
-
 root = window || @
 
 class HoverManager
