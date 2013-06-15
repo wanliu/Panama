@@ -111,7 +111,7 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-    @category = shops_category.blank? ? create_shops_category(:name => name + "_" + "root") : shops_category
+    @category = shops_category.blank? ? create_shops_category(:name => "#{name}_root") : shops_category
     @category.load_default
 
     load_group

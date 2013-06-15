@@ -11,7 +11,6 @@
 //= require wanliu/ajax_auth_client
 //= require lib/realtime_client
 //= require twitter/bootstrap/dropdown
-//= require chats/contact
 //= require lib/image_natural_size
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
@@ -20,9 +19,7 @@
 //= require lib/colorpicker/js/bootstrap-colorpicker
 //= require lib/depend_select
 //= require lib/spinner
-//= require lib/modify_number
 //= require lib/notify
-//= require commit_comment
 //= require lib/at_who
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie

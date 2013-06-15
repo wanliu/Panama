@@ -1,7 +1,6 @@
 #encoding: utf-8
 #describe: 聊天视图
 #= require chats/contact_friend
-#= require lib/realtime_client
 root = window || @
 
 class User extends Backbone.Model
