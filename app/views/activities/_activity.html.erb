@@ -1,3 +1,92 @@
-<div class='activity'>
-	<%= image_tag activity.url %>
+<div class="container">
+  <div class="row-fluid">
+    <div class="span9">
+      <!-- 主展示框 -->
+      <div id="main-model" class="dialog ">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>{{description}}</h3>
+          <div class="btn-group pull-right ">
+             <a class="btn animate-play" href="#"><%= caret :right %></a>
+          </div>
+        </div>
+        <div class="modal-body main-show">
+          <div class='picture'>
+            <img class="preview b-{{id}}" src="{{url}}" />
+          </div>
+          <h4 class="right_bottom2 animate1 fadeInRight">原价: <span>{{price}}</span></h5>
+          <h3 class="right_bottom1 animate2 fadeInRight">现价: <span>1299</span></h4>
+        </div>
+        <div class="modal-footer">
+          <div class="big_comments_and_reply">
+
+            <div class="comments">
+              {{#comments}}
+              <div class="comment">
+                <img class='people-image' src="{{ user.photos.header }}">
+                <span class='author-name'>{{ user.login }}</span>
+                <div class="message">{{{ content_html }}}</div>
+              </div>
+              {{/comments}}
+            </div>
+            <div class="reply_form">
+              <img class='head-icon' src="<%= current_user.photos.header %>">
+              <div class='message'>
+                <!-- <input name="message" placeholder="发表评论"></input> -->
+                <textarea name='message' placeholder="发表评论..."></textarea>
+              </div>
+              <button class="submit-comment btn btn-danger ">评论</button>
+            </div>
+          </div>
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+          <a href="#" class="btn btn-primary">Save changes</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="span3">
+      <div class="dialog" id="activity-actions">
+        <div class="modal-body">
+          <img class="author_image" src={{author.photos.header}} />
+          <h4>{{author.login}}</h4>
+          <p>关注 55</p>
+          <p>粉丝 100</p>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+
+      <div class="dialog" id="purchase-forms">
+        <div class="modal-body">
+
+          <%= simple_form_for product_item, :url => to_cart_activity_path do |f| %>
+            <%= f.input :price, :readonly => true %>
+            <%= f.input :title, :as => :hidden %>
+            <%= f.input :product_id, :as => :hidden %>
+            <%= f.input :amount %>
+          <% end %>
+        </div>
+        <div class="modal-footer">
+
+          <div class="btn-group">
+            {{#liked}}
+            <a class="btn unlike-button active" href="#">取消喜欢</a>
+            <a class="btn like-count active" href="#">{{like}}{{^like}}0{{/like}}</a>
+            {{/liked}}
+            {{^liked}}
+            <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
+            <a class="btn like-count" href="#">{{like}}{{^like}}0{{/like}}</a>
+            {{/liked}}
+          </div>
+          <div class="btn-group">
+            <%= link_to_mycart to_cart_activity_path(activity), ".preview.b-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
+              <%= icon(:'shopping-cart', :white) + " 参与" %>
+            <% end %>
+            <a class="btn btn-danger partic-button" href="#">{{participate}}{{^participate}}0{{/participate}}</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

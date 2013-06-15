@@ -1,0 +1,62 @@
+<!-- 竞价 -->
+<%= simple_form_for @activity, :remote => true,:url => activities_auction_index_path, :html => { class: 'form-horizontal' } do |f| %>
+
+  <%= f.association :product, :collection => Product.all %>
+  <%= f.input :description,
+              :label => '活动名称',
+              :warpper => false %>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">图片</label>
+    <div class="controls">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+    </div>
+  </div>
+
+  <%= f.input :price,
+              :label => '价格',
+              :input_html=>{class: :span2} %>
+
+  <%= f.input :activity_price,
+              :label => '竞购价',
+              :input_html=>{class: :span2} %>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">&nbsp;</label>
+    <div class="controls" style="margin-top: 55px;">
+      <div id="price_slider"></div>
+        <script type="text/javascript">
+          $( "#price_slider" ).slider();
+        </script>
+    </div>
+  </div>
+
+  <%= f.input :start_time,
+              :as         => :date_picker,
+              input_html: { id: 'start_time', name: 'activity[start_time]' } %>
+
+  <%= f.input :end_time,
+              :as         => :date_picker,
+              input_html: { id: 'end_time', name: 'activity[end_time]' } %>
+
+  <!-- 选择商品后，自动填充价格 -->
+  <script type="text/javascript">
+      $('#activity_product_id').change(function(e){
+        var product_id = $('#activity_product_id').val();
+        var product_name = $('#activity_product_id option[value=\'' + product_id + '\']').html()
+        $('#activity_description').val(product_name + '竞价')
+        $.ajax({
+          url: "products/price/?id=" + product_id,
+          beforeSend: function (xhr) {
+            xhr.overrideMimeType("text/json; charset=x-user-defined");
+          }
+        }).success(function (data) {
+          $('#activity_price').val(data.price);
+          $('#activity_activity_price').val(data.price);
+        });
+      })
+  </script>
+
+<% end %>

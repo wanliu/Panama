@@ -202,6 +202,10 @@ zh-CN:
       user: "用户"
       comment: "评论"
       shop_group: "权限组"
+      activity: "活动"
+    attributes:
+      activity:
+        product: "商品"
 
   mongoid:
     models:
@@ -381,3 +385,10 @@ zh-CN:
     waiting_delivery: 等待发货
     waiting_sign: 等待签收
     complete: 完成
+
+  simple_form:
+    lables:
+      activity:
+        product: "产品"
+  my_cart: 购物车
+  chat: 交谈

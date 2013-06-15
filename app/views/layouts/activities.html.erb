@@ -8,15 +8,23 @@
   <%= render "main_nav-fluid" %>
   <div id="content" class="relative">
     <%= render "social_sidebar" %>
+
     <div id="main">
+
       <div class="container-fluid">
-        <div class="row-fluid">
-          <%= render "flashes" %>
-          <%= yield %>
+        <div class="main-body">
+        <!-- <div class="span3"> -->
+        <%= render "flashes" %>
+        <%#= render 'information' %>
+        <%= yield %>
         </div>
-        <%= render "footer" %>
+        <!-- </div> -->
+
+      <%= render "footer" %>
       </div>
+
     </div>
+
     <%#= render "left_sidebar" %>
 	</div>
 

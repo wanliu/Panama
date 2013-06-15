@@ -1,0 +1,45 @@
+
+
+$radius: 5px;
+
+.streams {
+	// padding: 10px 0px;
+
+	.header {
+		background: $white;
+		@include border-top-left-radius($radius);
+		@include border-top-right-radius($radius);
+		border: 1px solid #ccc;
+		padding: 10px;
+
+		h3 {
+			font-size: 18px;
+			font-weight: bold;
+			line-height: 20px;
+			margin: 0px;
+		}
+	}
+
+	.stream {
+		background: $white;
+		padding: 10px 10px 10px 50px;
+		border: 1px solid #ccc;
+		// border-top: none;
+		margin-bottom: 10px;
+		@include border-radius($radius);
+
+		.avatar {
+			margin-left: -40px;
+			float: left;
+
+			img {
+				width: 30px;
+				height: 30px;
+			}
+		}
+
+		.author {
+			font-weight: bold;
+		}
+	}
+}

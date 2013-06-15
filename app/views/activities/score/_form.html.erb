@@ -1,0 +1,42 @@
+<!-- 积分 -->
+<%= simple_form_for activity, :url => activities_score_index_path, :remote => true, :html => { class: 'form-horizontal' } do |f| %>
+      <%= f.association :product,
+                        :collection   => Product.all %>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">图片</label>
+    <div class="controls">
+  		<select class="image-picker show-html">
+          <option data-img-src="assets/beauty01.jpg" class="img-rounded" alt="image"  value="1"> image 1  </option>
+          <option data-img-src="assets/beauty02.jpg" class="img-rounded" alt="image"  value="2">  image 2  </option>
+          <option data-img-src="assets/beauty023.jpg" class="img-rounded" alt="image"  value="3">  image 3  </option>
+      </select>
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+          $(".image-picker").imagepicker({
+              hide_select : true,
+              show_label  : false
+          });
+   </script>
+
+
+    <%= f.input :price %>
+
+    <%= f.input :give_score %>
+
+    <%= f.input :limit_score %>
+
+
+    <%= f.input :start_time,
+                :as         => :date_picker, id: 'start_time', value: 'yyyy/MM/dd hh:mm:ss'       %>
+
+
+
+    <%= f.input :end_time,
+                :as         => :date_picker, id: 'end_time', value: 'yyyy/MM/dd hh:mm:ss'  %>
+
+<% end %>

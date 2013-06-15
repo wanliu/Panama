@@ -90,4 +90,23 @@ class ProductItem < ActiveRecord::Base
     super
   end
 
+  def as_json(options = {})
+    super.merge merge_photos(options[:photos])
+  end
+
+  def merge_photos(options = nil)
+    keys = case options
+           when Symbol, String
+             [options]
+           when Array
+             options
+           when NilClass
+             photos.options[:allow]
+           else
+             photos.options[:allow]
+           end
+
+    Hash[keys.map { |k| [k, photos.send(k) ]}]
+  end
+
 end

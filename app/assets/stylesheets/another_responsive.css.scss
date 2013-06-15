@@ -1,0 +1,23 @@
+@media (min-width: 1250px) {
+
+  // Fixed grid
+  @include grid-core($gridColumnWidth1250, $gridGutterWidth1250);
+
+  // Fluid grid
+  @include grid-fluid($fluidGridColumnWidth1250, $fluidGridGutterWidth1250);
+
+  // Input grid
+  @include grid-input($gridColumnWidth1250, $gridGutterWidth1250);
+
+  // Thumbnails
+  .thumbnails {
+    margin-left: - $gridGutterWidth1250;
+  }
+  .thumbnails > li {
+    margin-left: $gridGutterWidth1250;
+  }
+  .row-fluid .thumbnails {
+    margin-left: 0;
+  }
+
+}

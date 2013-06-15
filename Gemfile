@@ -142,8 +142,9 @@ gem 'activemerchant'
 gem 'activemerchant_patch_for_china'
 gem 'geocoder', :github => 'mrichie/geocoder'
 gem 'ruby-hmac'
-
 gem "hiredis", "~> 0.4.0"
 gem "redis", "~> 2.2.0", :require => ["redis/connection/hiredis", "redis"]
 gem 'rails_autolink'
 gem 'whenever', :require => false
+# gem 'text_format_html',:github => "huxinghai1988/text_format_html"
+gem "wicked"
