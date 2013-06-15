@@ -1,5 +1,7 @@
 #管理付款方式
 
+root = window || @
+
 class PayManner extends Backbone.View
   events: {
     "click .title" : "chose_manner"
@@ -17,7 +19,7 @@ class PayManner extends Backbone.View
     @set_name(name: @name, code: @code)
 
 
-class TransactionPayManner extends Backbone.View
+class root.TransactionPayManner extends Backbone.View
   events: {
     "click .mdify_show" : "toggleMdify",
     'click input:button.mdify' : "toggle_paymanner"
