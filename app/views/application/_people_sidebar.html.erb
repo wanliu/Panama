@@ -78,17 +78,19 @@
     <li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>
   </ul>
   <script type="text/javascript">
-    $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
+    $(document).ready(function(){
+      $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
 
-    new Followers({
-      login: "<%= current_user.login %>",
-      people_id: "<%= @people.id %>",
-      follow_type: "User",
-      el: $(".isfollowing") })
+      new Followers({
+        login: "<%= current_user.login %>",
+        people_id: "<%= @people.id %>",
+        follow_type: "User",
+        el: $(".isfollowing") })
 
-    new PeopleSideView({
-      el: $("#people-sidebar")
-    });
+      new PeopleSideView({
+        el: $("#people-sidebar")
+      });
+    })
 
   </script>
   </div>
