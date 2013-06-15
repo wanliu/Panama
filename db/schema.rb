@@ -368,9 +368,6 @@ ActiveRecord::Schema.define(:version => 20130604052310) do
     t.integer  "delivery_type_id"
     t.decimal  "delivery_price",     :precision => 10, :scale => 0
     t.string   "delivery_code"
-    t.integer  "pay_manner_id"
-    t.integer  "delivery_manner_id"
-    t.integer  "transfer_sheet_id"
   end
 
   create_table "pay_manners", :force => true do |t|
