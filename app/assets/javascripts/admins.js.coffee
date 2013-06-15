@@ -26,3 +26,4 @@
 #= require lib/table_creater
 #= require lib/table_bander
 #= require lib/data_2_table
+#= require twitter/bootstrap/modal
