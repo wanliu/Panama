@@ -26,5 +26,6 @@
 #= require lib/attachment_upload
 #= require shop_category
 #= require lib/depend_select
+#= require lib/countdown
 #= require topic
 

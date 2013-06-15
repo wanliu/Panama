@@ -21,8 +21,6 @@
 #= require lib/attachment_upload
 #= require lib/hogan
 #= require lib/state_progress
-#= require lib/jquery.countdown
-#= require lib/jquery.countdown-zh-CN
 #= require lib/state_progress
 #= require lib/countdown
 #= require lib/table_creater
