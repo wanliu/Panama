@@ -9,6 +9,7 @@
 #= require people/people_side
 #= require lib/chosen.jquery
 #= require lib/chose-friend
+#= require lib/modify_number
 #= require people/followers
 #= require people/following
 #= require people/cart

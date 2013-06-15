@@ -6,9 +6,9 @@
     <span class="label">Default</span>
     <% unless @people.id == current_user.id %>
       <% unless current_user.is_follow_user?(@people.id) %>
-        <span class="label lf follow" data-value="<%= @people.id %>">关注</span>
+        <span class="label label-success lf follow" data-value="<%= @people.id %>">+关注</span>
       <% else %>
-        <span class="label lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+        <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
       <% end %>
     <% end %>
   </div>
