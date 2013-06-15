@@ -1,8 +1,8 @@
 #= require 'jquery'
 #= require 'jquery-ui'
+#= require 'lib/dnd'
 #= require 'backbone'
 #= require 'models/form_model'
-#= require 'lib/dnd'
 
 root = window || @
 

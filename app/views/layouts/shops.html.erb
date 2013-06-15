@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-<%= render "head" %>
+<%= render "head", :styles => ['bootstrap_application'] %>
 <body class="<%= controller.controller_name %>">
 	<%= render "header" %>
 	<div id='wrapper' class='container'>
 		<%= yield %>
 	</div>
-    <%= render_widget :my_cart %>	
+    <%= render_widget :my_cart %>
 </body>
 </html>
