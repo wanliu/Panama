@@ -1,5 +1,6 @@
 #= require jquery
 #= require backbone
+#= require lib/XPath
 
 root = window || @
 
