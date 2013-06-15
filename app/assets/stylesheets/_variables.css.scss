@@ -191,9 +191,14 @@ $navbarLinkBackgroundActive:      darken($navbarBackground, 5%) !default;
 $navbarBrandColor:                $navbarLinkColor !default;
 
 // Inverted navbar
-$navbarInverseBackground:                #9d0019 !default;
-$navbarInverseBackgroundHighlight:       #f10026 !default;
-$navbarInverseBorder:                    #f83e5b !default;
+// $navbarInverseBackground:                #9d0019 !default;
+// $navbarInverseBackgroundHighlight:       #f10026 !default;
+// $navbarInverseBorder:                    #f83e5b !default;
+
+$navbarInverseBackground:                #028e9b !default;
+$navbarInverseBackgroundHighlight:       #35c0cd !default;
+$navbarInverseBorder:                    #015c65 !default;
+
 
 $navbarInverseText:                      $grayLight !default;
 $navbarInverseLinkColor:                 $grayLight !default;
@@ -283,8 +288,8 @@ $gridGutterWidth768:      20px !default;
 $gridRowWidth768:         ($gridColumns * $gridColumnWidth768) + ($gridGutterWidth768 * ($gridColumns - 1)) !default;
 
 // 1300px min
-$gridColumnWidth1300:     80px !default;
-$gridGutterWidth1300:     30px !default;
+$gridColumnWidth1300:     90px !default;
+$gridGutterWidth1300:     20px !default;
 $gridRowWidth1300:        ($gridColumns * $gridColumnWidth1300) + ($gridGutterWidth1300 * ($gridColumns - 1)) !default;
 
 

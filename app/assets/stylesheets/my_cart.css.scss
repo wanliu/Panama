@@ -1,4 +1,5 @@
-@import "footer_nav";
+@import "compass/typography/text/ellipsis";
+
 #my_cart {
 /*    position: fixed;
     bottom: -5px;
@@ -37,7 +38,6 @@
         text-align: center;
         line-height: 36px;
         width: 260px;
-        /*position: relative;*/
         margin-left: 3px;
         background-color: white;
     }
@@ -58,10 +58,14 @@
         /*margin: 10px;*/
         margin-left: 2px;
         line-height: 30px;
-        
+
         text-align: center;
         td{
-            width: 65px;
+            .title {
+                display: block;
+                width: 65px;
+                @include ellipsis();
+            }
         }
         position: relative;
     }

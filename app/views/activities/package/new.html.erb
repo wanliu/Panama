@@ -1,0 +1,67 @@
+<!--聚集-->
+<%= simple_form_for @activity, :url => activities_package_index_path, :remote => true, :html => { class: 'form-horizontal' } do |f|%>
+
+       <%= f.input :main_product %>
+
+
+        <%=f.input  :main_product_number %>
+
+      <%= f.input :main_product_price %>
+     </div>
+  </div>
+
+   <div class="control-group">
+    <label class="control-label" for="inputPrice">图片</label>
+    <div class="controls">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+    </div>
+  </div>
+
+
+      <%= f.input :attach_product %>
+
+
+        <%=f.input  :attach_product_number %>
+
+      <%= f.input :attach_product_price %>
+
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">图片</label>
+    <div class="controls">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+    </div>
+  </div>
+
+
+    <div class="control-group">
+    <label class="control-label" for="inputMainProduct">捆绑类型</label>
+    <div class="controls">
+    <div class="input-append">
+      <input class="span2" name="inputMainProduct" placeholder="MainProduct" type="text">
+      <div class="btn-group">
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+          选择
+          <span class="caret"></span>
+        </button>
+          <ul class="dropdown-menu">
+              <li><a href="#">买就送</a></li>
+              <li><a href="#">一起卖</a></li>
+              <li><a href="#">其他</a></li>
+          </ul>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  
+      <%= f.input :start_time,
+                  :as         => :string %>
+      <%= f.input :end_time,
+                  :as         => :string %>
+
+<% end %>

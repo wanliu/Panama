@@ -88,6 +88,26 @@ module ApplicationHelper
     link_to span, person_notifications_path(current_user.login)
   end
 
+  def link_to_mycart(title, *args, &block)
+    if block_given?
+      url, selector, options = title, *args
+      options ||= {}
+      options.merge!({
+        'add-to-cart'   => selector,
+        'add-to-action' => url
+      })
+      link_to url, options, &block
+    else
+      options ||= {}
+      url, selector, options = *args
+      options.merge!({
+        'add-to-cart'   => selector,
+        'add-to-action' => url
+      })
+      link_to title, url, options
+    end
+  end
+
   def unread_notification_count
     Notification.unreads.where(:user_id => current_user.id).count
   end
@@ -123,8 +143,9 @@ module ApplicationHelper
     end
   end
 
-  def icon(name)
-    content_tag :i, nil, :class => "icon-#{name}"
+  def icon(*names)
+
+    content_tag :i, nil, :class => names.map {|n| "icon-#{n}" }
   end
 
   def caret(position = :down, *styles)

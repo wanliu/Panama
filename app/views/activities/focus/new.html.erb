@@ -1,0 +1,46 @@
+<!-- 竞价 -->
+
+<%= simple_form_for @activity, :url => activities_focus_path, :remote => true,  :html => { class: 'form-horizontal' } do |f|%>
+
+
+
+       <%= f.input :product, :wrapper => false, :label => false %>
+
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">图片</label>
+    <div class="controls">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+      <img data-src="holder.js/140x140" class="img-rounded" alt="140x140" style="width: 140px; height: 140px;" src="">
+    </div>
+  </div>
+
+
+
+        <%=f.input  :people_number %>
+
+      <%= f.input :price %>
+
+
+
+  <div class="control-group addLine1">
+    <div class="pull-right" style="padding-right:100px;">
+      <button class="btn add1"  type="button"><i class="icon-plus"></i>Add</li></button>
+    </div>
+  </div>
+
+<script type="text/javascript">
+    var insert = $(".bettwen1");
+    $(".add1").bind("click",function(){
+      $(".addLine1").prepend(insert);
+    });
+</script>
+
+      <%= f.input :start_time,
+                  :as         => :string %>
+
+      <%= f.input :end_time,
+                  :as         => :string %>
+
+
+<% end %>
