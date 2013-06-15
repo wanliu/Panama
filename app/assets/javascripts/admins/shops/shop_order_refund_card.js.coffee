@@ -3,7 +3,9 @@
 #= require lib/transaction_card_base
 
 
-class ShopOrderRefundCard extends TransactionCardBase
+exports = window || @
+
+class exports.ShopOrderRefundCard extends TransactionCardBase
   initialize: () ->
     super
 

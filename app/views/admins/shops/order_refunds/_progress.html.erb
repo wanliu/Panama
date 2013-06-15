@@ -1,18 +1,17 @@
 <div class="progress progress-mini progress-striped active">
 </div>
 <script type='text/javascript'>
-    function($, StateProgress){
-    var complete_states = []
-    <% refund.state_details.each do |item| %>
-      complete_states.push({
-        state: "<%=item.state %>",
-        created_at: "<%=item.created_at %>"
-      })
-    <% end %>
-      new StateProgress({
-        el: $(".refund-<%=refund.id %>-<%=refund.state %> .state-progress>.progress"),
-        state_type: "returned",
-        localName: <%= t("order_refund_state").to_json.html_safe %>,
-        complete_states: complete_states
-      })
+  var complete_states = []
+  <% refund.state_details.each do |item| %>
+    complete_states.push({
+      state: "<%=item.state %>",
+      created_at: "<%=item.created_at %>"
+    })
+  <% end %>
+  new StateProgress({
+    el: $(".refund-<%=refund.id %>-<%=refund.state %> .state-progress>.progress"),
+    state_type: "returned",
+    localName: <%= t("order_refund_state").to_json.html_safe %>,
+    complete_states: complete_states
+  })
 </script>
