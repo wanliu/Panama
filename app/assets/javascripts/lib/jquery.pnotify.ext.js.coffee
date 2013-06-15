@@ -1,5 +1,4 @@
 #bubbing 提醒
-#= require jquery
 #= require lib/jquery.pnotify
 
 (options) ->

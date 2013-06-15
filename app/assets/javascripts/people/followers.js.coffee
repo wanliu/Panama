@@ -1,6 +1,4 @@
 #describe: 关注某个人
-#= require jquery
-#= require backbone
 
 exports = window || @
 

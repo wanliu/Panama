@@ -1,7 +1,5 @@
 #author: huxinghai
 #describe: 评论
-#= require jquery
-#= require backbone
 
 root = window || @
 

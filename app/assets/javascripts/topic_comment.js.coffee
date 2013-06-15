@@ -1,7 +1,4 @@
 #帖子回复
-#= require jquery
-#= require backbone
-#= require lib/config_timeago
 #= require lib/hogan
 
 class Comment extends Backbone.Model

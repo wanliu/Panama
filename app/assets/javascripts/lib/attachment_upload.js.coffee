@@ -1,6 +1,4 @@
 #describe: 附件上传
-#= require jquery
-#= require backbone
 #= require lib/fileuploader
 #= require twitter/bootstrap/tooltip
 

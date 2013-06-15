@@ -1,7 +1,4 @@
-#= require jquery
-#= require backbone
 #= require lib/transaction_card_base
-#= require lib/state-machine
 #= require lib/chosen.jquery
 
 root = window || @
@@ -11,6 +8,7 @@ class TransactionCard extends TransactionCardBase
         super
         @urlRoot = @transaction.urlRoot
         @body = @$(".transaction-body")
+
 
     events:
         "click .page-header .btn"   : "clickAction"

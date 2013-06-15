@@ -1,6 +1,3 @@
-#= require jquery
-#= require backbone
-
 
 exports = window || @
 

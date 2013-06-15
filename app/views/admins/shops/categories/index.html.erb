@@ -18,9 +18,9 @@
 <script type="text/javascript">
 		var $trs = $("#table tr:gt(0)");
 		$trs.each(function(i, tr){
-			var models = new FormModel.ObjectFormModel($(tr).find("form"), "category");
-			var model = new Category.Model(models)
-			new Category.CategoryRow({el: tr, model: model});
+			var models = new ObjectFormModel($(tr).find("form"), "category");
+			var model = new CategoryModel(models)
+			new CategoryRow({el: tr, model: model});
 		});
 
 
@@ -28,7 +28,7 @@
 			// var model = new Category.Model(models)
 			var tr = $("<tr />").appendTo("#table")
 			$("#table")
-			var row = new Category.CategoryRow({el: tr});
+			var row = new CategoryRow({el: tr});
 			var data = row.render('new');
 			tr.replaceWith(data);
 		});

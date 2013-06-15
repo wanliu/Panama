@@ -51,11 +51,11 @@
 		// var models = FormToModel($(tr).find("form"), "category");
 		// var model = new Category.Model(models)
 		var model = new AttributeModel(tr)
-		new Products.CategoryMiniRow({el: tr, model: model, urlRoot: urlRoot});
+		new CategoryMiniRow({el: tr, model: model, urlRoot: urlRoot});
 	});
 
 	$("#new_product").on("click", function(){
-		var row = new Products.ProductRow({urlRoot: urlRoot})
+		var row = new ProductRow({urlRoot: urlRoot})
 		row.newProduct();
 	});
 </script>

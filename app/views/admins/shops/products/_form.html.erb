@@ -42,7 +42,7 @@
 
     $('.color').colorpicker();
 
-    var form = new Rails.FormView("form#<%= options_dom_id(@product) %>", {
+    var form = new FormView("form#<%= options_dom_id(@product) %>", {
         model: <%= raw @product.to_json %>
     });
 

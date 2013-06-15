@@ -1,6 +1,4 @@
 #describe: 圈子视图
-#= require jquery
-#= require backbone
 #= require twitter/bootstrap/modal
 
 root = (window || @)
