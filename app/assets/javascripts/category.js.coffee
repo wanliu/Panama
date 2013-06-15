@@ -1,6 +1,3 @@
-#= require jquery
-#= require backbone
-#= require lib/typeahead
 #= require jquery.slides
 
 root = window || @
@@ -358,7 +355,6 @@ class CategoryView extends Backbone.View
 class CategoryDetailView extends Backbone.View
     tagName: 'div'
     className: 'category_detail'
-    detail_template: _.template($('#list-template').html())
 
     initialize: (options) ->
         _.extend(@, options)
@@ -376,7 +372,8 @@ class CategoryDetailView extends Backbone.View
         @parentView.parentView.select_category(@model)
 
     render: () ->
-        @$el.html(@detail_template(@model.toJSON()))
+        detail_template = _.template($('#list-template').html())
+        @$el.html(detail_template(@model.toJSON()))
         @
 
 

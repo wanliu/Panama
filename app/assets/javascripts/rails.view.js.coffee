@@ -43,6 +43,7 @@ class AbstractResourceView extends DNDView
 	render: (state) ->
 		data = @fetchView(state)
 		@el = $(@el).html(data)
+		@remoteFormProxy()
 		@
 
 	repalceWith: (state) ->
