@@ -22,7 +22,6 @@
 //= require lib/spinner
 //= require lib/modify_number
 //= require lib/notify
-//= require commit_comment
 //= require lib/at_who
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
