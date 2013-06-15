@@ -1,8 +1,8 @@
 #交易付款
-#= require jquery
-#= require backbone
 
-class TransactionPayment extends Backbone.View
+exports = window || @
+
+class exports.TransactionPayment extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)

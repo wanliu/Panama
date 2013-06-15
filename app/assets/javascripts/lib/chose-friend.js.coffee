@@ -1,5 +1,4 @@
 #describe: 选择圈子与范围
-#= require jquery
 #= require twitter/bootstrap/tooltip
 #= require twitter/bootstrap/popover
 

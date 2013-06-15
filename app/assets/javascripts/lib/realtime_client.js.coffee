@@ -1,5 +1,3 @@
-#= require lib/underscore
-
 root = (window || @)
 root = root.Realtime = {}
 root.clients = {}

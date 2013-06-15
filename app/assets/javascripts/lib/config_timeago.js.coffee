@@ -1,6 +1,3 @@
-#=require jquery
-#=require lib/jquery.timeago
-
 $.extend $.timeago.settings.strings, {
     suffixAgo: "前",
     suffixFromNow: "刚刚",

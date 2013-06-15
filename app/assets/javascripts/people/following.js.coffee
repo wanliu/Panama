@@ -1,7 +1,4 @@
 #describe: 个人关注的对象
-#= require jquery
-#= require backbone
-
 root = window || @
 
 class Follow extends Backbone.Model

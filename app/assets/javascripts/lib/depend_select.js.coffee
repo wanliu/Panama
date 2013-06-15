@@ -1,5 +1,6 @@
-#= require jquery
-#= require backbone
+
+
+root = window || @
 
 class DependSelectView extends Backbone.View
 	initialize: (options) ->
@@ -28,3 +29,5 @@ class DependSelectView extends Backbone.View
 	reset: () ->
 		$("."+@children).data().depend.el.html("") if this.children != ""
 		$("."+@children).data().depend.reset() if $("."+@children).data().depend.children != ""
+
+root.DependSelectView = DependSelectView

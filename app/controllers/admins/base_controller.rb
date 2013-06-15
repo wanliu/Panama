@@ -1,6 +1,5 @@
 class Admins::BaseController < ApplicationController
 
-
   layout "admins"
 
   before_filter :login_required

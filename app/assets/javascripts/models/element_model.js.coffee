@@ -1,6 +1,7 @@
 #= require jquery
 #= require backbone
-#= require lib/XPath
+
+root = window || @
 
 class ElementModel extends Backbone.Model
 
@@ -23,3 +24,4 @@ class ElementModel extends Backbone.Model
 				for element in results.value
 					@set name, $.trim(element.innerText)
 
+root.ElementModel = ElementModel

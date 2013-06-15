@@ -1,10 +1,8 @@
 #describe: 个人社区找人
-#= require jquery
-#= require backbone
 #= require circle
 #= require circle_search_user
 #= require jquery-ui
-exports = window || @
+root = window || @
 
 class AddedYouUserView extends Backbone.View
   className: "add_you_circle_panel circle_friend"
@@ -13,7 +11,7 @@ class AddedYouUserView extends Backbone.View
     _.extend(@, options)
     @$el = $(@el)
 
-    @users = new exports.CircleList([], @remote_url)
+    @users = new CircleList([], @remote_url)
     @users.bind("add", @add, @)
     @users.bind("reset", @all, @)
     @refresh()
@@ -85,7 +83,7 @@ class YouCircleUserView extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @circle_list = new exports.CircleList([], @remote_url)
+    @circle_list = new CircleList([], @remote_url)
     @circle_list.bind("add", @add, @)
     @circle_list.bind("reset", @all, @)
     @circle_list.bind("remove", @remove, @)
@@ -210,7 +208,7 @@ class CommunityPeopleView extends Backbone.View
     @friend_el = @$(".friends_panel")
     @circle_el = @$(".circle-panel")
 
-    @circle_view_list = new exports.CircleViewList(
+    @circle_view_list = new CircleViewList(
       template: @circle_template,
       remote_url: @remote_url,
       el: @circle_el
@@ -224,4 +222,4 @@ class CommunityPeopleView extends Backbone.View
     @friend_view.bind("remove_user",
       _.bind(@circle_view_list.remove_all_circle_user, @circle_view_list))
 
-    @friend_view.othe_circle_user();
+    @friend_view.othe_circle_user()

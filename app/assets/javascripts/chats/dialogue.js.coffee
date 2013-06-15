@@ -1,6 +1,4 @@
 #describe: 与好友对话
-#= require jquery
-#= require backbone
 #= require lib/postmessage
 
 

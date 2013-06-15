@@ -1,6 +1,3 @@
-#= require jquery
-#= require backbone
-#= require lib/state-machine
 #= require lib/state-view
 #= require lib/jsclock-0.8
 #= require lib/realtime_client
@@ -15,12 +12,12 @@ class Transaction extends Backbone.Model
 class TransactionCardBase extends AbstructStateView
 
     initialize:(@option) ->
-        super
         @options['initial']   ?= @$el.attr('state-initial')
         @options['id']        ?= @$el.attr('state-id')
         @options['url']       ?= @$el.attr('state-url')
         @options['event_url'] ?= @$el.attr('state-event-url')
         @options['url_root'] ?= @$el.attr('url-root')
+
         @transaction = new Transaction()
         @transaction.set_url(@options['url_root'])
 
@@ -28,6 +25,7 @@ class TransactionCardBase extends AbstructStateView
         if @rt_options.url?
             @realtime = Realtime.client(@rt_options.url)
             @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
+        super
         # @$el.bind('click', @activeThis)
 
     getNotifyName: () ->

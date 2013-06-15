@@ -1,9 +1,9 @@
 #= require jquery
 #= require backbone
 
-exports = window || @
+root = window || @
 
-class exports.TableCreater extends Backbone.View
+class root.TableCreater extends Backbone.View
 	tagName: 'table'
 	className: 'table table-bordered js-createdTable'
 	attributes:
@@ -204,4 +204,3 @@ counterFun = (() ->
 	innerCounter )()
 
 
-exports

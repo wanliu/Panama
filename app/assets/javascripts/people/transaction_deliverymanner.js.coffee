@@ -1,6 +1,6 @@
 #管理配送方式
-#= require jquery
-#= require backbone
+
+root = window || @
 
 class DeliveryManner extends Backbone.View
   events: {
@@ -19,7 +19,7 @@ class DeliveryManner extends Backbone.View
     @set_name(name: @name, code: @code)
 
 
-class TransactionDeliveryManner extends Backbone.View
+class root.TransactionDeliveryManner extends Backbone.View
   events: {
     "click .delivery_manner .mdify_show" : "toggleMdify",
     'click .delivery_manner input:button.mdify' : "toggle_delivery_manner"

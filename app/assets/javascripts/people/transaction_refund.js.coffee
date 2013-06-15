@@ -1,6 +1,4 @@
 #交易退货
-#= require jquery
-#= require backbone
 #= require lib/notify
 
 class TransactionRefund extends Backbone.Model

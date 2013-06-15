@@ -4,7 +4,6 @@
 <%= render "head", :styles => [:admins], :javascripts => [:admins] %>
 
 <body class="<%= controller.controller_name %>">
-	<%= javascript_include_tag faye_server_uri + "/client.js" %>
 	<%= render "header" %>
 	<%= render "flashes" %>
   	<div id="admin_content" class="container relative">
