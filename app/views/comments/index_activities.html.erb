@@ -6,7 +6,7 @@
     <br>
     <script type="text/javascript">
       template = Hogan.compile($("#comment_template").html());
-      new view.CommitComment({
+      new CommitComment({
         login: "<%= @people.login %>",
         targeable_id: "<%= activity.id %>",
         el: $("#activity_<%= activity.id %>"),
