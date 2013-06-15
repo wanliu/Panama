@@ -9,9 +9,8 @@
   <div class='friend_list'>
   </div>
 </div>
-
+<%=javascript_include_tag "chats/contact" %>
 <script type="text/javascript">
-    //= require chats/contact
     chat_view = new ChatContact({
       el: $(".chat_friend_panel"),
       faye_url: "<%=faye_server_uri %>",
