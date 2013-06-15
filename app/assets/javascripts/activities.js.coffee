@@ -4,8 +4,8 @@
 
 #= require panama
 #= require twitter/bootstrap/affix
-#= require jquery
 #= require jquery.masonry
 #= require lib/mousemove
 #= require lib/image_natural_size
 #= require lib/chosen.ex
+#= require commit_comment

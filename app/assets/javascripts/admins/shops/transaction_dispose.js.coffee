@@ -3,6 +3,8 @@
 #= require backbone
 #= require lib/realtime_client
 
+exports = window || @
+
 class Transaction extends Backbone.Model
   set_url: (shop_name) ->
     @urlRoot = "/shops/#{shop_name}/admins/transactions"
@@ -55,7 +57,7 @@ class TransactionEvent extends Backbone.View
   change_message_count: () ->
     @$(".message_count").html(@model.get("unmessages_count"))
 
-class TransactionDispose extends Backbone.View
+class exports.TransactionDispose extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)

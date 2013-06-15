@@ -1,3 +1,2 @@
-#= jquery
-#= lib/jquery.countdown
-#= lib/jquery.countdown-zh-CN
+#= require lib/jquery.countdown
+#= require lib/jquery.countdown-zh-CN

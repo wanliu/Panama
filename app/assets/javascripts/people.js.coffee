@@ -9,6 +9,7 @@
 #= require people/people_side
 #= require lib/chosen.jquery
 #= require lib/chose-friend
+#= require lib/modify_number
 #= require people/followers
 #= require people/following
 #= require people/cart
@@ -26,5 +27,6 @@
 #= require lib/attachment_upload
 #= require shop_category
 #= require lib/depend_select
+#= require lib/countdown
 #= require topic
 
