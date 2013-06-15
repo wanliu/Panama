@@ -10,6 +10,7 @@
         created_at: "<%=item.created_at %>"
       })
     <% end %>
+    debugger
     new StateProgress({
       el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .state-progress>.progress"),
       localName: <%=t("order_states.buyer").to_json.html_safe %>,

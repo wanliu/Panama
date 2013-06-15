@@ -101,10 +101,11 @@ class TransactionCardBase extends AbstructStateView
         @$el.wrap($side1)
         $slideBox = @$el.parents(".slide-box")
         $slideContainer = @$el.parents(".slide-container")
-        $side2 = $("<div class='slide-2'></div>").html(page)
+        $slideContainer.append($side2)
+        $side2.html(page)
 
         $side1 = @$el
-        $slideContainer.append($side2)
+
 
         height =  Math.max($side2.height(), $side1.height())
         length = $slideBox.width()
