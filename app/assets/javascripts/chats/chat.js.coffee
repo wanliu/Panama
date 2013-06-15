@@ -1,6 +1,4 @@
 #describe: 聊天
-#= require lib/realtime_client
-#= require lib/postmessage
 
 class ChatMessage extends Backbone.Model
   urlRoot: "/chat_messages"

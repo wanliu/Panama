@@ -25,3 +25,6 @@
 #= require lib/jquery.countdown-zh-CN
 #= require lib/state_progress
 #= require lib/countdown
+#= require lib/table_creater
+#= require lib/table_bander
+#= require lib/data_2_table

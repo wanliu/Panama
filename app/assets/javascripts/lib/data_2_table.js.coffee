@@ -1,8 +1,8 @@
 #= require 'jquery'
 
-exports = window || @
+root = window || @
 
-class exports.Data2Table
+class root.Data2Table
 	constructor: (collection) ->
 		@collection = collection.collection
 		#两种触发条件。触发类型取决于本js类与form中table的载入顺序
@@ -41,4 +41,3 @@ class exports.Data2Table
 			after = _.uniq(input_id.concat(values)).length
 			return item[type] if after is before
 
-exports

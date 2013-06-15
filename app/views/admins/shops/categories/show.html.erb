@@ -15,8 +15,8 @@
 <%= register_javascript :ajax_category_editor, :only => :ajax do %>
 <script type="text/javascript">
 	var target = $("tr#<%= @shops_category.id %>")
-	var model = new Category.Model(<%=raw @shops_category.to_json %>);
+	var model = new CategoryModel(<%=raw @shops_category.to_json %>);
 	model.set("id", model.get("_id"));
-	new Category.CategoryRow({el: target, model: model });
+	new CategoryRow({el: target, model: model });
 </script>
 <% end %>

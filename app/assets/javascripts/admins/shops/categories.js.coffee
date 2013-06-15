@@ -3,11 +3,12 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 #= require jquery
+#= require jquery-ui
 #= require backbone
 #= require lib/dnd
 
 
-exports = window || @
+root = window || @
 
 class Category extends Backbone.Model
 
@@ -127,7 +128,6 @@ class CategoryRow extends AbstractRow
 						@remove()
 		false
 
-exports.CategoryRow = CategoryRow
-exports.Model = Category
-exports.AbstractRow  = AbstractRow
-exports
+root.CategoryRow = CategoryRow
+root.CategoryModel = Category
+root.AbstractRow  = AbstractRow
