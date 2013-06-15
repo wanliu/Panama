@@ -70,7 +70,7 @@ class MyCart extends Backbone.View
 				$(".cart_main").append(@trHtml(item))
 
 			$("#shop_count").html($(".cart_main tr").size())
-
+			$("#cart_box .checkout").removeClass("disabled")
 
 			# totals = $(".cart_bottom tr td").html().split("")[5]
 			# totals = totals + item.product_item.total

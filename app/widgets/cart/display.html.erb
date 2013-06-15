@@ -13,10 +13,10 @@
         <%= link_to_if @my_cart.items.count > 0,
                     t(:checkout),
                     person_cart_index_path(current_user.login),
-                    :class => 'btn btn-primary' do %>
+                    :class => 'btn btn-primary checkout' do %>
         <%= link_to t(:checkout),
                     person_cart_index_path(current_user.login),
-                    :class => 'btn btn-primary disabled' %>
+                    :class => 'btn btn-primary checkout disabled' %>
         <% end %>
         <table class="cart_top">
             <tr>
