@@ -1,6 +1,8 @@
 # encoding: utf-8
-source 'https://rubygems.org'
-# source 'http://ruby.taobao.org'
+
+# source 'https://rubygems.org'
+
+source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
 # database orm adapter
@@ -20,7 +22,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
-  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
+  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails', :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails', '~> 1.0.3'
   gem 'compass-h5bp', '~> 0.1.0'
@@ -143,8 +145,11 @@ gem 'activemerchant_patch_for_china'
 gem 'geocoder', :github => 'mrichie/geocoder'
 gem 'ruby-hmac'
 gem "hiredis", "~> 0.4.0"
-gem "redis", "~> 2.2.0", :require => ["redis/connection/hiredis", "redis"]
 gem 'rails_autolink'
 gem 'whenever', :require => false
-# gem 'text_format_html',:github => "huxinghai1988/text_format_html"
+gem 'chinese_pinyin', '0.4.1'
+gem 'rmmseg-cpp-huacnlee', '0.2.9'
+gem 'redis-namespace','~> 1.0.2'
+gem 'redis-search', '0.6.3'
+gem 'redis'
 gem "wicked"

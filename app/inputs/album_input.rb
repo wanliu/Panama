@@ -16,7 +16,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
     output = ActiveSupport::SafeBuffer.new
     output << template.content_tag(:ul, nil, :class => "attachment-list", :id => el_id)
     output << template.javascript_tag(<<-JAVASCRIPT
-        new ProductUpload({
+      new ProductUpload({
           el : document.getElementById("#{el_id}"),
           data : #{collection.to_json},
           params : {
@@ -41,7 +41,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
       <input type="hidden" />
       <div class="attachment-upload"></div>
       <div class="operation-panle">
-        '<a href="javascript:void(0)" class="delete-img">删除</a>
+        <a href="javascript:void(0)" class="delete-img">删除</a>
         <a href="javascript:void(0)" class="default-index-img">设为主图</a>
       </div>
       <div class="progress-panle"></div>

@@ -23,19 +23,18 @@
       <button class="btn add2"  type="button"><i class="icon-plus"></i>Add</li></button>
     </div>
   </div>
-     <script type="text/javascript">
-          var insert = $(".bettwen2");
-          $(".add2").bind("click",function(){
-            debugger
-            $(".addLine2").prepend(insert);
-          });
-      </script>
+  <script type="text/javascript">
+    var insert = $(".bettwen2");
+    $(".add2").bind("click",function(){
+      $(".addLine2").prepend(insert);
+    });
+  </script>
 
 
-      <%= f.input :start_time,
-                  :as         => :string %>
+  <%= f.input :start_time,
+              :as         => :string %>
 
-      <%= f.input :end_time,
-                  :as         => :string %>
+  <%= f.input :end_time,
+              :as         => :string %>
 <% end %>
 

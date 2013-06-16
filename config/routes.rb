@@ -150,11 +150,12 @@ Panama::Application.routes.draw do
   resources :contents, :except => :index
 
   resources :products, :except => :index do
-    collection do
-      get 'price'
+    member do
+      get 'base_info'
     end
   end
 
+  resources :product_search
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
