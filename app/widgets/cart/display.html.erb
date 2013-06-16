@@ -5,11 +5,10 @@
 
 <div id="cart_box">
     <div class="tool">
-        <%= link_to t(:clear_list),
-                    cart_clear_list,
-                    :class => 'btn',
-                    :remote => true,
-                    :metohd => :post %>
+        <%= form_tag cart_clear_list do %>
+            <input type='submit' class='btn' value="<%=t(:clear_list) %>" />
+        <% end %>
+
         <%= link_to_if @my_cart.items.count > 0,
                     t(:checkout),
                     person_cart_index_path(current_user.login),
