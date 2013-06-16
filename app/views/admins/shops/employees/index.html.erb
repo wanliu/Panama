@@ -98,7 +98,7 @@
 </template>
 
 <script type='text/javascript' >
-    function(EmployeeGroup, $, hogan){
+    $(function(EmployeeGroup, hogan){
         template = Hogan.compile($(".group-user-template").html())
         _permission_template = Hogan.compile($(".permission-group-template").html())
         new EmployeeGroup({

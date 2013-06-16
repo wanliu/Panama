@@ -16,7 +16,7 @@ class PayManner extends Backbone.View
 
   chose_manner: () ->
     @$radio[0].checked = true
-    @set_name(name: @name, code: @code)
+    @set_name({name: @name, code: @code}, @$(".guide"))
 
 
 class root.TransactionPayManner extends Backbone.View
@@ -38,6 +38,14 @@ class root.TransactionPayManner extends Backbone.View
     @chose_panel.slideUp () =>
       @panel.show()
 
+  toggle_guide: (guide) ->
+    if guide.css("display") == "none"
+      guides = @chose_panel.find("ul>li>.guide")
+      guides.slideUp()
+      guide.slideDown()
+
+
+
   load_list: () ->
     lis = @chose_panel.find("ul>li")
     _.each lis, (li) =>
@@ -45,7 +53,7 @@ class root.TransactionPayManner extends Backbone.View
         set_name: _.bind(@set_name, @),
         el: $(li))
 
-  set_name: (pay_manner) ->
+  set_name: (pay_manner, guide) ->
     @panel.find(".chose_name").html(pay_manner.name)
-
+    @toggle_guide(guide)
 
