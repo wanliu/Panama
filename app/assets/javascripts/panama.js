@@ -11,6 +11,7 @@
 //= require wanliu/ajax_auth_client
 //= require lib/realtime_client
 //= require twitter/bootstrap/dropdown
+//= require twitter/bootstrap
 //= require lib/image_natural_size
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
