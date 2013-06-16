@@ -1,3 +1,4 @@
+
 root = window || @
 
 class HoverManager
@@ -16,7 +17,8 @@ class HoverManager
 	checkStatus: (event) ->
 
 class MyCart extends Backbone.View
-	el: "#my_cart"
+	# el: "#my_cart"
+	el: $('#my_cart')
 
 	events:
 		"click .handle": "toggleCartBox"
