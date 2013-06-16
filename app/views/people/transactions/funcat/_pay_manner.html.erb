@@ -11,14 +11,19 @@
       <ul>
         <% PayManner.avaliable.each do | pay_manner | %>
         <li>
-          <span class='title' >
-            <input type="radio" name='order_transaction[pay_manner_id]' value='<%=pay_manner.id %>'  <%='checked' if pay_manner.default_state %>/>
-            <span class='name'><%=pay_manner.name %></span>
-          </span>
-          <input type='hidden' value="<%=pay_manner.code %>" class='code' />
-          <span class='describe'>
-            <%=pay_manner.description %>
-          </span>
+          <div>
+            <span class='title' >
+              <input type="radio" name='order_transaction[pay_manner_id]' value='<%=pay_manner.id %>'  <%='checked' if pay_manner.default_state %>/>
+              <span class='name'><%=pay_manner.name %></span>
+            </span>
+            <input type='hidden' value="<%=pay_manner.code %>" class='code' />
+            <span class='describe'>
+              <%=pay_manner.description %>
+            </span>
+          </div>
+          <div class='guide'>
+            <%=render "people/transactions/pay_manners/#{pay_manner.code}" %>
+          </div>
         </li>
         <% end %>
       </ul>
@@ -58,7 +63,7 @@
     </div>
   </div>
   <div class="delivery-select">
-    <label class="chosen control-label">运送方式:</label>
+    <label class="chosen control-label">运送方式</label>
     <div class="controls controls-row">
       <div class="span7">
         <select name='order_transaction[delivery_type_id]' class='order_delivery_type_id'>
