@@ -1,3 +1,4 @@
+
 root = window || @
 
 class HoverManager
@@ -16,7 +17,8 @@ class HoverManager
 	checkStatus: (event) ->
 
 class MyCart extends Backbone.View
-	el: "#my_cart"
+	# el: "#my_cart"
+	el: $('#my_cart')
 
 	events:
 		"click .handle": "toggleCartBox"
@@ -79,7 +81,10 @@ class MyCart extends Backbone.View
 				# $(trOjb[2]).html(item.amount)
 				# $(trOjb[3]).html(item.total)
 			else
-				@$(".cart_main").append(@trHtml(item))
+			$(".cart_main").append(@trHtml(item))
+
+			$("#shop_count").html($(".cart_main tr").size())
+			$("#cart_box .checkout").removeClass("disabled")
 
 			@$("#shop_count").html($(".cart_main tr").size())
 			# totals = $(".cart_bottom tr td").html().split("")[5]

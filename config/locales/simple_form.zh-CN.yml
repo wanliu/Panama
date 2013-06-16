@@ -1,0 +1,8 @@
+"zh-CN":
+  simple_form:
+    labels:
+      order_transaction:
+        address_id: 选择地址
+      address:
+        zip_code: 邮编
+        road: 街道

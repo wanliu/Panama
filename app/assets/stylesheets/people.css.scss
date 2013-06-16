@@ -149,6 +149,11 @@ body {
 }
 
 .transaction-body{
+
+  .label_zip_code{
+    width: 76px !important;
+  }
+
   .row-fluid{
     line-height: 30px;
 
@@ -195,6 +200,16 @@ body {
           .describe{
             color: gray;
             margin-left: 25px;
+          }
+
+          .guide{
+            display: none;
+
+
+            .bank-wrapper{
+              margin-top: 10px;
+              margin-left: 30px;
+            }
           }
         }
       }

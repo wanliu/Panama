@@ -4,35 +4,22 @@
     <% end %>
     <span id="shop_count" class="badge badge-important"><%= @my_cart.items_count %></span>
 
-    <div id="cart_box">
-        <div class="tool">
-            <%= link_to t(:clear_list),
-                        cart_clear_list,
-                        :class => 'btn',
-                        :remote => true,
-                        :metohd => :post %>
-            <%= link_to_if @my_cart.items.count > 0,
-                        t(:checkout),
-                        person_cart_index_path(current_user.login),
-                        :class => 'btn btn-primary' do %>
-            <%= link_to t(:checkout),
-                        person_cart_index_path(current_user.login),
-                        :class => 'btn btn-primary disabled' %>
-            <% end %>
-            <table class="cart_top">
-                <tr>
-                    <td>商品图片</td>
-                    <td>商品标题</td>
-                    <td>商品数量</td>
-                    <td>商品价格</td>
-                </tr>
-            </table>
-        </div>
 
-        <table class="cart_main">
-            <%= render :partial => "cart/product_item", :collection => @my_cart.items %>
-        </table>
-        <table class="cart_bottom">
+<div id="cart_box">
+    <div class="tool">
+        <%= form_tag cart_clear_list do %>
+            <input type='submit' class='btn' value="<%=t(:clear_list) %>" />
+        <% end %>
+
+        <%= link_to_if @my_cart.items.count > 0,
+                    t(:checkout),
+                    person_cart_index_path(current_user.login),
+                    :class => 'btn btn-primary checkout' do %>
+        <%= link_to t(:checkout),
+                    person_cart_index_path(current_user.login),
+                    :class => 'btn btn-primary checkout disabled' %>
+        <% end %>
+        <table class="cart_top">
             <tr>
                 <td class="product_total">商品总价：0</td>
             </tr>
