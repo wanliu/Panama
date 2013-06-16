@@ -5,6 +5,7 @@ class Product < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::SynchronousProperty
   include PanamaCore::InventoryCache
+  include Redis::Search
 
   attr_accessible :description,
                   :name,
@@ -66,6 +67,11 @@ class Product < ActiveRecord::Base
       select { |pv| pv.property_id == property.id }.first unless property.nil?
     end
   end
+
+  # 产品名称搜索
+  redis_search_index(:title_field => :name,
+                     :score_field => :created_at,
+                     :ext_fields  => [:price])
 
   def prices_definition
     price_options.map do |po|
@@ -147,10 +153,19 @@ class Product < ActiveRecord::Base
     default_attachment ? default_attachment.file : Attachment.new.file
   end
 
-  def format_attachment
+  def as_json(*args)
+    options = args.extract_options!
+    attrs = super *args
+    attrs["attachments"] = format_attachment(options[:version_name])
+    attrs
+  end
+
+  def format_attachment(version_name = nil)
     temp = []
-    temp << default_attachment.get_attributes.merge(:default_state => true) unless default_attachment.blank?
-    attachments.each{| atta | temp << atta.get_attributes }
+    unless default_attachment.blank?
+      temp << default_attachment.get_attributes(version_name).merge(:default_state => true)
+    end
+    attachments.each{| atta | temp << atta.get_attributes(version_name) }
     temp
   end
 
