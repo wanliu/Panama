@@ -14,14 +14,14 @@
     </div>
     <div class="span3">
       <label class="control-label">
-        <%= transaction.delivery_price %>
+        <%= number_to_currency(transaction.delivery_price) %>
       </label>
     </div>
     <div class='span1'>
       <label class="control-label">快递单号</label>
     </div>
     <div class='span3'>
-        transaction.delivery_code
+        <%= transaction.delivery_code %>
     </div>
   </div>
   <% end %>
