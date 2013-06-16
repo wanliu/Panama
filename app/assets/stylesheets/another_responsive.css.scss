@@ -1,3 +1,17 @@
+@import "variables";
+@import "twitter/bootstrap/mixins";
+
+//
+// 1250px min
+$gridColumnWidth1250:     85px !default;
+$gridGutterWidth1250:     20px !default;
+$gridRowWidth1250:        ($gridColumns * $gridColumnWidth1250) + ($gridGutterWidth1250 * ($gridColumns - 1)) !default;
+
+
+// 1250px min
+$fluidGridColumnWidth1250:     percentage($gridColumnWidth1250/$gridRowWidth1250) !default;
+$fluidGridGutterWidth1250:     percentage($gridGutterWidth1250/$gridRowWidth1250) !default;
+
 @media (min-width: 1250px) {
 
   // Fixed grid
