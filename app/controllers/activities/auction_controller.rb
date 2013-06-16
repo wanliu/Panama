@@ -10,7 +10,7 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def create
-    slice_options = [:product_id, :price, :start_time, :end_time, :description]
+    slice_options = [:product_id, :price, :start_time, :end_time, :description, :attachment_ids]
     activity_params = params[:activity].slice(*slice_options)
 
     parse_time!(activity_params)
@@ -18,6 +18,9 @@ class Activities::AuctionController < Activities::BaseController
     @activity = current_user.activities.build(activity_params)
     @activity.activity_type = "auction"
     @activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
+    @activity.attachments = activity_params[:attachment_ids].map do |k, v|
+      Attachment.find_by(:id => v)
+    end.compact
 
     if params[:activity][:activity_price]
       @activity.activity_rules.build(name: 'activity_price',
