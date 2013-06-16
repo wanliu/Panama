@@ -11,6 +11,7 @@ class Activity < ActiveRecord::Base
   has_many :comments, :as => :targeable
   has_many :activities_likes
   has_many :likes, :through => :activities_likes, :source => :user
+  has_and_belongs_to_many :attachments, class_name: "Attachment"
 
   has_many :activities_participates
   has_many :participates, :through => :activities_participates, :source => :user

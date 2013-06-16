@@ -23,10 +23,10 @@ class ProductsController < ApplicationController
     @item.delegate_property_setup
   end
 
-  def price
-    product = Product.find(params[:id])
+  def base_info
+    @product = Product.find(params[:id])
     respond_to do |format|
-      format.json { render json: { price: product.price } }
+      format.json{ render :json => @product }
     end
   end
 

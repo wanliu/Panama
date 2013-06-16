@@ -1,10 +1,12 @@
 <div id="activities" >
-  <% @activities.each_slice(2) do |group| -%>
+  <!-- 4列，按下标公式4n, 4n +1, 4n + 2, 4n + 3分类竖向排列 -->
+  <% (0...@activities.size).group_by { |i| i % 4 }.each do |_, indexs| -%>
     <div class="column">
-      <% group.each do |activity| %>
-        <%= render_activity activity %>
+      <% indexs.each do |index| %>
+        <%= render_activity @activities[index] %>
       <% end %>
-    </div><% end %>
+    </div>
+  <% end %>
 </div>
 <script type="text/javascript">
     var $container = $('#activities');

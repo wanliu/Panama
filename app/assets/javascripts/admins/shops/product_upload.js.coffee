@@ -5,7 +5,7 @@
 #= require backbone
 #= require lib/fileuploader
 
-exports = (window || @)
+root = (window || @)
 
 class Attachment extends Backbone.Model
 
@@ -172,7 +172,7 @@ class ProductAttachmentUpload extends Backbone.View
         @hidden_input.attr("name", "#{@default_params.default_input_name}")
 
 
-class exports.ProductUpload extends Backbone.View
+class root.ProductUpload extends Backbone.View
 
     initialize : () ->
         _.extend(@, @options)
@@ -215,5 +215,4 @@ class exports.ProductUpload extends Backbone.View
         )
         temp
 
-exports
 
