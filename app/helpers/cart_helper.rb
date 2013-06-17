@@ -9,6 +9,6 @@ module CartHelper
   end
 
   def cart_clear_list
-    clear_cart_list_path(current_user)
+    clear_cart_list_path
   end
 end
