@@ -1,6 +1,6 @@
 require 'faye'
 require 'faye/redis'
-require 'debugger'
+#require 'debugger'
 require "redis"
 require 'yaml'
 require 'logger'
