@@ -1,5 +1,5 @@
 <!-- 竞价 -->
-<%= simple_form_for @activity, :remote => true,:url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction' } do |f| %>
+<%= simple_form_for @activity, :remote => true, :url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction' }, :type => :json do |f| %>
 
   <%= f.input :product,
               :label => "商品",
