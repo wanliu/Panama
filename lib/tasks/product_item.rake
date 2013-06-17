@@ -42,7 +42,6 @@ namespace :product do
     end
   end
 
-
   desc "export csv product data"
   task :load => :environment do
     CSV.foreach("#{Rails.root}/config/data/product_niu_nai.csv") do |row|
