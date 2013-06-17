@@ -7,13 +7,14 @@
 	<%= render "header" %>
 	<%= render "flashes" %>
   	<div id="admin_content" class="container relative">
-	    <div id="admin_main">
-	      <div class="container-fluid">
-	        <%= yield %>
-	        <%= render "footer" %>
-	      </div>
-	    </div>
-	    <%= side_bar :admin_left_side %>
+  		<div class="row">
+		    <div id="admin_main">
+		      <div class="container-fluid">
+		        <%= yield %>
+		      </div>
+		    </div>
+		    <%= side_bar :admin_left_side %>
+		</div>
 	</div>
     <%#= render "javascripts" %>
 	<%= javascripts_codes %>
@@ -21,8 +22,9 @@
 		Ajaxify.start();
 	</script>
 
-  <div class='footer_nav'>
-    <%= render_widget :chat %>
-  </div>
+	<div class='footer_nav'>
+		<%= render_widget :chat %>
+	</div>
+	<%= render "footer" %>
 </body>
 </html>
