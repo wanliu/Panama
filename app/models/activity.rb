@@ -37,13 +37,15 @@ class Activity < ActiveRecord::Base
 
 
   def as_json(options = nil)
-    super(:include => {
+    atts = super(:include => {
           :author   => {
             :include => :photos },
           :comments => {
             :include => {
               :user => {
                 :include => :photos }}}})
+    atts["url"] = photos.default
+    atts
   end
 
   def activity_price
