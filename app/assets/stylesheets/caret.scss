@@ -1,3 +1,5 @@
+@import "variables";
+
 @mixin caret-arrow($dist, $size, $color, $height: $size) {
 	$left: 'right';
 	$right: 'left';
@@ -37,10 +39,11 @@
 	}
 
 	&.right {
+		margin-top: 5px;
 		@include caret-arrow('right', 5px, $black);
 	}
 
 	&.inverse.right {
 		@include caret-arrow('right', 5px, $white);
-	}	
+	}
 }

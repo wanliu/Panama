@@ -136,12 +136,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   private
 
   def dispose_options
-    args = { :attachment_ids => [] }
     attachments = params[:product].fetch(:attachment_ids, {})
-    attachments.each do | k, v |
-      args[:attachment_ids] << v
-    end
-    args
+    {:attachment_ids => attachments.map{|k, v| v} }
   end
 
   def additional_properties_content(category = nil)

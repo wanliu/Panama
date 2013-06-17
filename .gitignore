@@ -14,6 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /config/sso.yml
 /config/database.yml
+/config/deploy.rb
 /log/*.log
 /coverage
 /tmp
@@ -24,3 +25,7 @@
 /public/assets
 /config/email.yml
 /config/application.yml
+/assets/images/beauty01.jpg
+/assets/images/beauty02.jpg
+/assets/images/beauty023.jpg
+/public/assets

@@ -1,0 +1,11 @@
+$gridColumnWidth: 70px;
+$gridGutterWidth: 10px;
+
+@import "variables";
+
+// import original bootstrap
+@import "twitter/bootstrap";
+// @import "twitter/bootstrap-responsive";
+
+
+@import "another_responsive";

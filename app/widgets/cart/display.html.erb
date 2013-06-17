@@ -1,7 +1,9 @@
 <%= widget_div :class => "nav_item" do %>
-    <a href="#" class='handle' >My Cart</a>
+    <%= link_to '#', class: 'handle' do %>
+        <%= icon(:'shopping-cart') + ' ' + t(:my_cart) %>
+    <% end %>
     <span id="shop_count" class="badge badge-important"><%= @my_cart.items_count %></span>
-<% end %>
+
 
 <div id="cart_box">
     <div class="tool">
@@ -19,23 +21,11 @@
         <% end %>
         <table class="cart_top">
             <tr>
-                <td>图片</td>
-                <td>标题</td>
-                <td>数量</td>
-                <td>价格</td>
+                <td class="product_total">商品总价：0</td>
             </tr>
         </table>
+        </div>
     </div>
 
-
-    <table class="cart_main">
-        <%= render :partial => "cart/product_item", :collection => @my_cart.items %>
-    </table>
-    <table class="cart_bottom">
-        <tr>
-            <td class="product_total">总价：0</td>
-        </tr>
-    </table>
-    </div>
-</div>
+<% end %>
 <%= javascript_include_tag "my_cart" %>

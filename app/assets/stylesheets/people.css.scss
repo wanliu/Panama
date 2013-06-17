@@ -14,6 +14,7 @@
 //= require './lib/notify/jquery.pnotify.default'
 //= require './lib/notify/jquery.pnotify.default.icons'
 
+@import "another_bootstrap";
 @import "compass/css3";
 @import "variables";
 @import "banks";
@@ -22,6 +23,8 @@
 @import "widget";
 @import "transaction";
 @import "notification";
+@import "footer_nav";
+
 
 body {
   background: #f1f1f1;
