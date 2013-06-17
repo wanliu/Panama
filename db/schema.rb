@@ -13,7 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20130617033132) do
 
-
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
     t.string   "resource_type", :null => false
@@ -388,8 +387,8 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.decimal  "total",              :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
     t.integer  "address_id"
     t.boolean  "operator_state",                                    :default => false
     t.integer  "delivery_type_id"
