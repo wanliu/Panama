@@ -10,6 +10,12 @@ $gridGutterWidth: 10px;
 
 @import "another_responsive";
 
+#header {
+	position: relative;
+	height: 80px;
+}
+
+
 .nav{
 	.user_icon{
 		width: 20px;

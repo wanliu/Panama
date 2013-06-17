@@ -17,7 +17,7 @@ class Activities::AuctionController < Activities::BaseController
 
     @activity = current_user.activities.build(activity_params)
     @activity.activity_type = "auction"
-    @activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
+    # @activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
     unless activity_params[:attachment_ids].nil?
       @activity.attachments = activity_params[:attachment_ids].map do |k, v|
         Attachment.find_by(:id => v)
