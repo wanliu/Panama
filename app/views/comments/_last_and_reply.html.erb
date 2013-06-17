@@ -1,0 +1,4 @@
+<div class="comments">
+	<%= render "comments/one_comment", :comment => target.comments.last if target.comments.last %>
+</div>
+<%= render "comments/reply_form", :author => current_user %>

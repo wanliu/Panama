@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
+<%= html_tag :class => "no-js" %>
+<%= render "head", :styles => ["stream"], :javascripts => ['stream'] %>
+
+<body class="<%= controller.controller_name %>">
+  <%= render "header" %>
+  <%= render "main_nav" %>
+
+  <div id="main" class="container">
+    <div id="main-category" class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <ul class="nav">
+            <li><a href='#' ><%=icon 'eye-open' %> </a></li>
+            <li><a href='#' >食品保健</a></li>
+            <li><a href="#">尿裤湿巾</a></li>
+            <li><a href="#">洗浴用品</a></li>
+            <li><a href="#">护肤用品</a></li>
+            <li><a href="#">出行车类</a></li>
+            <li><a href="#">出行安全</a></li>
+            <li><a href="#">玩具礼物</a></li>
+            <li><a href="#">哺喂用品</a></li>
+            <li><a href="#">健康安全</a></li>
+            <li><a href="#">妈妈专区</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="main-body">
+      <%= render "flashes" %>
+      <%#= render 'information' %>
+    <%= yield %>
+    </div>
+    <%= render "social_sidebar" %>
+
+
+    <%= render "footer" %>
+  </div>
+  <div class='footer_nav'>
+    <%= render_widget :chat %>
+    <%= render_widget :my_cart %>
+  </div>
+  <% if !google_account_id.blank? %>
+    <script>
+      //<![CDATA[
+        var _gaq=[['_setAccount','<%= google_account_id %>'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+      //]]>
+    </script>
+  <% end %>
+</body>
+</html>

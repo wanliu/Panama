@@ -1,0 +1,2 @@
+module Activities::FocusHelper
+end

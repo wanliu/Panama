@@ -1,48 +1,19 @@
 <div id="activities" >
-  <%= render :partial => "activity", :collection => @activities %>
+  <!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
+  <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
+    <div class="column">
+      <% indexs.each do |index| %>
+        <%= render_activity @activities[index] %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
-<%= link_to 'New Activity', new_activity_path %>
-<br />
-<% User.all.each do |u| %>
-<a href="javascript:void(0)" class='chat_user' data-event='chat' data-value="<%=u.id %>"><%=u.login %></a>
-<% end %>
-<br />
 <script type="text/javascript">
-
     var $container = $('#activities');
 
-    $container.imagesLoaded( function(){
-      $container.masonry({
-        itemSelector : '.activity'
-      });
-    });
-
-
-    $("#activities img").on('click', function(){
-      var $this = $(this);
-        html = "<div id='center_image'><img src='" + $this.attr('src') + "' alt='#' /> </div>",
-        $dialog = $('#center_image').get(0) ? $('#center_image') : $(html).appendTo('body'),
-        naturalWidth = $this.naturalWidth(),
-        naturalHeight = $this.naturalHeight(),
-        windowWidth = $(window).width(),
-        windowHeight = $(window).height();
-
-      var top = naturalHeight > windowHeight ? 0 : (windowHeight - naturalHeight) / 2,
-        left = naturalWidth > windowWidth ? 0 : (windowWidth - naturalWidth) / 2;
-
-
-      $dialog.find("img").attr('src', $this.attr('src'));
-      effect = "fadeIn"
-      $dialog.removeClass("animated " + effect);
-      $dialog
-        .css('position', 'absolute')
-        .width(naturalWidth)
-        .height(naturalHeight)
-        .offset({top: top, left: left})
-        .css('z-index', 2000)
-      .show()
-      .addClass('animated ' + effect);
-    })
-
-    new Drag
+    // $container.imagesLoaded( function(){
+    //   $container.masonry({
+    //     itemSelector : '.activity'
+    //   });
+    // });
 </script>

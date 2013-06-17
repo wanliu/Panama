@@ -1,8 +1,20 @@
+@import "my_cart";
+@import "contact_friend";
+
+
 .footer_nav{
  	position: fixed;
   right: 100px;
   z-index: 1200;
   bottom: -5px;
+  background: $white;
+  border: 1px solid #ccc;
+  @include border-radius(5px);
+  @include box-shadow(1px 1px 1px $grayDarker);
+
+  &>:first-child.nav_item {
+    border-left: none;
+  }
 
   .nav_item{
     line-height: 40px;
@@ -10,8 +22,5 @@
     margin-right: 5px;
     display: inline-block;
     border-left: 1px solid #DDD;
-    @include border-radius(5px);
-    background: $white;
-    @include box-shadow(1px 1px 3px $grayDarker);
   }
 }

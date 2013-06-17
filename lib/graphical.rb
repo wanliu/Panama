@@ -66,6 +66,7 @@ module Graphical
         end
 
         class ImageType
+            include ActiveModel::Serialization
 
             attr_accessor :klass, :options
 
@@ -78,6 +79,15 @@ module Graphical
                         file.url(config[type]) if file
                     end
                 end
+            end
+
+            def attributes
+                config = @klass.class.configrue_graphical
+
+                Hash[ @options[:allow].map do |type|
+                    file = @klass.send(@options[:handler])
+                    [type, file.url(config[type])] if file
+                end]
             end
         end
     end

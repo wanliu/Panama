@@ -3,6 +3,7 @@
 //= require lib/jquery.raty
 //= require lib/underscore
 //= require backbone
+//= require twitter/bootstrap
 //= require h5bp
 //= require lib/hogan
 //= require lib/chosen.ex
@@ -10,7 +11,6 @@
 //= require lib/dnd
 //= require wanliu/ajax_auth_client
 //= require lib/realtime_client
-//= require twitter/bootstrap/dropdown
 //= require lib/image_natural_size
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
