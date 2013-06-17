@@ -40,22 +40,24 @@
 </div>
 
 <script type="text/javascript">
-  $(".save_activity").on('click', function(type){
-    var $a = $(".activity_select>.active");
-    var content_id = $a.find(">a").attr('href')
-    var $form = $(".activity_forms>" + content_id + " form");
+  $(document).ready(function(){
+    $(".save_activity").on('click', function(type){
+      var $a = $(".activity_select>.active");
+      var content_id = $a.find(">a").attr('href')
+      var $form = $(".activity_forms>" + content_id + " form");
 
-    $form.submit();
+      $form.submit();
 
-    $form.on("ajax:success", function(){
-      $("#active_dialog").modal('hide');
+      $form.on("ajax:success", function(){
+        $("#active_dialog").modal('hide');
+      });
+
+      $form.on("ajax:error", function(event, xhr, state){
+        $form.replaceWith(xhr.responseText);
+      });
+
     });
-
-    $form.on("ajax:error", function(event, xhr, state){
-      $form.replaceWith(xhr.responseText);
-    });
-
-  });
+  })
 
   // var pb = new PublishButton({el: ".publish_button"})
 </script>
