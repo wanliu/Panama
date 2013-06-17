@@ -12,18 +12,22 @@ class root.ActivityBaseInfoView extends Backbone.View
 
       default_img_url: "",
 
-      version_name: "",
+      version_name: "100x100",
 
       template: "",
 
-      input_name: ""
+      input_name: "activity[attachment_ids]",
+
+      default_enabled: false,
+
+      limit: 5
     }
   }
 
-  def_options: {}
+  upload_options: {}
 
   initialize: (options) ->
-    _.extend(@def_options , @default_options, options)
+    _.extend(@upload_options , @default_options.params, options.params)
 
   fetch_product: (product_id) ->
     $.ajax
@@ -43,12 +47,13 @@ class root.ActivityBaseInfoView extends Backbone.View
   load_attachments: (attachments) ->
     @$("img.private").remove()
     @$(".attachment_panel>li").remove()
+
     new ProductUpload({
       el: @$(".attachment_panel"),
       data: attachments,
       default_enabled: false,
       limit: 5,
-      params: @def_options.params
+      params: @upload_options
     })
 
   render: () ->
