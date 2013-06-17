@@ -11,4 +11,4 @@ Redis::Search.configure do |config|
   config.pinyin_match = true
 end
 
-Product.new
+# Product.new

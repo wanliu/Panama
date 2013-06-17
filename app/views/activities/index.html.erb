@@ -1,6 +1,6 @@
 <div id="activities" >
-  <!-- 4列，按下标公式4n, 4n +1, 4n + 2, 4n + 3分类竖向排列 -->
-  <% (0...@activities.size).group_by { |i| i % 4 }.each do |_, indexs| -%>
+  <!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
+  <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
     <div class="column">
       <% indexs.each do |index| %>
         <%= render_activity @activities[index] %>
