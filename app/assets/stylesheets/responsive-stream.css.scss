@@ -1,6 +1,6 @@
 
 @media (min-width: 950px) {
-	$socialSideBarWidth: 250px;
+	$socialSideBarWidth: 0;
 	$columnGutter: 5px;
 	$columnCounter: 3;
 
@@ -12,6 +12,8 @@
 	#social_sidebar {
 		width: $socialSideBarWidth;
 		margin-left: $gridRowWidth - $socialSideBarWidth;
+		// hide sidebar
+		display: none;
 
 		&.affix {
 			top: 40px;
@@ -29,9 +31,9 @@
 }
 
 @media (min-width: 1250px) {
-	$socialSideBarWidth: 280px;
+	$socialSideBarWidth: 0;
 	$columnGutter: 10px;
-	$columnCounter: 4;
+	$columnCounter: 5;
 
 	#main-body {
 		float: left;
@@ -41,6 +43,8 @@
 	#social_sidebar {
 		width: $socialSideBarWidth;
 		margin-left: $gridRowWidth1250 - $socialSideBarWidth;
+		// hide sidebar
+		display: none;
 
 		&.affix {
 			top: 40px;
