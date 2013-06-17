@@ -46,8 +46,8 @@ Panama::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( stream.js stream.css people.css admins.css polyfills.js chats/contact.js my_cart.js sigin.css sigin.js)
-
+  config.assets.precompile += %w(stream.js polyfills.js chats/contact.js my_cart.js sigin.js panama.js)
+  config.assets.precompile += %w(stream.css people.css admins.css sigin.css category.css)
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
