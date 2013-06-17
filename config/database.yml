@@ -40,7 +40,7 @@ production:
   database: panama_production
   pool: 5
   username: root
-  password:
+  password: crazydog
   host: localhost
  # socket: /tmp/mysql.sock
 
