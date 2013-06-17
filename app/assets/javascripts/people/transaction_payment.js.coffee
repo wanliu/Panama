@@ -1,17 +1,17 @@
 #交易付款
 
-define ["jquery", "backbone"], ($, Backbone) ->
+exports = window || @
 
-  class TransactionPayment extends Backbone.View
+class exports.TransactionPayment extends Backbone.View
 
-    initialize: (options) ->
-      _.extend(@, options)
+  initialize: (options) ->
+    _.extend(@, options)
 
-      @button = @$(".pay-button")
-      @filter_state()
+    @button = @$(".pay-button")
+    @filter_state()
 
-    filter_state: () ->
-      if @model.total > @model.money
-        @button.addClass("disabled")
-      else
-        @button.removeClass("disabled")
+  filter_state: () ->
+    if @model.total > @model.money
+      @button.addClass("disabled")
+    else
+      @button.removeClass("disabled")

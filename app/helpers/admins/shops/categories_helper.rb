@@ -38,22 +38,20 @@ module Admins::Shops::CategoriesHelper
     end +
     register_javascript(:changed_highlight_save) do
       javascript_tag <<-JAVASCRIPT
-        require(['jquery'], function($){
-          $("#table tr td :input").on('keydown', function(){
-            var $this = $(this);
-            var $buttons = $this.parents("tr").find("td a.utils");
-            console.log($buttons);
-            $buttons.each(function(i, button){
-              var $btn = $(button);
-              if ($btn.hasClass('save') || $btn.hasClass('edit')){
-                if ($this.val().length == 0)
-                  $btn.removeClass('btn-primary');
-                else
-                  $btn.addClass('btn-primary');
-              }
-            });
-          })
-        });
+        $("#table tr td :input").on('keydown', function(){
+          var $this = $(this);
+          var $buttons = $this.parents("tr").find("td a.utils");
+          console.log($buttons);
+          $buttons.each(function(i, button){
+            var $btn = $(button);
+            if ($btn.hasClass('save') || $btn.hasClass('edit')){
+              if ($this.val().length == 0)
+                $btn.removeClass('btn-primary');
+              else
+                $btn.addClass('btn-primary');
+            }
+          });
+        })
       JAVASCRIPT
     end
   end

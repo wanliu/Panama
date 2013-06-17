@@ -1,93 +1,91 @@
 #交易退货
+#= require lib/notify
 
-define ["jquery", "backbone", "notify"], ($, Backbone) ->
+class TransactionRefund extends Backbone.Model
+  set_url: (url) ->
+    @urlRoot = url
 
-  class TransactionRefund extends Backbone.Model
-    set_url: (url) ->
-      @urlRoot = url
+  create: (callback) ->
+    @fetch({
+      url: "#{@urlRoot}/refund",
+      type: "POST",
+      data: {order_refund: @toJSON()},
+      success: callback
+    })
 
-    create: (callback) ->
-      @fetch({
-        url: "#{@urlRoot}/refund",
-        type: "POST",
-        data: {order_refund: @toJSON()},
-        success: callback
-      })
+class TransactionRefundView extends Backbone.View
+  events: {
+    "click .returned-event"        : "toggle_panel",
+    "submit .returned_panel form"  : "create"
+  }
 
-  class TransactionRefundView extends Backbone.View
-    events: {
-      "click .returned-event"        : "toggle_panel",
-      "submit .returned_panel form"  : "create"
-    }
+  initialize: (options) ->
+    @remote_url = @options.remote_url
+    @$details = @$(".item-details>.detail-row")
+    @$panel = @$(".returned_panel")
+    @$form = @$panel.find("form")
 
-    initialize: (options) ->
-      @remote_url = @options.remote_url
-      @$details = @$(".item-details>.detail-row")
-      @$panel = @$(".returned_panel")
-      @$form = @$panel.find("form")
+  toggle_panel: () ->
+    @$panel.slideToggle(_.bind(@toggle_chose_product, @))
 
-    toggle_panel: () ->
-      @$panel.slideToggle(_.bind(@toggle_chose_product, @))
+  toggle_chose_product: () ->
+    state = if @$panel.css("display") == "none" then false else true
+    @each_details (row) ->
+      check = @row_checkbox(row)
+      if check.length > 0
+        if state then check.show() else check.hide()
+        check[0].checked = state
 
-    toggle_chose_product: () ->
-      state = if @$panel.css("display") == "none" then false else true
-      @each_details (row) ->
-        check = @row_checkbox(row)
-        if check.length > 0
-          if state then check.show() else check.hide()
-          check[0].checked = state
+  create: () ->
+    data = @get_form_data()
+    data["product_items"] = @get_details()
+    if data.product_items.length <= 0
+      @notify("请选择退货商品!", "error")
+      return false
 
-    create: () ->
-      data = @get_form_data()
-      data["product_items"] = @get_details()
-      if data.product_items.length <= 0
-        @notify("请选择退货商品!", "error")
+    if data.hasOwnProperty('delivery_price')
+      if _.isEmpty(data.delivery_price)
+        @$("input.delivery_price").val(0)
+
+      unless /^\d*\.?\d+$/.test data.delivery_price
+        @notify("请输入正确运费!", "error")
         return false
 
-      if data.hasOwnProperty('delivery_price')
-        if _.isEmpty(data.delivery_price)
-          @$("input.delivery_price").val(0)
+    @refund = new TransactionRefund(data)
+    @refund.set_url(@remote_url)
+    @refund.create (model, data) =>
+      @notify("退货申请成功, 等待商家确认!", "success")
+      @toggle_panel()
+    false
 
-        unless /^\d*\.?\d+$/.test data.delivery_price
-          @notify("请输入正确运费!", "error")
-          return false
+  get_form_data: () ->
+    data = @$form.serializeArray()
+    options = {}
+    _.each data, (d) ->
+      options[d.name] = d.value
+    options
 
-      @refund = new TransactionRefund(data)
-      @refund.set_url(@remote_url)
-      @refund.create (model, data) =>
-        @notify("退货申请成功, 等待商家确认!", "success")
-        @toggle_panel()
-      false
+  get_details: () ->
+    product_items = []
+    @each_details (row) ->
+      check = @row_checkbox(row)
+      if check.length > 0 && check[0].checked
+        product_items.push(row.attr('data-value-id'))
 
-    get_form_data: () ->
-      data = @$form.serializeArray()
-      options = {}
-      _.each data, (d) ->
-        options[d.name] = d.value
-      options
+    product_items
 
-    get_details: () ->
-      product_items = []
-      @each_details (row) ->
-        check = @row_checkbox(row)
-        if check.length > 0 && check[0].checked
-          product_items.push(row.attr('data-value-id'))
+  each_details: (callback) ->
+    _.each @$details, (row) =>
+      callback.call(@, $(row))
 
-      product_items
+  row_checkbox: (row) ->
+    row.find(".detail-chose>input:checkbox")
 
-    each_details: (callback) ->
-      _.each @$details, (row) =>
-        callback.call(@, $(row))
+  notify: (text, type) ->
+    $.pnotify({
+      title: "申请退货提示",
+      text: text,
+      type: type
+    });
 
-    row_checkbox: (row) ->
-      row.find(".detail-chose>input:checkbox")
-
-    notify: (text, type) ->
-      $.pnotify({
-        title: "申请退货提示",
-        text: text,
-        type: type
-      });
-
-
-
+window.TransactionRefundView = TransactionRefundView

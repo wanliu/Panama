@@ -1,230 +1,232 @@
 #describe: 圈子视图
-define ["jquery", "backbone", "exports", "twitter/bootstrap/modal"], ($, Backbone, exports) ->
-  class Circle extends Backbone.Model
-    set_url: (url) ->
-      @urlRoot = url
+#= require twitter/bootstrap/modal
 
-    constructor: (attr, url) ->
-      @set_url(url)
-      super attr
+root = (window || @)
 
-    join_friend: (user_id, scallback, ecallback) ->
-      @fetch({
-        url: "#{@urlRoot}/#{@id}/join_friend/#{user_id}",
-        type: "POST",
-        success: scallback,
-        error: ecallback
+class Circle extends Backbone.Model
+  set_url: (url) ->
+    @urlRoot = url
+
+  constructor: (attr, url) ->
+    @set_url(url)
+    super attr
+
+  join_friend: (user_id, scallback, ecallback) ->
+    @fetch({
+      url: "#{@urlRoot}/#{@id}/join_friend/#{user_id}",
+      type: "POST",
+      success: scallback,
+      error: ecallback
+    })
+
+  remove_friend: (user_id, callback) ->
+    @fetch({
+      url: "#{@urlRoot}/#{@id}/remove_friend/#{user_id}",
+      type: "delete",
+      success: callback
+    })
+
+  circles_remove_friend: (callback) ->
+    @fetch(
+      url: "#{@urlRoot}/circles_remove_friend/#{@id}"
+      type: "delete",
+      success: callback
+    )
+
+class CircleList extends Backbone.Collection
+  model: Circle
+  set_url: (url) ->
+    @url = url
+
+  constructor: (models, url) ->
+    @set_url(url)
+    super models
+
+  added_users: () ->
+    @fetch(
+      url: "#{@url}/addedyou"
+    )
+
+  all_friends: () ->
+    @fetch(
+      url: "#{@url}/all_friends"
+    )
+
+  friends: (circle_id) ->
+    @fetch({
+        url: "#{@url}/friends",
+        data: {circle_id: circle_id}
       })
 
-    remove_friend: (user_id, callback) ->
-      @fetch({
-        url: "#{@urlRoot}/#{@id}/remove_friend/#{user_id}",
-        type: "delete",
-        success: callback
-      })
+  followers: () ->
+    @fetch( url: "#{@url}/followers" )
 
-    circles_remove_friend: (callback) ->
-      @fetch(
-        url: "#{@urlRoot}/circles_remove_friend/#{@id}"
-        type: "delete",
-        success: callback
-      )
+class CircleUser extends Backbone.View
+  tagName: "span"
+  className: "label user"
+  events: {
+    "click .remove_user" : "cloes_user"
+  }
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    @$el.html(@model.get('login'))
+    @$el.append("<a class='close-label remove_user' href='javascript:void(0)'></a>")
+    @model.bind("remove", @remove, @)
 
-  class CircleList extends Backbone.Collection
-    model: Circle
-    set_url: (url) ->
-      @url = url
+  render: () ->
+    @$el
 
-    constructor: (models, url) ->
-      @set_url(url)
-      super models
+  cloes_user: () ->
+    if confirm("是否确认删除#{@model.get('login')}?")
+      @circle.remove_friend @model.id, (model, data) =>
+        @trigger("find_remove", @model.id)
 
-    added_users: () ->
-      @fetch(
-        url: "#{@url}/addedyou"
-      )
+  remove: () ->
+    @$el.remove()
 
-    all_friends: () ->
-      @fetch(
-        url: "#{@url}/all_friends"
-      )
+class CircleUserList extends Backbone.View
+  notice_el: "<div class='notice'>暂时没有好友!</div>"
+  initialize: (options) ->
+    _.extend(@, options)
+    @user_list = new CircleList([], @remote_url)
+    @user_list.bind("add", @add_one, @)
+    @user_list.bind("reset", @all_user, @)
+    @user_list.friends(@model.id)
 
-    friends: (circle_id) ->
-      @fetch({
-          url: "#{@url}/friends",
-          data: {circle_id: circle_id}
-        })
+  render: () ->
+    @el
 
-    followers: () ->
-      @fetch( url: "#{@url}/followers" )
+  all_user: (collection) ->
+    collection.each (model) =>
+      @add_one(model)
 
-  class CircleUser extends Backbone.View
-    tagName: "span"
-    className: "label user"
-    events: {
-      "click .remove_user" : "cloes_user"
-    }
-    initialize: (options) ->
-      _.extend(@, options)
-      @$el = $(@el)
-      @$el.html(@model.get('login'))
-      @$el.append("<a class='close-label remove_user' href='javascript:void(0)'></a>")
-      @model.bind("remove", @remove, @)
+    @filter_msg()
 
-    render: () ->
-      @$el
+  add_one: (model) ->
+    @$(".notice").remove()
+    @circle_view = new CircleUser(
+      circle: @model,
+      model: model )
+    @circle_view.bind("find_remove", _.bind(@find_remove, @))
+    @el.append(@circle_view.render())
 
-    cloes_user: () ->
-      if confirm("是否确认删除#{@model.get('login')}?")
-        @circle.remove_friend @model.id, (model, data) =>
-          @trigger("find_remove", @model.id)
-
-    remove: () ->
-      @$el.remove()
-
-  class CircleUserList extends Backbone.View
-    notice_el: "<div class='notice'>暂时没有好友!</div>"
-    initialize: (options) ->
-      _.extend(@, options)
-      @user_list = new CircleList([], @remote_url)
-      @user_list.bind("add", @add_one, @)
-      @user_list.bind("reset", @all_user, @)
-      @user_list.friends(@model.id)
-
-    render: () ->
-      @el
-
-    all_user: (collection) ->
-      collection.each (model) =>
-        @add_one(model)
-
+  find_remove: (id) ->
+    model = @user_list.get(id)
+    if model?
+      model.trigger("remove")
+      @user_list.remove(model)
       @filter_msg()
 
-    add_one: (model) ->
-      @$(".notice").remove()
-      @circle_view = new CircleUser(
-        circle: @model,
-        model: model )
-      @circle_view.bind("find_remove", _.bind(@find_remove, @))
-      @el.append(@circle_view.render())
+  filter_msg: () ->
+    if @user_list.length <= 0
+      @el.html(@notice_el)
 
-    find_remove: (id) ->
-      model = @user_list.get(id)
-      if model?
-        model.trigger("remove")
-        @user_list.remove(model)
-        @filter_msg()
+class CircleView extends Backbone.View
+  className: "alert alert-info circle"
+  events: {
+    "click .remove_circle" : "delete_circle"
+  }
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    @$el.html(@template.render(@model.toJSON()))
 
-    filter_msg: () ->
-      if @user_list.length <= 0
-        @el.html(@notice_el)
+    @circle_user_list = new CircleUserList(
+      model: @model,
+      el: @$(".user-list"),
+      remote_url: @remote_url
+    )
 
-  class CircleView extends Backbone.View
-    className: "alert alert-info circle"
-    events: {
-      "click .remove_circle" : "delete_circle"
-    }
-    initialize: (options) ->
-      _.extend(@, options)
-      @$el = $(@el)
-      @$el.html(@template.render(@model.toJSON()))
+    @$el.droppable(
+      drop: _.bind(@join_friend, @)
+    )
 
-      @circle_user_list = new CircleUserList(
-        model: @model,
-        el: @$(".user-list"),
-        remote_url: @remote_url
-      )
+    @model.bind("remove_user", _.bind(@remove_user, @))
 
-      @$el.droppable(
-        drop: _.bind(@join_friend, @)
-      )
+  render: () ->
+    @$el
 
-      @model.bind("remove_user", _.bind(@remove_user, @))
+  delete_circle: () ->
+    if confirm("是否确认删除#{@model.get('name')}圈子?")
+      @model.destroy()
+      @$el.remove()
 
-    render: () ->
-      @$el
+  join_friend: (event, ui) ->
+    user_id = $(ui.helper).attr("data-value-id")
+    circle = new Circle({id: @model.id}, @remote_url)
+    circle.join_friend user_id,
+      (model, data) =>
+        @circle_user_list.user_list.add(data)
+      (model, data, t) =>
+        m = JSON.parse(data.responseText)
+        alert(m.message)
 
-    delete_circle: () ->
-      if confirm("是否确认删除#{@model.get('name')}圈子?")
-        @model.destroy()
-        @$el.remove()
+  remove_user: (user_id) ->
+    @circle_user_list.find_remove(user_id)
 
-    join_friend: (event, ui) ->
-      user_id = $(ui.helper).attr("data-value-id")
-      circle = new Circle({id: @model.id}, @remote_url)
-      circle.join_friend user_id,
-        (model, data) =>
-          @circle_user_list.user_list.add(data)
-        (model, data, t) =>
-          m = JSON.parse(data.responseText)
-          alert(m.message)
+class CircleViewList extends Backbone.View
+  events: {
+    "click .add-circle" : "show_add_circle"
+    "click .save-circle" : "create_circle"
+    "keypress input.circle_name" : "key_up"
+  }
+  initialize: (options) ->
+    _.extend(@, options)
 
-    remove_user: (user_id) ->
-      @circle_user_list.find_remove(user_id)
+    @circles = new CircleList([], @remote_url)
+    @circles.bind("add", @add_circle, @)
+    @circles.bind("reset", @all_circle, @)
+    @circles.fetch()
 
-  class CircleViewList extends Backbone.View
-    events: {
-      "click .add-circle" : "show_add_circle"
-      "click .save-circle" : "create_circle"
-      "keypress input.circle_name" : "key_up"
-    }
-    initialize: (options) ->
-      _.extend(@, options)
+    @circle_el = @$(".circle-list")
+    @add_panel = @$(".add_circle_panel")
 
-      @circles = new CircleList([], @remote_url)
-      @circles.bind("add", @add_circle, @)
-      @circles.bind("reset", @all_circle, @)
-      @circles.fetch()
+  render: () ->
 
-      @circle_el = @$(".circle-list")
-      @add_panel = @$(".add_circle_panel")
+  all_circle: (collection) ->
+    collection.each (model) =>
+      @add_circle(model)
 
-    render: () ->
+  add_circle: (model) ->
+    model.set_url(@remote_url)
+    circle_view = new CircleView({
+      model: model,
+      template: @template,
+      remote_url: @remote_url
+    })
 
-    all_circle: (collection) ->
-      collection.each (model) =>
-        @add_circle(model)
+    @circle_el.append(circle_view.render())
 
-    add_circle: (model) ->
-      model.set_url(@remote_url)
-      circle_view = new CircleView({
-        model: model,
-        template: @template,
-        remote_url: @remote_url
-      })
+  show_add_circle: () ->
+    @add_panel.modal("show")
 
-      @circle_el.append(circle_view.render())
+  create_circle: () ->
+    val = @$("input.circle_name").val().trim()
+    if val is ""
+      @$(".error").html("名称不能为空！")
+      return
 
-    show_add_circle: () ->
-      @add_panel.modal("show")
+    @circle = new Circle({name: val}, @remote_url)
+    @circle.save({},
+      success: (model, data) =>
+        @circles.add(data)
+        @$("input.circle_name").val('')
+        @add_panel.modal("hide")
 
-    create_circle: () ->
-      val = @$("input.circle_name").val().trim()
-      if val is ""
-        @$(".error").html("名称不能为空！")
-        return
+      error: (model, data) =>
+        data = JSON.parse(data.responseText)
+        _.each data, (d) =>
+          @$(".error").append(d)
+    )
 
-      @circle = new Circle({name: val}, @remote_url)
-      @circle.save({},
-        success: (model, data) =>
-          @circles.add(data)
-          @$("input.circle_name").val('')
-          @add_panel.modal("hide")
+  key_up: (e) ->
+    @create_circle() if e.keyCode == 13
 
-        error: (model, data) =>
-          data = JSON.parse(data.responseText)
-          _.each data, (d) =>
-            @$(".error").append(d)
-      )
+  remove_all_circle_user: (user_id) ->
+    @circles.each (model) =>
+      model.trigger("remove_user", user_id)
 
-    key_up: (e) ->
-      @create_circle() if e.keyCode == 13
-
-    remove_all_circle_user: (user_id) ->
-      @circles.each (model) =>
-        model.trigger("remove_user", user_id)
-
-  exports.Circle = Circle
-  exports.CircleList = CircleList
-  exports.CircleViewList = CircleViewList
-  exports
+root.Circle = Circle
+root.CircleList = CircleList
+root.CircleViewList = CircleViewList

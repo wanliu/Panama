@@ -6,9 +6,9 @@
     <span class="label">Default</span>
     <% unless @people.id == current_user.id %>
       <% unless current_user.is_follow_user?(@people.id) %>
-        <span class="label lf follow" data-value="<%= @people.id %>">关注</span>
+        <span class="label label-success lf follow" data-value="<%= @people.id %>">+关注</span>
       <% else %>
-        <span class="label lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+        <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
       <% end %>
     <% end %>
   </div>
@@ -78,21 +78,19 @@
     <li><a href="#misc"><i class="icon-chevron-right"></i> Misc</a></li>
   </ul>
   <script type="text/javascript">
-    require(['jquery'], function($){
+    $(document).ready(function(){
       $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
-    });
 
-    require(["jquery", "people"], function($, following){
-      new following({
+      new Followers({
         login: "<%= current_user.login %>",
         people_id: "<%= @people.id %>",
         follow_type: "User",
         el: $(".isfollowing") })
-    });
 
-    require(["jquery", "people/people_side"], function($, PeopleSide){
-      var people_side = new PeopleSide.PeopleSideView({ el: $("#people-sidebar")});
-    });
+      new PeopleSideView({
+        el: $("#people-sidebar")
+      });
+    })
 
   </script>
   </div>

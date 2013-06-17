@@ -21,7 +21,7 @@
         </div>
         <div class="category_list span7">
             <div class="alert fade in no-result">
-                <strong>没有搜索结果，试着换一个搜索词吧！</strong> 
+                <strong>没有搜索结果，试着换一个搜索词吧！</strong>
             </div>
         </div>
         <div class="sub_category span2">
@@ -44,19 +44,17 @@
     <p>页面构成 <strong>商品层示图片</strong> <strong> 商品略缩图</strong> <strong>价目信息</strong> <strong> 一般属性</strong> <strong>商品层示图片</strong></p>
     <div class="controls">
         <%% if (flag==1) {{%>
-            <button class="btn btn-primary enter_children">选择子类</button> 
+            <button class="btn btn-primary enter_children">选择子类</button>
         <%% }} else {{%>
             <button class="btn select_category category-<%%= id %>">选择"<%%= name %>"</button>
         <%% }} %>
     </div>
     <hr>
 </script>
-
+<%= javascript_include_tag 'category' %>
 <script type="text/javascript">
-    require(['jquery', 'category'], function ($, view){
-        var categoryView = new view.CategoryView({
-            shop_name: "<%= current_shop.name %>",
-            el: $(".container-fluid.category_select")
-        });
+    var categoryView = new CategoryView({
+        shop_name: "<%= current_shop.name %>",
+        el: $(".container-fluid.category_select")
     });
 </script>

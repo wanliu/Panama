@@ -45,7 +45,13 @@
 
         <%= address_form.error :province_id %>
       </div>
-      <%= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
+      <div class='span2'>
+        <%= address_form.label :zip_code, :wrapper => :inline_label, :class => :label_zip_code %>
+      </div>
+      <div class='span2'>
+        <%=address_form.input_field :zip_code, :class => :span12  %>
+      </div>
+      <%#= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
     </div>
     <%= address_form.input :road, :input_html => { :class => :span12 } %>
   <% end %>
@@ -55,11 +61,9 @@
 <% end %>
 </div>
 <script type="text/javascript">
-  require(["jquery", 'lib/chosen.jquery'], function($){
-    $("#address_id_<%=transaction.id%>", ".transaction-<%=transaction.id%>-order").chosen({
-        allow_single_deselect : true,
-        placeholder_text : "选择一个地址",
-        no_results_text : "没有以该关键词开头的地址"
-    });
+  $("#address_id_<%=transaction.id%>", ".transaction-<%=transaction.id%>-order").chosen({
+      allow_single_deselect : true,
+      placeholder_text : "选择一个地址",
+      no_results_text : "没有以该关键词开头的地址"
   });
 </script>

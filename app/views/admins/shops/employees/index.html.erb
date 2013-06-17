@@ -98,15 +98,14 @@
 </template>
 
 <script type='text/javascript' >
-    require(["admins/shops/employee_group", "jquery", "hogan"],
-        function(EmployeeGroup, $, hogan){
-            template = Hogan.compile($(".group-user-template").html())
-            _permission_template = Hogan.compile($(".permission-group-template").html())
-            new EmployeeGroup({
-                el: $(".employee-groups"),
-                shop: "<%=current_shop.name %>",
-                group_user_template: template,
-                permission_template: _permission_template
-            })
+    $(function(EmployeeGroup, hogan){
+        template = Hogan.compile($(".group-user-template").html())
+        _permission_template = Hogan.compile($(".permission-group-template").html())
+        new EmployeeGroup({
+            el: $(".employee-groups"),
+            shop: "<%=current_shop.name %>",
+            group_user_template: template,
+            permission_template: _permission_template
         })
+    })
 </script>

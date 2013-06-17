@@ -1,5 +1,7 @@
 <div class='nav_item'>
-  <a href='javascript:void(0)' class='chat_nav'>聊天</a>
+  <%= link_to "javascript:void(0)", class: 'chat_nav' do %>
+    <%= icon(:comment) + ' ' + t(:chat) %>
+  <% end %>
 </div>
 <div class='chat_friend_panel'>
   <div class='title'>
@@ -9,9 +11,8 @@
   <div class='friend_list'>
   </div>
 </div>
-
+<%=javascript_include_tag "chats/contact" %>
 <script type="text/javascript">
-  require(["chats/contact"], function(ChatContact){
     chat_view = new ChatContact({
       el: $(".chat_friend_panel"),
       faye_url: "<%=faye_server_uri %>",
@@ -30,5 +31,4 @@
       user_id = $(event.currentTarget).attr("data-value")
       chat_view.show_dialogue(user_id)
     })
-  })
 </script>

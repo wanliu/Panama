@@ -1,141 +1,143 @@
-define ['jquery', 'backbone', 'lib/transaction_card_base',  "lib/state-machine", 'exports', 'lib/chosen.jquery'],
-($, Backbone, Transaction, StateMachine, exports) ->
+#= require lib/transaction_card_base
+#= require lib/chosen.jquery
 
-    class TransactionCard extends Transaction.TransactionCardBase
-        initialize:() ->
-            super
-            @urlRoot = @transaction.urlRoot
-            @body = @$(".transaction-body")
+root = window || @
 
-        events:
-            "click .page-header .btn"   : "clickAction"
-            "click button.close"        : "closeThis"
-            "click .address-add>button" : "addAddress"
-            "click .item-detail"        : "toggleItemDetail"
-            "click .message-toggle"     : "toggleMessage"
-            "submit .address-form>form" : "saveAddress"
-            "click .chzn-results>li"    : "hideAddress"
-            "change select.order_delivery_type_id" : "selectDeliveryType"
-
-        states:
-            initial: 'none'
-
-            events:  [
-                { name: 'buy',        from: 'order',             to: 'waiting_paid' },
-                { name: 'paid',       from: 'waiting_paid',      to: 'waiting_delivery' },
-                { name: 'delivered',  from: 'waiting_delivery',  to: 'waiting_sign' },
-                { name: 'sign',       from: 'waiting_sign',      to: 'evaluate' },
-                { name: 'back',       from: 'waiting_paid',      to: 'order' },
-                { name: 'back',       from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
-                { name: 'back',       from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
-                { name: "returned",   from: 'waiting_delivery',  to: 'apply_refund'},
-                { name: "returned",   from: 'waiting_sign',      to: 'apply_refund'},
-                { name: "returned",   from: 'complete',          to: 'apply_refund'},
-                { name: 'transfer',   from: 'waiting_transfer',  to: 'waiting_audit' },
-                { name: 'confirm_transfer', from: 'waiting_audit_failure', to: 'waiting_audit' }
-            ]
+class TransactionCard extends TransactionCardBase
+    initialize:() ->
+        super
+        @urlRoot = @transaction.urlRoot
+        @body = @$(".transaction-body")
 
 
-        getNotifyName: () ->
-            super + "-buyer"
+    events:
+        "click .page-header .btn"   : "clickAction"
+        "click button.close"        : "closeThis"
+        "click .address-add>button" : "addAddress"
+        "click .item-detail"        : "toggleItemDetail"
+        "click .message-toggle"     : "toggleMessage"
+        "submit .address-form>form" : "saveAddress"
+        "click .chzn-results>li"    : "hideAddress"
+        "change select.order_delivery_type_id" : "selectDeliveryType"
 
-        beforeBack: (event, from ,to ) ->
-            @slideBeforeEvent('back')
-            true
+    states:
+        initial: 'none'
 
-        addAddress: (event) ->
-            @$(".address-panel").slideToggle()
-            @$el.find("abbr:first").trigger("mouseup")
-            false
+        events:  [
+            { name: 'buy',        from: 'order',             to: 'waiting_paid' },
+            { name: 'paid',       from: 'waiting_paid',      to: 'waiting_delivery' },
+            { name: 'delivered',  from: 'waiting_delivery',  to: 'waiting_sign' },
+            { name: 'sign',       from: 'waiting_sign',      to: 'evaluate' },
+            { name: 'back',       from: 'waiting_paid',      to: 'order' },
+            { name: 'back',       from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
+            { name: 'back',       from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
+            { name: "returned",   from: 'waiting_delivery',  to: 'apply_refund'},
+            { name: "returned",   from: 'waiting_sign',      to: 'apply_refund'},
+            { name: "returned",   from: 'complete',          to: 'apply_refund'},
+            { name: 'transfer',   from: 'waiting_transfer',  to: 'waiting_audit' },
+            { name: 'confirm_transfer', from: 'waiting_audit_failure', to: 'waiting_audit' }
+        ]
 
-        toggleItemDetail: (event) ->
-            @$(".item-details").slideToggle()
-            false
 
-        hideAddress: () ->
-            @$(".address-panel").slideUp()
+    getNotifyName: () ->
+        super + "-buyer"
 
-        toggleMessage: (event) ->
-            @$("iframe", ".transaction-footer").slideToggle()
+    beforeBack: (event, from ,to ) ->
+        @slideBeforeEvent('back')
+        true
 
-        leaveWaitingTransfer: (event, from, to, msg) ->
-            @create_transfer_info(event)
+    addAddress: (event) ->
+        @$(".address-panel").slideToggle()
+        @$el.find("abbr:first").trigger("mouseup")
+        false
 
-        leaveWaitingAuditFailure: (event, from, to, msg) ->
-            @create_transfer_info(event)
+    toggleItemDetail: (event) ->
+        @$(".item-details").slideToggle()
+        false
 
-        leaveOrder: (event, from ,to , msg) ->
-            @$(".address-form>form").submit()
-            StateMachine.ASYNC
+    hideAddress: () ->
+        @$(".address-panel").slideUp()
 
-        leaveWaitingDelivery: (event, from, to, msg) ->
-            @slideAfterEvent(event) if /returned/.test event
+    toggleMessage: (event) ->
+        @$("iframe", ".transaction-footer").slideToggle()
 
-        leaveWaitingPaid: (event, from, to, msg) ->
-            @slideAfterEvent(event) unless /back/.test event
+    leaveWaitingTransfer: (event, from, to, msg) ->
+        @create_transfer_info(event)
 
-        beforeSign: (event, from, to, msg) ->
-            @slideAfterEvent(event)
+    leaveWaitingAuditFailure: (event, from, to, msg) ->
+        @create_transfer_info(event)
 
-        saveAddress: (event) ->
-            form = @$(".address-form>form")
-            params = form.serialize()
-            url = form.attr("action")
-            $.post(url, params)
-                .success (xhr, data, status) =>
-                    @transition()
-                    @slideAfterEvent('buy')
-                .error (xhr, status) =>
-                    @notify("错误信息", '请填写完整的信息！', "error")
-                    @alarm()
-                    @transition.cancel()
-            false
+    leaveOrder: (event, from ,to , msg) ->
+        @$(".address-form>form").submit()
+        StateMachine.ASYNC
 
-        selectDeliveryType: () ->
-            url = @transaction.urlRoot
-            delivery_type_id = @$("select#order_transaction_delivery_type_id").val()
-            @transaction.fetch(
-                url: "#{url}/get_delivery_price",
-                data: {delivery_type_id: delivery_type_id},
-                type: "POST",
-                success: (model, data) ->
-                    @$("input:hidden.price").val(data.delivery_price)
-                    @$(".delivery_price").html("¥ #{parseFloat(data.delivery_price).toFixed(2)}")
-            )
+    leaveWaitingDelivery: (event, from, to, msg) ->
+        @slideAfterEvent(event) if /returned/.test event
 
-        validate_transfer: (transfers, form) ->
-            state = true
-            if _.isEmpty(transfers.person)
-                form.find(".person").addClass("error")
-                state = false
+    leaveWaitingPaid: (event, from, to, msg) ->
+        @slideAfterEvent(event) unless /back/.test event
 
-            if _.isEmpty(transfers.code)
-                form.find(".code").addClass("error")
-                state = false
+    beforeSign: (event, from, to, msg) ->
+        @slideAfterEvent(event)
 
-            if _.isEmpty(transfers.bank)
-                form.find(".bank").addClass("error")
-                state = false
-
-            state
-
-        create_transfer_info: (event_name) ->
-            form = @body.find("form.transfer_sheet")
-            data = form.serializeArray()
-            transfers = {}
-            _.each data, (d)  -> transfers[d.name] = d.value
-
-            if @validate_transfer(transfers, form)
-                @transaction.fetch(
-                    url: "#{@urlRoot}/transfer",
-                    data: {transfer: transfers},
-                    type: 'POST',
-                    success: (model, data) =>
-                        @slideAfterEvent(event_name)
-                )
-            else
+    saveAddress: (event) ->
+        form = @$(".address-form>form")
+        params = form.serialize()
+        url = form.attr("action")
+        $.post(url, params)
+            .success (xhr, data, status) =>
+                @transition()
+                @slideAfterEvent('buy')
+            .error (xhr, status) =>
+                @notify("错误信息", '请填写完整的信息！', "error")
                 @alarm()
                 @transition.cancel()
+        false
 
-    exports.TransactionCard = TransactionCard
-    exports
+    selectDeliveryType: () ->
+        url = @transaction.urlRoot
+        delivery_type_id = @$("select#order_transaction_delivery_type_id").val()
+        @transaction.fetch(
+            url: "#{url}/get_delivery_price",
+            data: {delivery_type_id: delivery_type_id},
+            type: "POST",
+            success: (model, data) ->
+                @$("input:hidden.price").val(data.delivery_price)
+                @$(".delivery_price").html("¥ #{parseFloat(data.delivery_price).toFixed(2)}")
+        )
+
+    validate_transfer: (transfers, form) ->
+        state = true
+        if _.isEmpty(transfers.person)
+            form.find(".person").addClass("error")
+            state = false
+
+        if _.isEmpty(transfers.code)
+            form.find(".code").addClass("error")
+            state = false
+
+        if _.isEmpty(transfers.bank)
+            form.find(".bank").addClass("error")
+            state = false
+
+        state
+
+    create_transfer_info: (event_name) ->
+        form = @body.find("form.transfer_sheet")
+        data = form.serializeArray()
+        transfers = {}
+        _.each data, (d)  -> transfers[d.name] = d.value
+
+        if @validate_transfer(transfers, form)
+            @transaction.fetch(
+                url: "#{@urlRoot}/transfer",
+                data: {transfer: transfers},
+                type: 'POST',
+                success: (model, data) =>
+                    @slideAfterEvent(event_name)
+            )
+        else
+            @alarm()
+            @transition.cancel()
+
+root.TransactionCard = TransactionCard

@@ -1,213 +1,217 @@
 #describe: 社交帖子
-define ["jquery","backbone","topic_comment","timeago","twitter/bootstrap/tooltip",
-"twitter/bootstrap/popover"],
-($, Backbone, TopicCommentView) ->
+#= require lib/timeago
+#= require topic_comment
+#= require twitter/bootstrap/tooltip
+#= require twitter/bootstrap/popover
 
-  class Topic extends Backbone.Model
-    seturl: (url) ->
-      @urlRoot = url
-    receives: (callback) ->
-      @fetch({
-        url: "#{@urlRoot}/receives/#{@id}",
-        success: callback
-      })
 
-  class TopicList extends Backbone.Collection
-    model: Topic
-    seturl: (url) ->
-      @url = url
+root = window || @
 
-  class TopicView extends Backbone.View
-    avatar_img: $("<img class='img-circle user-avatar' />")
+class Topic extends Backbone.Model
+  seturl: (url) ->
+    @urlRoot = url
+  receives: (callback) ->
+    @fetch({
+      url: "#{@urlRoot}/receives/#{@id}",
+      success: callback
+    })
 
-    events: {
-      "click .external" : "external_receive",
-      "click .circle" : "circle_receive",
-      "click .puliceity" : "puliceity_receive",
-      "click .close-label" : "hide_receive"
-    }
+class TopicList extends Backbone.Collection
+  model: Topic
+  seturl: (url) ->
+    @url = url
 
-    initialize: (options) ->
-      _.extend(@, options)
+class TopicView extends Backbone.View
+  avatar_img: $("<img class='img-circle user-avatar' />")
 
-      @$el = $(@el)
-      @$el.html(@template.render(@model.toJSON()))
-      @show_attachments()
+  events: {
+    "click .external" : "external_receive",
+    "click .circle" : "circle_receive",
+    "click .puliceity" : "puliceity_receive",
+    "click .close-label" : "hide_receive"
+  }
 
-      new TopicCommentView(
-        el: @$(".topic-comments"),
-        topic: @model,
-        current_user: @current_user
-      )
+  initialize: (options) ->
+    _.extend(@, options)
 
-      @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
-      @$("abbr.timeago").timeago()
-      @$(".send_user").html(@find_owner())
+    @$el = $(@el)
+    @$el.html(@template.render(@model.toJSON()))
+    @show_attachments()
 
-      @puliceity_hide_status()
-      @switch_style()
+    new TopicCommentView(
+      el: @$(".topic-comments"),
+      topic: @model,
+      current_user: @current_user
+    )
 
-    render: () ->
-      @$el
+    @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
+    @$("abbr.timeago").timeago()
+    @$(".send_user").html(@find_owner())
 
-    switch_style: () ->
-      if @model.get("owner_type") == "Shop"
-        @$(".user_panel").html("由 #{@model.get("send_login")}发布")
+    @puliceity_hide_status()
+    @switch_style()
 
-    puliceity_hide_status: () ->
-      if @model.get("status") is "community"
-        @$(".community").hide();
+  render: () ->
+    @$el
 
-    puliceity_receive: () ->
-      @popover_basis("所有人多可以看到。")
+  switch_style: () ->
+    if @model.get("owner_type") == "Shop"
+      @$(".user_panel").html("由 #{@model.get("send_login")}发布")
 
-    external_receive: () ->
-      @popover_basis("显示给#{@find_owner()}圈子中的所有成员，以及这些成员的圈子中的所有人。")
+  puliceity_hide_status: () ->
+    if @model.get("status") is "community"
+      @$(".community").hide();
 
-    find_owner: () ->
-      if @model.get("owner_type") == "User"
-        @model.get("owner").login
+  puliceity_receive: () ->
+    @popover_basis("所有人多可以看到。")
+
+  external_receive: () ->
+    @popover_basis("显示给#{@find_owner()}圈子中的所有成员，以及这些成员的圈子中的所有人。")
+
+  find_owner: () ->
+    if @model.get("owner_type") == "User"
+      @model.get("owner").login
+    else
+      @model.get("owner").name
+
+  show_attachments: () ->
+    _.each @model.get("attachments"), (atta) =>
+      @$(".attachments").append("<img src='#{atta}' class='attachment' />")
+
+  circle_receive: () ->
+    @popover_basis('<h6 class="title-popover-topic">此信息目前的分享对象：</h6><div class="circle_users"></div>')
+    @$circle_users_el = @$(".circle_users")
+    @$circle_users_el.html("正在加载...")
+    @model.receives (model, data) =>
+      if data.length <= 0
+        @$circle_users_el.html("暂时没有分享用户")
       else
-        @model.get("owner").name
+        @show_user(data)
 
-    show_attachments: () ->
-      _.each @model.get("attachments"), (atta) =>
-        @$(".attachments").append("<img src='#{atta}' class='attachment' />")
+  show_user: (data) ->
+    @$circle_users_el.html("")
+    _.each data, (user) =>
+      img_el = @avatar_img.clone().attr("src", user.icon)
+      @$circle_users_el.append(img_el)
+      img_el.tooltip(title: user.login)
 
-    circle_receive: () ->
-      @popover_basis('<h6 class="title-popover-topic">此信息目前的分享对象：</h6><div class="circle_users"></div>')
-      @$circle_users_el = @$(".circle_users")
-      @$circle_users_el.html("正在加载...")
-      @model.receives (model, data) =>
-        if data.length <= 0
-          @$circle_users_el.html("暂时没有分享用户")
-        else
-          @show_user(data)
+  hide_receive: () ->
+    @$(".status").popover("hide")
 
-    show_user: (data) ->
-      @$circle_users_el.html("")
-      _.each data, (user) =>
-        img_el = @avatar_img.clone().attr("src", user.icon)
-        @$circle_users_el.append(img_el)
-        img_el.tooltip(title: user.login)
+  popover_basis: (content) ->
+    @$(".status").popover({
+      content: content + "<a class='close-label'></a>",
+      placement: "bottom",
+      html: true
+    }).popover("show")
 
-    hide_receive: () ->
-      @$(".status").popover("hide")
+class TopicViewList extends Backbone.View
+  notice_el: $("<div class='alert alert-block'>暂时没有信息!</div>")
 
-    popover_basis: (content) ->
-      @$(".status").popover({
-        content: content + "<a class='close-label'></a>",
-        placement: "bottom",
-        html: true
-      }).popover("show")
+  events: {
+    "click input:button.send_topic": "create",
+    "keyup textarea[name=content]": "textarea_status"
+  }
 
-  class TopicViewList extends Backbone.View
-    notice_el: $("<div class='alert alert-block'>暂时没有信息!</div>")
+  initialize: (options) ->
+    _.extend(@, options)
 
-    events: {
-      "click input:button.send_topic": "create",
-      "keyup textarea[name=content]": "textarea_status"
-    }
+    @topic_list = new TopicList()
+    @topic_list.seturl @remote_url
+    @topic_list.bind("reset", @all_topic, @)
+    #@topic_list.bind("add", @add_topic, @)
 
-    initialize: (options) ->
-      _.extend(@, options)
+    @topic_list.fetch(data: {circle_id: @circle_id})
 
-      @topic_list = new TopicList()
-      @topic_list.seturl @remote_url
-      @topic_list.bind("reset", @all_topic, @)
-      #@topic_list.bind("add", @add_topic, @)
+    @$form = @$("form.topic-form")
+    @$button = $("input:button.send_topic", @$form)
+    @$content = $("textarea[name=content]", @$form)
 
-      @topic_list.fetch(data: {circle_id: @circle_id})
+    @$el = $(@el)
 
-      @$form = @$("form.topic-form")
-      @$button = $("input:button.send_topic", @$form)
-      @$content = $("textarea[name=content]", @$form)
+  textarea_status: () ->
+    content = @$content.val().trim()
+    if content is ""
+      @$button.addClass("disabled")
+    else
+      @$button.removeClass("disabled")
 
-      @$el = $(@el)
+  create: () ->
+    data = @form_serialize()
+    return if data.content is ""
 
-    textarea_status: () ->
-      content = @$content.val().trim()
-      if content is ""
-        @$button.addClass("disabled")
+    data.friends = @get_friends()
+    if data.friends.length <= 0
+      @$(".friend-context input:text").focus()
+      return
+
+    @topic = new Topic(data)
+    @topic.seturl @remote_url
+    @topic.save({}, {
+      data: $.param({topic: data})
+      success: (model) =>
+        @$content.val('')
+        @textarea_status()
+        topic = @topic_list.add(model).last()
+        @before_append(@add_topic(topic))
+        @$(".topic_upload").html('')
+
+      error: (model, data) =>
+        @show_error(JSON.parse(data.responseText))
+    })
+
+  form_serialize: () ->
+    forms = @$form.serializeArray()
+    data = {}
+    $.each forms, (i, v) ->
+      data[v.name] = v.value
+    data
+
+  before_append: (view) ->
+    topics = @$(".topics>:first")
+    if topics.length <= 0
+      @$(".topics").append view
+    else
+      topics.before view
+
+  all_topic: (collection) ->
+    collection.each (model) =>
+      @$(".topics").append @add_topic(model)
+
+    @notice_msg()
+
+  add_topic: (model) ->
+    @notice_msg()
+    model.seturl @remote_url
+    topic_view = new TopicView(
+      model: model,
+      template: @template,
+      current_user: @current_user
+    )
+    topic_view.render()
+
+  notice_msg: () ->
+    if @topic_list.length <= 0
+      @$(".topics").append(@notice_el)
+    else
+      @notice_el.remove()
+
+  show_error: (messages) ->
+    $.each messages, (i, m) =>
+      @$(".errors").append("#{m}")
+
+    @$(".errors").show()
+
+  get_friends: () ->
+    items = @$(".chose-item-selector>.chose-label")
+    data = []
+    items.each (i, item) =>
+      val = $.data(item, "data").value
+      if typeof val is "string"
+        data.push {id: val, status: "scope"}
       else
-        @$button.removeClass("disabled")
+        data.push {id: val.id, status: val._status}
 
-    create: () ->
-      data = @form_serialize()
-      return if data.content is ""
+    data
 
-      data.friends = @get_friends()
-      if data.friends.length <= 0
-        @$(".friend-context input:text").focus()
-        return
-
-      @topic = new Topic(data)
-      @topic.seturl @remote_url
-      @topic.save({}, {
-        data: $.param({topic: data})
-        success: (model) =>
-          @$content.val('')
-          @textarea_status()
-          topic = @topic_list.add(model).last()
-          @before_append(@add_topic(topic))
-          @$(".topic_upload").html('')
-
-        error: (model, data) =>
-          @show_error(JSON.parse(data.responseText))
-      })
-
-    form_serialize: () ->
-      forms = @$form.serializeArray()
-      data = {}
-      $.each forms, (i, v) ->
-        data[v.name] = v.value
-      data
-
-    before_append: (view) ->
-      topics = @$(".topics>:first")
-      if topics.length <= 0
-        @$(".topics").append view
-      else
-        topics.before view
-
-    all_topic: (collection) ->
-      collection.each (model) =>
-        @$(".topics").append @add_topic(model)
-
-      @notice_msg()
-
-    add_topic: (model) ->
-      @notice_msg()
-      model.seturl @remote_url
-      topic_view = new TopicView(
-        model: model,
-        template: @template,
-        current_user: @current_user
-      )
-      topic_view.render()
-
-    notice_msg: () ->
-      if @topic_list.length <= 0
-        @$(".topics").append(@notice_el)
-      else
-        @notice_el.remove()
-
-    show_error: (messages) ->
-      $.each messages, (i, m) =>
-        @$(".errors").append("#{m}")
-
-      @$(".errors").show()
-
-    get_friends: () ->
-      items = @$(".chose-item-selector>.chose-label")
-      data = []
-      items.each (i, item) =>
-        val = $.data(item, "data").value
-        if typeof val is "string"
-          data.push {id: val, status: "scope"}
-        else
-          data.push {id: val.id, status: val._status}
-
-      data
-
-  TopicViewList
+root.TopicViewList = TopicViewList

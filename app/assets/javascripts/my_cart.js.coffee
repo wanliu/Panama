@@ -1,108 +1,119 @@
-define ['jquery', 'backbone', 'exports',"lib/hogan"] , ($, Backbone, exports) ->
 
-	class HoverManager
+root = window || @
 
-		default_options = {
-			timeOut: 1500
-		}
+class HoverManager
 
-		constructor: (@over_elements, @options) ->
-			@hover = false
+	default_options = {
+		timeOut: 1500
+	}
 
-		signalProcess: (event) ->
-			_(@over_elements).include(event.currentTarget)
+	constructor: (@over_elements, @options) ->
+		@hover = false
 
-
-		checkStatus: (event) ->
-
-	class MyCart extends Backbone.View
-		el: "#my_cart"
-
-		events:
-			"click .handle": "toggleCartBox"
+	signalProcess: (event) ->
+		_(@over_elements).include(event.currentTarget)
 
 
-		initialize: (@options) ->
-			@hm = new HoverManager(@$("a.handle, #cart_box"))
+	checkStatus: (event) ->
+
+class MyCart extends Backbone.View
+	# el: "#my_cart"
+	el: $('#my_cart')
+
+	events:
+		"click .handle": "toggleCartBox"
+
+	item_row: """
+		<tr id= 'product_item{{id}}'>
+		<td><img src='{{icon}}' ></td>
+		<td><span class='title' data-toggle="tooltip" title="{{title}}">{{title}}</span></td>
+		<td>{{amount}}</td>
+		<td>{{total}}</td></tr>
+	"""
+
+	initialize: (@options) ->
+		@hm = new HoverManager(@$("a.handle, #cart_box"))
 
 
-		toggleCartBox: (event) ->
-			$("#cart_box")
-				.toggle () ->
-					if $(@).hasClass "fadeInUpBig"
-						'animate fadeInDownBig show'
-					else
-						'animate fadeInUpBig'
-
-		hoverProcess: (event) ->
-			@$("#cart_box")
-				.show()
-				.addClass("animated fadeInUpBig")
-			# @hm.signalProcess(event)
-
-		blurProcess: (event)->
-			$(@el)
-				.addClass("animated fadeInDownBig")
-
-		addToCart: ($element, form, urlAction) ->
-			$el = $(@el)
-
-			targetPosition = @targetAttributes($el)
-
-			moveTarget = $element
-				.clone()
-				.appendTo("body")
-
-			moveTarget
-				.css('position', "fixed")
-				.animate targetPosition, () =>
-					$(@el).addClass("bounce")
-					moveTarget.remove()
-					@cartAddAction(urlAction, form)
-
-		cartAddAction: (url, form) ->
-			$.post url, form.serialize(), (item) =>
-				if $("#product_item#{item.id}").length > 0
-					trOjb = $("#product_item#{item.id} td")
-					$(trOjb[2]).html(item.amount)
-					$(trOjb[3]).html(item.total)
+	toggleCartBox: (event) ->
+		$("#cart_box")
+			.toggle () ->
+				if $(@).hasClass "fadeInUpBig"
+					'animate fadeInDownBig show'
 				else
-					$(".cart_main").append(@trHtml(item))
+					'animate fadeInUpBig'
+		false
 
-				$("#shop_count").html($(".cart_main tr").size())
+	hoverProcess: (event) ->
+		@$("#cart_box")
+			.show()
+			.addClass("animated fadeInUpBig")
+		# @hm.signalProcess(event)
 
+	blurProcess: (event)->
+		$(@el)
+			.addClass("animated fadeInDownBig")
 
-				# totals = $(".cart_bottom tr td").html().split("")[5]
-				# totals = totals + item.product_item.total
-				# alert(totals)
-				# $(".cart_bottom tr td").html("商品总价：" + totals)
+	addToCart: ($element, form, urlAction) ->
+		$el = $(@el)
 
-		trHtml: (item) ->
-			strHmtl = "<tr id= 'product_item#{item.id}'>"
-			strHmtl += "<td><img src='#{item.img_path}''></td>"
-			strHmtl += "<td>#{item.title}</td>"
-			strHmtl += "<td>#{item.amount}</td>"
-			strHmtl += "<td>#{item.total}</td></tr>"
-			strHmtl
+		targetPosition = @targetAttributes($el)
+		pos = $element.offset()
+		moveTarget = $element
+			.clone()
+			.addClass("moving")
+			.appendTo("body")
 
-		targetAttributes: (target) ->
-			top: target.position().top
-			left: target.position().left
-			width: target.width()
-			height: target.height()
-			opacity: 0.25
+		moveTarget
+			.css('position', "fixed")
+			.css('top', pos.top - $(window).scrollTop())
+			.css('left', pos.left - $(window).scrollLeft())
+			.animate targetPosition, () =>
+				$(@el).addClass("bounce")
+				moveTarget.remove()
+				@cartAddAction(urlAction, form)
 
+	cartAddAction: (url, form) ->
+		$.post url, form.serialize(), (item) =>
+			if $("#cart_box table #product_item#{item.product_id}").length > 0
+				trObj = $("#cart_box table #product_item#{item.product_id}")
+				trObj.replaceWith(@trHtml(item))
+				# $(trOjb[2]).html(item.amount)
+				# $(trOjb[3]).html(item.total)
+			else
+			$(".cart_main").append(@trHtml(item))
 
-	class CartBox extends Backbone.View
+			$("#shop_count").html($(".cart_main tr").size())
+			$("#cart_box .checkout").removeClass("disabled")
 
-	myCart = new MyCart
+			@$("#shop_count").html($(".cart_main tr").size())
+			# totals = $(".cart_bottom tr td").html().split("")[5]
+			# totals = totals + item.product_item.total
+			# alert(totals)
+			# $(".cart_bottom tr td").html("商品总价：" + totals)
 
-	$("[add-to-cart]").on "click", (event) ->
-		selector = $(@).attr('add-to-cart')
-		urlAction = $(@).attr('add-to-action')
-		form = $(@).parents("form")
+	trHtml: (product_item) ->
+		row_tpl = Hogan.compile(@item_row)
+		row_tpl.render(product_item)
 
-		myCart.addToCart($(selector), form, urlAction)
+	targetAttributes: (target) ->
+		top: target.offset().top - $(window).scrollTop()
+		left: target.offset().left - $(window).scrollLeft()
+		width: target.width()
+		height: target.height()
+		opacity: 0.25
 
-	exports.myCart = myCart
-	exports
+class CartBox extends Backbone.View
+
+myCart = new MyCart
+
+$("[add-to-cart]").on "click", (event) ->
+	$form     = $(@).parents("form")
+	selector  = $(@).attr('add-to-cart')
+	urlAction = $(@).attr('add-to-action')
+
+	myCart.addToCart($(selector), $form, urlAction)
+	false
+
+root.myCart = myCart
+root

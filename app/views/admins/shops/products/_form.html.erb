@@ -9,7 +9,7 @@
         <label class="string required control-label" for="product_name"><abbr title="required">*</abbr> 类别</label>
         <div class="controls">
             <%= breadcrumb_button(dom_id(@product, :category), @product.category_ancestors_and_self ) %>
-            
+
         </div>
     </div>
 
@@ -40,15 +40,11 @@
 <%= register_javascript :product_form_editor, :only => :ajax do %>
 <script type="text/javascript">
 
-	require(['lib/colorpicker/js/bootstrap-colorpicker'], function(){
     $('.color').colorpicker();
-  })
 
-    require(['jquery', 'backbone', 'rails.view', 'nested_form'], function($, Backbone, Rails){
-        var form = new Rails.FormView("form#<%= options_dom_id(@product) %>", {
-            model: <%= raw @product.to_json %>
-        });
-    })
+    var form = new FormView("form#<%= options_dom_id(@product) %>", {
+        model: <%= raw @product.to_json %>
+    });
 
 </script>
 <% end %>
@@ -72,87 +68,85 @@
 <script type="text/javascript">
     var button = ".<%= dom_id(@product, :category) %>";
 
-    require(['jquery','twitter/bootstrap/modal','twitter/bootstrap/affix'],function($){
-        
-        function setModalSize(percentage){
-            var modal = $("#CategoryModal");
-            modal.offset({top: 0});
-            modal.css("min-height",$(window).height());
-            modal.css("max-height",$(window).height());
-            modal.css("width",$(window).width()*percentage);
-            
-            header_height = modal.find(".modal-header").height();
-            footer_height = modal.find(".modal-footer").height();
-            modal.find(".modal-body").css("min-height",$(window).height()-header_height-footer_height);
-            modal.css("padding-right",$(window).width()*((1-percentage)/2));
-            modal.css("margin-left",parseInt(modal.css("padding-right"))-parseInt(modal.css("left"))-2);
 
-            modal.find(".modal-header").width(modal.find(".modal-body").width());
-            modal.find(".modal-footer").width(modal.find(".modal-body").width());
-            modal.find(".search").css("max-width", modal.find(".modal-body").width());
-            modal.find(".modal-resize").attr("modal-size",percentage);
-        }
+    function setModalSize(percentage){
+        var modal = $("#CategoryModal");
+        modal.offset({top: 0});
+        modal.css("min-height",$(window).height());
+        modal.css("max-height",$(window).height());
+        modal.css("width",$(window).width()*percentage);
 
-        $("#CategoryModal").on('show', function() {
-            $(this).find(".modal-body")
-                .load("<%= category_page_shop_admins_products_path %>");
-        });
+        header_height = modal.find(".modal-header").height();
+        footer_height = modal.find(".modal-footer").height();
+        modal.find(".modal-body").css("min-height",$(window).height()-header_height-footer_height);
+        modal.css("padding-right",$(window).width()*((1-percentage)/2));
+        modal.css("margin-left",parseInt(modal.css("padding-right"))-parseInt(modal.css("left"))-2);
 
-        $("#CategoryModal").on('shown',function(){
-            $("body").css("position","fixed");
-            setModalSize(0.75);
-            $(window).bind("resize", function(e){
-                percentage = $(".modal-resize").attr("modal-size");
-                setModalSize(percentage);
-                e.preventDefault();
-            });
-            $("#CategoryModal").one("click", function(e){
-                pointerX = $("#CategoryModal .modal-body").outerWidth() 
-                    + $("#CategoryModal").offset().left;
-                if(e.pageX > pointerX){
-                    $('#CategoryModal').modal('hide');
-                }
-            });
-        });
+        modal.find(".modal-header").width(modal.find(".modal-body").width());
+        modal.find(".modal-footer").width(modal.find(".modal-body").width());
+        modal.find(".search").css("max-width", modal.find(".modal-body").width());
+        modal.find(".modal-resize").attr("modal-size",percentage);
+    }
 
-        $("#CategoryModal .save_category").on('click', function(){
-            $('#CategoryModal').modal('hide');
-            category_id = $(".category_select").attr("data-select");
-            $(".breadcrumb").load("/shops/<%= current_shop.name %>/admins/categories/category_full_name?category_id="+category_id,function(response, status, xhr) {
-                    if(status == "success"){
-                        $(".breadcrumb").html(breadcrumb(response));
-                    }
-            });
-        });
+    $("#CategoryModal").on('show', function() {
+        $(this).find(".modal-body")
+            .load("<%= category_page_shop_admins_products_path %>");
+    });
 
-        function breadcrumb(category_full_name){
-            html = '<a href="#" data-toggle="modal"></a>';
-            $(category_full_name.split("|")).each(function(e,el){
-                if(e+1 < (category_full_name.split("|")).length){
-                    html += '<li><a href="#">'+el+'</a><span class="divider">|</span></li>';
-                }else{
-                   html += '<li class="active">'+el+'</li>';
-                } 
-            });
-            return html;
-        }
-
-        $("#CategoryModal").on('hide', function(){
-            $("body").css("position","static");
-            $(window).unbind("resize");
-        });
-
-        $(button).click(function(e){
-            $('#CategoryModal').modal('show');
-        });
-
-        $(".modal-resize").click(function(){
-            percentage = 1;
-            if($(".modal-resize").attr("modal-size") == 1){
-                percentage = 0.75;
-            }
+    $("#CategoryModal").on('shown',function(){
+        $("body").css("position","fixed");
+        setModalSize(0.75);
+        $(window).bind("resize", function(e){
+            percentage = $(".modal-resize").attr("modal-size");
             setModalSize(percentage);
-            return false;
+            e.preventDefault();
         });
-    })
+        $("#CategoryModal").one("click", function(e){
+            pointerX = $("#CategoryModal .modal-body").outerWidth()
+                + $("#CategoryModal").offset().left;
+            if(e.pageX > pointerX){
+                $('#CategoryModal').modal('hide');
+            }
+        });
+    });
+
+    $("#CategoryModal .save_category").on('click', function(){
+        $('#CategoryModal').modal('hide');
+        category_id = $(".category_select").attr("data-select");
+        $(".breadcrumb").load("/shops/<%= current_shop.name %>/admins/categories/category_full_name?category_id="+category_id,function(response, status, xhr) {
+                if(status == "success"){
+                    $(".breadcrumb").html(breadcrumb(response));
+                }
+        });
+    });
+
+    function breadcrumb(category_full_name){
+        html = '<a href="#" data-toggle="modal"></a>';
+        $(category_full_name.split("|")).each(function(e,el){
+            if(e+1 < (category_full_name.split("|")).length){
+                html += '<li><a href="#">'+el+'</a><span class="divider">|</span></li>';
+            }else{
+               html += '<li class="active">'+el+'</li>';
+            }
+        });
+        return html;
+    }
+
+    $("#CategoryModal").on('hide', function(){
+        $("body").css("position","static");
+        $(window).unbind("resize");
+    });
+
+    $(button).click(function(e){
+        $('#CategoryModal').modal('show');
+    });
+
+    $(".modal-resize").click(function(){
+        percentage = 1;
+        if($(".modal-resize").attr("modal-size") == 1){
+            percentage = 0.75;
+        }
+        setModalSize(percentage);
+        return false;
+    });
 </script>

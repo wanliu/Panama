@@ -14,7 +14,7 @@ def initialize_data
   PanamaCore::VFS.load_panama_files
 
   load_categories
-
+  load_permission
   load_banks
 
   load_cities
@@ -65,6 +65,10 @@ end
 
 def load_delivery_manner
   rake['delivery_manner:load'].invoke
+end
+
+def load_permission
+  rake['permission:load'].invoke
 end
 
 initialize_data

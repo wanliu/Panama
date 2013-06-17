@@ -1,42 +1,44 @@
 #describe 买家退货
-define ['jquery', 'backbone', "lib/transaction_card_base"],
-($, Backbone, Transaction) ->
+#= require lib/transaction_card_base
 
-  class OrderRefundCard extends Transaction.TransactionCardBase
+root = window || @
 
-    initialize: () ->
-      super
+class OrderRefundCard extends TransactionCardBase
 
-    events: {
-      "click input.delivered" : "clickAction",
-      "keyup input:text.delivery_code" : "change_delivery_code",
-    }
+  initialize: () ->
+    super
 
-    states:
-      initial: 'none'
+  events: {
+    "click input.delivered" : "clickAction",
+    "keyup input:text.delivery_code" : "change_delivery_code",
+  }
 
-      events:  [
-        { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' }
-      ]
+  states:
+    initial: 'none'
 
-    change_delivery_code: () ->
+    events:  [
+      { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' }
+    ]
 
-      code = @$("input:text.delivery_code").val()
-      button = @$('.page-header input.delivered')
-      if _.isEmpty(code)
-        button.addClass("disabled")
-      else
-        button.removeClass("disabled")
+  change_delivery_code: () ->
 
-    afterDelivered: (event, from, to, msg) ->
-      code = @$("input:text.delivery_code").val()
-      return if _.isEmpty(code)
-      url = @transaction.urlRoot
-      @transaction.fetch(
-        url: "#{url}/delivery_code",
-        type: 'POST',
-        data: {delivery_code: code},
-        success: () =>
-          @slideAfterEvent(event)
-      )
+    code = @$("input:text.delivery_code").val()
+    button = @$('.page-header input.delivered')
+    if _.isEmpty(code)
+      button.addClass("disabled")
+    else
+      button.removeClass("disabled")
 
+  afterDelivered: (event, from, to, msg) ->
+    code = @$("input:text.delivery_code").val()
+    return if _.isEmpty(code)
+    url = @transaction.urlRoot
+    @transaction.fetch(
+      url: "#{url}/delivery_code",
+      type: 'POST',
+      data: {delivery_code: code},
+      success: () =>
+        @slideAfterEvent(event)
+    )
+
+root.OrderRefundCard = OrderRefundCard

@@ -1,0 +1,15 @@
+.ui-slider {
+	position: relative;
+	background: url('slider/slider-bg.png');
+	height: 8px;
+
+	.ui-slider-handle {
+		position: absolute;
+		top: -8px;
+		margin-left: -8px;
+		width: 24px;
+		height: 26px;
+		background: url('slider/slider-button.png')
+	}
+}
+

@@ -35,10 +35,8 @@
 </div>
 
 <script type="text/javascript">
-  require(['jquery', "jquery_ujs", "admins/shops/shop_transaction_card", "admins/shops/transaction_dispose", "lib/transaction_bubbling" ,"lib/hogan"], function($, _a, Transaction, TransactionDispose, TransactionBubbling){
-
     var transactionCard = function(elem){
-      var card = new Transaction.ShopTransactionCard({
+      var card = new ShopTransactionCard({
         el: elem,
         realtime: {
           url: '<%= faye_server_uri %>',
@@ -80,5 +78,4 @@
     new TransactionBubbling({
       url: "http://<%=request.env['HTTP_HOST'] %>/shops/<%=current_shop.name %>/admins/pending#order"
     })
-  });
 </script>

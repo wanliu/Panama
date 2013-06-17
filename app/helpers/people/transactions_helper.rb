@@ -10,12 +10,10 @@ module People::TransactionsHelper
   end
 
   def state_toolbar(&block)
-    debugger
     @@toolbars.push block
   end
 
   def render_toolbar
-      debugger
     @@toolbars.each do |toolbar|
       toolbar.call
     end

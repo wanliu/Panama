@@ -103,18 +103,16 @@
     </div>
     <div class='clearfix'></div>
     <div class="form-actions">
-      <%= link_to "转到银行付款", "/people/#{current_user.login}/recharges/ibank?trade_income[bank_id]=1&trade_income[money]=100", :method => :post %>
+      <%= link_to "转到银行付款", "#", :method => :post %>
     </div>
   </div>
 </div>
 <script type="text/javascript">
-  require(["jquery", "people/transaction_payment"], function($, TransactionPayment){
-      new TransactionPayment({
-        el: $("#order<%=transaction.id %>"),
-        model: {
-          total: <%=transaction.total %>,
-          money: <%=current_user.money %>
-        }
-      })
+  new TransactionPayment({
+    el: $("#order<%=transaction.id %>"),
+    model: {
+      total: <%= transaction.total %>,
+      money: <%= current_user.money || 0 %>
+    }
   })
 </script>
