@@ -125,13 +125,13 @@ class Product < ActiveRecord::Base
                                 :reject_if => proc { |att| att['file_filename'].blank? },
                                 :allow_destroy => true
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :price, presence: true
   validates :price, numericality: true
 
   validates_presence_of :category
-  validates_presence_of :shops_category
-  validates_presence_of :shop
+  # validates_presence_of :shops_category
+  # validates_presence_of :shop
 
   # delegate :properties, :to => :category, :allow_nil => true
 

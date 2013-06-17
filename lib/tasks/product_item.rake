@@ -1,4 +1,5 @@
 #encoding: utf-8
+require "csv"
 
 namespace :product do
   desc "load some product data"
@@ -40,4 +41,24 @@ namespace :product do
         end
     end
   end
+
+
+  desc "export csv product data"
+  task :load => :environment do
+    CSV.foreach("#{Rails.root}/config/data/product_niu_nai.csv") do |row|
+      category = Category.find_by(:name => "#{row[1]}粉")
+      if category.nil?
+        puts "===========not exists category: #{row.join('|')} "
+      else
+        duan = row[4]
+        duan = "#{duan}段" unless duan.nil?
+        Product.create(
+          :name => "#{row[0]}#{row[2]}#{duan}#{row[3]}g",
+          :price => 0,
+          :brand_name => row[0],
+          :category_id => category.id)
+      end
+    end
+  end
+
 end

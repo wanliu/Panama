@@ -21,7 +21,7 @@
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
-      <img data-src="holder.js/140x140" class="img-rounded private" alt="140x140" style="" src="<%= default_img_url('140x140') %>">
+      <img data-src="holder.js/140x140" class="img-rounded private" alt="140x140" style="" src="<%= default_img_url('100x100') %>">
       <ul class='attachment_panel'></ul>
     </div>
   </div>
@@ -59,10 +59,8 @@
       el: $(".form_activity_auction"),
       params: {
         url_upload: "<%=attachments_path %>",
-        default_img_url: "<%=default_img_url('140x140') %>",
-        version_name: "140x140",
+        default_img_url: "<%=default_img_url('100x100') %>",
         template: '<%=j render "product_upload" %>',
-        input_name: "activity[attachment_ids]"
       }
     });
 
