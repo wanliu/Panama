@@ -95,6 +95,11 @@
     $('ul.product_selector>li').live('click', function(){
       var product_id = $(this).attr('product_id')
       if (!product_id) return;
+
+      var product_name = $(this).text();
+      $('#activity_product').val(product_name);
+      $('#activity_description').val(product_name + '竞价');
+
       activity_view.fetch_product(product_id)
     });
   </script>
