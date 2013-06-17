@@ -17,6 +17,7 @@ class Product < ActiveRecord::Base
                   :shop,
                   :default_attachment_id,
                   :attachment_ids,
+                  :brand_name,
                   :prices
 
   attr_accessor :uploader_secure_token, :price_definition

@@ -6,3 +6,19 @@
           people: current_user } %>
   <% end %>
 </div>
+<script type="text/javascript">
+  var transactionCard = function(elem){
+    var card = new ShopTransactionCard({
+      el: elem,
+      realtime: {
+        url: '<%= faye_server_uri %>',
+        token: '<%= token %>'
+      }
+    })
+  }
+
+  $(".transaction").each(function(i, elem){
+    transactionCard(elem)
+  });
+
+</script>
