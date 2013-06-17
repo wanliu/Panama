@@ -19,18 +19,4 @@
 </td>
 
 <%= register_javascript :product_row_show, :only => :ajax do %>
-<script type="text/javascript">
-	require(['jquery', 'backbone', 'rails.view', 'models/element_model'], function($, Backbone, Rails, ElementModel){
-			// var tr = $("#<% @product.id %>").get(0);		
-			var urlRoot = '<%= shop_admins_products_path %>';
-
-			// var model = new ElementModel(tr, {
-			// 	name: "td[1]", 
-			// 	price: "td[2]",
-			// 	id: "td[6]"
-			// });
-
-			// var row = new Products.ProductRow({el: tr, urlRoot: urlRoot, model: model})	
-		})
-</script>
 <% end %>

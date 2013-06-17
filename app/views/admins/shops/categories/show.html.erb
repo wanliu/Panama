@@ -14,11 +14,9 @@
 
 <%= register_javascript :ajax_category_editor, :only => :ajax do %>
 <script type="text/javascript">
-	require(['jquery', 'admins/shops/categories'], function($, Category){
-		var target = $("tr#<%= @shops_category.id %>")
-		var model = new Category.Model(<%=raw @shops_category.to_json %>);
-		model.set("id", model.get("_id"));
-		new Category.CategoryRow({el: target, model: model });
-	});
+	var target = $("tr#<%= @shops_category.id %>")
+	var model = new CategoryModel(<%=raw @shops_category.to_json %>);
+	model.set("id", model.get("_id"));
+	new CategoryRow({el: target, model: model });
 </script>
 <% end %>

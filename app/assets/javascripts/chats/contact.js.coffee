@@ -1,78 +1,78 @@
 #encoding: utf-8
 #describe: 聊天视图
-define ["jquery", "backbone", "chats/contact_friend", "lib/realtime_client"],
-($, Backbone, ContactFriendViewList, Realtime) ->
-  class User extends Backbone.Model
-    urlRoot: "/users"
-    show: (user_id, callback) ->
-      @fetch(
-        url: "#{@urlRoot}/#{user_id}",
-        success: callback
-      )
+#= require chats/contact_friend
+root = window || @
 
-    connect: (token) ->
-      @fetch(
-        url: "#{@urlRoot}/connect/#{token}"
-      )
+class User extends Backbone.Model
+  urlRoot: "/users"
+  show: (user_id, callback) ->
+    @fetch(
+      url: "#{@urlRoot}/#{user_id}",
+      success: callback
+    )
 
-  class ChatContact extends Backbone.View
-    events: {
-      "click .close_list" : "hide"
-    }
+  connect: (token) ->
+    @fetch(
+      url: "#{@urlRoot}/connect/#{token}"
+    )
 
-    initialize: (options) ->
-      _.extend(@, options)
+class ChatContact extends Backbone.View
+  events: {
+    "click .close_list" : "hide"
+  }
 
-      @friend_list_el = @el.find(".friend_list")
-      #最近联系人
-      @cfv_list = new ContactFriendViewList(
-        current_user: @current_user,
-        faye_url: @faye_url)
-      @friend_list_el.html(@cfv_list.render())
+  initialize: (options) ->
+    _.extend(@, options)
 
-      @bind_relatime()
-      @connect()
+    @friend_list_el = @el.find(".friend_list")
+    #最近联系人
+    @cfv_list = new ContactFriendViewList(
+      current_user: @current_user,
+      faye_url: @faye_url)
+    @friend_list_el.html(@cfv_list.render())
 
-    bind_relatime: () ->
-      @client = Realtime.client(@faye_url)
+    @bind_relatime()
+    @connect()
 
-      @client.subscribe @contact_show_url(), (friend) =>
-        @cfv_list.add(friend)
+  bind_relatime: () ->
+    @client = Realtime.client(@faye_url)
 
-      @client.receive_message @current_user.token, (message) =>
-        @cfv_list.receive_notic(message.send_user_id)
+    @client.subscribe @contact_show_url(), (friend) =>
+      @cfv_list.add(friend)
 
-      @client.subscribe @change_state_notic_url(), (send_user_id) =>
-        @cfv_list.read_notice(send_user_id)
+    @client.receive_message @current_user.token, (message) =>
+      @cfv_list.receive_notic(message.send_user_id)
 
-      @client.subscribe @disconnect_url(), () =>
+    @client.subscribe @change_state_notic_url(), (send_user_id) =>
+      @cfv_list.read_notice(send_user_id)
 
-    disconnect_url: () ->
-      "/chat/user/disconnect/#{@current_user.id}"
+    @client.subscribe @disconnect_url(), () =>
 
-    contact_show_url: () ->
-      "/chat/contact_friends/#{@current_user.token}"
+  disconnect_url: () ->
+    "/chat/user/disconnect/#{@current_user.id}"
 
-    change_state_notic_url: () ->
-      "/chat/change/message/#{@current_user.token}"
+  contact_show_url: () ->
+    "/chat/contact_friends/#{@current_user.token}"
 
-    show_dialogue: (user_id) ->
-      user = new User()
-      user.show user_id, (model, data) =>
-        @cfv_list.show_dilogue data
+  change_state_notic_url: () ->
+    "/chat/change/message/#{@current_user.token}"
 
-    connect: () ->
-      user = new User()
-      user.connect(@current_user.token)
+  show_dialogue: (user_id) ->
+    user = new User()
+    user.show user_id, (model, data) =>
+      @cfv_list.show_dilogue data
 
-    hide: () ->
-      @el.hide()
+  connect: () ->
+    user = new User()
+    user.connect(@current_user.token)
 
-    show: () ->
-      @el.show()
+  hide: () ->
+    @el.hide()
 
-    toggle: () ->
-      @el.toggle()
+  show: () ->
+    @el.show()
 
+  toggle: () ->
+    @el.toggle()
 
-
+root.ChatContact = ChatContact

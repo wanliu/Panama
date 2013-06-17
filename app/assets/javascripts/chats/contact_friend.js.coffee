@@ -1,165 +1,171 @@
 #describe: 最近联系人
+#= require chats/dialogue
+#= require lib/realtime_client
 
-define ["jquery", "backbone", "chats/dialogue", "lib/realtime_client"],
-($, Backbone, DialogueListView, Realtime) ->
+root = window || @
 
-  class ContactFriend extends Backbone.Model
-    urlRoot: "/contact_friends"
-    join_friend: () ->
-      @fetch(
-        url: "#{@urlRoot}/join_friend",
-      )
+class ContactFriend extends Backbone.Model
+  urlRoot: "/contact_friends"
+  join_friend: () ->
+    @fetch(
+      url: "#{@urlRoot}/join_friend",
+    )
 
-  class ContactFriendList extends Backbone.Collection
-    model: ContactFriend
-    url: "/contact_friends"
-    comparator: (a, b) ->
-      if a.get("last_contact_date") > b.get("last_contact_date")
-        return -1
-      if a.get("last_contact_date") < b.get("last_contact_date")
-        return 1
-      else
-        return 0
+class ContactFriendList extends Backbone.Collection
+  model: ContactFriend
+  url: "/contact_friends"
+  comparator: (a, b) ->
+    if a.get("last_contact_date") > b.get("last_contact_date")
+      return -1
+    if a.get("last_contact_date") < b.get("last_contact_date")
+      return 1
+    else
+      return 0
 
-  class ContactFriendView extends Backbone.View
-    tagName: "li",
-    notice_class: "notice"
-    online_class: "online"
-    offline_class: "offline"
+class ContactFriendView extends Backbone.View
+  tagName: "li",
+  notice_class: "notice"
+  online_class: "online"
+  offline_class: "offline"
 
-    events:{
-      "click " : "show_dialog"
-    }
+  events:{
+    "click " : "show_dialog"
+  }
 
-    initialize: (options) ->
-      @$el = $(@el)
-      @friend = @model.get('friend')
-      @init_el()
+  initialize: (options) ->
+    @$el = $(@el)
+    @friend = @model.get('friend')
+    @init_el()
 
-      @model.bind("change:state", @change_state, @)
-      @model.bind("change:unread_count", @change_message, @)
-      @change_state()
-      @change_message()
+    @model.bind("change:state", @change_state, @)
+    @model.bind("change:unread_count", @change_message, @)
+    @change_state()
+    @change_message()
 
-    init_el: () ->
-      @$el.html("<a href='javascript:void(0)' class='item' />")
-      @avatar_label = $("<img src='#{@friend.icon_url}' class='img-rounded' />")
-      @notice_label = $("<div class='state offline'></div>")
-      @login_label = $("<span class='login'>#{@friend.login}<span/>")
-      @close_label = $("<a href='javascript:void(0)' class='close_label'></a>")
+  init_el: () ->
+    @$el.html("<a href='javascript:void(0)' class='item' />")
+    @avatar_label = $("<img src='#{@friend.icon_url}' class='img-rounded' />")
+    @notice_label = $("<div class='state offline'></div>")
+    @login_label = $("<span class='login'>#{@friend.login}<span/>")
+    @close_label = $("<a href='javascript:void(0)' class='close_label'></a>")
 
-      @$el.find("a.item")
-      .append(@avatar_label)
-      .append(@notice_label)
-      .append(@login_label)
-      .append(@close_label)
+    @$el.find("a.item")
+    .append(@avatar_label)
+    .append(@notice_label)
+    .append(@login_label)
+    .append(@close_label)
 
-    render: () ->
-      @$el
+  render: () ->
+    @$el
 
-    show_dialog: () ->
-      @trigger("show_dilogue", @friend)
+  show_dialog: () ->
+    @trigger("show_dilogue", @friend)
 
-    show_notic: () ->
+  show_notic: () ->
+    @clear_all_state()
+    @notice_label.addClass(@notice_class)
+
+  hide_notice: () ->
+    @notice_label.removeClass(@notice_class)
+    @change_state()
+
+  online: () ->
+    if @message_state()
       @clear_all_state()
-      @notice_label.addClass(@notice_class)
+      @notice_label.addClass @online_class
 
-    hide_notice: () ->
-      @notice_label.removeClass(@notice_class)
-      @change_state()
+  offline: () ->
+    if @message_state()
+      @clear_all_state()
+      @notice_label.addClass @offline_class
 
-    online: () ->
-      if @message_state()
-        @clear_all_state()
-        @notice_label.addClass @online_class
+  message_state: () ->
+    @model.get("unread_count") <= 0
 
-    offline: () ->
-      if @message_state()
-        @clear_all_state()
-        @notice_label.addClass @offline_class
+  change_message: () ->
+    if @model.get("unread_count") > 0 then @show_notic() else @hide_notice()
 
-    message_state: () ->
-      @model.get("unread_count") <= 0
+  change_state: () ->
+    if @model.get("state") then @online() else @offline()
 
-    change_message: () ->
-      if @model.get("unread_count") > 0 then @show_notic() else @hide_notice()
+  clear_all_state: () ->
+    @notice_label.removeClass @notice_class
+    @notice_label.removeClass @offline_class
+    @notice_label.removeClass @online_class
 
-    change_state: () ->
-      if @model.get("state") then @online() else @offline()
+class ContactFriendViewList extends Backbone.View
+  tagName: "ul",
 
-    clear_all_state: () ->
-      @notice_label.removeClass @notice_class
-      @notice_label.removeClass @offline_class
-      @notice_label.removeClass @online_class
+  initialize: (options) ->
+    _.extend(@, options)
 
-  class ContactFriendViewList extends Backbone.View
-    tagName: "ul",
+    @$el = $(@el)
+    @friends = new ContactFriendList()
+    @friends.bind("reset", @all_contact_friend, @)
+    @friends.bind("add", @add_contact_friend, @)
+    @friends.bind("sort", @all_contact_friend, @)
+    @friends.fetch()
 
-    initialize: (options) ->
-      _.extend(@, options)
+    @dilogue_views = new DialogueListView(
+      current_user: @current_user
+    )
 
-      @$el = $(@el)
-      @friends = new ContactFriendList()
-      @friends.bind("reset", @all_contact_friend, @)
-      @friends.bind("add", @add_contact_friend, @)
-      @friends.bind("sort", @all_contact_friend, @)
-      @friends.fetch()
+    @client = Realtime.client(@faye_url)
 
-      @dilogue_views = new DialogueListView(
-        current_user: @current_user
-      )
+  all_contact_friend: (collection) ->
+    @$el.html('')
+    collection.each (model) =>
+      @add_contact_friend(model)
 
-      @client = Realtime.client(@faye_url)
+  add_contact_friend: (model) ->
+    cf_view = new ContactFriendView(model: model)
+    cf_view.bind("show_dilogue", _.bind(@show_dilogue, @))
 
-    all_contact_friend: (collection) ->
-      @$el.html('')
-      collection.each (model) =>
-        @add_contact_friend(model)
+    @$el.append(cf_view.render())
+    friend_id = model.get("friend_id")
+    @client.online(friend_id, _.bind(@online_friend, @))
+    @client.offline(friend_id, _.bind(@offline_friend, @))
 
-    add_contact_friend: (model) ->
-      cf_view = new ContactFriendView(model: model)
-      cf_view.bind("show_dilogue", _.bind(@show_dilogue, @))
+  add: (model) ->
+    friend = @find_friend(model.friend_id)
+    if friend?
+      friend.set("last_contact_date", model.last_contact_date)
+    else
+      @friends.add(model)
 
-      @$el.append(cf_view.render())
-      friend_id = model.get("friend_id")
-      @client.online(friend_id, _.bind(@online_friend, @))
-      @client.offline(friend_id, _.bind(@offline_friend, @))
+    @sort_friend()
 
-    add: (model) ->
-      friend = @find_friend(model.friend_id)
-      if friend?
-        friend.set("last_contact_date", model.last_contact_date)
-      else
-        @friends.add(model)
+  offline_friend: (friend_id) ->
+    model = @friends.where(friend_id: parseInt(friend_id))[0]
+    model.set("state", false)  if model?
 
-      @sort_friend()
+  online_friend: (friend_id) ->
+    model = @friends.where(friend_id: parseInt(friend_id))[0]
+    model.set("state", true)  if model?
 
-    offline_friend: (friend_id) ->
-      model = @friends.where(friend_id: parseInt(friend_id))[0]
-      model.set("state", false)  if model?
+  show_dilogue: (model) ->
+    @dilogue_views.add(model)
 
-    online_friend: (friend_id) ->
-      model = @friends.where(friend_id: parseInt(friend_id))[0]
-      model.set("state", true)  if model?
+  receive_notic: (friend_id) ->
+    m = @find_friend(friend_id)
+    m.set("unread_count", 1 + parseInt(m.get("unread_count"))) if m?
 
-    show_dilogue: (model) ->
-      @dilogue_views.add(model)
+  read_notice: (friend_id) ->
+    m = @find_friend(friend_id)
+    m.set("unread_count", 0) if m?
 
-    receive_notic: (friend_id) ->
-      m = @find_friend(friend_id)
-      m.set("unread_count", 1 + parseInt(m.get("unread_count"))) if m?
+  find_friend: (friend_id) ->
+    for model in @friends.models
+      if model.get("friend_id").toString() is friend_id.toString()
+        return model
 
-    read_notice: (friend_id) ->
-      m = @find_friend(friend_id)
-      m.set("unread_count", 0) if m?
+  sort_friend: () ->
+    @friends.sort()
 
-    find_friend: (friend_id) ->
-      for model in @friends.models
-        if model.get("friend_id").toString() is friend_id.toString()
-          return model
+  render: () ->
+    @$el
 
-    sort_friend: () ->
-      @friends.sort()
-
-    render: () ->
-      @$el
+root.ContactFriendViewList = ContactFriendViewList
+root.ContactFriendView = ContactFriendView
+root.ContactFriendList = ContactFriendList
+root.ContactFriend = ContactFriend

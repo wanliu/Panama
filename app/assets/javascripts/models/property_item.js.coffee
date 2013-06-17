@@ -1,13 +1,15 @@
-define ['jquery', 'backbone', 'exports'], ($, Backbone, exports) ->
+#= require jquery
+#= require backbone
+exports = window || @
 
-	class PropertyItem extends Backbone.Model
-
-
-	class PropertyItemCollection extends Backbone.Collection
-
-		model: PropertyItem
+class PropertyItem extends Backbone.Model
 
 
-	exports.PropertyItem = PropertyItem
-	exports.PropertyItemCollection = PropertyItemCollection
-	exports
+class PropertyItemCollection extends Backbone.Collection
+
+	model: PropertyItem
+
+
+exports.PropertyItem = PropertyItem
+exports.PropertyItemCollection = PropertyItemCollection
+exports

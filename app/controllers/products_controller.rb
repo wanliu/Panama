@@ -23,6 +23,13 @@ class ProductsController < ApplicationController
     @item.delegate_property_setup
   end
 
+  def base_info
+    @product = Product.find(params[:id])
+    respond_to do |format|
+      format.json{ render :json => @product }
+    end
+  end
+
   protected
 
   def form_builder(record)

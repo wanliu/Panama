@@ -14,7 +14,7 @@
     </div>
     <div class="span3">
       <label class="control-label">
-        <%= transaction.delivery_price %>
+        <%= number_to_currency(transaction.delivery_price) %>
       </label>
     </div>
     <div class='span1'>
@@ -48,8 +48,6 @@
 </div>
 <%= render "products", :transaction => transaction %>
 <script type="text/javascript">
-  require(["countdown"], function(){
     expired = new Date("<%=transaction.current_state_detail.expired.strftime('%Y/%m/%d %H:%M:%S') %>")
     $('.clock', '#order<%=transaction.id %>').countdown({until: expired});
-  })
 </script>

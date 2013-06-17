@@ -1,11 +1,15 @@
-define ['jquery', 'backbone'], ($, Backbone) ->
+#= require jquery
+#= require backbone
 
-	class AttributeModel extends Backbone.Model
+exports = window || @
 
-		constructor: (el, @options) ->
-			super(@options)
-			
-			for item in el.attributes
-				@set(item.name, item.value)
+class AttributeModel extends Backbone.Model
+
+	constructor: (el, @options) ->
+		super(@options)
+
+		for item in el.attributes
+			@set(item.name, item.value)
 
 
+exports.AttributeModel = AttributeModel

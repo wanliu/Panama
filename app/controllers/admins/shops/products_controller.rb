@@ -75,6 +75,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
     @shops_category_root = current_shop.shops_category
     @category = @product.category
     @content = additional_properties_content(@category)
+
     if @product.valid?
       render :action => :show
     else
@@ -121,7 +122,7 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def products_by_category
-    category = ShopsCategory.find(params[:shops_category_id])
+    category = ShopsCategory.find(params[:category_id])
     @products = category.products
 
     render :partial => "products_table", :locals => { :products => @products }
@@ -135,12 +136,8 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   private
 
   def dispose_options
-    args = { :attachment_ids => [] }
     attachments = params[:product].fetch(:attachment_ids, {})
-    attachments.each do | k, v |
-      args[:attachment_ids] << v
-    end
-    args
+    {:attachment_ids => attachments.map{|k, v| v} }
   end
 
   def additional_properties_content(category = nil)

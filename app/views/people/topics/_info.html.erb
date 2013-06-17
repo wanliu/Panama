@@ -31,58 +31,47 @@
 <% circle_id = circle.is_a?(Circle) ? circle.id : circle %>
 
 <script type='text/javascript'>
-  require([
-    "jquery",
-    "lib/chose-friend",
-    "topic",
-    "shop_category",
-    "lib/hogan"
-  ], function($, ChoseFriend, TopicListView, ShopCategoryViewList){
+  var shop_category = new ShopCategoryViewList({el: $(".topic_category")})
 
-    var shop_category = new ShopCategoryViewList({el: $(".topic_category")})
+  $(".friend-context").choseFriend({
+    circle: {
+      data: "<%=person_circles_path(current_user) %>",
+      <% if circle.is_a?(Circle) %>
+      value: "name",
+      <% end %>
+      default_value: "<%=default_value %>"
+    },
 
-    $(".friend-context").choseFriend({
-      circle: {
-        data: "<%=person_circles_path(current_user) %>",
-        <% if circle.is_a?(Circle) %>
-        value: "name",
-        <% end %>
-        default_value: "<%=default_value %>"
-      },
+    followings: {
+      data: "<%=person_followings_path(current_user) %>"
+    },
 
-      followings: {
-        data: "<%=shops_person_followings_path(current_user) %>"
-      },
-
-      selector: function(data, li){
-        if(typeof data.value == "object"){
-          if(data.value._status == "shop"){
-            shop_category.add(data.value)
-          }
-        }
-      },
-
-      close_item: function(data, li){
-        if(typeof data.value == "object"){
-          if(data.value._status == "shop"){
-            shop_category.hide()
-          }
+    selector: function(data, li){
+      if(typeof data.value == "object"){
+        if(data.value._status == "shop"){
+          shop_category.add(data.value)
         }
       }
-    })
+    },
 
-    new TopicListView({
-      el: $(".topic-panel"),
-      template: Hogan.compile("<%=j render partial: 'topics/topic'  %>"),
-      circle_id: "<%=circle_id %>",
-      remote_url: "<%=person_topics_path(current_user) %>",
-      <% unless current_user.nil? %>
-      current_user: {login: "<%=current_user.login%>", icon_url: "<%=current_user.photos.icon %>", id: "<%=current_user.id %>"}
-      <% end %>
-    })
+    close_item: function(data, li){
+      if(typeof data.value == "object"){
+        if(data.value._status == "shop"){
+          shop_category.hide()
+        }
+      }
+    }
   })
 
-
+  new TopicViewList({
+    el: $(".topic-panel"),
+    template: Hogan.compile("<%=j render partial: 'topics/topic'  %>"),
+    circle_id: "<%=circle_id %>",
+    remote_url: "<%=person_topics_path(current_user) %>",
+    <% unless current_user.nil? %>
+    current_user: {login: "<%=current_user.login%>", icon_url: "<%=current_user.photos.icon %>", id: "<%=current_user.id %>"}
+    <% end %>
+  })
 </script>
 
 

@@ -9,13 +9,20 @@
   <meta name="description" content="">
 
   <%# Mobile viewport optimized: h5bp.com/viewport %>
-  <meta name="viewport" content="width=device-width">  
-  <%= stylesheet_link_tag "bootstrap_application" %>
+  <meta name="viewport" content="width=device-width">
   <% if defined?(styles) && styles.respond_to?(:each) %>
     <% styles.each do |css| %>
       <%= stylesheet_link_tag css %>
     <% end %>
   <% end %>
+  <%= javascript_include_tag faye_server_uri + "/client.js" %>
+
+  <% if defined?(javascripts) && javascripts.respond_to?(:each) %>
+    <% javascripts.each do |script| %>
+      <%= javascript_include_tag script %>
+    <% end %>
+  <% end %>
+
 
   <%# More ideas for your <head> here: h5bp.com/d/head-Tips %>
 

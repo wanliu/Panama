@@ -56,23 +56,21 @@
 <% end %>
 </div>
 <script type="text/javascript">
-    require(['jquery', 'lib/jquery.raty'], function($){
-        $(".grade-product").raty({
-            readOnly : false,
-            score    : 5,
-            path     : "<%= asset_path 'raty' %>"
-        })
+    $(".grade-product").raty({
+        readOnly : false,
+        score    : 5,
+        path     : "<%= asset_path 'raty' %>"
+    })
 
-        $(".serve").raty({
-            readOnly : false,
-            score    : 5,
-            path     : "<%= asset_path 'raty' %>"
-        })
+    $(".serve").raty({
+        readOnly : false,
+        score    : 5,
+        path     : "<%= asset_path 'raty' %>"
+    })
 
-        $(".logistics").raty({
-            readOnly : false,
-            score    : 5,
-            path     : "<%= asset_path 'raty' %>"
-        })
-    });
+    $(".logistics").raty({
+        readOnly : false,
+        score    : 5,
+        path     : "<%= asset_path 'raty' %>"
+    })
 </script>

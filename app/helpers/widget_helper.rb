@@ -1,13 +1,11 @@
 module WidgetHelper
   STATE_BUTTON_SCRIPT = <<-JAVASCRIPT
-    require(['jquery'], function($){
-      $(".state_button").on('click', function(){
-        var state = $(this).attr('state') === 'true';
-        STATUS = {true: 'on', false: 'off'};
-        $(this).find("." + STATUS[state] + "_state").hide();
-        state = !state;
-        $(this).find("." + STATUS[state] + "_state").show();
-      });
+    $(".state_button").on('click', function(){
+      var state = $(this).attr('state') === 'true';
+      STATUS = {true: 'on', false: 'off'};
+      $(this).find("." + STATUS[state] + "_state").hide();
+      state = !state;
+      $(this).find("." + STATUS[state] + "_state").show();
     });
   JAVASCRIPT
 
@@ -22,9 +20,9 @@ module WidgetHelper
 
     options = apppend_class(options, "state_button")
 
-    link_to('#',options) do 
+    link_to('#',options) do
       content_tag :ul, :class => 'unstyled' do
-        on_styles, off_styles = on_or_off ? styles : styles.reverse 
+        on_styles, off_styles = on_or_off ? styles : styles.reverse
 
         on_tag  = content_tag :li, on, :style => on_styles, :class => :on_state
         off_tag = content_tag :li, off, :style => off_styles, :class => :off_state
@@ -49,7 +47,7 @@ module WidgetHelper
       options[:class].push(name)
     else
       options[:class] = [options[:class], name]
-    end 
-    options 
+    end
+    options
   end
 end

@@ -45,8 +45,6 @@
 </div>
 <%=render "products", :refund => refund %>
 <script type="text/javascript">
-  require(["countdown"], function(){
-    expired = new Date("<%=refund.current_state_detail.expired.strftime('%Y/%m/%d %H:%M:%S') %>")
-    $('.clock', '.refund-<%=refund.id %>-<%=refund.state %>').countdown({until: expired});
-  })
+  expired = new Date("<%=refund.current_state_detail.expired.strftime('%Y/%m/%d %H:%M:%S') %>")
+  $('.clock', '.refund-<%=refund.id %>-<%=refund.state %>').countdown({until: expired});
 </script>

@@ -9,13 +9,11 @@ class DateControlInput < SimpleForm::Inputs::Base
         <i data-time-icon="icon-time" data-date-icon="icon-calendar">
         </i>
       </span>
-    </div> 
+    </div>
     <script type="text/javascript">
-      require(['jquery', 'lib/bootstrap-datetimepicker.min'], function($){
-        $(function() {
-          $('#datetimepicker1').datetimepicker({
-             pickTime: false
-          });
+      $(function() {
+        $('#datetimepicker1').datetimepicker({
+           pickTime: false
         });
       });
     </script>

@@ -3,8 +3,8 @@
 
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => ["people"] %>
+<%= javascript_include_tag :people %>
 <body class="<%= controller.controller_name %>">
-
   <%= render "header-fluid" %>
   <%= render "category_breadcrumbs" %>
   <div id='wrapper' class='container-fluid'>
@@ -20,6 +20,7 @@
   </div>
   <div class='footer_nav'>
     <%= render_widget :chat %>
+    <%= render_widget :my_cart %>
   </div>
 </body>
 </html>

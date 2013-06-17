@@ -1,6 +1,7 @@
 // Place all the styles related to the people controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//= require bootstrap_application
 //= require people/comment
 //= require jquery.atwho
 //= require product_comment
@@ -13,6 +14,7 @@
 //= require './lib/notify/jquery.pnotify.default'
 //= require './lib/notify/jquery.pnotify.default.icons'
 
+@import "another_bootstrap";
 @import "compass/css3";
 @import "variables";
 @import "banks";
@@ -21,6 +23,8 @@
 @import "widget";
 @import "transaction";
 @import "notification";
+@import "footer_nav";
+
 
 body {
   background: #f1f1f1;
@@ -145,6 +149,11 @@ body {
 }
 
 .transaction-body{
+
+  .label_zip_code{
+    width: 76px !important;
+  }
+
   .row-fluid{
     line-height: 30px;
 
@@ -191,6 +200,16 @@ body {
           .describe{
             color: gray;
             margin-left: 25px;
+          }
+
+          .guide{
+            display: none;
+
+
+            .bank-wrapper{
+              margin-top: 10px;
+              margin-left: 30px;
+            }
           }
         }
       }

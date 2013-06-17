@@ -8,7 +8,7 @@ class People::FollowingsController < People::BaseController
     @s_followings = @people.followings.shops
     respond_to do |format|
       format.html
-      format.json
+      format.json{ render json: @people.followings  }
     end
   end
 

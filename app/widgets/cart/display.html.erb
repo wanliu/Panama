@@ -1,46 +1,31 @@
 <%= widget_div :class => "nav_item" do %>
-    <a href="#" class='handle' >My Cart</a>
+    <%= link_to '#', class: 'handle' do %>
+        <%= icon(:'shopping-cart') + ' ' + t(:my_cart) %>
+    <% end %>
     <span id="shop_count" class="badge badge-important"><%= @my_cart.items_count %></span>
-<% end %>
+
 
 <div id="cart_box">
     <div class="tool">
-        <%= link_to t(:clear_list),
-                    cart_clear_list,
-                    :class => 'btn',
-                    :remote => true,
-                    :metohd => :post %>
+        <%= form_tag cart_clear_list, :class => "clear_list" do %>
+            <input type='submit' class='btn' value="<%=t(:clear_list) %>" />
+        <% end %>
+
         <%= link_to_if @my_cart.items.count > 0,
                     t(:checkout),
                     person_cart_index_path(current_user.login),
-                    :class => 'btn btn-primary' do %>
+                    :class => 'btn btn-primary checkout' do %>
         <%= link_to t(:checkout),
                     person_cart_index_path(current_user.login),
-                    :class => 'btn btn-primary disabled' %>
+                    :class => 'btn btn-primary checkout disabled' %>
         <% end %>
         <table class="cart_top">
             <tr>
-                <td>图片</td>
-                <td>标题</td>
-                <td>数量</td>
-                <td>价格</td>
+                <td class="product_total">商品总价：0</td>
             </tr>
         </table>
+        </div>
     </div>
 
-
-    <table class="cart_main">
-        <%= render :partial => "cart/product_item", :collection => @my_cart.items %>
-    </table>
-    <table class="cart_bottom">
-        <tr>
-            <td class="product_total">总价：0</td>
-        </tr>
-    </table>
-    </div>
-</div>
-<script type="text/javascript">
-    require(["jquery", 'my_cart'], function($, ShoppingCart){
-        var id = "#<%= widget_id %>";
-    });
-</script>
+<% end %>
+<%= javascript_include_tag "my_cart" %>

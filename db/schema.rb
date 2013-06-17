@@ -11,7 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130611080601) do
+ActiveRecord::Schema.define(:version => 20130617033132) do
+
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -42,6 +43,15 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
     t.integer  "limit_count",   :limit => 8
     t.integer  "like"
     t.integer  "participate"
+  end
+
+  create_table "activities_attachments", :force => true do |t|
+    t.integer  "attachment_id"
+    t.string   "activity_id"
+    t.string   "integer"
+    t.integer  "number"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "activities_likes", :force => true do |t|
@@ -311,7 +321,7 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
 
   create_table "money_bills", :force => true do |t|
     t.string   "serial_number"
-    t.decimal  "money",         :precision => 10, :scale => 0
+    t.decimal  "money",         :precision => 10, :scale => 2
     t.text     "decription"
     t.integer  "user_id"
     t.integer  "owner_id"
@@ -340,11 +350,11 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
     t.integer  "order_refund_id"
     t.text     "title"
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
-    t.decimal  "price",           :precision => 10, :scale => 0, :default => 0
-    t.decimal  "total",           :precision => 10, :scale => 0, :default => 0
+    t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
     t.integer  "product_id"
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
   end
 
   create_table "order_refund_state_details", :force => true do |t|
@@ -360,32 +370,35 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
     t.integer  "order_reason_id"
     t.text     "decription"
     t.integer  "order_transaction_id"
-    t.decimal  "total",                :precision => 10, :scale => 0, :default => 0
+    t.decimal  "total",                :precision => 10, :scale => 2, :default => 0.0
     t.string   "state"
     t.integer  "buyer_id"
     t.integer  "seller_id"
     t.text     "refuse_reason"
     t.integer  "operator_id"
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
-    t.decimal  "delivery_price",       :precision => 10, :scale => 0, :default => 0
+    t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
   end
 
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",            :precision => 10, :scale => 0
+    t.decimal  "total",              :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                  :default => false
+    t.boolean  "operator_state",                                    :default => false
     t.integer  "delivery_type_id"
-    t.decimal  "delivery_price",   :precision => 10, :scale => 0
+    t.decimal  "delivery_price",     :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
+    t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
+    t.integer  "delivery_manner_id"
   end
 
   create_table "pay_manners", :force => true do |t|
@@ -418,16 +431,16 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
   create_table "product_delivery_types", :force => true do |t|
     t.integer  "product_id"
     t.integer  "delivery_type_id"
-    t.datetime "created_at",                                                     :null => false
-    t.datetime "updated_at",                                                     :null => false
-    t.decimal  "delivery_price",   :precision => 10, :scale => 0, :default => 0
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
+    t.decimal  "delivery_price",   :precision => 5, :scale => 2, :default => 0.0
   end
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0
-    t.decimal  "price",          :precision => 10, :scale => 0
-    t.decimal  "total",          :precision => 10, :scale => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
+    t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
     t.integer  "transaction_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
@@ -468,7 +481,7 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
 
   create_table "products", :force => true do |t|
     t.string   "name"
-    t.decimal  "price",                 :precision => 10, :scale => 0
+    t.decimal  "price",                 :precision => 10, :scale => 2
     t.string   "summary"
     t.text     "description"
     t.datetime "created_at",                                           :null => false
@@ -477,6 +490,7 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
     t.integer  "category_id"
     t.integer  "default_attachment_id"
     t.integer  "shops_category_id"
+    t.string   "brand_name"
   end
 
   create_table "products_properties", :force => true do |t|
@@ -606,11 +620,11 @@ ActiveRecord::Schema.define(:version => 20130611080601) do
   end
 
   create_table "sub_products", :force => true do |t|
-    t.float    "price"
-    t.float    "quantity"
-    t.integer  "product_id", :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.decimal  "price",      :precision => 10, :scale => 2
+    t.decimal  "quantity",   :precision => 10, :scale => 0
+    t.integer  "product_id",                                :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
   end
 
   create_table "topic_attachments", :force => true do |t|

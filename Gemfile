@@ -1,5 +1,7 @@
 # encoding: utf-8
+
 # source 'https://rubygems.org'
+
 source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.8'
@@ -20,7 +22,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
-  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
+  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails', :git => 'git://github.com/anjlab/bootstrap-rails.git'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails', '~> 1.0.3'
   gem 'compass-h5bp', '~> 0.1.0'
@@ -30,7 +32,7 @@ end
 gem 'cache_digests', '~> 0.2.0'
 # gem 'jquery-rails', '~> 2.1.3'
 gem 'html5-rails', '~> 0.0.6'
-gem 'requirejs-rails', '~> 0.9.0'
+# gem 'requirejs-rails', '~> 0.9.0'
 
 gem 'omniauth', '~> 1.1.1'
 gem 'omniauth-oauth2', '~> 1.1.1'
@@ -84,7 +86,7 @@ gem 'kaminari', '~> 0.14.1'
 
 # Faye
 gem 'faye'
-gem 'faye-redis'
+gem 'faye-redis', '~> 0.1.1'
 
 gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 
@@ -142,8 +144,12 @@ gem 'activemerchant'
 gem 'activemerchant_patch_for_china'
 gem 'geocoder', :github => 'mrichie/geocoder'
 gem 'ruby-hmac'
-
-gem "hiredis", "~> 0.3.1"
-gem "redis", "~> 2.2.0", :require => ["redis/connection/hiredis", "redis"]
+gem "hiredis", "~> 0.4.0"
 gem 'rails_autolink'
 gem 'whenever', :require => false
+gem 'chinese_pinyin', '0.4.1'
+gem 'rmmseg-cpp-huacnlee', '0.2.9'
+gem 'redis-namespace','~> 1.0.2'
+gem 'redis-search', '0.6.3'
+gem 'redis'
+gem "wicked"

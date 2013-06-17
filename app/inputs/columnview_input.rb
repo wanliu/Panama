@@ -10,27 +10,23 @@ class ColumnviewInput < SimpleForm::Inputs::Base
         #{template.build_menu(input_options[:root], element_id)}
         <script type="text/javascript">
         if("" != '#{category}' ){
-          require(["jquery_columnview"], function($){
-            $("##{element_id}").columnview({
-                length: '#{category.ancestry_depth}',
-                ancestry: '#{category.ancestry}',
-                category_id: '#{category.id}',
-                ihid: '#{field_name}',
-                ihname: '#{@builder.object.class.name.underscore}[#{attribute_name}]'
-            });
-          })
+          $("##{element_id}").columnview({
+              length: '#{category.ancestry_depth}',
+              ancestry: '#{category.ancestry}',
+              category_id: '#{category.id}',
+              ihid: '#{field_name}',
+              ihname: '#{@builder.object.class.name.underscore}[#{attribute_name}]'
+          });
         } else {
-          require(["jquery_columnview"], function($){
-            $("##{element_id}").columnview({
-              length: '',
-              ancestry: '',
-              category_id: '',
-              ihid: '',
-              ihname: '',
-              selector : function(data, current_data){
-                $("input:hidden[name='#{@builder.object.class.name.underscore}[#{attribute_name}]']").val(current_data.id)
-              }
-            });
+          $("##{element_id}").columnview({
+            length: '',
+            ancestry: '',
+            category_id: '',
+            ihid: '',
+            ihname: '',
+            selector : function(data, current_data){
+              $("input:hidden[name='#{@builder.object.class.name.underscore}[#{attribute_name}]']").val(current_data.id)
+            }
           })
         }
         </script>

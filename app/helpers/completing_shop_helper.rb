@@ -1,0 +1,2 @@
+module CompletingShopHelper
+end
