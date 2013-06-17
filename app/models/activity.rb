@@ -1,5 +1,5 @@
 class Activity < ActiveRecord::Base
-
+  include Graphical::Display
   attr_accessible :url, :product_id, :start_time, :end_time, :price,
                   :description, :like, :participate, :author_id
 
@@ -17,6 +17,12 @@ class Activity < ActiveRecord::Base
   has_many :participates, :through => :activities_participates, :source => :user
 
   validates_associated :product
+
+  define_graphical_attr :photos, :handler => :default_photo
+
+  def default_photo
+    attachments.first ? attachments.first.file : Attachment.new.file
+  end
 
   validates :price, :presence => true
 
