@@ -5,7 +5,7 @@
 
 <div id="cart_box">
     <div class="tool">
-        <%= form_tag cart_clear_list do %>
+        <%= form_tag cart_clear_list, :class => "clear_list" do %>
             <input type='submit' class='btn' value="<%=t(:clear_list) %>" />
         <% end %>
 
