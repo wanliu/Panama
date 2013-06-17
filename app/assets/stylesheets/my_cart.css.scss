@@ -40,6 +40,11 @@
         width: 260px;
         margin-left: 3px;
         background-color: white;
+
+        .clear_list{
+            margin: 0px;
+            display: inline-block;
+        }
     }
 
     hr {
