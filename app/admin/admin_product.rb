@@ -1,6 +1,7 @@
+#encoding: utf-8
+
 ActiveAdmin.register Product do
   index do
-    column :id
     column :name
     column :properties do |product|
       properties_string = product.properties.map do |prop|
@@ -9,6 +10,9 @@ ActiveAdmin.register Product do
       link = link_to "have #{ product.properties.size } propertys.", system_product_path(product)
       link + "   " + properties_string.to_s
 
+    end
+    column do |product|
+      link_to "修改", edit_system_product_path(product)
     end
   end
 
