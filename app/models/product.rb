@@ -72,6 +72,7 @@ class Product < ActiveRecord::Base
   # 产品名称搜索
   redis_search_index(:title_field => :name,
                      :score_field => :created_at,
+                     :prefix_index_enable => true,
                      :ext_fields  => [:price])
 
   def prices_definition
