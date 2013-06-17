@@ -66,8 +66,11 @@
 
     // 根据用户输入的商品名称、条码，加载商品信息供选择
     $('#activity_product').on('blur',function(e){
-      $('ul.product_selector').hide();
+      window.setTimeout(function(){
+        $('ul.product_selector').hide();
+      },500);
     })
+
     $('#activity_product').on('keyup', function(e){
       var query_name = $('#activity_product').val()
       $.ajax({
