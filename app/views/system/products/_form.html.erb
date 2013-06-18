@@ -6,7 +6,7 @@
     <%= f.input :summary %>
     <%= f.input :brand_name %>
     <%= f.input :description, :as => :text %>
-    <%= f.input :attachments, :as => :aplum, :img_version => "100x100" %>
+    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
   <% end %>
   <%= f.actions %>
 <% end %>
