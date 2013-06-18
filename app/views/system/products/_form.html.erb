@@ -5,8 +5,12 @@
     <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
     <%= f.input :price, :class => :product_price %>
     <%= f.input :category, :as => :category %>
+    <% if @content.blank? %>
+	    <%= render_content(@content, locals: { category: @category }) %>
+	<% end %>
     <%= f.input :summary %>
     <%= f.input :brand_name %>
+
     <%= f.input :description, :as => :text %>
   <% end %>
   <%= f.actions %>
