@@ -14,7 +14,9 @@ class AplumInput
       output = ActiveSupport::SafeBuffer.new
       output << template.content_tag(:li) do
         template.content_tag(:label, "图片", class: "label") +
-        template.content_tag(:ul,nil, id: el_id, class: "attachment-list")
+        template.content_tag(:div) do
+          template.content_tag(:ul,nil, id: el_id, class: "attachment-list")
+        end
       end
 
       output << template.javascript_tag(<<-JAVASCRIPT
