@@ -10,10 +10,12 @@ module ContentsHelper
 
   def render_content(content, render_options = { :layout => false })
     begin
-      tpl = content.template.data
-      generate_template(tpl, render_options) do |tpl_name, options|
-        prepend_tpl_view_path
-        render_content_template tpl_name, render_options
+      if content && content.try(:template)
+        tpl = content.template.data
+        generate_template(tpl, render_options) do |tpl_name, options|
+          prepend_tpl_view_path
+          render_content_template tpl_name, render_options
+        end
       end
     rescue Vfs::Error => e
       raise "template file :#{content.template} not found"
