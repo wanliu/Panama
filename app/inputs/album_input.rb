@@ -25,7 +25,8 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
             template: '#{j(photo_template)}',
             version_name: "#{img_version}",
             input_name: "product[attachment_ids]",
-            default_input_name: "product[default_attachment_id]"
+            default_input_name: "product[default_attachment_id]",
+            limit: 5
           }
         })
     JAVASCRIPT
@@ -40,7 +41,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
       <img  class="img-rounded attachable-preview" />
       <input type="hidden" />
       <div class="attachment-upload"></div>
-      <div class="operation-panle">
+      <div class="nav-panle">
         <a href="javascript:void(0)" class="delete-img">删除</a>
         <a href="javascript:void(0)" class="default-index-img">设为主图</a>
       </div>

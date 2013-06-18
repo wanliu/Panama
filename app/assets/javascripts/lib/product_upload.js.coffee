@@ -50,7 +50,6 @@ class ProductAttachmentUpload extends Backbone.View
         $.extend(@.default_params, @.options.params)
 
         @el = $(@el)
-
         @init_template()
         @model.bind("set_default_attr", _.bind(@set_default_attr, @))
         @model.bind("set_value_attr", _.bind(@set_value_attr, @))
@@ -66,7 +65,7 @@ class ProductAttachmentUpload extends Backbone.View
         @attachment_upload_panle = @$(".attachment-upload")
         @hidden_input = @$("input[type=hidden]")
         @img = @$("img.attachable-preview")
-        @bottom_meun = @$(".operation-panle")
+        @bottom_meun = @$(".nav-panle")
         @attachable = @$(".attachable")
         @progress_panle_list = @$(".progress-panle").find("ul.list")
         @init_up_file()
