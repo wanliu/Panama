@@ -8,9 +8,10 @@ class Attachment < ActiveRecord::Base
 
   mount_uploader :file, ImageUploader
 
-  def get_attributes(version_name = nil)
-    _attributes = attributes
-    _attributes[:url] = file.url(version_name)
+  def as_json(*args)
+    options = args.extract_options!
+    _attributes = super *args
+    _attributes[:url] = file.url(options[:version_name])
     _attributes
   end
 
