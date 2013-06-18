@@ -26,11 +26,8 @@
 			}
 			var selector_el = this.el;
 
-			this.el.find('ul').css('display', 'none');
-			// this.el.find('a').attr('href', 'javascript: void(0);');
-
 			this.el.find('li').on('mouseenter', function(e) {
-				$(this).children('ul').show();
+				$(this).children('ul').css('display', 'block');
 			})
 
 			this.el.find('li').on('mouseleave', function(e) {
@@ -58,7 +55,7 @@
 			admin_category_selector(el);
 			$('input.mock_prodcut_category_id').on('click', function(e){
 				el.show();
-				el.children('ul').show()
+				el.children('ul').css('display', 'block');
 			})
 		})
 </script>

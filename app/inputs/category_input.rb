@@ -12,7 +12,7 @@ class CategoryInput < Formtastic::Inputs::StringInput
   end
 
   def mock_input
-    "<input type='text' class='mock_prodcut_category_id' value='未选择'>".html_safe
+    "<input type='text' class='mock_prodcut_category_id' value='未选择' readonly>".html_safe
   end
 
   def generate_ul_tree
