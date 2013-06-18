@@ -1,12 +1,12 @@
 <%= semantic_form_for product, :method => :put do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
+    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
     <%= f.input :price %>
     <%= f.input :category, :as => :category %>
     <%= f.input :summary %>
     <%= f.input :brand_name %>
     <%= f.input :description, :as => :text %>
-    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
   <% end %>
   <%= f.actions %>
 <% end %>
