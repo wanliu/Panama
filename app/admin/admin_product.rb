@@ -1,7 +1,8 @@
 #encoding: utf-8
 
-ActiveAdmin.register Product do
+include ProductsHelper
 
+ActiveAdmin.register Product do
   config.clear_action_items!
 
   action_item do
@@ -54,12 +55,28 @@ ActiveAdmin.register Product do
     @product = Product.new
   end
 
+  collection_action :create_plus do
+    @product = Product.new(params[:product])
+    @product.attachment_ids = dispose_options(params[:product])
+    if @product.save
+      redirect_to system_product_path(@product)
+    end
+  end
+
   member_action :properties do
     @product = Product.find(params[:id])
   end
 
   member_action :edit_plus do
     @product = Product.find(params[:id])
+  end
+
+  member_action :update_plus do
+    p = params[:product]
+    @product = Product.find(params[:id])
+    if @product.update_attributes(p.merge(dispose_options(p)))
+      redirect_to system_product_path(@product)
+    end
   end
 
   member_action :attach_properties, :method => :put do
