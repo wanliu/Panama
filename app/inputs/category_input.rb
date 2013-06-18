@@ -6,7 +6,7 @@ class CategoryInput < Formtastic::Inputs::StringInput
 
     input_wrapping do
 
-      label_html << builder.hidden_field(method, input_html_options) + @template.build_menu(@category_root)
+      label_html << builder.hidden_field(method, input_html_options) << template.build_menu(@category_root)
 
       # builder.text_field(method, input_html_options)
     end
