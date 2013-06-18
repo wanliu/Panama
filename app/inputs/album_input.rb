@@ -45,7 +45,11 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
         <a href="javascript:void(0)" class="delete-img">删除</a>
         <a href="javascript:void(0)" class="default-index-img">设为主图</a>
       </div>
-      <div class="progress-panle"></div>
+      <div class="progress-panle">
+        <div class="progress progress-mini progress-success">
+          <div class="bar" style="width: 0%"></div>
+        </div>
+      </div>
     </div>
     HTML
   end

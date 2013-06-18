@@ -1,18 +1,18 @@
+#encoding: utf-8
 class CategoryInput < Formtastic::Inputs::StringInput
 
   def to_html
-    # debugger
-
     input_wrapping do
-
-      label_html << builder.hidden_field(method, input_html_options) << generate_ul_tree
-
-      # builder.text_field(method, input_html_options)
+      label_html << builder.hidden_field(method, input_html_options) << mock_input << generate_ul_tree
     end
   end
 
   def root
     input_options[:root] || Category.where(:name => "_products_root")[0]
+  end
+
+  def mock_input
+    "<input type='text' class='mock_prodcut_category_id' value='未选择'>".html_safe
   end
 
   def generate_ul_tree

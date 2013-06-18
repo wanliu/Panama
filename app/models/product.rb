@@ -163,11 +163,11 @@ class Product < ActiveRecord::Base
   end
 
   def format_attachment(version_name = nil)
-    temp = []
+    temp, options = [], {version_name: version_name}
     unless default_attachment.blank?
-      temp << default_attachment.get_attributes(version_name).merge(:default_state => true)
+      temp << default_attachment.as_json(options).merge(:default_state => true)
     end
-    attachments.each{| atta | temp << atta.get_attributes(version_name) }
+    attachments.each{| atta | temp << atta.as_json(options) }
     temp
   end
 

@@ -71,4 +71,26 @@ ActiveAdmin.register Product do
   action_item :only => :show do
     link_to 'Attach Properties', attach_properties_system_product_path(params[:id]), :method => :put
   end
+
+  collection_action :load_category_properties do
+    root = '/panama'.to_dir
+    # @product = Product.find(params[:id])
+    @product = params[:product_id].blank? ? Product.new : Product.find(params[:product_id])
+    form_builder @product
+    @category = Category.find(params[:category_id])
+    @product.category = @category
+    @product.attach_properties!
+    @content = additional_properties_content(@category)
+
+    if @content.nil?
+      render :text => :ok
+    else
+      render_content(@content, locals: { category: @category })
+    end
+  end
+
+
+  def additional_properties_content(category = nil)
+    @content = PanamaCore::Contents.fetch_for(category, :additional_properties)
+  end
 end
