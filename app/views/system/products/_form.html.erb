@@ -1,10 +1,57 @@
+<%= stylesheet_link_tag "system/product" %>
 <%= semantic_form_for product, :method => :put do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
     <%= f.input :price %>
+    <%= f.input :categories, label: "fenlei" %>
+    <%= f.input :category, as: :hidden %>
     <%= f.input :summary %>
     <%= f.input :brand_name %>
     <%= f.input :description, :as => :text %>
   <% end %>
   <%= f.actions %>
 <% end %>
+
+
+<input id='category_for_testing'>
+<div style='position: relative;'>
+	<ul class='selector'>
+		<li>01</li>
+		<li>02</li>
+		<li>
+			<ul class='selector'>
+				<li>0201</li>
+				<li>
+					<ul class='selector'>
+						<li>020101</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script>
+		function admin_category_selector(el) {
+			if (el instanceof jQuery) {
+				this.el = el;
+			} else {
+				this.el = $(el);
+			}
+
+			this.ul = this.el.next().children('ul');
+			this.ul.find('ul').css('display', 'none');
+
+			this.ul.find('li').on('mouseenter', function(e){
+				$(this).children('ul').show();
+			})
+
+			this.ul.find('li').on('mouseleave', function(e){
+				$(this).find('ul').css('display', 'none');
+			})
+		}
+
+		$(function(){
+			admin_category_selector("input#category_for_testing");
+		})
+</script>
