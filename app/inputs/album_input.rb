@@ -17,15 +17,15 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
     output << template.content_tag(:ul, nil, :class => "attachment-list", :id => el_id)
     output << template.javascript_tag(<<-JAVASCRIPT
       new ProductUpload({
-          el : document.getElementById("#{el_id}"),
-          data : #{collection.to_json},
-          params : {
-            url_upload : "#{input_options[:upload_url]}" ,
-            default_img_url : "#{input_options[:default_url] || template.default_img_url(img_version) }",
-            template : '#{j(photo_template)}',
-            version_name : "#{img_version}",
-            input_name : "product[attachment_ids]",
-            default_input_name : "product[default_attachment_id]"
+          el: document.getElementById("#{el_id}"),
+          data: #{collection.to_json},
+          params: {
+            url_upload: "#{input_options[:upload_url]}" ,
+            default_img_url: "#{input_options[:default_url] || template.default_img_url(img_version) }",
+            template: '#{j(photo_template)}',
+            version_name: "#{img_version}",
+            input_name: "product[attachment_ids]",
+            default_input_name: "product[default_attachment_id]"
           }
         })
     JAVASCRIPT
@@ -48,5 +48,4 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
     </div>
     HTML
   end
-
 end

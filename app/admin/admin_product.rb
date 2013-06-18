@@ -2,7 +2,16 @@
 
 ActiveAdmin.register Product do
 
+  config.clear_action_items!
+
+  action_item do
+    link_to "新增 Product", new_plus_system_products_path
+  end
+
+
   index do
+
+
     column :name
     column :properties do |product|
       properties_string = product.properties.map do |prop|
@@ -13,7 +22,7 @@ ActiveAdmin.register Product do
 
     end
     column do |product|
-      link_to "修改", edit_system_product_path(product)
+      link_to "修改", edit_plus_system_product_path(product)
     end
   end
 

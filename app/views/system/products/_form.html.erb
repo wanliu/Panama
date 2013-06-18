@@ -3,17 +3,17 @@
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
     <%= f.input :price %>
-    <%= f.input :categories, label: "fenlei" %>
-    <%= f.input :category, as: :hidden %>
+    <%= f.input :category, :as => :category %>
     <%= f.input :summary %>
     <%= f.input :brand_name %>
     <%= f.input :description, :as => :text %>
+    <%= f.input :attachments, :as => :aplum %>
   <% end %>
   <%= f.actions %>
 <% end %>
 
 
-<input id='category_for_testing'>
+<!-- <input id='category_for_testing'>
 <div style='position: relative;'>
 	<ul class='selector'>
 		<li>01</li>
@@ -29,7 +29,7 @@
 			</ul>
 		</li>
 	</ul>
-</div>
+</div> -->
 
 <script>
 		function admin_category_selector(el) {
@@ -39,8 +39,9 @@
 				this.el = $(el);
 			}
 
-			this.ul = this.el.next().children('ul');
+			this.ul = this.el.next()//.children('ul');
 			this.ul.find('ul').css('display', 'none');
+			this.ul.find('ul').addClass('selector');
 
 			this.ul.find('li').on('mouseenter', function(e){
 				$(this).children('ul').show();
@@ -52,6 +53,6 @@
 		}
 
 		$(function(){
-			admin_category_selector("input#category_for_testing");
+			admin_category_selector("input#product_category_id");
 		})
 </script>
