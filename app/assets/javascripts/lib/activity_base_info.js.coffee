@@ -1,6 +1,6 @@
 # 活动上传
 
-#= require admins/shops/product_upload
+#= require lib/product_upload
 
 root = window || @
 

@@ -2,8 +2,9 @@
 # describe : 产品ajax上传
 
 #= require jquery
+#= require lib/underscore
 #= require backbone
-#= require lib/fileuploader
+#= require ./fileuploader
 
 root = (window || @)
 
