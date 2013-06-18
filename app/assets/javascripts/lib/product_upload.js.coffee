@@ -63,26 +63,14 @@ class ProductAttachmentUpload extends Backbone.View
       @init_element()
 
     init_element : () ->
-<<<<<<< HEAD:app/assets/javascripts/lib/product_upload.js.coffee
-        @attachment_upload_panle = @$(".attachment-upload")
-        @hidden_input = @$("input[type=hidden]")
-        @img = @$("img.attachable-preview")
-        @bottom_meun = @$(".nav-panle")
-        @attachable = @$(".attachable")
-        @progress_panle_list = @$(".progress-panle").find("ul.list")
-        @init_up_file()
-        @file_input = @$("input[type=file]")
-=======
       @attachment_upload_panle = @$(".attachment-upload")
       @hidden_input = @$("input[type=hidden]")
       @img = @$("img.attachable-preview")
-      @bottom_meun = @$(".operation-panle")
+      @bottom_meun = @$(".nav-panle")
       @attachable = @$(".attachable")
-      @progress_panle = @$(".progress-panle")
+      @progress_panle_list = @$(".progress-panle").find("ul.list")
       @init_up_file()
       @file_input = @$("input[type=file]")
->>>>>>> 30762522b4d4539b61f3b0bf90cb20d6c95c7783:app/assets/javascripts/admins/shops/product_upload.js.coffee
-
       @init_element_data()
 
     init_element_data: () ->
