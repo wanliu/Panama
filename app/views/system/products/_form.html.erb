@@ -1,0 +1,10 @@
+<%= semantic_form_for product, :method => :put do |f| %>
+  <%= f.inputs "Product" do %>
+    <%= f.input :name %>
+    <%= f.input :price %>
+    <%= f.input :summary %>
+    <%= f.input :brand_name %>
+    <%= f.input :description, :as => :text %>
+  <% end %>
+  <%= f.actions %>
+<% end %>

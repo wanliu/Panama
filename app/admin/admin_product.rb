@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 ActiveAdmin.register Product do
+
   index do
     column :name
     column :properties do |product|
@@ -40,7 +41,15 @@ ActiveAdmin.register Product do
     end
   end
 
+  collection_action :new_plus do
+    @product = Product.new
+  end
+
   member_action :properties do
+    @product = Product.find(params[:id])
+  end
+
+  member_action :edit_plus do
     @product = Product.find(params[:id])
   end
 
