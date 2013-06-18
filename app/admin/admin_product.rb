@@ -52,9 +52,6 @@ ActiveAdmin.register Product do
 
   collection_action :new_plus do
     @product = Product.new
-    class Product
-      attr_accessor :categories
-    end
   end
 
   member_action :properties do
