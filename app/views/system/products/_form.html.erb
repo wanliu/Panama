@@ -39,9 +39,9 @@
 				this.el = $(el);
 			}
 
+
 			this.ul = this.el.next()//.children('ul');
 			this.ul.find('ul').css('display', 'none');
-			this.ul.find('ul').addClass('selector');
 
 			this.ul.find('li').on('mouseenter', function(e){
 				$(this).children('ul').show();
