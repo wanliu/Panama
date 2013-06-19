@@ -1,0 +1,80 @@
+div.category-parent-class {
+	position: relative;
+	left: 20%;
+	top: 6px;
+	display: none;
+
+	li { position: relative; }
+
+	ul.dropdown-menu:first-child {
+		left: 0;
+	}
+
+	ul.dropdown-menu {
+		a {
+			text-decoration: none;
+			display: block;
+			padding: 3px 20px;
+			clear: both;
+			font-weight: normal;
+			line-height: 20px;
+			color: #333333;
+			white-space: nowrap;
+		}
+
+		display: none;
+		margin-bottom: 5px;
+		position: absolute;
+		top: -8px;
+		left: 160px;
+		z-index: 1000;
+		float: left;
+		min-width: 160px;
+		padding: 5px 0;
+		margin: 2px 0 0;
+		list-style: none;
+		background-color: #ffffff;
+		border: 1px solid #ccc;
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		-webkit-border-radius: 6px;
+		-moz-border-radius: 6px;
+		border-radius: 6px;
+		-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		-webkit-background-clip: padding-box;
+		-moz-background-clip: padding;
+		background-clip: padding-box;
+	}
+
+	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus,
+	.dropdown-submenu:hover > a {
+		color: #ffffff;
+		text-decoration: none;
+		background-color: #0081c2;
+		background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+		background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+		background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+		background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+		background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+		background-repeat: repeat-x;
+	}
+
+	.dropdown-submenu > a:after {
+		display: block;
+		float: right;
+		width: 0;
+		height: 0;
+		margin-top: 5px;
+		margin-right: -10px;
+		border-color: transparent;
+		border-left-color: #cccccc;
+		border-style: solid;
+		border-width: 5px 0 5px 5px;
+		content: " ";
+	}
+
+	.dropdown-submenu:hover > a:after {
+	  border-left-color: #ffffff;
+	}
+}
