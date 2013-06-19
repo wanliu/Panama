@@ -74,9 +74,9 @@ class ProductAttachmentUpload extends Backbone.View
       @init_element_data()
 
     init_element_data: () ->
+      @hidden_input.val(@model.id)
       if @is_default_index_img() then @set_default_attr() else @set_value_attr()
       @img.attr("src", @model.get("url"))
-      @hidden_input.val(@model.id)
 
     render : () ->
       @$el

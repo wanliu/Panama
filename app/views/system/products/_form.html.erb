@@ -1,15 +1,18 @@
 <%= stylesheet_link_tag "system/product" %>
-<%= semantic_form_for product, :url => create_plus_system_products_path do |f| %>
+<%= semantic_form_for product, :url => url do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
-    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
-    <%= f.input :category, :as => :category %>
+    <%= f.input :attachments, :as => :aplum,
+      :img_version => "100x100",
+      :collection => product.format_attachment('100x100') %>
+    <%= f.input :price, :class => :product_price %>
+    <%= f.input :category, :as => :category, :value => product.category_id %>
     <%= f.input :brand_name %>
     <%= f.input :summary %>
     <%= f.input :price, :class => :product_price %>
   <% end %>
   <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
-	<%= render_content(@content, locals: { category: @category }) %>
+  <%= render_content(@content, locals: { category: @category }) %>
   <% end %>
   <%= f.inputs "描述" do %>
     <%= f.input :description, :as => :text %>
@@ -19,58 +22,76 @@
 
 
 <script>
-		function admin_category_selector(el) {
-			if (el instanceof jQuery) {
-				this.el = el;
-			} else {
-				this.el = $(el);
-			}
-			var selector_el = this.el;
+    function admin_category_selector(el) {
+      if (el instanceof jQuery) {
+        this.el = el;
+      } else {
+        this.el = $(el);
+      }
+      var selector_el = this.el;
 
-			this.el.find('li').on('mouseenter', function(e) {
-				$(this).children('ul').css('display', 'block');
-			})
+      // 回显被选择分类
+      show_origin_category_name();
 
-			this.el.find('li').on('mouseleave', function(e) {
-				$(this).find('ul').hide();
-			})
+      // 控制菜单显示
+      control_list_show();
 
-			this.el.find('ul').on('mouseleave', function(e) {
-				$(this).hide();
-			})
+      // 单击选择分类
+      bind_click();
 
-			this.el.find('a').on('click', function(e) {
-				var category_id = $(this).attr('data-id');
-				$('input#product_category_id').val(category_id);
+      function control_list_show() {
+        selector_el.find('li').on('mouseenter', function(e) {
+          $(this).children('ul').css('display', 'block');
+        });
+        selector_el.find('li').on('mouseleave', function(e) {
+          $(this).find('ul').hide();
+        });
+        selector_el.find('ul').on('mouseleave', function(e) {
+          $(this).hide();
+        });
+      }
 
-				var category_name = $(this).attr('data-name');
-				$('input.mock_prodcut_category_id').val(category_name);
+      function show_origin_category_name() {
+        var origin_category_id = $("#product_category_id").val()
+        var select_a_tag = selector_el.find('a[data-id="' + origin_category_id + '"]')[0];
+        if (origin_category_id && select_a_tag) {
+          var origin_category_name = select_a_tag.val();
+          $('input.mock_prodcut_category_id').val(origin_category_name);
+        }
+      }
 
-				selector_el.children('ul').hide();
-				load_category_properties(category_id);
+      function bind_click() {
+        selector_el.find('a').on('click', function(e) {
+          var category_id = $(this).attr('data-id');
+          $('input#product_category_id').val(category_id);
+          load_category_properties(category_id);
 
-				return false;
-			})
+          var category_name = $(this).attr('data-name');
+          $('input.mock_prodcut_category_id').val(category_name);
 
+          selector_el.children('ul').hide();
+          return false;
+        })
+      }
 
-			function load_category_properties(category_id) {
-				var url = "<%= load_category_properties_system_products_path %>";
-				var product_id = <%= product.id || 0 %>;
-				var product_param = product_id > 0 ? "product_id=" + product_id : ""
-				var category_param = "category_id=" + category_id
-				url += '?' + [product_param, category_param].join('&')
-				$(".additional_properties ol").load(url, function(data){
+      function load_category_properties(category_id) {
+        var url = "<%= load_category_properties_system_products_path %>";
+        var product_id = <%= product.id || 0 %>;
+        var product_param = product_id > 0 ? "product_id=" + product_id : ""
+        var category_param = "category_id=" + category_id
+        url += '?' + [product_param, category_param].join('&')
+        $(".additional_properties ol").load(url, function(data){
 
-				})
-			}
-		}
+        })
+      }
+    }
 
-		$(function(){
-			var el = $("div.category-parent-class");
-			admin_category_selector(el);
-			$('input.mock_prodcut_category_id').on('click', function(e){
-				el.show();
-				el.children('ul').css('display', 'block');
-			})
-		})
+    $(function(){
+      var el = $("div.category-parent-class");
+      admin_category_selector(el);
+      $('input.mock_prodcut_category_id').on('click', function(e){
+        el.show();
+        el.children('ul').css('display', 'block');
+      })
+    })
 </script>
