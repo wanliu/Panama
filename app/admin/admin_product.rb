@@ -55,9 +55,11 @@ ActiveAdmin.register Product do
     @product = Product.new
   end
 
-  collection_action :create_plus do
-    @product = Product.new(params[:product])
-    @product.attachment_ids = dispose_options(params[:product])
+  collection_action :create_plus, :method => :post do
+    p = params[:product]
+    @product = Product.new(p)
+    @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    debugger
     if @product.save
       redirect_to system_product_path(@product)
     end
@@ -71,10 +73,11 @@ ActiveAdmin.register Product do
     @product = Product.find(params[:id])
   end
 
-  member_action :update_plus do
+  member_action :update_plus, :method => :post do
     p = params[:product]
     @product = Product.find(params[:id])
-    if @product.update_attributes(p.merge(dispose_options(p)))
+    @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    if @product.save
       redirect_to system_product_path(@product)
     end
   end
@@ -89,22 +92,32 @@ ActiveAdmin.register Product do
     link_to 'Attach Properties', attach_properties_system_product_path(params[:id]), :method => :put
   end
 
+  def form_builder(product)
+
+  end
+
   collection_action :load_category_properties do
     root = '/panama'.to_dir
     # @product = Product.find(params[:id])
     @product = params[:product_id].blank? ? Product.new : Product.find(params[:product_id])
-    form_builder @product
+
+    register_value :form do
+      semantic_form_for @product, :method => :put do |f|
+        break f
+      end
+    end
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-    @content = additional_properties_content(@category)
+    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
 
     if @content.nil?
-      render :text => :ok
+      render :text => '<h1>No having property!</h1>'
     else
       render_content(@content, locals: { category: @category })
     end
   end
+
 
 
   def additional_properties_content(category = nil)

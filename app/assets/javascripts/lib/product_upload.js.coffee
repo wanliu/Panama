@@ -68,7 +68,7 @@ class ProductAttachmentUpload extends Backbone.View
       @img = @$("img.attachable-preview")
       @bottom_meun = @$(".nav-panle")
       @attachable = @$(".attachable")
-      @progress_panle_list = @$(".progress-panle").find("ul.list")
+      @progress_panle = @$(".progress-panle")
       @init_up_file()
       @file_input = @$("input[type=file]")
       @init_element_data()
@@ -114,7 +114,9 @@ class ProductAttachmentUpload extends Backbone.View
       }
 
     progress_callback: (id, filename, loaded, total) ->
-      @progress_panle.find(".bar").width("#{(loaded/total) * 100}%")
+      bar = @progress_panle.find(">.progress>.bar")
+      if bar.length > 0
+        bar.width("#{(loaded/total) * 100}%")
 
     submit_before_callback: (id, filename) ->
       @progress_panle.show();
