@@ -115,7 +115,7 @@ ActiveAdmin.register Product do
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties)
+    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
 
     if @content.nil?
       render :text => :ok
