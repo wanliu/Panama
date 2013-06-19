@@ -2,4 +2,4 @@
 # upload_storage 指定储存库名称,
 # 例如 file与upyun 设置
 
-upload_storage: upyun
+upload_storage: file
