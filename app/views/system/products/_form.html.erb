@@ -3,14 +3,15 @@
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
     <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
-    <%= f.input :price, :class => :product_price %>
     <%= f.input :category, :as => :category %>
-    <% if @content.blank? %>
-	    <%= render_content(@content, locals: { category: @category }) %>
-	<% end %>
-    <%= f.input :summary %>
     <%= f.input :brand_name %>
-
+    <%= f.input :summary %>
+    <%= f.input :price, :class => :product_price %>
+  <% end %>
+  <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
+	<%= render_content(@content, locals: { category: @category }) %>
+  <% end %>
+  <%= f.inputs "描述" do %>
     <%= f.input :description, :as => :text %>
   <% end %>
   <%= f.actions %>
@@ -49,8 +50,22 @@
 				$('input.mock_prodcut_category_id').val(category_name);
 
 				selector_el.children('ul').hide();
+				load_category_properties(category_id);
+
 				return false;
 			})
+
+
+			function load_category_properties(category_id) {
+				var url = "<%= load_category_properties_system_products_path %>";
+				var product_id = <%= product.id || 0 %>;
+				var product_param = product_id > 0 ? "product_id=" + product_id : ""
+				var category_param = "category_id=" + category_id
+				url += '?' + [product_param, category_param].join('&')
+				$(".additional_properties ol").load(url, function(data){
+
+				})
+			}
 		}
 
 		$(function(){
