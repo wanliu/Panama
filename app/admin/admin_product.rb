@@ -55,10 +55,10 @@ ActiveAdmin.register Product do
     @product = Product.new
   end
 
-  collection_action :create_plus do
-    debugger
-    @product = Product.new(params[:product])
-    @product.attachment_ids = dispose_options(params[:product])
+  collection_action :create_plus, :method => :post do
+    p = params[:product]
+    @product = Product.new(p)
+    @product.attachment_ids = dispose_options(p)[:attachment_ids]
     if @product.save
       redirect_to system_product_path(@product)
     end
@@ -72,10 +72,11 @@ ActiveAdmin.register Product do
     @product = Product.find(params[:id])
   end
 
-  member_action :update_plus do
+  member_action :update_plus, :method => :post do
     p = params[:product]
     @product = Product.find(params[:id])
-    if @product.update_attributes(p.merge(dispose_options(p)))
+    @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    if @product.save
       redirect_to system_product_path(@product)
     end
   end
