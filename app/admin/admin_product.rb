@@ -59,6 +59,7 @@ ActiveAdmin.register Product do
     p = params[:product]
     @product = Product.new(p)
     @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    debugger
     if @product.save
       redirect_to system_product_path(@product)
     end
