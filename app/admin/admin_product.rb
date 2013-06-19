@@ -30,8 +30,19 @@ ActiveAdmin.register Product do
       panel("Product Base") do
         attributes_table_for(product) do
           attrbute_names = product.attributes.map { |attr, _| attr }
+          attrbute_names.delete("default_attachment")
           attrbute_names.each do |column|
             row column
+          end
+          row("attachments") do |product|
+            output = ActiveSupport::SafeBuffer.new
+            attas = product.format_attachment("240x240")
+            attas = attas.map do |atta|
+              output << content_tag(:img, nil,
+                :class => :product_preview,
+                :src => atta[:url])
+            end
+            output
           end
         end
       end
@@ -54,9 +65,8 @@ ActiveAdmin.register Product do
   end
 
   collection_action :create_plus, :method => :post do
-    p = params[:product]
-    @product = Product.new(p)
-    @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    atta = dispose_options(params[:product])
+    @product = Product.new(params[:product].merge(atta))
     if @product.save
       redirect_to system_product_path(@product)
     end
@@ -88,32 +98,22 @@ ActiveAdmin.register Product do
     link_to 'Attach Properties', attach_properties_system_product_path(params[:id]), :method => :put
   end
 
-  def form_builder(product)
-
-  end
-
   collection_action :load_category_properties do
     root = '/panama'.to_dir
     # @product = Product.find(params[:id])
     @product = params[:product_id].blank? ? Product.new : Product.find(params[:product_id])
-
-    register_value :form do
-      semantic_form_for @product, :method => :put do |f|
-        break f
-      end
-    end
+    form_builder @product
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
+    @content = additional_properties_content(@category)
 
     if @content.nil?
-      render :text => '<h1>No having property!</h1>'
+      render :text => :ok
     else
       render_content(@content, locals: { category: @category })
     end
   end
-
 
 
   def additional_properties_content(category = nil)
