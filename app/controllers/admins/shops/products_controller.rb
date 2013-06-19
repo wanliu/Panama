@@ -2,6 +2,7 @@
 require 'orm_fs'
 
 class Admins::Shops::ProductsController < Admins::Shops::SectionController
+  include ProductHelper
 
   helper_method :value_for
   before_filter :content_product_form,
@@ -31,12 +32,13 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   def create
-    prices_attributes = params[:product].delete(:prices)
-    @product = current_shop.products.build(:category_id => params[:product][:category_id])
-    @price_options = extract_prices_options(params[:product])
-    # @product = current_shop.products.build(params[:product].merge(dispose_options))
+    p = params[:product]
+    prices_attributes = p.delete(:prices)
+    @product = current_shop.products.build(:category_id => p[:category_id])
+    @price_options = extract_prices_options(p)
+
     @product.attach_properties!
-    @product.update_attributes(params[:product].merge(dispose_options))
+    @product.update_attributes(p.merge(dispose_options(p)))
     @product.update_prices_option(@price_options) unless @price_options.nil?
     @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @category = @product.category
@@ -62,14 +64,15 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
 
   def update
     @product = Product.find(params[:id])
-    category_id = params[:product][:category_id]
+    p = params[:product]
+    category_id = p[:category_id]
     @product.category_id = category_id unless category_id.nil?
     @product.attach_properties!
 
-    prices_attributes = params[:product].delete(:prices)
-    @price_options = extract_prices_options(params[:product])
+    prices_attributes = p.delete(:prices)
+    @price_options = extract_prices_options(p)
 
-    @product.update_attributes(params[:product].merge(dispose_options))
+    @product.update_attributes(p.merge(dispose_options(p)))
     @product.update_prices_option(@price_options) unless @price_options.nil?
     @product.update_prices(prices_attributes) unless prices_attributes.nil?
     @shops_category_root = current_shop.shops_category
@@ -134,12 +137,6 @@ class Admins::Shops::ProductsController < Admins::Shops::SectionController
   end
 
   private
-
-  def dispose_options
-    attachments = params[:product].fetch(:attachment_ids, {})
-    {:attachment_ids => attachments.map{|k, v| v} }
-  end
-
   def additional_properties_content(category = nil)
     @content = PanamaCore::Contents.fetch_for(category, :additional_properties)
   end
