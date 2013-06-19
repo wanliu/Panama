@@ -150,6 +150,6 @@ gem 'whenever', :require => false
 gem 'chinese_pinyin', '0.4.1'
 gem 'rmmseg-cpp-huacnlee', '0.2.9'
 gem 'redis-namespace','~> 1.0.2'
-gem 'redis-search', '0.6.3'
+gem 'redis-search', '0.9.0'
 gem 'redis'
 gem "wicked"
