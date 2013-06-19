@@ -10,7 +10,6 @@ ActiveAdmin.register Product do
 
   index do
 
-
     column :name
     column :properties do |product|
       properties_string = product.properties.map do |prop|
@@ -38,8 +37,9 @@ ActiveAdmin.register Product do
             output = ActiveSupport::SafeBuffer.new
             attas = product.format_attachment("240x240")
             attas = attas.map do |atta|
+              class_name = atta[:default_state] ? :default_preview : :product_preview
               output << content_tag(:img, nil,
-                :class => :product_preview,
+                :class => class_name,
                 :src => atta[:url])
             end
             output
@@ -67,8 +67,11 @@ ActiveAdmin.register Product do
   collection_action :create_plus, :method => :post do
     atta = dispose_options(params[:product])
     @product = Product.new(params[:product].merge(atta))
+
     if @product.save
       redirect_to system_product_path(@product)
+    else
+      render "new_plus"
     end
   end
 
@@ -85,6 +88,8 @@ ActiveAdmin.register Product do
     @product = Product.find(params[:id])
     if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
+    else
+      render "edit_plus"
     end
   end
 
