@@ -1,7 +1,5 @@
 #encoding: utf-8
 
-include ProductsHelper
-
 ActiveAdmin.register Product do
   config.clear_action_items!
 

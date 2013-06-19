@@ -22,22 +22,14 @@
 
 
 <script>
-    function admin_category_selector(el) {
-      if (el instanceof jQuery) {
-        this.el = el;
-      } else {
-        this.el = $(el);
-      }
-      var selector_el = this.el;
-
-      // 回显被选择分类
-      show_origin_category_name();
+		function admin_category_selector(el) {
+			var selector_el = (el instanceof jQuery) ? el : $(el);
 
       // 控制菜单显示
       control_list_show();
 
-      // 单击选择分类
-      bind_click();
+			// 单击选择分类
+			selector_el.find('a').on('click', bind_click);
 
       function control_list_show() {
         selector_el.find('li').on('mouseenter', function(e) {
@@ -51,28 +43,17 @@
         });
       }
 
-      function show_origin_category_name() {
-        var origin_category_id = $("#product_category_id").val()
-        var select_a_tag = selector_el.find('a[data-id="' + origin_category_id + '"]')[0];
-        if (origin_category_id && select_a_tag) {
-          var origin_category_name = select_a_tag.val();
-          $('input.mock_prodcut_category_id').val(origin_category_name);
-        }
-      }
+			function bind_click(event) {
+				var category_id = $(this).attr('data-id');
+				$('input#product_category_id').val(category_id);
+				load_category_properties(category_id);
 
-      function bind_click() {
-        selector_el.find('a').on('click', function(e) {
-          var category_id = $(this).attr('data-id');
-          $('input#product_category_id').val(category_id);
-          load_category_properties(category_id);
+				var category_name = $(this).attr('data-name');
+				$('input.mock_prodcut_category_id').val(category_name);
 
-          var category_name = $(this).attr('data-name');
-          $('input.mock_prodcut_category_id').val(category_name);
-
-          selector_el.children('ul').hide();
-          return false;
-        })
-      }
+				selector_el.children('ul').hide();
+				return false;
+			}
 
       function load_category_properties(category_id) {
         var url = "<%= load_category_properties_system_products_path %>";
@@ -86,12 +67,12 @@
       }
     }
 
-    $(function(){
-      var el = $("div.category-parent-class");
-      admin_category_selector(el);
-      $('input.mock_prodcut_category_id').on('click', function(e){
-        el.show();
-        el.children('ul').css('display', 'block');
-      })
-    })
+		$(function(){
+			var el = $("div.category-parent-class");
+			admin_category_selector(el);
+			$('input.mock_prodcut_category_id').on('click', function(e){
+				el.show();
+				el.children('ul').css('display', 'block');
+			});
+		})
 </script>
