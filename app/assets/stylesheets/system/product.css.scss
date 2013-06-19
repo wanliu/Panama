@@ -1,10 +1,14 @@
 div.category-parent-class {
 	position: relative;
-	left: 109px;
+	left: 20%;
 	top: 6px;
 	display: none;
 
 	li { position: relative; }
+
+	ul.dropdown-menu:first-child {
+		left: 0;
+	}
 
 	ul.dropdown-menu {
 		a {
