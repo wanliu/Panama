@@ -242,6 +242,8 @@ zh-CN:
         name: 商店名
         user: 用户
         photo: 商店实图
+        created_at: 创建时间
+        updated_at: 更新时间
       property:
         title: 标题
         name: 属性名
@@ -274,12 +276,17 @@ zh-CN:
         updated_at: 更新时间
         cover: 封面URL
       admin_user:
+        id: 编号
         login: 用户名
-        current_sign_in_at: 本次登录IP
-        last_sign_in_at: 上次登录IP
+        current_sign_in_at: 本次登录时间
+        last_sign_in_at: 上次登录时间
+        current_sign_in_ip: 本次登录地址
+        last_sign_in_ip: 上次登录地址
         sign_in_count: 登录次数
         password: 密码
         password_confirmation: 验证密码
+        created_at: 创建时间
+        updated_at: 更新时间
 
   mongoid:
     models:

@@ -1,3 +1,4 @@
+#encoding: utf-8
 ActiveAdmin.register AdminUser do
   index do
     column :login
@@ -10,7 +11,7 @@ ActiveAdmin.register AdminUser do
   filter :login
 
   form do |f|
-    f.inputs "Admin Details" do
+    f.inputs "管理员详细信息" do
       f.input :login
       f.input :password
       f.input :password_confirmation
