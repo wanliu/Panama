@@ -73,6 +73,9 @@ ActiveAdmin.register Product do
   member_action :update_plus, :method => :put do
     p = params[:product]
     @product = Product.find(params[:id])
+    # xifengzhu
+    debugger
+    @product.attach_properties!
     if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
     end
