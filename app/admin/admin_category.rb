@@ -1,3 +1,4 @@
+#encoding: utf-8
 ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
 
@@ -7,14 +8,14 @@ ActiveAdmin.register Category do
     column :ancestry
     column :created_at
     column :properties do |category|
-      link_to "have #{ category.properties.size } propertys", properties_system_category_path(category)
+      link_to "#{category.properties.size}个属性", properties_system_category_path(category)
     end
     default_actions
   end
 
   show do |category|
     div do
-      panel("Product Base") do
+      panel("产品 基本属性") do
         attributes_table_for(category) do
           attrbute_names = category.attributes.map { |attr, _| attr }
           attrbute_names.each do |column|
@@ -27,14 +28,14 @@ ActiveAdmin.register Category do
     div do
       @property = Property.new
 
-      panel("Category Properties") do
+      panel("类别 属性") do
         table_for(category.properties) do
           column :name
           column :property_type
         end
       end
 
-      panel("Category PriceOption") do
+      panel("类别 价格选项") do
         table_for(category.price_options) do
           column :name
           column :title
@@ -46,7 +47,7 @@ ActiveAdmin.register Category do
     div do
       @property = Property.new
       active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
-        f.inputs "Properties" do
+        f.inputs "属性" do
           f.input :id, as: :select, collection: Property.all { |property| property.title }
         end
         f.buttons
@@ -56,7 +57,7 @@ ActiveAdmin.register Category do
     div do
       @price_option = PriceOption.new
       active_admin_form_for @price_option, url: add_price_options_system_category_path(params[:id]) do |f|
-        f.inputs "Price Option" do
+        f.inputs "价格选项" do
           f.input :id, as: :select, collection: Property.all { | prop| prop.title }
         end
         f.buttons
@@ -82,14 +83,14 @@ ActiveAdmin.register Category do
     div do
       contents_config = Rails.application.config.contents
       section = Category.to_s.underscore.to_sym
-      panel("Category Contents") do
+      panel("类别内容") do
         expects = [:name, :parent, :transfer, :template]
         configs = contents_config[section][:each]
         contents = (configs.keys - expects).map { |k| ContentConfig.new(name: configs[k].name) }
         table_for(contents) do
           column :name
           column :tool do |row|
-            link_to 'create or modify template',
+            link_to '创建或更改模板',
                     modify_template_system_category_path + "?action_name=#{row.name}"
           end
         end
@@ -147,7 +148,7 @@ ActiveAdmin.register Category do
   end
 
   action_item :only => :show do
-    link_to 'Manager Properties', properties_system_category_path(params[:id])
+    link_to '管理属性', properties_system_category_path(params[:id])
   end
 
 end
