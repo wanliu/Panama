@@ -56,6 +56,7 @@ ActiveAdmin.register Product do
   end
 
   collection_action :create_plus do
+    debugger
     @product = Product.new(params[:product])
     @product.attachment_ids = dispose_options(params[:product])
     if @product.save
