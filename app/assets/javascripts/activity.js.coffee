@@ -28,6 +28,7 @@ class ActivityView extends Backbone.View
 		"click .like-button" 		: "like"
 		"click .unlike-button"  	: "unlike"
 		"click .partic-button"		: 'addToCard'
+		"click .submit-comment"     : "addComment"
 	}
 
 	like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
@@ -114,6 +115,16 @@ class ActivityView extends Backbone.View
 	decLike: (n = 1) ->
 		s = parseInt(@$('.like-count').text()) || 0
 		@$('.like-count').text(s - n)
+
+	addComment: (event) ->
+		content = @$("textarea",".message").val()
+		comment = {content: content, targeable_id: @model.id}
+		$.post('/comments/activity', {comment: comment})
+		comment_template = _.template($('#comment-template').html())
+		@$(".comments").append(comment_template(comment))
+		@$(".comments>.comment").last().slideDown("slow")
+		@$("textarea",".message").val("")
+		
 
 class ActivityPreview extends Backbone.View
 
