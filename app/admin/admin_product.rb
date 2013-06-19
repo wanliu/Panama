@@ -1,6 +1,6 @@
 #encoding: utf-8
 
-ActiveAdmin.register Product do
+ActiveAdmin.register Product, :title => "产品" do
   config.clear_action_items!
 
   action_item do
