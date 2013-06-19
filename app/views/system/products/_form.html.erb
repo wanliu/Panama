@@ -1,8 +1,8 @@
 <%= stylesheet_link_tag "system/product" %>
-<%= semantic_form_for product, :url => create_plus_system_products_path do |f| %>
+<%= semantic_form_for product, :url => url do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
-    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
+    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.format_attachment('100x100') %>
     <%= f.input :price, :class => :product_price %>
     <%= f.input :category, :as => :category %>
     <% if @content.blank? %>
