@@ -107,11 +107,15 @@ ActiveAdmin.register Product do
     root = '/panama'.to_dir
     # @product = Product.find(params[:id])
     @product = params[:product_id].blank? ? Product.new : Product.find(params[:product_id])
-    form_builder @product
+    register_value :form do
+      semantic_form_for(@product) do |f|
+        break f
+      end
+    end
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-    @content = additional_properties_content(@category)
+    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties)
 
     if @content.nil?
       render :text => :ok
