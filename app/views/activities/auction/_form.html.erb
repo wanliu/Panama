@@ -3,7 +3,7 @@
 
   <%= f.input :product,
               :label => "商品",
-              :input_html => { class: :product, placeHolder: '请输入商品名称...' } %>
+              :input_html => { class: :product, placeHolder: '请输入商品名称...', autocomplete: "off" } %>
 
   <div class="control-group string optional" style='margin: 0;'>
     <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
