@@ -2,12 +2,8 @@
 <%= semantic_form_for product, :url => url do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
-<<<<<<< HEAD
     <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.format_attachment('100x100') %>
     <%= f.input :price, :class => :product_price %>
-=======
-    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>
->>>>>>> dd240daa66067210ed1660457ca0e706c0673938
     <%= f.input :category, :as => :category %>
     <%= f.input :brand_name %>
     <%= f.input :summary %>
