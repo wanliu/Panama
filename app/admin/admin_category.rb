@@ -29,14 +29,14 @@ ActiveAdmin.register Category do
       @property = Property.new
 
       panel("类别 属性") do
-        table_for(category.properties) do
+        table_for(category.properties, i18n: Property) do
           column :name
           column :property_type
         end
       end
 
       panel("类别 价格选项") do
-        table_for(category.price_options) do
+        table_for(category.price_options, i18n: PriceOption) do
           column :name
           column :title
           column :property
