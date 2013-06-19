@@ -2,7 +2,6 @@
 require 'orm_fs'
 
 class Admins::Shops::ProductsController < Admins::Shops::SectionController
-  include ProductHelper
 
   helper_method :value_for
   before_filter :content_product_form,
