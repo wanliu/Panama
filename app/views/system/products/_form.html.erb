@@ -2,15 +2,17 @@
 <%= semantic_form_for product, :url => url do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
-    <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.format_attachment('100x100') %>
+    <%= f.input :attachments, :as => :aplum,
+      :img_version => "100x100",
+      :collection => product.format_attachment('100x100') %>
     <%= f.input :price, :class => :product_price %>
-    <%= f.input :category, :as => :category %>
+    <%= f.input :category, :as => :category, :value => product.category_id %>
     <%= f.input :brand_name %>
     <%= f.input :summary %>
     <%= f.input :price, :class => :product_price %>
   <% end %>
   <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
-	<%= render_content(@content, locals: { category: @category }) %>
+  <%= render_content(@content, locals: { category: @category }) %>
   <% end %>
   <%= f.inputs "描述" do %>
     <%= f.input :description, :as => :text %>
@@ -23,35 +25,23 @@
 		function admin_category_selector(el) {
 			var selector_el = (el instanceof jQuery) ? el : $(el);
 
-			// 回显被选择分类
-			show_origin_category_name();
-
-			// 控制菜单显示
-			control_list_show();
+      // 控制菜单显示
+      control_list_show();
 
 			// 单击选择分类
 			selector_el.find('a').on('click', bind_click);
 
-			function show_origin_category_name() {
-				var origin_category_id = $("#product_category_id").val()
-				var select_a_tag = selector_el.find('a[data-id="' + origin_category_id + '"]')[0];
-				if (origin_category_id && select_a_tag) {
-					var origin_category_name = select_a_tag.val();
-					$('input.mock_prodcut_category_id').val(origin_category_name);
-				}
-			}
-
-			function control_list_show() {
-				selector_el.find('li').on('mouseenter', function(e) {
-					$(this).children('ul').css('display', 'block');
-				});
-				selector_el.find('li').on('mouseleave', function(e) {
-					$(this).find('ul').hide();
-				});
-				selector_el.find('ul').on('mouseleave', function(e) {
-					$(this).hide();
-				});
-			}
+      function control_list_show() {
+        selector_el.find('li').on('mouseenter', function(e) {
+          $(this).children('ul').css('display', 'block');
+        });
+        selector_el.find('li').on('mouseleave', function(e) {
+          $(this).find('ul').hide();
+        });
+        selector_el.find('ul').on('mouseleave', function(e) {
+          $(this).hide();
+        });
+      }
 
 			function bind_click(event) {
 				var category_id = $(this).attr('data-id');
@@ -65,17 +55,17 @@
 				return false;
 			}
 
-			function load_category_properties(category_id) {
-				var url = "<%= load_category_properties_system_products_path %>";
-				var product_id = <%= product.id || 0 %>;
-				var product_param = product_id > 0 ? "product_id=" + product_id : ""
-				var category_param = "category_id=" + category_id
-				url += '?' + [product_param, category_param].join('&')
-				$(".additional_properties ol").load(url, function(data){
+      function load_category_properties(category_id) {
+        var url = "<%= load_category_properties_system_products_path %>";
+        var product_id = <%= product.id || 0 %>;
+        var product_param = product_id > 0 ? "product_id=" + product_id : ""
+        var category_param = "category_id=" + category_id
+        url += '?' + [product_param, category_param].join('&')
+        $(".additional_properties ol").load(url, function(data){
 
-				})
-			}
-		}
+        })
+      }
+    }
 
 		$(function(){
 			var el = $("div.category-parent-class");
