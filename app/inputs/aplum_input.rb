@@ -51,7 +51,9 @@ class AplumInput
         <a href="javascript:void(0)" class="delete-img">删除</a>
         <a href="javascript:void(0)" class="default-index-img">设为主图</a>
       </div>
-      <div class="progress-panle"></div>
+      <div class="progress-panle">
+        <img src='/assets/loading.gif' />
+      </div>
     </div>
     HTML
   end
