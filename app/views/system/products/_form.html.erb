@@ -28,12 +28,7 @@
 			var selector_el = this.el;
 
 			// 回显被选择分类
-			var origin_category_id = $("#product_category_id").val()
-			var select_a_tag = this.el.find('a[data-id="' + origin_category_id + '"]')[0];
-			if (origin_category_id && select_a_tag) {
-				var origin_category_name = select_a_tag.val();
-				$('input.mock_prodcut_category_id').val(origin_category_name);
-			}
+			show_origin_category_name();
 
 			// 控制菜单显示
 			this.el.find('li').on('mouseenter', function(e) {
@@ -50,16 +45,24 @@
 			this.el.find('a').on('click', function(e) {
 				var category_id = $(this).attr('data-id');
 				$('input#product_category_id').val(category_id);
+				load_category_properties(category_id);
 
 				var category_name = $(this).attr('data-name');
 				$('input.mock_prodcut_category_id').val(category_name);
 
 				selector_el.children('ul').hide();
-				load_category_properties(category_id);
 
 				return false;
 			})
 
+			function show_origin_category_name() {
+				var origin_category_id = $("#product_category_id").val()
+				var select_a_tag = selector_el.find('a[data-id="' + origin_category_id + '"]')[0];
+				if (origin_category_id && select_a_tag) {
+					var origin_category_name = select_a_tag.val();
+					$('input.mock_prodcut_category_id').val(origin_category_name);
+				}
+			}
 
 			function load_category_properties(category_id) {
 				var url = "<%= load_category_properties_system_products_path %>";
