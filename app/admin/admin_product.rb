@@ -30,8 +30,19 @@ ActiveAdmin.register Product do
       panel("Product Base") do
         attributes_table_for(product) do
           attrbute_names = product.attributes.map { |attr, _| attr }
+          attrbute_names.delete("default_attachment")
           attrbute_names.each do |column|
             row column
+          end
+          row("attachments") do |product|
+            output = ActiveSupport::SafeBuffer.new
+            attas = product.format_attachment("240x240")
+            attas = attas.map do |atta|
+              output << content_tag(:img, nil,
+                :class => :product_preview,
+                :src => atta[:url])
+            end
+            output
           end
         end
       end
