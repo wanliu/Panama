@@ -4,7 +4,7 @@ ActiveAdmin.register Product, :title => "产品" do
   config.clear_action_items!
 
   action_item do
-    link_to "新增 Product", new_plus_system_products_path
+    link_to "新增产品", new_plus_system_products_path
   end
 
 
