@@ -1,5 +1,5 @@
 <%= stylesheet_link_tag "system/product" %>
-<%= semantic_form_for product, :method => :put do |f| %>
+<%= semantic_form_for product, :url => create_plus_system_products_path do |f| %>
   <%= f.inputs "Product" do %>
     <%= f.input :name %>
     <%= f.input :attachments, :as => :aplum, :img_version => "100x100", :collection => product.attachments %>

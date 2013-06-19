@@ -3,7 +3,7 @@ class CategoryInput < Formtastic::Inputs::StringInput
 
   def to_html
     input_wrapping do
-      label_html << builder.hidden_field(method, input_html_options) << mock_input << generate_ul_tree
+      label_html << builder.hidden_field(method, input_html_options.merge(name: "proudct[category_id]")) << mock_input << generate_ul_tree
     end
   end
 
