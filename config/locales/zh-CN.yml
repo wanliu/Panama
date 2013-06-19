@@ -203,9 +203,13 @@ zh-CN:
       comment: "评论"
       shop_group: "权限组"
       activity: "活动"
+      product: "产品"
     attributes:
       activity:
         product: "商品"
+      product:
+        name: 名称
+        properties: 属性
 
   mongoid:
     models:
@@ -223,6 +227,7 @@ zh-CN:
   dashboard: 状态
   contents: 内容
   categories: 分类
+  product: 产品
   category: 分类
   pending: 未处理
   complete: 完成的
@@ -279,6 +284,7 @@ zh-CN:
     edit: "编辑"
     delete: "删除"
     delete_confirmation: "确定删除?"
+    product: 产品
     new_model: "新建%{model}"
     create_model: "新建%{model}"
     edit_model: "编辑%{model}"
