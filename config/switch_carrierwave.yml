@@ -1,5 +1,0 @@
-#转换上传储存库
-# upload_storage 指定储存库名称,
-# 例如 file与upyun 设置
-
-upload_storage: file
