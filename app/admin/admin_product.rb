@@ -9,8 +9,6 @@ ActiveAdmin.register Product do
 
 
   index do
-
-
     column :name
     column :properties do |product|
       properties_string = product.properties.map do |prop|
@@ -68,11 +66,20 @@ ActiveAdmin.register Product do
 
   member_action :edit_plus do
     @product = Product.find(params[:id])
+    register_value :form do
+      semantic_form_for(@product) do |f|
+        break f
+      end
+    end
+    @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
   end
 
   member_action :update_plus, :method => :put do
     p = params[:product]
     @product = Product.find(params[:id])
+    category_id = p[:category_id]
+    @product.category_id = category_id unless category_id.nil?
+    @product.attach_properties!
     if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
     end
@@ -85,7 +92,8 @@ ActiveAdmin.register Product do
   end
 
   action_item :only => :show do
-    link_to 'Attach Properties', attach_properties_system_product_path(params[:id]), :method => :put
+    link_to('Attach Properties', attach_properties_system_product_path(params[:id]), :method => :put) +
+    link_to('编辑 Properties', edit_plus_system_product_path(params[:id]))
   end
 
   def form_builder(product)
