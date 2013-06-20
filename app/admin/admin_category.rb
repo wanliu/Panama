@@ -87,7 +87,7 @@ ActiveAdmin.register Category do
         expects = [:name, :parent, :transfer, :template]
         configs = contents_config[section][:each]
         contents = (configs.keys - expects).map { |k| ContentConfig.new(name: configs[k].name) }
-        table_for(contents) do
+        table_for(contents, i18n: Content) do
           column :name
           column :tool do |row|
             link_to '创建或更改模板',
