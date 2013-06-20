@@ -206,16 +206,19 @@ zh-CN:
       product: "产品"
       shop: "商店"
       property: "属性"
+      property_item: "属性项"
       order_transaction: "订单"
       category: 类别
       admin_user: 管理员
     attributes:
       activity:
-        product: 商品
+        product: 产品
         id: 编号
         preview: 预览图
         description: 活动描述
         author: 创建人
+        author_id: 创建人
+        limit_count: 限制数量
         price: 价格
         created_at: 创建时间
         updated_at: 更新时间
@@ -225,12 +228,17 @@ zh-CN:
         like: 类似于
         participate: 参与人数
       product:
+        id: 编号
         name: 名称
         properties: 属性
         shop: 商店
         category: 类别
         shops_category: 商店类别
         default_attachment: 默认附加属性
+        shop_id: 商店
+        category_id: 类别
+        shops_category_id: 商店类别
+        default_attachment_id: 默认附加属性
         price: 价格
         summary: 产品概述
         description: 产品描述
@@ -251,6 +259,8 @@ zh-CN:
         items: 总计项
         created_at: 创建时间
         updated_at: 更新时间
+      property_item:
+        value: 属性值
       order_transaction:
         address: 收货地址
         delivery_type: 配送方式
@@ -278,6 +288,7 @@ zh-CN:
       admin_user:
         id: 编号
         login: 用户名
+        remember_created_at: 自动登录时间
         current_sign_in_at: 本次登录时间
         last_sign_in_at: 上次登录时间
         current_sign_in_ip: 本次登录地址
@@ -287,6 +298,14 @@ zh-CN:
         password_confirmation: 验证密码
         created_at: 创建时间
         updated_at: 更新时间
+
+      content:
+        name: 名称
+        tool: 操作
+      price_option:
+        name: 名称
+        title: 标题
+        property: 值
 
   mongoid:
     models:
@@ -369,6 +388,8 @@ zh-CN:
     view: "查看"
     edit: "编辑"
     delete: "删除"
+    create: "创建"
+    update: "更新" 
     delete_confirmation: "确定删除?"
     product: 产品
     new_model: "新建%{model}"
