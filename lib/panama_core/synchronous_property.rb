@@ -24,6 +24,7 @@ module PanamaCore
 
       before_save do
         replace_relations relation_properties
+        replace_relations relation_values
         replace_relations relation_items
       end
     end

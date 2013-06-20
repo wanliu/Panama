@@ -21,7 +21,7 @@
                 display:none;
             }
 
-            .operation-panle{
+            .nav-panle{
                 position: absolute;
                 bottom: 0px;
                 background: gray;
@@ -31,6 +31,10 @@
                 font-size : 9px;
                 text-align: center;
                 display: none;
+
+                .delete-img, .default-index-img{
+                    color: black;
+                }
             }
 
             .progress-panle{
@@ -38,9 +42,8 @@
                 width: 100%;
                 left: 0;
                 top: 50%;
-                background: #DDD;
                 display: none;
-
+                text-align: center;
             }
         }
 

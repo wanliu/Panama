@@ -2,8 +2,9 @@
 # describe : 产品ajax上传
 
 #= require jquery
+#= require lib/underscore
 #= require backbone
-#= require lib/fileuploader
+#= require ./fileuploader
 
 root = (window || @)
 
@@ -65,18 +66,17 @@ class ProductAttachmentUpload extends Backbone.View
       @attachment_upload_panle = @$(".attachment-upload")
       @hidden_input = @$("input[type=hidden]")
       @img = @$("img.attachable-preview")
-      @bottom_meun = @$(".operation-panle")
+      @bottom_meun = @$(".nav-panle")
       @attachable = @$(".attachable")
       @progress_panle = @$(".progress-panle")
       @init_up_file()
       @file_input = @$("input[type=file]")
-
       @init_element_data()
 
     init_element_data: () ->
+      @hidden_input.val(@model.id)
       if @is_default_index_img() then @set_default_attr() else @set_value_attr()
       @img.attr("src", @model.get("url"))
-      @hidden_input.val(@model.id)
 
     render : () ->
       @$el
@@ -114,7 +114,9 @@ class ProductAttachmentUpload extends Backbone.View
       }
 
     progress_callback: (id, filename, loaded, total) ->
-      @progress_panle.find(".bar").width("#{(loaded/total) * 100}%")
+      bar = @progress_panle.find(">.progress>.bar")
+      if bar.length > 0
+        bar.width("#{(loaded/total) * 100}%")
 
     submit_before_callback: (id, filename) ->
       @progress_panle.show();

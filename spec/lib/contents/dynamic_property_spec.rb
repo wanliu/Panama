@@ -8,7 +8,6 @@ describe PanamaCore::DynamicProperty do
     before :each do
       @apple = Product.first
       @apple.attach_properties!
-
     end
 
     it "同步 category properties" do
@@ -56,6 +55,18 @@ describe PanamaCore::DynamicProperty do
     it "同步 prices_definition 并保存" do
       @apple.save.should be_true
       Product.first.prices_definition.should eq(@apple.category.prices_definition)
+    end
+
+    it "update_attribute" do
+      @apple.update_attributes(:make_in => "China")
+      Product.first.make_in.should == "China"
+    end
+
+    it "update_attribute 2's" do
+      @apple.update_attributes(:make_in => "China")
+      Product.first.make_in.should == "China"
+      @apple.update_attributes(:make_in => "British")
+      Product.first.make_in.should == "British"
     end
   end
 end
