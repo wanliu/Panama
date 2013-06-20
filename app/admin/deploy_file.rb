@@ -2,8 +2,8 @@
 
 # ActiveAdmin.register FileEntity, :as => 'VFS' do
 
-#   index do 
-#     @root = '/'.to_dir 
+#   index do
+#     @root = '/'.to_dir
 #     render "index", :root => @root['*']
 #   end
 
@@ -26,7 +26,7 @@ ActiveAdmin.register_page "VFS" do
   end
 
   content do
-    @root = '/'.to_dir 
+    @root = '/'.to_dir
     render "index", :root => @root['*']
   end
 end
@@ -35,10 +35,10 @@ end
 ActiveAdmin.register_page "vfs_file" do
   # menu :label => "My Menu Item Label", :parent => "Dashboard"
   menu false
-  
+
   sidebar :所有条件 do
     ul do
-      li "没有可用条件" 
+      li "没有可用条件"
     end
   end
 
@@ -56,10 +56,10 @@ end
 ActiveAdmin.register_page "vfs_file_add" do
   # menu :label => "My Menu Item Label", :parent => "Dashboard"
   menu false
-  
+
   sidebar :所有条件 do
     ul do
-      li "没有可用条件" 
+      li "没有可用条件"
     end
   end
 
