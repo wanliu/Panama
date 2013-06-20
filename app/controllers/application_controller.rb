@@ -59,6 +59,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def login_or_admin_required
+    if !current_user && !current_admin
+      login_required
+    end
+  end
+
   def load_category
     @category_root = Category.where(:name => "_products_root")[0]
   end
