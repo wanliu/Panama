@@ -50,9 +50,21 @@
 }
 
 .pagination{
-    ul{
-        li{
-            float: left;
-        }
+  ul{
+    li{
+      float: left;
     }
+  }
+}
+
+
+body.system_categories{
+  .category_sidebar{
+    float: left;
+    width: 20%;
+  }
+
+  table.index_table{
+    width: 80%;
+  }
 }

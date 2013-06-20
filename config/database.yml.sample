@@ -15,7 +15,7 @@ development:
   database: panama_development
   pool: 5
   username: root
-  password: 
+  password:
   host: localhost
 #  socket: tmp/mysql.sock
 
@@ -29,7 +29,7 @@ test:
   database: panama_test
   pool: 5
   username: root
-  password: 
+  password:
   host: localhost
   #socket: /tmp/mysql.sock
 
@@ -41,6 +41,6 @@ production:
   pool: 5
   username: root
   password:
-  host: localhost
+  host: panama_production
  # socket: /tmp/mysql.sock
 

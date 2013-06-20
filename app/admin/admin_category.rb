@@ -3,6 +3,10 @@ ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
 
   index do
+    div :class => "category_sidebar" do
+      "fdsafdsa"
+    end
+
     column :id
     column :name
     column :ancestry
@@ -152,4 +156,3 @@ ActiveAdmin.register Category do
   end
 
 end
-
