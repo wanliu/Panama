@@ -27,6 +27,7 @@ group :assets do
   gem 'compass-rails', '~> 1.0.3'
   gem 'compass-h5bp', '~> 0.1.0'
   gem 'ejs', '~> 1.1.1'
+  gem 'turbo-sprockets-rails3'
 end
 
 gem 'cache_digests', '~> 0.2.0'
