@@ -1,5 +1,5 @@
 class AttachmentsController < ApplicationController
-	before_filter :login_required
+	before_filter :login_or_admin_required
 
   def upload
     file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[:attachable]
