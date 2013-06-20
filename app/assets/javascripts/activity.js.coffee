@@ -6,6 +6,7 @@
 #= require backbone
 #= require lib/hogan
 #= require my_cart
+#= require lib/countdown
 
 root = window || @
 
