@@ -203,9 +203,90 @@ zh-CN:
       comment: "评论"
       shop_group: "权限组"
       activity: "活动"
+      product: "产品"
+      shop: "商店"
+      property: "属性"
+      order_transaction: "订单"
+      category: 类别
+      admin_user: 管理员
     attributes:
       activity:
-        product: "商品"
+        product: 商品
+        id: 编号
+        preview: 预览图
+        description: 活动描述
+        author: 创建人
+        price: 价格
+        created_at: 创建时间
+        updated_at: 更新时间
+        activity_type: 活动类型
+        start_time: 开始时间
+        end_time: 结束时间
+        like: 类似于
+        participate: 参与人数
+      product:
+        name: 名称
+        properties: 属性
+        shop: 商店
+        category: 类别
+        shops_category: 商店类别
+        default_attachment: 默认附加属性
+        price: 价格
+        summary: 产品概述
+        description: 产品描述
+        created_at: 创建时间
+        updated_at: 更新时间
+        brand_name: 品牌名
+      shop:
+        id: 编号
+        name: 商店名
+        user: 用户
+        photo: 商店实图
+        created_at: 创建时间
+        updated_at: 更新时间
+      property:
+        title: 标题
+        name: 属性名
+        property_type: 取值类型
+        items: 总计项
+        created_at: 创建时间
+        updated_at: 更新时间
+      order_transaction:
+        address: 收货地址
+        delivery_type: 配送方式
+        seller: 卖家
+        buyer: 买家
+        operator: 接单员
+        pay_manner: 支付方式
+        delivery_manner: 配送类型
+        state: 订单状态
+        total: 总金额
+        operator_state: 已接单
+        delivery_price: 配送费用
+        delivery_code: 配送地邮编
+        created_at: 创建时间
+        updated_at: 更新时间
+      category:
+        id: 编号
+        name: 类别名
+        ancestry: 父类别
+        created_at: 创建时间
+        properties: 属性
+        ancestry_depth: 类别级别
+        updated_at: 更新时间
+        cover: 封面URL
+      admin_user:
+        id: 编号
+        login: 用户名
+        current_sign_in_at: 本次登录时间
+        last_sign_in_at: 上次登录时间
+        current_sign_in_ip: 本次登录地址
+        last_sign_in_ip: 上次登录地址
+        sign_in_count: 登录次数
+        password: 密码
+        password_confirmation: 验证密码
+        created_at: 创建时间
+        updated_at: 更新时间
 
   mongoid:
     models:
@@ -223,6 +304,7 @@ zh-CN:
   dashboard: 状态
   contents: 内容
   categories: 分类
+  product: 产品
   category: 分类
   pending: 未处理
   complete: 完成的
@@ -270,6 +352,15 @@ zh-CN:
   enter_shop: '进入商铺 %{name}'
   successfully_login: '登陆成功'
   admin_successfully_login: '管理员登陆成功'
+
+  views:
+    pagination:
+      first: 首页
+      previous: 上一页
+      next: 下一页
+      truncate: 当前页
+      last: 末页
+
   active_admin:
     dashboard: "控制面板"
     dashboard_welcome:
@@ -279,6 +370,7 @@ zh-CN:
     edit: "编辑"
     delete: "删除"
     delete_confirmation: "确定删除?"
+    product: 产品
     new_model: "新建%{model}"
     create_model: "新建%{model}"
     edit_model: "编辑%{model}"

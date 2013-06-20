@@ -1,10 +1,9 @@
 #encoding: utf-8
-
-ActiveAdmin.register Product do
+ActiveAdmin.register Product, :title => "产品" do
   config.clear_action_items!
 
   action_item do
-    link_to "新增 Product", new_plus_system_products_path
+    link_to "新增产品", new_plus_system_products_path
   end
 
 
@@ -14,7 +13,7 @@ ActiveAdmin.register Product do
       properties_string = product.properties.map do |prop|
         "#{prop.name}: #{prop.property_type}< #{product.send(prop.name).inspect} >"
       end
-      link = link_to "have #{ product.properties.size } propertys.", system_product_path(product)
+      link = link_to "#{product.properties.size}个属性", system_product_path(product)
       link + "   " + properties_string.to_s
 
     end
@@ -25,18 +24,29 @@ ActiveAdmin.register Product do
 
   show do |product|
     div do
-      panel("Product Base") do
+      panel("产品基本属性") do
         attributes_table_for(product) do
           attrbute_names = product.attributes.map { |attr, _| attr }
           attrbute_names.each do |column|
             row column
+          end
+          row("关联") do |product|
+            output = ActiveSupport::SafeBuffer.new
+            attas = product.format_attachment("240x240")
+            attas = attas.map do |atta|
+              class_name = atta[:default_state] ? :default_preview : :product_preview
+              output << content_tag(:img, nil,
+                :class => class_name,
+                :src => atta[:url])
+            end
+            output
           end
         end
       end
     end
 
     div do
-      panel("Product Properties") do
+      panel("产品属性") do
         attributes_table_for(product) do
           property_names = product.properties.map { |prop, _| prop.name }
           property_names.each do |column|
@@ -92,13 +102,11 @@ ActiveAdmin.register Product do
   end
 
   action_item :only => :show do
-    link_to('Attach Properties', attach_properties_system_product_path(params[:id]), :method => :put) +
+    link_to('关联属性', attach_properties_system_product_path(params[:id]), :method => :put) +
     link_to('编辑 Properties', edit_plus_system_product_path(params[:id]))
   end
 
-  def form_builder(product)
 
-  end
 
   collection_action :load_category_properties do
     root = '/panama'.to_dir
