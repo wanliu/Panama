@@ -206,6 +206,7 @@ zh-CN:
       product: "产品"
       shop: "商店"
       property: "属性"
+      price_option: "价格方案"
       order_transaction: "订单"
       category: 类别
       admin_user: 管理员
