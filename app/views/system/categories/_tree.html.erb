@@ -1,0 +1,38 @@
+<%= javascript_include_tag "lib/jquery.treeview" %>
+<%= stylesheet_link_tag  "jquery.treeview" %>
+
+<ul class='sidebar_category treeview'>
+  <li>分类
+    <ul class='main-category'>
+      <% root.children.each do |c| %>
+        <li>
+          <%=c.name %>
+          <% if c.children.length > 0 %>
+            <ul>
+              <% c.children.each do | ch | %>
+              <li><%=ch.name %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+</ul>
+<script type='text/javascript'>
+  $(document).ready(function(){
+    function load_tree(){
+      $(".sidebar_category").treeview({
+        persist: "location",
+        collapsed: true
+      })
+    }
+    load_tree()
+    $(".sidebar_category>li:eq(0)>.hitarea").click();
+
+    $(".main-category").on("click", "li", function(event){
+      var li = $(event.currentTarget)
+//      li.append("<ul><li>fdas<li><ul>")
+    })
+  })
+</script>
