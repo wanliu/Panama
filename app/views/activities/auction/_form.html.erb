@@ -3,7 +3,9 @@
 
   <%= f.input :product,
               :label => "商品",
-              :input_html => { class: :product, placeHolder: '请输入商品名称...', autocomplete: "off" } %>
+
+              :input_html => { class: :product, placeHolder: '请输入商品名称...',autocomplete: 'off' } %>
+
 
   <div class="control-group string optional" style='margin: 0;'>
     <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
@@ -72,7 +74,10 @@
     })
 
     $('#activity_product').on('keyup', function(e){
-      var query_name = $('#activity_product').val()
+      var query_name = $('#activity_product').val().trim();
+      if(query_name == ""){
+        return;
+      }
       $.ajax({
         url: "product_search/?q=" + query_name,
         beforeSend: function (xhr) {

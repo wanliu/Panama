@@ -48,3 +48,11 @@
 .attachment-list {
 	@include clearfix();
 }
+
+.pagination{
+    ul{
+        li{
+            float: left;
+        }
+    }
+}
