@@ -59,6 +59,14 @@
 
 
 body.system_categories{
+
+  .sidebar_category{
+
+    li{
+      padding: 3px 0pt 3px 16px;
+    }
+  }
+
   .category_sidebar{
     float: left;
     width: 20%;
