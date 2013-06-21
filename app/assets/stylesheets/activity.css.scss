@@ -86,6 +86,13 @@
 	padding-right: 3px;
 	overflow: hidden;
 	position: relative;
+
+	.clock{
+		text-align:right;
+		color:red;
+		font-size: 18px;
+	}
+
 	.out-box {
 		background: $white;
 

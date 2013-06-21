@@ -1,6 +1,11 @@
 #encoding: utf-8
 ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
+  config.clear_action_items!
+
+  action_item do
+    link_to "新增分类", new_plus_system_categories_path
+  end
 
   index do
 
@@ -102,14 +107,38 @@ ActiveAdmin.register Category do
       end
     end
   end
-# xifengzhu
-  member_action :update,:method => :post do
+
+  member_action :create,:method => :post do
+    @category = Category.new(params[:category])
+    parent_id = params[:product][:category_id]
+    unless parent_id.blank?
+      parent_category = Category.find(parent_id)
+      @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
+      @category.ancestry_depth = parent_category.ancestry_depth + 1
+    end
+    @category.save
+    redirect_to system_category_path(@category)
+  end
+
+  member_action :update,:method => :put do
     p = params[:category]
     @category = Category.find(params[:id])    
     @category.ancestry = p[:ancestry]
     @category.ancestry_depth =  @category.parent.ancestry_depth + 1  
     @category.save
     redirect_to system_category_path
+  end
+
+  collection_action :new_plus do
+    @category = Category.new
+  end
+
+  collection_action :create_plus, :method => :post do
+    c = params[:category]
+    @category = Category.new(c)
+    if @category.save
+      redirect_to system_category_path(@category)
+    end
   end
 
   member_action :properties do
