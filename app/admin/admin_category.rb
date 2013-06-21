@@ -3,6 +3,11 @@ ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
 
   index do
+
+    div :class => "category_sidebar" do
+      render :partial => "tree", :locals => { :root => Category.root }
+    end
+
     column :id
     column :name
     column :ancestry
@@ -161,4 +166,3 @@ ActiveAdmin.register Category do
   end
 
 end
-
