@@ -1,0 +1,19 @@
+<% @category.children.each do |c| %>
+<tr>
+  <td><%=c.id %></td>
+  <td><%=c.name %></td>
+  <td><%=c.ancestry %></td>
+  <td><%=c.created_at %></td>
+  <td><%=link_to "#{c.properties.size}个属性", properties_system_category_path(c)%></td>
+  <td>
+    <%=link_to "查看", "/system/categories/#{c.id}" %>
+    <%=link_to "编辑", "/system/categories/#{c.id}/edit" %>
+    <%=link_to "删除", "/system/categories/#{c.id}", remote: true, confirm: "是否确认删除？", method: "delete" %>
+  </td>
+</tr>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".pagination").hide();
+  })
+</script>
