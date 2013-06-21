@@ -12,4 +12,5 @@ class CategoryController < ApplicationController
     @category = Category.find(params[:id])
     @products = Product.where(:category_id => @category).limit(60)
   end
+
 end

@@ -7,8 +7,9 @@ ActiveAdmin.register Category do
   end
 
   index do
+
     div :class => "category_sidebar" do
-      "fdsafdsa"
+      render :partial => "tree", :locals => { :root => Category.root }
     end
 
     column :id
@@ -105,6 +106,15 @@ ActiveAdmin.register Category do
       end
     end
   end
+# xifengzhu
+  member_action :update,:method => :post do
+    p = params[:category]
+    @category = Category.find(params[:id])    
+    @category.ancestry = p[:ancestry]
+    @category.ancestry_depth =  @category.parent.ancestry_depth + 1  
+    @category.save
+    redirect_to system_category_path
+  end
 
   collection_action :new_plus do
     @category = Category.new
@@ -140,7 +150,7 @@ ActiveAdmin.register Category do
 
   member_action :delete_relation, :method => :put do
     @category = Category.find(params[:id])
-    @category.properties.delete(Property.find(params[:property][:id]))
+    @category.properties.delete(Property.find(params[:property_id]))
     redirect_to properties_system_category_path(@category)
   end
 
