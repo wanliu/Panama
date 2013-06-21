@@ -123,11 +123,11 @@ ActiveAdmin.register Category do
     redirect_to system_category_path(@category)
   end
 
-  member_action :update,:method => :put do
+  member_action :update, :method => :put do
     p = params[:category]
-    @category = Category.find(params[:id])    
+    @category = Category.find(params[:id])
     @category.ancestry = p[:ancestry]
-    @category.ancestry_depth =  @category.parent.ancestry_depth + 1  
+    @category.ancestry_depth =  @category.parent.ancestry_depth + 1
     @category.save
     redirect_to system_category_path
   end

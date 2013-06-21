@@ -11,7 +11,7 @@
       <ul style='display:none;'>
         <% c.children.each do |ch| %>
           <% class_name, hitarea_name = tree_cls_name(ch, last_ch) %>
-          <li class='<%=class_name %>' data-value-id="<%=c.id %>">
+          <li class='<%=class_name %>' data-value-id="<%=ch.id %>">
             <% if hitarea_name.present? %>
             <div class="hitarea <%=hitarea_name %>"></div>
             <% end %>
