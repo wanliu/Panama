@@ -25,3 +25,14 @@
     <% end %>
   </li>
 <% end %>
+<script type='text/javascript'>
+  $(document).ready(function(){
+    //var tbody = $("table#categories").find(">tbody")
+    //tbody.find(">tr").remove();
+    <% @category.children.each do |c| %>
+      // var strHtml = "<tr><td><%=c.id %></td><td><%=c.name %></td><td><%=c.ancestry %></td><td><%=c.created_at %></td><td><a href='/system/categories/<%=c.id %>/properties'><%=c.properties.size %>个属性</a></td><td><a href='/system/categories/<%=c.id %>'>查看</a><a href='/system/categories/<%=c.id %>/edit'>编辑</a><link_to '删除', system_category_path(c) ></td></tr>"
+
+      // tbody.append(strHtml)
+    <% end %>
+  })
+</script>

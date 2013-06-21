@@ -4,8 +4,8 @@ ActiveAdmin.register Activity do
   index do
     column :id
     column "预览" do |row|
-      row.attachments.each do |atta|
-        image_tag atta.file.url("100x100")
+      if row.attachments.length > 0
+        image_tag row.attachments.first.file.url("100x100")
       end
     end
     column :description
