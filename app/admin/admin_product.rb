@@ -1,6 +1,17 @@
 #encoding: utf-8
 ActiveAdmin.register Product, :title => "产品" do
   config.clear_action_items!
+  filter :category
+  # filter :hops_category
+  filter :shop_id
+  filter :shops_category_id
+  filter :name
+  filter :price
+  filter :summary
+  filter :description
+  filter :created_at
+  filter :updated_at
+  filter :brand_name
 
   action_item do
     link_to "新增产品", new_plus_system_products_path
