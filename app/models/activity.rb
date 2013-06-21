@@ -26,7 +26,6 @@ class Activity < ActiveRecord::Base
 
   validates :price, :presence => true
 
-
   def like
     likes.size
   end
