@@ -1,8 +1,21 @@
 #encoding: utf-8
+
+include CategoryHelper
+
 ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
+  config.clear_action_items!
+
+  action_item do
+    link_to "新增分类", new_plus_system_categories_path
+  end
 
   index do
+
+    div :class => "category_sidebar" do
+      render :partial => "tree", :locals => { :root => Category.root }
+    end
+
     column :id
     column :name
     column :ancestry
@@ -98,6 +111,39 @@ ActiveAdmin.register Category do
     end
   end
 
+  member_action :create,:method => :post do
+    @category = Category.new(params[:category])
+    parent_id = params[:product][:category_id]
+    unless parent_id.blank?
+      parent_category = Category.find(parent_id)
+      @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
+      @category.ancestry_depth = parent_category.ancestry_depth + 1
+    end
+    @category.save
+    redirect_to system_category_path(@category)
+  end
+
+  member_action :update, :method => :put do
+    p = params[:category]
+    @category = Category.find(params[:id])
+    @category.ancestry = p[:ancestry]
+    @category.ancestry_depth =  @category.parent.ancestry_depth + 1
+    @category.save
+    redirect_to system_category_path
+  end
+
+  collection_action :new_plus do
+    @category = Category.new
+  end
+
+  collection_action :create_plus, :method => :post do
+    c = params[:category]
+    @category = Category.new(c)
+    if @category.save
+      redirect_to system_category_path(@category)
+    end
+  end
+
   member_action :properties do
     @category = Category.find(params[:id])
   end
@@ -120,7 +166,7 @@ ActiveAdmin.register Category do
 
   member_action :delete_relation, :method => :put do
     @category = Category.find(params[:id])
-    @category.properties.delete(Property.find(params[:property][:id]))
+    @category.properties.delete(Property.find(params[:property_id]))
     redirect_to properties_system_category_path(@category)
   end
 
@@ -147,9 +193,13 @@ ActiveAdmin.register Category do
     redirect_to system_category_path
   end
 
+  member_action :children_category, :method => :get do
+    @category = Category.find(params[:id])
+    render :layout => false
+  end
+
   action_item :only => :show do
     link_to '管理属性', properties_system_category_path(params[:id])
   end
 
 end
-

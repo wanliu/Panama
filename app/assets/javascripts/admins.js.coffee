@@ -21,7 +21,6 @@
 #= require lib/attachment_upload
 #= require lib/hogan
 #= require lib/state_progress
-#= require lib/state_progress
 #= require lib/countdown
 #= require lib/table_creater
 #= require lib/table_bander

@@ -2,7 +2,6 @@ class Activity < ActiveRecord::Base
   include Graphical::Display
   attr_accessible :url, :product_id, :start_time, :end_time, :price,
                   :description, :like, :participate, :author_id
-
   belongs_to :product
   belongs_to :author, :class_name => "User"
 
@@ -24,8 +23,7 @@ class Activity < ActiveRecord::Base
     attachments.first ? attachments.first.file : Attachment.new.file
   end
 
-  validates :price, :presence => true
-
+  validates :price,:start_time,:end_time,:product_id,:presence => true
 
   def like
     likes.size

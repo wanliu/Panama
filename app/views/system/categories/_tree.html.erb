@@ -1,0 +1,18 @@
+<%= stylesheet_link_tag  "jquery.treeview" %>
+
+<ul class='sidebar_category treeview'>
+  <li class='expandable lastExpandable' data-value-id='<%=root.id %>'>
+    <div class="hitarea expandable-hitarea lastExpandable-hitarea">
+    </div>
+    <span>分类</span>
+    <ul style='display:none'>
+    </ul>
+  </li>
+</ul>
+<script type='text/javascript'>
+  $(document).ready(function(){
+    new CategoryTree({
+      el: $(".sidebar_category")
+    })
+  })
+</script>

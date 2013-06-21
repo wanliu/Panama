@@ -6,6 +6,7 @@
 #= require backbone
 #= require lib/hogan
 #= require my_cart
+#= require lib/countdown
 
 root = window || @
 
@@ -118,6 +119,7 @@ class ActivityView extends Backbone.View
 
 	addComment: (event) ->
 		content = @$("textarea",".message").val()
+		return unless content.trim() != ""
 		comment = {content: content, targeable_id: @model.id}
 		$.post('/comments/activity', {comment: comment})
 		comment_template = _.template($('#comment-template').html())

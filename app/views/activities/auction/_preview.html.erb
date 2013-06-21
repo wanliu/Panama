@@ -1,7 +1,7 @@
-<div class='activity' activity-id='<%= activity.id %>'>
+<div class='activity' activity-id='<%= activity.id %>' id="activity<%= activity.id %>">
 	<div class='out-box'>
 		<form>
-
+			剩余<span class='clock'></span>
 		<div class='in-box'>
 			<%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
 			<h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
@@ -67,4 +67,7 @@
 	var id = <%= activity.id %>;
 	var model = new ActivityModel({ id: id });
 	new ActivityPreview({ el: $("[activity-id=" + id + "]"), model: model});
+
+	expired = new Date("<%=activity.end_time.strftime('%Y/%m/%d %H:%M:%S') %>")
+    $('.clock', '#activity<%= activity.id %>').countdown({until: expired});
 </script>
