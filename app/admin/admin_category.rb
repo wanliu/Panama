@@ -123,6 +123,11 @@ ActiveAdmin.register Category do
     redirect_to system_category_path(@category)
   end
 
+  member_action :children_table, :method => :get do
+    @category = Category.find(params[:id])
+    render :layout => false
+  end
+
   member_action :update, :method => :put do
     p = params[:category]
     @category = Category.find(params[:id])
