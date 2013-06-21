@@ -108,10 +108,8 @@ ActiveAdmin.register Product, :title => "产品" do
 
   action_item :only => :show do
     link_to('关联属性', attach_properties_system_product_path(params[:id]), :method => :put) +
-    link_to('编辑 Properties', edit_plus_system_product_path(params[:id]))
+    link_to('编辑属性', edit_plus_system_product_path(params[:id]))
   end
-
-
 
   collection_action :load_category_properties do
     root = '/panama'.to_dir
@@ -134,8 +132,6 @@ ActiveAdmin.register Product, :title => "产品" do
       render_content(@content, locals: { category: @category })
     end
   end
-
-
 
   def additional_properties_content(category = nil)
     @content = PanamaCore::Contents.fetch_for(category, :additional_properties)

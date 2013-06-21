@@ -2,6 +2,10 @@
 ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
 
+  action_item do
+    link_to "新增分类", new_plus_system_categories_path
+  end
+
   index do
     div :class => "category_sidebar" do
       "fdsafdsa"
@@ -99,6 +103,18 @@ ActiveAdmin.register Category do
           end
         end
       end
+    end
+  end
+
+  collection_action :new_plus do
+    @category = Category.new
+  end
+
+  collection_action :create_plus, :method => :post do
+    c = params[:category]
+    @category = Category.new(c)
+    if @category.save
+      redirect_to system_category_path(@category)
     end
   end
 
