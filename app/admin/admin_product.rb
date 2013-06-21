@@ -2,7 +2,6 @@
 ActiveAdmin.register Product, :title => "产品" do
   config.clear_action_items!
   filter :category
-  # filter :hops_category
   filter :shop_id
   filter :shops_category_id
   filter :name
