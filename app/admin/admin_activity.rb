@@ -4,11 +4,13 @@ ActiveAdmin.register Activity do
   index do
     column :id
     column "预览" do |row|
-      image_tag row.url, :style => "width:100px"
+      row.attachments.each do |atta|
+        image_tag atta.file.url("100x100")
+      end
     end
     column :description
     column :author
-    # column :user
+
     default_actions
   end
 end

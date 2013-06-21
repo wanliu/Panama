@@ -9,7 +9,7 @@ class root.CategoryTree
     @el.on("click", "li.expandable", $.proxy(@load_tree, @))
     @el.on("click", "li.collapsable", $.proxy(@load_tree, @))
     @el.on("click", "li", () -> return false)
-
+    @el.find(">li").click()
 
   camelcase: (str) ->
     str.toUpperCase().substring(0, 1) + str.substring(1, str.length)
