@@ -1,38 +1,75 @@
-<%= javascript_include_tag "lib/jquery.treeview" %>
 <%= stylesheet_link_tag  "jquery.treeview" %>
 
 <ul class='sidebar_category treeview'>
-  <li>分类
-    <ul class='main-category'>
-      <% root.children.each do |c| %>
-        <li>
-          <%=c.name %>
-          <% if c.children.length > 0 %>
-            <ul>
-              <% c.children.each do | ch | %>
-              <li><%=ch.name %></li>
-              <% end %>
-            </ul>
-          <% end %>
-        </li>
-      <% end %>
+  <li class='expandable lastExpandable' data-value-id='<%=root.id %>'>
+    <div class="hitarea expandable-hitarea lastExpandable-hitarea">
+    </div>
+    <span>分类</span>
+    <ul style='display:none'>
     </ul>
   </li>
 </ul>
 <script type='text/javascript'>
   $(document).ready(function(){
-    function load_tree(){
-      $(".sidebar_category").treeview({
-        persist: "location",
-        collapsed: true
-      })
+    function camelcase(str){
+      return str.toUpperCase().substring(0, 1) + str.substring(1, str.length)
     }
-    load_tree()
-    $(".sidebar_category>li:eq(0)>.hitarea").click();
 
-    $(".main-category").on("click", "li", function(event){
-      var li = $(event.currentTarget)
-//      li.append("<ul><li>fdas<li><ul>")
+    function hitarea_tree(li, cls, cul){
+      var hitarea = li.find(">.hitarea")
+      var e_case = camelcase(cls)
+      var c_case = camelcase(cul)
+
+      if(li.hasClass("last"+ e_case)){
+        if(hitarea.length > 0){
+          hitarea.removeClass("last"+ e_case +"-hitarea")
+          hitarea.addClass("last"+ c_case +"-hitarea")
+        }
+        li.removeClass("last"+ e_case)
+        li.addClass("last"+ c_case)
+      }
+
+      if(hitarea.length > 0){
+        hitarea.removeClass(cls +"-hitarea")
+        hitarea.addClass(cul +"-hitarea")
+      }
+      li.removeClass(cls).addClass(cul)
+    }
+
+    function toggle_tree(li){
+      var ul = li.find(">ul")
+      if(li.hasClass("expandable")){
+        hitarea_tree(li, "expandable", "collapsable")
+        ul.show()
+      }else{
+        hitarea_tree(li, "collapsable", "expandable")
+        ul.hide()
+      }
+    }
+
+    function load_tree(event){
+      var li = $(event.currentTarget);
+      var ul = li.find(">ul");
+      if(ul.find(">li").length <= 0){
+        var id = li.attr("data-value-id");
+        $.ajax({
+          url: '/system/categories/'+ id + '/children_category',
+          success: function(data, xhr){
+            ul.html(data);
+            toggle_tree(li);
+          }
+        })
+      }else{
+        toggle_tree(li)
+      }
+      return false
+    }
+
+
+    $(".sidebar_category").on("click", "li.expandable", load_tree)
+    $(".sidebar_category").on("click", "li.collapsable", load_tree)
+    $(".sidebar_category").on("click", "li", function(){
+      return false
     })
   })
 </script>

@@ -1,4 +1,7 @@
 #encoding: utf-8
+
+include CategoryHelper
+
 ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
 
@@ -150,6 +153,11 @@ ActiveAdmin.register Category do
     @template = Template.find(template_name, root)
     @template.data = params[:template][:data]
     redirect_to system_category_path
+  end
+
+  member_action :children_category, :method => :get do
+    @category = Category.find(params[:id])
+    render :layout => false
   end
 
   action_item :only => :show do
