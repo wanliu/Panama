@@ -3,8 +3,7 @@
 
   <%= f.input :product,
               :label => "商品",
-
-              :input_html => { class: :product, placeHolder: '请输入商品名称...',autocomplete: 'off' } %>
+              :input_html => { class: :product, placeHolder: '请输入商品名称...',autocomplete: 'off',required: true, } %>
 
 
   <div class="control-group string optional" style='margin: 0;'>
@@ -30,7 +29,8 @@
 
   <%= f.input :price,
               :label => '价格',
-              :input_html=>{class: :span2} %>
+              :input_html=>{class: :span2},
+              required: true %>
 
   <%= f.input :activity_price,
               :label => '竞购价',
@@ -48,10 +48,12 @@
 
   <%= f.input :start_time,
               :as         => :date_picker,
+              required: true,
               input_html: { name: 'activity[start_time]' } %>
 
   <%= f.input :end_time,
               :as         => :date_picker,
+              required: true,
               input_html: { name: 'activity[end_time]' } %>
 
 
