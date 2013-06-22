@@ -50,7 +50,7 @@ namespace :db do
 end
 
 
-after "deploy:finalize_update", "deploy:symlink", :init_configure_path, "deploy:migrate"
+after "deploy:finalize_update", "deploy:create_symlink", :init_configure_path, "deploy:migrate"
 load 'deploy/assets'
 
 # if you want to clean up old releases on each deploy uncomment this:
