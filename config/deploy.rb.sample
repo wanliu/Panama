@@ -39,6 +39,8 @@ task :init_configure_path, :roles => :app do
   run "cp #{deploy_to}/current/config/sso.yml.sample #{deploy_to}/current/config/sso.yml"
   run "cp #{deploy_to}/current/config/email.yml.sample #{deploy_to}/current/config/email.yml"
   run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/current/config/application.yml"
+  run "cp #{deploy_to}/current/config/database.yml.sample #{deploy_to}/current/config/database.yml"
+  run "cp #{deploy_to}/current/config/switch_carrierwave.yml.sample #{deploy_to}/current/config/switch_carrierwave.yml"
 end
 
 namespace :db do
