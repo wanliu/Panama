@@ -43,6 +43,7 @@ ActiveAdmin.register Category do
 
       panel("类别 属性") do
         table_for(category.properties, i18n: Property) do
+          column :title
           column :name
           column :property_type
         end
@@ -111,22 +112,6 @@ ActiveAdmin.register Category do
     end
   end
 
-  member_action :create,:method => :post do
-    @category = Category.new(params[:category])
-    parent_id = params[:parent_id]
-    if parent_id.blank?
-      parent_category = Category.root
-      @category.ancestry = parent_category.id
-      @category.ancestry_depth = parent_category.ancestry_depth + 1
-    else
-      parent_category = Category.find(parent_id)
-      @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
-      @category.ancestry_depth = parent_category.ancestry_depth + 1
-    end
-    @category.save
-    redirect_to system_category_path(@category)
-  end
-
   member_action :children_table, :method => :get do
     @category = Category.find(params[:id])
     render :layout => false
@@ -146,10 +131,21 @@ ActiveAdmin.register Category do
   end
 
   collection_action :create_plus, :method => :post do
-    c = params[:category]
-    @category = Category.new(c)
+    @category = Category.new(params[:category])
+    parent_id = params[:parent_id]
+    if parent_id.blank?
+      parent_category = Category.root
+      @category.ancestry = parent_category.id
+      @category.ancestry_depth = parent_category.ancestry_depth + 1
+    else
+      parent_category = Category.find(parent_id)
+      @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
+      @category.ancestry_depth = parent_category.ancestry_depth + 1
+    end
     if @category.save
       redirect_to system_category_path(@category)
+    else
+      render "new_plus"
     end
   end
 
