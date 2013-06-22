@@ -3,14 +3,7 @@
 
   <%= f.input :product,
               :label => "商品",
-<<<<<<< HEAD
-              :input_html => { class: :product, placeHolder: '请输入商品名称...',autocomplete: 'off',required: true, } %>
-=======
-
-              :input_html => { class: :product, placeHolder: '商品名称...',autocomplete: 'off' } %>
->>>>>>> edfe8994955ab422bdaaf6e25ddf0b67d1ca48ac
-
-
+              :input_html => { class: :product, placeHolder: '商品名称...',autocomplete: 'off',required: true, } %>
   <div class="control-group string optional" style='margin: 0;'>
     <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
         style='display: none; top: 100px; left: 195px; width: 220px; padding: '>
@@ -63,7 +56,6 @@
 
 
   <script type="text/javascript">
-
     var activity_view = new ActivityBaseInfoView({
       el: $(".form_activity_auction"),
       params: {
@@ -73,50 +65,52 @@
       }
     });
 
-    // 根据用户输入的商品名称、条码，加载商品信息供选择
-    $('#activity_product').on('blur',function(e){
-      window.setTimeout(function(){
-        $('ul.product_selector').hide();
-      },500);
-    })
+    var choice_view = new Choice(activity_view);
 
-    $('#activity_product').on('keyup', function(e){
-      var query_name = $('#activity_product').val().trim();
-      if(query_name == ""){
-        return;
-      }
-      $.ajax({
-        url: "product_search/?q=" + query_name,
-        beforeSend: function (xhr) {
-          xhr.overrideMimeType("text/json; charset=x-user-defined");
-        }
-      }).success(function (data) {
-        var select_ul = "";
-        if (data.length > 0) {
-          $.each(data, function(){
-            select_ul += '<li product_id="' + this.id + '" '
-                          + 'product_price="' + this.price + '" '
-                          + '><a tabindex="-1" href="javascript: void(0);">'
-                          + this.title + '</a></li>';
-          })
-        }
-        select_ul = select_ul || '<li><a tabindex="-1" href="javascript: void(0);">没有相关商品！</a></li>';
-        $('ul.product_selector').html(select_ul);
-        $('ul.product_selector').show();
-      });
-    });
+    // // 根据用户输入的商品名称、条码，加载商品信息供选择
+    // $('#activity_product').on('blur',function(e){
+    //   window.setTimeout(function(){
+    //     $('ul.product_selector').hide();
+    //   },500);
+    // })
 
-    // 侦测那个商品被选择, 根据选择的商品更新相关信息
-    $('ul.product_selector>li').live('click', function(){
-      var product_id = $(this).attr('product_id')
-      if (!product_id) return;
+    // $('#activity_product').on('keyup', function(e){
+    //   var query_name = $('#activity_product').val().trim();
+    //   if(query_name == ""){
+    //     return;
+    //   }
+    //   $.ajax({
+    //     url: "product_search/?q=" + query_name,
+    //     beforeSend: function (xhr) {
+    //       xhr.overrideMimeType("text/json; charset=x-user-defined");
+    //     }
+    //   }).success(function (data) {
+    //     var select_ul = "";
+    //     if (data.length > 0) {
+    //       $.each(data, function(){
+    //         select_ul += '<li product_id="' + this.id + '" '
+    //                       + 'product_price="' + this.price + '" '
+    //                       + '><a tabindex="-1" href="javascript: void(0);">'
+    //                       + this.title + '</a></li>';
+    //       })
+    //     }
+    //     select_ul = select_ul || '<li><a tabindex="-1" href="javascript: void(0);">没有相关商品！</a></li>';
+    //     $('ul.product_selector').html(select_ul);
+    //     $('ul.product_selector').show();
+    //   });
+    // });
 
-      var product_name = $(this).text();
-      $('#activity_product').val(product_name);
-      $('#activity_description').val(product_name + '竞价');
+    // // 侦测那个商品被选择, 根据选择的商品更新相关信息
+    // $('ul.product_selector>li').live('click', function(){
+    //   var product_id = $(this).attr('product_id')
+    //   if (!product_id) return;
 
-      activity_view.fetch_product(product_id)
-    });
+    //   var product_name = $(this).text();
+    //   $('#activity_product').val(product_name);
+    //   $('#activity_description').val(product_name + '竞价');
+
+    //   activity_view.fetch_product(product_id)
+    // });
   </script>
 
 <% end %>
