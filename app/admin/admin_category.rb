@@ -113,7 +113,7 @@ ActiveAdmin.register Category do
 
   member_action :create,:method => :post do
     @category = Category.new(params[:category])
-    parent_id = params[:product][:category_id]
+    parent_id = params[:parent_id]
     unless parent_id.blank?
       parent_category = Category.find(parent_id)
       @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
@@ -121,6 +121,11 @@ ActiveAdmin.register Category do
     end
     @category.save
     redirect_to system_category_path(@category)
+  end
+
+  member_action :children_table, :method => :get do
+    @category = Category.find(params[:id])
+    render :layout => false
   end
 
   member_action :update, :method => :put do

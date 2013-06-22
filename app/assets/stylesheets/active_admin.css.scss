@@ -64,7 +64,12 @@ body.system_categories{
 
     li{
       padding: 3px 0pt 3px 16px;
+
+      span{
+        cursor: pointer;
+      }
     }
+
   }
 
   .category_sidebar{
@@ -76,3 +81,4 @@ body.system_categories{
     width: 80%;
   }
 }
+

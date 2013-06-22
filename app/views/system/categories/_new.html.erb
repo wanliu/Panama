@@ -2,7 +2,7 @@
 <%= semantic_form_for category, :url => url do |f| %>
   <%= f.inputs "分类" do %>
     <%= f.input :name %>
-    <%= f.input :ancestry, :as => :category%>
+    <%= f.input :ancestry, :as => :category, :name => :parent_id  %>
     <%= f.input :cover,
       :img_version => "100x100",
       :collection => category.cover %>

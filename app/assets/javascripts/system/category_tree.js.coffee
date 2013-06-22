@@ -8,8 +8,12 @@ class root.CategoryTree
     $.extend(@, options)
     @el.on("click", "li.expandable", $.proxy(@load_tree, @))
     @el.on("click", "li.collapsable", $.proxy(@load_tree, @))
-    @el.on("click", "li", () -> return false)
-
+    @el.on("click", "li", (event) =>
+      li = $(event.currentTarget)
+      @load_table(li)
+      return false
+    )
+    @el.find(">li").click()
 
   camelcase: (str) ->
     str.toUpperCase().substring(0, 1) + str.substring(1, str.length)
@@ -42,6 +46,7 @@ class root.CategoryTree
     else
       @hitarea_tree(li, "collapsable", "expandable")
       ul.hide()
+    @load_table(li)
 
   load_tree: (event) ->
     li = $(event.currentTarget);
@@ -58,3 +63,14 @@ class root.CategoryTree
       @toggle_tree(li)
 
     false
+
+  load_table: (li) ->
+    id = li.attr("data-value-id");
+    $.ajax({
+      url: "/system/categories/#{id}/children_table",
+      success: (data, xhr) =>
+        tbody = @table_el.find("tbody")
+        tbody.find(">tr").remove();
+        tbody.html(data)
+
+    })

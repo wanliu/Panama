@@ -39,6 +39,8 @@ task :init_configure_path, :roles => :app do
   run "cp #{deploy_to}/current/config/sso.yml.sample #{deploy_to}/current/config/sso.yml"
   run "cp #{deploy_to}/current/config/email.yml.sample #{deploy_to}/current/config/email.yml"
   run "cp #{deploy_to}/current/config/application.yml.sample #{deploy_to}/current/config/application.yml"
+  run "cp #{deploy_to}/current/config/database.yml.sample #{deploy_to}/current/config/database.yml"
+  run "cp #{deploy_to}/current/config/switch_carrierwave.yml.sample #{deploy_to}/current/config/switch_carrierwave.yml"
 end
 
 namespace :db do
@@ -48,7 +50,7 @@ namespace :db do
 end
 
 
-after "deploy:finalize_update", "deploy:symlink", :init_configure_path, "deploy:migrate"
+after "deploy:finalize_update", "deploy:create_symlink", :init_configure_path, "deploy:migrate"
 load 'deploy/assets'
 
 # if you want to clean up old releases on each deploy uncomment this:
