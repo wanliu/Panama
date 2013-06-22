@@ -15,6 +15,12 @@
 <script type='text/javascript' >
   new AttachmentUpload({
     el: $(".topic_upload"),
-    remote: "<%=attachments_path %>"
+    params: {
+      url_upload: "<%=attachment_path %>" ,
+      default_img_url: "#{default_url}",
+      template: '#{template.j(upload_template)}',
+      version_name: "100x100",
+      default_input_name
+    }
   })
 </script>
