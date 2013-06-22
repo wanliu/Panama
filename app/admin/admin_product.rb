@@ -27,7 +27,7 @@ ActiveAdmin.register Product, :title => "产品" do
       link + "   " + properties_string.to_s
 
     end
-    column do |product|
+    column :action_link do |product|
       link_to "修改", edit_plus_system_product_path(product)
     end
   end

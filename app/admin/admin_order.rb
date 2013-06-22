@@ -21,7 +21,7 @@ ActiveAdmin.register OrderTransaction do
     column :bank do |order|
       order.transfer_sheet.try(:bank)
     end
-    column do |order|
+    column :action_link do |order|
       content_tag :div do
         link = link_to "通过", audit_system_order_transaction_path(order), :method => :post
         link1 = link_to "未通过", audit_failure_system_order_transaction_path(order), :method => :post
