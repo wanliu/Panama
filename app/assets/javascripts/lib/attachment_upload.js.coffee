@@ -1,142 +1,229 @@
-#describe: 附件上传
-#= require lib/fileuploader
-#= require twitter/bootstrap/tooltip
+# author : huxinghai
+# describe : 产品ajax上传
 
-root = window || @
+#= require jquery
+#= require lib/underscore
+#= require backbone
+#= require ./fileuploader
+
+root = (window || @)
 
 class Attachment extends Backbone.Model
-  set_url: (url) ->
-    @urlRoot = url
 
-class PreviewImage extends Backbone.View
-  className: "preview_img"
-  events:{
-    "mouseover" : "show_nav",
-    "mouseout" : "hide_nav",
-    "click .delete" : "delete_attachment"
-  }
-  initialize: (options) ->
-    _.extend(@, options)
-    @$el = $(@el)
-    @$el.html @img_template()
-    @$el.append @val_template()
-    @$el.append @nav_template()
+class AttachmentList extends Backbone.Collection
+    model : Attachment
 
-  nav_template: () ->
-    "<div class='img_nav'>
-      <a href='javascript:void(0)' class='delete'>删除</a>
-    </div>"
-
-  img_template: () ->
-    "<img src='#{@model.get("url")}' />"
-
-  val_template: () ->
-    "<input type='hidden' name='attachments[#{@model.id}]' value='#{@model.id}' />"
-
-  render: () ->
-    @$el
-
-  show_nav: () ->
-    @$(".img_nav").show()
-
-  hide_nav: () ->
-    @$(".img_nav").hide()
-
-  delete_attachment: () ->
-    @model.destroy success: (model, data) =>
-      @remove()
-
-class ImageUpload extends Backbone.View
-  tagName: "span",
-  className: "image_upload",
-  events: {
-    "click .upload_button" : "chose_upload"
-  }
-  initialize: (options) ->
-    _.extend(@, options)
-    @$el = $(@el)
-    @init_upload()
-    #@$(".upload_button").tooltip(title: "上传图片")
-
-  init_upload: () ->
-
-    @fileupload = new qq.FileUploader({
-      element : @el,
-      allowedExtensions : ['jpg', 'jpeg', 'png', 'gif'],
-      sizeLimit : 1048576, # max size: 1MB
-      minSizeLimit : 0, # min size
-      debug : true,
-      multiple : false,
-      action : "#{@remote}/upload",
-      dragText: "",
-      inputName : "attachable",
-      cancelButtonText : "取消上传",
-      uploadButtonText : @upload_button(),
-      onComplete : _.bind(@complete, @),
-      onSubmit : _.bind(@submit_before, @),
-      messages : @messages()
-    })
-
-  upload_button: () ->
-    '<a class="btn btn-mini upload_button">
-      <i class="icon-upload"></i>
-    </a>'
-
-  messages: () ->
-    {
-      typeError : "请选择正确的{file}头像图片，只支持{extensions}图片",
-      sizeError : "{file}头像图片，超过{sizeLimit}了！"
+class AttachmentView extends Backbone.View
+    tagName: "li"
+    default_img_class: "default_img"
+    events: {
+      "mouseout" : "hide_nav_meun",
+      "mouseover" : "show_nav_meun",
+      "click .default-img" : "_set_default_img",
+      "click .delete-img" : "delete_img"
     }
 
-  complete: (id, filename, data) ->
-    if data.success
-      attachment = JSON.parse(data.attachment)
-      model = new Attachment(attachment)
-      model.set_url(@remote)
-      view = new PreviewImage(model: model)
-      @preview_el.append(view.render())
+    default_params : {
 
-  submit_before: () ->
-    @fileupload.setParams(
-      authenticity_token : $("meta[name=csrf-token]").attr("content"),
-      version_name : "100x100"
-    )
+      #上传url
+      url_upload: "",
 
-  render: () ->
-    @$el
+      #默认图片url
+      default_img_url: "",
 
-  chose_upload: () ->
-    @$("input:file").click()
+      #模板
+      template: "",
 
-class VideoUpload extends Backbone.View
-  tagName: "a",
-  className: "btn btn-mini",
-  template: "<i class='icon-film'></i>"
-  events: {
+      #预览图片版本
+      version_name: "100X100",
 
-  },
+      #提交文本名
+      input_name: "",
 
-  initialize: () ->
-    @$el = $(@el)
-    @$el.html(@template)
+      #默认图片的文本名称
+      default_input_name: ""
+    }
 
-  render: () ->
-    @$el
+    initialize : () ->
+      @model = @options.model
+      $.extend(@default_params, @options.params)
 
-class AttachmentUpload extends Backbone.View
-  initialize: (options) ->
-    _.extend(@, options)
+      @$el = $(@el)
 
-    @$el = $(@el).addClass("attachment_uploader")
-    @$el.append("<div class='upload_nav' />")
-    @$el.append("<div class='upload_preview' />")
-    @$preview_el = @$(".upload_preview")
-    @$nav_el = @$(".upload_nav")
+      @init_template()
+      @model.bind("set_default_attr", _.bind(@set_default_attr, @))
+      @model.bind("set_value_attr", _.bind(@set_value_attr, @))
 
-    image_upload_view = new ImageUpload(
-      remote: @remote,
-      preview_el: @$preview_el)
+    init_template : () ->
+      @$el.html(@default_params.template)
+      @init_element()
 
-    @$nav_el.append(image_upload_view.render())
+    init_element : () ->
+      @upload_panle = @$(".attachment-upload")
+      @hidden_input = @$("input[type=hidden]")
+      @preview = @$("img.attachable-preview")
+      @bottom_meun = @$(".nav-panle")
+      @attachable = @$(".attachable")
+      @progress_panle = @$(".progress-panle")
 
-root.AttachmentUpload = AttachmentUpload
+      @init_file_upload()
+      @init_data()
+
+    change_style: () ->
+      @$(".qq-upload-button").css(
+        overflow: 'visible',
+        position: 'static'
+      )
+
+      @$("input:file").height(@$el.height())
+
+    init_data: () ->
+      @hidden_input.val(@model.id)
+      if @is_default_img()
+        @set_default_attr()
+      else
+        @set_value_attr()
+
+      @preview.attr("src", @model.get("url"))
+
+    render : () ->
+      @$el
+
+    init_file_upload : () ->
+      @fileupload = new qq.FileUploader({
+        element: @upload_panle[0],
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+        sizeLimit: 1048576, # max size: 1MB
+        minSizeLimit: 0, # min size
+        multiple: false,
+        action: "#{@default_params.url_upload}/upload",
+        inputName: "attachable",
+        cancelButtonText: "取消上传",
+        uploadButtonText: '',
+        onComplete: _.bind(@complete_callback, @),
+        onSubmit: _.bind(@submit_before_callback, @),
+        onProgress: _.bind(@progress_callback, @),
+        messages: @messages()
+      })
+
+    messages: () ->
+      {
+        typeError: "请选择正确的{file}头像图片，只支持{extensions}图片",
+        sizeError: "{file}头像图片，超过{sizeLimit}了！"
+      }
+
+    progress_callback: (id, filename, loaded, total) ->
+      bar = @progress_panle.find(">.progress>.bar")
+      if bar.length > 0
+        bar.width("#{(loaded/total) * 100}%")
+
+    submit_before_callback: (id, filename) ->
+      @progress_panle.show();
+      @fileupload.setParams(
+        authenticity_token: $("meta[name=csrf-token]").attr("content"),
+        version_name: this.default_params.version_name
+      )
+
+    complete_callback : (id, filename, data) ->
+      return unless data.success
+      @progress_panle.hide();
+      info = data.attachment
+      #空图框时，添加新的空图框
+      @trigger("add_blank_preview") if @is_blank_img()
+      @model.set(info)
+      @init_data()
+      @change_style();
+
+    hide_nav_meun : () ->
+      @bottom_meun.hide()
+
+    show_nav_meun : () ->
+      return if @is_blank_img()
+      @switch_delete_meun()
+      @bottom_meun.show()
+
+    _set_default_img : () ->
+      @trigger("clear_blank_default")
+      @set_default_attr()
+
+    switch_delete_meun : () ->
+      default_el = @bottom_meun.find(".default-img")
+      if @is_default_img() then default_el.hide()  else default_el.show()
+
+    is_default_img : () ->
+      @attachable.hasClass(@default_img_class)
+
+    is_blank_img : () ->
+      @model.id is "" || not @model.id?
+
+
+    delete_img : () ->
+      @model.destroy(
+        url : "#{@default_params.url_upload}/#{@hidden_input.val()}",
+        success : (model, data) =>
+          if @is_default_img()
+            @trigger("default_first_img")
+
+          @$el.remove()
+      )
+
+    set_value_attr : () ->
+        @attachable.removeClass(@default_img_class)
+        if @hidden_input.val() is ""
+          @hidden_input.removeAttr("name")
+        else
+          @hidden_input.attr("name", "#{@default_params.input_name}[#{@model.id}]")
+
+    set_default_attr : () ->
+        @attachable.addClass(@default_img_class)
+        @hidden_input.attr("name", "#{@default_params.default_input_name}")
+
+
+class root.AttachmentUpload extends Backbone.View
+    data: []
+    default_enabled: true  #开启默认图片选择
+    limit: 10              #最多上传数量
+    initialize : () ->
+      _.extend(@, @options)
+      @$el = $(@el)
+      @attachment_list = new AttachmentList
+      @attachment_list.bind("add", @add_one, @)
+
+      _.each(@data, (attachment)=>
+        @attachment_list.add(attachment)
+      )
+      @add_blank_preview()
+      @default_choose_img(@get_default_model())
+
+    add_one : (model) ->
+      view = new AttachmentView(
+        model: model,
+        params: @options.params
+      )
+      view.bind("default_first_img", _.bind(@default_first_img, @))
+      view.bind("clear_blank_default", _.bind(@clear_blank_default, @))
+      view.bind("add_blank_preview", _.bind(@add_blank_preview, @))
+      @$el.append(view.render())
+      view.change_style()
+
+    default_choose_img: (model) ->
+      if @default_enabled
+        model.trigger("set_default_attr")
+
+    default_first_img: (model) ->
+      @default_choose_img(@attachment_list.models[0])
+
+    add_blank_preview: () ->
+      if @limit > @attachment_list.length
+        @attachment_list.add( url : @options.params.default_img_url)
+
+    clear_blank_default : () ->
+      @attachment_list.each (model) ->  model.trigger("set_value_attr")
+
+    get_default_model : () ->
+      temp = @attachment_list.models[0]
+      @attachment_list.each (model) ->
+        temp = model if model.get("default_state")?
+
+      temp
+
