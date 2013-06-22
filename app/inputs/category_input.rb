@@ -3,8 +3,10 @@ class CategoryInput < Formtastic::Inputs::StringInput
 
   def to_html
     category_id = options[:value]
+    name = options[:name] || "product[category_id]"
     input_wrapping do
-      label_html << builder.hidden_field(method, input_html_options.merge(name: "product[category_id]", value: category_id)) << mock_input(category_id) << generate_ul_tree
+      label_html << builder.hidden_field(method,
+        input_html_options.merge(name: name, value: category_id)) << mock_input(category_id) << generate_ul_tree
     end
   end
 
