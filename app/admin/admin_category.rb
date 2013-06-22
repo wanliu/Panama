@@ -114,7 +114,11 @@ ActiveAdmin.register Category do
   member_action :create,:method => :post do
     @category = Category.new(params[:category])
     parent_id = params[:parent_id]
-    unless parent_id.blank?
+    if parent_id.blank?
+      parent_category = Category.root
+      @category.ancestry = parent_category.id
+      @category.ancestry_depth = parent_category.ancestry_depth + 1
+    else
       parent_category = Category.find(parent_id)
       @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
       @category.ancestry_depth = parent_category.ancestry_depth + 1
