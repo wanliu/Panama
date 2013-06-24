@@ -1,23 +1,14 @@
+require 'net/http'
+
 class FayeClient
   def self.send(channel, params)
+    uri = URI.parse(Settings.defaults['faye_server'])
     token = Settings.defaults['faye_token']
-    puts "===channel:#{channel}===params: #{params}"
-    publish = connect.publish(channel, {values: params, token: token})
-  end
 
-  def self.receive(channel, &block)
-    connect.subscribe(channel) do |data|
-      yield data
+    message = { :channel => channel, :data => {values: params, token: token} }
+    puts message
+    Thread.new do
+      Net::HTTP.post_form(uri, :message => message.to_json)
     end
   end
-
-  class << self
-
-    private
-    def connect
-      @client ||= Faye::Client.new(Settings.defaults['faye_server'])
-      @client
-    end
-  end
-
 end
