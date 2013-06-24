@@ -22,6 +22,7 @@
 /vendor/bundle
 /vendor/cache
 /public/uploads
+/public/category
 /public/attachment
 /public/assets
 /config/email.yml
