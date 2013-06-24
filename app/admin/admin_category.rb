@@ -135,7 +135,11 @@ ActiveAdmin.register Category do
   member_action :update, :method => :put do
     p = params[:category]
     @category = Category.find(params[:id])
+    # @category.update_attributes(params[:category])
+    debugger
+    @category.name  = p[:name]
     @category.ancestry = p[:ancestry]
+    @category.cover = p[:cover]
     @category.ancestry_depth =  @category.parent.ancestry_depth + 1
     @category.save
     redirect_to system_category_path
