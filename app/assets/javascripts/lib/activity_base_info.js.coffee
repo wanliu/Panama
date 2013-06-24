@@ -1,6 +1,6 @@
 # 活动上传
 
-#= require lib/product_upload
+#= require lib/attachment_upload
 
 root = window || @
 
@@ -46,10 +46,10 @@ class root.ActivityBaseInfoView extends Backbone.View
 
   load_attachments: (attachments) ->
     @$("img.private").remove()
-    @$(".attachment_panel>li").remove()
+    @$(".attachment-list>li").remove()
 
-    new ProductUpload({
-      el: @$(".attachment_panel"),
+    new AttachmentUpload({
+      el: @$(".attachment-list"),
       data: attachments,
       default_enabled: false,
       limit: 5,

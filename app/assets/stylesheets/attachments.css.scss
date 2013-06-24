@@ -1,54 +1,63 @@
 .attachment-list{
-    list-style: none;
-    margin: 0px;
+  list-style: none;
+  margin: 0px;
     li{
-        margin-right: 15px;
-        margin-bottom: 10px;
-        float: left;
+      margin-right: 15px;
+      margin-bottom: 10px;
+      float: left;
+      position: relative;
+      overflow: hidden;
 
-        .attachable{
-            position: relative;
-            margin-left: 10px;
-            margin-right: 10px;
-            height : 100px;
-            width : 100px;
-            padding: 4px;
-            border: 1px solid #DDD;
-            vertical-align: middle;
-            display: table-cell;
+      .attachable{
+        position: relative;
+        margin-left: 10px;
+        margin-right: 10px;
+        height : 100px;
+        width : 100px;
+        padding: 4px;
+        border: 1px solid #DDD;
+        vertical-align: middle;
+        display: table-cell;
 
-            .attachment-upload{
-                display:none;
-            }
+        .attachment-upload{
 
-            .nav-panle{
-                position: absolute;
-                bottom: 0px;
-                background: gray;
-                width: 100%;
-                left: 0px;
-                opacity: 0.6;
-                font-size : 9px;
-                text-align: center;
-                display: none;
-
-                .delete-img, .default-index-img{
-                    color: black;
-                }
-            }
-
-            .progress-panle{
-                position: absolute;
-                width: 100%;
-                left: 0;
-                top: 50%;
-                display: none;
-                text-align: center;
-            }
+          .qq-upload-list{
+            display: none;
+          }
         }
 
-        .default_img{
-            border : 1px solid red !important;
+        .nav-panle{
+          position: absolute;
+          bottom: 0px;
+          background: gray;
+          width: 100%;
+          left: 0px;
+          opacity: 0.6;
+          font-size : 9px;
+          text-align: center;
+          display: none;
+
+          .delete-img, .default-img{
+            color: black;
+          }
         }
+
+        .progress-panle{
+          position: absolute;
+          width: 100%;
+          left: 0;
+          top: 50%;
+          display: none;
+          text-align: center;
+
+          .progress-mini{
+            height: 10px;
+          }
+        }
+      }
+
+      .default_img{
+        border : 1px solid red !important;
+      }
     }
 }

@@ -21,7 +21,7 @@ class AplumInput
 
       output << template.javascript_tag(<<-JAVASCRIPT
         $(document).ready(function(){
-          new ProductUpload({
+          new AttachmentUpload({
             el: $("##{el_id}"),
             data: #{collection.to_json},
             params: {

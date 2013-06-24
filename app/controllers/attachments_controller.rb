@@ -7,15 +7,19 @@ class AttachmentsController < ApplicationController
     @attachment.file = file
     begin
       @attachment.save!
-      render :json => {
+      render :text => {
         :success => true,
-        :attachment => @attachment.as_json(version_name: params[:version_name]) }.to_json
+        :attachment => @attachment.as_json(version_name: params[:version_name])
+      }.to_json
     rescue Exception => e
       unless @attachment.new_record?
         @attachment.file.remove!
         @attachment.destroy
       end
-      render :json => { :success => false, :message => e.message }.to_json
+      render :text => {
+        :success => false,
+        :message => e.message
+      }.to_json
     end
   end
 
