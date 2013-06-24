@@ -13,7 +13,7 @@ class root.CategoryTree
       @load_table(li)
       return false
     )
-    @el.find(">li").click()
+    #@el.find(">li").click()
 
   camelcase: (str) ->
     str.toUpperCase().substring(0, 1) + str.substring(1, str.length)

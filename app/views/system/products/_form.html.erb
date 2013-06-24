@@ -12,7 +12,7 @@
   <% end %>
   <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
     <% if product.category.present? %>
-      <%= render_content(@content, locals: { category: product.category }) %>
+      <%= render_content(@content) %>
     <% end %>
   <% end %>
   <%= f.inputs "描述" do %>

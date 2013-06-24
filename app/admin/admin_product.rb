@@ -98,7 +98,9 @@ ActiveAdmin.register Product, :title => "产品" do
         break f
       end
     end
-    @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
+    if @product.category.present?
+      @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
+    end
   end
 
   member_action :update_plus, :method => :put do
