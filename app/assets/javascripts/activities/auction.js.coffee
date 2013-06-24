@@ -25,7 +25,6 @@ class root.Choice extends Backbone.View
     , 500
    
   query: (event) ->
-    debugger
     query_name = @$("#activity_product").val().trim()
     return if query_name == "" 
     $.ajax
@@ -48,7 +47,5 @@ class root.Choice extends Backbone.View
   listening:(event)->
     product_id =  $(event.currentTarget).attr('product_id')  
     return if !product_id 
-    product_name = $(event.currentTarget).text().trim()
-    @$("#activity_product").val(product_name)
-    @$("#activity_description").val(product_name + "竞价") 
+    product_name = $(event.currentTarget).text().trim()     
     activity_view.fetch_product(product_id)

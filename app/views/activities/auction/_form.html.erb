@@ -7,8 +7,7 @@
                   class: :product, 
                   placeHolder: '商品名称...',
                   autocomplete: 'off',
-                  required: true,
-                  
+                  required: true              
               }%>
   <div class="control-group string optional" style='margin: 0;'>
     <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
@@ -70,7 +69,6 @@
         template: '<%=j render "product_upload" %>',
       }
     });
-
     var choice_view = new Choice(activity_view);    
   </script>
 
