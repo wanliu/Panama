@@ -11,7 +11,9 @@
     <%= f.input :price, :class => :product_price %>
   <% end %>
   <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
-  <%= render_content(@content, locals: { category: @category }) %>
+    <% if product.category.present? %>
+      <%= render_content(@content, locals: { category: product.category }) %>
+    <% end %>
   <% end %>
   <%= f.inputs "描述" do %>
     <%= f.input :description, :as => :text %>
