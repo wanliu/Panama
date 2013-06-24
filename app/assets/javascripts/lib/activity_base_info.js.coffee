@@ -40,7 +40,7 @@ class root.ActivityBaseInfoView extends Backbone.View
     @$('[name="activity[product_id]"]').val(product.id);
     @$('[name="activity[price]"]').val(product.price);
     @$('[name="activity[activity_price]"]').val(product.price);
-    @$('[name="activity[activity_name]"]').val(product.name + 'jingjia');
+    @$('[name="activity[description]"]').val(product.name + '  竞价');
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
 

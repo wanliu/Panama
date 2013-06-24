@@ -43,6 +43,7 @@ ActiveAdmin.register Category do
 
       panel("类别 属性") do
         table_for(category.properties, i18n: Property) do
+          column :title
           column :name
           column :property_type
         end
@@ -111,7 +112,29 @@ ActiveAdmin.register Category do
     end
   end
 
-  member_action :create,:method => :post do
+  member_action :children_table, :method => :get do
+    @category = Category.find(params[:id])
+    render :layout => false
+  end
+
+  member_action :update, :method => :put do
+    p = params[:category]
+    @category = Category.find(params[:id])
+    # @category.update_attributes(params[:category])
+    debugger
+    @category.name  = p[:name]
+    @category.ancestry = p[:ancestry]
+    @category.cover = p[:cover]
+    @category.ancestry_depth =  @category.parent.ancestry_depth + 1
+    @category.save
+    redirect_to system_category_path
+  end
+
+  collection_action :new_plus do
+    @category = Category.new
+  end
+
+  collection_action :create_plus, :method => :post do
     @category = Category.new(params[:category])
     parent_id = params[:parent_id]
     if parent_id.blank?
@@ -123,33 +146,10 @@ ActiveAdmin.register Category do
       @category.ancestry = "#{parent_category.ancestry}/#{parent_id}"
       @category.ancestry_depth = parent_category.ancestry_depth + 1
     end
-    @category.save
-    redirect_to system_category_path(@category)
-  end
-
-  member_action :children_table, :method => :get do
-    @category = Category.find(params[:id])
-    render :layout => false
-  end
-
-  member_action :update, :method => :put do
-    p = params[:category]
-    @category = Category.find(params[:id])
-    @category.ancestry = p[:ancestry]
-    @category.ancestry_depth =  @category.parent.ancestry_depth + 1
-    @category.save
-    redirect_to system_category_path
-  end
-
-  collection_action :new_plus do
-    @category = Category.new
-  end
-
-  collection_action :create_plus, :method => :post do
-    c = params[:category]
-    @category = Category.new(c)
     if @category.save
       redirect_to system_category_path(@category)
+    else
+      render "new_plus"
     end
   end
 

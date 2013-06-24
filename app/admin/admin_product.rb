@@ -109,6 +109,8 @@ ActiveAdmin.register Product, :title => "产品" do
     @product.attach_properties!
     if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
+    else
+      render "edit_plus"
     end
   end
 
