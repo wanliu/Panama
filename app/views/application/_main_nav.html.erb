@@ -49,6 +49,7 @@
       $form.submit();
 
       $form.on("ajax:success", function(){
+        $form[0].reset();
         $("#active_dialog").modal('hide');
       });
 
