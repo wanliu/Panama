@@ -8,16 +8,10 @@
                   placeHolder: '商品名称...',
                   autocomplete: 'off',
                   required: true,
-                  "data-provide" => 'typeahead'             
+                  # "data-provide" => 'typeahead'             
               } %>
               
-  <ul class="dropdown-menu">
-  <div class="control-group string optional" style='margin: 0;'>
-    <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
-        style='display: none; top: 100px; left: 195px; width: 220px; padding: '>
-      <!-- <li><a tabindex="-1" href="#">Action</a></li> -->
-    </ul>
-  </div>
+ 
 
   <%= f.text_field :product_id, type: :hidden %>
 
@@ -72,23 +66,13 @@
         template: '<%=j render "product_upload" %>',
       }
     });
-
-    $('.typeahead').typeahead({
-      source: function (query,typeahead) {        
-        $.ajax({
-          url: "product_search/?q="+query, 
-          success: function (data) {             
-            titles = [];            
-            $.each(data, function(i,item) {              
-              titles.push("<li>"+ item.title +"</li>");
-            });
-            typeahead(titles);
-          }
-        })
-        property: "title"
-      }
+                              
+    debugger                              
+    $(".typeahead").typeahead({      
+      name: "product",
+      remote: "product_search/?q=%QUERY&limit=10",
+      limit: 10
     });
-
   </script>
 
 <% end %>

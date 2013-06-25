@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 #= require jquery
 #= require backbone
-#= require lib/activity_base_info
+#= require lib/typeahead
 
 # root = window || @
 
