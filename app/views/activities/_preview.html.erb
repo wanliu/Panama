@@ -3,7 +3,7 @@
 		<form>
 
 		<div class='in-box'>
-			<%= image_tag activity.url, :class => "preview a-#{activity.id}" %>
+			<%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
 			<div class='right_bottom2'>
 				<h5>原价: <span><%= activity.price %></span></h5>
 			</div>

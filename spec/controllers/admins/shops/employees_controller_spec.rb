@@ -8,50 +8,50 @@ describe Admins::Shops::EmployeesController, "商店雇员控制器" do
     let(:sale_group){ FactoryGirl.create(:sale_group, :shop => shop) }
 
     def shop_param
-        {:shop_id => shop.name}
+      {:shop_id => shop.name}
     end
 
     before :each do
-        @user = anonymous
+      @user = anonymous
     end
 
     describe "GET index" do
 
-        it "获取所有雇员" do
-            shop.shop_users.build(:user_id => @user.id).save
-            get :index, shop_param, get_session
-            response.should be_success
-            assigns(:employees).should eq([@user])
-        end
+      it "获取所有雇员" do
+        shop.shop_users.build(:user_id => @user.id).save
+        get :index, shop_param, get_session
+        response.should be_success
+        assigns(:employees).should eq([@user, shop.user])
+      end
     end
 
     describe "POST invite" do
 
-        it "验证正确的数据" do
+      it "验证正确的数据" do
+        post :invite, shop_param.merge(:login => @user.login, :format => :json), get_session
+        response.should be_success
+        assigns(:user).should eq(@user)
+      end
+
+      it "验证无效的数据" do
+        post :invite, shop_param.merge(:login => "无效", :format => :json), get_session
+        assigns(:user).should be_nil
+        response.response_code.should eq(403)
+      end
+
+      it "注册用户发邀请信息" do
+        expect{
             post :invite, shop_param.merge(:login => @user.login, :format => :json), get_session
-            response.should be_success
-            assigns(:user).should eq(@user)
-        end
+        }.to change(Notification, :count).by(1)
+      end
 
-        it "验证无效的数据" do
-            post :invite, shop_param.merge(:login => "无效", :format => :json), get_session
-            assigns(:user).should be_nil
-            response.response_code.should eq(403)
-        end
+      it "E-mail地址发邀请信息" do
+        form = "huxinghai198@qq.com"
+        post :invite, shop_param.merge(:login => form, :format => :json), get_session
+        response.should be_success
 
-        it "注册用户发邀请信息" do
-            expect{
-                post :invite, shop_param.merge(:login => @user.login, :format => :json), get_session
-            }.to change(Notification, :count).by(1)
-        end
-
-        it "E-mail地址发邀请信息" do
-            form = "huxinghai198@qq.com"
-            post :invite, shop_param.merge(:login => form, :format => :json), get_session
-            response.should be_success
-
-            ActionMailer::Base.deliveries.last.to.should eq([form])
-        end
+        ActionMailer::Base.deliveries.last.to.should eq([form])
+      end
     end
 
     describe "DELETE destroy" do
@@ -130,14 +130,12 @@ describe Admins::Shops::EmployeesController, "商店雇员控制器" do
 
     describe "get find_by_group" do
 
-        it "获取组下所有雇员" do
-            shop.shop_users.create(:user_id => @user.id)
-            sale_group.create_user(@user.id)
-            get :find_by_group, shop_param.merge({group_id: sale_group.id, format: :json}), get_session
-            user = JSON.parse(response.body)
-            s_user = JSON.parse(@user.as_json(root: false, methods: "icon").to_json)
-            user.should eq([s_user])
-            response.should be_success
-        end
+      it "获取组下所有雇员" do
+        shop.shop_users.create(:user_id => @user.id)
+        sale_group.create_user(@user.id)
+        get :find_by_group, shop_param.merge({group_id: sale_group.id, format: :json}), get_session
+        assigns(:employees).should eq([@user, shop.user])
+        response.should be_success
+      end
     end
 end

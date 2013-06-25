@@ -1,6 +1,6 @@
   <% @activities.each do |activity| %>
     <div id="activity_<%= activity.id %>" class="comment_body">
-      <p><img src="<%= activity.url %>"></p>
+      <p><img src="<%= activity.photos.avatar %>"></p>
       <div class='comments'></div>
     </div>
     <br>

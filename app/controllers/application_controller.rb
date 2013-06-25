@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
           ajax_set_response_headers
           render :text => :ok, :status => 403 }
         format.html  {
+          configure_callback_url
           redirect_to '/auth/wanliuid' }
         format.json {
           render :json => { 'error' => 'Access Denied' }.to_json  }
@@ -52,6 +53,7 @@ class ApplicationController < ActionController::Base
 
       respond_to do |format|
         format.html  {
+          configure_callback_url
           redirect_to '/auth/wanliuadminid' }
         format.json {
           render :json => { 'error' => 'Access Denied' }.to_json  }
@@ -63,6 +65,15 @@ class ApplicationController < ActionController::Base
     if !current_user && !current_admin
       login_required
     end
+  end
+
+  def configure_callback_url
+    url = "http://#{request.env['HTTP_HOST']}#{request.env["PATH_INFO"]}"
+    session[:auth_redirect] = url
+  end
+
+  def auth_redirect
+    session[:auth_redirect] || root_path
   end
 
   def load_category
