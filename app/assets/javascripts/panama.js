@@ -25,7 +25,6 @@
 //= require lib/at_who
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
-//= require activities/auction
 
 
 root = window || this;

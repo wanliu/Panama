@@ -3,13 +3,13 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 #= require jquery
 #= require backbone
-#= require lib/typeahead
+#= require twitter/bootstrap/typeahead
 
 # root = window || @
 
 # class root.Choice extends Backbone.View
-  
-#   initialize: (options) ->    
+
+#   initialize: (options) ->
 #     _.extend(@, options)
 #     @el = $(".form_activity_auction")
 #     @$el = $(@el)
@@ -23,18 +23,18 @@
 #     window.setTimeout () ->
 #       @$("ul.product_selector").hide()
 #     , 500
-   
+
 #   query: (event) ->
 #     query_name = @$("#activity_product").val().trim()
-#     return if query_name == "" 
+#     return if query_name == ""
 #     $.ajax
 #       url: "product_search/?q=" + query_name
 #       beforeSend: (xhr)->
 #         xhr.overrideMimeType("text/json; charset=x-user-defined")
-#       success:(data)=> 
-#         select_ul = ""       
-#         if data.length > 0 
-#           $.each(data, (i, d) =>                       
+#       success:(data)=>
+#         select_ul = ""
+#         if data.length > 0
+#           $.each(data, (i, d) =>
 #             select_ul += "<li product_id=#{d.id}
 #                   product_price=#{d.price}>
 #                   <a tabindex='-1' href='javascript: void(0);'>
@@ -45,7 +45,7 @@
 
 
 #   listening:(event)->
-#     product_id =  $(event.currentTarget).attr('product_id')  
-#     return if !product_id 
-#     product_name = $(event.currentTarget).text().trim()     
+#     product_id =  $(event.currentTarget).attr('product_id')
+#     return if !product_id
+#     product_name = $(event.currentTarget).text().trim()
 #     activity_view.fetch_product(product_id)

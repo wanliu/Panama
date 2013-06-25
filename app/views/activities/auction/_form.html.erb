@@ -3,15 +3,15 @@
 
   <%= f.input :product,
               :label => "商品",
-              :input_html => { 
+              :input_html => {
                   class: :typeahead,
                   placeHolder: '商品名称...',
                   autocomplete: 'off',
-                  required: true,
-                  # "data-provide" => 'typeahead'             
+                  required: true
               } %>
-              
- 
+
+  <ul class="typeahead dropdown-menu typeahead_list"></ul>
+
 
   <%= f.text_field :product_id, type: :hidden %>
 
@@ -66,12 +66,46 @@
         template: '<%=j render "product_upload" %>',
       }
     });
-                              
-    debugger                              
-    $(".typeahead").typeahead({      
-      name: "product",
-      remote: "product_search/?q=%QUERY&limit=10",
-      limit: 10
+
+
+    $.fn.typeahead.Constructor.prototype.render = function(items){
+      var that = this
+      items = $(items).map(function (i, item) {
+        i = $(that.options.item).attr('data-value', item.id)
+        i.find('a').html(that.highlighter(item))
+        return i[0]
+      })
+
+      items.first().addClass('active')
+      this.$menu.html(items)
+      return this
+    }
+    $(".typeahead").typeahead({
+      source: function(query, process){
+        $.ajax({
+          url: 'product_search',
+          data: {q: query},
+          success: function(data){
+            process(data)
+          }
+        })
+      },
+      menu: ".typeahead_list",
+      matcher: function (obj) {
+        return 1
+      },
+      sorter: function(items){
+        return items
+      },
+      highlighter: function(item){
+        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+        return item.title.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+            return '<strong>' + match + '</strong>'
+        })
+      },
+      updater: function (id){
+        activity_view.fetch_product(id)
+      }
     });
   </script>
 
