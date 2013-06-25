@@ -33,10 +33,12 @@ ActiveAdmin.register Product, :title => "产品" do
   end
 
   show do |product|
+
     div do
       panel("产品基本属性") do
         attributes_table_for(product) do
           attrbute_names = product.attributes.map { |attr, _| attr }
+          attrbute_names.delete("default_attachment_id")
           attrbute_names.each do |column|
             row column
           end
