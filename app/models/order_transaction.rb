@@ -51,7 +51,7 @@ class OrderTransaction < ActiveRecord::Base
   validates :total, :numericality => true, :allow_nil => true
 
   validates_presence_of :buyer
-  validates_presence_of :seller_id
+  validates_presence_of :seller
   validates_associated :address
   validate :valid_base_info?
 

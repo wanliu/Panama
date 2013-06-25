@@ -5,15 +5,15 @@ describe OrderTransaction, "订单流通记录" do
 
     let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
 
-    it{ should have_one(:address) }
+    it{ should belong_to(:address) }
     it{ should belong_to(:seller) }
     it{ should belong_to(:buyer) }
     it{ should have_many(:items) }
 
     it{ should validate_presence_of(:buyer) }
-    it{ should validate_presence_of(:seller_id) }
-    it{ should validate_numericality_of(:items_count) }
-    it{ should validate_numericality_of(:total) }
+    it{ should validate_presence_of(:seller) }
+    # it{ should validate_numericality_of(:items_count) }
+    # it{ should validate_numericality_of(:total) }
 
     def params
         {
