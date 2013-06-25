@@ -7,8 +7,7 @@
                   class: :typeahead,
                   placeHolder: '商品名称...',
                   autocomplete: 'off',
-                  required: true,
-                  # "data-provide" => 'typeahead'             
+                  required: true,             
               } %>
               
  
@@ -66,13 +65,7 @@
         template: '<%=j render "product_upload" %>',
       }
     });
-                              
-    debugger                              
-    $(".typeahead").typeahead({      
-      name: "product",
-      remote: "product_search/?q=%QUERY&limit=10",
-      limit: 10
-    });
+
   </script>
 
 <% end %>
