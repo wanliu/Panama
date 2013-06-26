@@ -121,7 +121,6 @@ ActiveAdmin.register Category do
     p = params[:category]
     @category = Category.find(params[:id])
     # @category.update_attributes(params[:category])
-    debugger
     @category.name  = p[:name]
     @category.ancestry = p[:ancestry]
     @category.cover = p[:cover]

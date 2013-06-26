@@ -452,7 +452,7 @@ class EmployeeGroup
         permission_template: null
     }
 
-    constructor: (options) ->
+    constructor: (options) ->        
         $.extend(@default_params, options)
 
         @invite_employee = @default_params.el.find(".invite-employee")
@@ -480,13 +480,13 @@ class EmployeeGroup
         if $(".employee", @employee_panle).length <= 0
             @employee_panle.find(".content").html(@notice_template)
 
-    load_event: () ->
+    load_event: () ->        
         @bind_user_typeahead()
         @bind_invite_employee()
         @load_group()
         @load_permission_group()
 
-    bind_user_typeahead: () ->
+    bind_user_typeahead: () ->        
         new UserTypeahead(@invite_employee.find("form>input:text"))
 
     bind_invite_employee: () ->

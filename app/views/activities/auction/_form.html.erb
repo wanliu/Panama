@@ -3,18 +3,15 @@
 
   <%= f.input :product,
               :label => "商品",
-              :input_html => { 
-                  class: :product, 
+              :input_html => {
+                  class: :typeahead,
                   placeHolder: '商品名称...',
                   autocomplete: 'off',
-                  required: true              
-              }%>
-  <div class="control-group string optional" style='margin: 0;'>
-    <ul class="dropdown-menu product_selector" role="menu" aria-labelledby="dropdownMenu"
-        style='display: none; top: 100px; left: 195px; width: 220px; padding: '>
-      <!-- <li><a tabindex="-1" href="#">Action</a></li> -->
-    </ul>
-  </div>
+                  required: true
+              } %>
+
+  <ul class="typeahead dropdown-menu typeahead_list"></ul>
+
 
   <%= f.text_field :product_id, type: :hidden %>
 
@@ -69,7 +66,14 @@
         template: '<%=j render "product_upload" %>',
       }
     });
-    var choice_view = new Choice(activity_view);    
+    new TypeaheadExtension({
+        el: $('.typeahead'),
+        source: '/product_search/',
+        field: 'title',
+        select: function(id){
+          activity_view.fetch_product(id)
+        }
+    });
   </script>
 
 <% end %>
