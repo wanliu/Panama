@@ -9,7 +9,7 @@
     <% when "set" %>
        <%= f.input prop.name, :as => :select,:collection => prop.items, :label => prop.title %>
     <% when "datetime" %>   	  
-       <%= f.input prop.name,:label => prop.title,:as => :date_picker, %>
+       <%= f.input prop.name, :label => prop.title, :as => :date_picker  %>
     <% when "float" %>   	  
        <%= f.input prop.name,:as => :float,:label => prop.title %>
     <% when "decimal" %>   	  
