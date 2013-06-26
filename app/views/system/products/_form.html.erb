@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag "system/product" %>
 <%= semantic_form_for product, :url => url do |f| %>
-  <%= f.inputs "产品" do %>    
+  <%= f.inputs "产品" do %>
     <%= f.input :name %>
     <%= f.input :attachments, :as => :aplum,
       :img_version => "100x100",
@@ -13,6 +13,8 @@
   <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
     <% if product.category.present? %>
       <%= render_content(@content) %>
+    <% else %>
+      <%= "No having property!" %>
     <% end %>
   <% end %>
   <%= f.inputs "描述" do %>
