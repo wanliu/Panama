@@ -4,7 +4,7 @@
 <% @product.properties.each do |prop| %>
    <% case prop.property_type %>
    <% when "string" %>
-      
+      <%= f.input prop.name %>
    <% when "integer" %>
      <%= f.input prop.name, :as => :spinner %>
    <%# when "set" %>

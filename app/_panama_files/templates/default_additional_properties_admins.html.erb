@@ -7,7 +7,7 @@
     <% when "integer" %>
        <%= f.input prop.name, :as => :number,:label => prop.title %>
     <% when "set" %>
-       <%= f.input prop.name, :as => :select,:label => prop.title %>
+       <%= f.input prop.name, :as => :select,:collection => prop.items, :label => prop.title %>
     <% when "datetime" %>   	  
        <%= f.input prop.name,:as => :datetime,:label => prop.title %>
     <% when "float" %>   	  
