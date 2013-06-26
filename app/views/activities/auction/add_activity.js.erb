@@ -1,4 +1,6 @@
-$activity = $("<%= j render :partial => 'activities/auction/activity', :object => @activity %> ").prependTo("#activities")
+var column = $(".activity", "#activities").size() % 5
+$activity = $("<%= j render :partial => 'activities/auction/activity', 
+	:object => @activity %> ").prependTo(".column:eq("+column+")","#activities")
 $activity.find("img").load(function(){
 	$("#activities").masonry('reload')
 })
