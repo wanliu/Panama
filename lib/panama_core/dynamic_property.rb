@@ -90,7 +90,6 @@ module PanamaCore
 
     def delegate_property_setup
       @delegate_properties ||= []
-
       @delegate_properties.each do |method_name|
         @@_delete_method_name = method_name.to_sym
         class << self

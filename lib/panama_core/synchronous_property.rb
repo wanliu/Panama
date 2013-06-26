@@ -50,8 +50,8 @@ module PanamaCore
         relation_items.delete_if { true } if relation_items.size > 0
 
         category.properties.each do |prop|
-          relation_properties.target << prop
 
+          relation_properties.target << prop
           # properties.target << property
           relation_items.target.concat prop.items
         end
