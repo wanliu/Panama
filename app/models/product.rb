@@ -43,7 +43,7 @@ class Product < ActiveRecord::Base
       end
     end
   end
-  has_and_belongs_to_many :property_items,
+  has_and_belongs_to_many :property_items, :uniq => true,
            :select => ['property_items.*',
                        'products_property_items.id as products_property_items_id',
                        'products_property_items.title'],
