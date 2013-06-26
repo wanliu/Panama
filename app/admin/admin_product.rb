@@ -75,9 +75,8 @@ ActiveAdmin.register Product, :title => "产品" do
 
   collection_action :create_plus, :method => :post do
     p = params[:product]
-    @product = Product.new(category_id: p[:category_id])
-    @product.attach_properties!
-    @product.update_attributes(p.merge(dispose_options(p)))  
+    @product = Product.new(p)
+    @product.attachment_ids = dispose_options(p)[:attachment_ids]
     if @product.save
       redirect_to system_product_path(@product)
     else
@@ -91,6 +90,7 @@ ActiveAdmin.register Product, :title => "产品" do
 
   member_action :edit_plus do
     @product = Product.find(params[:id])
+    # xifengzhu
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
     @product.attach_properties!
@@ -100,9 +100,7 @@ ActiveAdmin.register Product, :title => "产品" do
         break f
       end
     end
-    if @product.category.present?
-      @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
-    end
+    @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
   end
 
   member_action :update_plus, :method => :put do
