@@ -90,7 +90,6 @@ ActiveAdmin.register Product, :title => "产品" do
 
   member_action :edit_plus do
     @product = Product.find(params[:id])
-    # xifengzhu
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
     @product.attach_properties!
