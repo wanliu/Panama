@@ -247,7 +247,7 @@ zh-CN:
         created_at: 创建时间
         updated_at: 更新时间
         brand_name: 品牌名
-        action_link: 操作
+        action_link: 操作        
       shop:
         id: 编号
         name: 商店名

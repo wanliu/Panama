@@ -1,12 +1,18 @@
 <% f = value_for(:form) %>
 
 <% @product.properties.each do |prop| %>
-   <% case prop.property_type %>
-   <% when "string" %>
-      <%= f.input prop.name %>
-   <% when "integer" %>
-     <%= f.input prop.name, :as => :number %>
-   <%# when "set" %>
-     <%#= f.input prop.name, :as => :select %>
+    <% case prop.property_type %>
+    <% when "string" %>   	  
+       <%= f.input prop.name,:label => prop.title %>
+    <% when "integer" %>
+       <%= f.input prop.name, :as => :number,:label => prop.title %>
+    <% when "set" %>
+       <%= f.input prop.name, :as => :select,:label => prop.title %>
+    <% when "datetime" %>   	  
+       <%= f.input prop.name,:as => :datetime,:label => prop.title %>
+    <% when "float" %>   	  
+       <%= f.input prop.name,:as => :float,:label => prop.title %>
+    <% when "decimal" %>   	  
+       <%= f.input prop.name,:as => :decimal,:label => prop.title %>
   <% end %>
 <% end %>
