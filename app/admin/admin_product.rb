@@ -75,8 +75,9 @@ ActiveAdmin.register Product, :title => "产品" do
 
   collection_action :create_plus, :method => :post do
     p = params[:product]
-    @product = Product.new(p)
-    @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    @product = Product.new(category_id: p[:category_id])
+    @product.attach_properties!
+    @product.update_attributes(p.merge(dispose_options(p)))  
     if @product.save
       redirect_to system_product_path(@product)
     else
