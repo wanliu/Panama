@@ -34,7 +34,7 @@ class Product < ActiveRecord::Base
   has_many   :comments, :as => :targeable, :dependent => :destroy                                         # 评论
   has_many   :contents, :as => :contentable, :dependent => :destroy                                       # 产品内容配置组
   has_many   :price_options, :as => :optionable, :autosave => true, :dependent => :destroy
-  has_and_belongs_to_many :properties do
+  has_and_belongs_to_many :properties, :uniq => true do
     def [](name)
       if name.is_a?(String) || name.is_a?(Symbol)
         select { |property| property.name == name.to_s }.first
@@ -43,7 +43,7 @@ class Product < ActiveRecord::Base
       end
     end
   end
-  has_and_belongs_to_many :property_items,
+  has_and_belongs_to_many :property_items, :uniq => true,
            :select => ['property_items.*',
                        'products_property_items.id as products_property_items_id',
                        'products_property_items.title'],

@@ -77,8 +77,7 @@ ActiveAdmin.register Product, :title => "产品" do
     p = params[:product]
     @product = Product.new(category_id: p[:category_id])
     @product.attach_properties!
-    @product.update_attributes(p.merge(dispose_options(p)))  
-    if @product.save
+    if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
     else
       render "new_plus"
