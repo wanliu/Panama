@@ -144,15 +144,15 @@ module PanamaCore
     end
 
     def relation_properties
-      send dynamic_configuration[:properties_relation]
+      reload.send dynamic_configuration[:properties_relation]
     end
 
     def relation_values
-      send dynamic_configuration[:values_relation]
+      reload.send dynamic_configuration[:values_relation]
     end
 
     def relation_items
-      send dynamic_configuration[:property_items_relation]
+      reload.send dynamic_configuration[:property_items_relation]
     end
 
     def add_property(property)
