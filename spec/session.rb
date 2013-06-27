@@ -1,3 +1,4 @@
+#encoding: utf-8
 module Session
   module Helpers
     def get_session(*args)
@@ -12,6 +13,22 @@ module Session
 
     def anonymous
       FactoryGirl.create(:anonymous)
+    end
+
+    def current_user_address
+      province = FactoryGirl.create(:province)
+      city = province.children.create(name: "衡阳", ancestry: province)
+      area = city.children.create(name: "耒阳", ancestry: city)
+      FactoryGirl.create(:address,
+                         user: current_user,
+                         province: province,
+                         city: city,
+                         area: area,
+                         addressable: nil)
+    end
+
+    def my_cart
+      current_user.cart
     end
   end
 end

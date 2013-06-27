@@ -36,7 +36,6 @@ describe Address, "地址" do
   let(:city) { province.children.create(name: "衡阳", ancestry: province) }
   let(:area) { city.children.create(name: "耒阳", ancestry: city) }
   let(:address) { FactoryGirl.create(:address,
-                                     transaction: nil,
                                      user: user,
                                      province: province,
                                      city: city,
