@@ -63,8 +63,7 @@ describe Cart, "model 购物车 " do
       let(:people) { User.where(login: 'tt_name').first_or_create }
 
       it '数据库增一个订单' do
-        expect { cart.save_transcation(shop_a, the_items, people) }
-          .to change { people.transactions.size }.by(1)
+        expect { cart.save_transcation(shop_a, the_items, people) }.to change { people.transactions.size }.by(1)
       end
 
   		it '调用订单成员方法' do
@@ -74,10 +73,9 @@ describe Cart, "model 购物车 " do
         uer.stub_chain(:transactions, :build).with(seller_id: shop_a.id).and_return(ordertransaction)
 
   			# ordertransaction.should_receive(:build_items).with(the_items).exactly(1).times
-        ordertransaction.should_receive(:update_total_count).exactly(1).times
-        ordertransaction.should_receive(:items=).with(the_items).exactly(1).times
-        ordertransaction.should_receive(:save).exactly(1).times
-
+        # ordertransaction.should_receive(:update_total_count).exactly(1).times
+        ordertransaction.should_receive("items=").with(the_items).exactly(1).times
+        ordertransaction.should_receive(:save).exactly(1).times        
         cart.save_transcation(shop_a, the_items, uer)
   		end
   	end

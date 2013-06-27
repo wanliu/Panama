@@ -22,11 +22,11 @@ describe ChatMessage, "聊天记录模型" do
     before do
       @anony = anonymous
       @message1 = current_user.chat_messages.create(
-        :receive_user_id => @anony.id, :content => "这价格包邮吗？")
+        :receive_user => @anony, :content => "这价格包邮吗？")
       @message2 = @anony.chat_messages.create(
-        :receive_user_id => current_user.id, :content => "不包邮!" )
+        :receive_user => current_user, :content => "不包邮!" )
       @message3 = current_user.chat_messages.create(
-        :receive_user_id => anonymous.id, :content => "这商品好不好！")
+        :receive_user => anonymous, :content => "这商品好不好！")
     end
 
     it "所有未读信息" do
@@ -50,14 +50,14 @@ describe ChatMessage, "聊天记录模型" do
 
     it "发送信息之前建立最近联系人" do
       message = current_user.chat_messages.build(
-        :receive_user_id => @anony.id, :content => "东西怎么样!")
+        :receive_user => @anony, :content => "东西怎么样!")
       message.should_receive(:join_contact_friend).with(no_args())
       message.save.should be_true
     end
 
     it "发送信息之后通知接收人" do
       message = current_user.chat_messages.build(
-        :receive_user_id => @anony.id, :content => "东西怎么样!")
+        :receive_user => @anony, :content => "东西怎么样!")
       message.should_receive(:notic_receive_user).with(no_args())
       message.save.should be_true
     end
