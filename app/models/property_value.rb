@@ -32,8 +32,9 @@ class PropertyValue < ActiveRecord::Base
     when /datetime/
       send(:dtvalue=, other)
     when /set/
-      if valuable.property_items.select{|item| item.id.to_s == other}.size > 0
-        send(:svalue=, other) #if valuable.property_items.select { |item| item.value == other }.size > 0
+      item = valuable.property_items.select{|item| item.id.to_s == other}.first
+      if item.present?
+        send(:svalue=, item.value) #if valuable.property_items.select { |item| item.value == other }.size > 0
       end
     end
   end

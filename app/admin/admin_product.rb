@@ -62,7 +62,7 @@ ActiveAdmin.register Product, :title => "产品" do
       panel("产品属性") do
         attributes_table_for(product) do
           product.properties.each do |prop|
-            row(prop.title) do 
+            row(prop.title) do
               product.send(prop.name)
             end
           end
