@@ -75,8 +75,9 @@ ActiveAdmin.register Product, :title => "产品" do
 
   collection_action :create_plus, :method => :post do
     p = params[:product]
-    @product = Product.new(p)
-    @product.attachment_ids = dispose_options(p)[:attachment_ids]
+    @product = Product.new(category_id: p[:category_id])
+    @product.attach_properties!
+    @product.update_attributes(p.merge(dispose_options(p)))  
     if @product.save
       redirect_to system_product_path(@product)
     else
@@ -93,12 +94,15 @@ ActiveAdmin.register Product, :title => "产品" do
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
     @product.attach_properties!
+
     register_value :form do
       semantic_form_for(@product) do |f|
         break f
       end
     end
-    @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
+    if @product.category.present?
+      @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
+    end
   end
 
   member_action :update_plus, :method => :put do
@@ -149,5 +153,10 @@ ActiveAdmin.register Product, :title => "产品" do
 
   def additional_properties_content(category = nil)
     @content = PanamaCore::Contents.fetch_for(category, :additional_properties)
+  end
+
+
+  def changedate
+    
   end
 end

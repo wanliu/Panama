@@ -1,0 +1,54 @@
+.jquery-simpledatepicker-datepicker {
+  width: 16em;
+  position: absolute;
+  z-index: 999999;
+  border: 1px solid #5e6469;
+  background-color: white;
+  font-family: sans-serif;
+}
+.jquery-simpledatepicker-datepicker * {
+  float: left;
+  width: 14%;
+  text-align: center;
+  text-decoration: none;
+}
+.jquery-simpledatepicker-datepicker span {
+  border-color: #5e6469;
+  font-size: 0.8em;
+  text-decoration: none;
+}
+.jquery-simpledatepicker-preday,
+.jquery-simpledatepicker-postday {
+  color: #aaa;
+}
+.jquery-simpledatepicker-datepicker a {
+  text-decoration: none;
+  cursor: pointer;
+}
+.jquery-simpledatepicker-datepicker a:hover {
+  text-decoration: none;
+  background-color: #eee;
+}
+.jquery-simpledatepicker-datepickertoday {
+  background-color: #ccc;
+}
+.jquery-simpledatepicker-datetxt {
+  width: 70%;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none;
+}
+.jquery-simpledatepicker-CalendarBut {
+  width: 21px; height: 23px;
+  background-image: url(/assets/Calendar.gif); 
+  color: transparent;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 0;
+  vertical-align: middle;
+}
+.jquery-simpledatepicker-CalendarCloseBut, .jquery-simpledatepicker-CalendarTodayBut {
+  width: 50%;
+  text-align: center; 
+  font-size: 0.8em;
+}
