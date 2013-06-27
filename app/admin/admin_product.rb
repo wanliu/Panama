@@ -63,7 +63,7 @@ ActiveAdmin.register Product, :title => "产品" do
         attributes_table_for(product) do
           product.properties.each do |prop|
             row(prop.title) do 
-              product.send(prop.name).strftime("%Y年%m月%d日")
+              product.send(prop.name)
             end
           end
         end
