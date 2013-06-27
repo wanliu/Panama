@@ -21,7 +21,7 @@ describe Shop, "商店模型" do
   def option_attachment
     {
       :name => "测试商店32a",
-      :user_id => anonymous.id
+      :user => anonymous
     }
   end
 
@@ -80,7 +80,7 @@ describe Shop, "商店模型" do
 
       @shop.shop_users.build(:user_id => current_user.id).save
       @shop.find_employee(current_user.id).should_not be_nil
-      @shop.employees.should eq([current_user])
+      @shop.employees.should eq([current_user, @shop.user])
   end
 
   describe "实例方法" do
