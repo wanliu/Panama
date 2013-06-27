@@ -57,8 +57,8 @@ describe ShopGroup, "商店权限组" do
           :shop_user => shop.find_employee(@user.id),
           :shop_group => sg
       )
-      sg.users.empty?.should be_false
-      sg.users.should eq([@user])
+      sg.users.empty?.should be_false      
+      sg.users.should eq([@user, shop.user])
     end
 
     it "获取组下面某个用户" do

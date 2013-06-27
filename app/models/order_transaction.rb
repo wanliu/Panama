@@ -47,12 +47,12 @@ class OrderTransaction < ActiveRecord::Base
   has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy
 
   validates :state, :presence => true
-  validates :items_count, :numericality => true
-  validates :total, :numericality => true, :allow_nil => true
 
   validates_presence_of :buyer
-  validates_presence_of :seller_id
+  validates_presence_of :seller
   validates_associated :address
+  validates_numericality_of :items_count
+  validates_numericality_of :total
   validate :valid_base_info?
 
   accepts_nested_attributes_for :address

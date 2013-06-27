@@ -12,6 +12,7 @@
 @import "active_admin/mixins";
 @import "active_admin/base";
 @import "attachments";
+@import "system/simpledatepicker";
 // Overriding any non-variable SASS must be done after the fact.
 // For example, to change the default status-tag color:
 //
@@ -82,3 +83,6 @@ body.system_categories{
   }
 }
 
+/*a.jquery-simpledatepicker-preday{
+  color: red ;
+}*/

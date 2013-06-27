@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Address, "地址" do
 
   describe "关联检查" do
-    it { should belong_to(:transaction).class_name('OrderTransaction') }
+    it { should have_many(:transaction).class_name('OrderTransaction') }
     it { should belong_to(:user) }
     it { should belong_to(:province).class_name('City') }
     it { should belong_to(:city).class_name('City') }
@@ -35,13 +35,8 @@ describe Address, "地址" do
   let(:province) { FactoryGirl.create(:province) }
   let(:city) { province.children.create(name: "衡阳", ancestry: province) }
   let(:area) { city.children.create(name: "耒阳", ancestry: city) }
-  let(:address) { FactoryGirl.create(:address,
-                                     transaction: nil,
-                                     user: user,
-                                     province: province,
-                                     city: city,
-                                     area: area,
-                                     addressable: nil) }
+  let(:transaction) { FactoryGirl.create(:transaction) }
+  let(:address) { FactoryGirl.create(:address, user: anonymous, province: province, city: city, area: area, addressable: nil) }
 
   describe "数据验证" do
     it ("默认") { address.should be_valid }
@@ -65,7 +60,7 @@ describe Address, "地址" do
 
   describe "实例方法" do
     it "location" do
-      address.location.should ==
+      address.location.should == 
         "#{address.country}#{address.province.name}#{address.city.name}#{address.area.name}#{address.road}"
     end
   end

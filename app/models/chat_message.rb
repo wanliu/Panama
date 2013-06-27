@@ -21,7 +21,7 @@ class ChatMessage < ActiveRecord::Base
   validates :content, :presence => true
   validates :owner, :presence => true, :if => :owner_exists?
 
-  # validates_presence_of :receive_user
+  validates_presence_of :receive_user
   validates_presence_of :send_user
 
   after_create :notic_receive_user

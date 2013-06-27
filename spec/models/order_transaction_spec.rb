@@ -3,25 +3,29 @@ require 'spec_helper'
 
 describe OrderTransaction, "订单流通记录" do
 
-    let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
+    let(:seller){ FactoryGirl.create(:user)}
+    let(:buyer){ FactoryGirl.create(:user)}
+    let(:shop){ FactoryGirl.create(:shop, :user => seller) }
 
-    it{ should have_one(:address) }
+    it{ should belong_to(:address) }
     it{ should belong_to(:seller) }
     it{ should belong_to(:buyer) }
     it{ should have_many(:items) }
 
     it{ should validate_presence_of(:buyer) }
-    it{ should validate_presence_of(:seller_id) }
-    it{ should validate_numericality_of(:items_count) }
-    it{ should validate_numericality_of(:total) }
+    it{ should validate_presence_of(:seller) }
+    # it{ should validate_numericality_of(:items_count) }
+    # it{ should validate_numericality_of(:total) }
 
     def params
         {
-          :buyer_id => anonymous.id,
+          :buyer_id => buyer.id,
           :items_count => 2,
           :seller_id => shop.id,
           :total => 5,
-          :address_id => 3
+          :address_id => 3,
+          :pay_manner_id => 2,
+          :delivery_manner_id => 2
         }
     end
 
@@ -59,7 +63,7 @@ describe OrderTransaction, "订单流通记录" do
         o = OrderTransaction.new(params)
         o.save.should be_true
         o.state.should eq("order")
-        o.buy.should be_true
+        o.paid.should be_true
         o.state.should eq("waiting_paid")
         o.back.should be_true
         o.state.should eq("order")
