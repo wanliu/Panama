@@ -1,5 +1,5 @@
 table_for items, :class => 'index_table' do
-	column :value, :label => "as"
+	column :value
 	column :操作 do |item|
       link_to "删除", "#", :onclick => "items_delete(#{item.id})"
     end
