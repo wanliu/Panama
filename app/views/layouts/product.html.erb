@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-<%= render "head", :styles => [:another_bootstrap, :products], :javascripts => [:panama] %>
+<%= render "head", :styles => [:products], :javascripts => [:panama] %>
 <body class="<%= controller.controller_name %>">
   	<%= render "header-fluid" %>
   	<%#= render "main_nav-fluid" %>

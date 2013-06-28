@@ -16,7 +16,8 @@ class MoneyBill < ActiveRecord::Base
   after_create :calculate_money
 
   def calculate_money
-    sql = "update users set money=money+#{money} where id=#{user.id}"
-    User.connection.update(sql)
+    u = user.reload
+    u.money = u.money + money
+    u.save
   end
 end
