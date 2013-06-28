@@ -13,7 +13,7 @@ ActiveAdmin.register Property do
     # default_actions
   end
 
-  member_action :items do
+  member_action :items, :title => "属性项" do
     @property = Property.find(params[:id])
 
     # @items = @property.items
