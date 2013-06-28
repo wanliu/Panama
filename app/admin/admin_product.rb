@@ -5,6 +5,7 @@ ActiveAdmin.register Product, :title => "产品" do
   filter :shop_id
   filter :shops_category_id
   filter :name
+  filter :title
   filter :price
   filter :summary
   filter :description
@@ -60,9 +61,10 @@ ActiveAdmin.register Product, :title => "产品" do
     div do
       panel("产品属性") do
         attributes_table_for(product) do
-          property_names = product.properties.map { |prop, _| prop.name }
-          property_names.each do |column|
-            row column
+          product.properties.each do |prop|
+            row(prop.title) do
+              product.send(prop.name)
+            end
           end
         end
       end
@@ -152,10 +154,5 @@ ActiveAdmin.register Product, :title => "产品" do
 
   def additional_properties_content(category = nil)
     @content = PanamaCore::Contents.fetch_for(category, :additional_properties)
-  end
-
-
-  def changedate
-    
   end
 end

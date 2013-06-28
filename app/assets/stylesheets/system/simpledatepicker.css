@@ -2,7 +2,8 @@
   width: 16em;
   position: absolute;
   z-index: 999999;
-  border: 1px solid #5e6469;
+  border: 1px solid #c9d0d6 !important;
+  border-radius: 3px;
   background-color: white;
   font-family: sans-serif;
 }
@@ -10,16 +11,16 @@
   float: left;
   width: 14%;
   text-align: center;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 .jquery-simpledatepicker-datepicker span {
-  border-color: #5e6469;
+  border-color: #5e6469 !important;
   font-size: 0.8em;
   text-decoration: none;
 }
 .jquery-simpledatepicker-preday,
 .jquery-simpledatepicker-postday {
-  color: #aaa;
+  color: #aaa !important;
 }
 .jquery-simpledatepicker-datepicker a {
   text-decoration: none;
@@ -27,10 +28,10 @@
 }
 .jquery-simpledatepicker-datepicker a:hover {
   text-decoration: none;
-  background-color: #eee;
+  background-color: #eee !important;
 }
 .jquery-simpledatepicker-datepickertoday {
-  background-color: #ccc;
+  background-color: #ccc !important;
 }
 .jquery-simpledatepicker-datetxt {
   width: 70%;
