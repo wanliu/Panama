@@ -51,8 +51,8 @@ ActiveAdmin.register Category do
 
       panel("类别 价格选项") do
         table_for(category.price_options, i18n: PriceOption) do
-          column :name
           column :title
+          column :name
           column :property
         end
       end

@@ -13,7 +13,6 @@ module PanamaCore
       class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
         def self.after_attach_properties(name = nil, &block)
           @@attach_properties_procs ||= []
-
           if name.nil? && block_given?
             @@attach_properties_procs << block
           elsif name.present?

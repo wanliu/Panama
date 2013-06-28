@@ -140,7 +140,7 @@ module PanamaCore
 
     def product_property_values(name)
       property = relation_properties.select { |property| property.name == name }.first
-      relation_values.select { |pv| pv.property_id == property.id }.first unless property.nil?
+      relation_values.reload.select { |pv| pv.property_id == property.id }.first unless property.nil?
     end
 
     def relation_properties

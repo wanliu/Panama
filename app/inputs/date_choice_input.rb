@@ -1,7 +1,6 @@
 class DateChoiceInput  < Formtastic::Inputs::StringInput
 
   def to_html
-  debugger
   lable = options[:title]
   name = options[:name]
   value = options[:value]
