@@ -10,7 +10,7 @@
     <%= f.input :summary %>
     <%= f.input :price, :class => :product_price %>
   <% end %>
-  <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>
+  <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>   
     <% if product.category.present? %>
       <%= render_content(@content) %>
     <% else %>
@@ -65,7 +65,7 @@
         var category_param = "category_id=" + category_id
         url += '?' + [product_param, category_param].join('&')
         $(".additional_properties ol").load(url, function(data){
-
+          
         })
       }
     }

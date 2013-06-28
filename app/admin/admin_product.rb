@@ -94,7 +94,6 @@ ActiveAdmin.register Product, :title => "产品" do
     @product = Product.find(params[:id])
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
-
     register_value :form do
       semantic_form_for(@product) do |f|
         break f
@@ -106,7 +105,7 @@ ActiveAdmin.register Product, :title => "产品" do
   end
 
   member_action :update_plus, :method => :put do
-    p = params[:product]
+    p = params[:product]    
     @product = Product.find(params[:id])
     category_id = p[:category_id]
     @product.category_id = category_id unless category_id.nil?
