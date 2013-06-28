@@ -146,7 +146,7 @@ ActiveAdmin.register Product, :title => "产品" do
     @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
 
     if @content.nil?
-      render :text => '<h1>No having property!</h1>'
+      render :text => '<h1>暂时没有</h1>'
     else
       render_content(@content, locals: { category: @category })
     end
