@@ -62,7 +62,7 @@ ActiveAdmin.register Category do
       @property = Property.new
       active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
         f.inputs "属性" do
-          f.input :id, as: :select, collection: Property.all { |property| property.title }
+          f.input :id, label: "属性名", as: :select, collection: Property.all { |property| property.title }
         end
         f.buttons
       end
@@ -72,7 +72,7 @@ ActiveAdmin.register Category do
       @price_option = PriceOption.new
       active_admin_form_for @price_option, url: add_price_options_system_category_path(params[:id]) do |f|
         f.inputs "价格选项" do
-          f.input :id, as: :select, collection: Property.all { | prop| prop.title }
+          f.input :id, label: "属性名", as: :select, collection: Property.all { | prop| prop.title }
         end
         f.buttons
       end
@@ -129,7 +129,7 @@ ActiveAdmin.register Category do
     redirect_to system_category_path
   end
 
-  collection_action :new_plus do
+  collection_action :new_plus, :title => "新增分类" do
     @category = Category.new
   end
 
@@ -152,7 +152,7 @@ ActiveAdmin.register Category do
     end
   end
 
-  member_action :properties do
+  member_action :properties, :title => "属性" do
     @category = Category.find(params[:id])
   end
 
