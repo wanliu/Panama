@@ -94,7 +94,6 @@ ActiveAdmin.register Product, :title => "产品" do
     @product = Product.find(params[:id])
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
-    @product.attach_properties!
 
     register_value :form do
       semantic_form_for(@product) do |f|
