@@ -6,7 +6,7 @@ ActiveAdmin.register Property do
     column :name
     column :property_type
     column :items do |property|
-      link_to("#{property.items.size} items", items_system_property_path(property)) +
+      link_to("#{property.items.size} 项", items_system_property_path(property)) +
       link_to("删除", delete_system_property_path(property),:style=>"margin-left:20px;")
     end
     # column :user
@@ -35,7 +35,7 @@ ActiveAdmin.register Property do
     f.inputs do
       f.input :title
       f.input :name
-      f.input :property_type, :as => :select, :collection => %w(string set datetime integer float decimal)
+      f.input :property_type, :as => :select, :collection => t("property.property_types").invert
     end
     f.buttons
   end

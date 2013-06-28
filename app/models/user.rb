@@ -57,6 +57,11 @@ class User < ActiveRecord::Base
       :owner => owner)
   end
 
+  def money
+    reload
+    read_attribute("money") || 0
+  end
+
   def messages(friend_id)
     ChatMessage.all(id, friend_id)
   end

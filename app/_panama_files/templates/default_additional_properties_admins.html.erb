@@ -7,13 +7,13 @@
     <% when "integer" %>
        <%= f.input prop.name, :as => :number,:label => prop.title %>
     <% when "set" %>
-       <% index = prop.items.find_index{|i| i.value == @product.send(prop.name) } || 0 %>
-       <%= f.input prop.name, :as => :select,:collection => prop.items, :label => prop.title, :selected => index + 1 %>
+       <% item = prop.items.find_by(:value => @product.send(prop.name)) %>
+       <%= f.input prop.name, :as => :select,:collection => prop.items, :label => prop.title, :selected => item.try(:id) %>
     <% when "datetime" %>
        <%= f.input prop.name,
           :as => :date_choice,
           :title => "#{prop.title}",
-          :name => "product[#{prop.name}]", 
+          :name => "product[#{prop.name}]",
           :value => "#{@product.send(prop.name)}" %>
     <% when "float" %>
        <%= f.input prop.name,:as => :number,:label => prop.title %>

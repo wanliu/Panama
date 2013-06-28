@@ -702,7 +702,7 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4
+    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0
     t.string   "im_token"
   end
 

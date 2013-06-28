@@ -484,6 +484,15 @@ zh-CN:
         sign_in: "登录"
         forgot_your_password: "忘记密码？"
 
+  property:
+    property_types: 
+      string: 字符串
+      integer: 整数
+      decimal: 数字
+      datetime: 日期
+      set: 集合
+      float: 浮点数      
+
   order_states:
     buyer:
       order: 确认订单
