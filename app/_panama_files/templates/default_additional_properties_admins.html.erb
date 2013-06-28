@@ -12,10 +12,11 @@
        <%= f.input prop.name, 
           :as => :date_choice,
           :title => "#{prop.title}",
-          :name => "product[#{prop.name}]" %>
+          :name => "product[#{prop.name}]", 
+          :value => "#{@product.send(prop.name)}" %>
     <% when "float" %>   	  
        <%= f.input prop.name,:as => :float,:label => prop.title %>
     <% when "decimal" %>   	  
        <%= f.input prop.name,:as => :decimal,:label => prop.title %>
-  <% end %>
+    <% end %>
 <% end %>
