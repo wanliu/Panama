@@ -4,5 +4,5 @@ class DeliveryType < ActiveRecord::Base
   has_many :transaction,
            class_name: 'OrderTransaction'
 
-  validates :name, :presence => true
+  validates :name, :presence => true, :uniqueness => true
 end

@@ -35,8 +35,12 @@ describe Address, "地址" do
   let(:province) { FactoryGirl.create(:province) }
   let(:city) { province.children.create(name: "衡阳", ancestry: province) }
   let(:area) { city.children.create(name: "耒阳", ancestry: city) }
-  let(:transaction) { FactoryGirl.create(:transaction) }
-  let(:address) { FactoryGirl.create(:address, user: anonymous, province: province, city: city, area: area, addressable: nil) }
+  let(:address) { FactoryGirl.create(:address,
+                                     user: user,
+                                     province: province,
+                                     city: city,
+                                     area: area,
+                                     addressable: nil) }
 
   describe "数据验证" do
     it ("默认") { address.should be_valid }
@@ -60,7 +64,7 @@ describe Address, "地址" do
 
   describe "实例方法" do
     it "location" do
-      address.location.should == 
+      address.location.should ==
         "#{address.country}#{address.province.name}#{address.city.name}#{address.area.name}#{address.road}"
     end
   end
