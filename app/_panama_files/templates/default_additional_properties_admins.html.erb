@@ -16,8 +16,9 @@
           :name => "product[#{prop.name}]", 
           :value => "#{@product.send(prop.name)}" %>
     <% when "float" %>
-       <%= f.input prop.name,:as => :float,:label => prop.title %>
+    
+       <%= f.input prop.name,:as => :number,:label => prop.title %>
     <% when "decimal" %>
-       <%= f.input prop.name,:as => :decimal,:label => prop.title %>
+       <%= f.input prop.name,:as => :number,:label => prop.title %>
     <% end %>
 <% end %>
