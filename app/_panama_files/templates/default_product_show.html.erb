@@ -8,9 +8,11 @@
   <div class="container-fluid property">
     <div class="row-fluid">
       <div class="span12">
-      <%= link_to t(:enter_shop, :name => @product.shop.name),
-            shop_path(@product.shop.name),
+      <% if @product.shop.present? %>
+      <%= link_to t(:enter_shop, :name => @product.shop.try(:name)),
+            shop_path(@product.shop.try(:name)),
             :class => 'btn pull-right' %>
+      <% end %>
       <h5><%= @product.name %></h5>
       <p><small><%= @product.summary %></small></P>
       <hr>
@@ -50,7 +52,8 @@
             </div>
           <div class="control-group">
             <div class="controls pull-right">
-              <button class="btn btn-primary btn-large">BUY</button>
+              <!-- <button class="btn btn-primary btn-large">BUY</button> -->
+              <%= link_to "BUY", person_cart_path(current_user), :class => "btn btn-primary btn-large" %>
               <%= add_to_my_cart("Add To Cart", '.preview') %>
             </div>
           </div>
