@@ -44,12 +44,11 @@ describe Admins::Shops::TransactionsController, "商家订单交易控制器" do
     end
 
     it "我处理的" do
-      debugger
-      @order1.operator_create(current_user)
+      current_user.connect
+      @order1.operator_create(current_user.id)
       get :pending, shop_param, valid_session
       assigns(:untransactions).should eq([@order2])
       assigns(:transactions).should eq([@order1])
     end
-
   end
 end
