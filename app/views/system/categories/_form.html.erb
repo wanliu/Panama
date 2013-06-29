@@ -12,7 +12,7 @@
 			<tr>
 				<td> <%= property.title %> </td>
 				<td> <%= property.name %> </td>
-				<td> <%= property.property_type %></td>
+				<td> <%= t("property.property_types.#{property.property_type}") %></td>
 				<td>
 					<span>
 						<%= link_to "详细", system_property_path(property) %>

@@ -6,9 +6,15 @@ ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
   config.clear_action_items!
 
-  action_item do
-    link_to "新增分类", new_plus_system_categories_path
+  action_item do   
+    link_to("新增分类", new_plus_system_categories_path) 
   end
+
+  action_item :only => :show do   
+    link_to("同步属性", all_attach_attributes_system_category_path(params[:id]))
+  end
+
+
 
   index do
 
@@ -62,7 +68,7 @@ ActiveAdmin.register Category do
       @property = Property.new
       active_admin_form_for @property, url: relate_property_system_category_path(params[:id]) do |f|
         f.inputs "属性" do
-          f.input :id, label: "属性名", as: :select, collection: Property.all { |property| property.title }
+          f.input :id, label: "属性名", as: :select, :collection => Hash[Property.all.map{|p| [p.title,p.id]}]
         end
         f.buttons
       end
@@ -72,7 +78,7 @@ ActiveAdmin.register Category do
       @price_option = PriceOption.new
       active_admin_form_for @price_option, url: add_price_options_system_category_path(params[:id]) do |f|
         f.inputs "价格选项" do
-          f.input :id, label: "属性名", as: :select, collection: Property.all { | prop| prop.title }
+          f.input :id, label: "属性名", as: :select, :collection => Hash[Property.all.map{|p| [p.title,p.id]}]
         end
         f.buttons
       end
@@ -208,6 +214,15 @@ ActiveAdmin.register Category do
 
   action_item :only => :show do
     link_to '管理属性', properties_system_category_path(params[:id])
+  end
+
+  member_action :all_attach_attributes do    
+    @category = Category.find(params[:id])
+    @category.products.each  do |product|
+      product.attach_properties!
+      product.save!
+    end
+    redirect_to system_category_path(params[:id])
   end
 
 end

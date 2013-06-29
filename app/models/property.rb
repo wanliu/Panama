@@ -8,10 +8,7 @@ class Property < ActiveRecord::Base
   # accepts_nested_attributes_for :items
 
   validates :name, uniqueness: true
-  validates :property_type, inclusion: { in: %w(string set datetime integer float decimal) }
+  validates :property_type, inclusion: { in: %w(string integer decimal datetime set float) }
 
-  def property_types
-  	%w(string set datetime integer float decimal)
-  end
 
 end

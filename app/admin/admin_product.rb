@@ -71,7 +71,7 @@ ActiveAdmin.register Product, :title => "产品" do
     end
   end
 
-  collection_action :new_plus, :title => "新增产品" do
+  collection_action :new_plus do
     @product = Product.new
   end
 
@@ -90,7 +90,7 @@ ActiveAdmin.register Product, :title => "产品" do
     @product = Product.find(params[:id])
   end
 
-  member_action :edit_plus, :title => "修改产品" do
+  member_action :edit_plus do
     @product = Product.find(params[:id])
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
@@ -120,6 +120,7 @@ ActiveAdmin.register Product, :title => "产品" do
   member_action :attach_properties, :method => :put do
     @product = Product.find(params[:id])
     @product.attach_properties!
+    @product.save!
     redirect_to system_product_path(params[:id])
   end
 
