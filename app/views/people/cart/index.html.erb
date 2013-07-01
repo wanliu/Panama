@@ -13,7 +13,7 @@
             <div class="span10" style="padding-top:25px;">
                 <h1 class="span3"><%= item.title %></h1>
                 <!--xifengzhu-->
-                <%= simple_form_for item, :url =>""  do |f| %>
+                <%= simple_form_for item, :html =>{ :class => "form-horizontal"}, :url =>""  do |f| %>
                     <div class="control-group span4">
               <!-- <label class="control-label" for="inputEmail">数量</label> -->
               <!-- <div class="controls"> -->
@@ -32,7 +32,7 @@
                 </div>
         <% end %>
             <!--xifengzhu-->
-                <span class="span3" style="padding-top:5px;">
+                <span class="span3">
           <price><%= item.price %></price>
         </span>
                 <div class="controls pull-right">
