@@ -24,11 +24,12 @@ class MyCart extends Backbone.View
 		"click .handle": "toggleCartBox"
 
 	item_row: """
-		<tr id= 'product_item{{id}}'>
-		<td><img src='{{icon}}' ></td>
-		<td><span class='title' data-toggle="tooltip" title="{{title}}">{{title}}</span></td>
-		<td>{{amount}}</td>
-		<td>{{total}}</td></tr>
+		<tr id= "product_item{{id}}">
+			<td><img src="{{icon}}" ></td>
+			<td><span class="title" data-toggle="tooltip" title="{{title}}">{{title}}</span></td>
+			<td>{{amount}}</td>
+			<td class="row">{{total}}</td>
+		</tr>
 	"""
 
 	initialize: (@options) ->
@@ -74,23 +75,24 @@ class MyCart extends Backbone.View
 				@cartAddAction(urlAction, form)
 
 	cartAddAction: (url, form) ->
+		totals = 0.0
 		$.post url, form.serialize(), (item) =>
-			if $("#cart_box table #product_item#{item.product_id}").length > 0
-				trObj = $("#cart_box table #product_item#{item.product_id}")
+			if  $("#product_item#{item.id}").length > 0
+				trObj = $("#product_item#{item.id}")
 				trObj.replaceWith(@trHtml(item))
 				# $(trOjb[2]).html(item.amount)
 				# $(trOjb[3]).html(item.total)
 			else
-			$(".cart_main").append(@trHtml(item))
+				$(".cart_main").append(@trHtml(item))
+				$("#shop_count").html($(".cart_main tr").size())
+				$("#cart_box .checkout").removeClass("disabled")
+				@$("#shop_count").html($(".cart_main tr").size())
+			debugger
+			$(".cart_main tr").each () ->
+				totals += parseFloat($(this).find(".row").html())
+			$(".cart_bottom tr td").html("商品总价：" + totals)
+			# totals = $(".product_total span").text(parseFloat(totals))
 
-			$("#shop_count").html($(".cart_main tr").size())
-			$("#cart_box .checkout").removeClass("disabled")
-
-			@$("#shop_count").html($(".cart_main tr").size())
-			# totals = $(".cart_bottom tr td").html().split("")[5]
-			# totals = totals + item.product_item.total
-			# alert(totals)
-			# $(".cart_bottom tr td").html("商品总价：" + totals)
 
 	trHtml: (product_item) ->
 		row_tpl = Hogan.compile(@item_row)

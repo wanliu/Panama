@@ -25,7 +25,7 @@ class People::CartController < People::BaseController
   def move_out_cart    
     @item = my_cart.items.find(params[:id])
     @item.destroy
-    redirect_to "/people/#{current_user.login}/cart"
+    render :js => "location.href='/people/#{current_user.login}/cart'"
   end
 
   def change_number
