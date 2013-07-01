@@ -66,16 +66,10 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      render_address_html = format.html { render partial: "people/transactions/funcat/address",
-                               layout: false,
-                               status: '400 Validation Error',
-                               locals: {
-                                 :transaction => @transaction,
-                                 :people => @people }}
       if @transaction.address.valid?
         options = generate_base_option
         if @transaction.update_attributes(options)
-          format.json{ head :no_content }
+          format.json { head :no_content }
         else
           render_address_html
         end
@@ -178,6 +172,15 @@ class People::TransactionsController < People::BaseController
     end
 
     super *args, options
+  end
+
+  def render_address_html
+    format.html { render partial: "people/transactions/funcat/address",
+                               layout: false,
+                               status: '400 Validation Error',
+                               locals: {
+                                 :transaction => @transaction,
+                                 :people => @people }}
   end
 
   def generate_address
