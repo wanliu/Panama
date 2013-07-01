@@ -11,14 +11,19 @@
                 <% end %>
             </div>
             <div class="span10" style="padding-top:25px;">
-                <h1 class="span2"><%= item.title %></h1>
+                <h1 class="span3"><%= item.title %></h1>
                 <!--xifengzhu-->
                 <%= simple_form_for item, :url =>""  do |f| %>
-                    <div class="control-group span2">
-              <label class="control-label" for="inputEmail">数量</label>
-              <div class="controls">
-                <%= f.input :amount, :value =>item.amount, :as => :spinner,input_html: {:panel_class =>"amount_#{item.id}"} %>
-              </div>
+                    <div class="control-group span4">
+              <!-- <label class="control-label" for="inputEmail">数量</label> -->
+              <!-- <div class="controls"> -->
+                <%= f.input :amount, 
+                    :label =>"数 量",
+                    :value =>item.amount, 
+                    :as => :spinner,
+                    input_html: {
+                        :panel_class =>"amount_#{item.id}"} %>
+              <!-- </div> -->
               <script type="text/javascript">
                   new ChangeNumber({
                     el : $(".product-item-<%=item.id %>"),
