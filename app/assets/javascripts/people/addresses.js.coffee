@@ -17,7 +17,9 @@ class exports.Addresses extends Backbone.View
 		@$el.find("form#new_address_form").submit()
 
 	delete_address: (event) ->
-
+		if confirm("确定要删除该收货地址吗？")
+			debugger
+		
 
 	update_address: (event) ->
 		@$el.find("form#edit_address_form").submit()
