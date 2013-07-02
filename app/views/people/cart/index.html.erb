@@ -6,8 +6,8 @@
     <div class='product-item product-item-<%=item.id %>'  data-value-id="<%=item.id %>">
         <div class="row-fluid">
             <div class="span2">
-                <%= link_to '#', :class => "img-polaroid" do %>
-                    <%= image_tag item.header %>
+                <%= link_to '#' do %>
+                    <%= image_tag item.header, :class => "img-polaroid" %>
                 <% end %>
             </div>
             <div class="span10" style="padding-top:25px;">
