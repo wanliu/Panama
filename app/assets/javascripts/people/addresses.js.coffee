@@ -3,6 +3,21 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 exports = window || @
 
-class exports.Address extends Backbone.View
+class exports.Addresses extends Backbone.View
 	initialize: (options) ->
-    _.extend(@, options)
+		_.extend(@, options)
+		@$el = $(@el)
+
+	events:
+		"click #new_address .save-button" : "new_address"
+		"click .address .delete-button"   : "delete_address"
+		"click .address .edit-button"     : "update_address"
+
+	new_address: (event) ->
+		@$el.find("form#new_address_form").submit()
+
+	delete_address: (event) ->
+
+
+	update_address: (event) ->
+		@$el.find("form#edit_address_form").submit()

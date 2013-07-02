@@ -4,7 +4,7 @@
 			<h3>地址<%= index + 1 %></h3>
 			<div class="pull-right">
 				<button href="#edit_address"  class="btn" type="button" data-toggle="modal">编辑</button>
-				<button class="btn btn-danger" type="button">删除</button>
+				<button class="btn btn-danger delete-button" type="button">删除</button>
 			</div>
 		</div>
 		<div class="in-box">
@@ -28,17 +28,5 @@
 		</div>
 	</div>
 
-	<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    <h3 id="myModalLabel">编辑地址</h3>
-	  </div>
-	  <div class="modal-body">
-	    <%= render :partial => "people/addresses/form", :locals => {:people => @people, :address => address, :el => "#edit_address"} %>
-	  </div>
-	  <div class="modal-footer">
-	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-	    <button class="btn btn-primary">保存</button>
-	  </div>
-	</div>
+	<%= render :partial => "people/addresses/edit", :locals => {:address => address} %>
 </div>

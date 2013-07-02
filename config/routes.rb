@@ -117,7 +117,6 @@ Panama::Application.routes.draw do
   end
 
   resources :city
-  resources :addresses
   resources :delivery_types
 
   resources :activities do

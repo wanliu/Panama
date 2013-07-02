@@ -1,0 +1,52 @@
+<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">编辑地址</h3>
+  </div>
+  <div class="modal-body">
+  	<div class="address-panel">  
+      <%= simple_form_for :address, :html => {:id => "edit_address_form", :class => 'form-horizontal'} do |address_form| %>
+        <label class="chosen optional control-label" for="address">选择省,市,县</label>
+        <div class="controls controls-row">
+          <div class="span8 control-group">
+            <%= address_form.input :province_id,
+                         :as => :depend_select,
+                         :children => :city_id,
+                         :object => address,
+                         :wrapper => :inline,
+                         :collection => get_city %>
+
+            <%= address_form.input :city_id,
+                         :as => :depend_select,
+                         :children => :area_id,
+                         :target => :province,
+                         :object => address,
+                         :wrapper => :inline,
+                         :collection_url => "/city/" %>
+
+            <%= address_form.input :area_id,
+                         :as => :depend_select,
+                         :object => address,
+                         :target => :city,
+                         :wrapper => :inline,
+                         :collection_url => "/city/" %>
+
+            <%= address_form.error :province_id %>
+          </div>
+          <div class='span2'>
+            <%= address_form.label :zip_code, :wrapper => :inline_label, :class => :label_zip_code %>
+          </div>
+          <div class='span2'>
+            <%=address_form.input_field :zip_code, :class => :span12  %>
+          </div>
+          <%#= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
+        </div>
+        <%= address_form.input :road, :input_html => { :class => :span12 } %>
+      <% end %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary edit-button">保存</button>
+  </div>
+</div>

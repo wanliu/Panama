@@ -4,11 +4,19 @@ class People::AddressesController < People::BaseController
 		@addresses = Address.where(:user_id => current_user.id)
 	end
 
+	def edit
+		@person = current_user
+	end
+
 	def create
-		debugger
+		redirect_to person_addresses_path
 	end
 
 	def update
-		debugger
+		redirect_to person_addresses_path
+	end
+
+	def destroy
+		redirect_to person_addresses_path
 	end
 end
