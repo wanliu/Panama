@@ -68,6 +68,5 @@
 	var model = new ActivityModel({ id: id });
 	new ActivityPreview({ el: $("[activity-id=" + id + "]"), model: model});
 
-	expired = new Date("<%=activity.end_time.strftime('%Y/%m/%d %H:%M:%S') %>")
     $('.clock', '#activity<%= activity.id %>').countdown({until: expired});
 </script>
