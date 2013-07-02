@@ -10,7 +10,7 @@ class SpinnerInput < SimpleForm::Inputs::Base
     <<-JAVASCRIPT
 		<div id="MySpinner" class="spinner #{discern_class}">
 	      #{@builder.text_field(attribute_name, input_html_options)}
-	      <div class="spinner-buttons  btn-group btn-group-vertical" style="margin-top: -8px;">
+	      <div class="spinner-buttons  btn-group btn-group-vertical">
 	        <a href='javascript:void(0)' class="btn spinner-up" style="height:9px;">
 	          <i class="icon-chevron-up" style="margin-top: -3px;"></i>
 	        </a>

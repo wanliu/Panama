@@ -31,6 +31,7 @@ class People::CartController < People::BaseController
   def change_number
     @item = my_cart.items.find(params[:id])
     @item.amount = params[:amount]
+    @item.total = @item.price * @item.amount
     @item.save
     respond_to do |format|
       format.json{ head :no_content }
