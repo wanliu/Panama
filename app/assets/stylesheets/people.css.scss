@@ -135,6 +135,16 @@ body {
   }
 }
 
+.cart-total {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid $tableBorder;
+  text-align: right;
+  div {
+    display: inline-block;
+  }
+}
+
 .controls {
   .inline {
     display: inline;

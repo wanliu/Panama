@@ -47,6 +47,15 @@
     </div>
 <% end %>
 <%= paginate @items %>
+<div class='cart-total'>
+    <!-- <div style='clear: both'></div> -->
+    <div class='quantity'>
+        <span class='cart-quantity-total'><%= @quantity_total %></span>件商品
+    </div>
+    <div class='price'>
+        总计<span class='cart-price-total'><%= @price_total %></span>元
+    </div>
+</div>
 <% if can? :batch_create, OrderTransaction %>
     <%= form_tag batch_create_person_transactions_path(@people.login), :method => :post do %>
         <input type='submit' value='生成订单' class='btn btn-primary btn-large' />
