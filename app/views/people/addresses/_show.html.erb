@@ -3,8 +3,8 @@
 		<div class="address-button">
 			<h3>地址<%= index + 1 %></h3>
 			<div class="pull-right">
-				<button href="#edit_address"  class="btn" type="button" data-toggle="modal">编辑</button>
-				<button class="btn btn-danger delete-button" type="button">删除</button>
+				<button href="#edit_address<%=address.id%>"  class="btn" type="button" data-toggle="modal">编辑</button>
+				<%= button_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn btn-danger" %>
 			</div>
 		</div>
 		<div class="in-box">

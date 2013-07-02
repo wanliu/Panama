@@ -5,15 +5,15 @@ class People::AddressesController < People::BaseController
 	end
 
 	def create
-		address = Address.new(params[:address])
-		address.user_id = current_user.id
-		address.save
+		@address = Address.new(params[:address])
+		@address.user_id = current_user.id
+		@address.save
 		redirect_to person_addresses_path
 	end
 
 	def update
-		address = Address.find(params[:id])
-		address.update_attributes(params[:address])
+		@address = Address.find(params[:id])
+		@address.update_attributes(params[:address])
 		redirect_to person_addresses_path
 	end
 

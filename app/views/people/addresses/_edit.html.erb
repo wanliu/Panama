@@ -1,11 +1,11 @@
-<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="edit_address<%=address.id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">编辑地址</h3>
   </div>
   <div class="modal-body">
   	<div class="address-panel">  
-      <%= simple_form_for address, :url => 'addresses/1', :html => {:id => "edit_address_form", :class => 'form-horizontal'} do |address_form| %>
+      <%= simple_form_for address, :url => "addresses/#{address.id}", :html => {:id => "edit_address_form", :class => 'form-horizontal'} do |address_form| %>
         <label class="chosen optional control-label" for="address">选择省,市,县</label>
         <div class="controls">
           <div class="control-group">
