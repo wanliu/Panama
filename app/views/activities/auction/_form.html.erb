@@ -3,7 +3,12 @@
 
   <%= f.input :product,
               :label => "商品",
+<<<<<<< HEAD
               :input_html => { class: :product, placeHolder: '请输入商品名称...',autocomplete: 'off',required: true, } %>
+=======
+
+              :input_html => { class: :product, placeHolder: '商品名称...',autocomplete: 'off' } %>
+>>>>>>> ce24616... fix
 
 
   <div class="control-group string optional" style='margin: 0;'>
@@ -28,9 +33,14 @@
   </div>
 
   <%= f.input :price,
+<<<<<<< HEAD
               :label => '价格',
               :input_html=>{class: :span2},
               required: true %>
+=======
+              :label => '原价',
+              :input_html=>{class: :span2} %>
+>>>>>>> ce24616... fix
 
   <%= f.input :activity_price,
               :label => '竞购价',
