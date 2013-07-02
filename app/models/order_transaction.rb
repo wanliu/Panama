@@ -258,7 +258,6 @@ class OrderTransaction < ActiveRecord::Base
     if event.to_s == "buy"
       event = pay_manner.code
     end
-
     filter_fire_event!(events, event)
   end
 

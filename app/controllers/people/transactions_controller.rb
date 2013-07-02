@@ -36,6 +36,7 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     event_name = params[:event]
     authorize! :event, @transaction
+
     if @transaction.buyer_fire_event!(event_name)
       render partial: 'transaction',
                    object:  @transaction,
