@@ -1,28 +1,37 @@
 <%= stylesheet_link_tag 'people/addresses' %> 
-<%= javascript_include_tag 'people/address' %>
+<%= javascript_include_tag 'people/addresses' %>
 <% active_section :addresses %>
 
-<div class="addresses-button">
-	<button href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">新增</button>
-	已有<%= @addresses.count %>个地址
-</div>
-<div class="addresses">
-	<% @addresses.each_with_index do |address, index| %>
-    <%= render "show", :address => address, :index => index %>
-	<% end %>
+<div class="addresses-panel">
+  <div class="addresses-button">
+    <button href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">新增</button>
+    已有<%= @addresses.count %>个地址
+  </div>
+
+  <div class="address-list">
+  	<% @addresses.each_with_index do |address, index| %>
+      <%= render "show", :address => address, :index => index %>
+  	<% end %>
+  </div>
+
+  <div id="new_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">新增地址</h3>
+    </div>
+    <div class="modal-body">
+      <%= render :partial => "people/addresses/form", 
+          :locals => {:people => @people, :address => Address.new, :el => "#new_address" } %>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+      <button class="btn btn-primary">保存</button>
+    </div>
+  </div>
 </div>
 
-<div id="new_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">新增地址</h3>
-  </div>
-  <div class="modal-body">
-    <%= render :partial => "people/addresses/form", 
-    		:locals => {:people => @people, :address => Address.new } %>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <button class="btn btn-primary">保存</button>
-  </div>
-</div>
+<script type="text/javascript">
+  new Addresses({
+    el: ".addresses-panel"
+  })
+</script>
