@@ -34,6 +34,8 @@ class MyCart extends Backbone.View
 
 	initialize: (@options) ->
 		@hm = new HoverManager(@$("a.handle, #cart_box"))
+		debugger
+		@totals_money()
 
 
 	toggleCartBox: (event) ->
@@ -75,7 +77,6 @@ class MyCart extends Backbone.View
 				@cartAddAction(urlAction, form)
 
 	cartAddAction: (url, form) ->
-		totals = 0.0
 		$.post url, form.serialize(), (item) =>
 			if  $("#product_item#{item.id}").length > 0
 				trObj = $("#product_item#{item.id}")
@@ -87,11 +88,17 @@ class MyCart extends Backbone.View
 				$("#shop_count").html($(".cart_main tr").size())
 				$("#cart_box .checkout").removeClass("disabled")
 				@$("#shop_count").html($(".cart_main tr").size())
-			debugger
-			$(".cart_main tr").each () ->
+			@totals_money()
+			# $(".cart_main tr").each () ->
+			# 	totals += parseFloat($(this).find(".row").html())
+			# $(".cart_bottom tr td").html("商品总价：" + totals)
+			# totals = $(".product_total span").text(parseFloat(totals))
+
+	totals_money: () ->
+		totals = 0.0
+		$(".cart_main tr").each () ->
 				totals += parseFloat($(this).find(".row").html())
 			$(".cart_bottom tr td").html("商品总价：" + totals)
-			# totals = $(".product_total span").text(parseFloat(totals))
 
 
 	trHtml: (product_item) ->
