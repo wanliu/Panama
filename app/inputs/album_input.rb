@@ -16,7 +16,7 @@ class AlbumInput < SimpleForm::Inputs::CollectionSelectInput
     output = ActiveSupport::SafeBuffer.new
     output << template.content_tag(:ul, nil, :class => "attachment-list", :id => el_id)
     output << template.javascript_tag(<<-JAVASCRIPT
-      new ProductUpload({
+      new AttachmentUpload({
           el: document.getElementById("#{el_id}"),
           data: #{collection.to_json},
           params: {

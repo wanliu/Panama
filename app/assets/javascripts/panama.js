@@ -26,6 +26,7 @@
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
 
+
 root = window || this;
 
 var panle_modal = $("#login-modal");

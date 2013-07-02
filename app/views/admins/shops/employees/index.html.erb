@@ -98,9 +98,9 @@
 </template>
 
 <script type='text/javascript' >
-    $(function(EmployeeGroup, hogan){
+    $(function(){        
         template = Hogan.compile($(".group-user-template").html())
-        _permission_template = Hogan.compile($(".permission-group-template").html())
+        _permission_template = Hogan.compile($(".permission-group-template").html())        
         new EmployeeGroup({
             el: $(".employee-groups"),
             shop: "<%=current_shop.name %>",

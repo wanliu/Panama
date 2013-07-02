@@ -6,7 +6,6 @@ class UserSessionsController < ApplicationController
   # omniauth callback method
   def create
     omniauth = env['omniauth.auth']
-
     logger.debug "+++ #{omniauth}"
     user = User.find_by(:uid => omniauth['uid'])
     if not user
@@ -24,7 +23,7 @@ class UserSessionsController < ApplicationController
     session[:user_id] = omniauth['uid']
 
     flash[:notice] = t(:successfully_login, "Successfully logged in")
-    redirect_to root_path
+    redirect_to auth_redirect
   end
 
   # Omniauth failure callback

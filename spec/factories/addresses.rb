@@ -5,7 +5,6 @@ FactoryGirl.define do
     country '中国CHINA'
     sequence(:road) { |n| "the_#{n}th_road" }
     sequence(:zip_code, 421800) { |n| "#{n}" }
-    f.transaction :transaction
     f.user :user
     f.province :province
     f.city :city
@@ -15,7 +14,7 @@ FactoryGirl.define do
 end
 
 RSpec::Matchers.define :validate_superior_of do |expected, target|
-  match do |actual| 
+  match do |actual|
     actual.send(target).children.include?(actual.send(expected))
   end
 end

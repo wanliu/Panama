@@ -8,7 +8,7 @@
 #= require topic
 #= require models/attribute_model
 #= require models/element_model
-#= require lib/product_upload
+#= require lib/attachment_upload
 #= require admins/shops/products
 #= require admins/shops/categories
 #= require admins/shops/community_people

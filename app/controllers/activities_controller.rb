@@ -28,7 +28,8 @@ class ActivitiesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
-      format.json { render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) }
+      format.json {
+        render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) }
     end
   end
 

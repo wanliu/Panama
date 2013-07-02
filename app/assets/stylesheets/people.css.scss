@@ -24,6 +24,7 @@
 @import "transaction";
 @import "notification";
 @import "footer_nav";
+@import "lib/chosen";
 
 
 body {
@@ -75,7 +76,7 @@ body {
 
 #main-body {
   margin-left: 210px;
-  margin-top: -40px;
+/*  margin-top: -40px;*/
 }
 
 .sidebar_panel {
@@ -84,6 +85,7 @@ body {
 
 .main-sidebar {
   margin-right: 310px;
+  margin-top: -40px;
 }
 
 .right-sidebar {
@@ -130,6 +132,16 @@ body {
   &:hover {
     border-color: $blue;
     @include box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
+  }
+}
+
+.cart-total {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid $tableBorder;
+  text-align: right;
+  div {
+    display: inline-block;
   }
 }
 

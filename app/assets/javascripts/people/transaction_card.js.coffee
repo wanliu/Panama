@@ -89,6 +89,8 @@ class TransactionCard extends TransactionCardBase
                 @transition()
                 @slideAfterEvent('buy')
             .error (xhr, status) =>
+                @$(".address-form").html(xhr.responseText)
+                @$("#address_province_id option:first", ".address-form").attr("selected", true)
                 @notify("错误信息", '请填写完整的信息！', "error")
                 @alarm()
                 @transition.cancel()

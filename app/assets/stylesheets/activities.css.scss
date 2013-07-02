@@ -1,6 +1,7 @@
 // Place all the styles related to the Activities controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
 @import "variables";
 @import 'launch_bootstrap';
 @import "launch_bootstrap";
@@ -15,6 +16,7 @@
 @import "activities/image-picker";
 @import "stream_item";
 @import "nanoscroller";
+@import 'lib/typeahead';
 
 body {
 	@include background(

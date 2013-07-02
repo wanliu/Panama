@@ -11,11 +11,11 @@ class SpinnerInput < SimpleForm::Inputs::Base
 		<div id="MySpinner" class="spinner #{discern_class}">
 	      #{@builder.text_field(attribute_name, input_html_options)}
 	      <div class="spinner-buttons  btn-group btn-group-vertical">
-	        <a href='javascript:void(0)' class="btn spinner-up" style="height:9px;margin-top: -1px;">
-	          <i class="icon-chevron-up"></i>
+	        <a href='javascript:void(0)' class="btn spinner-up" style="height:9px;">
+	          <i class="icon-chevron-up" style="margin-top: -3px;"></i>
 	        </a>
 	        <a href='javascript:void(0)' class="btn spinner-down" style="height:9px;">
-	          <i class="icon-chevron-down"></i>
+	          <i class="icon-chevron-down" style="margin-top: -3px;"></i>
 	        </a>
 	      </div>
 	    </div>

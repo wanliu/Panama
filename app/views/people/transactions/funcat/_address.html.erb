@@ -5,7 +5,7 @@
           :remote=>true do |f| %>
   <div class="address_input">
     <%= f.input :address_id,
-          # :as => :chosen,
+          #:as => :chosen,
           :collection => people.addresses,
           :object => transaction,
           :selected => "",
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div class="address-panel">
+  <div class="address-panel">  
   <%= simple_fields_for :address, transaction.address do |address_form| %>
     <label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
     <div class="controls controls-row">

@@ -11,10 +11,9 @@ describe Attachment, "附件模型" do
 	   attachment.file.should be_an_instance_of(ImageUploader)
 	end
 
-	describe "method get_attributes" do
+	describe "method as_json" do
 		it "格式化属性" do
-			attachment.get_attributes("100x100").should have_key(:url)
-			attachment.get_attributes.should have_key(:url)
+			attachment.as_json.should have_key(:url)
 		end
 	end
 end

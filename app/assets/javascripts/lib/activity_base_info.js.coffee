@@ -1,6 +1,6 @@
 # 活动上传
 
-#= require lib/product_upload
+#= require lib/attachment_upload
 
 root = window || @
 
@@ -40,16 +40,16 @@ class root.ActivityBaseInfoView extends Backbone.View
     @$('[name="activity[product_id]"]').val(product.id);
     @$('[name="activity[price]"]').val(product.price);
     @$('[name="activity[activity_price]"]').val(product.price);
-    @$('[name="activity[activity_name]"]').val(product.name + 'jingjia');
+    @$('[name="activity[description]"]').val(product.name + '  竞价');
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
 
   load_attachments: (attachments) ->
     @$("img.private").remove()
-    @$(".attachment_panel>li").remove()
+    @$(".attachment-list>li").remove()
 
-    new ProductUpload({
-      el: @$(".attachment_panel"),
+    new AttachmentUpload({
+      el: @$(".attachment-list"),
       data: attachments,
       default_enabled: false,
       limit: 5,

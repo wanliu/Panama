@@ -5,6 +5,7 @@ ActiveAdmin.register Product, :title => "产品" do
   filter :shop_id
   filter :shops_category_id
   filter :name
+  filter :title
   filter :price
   filter :summary
   filter :description
@@ -27,16 +28,18 @@ ActiveAdmin.register Product, :title => "产品" do
       link + "   " + properties_string.to_s
 
     end
-    column do |product|
+    column :action_link do |product|
       link_to "修改", edit_plus_system_product_path(product)
     end
   end
 
   show do |product|
+
     div do
       panel("产品基本属性") do
         attributes_table_for(product) do
           attrbute_names = product.attributes.map { |attr, _| attr }
+          attrbute_names.delete("default_attachment_id")
           attrbute_names.each do |column|
             row column
           end
@@ -58,9 +61,10 @@ ActiveAdmin.register Product, :title => "产品" do
     div do
       panel("产品属性") do
         attributes_table_for(product) do
-          property_names = product.properties.map { |prop, _| prop.name }
-          property_names.each do |column|
-            row column
+          product.properties.each do |prop|
+            row(prop.title) do
+              product.send(prop.name)
+            end
           end
         end
       end
@@ -73,10 +77,12 @@ ActiveAdmin.register Product, :title => "产品" do
 
   collection_action :create_plus, :method => :post do
     p = params[:product]
-    @product = Product.new(p)
-    @product.attachment_ids = dispose_options(p)[:attachment_ids]
-    if @product.save
+    @product = Product.new(category_id: p[:category_id])
+    @product.attach_properties!
+    if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
+    else
+      render "new_plus"
     end
   end
 
@@ -86,33 +92,35 @@ ActiveAdmin.register Product, :title => "产品" do
 
   member_action :edit_plus do
     @product = Product.find(params[:id])
-    # xifengzhu
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
-    @product.attach_properties!
-
     register_value :form do
       semantic_form_for(@product) do |f|
         break f
       end
     end
-    @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
+    if @product.category.present?
+      @content = PanamaCore::Contents.fetch_for(@product.category, :additional_properties_admins)
+    end
   end
 
   member_action :update_plus, :method => :put do
-    p = params[:product]
+    p = params[:product]    
     @product = Product.find(params[:id])
     category_id = p[:category_id]
     @product.category_id = category_id unless category_id.nil?
     @product.attach_properties!
     if @product.update_attributes(p.merge(dispose_options(p)))
       redirect_to system_product_path(@product)
+    else
+      render "edit_plus"
     end
   end
 
   member_action :attach_properties, :method => :put do
     @product = Product.find(params[:id])
     @product.attach_properties!
+    @product.save!
     redirect_to system_product_path(params[:id])
   end
 
@@ -137,7 +145,7 @@ ActiveAdmin.register Product, :title => "产品" do
     @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
 
     if @content.nil?
-      render :text => '<h1>No having property!</h1>'
+      render :text => '<h1>暂时没有</h1>'
     else
       render_content(@content, locals: { category: @category })
     end

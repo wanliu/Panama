@@ -1,8 +1,8 @@
 <table class = 'index_table' >
 	<thead>
 		<tr>
-			<th>名称</th>
 			<th>标题</th>
+			<th>名称</th>
 			<th>取值类型</th>
 			<th>操作</th>
 		</tr>
@@ -10,9 +10,9 @@
 	<tbody>
 		<% properties.each do |property| %>
 			<tr>
-				<td> <%= property.name %> </td>
 				<td> <%= property.title %> </td>
-				<td> <%= property.property_type %></td>
+				<td> <%= property.name %> </td>
+				<td> <%= t("property.property_types.#{property.property_type}") %></td>
 				<td>
 					<span>
 						<%= link_to "详细", system_property_path(property) %>

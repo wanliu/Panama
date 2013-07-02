@@ -213,8 +213,9 @@ zh-CN:
       admin_user: 管理员
     attributes:
       activity:
-        product: 产品
         id: 编号
+        product: 产品
+        product_id: 产品
         preview: 预览图
         description: 活动描述
         author: 创建人
@@ -246,6 +247,7 @@ zh-CN:
         created_at: 创建时间
         updated_at: 更新时间
         brand_name: 品牌名
+        action_link: 操作        
       shop:
         id: 编号
         name: 商店名
@@ -263,13 +265,25 @@ zh-CN:
       property_item:
         value: 属性值
       order_transaction:
+        id: 编号
+        items_count: 总计项
         address: 收货地址
+        address_id: 收货地址
         delivery_type: 配送方式
+        delivery_type_id: 配送方式
         seller: 卖家
         buyer: 买家
         operator: 接单员
+        operator_id: 接单员
+        seller_id: 卖家
+        buyer_id: 买家
         pay_manner: 支付方式
+        pay_manner_id: 支付方式
         delivery_manner: 配送类型
+        delivery_manner_id: 配送类型
+        transfer_sheet_id: 快递单
+        code: 邮编
+        bank: 银行
         state: 订单状态
         total: 总金额
         operator_state: 已接单
@@ -277,6 +291,7 @@ zh-CN:
         delivery_code: 配送地邮编
         created_at: 创建时间
         updated_at: 更新时间
+        action_link: 操作
       category:
         id: 编号
         name: 分类名
@@ -440,6 +455,10 @@ zh-CN:
       action_label: "%{title} 被选中"
       labels:
         destroy: "删除"
+        update: "修改"
+        new: "新增"
+        new_plus: "新增"
+        create: "创建"
     comments:
       body: "内容"
       author: "作者"
@@ -464,6 +483,15 @@ zh-CN:
       links:
         sign_in: "登录"
         forgot_your_password: "忘记密码？"
+
+  property:
+    property_types: 
+      string: 字符串
+      integer: 整数
+      decimal: 数字
+      datetime: 日期
+      set: 集合
+      float: 浮点数      
 
   order_states:
     buyer:

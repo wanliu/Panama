@@ -6,19 +6,21 @@
     <div class='product-item product-item-<%=item.id %>'  data-value-id="<%=item.id %>">
         <div class="row-fluid">
             <div class="span2">
-                <%= link_to '#', :class => "img-polaroid" do %>
-                    <%= image_tag item.header %>
+                <%= link_to '#' do %>
+                    <%= image_tag item.header, :class => "img-polaroid" %>
                 <% end %>
             </div>
             <div class="span10" style="padding-top:25px;">
                 <h1 class="span2"><%= item.title %></h1>
                 <!--xifengzhu-->
-                <%= simple_form_for item, :url =>""  do |f| %>
-                    <div class="control-group span2">
-              <label class="control-label" for="inputEmail">数量</label>
-              <div class="controls">
-                <%= f.input :amount, :value =>item.amount, :as => :spinner,input_html: {:panel_class =>"amount_#{item.id}"} %>
-              </div>
+                <%= simple_form_for item, :html =>{ :class => "form-horizontal"}, :url =>""  do |f| %>
+                <div class="control-group span4">
+                    <%= f.input :amount, 
+                        :label =>"数 量",
+                        :value =>item.amount, 
+                        :as => :spinner,
+                        input_html: {
+                            :panel_class =>"amount_#{item.id}"} %>
               <script type="text/javascript">
                   new ChangeNumber({
                     el : $(".product-item-<%=item.id %>"),
@@ -27,9 +29,9 @@
                 </div>
         <% end %>
             <!--xifengzhu-->
-                <span class="span3" style="padding-top:5px;">
-          <price><%= item.price %></price>
-        </span>
+            <span class="span2">
+                <price><%= item.price %></price>
+            </span>
                 <div class="controls pull-right">
                     <%= button_to "不想要了",
                         move_out_cart_person_cart_path(@people.login, item.id),
@@ -42,6 +44,15 @@
     </div>
 <% end %>
 <%= paginate @items %>
+<div class='cart-total'>
+    <!-- <div style='clear: both'></div> -->
+    <div class='quantity'>
+        <span class='cart-quantity-total'><%= @quantity_total %></span>件商品
+    </div>
+    <div class='price'>
+        总计<span class='cart-price-total'><%= @price_total %></span>元
+    </div>
+</div>
 <% if can? :batch_create, OrderTransaction %>
     <%= form_tag batch_create_person_transactions_path(@people.login), :method => :post do %>
         <input type='submit' value='生成订单' class='btn btn-primary btn-large' />

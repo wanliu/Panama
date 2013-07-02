@@ -22,5 +22,8 @@ class exports.ChangeNumber extends Backbone.View
 			url: "/people/#{@login}/cart/#{@item_id }/change_number",
 			data : { amount : @amount }
 			dataType: "json"
-		})
+		}).success((model, status, xhr) ->
+			$('.cart-total span.cart-price-total').html(model.price_total)
+			$('.cart-total span.cart-quantity-total').html(model.quantity_total)
+		)
 

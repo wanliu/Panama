@@ -8,9 +8,10 @@ class ProductsController < ApplicationController
     @product_content = PanamaCore::Contents.fetch_for(@product, :show)
     @sale_options_content = PanamaCore::Contents.fetch_for(@product, :sale_options)
     @item = ProductItem.new(:product => @product,
-                            :title => @product.name,
-                            :price => @product.price,
-                            :amount => 1)
+                            :title   => @product.name,
+                            :price   => @product.price,
+                            :amount  => 1,
+                            :shop_id => @product.shop_id)
 
     form_builder(@item)
 

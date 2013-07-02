@@ -47,12 +47,12 @@ class OrderTransaction < ActiveRecord::Base
   has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy
 
   validates :state, :presence => true
-  validates :items_count, :numericality => true
-  validates :total, :numericality => true, :allow_nil => true
 
   validates_presence_of :buyer
-  validates_presence_of :seller_id
+  validates_presence_of :seller
   validates_associated :address
+  validates_numericality_of :items_count
+  validates_numericality_of :total
   validate :valid_base_info?
 
   accepts_nested_attributes_for :address
@@ -207,16 +207,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def self.state_expired
-    transactions = joins("left join transaction_state_details as details
-      on details.order_transaction_id = order_transactions.id and
-      details.state = order_transactions.state and details.expired_state=true")
-    .where("details.expired <=?", DateTime.now)
-    transactions.each{|t| t.fire_events!(:expired) }
-    puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
-    transactions
-  end
-
   #如果卖家没有发货直接删除明细，返还买家的金额
   def refund_handle_detail_return_money(refund)
     if unshipped_state?
@@ -265,7 +255,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def buyer_fire_event!(event)
     events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer confirm_transfer)
-    if event == "buy"
+    if event.to_s == "buy"
       event = pay_manner.code
     end
     filter_fire_event!(events, event)
@@ -429,6 +419,16 @@ class OrderTransaction < ActiveRecord::Base
     else
       self.delivery_price = get_delivery_price(self.delivery_type_id)
     end
+  end
+
+  def self.state_expired
+    transactions = joins("left join transaction_state_details as details
+      on details.order_transaction_id = order_transactions.id and
+      details.state = order_transactions.state and details.expired_state=true")
+    .where("details.expired <=?", DateTime.now)
+    transactions.each{|t| t.fire_events!(:expired) }
+    puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
+    transactions
   end
 
   private

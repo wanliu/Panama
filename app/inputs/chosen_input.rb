@@ -16,14 +16,16 @@ class ChosenInput < SimpleForm::Inputs::CollectionSelectInput
     )+
     <<-JAVASCRIPT
     <SCRIPT type='text/javascript'>
-        $(".#{dom_id}").chosenEx({
-          remote: {
-            url: '#{input_options[:url]}',
-            remote_key: #{remote_key.inspect},
-            remote_value: #{remote_value.inspect},
-            param_name: #{param_name.inspect}
-          }
-        });
+        $(document).ready(function(){
+          $(".#{dom_id}").chosenEx({
+            remote: {
+              url: '#{input_options[:url]}',
+              remote_key: #{remote_key.inspect},
+              remote_value: #{remote_value.inspect},
+              param_name: #{param_name.inspect}
+            }
+          });
+        })
     </SCRIPT>
     JAVASCRIPT
     .html_safe
