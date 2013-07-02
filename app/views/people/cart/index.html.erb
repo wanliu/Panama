@@ -11,19 +11,16 @@
                 <% end %>
             </div>
             <div class="span10" style="padding-top:25px;">
-                <h1 class="span3"><%= item.title %></h1>
+                <h1 class="span2"><%= item.title %></h1>
                 <!--xifengzhu-->
                 <%= simple_form_for item, :html =>{ :class => "form-horizontal"}, :url =>""  do |f| %>
-                    <div class="control-group span4">
-              <!-- <label class="control-label" for="inputEmail">数量</label> -->
-              <!-- <div class="controls"> -->
-                <%= f.input :amount, 
-                    :label =>"数 量",
-                    :value =>item.amount, 
-                    :as => :spinner,
-                    input_html: {
-                        :panel_class =>"amount_#{item.id}"} %>
-              <!-- </div> -->
+                <div class="control-group span4">
+                    <%= f.input :amount, 
+                        :label =>"数 量",
+                        :value =>item.amount, 
+                        :as => :spinner,
+                        input_html: {
+                            :panel_class =>"amount_#{item.id}"} %>
               <script type="text/javascript">
                   new ChangeNumber({
                     el : $(".product-item-<%=item.id %>"),
@@ -32,9 +29,9 @@
                 </div>
         <% end %>
             <!--xifengzhu-->
-                <span class="span3">
-          <price><%= item.price %></price>
-        </span>
+            <span class="span2">
+                <price><%= item.price %></price>
+            </span>
                 <div class="controls pull-right">
                     <%= button_to "不想要了",
                         move_out_cart_person_cart_path(@people.login, item.id),

@@ -23,6 +23,15 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def create
+    shop_id = params[:product_item][:shop_id]
+    @transaction = @people.transactions.build(seller_id: shop_id)
+    @transaction.items.build(params[:product_item])
+    @transaction.save
+    redirect_to person_transactions_path(@people.login),
+                  notice: 'Transaction was successfully created.'
+  end
+
   def page
     @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
