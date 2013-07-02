@@ -157,3 +157,4 @@ gem "wicked"
 
 ## Search 
 gem 'tire', :github => "hysios/tire"
+gem 'yajl-ruby'

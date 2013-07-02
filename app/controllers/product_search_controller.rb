@@ -3,11 +3,7 @@ class ProductSearchController < ApplicationController
 
   def index
     # products = Redis::Search.complete("Product", params[:q]).first(10)
-    q_string = "name:#{params[:q]}"
-    
-    s = Product.search2 do 
-      query { string q_string }
-    end
+    s = Product.search2 "name:#{params[:q]}"
     products = s.results
     respond_to do |format|
       format.json { render json: products }

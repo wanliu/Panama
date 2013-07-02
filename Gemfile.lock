@@ -593,3 +593,4 @@ DEPENDENCIES
   vfs (~> 0.4.8)
   whenever
   wicked
+  yajl-ruby
