@@ -1,7 +1,7 @@
 <%#= render_content(@product_content) %>
 <div class='row-fluid'>
   <div class="preview">
-    <%= image_tag @product.photos.preview, :id => 'zoom_01', "data-zoom-image" => "http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg" %>
+    <%= image_tag @product.photos.preview, :id => 'zoom_01', "data-zoom-image" => @product.default_attachment.try(:file_url) || "" %>
   </div>
   <script type="text/javascript">
     $("#zoom_01").elevateZoom();
