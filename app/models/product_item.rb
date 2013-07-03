@@ -2,7 +2,7 @@ class ProductItem < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::MemoryAssociation
 
-  attr_accessible :amount, :price, :title, :total, :transaction_id, :cart, :product_id, :product
+  attr_accessible :amount, :price, :title, :total, :transaction_id, :cart, :product_id, :product, :shop_id
 
   attr_accessor :options
 
@@ -52,6 +52,8 @@ class ProductItem < ActiveRecord::Base
   belongs_to :transaction,
              class_name: "OrderTransaction"
              # primary_key: 'transaction_id'
+
+  belongs_to :shop
 
   delegate :photos, :to => :product
   delegate :icon, :header, :avatar, :preview, :to => :photos

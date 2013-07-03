@@ -21,7 +21,19 @@
         <% end %>
         <table class="cart_top">
             <tr>
-                <td class="product_total">商品总价：0</td>
+                <td>图片</td>
+                <td>标题</td>
+                <td>数量</td>
+                <td>价格</td>
+            </tr>
+        </table>
+
+        <table class="cart_main">
+             <%= render :partial => "cart/product_item", :collection => @my_cart.items %>
+        </table>
+        <table class="cart_bottom">
+            <tr>
+                <td class="product_total">商品总价:0 </td>
             </tr>
         </table>
         </div>

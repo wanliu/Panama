@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130617033132) do
+ActiveRecord::Schema.define(:version => 20130702071442) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -137,9 +137,9 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -449,6 +449,7 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.integer  "product_id"
     t.string   "options"
     t.boolean  "refund_state",                                  :default => true
+    t.integer  "shop_id"
   end
 
   add_index "product_items", ["options"], :name => "index_product_items_on_options"
@@ -532,15 +533,6 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.string   "valuable_type"
-  end
-
-  create_table "receive_order_messages", :force => true do |t|
-    t.integer  "order_transaction_id"
-    t.integer  "send_user_id"
-    t.text     "content"
-    t.boolean  "state",                :default => false
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
   end
 
   create_table "replies", :force => true do |t|
@@ -702,7 +694,7 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0
+    t.decimal  "money",      :precision => 20, :scale => 4
     t.string   "im_token"
   end
 

@@ -3,7 +3,7 @@
   <div class="controls controls-row">
     <div class='paymanner_panel'>
       <span class='chose_name'>
-        <%= PayManner.default.name %>
+        <%= PayManner.default.try(:name) || "未设定" %>
       </span>
       <a href='javascript:void(0)' class='mdify_show'>修改</a>
     </div>
@@ -38,7 +38,7 @@
     <div class="controls controls-row">
       <div class='delivery_manner_panel'>
         <span class='chose_name'>
-          <%= DeliveryManner.default.name %>
+          <%= DeliveryManner.default.try(:name) || "未设定" %>
         </span>
         <a href='javascript:void(0)' class='mdify_show'>修改</a>
       </div>
