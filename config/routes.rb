@@ -121,6 +121,7 @@ Panama::Application.routes.draw do
       post 'like'
       post 'unlike'
       post 'to_cart'
+      post 'join'
     end
   end
 

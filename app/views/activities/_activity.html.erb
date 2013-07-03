@@ -56,12 +56,12 @@
       <div class="dialog" id="purchase-forms">
         <div class="modal-body">
 
-          <%= simple_form_for product_item, :url => to_cart_activity_path do |f| %>
+          <%= simple_form_for product_item, :url => join_activity_path do |f| %>
             <%= f.input :price, :readonly => true %>
             <%= f.input :title, :as => :hidden %>
             <%= f.input :product_id, :as => :hidden %>
             <%= f.input :amount %>
-          <% end %>
+         
         </div>
         <div class="modal-footer">
 
@@ -75,13 +75,13 @@
             <a class="btn like-count" href="#">{{like}}{{^like}}0{{/like}}</a>
             {{/liked}}
           </div>
-          <div class="btn-group">
-            <%= link_to_mycart to_cart_activity_path(activity), ".preview.b-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
-              <%= icon(:'shopping-cart', :white) + " 参与" %>
-            <% end %>
+          <div class="btn-group">           
+            <button class="btn btn-danger partic-button" type="submit" name="join">
+              <%= icon(:'shopping-cart', :white) + " 参与" %> 
+            </button>
             <a class="btn btn-danger partic-button" href="#">{{participate}}{{^participate}}0{{/participate}}</a>
           </div>
-
+        <% end %>
         </div>
       </div>
     </div>
