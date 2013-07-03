@@ -81,10 +81,10 @@ class People::TransactionsController < People::BaseController
         if @transaction.update_attributes(options)
           format.json { head :no_content }
         else
-          render_address_html
+          format.html { render error_back_address_html }
         end
       else
-        render_address_html
+        format.html { render error_back_address_html }
       end
     end
   end
@@ -184,13 +184,12 @@ class People::TransactionsController < People::BaseController
     super *args, options
   end
 
-  def render_address_html
-    format.html { render partial: "people/transactions/funcat/address",
-                               layout: false,
-                               status: '400 Validation Error',
-                               locals: {
-                                 :transaction => @transaction,
-                                 :people => @people }}
+  def error_back_address_html
+    { partial: "people/transactions/funcat/address",
+      layout: false,
+      status: '400 Validation Error',
+      locals: { :transaction => @transaction,
+                :people => @people } }
   end
 
   def generate_address
