@@ -1,3 +1,32 @@
+$socialSideBarWidth: 0;
+$columnGutter: 5px;
+$columnCounter: 4;
+
+#main-body {
+	float: left;
+	width: $gridRowWidth - $socialSideBarWidth;
+}
+
+#social_sidebar {
+	width: $socialSideBarWidth;
+	margin-left: $gridRowWidth - $socialSideBarWidth;
+	// hide sidebar
+	display: none;
+
+	&.affix {
+		top: 40px;
+		z-index: 1030;
+		position: fixed!important;
+	}
+}
+
+.column {
+	width: ($gridRowWidth - $socialSideBarWidth - ($columnCounter * ($columnGutter + 5px))) / $columnCounter;
+	display: inline-block;
+	vertical-align: top;
+	margin-right: $columnGutter
+}
+
 
 @media (min-width: 950px) {
 	$socialSideBarWidth: 0;

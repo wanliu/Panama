@@ -23,6 +23,15 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def create
+    shop_id = params[:product_item][:shop_id]
+    @transaction = @people.transactions.build(seller_id: shop_id)
+    @transaction.items.build(params[:product_item])
+    @transaction.save
+    redirect_to person_transactions_path(@people.login),
+                  notice: 'Transaction was successfully created.'
+  end
+
   def page
     @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
@@ -36,6 +45,7 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     event_name = params[:event]
     authorize! :event, @transaction
+
     if @transaction.buyer_fire_event!(event_name)
       render partial: 'transaction',
                    object:  @transaction,
@@ -66,16 +76,10 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      render_address_html = format.html { render partial: "people/transactions/funcat/address",
-                               layout: false,
-                               status: '400 Validation Error',
-                               locals: {
-                                 :transaction => @transaction,
-                                 :people => @people }}
       if @transaction.address.valid?
         options = generate_base_option
         if @transaction.update_attributes(options)
-          format.json{ head :no_content }
+          format.json { head :no_content }
         else
           render_address_html
         end
@@ -105,7 +109,7 @@ class People::TransactionsController < People::BaseController
 
   def refund
     order = current_order.find(params[:id])
-    items = params[:order_refund].delete(:product_items)
+    items = params[:order_refund].delete(:product_items) || []
     respond_to do |format|
       refund = order.refunds.create(params[:order_refund])
       if refund.valid?
@@ -178,6 +182,15 @@ class People::TransactionsController < People::BaseController
     end
 
     super *args, options
+  end
+
+  def render_address_html
+    format.html { render partial: "people/transactions/funcat/address",
+                               layout: false,
+                               status: '400 Validation Error',
+                               locals: {
+                                 :transaction => @transaction,
+                                 :people => @people }}
   end
 
   def generate_address
