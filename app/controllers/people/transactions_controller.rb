@@ -76,13 +76,8 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      if @transaction.address.valid?
-        options = generate_base_option
-        if @transaction.update_attributes(options)
-          format.json { head :no_content }
-        else
-          format.html { render error_back_address_html }
-        end
+      if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
+        format.json { head :no_content }
       else
         format.html { render error_back_address_html }
       end
