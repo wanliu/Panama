@@ -24,7 +24,9 @@ class People::TransactionsController < People::BaseController
   end
 
   def create
-    shop_id = params[:product_item][:shop_id]
+    product_id = params[:product_item][:product_id]
+    product = Product.find(product_id)
+    shop_id = product.shop_id
     @transaction = @people.transactions.build(seller_id: shop_id)
     @transaction.items.build(params[:product_item])
     @transaction.save
@@ -76,15 +78,10 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      if @transaction.address.valid?
-        options = generate_base_option
-        if @transaction.update_attributes(options)
-          format.json { head :no_content }
-        else
-          render_address_html
-        end
+      if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
+        format.json { head :no_content }
       else
-        render_address_html
+        format.html { render error_back_address_html }
       end
     end
   end
@@ -184,13 +181,12 @@ class People::TransactionsController < People::BaseController
     super *args, options
   end
 
-  def render_address_html
-    format.html { render partial: "people/transactions/funcat/address",
-                               layout: false,
-                               status: '400 Validation Error',
-                               locals: {
-                                 :transaction => @transaction,
-                                 :people => @people }}
+  def error_back_address_html
+    { partial: "people/transactions/funcat/address",
+      layout: false,
+      status: '400 Validation Error',
+      locals: { :transaction => @transaction,
+                :people => @people } }
   end
 
   def generate_address

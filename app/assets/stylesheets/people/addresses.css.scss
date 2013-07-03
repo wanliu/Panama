@@ -1,0 +1,27 @@
+// Place all the styles related to the people/addresses controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "launch_bootstrap";
+@import "compass/css3";
+
+.addresses-button{
+	padding-bottom: 10px;
+}
+
+.addresses{
+	.out-box {
+		background: $white;
+		@include box-shadow(#ccc 0 0 1px);
+		border: 1px solid #ccc;
+		margin-bottom: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
+
+		.in-box {
+			position: relative;
+			overflow: hidden;
+			border-bottom: 1px solid #e7e7e7;
+		}
+	}	
+}

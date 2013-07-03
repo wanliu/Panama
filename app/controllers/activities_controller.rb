@@ -58,6 +58,16 @@ class ActivitiesController < ApplicationController
     end
   end
 
+  def join
+    product_id = params[:product_item][:product_id]
+    product = Product.find(product_id)
+    @transaction = current_user.transactions.build(seller_id: product.shop_id)
+    @transaction.items.build(params[:product_item])
+    @transaction.save
+    redirect_to person_transactions_path(current_user.login),
+                  notice: 'Transaction was successfully created.'
+  end
+
   # GET /activities/new
   # GET /activities/new.json
   def new
