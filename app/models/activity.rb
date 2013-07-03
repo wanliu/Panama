@@ -15,7 +15,9 @@ class Activity < ActiveRecord::Base
   has_many :activities_participates
   has_many :participates, :through => :activities_participates, :source => :user
 
-  validates_associated :product
+  # validates_associated :product
+  validates_presence_of :product
+  validates_presence_of :author
 
   define_graphical_attr :photos, :handler => :default_photo
 

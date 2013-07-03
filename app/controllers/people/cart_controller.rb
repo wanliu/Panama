@@ -22,7 +22,7 @@ class People::CartController < People::BaseController
     render :text => :ok
   end
 
-  def move_out_cart    
+  def move_out_cart
     @item = my_cart.items.find(params[:id])
     @item.destroy
     redirect_to "/people/#{current_user.login}/cart"
