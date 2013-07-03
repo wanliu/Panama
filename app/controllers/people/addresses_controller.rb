@@ -4,6 +4,11 @@ class People::AddressesController < People::BaseController
 		@addresses = Address.where(:user_id => current_user.id)
 	end
 
+	def edit
+		@address = Address.find(params[:id])
+		render layout: false
+	end
+
 	def create
 		@address = Address.new(params[:address])
 		@address.user_id = current_user.id
