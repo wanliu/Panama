@@ -24,7 +24,9 @@ class People::TransactionsController < People::BaseController
   end
 
   def create
-    shop_id = params[:product_item][:shop_id]
+    product_id = params[:product_item][:product_id]
+    product = Product.find(product_id)
+    shop_id = product.shop_id
     @transaction = @people.transactions.build(seller_id: shop_id)
     @transaction.items.build(params[:product_item])
     @transaction.save
