@@ -33,6 +33,7 @@
         <%= address_form.input :city_id,
                      :as => :depend_select,
                      :children => :area_id,
+                     :target => :province,
                      :object => transaction,
                      :wrapper => :inline,
                      :collection_url => "/city/" %>
@@ -40,6 +41,7 @@
         <%= address_form.input :area_id,
                      :as => :depend_select,
                      :object => transaction,
+                     :target => :city,
                      :wrapper => :inline,
                      :collection_url => "/city/" %>
 

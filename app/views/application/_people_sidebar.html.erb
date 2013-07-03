@@ -37,6 +37,11 @@
         退货
       </a>
     </li>
+    <li>
+      <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>
+        收货地址
+      </a>
+    </li>
     <li class="nav-header">活动</li>
     <% if can? :index, Notification %>
     <li>

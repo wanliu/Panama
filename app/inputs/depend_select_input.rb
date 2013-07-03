@@ -3,14 +3,14 @@ class DependSelectInput < SimpleForm::Inputs::CollectionSelectInput
   def input
     isif = reflection.blank?
     strID = isif ? "" : "_id"
-    children = input_options[:children].blank? ? "" : children_dom_id
     url = input_options[:collection_url] || ""
-    @collection = input_options[:collection] ?  collection :  []
+
     label_method, value_method = detect_collection_methods
 
     input_html_options[:class].push(dom_id)
+
     @builder.collection_select(
-      attribute_name, @collection, value_method, label_method,
+      attribute_name, collection, value_method, label_method,
       input_options, input_html_options
     ) +
     <<-JAVASCRIPT
@@ -19,6 +19,27 @@ class DependSelectInput < SimpleForm::Inputs::CollectionSelectInput
       </SCRIPT>
     JAVASCRIPT
     .html_safe
+  end
+
+  def children
+    input_options[:children].blank? ? "" : children_dom_id    
+  end
+
+  def collection
+    collection = options[:collection] || self.class.boolean_collection
+    @collection ||= if options[:collection]
+                      collection.respond_to?(:call) ? collection.call : collection.to_a
+                    else
+                      target_object.try(:children) || []
+                    end
+  end
+
+  def target_object
+    object.try(:send, target) if target
+  end
+
+  def target
+    input_options[:target]
   end
 
   def field_name
