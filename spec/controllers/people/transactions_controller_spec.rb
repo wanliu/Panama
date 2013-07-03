@@ -17,16 +17,15 @@ describe People::TransactionsController, "用户订单交易流通" do
   let(:item_1) { FactoryGirl.create(:product_item, product: product_i, cart: nil) }
   let(:item_2) { FactoryGirl.create(:product_item, product: product_ii, cart: nil) }
 
-
   def generate_order
-     item_1.cart = my_cart
-     item_2.cart = my_cart
+    item_1.cart = my_cart
+    item_2.cart = my_cart
 
-     item_1.save
-     item_2.save
+    item_1.save
+    item_2.save
 
-     my_cart.create_transaction(current_user)
-     OrderTransaction.last
+    my_cart.create_transaction(current_user)
+    OrderTransaction.last
   end
 
   def person_params
@@ -270,6 +269,176 @@ describe People::TransactionsController, "用户订单交易流通" do
           end
         end
       end
+
+      describe "货到付款" do
+        let(:pay_manner){ FactoryGirl.create(:cash_on_delivery) }
+
+        before do
+          @transaction.pay_manner = pay_manner
+          @transaction.address = current_user_address
+          @transaction.save
+        end
+
+        it "确认订单 到 等待发货" do
+          @transaction.state.should eq("order")
+          post :event, @options.merge(:event => :buy), valid_session
+          assigns(:transaction).state.should eq("waiting_delivery")
+        end
+
+        describe do
+          before do
+            @transaction.buyer_fire_event!(:buy)
+            @transaction.seller_fire_event!(:delivered)
+          end
+
+          it "等待签收 到 完成" do
+            @transaction.state.should eq("waiting_sign")
+            post :event, @options.merge(:event => :sign), valid_session
+            assigns(:transaction).state.should eq("complete")
+          end
+        end
+      end
+
+      describe "银行汇款" do
+        let(:pay_manner){ FactoryGirl.create(:bank_transfer) }
+        before do
+          @transaction.pay_manner = pay_manner
+          @transaction.address = current_user_address
+          @transaction.save
+        end
+
+        it "确认订单 到 等待汇款" do
+          @transaction.state.should eq("order")
+          post :event, @options.merge(:event => :buy), valid_session
+          assigns(:transaction).state.should eq("waiting_transfer")
+        end
+
+        describe do
+          let(:transfer_sheet){ FactoryGirl.create(:transfer_sheet, :order_transaction => @order_transaction) }
+          before do
+            @transaction.buyer_fire_event!(:buy)
+            @transaction.transfer_sheet = transfer_sheet
+            @transaction.save
+          end
+
+          it "等待汇款 到 等待审核" do
+            @transaction.state.should eq("waiting_transfer")
+            post :event, @options.merge(:event => :transfer), valid_session
+            assigns(:transaction).state.should eq("waiting_audit")
+          end
+
+          describe do
+            before do
+              @transaction.buyer_fire_event!(:transfer)
+              #审核通过
+              @transaction.fire_events!(:audit_transfer)
+              #卖家发货
+              @transaction.seller_fire_event!(:delivered)
+            end
+
+            it "等待签收 到 完成" do
+              @transaction.state.should eq("waiting_sign")
+              post :event, @options.merge(:event => :sign), valid_session
+              assigns(:transaction).state.should eq("complete")
+            end
+          end
+        end
+      end
+    end
+  end
+
+  describe "POST refund 订单申请退货"  do
+    let(:reason){ FactoryGirl.create(:order_reason) }
+    before do
+      @transaction = generate_order
+      @options = person_params.merge({:id => @transaction.to_param})
+      @options[:order_refund] = {
+        :order_reason_id => reason.id,
+        :decription => "这个商品质量很差！",
+        :delivery_price => 10,
+        :product_items => [item_1, item_2]
+      }
+    end
+
+    it "没有选择商品申请退货" do
+      @options[:order_refund].delete(:product_items)
+      xhr :post, :refund, @options, valid_session, format: :json
+      response.code.should eq("403")
+    end
+
+    it "没有选择退货理由" do
+      @options[:order_refund].delete(:order_reason_id)
+      xhr :post, :refund, @options, valid_session, format: :json
+      response.code.should eq("403")
+    end
+
+    it "申请退货成功" do
+      xhr :post, :refund, @options, valid_session, format: :json
+      response.code.should eq("200")
+    end
+  end
+
+  describe "GET dialogue" do
+    before do
+      @transaction = generate_order
+    end
+
+    it "订单聊天框" do
+      get :dialogue, person_params.merge({
+        :id => @transaction.to_param}), valid_session
+      response.should be_success
+      response.should render_template("transactions/_dialogue")
+    end
+  end
+
+  describe "POST send_message" do
+    before do
+      @transaction = generate_order
+      @options = person_params.merge({
+        :message => {content: "这个有优惠吗？"},
+        :id => @transaction.to_param})
+    end
+
+    it "发送消息" do
+      post :send_message, @options, valid_session, format: :json
+      assigns(:message).valid?.should be_true
+    end
+  end
+
+  describe "GET get_delivery_price" do
+    let(:pdt){ FactoryGirl.create(:product_delivery_type, :product => product_i, :delivery_type => ems) }
+    before do
+      @pdt = pdt
+      @transaction = generate_order
+      @options = person_params.merge({
+        :id => @transaction.to_param,
+        :delivery_type_id => ems.id
+      })
+    end
+
+    it "获取某个订单运费" do
+      xhr :get, :get_delivery_price, @options, valid_session, format: :json
+      assigns(:price).should eq(@pdt.delivery_price)
+    end
+  end
+
+  describe "GET messages" do
+    before do
+      @transaction = generate_order
+      @options = person_params.merge({
+        :id => @transaction.to_param})
+      @transaction.message_create(
+        :send_user => current_user,
+        :content => "在吗?" )
+      @transaction.message_create(
+        :send_user => current_user,
+        :content => "这个商品质量很差！?" )
+    end
+
+    it "获取某个订单的所有消息" do
+      get :messages, @options, valid_session, format: :json
+      assigns(:transaction).should eq(@transaction)
+      assigns(:messages).to_a.should eq(@transaction.messages)
     end
   end
 end

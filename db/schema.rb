@@ -437,7 +437,7 @@ ActiveRecord::Schema.define(:version => 20130702071442) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
     t.integer  "transaction_id"

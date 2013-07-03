@@ -109,7 +109,7 @@ class People::TransactionsController < People::BaseController
 
   def refund
     order = current_order.find(params[:id])
-    items = params[:order_refund].delete(:product_items)
+    items = params[:order_refund].delete(:product_items) || []
     respond_to do |format|
       refund = order.refunds.create(params[:order_refund])
       if refund.valid?

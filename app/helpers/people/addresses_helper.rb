@@ -1,0 +1,2 @@
+module People::AddressesHelper
+end
