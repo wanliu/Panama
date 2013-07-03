@@ -20,15 +20,6 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
-  def render(*args)
-    options = args.extract_options!
-    if request.xhr?
-      options[:layout] = false
-    end
-
-    super *args, options
-  end
-
   def event
     @transaction = OrderTransaction.find_by(
       :id => params[:id], :seller_id => current_shop.id)
@@ -47,14 +38,14 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   end
 
   def delivery_code
-    transaction = OrderTransaction.find(params[:id])
+    @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
-      if transaction.state_name == :waiting_delivery
-        transaction.delivery_code = params[:delivery_code]
-        if transaction.save
+      if @transaction.state_name == :waiting_delivery
+        @transaction.delivery_code = params[:delivery_code]
+        if @transaction.save
           format.json{ head :no_content }
         else
-          format.json{ render :json => draw_errors_message(transaction), :status => 403 }
+          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
         end
       else
         format.json{ render :json =>{message: 'invalid state'}, :status => 403 }
@@ -104,5 +95,15 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     respond_to do |format|
       format.json{ render :json =>  @messages }
     end
+  end
+
+  private
+  def render(*args)
+    options = args.extract_options!
+    if request.xhr?
+      options[:layout] = false
+    end
+
+    super *args, options
   end
 end
