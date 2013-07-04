@@ -2,7 +2,7 @@ class ProductItem < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::MemoryAssociation
 
-  attr_accessible :amount, :price, :title, :total, :transaction_id, :cart, :product_id, :product
+  attr_accessible :amount, :price, :title, :total, :transaction_id, :cart, :product_id, :product, :shop_id
 
   attr_accessor :options
 
@@ -53,12 +53,18 @@ class ProductItem < ActiveRecord::Base
              class_name: "OrderTransaction"
              # primary_key: 'transaction_id'
 
+  belongs_to :shop
+
   delegate :photos, :to => :product
   delegate :icon, :header, :avatar, :preview, :to => :photos
   delegate :price_options, :prices_definition, :prices, :to => :product, :allow_nil => true
 
 
   memories :properties, :properties_values, :property_items
+
+  before_save do 
+    self.total = self.price * self.amount
+  end
 
   after_create do
     if product.present? && !@product_options.blank?
