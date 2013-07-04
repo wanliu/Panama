@@ -56,6 +56,19 @@
       <%#= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
     </div>
     <%= address_form.input :road, :input_html => { :class => :span12 } %>
+
+    <label class="chosen optional control-label" for="transaction_address">联系人</label>
+    <div class="controls controls-row">
+      <div class='span6'>
+        <%=address_form.input_field :contact_name %>
+      </div>
+      <div class='span2'>
+        <%= address_form.label :contact_phone, :label => "联系电话", :wrapper => :inline_label, :class => :label_zip_code %>
+      </div>
+      <div class='span4'>
+        <%=address_form.input_field :contact_phone, :class => :span12 %>
+      </div>
+    </div>
   <% end %>
   </div>
 

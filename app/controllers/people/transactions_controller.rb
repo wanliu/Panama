@@ -228,7 +228,9 @@ class People::TransactionsController < People::BaseController
       :city_id => a[:city_id],
       :area_id => a[:area_id],
       :zip_code => a[:zip_code],
-      :road => a[:road]
+      :road => a[:road],
+      :contact_name => a[:contact_name],
+      :contact_phone => a[:contact_phone]
     }
   end
 end
