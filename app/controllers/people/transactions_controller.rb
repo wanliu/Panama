@@ -196,7 +196,7 @@ class People::TransactionsController < People::BaseController
     else
       address = Address.new(gener_address_arg(params[:address]))
       address.user_id = current_user.id
-      address.save      
+      address.save
       address
     end
   end
