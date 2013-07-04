@@ -257,6 +257,12 @@ class OrderTransaction < ActiveRecord::Base
       complete).include?(state)
   end
 
+  def close_state?
+    %w(close
+      order
+      waiting_paid).include?(state)
+  end
+
   def buyer_fire_event!(event)
     events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer confirm_transfer)
     if event.to_s == "buy"

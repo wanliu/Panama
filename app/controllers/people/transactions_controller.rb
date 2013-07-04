@@ -134,11 +134,15 @@ class People::TransactionsController < People::BaseController
   def destroy
     @transaction = current_order.find(params[:id])
     authorize! :destroy, @transaction
-    @transaction.destroy
 
     respond_to do |format|
-      format.html { redirect_to person_transactions_path(@people.login) }
-      format.json { head :no_content }
+      if @transaction.close_state?
+        @transaction.destroy
+        format.html { redirect_to person_transactions_path(@people.login) }
+        format.json { head :no_content }
+      else
+        format.json{ render :state => 403 }
+      end
     end
   end
 
