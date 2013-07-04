@@ -1,6 +1,10 @@
 @import "variables";
 @import "compass/css3";
 
+.transaction:first-child{
+	padding-top: 0px;
+};
+
 .transaction {
 	padding-top: 40px;
 	margin-bottom: 20px;
