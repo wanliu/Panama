@@ -13,7 +13,7 @@ class PeopleSideView extends Backbone.View
 
 
   autoScroll: (event) ->
-    console.log("doc: #{$(document).scrollTop()}, #{TOP_POSITION} = #{this.mainHeight}, #{this.peopleHeight}")
+    # console.log("doc: #{$(document).scrollTop()}, #{TOP_POSITION} = #{this.mainHeight}, #{this.peopleHeight}")
     if $(document).scrollTop() > TOP_POSITION and this.mainHeight > this.peopleHeight
       @$el.addClass("affix")
       @$el.trigger('fixed')
