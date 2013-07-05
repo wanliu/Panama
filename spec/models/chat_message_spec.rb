@@ -6,7 +6,7 @@ describe ChatMessage, "聊天记录模型" do
   it{ should belong_to(:receive_user) }
   it{ should belong_to(:send_user) }
 
-  it{ should validate_presence_of :receive_user }
+  # it{ should validate_presence_of :receive_user }
   it{ should validate_presence_of :send_user }
   it{ should validate_presence_of :content }
 

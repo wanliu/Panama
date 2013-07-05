@@ -17,8 +17,8 @@ class Shop < ActiveRecord::Base
   has_many :topics, as: :owner, dependent: :destroy
   has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   has_many :topic_categories, dependent: :destroy
-  has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
-  has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
+  # has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
+  # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
   has_one :shops_category
   belongs_to :user
