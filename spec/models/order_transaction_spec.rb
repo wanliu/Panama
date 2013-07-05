@@ -762,6 +762,9 @@ describe OrderTransaction, "订单流通记录" do
     end
 
     describe "update_total_count" do
+      before do 
+        @order.build_items(items)
+      end
       it "计算产品数" do
         count_sum = items.reduce(0) { |s, i| s + i[:amount] }
         expect { @order.update_total_count }.to change { @order.items_count }.by(count_sum)
