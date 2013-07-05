@@ -439,7 +439,7 @@ ActiveRecord::Schema.define(:version => 20130704081244) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
     t.integer  "transaction_id"
@@ -691,10 +691,10 @@ ActiveRecord::Schema.define(:version => 20130704081244) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
+    t.decimal  "money",      :precision => 20, :scale => 4
     t.string   "im_token"
   end
 
