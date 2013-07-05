@@ -1,3 +1,8 @@
 <% @products.each do |product| %>
-	<div><%= product.name %></div>
+	<div class="well">
+		<%= link_to product do
+			image_tag(product.photos.header)
+		end%>
+		<div><%= product.name %></div>
+	</div>
 <% end %>
