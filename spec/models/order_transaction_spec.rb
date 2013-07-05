@@ -17,12 +17,16 @@ describe OrderTransaction, "订单流通记录" do
   let(:item_1) { FactoryGirl.create(:product_item, product: product_i, cart: nil) }
   let(:item_2) { FactoryGirl.create(:product_item, product: product_ii, cart: nil) }
   let(:icbc){ FactoryGirl.create(:icbc) }
-
+  let(:order_reason){ FactoryGirl.create(:order_reason) }
 
   it{ should belong_to(:address) }
   it{ should belong_to(:seller) }
   it{ should belong_to(:buyer) }
   it{ should have_many(:items) }
+  it{ should have_one(:transfer_sheet) }
+  it{ should belong_to(:pay_manner) }
+  it{ should belong_to(:delivery_manner) }
+  it{ should belong_to(:operator) }
 
   it{ should validate_presence_of(:buyer) }
   it{ should validate_presence_of(:seller) }
@@ -86,6 +90,10 @@ describe OrderTransaction, "订单流通记录" do
       @order.address = current_user_address
     end
 
+    def now_expired_state(detail)
+      detail.update_attributes(expired: DateTime.now)
+    end
+
     describe "快递运输" do
       let(:delivery_manner){ FactoryGirl.create(:express) }
       before do
@@ -131,6 +139,18 @@ describe OrderTransaction, "订单流通记录" do
           @order.fire_events(pay_manner.code).should be_false
         end
 
+        it "状态还未过期" do
+          OrderTransaction.state_expired
+          @order.state.should eq("order")
+        end
+
+        it "状态过期" do
+          @order.state.should eq("order")
+          now_expired_state(@order.state_details.last)
+          OrderTransaction.state_expired
+          @order.reload.state.should eq("close")
+        end
+
         describe do
           before do
             @order.buyer_fire_event!(:buy)
@@ -154,6 +174,19 @@ describe OrderTransaction, "订单流通记录" do
             @order.buyer.money.should eq(0.to_d)
           end
 
+
+          it "状态还未过期" do
+            OrderTransaction.state_expired
+            @order.state.should eq("waiting_paid")
+          end
+
+          it "状态过期" do
+            @order.state.should eq("waiting_paid")
+            now_expired_state(@order.state_details.last)
+            OrderTransaction.state_expired
+            @order.reload.state.should eq("close")
+          end
+
           describe do
             before do
               @order.buyer.recharge(@order.stotal, icbc)
@@ -174,6 +207,18 @@ describe OrderTransaction, "订单流通记录" do
               @order.state.should eq("waiting_sign")
             end
 
+            it "状态还未过期" do
+              OrderTransaction.state_expired
+              @order.state.should eq("waiting_delivery")
+            end
+
+            it "状态过期" do
+              @order.state.should eq("waiting_delivery")
+              now_expired_state(@order.state_details.last)
+              OrderTransaction.state_expired
+              @order.reload.state.should eq("delivery_failure")
+            end
+
             describe do
               before do
                 @order.seller_fire_event!(:delivered)
@@ -184,6 +229,19 @@ describe OrderTransaction, "订单流通记录" do
                 @order.buyer_fire_event!(:sign)
                 @order.state.should eq("complete")
               end
+
+              it "状态还未过期" do
+                OrderTransaction.state_expired
+                @order.state.should eq("waiting_sign")
+              end
+
+              it "状态过期" do
+                @order.state.should eq("waiting_sign")
+                now_expired_state(@order.state_details.last)
+                OrderTransaction.state_expired
+                @order.reload.state.should eq("complete")
+              end
+
             end
           end
         end
@@ -342,12 +400,6 @@ describe OrderTransaction, "订单流通记录" do
           @order.fire_events(pay_manner.code).should be_false
         end
 
-        it "refund_handle_detail_return_money 会调用 unshipped_state 方法" do
-          refund = mock("OrderRefund")
-          @order.should_receive("unshipped_state?").and_return(false)
-          @order.refund_handle_detail_return_money(refund)
-        end
-
         describe do
           before do
             @order.buyer_fire_event!(:buy)
@@ -369,7 +421,10 @@ describe OrderTransaction, "订单流通记录" do
 
           describe "refund_handle_detail_return_money" do
             before do
-              @refund = mock("OrderRefund")
+              @refund = @order.refunds.create(
+                :descripton => '退货',
+                :order_reason_id => order_reason.id)
+              @refund.create_items([@order.items[0].id])
             end
 
             it "判断是否及时退货" do
@@ -377,11 +432,55 @@ describe OrderTransaction, "订单流通记录" do
               @order.refund_handle_detail_return_money(@refund)
             end
 
-            it "删除明细，返回钱给买家" do
-              @order.items.should_receive("destroy_all")
-              @order.should_receive("save").and_return(true)
-              @refund.should_receive("buyer_recharge")
+            it "删除明细" do
+              @order.items.find_by(
+                :product_id => @refund.items.map{|i| i.product_id}
+              ).should_not be_nil
               @order.refund_handle_detail_return_money(@refund)
+              @order.items.find_by(
+                :product_id => @refund.items.map{|i| i.product_id}
+              ).should be_nil
+            end
+
+            it "返回钱给买家" do
+              expect{
+                @order.refund_handle_detail_return_money(@refund)
+              }.to change{ @order.buyer.money }.by(@refund.stotal)
+
+            end
+          end
+
+          describe "refund_handle_product_item" do
+            before do
+              @refund = @order.refunds.create(
+                :descripton => '退货',
+                :order_reason_id => order_reason.id)
+              @refund.create_items([@order.items[0].id])
+            end
+
+            it "标识退货产品" do
+              order_refund.should eq(0)
+              @order.refund_handle_product_item(@refund)
+              order_refund.should eq(1)
+            end
+
+            def order_refund
+              @order.items.where(
+                :refund_state => false).count
+            end
+          end
+
+          describe "get_refund_items" do
+            before do
+              @refund = @order.refunds.create(
+                :descripton => '退货',
+                :order_reason_id => order_reason.id)
+              @refund.create_items([@order.items[0].id])
+            end
+
+            it "获取订单退货的商品" do
+              items = @order.get_refund_items(@refund)
+              items.should eq(@order.items.where(:product_id => @refund.items.map{|i| i.product_id}))
             end
           end
 
@@ -678,7 +777,6 @@ describe OrderTransaction, "订单流通记录" do
       end
     end
 
-
     describe "get_delivery_price" do
       it "获取运输费用" do
         order = generate_order
@@ -701,6 +799,41 @@ describe OrderTransaction, "订单流通记录" do
         pr_de.source.total.should eq(pr_de.total.delete(', ¥$').to_f)
       end
     end
+
+    it "付款后的订单状态" do
+      @order.state = "waiting_sign"
+      @order.shipped_state?.should be_true
+      @order.state = "complete"
+      @order.shipped_state?.should be_true
+    end
+
+    it "没有付款的订单状态" do
+      @order.state = "delivery_failure"
+      @order.unshipped_state?.should be_true
+      @order.state = "waiting_delivery"
+      @order.unshipped_state?.should be_true
+    end
+
+    it "是否成功状态" do
+      @order.complete_state?.should be_false
+      @order.state = "complete"
+      @order.complete_state?.should be_true
+    end
+
+    it "是否退货状态" do
+      @order.refund_state?.should be_false
+      @order.state = "refund"
+      @order.refund_state?.should be_true
+    end
+
+    it "等待退货状态" do
+      @order.wating_refund_state?.should be_false
+      @order.state = "waiting_refund"
+      @order.wating_refund_state?.should be_true
+    end
+  end
+
+  describe "类方法" do
   end
 
 end

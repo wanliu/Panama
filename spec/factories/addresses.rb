@@ -5,7 +5,7 @@ FactoryGirl.define do
     country '中国CHINA'
     sequence(:road) { |n| "the_#{n}th_road" }
     sequence(:zip_code, 421800) { |n| "#{n}" }
-    f.user :user
+    f.user User.first || :user
     f.province :province
     f.city :city
     f.area :area
