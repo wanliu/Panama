@@ -60,6 +60,7 @@
 <%end%>
 
 <% if can? :destroy, Cart %>
-<button class="btn btn-large">清空列表</button>
+    <%= button_to "清空列表",clear_cart_list_path ,:class => "btn btn-large" %>
+<!-- <button class="btn btn-large">清空列表</button> -->
 <%end%>
 
