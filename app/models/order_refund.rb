@@ -78,6 +78,10 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_unshipped_order_state?
     end
 
+    before_transition :waiting_delivery => :waiting_sign do |refund, transition|
+      refund.valid_delivery_code?
+    end
+
     after_transition :apply_refund => :waiting_delivery,
                      :apply_failure => :waiting_delivery do |refund, transition|
       refund.handle_detail_return_money
@@ -195,6 +199,12 @@ class OrderRefund < ActiveRecord::Base
         buyer_recharge
         seller_payment
       end
+    end
+  end
+
+  def valid_delivery_code?
+    if delivery_code.blank?
+      errors.add(:delivery_code, "发货单号不能为空！")
     end
   end
 
