@@ -15,7 +15,8 @@
       <%= stylesheet_link_tag css %>
     <% end %>
   <% end %>
-  <%= javascript_include_tag faye_server_uri + "/client.js" %>
+  
+  <%#= javascript_include_tag faye_server_uri + "/client.js" %>
 
   <% if defined?(javascripts) && javascripts.respond_to?(:each) %>
     <% javascripts.each do |script| %>
@@ -29,6 +30,9 @@
   <%# All JavaScript at the bottom, except polyfills %>
   <%= javascript_include_tag "polyfills" %>
   <%= render "javascripts" %>
-
+  <%= stylesheet_link_tag "font-awesome/css/font-awesome.min" %>
+  <!--[if IE 7]>
+    <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome-ie7.min.css">
+  <![endif]-->  
   <%= csrf_meta_tag %>
 </head>

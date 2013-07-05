@@ -1,19 +1,34 @@
-<div id="activities" >
-  <!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
-  <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
-    <div class="column">
-      <% indexs.each do |index| %>
-        <%= render_activity @activities[index] %>
-      <% end %>
-    </div>
-  <% end %>
-</div>
-<script type="text/javascript">
-    var $container = $('#activities');
+<div id="main" class="content">
+    <section class="widget">
+      <div class="body">
+          <ul id="activity-category" class="nav nav-tabs activity-category" >
+              <li class="active"><a href='#' ><%=icon 'eye-open' %> </a></li>
+              <li><a href='#' >食品保健</a></li>
+              <li><a href="#">尿裤湿巾</a></li>
+              <li><a href="#">洗浴用品</a></li>
+              <li><a href="#">护肤用品</a></li>
+              <li><a href="#">出行车类</a></li>
+              <li><a href="#">出行安全</a></li>
+              <li><a href="#">玩具礼物</a></li>
+              <li><a href="#">哺喂用品</a></li>
+              <li><a href="#">健康安全</a></li>
+              <li><a href="#">妈妈专区</a></li>
+          </ul>
+      </div>
+    </section>
+    <div id="activities" >
 
-    // $container.imagesLoaded( function(){
-    //   $container.masonry({
-    //     itemSelector : '.activity'
-    //   });
-    // });
-</script>
+      <!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
+      <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
+        <div class="column">
+          <% indexs.each do |index| %>
+            <%= render_activity @activities[index] %>
+          <% end %>
+        </div>
+      <% end %>  
+    </div>
+
+    <script type="text/javascript">
+    var activites = new ActivitiesView({el: '#activities'});
+    </script>
+</div>

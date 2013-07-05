@@ -175,9 +175,21 @@ class ActivityModel extends Backbone.Model
 
 	urlRoot: '/activities'
 
+class ActivitiesView extends Backbone.View
+
+	initialize: (@options) ->
+
+		$(window).resize($.proxy(@resizeWrap, @))
+		@resizeWrap()
+
+	resizeWrap: (e) ->
+		$wrap = $('.wrap')
+		@$el.width(parseInt($wrap.width() / 246) * 246)
+
+
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview
 root.ActivityView = ActivityView
-
+root.ActivitiesView = ActivitiesView
 
 

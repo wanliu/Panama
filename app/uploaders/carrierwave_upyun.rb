@@ -1,7 +1,13 @@
 require 'carrierwave_uploader_version'
 class CarrierWaveStorageUpYun < CarrierWave::Uploader::Base
+  attr_accessor :default_file
+
   def store_dir
     "#{model.class.to_s.underscore}/#{mounted_as}"
+  end
+
+  def default_file 
+    @default_file = "file_blank.gif"
   end
 
   def default_url
@@ -9,7 +15,7 @@ class CarrierWaveStorageUpYun < CarrierWave::Uploader::Base
     # 由于有自动的缩略图处理，小图也不成问题
     # Setting.upload_url 这个是你的图片空间 URL
     # "#{Setting.upload_url}/blank.png#{version_name}"
-    "http://panama.b0.upaiyun.com/file_blank.gif#{version_name}"
+    "http://panama.b0.upaiyun.com/#{default_file}#{version_name}"
   end
 
   #覆盖 url 方法以适应“图片空间”的缩略图命名

@@ -17,10 +17,17 @@ $grayLight:             #999 !default;
 $grayLighter:           #eee !default;
 $white:                 #fff !default;
 
+// $black:                 #fff !default;
+// $grayDarker:            #fff !default;
+// $grayDark:              #eee !default;
+// $gray:                  #999 !default;
+// $grayLight:             #555 !default;
+// $grayLighter:           #333 !default;
+// $white:                 #666 !default;
 
 // Accent colors
 // -------------------------
-$blue:                  #049cdb !default;
+$blue:                  #618fb0 !default;
 $blueDark:              #0064cd !default;
 $green:                 #46a546 !default;
 $red:                   #9d261d !default;
@@ -72,9 +79,9 @@ $paddingLarge:          11px 19px !default; // 44px
 $paddingSmall:          2px 10px !default;  // 26px
 $paddingMini:           1px 6px !default;   // 24px
 
-$baseBorderRadius:      4px !default;
-$borderRadiusLarge:     6px !default;
-$borderRadiusSmall:     3px !default;
+$baseBorderRadius:      0px !default;
+$borderRadiusLarge:     0px !default;
+$borderRadiusSmall:     0px !default;
 
 
 // Tables
@@ -86,27 +93,27 @@ $tableBorder:                       #ddd !default; // table and cell border
 
 // Buttons
 // -------------------------
-$btnBackground:                     $white !default;
-$btnBackgroundHighlight:            darken($white, 10%) !default;
+$btnBackground:                     #666666 !default;
+$btnBackgroundHighlight:            #666666 !default;
 $btnBorder:                         #bbb !default;
 
-$btnPrimaryBackground:              $linkColor !default;
-$btnPrimaryBackgroundHighlight:     adjust-hue($btnPrimaryBackground, 20%) !default;
+$btnPrimaryBackground:              #618fb0 !default;
+$btnPrimaryBackgroundHighlight:     #618fb0 !default;
 
-$btnInfoBackground:                 #5bc0de !default;
-$btnInfoBackgroundHighlight:        #2f96b4 !default;
+$btnInfoBackground:                 #4ab0ce !default;
+$btnInfoBackgroundHighlight:        #4ab0ce !default;
 
-$btnSuccessBackground:              #62c462 !default;
-$btnSuccessBackgroundHighlight:     #51a351 !default;
+$btnSuccessBackground:              #56bc76 !default;
+$btnSuccessBackgroundHighlight:     #56bc76 !default;
 
-$btnWarningBackground:              lighten($orange, 15%) !default;
-$btnWarningBackgroundHighlight:     $orange !default;
+$btnWarningBackground:              #eac85e !default;
+$btnWarningBackgroundHighlight:     #eac85e !default;
 
-$btnDangerBackground:               #ee5f5b !default;
-$btnDangerBackgroundHighlight:      #bd362f !default;
+$btnDangerBackground:               #e5603b !default;
+$btnDangerBackgroundHighlight:      #e5603b !default;
 
-$btnInverseBackground:              #444 !default;
-$btnInverseBackgroundHighlight:     $grayDarker !default;
+$btnInverseBackground:              #f3f3f3 !default;
+$btnInverseBackgroundHighlight:     #f3f3f3 !default;
 
 
 // Forms

@@ -2,50 +2,38 @@
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
   <%= cache do %>
-    <%= render "head" %>
+    <%= render "head", :styles => ['application'], :javascripts => ['application'] %>
   <% end %>
-
-  <body class="<%= controller.controller_name %> ab">
+  <body class="<%= controller.controller_name %>" style="zoom: 1">
     <%= render "chromeframe" %>
-    <%= render 'header' %>
-    <div class='second-nav-bar'></div>
-    <div class='main-slide'>
-        <style type="text/css" media="screen">
-
-        </style>
-        <div class='slide'>
-
-        </div>
+    <div class="logo" data-spy="affix" data-offset-top="20">
+        <h4><a href="index.html">万流 <strong>市场</strong></a></h4>
     </div>
-    <div class='contents container'>
-        <div class='left-side shadow'>
-            <%= render_cell :category, :show %>
-        </div>
-        <div class='body'>
-            <%= render_cell :navigation, :show %>
-            <div class='main'>
-                <div class="slide-box">
-                    <%= render_cell :slide, :show %>
+    <%= render "left_sidebar" %>
+    <div class="wrap">
+        <header class="page-header">
+            <div class="navbar affix-top" data-spy="affix" data-offset-top="20">
+                <div class="navbar-inner">
+                    <%= render "topbar" %>
+                    <form id="search-form" class="navbar-search pull-right">
+                        <input type="search" class="search-query" placeholder="搜索...">
+                    </form>
+<!--                     <div class="notifications pull-right">
+                        <div class="alert pull-right">
+                            <a href="#" class="close" data-dismiss="alert">×</a>
+                            <i class="icon-info-sign"></i> Check out Light Blue <a id="notification-link" href="#">settings</a> on the right!
+                        </div>
+                    </div> -->
                 </div>
-
-                <%= render "flashes" %>
-                <%= yield %>
             </div>
-        </div>
+        </header>
+        <%= yield %>
     </div>
-
+    <%= render "right_sidebar" %>
+    <%#= render 'header' %>
     <%= render "footer" %>
-
     <%# Javascript at the bottom for fast page loading %>
-    <%= render "javascripts" %>
-    <script type="text/javascript">
-        $(".slide-box").slides({
-            play: 5000,
-            pause: 2500,
-            hoverPause: true
-        });
-    </script>
-  <%= render "baidu_analyzer" %>
+    <%= render "baidu_analyzer" %>
     
   </body>
 </html>

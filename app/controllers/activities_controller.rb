@@ -2,7 +2,7 @@ class ActivitiesController < ApplicationController
   before_filter :login_required
   before_filter :load_category, :only => [:index, :new, :show]
   # layout "activities"
-  layout "stream"
+  layout "application"
 
   respond_to :html, :dialog
 
