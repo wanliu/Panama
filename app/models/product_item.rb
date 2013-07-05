@@ -63,7 +63,7 @@ class ProductItem < ActiveRecord::Base
   memories :properties, :properties_values, :property_items
 
   before_save do 
-    self.total = self.price * self.amount
+    update_total
   end
 
   after_create do
@@ -82,6 +82,10 @@ class ProductItem < ActiveRecord::Base
       end
       save!
     end
+  end
+
+  def update_total
+    self.total = self.price * self.amount
   end
 
   def options

@@ -24,11 +24,10 @@ class People::TransactionsController < People::BaseController
   end
 
   def create
-    product_id = params[:product_item][:product_id]
-    product = Product.find(product_id)
-    shop_id = product.shop_id
-    @transaction = @people.transactions.build(seller_id: shop_id)
+    product = Product.find(params[:product_item][:product_id])
+    @transaction = @people.transactions.build(seller_id: product.shop_id)
     @transaction.items.build(params[:product_item])
+    @transaction.items.each {|item| item.update_total}
     @transaction.save
     redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'

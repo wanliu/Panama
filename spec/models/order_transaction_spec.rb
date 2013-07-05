@@ -241,7 +241,6 @@ describe OrderTransaction, "订单流通记录" do
                 OrderTransaction.state_expired
                 @order.reload.state.should eq("complete")
               end
-
             end
           end
         end
@@ -763,6 +762,9 @@ describe OrderTransaction, "订单流通记录" do
     end
 
     describe "update_total_count" do
+      before do 
+        @order.build_items(items)
+      end
       it "计算产品数" do
         count_sum = items.reduce(0) { |s, i| s + i[:amount] }
         expect { @order.update_total_count }.to change { @order.items_count }.by(count_sum)
@@ -827,6 +829,22 @@ describe OrderTransaction, "订单流通记录" do
       @order.wating_refund_state?.should be_false
       @order.state = "waiting_refund"
       @order.wating_refund_state?.should be_true
+    end
+
+    describe "buyer_payment" do
+      it "买家付款" do
+        expect{
+          @order.buyer_payment
+        }.to change{ @order.buyer.money }.by(@order.buyer.money - @order.stotal)
+      end
+    end
+
+    describe "seller_recharge" do
+      it "卖家收款" do
+        expect{
+          @order.seller_recharge
+        }.to change{ @order.seller.user.money }.by(@order.stotal)
+      end
     end
   end
 
