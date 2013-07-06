@@ -107,10 +107,9 @@ class OrderRefund < ActiveRecord::Base
 
   def self.state_expired
     refunds = joins("left join order_refund_state_details as detail
-      on  detail.order_transaction_id = order_refunds.id and
+      on  detail.order_refund_id = order_refunds.id and
       detail.expired_state=true and
-      detail.state=order_refunds.state")
-    .where("detail.expired<=", DateTime.now)
+      detail.state=order_refunds.state").where("detail.expired<=?", DateTime.now)
     refunds.each{|ref| ref.fire_events!(:expired) }
     puts "=refund===start: #{DateTime.now}=====count: #{refunds.count}===="
     refunds
@@ -149,9 +148,9 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def update_buyer_and_seller_and_operate
-    self.buyer_id = order_transaction.buyer_id
-    self.seller_id = order_transaction.seller_id
-    self.operator_id = order_transaction.operator_id
+    self.buyer_id = order_transaction.try(:buyer_id)
+    self.seller_id = order_transaction.try(:seller_id)
+    self.operator_id = order_transaction.try(:operator_id)
   end
 
   def create_state_detail

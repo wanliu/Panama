@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "/home/kaka/cron_log.log"
+#set :output, "/home/kaka/cron_log.log"
 
 every 2.minutes do
   runner "OrderTransaction.state_expired", :environment => "development"
