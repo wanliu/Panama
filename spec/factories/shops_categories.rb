@@ -3,7 +3,7 @@
 
 FactoryGirl.define do
 
-  factory :shops_category do |f|
+  factory :shops_category, :class => ShopsCategory do |f|
     name "test_category"
     f.shop :shop
   end
