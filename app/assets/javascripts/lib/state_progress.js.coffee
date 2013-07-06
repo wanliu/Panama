@@ -114,6 +114,10 @@ class StateProgress extends Backbone.View
       complete: {
         class_progress: "bar-success",
         class_badge: "badge-success"
+      },
+      close: {
+        class_progress: "bar-success",
+        class_badge: "badge-success"
       }
     }
   }
