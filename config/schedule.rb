@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "~/cron_log.log"
+set :output, "~/whenever.log"
 
 every 2.minutes do
   runner "OrderTransaction.state_expired"

@@ -66,23 +66,51 @@ describe OrderRefund, "退货模型" do
       order
     end
 
+    def now_expire(detail)
+      detail.expired = DateTime.now
+      detail.save
+    end
+
     describe "订单还未发货" do
       before do
         @order = refund_order
         @refund = generate_refund(@order, @order.items.map{|item| item.id })
       end
 
-      it "申请退货 到 拒绝" do
+      it "申请退货 到 退货失败" do
         @refund.state.should eq("apply_refund")
         @refund.refuse_reason = "无理由退货"
         @refund.seller_fire_events!("refuse")
         @refund.state.should eq("failure")
       end
 
+      it "申请退货 状态过期" do
+        now_expire(@refund.current_state_detail)
+        OrderRefund.state_expired
+        @refund.reload.state.should eq("apply_failure")
+      end
+
+      it "拒绝退货 变更状态明细" do
+        size = @refund.state_details.count
+
+        @refund.refuse_reason = "无理由退货"
+        @refund.seller_fire_events!("refuse")
+        @refund.current_state_detail.state.should eq("failure")
+        @refund.state_details.count.should eq(size+1)
+      end
+
       it "申请退货 到 成功" do
         @refund.state.should eq("apply_refund")
         @refund.seller_fire_events!("unshipped_agree")
         @refund.state.should eq("complete")
+      end
+
+      it "接受退货 变更状态明细" do
+        size = @refund.state_details.count
+
+        @refund.seller_fire_events!("unshipped_agree")
+        @refund.current_state_detail.state.should eq("complete")
+        @refund.state_details.count.should eq(size+1)
       end
 
       it "成功返还金额给买家" do
@@ -107,10 +135,33 @@ describe OrderRefund, "退货模型" do
         @refund.state.should eq("failure")
       end
 
+      it "拒绝退货 变更状态明细" do
+        size = @refund.state_details.count
+
+        @refund.refuse_reason = "无理由退货"
+        @refund.seller_fire_events!("refuse")
+        @refund.current_state_detail.state.should eq("failure")
+        @refund.state_details.count.should eq(size+1)
+      end
+
+      it "申请退货 状态过期" do
+        now_expire(@refund.current_state_detail)
+        OrderRefund.state_expired
+        @refund.reload.state.should eq("apply_failure")
+      end
+
       it "申请退货 到 等待发货" do
         @refund.state.should eq("apply_refund")
         @refund.seller_fire_events!("shipped_agree")
         @refund.state.should eq("waiting_delivery")
+      end
+
+      it "接受退货 变更状态明细" do
+        size = @refund.state_details.count
+
+        @refund.seller_fire_events!("shipped_agree")
+        @refund.current_state_detail.state.should eq("waiting_delivery")
+        @refund.state_details.count.should eq(size+1)
       end
 
       describe do
@@ -120,11 +171,78 @@ describe OrderRefund, "退货模型" do
 
         it "等待发货 到 等待签收" do
           @refund.state.should eq("waiting_delivery")
+          @refund.delivery_code = "8489489489"
           @refund.buyer_fire_events!("delivered")
           @refund.state.should eq("waiting_sign")
         end
+
+        it "等待发货 状态过期" do
+          now_expire(@refund.current_state_detail)
+          OrderRefund.state_expired
+          @refund.reload.state.should eq("close")
+        end
+
+        it "接受退货 变更状态明细" do
+          size = @refund.state_details.count
+
+          @refund.delivery_code = "8489489489"
+          @refund.buyer_fire_events!("delivered")
+          @refund.current_state_detail.state.should eq("waiting_sign")
+          @refund.state_details.count.should eq(size+1)
+        end
+
+        describe do
+          before do
+            @refund.delivery_code = "8489489489"
+            @refund.buyer_fire_events!("delivered")
+          end
+
+          it "等待签收 到 完成" do
+            @refund.state.should eq("waiting_sign")
+            @refund.seller_fire_events!("sign")
+            @refund.state.should eq("complete")
+          end
+
+          it "等待签收 状态过期" do
+            now_expire(@refund.current_state_detail)
+            OrderRefund.state_expired
+            @refund.reload.state.should eq("complete")
+          end
+
+          it "完成 变更状态明细" do
+            size = @refund.state_details.count
+
+            @refund.seller_fire_events!("sign")
+            @refund.current_state_detail.state.should eq("complete")
+            @refund.state_details.count.should eq(size+1)
+          end
+
+          it "订单还未完成，只是付款 退还金额给买家一方" do
+            money = @refund.buyer.money
+            expect{
+              @refund.seller_fire_events!("sign")
+            }.to change{ @refund.buyer.money }.by(money + @refund.stotal)
+          end
+
+          it "订单完成，退还金额给双方" do
+            @refund.order_transaction.buyer_fire_event!("sign")
+            bmoney = @refund.buyer.money
+            smoney = @refund.seller.user.money
+
+            @refund.seller_fire_events!("sign")
+            @refund.buyer.money.should eq(bmoney + @refund.stotal)
+            @refund.seller.user.money.should eq(smoney - @refund.stotal)
+          end
+        end
       end
     end
-
   end
+
+  describe "change_order_state" do
+
+    it "变更订单状态" do
+
+    end
+  end
+
 end
