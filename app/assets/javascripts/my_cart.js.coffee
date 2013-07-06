@@ -22,6 +22,7 @@ class MyCart extends Backbone.View
 
 	events:
 		"click .handle": "toggleCartBox"
+		"click .clear_list": "clear_list"
 
 	item_row: """
 		<tr id= "product_item{{id}}">
@@ -45,6 +46,16 @@ class MyCart extends Backbone.View
 				else
 					'animate fadeInUpBig'
 		false
+
+	clear_list: () ->
+		$.ajax({
+	      type: "post",
+	      url: "/mycart/clear_list",
+	      success: () =>
+	       $(".cart_main tr").remove()
+	       $("#shop_count").html($(".cart_main tr").size())
+	       @totals_money()
+    	})
 
 	hoverProcess: (event) ->
 		@$("#cart_box")
@@ -84,7 +95,7 @@ class MyCart extends Backbone.View
 				# $(trOjb[3]).html(item.total)
 			else
 				$(".cart_main").append(@trHtml(item))
-				$("#shop_count").html($(".cart_main tr").size())
+				# $("#shop_count").html($(".cart_main tr").size())
 				$("#cart_box .checkout").removeClass("disabled")
 				@$("#shop_count").html($(".cart_main tr").size())
 			@totals_money()

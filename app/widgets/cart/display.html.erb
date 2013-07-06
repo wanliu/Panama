@@ -7,10 +7,10 @@
 
 <div id="cart_box">
     <div class="tool">
-        <%= form_tag cart_clear_list, :class => "clear_list" do %>
-            <input type='submit' class='btn' value="<%=t(:clear_list) %>" />
-        <% end %>
-
+        <%#= form_tag cart_clear_list, :class => "clear_list" do %>
+            <!-- <input type='submit' class='btn' value="<%#=t(:clear_list) %>" /> -->
+        <%# end %>
+        <input type='button' class='btn clear_list' value="清空列表" %>
         <%= link_to_if @my_cart.items.count > 0,
                     t(:checkout),
                     person_cart_index_path(current_user.login),

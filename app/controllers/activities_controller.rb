@@ -63,6 +63,7 @@ class ActivitiesController < ApplicationController
     product = Product.find(product_id)
     @transaction = current_user.transactions.build(seller_id: product.shop_id)
     @transaction.items.build(params[:product_item])
+    @transaction.items.each {|item| item.update_total}
     @transaction.save
     redirect_to person_transactions_path(current_user.login),
                   notice: 'Transaction was successfully created.'

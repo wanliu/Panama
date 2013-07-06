@@ -63,8 +63,8 @@ describe Address, "地址" do
   end
 
   describe "实例方法" do
-    it "location" do
-      address.location.should ==
+    it "location_without_contact" do
+      address.location_without_contact.should == 
         "#{address.country}#{address.province.name}#{address.city.name}#{address.area.name}#{address.road}"
     end
   end

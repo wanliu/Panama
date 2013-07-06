@@ -115,6 +115,11 @@ describe OrderTransaction, "订单流通记录" do
           @order.state.should eq("waiting_paid")
         end
 
+        it "状态变更产生状态明细" do
+          @order.buyer_fire_event!(:buy)
+          @order.state.should eq(@order.state_details.last.state)
+        end
+
         it "没有选择运输公司" do
           @order.delivery_type = nil
           @order.save.should be_true
@@ -174,6 +179,11 @@ describe OrderTransaction, "订单流通记录" do
             @order.buyer.money.should eq(0.to_d)
           end
 
+          it "状态变更产生状态明细" do
+            @order.buyer.recharge(@order.stotal, icbc)
+            @order.buyer_fire_event!(:paid)
+            @order.state.should eq(@order.state_details.last.state)
+          end
 
           it "状态还未过期" do
             OrderTransaction.state_expired
@@ -207,6 +217,11 @@ describe OrderTransaction, "订单流通记录" do
               @order.state.should eq("waiting_sign")
             end
 
+            it "状态变更产生状态明细" do
+              @order.buyer_fire_event!(:delivered)
+              @order.state.should eq(@order.state_details.last.state)
+            end
+
             it "状态还未过期" do
               OrderTransaction.state_expired
               @order.state.should eq("waiting_delivery")
@@ -228,6 +243,11 @@ describe OrderTransaction, "订单流通记录" do
                 @order.state.should eq("waiting_sign")
                 @order.buyer_fire_event!(:sign)
                 @order.state.should eq("complete")
+              end
+
+              it "状态变更产生状态明细" do
+                @order.buyer_fire_event!(:sign)
+                @order.state.should eq(@order.state_details.last.state)
               end
 
               it "状态还未过期" do
@@ -762,7 +782,7 @@ describe OrderTransaction, "订单流通记录" do
     end
 
     describe "update_total_count" do
-      before do 
+      before do
         @order.build_items(items)
       end
       it "计算产品数" do
@@ -844,6 +864,24 @@ describe OrderTransaction, "订单流通记录" do
         expect{
           @order.seller_recharge
         }.to change{ @order.seller.user.money }.by(@order.stotal)
+      end
+    end
+
+    describe "state_change_detail" do
+      before do
+        @order = generate_order
+      end
+
+      it "初始化订单，产生状态" do
+        OrderTransaction.any_instance.should_receive(:state_change_detail)
+        generate_order
+      end
+
+      it "添加状态明细记录" do
+        @order.state_details.destroy_all
+        expect{
+          @order.state_change_detail
+        }.to change(TransactionStateDetail, :count).by(1)
       end
     end
   end

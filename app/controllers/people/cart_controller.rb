@@ -21,7 +21,11 @@ class People::CartController < People::BaseController
   def clear_list
     authorize! :destroy, Cart
     my_cart.items.destroy_all
-    render :text => :ok
+    respond_to do |format|
+      format.html { redirect_to person_cart_index_path(current_user.login) }
+      format.js { head :no_content }
+    # render :text => :ok
+    end
   end
 
   def move_out_cart
