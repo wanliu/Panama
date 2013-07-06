@@ -196,7 +196,6 @@ describe Admins::Shops::ProductsController do
   describe "get products_by_category" do
 
     it "获取分类产品" do
-
       get "products_by_category", {:shops_category_id => shops_category.id}.merge(current_shop), get_session
       response.should be_success
       assigns(:products).each{ | p | p.shops_category.id.should eq(shops_category.id) } if assigns(:products) != nil
