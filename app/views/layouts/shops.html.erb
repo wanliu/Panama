@@ -3,15 +3,11 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => ['another_bootstrap'], :javascripts => ['shops'] %>
 <body class="<%= controller.controller_name %>">
-	<%= render "header" %>
-	<div id='wrapper' class='container'>
-		<%= yield %>
-	</div>
-	<div class='footer_nav'>
-	    <%= render_widget :chat %>
-	    <%= render_widget :my_cart %>
-	</div>
-  <%= render "baidu_analyzer" %>
-	
+  <%= render "header" %>
+  <div id='wrapper' class='container'>
+    <%= yield %>
+  </div>
+    <%= render "baidu_analyzer" %>
+  
 </body>
 </html>
