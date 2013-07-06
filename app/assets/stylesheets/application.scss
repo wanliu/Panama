@@ -23,15 +23,42 @@
 @import "responsive-stream";
 @import "lib/transparent";
 
+
 body {
+	$bgcolor1: #69D2E7;
+	$bgcolor2: #A7DBD8;
+	$bgcolor3: #E0E4CC;
+
+	$bgcolor1: #3FB8AF;
+	$bgcolor2: #7FC7AF;
+	$bgcolor3: #DAD8A7;
+
+	// $bgcolor1: #3B3659;
+	// $bgcolor2: #7972A6;
+	// $bgcolor3: #A64949;
+
+	// $bgcolor1: #A0A608;
+	// $bgcolor2: #EDF249;
+	// $bgcolor3: #F2D8C2;
+
+
+	font: 14px/1.5 "Microsoft Yahei",tahoma,arial!important;
 	padding-bottom: 100px;
 	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…gd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="),url("../img/bgnoise_lg_dark.png");
 	// background-color: rgba(57,123,137,0.91);
-	@include transparent(rgb(57,123,137), 0.91);
-	@include background(radial-gradient(farthest-side ellipse at 10% 0, 
-										rgba(#69D2E7,0.91),
-										rgba(#A7DBD8,0.91),
-										rgba(#E0E4CC,0.91)),url('bgnoise_lg_dark.png'));
+	// @include transparent($bgcolor1, 0.91);
+	// @include filter-gradient($bgcolor1, $bgcolor3, horizontal); // IE6-9 fallback on horizontal gradient
+	// @include background(radial-gradient(farthest-side ellipse at 10% 0, 
+	// 									rgba($bgcolor1,0.91),
+	// 									rgba($bgcolor2,0.91),
+	// 									rgba($bgcolor3,0.91)),  url('bgnoise_lg_dark.png'));
+
+	background: url('4fceb23c1312d.jpg') no-repeat;
+    background-attachment: fixed;
+
+	// background-color: #1e5799; // Old browsers
+	// @include filter-gradient(#1e5799, #7db9e8, horizontal); // IE6-9 fallback on horizontal gradient
+	// @include background-image(radial-gradient(farthest-side ellipse at 10% 0, #1e5799 0%,#207cca 27%,#2989d8 50%,#207cca 68%,#7db9e8 100%), url('bgnoise_lg_dark.png'))
 
 }
 
@@ -84,7 +111,81 @@ body {
 	}
 }
 
+.page-header {
+	margin: 15px 0 0px;
+	border: none;
 
+	.navbar {
+
+		.navbar-inner {
+			background: transparent;
+			@include transparent(rgb(0,0,0),0.0);
+			@include box-shadow(none);
+			border: none;
+			.nav>li>a {
+				font-size: 18px;
+			}
+
+			.nav>li .count {
+				position: absolute;
+				bottom: 2px;
+				right: 2px;
+				font-size: 9.1px;
+				font-weight: normal;
+				// background: rgba(51,51,51,0.55);
+				@include transparent(rgb(51,51,51),0.55);				
+				color: rgba(255,255,255,0.9);
+				line-height: 1em;
+				padding: 2px 4px;
+				@include border-radius(10px);
+			}
+		}
+	}
+
+	.navbar.affix {
+		top: 0px;
+		position: fixed;
+		left: 0px;
+		right: 0px;
+		z-index: 1030;
+		// @include background(rgba(0,0,0,0.5));
+		@include transparent(rgb(0,0,0),0.55);
+
+		.nav>li>a {
+			color: white;
+		}
+	}
+
+	.navbar.affix-top {
+		position: fixed;
+		top: 15px;
+		right:0px;
+		z-index: 1030;
+
+	}
+
+	.search-query {
+		border: none;
+		color: #f8f8f8;
+		background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);
+		@include transparent(rgb(51,51,51),0.4);				
+
+		padding-left: 26px;
+		width: 100px;
+		line-height: 20px;
+		@include transition(width 0.2s);
+		@include border-radius(1px);
+	}
+
+	.nav>li.divider {
+		display: block;
+		height: 38px;
+		width: 1px;
+		margin: 0 20px;
+		background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+		@include background(linear-gradient(rgba(51,51,51,0),rgba(51,51,51,0.5),rgba(230,230,230,0)));
+	}
+}
 
 
 .wrap {
@@ -246,7 +347,7 @@ body {
 }
 
 .navbar .nav>li>.messages:after {
-	border-bottom-color: rgba(51,51,51,0.85);
+	// border-bottom-color: rgba(51,51,51,0.85);
 }
 
 // support 
@@ -273,7 +374,7 @@ body {
 }
 
 .navbar .nav>li>.account:after {
-	border-bottom-color: rgba(51,51,51,0.85);
+	// border-bottom-color: rgba(51,51,51,0.85);
 }
 
 // publish
@@ -299,7 +400,7 @@ body {
 }
 
 .navbar .nav>li>.publish:after {
-	border-bottom-color: rgba(51,51,51,0.85);
+	// border-bottom-color: rgba(51,51,51,0.85);
 }
 
 // content 
@@ -312,7 +413,6 @@ body {
 	height: 50px;
 	margin: 0px 5px;
 }
-
 
 // widget 
 .widget {
@@ -330,12 +430,11 @@ body {
 }
 
 .widget-tabs .body {
-	background: rgba(51,51,51,0.4);
+	@include transparent(rgb(51,51,51),0.4);
 	margin-top: 0;
 	padding: 10px 12px;
 	@include border-radius(0 0 1px 1px);
 }
-
 
 .widget-tabs .nav>li>a {
 	padding-top: 7px;
@@ -358,17 +457,18 @@ body {
 .nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
 	border-color: transparent;
 }
+
 .nav>li>a:hover, .nav>li>a:focus {
 	@include transparent(rgb(51,51,51),0.25);
 }
 
-.nav-tabs>.active>a, .nav-tabs>.active>a:hover, .nav-tabs>.active>a:focus {
+.nav-tabs>.active>a, 
+.nav-tabs>.active>a:hover, 
+.nav-tabs>.active>a:focus {
 	color: #f8f8f8;
 	@include transparent(rgb(51,51,51),0.25);
 	border-color: transparent;
 }
-
-
 
 // activity-category
 .activity-category {
@@ -379,93 +479,10 @@ body {
 	position: fixed;
 	top: 40px;
 	z-index: 1032;
-	@include transparent(rgb(0,0,0),0.55);				
+	@include transparent(rgb(0,0,0),0.55);
 }
 
-// .nav-tabs>li>a, .nav-pills>li>a {
-// 	padding-right: 12px;
-// 	padding-left: 12px;
-// 	margin-right: 2px;
-// 	line-height: 14px;
-// }
-// hedear navigration
-
-.page-header {
-	margin: 15px 0 0px;
-	border: none;
-
-	.navbar-inner {
-		background: transparent;
-		@include transparent(rgb(0,0,0),0.0);
-		border: none;
-		@include box-shadow(none);
-
-		.nav>li>a {
-			font-size: 18px;
-		}
-
-		.nav>li .count {
-			position: absolute;
-			bottom: 2px;
-			right: 2px;
-			font-size: 9.1px;
-			font-weight: normal;
-			// background: rgba(51,51,51,0.55);
-			@include transparent(rgb(51,51,51),0.55);				
-			color: rgba(255,255,255,0.9);
-			line-height: 1em;
-			padding: 2px 4px;
-			@include border-radius(10px);
-		}
-	}
-
-	.navbar.affix {
-		top: 0px;
-		position: fixed!important;
-		left: 0px;
-		right: 0px;
-		z-index: 1030;
-		// @include background(rgba(0,0,0,0.5));
-		@include transparent(rgb(0,0,0),0.55);
-
-		.nav>li>a {
-			color: white;
-		}
-	}
-
-	.navbar.affix-top {
-		position: fixed;
-		top: 15px;
-		right:0px;
-		z-index: 1030;
-	}
-
-
-
-
-	.search-query {
-		border: none;
-		color: #f8f8f8;
-		background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);
-		@include transparent(rgb(51,51,51),0.4);				
-
-		padding-left: 26px;
-		width: 100px;
-		line-height: 20px;
-		@include transition(width 0.2s);
-		@include border-radius(1px);
-	}
-
-	.nav>li.divider {
-		display: block;
-		height: 38px;
-		width: 1px;
-		margin: 0 20px;
-		background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
-		@include background(linear-gradient(rgba(51,51,51,0),rgba(51,51,51,0.5),rgba(230,230,230,0)));
-	}
-}
-
+// header navigration
 
 .open_right_side {
 
@@ -489,7 +506,6 @@ body {
 }
 
 // Social Sidebar
-
 
 .right-sidebar {
 	position: absolute;
@@ -587,7 +603,7 @@ body {
 }
 
 .users-list li {
-	border-top: 1px solid rgba(51,51,51,0.25);
+	// border-top: 1px solid rgba(51,51,51,0.25);
 	padding: 12px;
 	min-width: 60px;
 	margin: 0 -12px;
@@ -609,3 +625,82 @@ body {
 .users-list .user-info {
 	margin-left: 62px;
 }
+
+// model 
+.model-popup-backdrop {
+	// @include filter(blur(20px));
+	@include filter(none);
+}
+
+.to-blur {
+	@include filter(blur(3px));
+	@include transition(0.0s);
+}
+
+.modal {
+	color: #555;
+	@include border-radius(1px);
+}
+
+.modal-body {
+	.author_image {
+		width: 50px;
+	}
+
+	height: auto;
+	max-height: 900px;
+}
+
+.dialog {
+	z-index: 1050;
+	background-color: white;
+	border: 1px solid #999999;
+	// border: 1px solid rgba(0, 0, 0, 0.3);
+	@include border-radius(1px);
+	// @include box-shadow (0 3px 7px rgba(0, 0, 0, 0.3));
+	@include background-clip(padding-box);
+	outline: none;
+	margin-bottom: 20px;
+}
+
+// comments and reply
+
+.big_comments_and_reply {
+	text-align: left;
+	.comments {
+		.comment {
+			padding: 0px 20px 10px 60px;
+			min-height: 60px;
+			.people-image {
+				margin-left: -60px;
+				float: left;
+				width: 50px;
+				height: 50px;
+			}
+
+			.author-name {
+				font-size: 16px;
+				font-weight: bold;
+			}
+
+
+		}
+	}
+
+	.reply_form {
+		padding: 0px 20px 10px 60px;
+		.head-icon {
+			margin-left: -60px;
+			float: left;
+			width: 50px;
+			height: 50px;
+		}
+
+		.message {
+			textarea {
+				width: 100%;
+			}
+		}
+	}
+}
+
