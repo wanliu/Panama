@@ -50,11 +50,6 @@
 	@include transition(0.0s);
 }
 
-.modal {
-	color: #555;
-	@include border-radius(1px);
-}
-
 .modal-body {
 	.author_image {
 		width: 50px;

@@ -18,62 +18,29 @@
 <%#= button_to_function "Submit", "document.getElementById('payment-form').firstChild.remove();document.getElementById('payment-form').submit()", :class=> 'btn' %>
 <div class="info">
   <div class="row-fluid">
-    <div class="span2">
-      <label class="control-label">收货地址：</label>
-    </div>
-    <div class="span4">
-      <%= transaction.address.try(:location) %>
-    </div>
-    <div class="span2">
-      <label class="control-label">邮编：</label>
-    </div>
-    <div class="span4">
-      <small><%= transaction.address.try(:zip_code) %></small>
-    </div>
-  </div>
+    <table class="table table-striped table-images">
+      <thead>
+        <tr>
+          <th>图片</th>
+          <th>收货地址</th>
+          <th>配送方式</th>
+          <th>合计(含运费)</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><% transaction.items[0...10].each do |item| %>
+        <%= image_tag item.product.photos.icon, :class => "avatar" %>x<%= item.amount.to_i %>
+          <% end %></td>
+        <td><%= transaction.address.try(:location) %></td>
+        <td><%= transaction.delivery_type.try(:name) %></td>
+        <td><%= number_to_currency(transaction.stotal) %></td>
+      </tr>
+    </table>
 
-  <div class="row-fluid">
-    <div class="span2">
-      <label class="control-label">配送方式：</label>
-    </div>
-    <div class="span4">
-      <%= transaction.delivery_type.try(:name) %>
-    </div>
-    <div class="span2">
-      <label class="control-label">配送费用：</label>
-    </div>
-    <div class="span4">
-      <%= number_to_currency(transaction.try(:delivery_price)) %>
-    </div>
   </div>
-
-  <div class="row-fluid">
-    <div class="span2">
-      <label class="control-label" for="inputEmail">购买的宝贝：</label>
-    </div>
-    <div class="span10">
-      <% transaction.items[0...10].each do |item| %>
-        <%= image_tag item.product.photos.icon %><small>x<%= item.amount.to_i %></small>
-      <% end %>
-    </div>
-  </div>
+  你的余额：<%= number_to_currency(current_user.money) %>
 </div>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th colspan=2 class="relative">
-        <div class="left-frame"></div>
-      </th>
-      <th><strong>合计(含运费)：<%= number_to_currency(transaction.stotal) %></strong>
-      </th>
-      <th><strong>你的余额：<%= number_to_currency(current_user.money) %></strong>
-      </th>
-      <th class="relative">
-        <div class="right-frame"></div>
-      </th>
-    </tr>
-    </thead>
-  </table>
+  
   <% if current_user.credits.size > 0 %>
   <hr>
   <div class="row-fluid">
