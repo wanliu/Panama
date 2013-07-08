@@ -19,8 +19,8 @@
             <%= flash[:error] %>
           </div>
         <% end %>
-      	<% @addresses.each_with_index do |address, index| %>
-          <%= render "show", :address => address, :index => index %>
+      	<% @addresses.each do |address| %>
+          <%= render "show", :address => address %>
       	<% end %>
       </div>
 
