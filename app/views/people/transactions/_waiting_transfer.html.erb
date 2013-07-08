@@ -29,20 +29,6 @@
       <%=transaction.pay_manner.name %>
     </div>
   </div>
-  <div class="row-fluid">
-    <div class="span2 title">
-      收货地址
-    </div>
-    <div class="span4">
-      <%= transaction.address.try(:location) %>
-    </div>
-    <div class="span2 title">
-      邮编
-    </div>
-    <div class="span4">
-      <small><%= transaction.address.try(:zip_code) %></small>
-    </div>
-  </div>
 
   <% unless transaction.delivery_manner.local_delivery? %>
     <div class="row-fluid">
@@ -60,5 +46,14 @@
       </div>
     </div>
   <% end %>
+
+  <div class="row-fluid">
+    <div class="span2 title">
+      收货地址
+    </div>
+    <div class="span10">
+      <%= transaction.address.try(:location) %>
+    </div>
+  </div>
 </div>
 <%= render "products", :transaction => transaction, :people => people %>
