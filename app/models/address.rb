@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Address < ActiveRecord::Base
   include Custom::Validators
 
@@ -16,7 +17,7 @@ class Address < ActiveRecord::Base
   end
 
   def location
-    "#{location_without_contact} -- #{contact_name} #{contact_phone}"
+    "#{contact_name}，#{contact_phone}，#{location_without_contact}"
   end
 
   validates :road, :presence => true
