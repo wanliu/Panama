@@ -12,7 +12,7 @@ class PayManner extends Backbone.View
 
     @$radio = @$("input:radio")
     @name = @$('.name').text().trim()
-    @code = @$(".code").text().trim()
+    @code = @$(".code").val().trim()
 
   chose_manner: () ->
     @$radio[0].checked = true
@@ -21,13 +21,14 @@ class PayManner extends Backbone.View
 
 class root.TransactionPayManner extends Backbone.View
   events: {
-    "click .mdify_show" : "toggleMdify",
-    'click input:button.mdify' : "toggle_paymanner"
+    "click .transaction-body .paymanner .mdify_show" : "toggleMdify",
+    'click .transaction-body .paymanner input:button.mdify' : "toggle_paymanner"
   }
 
   initialize: (options) ->
     @panel = @$(".paymanner_panel")
     @chose_panel = @$(".chose_paymanner_panel")
+    @page_head = @$(".page-header")
     @load_list()
 
   toggleMdify: () ->
@@ -44,8 +45,6 @@ class root.TransactionPayManner extends Backbone.View
       guides.slideUp()
       guide.slideDown()
 
-
-
   load_list: () ->
     lis = @chose_panel.find("ul>li")
     _.each lis, (li) =>
@@ -55,5 +54,5 @@ class root.TransactionPayManner extends Backbone.View
 
   set_name: (pay_manner, guide) ->
     @panel.find(".chose_name").html(pay_manner.name)
+    @page_head.find(".btn").attr("event-name", pay_manner.code)
     @toggle_guide(guide)
-
