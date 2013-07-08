@@ -15,7 +15,6 @@
 					<h1><%= buyer.login %>
 						<small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
 						<%= distance_of_time_in_words Time.now, transaction.created_at %>
-						<%= transaction.state if Rails.env.development? %>
 						</small>
 
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
