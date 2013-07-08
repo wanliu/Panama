@@ -12,7 +12,7 @@
 				<div class="span2">
 					<label class="control-label">收货地址：</label>
 				</div>
-				<div class="span4">
+				<div class="span10">
 					<%= address.try(:location_without_contact) %>
 				</div>
 			</div>
@@ -21,7 +21,7 @@
 				<div class="span2">
 					<label class="control-label">联系人：</label>
 				</div>
-				<div class="span4">
+				<div class="span10">
 					<%= address.try(:contact_name) %>
 				</div>
 			</div>
@@ -30,7 +30,7 @@
 				<div class="span2">
 					<label class="control-label">联系电话：</label>
 				</div>
-				<div class="span4">
+				<div class="span10">
 					<%= address.try(:contact_phone) %>
 				</div>
 			</div>
