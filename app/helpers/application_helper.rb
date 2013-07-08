@@ -86,7 +86,9 @@ module ApplicationHelper
   end
 
   def link_to_account
-    link_to current_user.login, person_path(current_user)
+    link_to person_path(current_user) do 
+      icon(:user) + ' ' + t(:account)
+    end
   end
 
   def account_info

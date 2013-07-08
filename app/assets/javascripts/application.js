@@ -16,6 +16,3 @@
 //= require social_sidebar
 //= require lib/jquery.nanoscroller
 //= require lib/activity_base_info
-//= require sidebar
-//= require topbar
-//= require right_sidebar

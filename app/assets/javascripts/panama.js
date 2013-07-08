@@ -25,7 +25,9 @@
 //= require lib/at_who
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
-
+//= require sidebar
+//= require topbar
+//= require right_sidebar
 
 root = window || this;
 

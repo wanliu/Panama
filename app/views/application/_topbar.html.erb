@@ -7,12 +7,6 @@
         <li><a href="#" class="create_buy">求购信息</a></li>
       </ul>
     </li>
-    <!-- 搜索按钮 -->
-<!--     <li class="visible-phone-landscape">
-        <a href="#" id="search-toggle">
-            <i class="icon-search"></i>
-        </a>
-    </li> -->
     <!-- 聊天信息 -->
     <li class="dropdown">
         <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
@@ -138,10 +132,7 @@
                 <%= account_info %>
             </li>
             <li role="presentation">
-                <a href="form_account.html" class="link">
-                    <i class="icon-user"></i>
-                    帐号
-                </a>
+                <%= link_to_account %>
             </li>
             <li><%= link_to_logout %></li>    
          </ul>
@@ -159,42 +150,7 @@
     <!-- <li class="hidden-phone"><a href="login.html"><i class="icon-signout"></i></a></li> -->
 </ul>
 
-<div id="active_dialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">发布您的活动</h3>
-  </div>
-  <div class="modal-body">
-    <p>One fine body…</p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <button class="btn btn-primary save_activity">确认</button>
-  </div>
-</div>
-
 <script type="text/javascript">
-  $(document).ready(function(){
-    $(".save_activity").on('click', function(type){
-      var $a = $(".activity_select>.active");
-      var content_id = $a.find(">a").attr('href')
-      var $form = $(".activity_forms>" + content_id + " form");
-
-      $form.submit();
-
-      $form.on("ajax:success", function(){
-        $form[0].reset();
-        $("#active_dialog").modal('hide');
-      });
-
-      $form.on("ajax:error", function(event, xhr, state){
-        $form.replaceWith(xhr.responseText);
-      });
-
-    });
-  })
-
   var topbar = new TopBar({el: "#topbar"});
-
   // var pb = new PublishButton({el: ".publish_button"})
 </script>

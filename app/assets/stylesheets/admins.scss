@@ -1,34 +1,26 @@
-//= require 'another_bootstrap'
-//= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
-//= require 'hallo'
-//= require 'image'
-//= require 'animate'
-//= require 'annotate'
-//= require 'arrow'
-//= require './lib/jquery.columnview'
-//= require './lib/typeahead'
-//= require './lib/search_user_typeahead'
-//= require ./lib/chose-friend
-//= require 'bootstrap_extend'
-//= require './admins/shops'
-//= require 'bootstrap-datetimepicker.min'
-//= require 'communities'
-//= require products
-//= require attachments
-//= require attachment_uploader
-//= require_self
+//!= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
+//!= require 'hallo'
+//!= require 'image'
+//!= require 'animate'
+//!= require 'annotate'
+//!= require 'arrow'
 
-
-
-@import "variables";
+@import "core";
+@import './lib/typeahead';
+@import 'lib/search_user_typeahead';
+@import './lib/chose-friend';
+@import './admins/shops';
+@import 'communities';
+@import 'products';
+@import 'attachments';
+@import 'attachment_uploader';
 @import "caret";
 @import "progress";
 @import "transaction";
 @import "admins/shops/products";
 @import "footer_nav";
 
-$left-side-admin-width :200px;
-
+$left-side-admin-width: 160px;
 
 #admin_content {
 	position: relative;
@@ -37,11 +29,6 @@ $left-side-admin-width :200px;
 
 #admin_left_side {
 	width: $left-side-admin-width;
-	position: absolute;
-	min-height: 500px;
-	top: 0px;
-	left: 0px;
-	bottom: 0px;
 }
 
 #admin_main {

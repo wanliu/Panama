@@ -35,6 +35,12 @@ module Admins
       else
         shop_admins_product_path params[:shop_id], record
       end 
+    end
+
+    def admin_active_section(name)
+      content_for(:admin_siderbar) do 
+        name.to_s
+      end
     end    
   end
 end

@@ -3,30 +3,29 @@
 <%= html_tag :class => "no-js" %>
 <%= render "head", :styles => [:admins], :javascripts => [:admins] %>
 
-<body class="<%= controller.controller_name %>">
-	<%= render "header" %>
+<body class="<%= controller.controller_name %>" style="zoom: 1">
+    <%= render "chromeframe" %>
+    <div class="logo" data-spy="affix" data-offset-top="20">
+        <h4><a href="index.html">万流 <strong>市场</strong></a></h4>
+    </div>
 	<%= render "flashes" %>
-  	<div id="admin_content" class="container relative">
-  		<div class="row">
-		    <div id="admin_main">
-		      <div class="container-fluid">
-		        <%= yield %>
-		      </div>
-		    </div>
-		    <%= side_bar :admin_left_side %>
-		</div>
-	</div>
+
+	<%= side_bar :admin_left_side %>
+    <div class="wrap">
+        <%= render "header" %>
+      	<div class='content container-fluid'>
+        	<%= yield %>
+      	</div>  
+    </div>
+
+    <div id="popup-layout"></div>
+    <%= render "right_sidebar" %>
+    <%#= render 'header' %>
+    <%= render "footer" %>
+    <%# Javascript at the bottom for fast page loading %>
+    <%= render "baidu_analyzer" %>
+
     <%#= render "javascripts" %>
 	<%= javascripts_codes %>
-	<script type="text/javascript">
-		Ajaxify.start();
-	</script>
-
-	<div class='footer_nav'>
-		<%= render_widget :chat %>
-	</div>
-	<%= render "footer" %>
-  	<%= render "baidu_analyzer" %>
-
 </body>
 </html>

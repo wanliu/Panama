@@ -1,8 +1,9 @@
 @import "variables";
 @import "compass/css3";
+@import "lib/transparent";
 
 .transaction {
-	padding-top: 40px;
+	// padding-top: 40px;
 	margin-bottom: 20px;
 
 	.container-fluid {
@@ -11,21 +12,27 @@
 	}
 
 	.wrapper-box {
-		@include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-		background: $white;
+		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+		@include transparent(rgb(51, 51, 51), 0.4);
 	}
+
+	hr {
+		margin: 20px 20px;
+	}
+
 	.transaction-header {
 
 		.avatar {
-			margin-left: 40px;
-			margin-top: -40px;
+			margin-left: 20px;
+			margin-top: 20px;
+			// margin-top: -40px;
 			position: absolute;
-			width: 100px;
+			width: 65px;
 			z-index: 1030
 		}
 
 		.info-header {
-			margin-left: 150px;
+			margin-left: 90px;
 			position: relative;
 
 			.page-header {
@@ -74,102 +81,28 @@
 			}
 		}
 
-		border: 1px solid $tableBorder;
-		border-bottom: none;
+		// border: 1px solid $tableBorder;
+		// border-bottom: none;
 	}
 
 	$headerHeight: 100px;
 
 	.products {
-		border-top: 1px solid $tableBorder;
-		border-bottom: 1px solid $tableBorder;
-		position: relative;
-		padding-top: $headerHeight;
-		// margin: 0 -20px 0px -20px;
-		.products-head {
-			position: absolute;
-			top: -1px;
-			left: -5px;
-			right: -5px;
-			border: 1px solid $tableBorder;
-			background: $white;
-			// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-
-			.img-header {
-				width: $headerHeight;
-				height: $headerHeight;
-				float: left;
-			}
-
-			.toolbar {
-				position: absolute;
-				right: 20px;
-			}
-		}
-
-		.item-details {
-			color: #c6c6c6;
-			background: url('linen-light.png');
-			padding: 0 10px;
-
-			.detail-row {
-
-				border-bottom: 1px solid #121212;
-				@include box-shadow(rgba(255, 255, 255, 0.07) 0 1px 0);
-				height: 30px;
-				padding: 10px;
-				line-height: 30px;
-
-				.detail-icon {
-					width: 10%;
-					float: left;
-				}
-				.detail-title {
-					width: 50%;
-					float: left;
-				}
-				.detail-amount {
-					width: 10%;
-					float: left;
-					text-align: right
-				}
-				.detail-price {
-					width: 15%;
-					float: left;
-					text-align: right
-				}
-				.detail-total {
-					width: 10%;
-					float: left;
-					text-align: right
-				}
-
-				.detail-chose{
-					float: left;
-					width: 5%;
-					text-align: right;
-
-					input{
-						margin: 0px;
-						display: none;
-					}
-				}
-			}
-		}
+		padding: 20px;
 	}
 
 	.total {
 		text-align: right;
 		font-size: 30px;
-		padding: 15px;
+		padding:0 20px;
 	}
 
 	.transaction-body {
 		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
 
-		border-left: 1px solid $tableBorder;
-		border-right: 1px solid $tableBorder;
-		border-bottom: 1px solid $tableBorder;
+		// border-left: 1px solid $tableBorder;
+		// border-right: 1px solid $tableBorder;
+		// border-bottom: 1px solid $tableBorder;
 		// padding: 0 20px 20px 20px;
 
 		.returned_panel{
@@ -193,11 +126,13 @@
 		}
 
 		.control-label {
-			width: 100px;
+			// width: 100px;
+			text-align: left;
 		}
 
 		.controls {
-			margin-left: 120px;
+			// margin-left: 120px;
+
 		}
 
 		.address_input {
@@ -221,11 +156,12 @@
 		margin-left: 5px;
 		margin-right: 5px;
 		padding: 5px;
-		background: $grayLighter;
+		// background: $grayLighter;
 		/*display: none;*/
-		border-left: 1px solid $tableBorder;
-		border-right: 1px solid $tableBorder;
-		border-bottom: 1px solid $tableBorder;
+		@include transparent(rgb(51, 51, 51), 0.4);
+		// border-left: 1px solid $tableBorder;
+		// border-right: 1px solid $tableBorder;
+		// border-bottom: 1px solid $tableBorder;
 
 		iframe{
 			border: none;

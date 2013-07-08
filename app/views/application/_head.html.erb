@@ -16,7 +16,7 @@
     <% end %>
   <% end %>
   
-  <%#= javascript_include_tag faye_server_uri + "/client.js" %>
+  <%= javascript_include_tag faye_server_uri + "/client.js" %>
 
   <% if defined?(javascripts) && javascripts.respond_to?(:each) %>
     <% javascripts.each do |script| %>
