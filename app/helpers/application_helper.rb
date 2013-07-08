@@ -72,20 +72,38 @@ module ApplicationHelper
   end
 
   def link_to_logout
-    link_to l(:sign_out, "退出"), logout_path, :method => :delete
+    link_to logout_path, :method => :delete do 
+      icon(:signout) + ' ' + t(:logout)
+    end 
   end
 
   def link_to_admin
-    link_to l(:admin, '管理'), shop_admins_path(@shop.name) if action_controller.respond_to?(:admin?)
+    if action_controller.respond_to?(:admin?)    
+      link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings" do 
+        icon :cog
+      end
+    end
   end
 
   def link_to_account
-    link_to current_user.login, person_path(current_user)
+    link_to person_path(current_user) do 
+      icon(:user) + ' ' + t(:account)
+    end
+  end
+
+  def account_info
+    image_tag(current_user.icon, :class => "user_icon") + current_user.login
   end
 
   def link_to_notice
-    span = content_tag :span, unread_notification_count, :id => "my_notification", :class => "badge badge-warning notification"
-    link_to span, person_notifications_path(current_user.login)
+    # span = content_tag :span, unread_notification_count, :id => "my_notification", :class => "badge badge-warning notification"
+    # link_to span, person_notifications_path(current_user.login)
+    link_to person_notifications_path(current_user.login), 
+            :title => t(:unread_notification, count: unread_notification_count),
+            :class => "dropdown-toggle",
+            'data-taggle' => "dropdown" do 
+        icon(:group) + content_tag(:span, unread_notification_count, :class => 'count')
+    end
   end
 
   def link_to_mycart(title, *args, &block)

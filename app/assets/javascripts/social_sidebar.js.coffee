@@ -3,10 +3,10 @@
 
 root = window || @
 
-class SideBar extends Backbone.View
+class SocialSideBar extends Backbone.View
 
 	scrollSideBar: (e) ->
 		console.log e
 		false
 
-root.SideBar = SideBar
+root.SocialSideBar = SocialSideBar

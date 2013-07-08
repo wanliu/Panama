@@ -14,43 +14,33 @@
 //= require './lib/notify/jquery.pnotify.default'
 //= require './lib/notify/jquery.pnotify.default.icons'
 
-@import "another_bootstrap";
-@import "compass/css3";
-@import "variables";
+@import "core";
 @import "banks";
 @import "progress";
-@import "caret";
 @import "widget";
 @import "transaction";
 @import "notification";
 @import "footer_nav";
-@import "lib/chosen";
 
 
-body {
-  background: #f1f1f1;
-}
 
-/*.nav.nav-list.affix{
-  top:0;
-  position: fixed;
-}
-*/
-
-#wrapper {
-  padding-top :10px;
-
-}
-
-.leftfix.affix {
-  position: fixed!important;
-  top:0px;
+#people-sidebar.affix-top {
+  position: absolute;
 }
 
 #people-sidebar {
-  width: 200px;
-  position: absolute;
+  width: 160px;
+  top: 0px;
 
+  .avatar {
+    margin: 10px;
+
+    img {
+      width: 80px;
+
+    }
+
+  }  
   .icon-chevron-right {
     float: right;
     margin-top: 2px;
@@ -84,39 +74,13 @@ body {
 }
 
 .main-sidebar {
-  margin-right: 310px;
 }
 
-.right-sidebar {
-  width: 300px;
-  position: absolute;
-  right: 0px;
-}
-
-.cards {
-  list-style: none;
-  margin: 0;
-
-  li {
-    list-style-type: none;
-    padding: 1em;
-    border-bottom: 1px solid $tableBorder;
-  }
-
-  .img {
-    width: 48px;
-    height: 48px;
-    float: left;
-    margin-right: 1em;
-    margin-bottom: 1em;
-  }
-
-  .stats {
-    .time {
-      float: right;
-    }
-  }
-}
+// .right-sidebar {
+//   width: 300px;
+//   position: absolute;
+//   right: 0px;
+// }
 
 .product-item {
   margin-bottom: 10px;

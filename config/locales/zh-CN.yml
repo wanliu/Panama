@@ -535,3 +535,4 @@ zh-CN:
         product: "产品"
   my_cart: 购物车
   chat: 交谈
+  unread_notification: "%{count} 未读信息"

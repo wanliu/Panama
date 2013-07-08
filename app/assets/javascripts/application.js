@@ -10,4 +10,9 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require "panama"
+//= require panama
+//= require activity
+//= require activities/image-picker
+//= require social_sidebar
+//= require lib/jquery.nanoscroller
+//= require lib/activity_base_info

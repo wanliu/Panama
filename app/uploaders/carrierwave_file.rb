@@ -4,6 +4,8 @@ require 'carrierwave_uploader_version'
 class CarrierWaveStorageFile < CarrierWave::Uploader::Base
     include CarrierWave::MiniMagick
 
+    attr_accessor :default_file
+
     def store_dir
       "#{model.class.to_s.underscore}/#{mounted_as}"
     end
@@ -13,16 +15,20 @@ class CarrierWaveStorageFile < CarrierWave::Uploader::Base
       args = "t#{version_name.split("x").join}".to_sym unless version_name.blank?
       url = super(args)
       file_path = "#{ImageUploader.root.call}#{url}"
-      File.exist?(file_path) ? url : default_url
+      File.exist?(file_path) ? url : default_url(version_name)
     end
 
     def extension_white_list
       %w(jpg jpeg gif png)
     end
 
-    def default_url
+    def default_file 
+      @default_file = "file_blank.gif"
+    end
+
+    def default_url(version_name = nil)
       _version_name = version_name ? "#{version_name}_" : ""
-      "/default_img/#{_version_name}file_blank.gif"
+      "/default_img/#{_version_name}#{default_file}"
     end
 
     CarrierWave::Uploader.version_names.each do | vname |

@@ -41,7 +41,7 @@ class ActivityView extends Backbone.View
 		backdrop = "<div class='model-popup-backdrop in' />"
 
 		@loadTemplate () =>
-			@$backdrop ||= $(backdrop).appendTo("#main")
+			@$backdrop ||= $(backdrop).appendTo("#popup-layout")
 			@$el = $(@render()).appendTo(@$backdrop)
 			$(window).scroll()
 		super
@@ -61,8 +61,16 @@ class ActivityView extends Backbone.View
 		# 	.addClass("in")
 		# 	.css('display', 'block')
 		# 	.css('top', '10%')
-
+		$(".wrap").addClass("to-blur")
+		$("#sidebar").addClass("to-blur")
+		$(".right-sidebar").addClass("to-blur")
 		$("body").addClass("noScroll")
+
+	unmodal: () ->
+		$(".wrap").removeClass("to-blur")
+		$("#sidebar").removeClass("to-blur")
+		$(".right-sidebar").removeClass("to-blur")
+		$("body").removeClass("noScroll")
 
 	# events
 
@@ -74,11 +82,7 @@ class ActivityView extends Backbone.View
 
 	close: () ->
 		@$backdrop.remove()
-		# @$el
-		# 	.removeClass("in")
-		# 	.css('display', 'none')
-		# 	.css('top', '-20%')
-		$("body").removeClass("noScroll")
+		@unmodal();
 
 	playAnimate: () ->
 		$body = @$(".main-show")
@@ -175,9 +179,21 @@ class ActivityModel extends Backbone.Model
 
 	urlRoot: '/activities'
 
+class ActivitiesView extends Backbone.View
+
+	initialize: (@options) ->
+
+		$(window).resize($.proxy(@resizeWrap, @))
+		@resizeWrap()
+
+	resizeWrap: (e) ->
+		$wrap = $('.wrap')
+		@$el.width(parseInt(($wrap.width() - 25) / 246) * 246)
+
+
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview
 root.ActivityView = ActivityView
-
+root.ActivitiesView = ActivitiesView
 
 
