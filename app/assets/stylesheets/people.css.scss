@@ -22,8 +22,6 @@
 @import "notification";
 @import "footer_nav";
 
-
-
 #people-sidebar.affix-top {
   position: absolute;
 }
@@ -253,4 +251,24 @@
     }
   }
 
+}
+
+.addresses-panel{
+  .addresses-button{
+    padding-bottom: 10px;
+  }
+
+  .address-list{
+    .out-box {
+      margin-bottom: 10px;
+      padding-left: 10px;
+      padding-right: 10px;
+      background-color: rgba(51, 51, 51, 0.4);
+
+      .in-box {
+        position: relative;
+        overflow: hidden;
+      }
+    } 
+  }
 }
