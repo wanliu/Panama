@@ -36,16 +36,6 @@
               :label => '竞购价',
               :input_html=>{class: :span2} %>
 
-  <div class="control-group">
-    <label class="control-label" for="inputPrice">&nbsp;</label>
-    <div class="controls" style="margin-top: 55px;">
-      <div id="price_slider"></div>
-        <script type="text/javascript">
-          $( "#price_slider" ).slider();
-        </script>
-    </div>
-  </div>
-
   <%= f.input :start_time,
               :as         => :date_picker,
               required: true,
