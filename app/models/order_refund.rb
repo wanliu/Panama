@@ -45,6 +45,7 @@ class OrderRefund < ActiveRecord::Base
 
     event :expired do
       transition :apply_refund => :apply_failure,
+                 :waiting_delivery => :close,
                  :waiting_sign => :complete
     end
 
@@ -106,10 +107,13 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def self.state_expired
-    refunds = joins("left join order_refund_state_details as detail
+    refunds = find(:all,
+      :joins => "left join order_refund_state_details as detail
       on  detail.order_refund_id = order_refunds.id and
       detail.expired_state=true and
-      detail.state=order_refunds.state").where("detail.expired<=?", DateTime.now)
+      detail.state=order_refunds.state",
+      :conditions => ["detail.expired<=?", DateTime.now],
+      :readonly => false)
     refunds.each{|ref| ref.fire_events!(:expired) }
     puts "=refund===start: #{DateTime.now}=====count: #{refunds.count}===="
     refunds
@@ -198,6 +202,8 @@ class OrderRefund < ActiveRecord::Base
         buyer_recharge
         seller_payment
       end
+    elsif order_transaction.waiting_sign_state?
+      buyer_recharge
     end
   end
 

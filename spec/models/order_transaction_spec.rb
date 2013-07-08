@@ -110,9 +110,13 @@ describe OrderTransaction, "订单流通记录" do
         end
 
         it "确认订单 到 等待付款" do
+          count = @order.state_details.count
+
           @order.state.should eq("order")
           @order.buyer_fire_event!(:buy)
           @order.state.should eq("waiting_paid")
+          @order.current_state_detail.state.should eq("waiting_paid")
+          @order.state_details.count.should eq(count+1)
         end
 
         it "状态变更产生状态明细" do
@@ -172,10 +176,14 @@ describe OrderTransaction, "订单流通记录" do
           end
 
           it "等待付款 到 等待发货" do
+            count = @order.state_details.count
+
             @order.buyer.recharge(@order.stotal, icbc)
             @order.state.should eq("waiting_paid")
             @order.buyer_fire_event!(:paid)
             @order.state.should eq("waiting_delivery")
+            @order.current_state_detail.state.should eq("waiting_delivery")
+            @order.state_details.count.should eq(count+1)
             @order.buyer.money.should eq(0.to_d)
           end
 
