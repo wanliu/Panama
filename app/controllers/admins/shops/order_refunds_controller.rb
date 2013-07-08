@@ -20,7 +20,7 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     @refund.refuse_reason = params[:refuse_reason]
     respond_to do |format|
       if @refund.save
-        format.json{ head :no_context }
+        format.json{ head :no_content }
       else
         format.json{ render :json =>draw_errors_message(@refund), :status => 403 }
       end

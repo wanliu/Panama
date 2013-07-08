@@ -6,10 +6,6 @@ class CarrierWaveStorageUpYun < CarrierWave::Uploader::Base
     "#{model.class.to_s.underscore}/#{mounted_as}"
   end
 
-  def default_file 
-    @default_file = "file_blank.gif"
-  end
-
   def default_url
     # 搞一个大一点的默认图片取名 blank.png 用 FTP 传入图片空间，用于作为默认图片
     # 由于有自动的缩略图处理，小图也不成问题

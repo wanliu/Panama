@@ -720,3 +720,7 @@ ul {
 	color: #555;
 	@include border-radius(1px);
 }
+
+h2 small {
+	color: white;
+}
