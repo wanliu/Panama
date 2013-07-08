@@ -61,7 +61,7 @@ class OrderTransaction < ActiveRecord::Base
     update_total_count
   end
 
-  after_create :notice_user, :notice_new_order, :state_change_detail
+  after_create :notice_user, :notice_new_order
 
   def notice_user
     Notification.create!(
@@ -173,7 +173,7 @@ class OrderTransaction < ActiveRecord::Base
       order.buyer_payment
     end
 
-    after_transition do |order, transaction|
+    after_transition do |order, transaction|      
       if transaction.event == :back
         order.state_details.last.destroy
       else
