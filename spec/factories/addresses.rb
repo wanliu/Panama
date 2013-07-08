@@ -7,7 +7,7 @@ FactoryGirl.define do
     sequence(:zip_code, 421800) { |n| "#{n}" }
     contact_name "李四"
     contact_phone "15844545466"
-    f.user User.first || :user
+    f.user :user
     f.province :province
     f.city :city
     f.area :area
