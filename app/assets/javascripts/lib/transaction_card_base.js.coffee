@@ -130,7 +130,7 @@ class TransactionCardBase extends AbstructStateView
         overSlide = () =>
             $side1.unwrap()
                   .remove()
-            @$el = $side2.find(">.transaction")
+            @el = @$el = $side2.find(">.transaction")
             @delegateEvents()
             $side2.find(">.transaction")
                   .unwrap()

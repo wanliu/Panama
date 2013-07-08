@@ -78,7 +78,7 @@ class People::TransactionsController < People::BaseController
     respond_to do |format|
       @transaction.address = generate_address
       if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
-        format.json { head :no_content }
+        format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
       else
         format.html { render error_back_address_html }
       end
