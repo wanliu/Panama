@@ -108,6 +108,13 @@ ActiveRecord::Schema.define(:version => 20130708034217) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
+  create_table "admins", :force => true do |t|
+    t.string   "uid"
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "attachments", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",      :null => false
@@ -305,11 +312,6 @@ ActiveRecord::Schema.define(:version => 20130708034217) do
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
 
-  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
-  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
-  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
-  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
-
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
@@ -438,13 +440,13 @@ ActiveRecord::Schema.define(:version => 20130708034217) do
   end
 
   create_table "product_items", :force => true do |t|
+    t.integer  "transaction_id"
     t.string   "title"
     t.decimal  "amount",         :precision => 10, :scale => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
-    t.integer  "transaction_id"
-    t.datetime "created_at",                                                      :null => false
-    t.datetime "updated_at",                                                      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "cart_id"
     t.integer  "product_id"
     t.string   "options"
