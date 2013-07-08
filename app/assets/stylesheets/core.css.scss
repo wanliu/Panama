@@ -687,3 +687,8 @@ ul {
 		width: 100px;
 	}
 }
+
+.modal {
+	color: #555;
+	@include border-radius(1px);
+}
