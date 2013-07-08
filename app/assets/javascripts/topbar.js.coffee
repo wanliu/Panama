@@ -2,6 +2,9 @@ root = (window || @)
 
 class TopBar extends Backbone.View
 
+	initialize: (@options) ->
+		$('.link.friends').bind('click', $.proxy(@toggleFriends, @))
+
 	events: 
 		"click .link.friends": "toggleFriends"
 
