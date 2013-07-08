@@ -45,6 +45,7 @@ class OrderRefund < ActiveRecord::Base
 
     event :expired do
       transition :apply_refund => :apply_failure,
+                 :waiting_delivery => :close,
                  :waiting_sign => :complete
     end
 
@@ -78,6 +79,10 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_unshipped_order_state?
     end
 
+    before_transition :waiting_delivery => :waiting_sign do |refund, transition|
+      refund.valid_delivery_code?
+    end
+
     after_transition :apply_refund => :waiting_delivery,
                      :apply_failure => :waiting_delivery do |refund, transition|
       refund.handle_detail_return_money
@@ -102,11 +107,13 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def self.state_expired
-    refunds = joins("left join order_refund_state_details as detail
-      on  detail.order_transaction_id = order_refunds.id and
+    refunds = find(:all,
+      :joins => "left join order_refund_state_details as detail
+      on  detail.order_refund_id = order_refunds.id and
       detail.expired_state=true and
-      detail.state=order_refunds.state")
-    .where("detail.expired<=", DateTime.now)
+      detail.state=order_refunds.state",
+      :conditions => ["detail.expired<=?", DateTime.now],
+      :readonly => false)
     refunds.each{|ref| ref.fire_events!(:expired) }
     puts "=refund===start: #{DateTime.now}=====count: #{refunds.count}===="
     refunds
@@ -145,9 +152,9 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def update_buyer_and_seller_and_operate
-    self.buyer_id = order_transaction.buyer_id
-    self.seller_id = order_transaction.seller_id
-    self.operator_id = order_transaction.operator_id
+    self.buyer_id = order_transaction.try(:buyer_id)
+    self.seller_id = order_transaction.try(:seller_id)
+    self.operator_id = order_transaction.try(:operator_id)
   end
 
   def create_state_detail
@@ -195,6 +202,14 @@ class OrderRefund < ActiveRecord::Base
         buyer_recharge
         seller_payment
       end
+    elsif order_transaction.waiting_sign_state?
+      buyer_recharge
+    end
+  end
+
+  def valid_delivery_code?
+    if delivery_code.blank?
+      errors.add(:delivery_code, "发货单号不能为空！")
     end
   end
 

@@ -39,6 +39,10 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :addresses, :controller => "people/addresses" do
+
+    end
+
     match 'recharges/ibank', :to => "people/recharges#ibank", :via => :post
     match 'recharges/remittance', :to => "people/recharges#remittance", :via => :post
 
@@ -113,7 +117,6 @@ Panama::Application.routes.draw do
   end
 
   resources :city
-  resources :addresses
   resources :delivery_types
 
   resources :activities do
@@ -121,6 +124,7 @@ Panama::Application.routes.draw do
       post 'like'
       post 'unlike'
       post 'to_cart'
+      post 'join'
     end
   end
 

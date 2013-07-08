@@ -1,7 +1,8 @@
+#encoding: utf-8
 class Address < ActiveRecord::Base
   include Custom::Validators
 
-  attr_accessible :country, :road, :zip_code, :province_id, :city_id, :area_id
+  attr_accessible :country, :road, :zip_code, :province_id, :city_id, :area_id, :contact_name, :contact_phone
 
   has_many :transaction,
              class_name: 'OrderTransaction'
@@ -11,13 +12,19 @@ class Address < ActiveRecord::Base
   belongs_to :area, :inverse_of => :address , class_name: "City"      # 县
   belongs_to :addressable, :polymorphic => true
 
-  def location
+  def location_without_contact
     "#{country}#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}#{road}"
+  end
+
+  def location
+    "#{contact_name}，#{contact_phone}，#{location_without_contact}"
   end
 
   validates :road, :presence => true
   validates :province_id, :presence => true
   validates :city, :superior => {:target => :province, :att => :city_id }
   validates :area, :superior => {:target => :city , :att => :area_id }
+  validates :contact_name, :presence => true
+  validates :contact_phone, :presence => true
 
 end

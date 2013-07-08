@@ -62,6 +62,10 @@ class ProductItem < ActiveRecord::Base
 
   memories :properties, :properties_values, :property_items
 
+  before_save do 
+    update_total
+  end
+
   after_create do
     if product.present? && !@product_options.blank?
       product.prices_definition.each do |prop|
@@ -78,6 +82,10 @@ class ProductItem < ActiveRecord::Base
       end
       save!
     end
+  end
+
+  def update_total
+    self.total = self.price * self.amount
   end
 
   def options

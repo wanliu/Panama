@@ -11,7 +11,7 @@ describe Comment,"评论模型" do
         :shops_category => yifu,
         :category => category) }
 
-    let(:activity){ FactoryGirl.create(:activity, :product => product) }
+    let(:activity){ FactoryGirl.create(:activity, :product => product, :author => anonymous) }
 
     it{ should belong_to :user }
     it{ should belong_to :targeable }

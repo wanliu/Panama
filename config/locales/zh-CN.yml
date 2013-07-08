@@ -247,7 +247,7 @@ zh-CN:
         created_at: 创建时间
         updated_at: 更新时间
         brand_name: 品牌名
-        action_link: 操作        
+        action_link: 操作
       shop:
         id: 编号
         name: 商店名
@@ -405,7 +405,7 @@ zh-CN:
     edit: "编辑"
     delete: "删除"
     create: "创建"
-    update: "更新" 
+    update: "更新"
     delete_confirmation: "确定删除?"
     product: 产品
     new_model: "新建%{model}"
@@ -485,13 +485,13 @@ zh-CN:
         forgot_your_password: "忘记密码？"
 
   property:
-    property_types: 
+    property_types:
       string: 字符串
       integer: 整数
       decimal: 数字
       datetime: 日期
       set: 集合
-      float: 浮点数      
+      float: 浮点数
 
   order_states:
     buyer:
@@ -527,6 +527,7 @@ zh-CN:
     waiting_delivery: 等待发货
     waiting_sign: 等待签收
     complete: 完成
+    close: 关闭
 
   simple_form:
     lables:

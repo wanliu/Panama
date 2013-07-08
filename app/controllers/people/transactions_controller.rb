@@ -24,9 +24,10 @@ class People::TransactionsController < People::BaseController
   end
 
   def create
-    shop_id = params[:product_item][:shop_id]
-    @transaction = @people.transactions.build(seller_id: shop_id)
+    product = Product.find(params[:product_item][:product_id])
+    @transaction = @people.transactions.build(seller_id: product.shop_id)
     @transaction.items.build(params[:product_item])
+    @transaction.items.each {|item| item.update_total}
     @transaction.save
     redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'
@@ -76,15 +77,10 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      if @transaction.address.valid?
-        options = generate_base_option
-        if @transaction.update_attributes(options)
-          format.json { head :no_content }
-        else
-          render_address_html
-        end
+      if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
+        format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
       else
-        render_address_html
+        format.html { render error_back_address_html }
       end
     end
   end
@@ -137,11 +133,15 @@ class People::TransactionsController < People::BaseController
   def destroy
     @transaction = current_order.find(params[:id])
     authorize! :destroy, @transaction
-    @transaction.destroy
 
     respond_to do |format|
-      format.html { redirect_to person_transactions_path(@people.login) }
-      format.json { head :no_content }
+      if @transaction.close_state?
+        @transaction.destroy
+        format.html { redirect_to person_transactions_path(@people.login) }
+        format.json { head :no_content }
+      else
+        format.json{ render :state => 403 }
+      end
     end
   end
 
@@ -184,13 +184,12 @@ class People::TransactionsController < People::BaseController
     super *args, options
   end
 
-  def render_address_html
-    format.html { render partial: "people/transactions/funcat/address",
-                               layout: false,
-                               status: '400 Validation Error',
-                               locals: {
-                                 :transaction => @transaction,
-                                 :people => @people }}
+  def error_back_address_html
+    { partial: "people/transactions/funcat/address",
+      layout: false,
+      status: '400 Validation Error',
+      locals: { :transaction => @transaction,
+                :people => @people } }
   end
 
   def generate_address
@@ -200,7 +199,7 @@ class People::TransactionsController < People::BaseController
     else
       address = Address.new(gener_address_arg(params[:address]))
       address.user_id = current_user.id
-      address.save      
+      address.save
       address
     end
   end
@@ -228,7 +227,9 @@ class People::TransactionsController < People::BaseController
       :city_id => a[:city_id],
       :area_id => a[:area_id],
       :zip_code => a[:zip_code],
-      :road => a[:road]
+      :road => a[:road],
+      :contact_name => a[:contact_name],
+      :contact_phone => a[:contact_phone]
     }
   end
 end

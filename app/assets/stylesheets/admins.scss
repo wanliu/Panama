@@ -23,54 +23,67 @@
 $left-side-admin-width: 160px;
 
 #admin_content {
-	position: relative;
-	margin-top: 20px;
+  position: relative;
+  margin-top: 20px;
 }
 
 #admin_left_side {
-	width: $left-side-admin-width;
+  width: $left-side-admin-width;
 }
 
 #admin_main {
-	margin-left: $left-side-admin-width + $gridGutterWidth;
-	// margin-top: $slide-height;
+  margin-left: $left-side-admin-width + $gridGutterWidth;
+  // margin-top: $slide-height;
 }
 
 .editor {
-	border: 4px dashed #ccc;
-	min-height: 400px;
+  border: 4px dashed #ccc;
+  min-height: 400px;
 }
 
 .indent_1 td:first-child {
-	padding-left: 0px;
+  padding-left: 0px;
 }
 
 .indent_2 td:first-child{
-	padding-left: $gridGutterWidth * 2;
+  padding-left: $gridGutterWidth * 2;
 }
 
 .indent_3 td:first-child {
-	padding-left: $gridGutterWidth * 4;
+  padding-left: $gridGutterWidth * 4;
 }
 
 .indent_4 td:first-child {
-	padding-left: $gridGutterWidth * 6;
+  padding-left: $gridGutterWidth * 6;
 }
 
 .collapse_button {
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
 .collapse_button ul {
-	margin-left: 0px;
-	li {
-		list-style-type: none;
-		padding-top: 13px;
-	}
+  margin-left: 0px;
+  li {
+    list-style-type: none;
+    padding-top: 13px;
+  }
 }
 
 .category.collapse_button{
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.title{
+  h1{
+    font-size: 24px;
+    font-weight: 300;
+    margin: 0px;
+    line-height:30px;
+  }
+
+  hr{
+    margin: 5px 0px 20px;
+  }
 }

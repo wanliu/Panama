@@ -64,6 +64,13 @@ class TransactionCardBase extends AbstructStateView
 
     closeThis: (event) ->
         if confirm("要取消这笔交易吗?")
+            @transaction.fetch({
+                url: @transaction.urlRoot,
+                type: "DELETE",
+                success: (model, data) =>
+                    $(@el).remove()
+            })
+            ###
             if Modernizr.cssanimations?
                 $(@el).addClass("animated fadeOutUp")
                 setTimeout () =>
@@ -71,6 +78,7 @@ class TransactionCardBase extends AbstructStateView
                 , 1300
             else
                 $(@el).fadeOut()
+            ###
 
     eventUrl: (event) ->
         @options['event_url'] + "/#{event}"
@@ -122,7 +130,7 @@ class TransactionCardBase extends AbstructStateView
         overSlide = () =>
             $side1.unwrap()
                   .remove()
-            @$el = $side2.find(">.transaction")
+            @el = @$el = $side2.find(">.transaction")
             @delegateEvents()
             $side2.find(">.transaction")
                   .unwrap()

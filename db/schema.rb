@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702071442) do
+ActiveRecord::Schema.define(:version => 20130708034217) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(:version => 20130702071442) do
     t.integer  "area_id"
     t.integer  "addressable_id"
     t.string   "addressable_type"
+    t.string   "contact_name"
+    t.string   "contact_phone"
   end
 
   create_table "admin_users", :force => true do |t|
@@ -677,6 +679,14 @@ ActiveRecord::Schema.define(:version => 20130702071442) do
     t.datetime "updated_at",                             :null => false
   end
 
+  create_table "transfer_accounts", :force => true do |t|
+    t.string   "name"
+    t.string   "number"
+    t.integer  "bank_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "transfer_sheets", :force => true do |t|
     t.string   "person"
     t.string   "code"
@@ -689,10 +699,10 @@ ActiveRecord::Schema.define(:version => 20130702071442) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4
+    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
     t.string   "im_token"
   end
 

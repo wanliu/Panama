@@ -1,0 +1,31 @@
+<%= stylesheet_link_tag 'people/addresses' %> 
+<%= javascript_include_tag 'people/addresses' %>
+<% active_section :addresses %>
+
+<div class="addresses-panel">
+  <div class="addresses-button">
+    <button href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">新增</button>
+    已有<%= @addresses.count %>个地址
+  </div>
+
+  <div class="address-list">
+    <% if flash[:error] %>
+      <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+  	<% @addresses.each_with_index do |address, index| %>
+      <%= render "show", :address => address, :index => index %>
+  	<% end %>
+  </div>
+
+  <%= render :partial => "people/addresses/new", 
+          :locals => {:address => @people.addresses.build} %>
+</div>
+
+<script type="text/javascript">
+  new Addresses({
+    el: "div.addresses-panel"
+  })
+</script>

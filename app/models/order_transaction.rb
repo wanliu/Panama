@@ -44,7 +44,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
   has_many :refunds, class_name: "OrderRefund", dependent: :destroy
-  has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy
+  has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy, inverse_of: :order_transaction
 
   validates :state, :presence => true
 
@@ -205,6 +205,10 @@ class OrderTransaction < ActiveRecord::Base
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
       order.update_delivery
     end
+
+    before_transition :waiting_transfer => :waiting_audit do |order, transition|
+      order.valid_transfer_sheet?
+    end
   end
 
   #如果卖家没有发货直接删除明细，返还买家的金额
@@ -229,6 +233,10 @@ class OrderTransaction < ActiveRecord::Base
     %w(waiting_sign complete).include?(state)
   end
 
+  def waiting_sign_state?
+    "waiting_sign" == state
+  end
+
   def unshipped_state?
     %w(delivery_failure waiting_delivery).include?(state)
   end
@@ -251,6 +259,12 @@ class OrderTransaction < ActiveRecord::Base
       waiting_delivery
       waiting_sign
       complete).include?(state)
+  end
+
+  def close_state?
+    %w(close
+      order
+      waiting_paid).include?(state)
   end
 
   def buyer_fire_event!(event)
@@ -279,10 +293,6 @@ class OrderTransaction < ActiveRecord::Base
   #卖家收款
   def seller_recharge
     seller.user.recharge(stotal, self)
-  end
-
-  def readonly?
-    false
   end
 
   def get_delivery_price(delivery_id)
@@ -377,6 +387,12 @@ class OrderTransaction < ActiveRecord::Base
     FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
   end
 
+  def valid_transfer_sheet?
+    if transfer_sheet.nil?
+      errors.add(:transfer_sheet, "没有汇款单号!")
+    end
+  end
+
   def valid_refund?
     # product_ids = refunds.avaliable.joins(:items) do |ref|
     #   ref.items.map{|item| item.product_id }
@@ -413,19 +429,25 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def update_delivery
-    if delivery_manner.local_delivery?
-      self.delivery_type_id = nil
-      self.delivery_price = 0
+    if delivery_manner.present?
+      if delivery_manner.local_delivery?
+        self.delivery_type_id = nil
+        self.delivery_price = 0
+      else
+        self.delivery_price = get_delivery_price(self.delivery_type_id)
+      end
     else
-      self.delivery_price = get_delivery_price(self.delivery_type_id)
+      errors.add(:delivery_manner_id, "没有选择运输方式!")
     end
   end
 
   def self.state_expired
-    transactions = joins("left join transaction_state_details as details
+    transactions = find(:all,
+      :joins => "left join transaction_state_details as details
       on details.order_transaction_id = order_transactions.id and
-      details.state = order_transactions.state and details.expired_state=true")
-    .where("details.expired <=?", DateTime.now)
+      details.state = order_transactions.state and details.expired_state=true",
+      :conditions => ["details.expired <=?", DateTime.now],
+      :readonly => false)
     transactions.each{|t| t.fire_events!(:expired) }
     puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
@@ -435,10 +457,13 @@ class OrderTransaction < ActiveRecord::Base
   def valid_base_info?
     unless %w(order close).include?(state)
       errors.add(:pay_manner_id, "请选择付款方式!") if pay_manner.nil?
-      errors.add(:delivery_manner_id, "请选择配送方式!") if delivery_manner.nil?
       errors.add(:address, "地址不存在！") if address.nil?
-      if delivery_type.nil? && !delivery_manner.local_delivery?
-        errors.add(:delivery_type_id, "请选择运送类型!")
+      if delivery_manner.present?
+        if delivery_type.nil? && !delivery_manner.local_delivery?
+          errors.add(:delivery_type_id, "请选择运送类型!")
+        end
+      else
+        errors.add(:delivery_manner_id, "请选择配送方式!")
       end
     end
   end

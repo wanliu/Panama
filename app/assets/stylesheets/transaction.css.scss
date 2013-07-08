@@ -2,6 +2,10 @@
 @import "compass/css3";
 @import "lib/transparent";
 
+.transaction:first-child{
+	padding-top: 0px;
+};
+
 .transaction {
 	// padding-top: 40px;
 	margin-bottom: 20px;
@@ -147,7 +151,7 @@
 		}
 
 		.address-panel {
-			// display: none;
+			display: none;
 		}
 
 	}
@@ -188,17 +192,18 @@
 
 .bank-wrapper {
 
+	td {
+		vertical-align: middle;
+	}
+
 	.bank_card {
 		float: left;
-		margin-right: 10px;
-		margin-bottom: 10px;
+		margin-right: 0px;
+		margin-bottom: 0px;
 
 		.cart {
-
-			// width: 180px;
-			// height: 110px;
 			width: 100px;
-			height: 62px;
+			// height: 62px;
 			@include box-shadow(0 1px 2px $gray);
 		}
 
@@ -287,17 +292,4 @@
 
 .creditcard-preview {
 	// height: 180px;
-}
-
-.title{
-	h1{
-		font-size: 24px;
-		font-weight: 300;
-		margin: 0px;
-		line-height:30px;
-	}
-
-	hr{
-		margin: 5px 0px 20px;
-	}
 }
