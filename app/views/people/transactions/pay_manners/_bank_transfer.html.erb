@@ -1,13 +1,30 @@
 <div class='row-fluid'>
   <div class="bank-wrapper">
-  <% Bank.all.each do |bank| %>
-    <%= content_tag :div, :class => 'bank_card' do %>
-      <%= label_tag "bank_#{bank.code}" do %>
-        <span class="banks bank-<%= bank.code %>">
-        	<%= bank.name %>
-        </span>
-      <% end %>
-    <% end %>
-  <% end %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>银行</th>
+          <th>收款方</th>
+          <th>收款帐号</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% Bank.all.each do |bank| %>
+          <tr>
+            <td>
+              <%= content_tag :div, :class => 'bank_card' do %>
+                <%= label_tag "bank_#{bank.code}" do %>
+                  <span class="banks bank-<%= bank.code %>">
+                    <%= bank.name %>
+                  </span>
+                <% end %>
+              <% end %>
+            </td>
+            <td><%= bank.transfer_account.try(:name) || "暂无" %></td>
+            <td><%= bank.transfer_account.try(:number) || "暂无" %></td>
+        <% end %>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
