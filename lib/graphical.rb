@@ -25,7 +25,7 @@ module Graphical
     module Display
         def self.config(options = {})
             default_config = {
-                :icon => "30x30",
+                :icon => "50x50",
                 :header => "100x100",
                 :avatar => "240x240",
                 :preview => "420x420"

@@ -136,8 +136,12 @@ class TransactionMessageView extends Backbone.View
 
   reset_message: (collection) ->
     @$messages.html('')
-    collection.each (model) =>
-      @_add_msg(model)
+    `
+      for(var i=collection.length-1; i>=0; i--){
+        this._add_msg(collection.models[i])
+      }
+    `
+    return
 
   add_message: (data) ->
     @trans.add(data)

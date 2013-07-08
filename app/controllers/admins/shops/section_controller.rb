@@ -28,7 +28,6 @@ class Admins::Shops::SectionController < Admins::BaseController
       render :text => "商店不存在！"
       return
     end
-
     if @current_shop.user != current_user &&
       @current_shop.find_employee(current_user.id).nil?
       redirect_to shop_path(params[:shop_id])

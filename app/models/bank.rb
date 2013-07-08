@@ -1,6 +1,7 @@
 class Bank < ActiveRecord::Base
   attr_accessible :code, :name
 
+  has_one :transfer_account, class_name: "TransferAccount"
   has_many :trade_incomes, class_name: "TradeIncome"
 
   validates :name, :presence => true

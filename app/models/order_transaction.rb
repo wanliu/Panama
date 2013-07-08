@@ -233,6 +233,10 @@ class OrderTransaction < ActiveRecord::Base
     %w(waiting_sign complete).include?(state)
   end
 
+  def waiting_sign_state?
+    "waiting_sign" == state
+  end
+
   def unshipped_state?
     %w(delivery_failure waiting_delivery).include?(state)
   end
@@ -289,10 +293,6 @@ class OrderTransaction < ActiveRecord::Base
   #卖家收款
   def seller_recharge
     seller.user.recharge(stotal, self)
-  end
-
-  def readonly?
-    false
   end
 
   def get_delivery_price(delivery_id)
@@ -442,10 +442,12 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def self.state_expired
-    transactions = joins("left join transaction_state_details as details
+    transactions = find(:all,
+      :joins => "left join transaction_state_details as details
       on details.order_transaction_id = order_transactions.id and
-      details.state = order_transactions.state and details.expired_state=true")
-    .where("details.expired <=?", DateTime.now)
+      details.state = order_transactions.state and details.expired_state=true",
+      :conditions => ["details.expired <=?", DateTime.now],
+      :readonly => false)
     transactions.each{|t| t.fire_events!(:expired) }
     puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions

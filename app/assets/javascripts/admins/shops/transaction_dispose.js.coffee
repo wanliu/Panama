@@ -102,7 +102,7 @@ class exports.TransactionDispose extends Backbone.View
     @client.subscribe "/chat/receive/OrderTransaction/#{@shop.id}/un_dispose", (data) =>
       model = @transactions.get(data.owner.id)
       if model?
-        model.set("unmessages_count", data.unmessages_count)
+        model.set("unmessages_count", data.owner.unmessages_count)
       else
         @add data.owner
 

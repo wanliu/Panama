@@ -3,4 +3,5 @@
 #= require lib/underscore
 #= require backbone
 #= require lib/hogan
-#= require people/transaction_message
+#= require lib/postmessage
+#= require transaction_message

@@ -3,15 +3,23 @@
 		<form>
 		<div class='in-box'>
 			<%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
-			<h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
+<!-- 			<h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
 			<h4 class="right_bottom1 ">现价: <span><%= activity.activity_price %></span></h4>
-		</div>
-		<div class="corner"><h4>特价</h4></div>
-		<div class='info'>
-			<p class="title"><%= activity.description %></p>
-			<span>参与 <%= activity.participate || 0%> </span>
-			喜欢 <span class='like-count'><%= activity.like || 0 %></span>
-		</div>
+ -->		</div>
+<!-- 		<div class="corner"><h4>特价</h4></div>
+
+
+ -->		
+ 			<div class='summary'>
+				<h4 class="title"><%= activity.description %></h4>
+				<p><%= activity.description %> </p>
+ 			</div>
+			<div class='userinfo'>
+				<%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
+				<p><%= activity.author.login %></p>
+				<span>参与 <%= activity.participate || 0%> </span>
+				<span class='like-count'>支持 <%= activity.like || 0 %></span>
+			</div>
 		<div class="buttons">
 			<%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
 				<%#= icon(:'shopping-cart') + " 参与" %>
@@ -22,18 +30,18 @@
 
 			<% if activity.likes.exists?(current_user) %>
 				<%= link_to '#', class: 'btn unlike-button active' do %>
-					<%= "取消喜欢" %>
+					<%= "取消支持" %>
 				<% end %>
 			<% else %>
 				<%= link_to '#', class: 'btn like-button' do %>
-					<%= icon(:heart) + " 喜欢" %>
+					<%= icon(:'thumbs-up') + " 支持" %>
 				<% end %>
 			<% end %>
 		</div>
-		<div class="comments_and_reply">
-			<%= render "people/attribution", people: activity.author if activity.author %>
+	<!-- 	<div class="comments_and_reply">
+			<%#= render "people/attribution", people: activity.author if activity.author %>
 			<%#= render "comments/last_and_reply", target: activity %>
-		</div>
+		</div> -->
 		</form>
 
 	</div>

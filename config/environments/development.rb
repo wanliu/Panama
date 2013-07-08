@@ -28,7 +28,7 @@ Panama::Application.configure do
   config.assets.compress = false
 
   # Enable source maps in the browser
-  config.sass.debug_info = true
+  config.sass.debug_info = false
 
   # Expands the lines which load the assets
   config.assets.debug = true

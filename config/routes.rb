@@ -40,7 +40,7 @@ Panama::Application.routes.draw do
     end
 
     resources :addresses, :controller => "people/addresses" do
-      
+
     end
 
     match 'recharges/ibank', :to => "people/recharges#ibank", :via => :post

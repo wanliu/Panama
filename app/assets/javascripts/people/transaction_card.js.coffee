@@ -7,7 +7,6 @@ class TransactionCard extends TransactionCardBase
     initialize:() ->
         super
         @urlRoot = @transaction.urlRoot
-        @body = @$(".transaction-body")
 
 
     events:
@@ -24,18 +23,20 @@ class TransactionCard extends TransactionCardBase
         initial: 'none'
 
         events:  [
-            { name: 'buy',        from: 'order',             to: 'waiting_paid' },
-            { name: 'paid',       from: 'waiting_paid',      to: 'waiting_delivery' },
-            { name: 'delivered',  from: 'waiting_delivery',  to: 'waiting_sign' },
-            { name: 'sign',       from: 'waiting_sign',      to: 'evaluate' },
-            { name: 'back',       from: 'waiting_paid',      to: 'order' },
-            { name: 'back',       from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
-            { name: 'back',       from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
-            { name: "returned",   from: 'waiting_delivery',  to: 'apply_refund'},
-            { name: "returned",   from: 'waiting_sign',      to: 'apply_refund'},
-            { name: "returned",   from: 'complete',          to: 'apply_refund'},
-            { name: 'transfer',   from: 'waiting_transfer',  to: 'waiting_audit' },
-            { name: 'confirm_transfer', from: 'waiting_audit_failure', to: 'waiting_audit' }
+            { name: 'online_payment',       from: 'order',                  to: 'waiting_paid' },
+            { name: 'bank_transfer',        from: 'order',                  to: 'waiting_transfer' },
+            { name: 'cash_on_delivery',     from: 'order',                  to: 'waiting_delivery' }
+            { name: 'paid',                 from: 'waiting_paid',           to: 'waiting_delivery' },
+            { name: 'delivered',            from: 'waiting_delivery',       to: 'waiting_sign' },
+            { name: 'sign',                 from: 'waiting_sign',           to: 'evaluate' },
+            { name: 'back',                 from: 'waiting_paid',           to: 'order' },
+            { name: 'back',                 from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
+            { name: 'back',                 from: 'waiting_sign',           to: 'waiting_delivery' }, # only for development
+            { name: "returned",             from: 'waiting_delivery',       to: 'apply_refund' },
+            { name: "returned",             from: 'waiting_sign',           to: 'apply_refund' },
+            { name: "returned",             from: 'complete',               to: 'apply_refund' },
+            { name: 'transfer',             from: 'waiting_transfer',       to: 'waiting_audit' },
+            { name: 'confirm_transfer',     from: 'waiting_audit_failure',  to: 'waiting_audit' }
         ]
 
 
@@ -85,9 +86,9 @@ class TransactionCard extends TransactionCardBase
         params = form.serialize()
         url = form.attr("action")
         $.post(url, params)
-            .success (xhr, data, status) =>
+            .success (data, xhr, status) =>
                 @transition()
-                @slideAfterEvent('buy')
+                @slideAfterEvent(data.event)
             .error (xhr, status) =>
                 @$(".address-form").html(xhr.responseText)
                 @notify("错误信息", '请填写完整的信息！', "error")
@@ -124,7 +125,8 @@ class TransactionCard extends TransactionCardBase
         state
 
     create_transfer_info: (event_name) ->
-        form = @body.find("form.transfer_sheet")
+        body = @$(".transaction-body")
+        form = body.find("form.transfer_sheet")
         data = form.serializeArray()
         transfers = {}
         _.each data, (d)  -> transfers[d.name] = d.value
