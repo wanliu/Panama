@@ -340,6 +340,11 @@ ul {
 	width: 80px;
 }
 
+.navbar .nav > li > .dropdown-menu:after {
+	border-bottom-color: #555;
+	border-bottom-color: rgba(51,51,51,0.85);
+}
+
 // messages
 .messages {
 	// background: rgba(51,51,51,0.85);
