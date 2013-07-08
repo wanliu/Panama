@@ -3,3 +3,22 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 @import "core";
+
+.category-sidebar {
+	width: 300px;
+}
+
+
+#category-sidebar.affix-top {
+  position: absolute;
+}
+
+#category-sidebar {
+  width: 300px;
+  top: 0px;
+
+}
+
+.wrap {
+	margin-left: 300px;
+}
