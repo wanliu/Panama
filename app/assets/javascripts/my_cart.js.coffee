@@ -49,7 +49,6 @@ class MyCart extends Backbone.View
 		false
 
 	clear_list: () ->
-		debugger
 		$.ajax({
 	      type: "post",
 	      url: "/mycart/clear_list",
