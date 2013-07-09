@@ -36,6 +36,7 @@ class MyCart extends Backbone.View
 	initialize: (@options) ->
 		@hm = new HoverManager(@$("a.handle, #cart_box"))
 		@totals_money()
+		@total_amounts()
 
 
 	toggleCartBox: (event) ->
@@ -93,8 +94,15 @@ class MyCart extends Backbone.View
 			else
 				$(".cart_main").append(@trHtml(item))
 				$("#cart_box .checkout").removeClass("disabled")
-			@$("#shop_count").html($(".cart_main tr").size())
+			@total_amounts()
 			@totals_money()
+
+	total_amounts: () ->
+		trs = @$(".cart_main tr")
+		s = 0
+		for e in trs
+			s += parseInt($(e).find("td:nth(2)").text())
+		$("#shop_count").html(s)
 
 	totals_money: () ->
 		totals = 0.0
@@ -120,7 +128,6 @@ myCart = new MyCart
 
 $ ->
 	$("[add-to-cart]").on "click", (event) ->
-		debugger
 		$form     = $(@).parents("form")
 		selector  = $(@).attr('add-to-cart')
 		urlAction = $(@).attr('add-to-action')
