@@ -738,6 +738,9 @@ ul {
 	@include border-radius(1px);
 }
 
+.model-popup-backdrop {
+	color: #555;
+}
 h2 small {
 	color: white;
 }
