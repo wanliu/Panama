@@ -40,7 +40,7 @@
   </div>
   你的余额：<%= number_to_currency(current_user.money) %>
 </div>
-  
+
   <% if current_user.credits.size > 0 %>
   <hr>
   <div class="row-fluid">
@@ -55,7 +55,7 @@
   </div>
   <% end %>
   <hr>
-  <div class="row-fluid">
+  <div class="row-fluid paid_bank">
     <div class="bank-wrapper">
 
     <% Bank.all.each do |bank| %>
