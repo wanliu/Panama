@@ -5,7 +5,10 @@ root.clients = {}
 class RealtimeClient
 
   constructor: (server_uri = null) ->
-    @client = new Faye.Client(server_uri) if server_uri?
+    #new Faye.Client(server_uri) if server_uri?
+    @client = {
+      subscribe: (key, callback) ->
+    }
     @events = {}
 
   monitor_people_notification: (token, callback = (data) -> ) ->
