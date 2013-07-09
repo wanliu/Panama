@@ -340,7 +340,7 @@ class OrderTransaction < ActiveRecord::Base
     unless seller.seller_group_employees.any?{|u| u.connect_state }
       not_service_online(id.to_s)
     end
-    operator_connect_state
+    # operator_connect_state
     if operator_state
       options[:receive_user] = current_operator
     else
