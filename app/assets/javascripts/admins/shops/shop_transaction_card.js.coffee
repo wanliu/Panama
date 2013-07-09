@@ -45,6 +45,7 @@ class ShopTransactionCard extends TransactionCardBase
 
     toggleMessage: (event) ->
         @$("iframe", ".transaction-footer").slideToggle()
+        false
 
     leaveWaitingDelivery: (event, from, to, msg) ->
         @slideAfterEvent(event) unless /back/.test event

@@ -9,14 +9,14 @@
     </li>
 
     <!--购物车信息-->
-    <li class="dropdown">
-        <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
+    <li class="dropdown shoppingcart">
+        <a href="#" title="cart" id="cart" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-shopping-cart"></i>
+            <span id="shop_count" class="badge badge-important">0</span>
         </a>
-        <span id="shop_count" class="badge badge-important"><%= my_cart.items_count %></span>
-         <ul id="support-menu" class="dropdown-menu support" role="menu">
+         <ul id="shopping-cart" class="dropdown-menu support" role="menu">
             <li role="presentation">
-                <div class="details span3">
+                <div class="details">
                     <%= render_widget :my_cart %>
                 </div>
             </li>
