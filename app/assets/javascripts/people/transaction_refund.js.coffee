@@ -21,7 +21,7 @@ class TransactionRefundView extends Backbone.View
 
   initialize: (options) ->
     @remote_url = @options.remote_url
-    @$details = @$(".item-details>.detail-row")
+    @$details = @$(".products>table>tbody>tr")
     @$panel = @$(".returned_panel")
     @$form = @$panel.find("form")
 
@@ -79,7 +79,7 @@ class TransactionRefundView extends Backbone.View
       callback.call(@, $(row))
 
   row_checkbox: (row) ->
-    row.find(".detail-chose>input:checkbox")
+    row.find("input:checkbox")
 
   notify: (text, type) ->
     $.pnotify({

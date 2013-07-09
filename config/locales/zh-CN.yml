@@ -282,8 +282,9 @@ zh-CN:
         delivery_manner: 配送类型
         delivery_manner_id: 配送类型
         transfer_sheet_id: 快递单
-        code: 邮编
-        bank: 银行
+        transfer_code: 汇单号
+        transfer_person: 汇款人
+        transfer_bank: 汇款银行
         state: 订单状态
         total: 总金额
         operator_state: 已接单

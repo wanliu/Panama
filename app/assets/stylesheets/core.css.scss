@@ -29,7 +29,7 @@ body {
 	padding-bottom: 100px;
 	@include transparent($bgcolor1, 0.91);
 	@include filter-gradient($bgcolor1, $bgcolor3, horizontal); // IE6-9 fallback on horizontal gradient
-	@include background(radial-gradient(farthest-side ellipse at 10% 0, 
+	@include background(radial-gradient(farthest-side ellipse at 10% 0,
 										rgba($bgcolor1,0.91),
 										rgba($bgcolor2,0.91),
 										rgba($bgcolor3,0.91)),  url('bgnoise_lg_dark.png'));
@@ -71,7 +71,7 @@ ul {
 	margin: 11px 0 15px;
 }
 
-// logo 
+// logo
 
 .logo {
 	position: absolute;
@@ -86,7 +86,7 @@ ul {
 		top: 0px;
 		margin-top: 0px;
 		position: fixed!important;
-		z-index: 1031;		
+		z-index: 1031;
 	}
 
 	&.sidebar-icons {
@@ -131,7 +131,7 @@ ul {
 				font-size: 9.1px;
 				font-weight: normal;
 				// background: rgba(51,51,51,0.55);
-				@include transparent(rgb(51,51,51),0.55);				
+				@include transparent(rgb(51,51,51),0.55);
 				color: rgba(255,255,255,0.9);
 				line-height: 1em;
 				padding: 2px 4px;
@@ -166,7 +166,7 @@ ul {
 		border: none;
 		color: #f8f8f8;
 		background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);
-		@include transparent(rgb(51,51,51),0.4);				
+		@include transparent(rgb(51,51,51),0.4);
 
 		padding-left: 26px;
 		width: 100px;
@@ -203,11 +203,11 @@ ul {
 	margin-right:  60px;
 }
 
-// sidebar 
+// sidebar
 
 .sidebar {
 	// background: rgba(51,51,51,0.4);
-	@include transparent(rgb(51,51,51), 0.4);	
+	@include transparent(rgb(51,51,51), 0.4);
 	position: absolute;
 	width: 160px;
 	padding: 10px 0;
@@ -220,7 +220,7 @@ ul {
 	&.affix {
 		top: 0px;
 		position: fixed!important;
-		z-index: 1030;	
+		z-index: 1030;
 	}
 
 	&.affix-top {
@@ -363,7 +363,7 @@ ul {
 	.text {
 		font-size: 11.05px;
 		color: #ddd;
-	}		
+	}
 }
 
 .page-header .navbar .nav li.dropdown.open>.dropdown-toggle, .page-header .navbar .nav li.dropdown.active>.dropdown-toggle, .page-header .navbar .nav li.dropdown.open.active>.dropdown-toggle {
@@ -378,7 +378,7 @@ ul {
 // messages
 .messages {
 	// background: rgba(51,51,51,0.85);
-	@include transparent(rgb(51,51,51),0.25);	
+	@include transparent(rgb(51,51,51),0.25);
 	box-shadow: none;
 	@include box-shadow(none);
 	@include border-radius(0);
@@ -393,19 +393,19 @@ ul {
 	.text {
 		font-size: 11.05px;
 		color: #ddd;
-	}	
+	}
 }
 
 .navbar .nav>li>.messages:after {
 	// border-bottom-color: rgba(51,51,51,0.85);
 }
 
-// support 
+// support
 
 // account
 .account {
 	// background: rgba(51,51,51,0.85);
-	@include transparent(rgb(51,51,51),0.85);		
+	@include transparent(rgb(51,51,51),0.85);
 	box-shadow: none;
 	@include box-shadow(none);
 	@include border-radius(0);
@@ -420,7 +420,7 @@ ul {
 	.text {
 		font-size: 11.05px;
 		color: #ddd;
-	}	
+	}
 }
 
 .navbar .nav>li>.account:after {
@@ -431,7 +431,7 @@ ul {
 
 .publish {
 	// background: rgba(51,51,51,0.85);
-	@include transparent(rgb(51,51,51),0.85);	
+	@include transparent(rgb(51,51,51),0.85);
 	box-shadow: none;
 	@include box-shadow(none);
 	@include border-radius(0);
@@ -446,14 +446,14 @@ ul {
 	.text {
 		font-size: 11.05px;
 		color: #ddd;
-	}	
+	}
 }
 
 .navbar .nav>li>.publish:after {
 	// border-bottom-color: rgba(51,51,51,0.85);
 }
 
-// content 
+// content
 .content {
 	padding: 25px 2.5641%;
 }
@@ -464,7 +464,7 @@ ul {
 	margin: 0px 5px;
 }
 
-// widget 
+// widget
 .widget {
 	@include border-radius(1px);
 	padding: 10px 12px;
@@ -491,7 +491,7 @@ ul {
 	padding-bottom: 6px;
 	color: #f8f8f8;
 }
-// tabs 
+// tabs
 .nav-tabs {
 	border-bottom: none;
 	&>li {
@@ -512,8 +512,8 @@ ul {
 	@include transparent(rgb(51,51,51),0.25);
 }
 
-.nav-tabs>.active>a, 
-.nav-tabs>.active>a:hover, 
+.nav-tabs>.active>a,
+.nav-tabs>.active>a:hover,
 .nav-tabs>.active>a:focus {
 	color: #f8f8f8;
 	@include transparent(rgb(51,51,51),0.25);
@@ -527,7 +527,7 @@ ul {
 
 	.navbar.affix {
 		right: 200px;
-	}	
+	}
 
 	.navbar.affix-top {
 		right: 200px;
@@ -536,7 +536,7 @@ ul {
 	&.right-mini {
 		.navbar.affix {
 			right: 74px;
-		}	
+		}
 
 		.navbar.affix-top {
 			right: 74px;
@@ -594,7 +594,7 @@ ul {
 	}
 }
 
-.open_right_side 
+.open_right_side
 .right-sidebar {
 	position: fixed;
 	right: 0;
@@ -687,7 +687,7 @@ ul {
 }
 
 
-// table-images 
+// table-images
 .table-images td img {
 	height: 60px;
 }

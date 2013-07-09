@@ -1,0 +1,84 @@
+// SASS variable overrides must be declared before loading up Active Admin's styles.
+//
+// To view the variables that Active Admin provides, take a look at
+// `app/assets/stylesheets/active_admin/mixins/_variables.css.scss` in the
+// Active Admin source.
+//
+// For example, to change the sidebar width:
+// $sidebarwidth: 242px;
+
+// Active Admin's got SASS!
+//
+@import "active_admin/mixins";
+@import "active_admin/base";
+@import "attachments";
+@import "system/simpledatepicker";
+// Overriding any nonvariable SASS must be done after the fact.
+// For example, to change the default statustag color:
+//
+//   body.active_admin {
+//      .status_tag { background: #6090DB; }
+//   }
+//
+// Notice that Active Admin CSS rules are nested within a
+// 'body.active_admin' selector to prevent conflicts with
+// other pages in the app. It is best to wrap your changes in a
+// namespace so they are properly recognized. You have options
+// if you e.g. want different styles for different namespaces:
+//
+// .active_admin       applies to any Active Admin namespace
+// .admin_namespace    applies to the admin namespace (eg: /admin)
+// .other_namespace    applies to a custom namespace named other (eg: /other)
+
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.clearfix{*height:1%;}
+
+@mixin clearfix {
+    zoom:1;
+    &:before, &:after {
+        content: "\0020";
+        display: block;
+        height: 0;
+        overflow: hidden;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+.attachmentlist {
+  @include clearfix();
+}
+
+.pagination{
+  ul{
+    li{
+      float: left;
+    }
+  }
+}
+
+
+body.system_categories{
+
+  .sidebar_category{
+
+    li{
+      padding: 3px 0pt 3px 16px;
+
+      span{
+        cursor: pointer;
+      }
+    }
+
+  }
+
+  .category_sidebar{
+    float: left;
+    width: 20%;
+  }
+
+  table.index_table{
+    width: 80%;
+  }
+}
