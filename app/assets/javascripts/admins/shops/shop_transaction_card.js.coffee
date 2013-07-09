@@ -20,12 +20,14 @@ class ShopTransactionCard extends TransactionCardBase
         initial: 'none'
 
         events:  [
-            { name: 'refresh',       from: 'order',             to: 'waiting_paid' },
-            { name: 'refresh',       from: 'waiting_paid',      to: 'waiting_delivery' },
-            { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
-            { name: 'back',          from: 'waiting_paid',      to: 'order'         },
-            { name: 'back',          from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
-            { name: 'back',          from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
+            { name: 'refresh',          from: 'order',             to: 'waiting_paid' },
+            { name: 'refresh',          from: 'waiting_paid',      to: 'waiting_delivery' },
+            { name: 'audit_transfer',   from: 'waiting_audit',     to: 'waiting_delivery'},
+            { name: 'audit_failure',    from: 'waiting_audit',     to: 'waiting_audit_failure'},
+            { name: 'delivered',        from: 'waiting_delivery',  to: 'waiting_sign' }, # only for development
+            { name: 'back',             from: 'waiting_paid',      to: 'order'         },
+            { name: 'back',             from: 'waiting_delivery',  to: 'waiting_paid' }, # only for development
+            { name: 'back',             from: 'waiting_sign',      to: 'waiting_delivery' }, # only for development
 
         ]
 
