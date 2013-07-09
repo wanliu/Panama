@@ -3,6 +3,8 @@
 @import "caret";
 @import "lib/transparent";
 @import "lib/chosen";
+@import 'font-awesome';
+
 
 body {
 	$bgcolor1: #69D2E7;
@@ -178,7 +180,7 @@ ul {
 		height: 38px;
 		width: 1px;
 		margin: 0 20px;
-		background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+		// background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
 		@include background(linear-gradient(rgba(51,51,51,0),rgba(51,51,51,0.5),rgba(230,230,230,0)));
 	}
 }
@@ -362,6 +364,15 @@ ul {
 		font-size: 11.05px;
 		color: #ddd;
 	}
+}
+
+.page-header .navbar .nav li.dropdown.open>.dropdown-toggle, .page-header .navbar .nav li.dropdown.active>.dropdown-toggle, .page-header .navbar .nav li.dropdown.open.active>.dropdown-toggle {
+	background-color: transparent;
+	color: rgba(51,51,51,0.5);
+}
+
+.page-header .navbar .nav>li>a:focus, .page-header .navbar .nav>li>a:hover, .page-header .navbar .nav>.active>a, .page-header .navbar .nav>.active>a:hover, .page-header .navbar .nav>.active>a:focus {
+	color: #fff;
 }
 
 // messages
@@ -710,4 +721,8 @@ ul {
 .modal {
 	color: #555;
 	@include border-radius(1px);
+}
+
+h2 small {
+	color: white;
 }

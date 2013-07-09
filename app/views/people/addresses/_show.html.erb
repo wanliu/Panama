@@ -1,22 +1,13 @@
-<div class="address address<%=address.id%> out-box">
+<div class="address address<%=address.id%>">
 	<div class="address-details">
 		<div class="address-button">
-			<h3>地址<%= index + 1 %></h3>
+			<h3><%= address.try(:location_without_contact) %></h3>
 			<div class="pull-right">
 				<a class="btn" data-toggle="modal" href="addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
 				<%= button_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn btn-danger" %>
 			</div>
 		</div>
 		<div class="in-box">
-			<div class="row-fluid">
-				<div class="span2">
-					<label class="control-label">收货地址：</label>
-				</div>
-				<div class="span10">
-					<%= address.try(:location_without_contact) %>
-				</div>
-			</div>
-
 			<div class="row-fluid">
 				<div class="span2">
 					<label class="control-label">联系人：</label>
