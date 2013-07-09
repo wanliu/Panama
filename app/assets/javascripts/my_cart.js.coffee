@@ -48,6 +48,7 @@ class MyCart extends Backbone.View
 		false
 
 	clear_list: () ->
+		debugger
 		$.ajax({
 	      type: "post",
 	      url: "/mycart/clear_list",
@@ -69,7 +70,6 @@ class MyCart extends Backbone.View
 
 	addToCart: ($element, form, urlAction) ->
 		$el = $(@el)
-
 		targetPosition = @targetAttributes($el)
 		pos = $element.offset()
 		moveTarget = $element
@@ -126,13 +126,15 @@ class CartBox extends Backbone.View
 
 myCart = new MyCart
 
-$("[add-to-cart]").on "click", (event) ->
-	$form     = $(@).parents("form")
-	selector  = $(@).attr('add-to-cart')
-	urlAction = $(@).attr('add-to-action')
+$ ->
+	$("[add-to-cart]").on "click", (event) ->
+		debugger
+		$form     = $(@).parents("form")
+		selector  = $(@).attr('add-to-cart')
+		urlAction = $(@).attr('add-to-action')
 
-	myCart.addToCart($(selector), $form, urlAction)
-	false
+		myCart.addToCart($(selector), $form, urlAction)
+		false
 
 root.myCart = myCart
 root

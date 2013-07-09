@@ -24,71 +24,71 @@
 module Graphical
     module Display
         def self.config(options = {})
-            default_config = {
-                :icon => "50x50",
-                :header => "100x100",
-                :avatar => "240x240",
-                :preview => "420x420"
-            }
-            @config ||= default_config
-            @config = default_config.merge(options) unless options.empty?
-            @config[:default] = ""
-            @config
+          default_config = {
+            :icon => "50x50",
+            :header => "100x100",
+            :avatar => "240x240",
+            :preview => "420x420"
+          }
+          @config ||= default_config
+          @config = default_config.merge(options) unless options.empty?
+          @config[:default] = ""
+          @config
         end
 
         def self.included(base)
-            base.extend(ClassMethods)
+          base.extend(ClassMethods)
         end
 
         module ClassMethods
 
-            #定义graphical attribute
-            def define_graphical_attr(*args)
-                attribute, options = args
-                raise "not setting attribute argument!" if attribute.nil?
-                options = {
-                    :handler => :attachment ,
-                    :allow => [:icon, :avatar, :preview, :header]
-                }.merge(options || {})
-                options[:allow].push(:default)
+          #定义graphical attribute
+          def define_graphical_attr(*args)
+              attribute, options = args
+              raise "not setting attribute argument!" if attribute.nil?
+              options = {
+                  :handler => :attachment ,
+                  :allow => [:icon, :avatar, :preview, :header]
+              }.merge(options || {})
+              options[:allow].push(:default)
 
-               self.instance_eval do
-                    define_method attribute do
-                        ImageType.new(self, options)
-                    end
-               end
-            end
+             self.instance_eval do
+                  define_method attribute do
+                      ImageType.new(self, options)
+                  end
+             end
+          end
 
-            #配置图片类型
-            def configrue_graphical(options = {})
-                @config ||= Graphical::Display.config.merge(options)
-            end
+          #配置图片类型
+          def configrue_graphical(options = {})
+              @config ||= Graphical::Display.config.merge(options)
+          end
         end
 
         class ImageType
-            include ActiveModel::Serialization
+          include ActiveModel::Serialization
 
-            attr_accessor :klass, :options
+          attr_accessor :klass, :options
 
-            def initialize(klass, options)
-                @klass, @options = klass, options
-                config = @klass.class.configrue_graphical
-                @options[:allow].each do | type |
-                    define_singleton_method type do
-                        file = @klass.send(@options[:handler])
-                        file.url(config[type]) if file
-                    end
-                end
+          def initialize(klass, options)
+            @klass, @options = klass, options
+            config = @klass.class.configrue_graphical
+            @options[:allow].each do | type |
+              define_singleton_method type do
+                file = @klass.send(@options[:handler])
+                file.url(config[type]) if file
+              end
             end
+          end
 
-            def attributes
-                config = @klass.class.configrue_graphical
+          def attributes
+            config = @klass.class.configrue_graphical
 
-                Hash[ @options[:allow].map do |type|
-                    file = @klass.send(@options[:handler])
-                    [type, file.url(config[type])] if file
-                end]
-            end
+            Hash[ @options[:allow].map do |type|
+              file = @klass.send(@options[:handler])
+              [type, file.url(config[type])] if file
+            end]
+          end
         end
     end
 end

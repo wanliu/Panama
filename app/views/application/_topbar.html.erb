@@ -9,22 +9,16 @@
     </li>
 
     <!--购物车信息-->
-
     <li class="dropdown">
         <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-shopping-cart"></i>
         </a>
-        <span id="shop_count" class="badge badge-important"><%= current_user.cart.items_count %></span>
+        <span id="shop_count" class="badge badge-important"><%= my_cart.items_count %></span>
          <ul id="support-menu" class="dropdown-menu support" role="menu">
             <li role="presentation">
-                <a href="#" class="support-ticket">
-                    <div class="picture">
-                        <span class="label label-important"><i class="icon-shopping-cart"></i></span>
-                    </div>
-                    <div class="details span3">
-                        <%= render_widget :my_cart %>
-                    </div>
-                </a>
+                <div class="details span3">
+                    <%= render_widget :my_cart %>
+                </div>
             </li>
         </ul> 
     </li>
@@ -171,6 +165,7 @@
     </li>    
     <!-- <li class="hidden-phone"><a href="login.html"><i class="icon-signout"></i></a></li> -->
 </ul>
+<%= javascript_include_tag "my_cart" %>
 
 <script type="text/javascript">
   var topbar = new TopBar({el: "#topbar"});
