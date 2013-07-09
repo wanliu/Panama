@@ -1,4 +1,4 @@
-.notification_panle{
+.notification_panel{
 	ul{
 		list-style: none;
 
@@ -7,10 +7,15 @@
 			margin-bottom: 10px;
 
 			.people-info{
+				padding: 10px;
 				text-align: right;
 /*				display: inline-block;
 				margin-right: 15px;*/
 			}
+
+			.widget {
+		    padding-left: 100px;
+		  }
 
 			.content{
 /*				display: inline-block;
