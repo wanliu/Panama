@@ -326,7 +326,7 @@ class OrderTransaction < ActiveRecord::Base
       self.update_attribute(:operator_id, _operator.id)
     end
     notice_order_dispose
-    operator_connect_state
+    self.update_attribute(:operator_state, true)
   end
 
   #买家发送信息
@@ -372,6 +372,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["buyer_login"] = buyer.login
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
+    attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra
   end
 
