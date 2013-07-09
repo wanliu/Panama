@@ -13,12 +13,9 @@
 				margin-right: 15px;*/
 			}
 
-			.widget {
-		    padding-left: 100px;
-		    margin-bottom: 0px;
-		  }
-
 			.content{
+				@include panel-background;
+				position: relative;
 /*				display: inline-block;
 				position: absolute;
 				padding: 10px;*/
