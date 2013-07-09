@@ -18,20 +18,26 @@
 
   <ul id="people-side-nav" class="side-nav">
       <% if can?(:index, Cart) || can?(:index, OrderTransaction) %>
+        <% if can? :index, Cart %>            
+            <li>
+              <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
+              购物车</a>
+            </li>
+        <% end %>                
+        <% if can? :index, OrderTransaction %>
+            <li>
+              <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>"><i class="icon-envelope-alt"></i>订单
+            </a>
+            </li>
+        <%end%>      
         <li class="accordion-group">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-shopping-cart"></i> <span class="name">购物</span></a>
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-folder-open"></i> <span class="name">交易管理</span></a>
             <ul id="purchaser-collapse" class="accordion-body collapse">
-            <% if can? :index, Cart %>            
-                <li>
-                  <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>">购物车</a>
-                </li>
-            <% end %>                
-            <% if can? :index, OrderTransaction %>
-                <li>
-                  <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>">订单
-                </a>
-                </li>
-            <%end%>
+            <li>
+              <a class='people-completed' href='<%= completed_person_transactions_path(@people.login) %>'>完成的
+              </a>
+            </li>
+
             <li>
               <a class='people-refunds' href='<%= person_order_refunds_path(@people.login) %>'>退货
               </a>
