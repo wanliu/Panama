@@ -6,7 +6,6 @@
 #= require backbone
 #= require lib/hogan
 #= require my_cart
-#= require lib/countdown
 #= require typeaheadExtension
 
 root = window || @
@@ -61,15 +60,15 @@ class ActivityView extends Backbone.View
 		# 	.addClass("in")
 		# 	.css('display', 'block')
 		# 	.css('top', '10%')
-		$(".wrap").addClass("to-blur")
-		$("#sidebar").addClass("to-blur")
-		$(".right-sidebar").addClass("to-blur")
+		# $(".wrap").addClass("to-blur")
+		# $("#sidebar").addClass("to-blur")
+		# $(".right-sidebar").addClass("to-blur")
 		$("body").addClass("noScroll")
 
 	unmodal: () ->
-		$(".wrap").removeClass("to-blur")
-		$("#sidebar").removeClass("to-blur")
-		$(".right-sidebar").removeClass("to-blur")
+		# $(".wrap").removeClass("to-blur")
+		# $("#sidebar").removeClass("to-blur")
+		# $(".right-sidebar").removeClass("to-blur")
 		$("body").removeClass("noScroll")
 
 	# events

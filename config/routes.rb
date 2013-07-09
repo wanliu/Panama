@@ -29,6 +29,7 @@ Panama::Application.routes.draw do
 
       collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
+        get "completed", :to => "people/transactions#completed"
       end
     end
 

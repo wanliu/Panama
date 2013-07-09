@@ -17,6 +17,11 @@ class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
 
+  # default_scope -> { where("state != 'complete'") }
+  scope :completed, -> { where(:state => 'complete') }
+  scope :uncomplete, -> { where("state != 'complete'") }
+  scope :buyer, ->(person){ where(:buyer_id => person.id) }
+  
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
   # attr_accessor :total
 
@@ -61,7 +66,7 @@ class OrderTransaction < ActiveRecord::Base
     update_total_count
   end
 
-  after_create :notice_user, :notice_new_order
+  after_create :notice_user, :notice_new_order, :state_change_detail
 
   def notice_user
     Notification.create!(
@@ -178,7 +183,7 @@ class OrderTransaction < ActiveRecord::Base
       order.buyer_payment
     end
 
-    after_transition do |order, transaction|      
+    after_transition do |order, transaction|
       if transaction.event == :back
         order.state_details.last.destroy
       else
@@ -340,7 +345,7 @@ class OrderTransaction < ActiveRecord::Base
     unless seller.seller_group_employees.any?{|u| u.connect_state }
       not_service_online(id.to_s)
     end
-    operator_connect_state
+    # operator_connect_state
     if operator_state
       options[:receive_user] = current_operator
     else

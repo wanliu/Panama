@@ -11,4 +11,53 @@ module CategoryHelper
 
     ["#{cls_name} #{last_name}", hitarea_name]
   end
+
+  def root_category_tree
+  	html = ""
+  	Category.root.children.each do |category|
+  		html << first_class_category_tree_of(category)
+  	end
+  	html.html_safe
+  end
+
+  def first_class_category_tree_of(category)
+  	li_begin_of(category) << descendant_categories_html(category) << li_end_of(category)
+  end
+
+  def second_class_category_tree_of(category)
+    html = "<li class='second_class_category_tree'>
+              <a href='javascript: void(0)'>
+                <span>#{ category.name }</span>
+              </a>
+              <ul>"
+    category.children.each do |child|
+      html << "<li class='third_class_category_node'><a href='/categories/#{ child.id }'>#{ child.name }</a></li>"
+    end
+    html << "</ul></li>"
+  end
+
+  def li_begin_of(category)
+  		"<li class='accordion-group'>
+	      <a class='accordion-toggle collapsed' data-toggle='collapse' data-parent='#forms-collapse-#{ category.parent.id }' href='#forms-collapse-#{ category.id }'>
+	        <i class='icon-edit'></i>
+	        <span class='name'> #{ category.name } </span>
+	      </a>"
+  end
+
+  def descendant_categories_html(category)
+  	html = ""
+  	if category.children.size > 0
+	      html << "<ul id='forms-collapse-#{ category.id }' class='accordion-body collapse second_class_categories'>"
+	        category.children.each do |child|
+	        	html << second_class_category_tree_of(child)
+	        end
+	      html << "</ul>"
+	  	HTML
+	  end
+	  html
+	end
+
+	def li_end_of(category)
+		"</li>"
+	end
 end
