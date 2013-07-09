@@ -203,7 +203,8 @@
 	.bank_card {
 		float: left;
 		margin-right: 0px;
-		margin-bottom: 0px;
+		margin-bottom: 20px;
+		position: relative;
 
 		.cart {
 			width: 100px;
@@ -211,9 +212,17 @@
 			@include box-shadow(0 1px 2px $gray);
 		}
 
+		input[type='radio']{
+			position: absolute;
+			top: 8px;
+			left: 5px;
+		}
+
 		label {
 			display: inline-block;
 			line-height: 36px;
+			margin-bottom: 0px;
+			margin-left: 25px;
 		}
 
 		.banks {
