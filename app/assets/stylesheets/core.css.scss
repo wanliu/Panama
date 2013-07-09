@@ -3,7 +3,7 @@
 @import "caret";
 @import "lib/transparent";
 @import "lib/chosen";
-@import 'font-awesome';
+@import "font-awesome";
 
 
 body {
@@ -169,10 +169,14 @@ ul {
 		@include transparent(rgb(51,51,51),0.4);				
 
 		padding-left: 26px;
-		width: 100px;
+		width: 150px;
 		line-height: 20px;
 		@include transition(width 0.2s);
 		@include border-radius(1px);
+
+		&:focus {
+			width: 200px;
+		}
 	}
 
 	.nav>li.divider {
@@ -182,6 +186,10 @@ ul {
 		margin: 0 20px;
 		// background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
 		@include background(linear-gradient(rgba(51,51,51,0),rgba(51,51,51,0.5),rgba(230,230,230,0)));
+	}
+
+	.nav li a {
+		@include transition(color 0.2s);
 	}
 }
 
