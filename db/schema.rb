@@ -139,9 +139,9 @@ ActiveRecord::Schema.define(:version => 20130708034217) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count", :default => 0
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.integer  "items_count"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "user_id"
   end
 
@@ -534,6 +534,15 @@ ActiveRecord::Schema.define(:version => 20130708034217) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.string   "valuable_type"
+  end
+
+  create_table "receive_order_messages", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.integer  "send_user_id"
+    t.text     "content"
+    t.boolean  "state",                :default => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
   end
 
   create_table "replies", :force => true do |t|

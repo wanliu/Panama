@@ -18,10 +18,15 @@
     <%= render "right_sidebar" %>
     <%#= render 'header' %>
     <%= render "footer" %>
-    <%# Javascript at the bottom for fast page loading %>
+    <%# Javascript at the bottom for fast page loading %> 
+    <div class='footer_nav'>
+      <%#= render_widget :chat %>
+      <%#= render_widget :my_cart %>
+    </div>
+
     <%= render "baidu_analyzer" %>
     <div class='footer_nav'>
-      <%= render_widget :chat %>
-      <%= render_widget :my_cart %>
+      <%#= render_widget :chat %>
+      <%#= render_widget :my_cart %>
     </div>
 </body>
