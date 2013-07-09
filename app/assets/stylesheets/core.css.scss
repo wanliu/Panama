@@ -741,3 +741,9 @@ ul {
 h2 small {
 	color: white;
 }
+
+@mixin panel-background {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba(51, 51, 51, 0.4);
+}
