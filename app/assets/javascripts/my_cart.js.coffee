@@ -97,12 +97,19 @@ class MyCart extends Backbone.View
 				$(".cart_main").append(@trHtml(item))
 				# $("#shop_count").html($(".cart_main tr").size())
 				$("#cart_box .checkout").removeClass("disabled")
-				@$("#shop_count").html($(".cart_main tr").size())
+			$("#shop_count").html(@total_amounts())
 			@totals_money()
 			# $(".cart_main tr").each () ->
 			# 	totals += parseFloat($(this).find(".row").html())
 			# $(".cart_bottom tr td").html("商品总价：" + totals)
 			# totals = $(".product_total span").text(parseFloat(totals))
+
+	total_amounts: () ->
+		trs = @$(".cart_main tr")
+		s = 0
+		for e in trs
+			s += parseInt($(e).find("td:nth(2)").text())
+		s
 
 	totals_money: () ->
 		totals = 0.0
