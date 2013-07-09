@@ -18,7 +18,7 @@ class HoverManager
 
 class MyCart extends Backbone.View
 	# el: "#my_cart"
-	el: $('#my_cart')
+	el: $('.shoppingcart')
 
 	events:
 		"click .handle": "toggleCartBox"
@@ -59,17 +59,16 @@ class MyCart extends Backbone.View
     	})
 
 	hoverProcess: (event) ->
-		@$("#cart_box")
+		$("#cart_box")
 			.show()
 			.addClass("animated fadeInUpBig")
-		# @hm.signalProcess(event)
 
 	blurProcess: (event)->
-		$(@el)
+		$("#cart_box")
 			.addClass("animated fadeInDownBig")
 
 	addToCart: ($element, form, urlAction) ->
-		$el = $(@el)
+		$el = $("#cart_box")
 		targetPosition = @targetAttributes($el)
 		pos = $element.offset()
 		moveTarget = $element
@@ -91,18 +90,11 @@ class MyCart extends Backbone.View
 			if  $("#product_item#{item.id}").length > 0
 				trObj = $("#product_item#{item.id}")
 				trObj.replaceWith(@trHtml(item))
-				# $(trOjb[2]).html(item.amount)
-				# $(trOjb[3]).html(item.total)
 			else
 				$(".cart_main").append(@trHtml(item))
-				# $("#shop_count").html($(".cart_main tr").size())
 				$("#cart_box .checkout").removeClass("disabled")
-				@$("#shop_count").html($(".cart_main tr").size())
+			@$("#shop_count").html($(".cart_main tr").size())
 			@totals_money()
-			# $(".cart_main tr").each () ->
-			# 	totals += parseFloat($(this).find(".row").html())
-			# $(".cart_bottom tr td").html("商品总价：" + totals)
-			# totals = $(".product_total span").text(parseFloat(totals))
 
 	totals_money: () ->
 		totals = 0.0
@@ -132,7 +124,6 @@ $ ->
 		$form     = $(@).parents("form")
 		selector  = $(@).attr('add-to-cart')
 		urlAction = $(@).attr('add-to-action')
-
 		myCart.addToCart($(selector), $form, urlAction)
 		false
 

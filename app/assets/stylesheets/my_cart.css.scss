@@ -3,10 +3,11 @@
     position: relative;
     top: -20px;
     left: 23px;
-    @include transparent(rgb(51,51,51), 0.5)
+    /*@include transparent(rgb(51,51,51), 0.5);*/
 }
 
 #cart_box {
+    /*width: 100%;*/
     width: 280px;
     height: auto;
     overflow: auto;
@@ -28,12 +29,14 @@
     }
 
     .cart_top {
+        /*width: 100%;*/
         width: 260px;
         line-height: 40px;
         position: relative;
     }
 
     .cart_main {
+        /*width: 100%;*/
         width: 260px;
         margin-left: 2px;
         line-height: 30px;
@@ -58,7 +61,8 @@
     }
 
     .cart_bottom {
-       width: 255px;
+        /*width: 100%;*/
+        width: 255px;
         height: 30px;
         margin-bottom: 20px;
         position:relative;
