@@ -15,7 +15,7 @@ module CategoryHelper
   def root_category_tree
   	html = ""
   	Category.root.children.each do |category|
-  		html << category_tree_of(category)
+  		html << first_class_category_tree_of(category)
   	end
   	html.html_safe
   end
