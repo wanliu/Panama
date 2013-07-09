@@ -14,7 +14,8 @@
         <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-shopping-cart"></i>
         </a>
-        <ul id="support-menu" class="dropdown-menu support" role="menu">
+        <span id="shop_count" class="badge badge-important"><%= current_user.cart.items_count %></span>
+         <ul id="support-menu" class="dropdown-menu support" role="menu">
             <li role="presentation">
                 <a href="#" class="support-ticket">
                     <div class="picture">
@@ -25,7 +26,7 @@
                     </div>
                 </a>
             </li>
-        </ul>
+        </ul> 
     </li>
 
     <!-- 聊天信息 -->
