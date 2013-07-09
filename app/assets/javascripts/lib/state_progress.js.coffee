@@ -149,7 +149,8 @@ class StateProgress extends Backbone.View
       @added_states(item.state)
 
     item = @last_complete_state()
-    @load_define_state(item.state)
+    if item?
+      @load_define_state(item.state)
 
   load_define_state: (state) ->
     info = @get_state_flow(state)

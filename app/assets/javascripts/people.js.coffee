@@ -22,6 +22,7 @@
 #= require people/transaction_paymanner
 #= require people/transaction_payment
 #= require people/transaction_refund
+#= require people/addresses
 #= require lib/transaction_bubbling
 #= require lib/state_progress
 #= require lib/attachment_upload

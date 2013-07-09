@@ -28,6 +28,7 @@ group :assets do
   gem 'compass-h5bp', '~> 0.1.0'
   gem 'ejs', '~> 1.1.1'
   gem 'turbo-sprockets-rails3'
+  gem 'font-awesome-sass-rails'
 end
 
 gem 'cache_digests', '~> 0.2.0'
@@ -94,8 +95,8 @@ gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 gem 'state_machine', '~> 1.1.2'
 
 group :development, :test do
-  gem "selenium-webdriver", "~> 2.27.0"
   gem 'debugger', '~> 1.2.2'
+  gem "selenium-webdriver", "~> 2.27.0"
   gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'
   gem 'rb-readline', '~> 0.4.2'

@@ -22,8 +22,6 @@
 @import "notification";
 @import "footer_nav";
 
-
-
 #people-sidebar.affix-top {
   position: absolute;
 }
@@ -253,4 +251,27 @@
     }
   }
 
+}
+
+.addresses-panel{
+  .addresses-button{
+    padding-bottom: 10px;
+  }
+
+  .address-list{
+    .address {
+      @include panel-background;
+
+      .in-box {
+        position: relative;
+        overflow: hidden;
+      }
+    } 
+  }
+}
+
+.comment-list {
+  .product-comment{
+    @include panel-background;
+  }
 }

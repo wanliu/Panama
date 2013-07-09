@@ -9,7 +9,6 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  */
-
 @import "core";
 @import "footer_nav";
 @import "bootstrap-spinner";
@@ -34,7 +33,7 @@
 }
 
 
-// model 
+// model
 
 .active_dialog{
 	top: 25px!important;
@@ -50,18 +49,13 @@
 	@include transition(0.0s);
 }
 
-.modal {
-	color: #555;
-	@include border-radius(1px);
-}
-
 .modal-body {
 	.author_image {
 		width: 50px;
 	}
 
 	height: auto;
-	max-height: 900px;
+	max-height: 525px;
 }
 
 .dialog {

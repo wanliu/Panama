@@ -15,7 +15,6 @@
 					<h1><%= buyer.login %>
 						<small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
 						<%= distance_of_time_in_words Time.now, transaction.created_at %>
-						<%= transaction.state if Rails.env.development? %>
 						</small>
 
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -32,7 +31,7 @@
 		</div>
 		<div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
 			<div class="message-toggle"><%= button_tag icon(:list), :class => "btn" %></div>
-			<iframe class="hide" src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
+ 			<iframe class="hide" src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
 			</iframe>
 		</div>
 	</div>

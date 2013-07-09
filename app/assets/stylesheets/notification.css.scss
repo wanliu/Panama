@@ -1,4 +1,4 @@
-.notification_panle{
+.notification_panel{
 	ul{
 		list-style: none;
 
@@ -7,12 +7,15 @@
 			margin-bottom: 10px;
 
 			.people-info{
-				text-align: right;
+				padding: 10px;
+				text-align: center;
 /*				display: inline-block;
 				margin-right: 15px;*/
 			}
 
 			.content{
+				@include panel-background;
+				position: relative;
 /*				display: inline-block;
 				position: absolute;
 				padding: 10px;*/

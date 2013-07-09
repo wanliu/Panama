@@ -1,5 +1,9 @@
 <% admin_active_section :complete %>
-
+<div class='row-fluid'>
+  <div class='span12'>
+    <h2 class='page-title'>已完成</h2>
+  </div>
+</div>
 <div class='transaction_list'>
   <% @transactions.each do |transaction| %>
       <%= render :partial => "transaction" ,:locals => {

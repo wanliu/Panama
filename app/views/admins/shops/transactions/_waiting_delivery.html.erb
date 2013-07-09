@@ -1,39 +1,43 @@
 <div class="container-fluid">
   <% if transaction.delivery_manner.express? %>
   <div class="row-fluid">
-    <div class="span1">
+    <div class='span2 title'>
+      <label class="control-label">快递单号</label>
+    </div>
+    <div class='span4'>
+        <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code span12' />
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span2 title">
       <label class="control-label">配送方式</label>
     </div>
-    <div class="span3">
+    <div class="span4">
       <label class="control-label">
       <%= transaction.delivery_type.nil? ? "暂无" : transaction.delivery_type.name %>
       </label>
     </div>
-    <div class="span1">
+    <div class="span2 title">
       <label class="control-label">配送费用</label>
     </div>
-    <div class="span3">
+    <div class="span4">
       <label class="control-label">
         <%= number_to_currency(transaction.delivery_price) %>
       </label>
     </div>
-    <div class='span1'>
-      <label class="control-label">快递单号</label>
-    </div>
-    <div class='span3'>
-        <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code' style='margin-bottom:0px;' />
-    </div>
   </div>
   <% end %>
   <div class='row-fluid'>
-    <div class='span1'>
+    <div class='span2 title'>
       送货地址
     </div>
-    <div class='span7'>
+    <div class='span10'>
       <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
     </div>
-    <div class='span1'>运输方式</div>
-    <div class='span3'>
+  </div>
+  <div class="row-fluid">
+    <div class='span2 title'>运输方式</div>
+    <div class='span4'>
       <%=transaction.delivery_manner.name %>
     </div>
   </div>
@@ -48,6 +52,4 @@
 </div>
 <%= render "products", :transaction => transaction %>
 <script type="text/javascript">
-    expired = new Date("<%=transaction.current_state_detail.expired.strftime('%Y/%m/%d %H:%M:%S') %>")
-    $('.clock', '#order<%=transaction.id %>').countdown({until: expired});
 </script>

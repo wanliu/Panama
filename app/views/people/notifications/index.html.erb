@@ -1,47 +1,51 @@
 <% active_section :notification %>
 <div class='row-fluid'>
-    <div class='span8'>
-    
-        <div class='notification_panle'>
-            <ul>
-            <% @notifications.each do | n | %>
-                <li>
-                    <div class='people-info span1'>
-                        <div>
-                            <img class="img-circle" src="<%=n.mentionable_user.photos.icon %>" />
-                        </div>
-                        <div>
-                          <a href="javascript:void(0)"><%=n.mentionable_user.login %></a>
-                        </div>
-                    </div>
-                    <div class='widget' style='position:relative;'>
-                        <p>
-                            <%=raw n.body %>
-                        </p>
-                        <p>
-                            <span class="label <%= n.read ? "" : "label-important" %>" style='position: absolute;top: 0px;right: 0px;'>
-                                <%= n.read ? "已读取" : "未读取" %>
-                            </span>
-                            <span>
-                                <a href="<%=person_notification_path(current_user.login, n.id) %>/enter">
-                                    查看
-                                </a>
-                            </span>
-                            <% unless n.read %>
-                                <span style='margin-left: 20px'>
-                                    <span class="label">不提醒</span>
-                                </span>
-                            <% end %>
-                        </p>
-                    </div>
-                </li>
-            <% end %>
-            </ul>
-            <% unless params[:all] == "1" %>
-                <div>
-                    <a href="<%= person_notifications_path(current_user.login) %>?all=1">查看所有提醒</a>
-                </div>
-            <% end %>
-        </div>
+  <div class='span12'>
+    <h2 class="page-title">通知管理 <small>通知的清单</small></h2>      
+  </div>
+</div>
+<div class='row-fluid'>
+  <div class='span8'>
+    <div class='notification_panel'>
+      <ul>
+        <% @notifications.each do | n | %>
+        <li>
+          <div class='people-info span2'>
+          <div>
+              <img class="img-circle" src="<%=n.mentionable_user.photos.icon %>" />
+            </div>
+            <div>
+              <a href="javascript:void(0)"><%=n.mentionable_user.login %></a>
+            </div>
+          </div>
+          <div class='content'>
+            <p>
+              <%=raw n.body %>
+            </p>
+            <p>
+              <span class="label <%= n.read ? "" : "label-important" %>" style='position: absolute;top: 0px;right: 0px;'>
+                <%= n.read ? "已读取" : "未读取" %>
+              </span>
+              <span>
+                <a href="<%=person_notification_path(current_user.login, n.id) %>/enter">
+                  查看
+                </a>
+              </span>
+              <% unless n.read %>
+              <span style='margin-left: 20px'>
+                <span class="label">不提醒</span>
+              </span>
+              <% end %>
+            </p>
+          </div>
+        </li>
+        <% end %>
+      </ul>
+      <% unless params[:all] == "1" %>
+      <div>
+        <a href="<%= person_notifications_path(current_user.login) %>?all=1">查看所有提醒</a>
+      </div>
+      <% end %>
     </div>
+  </div>
 </div>

@@ -1,3 +1,63 @@
-// @import "banks/*.png";
+.bank-wrapper {
 
-// @include all-banks-sprites;
+  .bank_card {
+
+    label {
+      display: inline-block;
+      line-height: 36px;
+      margin-bottom: 0px;
+    }
+
+    .banks {
+      background: url('/assets/banks.png');
+      width: 126px;
+      height: 36px;
+      display: block;
+      text-indent: -300px;
+      overflow: hidden;
+      border: 1px solid $tableBorder;
+
+
+      &.bank-boc {
+        background-position: 0 -36px;
+      }
+
+      &.bank-icbc {
+        background-position: 0 -432px;
+      }
+
+      &.bank-cbc {
+        background-position: 0 -72px;
+      }
+
+      &.bank-abc {
+        background-position: 0 0;
+      }
+
+      &.bank-cmb {
+        background-position: 0 -216px;
+      }
+
+      &.bank-cmbc {
+        background-position: 0 -252px;
+      }
+
+      &.bank-comm {
+        background-position: 0 -288px;
+      }
+
+      &.bank-cgb {
+        background-position: 0 -324px;
+      }
+
+      &.bank-cib {
+        background-position: 0 -144px;
+      }
+
+
+      &.bank-ecitic {
+        background-position: 0 -180px;
+      }
+    }
+  }
+}

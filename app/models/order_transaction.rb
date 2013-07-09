@@ -152,7 +152,7 @@ class OrderTransaction < ActiveRecord::Base
                      :order            => :waiting_transfer,
                      :order            => :waiting_delivery,
                      :waiting_paid     => :waiting_delivery do |order, transition|
-      order.notice_change_seller(:name => transition.to_name)
+      order.notice_change_seller(transition.to_name)
       true
     end
 
@@ -161,15 +161,20 @@ class OrderTransaction < ActiveRecord::Base
       after_transition :waiting_paid      => :order,
                        :waiting_delivery  => :waiting_paid,
                        :waiting_sign      => :waiting_delivery do |order, transition|
-        order.notice_change_seller(:name => transition.to_name, :event => :back)
+        order.notice_change_seller(transition.to_name, :back)
       end
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.notice_change_buyer(transition.to_name)
+      order.notice_change_buyer(transition.to_name, :delivered)
     end
 
-    after_transition :waiting_paid => :waiting_delivery do |order, transaction|
+    after_transition :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
+      order.notice_change_buyer(transition.to_name, transition.event)
+      order.notice_change_seller(transition.to_name, transition.event)
+    end
+
+    after_transition :waiting_paid => :waiting_delivery do |order, transition|
       order.buyer_payment
     end
 
@@ -326,7 +331,7 @@ class OrderTransaction < ActiveRecord::Base
       self.update_attribute(:operator_id, _operator.id)
     end
     notice_order_dispose
-    operator_connect_state
+    self.update_attribute(:operator_state, true)
   end
 
   #买家发送信息
@@ -335,7 +340,7 @@ class OrderTransaction < ActiveRecord::Base
     unless seller.seller_group_employees.any?{|u| u.connect_state }
       not_service_online(id.to_s)
     end
-    operator_connect_state
+    # operator_connect_state
     if operator_state
       options[:receive_user] = current_operator
     else
@@ -372,19 +377,22 @@ class OrderTransaction < ActiveRecord::Base
     attra["buyer_login"] = buyer.login
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
+    attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra
   end
 
-  def notice_change_buyer(name)
+  def notice_change_buyer(name, event_name = nil)
     token = buyer.try(:im_token)
     FayeClient.send("/events/#{token}/transaction-#{id}-buyer",
                       :name => name,
-                      :event => :delivered)
+                      :event => event_name)
   end
 
-  def notice_change_seller(options)
+  def notice_change_seller(name, event_name = nil)
     token = current_operator.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
+    FayeClient.send("/events/#{token}/transaction-#{id}-seller",
+        :name => name,
+        :event => event_name)
   end
 
   def valid_transfer_sheet?

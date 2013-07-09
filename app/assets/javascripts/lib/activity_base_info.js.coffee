@@ -45,7 +45,7 @@ class root.ActivityBaseInfoView extends Backbone.View
     @load_attachments(product.attachments)
 
   load_attachments: (attachments) ->
-    @$("img.private").remove()
+    @$("img.preview").remove()
     @$(".attachment-list>li").remove()
 
     new AttachmentUpload({
