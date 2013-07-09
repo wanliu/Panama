@@ -61,7 +61,7 @@ class OrderTransaction < ActiveRecord::Base
     update_total_count
   end
 
-  after_create :notice_user, :notice_new_order, :state_change_detail
+  after_create :notice_user, :notice_new_order
 
   def notice_user
     Notification.create!(
@@ -173,7 +173,7 @@ class OrderTransaction < ActiveRecord::Base
       order.buyer_payment
     end
 
-    after_transition do |order, transaction|
+    after_transition do |order, transaction|      
       if transaction.event == :back
         order.state_details.last.destroy
       else
@@ -326,7 +326,7 @@ class OrderTransaction < ActiveRecord::Base
       self.update_attribute(:operator_id, _operator.id)
     end
     notice_order_dispose
-    operator_connect_state
+    self.update_attribute(:operator_state, true)
   end
 
   #买家发送信息
@@ -372,6 +372,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["buyer_login"] = buyer.login
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
+    attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra
   end
 

@@ -1,48 +1,24 @@
 @import "compass/typography/text/ellipsis";
-
-#my_cart {
-/*    position: fixed;
-    bottom: -5px;
-    right: 100px;
-    height: 45px;
-    width:100px;
-    background: $white;
-    line-height: 45px;
-    text-align: center;
-    @include border-radius(5px);
-    @include box-shadow(1px 1px 3px $grayDarker);
-    z-index: 1200;*/
-
-    #shop_count{
-        position: absolute;
-        top: -10px;
-        right: 10px;
-    }
+#shop_count{
+    position: relative;
+    top: -20px;
+    left: 23px;
+    @include transparent(rgb(51,51,51), 0.5)
 }
 
 #cart_box {
-    position: fixed;
-    display: none;
     width: 280px;
     height: auto;
-    max-height: 400px;
-    background: $white;
-    bottom: 55px;
-    right: 25px;
     overflow: auto;
     overflow-x: hidden;
-    @include border-radius(5px);
-    @include box-shadow(1px 1px 3px $grayDarker);
     z-index: 1200;
     .tool {
         text-align: center;
         line-height: 36px;
         width: 260px;
         margin-left: 3px;
-        background-color: white;
-
         .clear_list{
-            margin: 0px;
+            margin: 5 0 0 0;
             display: inline-block;
         }
     }
@@ -54,35 +30,41 @@
     .cart_top {
         width: 260px;
         line-height: 40px;
-        background-color: white;
         position: relative;
     }
 
     .cart_main {
         width: 260px;
-        /*margin: 10px;*/
         margin-left: 2px;
         line-height: 30px;
 
         text-align: center;
+        tr:hover
+        { 
+            background-color:#0088cc;
+        }
         td{
             .title {
                 display: block;
-                width: 65px;
+                width: 50px;
                 @include ellipsis();
+            }
+            img{
+                width: 50px;
+                height: 50px;
             }
         }
         position: relative;
     }
 
     .cart_bottom {
-        width: 255px;
+       width: 255px;
         height: 30px;
         margin-bottom: 20px;
         position:relative;
         margin-left: 7px;
-        background-color: white;
     }
 
 }
+
 
