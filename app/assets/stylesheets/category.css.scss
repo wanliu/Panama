@@ -22,3 +22,37 @@
 .wrap {
 	margin-left: 300px;
 }
+
+#category-sidebar {
+	.second_class_categories {
+		height: auto;
+		position: absolute;
+		padding-right: 20px;
+		padding-bottom: 20px;
+		background-color: rgba(63, 184, 175, 0.91);
+		top: 0;
+		left: 301px;
+		min-width: 752px;
+		display: none;
+		.second_class_category_tree {
+			width: 230px;
+			display: inline-block;
+			vertical-align: top;
+			margin-left: 20px;
+			padding: 10px 0;
+			border-bottom: 1px dashed;
+			& > a {
+				border-bottom: 1px solid white;
+				text-align: left;
+				font-size: 18px;
+				display: block;
+				padding: 4px 10px 4px 0;
+			}
+			li.third_class_category_node {
+				display: inline-block;
+				padding: 4px 10px 4px 0;
+				a { padding-left: 4px; }
+			}
+		}
+	}
+}
