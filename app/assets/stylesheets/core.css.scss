@@ -305,25 +305,7 @@ ul {
 .side-nav .accordion-body li a {
 	padding: 4px 10px;
 	padding-left: 40px;
-	& + ul {
-		a {
-			padding-left: 60px;
-			& + ul {
-				a { padding-left: 80px;
-					& + ul {
-						a { padding-left: 100px;
-							& + ul {
-								a { padding-left: 120px; }
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 }
-
-
 
 .side-nav li a:hover, .side-nav li a:focus {
 	@include transparent(rgb(51,51,51),0.25);
