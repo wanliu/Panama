@@ -12,13 +12,13 @@ ActiveAdmin.register OrderTransaction do
     column :address do |order|
       order.address.try(:location)
     end
-    column :person do |order|
+    column :transfer_person do |order|
       order.transfer_sheet.try(:person)
     end
-    column :code do |order|
+    column :transfer_code do |order|
       order.transfer_sheet.try(:code)
     end
-    column :bank do |order|
+    column :transfer_bank do |order|
       order.transfer_sheet.try(:bank)
     end
     column :action_link do |order|
