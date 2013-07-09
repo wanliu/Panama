@@ -34,7 +34,7 @@ class MyCart extends Backbone.View
 	"""
 
 	initialize: (@options) ->
-		@hm = new HoverManager(@$("a.handle, #cart_box"))
+		@hm = new HoverManager($("a.handle, #cart_box"))
 		@totals_money()
 		@total_amounts()
 
