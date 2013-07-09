@@ -61,7 +61,7 @@ class OrderTransaction < ActiveRecord::Base
     update_total_count
   end
 
-  after_create :notice_user, :notice_new_order, :state_change_detail
+  after_create :notice_user, :notice_new_order
 
   def notice_user
     Notification.create!(
@@ -152,7 +152,7 @@ class OrderTransaction < ActiveRecord::Base
                      :order            => :waiting_transfer,
                      :order            => :waiting_delivery,
                      :waiting_paid     => :waiting_delivery do |order, transition|
-      order.notice_change_seller(:name => transition.to_name)
+      order.notice_change_seller(transition.to_name)
       true
     end
 
@@ -161,19 +161,24 @@ class OrderTransaction < ActiveRecord::Base
       after_transition :waiting_paid      => :order,
                        :waiting_delivery  => :waiting_paid,
                        :waiting_sign      => :waiting_delivery do |order, transition|
-        order.notice_change_seller(:name => transition.to_name, :event => :back)
+        order.notice_change_seller(transition.to_name, :back)
       end
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.notice_change_buyer(transition.to_name)
+      order.notice_change_buyer(transition.to_name, :delivered)
     end
 
-    after_transition :waiting_paid => :waiting_delivery do |order, transaction|
+    after_transition :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
+      order.notice_change_buyer(transition.to_name, transition.event)
+      order.notice_change_seller(transition.to_name, transition.event)
+    end
+
+    after_transition :waiting_paid => :waiting_delivery do |order, transition|
       order.buyer_payment
     end
 
-    after_transition do |order, transaction|
+    after_transition do |order, transaction|      
       if transaction.event == :back
         order.state_details.last.destroy
       else
@@ -376,16 +381,18 @@ class OrderTransaction < ActiveRecord::Base
     attra
   end
 
-  def notice_change_buyer(name)
+  def notice_change_buyer(name, event_name = nil)
     token = buyer.try(:im_token)
     FayeClient.send("/events/#{token}/transaction-#{id}-buyer",
                       :name => name,
-                      :event => :delivered)
+                      :event => event_name)
   end
 
-  def notice_change_seller(options)
+  def notice_change_seller(name, event_name = nil)
     token = current_operator.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{id}-seller", options)
+    FayeClient.send("/events/#{token}/transaction-#{id}-seller",
+        :name => name,
+        :event => event_name)
   end
 
   def valid_transfer_sheet?
