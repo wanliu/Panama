@@ -12,10 +12,10 @@ class exports.SpinnerView extends Backbone.View
 
 	spinnerDown: () ->
 		$input = @getInput()
-		if (parseInt($input.val())) > 0
+		if (parseInt($input.val())) > 2
 			$input.val(parseInt($input.val())-1)
 		else
-			$input.val(0)
+			$input.val(1)
 
 	getInput: () ->
 		@$el.find("input[type='text']")
