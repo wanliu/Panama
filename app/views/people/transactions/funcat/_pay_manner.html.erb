@@ -67,13 +67,14 @@
     <div class="controls controls-row">
       <div class="span7">
         <select name='order_transaction[delivery_type_id]' class='order_delivery_type_id'>
-          <% DeliveryType.all.each do |dm| %>
-            <option value='<%=dm.id %>'><%=dm.name %></option>
+          <% DeliveryType.all.each do |dt| %>
+            <option value='<%=dt.id %>'>
+              <%=dt.name %> <%= number_to_currency(dt.try(:price)) %>
+            </option>
           <% end %>
         </select>
       </div>
-      <div class="span5 delivery_price">
-        <%= number_to_currency(0.0)%>
+      <div class="span5 delivery_price hide">
       </div>
     </div>
   </div>

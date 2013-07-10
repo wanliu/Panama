@@ -1,5 +1,5 @@
 class DeliveryType < ActiveRecord::Base
-  attr_accessible :name, :description
+  attr_accessible :name, :price, :description
 
   has_many :transaction,
            class_name: 'OrderTransaction'

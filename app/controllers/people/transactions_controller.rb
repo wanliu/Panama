@@ -97,11 +97,12 @@ class People::TransactionsController < People::BaseController
   end
 
   def completed
-    OrderTransaction.buyer(@people).completed
+    @transactions = OrderTransaction.buyer(@people).completed
   end
 
   def get_delivery_price
-    @price = current_order.find(params[:id]).get_delivery_price(params[:delivery_type_id])
+    # @price = current_order.find(params[:id]).get_delivery_price(params[:delivery_type_id])
+    @price = DeliveryType.find(params[:delivery_type_id]).try(:price)
     respond_to do |format|
       format.json{ render :json => {delivery_price: @price} }
     end
@@ -214,6 +215,7 @@ class People::TransactionsController < People::BaseController
     options[:pay_manner] = get_pay_manner t[:pay_manner_id]
     options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
     options[:delivery_type_id] = t[:delivery_type_id]
+    options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
     options
   end
 
