@@ -172,12 +172,4 @@ class TransactionMessageView extends Backbone.View
       data : message
     });
 
-    #opts = {
-    #  title: "消息提醒",
-    #  text: "#{message.send_user.login}: #{message.content}",
-    #  stack: stack_topright
-    #}
-
-    #$.pnotify(opts);
-
 root.TransactionMessageView = TransactionMessageView

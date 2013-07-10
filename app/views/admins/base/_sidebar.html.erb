@@ -8,25 +8,25 @@
         <ul id="orders-collapse" class="accordion-body collapse">
         <% sections(:transactions).each do |section| %>
             <%= render :partial => "section", :locals => section %>
-        <% end %>        
+        <% end %>
         </ul>
-    </li>    
+    </li>
     <li class="accordion-group">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#logistics-collapse"><i class="icon-truck"></i> <span class="name">物流</span></a>
         <ul id="logistics-collapse" class="accordion-body collapse">
         <% sections(:transportation).each do |section| %>
             <%= render :partial => "section", :locals => section %>
-        <% end %>      
+        <% end %>
         </ul>
-    </li>    
+    </li>
     <li class="accordion-group">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#services-collapse"><i class="icon-user-md"></i> <span class="name">售后</span></a>
         <ul id="services-collapse" class="accordion-body collapse">
         <% sections(:service).each do |section| %>
             <%= render :partial => "section", :locals => section %>
-        <% end %>  
+        <% end %>
         </ul>
-    </li> 
+    </li>
     <li class="accordion-group">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#products-collapse"><i class="icon-th-large"></i> <span class="name">商品</span></a>
         <ul id="products-collapse" class="accordion-body collapse">
@@ -50,7 +50,7 @@
             <%= render :partial => "section", :locals => section %>
         <% end %>
         </ul>
-    </li>    
+    </li>
 </ul>
 <div>
     <div style='display:inline-block'>
@@ -75,11 +75,12 @@
 
 <script type="text/javascript">
     var section = "<%= yield :admin_siderbar %>";
-    $("#<%= name %> ul li #" + section ).parents("li")
-        .addClass("active")
-    .parents(".accordion-body")
-        .addClass("in");
-
+    if(section != ""){
+        $("#<%= name %> ul li #" + section ).parents("li")
+            .addClass("active")
+        .parents(".accordion-body")
+            .addClass("in");
+    }
 
 </script>
 
