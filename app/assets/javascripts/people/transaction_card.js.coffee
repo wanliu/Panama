@@ -62,7 +62,8 @@ class TransactionCard extends TransactionCardBase
         @$(".address-panel").slideUp()
 
     toggleMessage: (event) ->
-        @$("iframe", ".transaction-footer").slideToggle()
+        height = @$(".transaction-header").parents(".span6").innerHeight() - @$(".message-toggle").height();
+        @$("iframe", ".transaction-footer").height(height).slideToggle()
 
     leaveWaitingTransfer: (event, from, to, msg) ->
         @create_transfer_info(event)
@@ -100,7 +101,7 @@ class TransactionCard extends TransactionCardBase
 
     selectDeliveryType: () ->
         url = @transaction.urlRoot
-        delivery_type_id = @$("select#order_transaction_delivery_type_id").val()
+        delivery_type_id = @$("select.order_delivery_type_id").val()
         @transaction.fetch(
             url: "#{url}/get_delivery_price",
             data: {delivery_type_id: delivery_type_id},

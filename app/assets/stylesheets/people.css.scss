@@ -23,7 +23,7 @@
 @import "footer_nav";
 
 #people-sidebar.affix-top {
-  position: absolute;
+  position: fixed;
 }
 
 #people-sidebar {
@@ -313,4 +313,9 @@
   .product-comment{
     @include panel-background;
   }
+}
+
+.transaction-number {
+  margin-top: -10px;
+  margin-bottom: -22px;
 }

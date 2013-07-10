@@ -6,38 +6,46 @@
    state-event-url= "<%=trigger_event_person_transaction_path(@people, transaction) %>"
    url-root="<%= person_transaction_path(@people, transaction) %>">
   <div class="wrapper-box">
-    <div class="transaction-header">
+    <div class='row-fluid'>
+      <div class='span6'>
+        <div class="transaction-header">
 
-      <div class="avatar">
-        <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
-      </div>
-
-      <div class="container-fluid info-header">
-        <div class="page-header">
-          <h1>
-            <%= seller.name %>
-            <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-              <%= time_ago_in_words transaction.created_at %>
-              <span class="display-state"></span>
-            </small>
-            <% if transaction.close_state? %>
-              <button type="button" class="close">&times;</button>
-            <% end %>
-            <%= render "state_buttons", :transaction => transaction %>
-          </h1>
-          <div class="state-progress">
-            <%=render "people/transactions/funcat/progress", transaction: transaction %>
+          <div class="avatar">
+            <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
+          </div>
+          <div class="container-fluid info-header">
+            <div class="page-header">
+              <h1>
+                <%= seller.name %>
+                <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+                  <%= time_ago_in_words transaction.created_at %>
+                  <span class="display-state"></span>
+                </small>
+                <% if transaction.close_state? %>
+                  <button type="button" class="close">&times;</button>
+                <% end %>
+                <%= render "state_buttons", :transaction => transaction %>
+              </h1>
+              <div class="transaction-number">
+                订单编号：<%= transaction.number %>
+              </div>
+              <div class="state-progress">
+                <%=render "people/transactions/funcat/progress", transaction: transaction %>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="transaction-body">
+          <%= render state, transaction: transaction, people: people %>
+        </div>
       </div>
-    </div>
-    <div class="transaction-body">
-      <%= render state, transaction: transaction, people: people %>
-    </div>
-    <div class="transaction-footer">
-      <div class="message-toggle"><%= button_tag icon(:list), :class => "btn" %></div>
-      <iframe class="hide" name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
-      </iframe>
-    </div>
+      <div class='span6'>
+        <div class="transaction-footer">
+          <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
+          <iframe class="hide" name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
+          </iframe>
+        </div>
+      </div>
+    </div>    
   </div>
 </div>

@@ -473,6 +473,14 @@ class OrderTransaction < ActiveRecord::Base
     transactions
   end
 
+  def number
+    if id > 99999999
+      "WL#{ id }"
+    else
+      "WL#{ '0' * (9 - id.to_s.length) }#{ id }"
+    end
+  end
+
   private
   def valid_base_info?
     unless %w(order close).include?(state)

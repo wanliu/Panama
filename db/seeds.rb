@@ -52,7 +52,7 @@ def load_cities
 end
 
 def load_delivery_types
-  rake['panama:delivery_type:load'].invoke
+  rake['delivery_type:load'].invoke
 end
 
 def load_order_reason
