@@ -107,6 +107,18 @@
           width: 30px;
           height: 30px;
         }
+        h5 {
+          display: inline;
+        }
+        .spinner {
+          a {
+            width: 2px;
+            padding-left: 3px;
+          }
+          i {
+            font-size: 9px!important;
+          }
+        }
       }
     }
   }
@@ -118,6 +130,16 @@
     text-align: right;
     div {
       display: inline-block;
+    }
+  }
+
+  .form-actions {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    background: rgba(51,51,51,0.25);
+    border-top: none;
+    form {
+      float: right;
     }
   }
 }
@@ -145,6 +167,7 @@
 
   .row-fluid{
     line-height: 30px;
+    padding-left: 20px;
 
     .title{
       text-align: right;

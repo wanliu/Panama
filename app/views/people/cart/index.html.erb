@@ -38,7 +38,7 @@
 								<h5><%= item.product.shop.name %></h5>
 							</td>
 							<td>
-								<%= simple_form_for item,:url =>"" do |f| %>
+								<%= simple_form_for item,:url => "" do |f| %>
 									<%= f.input :amount, 
 										:label => false,
 										:value => item.amount, 
@@ -75,22 +75,18 @@
 						总计<span class='cart-price-total'><%= @price_total %></span>元
 					</div>
 				</div>
-			</div>
+				<div class="form-actions">
+					<% if can? :batch_create, OrderTransaction %>
+						<%= form_tag batch_create_person_transactions_path(@people.login), :method => :post do %>
+							<input type='submit' value='生成订单' class='btn btn-primary btn-large' />
+						<% end %>
+					<%end%>
+
+					<% if can? :destroy, Cart %>
+						<%= button_to "清空列表",clear_cart_list_path ,:class => "btn btn-large" %>
+					<% end %> 
+				</div>
 			</div>
 		</section>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span8">
-		<% if can? :batch_create, OrderTransaction %>
-			<%= form_tag batch_create_person_transactions_path(@people.login), :method => :post do %>
-				<input type='submit' value='生成订单' class='btn btn-primary btn-large' />
-			<% end %>
-		<%end%>
-
-		<% if can? :destroy, Cart %>
-			<%= button_to "清空列表",clear_cart_list_path ,:class => "btn btn-large" %>
-		<!-- <button class="btn btn-large">清空列表</button> -->
-		<%end%> 
 	</div>
 </div>
