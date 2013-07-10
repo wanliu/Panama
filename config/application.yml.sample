@@ -5,12 +5,13 @@ defaults: &defaults
   redis_server: "192.168.2.32"
   redis_key_prefix: "online_user_"
   rabbitmq:
-    server: "192.168.2.32"
+    host: "192.168.2.32"
     port: 5672
     vhost: "/"
+    ssh: false
     user: "guest"
     pass: "guest"
-    heartbeat: server,
+    heartbeat: "server"
     frame_max: 131072
 
 development:
