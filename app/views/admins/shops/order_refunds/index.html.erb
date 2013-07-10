@@ -1,7 +1,11 @@
 <% admin_active_section :order_refunds %>
-<% @refunds.each do |refund| %>
-  <%= render "context", :refund => refund %>
-<% end %>
+<div class='row-fluid'>
+  <div class='span8'>
+    <% @refunds.each do |refund| %>
+      <%= render "context", :refund => refund %>
+    <% end %>
+  </div>
+</div>
 <script type='text/javascript'>
   $(".transaction").each(function(i, elem){
     new ShopOrderRefundCard({
