@@ -13,42 +13,42 @@
           <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
         <% end %>
       <% end %>
-    </div>  
-  </div>  
+    </div>
+  </div>
 
   <ul id="people-side-nav" class="side-nav">
       <% if can?(:index, Cart) || can?(:index, OrderTransaction) %>
-        <% if can? :index, Cart %>            
+        <% if can? :index, Cart %>
             <li>
               <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
               购物车</a>
             </li>
-        <% end %>                
+        <% end %>
         <% if can? :index, OrderTransaction %>
             <li>
               <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>"><i class="icon-envelope-alt"></i>订单
             </a>
             </li>
-        <%end%>      
-        <li class="accordion-group">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-folder-open"></i> <span class="name">交易管理</span></a>
-            <ul id="purchaser-collapse" class="accordion-body collapse">
-            <li>
-              <a class='people-completed' href='<%= completed_person_transactions_path(@people.login) %>'>完成的
-              </a>
-            </li>
+          <li class="accordion-group">
+              <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-folder-open"></i> <span class="name">交易管理</span></a>
+              <ul id="purchaser-collapse" class="accordion-body collapse">
+              <li>
+                <a class='people-completed' href='<%= completed_person_transactions_path(@people.login) %>'>完成的
+                </a>
+              </li>
 
-            <li>
-              <a class='people-refunds' href='<%= person_order_refunds_path(@people.login) %>'>退货
-              </a>
-            </li>
-            <li>
-              <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>地址
-              </a>
-            </li>            
-            </ul>
-        </li>
-      <% end %>        
+              <li>
+                <a class='people-refunds' href='<%= person_order_refunds_path(@people.login) %>'>退货
+                </a>
+              </li>
+              <li>
+                <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>地址
+                </a>
+              </li>
+              </ul>
+          </li>
+        <%end%>
+      <% end %>
       <li class='accordion-group'>
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#activity-collapse"><i class="icon-calendar"></i> <span class="name">活动</span></a>
        <ul id="activity-collapse" class="accordion-body collapse">
@@ -59,7 +59,7 @@
         <%end%>
         <li><a href="my_activity">我参于的活动</a></li>
         <li><a href="about_to_happen">马上要发生的</a></li>
-        <li><a href="expired">往期活动</a></li>       
+        <li><a href="expired">往期活动</a></li>
        </ul>
       </li>
 
@@ -72,14 +72,14 @@
             </a>
           </li>
           <li><a class='people-followers' href="<%=person_followers_path(@people.login) %>">关注我的
-            </a></li>    
-        </ul>        
+            </a></li>
+        </ul>
       </li>
   </ul>
   <div id="sidebar-settings" class="settings">
       <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
       <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
-  </div>  
+  </div>
   <script type="text/javascript">
     $(document).ready(function(){
       $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
