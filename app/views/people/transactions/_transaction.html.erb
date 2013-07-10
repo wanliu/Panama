@@ -25,6 +25,9 @@
             <% end %>
             <%= render "state_buttons", :transaction => transaction %>
           </h1>
+          <div class="transaction-number">
+            订单编号：<%= transaction.number %>
+          </div>
           <div class="state-progress">
             <%=render "people/transactions/funcat/progress", transaction: transaction %>
           </div>

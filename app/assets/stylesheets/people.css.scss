@@ -38,7 +38,7 @@
 
     }
 
-  }  
+  }
   .icon-chevron-right {
     float: right;
     margin-top: 2px;
@@ -167,7 +167,7 @@
 
   .row-fluid{
     line-height: 30px;
-    padding-left: 20px;
+    /*padding-left: 20px;*/
 
     .title{
       text-align: right;
@@ -305,7 +305,7 @@
         position: relative;
         overflow: hidden;
       }
-    } 
+    }
   }
 }
 
@@ -313,4 +313,9 @@
   .product-comment{
     @include panel-background;
   }
+}
+
+.transaction-number {
+  margin-top: -10px;
+  margin-bottom: -22px;
 }
