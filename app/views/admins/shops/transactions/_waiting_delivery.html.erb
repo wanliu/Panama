@@ -1,4 +1,12 @@
 <div class="container-fluid">
+  <div class='row-fluid'>
+    <div class='span2 title'>
+      <label class="control-label">订单编号</label>
+    </div>
+    <div class='span4'>
+      <label class="control-label"><%= transaction.number %></label>
+    </div>
+  </div>
   <% if transaction.delivery_manner.express? %>
   <div class="row-fluid">
     <div class='span2 title'>
