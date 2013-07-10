@@ -96,13 +96,29 @@
   }
 }
 
-.cart-total {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid $tableBorder;
-  text-align: right;
-  div {
-    display: inline-block;
+.cart-container {
+  table {
+    tr {
+      td {
+        input {
+          margin-top: 15px;
+        }
+        .img-seller {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+
+  .cart-total {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid $tableBorder;
+    text-align: right;
+    div {
+      display: inline-block;
+    }
   }
 }
 
