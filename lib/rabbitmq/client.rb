@@ -53,7 +53,9 @@ module Rabbitmq
 
     private
     def options
-      {}
+      _opts = Settings.defaults["rabbitmq"].symbolize_keys
+      _opts[:heartbeat] = _opts[:heartbeat].to_sym if _opts.key?(:heartbeat)
+      _opts
     end
   end
 
