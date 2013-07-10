@@ -26,6 +26,9 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <%=render "state_button", :refund => refund %>
           </h1>
+          <div class="transaction-number">
+            订单编号：<%= refund.order_transaction.number %>
+          </div>
           <div class="state-progress">
             <% unless refund.state == "failure" %>
               <%=render "progress", :refund => refund %>
