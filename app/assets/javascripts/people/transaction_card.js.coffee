@@ -100,7 +100,7 @@ class TransactionCard extends TransactionCardBase
 
     selectDeliveryType: () ->
         url = @transaction.urlRoot
-        delivery_type_id = @$("select#order_transaction_delivery_type_id").val()
+        delivery_type_id = @$("select.order_delivery_type_id").val()
         @transaction.fetch(
             url: "#{url}/get_delivery_price",
             data: {delivery_type_id: delivery_type_id},
