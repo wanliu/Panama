@@ -17,6 +17,11 @@ class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
 
+  # default_scope -> { where("state != 'complete'") }
+  scope :completed, -> { where(:state => 'complete') }
+  scope :uncomplete, -> { where("state != 'complete'") }
+  scope :buyer, ->(person){ where(:buyer_id => person.id) }
+  
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
   # attr_accessor :total
 
@@ -425,6 +430,9 @@ class OrderTransaction < ActiveRecord::Base
   def valid_payment?
     if buyer.reload.money < stotal
       errors.add(:buyer, "您的金额不足!")
+      false
+    else
+      true
     end
   end
 

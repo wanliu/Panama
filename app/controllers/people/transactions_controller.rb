@@ -4,7 +4,7 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions.json
   def index
     authorize! :index, OrderTransaction
-    @transactions = current_order.order("created_at desc").page(params[:page])
+    @transactions = current_order.uncomplete.order("created_at desc").page(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }
@@ -94,6 +94,10 @@ class People::TransactionsController < People::BaseController
         format.json{ render :json => draw_errors_message(@transfer), :status => 403 }
       end
     end
+  end
+
+  def completed
+    OrderTransaction.buyer(@people).completed
   end
 
   def get_delivery_price
