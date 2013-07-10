@@ -5,6 +5,9 @@ ActiveAdmin.register OrderTransaction do
     column :state do |order|
       I18n.t("order_states.buyer.#{order.state}")
     end
+    column :pay_manner do |order|
+      order.pay_manner.name
+    end
     column :total
     column :buyer do |order|
       order.buyer.login
@@ -22,10 +25,12 @@ ActiveAdmin.register OrderTransaction do
       order.transfer_sheet.try(:bank)
     end
     column :action_link do |order|
-      content_tag :div do
-        link = link_to "通过", audit_system_order_transaction_path(order), :method => :post
-        link1 = link_to "未通过", audit_failure_system_order_transaction_path(order), :method => :post
-        "#{link}  #{link1}".html_safe
+      if order.waiting_audit_state?
+        content_tag :div do
+          link = link_to "通过", audit_system_order_transaction_path(order), :method => :post
+          link1 = link_to "未通过", audit_failure_system_order_transaction_path(order), :method => :post
+          "#{link}  #{link1}".html_safe
+        end
       end
     end
   end
@@ -33,7 +38,8 @@ ActiveAdmin.register OrderTransaction do
   controller do
     def index
       index! do |format|
-        @order_transactions = OrderTransaction.where(:state => "waiting_audit").page(params[:page])
+        @order_transactions = @order_transactions.where(
+          :state => "waiting_audit").page(params[:page]) if params[:q].nil?
         format.html
       end
     end
