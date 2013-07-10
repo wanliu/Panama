@@ -97,7 +97,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def completed
-    OrderTransaction.buyer(@people).completed
+    @transactions = OrderTransaction.buyer(@people).completed
   end
 
   def get_delivery_price
