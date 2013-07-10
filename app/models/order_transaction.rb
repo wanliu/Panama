@@ -425,6 +425,9 @@ class OrderTransaction < ActiveRecord::Base
   def valid_payment?
     if buyer.reload.money < stotal
       errors.add(:buyer, "您的金额不足!")
+      false
+    else
+      true
     end
   end
 

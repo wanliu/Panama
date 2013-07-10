@@ -53,7 +53,7 @@ module Rabbitmq
 
     private
     def options
-      {}
+      Settings.defaults["rabbitmq"]
     end
   end
 
