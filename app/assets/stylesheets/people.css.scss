@@ -107,6 +107,18 @@
           width: 30px;
           height: 30px;
         }
+        h5 {
+          display: inline;
+        }
+        .spinner {
+          a {
+            width: 2px;
+            padding-left: 3px;
+          }
+          i {
+            font-size: 9px!important;
+          }
+        }
       }
     }
   }

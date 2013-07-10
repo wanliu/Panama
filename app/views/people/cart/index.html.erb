@@ -38,7 +38,7 @@
 								<h5><%= item.product.shop.name %></h5>
 							</td>
 							<td>
-								<%= simple_form_for item,:url =>"" do |f| %>
+								<%= simple_form_for item,:url => "" do |f| %>
 									<%= f.input :amount, 
 										:label => false,
 										:value => item.amount, 
@@ -75,7 +75,6 @@
 						总计<span class='cart-price-total'><%= @price_total %></span>元
 					</div>
 				</div>
-			</div>
 			</div>
 		</section>
 	</div>
