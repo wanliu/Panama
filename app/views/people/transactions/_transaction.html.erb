@@ -7,7 +7,7 @@
    url-root="<%= person_transaction_path(@people, transaction) %>">
   <div class="wrapper-box">
     <div class='row-fluid'>
-      <div class='span6'>
+      <div class='left span7'>
         <div class="transaction-header">
 
           <div class="avatar">
@@ -39,7 +39,7 @@
           <%= render state, transaction: transaction, people: people %>
         </div>
       </div>
-      <div class='span6'>
+      <div class='span5'>
         <div class="transaction-footer">
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
           <iframe class="hide" name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
