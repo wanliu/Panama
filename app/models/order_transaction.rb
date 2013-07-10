@@ -185,7 +185,9 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition do |order, transaction|
       if transaction.event == :back
-        order.state_details.last.destroy
+        if order.state == order.state_details.last.state
+          order.state_details.last.destroy
+        end
       else
         order.state_change_detail
       end
