@@ -407,10 +407,13 @@ ul {
 }
 
 // shoppingcart
-.shoppingcart{
-	#shop_count{
+.shoppingcart {
+	#shop_count {
 		padding-left: 4px;
 		padding-right: 4px;
+	}
+	&>ul {
+		right:25px !important;
 	}
 }
 

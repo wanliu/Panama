@@ -21,7 +21,7 @@ class OrderTransaction < ActiveRecord::Base
   scope :completed, -> { where(:state => 'complete') }
   scope :uncomplete, -> { where("state != 'complete'") }
   scope :buyer, ->(person){ where(:buyer_id => person.id) }
-  
+
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
   # attr_accessor :total
 
@@ -245,6 +245,10 @@ class OrderTransaction < ActiveRecord::Base
 
   def waiting_sign_state?
     "waiting_sign" == state
+  end
+
+  def waiting_audit_state?
+    "waiting_audit" == state
   end
 
   def unshipped_state?

@@ -54,32 +54,32 @@
       </div>
 
       <div class="dialog" id="purchase-forms">
-        <div class="modal-body">
-          <%= simple_form_for product_item, :url => join_activity_path do |f| %>
-            <%= f.input :price, :readonly => true %>
-            <%= f.input :title, :as => :hidden %>
-            <%= f.input :product_id, :as => :hidden %>
-            <%= f.input :amount %>
-        </div>
-        <div class="modal-footer">
+        <%= simple_form_for product_item, :url => join_activity_path do |f| %>
+          <div class="modal-body">
+              <%= f.input :price, :readonly => true %>
+              <%= f.input :title, :as => :hidden %>
+              <%= f.input :product_id, :as => :hidden %>
+              <%= f.input :amount %>
+          </div>
+          <div class="modal-footer">
 
-          <div class="btn-group">
-            {{#liked}}
-            <a class="btn unlike-button active" href="#">取消喜欢</a>
-            <a class="btn like-count active" href="#">{{like}}{{^like}}0{{/like}}</a>
-            {{/liked}}
-            {{^liked}}
-            <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
-            <a class="btn like-count" href="#">{{like}}{{^like}}0{{/like}}</a>
-            {{/liked}}
+            <div class="btn-group">
+              {{#liked}}
+              <a class="btn unlike-button active" href="#">取消喜欢</a>
+              <a class="btn like-count active" href="#">{{like}}{{^like}}0{{/like}}</a>
+              {{/liked}}
+              {{^liked}}
+              <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
+              <a class="btn like-count" href="#">{{like}}{{^like}}0{{/like}}</a>
+              {{/liked}}
+            </div>
+            <div class="btn-group">           
+              <button class="btn btn-danger" type="submit" name="join">
+                <%= icon(:'shopping-cart', :white) + " 参与" %>
+              </button>
+              <a class="btn btn-danger partic-button" href="#">{{participate}}{{^participate}}0{{/participate}}</a>
+            </div>
           </div>
-          <div class="btn-group">           
-            <button class="btn btn-danger" type="submit" name="join">
-              <%= icon(:'shopping-cart', :white) + " 参与" %> 
-            </button>
-            <a class="btn btn-danger partic-button" href="#">{{participate}}{{^participate}}0{{/participate}}</a>
-          </div>
-        </div>
         <% end %>
       </div>
     </div>

@@ -1,0 +1,13 @@
+<% active_section :completed %>
+<div class='row-fluid'>
+  <div class='span8'>
+  <% @transactions.each do |transaction| %>
+    <%= render partial: 'transaction',
+     object:  transaction,
+     locals: {
+       state:  transaction.state,
+       people: @people
+     } %>
+  <% end %>
+  </div>
+</div>
