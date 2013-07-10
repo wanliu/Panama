@@ -1,10 +1,17 @@
-<div class='message'>
-  <div class='wrapper'>
-    <div class='people-name'>
-      <p>{{send_user.login}}:</p>
+<div class="chat-message">
+    <div class="sender pull-left">
+        <div class="icon">
+            <img src="{{send_user.icon_url}}" class="img-circle" alt="">
+        </div>
+        <div class="time">
+            4 min
+        </div>
     </div>
-    <div class='msg'>
-      <p>{{content}}</p>
+    <div class="chat-message-body">
+        <span class="arrow"></span>
+        <div class="sender"><a href="#">{{send_user.login}}</a></div>
+        <div class="text">
+			{{content}}        
+        </div>
     </div>
-  </div>
 </div>

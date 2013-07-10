@@ -23,7 +23,7 @@
 @import "footer_nav";
 
 #people-sidebar.affix-top {
-  position: absolute;
+  position: fixed;
 }
 
 #people-sidebar {
@@ -290,4 +290,11 @@
   .product-comment{
     @include panel-background;
   }
+}
+
+
+ul#transactions {
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: scroll;  
 }

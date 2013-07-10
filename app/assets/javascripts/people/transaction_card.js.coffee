@@ -62,7 +62,8 @@ class TransactionCard extends TransactionCardBase
         @$(".address-panel").slideUp()
 
     toggleMessage: (event) ->
-        @$("iframe", ".transaction-footer").slideToggle()
+        height = @$(".transaction-header").parents(".span6").innerHeight() - @$(".message-toggle").height();
+        @$("iframe", ".transaction-footer").height(height).slideToggle()
 
     leaveWaitingTransfer: (event, from, to, msg) ->
         @create_transfer_info(event)

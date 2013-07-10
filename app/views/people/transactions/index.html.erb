@@ -5,7 +5,7 @@
   </div>
 </div>
 <div class='row-fluid'>
-  <div class='span8'>
+  <div id='transactions' class=' span12'>
     <% if @transactions.size > 0 %>
       <% @transactions.each do |transaction| %>
         <%= render partial: 'transaction',
@@ -37,4 +37,6 @@
   new TransactionBubbling({
     url: "http://<%=request.env['HTTP_HOST'] %>/people/<%=current_user.login %>/transactions#order"
   })
+
+  new TransactionsView({el: "#transactions" });
 </script>

@@ -1,11 +1,35 @@
 @import "another_bootstrap";
 @import "_variables";
 @import "compass/css3";
+@import "lib/transparent";
+
+
+body {
+  // background: transparent;
+  color: #333;
+}
+
 .transaction_dialog_panel{
+  // @include transparent(rgb(51,51,51), 0.4);
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+
 
   .message_panel{
-    height: 300px;
+    // height: 300px;
     overflow-y: auto;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 80px;
+    padding: 5px;
+
+
 
     .messages {
       position: relative;
@@ -48,7 +72,8 @@
   }
 
   .foot{
-    position: relative;
+    position: absolute;
+    bottom: 0px;
 
     form{
       margin: 0px;
@@ -79,4 +104,53 @@
       }
     }
   }
+}
+a {
+  color: rgb(71, 142, 187);
+  text-decoration: none;
+}
+
+
+.chat-message .icon {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 53px;
+  height: 53px;
+  line-height: 53px;
+  vertical-align: middle;
+  @include border-radius(53px);
+
+}
+
+.chat-message .time {
+  font-size: 11.05px;
+  line-height: 1.5em;
+  text-align: center;
+  color: #d7d7d7;
+}
+
+.chat-message+.chat-message {
+  margin-top: 10px;
+}
+
+.chat-message-body .arrow {
+  display: block;
+  position: absolute;
+  top: 21px;
+  left: -7px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid rgb(162, 217, 243);
+}
+
+.chat-message-body {
+  margin-left: 63px;
+  padding: 8px 10px;
+  @include transparent(rgb(162, 217, 243), 0.25);
+  @include border-radius(1px);
+  position: relative;
+  border-left: 2px solid rgb(162, 217, 243);
 }
