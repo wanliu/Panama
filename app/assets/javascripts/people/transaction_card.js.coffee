@@ -61,14 +61,19 @@ class TransactionCard extends TransactionCardBase
     hideAddress: () ->
         @$(".address-panel").slideUp()
 
-    initMessagePanel: () ->
-        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
+    setMessagePanel: () ->
         @message_panel = @$("iframe", ".transaction-footer")
+        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
         @message_panel.height(height)
-        @message_panel.toggle()
+
+    initMessagePanel: () ->
+        @setMessagePanel()
+        @message_panel.show()
 
     toggleMessage: () ->
+        @setMessagePanel()
         @message_panel.slideToggle()
+        false
 
     leaveWaitingTransfer: (event, from, to, msg) ->
         @create_transfer_info(event)
