@@ -30,6 +30,7 @@ body {
 	padding-bottom: 100px;
 	@include transparent($bgcolor1, 0.91);
 	@include filter-gradient($bgcolor1, $bgcolor3, horizontal); // IE6-9 fallback on horizontal gradient
+	@include background(linear-gradient(150deg, rgba($bgcolor1, 0.91), rgba(lighten($bgcolor2, 10%), 0.91), rgba($bgcolor3, 0.91)), url('bgnoise_lg_dark.png'));
 	@include background(radial-gradient(farthest-side ellipse at 10% 0,
 										rgba($bgcolor1,0.91),
 										rgba($bgcolor2,0.91),

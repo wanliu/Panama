@@ -11,4 +11,16 @@ class PayManner < ActiveRecord::Base
   def self.default
   	find_by(:default_state => true)
   end
+
+  def online_payment?
+  	code == "online_payment"
+  end
+
+  def bank_transfer?
+  	code == "bank_transfer"
+  end
+
+  def cash_on_delivery?
+  	code == "cash_on_delivery"
+  end
 end

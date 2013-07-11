@@ -73,6 +73,8 @@ class SendMessageView extends Backbone.View
   send_message: () ->
     data = @form_serialize()
     return false if not data["content"]? || data["content"] == ""
+    return false if @$button.hasClass("disabled")
+    @$button.addClass("disabled")
     @model.send_message data, (model, data) =>
       @trigger('add_message', data)
       @$content.val('')

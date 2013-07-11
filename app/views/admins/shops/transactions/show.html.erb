@@ -1,4 +1,17 @@
+<% if @transaction.present? %>
 <%= render :partial => "transaction" ,:locals => {
     :transaction => @transaction,
     state: @transaction.state,
     people: current_user } %>
+<script type="text/javascript">
+  var card = new ShopTransactionCard({
+    el: $("#order<%=@transaction.id %>"),
+    realtime: {
+      url: '<%= faye_server_uri %>',
+      token: '<%= token %>'
+    }
+  })
+</script>
+<% else %>
+  <p>订单已经不存在</p>
+<% end %>

@@ -80,7 +80,7 @@ class OrderTransaction < ActiveRecord::Base
 
     #在线确认订单 到 等待
     event :online_payment do
-      transition [:order] => :waiting_paid
+      transition :order => :waiting_paid
     end
 
     #银行汇款方式
@@ -138,27 +138,26 @@ class OrderTransaction < ActiveRecord::Base
     #付款
     event :paid do
       # 等待付款 到 等待发货
-      transition [:waiting_paid] => :waiting_delivery
+      transition :waiting_paid => :waiting_delivery
     end
 
     #发货
     event :delivered do
       # 等待发货 到 等待签收
-      transition [:waiting_delivery] => :waiting_sign
+      transition :waiting_delivery => :waiting_sign
     end
 
     #签收
     event :sign do
       # 等待签收 到 完成
-      transition [:waiting_sign] => :complete
+      transition :waiting_sign => :complete
     end
 
-    after_transition :order            => :waiting_paid,
-                     :order            => :waiting_transfer,
-                     :order            => :waiting_delivery,
+    after_transition :order            => [:waiting_paid, :waiting_transfer, :waiting_delivery],
+                     :waiting_transfer => :waiting_audit,
+                     :waiting_sign     => :complete,
                      :waiting_paid     => :waiting_delivery do |order, transition|
-      order.notice_change_seller(transition.to_name)
-      true
+      order.notice_change_seller(transition.to_name, transition.event)
     end
 
     ## only for development
@@ -171,7 +170,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.notice_change_buyer(transition.to_name, :delivered)
+      order.notice_change_buyer(transition.to_name, transition.event)
     end
 
     after_transition :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
@@ -215,6 +214,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
+      order.valid_pay_manner?
       order.update_delivery
     end
 
@@ -228,7 +228,9 @@ class OrderTransaction < ActiveRecord::Base
     if unshipped_state?
       get_refund_items(refund).destroy_all
       update_total_count
-      refund.buyer_recharge if save
+      if !pay_manner.cash_on_delivery? && save
+        refund.buyer_recharge
+      end
     end
   end
 
@@ -313,7 +315,9 @@ class OrderTransaction < ActiveRecord::Base
 
   def get_delivery_price(delivery_id)
     product_ids = items.map{|item| item.product_id}
-    ProductDeliveryType.where(:product_id => product_ids, :delivery_type_id => delivery_id)
+    ProductDeliveryType.where(
+      :product_id => product_ids,
+      :delivery_type_id => delivery_id)
     .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
   end
 
@@ -396,14 +400,18 @@ class OrderTransaction < ActiveRecord::Base
     token = buyer.try(:im_token)
     FayeClient.send("/events/#{token}/transaction-#{id}-buyer",
                       :name => name,
-                      :event => event_name)
+                      :event => "refresh_#{event_name}")
   end
 
   def notice_change_seller(name, event_name = nil)
-    token = current_operator.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{id}-seller",
+    if current_operator.nil?
+      FayeClient.send("/transaction/#{seller.id}/un_dispose", self)
+    else
+      token = current_operator.try(:im_token)
+      FayeClient.send("/events/#{token}/transaction-#{id}-seller",
         :name => name,
-        :event => event_name)
+        :event => "refresh_#{event_name}")
+    end
   end
 
   def valid_transfer_sheet?
@@ -439,6 +447,12 @@ class OrderTransaction < ActiveRecord::Base
       false
     else
       true
+    end
+  end
+
+  def valid_pay_manner?
+    unless pay_manner.state
+      errors.add(:pay_manner_id, "付款方式无效！")
     end
   end
 
