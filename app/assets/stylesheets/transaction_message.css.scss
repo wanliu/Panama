@@ -36,6 +36,7 @@ body {
 
       .row-msg {
         clear: both;
+        padding-bottom: 20px;
 
         .people {
           margin: 10px 20px;
@@ -152,6 +153,9 @@ a {
   @include border-radius(1px);
   position: relative;
   border-left: 2px solid rgb(162, 217, 243);
+  .text{
+    word-break:break-all;
+  }
 
   &.on-left{
     margin-left: 0;
