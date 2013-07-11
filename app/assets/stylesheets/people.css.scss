@@ -285,11 +285,17 @@
       .error{
         input[type='text']{
           border: 1px solid red;
-        };
+        }
       }
     }
   }
 
+  .product-imgs {
+    @include panel-background;
+    .product-count {
+      vertical-align: bottom;
+    }
+  }
 }
 
 .addresses-panel{
