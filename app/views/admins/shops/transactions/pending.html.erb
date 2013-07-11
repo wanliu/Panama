@@ -32,60 +32,58 @@
   </div>
 </div>
 <div class='row-fluid'>
-  <div class='span8'>
-    <div class='transaction_list'>
-      <% @transactions.each do |transaction| %>
-          <%= render :partial => "transaction" ,:locals => {
-              :transaction => transaction,
-              state: transaction.state,
-              people: current_user } %>
-      <% end %>
-    </div>
-    <script type="text/javascript">
-      var transactionCard = function(elem){
-        var card = new ShopTransactionCard({
-          el: elem,
-          realtime: {
-            url: '<%= faye_server_uri %>',
-            token: '<%= token %>'
-          }
-        })
-      }
-
-      $(".transaction").each(function(i, elem){
-        transactionCard(elem)
-      });
-
-      var dispose_view = new TransactionDispose({
-        el: $("table.untransactions"),
-        realtime_url: '<%= faye_server_uri %>',
-        shop: {
-          name: "<%=current_shop.name %>",
-          id: "<%=current_shop.id %>"},
-        tranOpts: {
-          tran_panel: $(".transaction_list"),
-          tran_card: transactionCard
-        },
-        template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
-      })
-
-      <% @untransactions.each do |t| %>
-        dispose_view.add({
-          id: <%=t.id %>,
-          buyer_login: "<%=t.buyer.login %>",
-          items_count: "<%=t.items_count %>",
-          total: "<%=t.total %>",
-          created_at: "<%=t.created_at.strftime('%Y-%m-%d %H:%M:%S') %>",
-          state_title: '<%=t("order_states.seller.#{t.state}") %>',
-          address: "<%=t.address.try(:location) %>",
-          unmessages_count: "<%=t.unmessages.count %>"
-        })
-      <% end %>
-
-      new TransactionBubbling({
-        url: "http://<%=request.env['HTTP_HOST'] %>/shops/<%=current_shop.name %>/admins/pending#order"
-      })
-    </script>
+  <div class='span12 transaction_list'>
+    <% @transactions.each do |transaction| %>
+        <%= render :partial => "transaction" ,:locals => {
+            :transaction => transaction,
+            state: transaction.state,
+            people: current_user } %>
+    <% end %>
   </div>
+  <script type="text/javascript">
+    var transactionCard = function(elem){
+      var card = new ShopTransactionCard({
+        el: elem,
+        realtime: {
+          url: '<%= faye_server_uri %>',
+          token: '<%= token %>'
+        }
+      })
+    }
+
+    $(".transaction").each(function(i, elem){
+      transactionCard(elem)
+    });
+
+    var dispose_view = new TransactionDispose({
+      el: $("table.untransactions"),
+      realtime_url: '<%= faye_server_uri %>',
+      shop: {
+        name: "<%=current_shop.name %>",
+        id: "<%=current_shop.id %>"},
+      tranOpts: {
+        tran_panel: $(".transaction_list"),
+        tran_card: transactionCard
+      },
+      template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
+    })
+
+    <% @untransactions.each do |t| %>
+      dispose_view.add({
+        id: <%=t.id %>,
+        buyer_login: "<%=t.buyer.login %>",
+        items_count: "<%=t.items_count %>",
+        total: "<%=t.total %>",
+        created_at: "<%=t.created_at.strftime('%Y-%m-%d %H:%M:%S') %>",
+        state_title: '<%=t("order_states.seller.#{t.state}") %>',
+        address: "<%=t.address.try(:location) %>",
+        unmessages_count: "<%=t.unmessages.count %>"
+      })
+    <% end %>
+
+    new TransactionBubbling({
+      url: "http://<%=request.env['HTTP_HOST'] %>/shops/<%=current_shop.name %>/admins/pending#order"
+    })
+  </script>
 </div>
 
