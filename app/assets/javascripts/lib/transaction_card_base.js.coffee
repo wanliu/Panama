@@ -35,7 +35,13 @@ class TransactionCardBase extends AbstructStateView
         btn = $(event.target)
         if !btn.hasClass("disabled")
             event_name = btn.attr('event-name')
-            @[event_name].call(@)
+            if @[event_name]
+                try
+                    @[event_name].call(@)
+                catch error
+                    @notify("错误信息", error, "error")
+            else
+                @notify("错误信息", "状态机错误！无权进行此项操作", "error")
         false
 
 
@@ -97,8 +103,12 @@ class TransactionCardBase extends AbstructStateView
         $.post @eventUrl(event), (data) =>
             @slidePage(data, direction)
         .fail (data) =>
-            m = JSON.parse(data.responseText)
-            @notify("错误信息", m.message, "error")
+            error_massage =  if data.status is 500
+                data.responseText
+            else
+                JSON.parse(data.responseText).message
+
+            @notify("错误信息", error_massage, "error")
 
 
     slidePage: (page, direction = 'right') ->
