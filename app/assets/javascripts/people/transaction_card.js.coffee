@@ -7,17 +7,17 @@ class TransactionCard extends TransactionCardBase
     initialize:() ->
         super
         @urlRoot = @transaction.urlRoot
-
+        @initMessagePanel()
 
     events:
-        "click .page-header .btn"   : "clickAction"
-        "click button.close"        : "closeThis"
-        "click .address-add>button" : "addAddress"
-        "click .item-detail"        : "toggleItemDetail"
-        "click .message-toggle"     : "toggleMessage"
-        "submit .address-form>form" : "saveAddress"
-        "click .chzn-results>li"    : "hideAddress"
-        "change select.order_delivery_type_id" : "selectDeliveryType"
+        "click .page-header .btn"        : "clickAction"
+        "click button.close"             : "closeThis"
+        "click .address-add>button"      : "addAddress"
+        "click .item-detail"             : "toggleItemDetail"
+        "click .message-toggle>button"   : "toggleMessage"
+        "submit .address-form>form"      : "saveAddress"
+        "click .chzn-results>li"         : "hideAddress"
+        "change .order_delivery_type_id" : "selectDeliveryType"
 
     states:
         initial: 'none'
@@ -61,9 +61,14 @@ class TransactionCard extends TransactionCardBase
     hideAddress: () ->
         @$(".address-panel").slideUp()
 
-    toggleMessage: (event) ->
-        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height();
-        @$("iframe", ".transaction-footer").height(height).slideToggle()
+    initMessagePanel: () ->
+        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
+        @message_panel = @$("iframe", ".transaction-footer")
+        @message_panel.height(height)
+        @message_panel.toggle()
+
+    toggleMessage: () ->
+        @message_panel.slideToggle()
 
     leaveWaitingTransfer: (event, from, to, msg) ->
         @create_transfer_info(event)
