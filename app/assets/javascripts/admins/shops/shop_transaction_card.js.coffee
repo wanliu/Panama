@@ -5,6 +5,7 @@
 
 exports = window || @
 class ShopTransactionCard extends TransactionCardBase
+
     initialize:() ->
         super
         @filter_delivery_code()
@@ -44,14 +45,19 @@ class ShopTransactionCard extends TransactionCardBase
         @$(".item-details").slideToggle()
         false
 
-    initMessagePanel: () ->
-        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
+    setMessagePanel: () ->
         @message_panel = @$("iframe", ".transaction-footer")
+        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
         @message_panel.height(height)
-        @message_panel.toggle()
+
+    initMessagePanel: () ->
+        @setMessagePanel()
+        @message_panel.show()
 
     toggleMessage: () ->
+        @setMessagePanel()
         @message_panel.slideToggle()
+        false
 
     leaveWaitingDelivery: (event, from, to, msg) ->
         @slideAfterEvent(event) unless /back/.test event
@@ -77,7 +83,6 @@ class ShopTransactionCard extends TransactionCardBase
             type: "PUT",
             data: {delivery_code: delivery_code}
         )
-
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports
