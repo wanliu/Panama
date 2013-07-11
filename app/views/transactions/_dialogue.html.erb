@@ -10,9 +10,9 @@
     </div>
   </div>
   <div class='foot row-fluid'>
-    <form>
+    <form class="message-form">
       <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>" />
-      <textarea rows=3 class="span12" name='content' placehold='输入你的信息'></textarea>
+      <textarea rows=3 class="span12 textarea-message" name='content' placehold='输入你的信息'></textarea>
       <div class='message_send'>
         <input type='submit' value='提交' class='btn btn-primary disabled' />
       </div>

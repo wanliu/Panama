@@ -8,6 +8,7 @@ class ShopTransactionCard extends TransactionCardBase
     initialize:() ->
         super
         @filter_delivery_code()
+        @initMessagePanel()
 
     events:
         "click .page-header .btn" : "clickAction"
@@ -43,9 +44,14 @@ class ShopTransactionCard extends TransactionCardBase
         @$(".item-details").slideToggle()
         false
 
-    toggleMessage: (event) ->
-        @$("iframe", ".transaction-footer").slideToggle()
-        false
+    initMessagePanel: () ->
+        height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
+        @message_panel = @$("iframe", ".transaction-footer")
+        @message_panel.height(height)
+        @message_panel.toggle()
+
+    toggleMessage: () ->
+        @message_panel.slideToggle()
 
     leaveWaitingDelivery: (event, from, to, msg) ->
         @slideAfterEvent(event) unless /back/.test event
