@@ -9,6 +9,16 @@
     </div>
   </div>
   <div class="row-fluid">
+    <div class='span2 title'>运输方式</div>
+    <div class='span4'>
+      <%=transaction.delivery_manner.name %>
+    </div>
+    <div class='span2 title'>付款方式</div>
+    <div class='span4'>
+      <%=transaction.pay_manner.name %>
+    </div>
+  </div>
+  <div class="row-fluid">
     <div class="span2 title">
       <label class="control-label">配送方式</label>
     </div>
@@ -33,12 +43,6 @@
     </div>
     <div class='span10'>
       <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class='span2 title'>运输方式</div>
-    <div class='span4'>
-      <%=transaction.delivery_manner.name %>
     </div>
   </div>
   <div class='row-fluid'>
