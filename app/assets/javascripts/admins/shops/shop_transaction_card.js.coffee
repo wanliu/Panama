@@ -5,6 +5,7 @@
 
 exports = window || @
 class ShopTransactionCard extends TransactionCardBase
+
     initialize:() ->
         super
         @filter_delivery_code()
@@ -82,7 +83,6 @@ class ShopTransactionCard extends TransactionCardBase
             type: "PUT",
             data: {delivery_code: delivery_code}
         )
-
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

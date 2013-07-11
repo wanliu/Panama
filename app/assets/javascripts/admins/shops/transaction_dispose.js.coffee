@@ -29,6 +29,7 @@ class TransactionEvent extends Backbone.View
     @$el = $(@el)
     @$el.html @template.render(@model.toJSON())
     @model.bind("change:unmessages_count", @change_message_count, @)
+    @model.bind("change:state_title", @change_state, @)
     @model.bind("remove", @remove, @)
 
   dispose: () ->
@@ -42,20 +43,23 @@ class TransactionEvent extends Backbone.View
     else
       first_tran_el.before(template)
 
-    @tran_card @first_transaction()
+    @tran_card @tran_panel.find("#order#{@model.id}")
     @remove_tran()
 
   remove_tran: () ->
     @trigger("remove_tran", @model)
 
   first_transaction: () ->
-    @tran_panel.find(">.transaction")
+    @tran_panel.find(">.transaction:eq(0)")
 
   render: () ->
     @$el
 
   change_message_count: () ->
     @$(".message_count").html(@model.get("unmessages_count"))
+
+  change_state: () ->
+    @$(".state").html(@model.get("state_title"))
 
 class exports.TransactionDispose extends Backbone.View
 
@@ -100,17 +104,25 @@ class exports.TransactionDispose extends Backbone.View
 
   bind_realtime: () ->
     @client = Realtime.client(@realtime_url)
-    @client.subscribe "/chat/receive/OrderTransaction/#{@shop.id}/un_dispose", (data) =>
+    @client.subscribe "/chat/receive/OrderTransaction/#{@shop_key()}/un_dispose", (data) =>
       model = @transactions.get(data.owner.id)
       if model?
         model.set("unmessages_count", data.owner.unmessages_count)
       else
         @add data.owner
 
-    @client.subscribe "/transaction/new/#{@shop.id}/un_dispose", (data) =>
+    @client.subscribe "/transaction/new/#{@shop_key()}/un_dispose", (data) =>
       @add data
 
-    @client.subscribe "/transaction/#{@shop.id}/dispose", (data) =>
+    @client.subscribe "/transaction/#{@shop_key()}/un_dispose", (data) =>
+      model = @transactions.get(data.id)
+      if model?
+        model.set("state_title", data.state_title)
+
+    @client.subscribe "/transaction/#{@shop_key()}/dispose", (data) =>
       model = @transactions.get(data.id)
       if model?
         @remove_tran model
+
+  shop_key: () ->
+    @shop.id

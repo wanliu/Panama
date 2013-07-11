@@ -27,7 +27,7 @@ class TransactionCard extends TransactionCardBase
             { name: 'bank_transfer',        from: 'order',                  to: 'waiting_transfer' },
             { name: 'cash_on_delivery',     from: 'order',                  to: 'waiting_delivery' }
             { name: 'paid',                 from: 'waiting_paid',           to: 'waiting_delivery' },
-            { name: 'delivered',            from: 'waiting_delivery',       to: 'waiting_sign' },
+            { name: 'refresh_delivered',    from: 'waiting_delivery',       to: 'waiting_sign' },
             { name: 'sign',                 from: 'waiting_sign',           to: 'evaluate' },
             { name: 'back',                 from: 'waiting_paid',           to: 'order' },
             { name: 'back',                 from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
@@ -85,8 +85,8 @@ class TransactionCard extends TransactionCardBase
         @$(".address-form>form").submit()
         StateMachine.ASYNC
 
-    leaveWaitingDelivery: (event, from, to, msg) ->
-        @slideAfterEvent(event) if /returned/.test event
+    #leaveWaitingDelivery: (event, from, to, msg) ->
+        #@slideAfterEvent(event) if /refresh_delivered/.test event
 
     leaveWaitingPaid: (event, from, to, msg) ->
         @slideAfterEvent(event) unless /back/.test event
