@@ -1,4 +1,4 @@
-<% seller = refund.order_transaction.seller %>
+<% seller = refund.order.seller %>
 <div id="refund<%=refund.id %>"
   class="transaction refund-<%=refund.id %>-<%=refund.state %>"
   state-id='<%=refund.id %>'
@@ -27,7 +27,7 @@
             <%=render "state_button", :refund => refund %>
           </h1>
           <div class="transaction-number">
-            订单编号：<%= refund.order_transaction.number %>
+            订单编号：<%= refund.order.number %>
           </div>
           <div class="state-progress">
             <% unless refund.state == "failure" %>

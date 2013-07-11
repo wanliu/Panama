@@ -17,7 +17,7 @@ class OrderRefund < ActiveRecord::Base
   attr_accessible :decription, :order_reason_id, :delivery_price
 
   belongs_to :order_reason
-  belongs_to :order, :foreign_key => "order_transaction_id"
+  belongs_to :order, :foreign_key => "order_transaction_id", :class_name => "OrderTransaction"
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "User"
