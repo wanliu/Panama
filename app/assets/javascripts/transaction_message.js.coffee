@@ -43,11 +43,11 @@ class MessageView extends Backbone.View
 
   load_style: () ->
     if @current_user.id is @model.get("send_user_id")
-      @$(".sender").addClass("pull-left")
-      @$message.addClass(@selfClassName)
-    else
       @$(".sender").addClass("pull-right")
       @$(".chat-message-body").addClass("on-left")
+      @$message.addClass(@selfClassName)
+    else
+      @$(".sender").addClass("pull-left")
       @$message.addClass(@peopleClassName)
 
   render: () ->
@@ -73,6 +73,8 @@ class SendMessageView extends Backbone.View
   send_message: () ->
     data = @form_serialize()
     return false if not data["content"]? || data["content"] == ""
+    return false if @$button.hasClass("disabled")
+    @$button.addClass("disabled")
     @model.send_message data, (model, data) =>
       @trigger('add_message', data)
       @$content.val('')
