@@ -10,7 +10,8 @@ class TransactionRefund extends Backbone.Model
       url: "#{@urlRoot}/refund",
       type: "POST",
       data: {order_refund: @toJSON()},
-      success: callback
+      success: callback.success
+      error: callback.error
     })
 
 class TransactionRefundView extends Backbone.View
@@ -53,9 +54,12 @@ class TransactionRefundView extends Backbone.View
 
     @refund = new TransactionRefund(data)
     @refund.set_url(@remote_url)
-    @refund.create (model, data) =>
-      @notify("退货申请成功, 等待商家确认!", "success")
-      @toggle_panel()
+    @refund.create
+      success: (model, data) =>
+        @notify("退货申请成功, 等待商家确认!", "success")
+        @toggle_panel()
+      error: (model, data) =>
+        @notify("错误! #{ JSON.parse(data.responseText) }", 'error')
     false
 
   get_form_data: () ->

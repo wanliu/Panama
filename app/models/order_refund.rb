@@ -26,6 +26,7 @@ class OrderRefund < ActiveRecord::Base
 
   validates :order_reason, :presence => true
   validates :order_transaction, :presence => true
+  validates :order_transaction_id, :uniqueness => { message: "该单已经在退货之中" }
 
   before_validation(:on => :create) do
     update_buyer_and_seller_and_operate
