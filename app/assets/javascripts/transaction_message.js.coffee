@@ -43,11 +43,11 @@ class MessageView extends Backbone.View
 
   load_style: () ->
     if @current_user.id is @model.get("send_user_id")
-      @$(".sender").addClass("pull-left")
-      @$message.addClass(@selfClassName)
-    else
       @$(".sender").addClass("pull-right")
       @$(".chat-message-body").addClass("on-left")
+      @$message.addClass(@selfClassName)
+    else
+      @$(".sender").addClass("pull-left")
       @$message.addClass(@peopleClassName)
 
   render: () ->
