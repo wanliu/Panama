@@ -1,30 +1,42 @@
 <% admin_active_section :complete %>
+
 <div class='row-fluid'>
-  <div class='span12'>
+  <div class='span8'>
     <h2 class='page-title'>已完成</h2>
   </div>
 </div>
-<div class='transaction_list'>
-  <% @transactions.each do |transaction| %>
-      <%= render :partial => "transaction" ,:locals => {
-          :transaction => transaction,
-          state: transaction.state,
-          people: current_user } %>
-  <% end %>
+<div class='row-fluid'>
+  <div class='span8'>
+    <section class='widget'>
+      <table class='table table-images table-hover complete'>
+        <thead>
+          <tr>
+            <th class="span1">卖家</th>
+            <th class="span2">订单编号</th>
+            <th class="span3">到货地址</th>
+            <th class="span2">下单日期</th>
+            <th class="span1">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transactions.each do |t| %>
+            <tr class="transaction_complete-<%=t.id%>">
+              <td>
+                <%= image_tag t.buyer.photos.icon %> 
+                <%= t.buyer.login %>
+              </td>
+              <td><%= t.number %></td>
+              <td style="text-align:left;"><%=t.address.try(:location) %></td>
+              <td><%= t.created_at.strftime("%Y-%d-%m %H:%M") %></td>
+              <td> <%= button_to "明细",
+                  { :action => "show", :id => t.id },
+                  :class => "btn btn-info btn-small",
+                  :method => :get %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  </div>
 </div>
-<script type="text/javascript">
-  var transactionCard = function(elem){
-    var card = new ShopTransactionCard({
-      el: elem,
-      realtime: {
-        url: '<%= faye_server_uri %>',
-        token: '<%= token %>'
-      }
-    })
-  }
-
-  $(".transaction").each(function(i, elem){
-    transactionCard(elem)
-  });
-
-</script>
