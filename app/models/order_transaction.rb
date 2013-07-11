@@ -214,6 +214,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
+      order.valid_pay_manner?
       order.update_delivery
     end
 
@@ -442,6 +443,12 @@ class OrderTransaction < ActiveRecord::Base
       false
     else
       true
+    end
+  end
+
+  def valid_pay_manner?
+    unless pay_manner.state
+      errors.add(:pay_manner_id, "付款方式无效！")
     end
   end
 
