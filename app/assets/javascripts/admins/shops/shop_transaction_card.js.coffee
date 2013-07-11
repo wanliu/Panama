@@ -8,6 +8,7 @@ class ShopTransactionCard extends TransactionCardBase
   initialize:() ->
     super
     @filter_delivery_code()
+    @initMessagePanel()
 
   events:
     "click .page-header .btn" : "clickAction"
@@ -46,6 +47,12 @@ class ShopTransactionCard extends TransactionCardBase
     @$(".item-details").slideToggle()
     false
 
+  initMessagePanel: () ->
+    height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
+    @message_panel = @$("iframe", ".transaction-footer")
+    @message_panel.height(height)
+    @message_panel.toggle()
+
   toggleMessage: (event) ->
     @$("iframe", ".transaction-footer").slideToggle()
     false
@@ -74,7 +81,6 @@ class ShopTransactionCard extends TransactionCardBase
         type: "PUT",
         data: {delivery_code: delivery_code}
     )
-
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

@@ -21,7 +21,7 @@ class MyCart extends Backbone.View
 	el: $('.shoppingcart')
 
 	events:
-		"click .handle": "toggleCartBox"
+		"click .shoppingcart": "toggleCartBox"
 		"click .clear_list": "clear_list"
 
 	item_row: """
