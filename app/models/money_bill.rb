@@ -20,4 +20,8 @@ class MoneyBill < ActiveRecord::Base
     u.money = u.money + money
     u.save
   end
+
+  def owner_name
+    I18n.t("activerecord.models.#{owner_type.underscore}")
+  end
 end
