@@ -70,17 +70,16 @@ root.loadPage = function(query, url){
 $.ajaxSetup({
   beforeSend: function(xhr){
     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-  }
-})
-
-$(document).ajaxError(function(xhr, error, thr){
-  if(error.status == 500){
-    $.pnotify({
-      title: '请求出错！',
-      text: error.responseText.toString(),
-      type: 'error',
-      text_escape: true
-    })
+  },
+  error: function(xhr, error, thr){
+    if(error.status == 500){
+      $.pnotify({
+        title: '请求出错！',
+        text: error.responseText,
+        type: 'error',
+        text_escape: true
+      })
+    }
   }
 })
 

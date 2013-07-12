@@ -76,10 +76,10 @@
 <script type="text/javascript">
     var section = "<%= yield :admin_siderbar %>";
     if(section != ""){
-        $("#<%= name %> ul li #" + section ).parents("li")
-            .addClass("active")
-        .parents(".accordion-body")
-            .addClass("in");
+      $("#<%= name %> ul li #" + section ).parents("li")
+      .addClass("active")
+      .parents(".accordion-body")
+      .addClass("in");
     }
 
 </script>
