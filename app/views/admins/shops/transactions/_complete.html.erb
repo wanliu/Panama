@@ -1,10 +1,18 @@
 <div class="container-fluid">
   <% if transaction.delivery_manner.express? %>
   <div class="row-fluid">
+    <div class='span2'>
+      <label class="control-label">快递单号</label>
+    </div>
+    <div class='span4'>
+        <%= transaction.delivery_code %>
+    </div>
+  </div>
+  <div class="row-fluid">
     <div class="span2">
       <label class="control-label">配送方式</label>
     </div>
-    <div class="span2">
+    <div class="span4">
       <label class="control-label">
       <%= transaction.delivery_type.nil? ? "暂无" : transaction.delivery_type.name %>
       </label>
@@ -12,30 +20,21 @@
     <div class="span2">
       <label class="control-label">配送费用</label>
     </div>
-    <div class="span2">
+    <div class="span4">
       <label class="control-label">
         <%= number_to_currency(transaction.delivery_price) %>
       </label>
-    </div>
-    <div class='span2'>
-      <label class="control-label">快递单号</label>
-    </div>
-    <div class='span2'>
-        <%= transaction.delivery_code %>
     </div>
   </div>
   <% end %>
   <div class='row-fluid'>
     <div class='span2'>付款方式</div>
-    <div class='span2'>
+    <div class='span4'>
       <%=transaction.pay_manner.name %>
     </div>
     <div class='span2'>运输方式</div>
-    <div class='span2'>
+    <div class='span4'>
       <%=transaction.delivery_manner.name %>
-    </div>
-    <div class='span1'></div>
-    <div class='span3'>
     </div>
   </div>
   <div class='row-fluid'>
@@ -46,5 +45,5 @@
       <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
     </div>
   </div>
-<%= render "products", :transaction => transaction %>
 </div>
+<%= render "products", :transaction => transaction %>

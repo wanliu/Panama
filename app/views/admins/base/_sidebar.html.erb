@@ -1,4 +1,4 @@
-<%= content_tag :nav, :id => name, :class => 'sidebar nav nav-collapse collapse' do %>
+<%= content_tag :nav, :id => name, "data-spy" => "affix", :class => 'sidebar nav nav-collapse collapse' do %>
  <ul id="admin-side-nav" class="side-nav">
     <% sections(:top).each do |section| %>
         <%= render :partial => "section", :locals => section %>
