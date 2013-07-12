@@ -1,26 +1,25 @@
 // Place all the styles related to the people controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-//= require another_bootstrap
-//= require people/comment
-//= require jquery.atwho
-//= require product_comment
-//= require people/following
-//= require communities
-//= require ./lib/chose-friend
-//= require people/community_people
-//= require attachment_uploader
-//= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
-//= require './lib/notify/jquery.pnotify.default'
-//= require './lib/notify/jquery.pnotify.default.icons'
 
 @import "core";
 @import "banks";
 @import "progress";
 @import "widget";
+@import "people/comment";
 @import "transaction";
 @import "notification";
 @import "footer_nav";
+@import "jquery.atwho";
+@import "product_comment";
+@import "people/following";
+@import "communities";
+@import "./lib/chose-friend";
+@import "people/community_people";
+@import "attachment_uploader";
+@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
+@import "./lib/notify/jquery.pnotify.default";
+@import "./lib/notify/jquery.pnotify.default.icons";
 
 #people-sidebar.affix-top {
   position: fixed;
