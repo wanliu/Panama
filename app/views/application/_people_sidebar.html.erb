@@ -82,7 +82,9 @@
   </div>
   <script type="text/javascript">
     $(document).ready(function(){
-      $(".people-<%= yield :people_siderbar %>").parents("li").addClass("active")
+      $(".people-<%= yield :people_siderbar %>")
+      .parents("li").addClass("active")
+      .parents(".accordion-body").addClass("in")
 
       new Followers({
         login: "<%= current_user.login %>",
