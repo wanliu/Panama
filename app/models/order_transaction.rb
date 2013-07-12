@@ -228,7 +228,9 @@ class OrderTransaction < ActiveRecord::Base
     if unshipped_state?
       get_refund_items(refund).destroy_all
       update_total_count
-      refund.buyer_recharge if save
+      if !pay_manner.cash_on_delivery? && save
+        refund.buyer_recharge
+      end
     end
   end
 
@@ -313,7 +315,9 @@ class OrderTransaction < ActiveRecord::Base
 
   def get_delivery_price(delivery_id)
     product_ids = items.map{|item| item.product_id}
-    ProductDeliveryType.where(:product_id => product_ids, :delivery_type_id => delivery_id)
+    ProductDeliveryType.where(
+      :product_id => product_ids,
+      :delivery_type_id => delivery_id)
     .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
   end
 

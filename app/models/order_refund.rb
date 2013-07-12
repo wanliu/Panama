@@ -17,7 +17,7 @@ class OrderRefund < ActiveRecord::Base
   attr_accessible :decription, :order_reason_id, :delivery_price
 
   belongs_to :order_reason
-  belongs_to :order_transaction
+  belongs_to :order, :foreign_key => "order_transaction_id", :class_name => "OrderTransaction"
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "User"
@@ -25,7 +25,7 @@ class OrderRefund < ActiveRecord::Base
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
 
   validates :order_reason, :presence => true
-  validates :order_transaction, :presence => true
+  validates :order, :presence => true
   validates :order_transaction_id, :uniqueness => { message: "该单已经在退货之中" }
 
   before_validation(:on => :create) do
@@ -84,14 +84,8 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_delivery_code?
     end
 
-    after_transition :apply_refund => :waiting_delivery,
-                     :apply_failure => :waiting_delivery do |refund, transition|
-      refund.handle_detail_return_money
-      refund.change_order_state
-    end
-
-    after_transition :apply_refund => :complete,
-                     :apply_failure => :complete do |refund, transition|
+    after_transition :apply_refund => [:waiting_delivery, :complete],
+                     :apply_failure => [:waiting_delivery, :complete] do |refund, transition|
       refund.handle_detail_return_money
       refund.change_order_state
     end
@@ -125,19 +119,19 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def change_order_state
-    if order_transaction.valid_refund?
-      unless order_transaction.seller_fire_event!(:returned)
+    if order.valid_refund?
+      unless order.seller_fire_event!(:returned)
         errors.add(:state, "确认退货出错！")
       end
     end
   end
 
   def handle_detail_return_money
-    order_transaction.refund_handle_detail_return_money(self)
+    order.refund_handle_detail_return_money(self)
   end
 
   def handle_product_item
-    order_transaction.refund_handle_product_item(self)
+    order.refund_handle_product_item(self)
   end
 
   def self.avaliable
@@ -153,9 +147,9 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def update_buyer_and_seller_and_operate
-    self.buyer_id = order_transaction.try(:buyer_id)
-    self.seller_id = order_transaction.try(:seller_id)
-    self.operator_id = order_transaction.try(:operator_id)
+    self.buyer_id = order.try(:buyer_id)
+    self.seller_id = order.try(:seller_id)
+    self.operator_id = order.try(:operator_id)
   end
 
   def create_state_detail
@@ -166,7 +160,7 @@ class OrderRefund < ActiveRecord::Base
   def create_items(_items = [])
     _items = [_items] unless _items.is_a?(Array)
     _items.each do |item_id|
-      product_item = order_transaction.items.find_by(:id => item_id, :refund_state => true)
+      product_item = order.items.find_by(:id => item_id, :refund_state => true)
       if product_item.present?
         items.create(
           :title => product_item.title,
@@ -189,21 +183,21 @@ class OrderRefund < ActiveRecord::Base
 
   #退款
   def buyer_recharge
-    order_transaction.buyer.recharge(stotal, self)
+    order.buyer.recharge(stotal, self)
   end
 
   def seller_payment
-    order_transaction.seller.user.payment(stotal, self)
+    order.seller.user.payment(stotal, self)
   end
 
   #卖家退款
   def seller_refund_money
-    if order_transaction.complete_state?
+    if order.complete_state?
       MoneyBill.transaction do
         buyer_recharge
         seller_payment
       end
-    elsif order_transaction.waiting_sign_state?
+    elsif order.waiting_sign_state? && !order.payment.cash_on_delivery?
       buyer_recharge
     end
   end
@@ -221,13 +215,13 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def validate_shipped_order_state?
-    unless order_transaction.shipped_state?
+    unless order.shipped_state?
       errors.add(:state, "卖家还没有发货!")
     end
   end
 
   def valid_unshipped_order_state?
-    unless order_transaction.unshipped_state?
+    unless order.unshipped_state?
       errors.add(:state, "卖家已经发送了!")
     end
   end
@@ -235,7 +229,7 @@ class OrderRefund < ActiveRecord::Base
 
   private
   def valid_shipped_order_state?
-    unless order_transaction.order_refund_state?
+    unless order.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
     end
   end

@@ -1,12 +1,3 @@
-//!= require 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom'
-//!= require 'hallo'
-//!= require 'image'
-//!= require 'animate'
-//!= require 'annotate'
-//!= require 'arrow'
-//= require 'lib/notify/jquery.pnotify.default'
-//= require 'lib/notify/jquery.pnotify.default.icons'
-
 @import "core";
 @import './lib/typeahead';
 @import 'lib/search_user_typeahead';
@@ -19,6 +10,8 @@
 @import "progress";
 @import "transaction";
 @import "admins/shops/products";
+@import 'lib/notify/jquery.pnotify.default';
+@import 'lib/notify/jquery.pnotify.default.icons';
 
 $left-side-admin-width: 160px;
 

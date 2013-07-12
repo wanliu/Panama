@@ -1,4 +1,4 @@
-
+<div class="container-fluid">
   <div class='row-fluid refuse-panel'>
     <div class='span2'>拒绝理由:</div>
     <div class='span9'>
@@ -42,9 +42,7 @@
       <%= refund.decription %>
     </div>
   </div>
-
+</div>
 <%=render "products", :refund => refund %>
 <script type="text/javascript">
-  expired = new Date("<%=refund.current_state_detail.expired.strftime('%Y/%m/%d %H:%M:%S') %>")
-  $('.clock', '.refund-<%=refund.id %>-<%=refund.state %>').countdown({until: expired});
 </script>
