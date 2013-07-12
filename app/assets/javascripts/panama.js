@@ -83,3 +83,7 @@ $.ajaxSetup({
   }
 })
 
+
+$(document).ready(function(){
+  notifier.setPermission()
+})
