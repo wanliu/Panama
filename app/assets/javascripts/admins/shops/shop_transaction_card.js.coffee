@@ -61,7 +61,6 @@ class ShopTransactionCard extends TransactionCardBase
     @message_panel.slideToggle()
     false
 
-
   leaveWaitingDelivery: (event, from, to, msg) ->
     @slideAfterEvent(event) unless /back/.test event
 
