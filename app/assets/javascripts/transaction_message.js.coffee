@@ -9,14 +9,15 @@ root = window || @
 class TransactionMessage extends Backbone.Model
   set_url: (url) -> @urlRoot = url
 
-  send_message: (data, callback) ->
+  send_message: (data, callback, done_call) ->
     token = data.authenticity_token
     delete(data.authenticity_token)
     @fetch(
       url: "#{@urlRoot}/send_message",
       type: "POST",
       data: {message: data, authenticity_token: token},
-      success: callback
+      success: callback,
+      complete: done_call
     )
 
 class TransactionMessageList extends Backbone.Collection
@@ -75,11 +76,16 @@ class SendMessageView extends Backbone.View
     return false if not data["content"]? || data["content"] == ""
     return false if @$button.hasClass("disabled")
     @$button.addClass("disabled")
-    @model.send_message data, (model, data) =>
-      @trigger('add_message', data)
-      @$content.val('')
-      @filter_send_state()
+    @model.send_message data,
+      (model, data) =>
+        @trigger('add_message', data)
+        @$content.val('')
+        @filter_send_state()
+      ,() =>
+        @filter_send_state()
+
     false
+
 
   form_serialize: () ->
     ms = @$form.serializeArray()
