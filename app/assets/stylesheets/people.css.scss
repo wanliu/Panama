@@ -18,8 +18,7 @@
 @import "people/community_people";
 @import "attachment_uploader";
 @import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
-@import "./lib/notify/jquery.pnotify.default";
-@import "./lib/notify/jquery.pnotify.default.icons";
+@import "./lib/notify/pnotify";
 
 #people-sidebar.affix-top {
   position: fixed;

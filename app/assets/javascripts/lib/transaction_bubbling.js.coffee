@@ -15,7 +15,7 @@ class TransactionBubbling
     pm.bind(@channel_key, (message) =>
       pnotify({
         title: "有新的消息",
-        text: "#{message.send_user.login}: #{message.content}<br />#{@order_uri(message.owner.id)}",
+        text: "#{message.send_user.login}: #{message.content}",
         addclass: "stack-bottomright",
         stack: "stack_bottomright"
       });
