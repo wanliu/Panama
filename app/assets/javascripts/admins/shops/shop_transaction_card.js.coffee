@@ -77,18 +77,16 @@ class ShopTransactionCard extends TransactionCardBase
 
   save_delivery_code: (cb) ->
     delivery_code = @$("input:text.delivery_code").val()
-    return if delivery_code == ""
-
     urlRoot = @transaction.urlRoot
     @transaction.fetch(
-        url: "#{urlRoot}/delivery_code",
-        type: "PUT",
-        data: {delivery_code: delivery_code},
-        success: cb,
-        error: () ->
-          @notify("错误信息", '请填写发货单号!', "error")
-          @alarm()
-          @transition.cancel()
+      url: "#{urlRoot}/delivery_code",
+      type: "PUT",
+      data: {delivery_code: delivery_code},
+      success: cb,
+      error: () ->
+        @notify("错误信息", '请填写发货单号!', "error")
+        @alarm()
+        @transition.cancel()
     )
 
 exports.ShopTransactionCard = ShopTransactionCard
