@@ -76,18 +76,22 @@ class ShopTransactionCard extends TransactionCardBase
       button.removeClass("disabled")
 
   save_delivery_code: (cb) ->
-    delivery_code = @$("input:text.delivery_code").val()
-    urlRoot = @transaction.urlRoot
-    @transaction.fetch(
-      url: "#{urlRoot}/delivery_code",
-      type: "PUT",
-      data: {delivery_code: delivery_code},
-      success: cb,
-      error: () ->
-        @notify("错误信息", '请填写发货单号!', "error")
-        @alarm()
-        @transition.cancel()
-    )
+    input = @$("input:text.delivery_code")
+    if input.length > 0
+      delivery_code = input.val()
+      urlRoot = @transaction.urlRoot
+      @transaction.fetch(
+        url: "#{urlRoot}/delivery_code",
+        type: "PUT",
+        data: {delivery_code: delivery_code},
+        success: cb,
+        error: () ->
+          @notify("错误信息", '请填写发货单号!', "error")
+          @alarm()
+          @transition.cancel()
+      )
+    else
+     cb()
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports
