@@ -1,4 +1,9 @@
-<div>
-  地址：<%=transaction.address.try(:location) %>
+<div class="row-fluid">
+  <div class="span2 title">
+    收货地址
+  </div>
+  <div class="span10">
+    <%= transaction.address.try(:location) %>
+  </div>
 </div>
 <%= render "products", :transaction => transaction, :people => people %>
