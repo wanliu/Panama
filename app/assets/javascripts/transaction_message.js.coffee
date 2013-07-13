@@ -57,8 +57,7 @@ class MessageView extends Backbone.View
 class SendMessageView extends Backbone.View
   events: {
     "submit form" : "send_message",
-    "keyup textarea[name=content]" : 'filter_send_state',
-    "keydown .textarea-message" : "fastKey"
+    "keyup textarea[name=content]" : 'fastKey'
   }
   initialize: (options) ->
     @model = options.model
@@ -67,9 +66,10 @@ class SendMessageView extends Backbone.View
     @$content = @$("textarea[name=content]")
 
   fastKey: (event) ->
+    @filter_send_state()
     event = event ? event:window.event
     if event.ctrlKey && 13 == event.keyCode
-       $(".message-form").submit()
+      $(".message-form").submit()
 
   send_message: () ->
     data = @form_serialize()
