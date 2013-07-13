@@ -69,20 +69,29 @@ class SendMessageView extends Backbone.View
     @filter_send_state()
     event = event ? event:window.event
     if event.ctrlKey && 13 == event.keyCode
-      $(".message-form").submit()
+      @$button.focus()
+      @send_message()
+
 
   send_message: () ->
     data = @form_serialize()
-    return false if not data["content"]? || data["content"] == ""
-    return false if @$button.hasClass("disabled")
+    if not data["content"]? || data["content"] == ""
+      @$content.focus()
+      return false
+    if @$button.hasClass("disabled")
+      @$content.focus()
+      return false
+
     @$button.addClass("disabled")
     @model.send_message data,
       (model, data) =>
         @trigger('add_message', data)
         @$content.val('')
         @filter_send_state()
+        @$content.focus()
       ,() =>
         @filter_send_state()
+        @$content.focus()
 
     false
 
