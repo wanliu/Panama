@@ -9,7 +9,7 @@ root = window || @
 class TransactionMessage extends Backbone.Model
   set_url: (url) -> @urlRoot = url
 
-  send_message: (data, callback, done_call) ->
+  send_message: (data, callback, done_call,fail) ->
     token = data.authenticity_token
     delete(data.authenticity_token)
     @fetch(
@@ -18,6 +18,7 @@ class TransactionMessage extends Backbone.Model
       data: {message: data, authenticity_token: token},
       success: callback,
       complete: done_call
+      error: fail
     )
 
 class TransactionMessageList extends Backbone.Collection
@@ -69,17 +70,14 @@ class SendMessageView extends Backbone.View
     @filter_send_state()
     event = event ? event:window.event
     if event.ctrlKey && 13 == event.keyCode
-      @$button.focus()
       @send_message()
-
+      @$content.val('')
 
   send_message: () ->
     data = @form_serialize()
     if not data["content"]? || data["content"] == ""
-      @$content.focus()
       return false
     if @$button.hasClass("disabled")
-      @$content.focus()
       return false
 
     @$button.addClass("disabled")
@@ -88,11 +86,10 @@ class SendMessageView extends Backbone.View
         @trigger('add_message', data)
         @$content.val('')
         @filter_send_state()
-        @$content.focus()
       ,() =>
         @filter_send_state()
-        @$content.focus()
-
+      ,() =>
+        @$content.val(data["content"])
     false
 
 
