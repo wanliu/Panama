@@ -389,6 +389,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def as_json(*args)
     attra = super *args
+    attra["number"] = number
     attra["buyer_login"] = buyer.login
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
