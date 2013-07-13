@@ -43,7 +43,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def event
-    @transaction = current_order.find(0)
+    @transaction = current_order.find(params[:id])
     event_name = params[:event]
     authorize! :event, @transaction
 
