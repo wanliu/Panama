@@ -26,7 +26,6 @@ class OrderRefund < ActiveRecord::Base
 
   validates :order_reason, :presence => true
   validates :order, :presence => true
-  validates :order_transaction_id, :uniqueness => { message: "该单已经在退货之中" }
 
   before_validation(:on => :create) do
     update_buyer_and_seller_and_operate
@@ -161,6 +160,10 @@ class OrderRefund < ActiveRecord::Base
     _items = [_items] unless _items.is_a?(Array)
     _items.each do |item_id|
       product_item = order.items.find_by(:id => item_id, :refund_state => true)
+      if product_been_refunded?(product_item)
+        items.clear
+        return false
+      end
       if product_item.present?
         items.create(
           :title => product_item.title,
@@ -223,6 +226,13 @@ class OrderRefund < ActiveRecord::Base
   def valid_unshipped_order_state?
     unless order.unshipped_state?
       errors.add(:state, "卖家已经发送了!")
+    end
+  end
+
+  # 检查本次被退货的商品是否已经在退货中
+  def product_been_refunded?(product_item)
+    order.refunds.any? do |refund|
+      refund.items.any? { |item| item.product_id == product_item.product_id }
     end
   end
 
