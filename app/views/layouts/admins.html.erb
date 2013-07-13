@@ -15,7 +15,7 @@
         <%= render "header" %>
       	<div class='content container-fluid'>
         	<%= yield %>
-      	</div>  
+      	</div>
     </div>
 
     <div id="popup-layout"></div>
@@ -28,3 +28,8 @@
 	<%= javascripts_codes %>
 </body>
 </html>
+<script type="text/javascript">
+$(document).ready(function(){
+  notifier.setPermission()
+})
+</script>
