@@ -19,6 +19,8 @@
 @import "modal";
 @import "stream_item";
 @import "responsive-stream";
+@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
+@import "./lib/notify/pnotify";
 
 
 // activity-category
@@ -32,6 +34,11 @@
 	z-index: 1032;
 	@include transparent(rgb(0,0,0),0.55);
 }
+
+#agree_notifiction_desktop{
+	margin-right: 10px;
+	color: blue;
+};
 
 
 // model

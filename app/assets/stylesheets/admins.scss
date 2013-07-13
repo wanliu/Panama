@@ -10,8 +10,8 @@
 @import "progress";
 @import "transaction";
 @import "admins/shops/products";
-@import 'lib/notify/jquery.pnotify.default';
-@import 'lib/notify/jquery.pnotify.default.icons';
+@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
+@import "./lib/notify/pnotify";
 
 $left-side-admin-width: 160px;
 

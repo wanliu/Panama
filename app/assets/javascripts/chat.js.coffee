@@ -1,3 +1,4 @@
+#= require core_extend/core
 #= require jquery
 #= require faye
 #= require lib/underscore

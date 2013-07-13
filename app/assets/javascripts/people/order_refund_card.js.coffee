@@ -9,6 +9,7 @@ class OrderRefundCard extends TransactionCardBase
     super
 
   events: {
+    "click .refuse_protect" : "toggle_panel"
     "click input.delivered" : "clickAction",
     "keyup input:text.delivery_code" : "change_delivery_code",
   }
@@ -28,6 +29,9 @@ class OrderRefundCard extends TransactionCardBase
       button.addClass("disabled")
     else
       button.removeClass("disabled")
+
+  toggle_panel: (option) ->
+    @$(".connect").toggle("slow")
 
   afterDelivered: (event, from, to, msg) ->
     code = @$("input:text.delivery_code").val()
