@@ -24,7 +24,9 @@
   <% end %>
 
   <%# 开发环境下显示500错误信息 %>
-  <%= render "show_500_error_in_dev" %>
+  <% unless Rails.env.production? %>
+    <%= javascript_include_tag "show_500_error_in_dev" %>
+  <% end %>
 
   <%# More ideas for your <head> here: h5bp.com/d/head-Tips %>
 
