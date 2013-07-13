@@ -9,6 +9,7 @@ class PeopleAbility
         can :read, Notification do |notice|
           notice.user_id == current_user.id
         end
+        can :manage, User
         can :index, Notification
         can :index, Cart
         can :create, Cart

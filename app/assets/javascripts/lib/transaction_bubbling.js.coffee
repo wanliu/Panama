@@ -13,12 +13,13 @@ class TransactionBubbling
 
   bind_pmessage: () ->
     pm.bind(@channel_key, (message) =>
-      pnotify({
+      $.notifier({
         title: "有新的消息",
-        text: "#{message.send_user.login}: #{message.content}<br />#{@order_uri(message.owner.id)}",
+        avatar: message.send_user.icon_url,
+        text: "#{message.send_user.login}: #{message.content}",
         addclass: "stack-bottomright",
         stack: "stack_bottomright"
-      });
+      })
     )
 
   order_uri: (id) ->

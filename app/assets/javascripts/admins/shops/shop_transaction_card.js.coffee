@@ -61,12 +61,11 @@ class ShopTransactionCard extends TransactionCardBase
     @message_panel.slideToggle()
     false
 
-
   leaveWaitingDelivery: (event, from, to, msg) ->
-    @slideAfterEvent(event) unless /back/.test event
-
-  beforeDelivered: (event, from, to, msg) ->
-    @save_delivery_code()
+    _event = event
+    unless /back/.test _event
+      @save_delivery_code () =>
+        @slideAfterEvent(_event)
 
   filter_delivery_code: () ->
     delivery_code = @$("input:text.delivery_code").val()
@@ -76,7 +75,7 @@ class ShopTransactionCard extends TransactionCardBase
     else
       button.removeClass("disabled")
 
-  save_delivery_code: () ->
+  save_delivery_code: (cb) ->
     delivery_code = @$("input:text.delivery_code").val()
     return if delivery_code == ""
 
@@ -84,7 +83,12 @@ class ShopTransactionCard extends TransactionCardBase
     @transaction.fetch(
         url: "#{urlRoot}/delivery_code",
         type: "PUT",
-        data: {delivery_code: delivery_code}
+        data: {delivery_code: delivery_code},
+        success: cb,
+        error: () ->
+          @notify("错误信息", '请填写发货单号!', "error")
+          @alarm()
+          @transition.cancel()
     )
 
 exports.ShopTransactionCard = ShopTransactionCard

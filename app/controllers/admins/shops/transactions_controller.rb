@@ -1,7 +1,8 @@
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def pending
-    transactions = OrderTransaction.where("seller_id=? and state<>?", current_shop.id, :complete).order("created_at desc")
+    transactions = OrderTransaction.where("seller_id=? and state not in (?)", 
+      current_shop.id, [:complete, :close]).order("created_at desc")
     @untransactions = transactions.where(:operator_state => false)
     @transactions = transactions.where(:operator_state => true).joins(:operator)
     .where("transaction_operators.operator_id=?", current_user.id)
