@@ -69,7 +69,7 @@ class MyCart extends Backbone.View
 
 	addToCart: ($element, form, urlAction) ->
 		$el = $("#cart_box")
-		targetPosition = @targetAttributes($el)
+		targetPosition = @targetAttributes($(".icon-shopping-cart"))
 		pos = $element.offset()
 		moveTarget = $element
 			.clone()

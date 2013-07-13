@@ -1,7 +1,7 @@
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def pending
-    transactions = OrderTransaction.where("seller_id=? and state not in (?)", 
+    transactions = OrderTransaction.where("seller_id=? and state not in (?)",
       current_shop.id, [:complete, :close]).order("created_at desc")
     @untransactions = transactions.where(:operator_state => false)
     @transactions = transactions.where(:operator_state => true).joins(:operator)
@@ -94,7 +94,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = OrderTransaction.find_by(:seller_id => current_shop.id, :id => params[:id])
     @messages = @transaction.messages.order("created_at desc").limit(30)
     respond_to do |format|
-      format.json{ render :json =>  @messages }
+      format.json{ render :json =>  @messages}
     end
   end
 

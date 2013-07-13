@@ -9,7 +9,7 @@ root = window || @
 class TransactionMessage extends Backbone.Model
   set_url: (url) -> @urlRoot = url
 
-  send_message: (data, callback, done_call) ->
+  send_message: (data, callback, done_call,fail) ->
     token = data.authenticity_token
     delete(data.authenticity_token)
     @fetch(
@@ -18,6 +18,7 @@ class TransactionMessage extends Backbone.Model
       data: {message: data, authenticity_token: token},
       success: callback,
       complete: done_call
+      error: fail
     )
 
 class TransactionMessageList extends Backbone.Collection
@@ -57,8 +58,7 @@ class MessageView extends Backbone.View
 class SendMessageView extends Backbone.View
   events: {
     "submit form" : "send_message",
-    "keyup textarea[name=content]" : 'filter_send_state',
-    "keydown .textarea-message" : "fastKey"
+    "keyup textarea[name=content]" : 'fastKey'
   }
   initialize: (options) ->
     @model = options.model
@@ -67,14 +67,19 @@ class SendMessageView extends Backbone.View
     @$content = @$("textarea[name=content]")
 
   fastKey: (event) ->
+    @filter_send_state()
     event = event ? event:window.event
     if event.ctrlKey && 13 == event.keyCode
-       $(".message-form").submit()
+      @send_message()
+      @$content.val('')
 
   send_message: () ->
     data = @form_serialize()
-    return false if not data["content"]? || data["content"] == ""
-    return false if @$button.hasClass("disabled")
+    if not data["content"]? || data["content"] == ""
+      return false
+    if @$button.hasClass("disabled")
+      return false
+
     @$button.addClass("disabled")
     @model.send_message data,
       (model, data) =>
@@ -83,7 +88,8 @@ class SendMessageView extends Backbone.View
         @filter_send_state()
       ,() =>
         @filter_send_state()
-
+      ,() =>
+        @$content.val(data["content"])
     false
 
 

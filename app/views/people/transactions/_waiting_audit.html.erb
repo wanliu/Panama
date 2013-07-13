@@ -1,18 +1,18 @@
 <% transfer = transaction.transfer_sheet %>
 <div class="container-fluid">
   <div class='row-fluid'>
-    <div class='span2 title'>汇款人</div>
-    <div class='span4 person' >
-      <%=transfer.try(:person) %>
-    </div>
     <div class='span2 title'>汇款单号</div>
-    <div class='span4 code'>
+    <div class='span10 code'>
       <%=transfer.try(:code) %>
     </div>
   </div>
   <div class='row-fluid'>
+    <div class='span2 title'>汇款人</div>
+    <div class='span4 person' >
+      <%=transfer.try(:person) %>
+    </div>
     <div class='span2 title'>汇款银行</div>
-    <div class='span10 bank'>
+    <div class='span4 bank'>
       <%=transfer.try(:bank) %>
     </div>
   </div>
@@ -24,14 +24,6 @@
     <div class='span2 title'>付款方式</div>
     <div class='span4'>
       <%=transaction.pay_manner.name %>
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span2 title">
-      收货地址
-    </div>
-    <div class="span10">
-      <%= transaction.address.try(:location) %>
     </div>
   </div>
 
@@ -51,5 +43,14 @@
       </div>
     </div>
   <% end %>
+
+  <div class="row-fluid">
+    <div class="span2 title">
+      收货地址
+    </div>
+    <div class="span10">
+      <%= transaction.address.try(:location) %>
+    </div>
+  </div>
 </div>
 <%= render "products", :transaction => transaction, :people => people %>
