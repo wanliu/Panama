@@ -103,12 +103,9 @@ class TransactionCardBase extends AbstructStateView
         $.post @eventUrl(event), (data) =>
             @slidePage(data, direction)
         .fail (data) =>
-            error_massage =  if data.status is 500
-                data.responseText
-            else
-                JSON.parse(data.responseText).message
-
-            @notify("错误信息", error_massage, "error")
+            if data.status isnt 500
+                error_massage = JSON.parse(data.responseText).message
+                @notify("错误信息", error_massage, "error")
 
 
     slidePage: (page, direction = 'right') ->
