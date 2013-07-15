@@ -105,7 +105,7 @@ class exports.TransactionDispose extends Backbone.View
   bind_realtime: () ->
     @client = Realtime.client(@realtime_url)
 
-    @client.subscribe "/transaction/#{@shop_key()}/un_dispose", (info) =>
+    @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
       data = info.values
       switch info.type
         when "chat"
