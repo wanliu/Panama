@@ -180,7 +180,7 @@ class TransactionMessageView extends Backbone.View
       @add_message(message)
 
   receive_notice_url: () ->
-    "/chat/receive/OrderTransaction/#{@shop.id}/#{@tansaction_id}_#{@current_user.token}"
+    "/chat/receive/OrderTransaction/#{@shop.token}/#{@tansaction_id}_#{@current_user.token}"
 
   max_scrollTop: () ->
     mheight = @$message_panel.find(">.message-list").height()

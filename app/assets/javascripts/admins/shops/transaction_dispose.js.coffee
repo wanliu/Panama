@@ -97,7 +97,7 @@ class exports.TransactionDispose extends Backbone.View
       @$tbody.html('')
       @$tbody.append("
       <tr class='notice_message'>
-        <td colspan='7' style='text-align:center;'>暂时没未处理单</td>
+        <td colspan='8' style='text-align:center;'>暂时没未处理单</td>
       </tr>")
     else
       @$tbody.find("tr.notice_message").remove()
@@ -105,7 +105,7 @@ class exports.TransactionDispose extends Backbone.View
   bind_realtime: () ->
     @client = Realtime.client(@realtime_url)
 
-    @client.subscribe "/transaction/#{@shop_key()}/un_dispose", (info) =>
+    @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
       data = info.values
       switch info.type
         when "chat"
@@ -135,4 +135,4 @@ class exports.TransactionDispose extends Backbone.View
       model.set("state_title", data.state_title)
 
   shop_key: () ->
-    @shop.id
+    @shop.token

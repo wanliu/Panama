@@ -52,7 +52,8 @@ class ChatMessage < ActiveRecord::Base
 
   #通知接收人
   def notic_receive_user
-    FayeClient.send("/#{routing_key}", {type: "chat" ,values: as_json})
+    channel, data = routing_key
+    FayeClient.send(channel, data) if channel.present? && data.present?
   end
 
   #通知接收人已经读取信息
@@ -62,12 +63,13 @@ class ChatMessage < ActiveRecord::Base
 
   def routing_key
     if owner.nil?
-      receive_user.im_token
+      ["/chat/receive/#{receive_user.im_token}", as_json]
     elsif owner.is_a?(OrderTransaction)
+      channel = "/#{owner_type}/#{owner.seller.im_token}/"
       if receive_user.present?
-        "#{owner_type}/#{owner.seller.id}/#{owner_id}_#{receive_user.try(:im_token)}"
+        ["/chat/receive#{channel}#{owner_id}_#{receive_user.try(:im_token)}", as_json]
       else
-        "#{owner_type}/#{owner.seller.id}/un_dispose"
+        ["#{channel}un_dispose", {type: 'chat', values: as_json}]
       end
     end
   end
