@@ -1,47 +1,47 @@
 <% buyer = transaction.buyer %>
 <div id="order<%=transaction.id %>" class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
-	 state-id="<%= transaction.id %>"
-	 state-initial="<%= transaction.state %>"
-	 state-url="<%= shop_admins_transaction_path(current_shop, transaction) %>"
-	 state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
-	 url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>">
-	<div class='wrapper-box'>
-		<div class='row-fluid'>
-			<div class='left span7'>
-				<div class="transaction-header">
-					<div class="avatar">
-						<%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
-					</div>
-					<div class="container-fluid info-header">
-						<div class="page-header">
-							<h1><%= buyer.login %>
-								<small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-								<%= distance_of_time_in_words Time.now, transaction.created_at %>
-								</small>
+   state-id="<%= transaction.id %>"
+   state-initial="<%= transaction.state %>"
+   state-url="<%= shop_admins_transaction_path(current_shop, transaction) %>"
+   state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
+   url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>">
+  <div class='wrapper-box'>
+    <div class='row-fluid'>
+      <div class='left span7'>
+        <div class="transaction-header">
+          <div class="avatar">
+            <%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
+          </div>
+          <div class="container-fluid info-header">
+            <div class="page-header">
+              <h1><%= buyer.login %>
+                <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+                <%= distance_of_time_in_words Time.now, transaction.created_at %>
+                </small>
 
-								<button type="button" class="close" data-dismiss="alert">&times;</button>
-								<%= render "state_buttons", :transaction => transaction %>
-							</h1>
-							<div class="transaction-number">
-								订单编号：<%= transaction.number %>
-							</div>
-							<div class="state-progress">
-								<%#=render "progress", transaction: transaction %>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="transaction-body">
-					<%= render state, transaction: transaction %>
-				</div>
-			</div>
-			<div class='span5'>
-				<div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
-					<div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
-					<iframe src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
-					</iframe>
-				</div>
-			</div>
-		</div>
-	</div>
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <%= render "state_buttons", :transaction => transaction %>
+              </h1>
+              <div class="transaction-number">
+                订单编号：<%= transaction.number %>
+              </div>
+              <div class="state-progress">
+                <%=render "progress", transaction: transaction %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="transaction-body">
+          <%= render state, transaction: transaction %>
+        </div>
+      </div>
+      <div class='span5'>
+        <div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
+          <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
+          <iframe src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

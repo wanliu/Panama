@@ -23,6 +23,8 @@ class ServerAuth
     if message['channel'] !~ %r{^/meta/}
       logger.info "message: #{message}"
       message = filter_data(message)
+    else
+      logger.info "system: #{message}"
     end
     callback.call(message)
   end
