@@ -97,7 +97,7 @@ class exports.TransactionDispose extends Backbone.View
       @$tbody.html('')
       @$tbody.append("
       <tr class='notice_message'>
-        <td colspan='7' style='text-align:center;'>暂时没未处理单</td>
+        <td colspan='8' style='text-align:center;'>暂时没未处理单</td>
       </tr>")
     else
       @$tbody.find("tr.notice_message").remove()
