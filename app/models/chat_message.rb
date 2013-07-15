@@ -52,7 +52,7 @@ class ChatMessage < ActiveRecord::Base
 
   #通知接收人
   def notic_receive_user
-    FayeClient.send("/chat/receive/#{routing_key}", as_json)
+    FayeClient.send("/#{routing_key}", {type: "chat" ,values: as_json})
   end
 
   #通知接收人已经读取信息
