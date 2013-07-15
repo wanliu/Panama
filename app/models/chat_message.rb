@@ -64,10 +64,11 @@ class ChatMessage < ActiveRecord::Base
     if owner.nil?
       receive_user.im_token
     elsif owner.is_a?(OrderTransaction)
+      channel = "#{owner_type}/#{owner.seller.im_token}/"
       if receive_user.present?
-        "#{owner_type}/#{owner.seller.id}/#{owner_id}_#{receive_user.try(:im_token)}"
+        "#{channel}#{owner_id}_#{receive_user.try(:im_token)}"
       else
-        "#{owner_type}/#{owner.seller.id}/un_dispose"
+        "#{channel}un_dispose"
       end
     end
   end

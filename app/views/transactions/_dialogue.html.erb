@@ -36,7 +36,8 @@
     tansaction_id: <%=transaction.id %>,
     shop: {
       id: "<%=transaction.seller.id %>",
-      name: "<%=transaction.seller.name %>"
+      name: "<%=transaction.seller.name %>",
+      token: "<%=transaction.seller.im_token%>"
     }
   })
 </script>

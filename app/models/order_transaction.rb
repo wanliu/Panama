@@ -406,7 +406,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_change_seller(name, event_name = nil)
     if current_operator.nil?
-      FayeClient.send("/transaction/#{seller.id}/un_dispose", {type: "change" ,values: self})
+      FayeClient.send("/transaction/#{seller.token}/un_dispose", {type: "change" ,values: self})
     else
       token = current_operator.try(:im_token)
       FayeClient.send("/events/#{token}/transaction-#{id}-seller",

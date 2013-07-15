@@ -135,4 +135,4 @@ class exports.TransactionDispose extends Backbone.View
       model.set("state_title", data.state_title)
 
   shop_key: () ->
-    @shop.id
+    @shop.token
