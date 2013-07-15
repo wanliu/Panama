@@ -71,3 +71,7 @@ class ChatContact extends Backbone.View
     @el.toggle()
 
 root.ChatContact = ChatContact
+root.user_connect = (token) ->
+  if token?
+    user = new User()
+    user.connect(@current_user.token)
