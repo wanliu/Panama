@@ -522,7 +522,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def realtime_dispose(data = {})
-    FayeClient.send("/transaction/#{seller.id}/un_dispose", dat)
+    FayeClient.send("/transaction/#{seller.id}/un_dispose", data)
   end
 
   def filter_fire_event!(events = [], event)
