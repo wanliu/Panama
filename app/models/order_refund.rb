@@ -31,7 +31,7 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  after_create :create_state_detail, :valid_shipped_order_state?
+  after_create :create_state_detail, :valid_shipped_order_state?, :notify_shop_refund
 
   state_machine :state, :initial => :apply_refund do
 
@@ -207,7 +207,7 @@ class OrderRefund < ActiveRecord::Base
         buyer_recharge
         seller_payment
       end
-    elsif order.waiting_sign_state? && !order.pay_manner.cash_on_delivery?
+    elsif order.waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
       buyer_recharge
     end
   end
@@ -249,6 +249,14 @@ class OrderRefund < ActiveRecord::Base
     unless order.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
     end
+  end
+
+  def notify_shop_refund
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
+      :body => "有人要退货了")
   end
 
   def type_fire_events!(states, event)
