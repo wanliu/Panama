@@ -33,6 +33,8 @@ class MoneyBill < ActiveRecord::Base
         owner.number
       when "Bank"
         owner.name
+      when "OrderRefund"
+        owner.id
       else
         "未知"
       end

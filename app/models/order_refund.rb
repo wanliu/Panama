@@ -79,7 +79,7 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_unshipped_order_state?
       if refund.valid?
         refund.handle_detail_return_money
-        refund.change_order_state
+        refund.change_order_refund_state
       end
     end
 
@@ -89,13 +89,13 @@ class OrderRefund < ActiveRecord::Base
 
     after_transition :apply_refund => :waiting_delivery,
                      :apply_failure => :waiting_delivery  do |refund, transition|
-      refund.change_order_state
+      refund.change_order_waiting_refund_state
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
       refund.handle_product_item
-      refund.change_order_state
+      refund.change_order_refund_state
     end
 
     after_transition :apply_refund => :apply_failure do |refund, transition|
@@ -120,7 +120,11 @@ class OrderRefund < ActiveRecord::Base
     state_details.find_by(:state => state)
   end
 
-  def change_order_state
+  def change_order_waiting_refund_state
+    order.seller_fire_event!(:returned)
+  end
+
+  def change_order_refund_state
     if order.valid_refund?
       unless order.seller_fire_event!(:returned)
         errors.add(:state, "确认退货出错！")
