@@ -399,6 +399,7 @@ ActiveRecord::Schema.define(:version => 20130715080511) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
   end
 
@@ -588,7 +589,6 @@ ActiveRecord::Schema.define(:version => 20130715080511) do
     t.datetime "updated_at", :null => false
     t.string   "photo"
     t.integer  "user_id"
-    t.string   "tmp_token"
     t.string   "im_token"
   end
 
