@@ -77,21 +77,19 @@ class OrderRefund < ActiveRecord::Base
     before_transition :apply_failure => :complete,
                       :apply_refund => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
+      if refund.valid?
+        refund.handle_detail_return_money
+        refund.change_order_state
+      end
     end
 
     before_transition :waiting_delivery => :waiting_sign do |refund, transition|
       refund.valid_delivery_code?
     end
 
-    before_transition :apply_failure => :complete,
-                      :apply_refund => :complete do |refund, transition|
-      refund.handle_detail_return_money
-      refund.change_order_state
-    end
-
     after_transition :apply_refund => :waiting_delivery,
                      :apply_failure => :waiting_delivery  do |refund, transition|
-
+      refund.change_order_state
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
