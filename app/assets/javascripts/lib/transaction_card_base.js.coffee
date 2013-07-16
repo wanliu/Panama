@@ -112,6 +112,7 @@ class TransactionCardBase extends AbstructStateView
         $side1 = $("<div class='slide-1'></div>")
         $side2 = $("<div class='slide-2'></div>")
 
+        @$el.find("iframe").remove()
         @$el.wrap($("<div class='slide-box'></div>"))
         @$el.wrap($("<div class='slide-container'></div>"))
         @$el.wrap($side1)
@@ -120,6 +121,7 @@ class TransactionCardBase extends AbstructStateView
         $slideContainer.append($side2)
         $side2.html(page)
 
+        iframe = $side2.find("iframe").remove()
         $side1 = @$el
 
 
@@ -144,6 +146,7 @@ class TransactionCardBase extends AbstructStateView
                   .unwrap()
                   .unwrap()
                   .unwrap()
+            @$el.find(".transaction-footer").append(iframe)
 
         if direction == 'right'
             $side1.css('float', 'left')
