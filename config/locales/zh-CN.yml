@@ -212,6 +212,7 @@ zh-CN:
       bank: 银行
       category: 分类
       admin_user: 管理员
+      order_refund: 退货
     attributes:
       activity:
         id: 编号

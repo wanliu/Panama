@@ -31,22 +31,23 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  after_create :create_state_detail, :valid_shipped_order_state?
+  after_create :create_state_detail, :valid_shipped_order_state?, :notify_shop_refund
 
   state_machine :state, :initial => :apply_refund do
 
     event :shipped_agree do
-      transition [:apply_refund, :apply_failure] => :waiting_delivery
+      transition [:apply_refund, :apply_expired, :apply_failure] => :waiting_delivery
     end
 
     event :unshipped_agree do
-      transition [:apply_refund, :apply_failure] => :complete
+      transition [:apply_refund, :apply_expired, :apply_failure] => :complete
     end
 
     event :expired do
-      transition :apply_refund => :apply_failure,
+      transition :apply_refund => :apply_expired,
                  :waiting_delivery => :close,
-                 :waiting_sign => :complete
+                 :waiting_sign => :complete,
+                 :apply_failure => :close
     end
 
     event :delivered do
@@ -58,49 +59,47 @@ class OrderRefund < ActiveRecord::Base
     end
 
     event :refuse do
-      transition :apply_refund => :failure
+      transition :apply_refund => :apply_failure
     end
 
     after_transition do |refund, transition|
       refund.create_state_detail
     end
 
-    before_transition :apply_refund => :failure do |refund, transition|
+    before_transition :apply_refund => :apply_failure do |refund, transition|
       refund.valid_refuse_reason?
     end
 
     before_transition :apply_refund => :waiting_delivery,
-                      :apply_failure => :waiting_delivery do |refund, transition|
+                      :apply_expired => :waiting_delivery do |refund, transition|
       refund.validate_shipped_order_state?
     end
 
-    before_transition :apply_failure => :complete,
+    before_transition :apply_expired => :complete,
                       :apply_refund => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
+      if refund.valid?
+        refund.handle_detail_return_money
+        refund.change_order_refund_state
+      end
     end
 
     before_transition :waiting_delivery => :waiting_sign do |refund, transition|
       refund.valid_delivery_code?
     end
 
-    before_transition :apply_failure => :complete,
-                      :apply_refund => :complete do |refund, transition|
-      refund.handle_detail_return_money
-      refund.change_order_state
-    end
-
     after_transition :apply_refund => :waiting_delivery,
-                     :apply_failure => :waiting_delivery  do |refund, transition|
-
+                     :apply_expired => :waiting_delivery  do |refund, transition|
+      refund.change_order_waiting_refund_state
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
       refund.handle_product_item
-      refund.change_order_state
+      refund.change_order_refund_state
     end
 
-    after_transition :apply_refund => :apply_failure do |refund, transition|
+    after_transition :apply_refund => :apply_expired do |refund, transition|
       refund.apply_failure_notice
     end
   end
@@ -122,7 +121,11 @@ class OrderRefund < ActiveRecord::Base
     state_details.find_by(:state => state)
   end
 
-  def change_order_state
+  def change_order_waiting_refund_state
+    order.seller_fire_event!(:returned)
+  end
+
+  def change_order_refund_state
     if order.valid_refund?
       unless order.seller_fire_event!(:returned)
         errors.add(:state, "确认退货出错！")
@@ -135,7 +138,7 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def handle_product_item
-    order.refund_handle_product_item(self)
+    order.refund_handle_product_item(refund_product_ids)
   end
 
   def self.avaliable
@@ -159,6 +162,10 @@ class OrderRefund < ActiveRecord::Base
   def create_state_detail
     state_details.update_all(:expired_state => false)
     state_details.create(:state => state)
+  end
+
+  def refund_product_ids
+    items.map{|it| it.product_id}
   end
 
   def create_items(_items = [])
@@ -205,7 +212,7 @@ class OrderRefund < ActiveRecord::Base
         buyer_recharge
         seller_payment
       end
-    elsif order.waiting_sign_state? && !order.pay_manner.cash_on_delivery?
+    elsif order.waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
       buyer_recharge
     end
   end
@@ -247,6 +254,14 @@ class OrderRefund < ActiveRecord::Base
     unless order.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
     end
+  end
+
+  def notify_shop_refund
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
+      :body => "有人要退货了")
   end
 
   def type_fire_events!(states, event)

@@ -15,11 +15,13 @@ class OrderRefundStateDetail < ActiveRecord::Base
   def generate_expired
     case state
     when "apply_refund"
-      self.expired = DateTime.now + 2.day
+      self.expired = DateTime.now + 2.days
     when "waiting_sign"
-      self.expired = DateTime.now + 7.day
+      self.expired = DateTime.now + 7.days
     when "waiting_delivery"
-      self.expired = DateTime.now + 3.day
+      self.expired = DateTime.now + 3.days
+    when 'apply_failure'
+      self.expired = DateTime.now + 3.days
     else
       self.expired_state = false
       self.expired = DateTime.now
