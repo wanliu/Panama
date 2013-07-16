@@ -137,7 +137,7 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def handle_product_item
-    order.refund_handle_product_item(self)
+    order.refund_handle_product_item(refund_product_ids)
   end
 
   def self.avaliable
@@ -161,6 +161,10 @@ class OrderRefund < ActiveRecord::Base
   def create_state_detail
     state_details.update_all(:expired_state => false)
     state_details.create(:state => state)
+  end
+
+  def refund_product_ids
+    items.map{|it| it.product_id}
   end
 
   def create_items(_items = [])
