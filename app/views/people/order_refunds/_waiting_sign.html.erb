@@ -1,19 +1,21 @@
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span2">
-      退货原因:
+      退货原因
     </div>
     <div class="span2">
       <%= refund.order_reason.name %>
     </div>
     <div class="span2">
-      <label class="control-label">退货总金额:</label>
+      退货总金额
     </div>
     <div class="span2">
       <%= number_to_currency(refund.stotal) %>
     </div>
+  </div>
+  <div class="row-fluid">
     <div class="span2">
-      发货单号:
+        发货单号
     </div>
     <div class="span3">
       <%= refund.delivery_code %>
@@ -22,7 +24,7 @@
 
   <div class="row-fluid">
     <div class="span2">
-      <label class="control-label">退货说明:</label>
+      退货说明
     </div>
     <div class="span10">
       <%= refund.decription %>
