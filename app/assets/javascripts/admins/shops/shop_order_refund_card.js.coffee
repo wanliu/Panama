@@ -21,12 +21,14 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     initial: 'none'
 
     events:  [
-      { name: 'refuse',          from: 'apply_refund',      to: 'refuse' },
+      { name: 'refuse',          from: 'apply_refund',      to: 'apply_failure' },
       { name: 'shipped_agree',   from: 'apply_refund',      to: 'waiting_delivery' },
       { name: 'unshipped_agree', from: 'apply_refund',      to: 'complete' },
       { name: 'sign',            from: 'waiting_sign',      to: 'complete'},
+      { name: 'shipped_agree',   from: 'apply_failure',     to: 'waiting_delivery' },
       { name: 'unshipped_agree', from: 'apply_failure',     to: 'complete'},
-      { name: 'shipped_agree',   from: 'apply_failure',     to: 'complete' }
+      { name: 'shipped_agree',   from: 'apply_expired',     to: 'waiting_delivery' },
+      { name: 'unshipped_agree', from: 'apply_expired',     to: 'complete'}
     ]
 
   leaveApplyRefund: (event, from, to, msg) ->

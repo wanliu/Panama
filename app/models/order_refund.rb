@@ -36,17 +36,18 @@ class OrderRefund < ActiveRecord::Base
   state_machine :state, :initial => :apply_refund do
 
     event :shipped_agree do
-      transition [:apply_refund, :apply_failure] => :waiting_delivery
+      transition [:apply_refund, :apply_expired, :apply_failure] => :waiting_delivery
     end
 
     event :unshipped_agree do
-      transition [:apply_refund, :apply_failure] => :complete
+      transition [:apply_refund, :apply_expired, :apply_failure] => :complete
     end
 
     event :expired do
-      transition :apply_refund => :apply_failure,
+      transition :apply_refund => :apply_expired,
                  :waiting_delivery => :close,
-                 :waiting_sign => :complete
+                 :waiting_sign => :complete,
+                 :apply_failure => :close
     end
 
     event :delivered do
@@ -58,23 +59,23 @@ class OrderRefund < ActiveRecord::Base
     end
 
     event :refuse do
-      transition :apply_refund => :failure
+      transition :apply_refund => :apply_failure
     end
 
     after_transition do |refund, transition|
       refund.create_state_detail
     end
 
-    before_transition :apply_refund => :failure do |refund, transition|
+    before_transition :apply_refund => :apply_failure do |refund, transition|
       refund.valid_refuse_reason?
     end
 
     before_transition :apply_refund => :waiting_delivery,
-                      :apply_failure => :waiting_delivery do |refund, transition|
+                      :apply_expired => :waiting_delivery do |refund, transition|
       refund.validate_shipped_order_state?
     end
 
-    before_transition :apply_failure => :complete,
+    before_transition :apply_expired => :complete,
                       :apply_refund => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
       if refund.valid?
@@ -88,7 +89,7 @@ class OrderRefund < ActiveRecord::Base
     end
 
     after_transition :apply_refund => :waiting_delivery,
-                     :apply_failure => :waiting_delivery  do |refund, transition|
+                     :apply_expired => :waiting_delivery  do |refund, transition|
       refund.change_order_waiting_refund_state
     end
 
@@ -98,7 +99,7 @@ class OrderRefund < ActiveRecord::Base
       refund.change_order_refund_state
     end
 
-    after_transition :apply_refund => :apply_failure do |refund, transition|
+    after_transition :apply_refund => :apply_expired do |refund, transition|
       refund.apply_failure_notice
     end
   end
