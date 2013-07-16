@@ -83,10 +83,15 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_delivery_code?
     end
 
-    after_transition :apply_refund => [:waiting_delivery, :complete],
-                     :apply_failure => [:waiting_delivery, :complete] do |refund, transition|
+    before_transition :apply_failure => :complete,
+                      :apply_refund => :complete do |refund, transition|
       refund.handle_detail_return_money
       refund.change_order_state
+    end
+
+    after_transition :apply_refund => :waiting_delivery,
+                     :apply_failure => :waiting_delivery  do |refund, transition|
+
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
@@ -200,7 +205,7 @@ class OrderRefund < ActiveRecord::Base
         buyer_recharge
         seller_payment
       end
-    elsif order.waiting_sign_state? && !order.payment.cash_on_delivery?
+    elsif order.waiting_sign_state? && !order.pay_manner.cash_on_delivery?
       buyer_recharge
     end
   end

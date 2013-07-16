@@ -226,8 +226,11 @@ class OrderTransaction < ActiveRecord::Base
   #如果卖家没有发货直接删除明细，返还买家的金额
   def refund_handle_detail_return_money(refund)
     if unshipped_state?
-      get_refund_items(refund).destroy_all
-      update_total_count
+      product_ids = refund_product_ids(refund)
+      if not_product_refund(product_ids).present?
+        get_refund_items(product_ids).destroy_all
+        update_total_count
+      end
       if !pay_manner.cash_on_delivery? && save
         refund.buyer_recharge
       end
@@ -235,12 +238,16 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def refund_handle_product_item(refund)
-    get_refund_items(refund).update_all(:refund_state => false)
+    product_ids = refund_product_ids(refund)
+    get_refund_items(product_ids).update_all(:refund_state => false)
   end
 
-  def get_refund_items(refund)
-    product_ids = refund.items.map{|it| it.product_id}
+  def get_refund_items(product_ids)
     items.where(:product_id => product_ids)
+  end
+
+  def not_product_refund(product_ids)
+    items.where("product_id not in (?)", product_ids).first
   end
 
   def shipped_state?
@@ -422,10 +429,6 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def valid_refund?
-    # product_ids = refunds.avaliable.joins(:items) do |ref|
-    #   ref.items.map{|item| item.product_id }
-    # end.flatten
-    # if items.where("product_id not in (?)", product_ids).first.nil?
     if items.exists?(:refund_state => true)
       errors.add(:state, "订单还有其它产品没有退货！")
       false
@@ -511,6 +514,10 @@ class OrderTransaction < ActiveRecord::Base
         errors.add(:delivery_manner_id, "请选择配送方式!")
       end
     end
+  end
+
+  def refund_product_ids(refund)
+    refund.items.map{|it| it.product_id}
   end
 
   def notice_new_order
