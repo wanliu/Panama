@@ -110,12 +110,11 @@ class People::TransactionsController < People::BaseController
 
   def refund
     order = current_order.find(params[:id])
-    items = params[:order_refund].delete(:product_items) || []
 
     respond_to do |format|
       refund = order.refunds.create(params[:order_refund])
       if refund.valid?
-        refund.create_items(items)
+        refund.create_items(order.items.map{|item| item.id})
         if refund.items.count <= 0
           refund.destroy
           format.json{ render :json => { :message => "申请退货失败：您选择退货的商品已经在退货之中，或者不能退货" },

@@ -130,9 +130,25 @@ class OrderTransaction < ActiveRecord::Base
     #退货事件方式
     event :returned do
       #发货失败`等待发货`签收 到 退货
-      transition [:delivery_failure, :waiting_delivery, :waiting_refund] => :refund,
-                 [:waiting_sign, :complete]             => :waiting_refund
+      transition :waiting_refund => :refund,
+                 [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund
 
+    end
+
+    event :rollback_delivery_failure do
+      transition :waiting_refund => :delivery_failure
+    end
+
+    event :rollback_waiting_delivery do
+      transition :waiting_refund => :waiting_delivery
+    end
+
+    event :rollback_waiting_sign do
+      transition :waiting_refund => :waiting_sign
+    end
+
+    event :rollback_complete do
+      transition :waiting_refund => :complete
     end
 
     #付款
@@ -184,7 +200,8 @@ class OrderTransaction < ActiveRecord::Base
       order.notice_change_buyer(transition.to_name, transition.event)
     end
 
-    after_transition :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
+    after_transition  [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund,
+                      :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
       order.notice_change_buyer(transition.to_name, transition.event)
       order.notice_change_seller(transition.to_name, transition.event)
     end
@@ -220,7 +237,7 @@ class OrderTransaction < ActiveRecord::Base
       order.valid_payment?
     end
 
-    before_transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund do |order, transition|
+    before_transition :waiting_refund => :refund do |order, transition|
       order.valid_refund?
     end
 
@@ -236,18 +253,16 @@ class OrderTransaction < ActiveRecord::Base
 
   #如果卖家没有发货直接删除明细，返还买家的金额
   def refund_handle_detail_return_money(refund)
-    if unshipped_state?
-      product_ids = refund.refund_product_ids
-      refund_items = get_refund_items(product_ids)
-      if not_product_refund(product_ids).present?
-        refund_items.destroy_all
-        update_total_count
-      else
-        refund_handle_product_item(product_ids)
-      end
-      if !pay_manner.cash_on_delivery? && save
-        refund.buyer_recharge
-      end
+    product_ids = refund.refund_product_ids
+    refund_items = get_refund_items(product_ids)
+    if not_product_refund(product_ids).present?
+      refund_items.destroy_all
+      update_total_count
+    else
+      refund_handle_product_item(product_ids)
+    end
+    if !pay_manner.cash_on_delivery? && save
+      refund.buyer_recharge
     end
   end
 
@@ -319,7 +334,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def seller_fire_event!(event)
-    events = %w(back returned delivered)
+    events = %w(back delivered)
     filter_fire_event!(events, event)
   end
 

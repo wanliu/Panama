@@ -325,7 +325,15 @@ zh-CN:
         name: 名称
         title: 标题
         property: 值
-
+      order_refund:
+        id: 编号
+        order_transaction: 订单
+        total: 总金额
+        state: 状态
+        buyer: 买家
+        seller: 卖家
+        decription: "退货描述"
+        action_link: "操作"
   mongoid:
     models:
       content: "内容"

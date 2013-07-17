@@ -14,6 +14,8 @@
 class OrderRefund < ActiveRecord::Base
   include MessageQueue::OrderRefund
 
+  scope :avaliable, where("state not in ('apply_refund', 'failure')")
+
   attr_accessible :decription, :order_reason_id, :delivery_price
 
   belongs_to :order_reason
@@ -31,7 +33,8 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  after_create :create_state_detail, :valid_shipped_order_state?, :notify_shop_refund
+  before_create :change_order_state
+  after_create :valid_shipped_order_state?, :notify_shop_refund, :create_state_detail
 
   state_machine :state, :initial => :apply_refund do
 
@@ -68,11 +71,11 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition :apply_refund => :apply_failure do |refund, transition|
       refund.valid_refuse_reason?
+      refund.rollback_order_state
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
       refund.validate_shipped_order_state?
-      refund.change_order_waiting_refund_state
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
@@ -121,17 +124,18 @@ class OrderRefund < ActiveRecord::Base
     refunds
   end
 
+  def change_order_state
+    self.order_state = order.state
+    order.fire_events!(:returned)
+  end
+
   def current_state_detail
     state_details.find_by(:state => state)
   end
 
-  def change_order_waiting_refund_state
-    order.seller_fire_event!(:returned)
-  end
-
   def change_order_refund_state
     if order.valid_refund?
-      unless order.seller_fire_event!(:returned)
+      unless order.fire_events!(:returned)
         errors.add(:state, "确认退货出错！")
       end
     end
@@ -149,16 +153,16 @@ class OrderRefund < ActiveRecord::Base
       :name => name, :event => "refresh_#{event_name}")
   end
 
+  def rollback_order_state
+    order.fire_events!("rollback_#{order_state}")
+  end
+
   def handle_detail_return_money
     order.refund_handle_detail_return_money(self)
   end
 
   def handle_product_item
     order.refund_handle_product_item(refund_product_ids)
-  end
-
-  def self.avaliable
-    where("state not in ('apply_refund', 'failure')")
   end
 
   def seller_fire_events!(event)
@@ -223,12 +227,12 @@ class OrderRefund < ActiveRecord::Base
 
   #卖家退款
   def seller_refund_money
-    if order.complete_state?
+    if order_complete_state?
       MoneyBill.transaction do
         buyer_recharge
         seller_payment
       end
-    elsif order.waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
+    elsif order_waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
       buyer_recharge
     end
   end
@@ -245,14 +249,30 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
+  def order_waiting_sign_state?
+    "waiting_sign" == order_state
+  end
+
+  def order_complete_state?
+    "complete" == order_state
+  end
+
+  def shipped_state?
+    %w(waiting_sign complete).include?(order_state)
+  end
+
+  def unshipped_state?
+    %w(delivery_failure waiting_delivery).include?(order_state)
+  end
+
   def validate_shipped_order_state?
-    unless order.shipped_state?
+    unless shipped_state?
       errors.add(:state, "卖家还没有发货!")
     end
   end
 
   def valid_unshipped_order_state?
-    unless order.unshipped_state?
+    unless unshipped_state?
       errors.add(:state, "卖家已经发送了!")
     end
   end

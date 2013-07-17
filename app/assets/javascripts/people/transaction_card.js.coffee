@@ -28,6 +28,11 @@ class TransactionCard extends TransactionCardBase
       { name: 'cash_on_delivery',     from: 'order',                  to: 'waiting_delivery' }
       { name: 'paid',                 from: 'waiting_paid',           to: 'waiting_delivery' },
       { name: 'refresh_delivered',    from: 'waiting_delivery',       to: 'waiting_sign' },
+      { name: 'refresh_returned',     from: 'waiting_refund',         to: 'refund' },
+      { name: 'refresh_returned',     from: 'delivery_failure',       to: 'waiting_refund' },
+      { name: 'refresh_returned',     from: 'waiting_delivery',       to: 'waiting_refund' },
+      { name: 'refresh_returned',     from: 'waiting_sign',           to: 'waiting_refund' },
+      { name: 'refresh_returned',     from: 'complete',               to: 'waiting_refund' },
       { name: 'sign',                 from: 'waiting_sign',           to: 'evaluate' },
       { name: 'back',                 from: 'waiting_paid',           to: 'order' },
       { name: 'back',                 from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
