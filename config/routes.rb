@@ -38,6 +38,7 @@ Panama::Application.routes.draw do
       member do
         post "event(/:event)", :to => "people/order_refunds#event", :as => :trigger_event
         post 'delivery_code', :to => "people/order_refunds#delivery_code"
+        get 'page', :to => "people/order_refunds#page"
       end
     end
 
@@ -259,6 +260,7 @@ Panama::Application.routes.draw do
         member do
           post "event(/:event)", :to => "shops/order_refunds#event", :as => :trigger_event
           post 'refuse_reason', :to => "shops/order_refunds#refuse_reason"
+          get 'page', :to => "shops/order_refunds#page"
         end
       end
 

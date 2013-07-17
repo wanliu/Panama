@@ -18,8 +18,19 @@ class OrderRefundCard extends TransactionCardBase
     initial: 'none'
 
     events:  [
-      { name: 'delivered',     from: 'waiting_delivery',  to: 'waiting_sign' }
+      { name: 'refresh_shipped_agree',    from: 'apply_refund',      to: 'waiting_delivery'},
+      { name: 'refresh_shipped_agree',    from: 'apply_expired',     to: 'waiting_delivery' },
+      { name: 'refresh_shipped_agree',    from: 'apply_failure',     to: 'waiting_delivery' },
+      { name: 'refresh_unshipped_agree',  from: 'apply_refund',      to: 'complete'},
+      { name: 'refresh_unshipped_agree',  from: 'apply_expired',     to: 'complete' },
+      { name: 'refresh_unshipped_agree',  from: 'apply_failure',     to: 'complete' },
+      { name: 'refresh_sign',             from: 'waiting_sign',      to: 'complete'},
+      { name: 'refresh_refuse',           from: 'apply_refund',      to: 'apply_failure'},
+      { name: 'delivered',                from: 'waiting_delivery',  to: 'waiting_sign' }
     ]
+
+  getNotifyName: () ->
+    "order-refund-#{@options['id']}-buyer"
 
   change_delivery_code: () ->
 

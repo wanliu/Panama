@@ -72,6 +72,7 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
       refund.validate_shipped_order_state?
+      refund.change_order_waiting_refund_state
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
@@ -82,12 +83,18 @@ class OrderRefund < ActiveRecord::Base
       end
     end
 
-    before_transition :waiting_delivery => :waiting_sign do |refund, transition|
-      refund.valid_delivery_code?
+    after_transition  [:apply_failure, :apply_refund, :apply_expired] => [:waiting_delivery ,:complete],
+                      :apply_refund => :apply_failure,
+                      :waiting_sign => :complete do |refund, transition|
+      refund.notice_change_buyer(transition.to_name, transition.event)
     end
 
-    after_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
-      refund.change_order_waiting_refund_state
+    after_transition :waiting_delivery => :waiting_sign do |refund, transition|
+      refund.notice_change_seller(transition.to_name, transition.event)
+    end
+
+    before_transition :waiting_delivery => :waiting_sign do |refund, transition|
+      refund.valid_delivery_code?
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
@@ -130,6 +137,18 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
+  def notice_change_buyer(name, event_name)
+    token = buyer.try(:im_token)
+    faye_send("/events/#{token}/order-refund-#{id}-buyer",
+      :name => name, :event => "refresh_#{event_name}")
+  end
+
+  def notice_change_seller(name, event_name)
+    token = operator.try(:im_token)
+    faye_send("/events/#{token}/order-refund-#{id}-seller",
+      :name => name, :event => "refresh_#{event_name}")
+  end
+
   def handle_detail_return_money
     order.refund_handle_detail_return_money(self)
   end
@@ -153,7 +172,7 @@ class OrderRefund < ActiveRecord::Base
   def update_buyer_and_seller_and_operate
     self.buyer_id = order.try(:buyer_id)
     self.seller_id = order.try(:seller_id)
-    self.operator_id = order.try(:operator_id)
+    self.operator_id = order.operator.try(:operator_id)
   end
 
   def create_state_detail
@@ -251,6 +270,10 @@ class OrderRefund < ActiveRecord::Base
     unless order.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
     end
+  end
+
+  def faye_send(channel, options)
+    FayeClient.send(channel, options)
   end
 
   def notify_shop_refund

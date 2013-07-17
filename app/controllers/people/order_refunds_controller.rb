@@ -5,6 +5,14 @@ class People::OrderRefundsController < People::BaseController
     @refunds = current_user_refunds.order("created_at desc")
   end
 
+  def show
+    @refund = current_user_refunds.find(params[:id])
+  end
+
+  def page
+    @refund = current_user_refunds.find(params[:id])
+  end
+
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
     if @refund.buyer_fire_events!(params[:event])
