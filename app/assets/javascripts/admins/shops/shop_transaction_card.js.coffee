@@ -9,6 +9,7 @@ class ShopTransactionCard extends TransactionCardBase
     super
     @filter_delivery_code()
     @initMessagePanel()
+    @countdown()
 
   events:
     "click .page-header .btn" : "clickAction"

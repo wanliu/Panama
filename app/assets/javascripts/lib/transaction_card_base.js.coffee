@@ -1,5 +1,5 @@
 #= require lib/state-view
-#= require lib/jsclock-0.8
+#= require lib/kkcountdown
 #= require lib/realtime_client
 #= require lib/notify
 
@@ -27,6 +27,18 @@ class TransactionCardBase extends AbstructStateView
             @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
         super
         # @$el.bind('click', @activeThis)
+
+    countdown: () ->
+        @$(".clock").kkcountdown({
+            dayText         : '天',
+            daysText        : '天',
+            hoursText       : '时',
+            minutesText     : '分',
+            secondsText     : '秒',
+            displayZeroDays : true,
+            # callback      : test,
+            oneDayClass     : 'one-day'
+        })
 
     getNotifyName: () ->
         "transaction-#{@options['id']}"
