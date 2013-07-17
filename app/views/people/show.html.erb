@@ -12,14 +12,14 @@
           </div>
           <div class='span8'>
             <p>
-              用户名: <%=@people.login %>
+              用户名 <%=@people.login %>
             </p>
             <p>
-              E-mail: <%=@people.email %>
+              E-mail <%=@people.email %>
             </p>
             <% if can?(:manage, User) %>
             <p>
-              余额: <%=@people.money %>
+              余额 <%=@people.money %>
             </p>
             <% end %>
           </div>

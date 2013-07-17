@@ -70,13 +70,11 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_refuse_reason?
     end
 
-    before_transition :apply_refund => :waiting_delivery,
-                      :apply_expired => :waiting_delivery do |refund, transition|
+    before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
       refund.validate_shipped_order_state?
     end
 
-    before_transition :apply_expired => :complete,
-                      :apply_refund => :complete do |refund, transition|
+    before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
       if refund.valid?
         refund.handle_detail_return_money
@@ -88,8 +86,7 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_delivery_code?
     end
 
-    after_transition :apply_refund => :waiting_delivery,
-                     :apply_expired => :waiting_delivery  do |refund, transition|
+    after_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
       refund.change_order_waiting_refund_state
     end
 
