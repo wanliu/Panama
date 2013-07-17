@@ -27,4 +27,20 @@ class Address < ActiveRecord::Base
   validates :contact_name, :presence => true
   validates :contact_phone, :presence => true
 
+  validate :valid_address_uniqueness?
+
+
+  private
+  def valid_address_uniqueness?
+    if Address.where("
+      road=? and
+      province_id=? and
+      city_id=? and
+      area_id=? and
+      contact_name=? and
+      contact_phone=? and id<>?", road, province_id,
+      city_id, area_id, contact_name, contact_phone, id).present?
+      errors.add(:province_id, "地址已经存在了！")
+    end
+  end
 end
