@@ -79,7 +79,8 @@ class ChatMessage < ActiveRecord::Base
     attra["receive_user"] = receive_user.nil? ? {} : receive_user.as_json
     attra["owner"] = owner.nil? ? {} : owner.as_json
     attra["send_user"] = send_user.as_json
-    attra["created_at"] = created_at.strftime("%Y-%d-%m %H:%M:%S")
+    # attra["created_at"] = created_at.localtime().strftime("%Y-%m-%d %H:%M:%S")
+    attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S").as_json
     attra
   end
 
