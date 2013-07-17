@@ -153,6 +153,17 @@ class OrderTransaction < ActiveRecord::Base
       transition :waiting_sign => :complete
     end
 
+    state :waiting_sign do
+      # 提前申请延长收货的时限
+      def pre_delay_sign_time
+        3.days
+      end
+      # 申请延长收货增加的时间
+      def delay_sign_time
+        3.days
+      end
+    end
+
     after_transition :order            => [:waiting_paid, :waiting_transfer, :waiting_delivery],
                      :waiting_transfer => :waiting_audit,
                      :waiting_sign     => :complete,
@@ -252,6 +263,10 @@ class OrderTransaction < ActiveRecord::Base
 
   def shipped_state?
     %w(waiting_sign complete).include?(state)
+  end
+
+  def undelayed_sign_state?
+    %w(waiting_sign).include?(state)
   end
 
   def waiting_sign_state?
@@ -481,6 +496,10 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def can_delay_sign_expired?
+    undelayed_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
+  end
+
   def self.state_expired
     transactions = find(:all,
       :joins => "left join transaction_state_details as details
@@ -540,4 +559,5 @@ class OrderTransaction < ActiveRecord::Base
       false
     end
   end
+
 end

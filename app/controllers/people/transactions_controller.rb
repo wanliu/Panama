@@ -129,6 +129,19 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def delay_sign
+    order = current_order.find(params[:id])
+    respond_to do |format|
+      if order.current_state_detail.count == 1
+        format.json { render json: { text: "no" } }
+      elsif order.current_state_detail.delay_sign_expired
+        format.json { render json: { text: "ok" } }
+      else
+        format.json { render json: { text: "fail" } }
+      end
+    end
+  end
+
   def notify
   end
 

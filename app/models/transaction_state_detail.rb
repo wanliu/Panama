@@ -5,7 +5,7 @@
 #  expired: 过期
 #  expired_state: 是否过期(true有限制, false无限制)
 class TransactionStateDetail < ActiveRecord::Base
-  attr_accessible :order_transaction, :state, :expired
+  attr_accessible :order_transaction, :state, :expired, :count
 
   belongs_to :order_transaction
 
@@ -13,6 +13,14 @@ class TransactionStateDetail < ActiveRecord::Base
 
   def calculate_expired
     self.expired = switch_state
+  end
+
+  def delay_sign_expired
+    if order_transaction.can_delay_sign_expired?
+      expired_time = expired + order_transaction.delay_sign_time
+      self.update_attributes({:expired => expired_time, :count => count + 1})
+    end
+    false
   end
 
   private

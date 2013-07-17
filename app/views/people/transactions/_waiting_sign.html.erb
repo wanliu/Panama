@@ -6,7 +6,7 @@
       <span class='clock'></span>来确认收货，超时订单自动确认收货
       <div class="pull-right">
         <a href='javascript:void(0)' class='returned-event'>申请退货</a>
-        <a href='javascript:void(0)'>延长收货时间</a>
+        <a href='javascript:void(0)' class='delay-sign-event'>延长收货时间</a>
       </div>
     </div>
   </div>
@@ -43,3 +43,11 @@
 </div>
 <%= render "people/transactions/funcat/refund_display", :transaction => transaction, :people => people %>
 <%= render "products", :transaction => transaction, :people => people %>
+<script type='text/javascript'>
+  $(function(){
+    new TransactionDelaySignView({
+      el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
+      remote_url: "<%= person_transaction_path(people, transaction)%>"
+    })
+  })
+</script>

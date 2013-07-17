@@ -24,6 +24,7 @@ Panama::Application.routes.draw do
         get "messages", :to => "people/transactions#messages"
         post "get_delivery_price", :to => "people/transactions#get_delivery_price"
         post "refund", :to => "people/transactions#refund"
+        post "delay_sign", :to => "people/transactions#delay_sign"
         post 'transfer', :to => "people/transactions#transfer"
       end
 

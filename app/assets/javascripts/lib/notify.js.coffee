@@ -59,6 +59,7 @@ class Notifier
     delay: 8000,
     title: "系统提醒",
     text: "",
+    type: "success",
     avatar: "http://panama.b0.upaiyun.com/default_avatar.jpg!50x50"
   },
 
