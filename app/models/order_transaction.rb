@@ -409,7 +409,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_change_buyer(name, event_name = nil)
     token = buyer.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{id}-buyer",
+    faye_send("/events/#{token}/transaction-#{id}-buyer",
                       :name => name,
                       :event => "refresh_#{event_name}")
   end
@@ -419,7 +419,7 @@ class OrderTransaction < ActiveRecord::Base
       realtime_dispose({type: "change" ,values: self})
     else
       token = current_operator.try(:im_token)
-      FayeClient.send("/events/#{token}/transaction-#{id}-seller",
+      faye_send("/events/#{token}/transaction-#{id}-seller",
         :name => name,
         :event => "refresh_#{event_name}")
     end
@@ -528,7 +528,11 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def realtime_dispose(data = {})
-    FayeClient.send("/OrderTransaction/#{seller.im_token}/un_dispose", data)
+    faye_send("/OrderTransaction/#{seller.im_token}/un_dispose", data)
+  end
+
+  def faye_send(channel, options)
+    FayeClient.send(channel, options)
   end
 
   def filter_fire_event!(events = [], event)
