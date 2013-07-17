@@ -1,0 +1,16 @@
+<div class='row-fluid'>
+  <div class='span8'>
+    <%= render "context", :refund => @refund %>
+  </div>
+</div>
+<script type='text/javascript' >
+  $(document).ready(function(){
+    new OrderRefundCard({
+      el: $(".transaction"),
+      realtime: {
+        url: '<%= faye_server_uri %>',
+        token: '<%= token %>'
+      }
+    })
+  })
+</script>
