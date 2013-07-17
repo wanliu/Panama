@@ -101,6 +101,15 @@ class StateProgress extends Backbone.View
         class_badge: "badge-info",
         to: "waiting_delivery"
       },
+      apply_failure: {
+        class_badge: "badge-warning",
+        class_progress: "bar-warning",
+        to: 'close'
+      },
+      apply_expired: {
+        class_badge: "badge-inverse",
+        class_progress: "bar-info"
+      },
       waiting_delivery: {
         class_badge: "badge-important",
         class_progress: "bar-danger",
