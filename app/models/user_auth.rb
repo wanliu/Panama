@@ -4,10 +4,10 @@ class UserAuth
   include ActiveModel::Conversion
   extend ActiveModel::Naming
   
-  attr_accessor :company_name, :company_legal, :company_address, :content
+  attr_accessor :company_name, :company_address, :company_summary, :company_legal, :legal_contact, :business_license_num
   
   validates_presence_of :company_name
-  validates_length_of :content, :maximum => 500
+  validates_length_of :company_summary, :maximum => 100
   
   def initialize(attributes = {})
     attributes.each do |name, value|
