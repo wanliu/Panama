@@ -15,15 +15,14 @@
           <div class="container-fluid info-header">
             <div class="page-header">
               <h1><%= buyer.login %>
-                <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-                <%= distance_of_time_in_words Time.now, transaction.created_at %>
-                </small>
-
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <%= render "state_buttons", :transaction => transaction %>
               </h1>
               <div class="transaction-number">
                 订单编号：<%= transaction.number %>
+                <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+                <%= distance_of_time_in_words Time.now, transaction.created_at %>
+                </small>
               </div>
               <div class="state-progress">
                 <% if state != "close" %>
