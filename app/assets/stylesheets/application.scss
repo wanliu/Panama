@@ -43,10 +43,6 @@
 
 // model
 
-.active_dialog{
-	top: 25px!important;
-}
-
 .model-popup-backdrop {
 	// @include filter(blur(20px));
 	@include filter(none);
