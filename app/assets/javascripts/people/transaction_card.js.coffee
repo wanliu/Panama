@@ -8,6 +8,7 @@ class TransactionCard extends TransactionCardBase
     super
     @urlRoot = @transaction.urlRoot
     @initMessagePanel()
+    @countdown()
 
   events:
     "click .page-header .btn"        : "clickAction"

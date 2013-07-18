@@ -8,14 +8,14 @@ class SpinnerInput < SimpleForm::Inputs::Base
 
   	discern_class = "spinner_"+object.class.to_s+"_"+attribute_name.to_s+"_#{input_html_options[:panel_class]}"
     <<-JAVASCRIPT
-		<div id="MySpinner" class="spinner #{discern_class}">
+		<div id="MySpinner" class="spinner #{discern_class}" style="margin-top:4px;">
 	      #{@builder.text_field(attribute_name, input_html_options)}
 	      <div class="spinner-buttons  btn-group btn-group-vertical">
 	        <a href='javascript:void(0)' class="btn spinner-up" style="height:9px;">
-	          <i class="icon-chevron-up" style="margin-top: -3px;"></i>
+	          <i class="icon-chevron-up pinner-icon"></i>
 	        </a>
 	        <a href='javascript:void(0)' class="btn spinner-down" style="height:9px;">
-	          <i class="icon-chevron-down" style="margin-top: -3px;"></i>
+	          <i class="icon-chevron-down pinner-icon"></i>
 	        </a>
 	      </div>
 	    </div>
