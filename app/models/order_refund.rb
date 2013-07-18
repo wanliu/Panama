@@ -33,9 +33,9 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  before_create :change_order_state
-  after_create :valid_shipped_order_state?, :notify_shop_refund, :create_state_detail
+  after_create :change_order_state, :notify_shop_refund, :create_state_detail
 
+  validate :valid_shipped_order_state?, :valid_order_already_exists?, :on => :create
   state_machine :state, :initial => :apply_refund do
 
     event :shipped_agree do
@@ -71,7 +71,7 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition :apply_refund => :apply_failure do |refund, transition|
       refund.valid_refuse_reason?
-      refund.rollback_order_state
+      refund.rollback_order_state if refund.valid?
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
@@ -84,6 +84,10 @@ class OrderRefund < ActiveRecord::Base
         refund.handle_detail_return_money
         refund.change_order_refund_state
       end
+    end
+
+    after_transition :apply_failure => [:complete, :waiting_delivery] do |refund, transition|
+      refund.change_order_refund_state
     end
 
     after_transition  [:apply_failure, :apply_refund, :apply_expired] => [:waiting_delivery ,:complete],
@@ -125,7 +129,6 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def change_order_state
-    self.order_state = order.state
     order.fire_events!(:returned)
   end
 
@@ -134,10 +137,8 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def change_order_refund_state
-    if order.valid_refund?
-      unless order.fire_events!(:returned)
-        errors.add(:state, "确认退货出错！")
-      end
+    unless order.fire_events!(:returned)
+      errors.add(:state, "确认退货出错！")
     end
   end
 
@@ -177,6 +178,7 @@ class OrderRefund < ActiveRecord::Base
     self.buyer_id = order.try(:buyer_id)
     self.seller_id = order.try(:seller_id)
     self.operator_id = order.operator.try(:operator_id)
+    self.order_state = order.state
   end
 
   def create_state_detail
@@ -192,10 +194,10 @@ class OrderRefund < ActiveRecord::Base
     _items = [_items] unless _items.is_a?(Array)
     _items.each do |item_id|
       product_item = order.items.find_by(:id => item_id, :refund_state => true)
-      if product_been_refunded?(product_item)
-        items.clear
-        return false
-      end
+      # if product_been_refunded?(product_item)
+      #   items.clear
+      #   return false
+      # end
       if product_item.present?
         items.create(
           :title => product_item.title,
@@ -278,17 +280,22 @@ class OrderRefund < ActiveRecord::Base
   end
 
   # 检查本次被退货的商品是否已经在退货中
-  def product_been_refunded?(product_item)
-    order.refunds.any? do |refund|
-      refund.items.any? { |item| item.product_id == product_item.product_id }
-    end
-  end
-
+  # def product_been_refunded?(product_item)
+  #   order.refunds.any? do |refund|
+  #     refund.items.any? { |item| item.product_id == product_item.product_id }
+  #   end
+  # end
 
   private
   def valid_shipped_order_state?
     unless order.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
+    end
+  end
+
+  def valid_order_already_exists?
+    if order.refunds.count > 0
+      errors.add(:order_transaction_id, '订单已经有退货了！')
     end
   end
 

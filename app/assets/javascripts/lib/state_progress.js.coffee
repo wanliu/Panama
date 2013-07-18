@@ -85,8 +85,8 @@ class StateProgress extends Backbone.View
         to: "waiting_audit"
       },
       waiting_audit: {
-        class_badge: "badge-warning",
-        class_progress: "bar-warning",
+        class_badge: "badge-info",
+        class_progress: "bar-info",
         to: "waiting_delivery"
       },
       waiting_audit_failure: {

@@ -238,7 +238,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :waiting_refund => :refund do |order, transition|
-      order.valid_refund?
+      # order.valid_refund?
     end
 
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
@@ -461,14 +461,14 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def valid_refund?
-    if items.exists?(:refund_state => true)
-      errors.add(:state, "订单还有其它产品没有退货！")
-      false
-    else
-      true
-    end
-  end
+  # def valid_refund?
+  #   if items.exists?(:refund_state => true)
+  #     errors.add(:state, "订单还有其它产品没有退货！")
+  #     false
+  #   else
+  #     true
+  #   end
+  # end
 
   def valid_delivery_code?
     if delivery_manner.express?

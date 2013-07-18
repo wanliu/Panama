@@ -30,7 +30,9 @@
                 订单编号：<%= transaction.number %>
               </div>
               <div class="state-progress">
-                <%=render "people/transactions/funcat/progress", transaction: transaction %>
+                <% if state != "close" %>
+                  <%=render "people/transactions/funcat/progress", transaction: transaction %>
+                <% end %>
               </div>
             </div>
           </div>

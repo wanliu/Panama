@@ -26,7 +26,9 @@
                 订单编号：<%= transaction.number %>
               </div>
               <div class="state-progress">
+                <% if state != "close" %>
                 <%=render "progress", transaction: transaction %>
+                <% end %>
               </div>
             </div>
           </div>
