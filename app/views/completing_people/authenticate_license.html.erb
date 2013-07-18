@@ -1,30 +1,19 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?key=46ce9d0614bf7aefe0ba562f8cf87194&v=1.0&services=false"></script>
-<div class="page-header">
-  <h1>验证您的工商营业执照</h1>
+<div class="container-fluid offset2">
+  <div class="page-header">
+    <h1>验证您的工商营业执照</h1>
+  </div>
+  <%= simple_form_for @user_auth, 
+        url: '/completing_people/authenticate_license', 
+        html: { method: :put, class: "span8 form-horizontal" } do |f| %>
+    <%= f.input :company_name, label: '企业名称' %>
+    <%= f.input :company_legal, label: '企业法人', hint: 'No special characters.' %>
+    <%= f.input :company_address, label: '营业地址' %>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn">下一步</button>
+        <%= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>
 </div>
-<form class='form form-horizontal' action="<%= wizard_path %>" method="PUT" >
-
-	<div class="control-group">
-    <label class="control-label" for="inputEmail">企业名称</label>
-    <div class="controls">
-      <input type="text" id="inputEmail" placeholder="Email">
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">营业地址</label>
-    <div class="controls">
-      <input type="password" id="inputPassword" placeholder="Password">
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">营业执照上传</label>
-    <div class="controls">
-      <input type="password" id="inputPassword" placeholder="Password">
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="controls">
-      <%= link_to '下一步', next_wizard_path, :class => 'btn btn-primary' %>
-    </div>
-  </div>
-</form>
