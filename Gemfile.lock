@@ -13,6 +13,13 @@ GIT
     rails-setting (0.0.8)
 
 GIT
+  remote: git://github.com/hysios/tire-settings.git
+  revision: 64bb7380bc145d5d45df9d068ec5f81bdb52f2de
+  specs:
+    tire-settings (0.0.5)
+      tire
+
+GIT
   remote: git://github.com/hysios/tire.git
   revision: 772bbf4d086fb14aed94a6cb8db73180931b8ccd
   specs:
@@ -281,7 +288,7 @@ GEM
       thor (~> 0.14)
     http_parser.rb (0.5.3)
     httpauth (0.2.0)
-    i18n (0.6.2)
+    i18n (0.6.4)
     inherited_resources (1.3.1)
       has_scope (~> 0.5.0)
       responders (~> 0.6)
@@ -318,7 +325,7 @@ GEM
       polyamorous (~> 0.5.0)
     metaclass (0.0.1)
     method_source (0.8.1)
-    mime-types (1.21)
+    mime-types (1.23)
     mini_magick (3.5.0)
       subexec (~> 0.2.1)
     mocha (0.10.5)
@@ -333,7 +340,7 @@ GEM
     mongoid-tree (1.0.1)
       mongoid (>= 3.0, <= 4.0)
     moped (1.4.2)
-    multi_json (1.6.1)
+    multi_json (1.7.7)
     multipart-post (1.2.0)
     mysql2 (0.3.11)
     nested_form (0.3.2)
@@ -398,7 +405,7 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rake (10.0.3)
+    rake (10.1.0)
     rb-fchange (0.0.6)
       ffi
     rb-fsevent (0.9.3)
@@ -588,6 +595,7 @@ DEPENDENCIES
   therubyracer (~> 0.10.2)
   thin (~> 1.5.0)
   tire!
+  tire-settings!
   turbo-sprockets-rails3
   uglifier (>= 1.0.3)
   vfs (~> 0.4.8)
