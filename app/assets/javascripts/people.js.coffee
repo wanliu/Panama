@@ -22,6 +22,7 @@
 #= require people/transaction_paymanner
 #= require people/transaction_payment
 #= require people/transaction_refund
+#= require people/transaction_delay_sign
 #= require people/transaction_view
 #= require people/addresses
 #= require lib/transaction_bubbling
@@ -29,6 +30,4 @@
 #= require lib/attachment_upload
 #= require shop_category
 #= require lib/depend_select
-#= require lib/countdown
 #= require topic
-

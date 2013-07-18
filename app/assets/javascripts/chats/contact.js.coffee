@@ -46,11 +46,6 @@ class ChatContact extends Backbone.View
     @client.subscribe @change_state_notic_url(), (send_user_id) =>
       @cfv_list.read_notice(send_user_id)
 
-    @client.subscribe @disconnect_url(), () =>
-
-  disconnect_url: () ->
-    "/chat/user/disconnect/#{@current_user.id}"
-
   contact_show_url: () ->
     "/chat/contact_friends/#{@current_user.token}"
 
@@ -76,3 +71,7 @@ class ChatContact extends Backbone.View
     @el.toggle()
 
 root.ChatContact = ChatContact
+root.user_connect = (token) ->
+  if token?
+    user = new User()
+    user.connect(@current_user.token)

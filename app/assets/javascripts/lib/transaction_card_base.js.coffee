@@ -1,5 +1,5 @@
 #= require lib/state-view
-#= require lib/jsclock-0.8
+#= require lib/kkcountdown
 #= require lib/realtime_client
 #= require lib/notify
 
@@ -27,6 +27,18 @@ class TransactionCardBase extends AbstructStateView
             @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
         super
         # @$el.bind('click', @activeThis)
+
+    countdown: () ->
+        @$(".clock").kkcountdown({
+            dayText         : '天',
+            daysText        : '天',
+            hoursText       : '时',
+            minutesText     : '分',
+            secondsText     : '秒',
+            displayZeroDays : true,
+            # callback      : test,
+            oneDayClass     : 'one-day'
+        })
 
     getNotifyName: () ->
         "transaction-#{@options['id']}"
@@ -112,6 +124,7 @@ class TransactionCardBase extends AbstructStateView
         $side1 = $("<div class='slide-1'></div>")
         $side2 = $("<div class='slide-2'></div>")
 
+        @$el.find("iframe").remove()
         @$el.wrap($("<div class='slide-box'></div>"))
         @$el.wrap($("<div class='slide-container'></div>"))
         @$el.wrap($side1)
@@ -120,6 +133,7 @@ class TransactionCardBase extends AbstructStateView
         $slideContainer.append($side2)
         $side2.html(page)
 
+        iframe = $side2.find("iframe").remove()
         $side1 = @$el
 
 
@@ -144,6 +158,7 @@ class TransactionCardBase extends AbstructStateView
                   .unwrap()
                   .unwrap()
                   .unwrap()
+            @$el.find(".transaction-footer").append(iframe)
 
         if direction == 'right'
             $side1.css('float', 'left')

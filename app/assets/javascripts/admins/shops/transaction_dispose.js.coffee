@@ -97,32 +97,42 @@ class exports.TransactionDispose extends Backbone.View
       @$tbody.html('')
       @$tbody.append("
       <tr class='notice_message'>
-        <td colspan='7' style='text-align:center;'>暂时没未处理单</td>
+        <td colspan='8' style='text-align:center;'>暂时没未处理单</td>
       </tr>")
     else
       @$tbody.find("tr.notice_message").remove()
 
   bind_realtime: () ->
     @client = Realtime.client(@realtime_url)
-    @client.subscribe "/chat/receive/OrderTransaction/#{@shop_key()}/un_dispose", (data) =>
-      model = @transactions.get(data.owner.id)
-      if model?
-        model.set("unmessages_count", data.owner.unmessages_count)
-      else
-        @add data.owner
 
-    @client.subscribe "/transaction/new/#{@shop_key()}/un_dispose", (data) =>
-      @add data
+    @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
+      data = info.values
+      switch info.type
+        when "chat"
+          @realtime_chat(data)
+        when "new"
+          @add data
+        when "change"
+          @realtime_change(data)
+        when "dispose"
+          @realtime_dispose(data)
 
-    @client.subscribe "/transaction/#{@shop_key()}/un_dispose", (data) =>
-      model = @transactions.get(data.id)
-      if model?
-        model.set("state_title", data.state_title)
+  realtime_dispose: (data) ->
+    model = @transactions.get(data.id)
+    if model?
+      @remove_tran model
 
-    @client.subscribe "/transaction/#{@shop_key()}/dispose", (data) =>
-      model = @transactions.get(data.id)
-      if model?
-        @remove_tran model
+  realtime_chat: (data) ->
+    model = @transactions.get(data.owner.id)
+    if model?
+      model.set("unmessages_count", data.owner.unmessages_count)
+    else
+      @add data.owner
+
+  realtime_change: (data) ->
+    model = @transactions.get(data.id)
+    if model?
+      model.set("state_title", data.state_title)
 
   shop_key: () ->
-    @shop.id
+    @shop.token

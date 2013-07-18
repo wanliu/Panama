@@ -212,6 +212,7 @@ zh-CN:
       bank: 银行
       category: 分类
       admin_user: 管理员
+      order_refund: 退货
     attributes:
       activity:
         id: 编号
@@ -324,7 +325,15 @@ zh-CN:
         name: 名称
         title: 标题
         property: 值
-
+      order_refund:
+        id: 编号
+        order_transaction: 订单
+        total: 总金额
+        state: 状态
+        buyer: 买家
+        seller: 卖家
+        decription: "退货描述"
+        action_link: "操作"
   mongoid:
     models:
       content: "内容"
@@ -526,6 +535,8 @@ zh-CN:
 
   order_refund_state:
     apply_refund: 申请退货
+    apply_expired: 申请超时
+    apply_failure: 拒绝
     waiting_delivery: 等待发货
     waiting_sign: 等待签收
     complete: 完成

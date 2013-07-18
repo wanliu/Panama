@@ -12,14 +12,14 @@
           </div>
           <div class='span8'>
             <p>
-              用户名: <%=@people.login %>
+              用户名 <%=@people.login %>
             </p>
             <p>
-              E-mail: <%=@people.email %>
+              E-mail <%=@people.email %>
             </p>
             <% if can?(:manage, User) %>
             <p>
-              余额: <%=@people.money %>
+              余额 <%=@people.money %>
             </p>
             <% end %>
           </div>
@@ -40,7 +40,7 @@
               <th>流水号</th>
               <th>金额</th>
               <th>支付类型</th>
-              <th>日期</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -49,7 +49,7 @@
               <td><%=bill.serial_number %></td>
               <td><%=bill.money %></td>
               <td><%=bill.owner_name %></td>
-              <td><%=bill.created_at %></td>
+              <td><%=bill.owner_value %></td>
             </tr>
             <% end %>
           </tbody>

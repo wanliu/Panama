@@ -130,9 +130,25 @@ class OrderTransaction < ActiveRecord::Base
     #退货事件方式
     event :returned do
       #发货失败`等待发货`签收 到 退货
-      transition [:delivery_failure, :waiting_delivery, :waiting_refund] => :refund,
-                 [:waiting_sign, :complete]             => :waiting_refund
+      transition :waiting_refund => :refund,
+                 [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund
 
+    end
+
+    event :rollback_delivery_failure do
+      transition :waiting_refund => :delivery_failure
+    end
+
+    event :rollback_waiting_delivery do
+      transition :waiting_refund => :waiting_delivery
+    end
+
+    event :rollback_waiting_sign do
+      transition :waiting_refund => :waiting_sign
+    end
+
+    event :rollback_complete do
+      transition :waiting_refund => :complete
     end
 
     #付款
@@ -151,6 +167,17 @@ class OrderTransaction < ActiveRecord::Base
     event :sign do
       # 等待签收 到 完成
       transition :waiting_sign => :complete
+    end
+
+    state :waiting_sign do
+      # 提前申请延长收货的时限
+      def pre_delay_sign_time
+        3.days
+      end
+      # 申请延长收货增加的时间
+      def delay_sign_time
+        3.days
+      end
     end
 
     after_transition :order            => [:waiting_paid, :waiting_transfer, :waiting_delivery],
@@ -173,7 +200,8 @@ class OrderTransaction < ActiveRecord::Base
       order.notice_change_buyer(transition.to_name, transition.event)
     end
 
-    after_transition :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
+    after_transition  [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund,
+                      :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
       order.notice_change_buyer(transition.to_name, transition.event)
       order.notice_change_seller(transition.to_name, transition.event)
     end
@@ -209,8 +237,8 @@ class OrderTransaction < ActiveRecord::Base
       order.valid_payment?
     end
 
-    before_transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund do |order, transition|
-      order.valid_refund?
+    before_transition :waiting_refund => :refund do |order, transition|
+      # order.valid_refund?
     end
 
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
@@ -225,26 +253,38 @@ class OrderTransaction < ActiveRecord::Base
 
   #如果卖家没有发货直接删除明细，返还买家的金额
   def refund_handle_detail_return_money(refund)
-    if unshipped_state?
-      get_refund_items(refund).destroy_all
+    product_ids = refund.refund_product_ids
+    refund_items = get_refund_items(product_ids)
+    if not_product_refund(product_ids).present?
+      refund_items.destroy_all
       update_total_count
-      if !pay_manner.cash_on_delivery? && save
-        refund.buyer_recharge
-      end
+    else
+      refund_handle_product_item(product_ids)
+    end
+    if !pay_manner.cash_on_delivery? && save
+      refund.buyer_recharge
     end
   end
 
-  def refund_handle_product_item(refund)
-    get_refund_items(refund).update_all(:refund_state => false)
+  def refund_handle_product_item(product_ids)
+    get_refund_items(product_ids).update_all(:refund_state => false)
   end
 
-  def get_refund_items(refund)
-    product_ids = refund.items.map{|it| it.product_id}
+  def get_refund_items(product_ids)
     items.where(:product_id => product_ids)
+  end
+
+  #订单产品全退货了
+  def not_product_refund(product_ids)
+    items.where("product_id not in (?)", product_ids).first
   end
 
   def shipped_state?
     %w(waiting_sign complete).include?(state)
+  end
+
+  def undelayed_sign_state?
+    %w(waiting_sign).include?(state)
   end
 
   def waiting_sign_state?
@@ -294,7 +334,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def seller_fire_event!(event)
-    events = %w(back returned delivered)
+    events = %w(back delivered)
     filter_fire_event!(events, event)
   end
 
@@ -389,6 +429,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def as_json(*args)
     attra = super *args
+    attra["number"] = number
     attra["buyer_login"] = buyer.login
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
@@ -398,17 +439,17 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_change_buyer(name, event_name = nil)
     token = buyer.try(:im_token)
-    FayeClient.send("/events/#{token}/transaction-#{id}-buyer",
+    faye_send("/events/#{token}/transaction-#{id}-buyer",
                       :name => name,
                       :event => "refresh_#{event_name}")
   end
 
   def notice_change_seller(name, event_name = nil)
     if current_operator.nil?
-      FayeClient.send("/transaction/#{seller.id}/un_dispose", self)
+      realtime_dispose({type: "change" ,values: self})
     else
       token = current_operator.try(:im_token)
-      FayeClient.send("/events/#{token}/transaction-#{id}-seller",
+      faye_send("/events/#{token}/transaction-#{id}-seller",
         :name => name,
         :event => "refresh_#{event_name}")
     end
@@ -420,18 +461,14 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def valid_refund?
-    # product_ids = refunds.avaliable.joins(:items) do |ref|
-    #   ref.items.map{|item| item.product_id }
-    # end.flatten
-    # if items.where("product_id not in (?)", product_ids).first.nil?
-    if items.exists?(:refund_state => true)
-      errors.add(:state, "订单还有其它产品没有退货！")
-      false
-    else
-      true
-    end
-  end
+  # def valid_refund?
+  #   if items.exists?(:refund_state => true)
+  #     errors.add(:state, "订单还有其它产品没有退货！")
+  #     false
+  #   else
+  #     true
+  #   end
+  # end
 
   def valid_delivery_code?
     if delivery_manner.express?
@@ -477,6 +514,10 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def can_delay_sign_expired?
+    undelayed_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
+  end
+
   def self.state_expired
     transactions = find(:all,
       :joins => "left join transaction_state_details as details
@@ -513,11 +554,19 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_new_order
-    FayeClient.send("/transaction/new/#{seller.id}/un_dispose", as_json)
+   realtime_dispose({type: "new" ,values: as_json})
   end
 
   def notice_order_dispose
-    FayeClient.send("/transaction/#{seller.id}/dispose", as_json)
+    realtime_dispose({type: "dispose" ,values: as_json})
+  end
+
+  def realtime_dispose(data = {})
+    faye_send("/OrderTransaction/#{seller.im_token}/un_dispose", data)
+  end
+
+  def faye_send(channel, options)
+    FayeClient.send(channel, options)
   end
 
   def filter_fire_event!(events = [], event)
@@ -528,4 +577,5 @@ class OrderTransaction < ActiveRecord::Base
       false
     end
   end
+
 end

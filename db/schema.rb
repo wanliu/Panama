@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710074116) do
+ActiveRecord::Schema.define(:version => 20130717094815) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -382,6 +382,7 @@ ActiveRecord::Schema.define(:version => 20130710074116) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
+    t.string   "order_state"
   end
 
   create_table "order_transactions", :force => true do |t|
@@ -588,6 +589,8 @@ ActiveRecord::Schema.define(:version => 20130710074116) do
     t.datetime "updated_at", :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "tmp_token"
+    t.string   "im_token"
   end
 
   create_table "shops_categories", :force => true do |t|
@@ -677,6 +680,7 @@ ActiveRecord::Schema.define(:version => 20130710074116) do
     t.boolean  "expired_state",        :default => true
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.integer  "count",                :default => 0
   end
 
   create_table "transfer_accounts", :force => true do |t|

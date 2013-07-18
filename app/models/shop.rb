@@ -100,6 +100,10 @@ class Shop < ActiveRecord::Base
     photos.icon
   end
 
+  def generate_im_token
+    self.im_token = SecureRandom.hex
+  end
+
   private
 
   def create_shop
@@ -108,6 +112,8 @@ class Shop < ActiveRecord::Base
     load_default_contents
 
     write_default_options
+
+    generate_im_token
   end
 
   def initial_shop_data

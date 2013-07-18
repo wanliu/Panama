@@ -1,46 +1,41 @@
 <div class=products>
-<table class="table table-striped table-images">
+  <table class="table table-striped table-images">
     <thead>
-    <tr>
+      <tr>
         <th class="hidden-phone-portrait">#</th>
         <th>图片</th>
         <th>商品</th>
         <th class="hidden-phone-portrait">数量</th>
         <th class="hidden-phone">单价</th>
         <th class="hidden-phone">金额</th>
-        <th>退货</th>
-    </tr>
+      </tr>
     </thead>
     <tbody>
-
-	<% transaction.items.each do |item| %>
-	<tr data-value-id="<%=item.id %>">
-		<td><%= item.id %></td>
-        <td><%= image_tag item.product.photos.icon %></td>
-        <td><%= item.title %>
-			<% unless item.refund_state %>
-				已退货
-			<% end %>
-		</td>
-		<td><%= item.amount %></td>
-		<td><%= number_to_currency(item.price) %></td>
-		<td><%= number_to_currency(item.total) %></td>
-		<td><% if item.refund_state %>
-				<input type='checkbox' />
-			<% end %>
-		</td>
-	</tr>
-	<% end %>    
+      <% transaction.items.each do |item| %>
+        <tr data-value-id="<%=item.id %>">
+          <td><%= item.id %></td>
+          <td><%= image_tag item.product.photos.icon %></td>
+          <td><%= item.title %>
+          </td>
+          <td>
+            <%= item.amount %>
+          </td>
+          <td>
+            <%= number_to_currency(item.price) %>
+          </td>
+          <td>
+            <%= number_to_currency(item.total) %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
-</table>
+  </table>
 
-<div class='total'>
-
-	<strong>合计：
-		<span>
-			<%= number_to_currency(transaction.stotal) %>
-		</span>
-	</strong>
-</div>
-
+  <div class='total'>
+    <strong>合计：
+      <span>
+        <%= number_to_currency(transaction.stotal) %>
+      </span>
+    </strong>
+  </div>
 </div>

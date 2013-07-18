@@ -1,3 +1,4 @@
+#encoding: utf-8
 #资金帐目
 class MoneyBill < ActiveRecord::Base
   attr_accessible :decription, :money, :owner, :user
@@ -23,5 +24,22 @@ class MoneyBill < ActiveRecord::Base
 
   def owner_name
     I18n.t("activerecord.models.#{owner_type.underscore}")
+  end
+
+  def owner_value
+    if owner.present?
+      case owner_type
+      when "OrderTransaction"
+        owner.number
+      when "Bank"
+        owner.name
+      when "OrderRefund"
+        owner.id
+      else
+        "未知"
+      end
+    else
+      "未知"
+    end
   end
 end

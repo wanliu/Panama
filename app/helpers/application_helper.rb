@@ -38,7 +38,7 @@ module ApplicationHelper
   end
 
   def token
-    @current_user.im_token
+    current_user.im_token
   end
 
   def default_img_url(version_name)
@@ -72,21 +72,21 @@ module ApplicationHelper
   end
 
   def link_to_logout
-    link_to logout_path, :method => :delete do 
+    link_to logout_path, :method => :delete do
       icon(:signout) + ' ' + t(:logout)
-    end 
+    end
   end
 
   def link_to_admin
-    if action_controller.respond_to?(:admin?)    
-      link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings" do 
+    if action_controller.respond_to?(:admin?)
+      link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings" do
         icon :cog
       end
     end
   end
 
   def link_to_account
-    link_to person_path(current_user) do 
+    link_to person_path(current_user) do
       icon(:user) + ' ' + t(:account)
     end
   end
@@ -98,10 +98,10 @@ module ApplicationHelper
   def link_to_notice
     # span = content_tag :span, unread_notification_count, :id => "my_notification", :class => "badge badge-warning notification"
     # link_to span, person_notifications_path(current_user.login)
-    link_to person_notifications_path(current_user.login), 
+    link_to person_notifications_path(current_user.login),
             :title => t(:unread_notification, count: unread_notification_count),
             :class => "dropdown-toggle",
-            'data-taggle' => "dropdown" do 
+            'data-taggle' => "dropdown" do
         icon(:group) + content_tag(:span, unread_notification_count, :class => 'count')
     end
   end

@@ -9,6 +9,7 @@ class ShopTransactionCard extends TransactionCardBase
     super
     @filter_delivery_code()
     @initMessagePanel()
+    @countdown()
 
   events:
     "click .page-header .btn" : "clickAction"
@@ -32,6 +33,11 @@ class ShopTransactionCard extends TransactionCardBase
       { name: 'refresh_back',                 from: 'waiting_paid',      to: 'order'         },
       { name: 'refresh_back',                 from: 'waiting_delivery',  to: 'waiting_paid' },
       { name: 'refresh_back',                 from: 'waiting_sign',      to: 'waiting_delivery' },
+      { name: 'refresh_returned',             from: 'waiting_refund',    to: 'refund' },
+      { name: 'refresh_returned',             from: 'delivery_failure',  to: 'waiting_refund' },
+      { name: 'refresh_returned',             from: 'waiting_delivery',  to: 'waiting_refund' },
+      { name: 'refresh_returned',             from: 'waiting_sign',      to: 'waiting_refund' },
+      { name: 'refresh_returned',             from: 'complete',          to: 'waiting_refund' },
       { name: 'delivered',                    from: 'waiting_delivery',  to: 'waiting_sign' }
     ]
 

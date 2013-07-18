@@ -8,6 +8,10 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     @refund = current_shop_refunds.find_by(:id => params[:id])
   end
 
+  def page
+    @refund = current_shop_refunds.find_by(:id => params[:id])
+  end
+
   def event
     @refund = current_shop_refunds.find_by(:id => params[:id])
     if @refund.seller_fire_events!(params[:event])

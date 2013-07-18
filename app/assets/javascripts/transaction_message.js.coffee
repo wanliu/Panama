@@ -9,7 +9,7 @@ root = window || @
 class TransactionMessage extends Backbone.Model
   set_url: (url) -> @urlRoot = url
 
-  send_message: (data, callback, done_call) ->
+  send_message: (data, callback, done_call,fail) ->
     token = data.authenticity_token
     delete(data.authenticity_token)
     @fetch(
@@ -18,6 +18,7 @@ class TransactionMessage extends Backbone.Model
       data: {message: data, authenticity_token: token},
       success: callback,
       complete: done_call
+      error: fail
     )
 
 class TransactionMessageList extends Backbone.Collection
@@ -69,12 +70,16 @@ class SendMessageView extends Backbone.View
     @filter_send_state()
     event = event ? event:window.event
     if event.ctrlKey && 13 == event.keyCode
-      $(".message-form").submit()
+      @send_message()
+      @$content.val('')
 
   send_message: () ->
     data = @form_serialize()
-    return false if not data["content"]? || data["content"] == ""
-    return false if @$button.hasClass("disabled")
+    if not data["content"]? || data["content"] == ""
+      return false
+    if @$button.hasClass("disabled")
+      return false
+
     @$button.addClass("disabled")
     @model.send_message data,
       (model, data) =>
@@ -83,7 +88,8 @@ class SendMessageView extends Backbone.View
         @filter_send_state()
       ,() =>
         @filter_send_state()
-
+      ,() =>
+        @$content.val(data["content"])
     false
 
 
@@ -174,7 +180,7 @@ class TransactionMessageView extends Backbone.View
       @add_message(message)
 
   receive_notice_url: () ->
-    "/chat/receive/OrderTransaction/#{@shop.id}/#{@tansaction_id}_#{@current_user.token}"
+    "/chat/receive/OrderTransaction/#{@shop.token}/#{@tansaction_id}_#{@current_user.token}"
 
   max_scrollTop: () ->
     mheight = @$message_panel.find(">.message-list").height()

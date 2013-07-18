@@ -8,6 +8,7 @@ class TransactionCard extends TransactionCardBase
     super
     @urlRoot = @transaction.urlRoot
     @initMessagePanel()
+    @countdown()
 
   events:
     "click .page-header .btn"        : "clickAction"
@@ -23,22 +24,28 @@ class TransactionCard extends TransactionCardBase
     initial: 'none'
 
     events:  [
-      { name: 'online_payment',       from: 'order',                  to: 'waiting_paid' },
-      { name: 'bank_transfer',        from: 'order',                  to: 'waiting_transfer' },
-      { name: 'cash_on_delivery',     from: 'order',                  to: 'waiting_delivery' }
-      { name: 'paid',                 from: 'waiting_paid',           to: 'waiting_delivery' },
-      { name: 'refresh_delivered',    from: 'waiting_delivery',       to: 'waiting_sign' },
-      { name: 'sign',                 from: 'waiting_sign',           to: 'evaluate' },
-      { name: 'back',                 from: 'waiting_paid',           to: 'order' },
-      { name: 'back',                 from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
-      { name: 'back',                 from: 'waiting_sign',           to: 'waiting_delivery' }, # only for development
-      { name: "returned",             from: 'waiting_delivery',       to: 'apply_refund' },
-      { name: "returned",             from: 'waiting_sign',           to: 'apply_refund' },
-      { name: "returned",             from: 'complete',               to: 'apply_refund' },
-      { name: 'transfer',             from: 'waiting_transfer',       to: 'waiting_audit' },
-      { name: 'confirm_transfer',     from: 'waiting_audit_failure',  to: 'waiting_audit' },
-      { name: 'audit_transfer',       from: 'waiting_audit',          to: 'waiting_delivery'},
-      { name: 'audit_failure',        from: 'waiting_audit',          to: 'waiting_audit_failure'}
+      { name: 'online_payment',         from: 'order',                  to: 'waiting_paid' },
+      { name: 'bank_transfer',          from: 'order',                  to: 'waiting_transfer' },
+      { name: 'cash_on_delivery',       from: 'order',                  to: 'waiting_delivery' }
+      { name: 'paid',                   from: 'waiting_paid',           to: 'waiting_delivery' },
+      { name: 'refresh_delivered',      from: 'waiting_delivery',       to: 'waiting_sign' },
+      { name: 'refresh_returned',       from: 'waiting_refund',         to: 'refund' },
+      { name: 'refresh_returned',       from: 'delivery_failure',       to: 'waiting_refund' },
+      { name: 'refresh_returned',       from: 'waiting_delivery',       to: 'waiting_refund' },
+      { name: 'refresh_returned',       from: 'waiting_sign',           to: 'waiting_refund' },
+      { name: 'refresh_returned',       from: 'complete',               to: 'waiting_refund' },
+      { name: 'refresh_audit_transfer', from: 'waiting_audit',          to: 'waiting_delivery'},
+      { name: 'sign',                   from: 'waiting_sign',           to: 'evaluate' },
+      { name: 'back',                   from: 'waiting_paid',           to: 'order' },
+      { name: 'back',                   from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
+      { name: 'back',                   from: 'waiting_sign',           to: 'waiting_delivery' }, # only for development
+      { name: "returned",               from: 'waiting_delivery',       to: 'apply_refund' },
+      { name: "returned",               from: 'waiting_sign',           to: 'apply_refund' },
+      { name: "returned",               from: 'complete',               to: 'apply_refund' },
+      { name: 'transfer',               from: 'waiting_transfer',       to: 'waiting_audit' },
+      { name: 'confirm_transfer',       from: 'waiting_audit_failure',  to: 'waiting_audit' },
+      { name: 'audit_transfer',         from: 'waiting_audit',          to: 'waiting_delivery'},
+      { name: 'audit_failure',          from: 'waiting_audit',          to: 'waiting_audit_failure'}
     ]
 
   getNotifyName: () ->

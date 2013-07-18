@@ -85,8 +85,8 @@ class StateProgress extends Backbone.View
         to: "waiting_audit"
       },
       waiting_audit: {
-        class_badge: "badge-warning",
-        class_progress: "bar-warning",
+        class_badge: "badge-info",
+        class_progress: "bar-info",
         to: "waiting_delivery"
       },
       waiting_audit_failure: {
@@ -100,6 +100,15 @@ class StateProgress extends Backbone.View
       apply_refund: {
         class_badge: "badge-info",
         to: "waiting_delivery"
+      },
+      apply_failure: {
+        class_badge: "badge-warning",
+        class_progress: "bar-warning",
+        to: 'close'
+      },
+      apply_expired: {
+        class_badge: "badge-inverse",
+        class_progress: "bar-info"
       },
       waiting_delivery: {
         class_badge: "badge-important",

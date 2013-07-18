@@ -166,6 +166,6 @@ class ContactFriendViewList extends Backbone.View
     @$el
 
 root.ContactFriendViewList = ContactFriendViewList
-root.ContactFriendView = ContactFriendView
-root.ContactFriendList = ContactFriendList
-root.ContactFriend = ContactFriend
+#root.ContactFriendView = ContactFriendView
+#root.ContactFriendList = ContactFriendList
+#root.ContactFriend = ContactFriend

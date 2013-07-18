@@ -80,7 +80,7 @@ class People::TransactionsController < People::BaseController
       if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
         format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
       else
-        format.html { render error_back_address_html }
+        format.html{ render error_back_address_html }
       end
     end
   end
@@ -110,12 +110,11 @@ class People::TransactionsController < People::BaseController
 
   def refund
     order = current_order.find(params[:id])
-    items = params[:order_refund].delete(:product_items) || []
 
     respond_to do |format|
       refund = order.refunds.create(params[:order_refund])
       if refund.valid?
-        refund.create_items(items)
+        refund.create_items(order.items.map{|item| item.id})
         if refund.items.count <= 0
           refund.destroy
           format.json{ render :json => { :message => "申请退货失败：您选择退货的商品已经在退货之中，或者不能退货" },
@@ -125,6 +124,19 @@ class People::TransactionsController < People::BaseController
         end
       else
         format.json{ render :json => draw_errors_message(refund), :status => 403 }
+      end
+    end
+  end
+
+  def delay_sign
+    order = current_order.find(params[:id])
+    respond_to do |format|
+      if order.current_state_detail.count == 1
+        format.json { render json: { text: "no" } }
+      elsif order.current_state_detail.delay_sign_expired
+        format.json { render json: { text: "ok" } }
+      else
+        format.json { render json: { text: "fail" } }
       end
     end
   end

@@ -21,13 +21,19 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     initial: 'none'
 
     events:  [
-      { name: 'refuse',          from: 'apply_refund',      to: 'refuse' },
-      { name: 'shipped_agree',   from: 'apply_refund',      to: 'waiting_delivery' },
-      { name: 'unshipped_agree', from: 'apply_refund',      to: 'complete' },
-      { name: 'sign',            from: 'waiting_sign',      to: 'complete'},
-      { name: 'unshipped_agree', from: 'apply_failure',     to: 'complete'},
-      { name: 'shipped_agree',   from: 'apply_failure',     to: 'complete' }
+      { name: 'refuse',             from: 'apply_refund',      to: 'apply_failure' },
+      { name: 'shipped_agree',      from: 'apply_refund',      to: 'waiting_delivery' },
+      { name: 'unshipped_agree',    from: 'apply_refund',      to: 'complete' },
+      { name: 'sign',               from: 'waiting_sign',      to: 'complete'},
+      { name: 'shipped_agree',      from: 'apply_failure',     to: 'waiting_delivery' },
+      { name: 'unshipped_agree',    from: 'apply_failure',     to: 'complete'},
+      { name: 'shipped_agree',      from: 'apply_expired',     to: 'waiting_delivery' },
+      { name: 'unshipped_agree',    from: 'apply_expired',     to: 'complete'},
+      { name: 'refresh_delivered',  from: 'waiting_delivery',  to: 'waiting_sign'}
     ]
+
+  getNotifyName: () ->
+    "order-refund-#{@options['id']}-seller"
 
   leaveApplyRefund: (event, from, to, msg) ->
     @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
