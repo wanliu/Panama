@@ -9,11 +9,11 @@ class UserAuth
   validates_presence_of :company_name
   validates_length_of :company_summary, :maximum => 100
   
-  # def initialize(attributes = {})
-  #   attributes.each do |name, value|
-  #     send("#{name}=", value)
-  #   end
-  # end
+  def initialize(attributes = {})
+    attributes.each do |name, value|
+      send("#{name}=", value)
+    end
+  end
   
   def persisted?
     false

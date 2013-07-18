@@ -9,14 +9,20 @@ class CompletingPeopleController < Wicked::WizardController
   end
 
   def update
-  	@user_auth = UserAuth.new(params[:user_auth])
-  	if @user_auth.valid?
-
-    else
-      format.html{ render error_back_complete_people_html }
+    case step
+    when :pick_industry
+      
+  	when :authenticate_license
+      save_license
     end
   end
 
   private
-
+  def save_license
+    @user_auth = UserAuth.new(params[:user_auth])
+    if @user_auth.valid?
+      next_step
+    end
+    render_wizard
+  end
 end
