@@ -1,0 +1,30 @@
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=46ce9d0614bf7aefe0ba562f8cf87194&v=1.0&services=false"></script>
+<div class="page-header">
+  <h1>验证您的工商营业执照</h1>
+</div>
+<form class='form form-horizontal' action="<%= wizard_path %>" method="PUT" >
+
+	<div class="control-group">
+    <label class="control-label" for="inputEmail">企业名称</label>
+    <div class="controls">
+      <input type="text" id="inputEmail" placeholder="Email">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">营业地址</label>
+    <div class="controls">
+      <input type="password" id="inputPassword" placeholder="Password">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">营业执照上传</label>
+    <div class="controls">
+      <input type="password" id="inputPassword" placeholder="Password">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <%= link_to '下一步', next_wizard_path, :class => 'btn btn-primary' %>
+    </div>
+  </div>
+</form>

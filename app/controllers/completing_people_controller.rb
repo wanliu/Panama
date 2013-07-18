@@ -1,7 +1,7 @@
 class CompletingPeopleController < Wicked::WizardController
   layout "sigin"
 
-  steps :authenticate_license
+  steps :pick_industry, :authenticate_license
 
 
   def show
