@@ -14,9 +14,9 @@ GIT
 
 GIT
   remote: git://github.com/hysios/tire-settings.git
-  revision: 64bb7380bc145d5d45df9d068ec5f81bdb52f2de
+  revision: 15a502da3bb6bcd50205fe999036632b45fe0010
   specs:
-    tire-settings (0.0.5)
+    tire-settings (0.0.6)
       tire
 
 GIT
