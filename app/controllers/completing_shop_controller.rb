@@ -1,5 +1,5 @@
 class CompletingShopController < Wicked::WizardController
-  layout "sigin"
+  layout "wizard"
 
   steps :pick_industry, :authenticate_license, :pick_product, :waiting_audit
 
@@ -32,10 +32,11 @@ class CompletingShopController < Wicked::WizardController
   def save_license
     @shop_auth = ShopAuth.new(params[:shop_auth])
     if @shop_auth.valid?
-      # next_step
-      @user_checking.update_attributes(@shop_auth.update_options)
+      next_step
+      # @user_checking.update_attributes(@shop_auth.update_options)
+      # redirect_to wizard_path(:pick_product)
     end
-    render_wizard
+    render_wizard(@shop_auth)
   end
 
   def save_products

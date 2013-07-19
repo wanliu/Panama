@@ -15,4 +15,8 @@ class UserAuth
   def persisted?
     false
   end
+
+  def save
+    true
+  end
 end

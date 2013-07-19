@@ -1,5 +1,5 @@
 class AfterSignupController < Wicked::WizardController
-  layout "sigin"
+  layout "wizard"
 
   steps :select_type
 
