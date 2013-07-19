@@ -1,21 +1,16 @@
-<div class="container-fluid">
-	<div class="row-fluid">
-		<div class="span2 product-catefory">
-			<ul>
-				<li>category</li>
-				<li>...</li>
-			</ul>
+<div class="container-fluid left">
+	 <div class="row-fluid">
+		<div class="span2 dom">
+			<%= render "category_sidebar" %>
+		</div> 
+		<div class="span3">
+			<textarea name="product" cols="4" rows="20" style="over-flow:auto;">
+			</textarea>
 		</div>
-		<div class="span3 product-catefory">
-			<ul>
-				<li>样乃</li>
-				<li>。。。</li>
-			</ul>
-		</div>
-		<div class="span1">
+		<div class="span1" style="margin-left:-30px;padding-top:30px;">
 			<input type="button" value="=>">
 		</div>
-		<div class="span5 product-catefory">
+		<div class="span4">
 			<table class="table">
 				<tr>
 					<th>产品名</th>
@@ -23,16 +18,42 @@
 					<th>库存</th>
 				</tr>
 				<tr>
-					<td>牛奶分</td>
+					<th>牛奶分</th>
+					<td>24元</td>
+					<td>100</td>
+				</tr>
+				<tr>
+					<th>牛奶分</th>
+					<td>24元</td>
+					<td>100</td>
+				</tr>
+				<tr>
+					<th>牛奶分</th>
 					<td>24元</td>
 					<td>100</td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	<div class="control-group">
-		<div class="controls">
-			<%= link_to '下一步', next_wizard_path, :class => 'btn btn-primary' %>
-		</div>
+</div>
+<script type="text/javascript">
+$(function(){	
+	$('table td').click(function(){
+		if(!$(this).is('.input')){
+			$(this).addClass('input').html('<input type="text" value="'+ $(this).text() +'" />').find('input').focus().blur(function(){
+				$(this).parent().removeClass('input').html($(this).val() || 0);
+			});					
+		}
+	}).hover(function(){
+		$(this).addClass('hover');
+	},function(){
+		$(this).removeClass('hover');
+	});
+
+});
+</script>
+<div class="control-group">
+	<div class="controls">
+		<%= link_to '下一步', next_wizard_path, :class => 'btn btn-primary pull-right' %>
 	</div>
 </div>

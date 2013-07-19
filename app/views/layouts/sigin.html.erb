@@ -2,7 +2,7 @@
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 
 <%= html_tag :class => "no-js" %>
-<%= render "head", :styles => ["sigin"] %>
+<%= render "head", :styles => ["sigin"] , :javascripts => [:completing_shop] %>
 <body class="<%= controller.controller_name %>">
   <%= render "header" %>
   <%= render "category_breadcrumbs" %>
