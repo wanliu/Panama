@@ -1,5 +1,5 @@
 class CompletingShopController < Wicked::WizardController
-  layout "sigin"
+  layout "wizard"
 
   steps :pick_industry, :authenticate_license, :pick_product, :waiting_audit
 
