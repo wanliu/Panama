@@ -185,7 +185,11 @@ Panama::Application.routes.draw do
   resources :receive_order_messages
 
 
-  resources :category
+  resources :category do
+    member do
+      get "products"
+    end
+  end
   # shop admins routes
 
   resources :shops, :except => :index do

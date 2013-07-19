@@ -31,7 +31,7 @@ module CategoryHelper
               </a>
               <ul>"
     category.children.each do |child|
-      html << "<li class='third_class_category_node'><a href='/categories/#{ child.id }'>#{ child.name }</a></li>"
+      html << "<li class='third_class_category_node'><a href='/category/#{ child.id }'>#{ child.name }</a></li>"
     end
     html << "</ul></li>"
   end
