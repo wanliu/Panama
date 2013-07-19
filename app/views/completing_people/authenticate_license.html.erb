@@ -1,22 +1,24 @@
-<script type="text/javascript" src="http://api.map.baidu.com/api?key=46ce9d0614bf7aefe0ba562f8cf87194&v=1.0&services=false"></script>
-<div class="container-fluid offset2">
-  <div class="page-header">
-    <h1>企业信息验证</h1>
-  </div>
-  <%= simple_form_for @user_auth, 
-        url: '/completing_people/authenticate_license', 
-        html: { method: :put, class: "span8 form-horizontal" } do |f| %>
-    <%= f.input :company_name, label: '企业名称' %>
-    <%= f.input :business_license_num, label: '营业执照号' %>
-    <%= f.input :company_address, label: '营业地址' %>
-    <%= f.input :company_summary, label: '企业简介' %>
-    <%= f.input :company_legal, label: '企业法人' %>
-    <%= f.input :legal_contact, label: '法人电话' %>
-    <div class="control-group">
-      <div class="controls">
-        <button type="submit" class="btn">下一步</button>
-        <%= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
-      </div>
+<div class="container-fluid offset2 span8">
+  <div class='row-fluid'>
+    <div class='span12'>
+      <h2 class="page-title">买家信息验证</h2>
     </div>
-  <% end %>
+  </div>
+  <div class='row-fluid wrapper-box'>
+    <%= simple_form_for @user_auth, 
+            url: '/completing_people/authenticate_license', 
+            html: { method: :put, class: "form-horizontal" } do |f| %>
+      <%= f.input :user_photo, label: '个人图片', as: 'file' %>
+      <%= f.input :true_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
+      <%= f.input :user_id_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
+      <%= f.input :user_phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">下一步</button>
+          <%= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
+          <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

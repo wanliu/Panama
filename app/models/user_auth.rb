@@ -1,18 +1,15 @@
-# 用户认证信息的虚拟模型
+# 零售商认证信息的虚拟模型
 class UserAuth
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
   
-  attr_accessor :company_name, :company_address, :company_summary, :company_legal, :legal_contact, :business_license_num
-  
-  validates_presence_of :company_name
-  validates_length_of :company_summary, :maximum => 100
+  attr_accessor :user_photo, :true_name, :user_id_number, :user_phone
   
   def initialize(attributes = {})
     attributes.each do |name, value|
       send("#{name}=", value)
-    end
+    end unless attributes.blank?
   end
   
   def persisted?

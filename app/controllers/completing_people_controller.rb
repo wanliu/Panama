@@ -1,7 +1,7 @@
 class CompletingPeopleController < Wicked::WizardController
   layout "sigin"
 
-  steps :pick_industry, :authenticate_license, :waiting_audited
+  steps :pick_industry, :authenticate_license, :waiting_audit
 
   def show
   	@user_auth = UserAuth.new
@@ -14,20 +14,21 @@ class CompletingPeopleController < Wicked::WizardController
   end
 
   def update
+    @user_checking = current_user.user_checking
     case step
     when :pick_industry
       save_industry_type
   	when :authenticate_license
       save_license
+    when :waiting_audit
+
     end
   end
 
   private
   def save_industry_type
-  	@user_checking = current_user.user_checking
-  	if @user_checking.update_attributes(params[:user_checking])
-  		render_wizard(@user_checking)
-  	end
+    @user_checking.update_attributes(params[:user_checking])
+  	render_wizard(@user_checking)
   end
 
   def save_license
