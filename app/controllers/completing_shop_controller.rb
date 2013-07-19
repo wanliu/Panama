@@ -5,26 +5,39 @@ class CompletingShopController < Wicked::WizardController
 
   def show
   	@shop_auth = ShopAuth.new
+    service_id = Service.where(service_type: "seller").first.id
+    @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
+
     render_wizard
   end
 
   def update
+    @user_checking = current_user.user_checking
     case step
     when :pick_industry
-      
-  	when :authenticate_license
+      save_industry_type
+    when :authenticate_license
       save_license
-    when :waiting_audit
-
+    when :pick_product
+      save_products
     end
   end
 
   private
+  def save_industry_type
+    @user_checking.update_attributes(params[:user_checking])
+    render_wizard(@user_checking)
+  end
+
   def save_license
     @shop_auth = ShopAuth.new(params[:shop_auth])
     if @shop_auth.valid?
-      next_step
+      # next_step
+      @user_checking.update_attributes(@shop_auth.update_options)
     end
     render_wizard
+  end
+
+  def save_products
   end
 end

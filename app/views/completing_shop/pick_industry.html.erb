@@ -1,18 +1,17 @@
 <div class="row-fluid">
-	<div class="span3 ">
-		<h4 class="text-right">请选经营择行业:</h4>
-	</div>
-	<select class="span2">
-		<option>
-			请选择
-		</option>
-		<option>
-			奶 粉
-		</option>
-	</select>
-	<div class="control-group">
-		<div class="controls">
-			<%= link_to '下一步', next_wizard_path, :class => 'btn btn-primary' %>
-		</div>
-	</div>
+  <div class="page-header">
+    <h1>企业信息验证:</h1>
+  </div>
+  <%= simple_form_for @user_checking,
+        url: '/completing_shop/pick_industry',
+        html: { method: :put, class: "span8 form-horizontal" } do |f| %>
+    <%= f.input :industry_type, collection: ['奶 粉'], label: "请选经营择行业" %>
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn">下一步</button>
+        <%#= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
+        <%#= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+      </div>
+    </div>
+  <% end %>
 </div>
