@@ -7,7 +7,6 @@ class CompletingPeopleController < Wicked::WizardController
   	@user_auth = UserAuth.new
 
   	service_id = Service.where(service_type: "buyer").first.id
-  	# @user_checking = UserChecking.create(user_id: user_id, service_id: service_id)
   	@user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
 
     render_wizard

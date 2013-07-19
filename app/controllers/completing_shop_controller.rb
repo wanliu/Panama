@@ -4,9 +4,10 @@ class CompletingShopController < Wicked::WizardController
   steps :pick_industry, :authenticate_license, :pick_product, :waiting_audit
 
   def show
-  	@shop_auth = ShopAuth.new
     service_id = Service.where(service_type: "seller").first.id
     @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
+
+    @shop_auth = ShopAuth.new(@user_checking.attributes)
 
     render_wizard
   end
@@ -32,9 +33,9 @@ class CompletingShopController < Wicked::WizardController
   def save_license
     @shop_auth = ShopAuth.new(params[:shop_auth])
     if @shop_auth.valid?
-      # next_step
-      # @user_checking.update_attributes(@shop_auth.update_options)
-      redirect_to wizard_path(:pick_product)
+      @user_checking.update_attributes(@shop_auth.update_options)
+      # redirect_to wizard_path(:pick_product)
+      render_wizard(@user_checking)
     else
       render_wizard
     end

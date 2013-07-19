@@ -1,19 +1,31 @@
+#encoding: utf-8
+
 # 供应商认证信息的虚拟模型
 class ShopAuth
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  attr_accessor :shop_name, :shop_photo, :shop_url, :shop_summary,
-                :store_name, :store_address, :business_license_num, :license_photo,
-                :legal_name, :legal_photo, :legal_id_number, :legal_phone
+  ATTR_FIELDS = [:shop_name, :shop_photo, :shop_url, :shop_summary,
+                 :company_name, :company_address, :company_license, :company_license_photo,
+                 :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone]
+  attr_accessor *ATTR_FIELDS
 
-  validates_presence_of :shop_name
+  # 在这里添加不能重复的字段
+  UNIQUENESS_FIELDS = [:shop_name, :shop_url, :company_license, :ower_shenfenzheng_number]
+
+  # 在这里添加不是必须出现的字段
+  UN_PRESENCE_FIELDS = [:shop_photo, :company_license_photo, :ower_photo]
+
+  # validates_presence_of :shop_name
   validates_length_of :shop_summary, :maximum => 200
+  validates *(ATTR_FIELDS - UN_PRESENCE_FIELDS), presence: true
+  validate :uniqueness_fields_validate
 
   def initialize(attributes = {})
+    attributes = attributes.symbolize_keys
     attributes.each do |name, value|
-      send("#{name}=", value)
+      send("#{name}=", value) unless value.blank? || !ATTR_FIELDS.include?(name)
     end unless attributes.blank?
   end
 
@@ -22,7 +34,20 @@ class ShopAuth
   end
 
   def update_options
-    # attributes
-    # { name: shop_name }
+    options = {}
+    ATTR_FIELDS.each do |field|
+      value = send(field)
+      options[field] = value unless value.blank?
+    end
+    options
   end
+
+  protected
+    def uniqueness_fields_validate
+      UNIQUENESS_FIELDS.each do |field|
+        unless UserChecking.where(field => send(field)).blank?
+          errors.add(field, "已经被注册！请另外选择")
+        end
+      end
+    end
 end

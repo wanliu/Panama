@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130718090452) do
+ActiveRecord::Schema.define(:version => 20130719091900) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -108,13 +108,6 @@ ActiveRecord::Schema.define(:version => 20130718090452) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "attachments", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",      :null => false
@@ -139,9 +132,9 @@ ActiveRecord::Schema.define(:version => 20130718090452) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "items_count", :default => 0
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
   end
 
@@ -313,6 +306,11 @@ ActiveRecord::Schema.define(:version => 20130718090452) do
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
 
+  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
+  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
+  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
+
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
@@ -440,13 +438,13 @@ ActiveRecord::Schema.define(:version => 20130718090452) do
   end
 
   create_table "product_items", :force => true do |t|
-    t.integer  "transaction_id"
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "transaction_id"
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
     t.integer  "cart_id"
     t.integer  "product_id"
     t.string   "options"
@@ -535,15 +533,6 @@ ActiveRecord::Schema.define(:version => 20130718090452) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.string   "valuable_type"
-  end
-
-  create_table "receive_order_messages", :force => true do |t|
-    t.integer  "order_transaction_id"
-    t.integer  "send_user_id"
-    t.text     "content"
-    t.boolean  "state",                :default => false
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
   end
 
   create_table "replies", :force => true do |t|
@@ -725,17 +714,29 @@ ActiveRecord::Schema.define(:version => 20130718090452) do
     t.integer  "user_id"
     t.integer  "service_id"
     t.string   "industry_type"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+    t.string   "shop_name"
+    t.string   "shop_photo"
+    t.string   "shop_url"
+    t.string   "shop_summary"
+    t.string   "company_name"
+    t.string   "company_address"
+    t.string   "company_license"
+    t.string   "company_license_photo"
+    t.string   "ower_name"
+    t.string   "ower_photo"
+    t.string   "ower_shenfenzheng_number"
+    t.string   "phone"
   end
 
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4
+    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
     t.string   "im_token"
   end
 
