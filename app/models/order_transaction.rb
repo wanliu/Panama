@@ -203,6 +203,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition  [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund,
+                      :waiting_refund => [:delivery_failure, :waiting_delivery, :waiting_sign, :complete],
                       :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
       order.notice_change_buyer(transition.to_name, transition.event)
       order.notice_change_seller(transition.to_name, transition.event)
