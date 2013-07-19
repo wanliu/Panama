@@ -29,13 +29,12 @@
         </tr>
       <% end %>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan='6' class='stotal'>
+          合计<%='(包含运费)' unless transaction.order_state? %>: <%= number_to_currency(transaction.stotal) %>
+        </td>
+      </tr>
+    </tfoot>
   </table>
-
-  <div class='total'>
-    <strong>合计：
-      <span>
-        <%= number_to_currency(transaction.stotal) %>
-      </span>
-    </strong>
-  </div>
 </div>

@@ -290,6 +290,10 @@ class OrderTransaction < ActiveRecord::Base
     %w(waiting_sign).include?(state)
   end
 
+  def order_state?
+    "order" == state
+  end
+
   def waiting_sign_state?
     "waiting_sign" == state
   end
