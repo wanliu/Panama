@@ -38,6 +38,10 @@ class TransactionStateDetail < ActiveRecord::Base
       DateTime.now + 3.days
     when "refund_failure"
       DateTime.now + 10.days
+    when "complete"
+      DateTime.now + 15.days
+    when "refund"
+      DateTime.now + 15.days
     else
       self.expired_state = false
       DateTime.now

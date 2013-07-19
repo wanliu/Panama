@@ -123,6 +123,8 @@ class OrderTransaction < ActiveRecord::Base
     event :expired do
       transition  :order             =>  :close,
                   :waiting_paid      =>  :close,
+                  :refund            =>  :close,
+                  :complete          =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete
     end
