@@ -8,12 +8,30 @@
         url: url,
         dataType: "json",
         success: (data) =>
-          $("textarea[name=product]").html("")
+          $("select[name=product]").html("")
           _.each(data, (product)->
-            $("textarea[name=product]").append(product.name+"\n")
-          )
-      })
+            $("select[name=product]").append("<option value="+product.id+">"+product.name+"</option>")
+            )
+          })
       false
+      )
+
+    $("input[name=get_select]").bind("click",()->
+      $("select[name=product] option:selected").each(() ->
+        $.ajax({
+          type: "get",
+          url: "/products/#{$(this).val()}/base_info",
+          dataType: "json",
+          success: (product) =>
+            debugger
+            $("table tr:last").after(
+              "<tr id="+product.id+"> 
+              <th>"+product.name+"</th>
+              <td>"+product.price+"</td>
+              <td>"+"1"+"</td> </tr>"
+              )
+            })
+        )
+      )
     )
-  )
 ).call(this)

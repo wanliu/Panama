@@ -5,11 +5,13 @@
 		<%= render "category_sidebar" %>
 	</div> 
 	<div class="span3">
-		<textarea name="product" cols="4" rows="20" style="over-flow:auto;">
-		</textarea>
+<!-- 		<textarea name="product" cols="4" rows="20" style="over-flow:auto;">
+		</textarea> -->
+		<select multiple="multiple" name="product" style="height:400px;">
+		</select>
 	</div>
 	<div class="span1" style="margin-left:-30px;padding-top:30px;">
-		<input type="button" value="=>">
+		<input type="button" value="=>" name="get_select">
 	</div>
 	<div class="span4">
 		<table class="table">
@@ -17,16 +19,6 @@
 				<th>产品名</th>
 				<th>价格</th>
 				<th>库存</th>
-			</tr>
-			<tr>
-				<th>牛奶分</th>
-				<td>24元</td>
-				<td>100</td>
-			</tr>
-			<tr>
-				<th>牛奶分</th>
-				<td>24元</td>
-				<td>100</td>
 			</tr>
 			<tr>
 				<th>牛奶分</th>
@@ -44,7 +36,7 @@
 </div>
 <script type="text/javascript">
 $(function(){	
-	$('table td').click(function(){
+	$('table td').live('click',function(){
 		if(!$(this).is('.input')){
 			$(this).addClass('input').html('<input type="text" value="'+ $(this).text() +'" />').find('input').focus().blur(function(){
 				$(this).parent().removeClass('input').html($(this).val() || 0);
