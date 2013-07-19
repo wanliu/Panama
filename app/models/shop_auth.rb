@@ -25,4 +25,8 @@ class ShopAuth
     # attributes
     # { name: shop_name }
   end
+
+  def save
+    true
+  end
 end
