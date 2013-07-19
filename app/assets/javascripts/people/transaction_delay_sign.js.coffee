@@ -16,26 +16,26 @@ class TransactionDelaySignView extends Backbone.View
 				if data.text == "ok"
 					pnotify({
 						title: "系统提示",
-						text: "申请延长收货时间3天成功!", 
+						text: "申请延长收货时间3天成功!",
 						type: "success"
 					})
 				else if data.text == "no"
 					pnotify({
 						title: "系统提示",
-						text: "您已经申请延迟收货!", 
+						text: "您已经申请延迟收货!",
 						type: "success"
 					})
 				else
 					pnotify({
 						title: "系统提示",
-						text: "请在到期前3天内申请延时!", 
+						text: "请在到期前3天内申请延时!",
 						type: "error"
 					})
-				
+
 			.error (xhr, status) =>
 				pnotify({
 					title: "系统提示",
-					text: "系统错误!", 
+					text: "系统错误!",
 					type: "error"
 				})
 
