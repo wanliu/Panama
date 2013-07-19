@@ -8,13 +8,16 @@
     <%= simple_form_for @shop_auth, 
             url: '/completing_shop/authenticate_license', 
             html: { method: :put, class: "form-horizontal" } do |f| %>
-      <div class="span5">
+      <div class="span12">
         <%= f.input :shop_name, label: '商店名称' %>
         <%= f.input :shop_photo, label: '商店图标', as: 'file' %>
-        <%= f.input :business_license_num, label: '营业执照号' %>
+        <%= f.input :shop_url, label: '商店地址' %>
         <%= f.input :shop_summary, label: '商店简介' %>
-      </div>
-      <div class="span5">
+        <hr>
+        <%= f.input :store_name, label: '实体店名称' %>
+        <%= f.input :store_address, label: '实体店地址' %>
+        <%= f.input :business_license_num, label: '营业执照号' %>
+        <hr>
         <%= f.input :legal_name, label: '真实姓名' %>
         <%= f.input :legal_id_number, label: '身份证号' %>
         <%= f.input :legal_phone, label: '联系电话' %>

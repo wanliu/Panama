@@ -4,9 +4,7 @@ class UserAuth
   include ActiveModel::Conversion
   extend ActiveModel::Naming
   
-  attr_accessor :user_name, :user_photo, :true_name, :user_id_number, :user_contact
-  
-  validates_presence_of :user_name, :user_id_number
+  attr_accessor :user_photo, :true_name, :user_id_number, :user_phone
   
   def initialize(attributes = {})
     attributes.each do |name, value|

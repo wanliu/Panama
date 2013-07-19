@@ -8,11 +8,10 @@
     <%= simple_form_for @user_auth, 
             url: '/completing_people/authenticate_license', 
             html: { method: :put, class: "form-horizontal" } do |f| %>
-      <%= f.input :user_name, label: '个人昵称' %>
-      <%= f.input :user_photo, label: '个人头像', as: 'file' %>
-      <%= f.input :true_name, label: '真实姓名' %>
-      <%= f.input :user_id_number, label: '身份证号' %>
-      <%= f.input :user_contact, label: '联系电话' %>
+      <%= f.input :user_photo, label: '买家图标', as: 'file' %>
+      <%= f.input :true_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
+      <%= f.input :user_id_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
+      <%= f.input :user_phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
       <div class="control-group">
         <div class="controls">
           <button type="submit" class="btn">下一步</button>
