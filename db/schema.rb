@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130718031015) do
+ActiveRecord::Schema.define(:version => 20130718090452) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -399,7 +399,6 @@ ActiveRecord::Schema.define(:version => 20130718031015) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
-    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
   end
 
@@ -553,10 +552,10 @@ ActiveRecord::Schema.define(:version => 20130718031015) do
   end
 
   create_table "services", :force => true do |t|
-    t.string   "name",       :null => false
-    t.string   "type"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "name",         :null => false
+    t.string   "service_type"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "services_users", :force => true do |t|
@@ -709,6 +708,14 @@ ActiveRecord::Schema.define(:version => 20130718031015) do
     t.integer  "order_transaction_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+  end
+
+  create_table "user_checkings", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "service_id"
+    t.string   "industry_type"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "users", :force => true do |t|
