@@ -370,11 +370,12 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def get_delivery_price(delivery_id)
-    product_ids = items.map{|item| item.product_id}
-    ProductDeliveryType.where(
-      :product_id => product_ids,
-      :delivery_type_id => delivery_id)
-    .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
+    delivery_type.try(:price) || 0
+    # product_ids = items.map{|item| item.product_id}
+    # ProductDeliveryType.where(
+    #   :product_id => product_ids,
+    #   :delivery_type_id => delivery_id)
+    # .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
   end
 
   #变更状态

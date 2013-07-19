@@ -69,7 +69,7 @@
         <select name='order_transaction[delivery_type_id]' class='order_delivery_type_id'>
           <% DeliveryType.all.each do |dt| %>
             <option value='<%=dt.id %>'>
-              <%=dt.name %> <%= number_to_currency(dt.try(:price)) %>
+              <%=dt.name %>  <%= number_to_currency(dt.try(:price)) %>
             </option>
           <% end %>
         </select>
