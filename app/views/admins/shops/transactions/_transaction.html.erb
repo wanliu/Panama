@@ -2,7 +2,7 @@
 <div id="order<%=transaction.id %>" class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
    state-id="<%= transaction.id %>"
    state-initial="<%= transaction.state %>"
-   state-url="<%= shop_admins_transaction_path(current_shop, transaction) %>"
+   state-url="<%= page_shop_admins_transaction_path(current_shop, transaction) %>"
    state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
    url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>">
   <div class='wrapper-box'>

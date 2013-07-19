@@ -13,6 +13,14 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transactions = transactions.where(:state => "complete")
   end
 
+  def page
+    @transaction = OrderTransaction.find_by(
+      :seller_id => current_shop.id, :id => params[:id])
+    respond_to do | format |
+      format.html
+    end
+  end
+
   def show
     @transaction = OrderTransaction.find_by(
       :seller_id => current_shop.id, :id => params[:id])
