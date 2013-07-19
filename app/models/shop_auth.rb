@@ -5,8 +5,8 @@ class ShopAuth
   extend ActiveModel::Naming
   
   attr_accessor :shop_name, :shop_photo, :shop_url, :shop_summary, 
-                :store_name, :store_address, :business_license_num, 
-                :legal_name, :legal_id_number, :legal_phone
+                :store_name, :store_address, :business_license_num, :license_photo, 
+                :legal_name, :legal_photo, :legal_id_number, :legal_phone
   
   validates_presence_of :shop_name
   validates_length_of :shop_summary, :maximum => 200
