@@ -19,6 +19,7 @@ class TransactionCard extends TransactionCardBase
     "submit .address-form>form"      : "saveAddress"
     "click .chzn-results>li"         : "hideAddress"
     "change .order_delivery_type_id" : "selectDeliveryType"
+    "keyup .code>input:text"         : "show_transfer_code"
 
   states:
     initial: 'none'
@@ -151,15 +152,21 @@ class TransactionCard extends TransactionCardBase
     _.each data, (d)  -> transfers[d.name] = d.value
 
     if @validate_transfer(transfers, form)
-        @transaction.fetch(
-            url: "#{@urlRoot}/transfer",
-            data: {transfer: transfers},
-            type: 'POST',
-            success: (model, data) =>
-                @slideAfterEvent(event_name)
-        )
+      @transaction.fetch(
+        url: "#{@urlRoot}/transfer",
+        data: {transfer: transfers},
+        type: 'POST',
+        success: (model, data) =>
+          @slideAfterEvent(event_name)
+      )
     else
-        @alarm()
-        @transition.cancel()
+      @alarm()
+      @transition.cancel()
+
+  show_transfer_code: (event) ->
+    code_input = @$("input:text[name=code]")
+    if !event.ctrlKey && event.keyCode > 47 && event.keyCode < 106
+      code_input.val(code_input.val().replace(/(\w{4})(?=\w)/g,"$1 "))
+
 
 root.TransactionCard = TransactionCard

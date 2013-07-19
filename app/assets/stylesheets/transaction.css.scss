@@ -77,6 +77,12 @@
 
 				small{
 					font-size: 20px;
+					color: #999999;
+					float: right;
+				}
+
+				.transaction-number{
+					line-height: 30px;
 				}
 
 				.controls {
@@ -88,14 +94,13 @@
 					}
 				}
 				.progress {
-					margin-top: 25px;
+					margin-top: 15px;
 					margin-bottom: 0px;
 				}
 
 				.state-progress {
 					position: relative;
-					margin-top: 30px;
-					margin-bottom: 10px;
+					margin-right: 10px;
 				}
 
 				.state-position {
@@ -105,7 +110,7 @@
 					.state-title {
 						position: absolute;
 						bottom: -15px;
-						left: 0;
+						left: -12px;
 						color: $gray;
 					}
 				}

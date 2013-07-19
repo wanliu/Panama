@@ -198,18 +198,12 @@ class StateProgress extends Backbone.View
       false
 
   badge_left: (index) ->
-    if @last_status(index)
-      {right: "0px"}
-    else
-      {left: "#{(@progress_width() * index) - (@badge_width / 2)}px"}
+    {left: "#{(100 / (@states.length-1)) * index}%"}
 
   bar_width: () ->
     100 / (@states.length - 1)
 
   progress_width: () ->
     @$el.width() / (@states.length - 1)
-
-  last_status: (i) ->
-    if @states.length-1 is i then true else false
 
 window.StateProgress = StateProgress

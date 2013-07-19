@@ -57,13 +57,3 @@
   </div>
 </div>
 <%= render "products", :transaction => transaction, :people => people %>
-
-<script type="text/javascript">
-  $(function(){
-    $("#order<%= transaction.id %> .code>input").on("keyup", function(event){
-      if (!event.ctrlKey && event.keyCode > 47 && event.keyCode < 106) {
-        this.value =this.value.replace(/(\w{4})(?=\w)/g,"$1 ");
-      }
-    });
-  });
-</script>

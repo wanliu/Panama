@@ -123,6 +123,8 @@ class OrderTransaction < ActiveRecord::Base
     event :expired do
       transition  :order             =>  :close,
                   :waiting_paid      =>  :close,
+                  :refund            =>  :close,
+                  :complete          =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete
     end
@@ -299,6 +301,15 @@ class OrderTransaction < ActiveRecord::Base
     %w(delivery_failure waiting_delivery).include?(state)
   end
 
+  def clear_uniq_states
+    states = state_details.map{|item| {state: item.state, created_at: item.created_at} }
+    index = states.find_index{|s| s[:state] == "waiting_refund"}
+    if index && states[index-1][:state] == (states[index+1] || {})[:state]
+      states.slice!(index-1..index)
+    end
+    states
+  end
+
   #是否成功
   def complete_state?
     state == "complete"
@@ -316,7 +327,7 @@ class OrderTransaction < ActiveRecord::Base
     %w(delivery_failure
       waiting_delivery
       waiting_sign
-      complete).include?(state)
+      complete).include?(_state)
   end
 
   def close_state?
@@ -460,15 +471,6 @@ class OrderTransaction < ActiveRecord::Base
       errors.add(:transfer_sheet, "没有汇款单号!")
     end
   end
-
-  # def valid_refund?
-  #   if items.exists?(:refund_state => true)
-  #     errors.add(:state, "订单还有其它产品没有退货！")
-  #     false
-  #   else
-  #     true
-  #   end
-  # end
 
   def valid_delivery_code?
     if delivery_manner.express?

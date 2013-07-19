@@ -1,9 +1,11 @@
 <% active_section :refunds %>
 <div class='row-fluid'>
-  <div class='span8'>
+  <div class='span7'>
     <% @refunds.each do |refund| %>
       <%= render "context", :refund => refund %>
     <% end %>
+  </div>
+  <div class='span5'>
   </div>
 </div>
 <script type='text/javascript'>
