@@ -1,5 +1,7 @@
 Panama::Application.routes.draw do
 
+  resources :shop_products
+
   # devise_for :admin_users, ActiveAdmin::Devise.config
   resources :after_signup
   resources :completing_people
