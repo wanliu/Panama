@@ -36,5 +36,25 @@
             <td>"+"1"+"</td> </tr>"
           )
       })
+
+    $('table td').live('click', () ->
+      if $(this) isnt ('.input')
+        $(this).addClass('input')
+          .html('<input type="text" value="'+ $(this).text() +'" />')
+          .find('input')
+          .focus().blur(() ->
+              debugger
+              $(this).parent().removeClass('input').html($(this).val() || 0)
+          )
+    )
+
+    update_product = (product_id) ->
+      $.ajax({
+        type: "post",
+        url: "/shop_products/product_id",
+        dataType: "json",
+        error: (messager) ->
+          alert("操作失败")
+      })
   )
 ).call(this)

@@ -1,3 +1,4 @@
+# encoding: utf-8
 class ShopProductsController < ApplicationController
 	def index
 		@shop = Shop.find(params[:shop_id])
