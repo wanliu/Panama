@@ -31,10 +31,9 @@ class CompletingShopController < Wicked::WizardController
   end
 
   def save_license
-    @shop_auth = ShopAuth.new(params[:shop_auth])
+    @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options)
-      # redirect_to wizard_path(:pick_product)
       render_wizard(@user_checking)
     else
       render_wizard

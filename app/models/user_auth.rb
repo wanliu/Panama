@@ -6,19 +6,16 @@ class UserAuth
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  ATTR_FIELDS = [:ower_photo, :ower_name, :ower_shenfenzheng_number, :phone]
+  ATTR_FIELDS = [:user_id, :ower_photo, :ower_name, :ower_shenfenzheng_number, :phone]
   attr_accessor *ATTR_FIELDS
 
   # 在这里添加不能重复的字段
-  # 这是个私有方法，放在前端以方便添加
-  def uniqueness_fields
-    [:ower_shenfenzheng_number]
-  end
-  private :uniqueness_fields
+  UNIQUENESS_FIELDS = [:ower_shenfenzheng_number]
 
   def initialize(attributes = {})
+    attributes = attributes.symbolize_keys
     attributes.each do |name, value|
-      send("#{name}=", value)
+      send("#{name}=", value) unless value.blank? || !ATTR_FIELDS.include?(name)
     end unless attributes.blank?
   end
 
@@ -37,8 +34,8 @@ class UserAuth
 
   protected
     def uniqueness_fields_validate
-      uniqueness_fields.each do |field|
-        unless UserChecking.where(field => send(field)).blank?
+      UNIQUENESS_FIELDS.each do |field|
+        unless UserChecking.where("#{ field } = ? and user_id <> ?", send(field), user_id).blank?
           errors.add(field, "已经被注册！请另外选择")
         end
       end

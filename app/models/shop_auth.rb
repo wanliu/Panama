@@ -6,7 +6,7 @@ class ShopAuth
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  ATTR_FIELDS = [:shop_name, :shop_photo, :shop_url, :shop_summary,
+  ATTR_FIELDS = [:user_id, :shop_name, :shop_photo, :shop_url, :shop_summary,
                  :company_name, :company_address, :company_license, :company_license_photo,
                  :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone]
   attr_accessor *ATTR_FIELDS
@@ -45,7 +45,8 @@ class ShopAuth
   protected
     def uniqueness_fields_validate
       UNIQUENESS_FIELDS.each do |field|
-        unless UserChecking.where(field => send(field)).blank?
+        # unless UserChecking.where(field => send(field)).blank?
+        unless UserChecking.where("#{ field } = ? and user_id <> ?", send(field), user_id).blank?
           errors.add(field, "已经被注册！请另外选择")
         end
       end

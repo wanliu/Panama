@@ -1,23 +1,42 @@
 @import "core";
+@import "category";
 
 
 
 body {
 	// padding-top: 80px;
-	background: $white;
+	// background: $white;
+	color: $grayDark;
 }
 
 .logo {
 	top: 0px;
 }
 
+.page-title {
+	color: $gray;
+}
 
+h2 small {
+	color: $gray;
+}
+
+.dialog {
+	background-color: $white;
+	border: 1px solid #999999;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	@include border-radius(1px);
+	@include box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
+	@include background-clip(padding-box);
+	outline: none;
+	padding: 10px;
+}
 
 .wizard {
 	height: 80px;
 	margin: 0px 0px 30px 0;
 	padding: 0px;
-	@include transparent($bgcolor1, 0.91);
+	// @include transparent($bgcolor1, 0.91);
 	// @include filter-gradient($bgcolor1, $bgcolor3, horizontal); // IE6-9 fallback on horizontal gradient
 	// @include background(linear-gradient(150deg, rgba($bgcolor1, 0.91), rgba(lighten($bgcolor2, 10%), 0.91), rgba($bgcolor3, 0.91)), url('bgnoise_lg_dark.png'));
 	// @include background(radial-gradient(farthest-side ellipse at 10% 0,
@@ -25,6 +44,15 @@ body {
 	// 									rgba($bgcolor2,0.91),
 	// 									rgba($bgcolor3,0.91)),  url('bgnoise_lg_dark.png'));	
 }
+
+#category-sidebar {
+	width: 160px;
+	.second_class_categories  {
+		left: 161px;
+	}
+}
+
+
 // #main-body {
 // 	padding-top: 20px;
 // }
@@ -40,5 +68,37 @@ body {
 .wrap {
 	margin-left: 0px;
 	padding-top: 0px;
+	min-height: 500px;
+}
+
+td input{
+	border:1px solid black;
+	background:yellow;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	border-radius:5px;
+	position:absolute;
+	padding:8px 0;
+	text-align:center;
+	width:60px;
+	margin:-17px 0 0 4px;
+	font-size:1.4em;
+}
+td.input{ 
+	padding:0;
+	position:relative;
+}
+
+table{
+	@include transparent(rgb(51, 51, 51), 0.4);
+}
+.dom{
+	#category-sidebar{
+		top: 45px;
+		width: 160px;
+	}
+	#category-sidebar .second_class_categories{
+		left: 160px;
+	}
 }
 

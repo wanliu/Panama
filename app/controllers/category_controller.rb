@@ -19,7 +19,7 @@ class CategoryController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @products.as_json(:only => [:id,:name])}
+      format.json { render json: @products.as_json(:only =>[:id,:name])}
     end
   end
 
