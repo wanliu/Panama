@@ -34,6 +34,7 @@ class Product < ActiveRecord::Base
   has_many   :comments, :as => :targeable, :dependent => :destroy                                         # 评论
   has_many   :contents, :as => :contentable, :dependent => :destroy                                       # 产品内容配置组
   has_many   :price_options, :as => :optionable, :autosave => true, :dependent => :destroy
+  has_many   :shop_products
   has_and_belongs_to_many :properties, :uniq => true do
     def [](name)
       if name.is_a?(String) || name.is_a?(Symbol)
