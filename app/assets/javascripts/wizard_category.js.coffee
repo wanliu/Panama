@@ -25,8 +25,8 @@
 
     get_and_render_product_infor = () ->
       $.ajax({
-        type: "get",
-        url: "/products/#{$(this).val()}/base_info",
+        type: "post",
+        url: "/shop_products",
         dataType: "json",
         success: (product) =>
           $("table tr:last").after(
