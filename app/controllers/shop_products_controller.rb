@@ -8,12 +8,23 @@ class ShopProductsController < ApplicationController
 	end
 
 	def create
-		@product = ShopProduct.create(params[:shop_product])
-		respond_to do |format|
-			if @product.valid?
-				format.json { render json: @product }
-			else
-				format.json { render json: @product.errors, status: :unprocessable_entity }
+		if current_user.shop
+			@shop_product = current_user.shop.shop_products.create(product_id: params[:product_id],
+																												     price: 0,
+																												     inventory: 1)
+			respond_to do |format|
+				if @shop_product.valid?
+					product = @shop_product.product
+					result  = { id: @shop_product.id, name: product.name,
+							    price: @shop_product.price, inventory: @shop_product.inventory }
+					format.json { render json: result }
+				else
+					format.json { render json: @shop_product.errors, status: :unprocessable_entity }
+				end
+			end
+		else
+			respond_to do |format|
+				format.json { render json: { error: "请返回上一步建立商店信息" }, status: :unprocessable_entity }
 			end
 		end
 	end
