@@ -33,7 +33,7 @@ class ShopProductsController < ApplicationController
 	def update
 		@product = ShopProduct.find(params[:id])
 		respond_to do |format|
-			if @preduct.update_attributes(params[:shop_product])
+			if @product.update_attributes(params[:shop_product])
 				format.json { render json: @product }
 			else
 				format.json { render json: @product.errors, status: :unprocessable_entity }
