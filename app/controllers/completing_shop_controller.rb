@@ -34,6 +34,9 @@ class CompletingShopController < Wicked::WizardController
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options)
+      if @user_checking.user.shop.blank?
+        @user_checking.user.create_shop(name: @shop_auth.shop_name)
+      end
       render_wizard(@user_checking)
     else
       render_wizard
