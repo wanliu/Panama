@@ -13,7 +13,7 @@ class ShopProductsController < ApplicationController
 			if @product.valid?
 				format.json { render json: @product }
 			else
-				format.json { render json: @product.errors.message }
+				format.json { render json: @product.errors, status: :unprocessable_entity }
 			end
 		end
 	end
@@ -24,7 +24,7 @@ class ShopProductsController < ApplicationController
 			if @preduct.update_attributes(params[:shop_product])
 				format.json { render json: @product }
 			else
-				format.json { render json: @product.errors.message }
+				format.json { render json: @product.errors, status: :unprocessable_entity }
 			end
 		end
 	end
