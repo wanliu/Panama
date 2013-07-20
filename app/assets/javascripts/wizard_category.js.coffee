@@ -23,7 +23,6 @@
           url: "/products/#{$(this).val()}/base_info",
           dataType: "json",
           success: (product) =>
-            debugger
             $("table tr:last").after(
               "<tr id="+product.id+"> 
               <th>"+product.name+"</th>
