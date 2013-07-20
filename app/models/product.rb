@@ -158,7 +158,6 @@ class Product < ActiveRecord::Base
   def as_json(*args)
     options = args.extract_options!
     attrs = super *args
-
     attrs["attachments"] = format_attachment(options[:version_name]) unless options[:only]
     attrs
   end

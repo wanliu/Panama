@@ -1,6 +1,9 @@
 class UserChecking < ActiveRecord::Base
-  attr_accessible :user_id, :service_id, :industry_type
-  attr_accessor :company_information_finished, :audited
+  attr_accessible :user_id, :service_id, :industry_type,
+                  :shop_name, :shop_photo, :shop_url, :shop_summary,
+                  :company_name, :company_address, :company_license, :company_license_photo,
+                  :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone
+  attr_accessor :audited
 
   belongs_to :user
   belongs_to :service
@@ -19,15 +22,15 @@ class UserChecking < ActiveRecord::Base
 
   protected
     def service_choosen?
-      persisted? && !service.nil?
+      persisted? && !service.blank?
     end
 
     def industry_choosen?
-      persisted? && !industry_type.nil?
+      persisted? && !industry_type.blank?
     end
 
     def company_information_finished?
-      persisted? && company_information_finished
+      persisted? && !company_name.blank?
     end
 
     def audited?
@@ -45,10 +48,14 @@ class UserChecking < ActiveRecord::Base
     end
 
     def find_seller_current_step
-      if audited?
+      if audited
+        "waiting_audit"
+      elsif company_information_finished?
         "pick_product"
-      else
-        find_buyer_current_step
+      elsif industry_choosen?
+        "authenticate_license"
+      elsif service_choosen?
+        "pick_industry"
       end
     end
 end

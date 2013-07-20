@@ -4,27 +4,31 @@
       <div class="page-header">
         <h2 class="page-title">卖家信息验证</h2>
       </div>
-      <%= simple_form_for @shop_auth, 
-              url: '/completing_shop/authenticate_license', 
+      <%= simple_form_for @shop_auth,
+              url: '/completing_shop/authenticate_license',
               html: { method: :put, class: "form-horizontal" } do |f| %>
+        <div class="span12">
         <%= f.input :shop_name, label: '商店名称' %>
         <%= f.input :shop_photo, label: '商店图标', as: 'file' %>
         <%= f.input :shop_url, label: '商店地址' %>
         <%= f.input :shop_summary, label: '商店简介' %>
         <hr>
-        <%= f.input :store_name, label: '营业店名' %>
-        <%= f.input :store_address, label: '营业地址' %>
-        <%= f.input :business_license_num, label: '营业执照号' %>
-        <%= f.input :license_photo, label: '营业执照照片', as: 'file' %>
+        <%= f.input :company_name, label: '营业店名' %>
+        <%= f.input :company_address, label: '营业地址' %>
+        <%= f.input :company_license, label: '营业执照号' %>
+        <%= f.input :company_license_photo, label: '营业执照照片', as: 'file' %>
         <hr>
-        <%= f.input :legal_photo, label: '个人图片', as: 'file' %>
-        <%= f.input :legal_name, label: '真实姓名' %>
-        <%= f.input :legal_id_number, label: '身份证号' %>
-        <%= f.input :legal_phone, label: '联系电话' %>
-        <div class="form-actions">
-          <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
-          <button type="submit" class="btn">下一步</button>
-        </div>             
+        <%= f.input :ower_photo, label: '法人头像', as: 'file' %>
+        <%= f.input :ower_name, label: '法人姓名' %>
+        <%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
+        <%= f.input :phone, label: '联系电话' %>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn">下一步</button>
+            <%#= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
+            <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+          </div>
+        </div>
       <% end %>
     </div>
   </div>
