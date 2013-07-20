@@ -108,6 +108,13 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
+  create_table "admins", :force => true do |t|
+    t.string   "uid"
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "attachments", :force => true do |t|
     t.string   "filename"
     t.datetime "created_at",      :null => false
@@ -132,9 +139,9 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count", :default => 0
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.integer  "items_count"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "user_id"
   end
 
@@ -306,11 +313,6 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
 
-  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
-  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
-  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
-  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
-
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
@@ -399,6 +401,7 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
   end
 
@@ -438,13 +441,13 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
   end
 
   create_table "product_items", :force => true do |t|
+    t.integer  "transaction_id"
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
-    t.integer  "transaction_id"
-    t.datetime "created_at",                                                      :null => false
-    t.datetime "updated_at",                                                      :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "cart_id"
     t.integer  "product_id"
     t.string   "options"
@@ -533,6 +536,15 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
     t.datetime "created_at",                                    :null => false
     t.datetime "updated_at",                                    :null => false
     t.string   "valuable_type"
+  end
+
+  create_table "receive_order_messages", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.integer  "send_user_id"
+    t.text     "content"
+    t.boolean  "state",                :default => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
   end
 
   create_table "replies", :force => true do |t|
@@ -742,10 +754,10 @@ ActiveRecord::Schema.define(:version => 20130720031434) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
+    t.decimal  "money",      :precision => 20, :scale => 4
     t.string   "im_token"
   end
 

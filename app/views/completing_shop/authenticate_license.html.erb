@@ -2,8 +2,12 @@
   <div class='offset2 span8'>
     <div class='dialog'>
       <div class="page-header">
-        <h2 class="page-title">卖家信息验证</h2>
+        <h2 class="page-title">卖家信息验证
+        <small>请把你的营业执照，身份证准备好的照片上传至我们平台，我们会在审核后确认您的身份</small>        
+        </h2>
+
       </div>
+      <div class='row-fluid'>
       <%= simple_form_for @shop_auth,
               url: '/completing_shop/authenticate_license',
               html: { method: :put, class: "form-horizontal" } do |f| %>
@@ -24,12 +28,13 @@
         <%= f.input :phone, label: '联系电话' %>
         <div class="control-group">
           <div class="controls">
-            <button type="submit" class="btn">下一步</button>
             <%#= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
-            <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+            <%= link_to '上一步', previous_wizard_path, :class => 'btn ' %>
+            <button type="submit" class="btn-primary">下一步</button>
           </div>
         </div>
       <% end %>
+      </div>      
     </div>
   </div>
 </div>
