@@ -27,34 +27,50 @@
       $.ajax({
         type: "post",
         url: "/shop_products",
+        data: {product_id: $(this).val() }
         dataType: "json",
         success: (product) =>
           $("table tr:last").after(
             "<tr id="+product.id+">
-            <th>"+product.name+"</th>
-            <td>"+product.price+"</td>
-            <td>"+"1"+"</td> </tr>"
+            <th class='name'>"+product.name+"</th>
+            <td class='price'>"+product.price+"</td>
+            <td class='inventory'>"+product.inventory+"</td> </tr>"
           )
       })
 
-    $('table td').live('click', () ->
-      if $(this) isnt ('.input')
+    $('table td').live 'click', () ->
+      if !$(this).is('.input')
         $(this).addClass('input')
-          .html('<input type="text" value="'+ $(this).text() +'" />')
+          .html("<input type='text' value='#{$(this).text()}' />")
           .find('input')
-          .focus().blur(() ->
-              debugger
-              $(this).parent().removeClass('input').html($(this).val() || 0)
+          .focus()
+          .blur(() ->
+            $(this).parent().removeClass('input').html($(this).val() || 0)
+            id = $(this).parent().attr("id")
+            field = $(this).attr("class")
+            value = $(this).val()
+            update_product(id, field, value)
           )
-    )
+    
 
-    update_product = (product_id) ->
+    update_product = (product_id, field, value) ->
+      data = if field is "price"
+        shop_product:
+          price: value
+      else
+        shop_product:
+          inventory: value
+
       $.ajax({
-        type: "post",
-        url: "/shop_products/product_id",
+        type: "put",
+        url: "/shop_products/#{product_id}",
         dataType: "json",
+        data: data
+        success: () ->
+          alert("s")
         error: (messager) ->
-          alert("操作失败")
+          alert("e")
+          
       })
   )
 ).call(this)
