@@ -12,6 +12,8 @@ module PanamaCore
       set_callback :category_attribute_changed, :after, :after_category_changed
 
       cattr_accessor :dynamic_configuration
+      cattr_accessor :quickly_status 
+      @@quickly_status = false
 
       @@dynamic_configuration = default_dynamic_configuration
 
@@ -64,16 +66,38 @@ module PanamaCore
         has_and_belongs_to_many default_dynamic_configuration[:property_items_relation]
       end
 
+      def quickly(&block)
+        quickly_status = true
+        debugger
+        yield 
+        quickly_status = false
+      end      
+
+    end
+
+    def quickly(&block)
+      @@quickly_status = true
+      debugger
+      yield 
+      @@quickly_status = false
+    end
+
+    def __launch(&block)
+      unless quickly_status
+        puts "LAUNCHING....", quickly_status
+        yield
+      end
     end
 
     def setup_dynamic_properties
       # debugger
       # self.class.reflect_on_association
-      #
-      _p_relation = dynamic_configuration[:properties_relation]
-      callback_fullname = "after_add_for_#{_p_relation}"
-      callback_methods = self.class.send(callback_fullname)
-      callback_methods << :add_property unless callback_methods.include?(:add_property)
+      __launch do 
+        _p_relation = dynamic_configuration[:properties_relation]
+        callback_fullname = "after_add_for_#{_p_relation}"
+        callback_methods = self.class.send(callback_fullname)
+        callback_methods << :add_property unless callback_methods.include?(:add_property)
+      end
     end
 
     def write_attribute(attr_name, value)
@@ -89,39 +113,41 @@ module PanamaCore
     end
 
     def delegate_property_setup
-      @delegate_properties ||= []
-      @delegate_properties.each do |method_name|
-        @@_delete_method_name = method_name.to_sym
-        class << self
-          remove_method @@_delete_method_name
+      __launch do
+        @delegate_properties ||= []
+        @delegate_properties.each do |method_name|
+          @@_delete_method_name = method_name.to_sym
+          class << self
+            remove_method @@_delete_method_name
 
-        end
-        # 删除之前的 安全 attributes
-        _accessible_attributes[:default].delete(method_name)
-      end
-
-      @delegate_properties = []
-
-      relation_properties.each do |property|
-        name = property.name
-        method_name = name
-
-        define_singleton_method(method_name) do
-          pv = product_property_values(name)
-          pv.value unless pv.nil?
-        end
-
-        @delegate_properties << method_name
-
-        define_singleton_method("#{method_name}=") do |other|
-          factory_property name, :valuable => self do |pv|
-            pv.property_id = property.id
-            pv.value = other
           end
+          # 删除之前的 安全 attributes
+          _accessible_attributes[:default].delete(method_name)
         end
-        _accessible_attributes[:default] << method_name
 
-        @delegate_properties << "#{method_name}="
+        @delegate_properties = []
+
+        relation_properties.each do |property|
+          name = property.name
+          method_name = name
+
+          define_singleton_method(method_name) do
+            pv = product_property_values(name)
+            pv.value unless pv.nil?
+          end
+
+          @delegate_properties << method_name
+
+          define_singleton_method("#{method_name}=") do |other|
+            factory_property name, :valuable => self do |pv|
+              pv.property_id = property.id
+              pv.value = other
+            end
+          end
+          _accessible_attributes[:default] << method_name
+
+          @delegate_properties << "#{method_name}="
+        end
       end
     end
 
