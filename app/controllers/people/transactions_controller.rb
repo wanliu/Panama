@@ -46,6 +46,7 @@ class People::TransactionsController < People::BaseController
     authorize! :event, @transaction
 
     if @transaction.buyer_fire_event!(event_name)
+      @transaction.notice_change_seller(event_name)
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {

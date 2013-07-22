@@ -16,14 +16,12 @@
 class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
-
-  # default_scope -> { where("state != 'complete'") }
   scope :completed, -> { where(:state => 'complete') }
   scope :uncomplete, -> { where("state != 'complete'") }
   scope :buyer, ->(person){ where(:buyer_id => person.id) }
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
-  # attr_accessor :total
+
 
 
   belongs_to :address,
@@ -182,13 +180,6 @@ class OrderTransaction < ActiveRecord::Base
       end
     end
 
-    after_transition :order            => [:waiting_paid, :waiting_transfer, :waiting_delivery],
-                     :waiting_transfer => :waiting_audit,
-                     :waiting_sign     => :complete,
-                     :waiting_paid     => :waiting_delivery do |order, transition|
-      order.notice_change_seller(transition.to_name, transition.event)
-    end
-
     ## only for development
     if Rails.env.development?
       after_transition :waiting_paid      => :order,
@@ -196,17 +187,6 @@ class OrderTransaction < ActiveRecord::Base
                        :waiting_sign      => :waiting_delivery do |order, transition|
         order.notice_change_seller(transition.to_name, :back)
       end
-    end
-
-    after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.notice_change_buyer(transition.to_name, transition.event)
-    end
-
-    after_transition  [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund,
-                      :waiting_refund => [:delivery_failure, :waiting_delivery, :waiting_sign, :complete],
-                      :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
-      order.notice_change_buyer(transition.to_name, transition.event)
-      order.notice_change_seller(transition.to_name, transition.event)
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
@@ -338,7 +318,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_fire_event!(event)
-    events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer confirm_transfer)
+    events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
     if event.to_s == "buy"
       event = pay_manner.code
     end
@@ -450,21 +430,26 @@ class OrderTransaction < ActiveRecord::Base
     attra
   end
 
-  def notice_change_buyer(name, event_name = nil)
-    token = buyer.try(:im_token)
-    faye_send("/events/#{token}/transaction-#{id}-buyer",
-                      :name => name,
-                      :event => "refresh_#{event_name}")
+  def notice_change_buyer(event_name = nil)
+    ename = event_name.to_s
+    if %w(back delivered audit_transfer audit_failure returned).include?(ename)
+      token = buyer.try(:im_token)
+      faye_send("/events/#{token}/transaction-#{id}-buyer",
+                        :event => "refresh_#{ename}")
+    end
   end
 
-  def notice_change_seller(name, event_name = nil)
-    if current_operator.nil?
-      realtime_dispose({type: "change" ,values: self})
-    else
-      token = current_operator.try(:im_token)
-      faye_send("/events/#{token}/transaction-#{id}-seller",
-        :name => name,
-        :event => "refresh_#{event_name}")
+  def notice_change_seller(event_name = nil)
+    ename = event_name.to_s
+    if %w(online_payment cash_on_delivery bank_transfer
+      back paid sign transfer confirm_transfer audit_transfer audit_failure returned).include?(ename)
+      if current_operator.nil?
+        realtime_dispose({type: "change" ,values: self})
+      else
+        token = current_operator.try(:im_token)
+        faye_send("/events/#{token}/transaction-#{id}-seller",
+          :event => "refresh_#{ename}")
+      end
     end
   end
 

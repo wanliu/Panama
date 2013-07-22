@@ -32,9 +32,8 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def event
     @transaction = OrderTransaction.find_by(
       :id => params[:id], :seller_id => current_shop.id)
-    # authorize! :event, @transaction
-
     if @transaction.seller_fire_event!(params[:event])
+      @transaction.notice_change_buyer(params[:event])
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {

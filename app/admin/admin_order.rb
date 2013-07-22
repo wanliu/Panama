@@ -48,12 +48,16 @@ ActiveAdmin.register OrderTransaction do
   member_action :audit, :method => :post do
     order = OrderTransaction.find(params[:id])
     order.fire_events!("audit_transfer")
+    order.notice_change_buyer("audit_transfer")
+    order.notice_change_seller("audit_transfer")
     redirect_to system_order_transaction_path
   end
 
   member_action :audit_failure, :method => :post do
     order = OrderTransaction.find(params[:id])
     order.fire_events!("audit_failure")
+    order.notice_change_buyer("audit_failure")
+    order.notice_change_seller("audit_failure")
     redirect_to system_order_transaction_path
   end
 end
