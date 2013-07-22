@@ -20,7 +20,7 @@ class CompletingShopController < Wicked::WizardController
     when :authenticate_license
       save_license
     when :pick_product
-      save_products
+      set_products_added
     end
   end
 
@@ -43,6 +43,8 @@ class CompletingShopController < Wicked::WizardController
     end
   end
 
-  def save_products
+  def set_products_added
+    @user_checking.update_attributes(products_added: true)
+    render_wizard(@user_checking)
   end
 end
