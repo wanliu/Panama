@@ -14,7 +14,6 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
-    @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
@@ -34,7 +33,6 @@ class People::TransactionsController < People::BaseController
   end
 
   def page
-    @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|

@@ -240,10 +240,6 @@ class OrderTransaction < ActiveRecord::Base
       order.valid_payment?
     end
 
-    before_transition :waiting_refund => :refund do |order, transition|
-      # order.valid_refund?
-    end
-
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
       order.valid_pay_manner?
       order.update_delivery

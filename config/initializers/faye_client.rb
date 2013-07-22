@@ -6,7 +6,7 @@ class FayeClient
     token = Settings.defaults['faye_token']
 
     message = { :channel => channel, :data => {values: params, token: token} }
-    puts message
+    Rails.logger.info message
     Thread.new do
       Net::HTTP.post_form(uri, :message => message.to_json)
     end

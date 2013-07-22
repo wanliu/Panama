@@ -58,7 +58,6 @@ class TransactionCardBase extends AbstructStateView
 
 
   stateChange: (data) ->
-    console.log data.name
     event_name = data.event || "refresh"
     console.log event_name
     @[event_name].call(@)
