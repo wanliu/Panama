@@ -16,8 +16,8 @@
 class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
-  scope :completed, -> { where(:state => 'complete') }
-  scope :uncomplete, -> { where("state != 'complete'") }
+  scope :completed, -> { where("state in (?)", [:complete, :close]) }
+  scope :uncomplete, -> { where("state not in (?)", [:complete, :close]) }
   scope :buyer, ->(person){ where(:buyer_id => person.id) }
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
