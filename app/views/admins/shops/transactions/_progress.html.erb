@@ -3,7 +3,7 @@
 <script type="text/javascript">
   new StateProgress({
     el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .state-progress>.progress"),
-    complete_states: <%=transaction.clear_uniq_states.to_json.html.safe %>,
+    complete_states: <%=transaction.clear_uniq_states.to_json.html_safe %>,
     localName: <%=t("order_states.seller").to_json.html_safe %>
   })
 </script>
