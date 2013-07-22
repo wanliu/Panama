@@ -1,6 +1,8 @@
 $ ->
   $(".second_class_category_tree a").bind("click", (event) ->
-    $(".accordion-body").hide()
+    $button = $(this).parents(".accordion-group").find(">a")
+    $body = $(this).parents(".accordion-body")
+    $body.removeClass("in").attr("style", "")
     url =  event.target.attributes.href.value + "/products"
     get_category_products(url)
     false
@@ -47,7 +49,6 @@ $ ->
         .focus()
         .blur(() ->
           $(this).parent().removeClass('input').html($(this).val() || 0)
-          debugger
           id = tr.attr("id")
           field = td.attr("class")
           value = td.text()
