@@ -1,9 +1,8 @@
-<div class="controls pull-right">
+<span class="pull-right">
   <div class="btn-group">
     <%= link_to '#', :class => "btn btn-large delivered btn-primary #{'disabled' if transaction.delivery_manner.express? }", 'event-name' => 'delivered' do %>
       <%=raw "确认发货&nbsp" %>
       <%= caret(:right, :inverse) %>
     <% end %>
   </div>
-
-</div>
+</span>

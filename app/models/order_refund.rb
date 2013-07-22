@@ -90,16 +90,6 @@ class OrderRefund < ActiveRecord::Base
       refund.change_order_refund_state
     end
 
-    # after_transition  [:apply_failure, :apply_refund, :apply_expired] => [:waiting_delivery ,:complete],
-    #                   :apply_refund => :apply_failure,
-    #                   :waiting_sign => :complete do |refund, transition|
-    #   refund.notice_change_buyer(transition.to_name, transition.event)
-    # end
-
-    # after_transition :waiting_delivery => :waiting_sign do |refund, transition|
-    #   refund.notice_change_seller(transition.to_name, transition.event)
-    # end
-
     before_transition :waiting_delivery => :waiting_sign do |refund, transition|
       refund.valid_delivery_code?
     end

@@ -1,4 +1,4 @@
-<div class="controls pull-right">
+<span class="pull-right">
 	<div class="btn-group">
 		<% event_name = PayManner.default.try(:code) %>
 		<%= link_to '#',
@@ -7,5 +7,4 @@
 			<%=raw "确认订单&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
 		<% end %>
 	</div>
-
-</div>
+</span>
