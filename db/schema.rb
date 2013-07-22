@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130617033132) do
+ActiveRecord::Schema.define(:version => 20130718031015) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.integer  "area_id"
     t.integer  "addressable_id"
     t.string   "addressable_type"
+    t.string   "contact_name"
+    t.string   "contact_phone"
   end
 
   create_table "admin_users", :force => true do |t|
@@ -105,13 +107,6 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
-
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "attachments", :force => true do |t|
     t.string   "filename"
@@ -243,8 +238,9 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
   create_table "delivery_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.decimal  "price",       :precision => 4, :scale => 2
   end
 
   create_table "dialogues", :force => true do |t|
@@ -309,6 +305,11 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.integer "warehouse_id"
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
+
+  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
+  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
+  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
 
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
@@ -438,17 +439,18 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
   end
 
   create_table "product_items", :force => true do |t|
-    t.integer  "transaction_id"
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "transaction_id"
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
     t.integer  "cart_id"
     t.integer  "product_id"
     t.string   "options"
     t.boolean  "refund_state",                                  :default => true
+    t.integer  "shop_id"
   end
 
   add_index "product_items", ["options"], :name => "index_product_items_on_options"
@@ -550,6 +552,18 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "services", :force => true do |t|
+    t.string   "name",       :null => false
+    t.string   "type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "services_users", :force => true do |t|
+    t.integer "user_id"
+    t.integer "service_id"
+  end
+
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
@@ -587,6 +601,7 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.datetime "updated_at", :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "im_token"
   end
 
   create_table "shops_categories", :force => true do |t|
@@ -676,6 +691,15 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
     t.boolean  "expired_state",        :default => true
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.integer  "count",                :default => 0
+  end
+
+  create_table "transfer_accounts", :force => true do |t|
+    t.string   "name"
+    t.string   "number"
+    t.integer  "bank_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "transfer_sheets", :force => true do |t|
@@ -690,10 +714,10 @@ ActiveRecord::Schema.define(:version => 20130617033132) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4
+    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
     t.string   "im_token"
   end
 
