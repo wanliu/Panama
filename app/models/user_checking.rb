@@ -2,8 +2,9 @@ class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :service_id, :industry_type,
                   :shop_name, :shop_photo, :shop_url, :shop_summary,
                   :company_name, :company_address, :company_license, :company_license_photo,
-                  :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone
-  attr_accessor :audited
+                  :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
+                  :rejected, :rejecte_reason
+  # attr_accessor :audited
 
   belongs_to :user
   belongs_to :service
@@ -33,8 +34,8 @@ class UserChecking < ActiveRecord::Base
       persisted? && !company_name.blank?
     end
 
-    def audited?
-      audited
+    def products_added?
+      persisted? && products_added
     end
 
     def find_buyer_current_step
@@ -48,7 +49,7 @@ class UserChecking < ActiveRecord::Base
     end
 
     def find_seller_current_step
-      if audited
+      if products_added?
         "waiting_audit"
       elsif company_information_finished?
         "pick_product"
