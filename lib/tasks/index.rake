@@ -5,7 +5,7 @@ namespace "index" do
   task :load => :environment do 
     Tire.index "products" do 
       delete
-
+      
       create({
         "index" => {
             "analysis" => {
@@ -25,6 +25,7 @@ namespace "index" do
             }
         }
       })
+      sleep 1
 
       close
       put_settings({
@@ -33,7 +34,7 @@ namespace "index" do
                 "analyzer" => {
                     "pinyin_analyzer" => {
                         "tokenizer" => ["my_pinyin"],
-                        "filter" => ["standard","nGram"]
+                        "filter" => ["standard", "nGram"]
                     }
                 },
                 "tokenizer" => {
@@ -47,6 +48,30 @@ namespace "index" do
         }
       })
       open
+
+      create :mappings => {
+        "product" => {
+            "properties" => {
+                "name" => {
+                    "type" => "multi_field",
+                    "fields" => {
+                        "name" => {
+                            "type" => "string",
+                            "store" => "no",
+                            "term_vector" => "with_positions_offsets",
+                            "analyzer" => "pinyin_analyzer",
+                            "boost" => 10
+                        },
+                        "primitive" => {
+                            "type" => "string",
+                            "store" => "yes",
+                            "analyzer" => "keyword"
+                        }
+                    }
+                }
+            }
+        }
+      }
     end
   end
 end
