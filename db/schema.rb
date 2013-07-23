@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130722095750) do
+ActiveRecord::Schema.define(:version => 20130723052151) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -740,6 +740,8 @@ ActiveRecord::Schema.define(:version => 20130722095750) do
     t.boolean  "products_added",           :default => false
     t.boolean  "rejected",                 :default => false
     t.string   "rejected_reason"
+    t.boolean  "checked",                  :default => false
+    t.integer  "rejected_times",           :default => 0
   end
 
   create_table "users", :force => true do |t|
