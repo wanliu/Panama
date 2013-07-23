@@ -15,11 +15,11 @@ module PanamaCore
 
       @@dynamic_configuration = default_dynamic_configuration
 
-      after_initialize :setup_dynamic_properties
+      # after_initialize :setup_dynamic_properties
 
-      after_find do
-        delegate_property_setup
-      end
+      # after_find do
+      #    delegate_property_setup
+      # end
     end
 
     module ClassMethods
@@ -63,13 +63,11 @@ module PanamaCore
       def create_items_relation
         has_and_belongs_to_many default_dynamic_configuration[:property_items_relation]
       end
-
     end
 
     def setup_dynamic_properties
       # debugger
       # self.class.reflect_on_association
-      #
       _p_relation = dynamic_configuration[:properties_relation]
       callback_fullname = "after_add_for_#{_p_relation}"
       callback_methods = self.class.send(callback_fullname)
@@ -90,7 +88,6 @@ module PanamaCore
 
     def delegate_property_setup
       @delegate_properties ||= []
-
       @delegate_properties.each do |method_name|
         @@_delete_method_name = method_name.to_sym
         class << self
