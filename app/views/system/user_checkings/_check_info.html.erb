@@ -67,7 +67,7 @@
 </table>
 <%#= button_to "/system/user_checkings/#{ @user_checking.id }/check" %>
 <%= button_to "审核通过", { action: :check } %>
-<input type='submit' class="user_checking_reject" value="驳回">
+<input type='submit' class="user_checking_reject" value="驳回" />
 <%= form_tag "/system/user_checkings/#{ @user_checking.id }/reject",
 	method: :post, class: "user_checking_reject", style: "display: none;" do %>
 	<span>驳回理由：</span><br>
@@ -93,6 +93,5 @@
 </script>
 <div id="reject_reason_content">
 	<div>
-		<%= 
 	</div>
 </div>

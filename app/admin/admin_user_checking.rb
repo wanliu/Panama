@@ -13,10 +13,6 @@ ActiveAdmin.register UserChecking do
     default_actions
   end
 
-  # action_item only: :show do |resource|
-  #   link_to('New Post', new_resource_path(resource))
-  # end
-
   show do
     render "check_info"
   end
@@ -26,7 +22,7 @@ ActiveAdmin.register UserChecking do
     user = user_checking.user
     user.services << Service.where(service_type: "seller")
     # user.save
-    redirect_to action: :show
+    redirect_to action: :index
   end
 
   member_action :reject, method: :post do
