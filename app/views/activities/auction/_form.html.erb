@@ -55,10 +55,11 @@
         template: '<%=j render "product_upload" %>',
       }
     });
+
     new TypeaheadExtension({
         el: $('.typeahead'),
         source: '/product_search/',
-        field: 'title',
+        field: 'name',
         select: function(id){
           activity_view.fetch_product(id)
         }
