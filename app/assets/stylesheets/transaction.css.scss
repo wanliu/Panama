@@ -85,14 +85,20 @@
 					line-height: 30px;
 				}
 
-				.controls {
+				.state-display{
+					font-size:20px;
+					font-weight:none;
+					margin-right: 20px;
+				}
+
+/*				.controls {
 					display: inline-block;
 					margin-right: 20px;
 					form{
 						display: inline-block;
 						margin-bottom: 0px;
 					}
-				}
+				}*/
 				.progress {
 					margin-top: 15px;
 					margin-bottom: 0px;
@@ -113,11 +119,6 @@
 						left: -12px;
 						color: $gray;
 					}
-				}
-
-				.state_text{
-					margin-right:10px;
-					font-size:22px
 				}
 			}
 		}
@@ -148,6 +149,11 @@
 
 		td {
 			vertical-align: middle;
+		}
+
+		td.stotal{
+			text-align: right;
+			font-size: 18px;
 		}
 
 		.returned_panel{

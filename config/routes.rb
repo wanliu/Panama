@@ -219,6 +219,7 @@ Panama::Application.routes.draw do
 
       resources :transactions, :controller => "shops/transactions" do
         member do
+          get "page", :to => "shops/transactions#page"
           post "event(/:event)", :to => "shops/transactions#event", :as => :trigger_event
           post "dispose", :to => "shops/transactions#dispose"
           get "dialogue", :to => "shops/transactions#dialogue"

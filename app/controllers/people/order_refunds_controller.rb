@@ -16,6 +16,7 @@ class People::OrderRefundsController < People::BaseController
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
     if @refund.buyer_fire_events!(params[:event])
+      @refund.notice_change_seller(params[:event])
       render :partial => "context", :locals => {
         :refund => @refund
       }

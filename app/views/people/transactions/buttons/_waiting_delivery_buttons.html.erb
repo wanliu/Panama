@@ -1,4 +1,4 @@
-<div class="controls pull-right">
+<span class="pull-right">
   <div class="btn-group">
     <% if Rails.env.development? %>
     <%= link_to '#',
@@ -11,7 +11,5 @@
       <%=raw "等待发货&nbsp" %>
       <%= caret(:right) %>
     <% end %>
-
   </div>
-
-</div>
+</span>

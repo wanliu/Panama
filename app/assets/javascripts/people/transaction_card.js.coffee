@@ -36,7 +36,7 @@ class TransactionCard extends TransactionCardBase
       { name: 'refresh_returned',       from: 'waiting_sign',           to: 'waiting_refund' },
       { name: 'refresh_returned',       from: 'complete',               to: 'waiting_refund' },
       { name: 'refresh_audit_transfer', from: 'waiting_audit',          to: 'waiting_delivery'},
-      { name: 'sign',                   from: 'waiting_sign',           to: 'evaluate' },
+      { name: 'sign',                   from: 'waiting_sign',           to: 'complete' },
       { name: 'back',                   from: 'waiting_paid',           to: 'order' },
       { name: 'back',                   from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
       { name: 'back',                   from: 'waiting_sign',           to: 'waiting_delivery' }, # only for development

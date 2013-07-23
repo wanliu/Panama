@@ -90,16 +90,6 @@ class OrderRefund < ActiveRecord::Base
       refund.change_order_refund_state
     end
 
-    after_transition  [:apply_failure, :apply_refund, :apply_expired] => [:waiting_delivery ,:complete],
-                      :apply_refund => :apply_failure,
-                      :waiting_sign => :complete do |refund, transition|
-      refund.notice_change_buyer(transition.to_name, transition.event)
-    end
-
-    after_transition :waiting_delivery => :waiting_sign do |refund, transition|
-      refund.notice_change_seller(transition.to_name, transition.event)
-    end
-
     before_transition :waiting_delivery => :waiting_sign do |refund, transition|
       refund.valid_delivery_code?
     end
@@ -130,6 +120,8 @@ class OrderRefund < ActiveRecord::Base
 
   def change_order_state
     order.fire_events!(:returned)
+    order.notice_change_buyer(:returned)
+    order.notice_change_seller(:returned)
   end
 
   def current_state_detail
@@ -142,16 +134,22 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
-  def notice_change_buyer(name, event_name)
-    token = buyer.try(:im_token)
-    faye_send("/events/#{token}/order-refund-#{id}-buyer",
-      :name => name, :event => "refresh_#{event_name}")
+  def notice_change_buyer(event_name)
+    ename = event_name.to_s
+    if %w(shipped_agree unshipped_agree refuse sign).include?(ename)
+      token = buyer.try(:im_token)
+      faye_send("/events/#{token}/order-refund-#{id}-buyer",
+        :event => "refresh_#{ename}")
+    end
   end
 
-  def notice_change_seller(name, event_name)
-    token = operator.try(:im_token)
-    faye_send("/events/#{token}/order-refund-#{id}-seller",
-      :name => name, :event => "refresh_#{event_name}")
+  def notice_change_seller(event_name)
+    ename = event_name.to_s
+    if %w(delivered).include?(ename)
+      token = operator.try(:im_token)
+      faye_send("/events/#{token}/order-refund-#{id}-seller",
+        :event => "refresh_#{ename}")
+    end
   end
 
   def rollback_order_state

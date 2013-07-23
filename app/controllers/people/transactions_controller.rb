@@ -14,7 +14,6 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
-    @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
@@ -34,7 +33,6 @@ class People::TransactionsController < People::BaseController
   end
 
   def page
-    @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
@@ -48,6 +46,7 @@ class People::TransactionsController < People::BaseController
     authorize! :event, @transaction
 
     if @transaction.buyer_fire_event!(event_name)
+      @transaction.notice_change_seller(event_name)
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {

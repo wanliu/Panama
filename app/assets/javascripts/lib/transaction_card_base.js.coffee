@@ -23,8 +23,8 @@ class TransactionCardBase extends AbstructStateView
 
     @rt_options = @options['realtime']
     if @rt_options.url?
-        @realtime = Realtime.client(@rt_options.url)
-        @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
+      @realtime = Realtime.client(@rt_options.url)
+      @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
     super
     # @$el.bind('click', @activeThis)
 
@@ -58,7 +58,6 @@ class TransactionCardBase extends AbstructStateView
 
 
   stateChange: (data) ->
-    console.log data.name
     event_name = data.event || "refresh"
     console.log event_name
     @[event_name].call(@)
