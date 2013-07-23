@@ -1,6 +1,5 @@
 $ ->
   $(".second_class_category_tree a").bind("click", (event) ->
-    $button = $(this).parents(".accordion-group").find(">a")
     $body = $(this).parents(".accordion-body")
     $body.removeClass("in").attr("style", "")
     url =  event.target.attributes.href.value + "/products"
