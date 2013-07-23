@@ -1,3 +1,12 @@
-等待审核
-<%= link_to '完成', next_wizard_path, :class => 'btn btn-primary' %>
-<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+<div class="container-fluid">
+	<div class="page-header">
+		<div class="offset1 span10">
+			<div class='dialog'>
+				<h2>等待审核</h2>
+				<p>您的资料已经提交成功，我们将在5个工作日内审核完毕，请您耐心等待。。。。。。。。。。。</p>
+				<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+			</div>
+		</div>
+	</div>
+</div>
+
