@@ -1,2 +1,2 @@
 #= require panama
-#= require wizard_category
+#= require pick_product

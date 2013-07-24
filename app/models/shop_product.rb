@@ -1,5 +1,5 @@
 class ShopProduct < ActiveRecord::Base
-  attr_accessible :shop_id, :product_id, :price, :inventory
+  attr_accessible :shop_id, :product_id, :price, :inventory,:photos,:name
 
   validates :shop_id, :product_id, presence: true
 

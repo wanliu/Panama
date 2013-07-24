@@ -17,7 +17,7 @@ class ShopProductsController < ApplicationController
 				if @shop_product.valid?
 					product = @shop_product.product
 					result  = { id: @shop_product.id, name: product.name,
-							    price: @shop_product.price, inventory: @shop_product.inventory }
+							    price: @shop_product.price, inventory: @shop_product.inventory, photos: product.photos }
 					format.json { render json: result }
 				else
 					format.json { render json: @shop_product.errors, status: :unprocessable_entity }
@@ -45,6 +45,15 @@ class ShopProductsController < ApplicationController
 		@product = ShopProduct.find(params[:id])
 		respond_to do |format|
 			format.json { render json: @product }
+		end
+	end
+
+	def destroy
+		@product = ShopProduct.find(params[:id])
+		@product.destroy
+
+		respond_to do |format|
+			format.json{ head :no_content }
 		end
 	end
 end
