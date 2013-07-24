@@ -8,7 +8,13 @@ class CompletingShopController < Wicked::WizardController
     @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
 
     @shop_auth = ShopAuth.new(@user_checking.attributes)
-
+    case step
+    when :pick_product
+      @products = ShopProduct
+        .joins(:product)
+        .select(["shop_products.*", "products.name"])
+        .where("shop_products.shop_id = ? ", @current_user.shop.id)
+    end 
     render_wizard
   end
 
