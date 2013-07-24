@@ -1,0 +1,72 @@
+<table class='table'>
+  <tr>
+    <td>订单编号</td>
+    <td><%=@transaction.number %></td>
+    <td>状态</td>
+    <td>
+      <%= t("order_states.seller.#{@transaction.state}") %>
+    </td>
+  </tr>
+  <tr>
+    <td>买家</td>
+    <td><%=@transaction.buyer.login %></td>
+    <td>商家</td>
+    <td><%=@transaction.seller.name %></td>
+  </tr>
+  <tr>
+    <td>付款方式</td>
+    <td><%=@transaction.pay_manner.try(:name) %></td>
+    <td>运送方式</td>
+    <td><%=@transaction.delivery_manner.try(:name) %></td>
+  </tr>
+  <tr>
+    <td>运输</td>
+    <td><%=@transaction.delivery_type.try(:name) %></td>
+    <td>运费</td>
+    <td><%=@transaction.delivery_price %></td>
+  </tr>
+  <tr>
+    <td>地址</td>
+    <td colspan='3'><%=@transaction.address.try(:location_without_contact) %></td>
+  </tr>
+  <tr>
+    <td colspan='4'>
+      <table class='table table-striped'>
+        <thead>
+          <tr>
+            <th>
+              图片
+            </th>
+            <th>商品</th>
+            <th>
+              单价
+            </th>
+            <th>
+              数量
+            </th>
+            <th>金额
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transaction.items.each do | item | %>
+          <tr>
+            <td><%= image_tag item.product.photos.icon %></td>
+            <td><%= item.title %></td>
+            <td><%= item.price %></td>
+            <td><%= item.amount %></td>
+            <td><%= number_to_currency item.total %></td>
+          </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan='5' class='order-stotal'>
+              总金额<%= '(包含运费)' unless @transaction.order_state? %>：<%=number_to_currency @transaction.stotal %>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </td>
+  </tr>
+</table>

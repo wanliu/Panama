@@ -1,0 +1,26 @@
+html, body{
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+}
+
+.table{
+  width: 100%;
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  &.table-striped{
+    th, td{
+      border-bottom: 1px solid #dddddd;
+      margin: 0px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: left;
+    }
+  }
+}
+
+@import 'order_print';
