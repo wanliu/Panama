@@ -25,6 +25,14 @@ class UserChecking < ActiveRecord::Base
     save
   end
 
+  def send_checked_mail
+    UserMailer.delay.send_user_checked_notify(user.email, ower_name, shop_url)
+  end
+
+  def send_rejected_mail
+    UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, shop_url)
+  end
+
   protected
     def service_choosen?
       persisted? && !service.blank?

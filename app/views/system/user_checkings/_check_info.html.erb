@@ -98,7 +98,7 @@
 	</div>
 	<div class='rejected-reason'>
 		<div class='label'><span>最近一次被拒绝原因：</span></div>
-		<div class='reason'><%= @user_checking.rejected_reason.html_safe || "不详" %></div>
+		<div class='reason'><%= @user_checking.rejected_reason.try(:html_safe) || "" %></div>
 	</div>
 <% end %>
 

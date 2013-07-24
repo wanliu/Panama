@@ -6,10 +6,13 @@ class CompletingShopController < Wicked::WizardController
   def show
     service_id = Service.where(service_type: "seller").first.id
     @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
-
     @shop_auth = ShopAuth.new(@user_checking.attributes)
 
-    render_wizard
+    if @user_checking.checked
+      redirect_to "/"
+    else
+      render_wizard
+    end
   end
 
   def update

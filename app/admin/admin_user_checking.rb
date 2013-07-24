@@ -4,7 +4,7 @@ ActiveAdmin.register UserChecking do
   end
 
   scope :rejected do
-    UserChecking.where("rejected = ?", true)
+    UserChecking.where("rejected = ? and checked <> ?", true, true)
   end
 
   scope :checked do
@@ -31,8 +31,7 @@ ActiveAdmin.register UserChecking do
 
     user = user_checking.user
     user.services << Service.where(service_type: user_checking.service.service_type)
-    # TODO
-    #user_checking.checked_mail
+    user_checking.send_checked_mail
 
     redirect_to action: :index
   end
@@ -41,8 +40,7 @@ ActiveAdmin.register UserChecking do
     user_checking = UserChecking.find(params[:id])
     user_checking.update_attributes(rejected: true, rejected_reason: params[:reject_reason])
     user_checking.update_rejected_times
-    # TODO
-    # user_checking.rejected_mail
+    user_checking.send_rejected_mail
 
     redirect_to action: :index
   end
