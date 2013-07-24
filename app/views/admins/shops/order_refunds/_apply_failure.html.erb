@@ -1,34 +1,37 @@
 <div class="container-fluid">
   <div class='row-fluid'>
-    <div class='span2'>拒绝理由:</div>
+    <div class='span2'>拒绝理由</div>
     <div class='span10'>
       <%= refund.refuse_reason %>
     </div>
   </div>
   <div class="row-fluid">
     <div class="span2">
-      退货原因:
+      退运费
     </div>
-    <div class="span2">
-      <%= refund.order_reason.name %>
-    </div>
-    <div class="span2">
-      退运费:
-    </div>
-    <div class="span2">
+    <div class="span4">
       <%= number_to_currency refund.delivery_price %>
     </div>
     <div class="span2">
-      <label class="control-label">退货总金额:</label>
+      退货总金额
     </div>
-    <div class="span2">
+    <div class="span4">
       <%= number_to_currency(refund.stotal) %>
+    </div>
+  </div>
+
+  <div class='row-fluid'>
+    <div class="span2">
+      退货原因
+    </div>
+    <div class="span10">
+      <%= refund.order_reason.name %>
     </div>
   </div>
 
   <div class="row-fluid">
     <div class="span2">
-      <label class="control-label">退货说明:</label>
+      <label class="control-label">退货说明</label>
     </div>
     <div class="span10">
       <%= refund.decription %>

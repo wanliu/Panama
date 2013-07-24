@@ -40,6 +40,7 @@ Panama::Application.routes.draw do
         post "event(/:event)", :to => "people/order_refunds#event", :as => :trigger_event
         post 'delivery_code', :to => "people/order_refunds#delivery_code"
         get 'page', :to => "people/order_refunds#page"
+        post 'update_delivery_price', :to => "people/order_refunds#update_delivery_price"
       end
     end
 

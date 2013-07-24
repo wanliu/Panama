@@ -23,6 +23,17 @@ class People::OrderRefundsController < People::BaseController
     end
   end
 
+  def update_delivery_price
+    @refund = current_user_refunds.find(params[:id])
+    respond_to do |format|
+      if @refund.update_attributes(:delivery_price => params[:delivery_price])
+        format.json{ head :no_content }
+      else
+        format.json{ render :json => draw_errors_message(@refund), :status => 403 }
+      end
+    end
+  end
+
   def delivery_code
     @refund = current_user_refunds.find_by(:id => params[:id])
     @refund.delivery_code = params[:delivery_code]

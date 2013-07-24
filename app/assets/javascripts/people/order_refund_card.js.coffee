@@ -12,6 +12,8 @@ class OrderRefundCard extends TransactionCardBase
     "click .refuse_protect" : "toggle_panel"
     "click input.delivered" : "clickAction",
     "keyup input:text.delivery_code" : "change_delivery_code",
+    'click .edit_rdprice' : 'edit_delivery_price',
+    'blur input:text[name=edit_rdprice]' : 'update_delivery_price'
   }
 
   states:
@@ -55,5 +57,42 @@ class OrderRefundCard extends TransactionCardBase
       success: () =>
         @slideAfterEvent(event)
     )
+
+  update_delivery_price: () ->
+    url = @transaction.urlRoot
+    price = @$input.val()
+    if /^\d*$/.test(price) || /^\d{0,10}(.\d*)$/.test(price)
+      old_price = @$rdp_panel.attr("data-value")
+      return if parseFloat(price) ==  parseFloat(old_price)
+      @transaction.fetch(
+        url: "#{url}/update_delivery_price",
+        type: 'POST',
+        data: {delivery_price: price},
+        success: () =>
+          @$rdp_panel.attr('data-value', price)
+          _price = @$rdp_panel.text().trim()
+          _price = _price.replace(_price.substring(1, _price.length), " #{price}")
+          @$rdp_panel.html(_price)
+          @$rdp_panel.show()
+          @$edit_rdp_panel.hide()
+      )
+    else
+      pnotify({
+        type: "error",
+        title: "编辑出错"
+        text: "请输入正确的运费！"
+      })
+      @$input.focus()
+
+  edit_delivery_price: () ->
+    @$input = $("input:text[name='edit_rdprice']")
+    price = @$input.val()
+    @$rdp_panel = @$(".rdp_panel")
+    @$rdp_panel.hide();
+    @$edit_rdp_panel = @$(".edit_rdp_panel")
+    @$edit_rdp_panel.show();
+    @$input.focus();
+
+
 
 root.OrderRefundCard = OrderRefundCard
