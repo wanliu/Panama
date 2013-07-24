@@ -23,15 +23,13 @@
         </tr>
       <% end %>
       </tbody>
+      <tfoot>
+        <tr>
+          <td colspan='6' class='stotal'>
+            总金额(包含运费)：<%= number_to_currency(refund.stotal) %>
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>
-
-<div class='total'>
-  <strong>合计：
-    <span>
-      <%= number_to_currency(refund.total) %>
-    </span>
-  </strong>
-</div>
-
