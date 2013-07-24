@@ -63,19 +63,22 @@ class OrderRefundCard extends TransactionCardBase
     price = @$input.val()
     if /^\d*$/.test(price) || /^\d{0,10}(.\d*)$/.test(price)
       old_price = @$rdp_panel.attr("data-value")
-      return if parseFloat(price) ==  parseFloat(old_price)
-      @transaction.fetch(
-        url: "#{url}/update_delivery_price",
-        type: 'POST',
-        data: {delivery_price: price},
-        success: () =>
-          @$rdp_panel.attr('data-value', price)
-          _price = @$rdp_panel.text().trim()
-          _price = _price.replace(_price.substring(1, _price.length), " #{price}")
-          @$rdp_panel.html(_price)
-          @$rdp_panel.show()
-          @$edit_rdp_panel.hide()
-      )
+      if parseFloat(price) ==  parseFloat(old_price)
+        @$rdp_panel.show()
+        @$edit_rdp_panel.hide()
+      else
+        @transaction.fetch(
+          url: "#{url}/update_delivery_price",
+          type: 'POST',
+          data: {delivery_price: price},
+          success: () =>
+            @$rdp_panel.attr('data-value', price)
+            _price = @$rdp_panel.text().trim()
+            _price = _price.replace(_price.substring(1, _price.length), " #{price}")
+            @$rdp_panel.html(_price)
+            @$rdp_panel.show()
+            @$edit_rdp_panel.hide()
+        )
     else
       pnotify({
         type: "error",

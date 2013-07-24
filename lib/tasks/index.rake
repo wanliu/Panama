@@ -2,10 +2,10 @@ require 'tire'
 
 namespace "index" do
   desc "import pinyin index"
-  task :load => :environment do 
-    Tire.index "products" do 
+  task :load => :environment do
+    Tire.index "products" do
       delete
-      
+
       create({
         "index" => {
             "analysis" => {
