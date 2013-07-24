@@ -1,6 +1,14 @@
 ActiveAdmin.register UserChecking do
   scope :waiting_audit, default: true do
-    UserChecking.where("shop_name <> ''")
+    UserChecking.where("shop_name <> '' and rejected = ? and checked = ?", false, false)
+  end
+
+  scope :rejected do
+    UserChecking.where("rejected = ?", true)
+  end
+
+  scope :checked do
+    UserChecking.where("checked = ?", true)
   end
 
   actions :index, :show
@@ -13,24 +21,29 @@ ActiveAdmin.register UserChecking do
     default_actions
   end
 
-  # action_item only: :show do |resource|
-  #   link_to('New Post', new_resource_path(resource))
-  # end
-
   show do
     render "check_info"
   end
 
   member_action :check, method: :post do
     user_checking = UserChecking.find(params[:id])
+    user_checking.update_attributes(checked: true)
+
     user = user_checking.user
-    user.services << Service.where(service_type: "seller")
-    # user.save
-    redirect_to action: :show
+    user.services << Service.where(service_type: user_checking.service.service_type)
+    # TODO
+    #user_checking.checked_mail
+
+    redirect_to action: :index
   end
 
   member_action :reject, method: :post do
-    debugger
-  end
+    user_checking = UserChecking.find(params[:id])
+    user_checking.update_attributes(rejected: true, rejected_reason: params[:reject_reason])
+    user_checking.update_rejected_times
+    # TODO
+    # user_checking.rejected_mail
 
+    redirect_to action: :index
+  end
 end
