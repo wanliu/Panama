@@ -155,3 +155,8 @@ gem 'redis-namespace','~> 1.0.2'
 gem 'redis-search', '0.9.0'
 gem 'redis'
 gem "wicked"
+
+## Search 
+gem 'tire', :github => "hysios/tire"
+gem 'tire-settings', :github => "hysios/tire-settings"
+gem 'yajl-ruby'

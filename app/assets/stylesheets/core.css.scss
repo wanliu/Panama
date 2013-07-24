@@ -53,6 +53,13 @@ ul {
 	margin: 0px;
 }
 
+#active_dialog {
+  width: 800px;
+  margin-left: -400px;
+  top: 25px!important;
+}
+
+
 .btn {
 	color: #fff;
 	@include text-shadow(none);
