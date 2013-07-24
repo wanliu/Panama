@@ -1,4 +1,4 @@
-<div class=products>
+<div class='products'>
   <table class="table table-striped table-images">
     <thead>
       <tr>
@@ -7,7 +7,16 @@
         <th>商品</th>
         <th class="hidden-phone-portrait">数量</th>
         <th class="hidden-phone">单价</th>
-        <th class="hidden-phone">金额</th>
+        <th class="hidden-phone relative">
+          <div class="btn-group">
+            <%= link_to 'javascript:void(0)', :class => "btn detials download " do %>
+              <%= icon :download %>
+            <% end %>
+            <%= link_to 'javascript:void(0)', :class => "btn print" do %>
+              <%= icon :print %>
+            <% end %>
+          </div>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -37,4 +46,17 @@
       </tr>
     </tfoot>
   </table>
+
+  <div class='print_display'></div>
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    new OrderExport({
+      url_print: "<%=print_person_transaction_path(@people, transaction) %>",
+      url_download:"<%=person_transaction_path(@people, transaction) %>.csv",
+      order_id: "<%=transaction.id %>",
+      el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>")
+    })
+  })
+</script>

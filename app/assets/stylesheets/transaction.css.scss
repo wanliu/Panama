@@ -90,15 +90,6 @@
 					font-weight:none;
 					margin-right: 20px;
 				}
-
-/*				.controls {
-					display: inline-block;
-					margin-right: 20px;
-					form{
-						display: inline-block;
-						margin-bottom: 0px;
-					}
-				}*/
 				.progress {
 					margin-top: 15px;
 					margin-bottom: 0px;
@@ -146,6 +137,11 @@
 		// border-right: 1px solid $tableBorder;
 		// border-bottom: 1px solid $tableBorder;
 		// padding: 0 20px 20px 20px;
+		.print_display{
+			height: 0px;
+			width: 0px;
+			overflow: hidden;
+		}
 
 		td {
 			vertical-align: middle;

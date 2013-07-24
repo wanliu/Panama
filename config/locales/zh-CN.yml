@@ -288,13 +288,14 @@ zh-CN:
         transfer_person: 汇款人
         transfer_bank: 汇款银行
         state: 状态
-        total: 总金额
+        total: 小计
         operator_state: 已接单
         delivery_price: 配送费用
         delivery_code: 配送地邮编
         created_at: 创建时间
         updated_at: 更新时间
         action_link: 操作
+        stotal: 总金额
       category:
         id: 编号
         name: 分类名

@@ -1,3 +1,4 @@
+require 'csv'
 class ApplicationController < ActionController::Base
   include ApplicationHelper
   include OmniAuth::Wanliu::AjaxHelpers
@@ -26,6 +27,21 @@ class ApplicationController < ActionController::Base
       ms.each{| m | messages << "#{attr}: #{m}"}
     end
     messages
+  end
+
+  #转换csv
+  def to_csv(column_names, values, options = {})
+    return unless values.is_a?(Array)
+    if values.length > 0
+      CSV.generate(options) do |csv|
+        keys = column_names.keys
+        columns = column_names.values_at(*keys)
+        csv << columns
+        values.each do | v |
+          csv << v.values_at(*keys)
+        end
+      end
+    end
   end
 
   def set_locale

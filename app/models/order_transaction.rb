@@ -423,10 +423,14 @@ class OrderTransaction < ActiveRecord::Base
   def as_json(*args)
     attra = super *args
     attra["number"] = number
+    attra["pay_manner_name"] = pay_manner.try(:name)
+    attra["delivery_manner_name"] = delivery_manner.try(:name)
     attra["buyer_login"] = buyer.login
+    attra["seller_name"] = seller.name
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("order_states.seller.#{state}")
+    attra["stotal"] = stotal
     attra
   end
 
@@ -524,6 +528,31 @@ class OrderTransaction < ActiveRecord::Base
       "WL#{ id }"
     else
       "WL#{ '0' * (9 - id.to_s.length) }#{ id }"
+    end
+  end
+
+  def self.export_column
+    {
+      "number" => "编号",
+      "state_title" => "状态",
+      "pay_manner_name" => "付款方式",
+      "delivery_manner_name" => "运送方式",
+      "buyer_login" => "买家",
+      "seller_name" => "商家",
+      "title" => "商品",
+      "price" => "单价",
+      "amount" => "数量",
+      "delivery_price" => "运费",
+      "stotal" => "总额",
+      "address" => "地址"
+    }
+  end
+
+  def convert_json
+    items.map do |item|
+      attra = item.as_json
+      attra.merge!(as_json)
+      attra
     end
   end
 

@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def pending
@@ -21,11 +22,21 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
+  def print
+    @transaction = OrderTransaction.find_by(
+      :seller_id => current_shop.id, :id => params[:id])
+    render :layout => "print"
+  end
+
   def show
     @transaction = OrderTransaction.find_by(
       :seller_id => current_shop.id, :id => params[:id])
     respond_to do | format |
       format.html
+      format.csv do
+        send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
+          :filename => "order#{DateTime.now.strftime('%Y%m%d%H%M%S')}.csv")
+      end
     end
   end
 

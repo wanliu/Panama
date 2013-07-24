@@ -19,7 +19,16 @@ class People::TransactionsController < People::BaseController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @transaction }
+      format.csv{
+        send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
+          :filename => "order#{DateTime.now.strftime('%Y%m%d%H%M%S')}.csv")
+      }
     end
+  end
+
+  def print
+    @transaction = current_order.find(params[:id])
+    render :layout => "print"
   end
 
   def create

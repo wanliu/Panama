@@ -1,5 +1,6 @@
 #= require lib/transaction_card_base
 #= require lib/chosen.jquery
+#= require lib/order_export
 
 root = window || @
 

@@ -26,6 +26,7 @@ Panama::Application.routes.draw do
         post "refund", :to => "people/transactions#refund"
         post "delay_sign", :to => "people/transactions#delay_sign"
         post 'transfer', :to => "people/transactions#transfer"
+        get 'print', :to => "people/transactions#print"
       end
 
       collection do
@@ -226,6 +227,7 @@ Panama::Application.routes.draw do
           post "send_message", :to => "shops/transactions#send_message"
           get "messages", :to => "shops/transactions#messages"
           put "delivery_code", :to => "shops/transactions#delivery_code"
+          get "print", :to => "shops/transactions#print"
         end
       end
 

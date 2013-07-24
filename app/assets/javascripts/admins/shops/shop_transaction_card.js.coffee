@@ -2,6 +2,7 @@
 #= require 'backbone'
 #= require 'lib/transaction_card_base'
 #= require 'lib/state-machine'
+#= require 'lib/order_export'
 
 exports = window || @
 class ShopTransactionCard extends TransactionCardBase
