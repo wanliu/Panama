@@ -1,13 +1,15 @@
+#encoding: utf-8
+
 ActiveAdmin.register UserChecking do
-  scope :waiting_audit, default: true do
+  scope :等待审核, default: true do
     UserChecking.where("shop_name <> '' and rejected = ? and checked = ?", false, false)
   end
 
-  scope :rejected do
+  scope :被驳回 do
     UserChecking.where("rejected = ? and checked <> ?", true, true)
   end
 
-  scope :checked do
+  scope :已审核通过 do
     UserChecking.where("checked = ?", true)
   end
 
