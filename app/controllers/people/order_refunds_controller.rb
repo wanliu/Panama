@@ -40,9 +40,10 @@ class People::OrderRefundsController < People::BaseController
     end
   end
 
-  def delivery_code
+  def update_delivery
     @refund = current_user_refunds.find_by(:id => params[:id])
     @refund.delivery_code = params[:delivery_code]
+    @refund.logistics_company = LogisticsCompany.find(params[:logistics_company_id])
     respond_to do |format|
       if @refund.save
         format.json{ head :no_content }

@@ -63,7 +63,7 @@ class TransactionRefundView extends Backbone.View
       error: (model, data) =>
         error_message = JSON.parse(data.responseText)
         error_message = error_message.message if error_message.message
-        @notify("错误! #{ error_message }", 'error')
+        @notify("错误! #{ error_message.join() }", 'error')
     false
 
   get_form_data: () ->

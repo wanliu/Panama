@@ -48,15 +48,18 @@ class OrderRefundCard extends TransactionCardBase
 
   afterDelivered: (event, from, to, msg) ->
     code = @$("input:text.delivery_code").val()
-    return if _.isEmpty(code)
-    url = @transaction.urlRoot
-    @transaction.fetch(
-      url: "#{url}/delivery_code",
-      type: 'POST',
-      data: {delivery_code: code},
-      success: () =>
-        @slideAfterEvent(event)
-    )
+    logistics_company_id = @$("select[name=logistics_company_id]").val()
+    if _.isEmpty(code) && _.isEmpty(logistics_company_id)
+      @slideAfterEvent(event)
+    else
+      url = @transaction.urlRoot
+      @transaction.fetch(
+        url: "#{url}/update_delivery",
+        type: 'POST',
+        data: {delivery_code: code, logistics_company_id: logistics_company_id},
+        success: () =>
+          @slideAfterEvent(event)
+      )
 
   update_delivery_price: () ->
     url = @transaction.urlRoot

@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div class="address-panel">  
+  <div class="address-panel">
   <%= simple_fields_for :address, transaction.address do |address_form| %>
     <label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
     <div class="controls controls-row">
@@ -53,7 +53,6 @@
       <div class='span2'>
         <%=address_form.input_field :zip_code, :class => :span12  %>
       </div>
-      <%#= address_form.input :zip_code, :wrapper => :inline_label, :input_html => { :class => :span2 } %>
     </div>
     <%= address_form.input :road, :input_html => { :class => :span12 } %>
 

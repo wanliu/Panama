@@ -4,7 +4,7 @@
       <div class='row-fluid' style='margin-bottom:10px'>
         <div class='span2 title'>退货原因</div>
         <div class='span10'>
-          <select name="order_reason_id">
+          <select name="order_reason_id" class='span12'>
             <% OrderReason.all.each do |reason| %>
             <option value="<%=reason.id %>"><%=reason.name %></option>
             <% end %>
@@ -13,9 +13,22 @@
       </div>
       <% if transaction.shipped_state? %>
       <div class='row-fluid' style='margin-bottom:10px'>
+        <div class='span2 title'>配送方式</div>
+        <div class='span4'>
+          <select class='span12' name='delivery_manner_id'>
+            <% DeliveryManner.avaliable.each do |delivery| %>
+            <% delivery_id = DeliveryManner.default.try(:id) %>
+            <option value="<%=delivery.id %>" <%= 'selected'  if delivery_id == delivery.id%>>
+              <%=delivery.name %>
+            </option>
+            <% end %>
+          </select>
+        </div>
         <div class='span2 title'>退运费</div>
-        <div class='span10'><input type='text' name='delivery_price' class='delivery_price' value='0' /></div>
-      </div>
+          <div class='span4'>
+            <input type='text' name='delivery_price' class='delivery_price span12' value='0' />
+          </div>
+        </div>
       <% end %>
       <div class='row-fluid' style='margin-bottom:10px'>
         <div class='span2 title'>退款说明</div>

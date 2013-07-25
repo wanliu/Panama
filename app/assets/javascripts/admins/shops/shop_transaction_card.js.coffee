@@ -84,15 +84,17 @@ class ShopTransactionCard extends TransactionCardBase
 
   save_delivery_code: (cb) ->
     input = @$("input:text.delivery_code")
-    if input.length > 0
+    select = @$("select[name=logistics_company_id]")
+    if input.length > 0 &&select.length > 0
       delivery_code = input.val()
+      logistics_company_id = select.val()
       urlRoot = @transaction.urlRoot
       @transaction.fetch(
-        url: "#{urlRoot}/delivery_code",
+        url: "#{urlRoot}/update_delivery",
         type: "PUT",
-        data: {delivery_code: delivery_code},
+        data: {delivery_code: delivery_code, logistics_company_id: logistics_company_id},
         success: cb,
-        error: () ->
+        error: () =>
           @notify("错误信息", '请填写发货单号!', "error")
           @alarm()
           @transition.cancel()
