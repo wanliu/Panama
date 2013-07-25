@@ -12,4 +12,26 @@ class SearchController < ApplicationController
     end
   end
 
+  def products
+    query = params[:q]
+    s = Tire.search 'products' do 
+        # query do 
+        #   string "name:#{query}"
+        # end
+
+        constant_score do 
+          query do 
+            string "name:#{query}"
+          end
+
+          boost 1.2
+        end
+        size 30
+
+        # analyzer　:standard
+      end
+    respond_to do |format|
+      format.json { render :json => s.results }
+    end
+  end
 end

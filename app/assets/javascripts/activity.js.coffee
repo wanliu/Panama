@@ -174,20 +174,63 @@ class ActivityPreview extends Backbone.View
 		s = parseInt(@$('.like-count').text()) || 0
 		@$('.like-count').text(s - n)
 
+
+class ProductPreview extends Backbone.View 
+
+	render: () ->
+		@template = @options? and @options['template']
+		@$el = $(@template.render(@model)) if @template
+		@
+
 class ActivityModel extends Backbone.Model
 
 	urlRoot: '/activities'
 
 class ActivitiesView extends Backbone.View
 
+	COLUMN_WIDTH = 233
+
 	initialize: (@options) ->
 
+		$(window).bind('search_result:append', $.proxy(@appendResult, @))
 		$(window).resize($.proxy(@resizeWrap, @))
 		@resizeWrap()
 
 	resizeWrap: (e) ->
 		$wrap = $('.wrap')
 		@$el.width(parseInt(($wrap.width() - 25) / 246) * 246)
+
+	appendResult: (e, data) ->
+		
+		$columns = @$('.column')
+		count = $columns.size()
+		data = data.data
+
+		if data? and _.isArray(data)
+			data.map (product, i) =>
+				view = @generateView(product)
+				target = $($columns[i % count])
+				view.$el
+					.hide()
+					.appendTo(target)
+					.fadeIn()
+
+	setResult: (e, data) ->
+		$("#activities")
+
+	relayoutColumns: () ->
+		count = parseInt(@$el.width() / 246)
+		
+
+
+	generateView: (model, default_type = "product") ->
+		@pdPreview ||= Hogan.compile($("#product-preview-template").text())
+		switch model.type || default_type
+			when "product"
+				new ProductPreview(model: model, template: @pdPreview).render()
+			else
+				new ProductPreview(model: model, template: @pdPreview).render()
+
 
 
 root.ActivityModel = ActivityModel

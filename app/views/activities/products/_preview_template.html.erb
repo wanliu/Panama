@@ -1,0 +1,45 @@
+<div class='activity' product-id='{{ id }}' id="product{{ id }}">
+  <div class='out-box'>
+    <form>
+    <div class='in-box'>
+      {{#avatar_url}}
+        <img src="{{avatar_url}}" class="preview a-{{id}}" alt />
+      {{/avatar_url}}
+      {{^avatar_url}}
+        <%= image_tag ImageUploader.new.url("240240") %>
+      {{/avatar_url}}
+    </div>
+      <div class='summary'>
+        <h4 class="title">{{name}}</h4>
+        <p> 价格 {{price}} </p>
+      </div>
+      <div class='userinfo'>
+        {{#author_icon}}
+        <img src="{{author_icon}}" class='author img-circle' alt="Author" />
+        {{/author_icon}}
+        {{^author_icon}}
+          <%= image_tag AvatarUploader.new.url("5050"), :class => 'author img-circle' %>
+        {{/author_icon}}
+        {{#login}}
+          <p>{{login}}</p>
+        {{/login}}
+        {{^login}}
+          <p>暂无卖家</p>
+        {{/login}}
+        <span>关注 {{participate}}{{^participate}}0{{/participate}}</span>
+        <span class='like-count'>喜欢 {{like}}{{^like}}0{{/like}}</span>
+      </div>
+    <div class="buttons">
+      <%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
+        <%#= icon(:'shopping-cart') + " 参与" %>
+      <%# end %>
+
+      <%= link_to '#', class: 'btn btn-danger launch-button' do %>
+        <%= icon('shopping-cart') + " 购买" %>
+      <% end %>
+
+    </div>
+    </form>
+
+  </div>
+</div>
