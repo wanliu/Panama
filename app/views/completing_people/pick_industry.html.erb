@@ -7,7 +7,7 @@
       <%= simple_form_for @user_checking,
         url: '/completing_people/pick_industry',
         html: { method: :put, class: "form-horizontal" } do |f| %>
-        <%= f.input :industry_type, collection: ['奶 粉'], label: "请选经营择行业" %>
+        <%= f.input :industry_type, collection: ['奶 粉'], selected: "奶 粉", label: "请选经营择行业" %>
       <div class="control-group">
         <div class="controls">
           <button type="submit" class="btn">下一步</button>

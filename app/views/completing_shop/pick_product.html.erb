@@ -35,7 +35,7 @@
 						<script type='text/javascript'>
 			  		<% @products.each do |product| %>
 							new ProductView({model: <%=raw product.attributes.to_json %>})
-						<% end %>						
+						<% end %>
 						</script>
 					</tbody>
 					<script type="text/javascript">
@@ -49,8 +49,8 @@
 		<div class='row-fluid'>
 			<%= form_for @user_checking, :url => wizard_path, :method => :put, class: "form-horizontal" do |f| %>
 				<div class="span12 form-actions">
-					<%= link_to '上一步', previous_wizard_path, :class => 'btn' %>
-					<%= f.submit "下一步", class: "btn btn-primary" %>
+					<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+					<%= f.submit "完成", class: "btn btn-primary" %>
 				</div>
 			<% end %>
 		</div>

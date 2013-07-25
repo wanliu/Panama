@@ -17,6 +17,7 @@ ActiveAdmin.register UserChecking do
 
   index do
     column :user
+    column :service
     column :shop_name
     column :ower_name
     column :ower_shenfenzheng_number
@@ -30,9 +31,6 @@ ActiveAdmin.register UserChecking do
   member_action :check, method: :post do
     user_checking = UserChecking.find(params[:id])
     user_checking.update_attributes(checked: true)
-
-    user = user_checking.user
-    user.services << Service.where(service_type: user_checking.service.service_type)
     user_checking.send_checked_mail
 
     redirect_to action: :index

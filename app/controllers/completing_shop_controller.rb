@@ -1,7 +1,7 @@
 class CompletingShopController < Wicked::WizardController
   layout "wizard"
 
-  steps :pick_industry, :authenticate_license, :pick_product, :waiting_audit
+  steps :pick_industry, :authenticate_license, :pick_product#, :waiting_audit
 
   def show
     service_id = Service.where(service_type: "seller").first.id
@@ -44,6 +44,7 @@ class CompletingShopController < Wicked::WizardController
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
+      current_user.services << Service.where(service_type: @user_checking.service.service_type)
       if @user_checking.user.shop.blank?
         @user_checking.user.create_shop(name: @shop_auth.shop_name)
       end
@@ -55,6 +56,7 @@ class CompletingShopController < Wicked::WizardController
 
   def set_products_added
     @user_checking.update_attributes(products_added: true)
-    render_wizard(@user_checking)
+    # render_wizard(@user_checking)
+    redirect_to '/'
   end
 end

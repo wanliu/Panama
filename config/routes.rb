@@ -4,7 +4,11 @@ Panama::Application.routes.draw do
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
   resources :after_signup
-  resources :completing_people
+  resources :completing_people do
+    member do
+      post 'skip'
+    end
+  end
   resources :completing_shop
   resources :user_auths
 
