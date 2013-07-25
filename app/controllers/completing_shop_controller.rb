@@ -1,5 +1,6 @@
 class CompletingShopController < Wicked::WizardController
   layout "wizard"
+  before_filter :login_required_without_service_choosen
 
   steps :pick_industry, :authenticate_license, :pick_product#, :waiting_audit
 
@@ -44,7 +45,6 @@ class CompletingShopController < Wicked::WizardController
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
-      current_user.services << Service.where(service_type: @user_checking.service.service_type)
       if @user_checking.user.shop.blank?
         @user_checking.user.create_shop(name: @shop_auth.shop_name)
       end
@@ -56,7 +56,9 @@ class CompletingShopController < Wicked::WizardController
 
   def set_products_added
     @user_checking.update_attributes(products_added: true)
-    # render_wizard(@user_checking)
+    # 添加服务（是否有服务是主页跳转到选择服务选择页的判断标记）
+    current_user.services << Service.where(service_type: @user_checking.service.service_type)
+
     redirect_to '/'
   end
 end

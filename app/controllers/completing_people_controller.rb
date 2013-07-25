@@ -1,5 +1,6 @@
 class CompletingPeopleController < Wicked::WizardController
   layout "wizard"
+  before_filter :login_required_without_service_choosen
 
   steps :pick_industry, :authenticate_license#, :waiting_audit
 
