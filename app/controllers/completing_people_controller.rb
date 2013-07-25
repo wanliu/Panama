@@ -1,7 +1,7 @@
 class CompletingPeopleController < Wicked::WizardController
   layout "wizard"
 
-  steps :pick_industry, :authenticate_license, :waiting_audit
+  steps :pick_industry, :authenticate_license#, :waiting_audit
 
   def show
   	service_id = Service.where(service_type: "buyer").first.id
@@ -17,7 +17,14 @@ class CompletingPeopleController < Wicked::WizardController
       save_industry_type
   	when :authenticate_license
       save_license
-    when :waiting_audit
+    # when :waiting_audit
+    end
+  end
+
+  def skip
+    case step
+    when :authenticate_license
+      skip_authenticate_license
     end
   end
 
@@ -28,17 +35,22 @@ class CompletingPeopleController < Wicked::WizardController
     end
 
     def save_license
-      # @user_auth = UserAuth.new(params[:user_auth].merge(user_id: @user_checking.user.id))
-      # if @user_auth.valid?
-      #   next_step
-      # end
-      # render_wizard
       @user_auth = UserAuth.new(params[:user_auth].merge(user_id: @user_checking.user.id))
       if @user_auth.valid?
         @user_checking.update_attributes(@user_auth.update_options)
-        render_wizard(@user_checking)
+
+        current_user.services << Service.where(service_type: @user_checking.service.service_type)
+
+        # render_wizard(@user_checking)
+        redirect_to '/'
       else
         render_wizard
       end
+    end
+
+    def skip_authenticate_license
+      user_checking = current_user.user_checking
+      current_user.services << Service.where(service_type: user_checking.service.service_type)
+      redirect_to '/'
     end
 end

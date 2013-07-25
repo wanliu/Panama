@@ -22,7 +22,7 @@
 					<p style="background-color: rgba(63, 184, 175, 0.91); min-height: 100px;"><%= @user_checking.rejected_reason.html_safe %></p>
 					<p>请您返回验证界面，完善您的资料，我们将尽快进行再次审核。</p>
 					<p>万流市场运营团队</p>
-					<%= link_to '返回填写信息', previous_wizard_path, :class => 'btn btn-primary' %>
+					<%= link_to '返回填写信息', wizard_path(:authenticate_license), :class => 'btn btn-primary' %>
 				</div>
 			</div>
 		</div>
