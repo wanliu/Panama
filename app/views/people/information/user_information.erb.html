@@ -1,0 +1,41 @@
+<div class='row-fluid'>
+  <div class='span7 widget'>
+    <section>
+      <header>
+        <h4><i class="icon-user"></i>个人信息</h4>
+      <header>
+      <div class='body'>
+        <% if can?(:manage, User) %>
+          <%= simple_form_for @shop_auth,
+              url: '/completing_shop/authenticate_license',
+              html: { method: :put, class: "form-horizontal" } do |f| %>
+            <div class="span12">
+            <%= f.input :shop_name, label: '商店名称' %>
+            <%= f.input :shop_photo, label: '商店图标', as: 'file' %>
+            <%= f.input :shop_url, label: '商店地址' %>
+            <%= f.input :shop_summary, label: '商店简介' %>
+            <hr>
+            <%= f.input :company_name, label: '营业店名' %>
+            <%= f.input :company_address, label: '营业地址' %>
+            <%= f.input :company_license, label: '营业执照号' %>
+            <%= f.input :company_license_photo, label: '营业执照照片', as: 'file' %>
+            <hr>
+            <%= f.input :ower_photo, label: '法人头像', as: 'file' %>
+            <%= f.input :ower_name, label: '法人姓名' %>
+            <%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
+            <%= f.input :phone, label: '联系电话' %>
+          <% end %>
+
+          <%= simple_form_for @user_auth,
+              url: '/completing_people/authenticate_license',
+              html: { method: :put, class: "form-horizontal" } do |f| %>
+            <%= f.input :ower_photo, label: '个人图片', as: 'file' %>
+            <%= f.input :ower_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
+            <%= f.input :ower_shenfenzheng_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
+            <%= f.input :phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+  </div>
+</div>

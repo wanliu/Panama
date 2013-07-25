@@ -3,49 +3,8 @@
   	<div class='dialog dialog_product'>
 	    <div class="page-header">
 	      <h2 class="page-title">请选择你经营的产品</h2>
-	    </div>  	
-	  	<div class='row-fluid'>
-			<div class="span2">
-				<%= render "category_selector" %>
-			</div> 
-			<div class="span3 relative">
-				<select multiple="multiple" name="product" class="product_list">
-				</select>
-				<div class='buttons'>
-					<%= link_to '#', :class => 'btn add_to_select' do %>
-						<%= icon 'arrow-right' %>
-					<% end %>
-					<%= link_to '#', :class => 'btn add_to_select' do %>
-						<%= icon 'arrow-left' %>
-					<% end %>
-				</div>
-			</div>
-			<div class="span7">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th><a href="#" class="select_all">全选</td>
-							<th>产品名</th>
-							<th>价格</th>
-							<th>库存</th>
-							<th>操作</th>
-						</tr>
-					</thead>
-					<tbody>
-						<script type='text/javascript'>
-			  		<% @products.each do |product| %>
-							new ProductView({model: <%=raw product.attributes.to_json %>})
-						<% end %>
-						</script>
-					</tbody>
-					<script type="text/javascript">
-						new WizardView({ el: $(".dialog_product") });
-						new ProductView({ el : $(".table") });
-					</script>
-					<a href="#" class="deleteAll">删除选中</a>
-				</table>
-			</div>
-		</div>
+	    </div> 
+	  	<%= render "add_product"%>
 		<div class='row-fluid'>
 			<%= form_for @user_checking, :url => wizard_path, :method => :put, class: "form-horizontal" do |f| %>
 				<div class="span12 form-actions">

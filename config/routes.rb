@@ -225,8 +225,9 @@ Panama::Application.routes.draw do
           get "additional_properties/:category_id",
             :to => "shops/products#additional_properties"
         end
-
       end
+
+      resources :shop_products, :controller => "shops/shop_products"
 
       resources :transactions, :controller => "shops/transactions" do
         member do

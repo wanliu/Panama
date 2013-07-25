@@ -30,6 +30,7 @@
 //= require topbar
 //= require right_sidebar
 
+
 root = window || this;
 
 var panle_modal = $("#login-modal");
