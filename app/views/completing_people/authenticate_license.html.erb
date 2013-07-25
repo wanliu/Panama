@@ -13,9 +13,9 @@
         <%= f.input :phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
         <div class="control-group">
           <div class="controls">
-            <button type="submit" class="btn">下一步</button>
-            <%= link_to '跳过', next_wizard_path, :class => 'btn btn-primary' %>
             <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+            <button type="submit" class="btn">下一步</button>
+            <%= link_to '跳过', next_wizard_path %>
           </div>
         </div>
       <% end %>
