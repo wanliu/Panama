@@ -64,7 +64,7 @@ class OrderRefundCard extends TransactionCardBase
   update_delivery_price: () ->
     url = @transaction.urlRoot
     price = @$input.val()
-    if /^\d*$/.test(price) || /^\d{0,10}(.\d*)$/.test(price)
+    if /^\d+.?\d+$/.test(price)
       old_price = @$rdp_panel.attr("data-value")
       if parseFloat(price) ==  parseFloat(old_price)
         @$rdp_panel.show()

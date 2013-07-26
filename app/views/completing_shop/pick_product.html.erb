@@ -3,8 +3,8 @@
   	<div class='dialog dialog_product'>
 	    <div class="page-header">
 	      <h2 class="page-title">请选择你经营的产品</h2>
-	    </div> 
-	  	<%= render "add_product"%>
+	    </div>
+	  	<%= render "add_products" %>
 		<div class='row-fluid'>
 			<%= form_for @user_checking, :url => wizard_path, :method => :put, class: "form-horizontal" do |f| %>
 				<div class="span12 form-actions">
