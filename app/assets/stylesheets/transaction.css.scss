@@ -81,6 +81,10 @@
 					float: right;
 				}
 
+				.close{
+					margin-left: 10px;
+				}
+
 				.transaction-number{
 					line-height: 30px;
 				}
@@ -121,7 +125,7 @@
 	$headerHeight: 100px;
 
 	.products {
-		padding: 20px;
+		padding: 10px 20px 0px 20px;
 	}
 
 	.total {
