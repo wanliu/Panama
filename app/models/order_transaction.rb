@@ -19,6 +19,7 @@ class OrderTransaction < ActiveRecord::Base
   scope :completed, -> { where("state in (?)", [:complete, :close, :refund]) }
   scope :uncomplete, -> { where("state not in (?)", [:complete, :close, :refund]) }
   scope :buyer, ->(person){ where(:buyer_id => person.id) }
+  scope :seller, ->(seller){ where(:seller_id => seller.id) }
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
 
@@ -35,6 +36,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :operator, class_name: "TransactionOperator"
   belongs_to :pay_manner
   belongs_to :delivery_manner
+  belongs_to :logistics_company
 
   has_many :operators, class_name: "TransactionOperator", dependent: :destroy
 
@@ -213,7 +215,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.valid_delivery_code?
+      order.valid_delivery?
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
@@ -308,7 +310,7 @@ class OrderTransaction < ActiveRecord::Base
     %w(delivery_failure
       waiting_delivery
       waiting_sign
-      complete).include?(_state)
+      complete).include?(state)
   end
 
   def close_state?
@@ -463,10 +465,13 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def valid_delivery_code?
+  def valid_delivery?
     if delivery_manner.express?
       if delivery_code.blank?
-        errors.add(:delivery_code, "没有发货运单号!")
+        errors.add(:delivery_code, "发货运单号没有!")
+      end
+      if logistics_company.nil?
+        errors.add(:logistics_company_id, "物流公司不存在！")
       end
     end
   end

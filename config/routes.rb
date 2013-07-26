@@ -49,7 +49,7 @@ Panama::Application.routes.draw do
     resources :order_refunds, :controller => "people/order_refunds" do
       member do
         post "event(/:event)", :to => "people/order_refunds#event", :as => :trigger_event
-        post 'delivery_code', :to => "people/order_refunds#delivery_code"
+        post 'update_delivery', :to => "people/order_refunds#update_delivery"
         get 'page', :to => "people/order_refunds#page"
         post 'update_delivery_price', :to => "people/order_refunds#update_delivery_price"
       end
@@ -243,7 +243,7 @@ Panama::Application.routes.draw do
           get "dialogue", :to => "shops/transactions#dialogue"
           post "send_message", :to => "shops/transactions#send_message"
           get "messages", :to => "shops/transactions#messages"
-          put "delivery_code", :to => "shops/transactions#delivery_code"
+          put "update_delivery", :to => "shops/transactions#update_delivery"
           get "print", :to => "shops/transactions#print"
         end
       end

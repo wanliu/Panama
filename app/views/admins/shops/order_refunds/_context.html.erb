@@ -1,4 +1,4 @@
-<% seller = refund.order.seller %>
+<% buyer = refund.order.buyer %>
 <div id="refund<%=refund.id %>"
   class="transaction refund-<%=refund.id %>-<%=refund.state %>"
   state-id='<%=refund.id %>'
@@ -11,13 +11,13 @@
     <div class="transaction-header">
 
       <div class="avatar">
-        <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
+        <%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
       </div>
 
       <div class="container-fluid info-header">
         <div class="page-header">
           <h1>
-            <%= seller.name %>
+            <%= buyer.login %>
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <%=render "state_button", :refund => refund %>
           </h1>

@@ -56,9 +56,9 @@
       <div class="dialog" id="purchase-forms">
         <%= simple_form_for product_item, :url => join_activity_path do |f| %>
           <div class="modal-body">
-              <%= f.input :price, :readonly => true %>
-              <%= f.input :title, :as => :hidden %>
-              <%= f.input :product_id, :as => :hidden %>
+              <%= hidden_field 'activity', 'id', :value => activity.id %>
+              <%= f.label :price %>
+              <input type='text' value="<%=activity.activity_price %>"  readonly=true />
               <%= f.input :amount %>
           </div>
           <div class="modal-footer">
@@ -73,7 +73,7 @@
               <a class="btn like-count" href="#">{{like}}{{^like}}0{{/like}}</a>
               {{/liked}}
             </div>
-            <div class="btn-group">           
+            <div class="btn-group">
               <button class="btn btn-danger" type="submit" name="join">
                 <%= icon(:'shopping-cart', :white) + " 参与" %>
               </button>

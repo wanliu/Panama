@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 class People::OrderRefundsController < People::BaseController
   before_filter :login_required
 
@@ -26,17 +28,22 @@ class People::OrderRefundsController < People::BaseController
   def update_delivery_price
     @refund = current_user_refunds.find(params[:id])
     respond_to do |format|
-      if @refund.update_attributes(:delivery_price => params[:delivery_price])
-        format.json{ head :no_content }
+      if @refund.state == "apply_failure"
+        if @refund.update_attributes(:delivery_price => params[:delivery_price])
+          format.json{ head :no_content }
+        else
+          format.json{ render :json => draw_errors_message(@refund), :status => 403 }
+        end
       else
-        format.json{ render :json => draw_errors_message(@refund), :status => 403 }
+        format.json{ render :json => ["这状态不能修改运费！"], :status => 403 }
       end
     end
   end
 
-  def delivery_code
+  def update_delivery
     @refund = current_user_refunds.find_by(:id => params[:id])
     @refund.delivery_code = params[:delivery_code]
+    @refund.logistics_company = LogisticsCompany.find(params[:logistics_company_id])
     respond_to do |format|
       if @refund.save
         format.json{ head :no_content }

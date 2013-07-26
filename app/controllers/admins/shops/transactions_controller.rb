@@ -2,16 +2,14 @@
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def pending
-    transactions = OrderTransaction.where("seller_id=? and state not in (?)",
-      current_shop.id, [:complete, :close]).order("created_at desc")
+    transactions = OrderTransaction.seller(current_shop).uncomplete.order("created_at desc")
     @untransactions = transactions.where(:operator_state => false)
     @transactions = transactions.where(:operator_state => true).joins(:operator)
     .where("transaction_operators.operator_id=?", current_user.id)
   end
 
   def complete
-    transactions = OrderTransaction.where(:seller_id => current_shop.id).order("created_at desc")
-    @transactions = transactions.where(:state => "complete")
+    @transactions = OrderTransaction.seller(current_shop).completed.order("created_at desc")
   end
 
   def page
@@ -56,11 +54,12 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
-  def delivery_code
+  def update_delivery
     @transaction = OrderTransaction.find(params[:id])
     respond_to do |format|
       if @transaction.state_name == :waiting_delivery
         @transaction.delivery_code = params[:delivery_code]
+        @transaction.logistics_company_id = params[:logistics_company_id]
         if @transaction.save
           format.json{ head :no_content }
         else
