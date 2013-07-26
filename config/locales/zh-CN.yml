@@ -288,13 +288,14 @@ zh-CN:
         transfer_person: 汇款人
         transfer_bank: 汇款银行
         state: 状态
-        total: 总金额
+        total: 小计
         operator_state: 已接单
         delivery_price: 配送费用
         delivery_code: 配送地邮编
         created_at: 创建时间
         updated_at: 更新时间
         action_link: 操作
+        stotal: 总金额
       category:
         id: 编号
         name: 分类名
@@ -325,7 +326,15 @@ zh-CN:
         name: 名称
         title: 标题
         property: 值
-
+      order_refund:
+        id: 编号
+        order_transaction: 订单
+        total: 总金额
+        state: 状态
+        buyer: 买家
+        seller: 卖家
+        decription: "退货描述"
+        action_link: "操作"
   mongoid:
     models:
       content: "内容"
@@ -357,6 +366,7 @@ zh-CN:
   employees: 雇员
   communities: 社区
   order_refunds: 退货
+  shop_products: 商品
 
   shop_group:
     sale: "销售组"

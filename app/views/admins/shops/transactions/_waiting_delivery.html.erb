@@ -1,35 +1,21 @@
 <div class="container-fluid">
   <% if transaction.delivery_manner.express? %>
   <div class="row-fluid">
+    <div class='span2 title'>物流公司</div>
+    <div class='span4'>
+      <select name='logistics_company_id' class='span12'>
+        <% LogisticsCompany.all.each do |lc| %>
+        <option value="<%=lc.id %>"><%=lc.name %></option>
+        <% end %>
+      </select>
+    </div>
     <div class='span2 title'>
-      <label class="control-label">快递单号：
-      </label>
+      快递单号
     </div>
     <div class='span4'>
-        <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code span12' />
+      <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code span12' />
     </div>
   </div>
-  <div class="row-fluid">
-    <div class="span2 title">
-      <label class="control-label">配送方式：
-      </label>
-    </div>
-    <div class="span4">
-      <label class="control-label">
-      <%= transaction.delivery_type.nil? ? "暂无" : transaction.delivery_type.name %>
-      </label>
-    </div>
-    <div class="span2 title">
-      <label class="control-label">配送费用：
-      </label>
-    </div>
-    <div class="span4">
-      <label class="control-label">
-        <%= number_to_currency(transaction.delivery_price) %>
-      </label>
-    </div>
-  </div>
-  <% end %>
   <div class="row-fluid">
     <div class='span2 title'>运输方式</div>
     <div class='span4'>
@@ -40,9 +26,36 @@
       <%=transaction.pay_manner.name %>
     </div>
   </div>
+  <div class="row-fluid">
+    <div class="span2 title">
+      配送方式
+    </div>
+    <div class="span4">
+      <label class="control-label">
+      <%= transaction.delivery_type.nil? ? "暂无" : transaction.delivery_type.name %>
+      </label>
+    </div>
+    <div class="span2 title">
+      配送费用
+    </div>
+    <div class="span4">
+      <span class='dprice_panel' data-value="<%=transaction.delivery_price %>">
+        <%= number_to_currency(transaction.delivery_price) %>
+      </span>
+      <% if transaction.pay_manner.cash_on_delivery? %>
+      <span class='dprice_edit_panel'>
+        <input type='text' class='span4' name='delivery_price' value="<%=transaction.delivery_price %>" />
+      </span>
+      <a href='javascript:void(0)' class='dprice_edit'>
+        <i class='icon-edit'></i>
+      </a>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
   <div class='row-fluid'>
     <div class='span2 title'>
-      送货地址：
+      送货地址
     </div>
     <div class='span10'>
       <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
@@ -56,7 +69,5 @@
     </div>
   </div>
   <p class="lead">请打印出交易清单, 请准备好你的商品, 并联系好您的物流, 再点击确认你的发货状态</p>
-<%= render "products", :transaction => transaction %>
+  <%= render "products", :transaction => transaction %>
 </div>
-<script type="text/javascript">
-</script>

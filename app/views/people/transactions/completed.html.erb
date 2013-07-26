@@ -11,3 +11,15 @@
   <% end %>
   </div>
 </div>
+<script type='text/javascript' >
+  $(document).ready(function(){
+    $(".transaction").each(function(i, elem){
+      var card = new TransactionCard({
+        el: elem,
+        realtime: {
+          url: '<%= faye_server_uri %>',
+          token: '<%= token %>' }
+        });
+    });
+  })
+</script>

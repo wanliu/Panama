@@ -15,6 +15,7 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
   def event
     @refund = current_shop_refunds.find_by(:id => params[:id])
     if @refund.seller_fire_events!(params[:event])
+      @refund.notice_change_buyer(params[:event])
       render :partial => "context", :locals => {refund: @refund}
     end
   end

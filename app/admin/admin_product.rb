@@ -1,6 +1,7 @@
 #encoding: utf-8
 ActiveAdmin.register Product, :title => "产品" do
   config.clear_action_items!
+  filter :id
   filter :category
   filter :shop_id
   filter :shops_category_id
@@ -19,6 +20,7 @@ ActiveAdmin.register Product, :title => "产品" do
 
 
   index do
+    column :id
     column :name
     column :properties do |product|
       properties_string = product.properties.map do |prop|

@@ -77,25 +77,31 @@
 
 				small{
 					font-size: 20px;
+					color: #999999;
+					float: right;
 				}
 
-				.controls {
-					display: inline-block;
-					margin-right: 20px;
-					form{
-						display: inline-block;
-						margin-bottom: 0px;
-					}
+				.close{
+					margin-left: 15px;
+				}
+
+				.transaction-number{
+					line-height: 30px;
+				}
+
+				.state-display{
+					font-size:20px;
+					font-weight:none;
+					/*margin-right: 20px;*/
 				}
 				.progress {
-					margin-top: 25px;
+					margin-top: 15px;
 					margin-bottom: 0px;
 				}
 
 				.state-progress {
 					position: relative;
-					margin-top: 30px;
-					margin-bottom: 10px;
+					margin-right: 10px;
 				}
 
 				.state-position {
@@ -109,11 +115,6 @@
 						color: $gray;
 					}
 				}
-
-				.state_text{
-					margin-right:10px;
-					font-size:22px
-				}
 			}
 		}
 
@@ -124,7 +125,7 @@
 	$headerHeight: 100px;
 
 	.products {
-		padding: 20px;
+		/*padding: 10px 20px 10px 20px;*/
 	}
 
 	.total {
@@ -140,9 +141,19 @@
 		// border-right: 1px solid $tableBorder;
 		// border-bottom: 1px solid $tableBorder;
 		// padding: 0 20px 20px 20px;
+		.print_display{
+			height: 0px;
+			width: 0px;
+			overflow: hidden;
+		}
 
 		td {
 			vertical-align: middle;
+		}
+
+		td.stotal{
+			text-align: right;
+			font-size: 18px;
 		}
 
 		.returned_panel{
@@ -260,6 +271,6 @@
 
 .connect {
 	font-size:16px;
-	display:none; 
+	display:none;
 	margin-left:200px;
 }

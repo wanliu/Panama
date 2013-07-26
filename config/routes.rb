@@ -19,6 +19,10 @@ Panama::Application.routes.draw do
 
   resources :people do
 
+    member do
+      get "show_bill"
+    end
+
     resources :transactions, :controller => "people/transactions" do
       member do
         get "page", :to => "people/transactions#page"
@@ -33,6 +37,7 @@ Panama::Application.routes.draw do
         post "refund", :to => "people/transactions#refund"
         post "delay_sign", :to => "people/transactions#delay_sign"
         post 'transfer', :to => "people/transactions#transfer"
+        get 'print', :to => "people/transactions#print"
       end
 
       collection do
@@ -44,8 +49,9 @@ Panama::Application.routes.draw do
     resources :order_refunds, :controller => "people/order_refunds" do
       member do
         post "event(/:event)", :to => "people/order_refunds#event", :as => :trigger_event
-        post 'delivery_code', :to => "people/order_refunds#delivery_code"
+        post 'update_delivery', :to => "people/order_refunds#update_delivery"
         get 'page', :to => "people/order_refunds#page"
+        post 'update_delivery_price', :to => "people/order_refunds#update_delivery_price"
       end
     end
 
@@ -225,17 +231,21 @@ Panama::Application.routes.draw do
           get "additional_properties/:category_id",
             :to => "shops/products#additional_properties"
         end
-
       end
+
+      resources :shop_products, :controller => "shops/shop_products"
 
       resources :transactions, :controller => "shops/transactions" do
         member do
+          get "page", :to => "shops/transactions#page"
           post "event(/:event)", :to => "shops/transactions#event", :as => :trigger_event
           post "dispose", :to => "shops/transactions#dispose"
           get "dialogue", :to => "shops/transactions#dialogue"
           post "send_message", :to => "shops/transactions#send_message"
           get "messages", :to => "shops/transactions#messages"
-          put "delivery_code", :to => "shops/transactions#delivery_code"
+          put "update_delivery", :to => "shops/transactions#update_delivery"
+          get "print", :to => "shops/transactions#print"
+          put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
         end
       end
 

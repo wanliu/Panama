@@ -81,11 +81,17 @@ $left-side-admin-width: 160px;
   }
 }
 
-.transaction-number {
-  margin-top: -10px;
-  margin-bottom: -22px;
-}
-
 .resource-panel.well{
   color: black;
+}
+
+.transaction-body{
+
+  .dprice_edit_panel{
+    display: none;
+  }
+
+  .dprice_edit{
+    margin-left: 10px;
+  }
 }

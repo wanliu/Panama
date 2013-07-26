@@ -11,16 +11,22 @@
 #  refuse_reason: 拒绝理由
 #  delivery_price: 退运费
 #  delivery_code: 运单号
+#  delivery_manner: 运输方式
 class OrderRefund < ActiveRecord::Base
   include MessageQueue::OrderRefund
 
-  attr_accessible :decription, :order_reason_id, :delivery_price
+  scope :avaliable, where("state not in ('apply_refund', 'failure')")
+
+  attr_accessible :decription, :order_reason_id, :delivery_price, :delivery_manner
 
   belongs_to :order_reason
   belongs_to :order, :foreign_key => "order_transaction_id", :class_name => "OrderTransaction"
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "User"
+  belongs_to :delivery_manner
+  belongs_to :logistics_company
+
   has_many :items, class_name: "OrderRefundItem", dependent: :destroy
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
 
@@ -31,8 +37,9 @@ class OrderRefund < ActiveRecord::Base
     update_buyer_and_seller_and_operate
   end
 
-  after_create :create_state_detail, :valid_shipped_order_state?, :notify_shop_refund
+  after_create :change_order_state, :notify_shop_refund, :create_state_detail
 
+  validate :valid_shipped_order_state?, :valid_order_already_exists?, :valid_delivery_manner?, :on => :create
   state_machine :state, :initial => :apply_refund do
 
     event :shipped_agree do
@@ -68,11 +75,11 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition :apply_refund => :apply_failure do |refund, transition|
       refund.valid_refuse_reason?
+      refund.rollback_order_state if refund.valid?
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
       refund.validate_shipped_order_state?
-      refund.change_order_waiting_refund_state
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
@@ -83,18 +90,12 @@ class OrderRefund < ActiveRecord::Base
       end
     end
 
-    after_transition  [:apply_failure, :apply_refund, :apply_expired] => [:waiting_delivery ,:complete],
-                      :apply_refund => :apply_failure,
-                      :waiting_sign => :complete do |refund, transition|
-      refund.notice_change_buyer(transition.to_name, transition.event)
-    end
-
-    after_transition :waiting_delivery => :waiting_sign do |refund, transition|
-      refund.notice_change_seller(transition.to_name, transition.event)
+    after_transition :apply_failure => [:complete, :waiting_delivery] do |refund, transition|
+      refund.change_order_refund_state
     end
 
     before_transition :waiting_delivery => :waiting_sign do |refund, transition|
-      refund.valid_delivery_code?
+      refund.valid_delivery?
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
@@ -121,32 +122,42 @@ class OrderRefund < ActiveRecord::Base
     refunds
   end
 
+  def change_order_state
+    order.fire_events!(:returned)
+    order.notice_change_buyer(:returned)
+    order.notice_change_seller(:returned)
+  end
+
   def current_state_detail
     state_details.find_by(:state => state)
   end
 
-  def change_order_waiting_refund_state
-    order.seller_fire_event!(:returned)
-  end
-
   def change_order_refund_state
-    if order.valid_refund?
-      unless order.seller_fire_event!(:returned)
-        errors.add(:state, "确认退货出错！")
-      end
+    unless order.fire_events!(:returned)
+      errors.add(:state, "确认退货出错！")
     end
   end
 
-  def notice_change_buyer(name, event_name)
-    token = buyer.try(:im_token)
-    faye_send("/events/#{token}/order-refund-#{id}-buyer",
-      :name => name, :event => "refresh_#{event_name}")
+  def notice_change_buyer(event_name)
+    ename = event_name.to_s
+    if %w(shipped_agree unshipped_agree refuse sign).include?(ename)
+      token = buyer.try(:im_token)
+      faye_send("/events/#{token}/order-refund-#{id}-buyer",
+        :event => "refresh_#{ename}")
+    end
   end
 
-  def notice_change_seller(name, event_name)
-    token = operator.try(:im_token)
-    faye_send("/events/#{token}/order-refund-#{id}-seller",
-      :name => name, :event => "refresh_#{event_name}")
+  def notice_change_seller(event_name)
+    ename = event_name.to_s
+    if %w(delivered).include?(ename)
+      token = operator.try(:im_token)
+      faye_send("/events/#{token}/order-refund-#{id}-seller",
+        :event => "refresh_#{ename}")
+    end
+  end
+
+  def rollback_order_state
+    order.fire_events!("rollback_#{order_state}")
   end
 
   def handle_detail_return_money
@@ -155,10 +166,6 @@ class OrderRefund < ActiveRecord::Base
 
   def handle_product_item
     order.refund_handle_product_item(refund_product_ids)
-  end
-
-  def self.avaliable
-    where("state not in ('apply_refund', 'failure')")
   end
 
   def seller_fire_events!(event)
@@ -173,6 +180,7 @@ class OrderRefund < ActiveRecord::Base
     self.buyer_id = order.try(:buyer_id)
     self.seller_id = order.try(:seller_id)
     self.operator_id = order.operator.try(:operator_id)
+    self.order_state = order.state
   end
 
   def create_state_detail
@@ -188,10 +196,6 @@ class OrderRefund < ActiveRecord::Base
     _items = [_items] unless _items.is_a?(Array)
     _items.each do |item_id|
       product_item = order.items.find_by(:id => item_id, :refund_state => true)
-      if product_been_refunded?(product_item)
-        items.clear
-        return false
-      end
       if product_item.present?
         items.create(
           :title => product_item.title,
@@ -223,19 +227,19 @@ class OrderRefund < ActiveRecord::Base
 
   #卖家退款
   def seller_refund_money
-    if order.complete_state?
+    if order_complete_state?
       MoneyBill.transaction do
         buyer_recharge
         seller_payment
       end
-    elsif order.waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
+    elsif order_waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
       buyer_recharge
     end
   end
 
-  def valid_delivery_code?
-    if delivery_code.blank?
-      errors.add(:delivery_code, "发货单号不能为空！")
+  def valid_delivery?
+    if delivery_manner.express? && (delivery_code.blank? || logistics_company.nil? )
+      errors.add(:delivery_code, "发货单号或者物流公司不能为空！")
     end
   end
 
@@ -245,30 +249,57 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
+  def order_waiting_sign_state?
+    "waiting_sign" == order_state
+  end
+
+  def order_complete_state?
+    "complete" == order_state
+  end
+
+  def shipped_state?
+    %w(waiting_sign complete).include?(order_state)
+  end
+
+  def unshipped_state?
+    %w(delivery_failure waiting_delivery).include?(order_state)
+  end
+
   def validate_shipped_order_state?
-    unless order.shipped_state?
+    unless shipped_state?
       errors.add(:state, "卖家还没有发货!")
     end
   end
 
   def valid_unshipped_order_state?
-    unless order.unshipped_state?
+    unless unshipped_state?
       errors.add(:state, "卖家已经发送了!")
     end
   end
 
   # 检查本次被退货的商品是否已经在退货中
-  def product_been_refunded?(product_item)
-    order.refunds.any? do |refund|
-      refund.items.any? { |item| item.product_id == product_item.product_id }
-    end
-  end
-
+  # def product_been_refunded?(product_item)
+  #   order.refunds.any? do |refund|
+  #     refund.items.any? { |item| item.product_id == product_item.product_id }
+  #   end
+  # end
 
   private
   def valid_shipped_order_state?
     unless order.order_refund_state?
       errors.add(:order_transaction_id, "订单属于不能退货状态！")
+    end
+  end
+
+  def valid_delivery_manner?
+    if shipped_state? && delivery_manner.nil?
+      errors.add(:delivery_manner_id, "请选择配送方式！")
+    end
+  end
+
+  def valid_order_already_exists?
+    if order.refunds.count > 0
+      errors.add(:order_transaction_id, '订单已经有退货了！')
     end
   end
 

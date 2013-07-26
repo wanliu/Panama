@@ -2,6 +2,7 @@
 #= require 'backbone'
 #= require 'lib/transaction_card_base'
 #= require 'lib/state-machine'
+#= require 'lib/order_export'
 
 exports = window || @
 class ShopTransactionCard extends TransactionCardBase
@@ -17,6 +18,8 @@ class ShopTransactionCard extends TransactionCardBase
     "click .detail"           : "toggleItemDetail"
     "click .message-toggle"   : "toggleMessage"
     "keyup .delivery_code"    : "filter_delivery_code"
+    "click .dprice_edit"      : "show_dprice_edit"
+    "blur input:text[name=delivery_price]" : "update_dprice"
 
   states:
     initial: 'none'
@@ -33,6 +36,11 @@ class ShopTransactionCard extends TransactionCardBase
       { name: 'refresh_back',                 from: 'waiting_paid',      to: 'order'         },
       { name: 'refresh_back',                 from: 'waiting_delivery',  to: 'waiting_paid' },
       { name: 'refresh_back',                 from: 'waiting_sign',      to: 'waiting_delivery' },
+      { name: 'refresh_returned',             from: 'waiting_refund',    to: 'refund' },
+      { name: 'refresh_returned',             from: 'delivery_failure',  to: 'waiting_refund' },
+      { name: 'refresh_returned',             from: 'waiting_delivery',  to: 'waiting_refund' },
+      { name: 'refresh_returned',             from: 'waiting_sign',      to: 'waiting_refund' },
+      { name: 'refresh_returned',             from: 'complete',          to: 'waiting_refund' },
       { name: 'delivered',                    from: 'waiting_delivery',  to: 'waiting_sign' }
     ]
 
@@ -42,7 +50,6 @@ class ShopTransactionCard extends TransactionCardBase
 
   getNotifyName: () ->
     super + "-seller"
-
 
   toggleItemDetail: (event) ->
     @$(".item-details").slideToggle()
@@ -78,21 +85,58 @@ class ShopTransactionCard extends TransactionCardBase
 
   save_delivery_code: (cb) ->
     input = @$("input:text.delivery_code")
-    if input.length > 0
+    select = @$("select[name=logistics_company_id]")
+    if input.length > 0 && select.length > 0
       delivery_code = input.val()
+      logistics_company_id = select.val()
       urlRoot = @transaction.urlRoot
       @transaction.fetch(
-        url: "#{urlRoot}/delivery_code",
+        url: "#{urlRoot}/update_delivery",
         type: "PUT",
-        data: {delivery_code: delivery_code},
+        data: {delivery_code: delivery_code, logistics_company_id: logistics_company_id},
         success: cb,
-        error: () ->
+        error: () =>
           @notify("错误信息", '请填写发货单号!', "error")
           @alarm()
           @transition.cancel()
       )
     else
      cb()
+
+  show_dprice_edit: () ->
+    @$dprice_panel = @$(".dprice_panel")
+    @$dprice_edit_panel = @$(".dprice_edit_panel")
+    @$dprice_input = @$("input:text[name=delivery_price]")
+
+    @$dprice_panel.hide()
+    @$dprice_edit_panel.show()
+    @$dprice_input.focus()
+
+  update_dprice: () ->
+    old_price = @$dprice_panel.attr("data-value")
+    new_price = @$dprice_input.val()
+
+    unless /^\d+.?\d+$/.test(new_price)
+      pnotify(title: "错误信息", text: "请输入正确运费！", type: "error")
+      return
+
+    if parseFloat(old_price) isnt parseFloat(new_price)
+      @transaction.fetch(
+        url: "#{@transaction.urlRoot}/update_delivery_price",
+        data: {delivery_price: new_price},
+        type: "PUT",
+        success: () =>
+          price = @$dprice_panel.text().trim()
+          price = price.replace(price.substring(1, price.length), " #{new_price}")
+          @$dprice_panel.html(price)
+          @$dprice_panel.show()
+          @$dprice_edit_panel.hide()
+      )
+    else
+      @$dprice_panel.show()
+      @$dprice_edit_panel.hide()
+
+
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

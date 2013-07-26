@@ -1,30 +1,38 @@
 <div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span2">
-      退货原因
-    </div>
-    <div class="span2">
-      <%= refund.order_reason.name %>
-    </div>
-    <div class='span1'>
+  <div class='row-fluid'>
+    <div class='span2'>运输方式</div>
+    <div class='span4'><%=refund.delivery_manner.name %></div>
+    <div class='span2'>
       退运费
     </div>
-    <div class='span2'>
+    <div class='span4'>
       <%= number_to_currency refund.delivery_price %>
     </div>
-    <div class="span2">
-      退货总金额
-    </div>
-    <div class="span2">
-      <%= number_to_currency(refund.stotal) %>
-    </div>
   </div>
+  <% if refund.delivery_manner.express? %>
   <div class="row-fluid">
+    <div class='span2'>物流公司</div>
+    <div class='span4'>
+      <select name='logistics_company_id' class='span12'>
+        <% LogisticsCompany.all.each do | dt| %>
+        <option value="<%=dt.id %>"><%=dt.name %></option>
+        <% end %>
+      </select>
+    </div>
     <div class="span2">
       发货单号
     </div>
-    <div class="span3">
-      <input type='text' name='delivery_code' class='delivery_code' />
+    <div class="span4">
+      <input type='text' name='delivery_code' class='delivery_code span12' />
+    </div>
+  </div>
+  <% end %>
+  <div class='row-fluid'>
+    <div class="span2">
+      退货原因
+    </div>
+    <div class="span10">
+      <%= refund.order_reason.name %>
     </div>
   </div>
 
@@ -32,7 +40,7 @@
     <div class="span2">
       退货说明
     </div>
-    <div class="span7">
+    <div class="span10">
       <%= refund.decription %>
     </div>
   </div>

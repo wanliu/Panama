@@ -19,6 +19,7 @@
 @import "attachment_uploader";
 @import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
 @import "./lib/notify/pnotify";
+@import 'order_refund';
 
 #people-sidebar.affix-top {
   position: fixed;
@@ -173,6 +174,15 @@
     }
   }
 
+  .address-form{
+    .controls, .controls-row{
+      margin-left: 90px;
+    }
+    .control-label{
+      width: 80px;
+    }
+  }
+
   .paymanner{
 
     .paymanner_panel{
@@ -218,7 +228,12 @@
 
             .bank-wrapper{
               margin-top: 10px;
-              margin-left: 30px;
+              margin-left: 18px;
+
+              .ta_number{
+                font-size: 18px;
+                font-weight: bold;
+              }
             }
           }
         }
@@ -317,11 +332,6 @@
   .product-comment{
     @include panel-background;
   }
-}
-
-.transaction-number {
-  margin-top: -10px;
-  margin-bottom: -22px;
 }
 
 .pinner-icon{

@@ -85,8 +85,8 @@ class StateProgress extends Backbone.View
         to: "waiting_audit"
       },
       waiting_audit: {
-        class_badge: "badge-warning",
-        class_progress: "bar-warning",
+        class_badge: "badge-info",
+        class_progress: "bar-info",
         to: "waiting_delivery"
       },
       waiting_audit_failure: {
@@ -104,7 +104,6 @@ class StateProgress extends Backbone.View
       apply_failure: {
         class_badge: "badge-warning",
         class_progress: "bar-warning",
-        to: 'close'
       },
       apply_expired: {
         class_badge: "badge-inverse",
@@ -198,18 +197,12 @@ class StateProgress extends Backbone.View
       false
 
   badge_left: (index) ->
-    if @last_status(index)
-      {right: "0px"}
-    else
-      {left: "#{(@progress_width() * index) - (@badge_width / 2)}px"}
+    {left: "#{(100 / (@states.length-1)) * index}%"}
 
   bar_width: () ->
     100 / (@states.length - 1)
 
   progress_width: () ->
     @$el.width() / (@states.length - 1)
-
-  last_status: (i) ->
-    if @states.length-1 is i then true else false
 
 window.StateProgress = StateProgress

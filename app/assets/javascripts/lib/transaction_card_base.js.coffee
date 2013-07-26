@@ -6,195 +6,195 @@
 exports = window || @
 
 class Transaction extends Backbone.Model
-    set_url: (url) ->
-        @urlRoot = url
+  set_url: (url) ->
+    @urlRoot = url
 
 class TransactionCardBase extends AbstructStateView
 
-    initialize:(@option) ->
-        @options['initial']   ?= @$el.attr('state-initial')
-        @options['id']        ?= @$el.attr('state-id')
-        @options['url']       ?= @$el.attr('state-url')
-        @options['event_url'] ?= @$el.attr('state-event-url')
-        @options['url_root'] ?= @$el.attr('url-root')
+  initialize:(@option) ->
+    @options['initial']   ?= @$el.attr('state-initial')
+    @options['id']        ?= @$el.attr('state-id')
+    @options['url']       ?= @$el.attr('state-url')
+    @options['event_url'] ?= @$el.attr('state-event-url')
+    @options['url_root'] ?= @$el.attr('url-root')
 
-        @transaction = new Transaction()
-        @transaction.set_url(@options['url_root'])
+    @transaction = new Transaction()
+    @transaction.set_url(@options['url_root'])
 
-        @rt_options = @options['realtime']
-        if @rt_options.url?
-            @realtime = Realtime.client(@rt_options.url)
-            @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
-        super
-        # @$el.bind('click', @activeThis)
+    @rt_options = @options['realtime']
+    if @rt_options.url?
+      @realtime = Realtime.client(@rt_options.url)
+      @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
+    super
+    # @$el.bind('click', @activeThis)
 
-    countdown: () ->
-        @$(".clock").kkcountdown({
-            dayText         : '天',
-            daysText        : '天',
-            hoursText       : '时',
-            minutesText     : '分',
-            secondsText     : '秒',
-            displayZeroDays : true,
-            # callback      : test,
-            oneDayClass     : 'one-day'
-        })
+  countdown: () ->
+    @$(".clock").kkcountdown({
+      dayText         : '天',
+      daysText        : '天',
+      hoursText       : '时',
+      minutesText     : '分',
+      secondsText     : '秒',
+      displayZeroDays : true,
+      # callback      : test,
+      oneDayClass     : 'one-day'
+    })
 
-    getNotifyName: () ->
-        "transaction-#{@options['id']}"
+  getNotifyName: () ->
+    "transaction-#{@options['id']}"
 
-    clickAction: (event) ->
-        btn = $(event.target)
-        if !btn.hasClass("disabled")
-            event_name = btn.attr('event-name')
-            if @[event_name]
-                try
-                    @[event_name].call(@)
-                catch error
-                    @notify("错误信息", error, "error")
-            else
-                @notify("错误信息", "状态机错误！无权进行此项操作", "error")
-        false
-
-
-    stateChange: (data) ->
-        console.log data.name
-        event_name = data.event || "refresh"
-        console.log event_name
-        @[event_name].call(@)
-        $.get @url(), (data) =>
-            @effect 'flipInY'
-
-            setTimeout () =>
-                # @$el.wrap("<p>")
-                # p = @$el.parent()
-                # p.html(data)
-                # @$el.unwrap()
-                html = $(data)
-                @$el.replaceWith(html)
-                @$el = html
-
-                @delegateEvents()
-                # .html(data).unwrap()
-            , 300
-
-            # @$el.addClass("animated flipInY")
+  clickAction: (event) ->
+    btn = $(event.target)
+    if !btn.hasClass("disabled")
+      event_name = btn.attr('event-name')
+      if @[event_name]
+        try
+          @[event_name].call(@)
+        catch error
+          @notify("错误信息", error, "error")
+      else
+        @notify("错误信息", "状态机错误！无权进行此项操作", "error")
+    false
 
 
-    closeThis: (event) ->
-        if confirm("要取消这笔交易吗?")
-            @transaction.fetch({
-                url: @transaction.urlRoot,
-                type: "DELETE",
-                success: (model, data) =>
-                    $(@el).remove()
-            })
-            ###
-            if Modernizr.cssanimations?
-                $(@el).addClass("animated fadeOutUp")
-                setTimeout () =>
-                    @$el.hide()
-                , 1300
-            else
-                $(@el).fadeOut()
-            ###
+  stateChange: (data) ->
+    event_name = data.event || "refresh"
+    console.log event_name
+    @[event_name].call(@)
+    $.get @url(), (data) =>
+      @effect 'flipInY'
 
-    eventUrl: (event) ->
-        @options['event_url'] + "/#{event}"
+      setTimeout () =>
+        # @$el.wrap("<p>")
+        # p = @$el.parent()
+        # p.html(data)
+        # @$el.unwrap()
+        html = $(data)
+        @$el.replaceWith(html)
+        @$el = html
 
-    url: () ->
-        @options['url']
+        @delegateEvents()
+        @countdown()
+        # .html(data).unwrap()
+      , 300
 
-    slideBeforeEvent: (event) ->
-        @slideEvent(event, 'left')
-
-    slideAfterEvent: (event) ->
-        @slideEvent(event, 'right')
-
-    slideEvent: (event, direction = 'right') ->
-        $.post @eventUrl(event), (data) =>
-            @slidePage(data, direction)
-        .fail (data) =>
-            if data.status isnt 500
-                error_massage = JSON.parse(data.responseText).message
-                @notify("错误信息", error_massage, "error")
+      # @$el.addClass("animated flipInY")
 
 
-    slidePage: (page, direction = 'right') ->
-        $side1 = $("<div class='slide-1'></div>")
-        $side2 = $("<div class='slide-2'></div>")
-
-        @$el.find("iframe").remove()
-        @$el.wrap($("<div class='slide-box'></div>"))
-        @$el.wrap($("<div class='slide-container'></div>"))
-        @$el.wrap($side1)
-        $slideBox = @$el.parents(".slide-box")
-        $slideContainer = @$el.parents(".slide-container")
-        $slideContainer.append($side2)
-        $side2.html(page)
-
-        iframe = $side2.find("iframe").remove()
-        $side1 = @$el
-
-
-        height =  Math.max($side2.height(), $side1.height())
-        length = $slideBox.width()
-        width = @$el.width()
-
-        $slideBox.height(height)
-        $slideBox.width(width)
-        $slideContainer.width( width * 2)
-        $slideContainer.height( height )
-
-        $side1.width(width)
-              .height($side1.height())
-
-        overSlide = () =>
-            $side1.unwrap()
-                  .remove()
-            @el = @$el = $side2.find(">.transaction")
-            @delegateEvents()
-            $side2.find(">.transaction")
-                  .unwrap()
-                  .unwrap()
-                  .unwrap()
-            @$el.find(".transaction-footer").append(iframe)
-
-        if direction == 'right'
-            $side1.css('float', 'left')
-            $side2.width(width)
-                  .css('float', 'left')
-            $slideBox.animate { scrollLeft: length }, "slow", overSlide
-        else
-            $side1.css('float', 'right')
-            $side2.width(width)
-                  .css('float', 'left')
-            $slideBox.scrollLeft(length)
-            $slideBox.animate { scrollLeft: -length }, "slow", overSlide
-
-    effect: (effect_name, handle) ->
-        if Modernizr.cssanimations?
-            classies = "animated #{effect_name}"
-            @$el.addClass(classies)
-            setTimeout () =>
-                @$el.removeClass(classies)
-            , 1300
-        else
-            handle.call(@) if _(handle).isFunction()
-
-    alarm: () ->
-        effect = "bounce"
-        @$el.removeClass("animated #{effect}").addClass("animated #{effect}");
-        wait = window.setTimeout () =>
-            @$el.removeClass("animated #{effect}")
+  closeThis: (event) ->
+    if confirm("要取消这笔交易吗?")
+      @transaction.fetch({
+        url: @transaction.urlRoot,
+        type: "DELETE",
+        success: (model, data) =>
+          $(@el).remove()
+      })
+      ###
+      if Modernizr.cssanimations?
+        $(@el).addClass("animated fadeOutUp")
+        setTimeout () =>
+          @$el.hide()
         , 1300
+      else
+        $(@el).fadeOut()
+      ###
 
-    notify: (title, message, type) ->
-        $.pnotify({
-          title: title,
-          text: message,
-          type: type
-        })
+  eventUrl: (event) ->
+    @options['event_url'] + "/#{event}"
+
+  url: () ->
+    @options['url']
+
+  slideBeforeEvent: (event) ->
+    @slideEvent(event, 'left')
+
+  slideAfterEvent: (event) ->
+    @slideEvent(event, 'right')
+
+  slideEvent: (event, direction = 'right') ->
+    $.post @eventUrl(event), (data) =>
+        @slidePage(data, direction)
+    .fail (data) =>
+      if data.status isnt 500
+        error_massage = JSON.parse(data.responseText).message
+        @notify("错误信息", error_massage, "error")
+
+
+  slidePage: (page, direction = 'right') ->
+    $side1 = $("<div class='slide-1'></div>")
+    $side2 = $("<div class='slide-2'></div>")
+
+    @$el.find("iframe").remove()
+    @$el.wrap($("<div class='slide-box'></div>"))
+    @$el.wrap($("<div class='slide-container'></div>"))
+    @$el.wrap($side1)
+    $slideBox = @$el.parents(".slide-box")
+    $slideContainer = @$el.parents(".slide-container")
+    $slideContainer.append($side2)
+    $side2.html(page)
+
+    iframe = $side2.find("iframe").remove()
+    $side1 = @$el
+
+
+    height =  Math.max($side2.height(), $side1.height())
+    length = $slideBox.width()
+    width = @$el.width()
+
+    $slideBox.height(height)
+    $slideBox.width(width)
+    $slideContainer.width( width * 2)
+    $slideContainer.height( height )
+
+    $side1.width(width)
+      .height($side1.height())
+
+    overSlide = () =>
+      $side1.unwrap()
+      .remove()
+      @el = @$el = $side2.find(">.transaction")
+      @delegateEvents()
+      $side2.find(">.transaction")
+      .unwrap()
+      .unwrap()
+      .unwrap()
+      @$el.find(".transaction-footer").append(iframe)
+
+    if direction == 'right'
+      $side1.css('float', 'left')
+      $side2.width(width)
+      .css('float', 'left')
+      $slideBox.animate { scrollLeft: length }, "slow", overSlide
+    else
+      $side1.css('float', 'right')
+      $side2.width(width)
+            .css('float', 'left')
+      $slideBox.scrollLeft(length)
+      $slideBox.animate { scrollLeft: -length }, "slow", overSlide
+
+  effect: (effect_name, handle) ->
+    if Modernizr.cssanimations?
+      classies = "animated #{effect_name}"
+      @$el.addClass(classies)
+      setTimeout () =>
+        @$el.removeClass(classies)
+      , 1300
+    else
+      handle.call(@) if _(handle).isFunction()
+
+  alarm: () ->
+    effect = "bounce"
+    @$el.removeClass("animated #{effect}").addClass("animated #{effect}");
+    wait = window.setTimeout () =>
+      @$el.removeClass("animated #{effect}")
+    , 1300
+
+  notify: (title, message, type) ->
+    $.pnotify({
+      title: title,
+      text: message,
+      type: type
+    })
 
 exports.TransactionCardBase = TransactionCardBase
 exports

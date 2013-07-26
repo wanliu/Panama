@@ -14,13 +14,21 @@ class People::TransactionsController < People::BaseController
   # GET /people/transactions/1
   # GET /people/transactions/1.json
   def show
-    @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @transaction }
+      format.csv{
+        send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
+          :filename => "order#{DateTime.now.strftime('%Y%m%d%H%M%S')}.csv")
+      }
     end
+  end
+
+  def print
+    @transaction = current_order.find(params[:id])
+    render :layout => "print"
   end
 
   def create
@@ -34,7 +42,6 @@ class People::TransactionsController < People::BaseController
   end
 
   def page
-    @transactions = current_order.page params[:page]
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
@@ -48,6 +55,7 @@ class People::TransactionsController < People::BaseController
     authorize! :event, @transaction
 
     if @transaction.buyer_fire_event!(event_name)
+      @transaction.notice_change_seller(event_name)
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {
@@ -109,16 +117,18 @@ class People::TransactionsController < People::BaseController
   end
 
   def refund
-    order = current_order.find(params[:id])
-    items = params[:order_refund].delete(:product_items) || []
-
+    order, options = current_order.find(params[:id]), params[:order_refund]
+    delivery_manner_id = params[:order_refund].delete(:delivery_manner_id)
+    if delivery_manner_id.present?
+      options.merge!(:delivery_manner =>  DeliveryManner.find(delivery_manner_id))
+    end
     respond_to do |format|
-      refund = order.refunds.create(params[:order_refund])
+      refund = order.refunds.create(options)
       if refund.valid?
-        refund.create_items(items)
+        refund.create_items(order.items.map{|item| item.id})
         if refund.items.count <= 0
           refund.destroy
-          format.json{ render :json => { :message => "申请退货失败：您选择退货的商品已经在退货之中，或者不能退货" },
+          format.json{ render :json => ["申请退货失败：您选择退货的商品已经在退货之中，或者不能退货"],
                               :status => 403 }
         else
           format.json{ render :json => refund }

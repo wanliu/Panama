@@ -1,18 +1,6 @@
 <p id="notice"><%= notice %></p>
 <% active_section :transaction %>
 <div class="sidebar_panel">
-  <div class="right-sidebar">
-    <% if @transactions.size > 0 %>
-    <div class="widget">
-      <h2>已下订单</h2>
-      <ul class="cards">
-      <% @transactions.each do |transaction| %>
-          <%= render :partial => 'trans_card', :locals => { :transaction => transaction, :state => transaction.state, :people => @people } %>
-      <% end %>
-      </ul>
-     </div>
-     <% end %>
-  </div>
   <div class="main-sidebar container-fluid">
     <%= render partial: 'transaction',
                object:  @transaction,

@@ -5,7 +5,9 @@ class Product < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::SynchronousProperty
   include PanamaCore::InventoryCache
-  include Redis::Search
+  # include Redis::Search
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   attr_accessible :description,
                   :name,
@@ -71,10 +73,10 @@ class Product < ActiveRecord::Base
   end
 
   # 产品名称搜索
-  redis_search_index(:title_field => :name,
-                     :score_field => :created_at,
-                     :prefix_index_enable => true,
-                     :ext_fields  => [:price])
+  # redis_search_index(:title_field => :name,
+  #                    :score_field => :created_at,
+  #                    :prefix_index_enable => true,
+  #                    :ext_fields  => [:price])
 
   def prices_definition
     price_options.map do |po|

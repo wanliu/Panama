@@ -16,15 +16,12 @@
 class OrderTransaction < ActiveRecord::Base
   include MessageQueue::Transaction
 
-
-  # default_scope -> { where("state != 'complete'") }
-  scope :completed, -> { where(:state => 'complete') }
-  scope :uncomplete, -> { where("state != 'complete'") }
+  scope :completed, -> { where("state in (?)", [:complete, :close, :refund]) }
+  scope :uncomplete, -> { where("state not in (?)", [:complete, :close, :refund]) }
   scope :buyer, ->(person){ where(:buyer_id => person.id) }
+  scope :seller, ->(seller){ where(:seller_id => seller.id) }
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
-  # attr_accessor :total
-
 
   belongs_to :address,
           foreign_key: 'address_id'
@@ -37,6 +34,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :operator, class_name: "TransactionOperator"
   belongs_to :pay_manner
   belongs_to :delivery_manner
+  belongs_to :logistics_company
 
   has_many :operators, class_name: "TransactionOperator", dependent: :destroy
 
@@ -123,6 +121,8 @@ class OrderTransaction < ActiveRecord::Base
     event :expired do
       transition  :order             =>  :close,
                   :waiting_paid      =>  :close,
+                  :refund            =>  :close,
+                  :complete          =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete
     end
@@ -130,9 +130,25 @@ class OrderTransaction < ActiveRecord::Base
     #退货事件方式
     event :returned do
       #发货失败`等待发货`签收 到 退货
-      transition [:delivery_failure, :waiting_delivery, :waiting_refund] => :refund,
-                 [:waiting_sign, :complete]             => :waiting_refund
+      transition :waiting_refund => :refund,
+                 [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :waiting_refund
 
+    end
+
+    event :rollback_delivery_failure do
+      transition :waiting_refund => :delivery_failure
+    end
+
+    event :rollback_waiting_delivery do
+      transition :waiting_refund => :waiting_delivery
+    end
+
+    event :rollback_waiting_sign do
+      transition :waiting_refund => :waiting_sign
+    end
+
+    event :rollback_complete do
+      transition :waiting_refund => :complete
     end
 
     #付款
@@ -164,13 +180,6 @@ class OrderTransaction < ActiveRecord::Base
       end
     end
 
-    after_transition :order            => [:waiting_paid, :waiting_transfer, :waiting_delivery],
-                     :waiting_transfer => :waiting_audit,
-                     :waiting_sign     => :complete,
-                     :waiting_paid     => :waiting_delivery do |order, transition|
-      order.notice_change_seller(transition.to_name, transition.event)
-    end
-
     ## only for development
     if Rails.env.development?
       after_transition :waiting_paid      => :order,
@@ -178,15 +187,6 @@ class OrderTransaction < ActiveRecord::Base
                        :waiting_sign      => :waiting_delivery do |order, transition|
         order.notice_change_seller(transition.to_name, :back)
       end
-    end
-
-    after_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.notice_change_buyer(transition.to_name, transition.event)
-    end
-
-    after_transition :waiting_audit => [:waiting_delivery, :waiting_audit_failure] do |order, transition|
-      order.notice_change_buyer(transition.to_name, transition.event)
-      order.notice_change_seller(transition.to_name, transition.event)
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
@@ -213,15 +213,11 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.valid_delivery_code?
+      order.valid_delivery?
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
       order.valid_payment?
-    end
-
-    before_transition [:delivery_failure, :waiting_delivery, :waiting_sign, :complete] => :refund do |order, transition|
-      order.valid_refund?
     end
 
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
@@ -236,18 +232,16 @@ class OrderTransaction < ActiveRecord::Base
 
   #如果卖家没有发货直接删除明细，返还买家的金额
   def refund_handle_detail_return_money(refund)
-    if unshipped_state?
-      product_ids = refund.refund_product_ids
-      refund_items = get_refund_items(product_ids)
-      if not_product_refund(product_ids).present?
-        refund_items.destroy_all
-        update_total_count
-      else
-        refund_handle_product_item(product_ids)
-      end
-      if !pay_manner.cash_on_delivery? && save
-        refund.buyer_recharge
-      end
+    product_ids = refund.refund_product_ids
+    refund_items = get_refund_items(product_ids)
+    if not_product_refund(product_ids).present?
+      refund_items.destroy_all
+      update_total_count
+    else
+      refund_handle_product_item(product_ids)
+    end
+    if !pay_manner.cash_on_delivery? && save
+      refund.buyer_recharge
     end
   end
 
@@ -272,6 +266,10 @@ class OrderTransaction < ActiveRecord::Base
     %w(waiting_sign).include?(state)
   end
 
+  def order_state?
+    "order" == state
+  end
+
   def waiting_sign_state?
     "waiting_sign" == state
   end
@@ -282,6 +280,27 @@ class OrderTransaction < ActiveRecord::Base
 
   def unshipped_state?
     %w(delivery_failure waiting_delivery).include?(state)
+  end
+
+  def edit_delivery_price?
+    if pay_manner.online_payment?
+      state_name == :waiting_paid
+    elsif pay_manner.bank_transfer?
+      state_name == :waiting_transfer
+    elsif pay_manner.cash_on_delivery?
+      state_name == :waiting_delivery
+    else
+      false
+    end
+  end
+
+  def clear_uniq_states
+    states = state_details.map{|item| {state: item.state, created_at: item.created_at} }
+    index = states.find_index{|s| s[:state] == "waiting_refund"}
+    if index && states[index-1][:state] == (states[index+1] || {})[:state]
+      states.slice!(index-1..index)
+    end
+    states
   end
 
   #是否成功
@@ -311,7 +330,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_fire_event!(event)
-    events = %w(online_payment back paid sign bank_transfer cash_on_delivery transfer confirm_transfer)
+    events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
     if event.to_s == "buy"
       event = pay_manner.code
     end
@@ -319,7 +338,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def seller_fire_event!(event)
-    events = %w(back returned delivered)
+    events = %w(back delivered)
     filter_fire_event!(events, event)
   end
 
@@ -339,11 +358,12 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def get_delivery_price(delivery_id)
-    product_ids = items.map{|item| item.product_id}
-    ProductDeliveryType.where(
-      :product_id => product_ids,
-      :delivery_type_id => delivery_id)
-    .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
+    delivery_type.try(:price) || 0
+    # product_ids = items.map{|item| item.product_id}
+    # ProductDeliveryType.where(
+    #   :product_id => product_ids,
+    #   :delivery_type_id => delivery_id)
+    # .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
   end
 
   #变更状态
@@ -415,28 +435,37 @@ class OrderTransaction < ActiveRecord::Base
   def as_json(*args)
     attra = super *args
     attra["number"] = number
+    attra["pay_manner_name"] = pay_manner.try(:name)
+    attra["delivery_manner_name"] = delivery_manner.try(:name)
     attra["buyer_login"] = buyer.login
+    attra["seller_name"] = seller.name
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("order_states.seller.#{state}")
+    attra["stotal"] = stotal
     attra
   end
 
-  def notice_change_buyer(name, event_name = nil)
-    token = buyer.try(:im_token)
-    faye_send("/events/#{token}/transaction-#{id}-buyer",
-                      :name => name,
-                      :event => "refresh_#{event_name}")
+  def notice_change_buyer(event_name = nil)
+    ename = event_name.to_s
+    if %w(back delivered audit_transfer audit_failure returned).include?(ename)
+      token = buyer.try(:im_token)
+      faye_send("/events/#{token}/transaction-#{id}-buyer",
+                        :event => "refresh_#{ename}")
+    end
   end
 
-  def notice_change_seller(name, event_name = nil)
-    if current_operator.nil?
-      realtime_dispose({type: "change" ,values: self})
-    else
-      token = current_operator.try(:im_token)
-      faye_send("/events/#{token}/transaction-#{id}-seller",
-        :name => name,
-        :event => "refresh_#{event_name}")
+  def notice_change_seller(event_name = nil)
+    ename = event_name.to_s
+    if %w(online_payment cash_on_delivery bank_transfer
+      back paid sign transfer confirm_transfer audit_transfer audit_failure returned).include?(ename)
+      if current_operator.nil?
+        realtime_dispose({type: "change" ,values: self})
+      else
+        token = current_operator.try(:im_token)
+        faye_send("/events/#{token}/transaction-#{id}-seller",
+          :event => "refresh_#{ename}")
+      end
     end
   end
 
@@ -446,19 +475,13 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def valid_refund?
-    if items.exists?(:refund_state => true)
-      errors.add(:state, "订单还有其它产品没有退货！")
-      false
-    else
-      true
-    end
-  end
-
-  def valid_delivery_code?
+  def valid_delivery?
     if delivery_manner.express?
       if delivery_code.blank?
-        errors.add(:delivery_code, "没有发货运单号!")
+        errors.add(:delivery_code, "发货运单号没有!")
+      end
+      if logistics_company.nil?
+        errors.add(:logistics_company_id, "物流公司不存在！")
       end
     end
   end
@@ -520,6 +543,31 @@ class OrderTransaction < ActiveRecord::Base
       "WL#{ id }"
     else
       "WL#{ '0' * (9 - id.to_s.length) }#{ id }"
+    end
+  end
+
+  def self.export_column
+    {
+      "number" => "编号",
+      "state_title" => "状态",
+      "pay_manner_name" => "付款方式",
+      "delivery_manner_name" => "运送方式",
+      "buyer_login" => "买家",
+      "seller_name" => "商家",
+      "title" => "商品",
+      "price" => "单价",
+      "amount" => "数量",
+      "delivery_price" => "运费",
+      "stotal" => "总额",
+      "address" => "地址"
+    }
+  end
+
+  def convert_json
+    items.map do |item|
+      attra = item.as_json
+      attra.merge!(as_json)
+      attra
     end
   end
 

@@ -26,6 +26,8 @@ def initialize_data
   load_pay_manner
 
   load_delivery_manner
+
+  load_logistics
 end
 
 def load_categories
@@ -69,6 +71,10 @@ end
 
 def load_permission
   rake['permission:load'].invoke
+end
+
+def load_logistics
+  LogisticsCompany.load_data
 end
 
 initialize_data

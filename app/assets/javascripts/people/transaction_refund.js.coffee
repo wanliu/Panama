@@ -30,19 +30,21 @@ class TransactionRefundView extends Backbone.View
     @$panel.slideToggle(_.bind(@toggle_chose_product, @))
 
   toggle_chose_product: () ->
+    ###
     state = if @$panel.css("display") == "none" then false else true
     @each_details (row) ->
       check = @row_checkbox(row)
       if check.length > 0
         if state then check.show() else check.hide()
         check[0].checked = state
+    ###
 
   create: () ->
     data = @get_form_data()
-    data["product_items"] = @get_details()
-    if data.product_items.length <= 0
-      @notify("请选择退货商品!", "error")
-      return false
+    #data["product_items"] = @get_details()
+    #if data.product_items.length <= 0
+    #  @notify("请选择退货商品!", "error")
+    #  return false
 
     if data.hasOwnProperty('delivery_price')
       if _.isEmpty(data.delivery_price)
@@ -61,7 +63,7 @@ class TransactionRefundView extends Backbone.View
       error: (model, data) =>
         error_message = JSON.parse(data.responseText)
         error_message = error_message.message if error_message.message
-        @notify("错误! #{ error_message }", 'error')
+        @notify("错误! #{ error_message.join() }", 'error')
     false
 
   get_form_data: () ->
@@ -72,6 +74,7 @@ class TransactionRefundView extends Backbone.View
     options
 
   get_details: () ->
+    ###
     product_items = []
     @each_details (row) ->
       check = @row_checkbox(row)
@@ -79,6 +82,7 @@ class TransactionRefundView extends Backbone.View
         product_items.push(row.attr('data-value-id'))
 
     product_items
+    ###
 
   each_details: (callback) ->
     _.each @$details, (row) =>
