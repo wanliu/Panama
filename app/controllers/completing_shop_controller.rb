@@ -1,6 +1,6 @@
 class CompletingShopController < Wicked::WizardController
   layout "wizard"
-  before_filter :login_required_without_service_choosen
+  before_filter :login_required_without_service_seller
 
   steps :pick_industry, :authenticate_license, :pick_product#, :waiting_audit
 
