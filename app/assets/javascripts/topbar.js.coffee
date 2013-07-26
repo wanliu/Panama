@@ -25,7 +25,11 @@ class TopBar extends Backbone.View
 
 	successSearch: (data) ->
 		@$("[type=search]").val("")
-		$(window).trigger('search_result:append', data: data)
+		$(window).trigger('search_result:reset', data: data)
+
+
+class GlobalTopBar extends TopBar
+	
 
 
 root.TopBar = TopBar

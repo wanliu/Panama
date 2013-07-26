@@ -7,8 +7,7 @@
 
             $.pnotify({ title : error.statusText,
                         text  : error.responseText,
-                        type  : "error", 
-                        width : "auto" })
+                        type  : "error"})
           }
         }
     })

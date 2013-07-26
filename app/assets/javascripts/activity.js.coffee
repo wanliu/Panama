@@ -186,6 +186,13 @@ class ActivityModel extends Backbone.Model
 
 	urlRoot: '/activities'
 
+class CycleIter
+	constructor: (@data, @pos = 0) ->
+
+	next: () ->
+		@pos = 0 unless @pos < @data.length
+		@data[@pos++]	
+
 class ActivitiesView extends Backbone.View
 
 	COLUMN_WIDTH = 233
@@ -193,12 +200,12 @@ class ActivitiesView extends Backbone.View
 	initialize: (@options) ->
 
 		$(window).bind('search_result:append', $.proxy(@appendResult, @))
-		$(window).resize($.proxy(@resizeWrap, @))
-		@resizeWrap()
+		$(window).bind('search_result:reset', $.proxy(@setResult, @))
+		$(window).resize($.proxy(@relayoutColumns, @))
+		@relayoutColumns()
 
 	resizeWrap: (e) ->
-		$wrap = $('.wrap')
-		@$el.width(parseInt(($wrap.width() - 25) / 246) * 246)
+		@$el.width(@adjustNumber() * 246)
 
 	appendResult: (e, data) ->
 		
@@ -216,11 +223,43 @@ class ActivitiesView extends Backbone.View
 					.fadeIn()
 
 	setResult: (e, data) ->
-		$("#activities")
+		@$el.empty()
+		@relayoutColumns()
+		@appendResult(e, data)
+
+	adjustNumber: () ->
+		$wrap = $('.wrap')
+		count = parseInt(($wrap.width() - 25) / 246)
 
 	relayoutColumns: () ->
-		count = parseInt(@$el.width() / 246)
+
+		activities = @fetchResults()
+		new_dom = $("<div id='activities'/>")
+		new_dom.append("<div class='column' />") for i in [0...@adjustNumber()]
+
+		cycle = new CycleIter(new_dom.find(".column"))
+
+		for act in activities
+			target = cycle.next()
+			$(target).append(act)
+
+		@$el.replaceWith(new_dom)
+		@$el = new_dom
+		@resizeWrap()
+
 		
+	fetchResults: () ->
+		row = 0
+		columns = @$(".column")
+		results = []
+
+		while _(_(columns).map (elem, i ) ->
+			node = $(elem).find(">div")[row]
+			results.push(node) if node?
+			node).any()
+			row++ 
+
+		results
 
 
 	generateView: (model, default_type = "product") ->
