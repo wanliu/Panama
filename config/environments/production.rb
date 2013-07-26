@@ -48,7 +48,7 @@ Panama::Application.configure do
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
 
   config.assets.precompile += %w(stream.js polyfills.js chats/contact.js my_cart.js sigin.js panama.js people.js faye.js chat.js admins.js shops.js)
-  config.assets.precompile += %w(stream.css people.css admins.css sigin.css category.css another_bootstrap.css system/product.css system/category.css jquery.treeview.css products.css transaction_message.css print.css)
+  config.assets.precompile += %w(stream.css people.css admins.css wizard.css sigin.css category.css another_bootstrap.css system/product.css system/category.css jquery.treeview.css products.css transaction_message.css print.css)
   config.assets.precompile += %w(font-awesome/css/font-awesome.min)
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false

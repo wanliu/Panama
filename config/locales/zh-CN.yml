@@ -367,6 +367,9 @@ zh-CN:
   communities: 社区
   order_refunds: 退货
   shop_products: 商品
+  bill_detail: 账单明细
+  shop_info: 店铺信息
+
 
   shop_group:
     sale: "销售组"
