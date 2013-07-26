@@ -84,3 +84,14 @@ $left-side-admin-width: 160px;
 .resource-panel.well{
   color: black;
 }
+
+.transaction-body{
+
+  .dprice_edit_panel{
+    display: none;
+  }
+
+  .dprice_edit{
+    margin-left: 10px;
+  }
+}

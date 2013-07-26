@@ -229,6 +229,7 @@ Panama::Application.routes.draw do
           get "messages", :to => "shops/transactions#messages"
           put "update_delivery", :to => "shops/transactions#update_delivery"
           get "print", :to => "shops/transactions#print"
+          put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
         end
       end
 
