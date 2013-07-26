@@ -1,9 +1,16 @@
 Panama::Application.routes.draw do
 
+  resources :shop_products
+
   # devise_for :admin_users, ActiveAdmin::Devise.config
   resources :after_signup
-  resources :completing_people
+  resources :completing_people do
+    member do
+      post 'skip'
+    end
+  end
   resources :completing_shop
+  resources :user_auths
 
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
@@ -11,6 +18,10 @@ Panama::Application.routes.draw do
   match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post
 
   resources :people do
+
+    member do
+      get "show_bill"
+    end
 
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -186,7 +197,11 @@ Panama::Application.routes.draw do
   resources :receive_order_messages
 
 
-  resources :category
+  resources :category do
+    member do
+      get "products"
+    end
+  end
   # shop admins routes
 
   resources :shops, :except => :index do
@@ -216,8 +231,9 @@ Panama::Application.routes.draw do
           get "additional_properties/:category_id",
             :to => "shops/products#additional_properties"
         end
-
       end
+
+      resources :shop_products, :controller => "shops/shop_products"
 
       resources :transactions, :controller => "shops/transactions" do
         member do

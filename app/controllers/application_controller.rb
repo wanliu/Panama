@@ -1,4 +1,6 @@
+#encoding: utf-8
 require 'csv'
+
 class ApplicationController < ActionController::Base
   include ApplicationHelper
   include OmniAuth::Wanliu::AjaxHelpers
@@ -48,9 +50,27 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] || I18n.default_locale
   end
 
+  # 绑定登陆和服务选择(买家，卖家？)
   def login_required
     if !current_user
+      login_required_origin
+    elsif current_user.services.empty?
+      respond_to do |format|
+        format.js{
+          ajax_set_response_headers
+          render :text => :ok, :status => 403 }
+        format.html  {
+          @user = current_user
+          redirect_to "/after_signup" }
+        format.json {
+          render :json => { 'error' => '您尚未选择服务' }.to_json  }
+      end
+    end
+  end
 
+  # 只需要验证是否登录而不需要验证是否选择服务用这个
+  def login_required_origin
+    if !current_user
       respond_to do |format|
         format.js{
           ajax_set_response_headers
@@ -61,6 +81,15 @@ class ApplicationController < ActionController::Base
         format.json {
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
+    end
+  end
+
+  # 用于验证服务选择
+  def login_required_without_service_choosen
+    if !current_user
+      login_required_origin
+    elsif !current_user.services.empty?
+      redirect_to '/'
     end
   end
 

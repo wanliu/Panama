@@ -18,7 +18,16 @@
   </div>
 
   <ul id="people-side-nav" class="side-nav">
+
       <% if can?(:index, Cart) || can?(:index, OrderTransaction) %>
+        <li class='accordion-group'>
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#info-collapse"><i class="icon-user"></i> <span class="name">账户管理</span></a>
+          <ul id="info-collapse" class="accordion-body collapse">
+            <li><a href="<%= person_path(current_user) %>">基本信息</a></li>
+            <li><a href="<%= show_bill_person_path %>">账单记录</a></li>
+            <li><a href="<%= after_signup_path %>">我要开店</a></li>
+          </ul>
+        </li>
         <% if can? :index, Cart %>
             <li>
               <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>

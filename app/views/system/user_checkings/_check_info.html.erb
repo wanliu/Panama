@@ -1,0 +1,154 @@
+<table>
+	<colgroup width="20%"></colgroup>
+	<colgroup width="80%"></colgroup>
+	<tbody>
+		<tr>
+			<td>用户ID</td>
+			<td><%= @user_checking.user.id %></td>
+		</tr>
+		<tr>
+			<td>用户名</td>
+			<td><%= @user_checking.user.login %></td>
+		</tr>
+		<tr>
+			<td>服务类型</td>
+			<td><%= @user_checking.service.name %></td>
+		</tr>
+		<tr>
+			<td>商店名称</td>
+			<td><%= @user_checking.shop_name %></td>
+		</tr>
+		<tr>
+			<td>商店地址</td>
+			<td><%= @user_checking.shop_url %></td>
+		</tr>
+		<tr>
+			<td>商店简介</td>
+			<td><%= @user_checking.shop_summary %></td>
+		</tr>
+		<tr>
+			<td>所选行业</td>
+			<td><%= @user_checking.industry_type %>
+		<tr>
+		<tr>
+			<td>公司名称</td>
+			<td><%= @user_checking.company_name %></td>
+		</tr>
+		<tr>
+			<td>公司地址</td>
+			<td><%= @user_checking.company_address %></td>
+		</tr>
+		<tr>
+			<td>营业许可证号</td>
+			<td><%= @user_checking.company_license %></td>
+		</tr>
+		<tr>
+			<td>法人姓名</td>
+			<td><%= @user_checking.ower_name %></td>
+		</tr>
+		<tr>
+			<td>法人身份证号码</td>
+			<td><%= @user_checking.ower_shenfenzheng_number %></td>
+		</tr>
+	</tbody>
+</table>
+
+<style type="text/css">
+	form.button_to {
+		display: inline;
+	}
+	form.button_to div {
+		display: inline;
+	}
+	div.reject {
+		margin-top: 20px;
+	}
+	div.reject h3{
+		margin-top: 30px;
+		margin-bottom: 5px;
+	}
+	.rejected-times h3.rejected-times {
+		padding: 20px 0;
+		border-top: 1px solid #6a7176;
+		/*border-bottom: 1px solid #6a7176;*/
+	}
+	.rejected-times + div.rejected-reason {
+		height: 100px;
+		border-top: 1px solid #6a7176;
+		border-bottom: 1px solid #6a7176;
+		margin-bottom: 20px;
+	}
+	div.label {
+		float: left;
+		width: 20%;
+		height: 100%;
+		vertical-align: center;
+	}
+	div.reason {
+		float: left;
+		width: 80%;
+		height: 100%;
+		background-color: #dfe1e2;
+	}
+</style>
+
+<% if @user_checking.rejected_times > 0 %>
+	<div class='rejected-times'>
+		<h3 class='rejected-times'>该用户的申请已被拒绝过<%= @user_checking.rejected_times %>次</h3>
+	</div>
+	<div class='rejected-reason'>
+		<div class='label'><span>最近一次被拒绝原因：</span></div>
+		<div class='reason'><%= @user_checking.rejected_reason.try(:html_safe) || "" %></div>
+	</div>
+<% end %>
+
+<% unless @user_checking.checked == true %>
+	<div class='checking'>
+		<%= button_to "审核通过", { action: :check } %>
+		<% if !@user_checking.rejected %>
+			<%= submit_tag "驳回", class: "user_checking_reject" %>
+			<%= form_tag "/system/user_checkings/#{ @user_checking.id }/reject",
+				method: :post, class: "user_checking_reject", style: "display: none;" do %>
+				<div class='reject'>
+					<h3>驳回理由：</h3>
+					<%= text_area_tag "reject_reason", nil, rows: 10 %><br>
+					<%= submit_tag "确定" %>
+					<%= button_tag "取消", class: "cancel" %>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+<% end %>
+
+<script type="text/javascript">
+	$(function(){
+		var UserCheckingView = Backbone.View.extend({
+			events: {
+				'click :submit.user_checking_reject' : 'reject',
+				'click .cancel' : 'cancel',
+				'submit form.user_checking_reject' : 'check_for_reason'
+			},
+
+			reject: function(event) {
+				var that = this;
+				this.$("form.user_checking_reject").slideDown(function(event){
+					that.$('textarea').focus();
+				});
+				return false;
+			},
+
+			cancel: function(event) {
+				this.$("form.user_checking_reject").slideUp();
+				return false;
+			},
+
+			check_for_reason: function(event) {
+				if (!$('textarea').val()) {
+					alert("请填写驳回原因！")
+					return false;
+				}
+			}
+		})
+		var checking_view = new UserCheckingView({ el: $("div.checking") })
+	})
+</script>

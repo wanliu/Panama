@@ -9,8 +9,9 @@ class Admins::Shops::SectionController < Admins::BaseController
   section :pending, :transactions
   section :complete, :transactions
   section :transport, :transportation
-  section :products, :products
-  section :categories, :products
+  # section :products, :products
+  section :shop_products, :products
+  # section :categories, :products
   section :complaint, :service
   section :contents, :design
   section :menu, :design

@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_one :shop
   has_one :shop_user
+  has_one :user_checking
 
   has_many :transactions,
            class_name: "OrderTransaction",
@@ -35,6 +36,7 @@ class User < ActiveRecord::Base
   has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
+  has_and_belongs_to_many :services
 
   delegate :groups, :jshop, :to => :shop_user
 

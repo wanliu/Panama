@@ -29,6 +29,8 @@
 //= require sidebar
 //= require topbar
 //= require right_sidebar
+//= require pick_product
+
 
 root = window || this;
 

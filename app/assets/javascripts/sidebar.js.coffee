@@ -29,7 +29,5 @@ class SideBar extends Backbone.View
 		@$("#side-nav").addClass(ICON_CLASS)
 		$(".wrap").addClass(ICON_CLASS)
 		$(window).trigger('resize')
-
-
-
+		
 root.SideBar = SideBar

@@ -1,0 +1,19 @@
+<div class="row-fluid">
+  <div class="offset2 span8">
+    <div class='dialog'>
+      <div class="page-header">
+        <h2 class="page-title">选择行业 <small>选择好您从事的行业，可以让我们更精确的为您提供服务</small></h2>
+      </div>  
+      <%= simple_form_for @user_checking,
+        url: '/completing_people/pick_industry',
+        html: { method: :put, class: "form-horizontal" } do |f| %>
+        <%= f.input :industry_type, collection: ['奶 粉'], selected: "奶 粉", label: "请选经营择行业" %>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn">下一步</button>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
