@@ -9,19 +9,23 @@
         </tr>
       </thead>
       <tbody>
-        <% Bank.all.each do |bank| %>
+        <% TransferAccount.all.each do |ta| %>
           <tr>
             <td>
               <%= content_tag :div, :class => 'bank_card' do %>
-                <%= label_tag "bank_#{bank.code}" do %>
-                  <span class="banks bank-<%= bank.code %>">
-                    <%= bank.name %>
+                <%= label_tag "bank_#{ta.bank.code}" do %>
+                  <span class="banks bank-<%= ta.bank.code %>">
+                    <%= ta.bank.name %>
                   </span>
                 <% end %>
               <% end %>
             </td>
-            <td><%= bank.transfer_account.try(:name) || "暂无" %></td>
-            <td><%= bank.transfer_account.try(:number) || "暂无" %></td>
+            <td class='ta_name'>
+              <%= ta.try(:name) || "暂无" %>
+            </td>
+            <td class='ta_number'>
+              <%= ta.try(:number) || "暂无" %>
+            </td>
         <% end %>
         </tr>
       </tbody>

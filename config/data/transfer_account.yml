@@ -1,0 +1,16 @@
+transfer_account:
+  - name: '李某某'
+    number: '7894 4656 1231 2253 012'
+    bank: boc
+
+  - name: '李某某'
+    number: '5464 2131 5466 4564 120'
+    bank: icbc
+
+  - name: '李某某'
+    number: '5464 2131 5466 4564 120'
+    bank: cbc
+
+  - name: '李某某'
+    number: '7897 5645 5646 5464 458'
+    bank: abc

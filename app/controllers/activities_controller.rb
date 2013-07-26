@@ -67,6 +67,7 @@ class ActivitiesController < ApplicationController
       :title => @activity.description,
       :price => @activity.activity_price
     })
+    @transaction.items.each{|item| item.update_total }
     @transaction.save
     redirect_to person_transactions_path(current_user.login),
                   notice: 'Transaction was successfully created.'
