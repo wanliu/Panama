@@ -117,15 +117,18 @@ class People::TransactionsController < People::BaseController
   end
 
   def refund
-    order = current_order.find(params[:id])
-
+    order, options = current_order.find(params[:id]), params[:order_refund]
+    delivery_manner_id = params[:order_refund].delete(:delivery_manner_id)
+    if delivery_manner_id.present?
+      options.merge!(:delivery_manner =>  DeliveryManner.find(delivery_manner_id))
+    end
     respond_to do |format|
-      refund = order.refunds.create(params[:order_refund])
+      refund = order.refunds.create(options)
       if refund.valid?
         refund.create_items(order.items.map{|item| item.id})
         if refund.items.count <= 0
           refund.destroy
-          format.json{ render :json => { :message => "申请退货失败：您选择退货的商品已经在退货之中，或者不能退货" },
+          format.json{ render :json => ["申请退货失败：您选择退货的商品已经在退货之中，或者不能退货"],
                               :status => 403 }
         else
           format.json{ render :json => refund }

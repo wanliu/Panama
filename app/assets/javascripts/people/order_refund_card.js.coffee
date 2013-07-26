@@ -48,34 +48,40 @@ class OrderRefundCard extends TransactionCardBase
 
   afterDelivered: (event, from, to, msg) ->
     code = @$("input:text.delivery_code").val()
-    return if _.isEmpty(code)
-    url = @transaction.urlRoot
-    @transaction.fetch(
-      url: "#{url}/delivery_code",
-      type: 'POST',
-      data: {delivery_code: code},
-      success: () =>
-        @slideAfterEvent(event)
-    )
+    logistics_company_id = @$("select[name=logistics_company_id]").val()
+    if _.isEmpty(code) && _.isEmpty(logistics_company_id)
+      @slideAfterEvent(event)
+    else
+      url = @transaction.urlRoot
+      @transaction.fetch(
+        url: "#{url}/update_delivery",
+        type: 'POST',
+        data: {delivery_code: code, logistics_company_id: logistics_company_id},
+        success: () =>
+          @slideAfterEvent(event)
+      )
 
   update_delivery_price: () ->
     url = @transaction.urlRoot
     price = @$input.val()
     if /^\d*$/.test(price) || /^\d{0,10}(.\d*)$/.test(price)
       old_price = @$rdp_panel.attr("data-value")
-      return if parseFloat(price) ==  parseFloat(old_price)
-      @transaction.fetch(
-        url: "#{url}/update_delivery_price",
-        type: 'POST',
-        data: {delivery_price: price},
-        success: () =>
-          @$rdp_panel.attr('data-value', price)
-          _price = @$rdp_panel.text().trim()
-          _price = _price.replace(_price.substring(1, _price.length), " #{price}")
-          @$rdp_panel.html(_price)
-          @$rdp_panel.show()
-          @$edit_rdp_panel.hide()
-      )
+      if parseFloat(price) ==  parseFloat(old_price)
+        @$rdp_panel.show()
+        @$edit_rdp_panel.hide()
+      else
+        @transaction.fetch(
+          url: "#{url}/update_delivery_price",
+          type: 'POST',
+          data: {delivery_price: price},
+          success: () =>
+            @$rdp_panel.attr('data-value', price)
+            _price = @$rdp_panel.text().trim()
+            _price = _price.replace(_price.substring(1, _price.length), " #{price}")
+            @$rdp_panel.html(_price)
+            @$rdp_panel.show()
+            @$edit_rdp_panel.hide()
+        )
     else
       pnotify({
         type: "error",

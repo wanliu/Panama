@@ -160,3 +160,7 @@ gem "wicked"
 gem 'tire', :github => "hysios/tire"
 gem 'tire-settings', :github => "hysios/tire-settings"
 gem 'yajl-ruby'
+
+gem "delayed_job_active_record"
+gem "daemons"
+

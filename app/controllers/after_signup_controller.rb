@@ -1,10 +1,23 @@
 class AfterSignupController < Wicked::WizardController
-  layout "sigin"
+  layout "wizard"
 
   steps :select_type
 
   def show
-    @user = current_user
-    render_wizard
+    if current_user.user_checking.blank?
+    	render_wizard
+    else
+    	@user_checking = current_user.user_checking
+    	@user_auth = UserAuth.new
+
+    	wizard_controller = if @user_checking.service.service_type == "buyer"
+    		[CompletingPeopleController, "people"]
+    	else
+    		[CompletingShopController, "shop"]
+    	end
+    	wizard_url = "/completing_" << wizard_controller.last
+
+    	redirect_to "#{ wizard_url }/#{ @user_checking.current_step }"
+    end
   end
 end

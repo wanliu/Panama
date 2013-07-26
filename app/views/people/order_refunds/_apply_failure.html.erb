@@ -9,12 +9,22 @@
       <%= refund.refuse_reason %>
     </div>
   </div>
+  <% if refund.shipped_state? %>
   <div class="row-fluid">
     <div class="span2">
-      退货总金额
+      运输方式
     </div>
     <div class="span4">
-      <%= number_to_currency(refund.stotal) %>
+      <%= refund.delivery_manner.try(:name) %>
+    </div>
+  </div>
+  <% end %>
+  <div class='row-fluid'>
+    <div class="span2">
+      退货原因
+    </div>
+    <div class="span4">
+      <%= refund.order_reason.name %>
     </div>
     <div class="span2">
       退运费
@@ -31,16 +41,6 @@
       </a>
     </div>
   </div>
-
-  <div class='row-fluid'>
-    <div class="span2">
-      退货原因
-    </div>
-    <div class="span10">
-      <%= refund.order_reason.name %>
-    </div>
-  </div>
-
   <div class="row-fluid">
     <div class="span2">
       退货说明

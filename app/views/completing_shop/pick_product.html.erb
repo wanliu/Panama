@@ -1,0 +1,19 @@
+<div class="row-fluid">
+  <div class='offset1 span10'>
+  	<div class='dialog dialog_product'>
+	    <div class="page-header">
+	      <h2 class="page-title">请选择你经营的产品</h2>
+	    </div> 
+	  	<%= render "add_product"%>
+		<div class='row-fluid'>
+			<%= form_for @user_checking, :url => wizard_path, :method => :put, class: "form-horizontal" do |f| %>
+				<div class="span12 form-actions">
+					<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+					<%= f.submit "完成", class: "btn btn-primary" %>
+				</div>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+
