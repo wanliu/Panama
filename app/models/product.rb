@@ -36,6 +36,7 @@ class Product < ActiveRecord::Base
   has_many   :comments, :as => :targeable, :dependent => :destroy                                         # 评论
   has_many   :contents, :as => :contentable, :dependent => :destroy                                       # 产品内容配置组
   has_many   :price_options, :as => :optionable, :autosave => true, :dependent => :destroy
+  has_many   :shop_products
   has_and_belongs_to_many :properties, :uniq => true do
     def [](name)
       if name.is_a?(String) || name.is_a?(Symbol)
@@ -160,7 +161,7 @@ class Product < ActiveRecord::Base
   def as_json(*args)
     options = args.extract_options!
     attrs = super *args
-    attrs["attachments"] = format_attachment(options[:version_name])
+    attrs["attachments"] = format_attachment(options[:version_name]) unless options[:only]
     attrs
   end
 

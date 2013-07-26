@@ -1,31 +1,24 @@
-<script type="text/javascript" src="http://api.map.baidu.com/api?key=46ce9d0614bf7aefe0ba562f8cf87194&v=1.0&services=false"></script>
-<div class="page-header">
-  <h1>验证您的工商营业执照</h1>
+<div class='row-fluid'>
+  <div class='offset2 span8'>
+    <div class='dialog'>
+      <div class="page-header">
+        <h2 class="page-title">买家信息验证</h2>
+      </div>
+      <%= simple_form_for @user_auth,
+              url: '/completing_people/authenticate_license',
+              html: { method: :put, class: "form-horizontal" } do |f| %>
+        <%= f.input :ower_photo, label: '个人图片', as: 'file' %>
+        <%= f.input :ower_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
+        <%= f.input :ower_shenfenzheng_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
+        <%= f.input :phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
+        <div class="control-group">
+          <div class="controls">
+            <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+           <%= f.submit "完成", class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+       <%= button_to "以后再说", { action: :skip }, class: "btn btn-primary" %>
+    </div>
+  </div>
 </div>
-<form class='form form-horizontal' action="<%= wizard_path %>" method="PUT" >
-
-	<div class="control-group">
-    <label class="control-label" for="inputEmail">企业名称</label>
-    <div class="controls">
-      <input type="text" id="inputEmail" placeholder="Email">
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">营业地址</label>
-    <div class="controls">
-      <input type="password" id="inputPassword" placeholder="Password">
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">营业执照上传</label>
-    <div class="controls">
-      <input type="password" id="inputPassword" placeholder="Password">
-    </div>
-  </div>
-  <div class="control-group">
-    <div class="controls">
-	      <button type="submit" class="btn">下一步</button>
-      <%= link_to '跳过', next_wizard_path %>
-    </div>
-  </div>
-</form>

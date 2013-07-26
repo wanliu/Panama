@@ -1,0 +1,31 @@
+<% if @user_checking.rejected == false %>
+	<div class="container-fluid">
+		<div class="page-header">
+			<div class="offset1 span10">
+				<div class='dialog'>
+					<h2>等待审核</h2>
+					<p>您的资料已经提交成功，我们将在5个工作日内审核完毕，请您耐心等待。</p>
+					<p>审核结果将发送到您的注册邮箱，您也可以随时登陆本网站查看是否审核完成。</p>
+					<p>如果您有任何疑问，欢迎拨打客服电话0731-2567888，0731-2567899。</p>
+					<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+				</div>
+			</div>
+		</div>
+	</div>
+<% else %>
+	<div class="container-fluid">
+		<div class="page-header">
+			<div class="offset1 span10">
+				<div class='dialog'>
+					<h2>尊敬的<%= @user_checking.ower_name %>先生/女士：</h2>
+					<p>很遗憾的通知您，您的验证申请没有通过审核，原因如下：</p>
+					<p style="background-color: rgba(63, 184, 175, 0.91); min-height: 100px;"><%= @user_checking.rejected_reason.html_safe %></p>
+					<p>请您返回验证界面，完善您的资料，我们将尽快进行再次审核。</p>
+					<p>万流市场运营团队</p>
+					<%= link_to '返回填写信息', wizard_path(:authenticate_license), :class => 'btn btn-primary' %>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>
+

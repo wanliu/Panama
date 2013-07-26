@@ -4,14 +4,23 @@ class PeopleController < ApplicationController
     :show_invite,
     :agree_invite_user,
     :agree_email_invite_user,
-    :show_email_invite]
+    :show_email_invite,
+    :show_bill]
 
   layout "people"
 
   def show
+    @user_checking = current_user.user_checking
     @people = User.find_by(:login => params[:id])
-    current_ability(@people)
+    @user_auth = UserAuth.new(@user_checking.attributes)
+    # current_ability(@people)
   end
+
+   def show_bill
+    @people = current_user
+    current_ability(@people)
+    render :template => "people/base/show_bill"
+   end
 
   def show_invite
     valid_invite_user
