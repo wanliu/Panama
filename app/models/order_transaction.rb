@@ -23,8 +23,6 @@ class OrderTransaction < ActiveRecord::Base
 
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
 
-
-
   belongs_to :address,
           foreign_key: 'address_id'
   belongs_to :delivery_type,
@@ -282,6 +280,18 @@ class OrderTransaction < ActiveRecord::Base
 
   def unshipped_state?
     %w(delivery_failure waiting_delivery).include?(state)
+  end
+
+  def edit_delivery_price?
+    if pay_manner.online_payment?
+      state_name == :waiting_paid
+    elsif pay_manner.bank_transfer?
+      state_name == :waiting_transfer
+    elsif pay_manner.cash_on_delivery?
+      state_name == :waiting_delivery
+    else
+      false
+    end
   end
 
   def clear_uniq_states
