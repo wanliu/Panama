@@ -11,7 +11,7 @@
       <table class='table table-images table-hover complete'>
         <thead>
           <tr>
-            <th class="span1">卖家</th>
+            <th class="span1">买家</th>
             <th class="span2">订单编号</th>
             <th class="span3">到货地址</th>
             <th class="span2">下单日期</th>
@@ -22,13 +22,13 @@
           <% @transactions.each do |t| %>
             <tr class="transaction_complete-<%=t.id%>">
               <td>
-                <%= image_tag t.buyer.photos.icon %> 
+                <%= image_tag t.buyer.photos.icon %>
                 <%= t.buyer.login %>
               </td>
               <td><%= t.number %></td>
               <td style="text-align:left;"><%=t.address.try(:location) %></td>
               <td><%= t.created_at.strftime("%Y-%d-%m %H:%M") %></td>
-              <td> 
+              <td>
                 <a class="btn btn-info btn-small" href="/shops/<%=t.seller.name %>/admins/transactions/<%= t.id %>">明细</a>
               </td>
             </tr>
