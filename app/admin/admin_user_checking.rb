@@ -32,9 +32,11 @@ ActiveAdmin.register UserChecking do
     user_checking = UserChecking.find(params[:id])
     user_checking.update_attributes(checked: true)
 
-    shop = user_checking.shop
-    shop.actived = true
-    shop.save!
+    if !user_checking.shop.blank?
+      shop = user_checking.shop
+      shop.actived = true
+      shop.save!
+    end
 
     user_checking.send_checked_mail
 

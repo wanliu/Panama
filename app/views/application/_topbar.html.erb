@@ -23,6 +23,15 @@
         </ul> 
     </li>
 
+    <!--商店入口-->
+    <% if current_user.is_seller? && current_user.shop.try(:name) %>
+        <li class="dropdown">
+            <a href="/shops/<%= current_user.shop.name %>/admin" title="cart" id="cart" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-building handle"></i>
+            </a>
+        </li>
+    <% end %>
+
     <!-- 聊天信息 -->
     <li class="dropdown">
         <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
