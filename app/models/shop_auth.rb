@@ -12,7 +12,7 @@ class ShopAuth
   attr_accessor *ATTR_FIELDS
 
   # 在这里添加不能重复的字段
-  UNIQUENESS_FIELDS = [:shop_name, :shop_url, :company_license, :ower_shenfenzheng_number]
+  UNIQUENESS_FIELDS = [:shop_name, :company_license, :ower_shenfenzheng_number]
 
   # 在这里添加不是必须出现的字段
   UN_PRESENCE_FIELDS = [:shop_photo, :company_license_photo, :ower_photo]
