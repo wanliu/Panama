@@ -50,10 +50,11 @@
         </li>
     <% end %>
     <% if can? :index, OrderTransaction %>
-        <li>
-          <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>"><i class="icon-envelope-alt"></i>订单
-        </a>
-        </li>
+      <li>
+          <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>">
+            <i class="icon-envelope-alt"></i>订单
+          </a>
+      </li>
       <li class="accordion-group">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-folder-open"></i> <span class="name">交易管理</span></a>
           <ul id="purchaser-collapse" class="accordion-body collapse">
