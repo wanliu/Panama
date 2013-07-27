@@ -1,6 +1,6 @@
 <div id='people-sidebar' class="sidebar nav nav-collapse collapse affix-top" >
   <div class='avatar'>
-    <a href='/people/<%=@people.login %>'>
+    <a href="person_path(@people)">
     <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
     </a>
     <h4><%= @people.login %></h4>
@@ -18,12 +18,21 @@
   </div>
 
   <ul id="people-side-nav" class="side-nav">
-
-      <% if can?(:index, Cart) || can?(:index, OrderTransaction) %>
-        <li class='accordion-group'>
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#info-collapse">
-            <i class="icon-user"></i>
-            <span class="name">账户管理</span>
+    <li class='accordion-group'>
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#info-collapse">
+        <i class="icon-user"></i>
+        <span class="name">账户管理</span>
+      </a>
+      <ul id="info-collapse" class="accordion-body collapse">
+        <li>
+          <a class='people-info' href="<%= person_path(current_user) %>">
+            基本信息
+          </a>
+        </li>
+        <% if can? :show_bill, People %>
+        <li>
+          <a class='people-show_bill' href="<%= show_bill_person_path(@people) %>">
+            账单记录
           </a>
           <ul id="info-collapse" class="accordion-body collapse">
             <li>
@@ -43,63 +52,71 @@
             </li>
           </ul>
         </li>
-        <% if can? :index, Cart %>
-            <li>
-              <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
-              购物车</a>
-            </li>
         <% end %>
-        <% if can? :index, OrderTransaction %>
-            <li>
-              <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>"><i class="icon-envelope-alt"></i>订单
-            </a>
-            </li>
-          <li class="accordion-group">
-              <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-folder-open"></i> <span class="name">交易管理</span></a>
-              <ul id="purchaser-collapse" class="accordion-body collapse">
-              <li>
-                <a class='people-completed' href='<%= completed_person_transactions_path(@people.login) %>'>完成的
-                </a>
-              </li>
-
-              <li>
-                <a class='people-refunds' href='<%= person_order_refunds_path(@people.login) %>'>退货
-                </a>
-              </li>
-              <li>
-                <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>地址
-                </a>
-              </li>
-              </ul>
-          </li>
-        <%end%>
-      <% end %>
-      <li class='accordion-group'>
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#activity-collapse"><i class="icon-calendar"></i> <span class="name">活动</span></a>
-       <ul id="activity-collapse" class="accordion-body collapse">
-        <% if can? :index, Notification %>
+        <li>
+          <a class='people-create_shop' href="/completing_shop/authenticate_license">
+            我要开店
+          </a>
+        </li>
+      </ul>
+    </li>
+    <% if can? :index, Cart %>
+        <li>
+          <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
+          购物车</a>
+        </li>
+    <% end %>
+    <% if can? :index, OrderTransaction %>
+      <li>
+          <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>">
+            <i class="icon-envelope-alt"></i>订单
+          </a>
+      </li>
+      <li class="accordion-group">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#purchaser-collapse"><i class="icon-folder-open"></i> <span class="name">交易管理</span></a>
+          <ul id="purchaser-collapse" class="accordion-body collapse">
           <li>
-            <a class='people-notification' href="<%=person_notifications_path(@people.login) %>">提醒</a>
-          </li>
-        <%end%>
-        <li><a href="my_activity">我参于的活动</a></li>
-        <li><a href="about_to_happen">马上要发生的</a></li>
-        <li><a href="expired">往期活动</a></li>
-       </ul>
-      </li>
-
-      <li class='accordion-group'>
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#soical-collapse"><i class="icon-group"></i> <span class="name">社区</span></a>
-        <ul id="soical-collapse" class="accordion-body collapse">
-          <li><a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">商品评论</a>
-          </li>
-          <li><a class='people-following' href="<%=person_followings_path(@people.login) %>">我关注的
+            <a class='people-completed' href='<%= completed_person_transactions_path(@people.login) %>'>完成的
             </a>
           </li>
-          <li><a class='people-followers' href="<%=person_followers_path(@people.login) %>">关注我的
-            </a></li>
-        </ul>
+
+          <li>
+            <a class='people-refunds' href='<%= person_order_refunds_path(@people.login) %>'>退货
+            </a>
+          </li>
+          <li>
+            <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>地址
+            </a>
+          </li>
+          </ul>
       </li>
+    <%end%>
+    <li class='accordion-group'>
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#activity-collapse"><i class="icon-calendar"></i> <span class="name">活动</span></a>
+     <ul id="activity-collapse" class="accordion-body collapse">
+      <% if can? :index, Notification %>
+        <li>
+          <a class='people-notification' href="<%=person_notifications_path(@people.login) %>">提醒</a>
+        </li>
+      <%end%>
+      <li><a href="my_activity">我参于的活动</a></li>
+      <li><a href="about_to_happen">马上要发生的</a></li>
+      <li><a href="expired">往期活动</a></li>
+     </ul>
+    </li>
+
+    <li class='accordion-group'>
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#soical-collapse"><i class="icon-group"></i> <span class="name">社区</span></a>
+      <ul id="soical-collapse" class="accordion-body collapse">
+        <li><a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">商品评论</a>
+        </li>
+        <li><a class='people-following' href="<%=person_followings_path(@people.login) %>">我关注的
+          </a>
+        </li>
+        <li><a class='people-followers' href="<%=person_followers_path(@people.login) %>">关注我的
+          </a></li>
+      </ul>
+    </li>
   </ul>
   <div id="sidebar-settings" class="settings">
       <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>

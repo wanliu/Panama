@@ -13,12 +13,13 @@ class PeopleController < ApplicationController
     @user_checking = current_user.user_checking
     @people = User.find_by(:login => params[:id])
     @user_auth = UserAuth.new(@user_checking.attributes)
-    # current_ability(@people)
+    current_ability(@people)
   end
 
    def show_bill
-    @people = current_user
+    @people = User.find_by(:login => params[:id])
     current_ability(@people)
+    authorize! :show_bill, People
     render :template => "people/base/show_bill"
    end
 
