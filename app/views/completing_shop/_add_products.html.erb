@@ -34,7 +34,7 @@
 				<tbody>
 					<script type='text/javascript'>
 					<% @products.each do |product| %>
-					new ProductView({model: <%=raw product.attributes.to_json %>})
+					new ProductView({model: <%=raw product.to_json %>})
 					<% end %>
 					</script>
 				</tbody>
