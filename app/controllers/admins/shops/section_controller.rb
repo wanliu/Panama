@@ -5,7 +5,11 @@ class Admins::Shops::SectionController < Admins::BaseController
   before_filter :current_shop
   helper_method :current_section, :current_shop
 
+
   section :dashboard, :top
+  section :shop_info, :acount
+  section :bill_detail,  :acount
+   
   section :pending, :transactions
   section :complete, :transactions
   section :transport, :transportation

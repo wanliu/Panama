@@ -5,4 +5,10 @@ class ShopProduct < ActiveRecord::Base
 
   belongs_to :shop
   belongs_to :product
+
+  def as_json(*args)
+  	attra = super *args
+  	attra["name"] = product.name
+  	attra
+  end
 end
