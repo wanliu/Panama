@@ -34,15 +34,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					<script type='text/javascript'>
-					<% @products.each do |product| %>
-					new ProductView({model: <%=raw product.attributes.to_json %>})
-					<% end %>
-					</script>
 				</tbody>
 				<script type="text/javascript">
-				new WizardView({ el: $(".dialog_product") });
-				new ProductView({ el : $(".table") });
+					var product_view = new ProductView({ el : $(".table"), models: <%=raw @products.to_json %> });
+					new WizardView({ 
+						el: $(".dialog_product"),
+						select_handle: function(models){
+							_.each(models, function(model){
+								product_view.render(model);
+							})
+						}
+					});				
 				</script>
 				<a href="#" class="deleteAll">删除选中</a>
 			</table>

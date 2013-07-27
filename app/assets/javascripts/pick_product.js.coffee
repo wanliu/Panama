@@ -42,18 +42,22 @@ class root.WizardView extends Backbone.View
     })
     false
 
-  render_product_infor: () ->
+  render_product_infor: (product_ids) ->
     $.ajax({
       type: "post",
       url: "/shop_products",
-      data: {product_id: $(this).val() }
+      data: {product_ids: product_ids }
       dataType: "json",
-      success: (product) =>
-        product_view = new ProductView(model: product)
+      success: (products) =>        
+        @options.select_handle(products)
     })
 
   get_products_infor: () ->
-    $("select[name=product] option:selected").each(@render_product_infor)
+    product_ids = []
+    $("select[name=product] option:selected").each () ->
+      product_ids.push($(this).val())
+
+    @render_product_infor(product_ids)
         
   update_product = (product_id, field, value) ->
     data = if field is "price edit"
@@ -98,22 +102,17 @@ class root.WizardView extends Backbone.View
         tr.remove()
     })   
 
-class root.ProductView extends Backbone.View
-  tagName: 'tr'
+class root.ProductView extends Backbone.View 
    
   initialize: (@options) ->
-    @product = @options['model']
-    @render()
+    @products = @options['models']
+    _.each @products, (model) =>
+      @render(model)    
 
   render: (product) ->
-    $(@el).html("<td><input type='checkbox'></td>
-                <td class='name'>#{ @product.name } </td>
-                <td class='price edit'> #{@product.price }</td>
-                <td class='inventory edit'> #{ @product.inventory }</td> 
-                <td><a href='#' class='delete_product'>删除</a></td>")
-    $(@el).attr('id', @product.id)
-    $("table tbody").append(@el)
-    @
-
-
-
+    tr = "<tr id='#{product.id}'><td><input type='checkbox'></td>
+          <td class='name'>#{ product.name } </td>
+          <td class='price edit'> #{product.price }</td>
+          <td class='inventory edit'> #{ product.inventory }</td> 
+          <td><a href='#' class='delete_product'>删除</a></td></tr>"    
+    $(@el).append(tr)

@@ -96,8 +96,8 @@ class ApplicationController < ActionController::Base
   def login_required_without_service_seller
     if !current_user
       login_required_origin
-    elsif current_user.services.empty? ||
-      (!current_user.services.empty? && current_user.services.any? { |service| service.service_type == "seller" })
+    elsif !current_user.services.empty? &&
+      current_user.services.any? { |service| service.service_type == "seller" }
       redirect_to '/'
     end
   end
