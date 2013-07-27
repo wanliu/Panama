@@ -1,6 +1,4 @@
 @import "core";
-@import './lib/typeahead';
-@import 'lib/search_user_typeahead';
 @import './lib/chose-friend';
 @import './admins/shops';
 @import 'communities';
@@ -12,6 +10,8 @@
 @import "admins/shops/products";
 @import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
 @import "./lib/notify/pnotify";
+@import "bootstrap-datetimepicker.min";
+@import './lib/typeahead';
 
 
 $left-side-admin-width: 160px;
