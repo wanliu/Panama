@@ -1,2 +1,6 @@
 <% active_section "info" %>
-<%= render "people/base/user_information" %>
+<%= render  :partial => "people/base/user_information", 
+    :locals => { :url => "/completing_people/authenticate_license" } %>
+<%# if @checked != true %>
+	<%#= button_to "修改",%>
+<%# end %>
