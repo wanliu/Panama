@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130725072138) do
+ActiveRecord::Schema.define(:version => 20130727075407) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -132,9 +132,9 @@ ActiveRecord::Schema.define(:version => 20130725072138) do
   end
 
   create_table "carts", :force => true do |t|
-    t.integer  "items_count", :default => 0
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.integer  "items_count"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.integer  "user_id"
   end
 
@@ -425,6 +425,7 @@ ActiveRecord::Schema.define(:version => 20130725072138) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
   end
@@ -466,7 +467,7 @@ ActiveRecord::Schema.define(:version => 20130725072138) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
+    t.decimal  "amount",         :precision => 10, :scale => 0
     t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
     t.integer  "transaction_id"
@@ -562,6 +563,15 @@ ActiveRecord::Schema.define(:version => 20130725072138) do
     t.string   "valuable_type"
   end
 
+  create_table "receive_order_messages", :force => true do |t|
+    t.integer  "order_transaction_id"
+    t.integer  "send_user_id"
+    t.text     "content"
+    t.boolean  "state",                :default => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
+  end
+
   create_table "replies", :force => true do |t|
     t.integer  "comment_id"
     t.string   "content"
@@ -632,11 +642,12 @@ ActiveRecord::Schema.define(:version => 20130725072138) do
 
   create_table "shops", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
     t.string   "im_token"
+    t.boolean  "actived",    :default => false
   end
 
   create_table "shops_categories", :force => true do |t|
@@ -774,10 +785,10 @@ ActiveRecord::Schema.define(:version => 20130725072138) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
+    t.decimal  "money",      :precision => 20, :scale => 4
     t.string   "im_token"
   end
 
