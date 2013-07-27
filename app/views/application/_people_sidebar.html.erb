@@ -24,17 +24,17 @@
         <span class="name">账户管理</span>
       </a>
       <ul id="info-collapse" class="accordion-body collapse">
-        <li>
+        <!-- <li>
           <a class='people-info' href="<%= person_path(current_user) %>">
             基本信息
           </a>
-        </li>
+        </li> -->
         <% if can? :show_bill, People %>
         <li>
-          <a class='people-show_bill' href="<%= show_bill_person_path(@people) %>">
+          <!-- <a class='people-show_bill' href="<%= show_bill_person_path(@people) %>">
             账单记录
-          </a>
-          <ul id="info-collapse" class="accordion-body collapse">
+          </a> -->
+          <!-- <ul id="info-collapse" class="accordion-body collapse"> -->
             <li>
               <a class='people-info' href="<%= person_path(@people) %>">
                 基本信息
@@ -53,12 +53,12 @@
           </ul>
         </li>
         <% end %>
-        <li>
+        <!-- <li>
           <a class='people-create_shop' href="/completing_shop/authenticate_license">
             我要开店
           </a>
-        </li>
-      </ul>
+        </li> -->
+     <!--  </ul> -->
     </li>
     <% if can? :index, Cart %>
         <li>
