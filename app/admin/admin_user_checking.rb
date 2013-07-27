@@ -31,6 +31,11 @@ ActiveAdmin.register UserChecking do
   member_action :check, method: :post do
     user_checking = UserChecking.find(params[:id])
     user_checking.update_attributes(checked: true)
+
+    shop = user_checking.shop
+    shop.actived = true
+    shop.save!
+
     user_checking.send_checked_mail
 
     redirect_to action: :index

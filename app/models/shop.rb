@@ -28,6 +28,8 @@ class Shop < ActiveRecord::Base
   after_create :initial_shop_data
   before_destroy :delete_shop
 
+  scope :actived, where(actived: true)
+
   validates :name, presence: true
   validates :name, uniqueness: true
 
