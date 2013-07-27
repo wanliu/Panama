@@ -23,7 +23,7 @@ class ShopAuth
   validates :ower_shenfenzheng_number, format: { with: /^\d{17}[0-9xX]$/, message: "请填写真实有效的第二代身份证号码" }
   validates :phone, format: { with: /^\d{3,5}-?\d{6,}$/, message: "电话号码只能由数字和‘-’组成" }
   validates :company_license, format: { with: /^\d{10,}$/, message: "请输入真实有效的营业执照号，只能包含数字" }
-  validates :shop_url, :shop_name, format: { with: /^\S{1,}$/, message: "地址只能以数字、字母和下划线（_­）组成，不能有空格" }
+  validates :shop_url, :shop_name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }
   validate :uniqueness_fields_validate
 
   def initialize(attributes = {})
