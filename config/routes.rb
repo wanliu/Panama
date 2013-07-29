@@ -12,6 +12,9 @@ Panama::Application.routes.draw do
   resources :completing_shop
   resources :user_auths
 
+  match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth",:via => :put
+  match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth",:via => :put
+
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
   match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post

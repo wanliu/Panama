@@ -45,11 +45,13 @@
                 账单记录
               </a>
             </li>
+            <% unless @people.is_seller? %>
             <li>
               <a class='people-create_shop' href="/completing_shop/authenticate_license">
                 我要开店
               </a>
             </li>
+            <% end %>
           </ul>
         </li>
         <% end %>

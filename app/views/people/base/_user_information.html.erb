@@ -7,7 +7,7 @@
       <div class='body'>
           <%= simple_form_for @user_auth,
               url: url,
-              html: { method: :put, class: "form-horizontal" } do |f| %>
+              html: { method: :put, class: "form-horizontal user_auth" } do |f| %>
             <%= f.input :ower_photo, label: '个人图片', as: 'file' %>
             <%= f.input :ower_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
             <%= f.input :ower_shenfenzheng_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
