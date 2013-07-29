@@ -154,6 +154,23 @@ class Product < ActiveRecord::Base
     replace_relations price_options
   end
 
+  # Tire 索引结构的 json
+  def to_indexed_json
+    {
+      :name        => name,
+      :category_id => category_id,
+      :created_at  => created_at,
+      :price       => price,
+      :shop_id     => shop_id,
+      :updated_at  => updated_at,
+      :photos      => {
+        :icon      => photos.icon,
+        :header    => photos.header,
+        :avatar    => photos.avatar
+      }
+    }.to_json
+  end
+
   def default_photo
     default_attachment ? default_attachment.file : Attachment.new.file
   end

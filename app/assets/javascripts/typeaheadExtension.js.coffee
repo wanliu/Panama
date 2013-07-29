@@ -2,7 +2,7 @@
 
 root = (window || @)
 class TypeaheadExtension
-  select: (id) ->    
+  select: (id) ->
   constructor: (options) ->
     $.extend(@, options)
     @$el = $(@el)
@@ -18,14 +18,14 @@ class TypeaheadExtension
       matcher: @matcher,
       sorter: @sorter,
       highlighter: $.proxy(@highlighter,@),
-      updater: $.proxy(@updater,@)    
+      updater: $.proxy(@updater,@)
     })
 
-  remote: (query, process) ->    
+  remote: (query, process) ->
     $.ajax(
       url: @url
       data: {q: query}
-      success: (data) =>        
+      success: (data) =>
         process(data)
     )
 
@@ -36,11 +36,11 @@ class TypeaheadExtension
 
   highlighter: (item) ->
    item[@field]
- 
+
   updater: (id) ->
     @select(id)
 
-  render: (items)->          
+  render: (items)->
     items = $(items).map((i, item) =>
       i = $(@options.item).attr('data-value', item.id)
       i.find('a').html(@highlighter(item))
@@ -49,7 +49,7 @@ class TypeaheadExtension
     items.first().addClass('active')
     @$menu.html(items)
     return @
-    
+
 
 root.TypeaheadExtension = (options) ->
   new TypeaheadExtension(options)
