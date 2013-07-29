@@ -1,4 +1,7 @@
-<%= simple_form_for @shop_auth,
+<div class='row-fluid'>
+  <div class='span7 widget'>
+    <h4>商店信息</h4>
+    <%= simple_form_for @shop_auth,
     url: '/user_checkings/update_shop_auth',
     html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
     <div class="span12">
@@ -16,17 +19,19 @@
         <%= f.input :ower_name, label: '法人姓名' %>
         <%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
         <%= f.input :phone, label: '联系电话' %>
-<% end %>
-<% if !@shop_auth.checked %>
-    <input type="button" class="modify" value="修改">
-<% else %>
-    <script type="text/javascript">
+        <% end %>
+        <% if !current_user.user_checking.checked %>
+        <button class="modify">修改</button>
+        <% else %>
+        <script type="text/javascript">
         $("input").attr("readonly","readonly");
-    </script>
-<% end %>
+        </script>
+        <% end %>
+    </div>
+</div>
 
 <script type="text/javascript">
-    $(".modify").bind("click",function(){
-        $(".shop_auth").submit();
-    })
+$(".modify").bind("click",function(){
+    $(".shop_auth").submit();
+})
 </script>

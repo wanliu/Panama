@@ -1,13 +1,7 @@
 <% active_section "info" %>
 <%= render  :partial => "people/base/user_information", 
     :locals => { :url => "/user_checkings/update_user_auth" } %>
-<% if !@user_checking.checked %>
 	<input type="button" class="modify" value="修改">
-<% else %>
-	<script type="text/javascript">
-		$("input").attr("readonly","readonly");
-	</script>
-<% end %>
 <script type="text/javascript">
 	$(".modify").bind("click",function(){
 		$(".user_auth").submit();

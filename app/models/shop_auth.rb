@@ -8,7 +8,7 @@ class ShopAuth
 
   ATTR_FIELDS = [:user_id, :shop_name, :shop_photo, :shop_summary,# :shop_url,
                  :company_name, :company_address, :company_license, :company_license_photo,
-                 :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone,:checked]
+                 :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone]
   attr_accessor *ATTR_FIELDS
 
   # 在这里添加不能重复的字段
