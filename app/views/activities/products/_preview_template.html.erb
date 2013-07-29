@@ -14,18 +14,18 @@
         <p> 价格 {{price}} </p>
       </div>
       <div class='userinfo'>
-        {{#author_icon}}
-        <img src="{{author_icon}}" class='author img-circle' alt="Author" />
-        {{/author_icon}}
-        {{^author_icon}}
+        {{#seller.photos.icon}}
+        <img src="{{seller.photos.icon}}" class='author img-circle' alt="Author" />
+        {{/seller.photos.icon}}
+        {{^seller.photos.icon}}
           <%= image_tag AvatarUploader.new.url("5050"), :class => 'author img-circle' %>
-        {{/author_icon}}
-        {{#login}}
-          <p>{{login}}</p>
-        {{/login}}
-        {{^login}}
+        {{/seller.photos.icon}}
+        {{#seller.name}}
+          <p>{{seller.name}}</p>
+        {{/seller.name}}
+        {{^seller.name}}
           <p>暂无卖家</p>
-        {{/login}}
+        {{/seller.name}}
         <span>关注 {{participate}}{{^participate}}0{{/participate}}</span>
         <span class='like-count'>喜欢 {{like}}{{^like}}0{{/like}}</span>
       </div>

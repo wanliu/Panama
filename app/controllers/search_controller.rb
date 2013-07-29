@@ -16,10 +16,16 @@ class SearchController < ApplicationController
 
   def products
     query = params[:q]
-    s = Tire.search 'products' do 
+    s = Tire.search ["products", "shop_products"] do 
         query do 
           string "name:#{query}"
         end
+
+        sort("_script" => { 
+            :script => "doc['_type'].value",
+            :type   => "string",
+            :order  => "desc"
+          }, "_score" => {})
 
         # constant_score do 
         #   query do 

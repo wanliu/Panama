@@ -1,5 +1,8 @@
 class Activity < ActiveRecord::Base
   include Graphical::Display
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+    
   attr_accessible :url, :product_id, :start_time, :end_time, :price,
                   :description, :like, :participate, :author_id
   belongs_to :product
