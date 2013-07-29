@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130727075407) do
+ActiveRecord::Schema.define(:version => 20130729053446) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -30,18 +30,20 @@ ActiveRecord::Schema.define(:version => 20130727075407) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
-    t.string   "activity_type", :limit => 14
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+    t.string   "activity_type",   :limit => 14
     t.string   "description"
     t.integer  "product_id"
-    t.decimal  "price",                       :precision => 10, :scale => 2
+    t.decimal  "price",                         :precision => 10, :scale => 2
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "author_id"
-    t.integer  "limit_count",   :limit => 8
+    t.integer  "limit_count",     :limit => 8
     t.integer  "like"
     t.integer  "participate"
+    t.integer  "shop_product_id"
+    t.integer  "shop_id"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -107,6 +109,13 @@ ActiveRecord::Schema.define(:version => 20130727075407) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
+
+  create_table "admins", :force => true do |t|
+    t.string   "uid"
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "attachments", :force => true do |t|
     t.string   "filename"
@@ -322,11 +331,6 @@ ActiveRecord::Schema.define(:version => 20130727075407) do
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
 
-  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
-  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
-  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
-  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
-
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
@@ -377,9 +381,11 @@ ActiveRecord::Schema.define(:version => 20130727075407) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
-    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+    t.integer  "shop_product_id"
+    t.integer  "product_id"
+    t.integer  "shop_id"
   end
 
   create_table "order_refund_state_details", :force => true do |t|
@@ -466,18 +472,19 @@ ActiveRecord::Schema.define(:version => 20130727075407) do
   end
 
   create_table "product_items", :force => true do |t|
+    t.integer  "transaction_id"
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0
-    t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
-    t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
+    t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
     t.integer  "transaction_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
     t.integer  "cart_id"
-    t.integer  "product_id"
     t.string   "options"
-    t.boolean  "refund_state",                                  :default => true
+    t.integer  "shop_product_id"
     t.integer  "shop_id"
+    t.integer  "product_id"
   end
 
   add_index "product_items", ["options"], :name => "index_product_items_on_options"

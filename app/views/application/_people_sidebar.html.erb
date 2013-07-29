@@ -24,42 +24,25 @@
         <span class="name">账户管理</span>
       </a>
       <ul id="info-collapse" class="accordion-body collapse">
-        <!-- <li>
-          <a class='people-info' href="<%= person_path(current_user) %>">
-            基本信息
-          </a>
-        </li> -->
         <% if can? :show_bill, People %>
         <li>
-          <!-- <a class='people-show_bill' href="<%= show_bill_person_path(@people) %>">
-            账单记录
-          </a> -->
-          <!-- <ul id="info-collapse" class="accordion-body collapse"> -->
-            <li>
-              <a class='people-info' href="<%= person_path(@people) %>">
-                基本信息
-              </a>
-            </li>
-            <li>
-              <a class='people-show_bill' href="<%= show_bill_person_path(@people) %>">
-                账单记录
-              </a>
-            </li>
-            <li>
-              <a class='people-create_shop' href="/completing_shop/authenticate_license">
-                我要开店
-              </a>
-            </li>
-          </ul>
+          <a class='people-info' href="<%= person_path(@people) %>">
+            基本信息
+          </a>
         </li>
-        <% end %>
-        <!-- <li>
+        <li>
+          <a class='people-show_bill' href="<%= show_bill_person_path(@people) %>">
+            账单记录
+          </a>
+        </li>
+        <li>
           <a class='people-create_shop' href="/completing_shop/authenticate_license">
             我要开店
           </a>
-        </li> -->
-     <!--  </ul> -->
-    </li>
+        </li>
+        <% end %>
+      </ul>
+
     <% if can? :index, Cart %>
         <li>
           <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>

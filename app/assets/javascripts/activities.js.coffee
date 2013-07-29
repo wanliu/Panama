@@ -9,4 +9,3 @@
 #= require lib/image_natural_size
 #= require lib/chosen.ex
 #= require commit_comment
-#= require lib/activity_base_info
