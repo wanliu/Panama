@@ -175,7 +175,11 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :product_search
+  resources :product_search do
+    collection do
+      get 'shop', :to =>  "product_search#shop"
+    end
+  end
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'

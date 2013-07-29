@@ -60,9 +60,10 @@ class ActivitiesController < ApplicationController
 
   def join
     @activity = Activity.find(params[:activity][:id])
-    @transaction = current_user.transactions.build(seller_id: @activity.product.shop_id)
+    @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
     @transaction.items.build({
-      :product_id => @activity.product_id,
+      :product_id => @activity.shop_product.product_id,
+      :shop_id => @activity.shop_id,
       :amount => params[:product_item][:amount],
       :title => @activity.description,
       :price => @activity.activity_price
