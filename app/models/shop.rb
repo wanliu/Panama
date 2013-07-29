@@ -83,6 +83,10 @@ class Shop < ActiveRecord::Base
     shop_users.find_by(:user_id => userid)
   end
 
+  def actived?
+    actived
+  end
+
   class << self
     attr_reader :slient_state
 
