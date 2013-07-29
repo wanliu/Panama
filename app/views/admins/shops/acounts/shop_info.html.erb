@@ -1,10 +1,10 @@
 <%= simple_form_for @shop_auth,
-    url: '/completing_shop/authenticate_license',
-    html: { method: :put, class: "form-horizontal" } do |f| %>
+    url: '/user_checkings/update_shop_auth',
+    html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
     <div class="span12">
         <%= f.input :shop_name, label: '商店名称' %>
         <%= f.input :shop_photo, label: '商店图标', as: 'file' %>
-        <%= f.input :shop_url, label: '商店地址' %>
+        <%#= f.input :shop_url, label: '商店地址' %>
         <%= f.input :shop_summary, label: '商店简介' %>
         <hr>
         <%= f.input :company_name, label: '营业店名' %>
@@ -17,3 +17,16 @@
         <%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
         <%= f.input :phone, label: '联系电话' %>
 <% end %>
+<% if !@shop_auth.checked %>
+    <input type="button" class="modify" value="修改">
+<% else %>
+    <script type="text/javascript">
+        $("input").attr("readonly","readonly");
+    </script>
+<% end %>
+
+<script type="text/javascript">
+    $(".modify").bind("click",function(){
+        $(".shop_auth").submit();
+    })
+</script>
