@@ -1,19 +1,15 @@
-<div class='row-fluid'>
-  <div class='span7 widget'>
-    <section>
-      <header>
-        <h4><i class="icon-user"></i>个人信息</h4>
-      <header>
+<section>
+  <header>
+    <h4><i class="icon-user"></i>个人信息</h4>
+    <header>
       <div class='body'>
-          <%= simple_form_for @user_auth,
-              url: url,
-              html: { method: :put, class: "form-horizontal" } do |f| %>
-            <%= f.input :ower_photo, label: '个人图片', as: 'file' %>
-            <%= f.input :ower_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
-            <%= f.input :ower_shenfenzheng_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
-            <%= f.input :phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
-          <% end %>
+        <%= simple_form_for @user_auth,
+        url: url,
+        html: { method: :put, class: "form-horizontal user_auth" } do |f| %>
+        <%= f.input :ower_photo, label: '个人图片', as: 'file' %>
+        <%= f.input :ower_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
+        <%= f.input :ower_shenfenzheng_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
+        <%= f.input :phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
+        <% end %>
       </div>
-    </section>
-  </div>
-</div>
+</section>

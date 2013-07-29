@@ -35,14 +35,16 @@
             账单记录
           </a>
         </li>
-        <li>
-          <a class='people-create_shop' href="/completing_shop/authenticate_license">
-            我要开店
-          </a>
-        </li>
+          <% unless @people.is_seller? %>
+          <li>
+            <a class='people-create_shop' href="/completing_shop/authenticate_license">
+              我要开店
+            </a>
+          </li>
+          <% end %>
         <% end %>
       </ul>
-
+    </li>
     <% if can? :index, Cart %>
         <li>
           <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
