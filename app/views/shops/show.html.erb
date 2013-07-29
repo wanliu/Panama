@@ -1,5 +1,7 @@
 <div id="main" class="content">
-	<div id="shop_products" >
-		
-	</div>
+  <div id="shop_products" >
+    <% @shop_products.each do |shop_product| %>
+      <%= render "shops/preview", shop_product: shop_product %>
+    <% end %>
+  </div>
 </div>

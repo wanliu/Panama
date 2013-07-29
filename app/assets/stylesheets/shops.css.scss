@@ -1,1 +1,59 @@
 @import "core";
+
+.shop_product {
+	padding-bottom: 10px;
+  margin-bottom: 12px;
+  padding-top: 3px;
+  padding-right: 3px;
+
+	.out-box {
+    @include transparent(rgb(51,51,51), 0.4);
+    color: white;
+    .in-box {
+      position: relative;
+      overflow: hidden;
+      padding: 5px;
+      // border-bottom: 1px solid #e7e7e7;
+
+      .preview {
+
+      }
+
+      .right_bottom2 {
+        position: absolute;
+        bottom: 30px;
+        text-align: right;
+        right: 0px;
+        text-decoration: line-through;
+        color: #ccc;
+        padding: 0 10px 0 10px;
+        @include border-top-left-radius(10px);
+        @include border-bottom-left-radius(10px);
+
+        @include transparent($black,0.5);        
+        h5 {
+          margin: 0px;
+        }
+
+      }
+
+      .right_bottom1 {
+        position: absolute;
+        text-align: right;
+        bottom: 5px;
+        right: 0px;
+        color: $red;
+        padding: 0 10px 0 10px;
+        // @include text-shadow(0px 0px 1px rgba(255, 255, 255, 1));
+        @include border-top-left-radius(10px);
+        @include border-bottom-left-radius(10px);
+        background: rgba($blue, 0.5);
+
+        h4 {
+          margin: 0px;
+        }
+
+      }
+    }
+  }
+}

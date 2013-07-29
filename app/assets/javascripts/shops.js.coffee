@@ -1,3 +1,3 @@
-#= require jquery
-#= require lib/underscore
-#= require backbone
+//= require panama
+//= require social_sidebar
+//= require lib/jquery.nanoscroller
