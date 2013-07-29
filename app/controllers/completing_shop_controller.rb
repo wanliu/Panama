@@ -43,6 +43,7 @@ class CompletingShopController < Wicked::WizardController
 
   def save_license
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
+
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
       if @user_checking.user.shop.blank?
