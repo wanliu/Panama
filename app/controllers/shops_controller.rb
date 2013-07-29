@@ -44,7 +44,8 @@ class ShopsController < ApplicationController
 
     respond_to do |format|
       # format.html { render_shop_content @shop, :index, @shop }
-      format.html { render_content @content }
+      # format.html { render_content @content }
+      format.html
       format.json { render json: @shop }
     end
   end

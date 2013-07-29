@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-<%= render "head", :styles => ['another_bootstrap'], :javascripts => ['shops'] %>
-<body class="<%= controller.controller_name %>">
-  <%= render "header" %>
-  <div id='wrapper' class='container'>
-    <%= yield %>
-  </div>
+  <%#= cache do %>
+    <%= render "head", :styles => ['shops'], :javascripts => ['shops'] %>
+  <%# end %>
+  <body class="<%= controller.controller_name %>" style="zoom: 1">
+    <%= render "chromeframe" %>
+    <div class="logo" data-spy="affix" data-offset-top="20">
+      <h4><a href="/">万流 <strong>市场</strong></a></h4>
+    </div>
+    <%= render "left_sidebar" %>
+    <div class="wrap">
+      <%= render "header" %>
+      <%= yield %>
+    </div>
+    <div id="popup-layout"></div>
+    <%= render "right_sidebar" %>
+    <%#= render 'header' %>
+    <%= render "footer" %>
+    <%# Javascript at the bottom for fast page loading %>
     <%= render "baidu_analyzer" %>
 
-</body>
+  </body>
 </html>
+<script type="text/javascript">
+$(document).ready(function(){
+  notifier.setPermission()
+})
+</script>
