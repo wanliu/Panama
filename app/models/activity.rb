@@ -3,10 +3,11 @@ class Activity < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
     
-  attr_accessible :url, :product_id, :start_time, :end_time, :price,
+  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price,
                   :description, :like, :participate, :author_id
-  belongs_to :product
+  belongs_to :shop_product
   belongs_to :author, :class_name => "User"
+  belongs_to :shop
 
   has_many :activity_rules, autosave: true
 
@@ -19,16 +20,21 @@ class Activity < ActiveRecord::Base
   has_many :participates, :through => :activities_participates, :source => :user
 
   # validates_associated :product
-  validates_presence_of :product
   validates_presence_of :author
 
   define_graphical_attr :photos, :handler => :default_photo
+
+  before_create :init_data
+
+  def init_data
+    self.shop_id = author.shop.id
+  end
 
   def default_photo
     attachments.first ? attachments.first.file : Attachment.new.file
   end
 
-  validates :price,:start_time,:end_time,:product_id,:presence => true
+  validates :price,:start_time,:end_time,:shop_product_id,:presence => true
 
   def like
     likes.size

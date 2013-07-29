@@ -1,34 +1,31 @@
-<% active_section "show_bill" %>
 <div class='row-fluid'>
-  <div class='span7'>
-    <div class='widget'>
-      <section>
-        <header>
-          <h4><i class="icon-user"></i>个人账户</h4>
-        <header>
-        <div class='body'>
-          <div class='row-fluid'>
-            <div class='span4'>
-              <img src="<%=@people.photos.header %>" class='img-circle' alt='头像' />
-            </div>
-            <div class='span8'>
-              <p>
-                用户名 <%=@people.login %>
-              </p>
-              <p>
-                E-mail <%=@people.email %>
-              </p>
-              <% if can?(:manage, User) %>
-              <p>
-                余额 <%=@people.money %>
-              </p>
-              <% end %>
-            </div>
+  <div class='span7 widget'>
+    <section>
+      <header>
+        <h4><i class="icon-user"></i>个人账户</h4>
+      <header>
+      <div class='body'>
+        <div class='row-fluid'>
+          <div class='span4'>
+            <img src="<%=@people.photos.header %>" class='img-circle' alt='头像' />
+          </div>
+          <div class='span8'>
+            <p>
+              用户名 <%=@people.login %>
+            </p>
+            <p>
+              E-mail <%=@people.email %>
+            </p>
+            <% if can?(:manage, User) %>
+            <p>
+              余额 <%=@people.money %>
+            </p>
+            <% end %>
           </div>
         </div>
-      </section>
-    </div>
-    <div class='widget'>
+      </div>
+    </section>
+    <div class='body'>
       <% if can?(:manage, User) %>
       <section>
         <header>

@@ -27,6 +27,8 @@ def initialize_data
 
   load_delivery_manner
 
+  load_user_service
+
   load_logistics
 end
 
@@ -71,6 +73,10 @@ end
 
 def load_permission
   rake['permission:load'].invoke
+end
+
+def load_user_service
+  rake['user_services:load'].invoke
 end
 
 def load_logistics

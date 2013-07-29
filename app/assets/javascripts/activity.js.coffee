@@ -6,7 +6,6 @@
 #= require backbone
 #= require lib/hogan
 #= require my_cart
-#= require typeaheadExtension
 
 root = window || @
 
@@ -130,7 +129,7 @@ class ActivityView extends Backbone.View
 		@$(".comments").append(comment_template(comment))
 		@$(".comments>.comment").last().slideDown("slow")
 		@$("textarea",".message").val("")
-		
+
 
 class ActivityPreview extends Backbone.View
 

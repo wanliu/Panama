@@ -1,7 +1,7 @@
 <!-- 竞价 -->
 <%= simple_form_for @activity, :remote => true, :url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction'}, :type => :json do |f| %>
 
-  <%= f.input :product,
+  <%= f.input :shop_product,
               :label => "商品",
               :input_html => {
                   class: :typeahead,
@@ -13,7 +13,7 @@
   <ul class="typeahead dropdown-menu typeahead_list"></ul>
 
 
-  <%= f.text_field :product_id, type: :hidden %>
+  <%= f.text_field :shop_product_id, type: :hidden %>
 
   <%= f.input :description,
               :label => '活动名称',
@@ -58,7 +58,7 @@
 
     new TypeaheadExtension({
         el: $('.typeahead'),
-        source: '/product_search/',
+        source: '/product_search/shop',
         field: 'name',
         select: function(id){
           activity_view.fetch_product(id)

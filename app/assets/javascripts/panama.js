@@ -30,6 +30,8 @@
 //= require topbar
 //= require right_sidebar
 //= require pick_product
+//= require typeaheadExtension
+//= require lib/activity_base_info
 
 
 root = window || this;

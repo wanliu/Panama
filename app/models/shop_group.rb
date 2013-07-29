@@ -38,7 +38,7 @@ class ShopGroup < ActiveRecord::Base
             group_permissions.create(permission_id: permission.id)
           end
         else
-          raise "not #{cls_name} #{ability} permission!"
+          raise "not define #{cls_name} #{ability} permission!"
         end
       end
     end

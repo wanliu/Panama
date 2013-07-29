@@ -93,6 +93,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def login_required_without_service_seller
+    if !current_user
+      login_required_origin
+    elsif !current_user.services.empty? &&
+      current_user.services.any? { |service| service.service_type == "seller" }
+      redirect_to '/'
+    end
+  end
+
   def admin_required
     if !current_admin
 

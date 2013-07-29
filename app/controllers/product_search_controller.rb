@@ -9,4 +9,16 @@ class ProductSearchController < ApplicationController
       format.json { render json: products }
     end
   end
+
+  def shop
+    if current_user.shop
+      s = ShopProduct.search2 "shop_id:#{current_user.shop.id} and name:#{params[:q]}"
+      products = s.results
+    else
+      products = []
+    end
+    respond_to do |format|
+      format.json { render json: products }
+    end
+  end
 end

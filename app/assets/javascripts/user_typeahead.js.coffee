@@ -1,6 +1,6 @@
 # author: huxinghai
 # describe: 搜索用户
-#= require lib/typeahead
+
 #= require lib/hogan
 
 root = window || @
@@ -11,7 +11,7 @@ class UserTypeahead
         @input_el = input_el
         @bind_typeahead()
 
-    bind_typeahead: () ->        
+    bind_typeahead: () ->
         @input_el.typeahead(
             name: "users",
             remote: "/search/users?q=%QUERY&limit=10",

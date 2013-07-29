@@ -4,6 +4,15 @@
         <%= render :partial => "section", :locals => section %>
     <% end %>
     <li class="accordion-group">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#acount-collapse"><i class="icon-user"></i> <span class="name">账户</span></a>
+        <ul id="acount-collapse" class="accordion-body collapse">
+        <% sections(:acount).each do |section| %>
+            <%= render :partial => "section", :locals => section %>
+        <% end %>
+        </ul>
+    </li>
+
+    <li class="accordion-group">
         <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#orders-collapse"><i class="icon-edit"></i> <span class="name">订单</span></a>
         <ul id="orders-collapse" class="accordion-body collapse">
         <% sections(:transactions).each do |section| %>

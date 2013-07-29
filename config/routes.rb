@@ -175,7 +175,11 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :product_search
+  resources :product_search do
+    collection do
+      get 'shop', :to =>  "product_search#shop"
+    end
+  end
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
@@ -210,6 +214,7 @@ Panama::Application.routes.draw do
     end
 
     namespace :admins do
+
       resources :dashboard, :controller => "shops/dashboard"
 
       resources :contents, :controller => "shops/contents"
@@ -245,6 +250,7 @@ Panama::Application.routes.draw do
           get "messages", :to => "shops/transactions#messages"
           put "update_delivery", :to => "shops/transactions#update_delivery"
           get "print", :to => "shops/transactions#print"
+          put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
         end
       end
 
@@ -275,6 +281,8 @@ Panama::Application.routes.draw do
 
       match "pending", :to => "shops/transactions#pending"
       match "complete", :to => "shops/transactions#complete"
+      match "shop_info", :to => "shops/acounts#shop_info"
+      match "bill_detail", :to => "shops/acounts#bill_detail"
 
       resources :order_refunds, :controller => "shops/order_refunds" do
         member do

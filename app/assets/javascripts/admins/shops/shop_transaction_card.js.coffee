@@ -18,6 +18,8 @@ class ShopTransactionCard extends TransactionCardBase
     "click .detail"           : "toggleItemDetail"
     "click .message-toggle"   : "toggleMessage"
     "keyup .delivery_code"    : "filter_delivery_code"
+    "click .dprice_edit"      : "show_dprice_edit"
+    "blur input:text[name=delivery_price]" : "update_dprice"
 
   states:
     initial: 'none'
@@ -48,7 +50,6 @@ class ShopTransactionCard extends TransactionCardBase
 
   getNotifyName: () ->
     super + "-seller"
-
 
   toggleItemDetail: (event) ->
     @$(".item-details").slideToggle()
@@ -85,7 +86,7 @@ class ShopTransactionCard extends TransactionCardBase
   save_delivery_code: (cb) ->
     input = @$("input:text.delivery_code")
     select = @$("select[name=logistics_company_id]")
-    if input.length > 0 &&select.length > 0
+    if input.length > 0 && select.length > 0
       delivery_code = input.val()
       logistics_company_id = select.val()
       urlRoot = @transaction.urlRoot
@@ -101,6 +102,41 @@ class ShopTransactionCard extends TransactionCardBase
       )
     else
      cb()
+
+  show_dprice_edit: () ->
+    @$dprice_panel = @$(".dprice_panel")
+    @$dprice_edit_panel = @$(".dprice_edit_panel")
+    @$dprice_input = @$("input:text[name=delivery_price]")
+
+    @$dprice_panel.hide()
+    @$dprice_edit_panel.show()
+    @$dprice_input.focus()
+
+  update_dprice: () ->
+    old_price = @$dprice_panel.attr("data-value")
+    new_price = @$dprice_input.val()
+
+    unless /^\d+.?\d+$/.test(new_price)
+      pnotify(title: "错误信息", text: "请输入正确运费！", type: "error")
+      return
+
+    if parseFloat(old_price) isnt parseFloat(new_price)
+      @transaction.fetch(
+        url: "#{@transaction.urlRoot}/update_delivery_price",
+        data: {delivery_price: new_price},
+        type: "PUT",
+        success: () =>
+          price = @$dprice_panel.text().trim()
+          price = price.replace(price.substring(1, price.length), " #{new_price}")
+          @$dprice_panel.html(price)
+          @$dprice_panel.show()
+          @$dprice_edit_panel.hide()
+      )
+    else
+      @$dprice_panel.show()
+      @$dprice_edit_panel.hide()
+
+
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports
