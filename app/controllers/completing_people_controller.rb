@@ -40,7 +40,7 @@ class CompletingPeopleController < Wicked::WizardController
       if @user_auth.valid?
         @user_checking.update_attributes(@user_auth.update_options)
 
-        current_user.services << Service.where(service_type: @user_checking.service.service_type)
+        current_user.services << Service.where(service_type: "buyer")
 
         # render_wizard(@user_checking)
         redirect_to '/'
