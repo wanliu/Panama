@@ -6,7 +6,7 @@ class CategoryController < ApplicationController
 
   def index
     @category = Category.where(:name => '_products_root').first
-    @products = Product.limit(60)
+    @products = Product.page params[:page]
   end
 
   def show
