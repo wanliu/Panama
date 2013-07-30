@@ -408,8 +408,10 @@ ActiveRecord::Schema.define(:version => 20130729053446) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
+    t.string   "shipped_state"
     t.string   "order_state"
     t.integer  "delivery_manner_id"
+    t.integer  "delivery_type_id"
     t.integer  "logistics_company_id"
   end
 
@@ -469,9 +471,11 @@ ActiveRecord::Schema.define(:version => 20130729053446) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
-    t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
-    t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
+
+    t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
+    t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
+
     t.integer  "transaction_id"
     t.datetime "created_at",                                                     :null => false
     t.datetime "updated_at",                                                     :null => false
@@ -638,6 +642,7 @@ ActiveRecord::Schema.define(:version => 20130729053446) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end

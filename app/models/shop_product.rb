@@ -37,7 +37,7 @@ class ShopProduct < ActiveRecord::Base
         :avatar       => product.photos.avatar
       }
     }.to_json
-  end  
+  end
 
   delegate :photos, :to => :product
 
