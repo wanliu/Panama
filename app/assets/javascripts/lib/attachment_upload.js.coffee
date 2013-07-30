@@ -226,4 +226,3 @@ class root.AttachmentUpload extends Backbone.View
         temp = model if model.get("default_state")?
 
       temp
-
