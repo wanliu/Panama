@@ -348,7 +348,9 @@ class OrderTransaction < ActiveRecord::Base
 
   #卖家收款
   def seller_recharge
-    seller.user.recharge(stotal, self)
+    unless pay_manner.cash_on_delivery?
+      seller.user.recharge(stotal, self)
+    end
   end
 
   def get_delivery_price(delivery_id)
