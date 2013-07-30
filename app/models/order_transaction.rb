@@ -237,16 +237,10 @@ class OrderTransaction < ActiveRecord::Base
     if not_product_refund(product_ids).present?
       refund_items.destroy_all
       update_total_count
-    else
-      refund_handle_product_item(product_ids)
     end
     if !pay_manner.cash_on_delivery? && save
       refund.buyer_recharge
     end
-  end
-
-  def refund_handle_product_item(product_ids)
-    get_refund_items(product_ids).update_all(:refund_state => false)
   end
 
   def get_refund_items(product_ids)
