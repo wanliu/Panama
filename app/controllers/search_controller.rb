@@ -16,19 +16,19 @@ class SearchController < ApplicationController
 
   def products
     query = params[:q]
-    s = Tire.search ["products", "shop_products"] do 
-        query do 
+    s = Tire.search ["products", "shop_products"] do
+        query do
           string "name:#{query}"
         end
 
-        sort("_script" => { 
+        sort("_script" => {
             :script => "doc['_type'].value",
             :type   => "string",
             :order  => "desc"
           }, "_score" => {})
 
-        # constant_score do 
-        #   query do 
+        # constant_score do
+        #   query do
         #     string "name:#{query}"
         #   end
 
@@ -42,6 +42,24 @@ class SearchController < ApplicationController
     respond_to do |format|
       format.json { render :json => @results }
       format.html { render :products }
+    end
+  end
+
+  def shop_products
+    if current_user.shop
+      query = params[:q]
+      shop_id = current_user.shop.id
+      s = ShopProduct.search2 do
+        query do
+          string "name:#{query}* and seller.id:#{shop_id}"
+        end
+      end
+      products = s.results
+    else
+      products = []
+    end
+    respond_to do |format|
+      format.json { render json: products }
     end
   end
 end
