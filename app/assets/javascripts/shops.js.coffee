@@ -11,6 +11,9 @@ class ShopProductModel extends Backbone.Model
 
 class ShopProductView extends Backbone.View
 
+	events:
+		"click [data-dismiss=modal]": "close"
+
 	initialize: (options) ->
 		_.extend(@, options)
 		backdrop = "<div class='model-popup-backdrop in' />"
@@ -26,6 +29,8 @@ class ShopProductView extends Backbone.View
 			@template = data
 			handle.call(@)
 			@delegateEvents()
+			$.get "/products/53757?layout=false", (data) =>
+				$(".main-show").html(data)
 
 	render: () ->
 		tpl = Hogan.compile(@template)
@@ -34,11 +39,18 @@ class ShopProductView extends Backbone.View
 	modal: () ->
 		$("body").addClass("noScroll")
 
+	unmodal: () ->
+		$("body").removeClass("noScroll")
+
+	close: () ->
+		@$backdrop.remove()
+		@unmodal()
+
 
 class ShopProductPreview extends Backbone.View
 
-	events:
-		"click .preview" 		: "launchShopProduct"
+	# events:
+		# "click .preview" 		: "launchShopProduct"
 
 	initialize: (options) ->
 		_.extend(@, options)

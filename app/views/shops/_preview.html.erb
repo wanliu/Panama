@@ -1,9 +1,11 @@
 <div class="shop_product" shop-product-id="<%=shop_product.id%>" style="display: inline-block">
 	<div class='out-box'>
 		<div class='in-box'>
-			<%= image_tag shop_product.photos.avatar, :class => "preview a-#{shop_product.id}" %>
+			<a href="/products/<%=shop_product.product_id%>">
+				<%= image_tag shop_product.photos.avatar, :class => "preview a-#{shop_product.id}" %>
+			</a>
  			<div class='summary'>
-				<h4 class="title"><%= shop_product.product.description %></h4>
+				<h4 class="title"><%= shop_product.product.name %></h4>
 				<p><%= shop_product.product.description %></p>
  			</div>
  		</div>

@@ -80,7 +80,7 @@ class ActivityView extends Backbone.View
 
 	close: () ->
 		@$backdrop.remove()
-		@unmodal();
+		@unmodal()
 
 	playAnimate: () ->
 		$body = @$(".main-show")
