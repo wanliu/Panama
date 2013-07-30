@@ -51,7 +51,7 @@ class SearchController < ApplicationController
       shop_id = current_user.shop.id
       s = ShopProduct.search2 do
         query do
-          string "name:#{query}* and seller.id:#{shop_id}"
+          string "name:#{query} and seller.id:#{shop_id}"
         end
       end
       products = s.results
