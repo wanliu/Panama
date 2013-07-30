@@ -52,5 +52,4 @@ class ShopProduct < ActiveRecord::Base
     indexes :name, :as => 'product.name'
     indexes :shop_id, :index => :not_analyzed
   end
->>>>>>> 194a95043bbe4dfc1c3d2b6be2effb64203f0a51
 end
