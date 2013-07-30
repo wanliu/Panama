@@ -6,7 +6,11 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="icon-plus"></i>&nbsp;发布</a>
       <ul class="dropdown-menu publish">
-        <li><a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog">优惠活动</a></li>
+        <% if current_user.is_seller? && current_user.shop.try(:actived?) %>
+        <li>
+            <a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog">优惠活动</a>
+        </li>
+        <% end %>
         <li><a href="#" class="create_buy">求购信息</a></li>
       </ul>
     </li>
@@ -25,6 +29,15 @@
             </li>
         </ul> 
     </li>
+
+    <!--商店入口-->
+    <% if current_user.is_seller? && current_user.shop.try(:name) && current_user.shop.actived? %>
+        <li class="dropdown">
+            <a href="/shops/<%= current_user.shop.name %>/admins">
+                <i class="icon-building handle"></i>
+            </a>
+        </li>
+    <% end %>
 
     <!-- 聊天信息 -->
     <li class="dropdown">
