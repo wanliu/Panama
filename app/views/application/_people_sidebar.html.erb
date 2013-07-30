@@ -39,7 +39,7 @@
             <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>地址
             </a>
           </li>
-          <% unless @people.is_seller? %>
+          <% unless !@people.is_seller? %>
           <li>
             <a class='people-create_shop' href="/completing_shop/authenticate_license">
               我要开店
