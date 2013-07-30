@@ -28,6 +28,8 @@ class Shop < ActiveRecord::Base
   after_create :initial_shop_data
   before_destroy :delete_shop
 
+  scope :actived, where(actived: true)
+
   validates :name, presence: true
   validates :name, uniqueness: true
 
@@ -79,6 +81,10 @@ class Shop < ActiveRecord::Base
   #查询这个商店是否有这个雇员
   def find_employee(userid)
     shop_users.find_by(:user_id => userid)
+  end
+
+  def actived?
+    actived
   end
 
   class << self
