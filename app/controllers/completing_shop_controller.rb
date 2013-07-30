@@ -58,7 +58,7 @@ class CompletingShopController < Wicked::WizardController
   def set_products_added
     @user_checking.update_attributes(products_added: true)
     # 添加服务（是否有服务是主页跳转到选择服务选择页的判断标记）
-    current_user.services << Service.where(service_type: @user_checking.service.service_type)
+    current_user.services << Service.where(service_type: "seller")
 
     redirect_to '/'
   end
