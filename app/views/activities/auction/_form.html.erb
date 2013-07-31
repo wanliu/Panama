@@ -62,7 +62,7 @@
 
     new TypeaheadExtension({
         el: $('.typeahead'),
-        source: '/product_search/shop',
+        source: '/search/shop_products',
         field: 'name',
         select: function(id){
           activity_view.fetch_product(id)

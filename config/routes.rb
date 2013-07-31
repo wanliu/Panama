@@ -178,11 +178,7 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :product_search do
-    collection do
-      get 'shop', :to =>  "product_search#shop"
-    end
-  end
+  resources :product_search
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
@@ -353,6 +349,7 @@ Panama::Application.routes.draw do
   # Search Engine
   match "search/users", :to => "search#users"
   match "search/products", :to => "search#products"
+  match "search/shop_products", :to => "search#shop_products", :via => :get
 
 
   # omniauth
