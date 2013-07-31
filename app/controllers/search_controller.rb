@@ -47,7 +47,7 @@ class SearchController < ApplicationController
 
   def shop_products
     if current_user.shop
-      query = params[:q]
+      query = params[:q].gsub(/[\+\-\*\/\.\,]/, "")
       shop_id = current_user.shop.id
       s = ShopProduct.search2 do
         query do
