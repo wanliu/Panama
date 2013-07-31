@@ -52,15 +52,11 @@
 		</tr>
 		<tr>
 			<td>所属商店</td>
-			<td><a href="/system/shops/<%= @activity.shop.id %>"><%= @activity.shop.name %></a></td>
+			<td><a href="/system/shops/<%= @activity.shop.try(:id) %>"><%= @activity.shop.try(:name) %></a></td>
 		</tr>
 		<tr>
 			<td>状态</td>
 			<td><%= @activity.status %></td>
-		</tr>
-		<tr>
-			<td>驳回原因</td>
-			<td><%= @activity.rejected_reason || "暂无" %></td>
 		</tr>
 	</tbody>
 </table>
