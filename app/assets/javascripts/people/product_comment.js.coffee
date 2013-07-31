@@ -13,6 +13,7 @@ class window.ProductCommentView extends Backbone.View
     @star_panel = @$(".star_panel")
     @comments = @$(".comments")
     @stars = @star_panel.find(".star")
+    @create_comment = @$(".create_comment")
     @init_star()
 
   create: () ->
@@ -23,13 +24,11 @@ class window.ProductCommentView extends Backbone.View
       type: "POST",
       data: {product_comment: data},
       success: (comment) =>
-        @comments.append("<div class='row-fluid'>
+        @comments.html("<div class='row-fluid'>
           <div class='span2'><img src='#{comment.user_icon_url}' />#{comment.user_login}</div>
           <div class='span10'>#{comment.content}</div>
         </div>")
-        @init_star_el(data)
-        @textarea.val('')
-        @filter_content()
+        @init_star_el(data);
     })
     false
 

@@ -2,7 +2,7 @@ class ProductComment < ActiveRecord::Base
   attr_accessible :product_item, :star_logistics, :star_product, :star_service
 
   belongs_to :product_item
-  has_many :comments, :as => :targeable
+  has_many :comments, :as => :targeable, :dependent => :destroy
 
   before_create :init_data
 

@@ -1,8 +1,13 @@
 <%= render "people/transactions/funcat/refund_display", :transaction => transaction, :people => people %>
 <div class='container-fluid'>
   <div class='row-fluid'>
-    <div class="offset10">
-      <a href='javascript:void(0)' class='returned-event'>申请退货</a>
+    <div class="offset8">
+      <a href='javascript:void(0)' class='returned-event'>
+        申请退货
+      </a>
+      <a href="<%= person_product_comment_path(@people, transaction.id) %>/order">
+        商品评论
+      </a>
     </div>
   </div>
   <div class='row-fluid'>
