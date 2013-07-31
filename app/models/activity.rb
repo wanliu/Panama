@@ -3,8 +3,9 @@ class Activity < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
     
-  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price,
+  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
                   :description, :like, :participate, :author_id, :status, :rejected_reason
+
   belongs_to :shop_product
   belongs_to :author, :class_name => "User"
   belongs_to :shop

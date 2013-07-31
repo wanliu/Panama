@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.datetime "created_at",                                                                  :null => false
     t.datetime "updated_at",                                                                  :null => false
     t.string   "activity_type",   :limit => 14
+    t.string   "title"
     t.string   "description"
     t.integer  "product_id"
     t.decimal  "price",                         :precision => 10, :scale => 2
@@ -430,7 +431,6 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
-    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
   end

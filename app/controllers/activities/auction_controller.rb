@@ -10,7 +10,7 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def create
-    slice_options = [:shop_product_id, :price, :start_time, :end_time, :description, :attachment_ids]
+    slice_options = [:shop_product_id, :price, :start_time, :end_time, :description, :attachment_ids,:title]
     activity_params = params[:activity].slice(*slice_options)
 
     parse_time!(activity_params)
