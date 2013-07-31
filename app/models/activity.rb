@@ -4,7 +4,7 @@ class Activity < ActiveRecord::Base
   include Tire::Model::Callbacks
     
   attr_accessible :url, :shop_product_id, :start_time, :end_time, :price,
-                  :description, :like, :participate, :author_id
+                  :description, :like, :participate, :author_id,:title
   belongs_to :shop_product
   belongs_to :author, :class_name => "User"
   belongs_to :shop
