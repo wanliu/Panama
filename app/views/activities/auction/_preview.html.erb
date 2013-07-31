@@ -11,8 +11,8 @@
 
  -->		
  			<div class='summary'>
-				<h4 class="title"><%= activity.description %></h4>
-				<p><%= activity.description %> </p>
+				<h5 class="title"><%= activity.title %></h5>
+				<p style="word-wrap:break-word;"><%= activity.description %> </p>
  			</div>
 			<div class='userinfo'>
 				<%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
