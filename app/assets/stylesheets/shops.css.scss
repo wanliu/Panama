@@ -1,5 +1,11 @@
 @import "application";
 
+.model-popup-backdrop {
+  .modal-body {
+    max-height: 99999px;
+  }
+}
+
 .shop_product {
 	padding-bottom: 10px;
   margin-bottom: 12px;
