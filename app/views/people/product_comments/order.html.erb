@@ -1,0 +1,28 @@
+<% active_section "product-comment" %>
+<div class='row-fluid'>
+  <div class='span8 comment-list'>
+		<%= render "comment", :order => @transaction %>
+	</div>
+</div>
+<script type="text/javascript">
+  $(".star_product").raty({
+    readOnly : false,
+    scoreName: 'star_product',
+    score    : 5,
+    path     : "<%= asset_path 'raty' %>"
+  })
+
+  $(".star_service").raty({
+    readOnly : false,
+    score    : 5,
+    scoreName: 'star_service',
+    path     : "<%= asset_path 'raty' %>"
+  })
+
+  $(".star_logistics").raty({
+    readOnly : false,
+    score    : 5,
+    scoreName: 'star_logistics',
+    path     : "<%= asset_path 'raty' %>"
+  })
+</script>
