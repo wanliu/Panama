@@ -229,7 +229,7 @@ zh-CN:
         activity_type: 活动类型
         start_time: 开始时间
         end_time: 结束时间
-        like: 类似于
+        like: 喜欢人数
         participate: 参与人数
       product:
         id: 编号

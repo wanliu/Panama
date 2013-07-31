@@ -30,9 +30,10 @@ ActiveRecord::Schema.define(:version => 20130731075511) do
 
   create_table "activities", :force => true do |t|
     t.string   "url"
-    t.datetime "created_at",                                                   :null => false
-    t.datetime "updated_at",                                                   :null => false
+    t.datetime "created_at",                                                                  :null => false
+    t.datetime "updated_at",                                                                  :null => false
     t.string   "activity_type",   :limit => 14
+    t.string   "title"
     t.string   "description"
     t.integer  "product_id"
     t.decimal  "price",                         :precision => 10, :scale => 2
@@ -44,6 +45,8 @@ ActiveRecord::Schema.define(:version => 20130731075511) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
+    t.integer  "status",                                                       :default => 0
+    t.string   "rejected_reason"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -483,12 +486,21 @@ ActiveRecord::Schema.define(:version => 20130731075511) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
+<<<<<<< HEAD
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
     t.integer  "transaction_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+=======
+    t.decimal  "amount",         :precision => 10, :scale => 0, :default => 0
+    t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "transaction_id"
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
+>>>>>>> 1671d23d33add33b3c36d217dd9c5e63926b3844
     t.integer  "cart_id"
     t.string   "options"
     t.integer  "shop_product_id"

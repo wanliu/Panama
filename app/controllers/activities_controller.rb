@@ -7,7 +7,7 @@ class ActivitiesController < ApplicationController
   respond_to :html, :dialog
 
   def index
-    @activities = Activity.all
+    @activities = Activity.where("status = ?", Activity.statuses[:access])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @activities }
