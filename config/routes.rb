@@ -99,6 +99,9 @@ Panama::Application.routes.draw do
     match "followers", :to => "people/followings#followers"
 
     resources :product_comments, :controller => "people/product_comments" do
+      collection do
+        get "/:order_id/order" => "people/product_comments#order"
+      end
     end
 
     resources :notifications,:except => :show, :controller => "people/notifications" do
