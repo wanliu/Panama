@@ -1,8 +1,13 @@
 class ProductComment < ActiveRecord::Base
+  scope :user, ->(user){ where(:user_id => user.id) }
+  scope :shop, ->(shop){ where(:shop_id => shop.id) }
+
   attr_accessible :product_item, :star_logistics, :star_product, :star_service
 
   belongs_to :product_item
-  has_many :comments, :as => :targeable, :dependent => :destroy
+  belongs_to :user
+  belongs_to :shop
+  has_one :comment, :as => :targeable, :dependent => :destroy
 
   before_create :init_data
 

@@ -223,6 +223,12 @@ Panama::Application.routes.draw do
 
       resources :menu, :controller => "shops/menu"
 
+      resources :product_comments, :controller => "shops/product_comments" do
+        member do
+          post :reply, :to => "shops/product_comments#reply"
+        end
+      end
+
       resources :categories, :controller => "shops/categories" do
         collection do
           get :category_children

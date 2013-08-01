@@ -9,12 +9,13 @@ class Admins::Shops::SectionController < Admins::BaseController
   # section :dashboard, :top
   section :shop_info, :acount
   section :bill_detail,  :acount
-   
+
   section :pending, :transactions
   section :complete, :transactions
   # section :transport, :transportation
   # section :products, :products
   section :shop_products, :products
+  section :product_comments, :products
   # section :categories, :products
   # section :complaint, :service
   section :contents, :design

@@ -1,15 +1,16 @@
 <div class='product-comment' >
   <div class='row-fluid'>
-    <div class='seller span12'>
+    <div class='seller span4'>
       <%= link_to order.seller.name, shop_path(order.seller) %>
     </div>
+    <div class='span4'>订单编号：<%=order.number %></div>
   </div>
   <% order.items.each do | item | %>
     <% product_comment = item.product_comment %>
     <div class='row-fluid comment'>
       <div class='span5'>
         <div>
-          <img class="img-polaroid" src="<%=item.product.photos.header %>" />
+          <img class="img-polaroid" src="<%=product_comment.product_item.product.photos.header %>" />
         </div>
         <div class="product_name">
           商品名称：
@@ -46,15 +47,25 @@
               </div>
             </div>
             <div class='span7 comments'>
-              <% if product_comment.present? %>
-                <% product_comment.comments.each do |c| %>
+              <% comment = product_comment.comment %>
+              <% if comment.present? %>
                 <div class='row-fluid'>
                   <div class='span2'>
-                    <img src="<%=c.user.icon %>" />
-                    <%=c.user.login %>
+                    <img src="<%=comment.user.icon %>" />
+                    <%=comment.user.login %>
                   </div>
                   <div class='span10'>
-                    <%= c.content %>
+                    <%=comment.content %>
+                  </div>
+                </div>
+                <% comment.replies.each do |reply| %>
+                <div class='row-fluid'>
+                  <div class='span2'>
+                    <img src="<%=reply.user.icon %>" />
+                    <%= reply.user.login %>
+                  </div>
+                  <div class='span10'>
+                    <%= reply.content %>
                   </div>
                 </div>
                 <% end %>
