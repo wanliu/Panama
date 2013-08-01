@@ -67,6 +67,10 @@ module ApplicationHelper
     end
   end
 
+  def title
+    @title ||= "#{t(controller_name, :default => '万流平台')} #{t(action_name, :default => action_name)}"
+  end
+
   def industry_title(after)
     after
   end
@@ -230,4 +234,5 @@ module ApplicationHelper
     attachments = product.fetch(:attachment_ids, {})
     {:attachment_ids => attachments.map{|k, v| v} }
   end
+
 end
