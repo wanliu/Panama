@@ -1,6 +1,14 @@
-<div>
-	name: <%=@shop.name %>
-</div>
-<div>
-	user: <%=@shop.user.login %>
+<div class="content container-fluid">
+  <div class='row-fluid'>
+    <div class='span12'>
+      <h2 class='page-title'>商店<%=@shop.name%></h2>
+    </div>
+  </div>
+  <div class='row-fluid'>
+    <div id="shop_products" class="span12">
+      <% @shop_products.each do |shop_product| %>
+        <%= render "shops/preview", shop_product: shop_product %>
+      <% end %>
+    </div>
+  </div>  
 </div>
