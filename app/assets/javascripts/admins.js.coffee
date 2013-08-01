@@ -25,3 +25,4 @@
 #= require lib/table_bander
 #= require lib/data_2_table
 #= require twitter/bootstrap/modal
+#= require admins/shops/product_comment

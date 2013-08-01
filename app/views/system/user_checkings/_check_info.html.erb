@@ -131,7 +131,7 @@
 
 			reject: function(event) {
 				var that = this;
-				this.$("form.user_checking_reject").slideDown(function(event){
+				this.$("form.user_checking_reject").slideToggle(function(event){
 					that.$('textarea').focus();
 				});
 				return false;

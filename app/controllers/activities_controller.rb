@@ -7,7 +7,7 @@ class ActivitiesController < ApplicationController
   respond_to :html, :dialog
 
   def index
-    @activities = Activity.all
+    @activities = Activity.where("status = ?", Activity.statuses[:access])
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @activities }
@@ -63,7 +63,6 @@ class ActivitiesController < ApplicationController
     @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
     @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
-      :shop_id => @activity.shop_id,
       :amount => params[:product_item][:amount],
       :title => @activity.description,
       :price => @activity.activity_price

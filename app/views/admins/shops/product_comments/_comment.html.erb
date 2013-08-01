@@ -1,0 +1,89 @@
+<div class='product-comment' >
+  <div class='row-fluid'>
+    <div class='seller span4'>
+      <%= link_to product_comment.user.login, person_path(product_comment.user) %>
+    </div>
+    <div class='span4'>订单编号：<%=product_comment.product_item.transaction.number %></div>
+  </div>
+  <div class='row-fluid comment'>
+    <div class='span5'>
+      <div>
+        <img class="img-polaroid" src="<%=product_comment.product_item.photos.header %>" />
+      </div>
+      <div class="product_name">
+        商品名称：
+        <%= link_to product_comment.product_item.title, product_path(product_comment.product_item.product) %>
+      </div>
+      <div class='price'>
+        价格：<%=product_comment.product_item.price %>
+      </div>
+      <div class='quantity'>
+        数量：<%=product_comment.product_item.amount %>
+      </div>
+    </div>
+    <div class='span7'>
+      <div class='row-fluid'>
+        <div class='span5'>
+          <div class='row-fluid'>
+            <div class='span12'>评分</div>
+          </div>
+          <div class='star_panel'>
+            <div class='row-fluid'>
+              商品
+              <span class='star' star-ready="true" star-name="star_product" star-value="<%=product_comment.try(:star_product) || 5 %>"></span>
+            </div>
+            <div class='row-fluid'>
+              服务
+              <span class='star' star-ready="true" star-name="star_service" star-value="<%=product_comment.try(:star_service) || 5 %>">
+              </span>
+            </div>
+            <div class='row-fluid'>
+              物流
+              <span class="star" star-ready="true" star-name="star_logistics" star-value="<%=product_comment.try(:star_logistics) || 5 %>"></span>
+            </div>
+          </div>
+        </div>
+        <div class='span7 comments'>
+          <% comment = product_comment.comment %>
+          <% if comment.present? %>
+          <div class='row-fluid'>
+            <div class='span2'>
+              <img src="<%=comment.user.icon %>" />
+              <%=comment.user.login %>
+            </div>
+            <div class='span10'>
+              <%=comment.content %>
+            </div>
+          </div>
+          <div class='row-fluid create_reply'>
+            <% if comment.replies.count > 0 %>
+              <% comment.replies.each do | reply | %>
+              <div class='row-fluid'>
+                <div class='span2'>
+                  <img src="<%=reply.user.icon %>" />
+                  <%=reply.user.login %>
+                </div>
+                <div class='span10'>
+                  <%=reply.content %>
+                </div>
+              </div>
+              <% end %>
+            <% else %>
+            <form class='reply'>
+              <div class='row-fluid'>
+                <div class='span12'>回复</div>
+                <input type='hidden' name='product_comment_id' value="<%=product_comment.id %>" />
+              </div>
+              <div class='row-fluid'>
+                <textarea rows="3" name='content' class='span12'></textarea>
+                <input type='submit' value='提交' class='btn btn-primary disabled' />
+              </div>
+            </form>
+            <% end %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

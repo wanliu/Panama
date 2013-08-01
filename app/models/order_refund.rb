@@ -100,7 +100,6 @@ class OrderRefund < ActiveRecord::Base
 
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
-      refund.handle_product_item
       refund.change_order_refund_state
     end
 
@@ -162,10 +161,6 @@ class OrderRefund < ActiveRecord::Base
 
   def handle_detail_return_money
     order.refund_handle_detail_return_money(self)
-  end
-
-  def handle_product_item
-    order.refund_handle_product_item(refund_product_ids)
   end
 
   def seller_fire_events!(event)
