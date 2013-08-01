@@ -22,6 +22,9 @@ class ProductsController < ApplicationController
     @item.property_items = @product.property_items
 
     @item.delegate_property_setup
+    if params[:layout] == "false"
+      render layout: false
+    end
   end
 
   def base_info

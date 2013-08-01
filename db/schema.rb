@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130731054211) do
+ActiveRecord::Schema.define(:version => 20130801023155) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.datetime "created_at",                                                                  :null => false
     t.datetime "updated_at",                                                                  :null => false
     t.string   "activity_type",   :limit => 14
-    t.string   "title"
     t.string   "description"
     t.integer  "product_id"
     t.decimal  "price",                         :precision => 10, :scale => 2
@@ -47,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -382,9 +382,10 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
-    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+    t.integer  "shop_product_id"
+    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -411,8 +412,10 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
+    t.string   "shipped_state"
     t.string   "order_state"
     t.integer  "delivery_manner_id"
+    t.integer  "delivery_type_id"
     t.integer  "logistics_company_id"
   end
 
@@ -462,6 +465,17 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.datetime "updated_at",      :null => false
   end
 
+  create_table "product_comments", :force => true do |t|
+    t.integer  "product_item_id"
+    t.integer  "shop_id"
+    t.integer  "user_id"
+    t.integer  "star_product"
+    t.integer  "star_service"
+    t.integer  "star_logistics"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "product_delivery_types", :force => true do |t|
     t.integer  "product_id"
     t.integer  "delivery_type_id"
@@ -479,9 +493,10 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.datetime "created_at",                                                     :null => false
     t.datetime "updated_at",                                                     :null => false
     t.integer  "cart_id"
-    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
+    t.integer  "product_id"
+    t.integer  "user_id"
   end
 
   add_index "product_items", ["options"], :name => "index_product_items_on_options"
@@ -641,6 +656,7 @@ ActiveRecord::Schema.define(:version => 20130731054211) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end
