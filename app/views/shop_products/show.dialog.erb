@@ -1,1 +1,18 @@
-<%= render "shop_products/product.html.erb", shop_product: @product %>
+<div class="container">
+  <div class="row-fluid ">
+    <div class="offset2 span8">
+      <!-- 主展示框 -->
+      <div id="main-modal" class="dialog">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3><%= @product.product.name %></h3>
+        </div>
+        <div class="modal-body main-show">
+        	modal-body
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
