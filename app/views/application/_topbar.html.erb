@@ -1,7 +1,7 @@
 <ul id='topbar' class="nav pull-right">
     <form id="search-form" class="navbar-search">
         <input type="search" class="search-query" placeholder="搜索...">
-    </form> 
+    </form>
     <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="icon-plus"></i>&nbsp;发布</a>
@@ -11,14 +11,16 @@
             <a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog">优惠活动</a>
         </li>
         <% end %>
-        <li><a href="#" class="create_buy">求购信息</a></li>
+        <li>
+            <a href="#" class="create_buy" data-toggle='modal' data-target='#ask_buy_dialog'>求购信息</a>
+        </li>
       </ul>
     </li>
 
     <!--购物车信息-->
     <li class="dropdown shoppingcart">
         <a href="#" title="cart" id="cart" class="dropdown-toggle" data-toggle="dropdown">
-             <i class="icon-shopping-cart handle"></i> 
+             <i class="icon-shopping-cart handle"></i>
             <span id="shop_count" class="badge badge-important">0</span>
         </a>
          <ul id="shopping-cart" class="dropdown-menu support" role="menu">
@@ -27,7 +29,7 @@
                     <%= render_widget :my_cart %>
                 </div>
             </li>
-        </ul> 
+        </ul>
     </li>
 
     <!--商店入口-->
@@ -133,7 +135,7 @@
             <li role="presentation">
                 <%= link_to_account %>
             </li>
-            <li><%= link_to_logout %></li>    
+            <li><%= link_to_logout %></li>
          </ul>
     </li>
     <li class="visible-phone">
@@ -145,7 +147,7 @@
         <a href="component_calendar.html" class="link friends">
             <i class="icon-resize-horizontal "></i>
         </a>
-    </li>    
+    </li>
     <!-- <li class="hidden-phone"><a href="login.html"><i class="icon-signout"></i></a></li> -->
 </ul>
 <%= javascript_include_tag "my_cart" %>

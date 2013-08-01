@@ -1,6 +1,8 @@
 class RemoveShopProductIdFromProductItem < ActiveRecord::Migration
   def up
-    remove_column :product_items, :shop_product_id
+  	if column_exists?(:product_items, :shop_product_id)
+    	remove_column :product_items, :shop_product_id
+    end
   end
 
   def down
