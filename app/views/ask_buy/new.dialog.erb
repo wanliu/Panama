@@ -1,0 +1,53 @@
+<%= simple_form_for @ask_buy, :remote => true, :url => ask_buy_index_path, :html => { class: 'form-horizontal form_ask_buy' }  do |f| %>
+  <%= f.input :title, :input_html => {
+    :class => "ask_buy_title"
+  } %>
+  <div class="control-group">
+    <label class="control-label" for="inputPrice">图片</label>
+    <div class="controls">
+      <ul class='attachment-list'></ul>
+    </div>
+  </div>
+  <%= f.input :price %>
+  <%= f.input :amount, input_html: { value: 1 } %>
+  <%= f.input :describe, :as => :text %>
+<% end %>
+
+<template class='upload_template'>
+  <div class="attachable">
+    <img class="img-rounded attachable-preview" />
+    <input type="hidden" />
+    <div class="attachment-upload"></div>
+    <div class="nav-panle">
+    </div>
+    <div class="progress-panle">
+      <div class="progress progress-mini progress-success">
+        <div class="bar" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script type='text/javascript'>
+  $(document).ready(function(){
+
+    view = new AskBuyView({
+      el: $("form.form_ask_buy"),
+      params: {
+        url_upload: "<%=attachments_path %>",
+        default_img_url: "<%=default_img_url('100x100') %>",
+        template: $(".upload_template").remove().html()
+      }
+    })
+
+    new TypeaheadExtension({
+      el: $("input.ask_buy_title"),
+      field: "name",
+      source: "/product_search",
+      select: function(id){
+        view.fetch_product(id)
+      }
+    })
+
+  })
+</script>
