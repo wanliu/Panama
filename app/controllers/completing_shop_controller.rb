@@ -43,6 +43,7 @@ class CompletingShopController < Wicked::WizardController
 
   def save_license
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
+
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
       if @user_checking.user.shop.blank?
@@ -57,7 +58,7 @@ class CompletingShopController < Wicked::WizardController
   def set_products_added
     @user_checking.update_attributes(products_added: true)
     # 添加服务（是否有服务是主页跳转到选择服务选择页的判断标记）
-    current_user.services << Service.where(service_type: @user_checking.service.service_type)
+    current_user.services << Service.where(service_type: "seller")
 
     redirect_to '/'
   end

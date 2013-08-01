@@ -1,0 +1,93 @@
+<div class='product-comment' >
+  <div class='row-fluid'>
+    <div class='seller span4'>
+      <%= link_to order.seller.name, shop_path(order.seller) %>
+    </div>
+    <div class='span4'>订单编号：<%=order.number %></div>
+  </div>
+  <% order.items.each do | item | %>
+    <% product_comment = item.product_comment %>
+    <div class='row-fluid comment'>
+      <div class='span5'>
+        <div>
+          <img class="img-polaroid" src="<%=product_comment.product_item.product.photos.header %>" />
+        </div>
+        <div class="product_name">
+          商品名称：
+          <%= link_to item.title, product_path(item.product) %>
+        </div>
+        <div class='price'>
+          价格：<%=item.price %>
+        </div>
+        <div class='quantity'>
+          数量：<%=item.amount %>
+        </div>
+      </div>
+      <div class='span7'>
+        <form class='create'>
+          <div class='row-fluid'>
+            <div class='span5'>
+              <div class='row-fluid'>
+                <div class='span12'>评分</div>
+              </div>
+              <div class='star_panel'>
+                <div class='row-fluid'>
+                  商品
+                  <span class='star' star-ready="<%= product_comment.nil? ? false : true %>" star-name="star_product" star-value="<%=product_comment.try(:star_product) || 5 %>"></span>
+                </div>
+                <div class='row-fluid'>
+                  服务
+                  <span class='star' star-ready="<%= product_comment.nil? ? false : true %>" star-name="star_service" star-value="<%=product_comment.try(:star_service) || 5 %>">
+                  </span>
+                </div>
+                <div class='row-fluid'>
+                  物流
+                  <span class="star" star-ready="<%= product_comment.nil? ? false : true %>" star-name="star_logistics" star-value="<%=product_comment.try(:star_logistics) || 5 %>"></span>
+                </div>
+              </div>
+            </div>
+            <div class='span7 comments'>
+              <% comment = product_comment.comment %>
+              <% if comment.present? %>
+                <div class='row-fluid'>
+                  <div class='span2'>
+                    <img src="<%=comment.user.icon %>" />
+                    <%=comment.user.login %>
+                  </div>
+                  <div class='span10'>
+                    <%=comment.content %>
+                  </div>
+                </div>
+                <% comment.replies.each do |reply| %>
+                <div class='row-fluid'>
+                  <div class='span2'>
+                    <img src="<%=reply.user.icon %>" />
+                    <%= reply.user.login %>
+                  </div>
+                  <div class='span10'>
+                    <%= reply.content %>
+                  </div>
+                </div>
+                <% end %>
+              <% else %>
+                <div class='row-fluid create_comment'>
+                  <div class='row-fluid'>
+                    <div class='span12'>评论</div>
+                    <input type='hidden' name='product_item_id' value="<%=item.id %>" />
+                  </div>
+                  <div class='row-fluid'>
+                    <textarea rows="4" name='content' class='span12'></textarea>
+                    <input type='submit' value='提交' class='btn btn-primary disabled' />
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+   <% end %>
+  <div class='row-fluid'>
+    总金额：<%= number_to_currency(order.stotal) %>
+  </div>
+</div>

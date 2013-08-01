@@ -1,0 +1,17 @@
+<% active_section "product-comment" %>
+<div class='row-fluid'>
+  <div class='span8 comment-list'>
+    <%= render "comment", :order => @transaction %>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".comment-list .comment").each(function(i, el){
+      new ProductCommentView({
+        el: $(el),
+        create_url: "<%=person_product_comments_path(current_user) %>",
+        raty_url: "<%=asset_path 'raty' %>"
+      })
+    })
+  })
+</script>

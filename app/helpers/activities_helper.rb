@@ -13,7 +13,11 @@ module ActivitiesHelper
     when "courage" # 吞货
       render "activities/courage/preview", activity: activity
     else
-      render "preview", activity: activity
+      if activity.is_a?(Product)
+
+      else
+        render "activities/products/preview", activity: activity
+      end
     end
   end
 end

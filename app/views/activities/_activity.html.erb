@@ -5,7 +5,7 @@
       <div id="main-model" class="dialog">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3>{{description}}</h3>
+          <h3>{{title}}</h3>
 <!--           <div class="btn-group pull-right ">
              <a class="btn animate-play" href="#"><%= caret :right %></a>
           </div>
@@ -16,6 +16,7 @@
           </div>
           <h4 class="right_bottom2 animate1 fadeInRight">原价: <span>{{price}}</span></h5>
           <h3 class="right_bottom1 animate2 fadeInRight">现价: <span><%= activity.activity_price %></span></h4>
+          <h4>产品描述：</h4><span style="word-wrap:break-word;margin-left:10px;">{{description}}</span>
         </div>
         <div class="modal-footer">
           <div class="big_comments_and_reply">

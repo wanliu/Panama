@@ -1,5 +1,6 @@
 # encoding: utf-8
 class ShopProductsController < ApplicationController
+	before_filter :login_required_origin
 	def index
 		@shop = Shop.find(params[:shop_id])
 		@products = @shop.shop_products
@@ -9,30 +10,29 @@ class ShopProductsController < ApplicationController
 	end
 
 	def create
-		if current_user.shop
-			product_ids = params[:product_ids]
-			shop_products = []
-			product_ids.map {| product_id | 
-				shop_products << current_user.shop.shop_products.create(
+		if !current_user.shop.blank?
+			product_ids   = params[:product_ids]
+			shop_products = product_ids.map do |product_id|
+				current_user.shop.shop_products.create(
 					product_id: product_id,
 					price: 0,
 					inventory: 1
 				)
-			}																								   
+			end
+			valid_shop_products = shop_products.find { |product| product.valid? }
+
 			respond_to do |format|
-				if shop_products.any? {|product| product.valid? }
-					valid_shop_products = shop_products.find {|product| product.valid? }
-					# @product = @shop_product.product
-					# result  = { id: @shop_product.id, name: product.name,
-					# 		    price: @shop_product.price, inventory: @shop_product.inventory, photos: product.photos }
+				if !valid_shop_products.blank?
 					format.json { render json: shop_products }
 				else
-					format.json { render json: @shop_product.errors, status: :unprocessable_entity }
+					format.json { render json: { errors: "无法创建商店商品" },
+										 status: :unprocessable_entity }
 				end
 			end
 		else
 			respond_to do |format|
-				format.json { render json: { error: "请返回上一步建立商店信息" }, status: :unprocessable_entity }
+				format.json { render json: { error: "请先建立商店信息" },
+									 status: :unprocessable_entity }
 			end
 		end
 	end
@@ -43,7 +43,8 @@ class ShopProductsController < ApplicationController
 			if @product.update_attributes(params[:shop_product])
 				format.json { render json: @product }
 			else
-				format.json { render json: @product.errors, status: :unprocessable_entity }
+				format.json { render json: @product.errors,
+									 status: :unprocessable_entity }
 			end
 		end
 	end

@@ -1,0 +1,21 @@
+<div id="main" class="content">
+    <div id="activities" >
+
+      <!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
+      <% (0...@results.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
+        <div class="column">
+          <% indexs.each do |index| %>
+            <%= render_activity @results[index] %>
+          <% end %>
+        </div>
+      <% end %>  
+    </div>
+
+    <script type="text/javascript">
+    var activites = new ActivitiesView({el: '#activities'});
+    </script>
+</div>
+
+<script type="text/template" id="product-preview-template">
+<%= render "activities/products/preview_template" %>
+</script>

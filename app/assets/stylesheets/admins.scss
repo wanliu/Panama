@@ -12,6 +12,7 @@
 @import "./lib/notify/pnotify";
 @import "bootstrap-datetimepicker.min";
 @import './lib/typeahead';
+@import 'product_comment';
 
 
 $left-side-admin-width: 160px;
@@ -94,5 +95,12 @@ $left-side-admin-width: 160px;
 
   .dprice_edit{
     margin-left: 10px;
+  }
+}
+
+
+.comment-list {
+  .product-comment{
+    @include panel-background;
   }
 }

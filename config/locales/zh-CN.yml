@@ -229,7 +229,7 @@ zh-CN:
         activity_type: 活动类型
         start_time: 开始时间
         end_time: 结束时间
-        like: 类似于
+        like: 喜欢人数
         participate: 参与人数
       product:
         id: 编号
@@ -366,9 +366,10 @@ zh-CN:
   employees: 雇员
   communities: 社区
   order_refunds: 退货
-  shop_products: 商品
+  shop_products: 添加商品
   bill_detail: 账单明细
   shop_info: 店铺信息
+  product_comments: 商品评论
 
 
   shop_group:
