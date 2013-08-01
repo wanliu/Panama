@@ -29,7 +29,7 @@ class ShopProductView extends Backbone.View
 			@template = data
 			handle.call(@)
 			@delegateEvents()
-			$.get "/products/53757?layout=false", (data) =>
+			$.get "/products/#{@product_id}?layout=false", (data) =>
 				$(".main-show").html(data)
 
 	render: () ->
@@ -58,8 +58,9 @@ class ShopProductPreview extends Backbone.View
 	launchShopProduct: (event) -> 
 		@model.fetch success: (model) =>
 			view = new ShopProductView({
-				el       : @$el,
-				model    : @model 
+				el         : @$el,
+				model      : @model,
+				product_id : @product_id 
 			})
 			view.modal()
 		false
