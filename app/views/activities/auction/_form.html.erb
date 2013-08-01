@@ -56,17 +56,17 @@
       params: {
         url_upload: "<%=attachments_path %>",
         default_img_url: "<%=default_img_url('100x100') %>",
-        template: '<%=j render "product_upload" %>',
+        template: '<%=j render "product_upload" %>'
       }
     });
 
     new TypeaheadExtension({
-        el: $('.typeahead'),
-        source: '/search/shop_products',
-        field: 'name',
-        select: function(id){
-          activity_view.fetch_product(id)
-        }
+      el: $('.typeahead'),
+      source: '/search/shop_products',
+      field: 'name',
+      select: function(id){
+        activity_view.fetch_product(id)
+      }
     });
   </script>
 

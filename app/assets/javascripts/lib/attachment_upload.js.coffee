@@ -51,6 +51,7 @@ class AttachmentView extends Backbone.View
       @$el = $(@el)
 
       @init_template()
+      @model.bind("remove_view", @remove_view, @)
       @model.bind("set_default_attr", _.bind(@set_default_attr, @))
       @model.bind("set_value_attr", _.bind(@set_value_attr, @))
 
@@ -74,7 +75,6 @@ class AttachmentView extends Backbone.View
         overflow: 'visible',
         position: 'static'
       )
-
       @$("input:file").height(@$el.height())
 
     init_data: () ->
@@ -168,15 +168,18 @@ class AttachmentView extends Backbone.View
       )
 
     set_value_attr : () ->
-        @attachable.removeClass(@default_img_class)
-        if @hidden_input.val() is ""
-          @hidden_input.removeAttr("name")
-        else
-          @hidden_input.attr("name", "#{@default_params.input_name}[#{@model.id}]")
+      @attachable.removeClass(@default_img_class)
+      if @hidden_input.val() is ""
+        @hidden_input.removeAttr("name")
+      else
+        @hidden_input.attr("name", "#{@default_params.input_name}[#{@model.id}]")
 
     set_default_attr : () ->
-        @attachable.addClass(@default_img_class)
-        @hidden_input.attr("name", "#{@default_params.default_input_name}")
+      @attachable.addClass(@default_img_class)
+      @hidden_input.attr("name", "#{@default_params.default_input_name}")
+
+    remove_view: () ->
+      @remove()
 
 
 class root.AttachmentUpload extends Backbone.View
@@ -204,7 +207,9 @@ class root.AttachmentUpload extends Backbone.View
       view.bind("clear_blank_default", _.bind(@clear_blank_default, @))
       view.bind("add_blank_preview", _.bind(@add_blank_preview, @))
       @$el.append(view.render())
-      view.change_style()
+      setTimeout () =>
+        view.change_style()
+      , 50
 
     default_choose_img: (model) ->
       if @default_enabled
@@ -226,3 +231,6 @@ class root.AttachmentUpload extends Backbone.View
         temp = model if model.get("default_state")?
 
       temp
+    destroy_all: () ->
+      @attachment_list.each (model) ->
+        model.trigger("remove_view")

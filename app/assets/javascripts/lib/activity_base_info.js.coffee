@@ -17,10 +17,6 @@ class root.ActivityBaseInfoView extends Backbone.View
       template: "",
 
       input_name: "activity[attachment_ids]",
-
-      default_enabled: false,
-
-      limit: 5
     }
   }
 
@@ -31,6 +27,8 @@ class root.ActivityBaseInfoView extends Backbone.View
 
   fetch_product: (shop_product_id) ->
     $.ajax
+      type: "get"
+      dataType: "json"
       url: "/shop_products/#{shop_product_id}"
       success: (data) =>
         @load_info(data)

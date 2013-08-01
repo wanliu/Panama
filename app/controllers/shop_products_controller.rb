@@ -53,7 +53,7 @@ class ShopProductsController < ApplicationController
 		@product = ShopProduct.find(params[:id])
 		respond_to do |format|
 			format.html # show.html.erb
-      format.dialog { render "show.dialog", :layout => false }
+      		format.dialog { render "show.dialog", :layout => false }
 			format.json { render json: @product }
 		end
 	end

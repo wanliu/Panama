@@ -2,7 +2,7 @@ class Activity < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
-    
+
   attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
                   :description, :like, :participate, :author_id, :status, :rejected_reason
 

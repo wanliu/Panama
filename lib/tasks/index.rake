@@ -71,7 +71,7 @@ namespace "index" do
         }
       }
     end
-    
+
     Tire.index "shop_products" do
       delete
 

@@ -32,7 +32,11 @@
     <%= render_widget :my_cart %>
   </div>
   <%= render "baidu_analyzer" %>
-  
-  <%# Javascript at the bottom for fast page loading %>
+
+  <script type="text/javascript">
+  $(document).ready(function(){
+    notifier.setPermission()
+  })
+  </script>
 </body>
 </html>

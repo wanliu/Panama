@@ -8,6 +8,7 @@ class ActivitiesController < ApplicationController
 
   def index
     @activities = Activity.where("status = ?", Activity.statuses[:access])
+    @ask_buy = AskBuy.all
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @activities }
