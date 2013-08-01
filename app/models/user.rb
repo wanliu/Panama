@@ -135,6 +135,10 @@ class User < ActiveRecord::Base
     followers.exists?(user_id: user_id)
   end
 
+  def is_seller?
+    !services.empty? && services.any? { |service| service.service_type == "seller" }
+  end
+
   def load_initialize_data
     load_circle
     load_friend_group

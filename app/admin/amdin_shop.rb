@@ -3,5 +3,6 @@ ActiveAdmin.register Shop do
     column :id
     column :name
     column :user
+    column :actived
   end
 end

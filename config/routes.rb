@@ -12,6 +12,9 @@ Panama::Application.routes.draw do
   resources :completing_shop
   resources :user_auths
 
+  match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth",:via => :put
+  match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth",:via => :put
+
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
   match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
@@ -96,6 +99,9 @@ Panama::Application.routes.draw do
     match "followers", :to => "people/followings#followers"
 
     resources :product_comments, :controller => "people/product_comments" do
+      collection do
+        get "/:order_id/order" => "people/product_comments#order"
+      end
     end
 
     resources :notifications,:except => :show, :controller => "people/notifications" do
@@ -175,11 +181,7 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :product_search do
-    collection do
-      get 'shop', :to =>  "product_search#shop"
-    end
-  end
+  resources :product_search
   # resources :shops do
   #   scope :module => "admins" do
   #     match "admins", :to => 'shop#index'
@@ -220,6 +222,12 @@ Panama::Application.routes.draw do
       resources :contents, :controller => "shops/contents"
 
       resources :menu, :controller => "shops/menu"
+
+      resources :product_comments, :controller => "shops/product_comments" do
+        member do
+          post :reply, :to => "shops/product_comments#reply"
+        end
+      end
 
       resources :categories, :controller => "shops/categories" do
         collection do
@@ -346,11 +354,11 @@ Panama::Application.routes.draw do
 
 
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
-  resources :search do
-    collection do
-      get "users"
-    end
-  end
+
+  # Search Engine
+  match "search/users", :to => "search#users"
+  match "search/products", :to => "search#products"
+  match "search/shop_products", :to => "search#shop_products", :via => :get
 
 
   # omniauth

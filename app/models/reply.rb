@@ -15,4 +15,11 @@ class Reply < ActiveRecord::Base
     errors.add(:user_id, "用户不存！") unless User.exists?(user_id)
   end
 
+  def as_json(*args)
+    attrs = super *args
+    attrs["user_login"] = user.login
+    attrs["user_icon_url"] = user.photos.icon
+    attrs
+  end
+
 end

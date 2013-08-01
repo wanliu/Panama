@@ -54,6 +54,7 @@ class ProductItem < ActiveRecord::Base
              # primary_key: 'transaction_id'
 
   belongs_to :shop
+  has_one :product_comment
 
   delegate :photos, :to => :product
   delegate :icon, :header, :avatar, :preview, :to => :photos
@@ -62,8 +63,9 @@ class ProductItem < ActiveRecord::Base
 
   memories :properties, :properties_values, :property_items
 
-  before_save do 
+  before_save do
     update_total
+    init_data
   end
 
   after_create do
@@ -86,6 +88,11 @@ class ProductItem < ActiveRecord::Base
 
   def update_total
     self.total = self.price * self.amount
+  end
+
+  def init_data
+    self.user_id = transaction.buyer_id
+    self.shop_id = transaction.seller_id
   end
 
   def options

@@ -1,0 +1,159 @@
+<table>
+	<colgroup width="20%"></colgroup>
+	<colgroup width="80%"></colgroup>
+	<tbody>
+		<tr>
+			<td>编号ID</td>
+			<td><%= @activity.id %></td>
+		</tr>
+		<tr>
+			<td>URL</td>
+			<td><%= @activity.url || "暂无" %></td>
+		</tr>
+		<tr>
+			<td>活动类型</td>
+			<td><%= @activity.activity_type %></td>
+		</tr>
+		<tr>
+			<td>活动描述</td>
+			<td><%= @activity.description %></td>
+		</tr>
+		<tr>
+			<td>活动产品</td>
+			<td><%= @activity.product_id %></td>
+		</tr>
+		<tr>
+			<td>价格</td>
+			<td><%= @activity.price %></td>
+		</tr>
+		<tr>
+			<td>开始时间</td>
+			<td><%= @activity.start_time %></td>
+		</tr>
+		<tr>
+			<td>结束时间</td>
+			<td><%= @activity.end_time %></td>
+		</tr>
+		<tr>
+			<td>创建人</td>
+			<td><%= @activity.author.login %></td>
+		</tr>
+		<tr>
+			<td>限制数量</td>
+			<td><%= @activity.limit_count %></td>
+		</tr>
+		<tr>
+			<td>喜欢人数</td>
+			<td><%= @activity.like %></td>
+		</tr>
+		<tr>
+			<td>参与人数</td>
+			<td><%= @activity.participate %></td>
+		</tr>
+		<tr>
+			<td>所属商店</td>
+			<td><a href="/system/shops/<%= @activity.shop.try(:id) %>"><%= @activity.shop.try(:name) %></a></td>
+		</tr>
+		<tr>
+			<td>状态</td>
+			<td><%= @activity.status %></td>
+		</tr>
+	</tbody>
+</table>
+
+<style type="text/css">
+	form.button_to {
+		display: inline;
+	}
+	form.button_to div {
+		display: inline;
+	}
+	div.reject {
+		margin-top: 20px;
+	}
+	div.reject h3{
+		margin-top: 30px;
+		margin-bottom: 5px;
+	}
+	.rejected-times h3.rejected-times {
+		padding: 20px 0;
+		border-top: 1px solid #6a7176;
+		/*border-bottom: 1px solid #6a7176;*/
+	}
+	.rejected-times + div.rejected-reason {
+		height: 100px;
+		border-top: 1px solid #6a7176;
+		border-bottom: 1px solid #6a7176;
+		margin-bottom: 20px;
+	}
+	div.label {
+		float: left;
+		width: 20%;
+		height: 100%;
+		vertical-align: center;
+	}
+	div.reason {
+		float: left;
+		width: 80%;
+		height: 100%;
+		background-color: #dfe1e2;
+	}
+</style>
+
+<% if @activity.status == Activity.statuses[:rejected] %>
+	<div class='rejected-reason'>
+		<div class='label'><span>被拒绝原因：</span></div>
+		<div class='reason'><%= @activity.rejected_reason.try(:html_safe) || "" %></div>
+	</div>
+<% end %>
+
+<% unless @activity.status == Activity.statuses[:access] %>
+	<div class='checking'>
+		<%= button_to "审核通过", { action: :check } %>
+		<% if @activity.status != Activity.statuses[:rejected] %>
+			<%= submit_tag "驳回", class: "activity_reject" %>
+			<%= form_tag "/system/activities/#{ @activity.id }/reject",
+				method: :post, class: "activity_reject", style: "display: none;" do %>
+				<div class='reject'>
+					<h3>驳回理由：</h3>
+					<%= text_area_tag "reject_reason", nil, rows: 10 %><br>
+					<%= submit_tag "确定" %>
+					<%= button_tag "取消", class: "cancel" %>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+<% end %>
+
+<script type="text/javascript">
+	$(function(){
+		var AcitivtyView = Backbone.View.extend({
+			events: {
+				'click :submit.activity_reject' : 'reject',
+				'click .cancel' : 'cancel',
+				'submit form.activity_reject' : 'check_for_reason'
+			},
+
+			reject: function(event) {
+				var that = this;
+				this.$("form.activity_reject").slideToggle(function(event){
+					that.$('textarea').focus();
+				});
+				return false;
+			},
+
+			cancel: function(event) {
+				this.$("form.activity_reject").slideUp();
+				return false;
+			},
+
+			check_for_reason: function(event) {
+				if (!$('textarea').val()) {
+					alert("请填写驳回原因！")
+					return false;
+				}
+			}
+		})
+		var activity_view = new AcitivtyView({ el: $("div.checking") })
+	})
+</script>
