@@ -181,6 +181,8 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :ask_buy
+
   resources :product_search
   # resources :shops do
   #   scope :module => "admins" do

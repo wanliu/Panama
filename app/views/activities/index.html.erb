@@ -25,7 +25,13 @@
             <%= render_activity @activities[index] %>
           <% end %>
         </div>
-      <% end %>  
+      <% end %>
+
+      <% @ask_buy.each do |a| %>
+        <div class="column">
+          <%= render_activity a %>
+        </div>
+      <% end %>
     </div>
 
     <script type="text/javascript">

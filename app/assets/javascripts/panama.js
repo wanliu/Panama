@@ -32,6 +32,7 @@
 //= require pick_product
 //= require typeaheadExtension
 //= require lib/activity_base_info
+//= require ask_buy
 
 
 root = window || this;
