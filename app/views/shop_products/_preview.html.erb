@@ -13,8 +13,8 @@
 <script type="text/javascript">
 	var id = <%= shop_product.id %>;
 	var model = new ShopProductModel({ id: id });
-	new ShopProductPreview({ 
-		el: $("[shop-product-id=" + id + "]"), 
+	new ShopProductPreview({
+		el: $("[shop-product-id=" + id + "]"),
 		model: model,
 		product_id: <%= shop_product.product.id %>
 	});
