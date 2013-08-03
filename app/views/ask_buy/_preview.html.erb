@@ -1,3 +1,21 @@
-<div class='ask_buy'>
-  <%= image_tag ask_buy.photos.avatar %>
+<div class='ask_buy' ask-buy-id='<%= ask_buy.id %>' id="ask_buy<%= ask_buy.id %>">
+  <div class='out-box'>
+    <div class='in-box'>
+      <%= image_tag ask_buy.photos.avatar, :class => "preview a-#{ask_buy.id}" %>
+    </div>
+    <div class='summary'>
+      <p class="title"><%= ask_buy.title %> 求购</p>
+      <p class='describe' style=""><%= ask_buy.describe %> </p>
+    </div>
+    <div class='userinfo'>
+      <%= image_tag ask_buy.user.icon, :class => [:author, :'img-circle'] %>
+      <p>
+        <a href="<%= person_path(ask_buy.user) %>">
+          <%= ask_buy.user.login %>
+        </a>
+      </p><br />
+    </div>
+    <div class="buttons">
+    </div>
+  </div>
 </div>

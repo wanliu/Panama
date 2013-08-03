@@ -5,7 +5,7 @@
 @import "lib/transparent";
 
 
-.activity {
+.activity, .ask_buy {
   // width: 225px;
   padding-bottom: 10px;
   // margin-right: 12px;
@@ -45,7 +45,7 @@
         @include border-top-left-radius(10px);
         @include border-bottom-left-radius(10px);
 
-        @include transparent($black,0.5);        
+        @include transparent($black,0.5);
         h5 {
           margin: 0px;
         }
@@ -92,6 +92,11 @@
 
     .summary {
       padding: 5px;
+
+      .describe{
+        word-wrap: break-word;
+        margin-bottom: 0px;
+      }
     }
 
     .userinfo {
@@ -104,7 +109,7 @@
         margin-left: -55px;
         float: left;
       }
-      
+
       span {
         font-size: 0.8em;
         margin-right: 20px;

@@ -25,4 +25,11 @@ class AskBuyController < ApplicationController
       end
     end
   end
+
+  def show
+    @ask_buy = AskBuy.find(params[:id])
+    respond_to do |format|
+      format.json{ render :json => @ask_buy.as_json(:include => :comments) }
+    end
+  end
 end

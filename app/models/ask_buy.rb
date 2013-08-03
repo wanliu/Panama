@@ -5,6 +5,7 @@ class AskBuy < ActiveRecord::Base
   belongs_to :product
   belongs_to :user
   has_and_belongs_to_many :attachments
+  has_many :comments, :as => :targeable
 
   validates :user, :presence => true
 
@@ -16,5 +17,12 @@ class AskBuy < ActiveRecord::Base
     else
      	Attachment.new.file
     end
+  end
+
+  def as_json(*args)
+    attra = super *args
+    attra["user"] = user.as_json
+    attra["url"] = photos.preview
+    attra
   end
 end
