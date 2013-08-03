@@ -113,15 +113,22 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
+  create_table "admins", :force => true do |t|
+    t.string   "uid"
+    t.string   "login"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0
-    t.float    "amount"
+    t.decimal  "price",      :precision => 10, :scale => 0, :default => 0
+    t.float    "amount",                                    :default => 0.0
     t.text     "describe"
-    t.integer  "status"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.integer  "status",                                    :default => 0
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.integer  "user_id"
   end
 
@@ -130,13 +137,6 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
     t.integer  "attachment_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
-  end
-
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
   create_table "attachments", :force => true do |t|
