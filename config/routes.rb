@@ -181,7 +181,11 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :ask_buy
+  resources :ask_buy do
+    member do
+      post :comment, :to => "ask_buy#comment"
+    end
+  end
 
   resources :product_search
   # resources :shops do

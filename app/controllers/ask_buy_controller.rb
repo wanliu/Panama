@@ -29,7 +29,25 @@ class AskBuyController < ApplicationController
   def show
     @ask_buy = AskBuy.find(params[:id])
     respond_to do |format|
-      format.json{ render :json => @ask_buy.as_json(:include => :comments) }
+      format.json do
+        ask_buy = @ask_buy.as_json
+        ask_buy["comments"] = @ask_buy.comments{|c| c.as_json}
+        render :json => ask_buy
+      end
     end
   end
+
+  def comment
+    @ask_buy = AskBuy.find(params[:id])
+    @comment = @ask_buy.comments.build(params[:comment])
+    @comment.user_id = current_user.id
+    respond_to do |format|
+      if @comment.save
+        format.json{ render :json => @comment }
+      else
+        format.json{ render :json => draw_errors_message(@comment), :status => 403 }
+      end
+    end
+  end
+
 end
