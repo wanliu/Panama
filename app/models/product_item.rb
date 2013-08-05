@@ -91,8 +91,7 @@ class ProductItem < ActiveRecord::Base
   end
 
   def init_data
-    self.user_id = transaction.buyer_id
-    self.shop_id = transaction.seller_id
+    self.user_id = cart.user_id
   end
 
   def options

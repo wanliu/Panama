@@ -10,7 +10,7 @@ class ShopProductsController < ApplicationController
   end
 
   def create
-    if !current_user.shop.blank?
+    if current_user.shop.present?
       product_ids   = params[:product_ids]
       shop_products = product_ids.map do |product_id|
         current_user.shop.shop_products.create(
