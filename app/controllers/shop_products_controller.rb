@@ -12,6 +12,7 @@ class ShopProductsController < ApplicationController
 	def create
 		if !current_user.shop.blank?
 			product_ids   = params[:product_ids]
+			# product_idss = ShopProduct.where('id not in (?)',product_ids)
 			shop_products = product_ids.map do |product_id|
 				current_user.shop.shop_products.create(
 					product_id: product_id,
