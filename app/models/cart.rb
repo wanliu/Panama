@@ -7,15 +7,16 @@ class Cart < ActiveRecord::Base
 
   def add_to(attributes, be_merge = true)
     product_id = attributes[:product_id]
-    item = exist_build_options(product_id, attributes) do |_item|
+    shop_id = attributes[:shop_id]
+    item = exist_build_options(shop_id, product_id, attributes) do |_item|
       _item.amount += attributes[:amount].to_d
     end
     item.total = item.price * item.amount
     item
   end
 
-  def exist_build(product_id, attributes, &block)
-    if item = items.where(:product_id => product_id).first
+  def exist_build(shop_id, product_id, attributes, &block)
+    if item = items.where(:shop_id => shop_id, :product_id => product_id).first
       yield item
       item
     else
@@ -24,7 +25,7 @@ class Cart < ActiveRecord::Base
       @product.prices_definition.each do |prop|
         @item.properties << prop
       end
-      @item.delegate_property_setup
+      # @item.delegate_property_setup
       attributes.each do |k, v|
         @item.send("#{k}=", v)
       end
@@ -32,9 +33,9 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def exist_build_options(product_id, attributes, be_merge = true, &block)
+  def exist_build_options(shop_id, product_id, attributes, be_merge = true, &block)
     if be_merge
-      exist_build product_id, attributes, &block
+      exist_build shop_id, product_id, attributes, &block
     else
       items.build attributes
     end
@@ -47,7 +48,7 @@ class Cart < ActiveRecord::Base
   end
 
   def shop_items
-    items.group_by { |item| item.product.shop }
+    items.group_by { |item| item.shop }
   end
 
   def save_transcation(shop, pro_items, people)

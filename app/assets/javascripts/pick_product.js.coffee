@@ -77,8 +77,9 @@ class root.WizardView extends Backbone.View
 
   selectAll : () ->
     $("input[type=checkbox]").each(() ->
-      $(this).attr("checked",!this.checked);  
+      $(this).attr("checked",!this.checked); 
     )
+    false
 
   deleteAll: () ->
     $('input[type="checkbox"]:checked').each((i,el) =>

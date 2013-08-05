@@ -9,19 +9,17 @@ class ShopProductsController < ApplicationController
 	    end
 	end
 
-	def create
-		if !current_user.shop.blank?
-			product_ids   = params[:product_ids]
-			# product_idss = ShopProduct.where('id not in (?)',product_ids)
-			shop_products = product_ids.map do |product_id|
-				current_user.shop.shop_products.create(
-					product_id: product_id,
-					price: 0,
-					inventory: 1
-				)
-			end
-			valid_shop_products = shop_products.find { |product| product.valid? }
-
+  def create
+    if current_user.shop.present?
+      product_ids   = params[:product_ids]
+      shop_products = product_ids.map do |product_id|
+        current_user.shop.shop_products.create(
+          product_id: product_id,
+          price: 0,
+          inventory: 1
+        )
+      end
+      valid_shop_products = shop_products.find { |product| product.valid? }
 
       respond_to do |format|
         if !valid_shop_products.blank?

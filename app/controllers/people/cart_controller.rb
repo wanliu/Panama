@@ -10,7 +10,13 @@ class People::CartController < People::BaseController
 
   def add_to_cart
     authorize! :create, Cart
-    @item = my_cart.add_to(params[:product_item])
+    @shop_product = ShopProduct.find(params[:shop_product_id])
+    @item = my_cart.add_to(params[:product_item].merge({
+      :product_id => @shop_product.product_id,
+      :shop_id => @shop_product.shop_id,
+      :title => @shop_product.product.name,
+      :price => @shop_product.product.price
+    }))
     if @item.save
       render :json => @item.as_json.merge(:img_path => @item.photos.icon)
     else

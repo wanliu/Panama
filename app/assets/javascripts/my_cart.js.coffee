@@ -95,6 +95,7 @@ class MyCart extends Backbone.View
 				$("#cart_box .checkout").removeClass("disabled")
 			@total_amounts()
 			@totals_money()
+			pnotify(title: "系统提醒", text: "加入购物成功！")
 
 	total_amounts: () ->
 		trs = @$(".cart_main tr")
