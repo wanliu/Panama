@@ -1,6 +1,10 @@
 Panama::Application.routes.draw do
 
-  resources :shop_products
+  resources :shop_products do
+    member do
+      post :buy, :to => "shop_products#buy"
+    end
+  end
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
   resources :after_signup
@@ -99,6 +103,9 @@ Panama::Application.routes.draw do
     match "followers", :to => "people/followings#followers"
 
     resources :product_comments, :controller => "people/product_comments" do
+      collection do
+        get "/:order_id/order" => "people/product_comments#order"
+      end
     end
 
     resources :notifications,:except => :show, :controller => "people/notifications" do
@@ -178,6 +185,12 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :ask_buy do
+    member do
+      post :comment, :to => "ask_buy#comment"
+    end
+  end
+
   resources :product_search
   # resources :shops do
   #   scope :module => "admins" do
@@ -219,6 +232,12 @@ Panama::Application.routes.draw do
       resources :contents, :controller => "shops/contents"
 
       resources :menu, :controller => "shops/menu"
+
+      resources :product_comments, :controller => "shops/product_comments" do
+        member do
+          post :reply, :to => "shops/product_comments#reply"
+        end
+      end
 
       resources :categories, :controller => "shops/categories" do
         collection do

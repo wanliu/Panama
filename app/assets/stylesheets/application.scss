@@ -21,6 +21,7 @@
 @import "responsive-stream";
 @import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
 @import "./lib/notify/pnotify";
+@import 'ask_buy';
 
 
 // activity-category
@@ -94,7 +95,7 @@
 
 	.reply_form {
 		padding: 0px 20px 10px 60px;
-		.head-icon {
+		.user-info {
 			margin-left: -60px;
 			float: left;
 			width: 50px;
@@ -108,4 +109,3 @@
 		}
 	}
 }
-

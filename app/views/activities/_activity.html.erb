@@ -31,7 +31,12 @@
               {{/comments}}
             </div>
             <div class="reply_form">
-              <img class='head-icon' src="<%= current_user.photos.header %>">
+              <div class='user-info'>
+                <img src="<%= current_user.photos.header %>">
+                <a href="<%= person_path(current_user) %>">
+                  <%=current_user.login %>
+                </a>
+              </div>
               <div class='message'>
                 <textarea name='message' placeholder="发表评论..."></textarea>
               </div>

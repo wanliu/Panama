@@ -27,6 +27,7 @@ class Comment < ActiveRecord::Base
     attrs = super *args
     attrs["user_login"] = user.login
     attrs["user_icon_url"] = user.photos.icon
+    attrs["user_header_url"] = user.photos.header
     attrs
   end
 

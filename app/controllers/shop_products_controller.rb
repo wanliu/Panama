@@ -2,11 +2,11 @@
 class ShopProductsController < ApplicationController
 	before_filter :login_required_origin
 	def index
-		@shop = Shop.find(params[:shop_id])
-		@products = @shop.shop_products
-		respond_to do |format|
-			format.json { render json: @products }
-		end
+	    @shop = Shop.find(params[:shop_id])
+	    @products = @shop.shop_products
+	    respond_to do |format|
+	      format.json { render json: @products }
+	    end
 	end
 
 	def create
@@ -22,47 +22,68 @@ class ShopProductsController < ApplicationController
 			end
 			valid_shop_products = shop_products.find { |product| product.valid? }
 
-			respond_to do |format|
-				if !valid_shop_products.blank?
-					format.json { render json: shop_products }
-				else
-					format.json { render json: { errors: "无法创建商店商品" },
-										 status: :unprocessable_entity }
-				end
-			end
-		else
-			respond_to do |format|
-				format.json { render json: { error: "请先建立商店信息" },
-									 status: :unprocessable_entity }
-			end
-		end
-	end
 
-	def update
-		@product = ShopProduct.find(params[:id])
-		respond_to do |format|
-			if @product.update_attributes(params[:shop_product])
-				format.json { render json: @product }
-			else
-				format.json { render json: @product.errors,
-									 status: :unprocessable_entity }
-			end
-		end
-	end
+      respond_to do |format|
+        if !valid_shop_products.blank?
+          format.json { render json: shop_products }
+        else
+          format.json { render json: { errors: "无法创建商店商品" },
+                     status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        format.json { render json: { error: "请先建立商店信息" },
+                   status: :unprocessable_entity }
+      end
+    end
+  end
 
-	def show
-		@product = ShopProduct.find(params[:id])
-		respond_to do |format|
-			format.json { render json: @product }
-		end
-	end
+  def update
+    @product = ShopProduct.find(params[:id])
+    respond_to do |format|
+      if @product.update_attributes(params[:shop_product])
+        format.json { render json: @product }
+      else
+        format.json { render json: @product.errors,
+                   status: :unprocessable_entity }
+      end
+    end
+  end
 
-	def destroy
-		@product = ShopProduct.find(params[:id])
-		@product.destroy
+  def show
+    @shop_product = ShopProduct.find(params[:id])
+    respond_to do |format|
+      format.html # show.html.erb
+      format.dialog { render "show.dialog", :layout => false }
+      format.json { render json: @product }
+    end
+  end
 
-		respond_to do |format|
-			format.json{ head :no_content }
-		end
-	end
+  def buy
+    @shop_product = ShopProduct.find(params[:id])
+    respond_to do |format|
+      @order = current_user.transactions.build(seller_id: @shop_product.shop_id)
+      @order.items.build({
+        :product_id => @shop_product.product_id,
+        :amount => params[:amount],
+        :title => @shop_product.product.try(:name),
+        :price => @shop_product.price
+      })
+      if @order.save
+        format.json{ render :json => @order }
+      else
+        format.json{ render :json => draw_errors_message, :status => 403 }
+      end
+    end
+  end
+
+  def destroy
+    @product = ShopProduct.find(params[:id])
+    @product.destroy
+
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
+  end
 end

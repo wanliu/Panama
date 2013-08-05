@@ -6,6 +6,7 @@
 #= require backbone
 #= require lib/hogan
 #= require my_cart
+#= require ask_buy_preview
 
 root = window || @
 
@@ -80,7 +81,7 @@ class ActivityView extends Backbone.View
 
 	close: () ->
 		@$backdrop.remove()
-		@unmodal();
+		@unmodal()
 
 	playAnimate: () ->
 		$body = @$(".main-show")
@@ -174,7 +175,7 @@ class ActivityPreview extends Backbone.View
 		@$('.like-count').text(s - n)
 
 
-class ProductPreview extends Backbone.View 
+class ProductPreview extends Backbone.View
 
 	render: () ->
 		@template = @options? and @options['template']
@@ -190,7 +191,7 @@ class CycleIter
 
 	next: () ->
 		@pos = 0 unless @pos < @data.length
-		@data[@pos++]	
+		@data[@pos++]
 
 class ActivitiesView extends Backbone.View
 
@@ -207,7 +208,7 @@ class ActivitiesView extends Backbone.View
 		@$el.width(@adjustNumber() * 246)
 
 	appendResult: (e, data) ->
-		
+
 		$columns = @$('.column')
 		count = $columns.size()
 		data = data.data
@@ -246,7 +247,7 @@ class ActivitiesView extends Backbone.View
 		@$el = new_dom
 		@resizeWrap()
 
-		
+
 	fetchResults: () ->
 		row = 0
 		columns = @$(".column")
@@ -256,7 +257,7 @@ class ActivitiesView extends Backbone.View
 			node = $(elem).find(">div")[row]
 			results.push(node) if node?
 			node).any()
-			row++ 
+			row++
 
 		results
 

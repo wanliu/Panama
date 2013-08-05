@@ -1,0 +1,21 @@
+<div class="shop_product" shop-product-id="<%=shop_product.id%>" style="display: inline-block">
+	<div class='out-box'>
+		<div class='in-box'>
+			<%= image_tag shop_product.photos.avatar, :class => "preview a-#{shop_product.id}" %>
+ 			<div class='summary'>
+				<h4 class="title"><%= shop_product.product.name %></h4>
+				<p><%= shop_product.product.description %></p>
+ 			</div>
+ 		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var id = <%= shop_product.id %>;
+	var model = new ShopProductModel({ id: id });
+	new ShopProductPreview({
+		el: $("[shop-product-id=" + id + "]"),
+		model: model,
+		product_id: <%= shop_product.product.id %>
+	});
+</script>

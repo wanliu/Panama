@@ -1,6 +1,26 @@
 .product-comment{
-	border: 1px solid #DDD;
-	padding: 5px;
-	display: table;
-	width: 100%;
+  border: 1px solid #DDD;
+  padding: 5px;
+  display: table;
+  width: 100%;
+
+  .seller{
+    font-size: 22px;
+    font-weight: bold;
+
+    a{
+      color: white;
+    }
+  }
+
+  .product_name{
+
+    a{
+      color: white;
+    }
+  }
+
+  textarea{
+    resize: none;
+  }
 }

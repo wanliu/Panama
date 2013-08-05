@@ -26,6 +26,20 @@
   </div>
 </div>
 
+<div id="ask_buy_dialog" class="ask_buy_dialog modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">发布求购信息</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary save_ask_buy">确认</button>
+  </div>
+</div>
+
 <script type="text/javascript">
   $(document).ready(function(){
     $(".save_activity").on('click', function(type){
@@ -45,5 +59,20 @@
       });
 
     });
+
+    $(".save_ask_buy").on('click', function(type){
+      var $form = $(".form_ask_buy");
+
+      $form.submit();
+
+      $form.on("ajax:success", function(){
+        $form[0].reset();
+      });
+
+      $form.on("ajax:error", function(event, xhr, state){
+        $form.replaceWith(xhr.responseText);
+      });
+
+    });
   });
-</script> 
+</script>

@@ -2,9 +2,10 @@ class Activity < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
-    
-  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price,
-                  :description, :like, :participate, :author_id,:title
+
+  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
+                  :description, :like, :participate, :author_id, :status, :rejected_reason
+
   belongs_to :shop_product
   belongs_to :author, :class_name => "User"
   belongs_to :shop
@@ -66,4 +67,15 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def self.statuses
+    { :wait => 0, :access => 1, :rejected => 2 }
+  end
+
+  def send_checked_mail
+    UserMailer.delay.send_activity_checked_notify(author.email, author, url)
+  end
+
+  def send_rejected_mail
+    UserMailer.delay.send_activity_rejected_notify(author.email, author, rejected_reason, url)
+  end
 end

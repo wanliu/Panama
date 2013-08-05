@@ -1,0 +1,18 @@
+<% admin_active_section :product_comments %>
+<div class='row-fluid'>
+  <div class='span8 comment-list'>
+    <% @product_comments.each do | product_comment | %>
+      <%=render "comment", :product_comment => product_comment %>
+    <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+  	$(".comment-list .comment").each(function(i, el){
+  		new ProductCommentReply({
+  			reply_url: "<%=shop_admins_product_comments_path(current_shop) %>",
+  			raty_url: "<%= asset_path 'raty' %>",
+  			el: $(el)})
+  	})
+  })
+</script>

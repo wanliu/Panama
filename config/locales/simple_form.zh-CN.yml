@@ -6,3 +6,11 @@
       address:
         zip_code: 邮编
         road: 街道
+      ask_buy:
+        title: 商品名称
+        product_id: 商品
+        price: 单价
+        amount: 数量
+        describe: 描述
+      product_item:
+        amount: 数量

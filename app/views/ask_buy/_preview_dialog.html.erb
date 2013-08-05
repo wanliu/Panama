@@ -1,0 +1,94 @@
+<div class='model-popup-backdrop in ask_buy_dialog' >
+  <div class="container">
+    <div class="row-fluid ">
+      <div class="offset1 span7">
+        <!-- 主展示框 -->
+        <div id="main-model" class="dialog">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>{{title}}</h3>
+          </div>
+          <div class="modal-body main-show">
+            <div class='picture'>
+              <img class="preview b-{{id}}" src="{{url}}" />
+            </div>
+            <h4 class="right_bottom2 animate1 fadeInRight">价格: <span>{{price}}</span></h5>
+            <h4>产品描述：</h4>
+            <span style="word-wrap:break-word;margin-left:10px;">
+              {{describe}}
+            </span>
+          </div>
+          <div class="modal-footer">
+            <div class="big_comments_and_reply">
+
+              <div class="comments">
+                {{#comments}}
+                <%= render  "ask_buy/comment" %>
+                {{/comments}}
+              </div>
+              <div class="reply_form">
+                <div class='user-info'>
+                  <img src="<%= current_user.photos.icon %>">
+                  <a href='javascript:void(0)'>
+                    <%=current_user.login %>
+                  </a>
+                </div>
+                <div class='message'>
+                  <textarea name='content' placeholder="发表评论..."></textarea>
+                </div>
+                <button class="submit-comment disabled btn btn-danger">评论</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="span3">
+        <div class="dialog">
+          <div class="modal-body">
+            <img class="author_image" src={{user.header_url}} />
+            <h4>{{user.login}}</h4>
+            <p>关注 55</p>
+            <p>粉丝 100</p>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+
+        <div class="dialog" id="purchase-forms">
+          <div class="modal-body">
+              <label class="decimal optional control-label" for="product_item_price">
+                Price
+              </label>
+              <input type='text' value="{{price}}"  readonly=true />
+              <div class="control-group integer optional">
+                <label class="integer optional control-label" for="product_item_amount">
+                  Amount
+                </label>
+                <div class="controls">
+                  <input class="numeric integer" name="" readonly=true type="number" value="{{amount}}">
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+
+            <div class="btn-group">
+              <a class="btn like-button" href="#">
+                <%= icon(:heart) %> 喜欢
+              </a>
+              <a class="btn like-count" href="#">0</a>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-danger" type="submit" name="join">
+                <%= icon(:'shopping-cart', :white) + " 参与" %>
+              </button>
+              <a class="btn btn-danger partic-button" href="#">
+                0
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

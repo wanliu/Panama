@@ -1,6 +1,7 @@
-var column = $(".activity", "#activities").size() % 5
+/*var column = $(".activity", "#activities").size() % 5
 $activity = $("<%= j render :partial => 'activities/auction/activity', 
 	:object => @activity %> ").prependTo(".column:eq("+column+")","#activities")
 $activity.find("img").load(function(){
 	$("#activities").masonry('reload')
-})
+})*/
+pnotify("已经发布活动，请等待审核！")
