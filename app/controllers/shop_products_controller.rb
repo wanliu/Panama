@@ -54,7 +54,7 @@ class ShopProductsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
-      format.json { render json: @product }
+      format.json { render json: @shop_product }
     end
   end
 
