@@ -1,7 +1,8 @@
 
-class window.ShopProductBuy extends Backbone.View
+class window.ShopProductToolbar extends Backbone.View
   events: {
-    "click input:button.buy" : "buy"
+    "click .toolbar .buy" : "buy"
+    "click .toolbar .cart" : "cart"
   }
 
   initialize: () ->
@@ -9,6 +10,7 @@ class window.ShopProductBuy extends Backbone.View
     @login = @options.login
     @shop_product_id = @$el.attr("data-value-id")
     @amount = @$("input:text.amount")
+    @$cart_el = $(".toolbar .cart")
 
   buy: () ->
     $.ajax(
@@ -18,5 +20,10 @@ class window.ShopProductBuy extends Backbone.View
       success: () =>
         window.location.href = "/people/#{@login}/transactions"
     )
+
+  cart: () ->
+    selector  = @$cart_el.attr('add-to-cart')
+    urlAction = @$cart_el.attr('add-to-action')
+    myCart.addToCart($(selector), @$("form") ,urlAction)
 
 

@@ -16,7 +16,11 @@
  			</div>
 			<div class='userinfo'>
 				<%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
-				<p><%= activity.author.login %></p>
+				<p>
+					<a href="<%= person_path(activity.author) %>">
+						<%= activity.author.login %>
+					</a>
+				</p>
 				<span>参与 <%= activity.participate || 0%> </span>
 				<span class='like-count'>支持 <%= activity.like || 0 %></span>
 			</div>
