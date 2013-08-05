@@ -24,7 +24,9 @@
         <button class="modify">修改</button>
         <% else %>
         <script type="text/javascript">
-        $("input").attr("readonly","readonly");
+            $("input").attr("readonly","readonly");
+            $(".file").attr("readonly",false);
+            $(".file").attr("disabled",true);
         </script>
         <% end %>
     </div>
