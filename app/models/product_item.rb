@@ -65,7 +65,6 @@ class ProductItem < ActiveRecord::Base
 
   before_save do
     update_total
-    init_data
   end
 
   after_create do
@@ -88,10 +87,6 @@ class ProductItem < ActiveRecord::Base
 
   def update_total
     self.total = self.price * self.amount
-  end
-
-  def init_data
-    self.user_id = cart.user_id
   end
 
   def options

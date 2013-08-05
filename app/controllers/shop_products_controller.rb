@@ -66,7 +66,8 @@ class ShopProductsController < ApplicationController
         :product_id => @shop_product.product_id,
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
-        :price => @shop_product.price
+        :price => @shop_product.price,
+        :user_id => current_user
       })
       if @order.save
         format.json{ render :json => @order }

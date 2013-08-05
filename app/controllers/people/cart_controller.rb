@@ -15,7 +15,8 @@ class People::CartController < People::BaseController
       :product_id => @shop_product.product_id,
       :shop_id => @shop_product.shop_id,
       :title => @shop_product.product.name,
-      :price => @shop_product.product.price
+      :price => @shop_product.product.price,
+      :user_id => @shop_product.user_id
     }))
     if @item.save
       render :json => @item.as_json.merge(:img_path => @item.photos.icon)
