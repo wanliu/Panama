@@ -1,6 +1,6 @@
 #encoding: utf-8
 class ChatMessagesController < ApplicationController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   def index
     @messages = current_user.messages(params[:friend_id])

@@ -1,8 +1,8 @@
 class CategoryController < ApplicationController
   layout "category"
 
-  before_filter :login_required, except: :products
-  before_filter :login_required_origin, only: :products
+  before_filter :login_and_service_required, except: :products
+  before_filter :login_required, only: :products
 
   def index
     @category = Category.where(:name => '_products_root').first

@@ -2,7 +2,7 @@ class Admins::BaseController < ApplicationController
 
   layout "admins"
 
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   helper_method :current_admin_path, :sections
 

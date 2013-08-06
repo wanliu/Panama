@@ -1,6 +1,8 @@
 # encoding: utf-8
 class ShopProductsController < ApplicationController
-	before_filter :login_required_origin
+	before_filter :login_required
+  before_filter :login_and_service_required, only: :buy
+
 	def index
 	    @shop = Shop.find(params[:shop_id])
 	    @products = @shop.shop_products

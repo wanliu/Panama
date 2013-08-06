@@ -1,6 +1,6 @@
 #encoding: utf-8
 class People::TopicsController < People::BaseController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   def create
     ptopic = params[:topic]
