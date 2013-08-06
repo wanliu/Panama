@@ -8,7 +8,6 @@ class Admins::BaseController < ApplicationController
 
   def section
     name = params[:section_name]
-    # debugger
     sect = sections.find {|sect| sect[:name] == name.to_sym }
     raise "invalid section name: #{name}" unless sect
     self.instance_exec &sect[:block] if sect[:block]

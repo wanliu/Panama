@@ -43,13 +43,17 @@
             </tr>
           </thead>
           <tbody>
-            <% @people.money_bills.each do |bill| %>
-            <tr>
-              <td><%=bill.serial_number %></td>
-              <td><%=bill.money %></td>
-              <td><%=bill.owner_name %></td>
-              <td><%=bill.owner_value %></td>
-            </tr>
+            <% if !@people.money_bills.present? %>
+              <tr><td colspan="4">您还没有交易记录</td></tr>
+            <% else %>
+              <% @people.money_bills.each do |bill| %>
+                <tr>
+                  <td><%=bill.serial_number %></td>
+                  <td><%=bill.money %></td>
+                  <td><%=bill.owner_name %></td>
+                  <td><%=bill.owner_value %></td>
+                </tr>
+              <% end %>
             <% end %>
           </tbody>
         </table>
