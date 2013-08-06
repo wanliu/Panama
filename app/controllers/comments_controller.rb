@@ -1,6 +1,6 @@
 #describe: 评论控制器
 class CommentsController < ApplicationController
-  before_filter :login_required, :only => [:activity, :product, :topic, :update, :destroy]
+  before_filter :login_and_service_required, :only => [:activity, :product, :topic, :update, :destroy]
 
   def index_activities
     @activities = Activity.all

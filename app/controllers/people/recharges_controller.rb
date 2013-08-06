@@ -1,6 +1,6 @@
 #用户充值
 class People::RechargesController < People::BaseController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   #网上银行充值
   def ibank

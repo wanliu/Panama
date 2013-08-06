@@ -51,9 +51,9 @@ class ApplicationController < ActionController::Base
   end
 
   # 绑定登陆和服务选择(买家，卖家？)
-  def login_required
+  def login_and_service_required
     if !current_user
-      login_required_origin
+      login_required
     elsif current_user.services.empty?
       respond_to do |format|
         format.js{
@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
   end
 
   # 只需要验证是否登录而不需要验证是否选择服务用这个
-  def login_required_origin
+  def login_required
     if !current_user
       respond_to do |format|
         format.js{
@@ -87,7 +87,7 @@ class ApplicationController < ActionController::Base
   # 用于验证服务选择
   def login_required_without_service_choosen
     if !current_user
-      login_required_origin
+      login_required
     elsif !current_user.services.empty?
       redirect_to '/'
     end
@@ -95,7 +95,7 @@ class ApplicationController < ActionController::Base
 
   def login_required_without_service_seller
     if !current_user
-      login_required_origin
+      login_required
     elsif current_user.is_seller?
       redirect_to '/'
     end

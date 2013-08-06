@@ -1,5 +1,5 @@
 class People::ProductCommentsController < People::BaseController
-	before_filter :login_required
+	before_filter :login_and_service_required
 
 	def index
 		@transactions = current_user.transactions.where(:state => "complete")

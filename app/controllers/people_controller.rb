@@ -1,6 +1,6 @@
 #encoding: utf-8
 class PeopleController < ApplicationController
-  before_filter :login_required, :only => [
+  before_filter :login_and_service_required, :only => [
     :show_invite,
     :agree_invite_user,
     :agree_email_invite_user,
