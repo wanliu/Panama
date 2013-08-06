@@ -38,10 +38,10 @@ class root.AskBuyView extends Backbone.View
     )
 
   init_attachment: (attachments) ->
-    @atta = new AttachmentUpload({
+    @atta = new AttachmentUpload(
       el: @$(".attachment-list"),
       data: attachments,
       default_enabled: false,
       limit: 4,
       params: @upload_params
-    })
+    )

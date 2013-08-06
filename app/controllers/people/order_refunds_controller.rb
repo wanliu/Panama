@@ -1,7 +1,7 @@
 #encoding: utf-8
 
 class People::OrderRefundsController < People::BaseController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   def index
     @refunds = current_user_refunds.order("created_at desc")

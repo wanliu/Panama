@@ -1,6 +1,10 @@
 Panama::Application.routes.draw do
 
-  resources :shop_products
+  resources :shop_products do
+    member do
+      post :buy, :to => "shop_products#buy"
+    end
+  end
 
   # devise_for :admin_users, ActiveAdmin::Devise.config
   resources :after_signup
@@ -181,7 +185,11 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :ask_buy
+  resources :ask_buy do
+    member do
+      post :comment, :to => "ask_buy#comment"
+    end
+  end
 
   resources :product_search
   # resources :shops do

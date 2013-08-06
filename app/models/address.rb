@@ -39,7 +39,7 @@ class Address < ActiveRecord::Base
       area_id=? and
       contact_name=? and
       contact_phone=? and id<>?", road, province_id,
-      city_id, area_id, contact_name, contact_phone, id).present?
+      city_id, area_id, contact_name, contact_phone, id).first.present?
       errors.add(:province_id, "地址已经存在了！")
     end
   end

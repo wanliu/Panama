@@ -110,6 +110,7 @@ class User < ActiveRecord::Base
     attribute = super *args
     attribute["icon_url"] = icon
     attribute["avatar_url"] = avatar
+    attribute["header_url"] = photos.header
     attribute["connect_state"] = connect_state
 
     attribute

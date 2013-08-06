@@ -1,7 +1,7 @@
 #encoding: utf-8
 #describe: 关注控制器
 class People::FollowingsController < People::BaseController
-  before_filter :login_required, :except => [:index]
+  before_filter :login_and_service_required, :except => [:index]
 
   def index
     @u_followings = @people.followings.users

@@ -1,5 +1,5 @@
 class AskBuyController < ApplicationController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   def new
     @ask_buy = AskBuy.new
@@ -25,4 +25,29 @@ class AskBuyController < ApplicationController
       end
     end
   end
+
+  def show
+    @ask_buy = AskBuy.find(params[:id])
+    respond_to do |format|
+      format.json do
+        ask_buy = @ask_buy.as_json
+        ask_buy["comments"] = @ask_buy.comments{|c| c.as_json}
+        render :json => ask_buy
+      end
+    end
+  end
+
+  def comment
+    @ask_buy = AskBuy.find(params[:id])
+    @comment = @ask_buy.comments.build(params[:comment])
+    @comment.user_id = current_user.id
+    respond_to do |format|
+      if @comment.save
+        format.json{ render :json => @comment }
+      else
+        format.json{ render :json => draw_errors_message(@comment), :status => 403 }
+      end
+    end
+  end
+
 end

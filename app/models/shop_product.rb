@@ -1,3 +1,4 @@
+#encoding: utf-8
 class ShopProduct < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
@@ -8,6 +9,8 @@ class ShopProduct < ActiveRecord::Base
 
   belongs_to :shop
   belongs_to :product
+
+  validate :valid_shop_and_product_uniq?
 
   # Tire 索引结构的 json
   def to_indexed_json
@@ -51,5 +54,12 @@ class ShopProduct < ActiveRecord::Base
     indexes :id, :index => :not_analyzed
     indexes :name, :as => 'product.name'
     indexes :shop_id, :index => :not_analyzed
+  end
+
+  private
+  def valid_shop_and_product_uniq?
+    if ShopProduct.where("shop_id=? and product_id=? and id<>?", shop_id, product_id, id.to_s).first.present?
+      errors.add(:product_id, "该商店存在相同的商品了!")
+    end
   end
 end

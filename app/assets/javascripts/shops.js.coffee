@@ -1,6 +1,7 @@
-//= require panama
-//= require social_sidebar
-//= require lib/jquery.nanoscroller
+#= require panama
+#= require social_sidebar
+#= require lib/jquery.nanoscroller
+#= require shop_products
 
 root = window || @
 
@@ -29,8 +30,8 @@ class ShopProductView extends Backbone.View
 			@template = data
 			handle.call(@)
 			@delegateEvents()
-			$.get "/products/#{@product_id}?layout=false", (data) =>
-				$(".main-show").html(data)
+			#$.get "/products/#{@product_id}?layout=false", (data) =>
+			#	$(".main-show").html(data)
 
 	render: () ->
 		tpl = Hogan.compile(@template)
@@ -55,12 +56,12 @@ class ShopProductPreview extends Backbone.View
 	initialize: (options) ->
 		_.extend(@, options)
 
-	launchShopProduct: (event) -> 
+	launchShopProduct: (event) ->
 		@model.fetch success: (model) =>
 			view = new ShopProductView({
 				el         : @$el,
 				model      : @model,
-				product_id : @product_id 
+				product_id : @product_id
 			})
 			view.modal()
 		false

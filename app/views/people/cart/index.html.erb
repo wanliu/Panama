@@ -33,9 +33,9 @@
               </td>
               <td>
                 <%= link_to '#' do %>
-                  <%= image_tag item.product.shop.try(:icon_url), :class => "img-polaroid img-seller" %>
+                  <%= image_tag item.shop.try(:icon_url), :class => "img-polaroid img-seller" %>
                 <% end %>
-                <h5><%= item.product.shop.name %></h5>
+                <h5><%= item.shop.name %></h5>
               </td>
               <td>
                 <%= simple_form_for item,:url => "" do |f| %>
