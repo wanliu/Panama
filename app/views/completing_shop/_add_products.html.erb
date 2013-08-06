@@ -7,7 +7,6 @@
 	</div>
 </div> 	
 <div class='row-fluid dialog_product'>
-
 	<div class="span2">
 		<%= render "category_selector" %>
 	</div>
@@ -40,6 +39,7 @@
 					var product_view = new ProductView({ el : $(".table"), models: <%=raw @products.to_json %> });
 					new WizardView({ 
 						el: $(".dialog_product"),
+						shop_id: <%= current_user.shop.try(:id) %>,
 						select_handle: function(models){
 							_.each(models, function(model){
 								product_view.render(model);

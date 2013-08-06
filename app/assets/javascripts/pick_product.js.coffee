@@ -27,6 +27,7 @@ class root.WizardView extends Backbone.View
       )
 
   get_category_products: (event) ->
+    shop_id = @options.shop_id
     $body = $(event.target).parents(".accordion-body")
     $body.removeClass("in").attr("style", "")
     @url =  event.target.attributes.href.value + "/products"
@@ -34,29 +35,32 @@ class root.WizardView extends Backbone.View
       type: "get",
       url: @url,
       dataType: "json",
+      data:{ shop_id : shop_id },
       success: (data) =>
         $("select[name=product]").html("")
         _.each(data, (product)->
-          $("select[name=product]").append("<option value="+product.id+">"+product.name+"</option>")
+          $("select[name=product]").append("<option id="+product.id+" value="+product.id+">"+product.name+"</option>")
         )
     })
     false
 
-  render_product_infor: (product_ids) ->
+  render_product_infor: (product_ids) =>
     $.ajax({
       type: "post",
       url: "/shop_products",
-      data: {product_ids: product_ids }
+      data: {product_ids: product_ids },
       dataType: "json",
-      success: (products) =>        
+      success: (products) =>      
         @options.select_handle(products)
+      error: () ->
+        alert("something is wrong")
     })
 
   get_products_infor: () ->
     product_ids = []
     $("select[name=product] option:selected").each () ->
       product_ids.push($(this).val())
-
+      $(this).remove()
     @render_product_infor(product_ids)
         
   update_product = (product_id, field, value) ->
@@ -70,7 +74,7 @@ class root.WizardView extends Backbone.View
       type: "put",
       url: "/shop_products/#{product_id}",
       dataType: "json",
-      data: data
+      data: data,
       error: (messager) ->
         alert(messager)
     })

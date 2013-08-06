@@ -84,7 +84,6 @@ class People::TransactionsController < People::BaseController
   def base_info
     @transaction = current_order.find(params[:id])
     respond_to do |format|
-      debugger
       @transaction.address = generate_address
       if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
         format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
