@@ -12,34 +12,30 @@ class ShopProductsController < ApplicationController
 	end
 
   def create
-    Benchmark.bm do |x|
-      x.report {
-        if current_user.shop.present?
-          product_ids   = params[:product_ids]
-          shop_products = product_ids.map do |product_id|
-            current_user.shop.shop_products.create(
-              product_id: product_id,
-              price: 0,
-              inventory: 1
-            )
-          end
-          valid_shop_products = shop_products.find { |product| product.valid? }
+    if current_user.shop.present?
+      product_ids   = params[:product_ids]
+      shop_products = product_ids.map do |product_id|
+        current_user.shop.shop_products.create(
+          product_id: product_id,
+          price: 0,
+          inventory: 1
+        )
+      end
+      valid_shop_products = shop_products.find { |product| product.valid? }
 
-          respond_to do |format|
-            if !valid_shop_products.blank?
-              format.json { render json: shop_products }
-            else
-              format.json { render json: { errors: "无法创建商店商品" },
-                         status: :unprocessable_entity }
-            end
-          end
+      respond_to do |format|
+        if !valid_shop_products.blank?
+          format.json { render json: shop_products }
         else
-          respond_to do |format|
-            format.json { render json: { error: "请先建立商店信息" },
-                       status: :unprocessable_entity }
-          end
+          format.json { render json: { errors: "无法创建商店商品" },
+                     status: :unprocessable_entity }
         end
-      }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: { error: "请先建立商店信息" },
+                   status: :unprocessable_entity }
+      end
     end
   end
 

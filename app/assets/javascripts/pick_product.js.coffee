@@ -52,9 +52,8 @@ class root.WizardView extends Backbone.View
       dataType: "json",
       success: (products) =>      
         @options.select_handle(products)
-      error: () ->
-        alert("something is wrong")
     })
+    false
 
   get_products_infor: () ->
     product_ids = []

@@ -11,14 +11,11 @@
 		<%= render "category_selector" %>
 	</div>
 	<div class="span3 relative">
-		<select multiple="multiple" name="product" class="product_list">
+		<select multiple="multiple" name="product" class="product_list" style="height:350px;">
 		</select>
 		<div class='buttons'>
 			<%= link_to '#', :class => 'btn add_to_select' do %>
 			<%= icon 'arrow-right' %>
-			<% end %>
-			<%= link_to '#', :class => 'btn add_to_select' do %>
-			<%= icon 'arrow-left' %>
 			<% end %>
 		</div>
 	</div>
