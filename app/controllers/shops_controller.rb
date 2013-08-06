@@ -17,6 +17,11 @@ class ShopsController < ApplicationController
 
   layout 'shops'
 
+  def title
+
+    @title = "首页 #{Shop.find(params[:id]).name}"
+  end
+
   def topic_categories
     @categories = Shop.find(params[:id]).topic_categories
     respond_to do |format|
