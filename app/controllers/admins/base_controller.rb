@@ -2,13 +2,12 @@ class Admins::BaseController < ApplicationController
 
   layout "admins"
 
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   helper_method :current_admin_path, :sections
 
   def section
     name = params[:section_name]
-    # debugger
     sect = sections.find {|sect| sect[:name] == name.to_sym }
     raise "invalid section name: #{name}" unless sect
     self.instance_exec &sect[:block] if sect[:block]

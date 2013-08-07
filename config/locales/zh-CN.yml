@@ -371,6 +371,10 @@ zh-CN:
   shop_info: 店铺信息
   product_comments: 商品评论
 
+  people: 基本信息
+  addresses: 地址
+  cart: 购物车
+  transactions: 交易
 
   shop_group:
     sale: "销售组"
@@ -555,3 +559,8 @@ zh-CN:
   my_cart: 购物车
   chat: 交谈
   unread_notification: "%{count} 未读信息"
+  activities: "活动"
+  acounts: "店铺"
+  shop_info: "基础信息"
+  index: ""
+  show: "显示页"

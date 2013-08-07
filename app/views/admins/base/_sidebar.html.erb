@@ -4,9 +4,9 @@
         <%= render :partial => "section", :locals => section %>
     <% end %>
     <li class="accordion-group">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#acount-collapse"><i class="icon-user"></i> <span class="name">账户</span></a>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#acount-collapse"><i class="icon-user"></i> <span class="name">店铺</span></a>
         <ul id="acount-collapse" class="accordion-body collapse">
-        <% sections(:acount).each do |section| %>
+        <% sections(:shop).each do |section| %>
             <%= render :partial => "section", :locals => section %>
         <% end %>
         </ul>

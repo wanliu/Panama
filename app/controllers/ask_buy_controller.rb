@@ -1,5 +1,5 @@
 class AskBuyController < ApplicationController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   def new
     @ask_buy = AskBuy.new

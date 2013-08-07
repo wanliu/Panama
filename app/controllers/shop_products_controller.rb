@@ -1,13 +1,15 @@
 # encoding: utf-8
 class ShopProductsController < ApplicationController
-  before_filter :login_required_origin
-  def index
-    @shop = Shop.find(params[:shop_id])
-    @products = @shop.shop_products
-    respond_to do |format|
-      format.json { render json: @products }
-    end
-  end
+	before_filter :login_required
+  before_filter :login_and_service_required, only: :buy
+
+	def index
+	    @shop = Shop.find(params[:shop_id])
+	    @products = @shop.shop_products
+	    respond_to do |format|
+	      format.json { render json: @products }
+	    end
+	end
 
   def create
     if current_user.shop.present?
@@ -54,7 +56,7 @@ class ShopProductsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
-      format.json { render json: @product }
+      format.json { render json: @shop_product }
     end
   end
 

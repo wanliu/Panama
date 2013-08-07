@@ -759,9 +759,49 @@ ul {
 	@include border-radius(1px);
 }
 
+.modal-body {
+	.nav-tabs {
+		li {
+			a {
+				color: #555;
+			}
+		}
+
+		border-bottom: 1px solid #dddddd;
+	}
+
+	.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+		color: #555;
+	}
+
+	.nav > li > a:hover, .nav > li > a:focus {
+		// background: $white;
+		zoom: 1;
+	}
+
+	.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+		// border: 1px solid #dddddd;
+		// border-color: transparent;
+	}	
+
+	.nav-tabs > .active > a {
+		background-color: white;
+		border: 1px solid #dddddd;
+		border-bottom-color: transparent;
+	}
+
+
+}
+
 .model-popup-backdrop {
 	color: #555;
 }
+
+
+input[type="text"], input[type="password"], .ui-autocomplete-input, textarea, .uneditable-input {
+	@include border-radius(1px);
+}
+
 h2 small {
 	color: white;
 }

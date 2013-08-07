@@ -1,5 +1,5 @@
 class UserCheckingsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_and_service_required
 
   def update_user_auth
   	@user_checking = current_user.user_checking

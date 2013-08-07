@@ -37,6 +37,17 @@ module ApplicationHelper
     @current_admin ||= AdminUser.where(:uid => session[:admin_id]).first if session[:admin_id]
   end
 
+  def current_shop
+
+    @current_shop = Shop.find_by(:name => params[:shop_id]) unless params[:shop_id].blank?
+    # if @current_shop.user != current_user &&
+    #   @current_shop.find_employee(current_user.id).nil?
+    #   redirect_to shop_path(params[:shop_id])
+    #   return
+    # end
+    # @current_shop
+  end
+
   def token
     current_user.im_token
   end
@@ -67,8 +78,16 @@ module ApplicationHelper
     end
   end
 
-  def title
-    @title ||= "#{t(controller_name, :default => '万流平台')} #{t(action_name, :default => action_name)}"
+  def default_title
+    "#{t(controller_name)} #{t(action_name, :default => action_name)} - 万流平台"
+  end
+
+  def controller_title
+    "#{controller.title} - 万流平台" if controller.respond_to?(:title)
+  end
+
+  def display_title
+    @title ||= controller_title or default_title
   end
 
   def industry_title(after)

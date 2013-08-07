@@ -3,7 +3,7 @@ require 'tempfile'
 require 'fileutils'
 
 class ShopsController < ApplicationController
-  before_filter :login_required, :only => [:show, :show_invite, :agree_invite, :show_email_invite]
+  before_filter :login_and_service_required, :only => [:show, :show_invite, :agree_invite, :show_email_invite]
 
   include Apotomo::Rails::ControllerMethods
 
@@ -16,6 +16,11 @@ class ShopsController < ApplicationController
   admin
 
   layout 'shops'
+
+  def title
+
+    @title = "首页 #{Shop.find(params[:id]).name}"
+  end
 
   def topic_categories
     @categories = Shop.find(params[:id]).topic_categories

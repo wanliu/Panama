@@ -1,30 +1,5 @@
-<!-- # <%# active_section :completed %>
-# <div class='row-fluid'>
-#   <div class='span12'>
-#   <%# @transactions.each do |transaction| %>
-#     <%#= render partial: 'transaction',
-#      object:  transaction,
-#      locals: {
-#        state:  transaction.state,
-#        people: @people
-#      } %>
-#   <%# end %>
-#   </div>
-# </div>
-# <script type='text/javascript' >
-#   $(document).ready(function(){
-#     $(".transaction").each(function(i, elem){
-#       var card = new TransactionCard({
-#         el: elem,
-#         realtime: {
-#           url: '<%= faye_server_uri %>',
-#           token: '<%= token %>' }
-#         });
-#     });
-#   })
-# </script> -->
 <% active_section :completed %>
-
+<% if @transactions.present? %>
 <div class='row-fluid'>
   <div class='span8'>
     <h2 class='page-title'>已完成</h2>
@@ -63,3 +38,9 @@
     </section>
   </div>
 </div>
+<% else %>
+<div>
+  <h3>你还没有购买成功任何物品喔！赶紧去购物吧。。。。。</h3>
+  <h4>祝您购物愉快～～～</h4>
+</div>
+<% end %>

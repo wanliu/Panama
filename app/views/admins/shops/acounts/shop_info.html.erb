@@ -1,3 +1,5 @@
+<% admin_active_section :shop_info %>
+
 <div class='row-fluid'>
   <div class='span7 widget'>
     <head> <h4>商店信息</h4></head>
@@ -24,7 +26,9 @@
         <button class="modify">修改</button>
         <% else %>
         <script type="text/javascript">
-        $("input").attr("readonly","readonly");
+            $("input").attr("readonly","readonly");
+            $(".file").attr("readonly",false);
+            $(".file").attr("disabled",true);
         </script>
         <% end %>
     </div>
