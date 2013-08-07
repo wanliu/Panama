@@ -371,6 +371,10 @@ zh-CN:
   shop_info: 店铺信息
   product_comments: 商品评论
 
+  people: 基本信息
+  addresses: 地址
+  cart: 购物车
+  transactions: 交易
 
   shop_group:
     sale: "销售组"
