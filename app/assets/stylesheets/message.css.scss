@@ -9,7 +9,7 @@ body {
   color: #333;
 }
 
-.transaction_dialog_panel{
+.transaction_dialog_panel, .direct_transaction_dialog_panel{
   // @include transparent(rgb(51,51,51), 0.4);
 
   position: absolute;
@@ -164,7 +164,7 @@ a {
     border-right: 2px solid #A2B1B0;
     text-align: right;
     background-color: rgba(162, 177, 176, 0.55);
-  }  
+  }
 }
 
 .chat-message-body.on-left .arrow {

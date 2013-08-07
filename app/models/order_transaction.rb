@@ -40,7 +40,7 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many  :items,
             class_name: "ProductItem",
-            foreign_key: 'transaction_id',
+            as: :owner,
             autosave: true,
             dependent: :destroy
 

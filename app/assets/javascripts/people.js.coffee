@@ -32,3 +32,4 @@
 #= require lib/depend_select
 #= require topic
 #= require people/product_comment
+#= require people/direct_transaction

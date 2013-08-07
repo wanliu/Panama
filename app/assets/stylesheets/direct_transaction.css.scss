@@ -1,0 +1,50 @@
+
+.direct_transactions{
+  .direct{
+    padding:0px;
+
+    .direct-info{
+      padding: 15px 0px 5px 15px;
+
+      .close{
+        margin-left: 10px;
+      }
+
+      .avatar{
+        img{
+          width:70px;
+          height:70px;
+        }
+
+        h1{
+          display:inline-block;
+        }
+      }
+
+      .products{
+        tfoot{
+          td{
+            text-align:right;
+            font-size:20px;
+          }
+        }
+      }
+    }
+
+    .direct-message{
+      background: white;
+      padding: 5px;
+
+      .messages{
+        background: white;
+
+        iframe{
+          width: 100%;
+          border: none;
+          height: 220px;
+        }
+      }
+    }
+
+  }
+}

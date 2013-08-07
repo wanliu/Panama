@@ -24,6 +24,8 @@ class ChatMessage < ActiveRecord::Base
   #validates_presence_of :receive_user
   validates_presence_of :send_user
 
+  validate :valid_receive_user_presence?
+
   after_create :notic_receive_user
   before_create :join_contact_friend
 
@@ -64,7 +66,7 @@ class ChatMessage < ActiveRecord::Base
   def routing_key
     if owner.nil?
       ["/chat/receive/#{receive_user.im_token}", as_json]
-    elsif owner.is_a?(OrderTransaction)
+    elsif owner.is_a?(OrderTransaction) || owner.is_a?(DirectTransaction)
       channel = "/#{owner_type}/#{owner.seller.im_token}/"
       if receive_user.present?
         ["/chat/receive#{channel}#{owner_id}_#{receive_user.try(:im_token)}", as_json]
@@ -80,12 +82,18 @@ class ChatMessage < ActiveRecord::Base
     attra["owner"] = owner.nil? ? {} : owner.as_json
     attra["send_user"] = send_user.as_json
     # attra["created_at"] = created_at.localtime().strftime("%Y-%m-%d %H:%M:%S")
-    attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S").as_json
+    attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
   end
 
   private
   def owner_exists?
     owner_id.present? && owner_type.present?
+  end
+
+  def valid_receive_user_presence?
+    if owner.nil?
+      errors.add(:receive_user, "没有接收人") if receive_user.nil?
+    end
   end
 end

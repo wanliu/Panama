@@ -1,6 +1,6 @@
 <% product = @shop_product.product %>
 <% shop = @shop_product.shop %>
-<div class="container shop_product_<%=@shop_product.id %>" data-value-id="<%=@shop_product.id %>">
+<div class="container shop_product_<%=@shop_product.id %> shop_product_dialog" data-value-id="<%=@shop_product.id %>">
   <div class="row-fluid ">
     <div class="offset2 span8">
       <!-- 主展示框 -->
@@ -25,6 +25,7 @@
                       shop_path(shop.try(:name)),
                       :class => 'btn pull-right' %>
                 <% end %>
+
                 <h5><%= product.name %></h5>
                 <p><small><%= product.summary %></small></P>
                 <hr>
@@ -83,8 +84,11 @@
         <div class="modal-footer toolbar">
           <div class="control-group">
             <div class="control pull-right">
-              <input class='btn btn-primary btn-large' type='button' value='快递购买' />
-              <input class="btn btn-primary btn-large buy" value="购买" type="button">
+              <span class='buy_manner'>
+                <input type='radio' checked name='buy_manner' value='direct' />直接购买
+                <input type='radio' name='buy_manner' value='guarantee' />担保交易
+              </span>
+              <button type="button" class="btn btn-primary btn-large buy">购买</button>
               <%= add_to_my_cart("Add To Cart", ".shop_product_#{@shop_product.id} .preview") %>
             </div>
           </div>

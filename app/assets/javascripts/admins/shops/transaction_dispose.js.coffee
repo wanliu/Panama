@@ -7,10 +7,10 @@ exports = window || @
 
 class Transaction extends Backbone.Model
   set_url: (shop_name) ->
-    @urlRoot = "/shops/#{shop_name}/admins/transactions"
+    @urlRoot = "/shops/#{shop_name}/admins/#{@get('_type')}"
   dispose: (callback) ->
     $.ajax(
-      url: "#{@urlRoot}/#{@.id}/dispose"
+      url: "#{@urlRoot}/#{@id}/dispose"
       type: "POST",
       success: callback
     )
@@ -43,7 +43,7 @@ class TransactionEvent extends Backbone.View
     else
       first_tran_el.before(template)
 
-    @tran_card @tran_panel.find("#order#{@model.id}")
+    @tran_card @tran_panel.find("##{@elem_id()}")
     @remove_tran()
 
   remove_tran: () ->
@@ -61,6 +61,13 @@ class TransactionEvent extends Backbone.View
   change_state: () ->
     @$(".state").html(@model.get("state_title"))
 
+  elem_id: () ->
+    if @model.get("_type") == "direct_transactions"
+      "direct#{@model.id}"
+    else
+      "order#{@model.id}"
+
+
 class exports.TransactionDispose extends Backbone.View
 
   initialize: (options) ->
@@ -73,7 +80,7 @@ class exports.TransactionDispose extends Backbone.View
 
   add_data: (model) ->
     model.set_url(@shop.name)
-    view = new TransactionEvent(_.extend({}, @tranOpts,
+    view = new TransactionEvent(_.extend({}, @tranOpts[model.get('_type')],
       model: model,
       template: @template
     ))
@@ -106,31 +113,37 @@ class exports.TransactionDispose extends Backbone.View
     @client = Realtime.client(@realtime_url)
 
     @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
-      data = info.values
-      switch info.type
-        when "chat"
-          @realtime_chat(data)
-        when "new"
-          @add data
-        when "change"
-          @realtime_change(data)
-        when "dispose"
-          @realtime_dispose(data)
+      @realtime_help(info, 'transactions')
 
-  realtime_dispose: (data) ->
-    model = @transactions.get(data.id)
+    @client.subscribe "/DirectTransaction/#{@shop_key()}/un_dispose", (info) =>
+      @realtime_help(info, 'direct_transactions')
+
+  realtime_help: (info, type) ->
+    data = info.values
+    switch info.type
+      when "chat"
+        @realtime_chat(data, type)
+      when "new"
+        @add _.extend(data, {_type: type})
+      when "change"
+        @realtime_change(data, type)
+      when "dispose"
+        @realtime_dispose(data, type)
+
+  realtime_dispose: (data, type) ->
+    model = @transactions.where(id: data.id, _type: type).first
     if model?
       @remove_tran model
 
-  realtime_chat: (data) ->
-    model = @transactions.get(data.owner.id)
+  realtime_chat: (data, type) ->
+    model = @transactions.where(id: data.owner.id, _type: type).first
     if model?
       model.set("unmessages_count", data.owner.unmessages_count)
     else
       @add data.owner
 
-  realtime_change: (data) ->
-    model = @transactions.get(data.id)
+  realtime_change: (data, type) ->
+    model = @transactions.where(id: data.id, _type: type).first
     if model?
       model.set("state_title", data.state_title)
 

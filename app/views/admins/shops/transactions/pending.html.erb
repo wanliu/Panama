@@ -33,6 +33,13 @@
   </div>
 </div>
 <div class='row-fluid'>
+  <div class='span12 direct_transactions'>
+    <% @direct_tansactions.each do | dt | %>
+    <%= render 'admins/shops/direct_transactions/show', :direct_transaction => dt %>
+    <% end %>
+  </div>
+</div>
+<div class='row-fluid'>
   <div class='span12 transaction_list'>
     <% @transactions.each do |transaction| %>
         <%= render :partial => "transaction" ,:locals => {
@@ -63,12 +70,34 @@
         name: "<%=current_shop.name %>",
         id: "<%=current_shop.id %>",
         token: "<%=current_shop.im_token %>"},
+
       tranOpts: {
-        tran_panel: $(".transaction_list"),
-        tran_card: transactionCard
+        transactions: {
+          tran_panel: $(".transaction_list"),
+          tran_card: transactionCard
+        },
+        direct_transactions:{
+          tran_panel: $(".direct_transactions"),
+          tran_card: function(ele){}
+        }
       },
       template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
     })
+
+    <% @undirect_tansactions.each do |ut| %>
+      dispose_view.add({
+        id: <%=ut.id %>,
+        number: "<%= ut.number %>",
+        buyer_login: "<%=ut.buyer.login %>",
+        items_count: "<%=ut.items_count %>",
+        total: "<%=ut.total %>",
+        created_at: "<%=ut.created_at.strftime('%Y-%m-%d %H:%M:%S') %>",
+        state_title: '<%=t("direct_transaction_state.#{ut.state.name}") %>',
+        address: "",
+        unmessages_count: "<%=ut.unmessages.count %>",
+        _type: "direct_transactions"
+      })
+    <% end %>
 
     <% @untransactions.each do |t| %>
       dispose_view.add({
@@ -80,12 +109,17 @@
         created_at: "<%=t.created_at.strftime('%Y-%m-%d %H:%M:%S') %>",
         state_title: '<%=t("order_states.seller.#{t.state}") %>',
         address: "<%=t.address.try(:location) %>",
-        unmessages_count: "<%=t.unmessages.count %>"
+        unmessages_count: "<%=t.unmessages.count %>",
+        _type: "transactions"
       })
     <% end %>
 
     new TransactionBubbling({
       url: "http://<%=request.env['HTTP_HOST'] %>/shops/<%=current_shop.name %>/admins/pending#order"
+    })
+
+    $(".direct_transactions>.direct").each(function(i, elem){
+      new ShopDirectTransactionView({el: $(elem)})
     })
   </script>
 </div>

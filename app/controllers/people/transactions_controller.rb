@@ -5,6 +5,7 @@ class People::TransactionsController < People::BaseController
   def index
     authorize! :index, OrderTransaction
     @transactions = current_order.uncomplete.order("created_at desc").page(params[:page])
+    @direct_transactions = current_user.direct_transactions.where(:operator_id => nil)
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }
@@ -107,6 +108,7 @@ class People::TransactionsController < People::BaseController
 
   def completed
     @transactions = OrderTransaction.buyer(@people).completed
+    @direct_transactions = @people.direct_transactions.completed
   end
 
   def get_delivery_price
@@ -153,6 +155,10 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def direct
+    @shop_product = ShopProduct.find(params[:shop_product_id])
+  end
+
   def notify
   end
 
@@ -179,7 +185,7 @@ class People::TransactionsController < People::BaseController
   def dialogue
     @transaction = current_user.transactions.find(params[:id])
     @transaction_message_url = person_transaction_path(current_user, @transaction)
-    render :partial => "transactions/dialogue", :layout => "transaction_message", :locals => {
+    render :partial => "transactions/dialogue", :layout => "message", :locals => {
       :transaction_message_url => @transaction_message_url,
       :transaction => @transaction }
   end
