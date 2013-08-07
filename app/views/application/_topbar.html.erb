@@ -42,7 +42,7 @@
     <% end %>
 
     <!-- 聊天信息 -->
-    <li class="dropdown">
+<!--     <li class="dropdown">
         <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-comments"></i>
         </a>
@@ -53,9 +53,9 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li> -->
     <!-- 通知信息 -->
-    <li class="dropdown">
+   <!--  <li class="dropdown">
         <%= link_to_notice %>
         <ul id="support-menu" class="dropdown-menu support" role="menu">
             <li role="presentation">
@@ -115,7 +115,7 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li> -->
     <li class="divider"></li>
     <li><%= link_to_admin %></li>
 <!--     <li class="hidden-phone">
@@ -126,12 +126,12 @@
  -->    <!-- 帐号信息 -->
     <li class="hidden-phone dropdown">
         <a href="#" title="Account" id="account" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-user"></i>
+            <%= account_info %>
         </a>
         <ul id="account-menu" class="dropdown-menu account" role="menu">
-            <li role="presentation" class="account-picture">
-                <%= account_info %>
-            </li>
+            <!-- <li role="presentation" class="account-picture">
+                <%#= account_info %>
+            </li> -->
             <li role="presentation">
                 <%= link_to_account %>
             </li>
@@ -143,11 +143,11 @@
             <i class="icon-reorder"></i>
         </a>
     </li>
-    <li role="presentation">
+<!--     <li role="presentation">
         <a href="component_calendar.html" class="link friends">
             <i class="icon-resize-horizontal "></i>
         </a>
-    </li>
+    </li> -->
     <!-- <li class="hidden-phone"><a href="login.html"><i class="icon-signout"></i></a></li> -->
 </ul>
 <%= javascript_include_tag "my_cart" %>
