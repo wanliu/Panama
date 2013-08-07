@@ -16,7 +16,11 @@ class Cart < ActiveRecord::Base
   end
 
   def exist_build(shop_id, product_id, attributes, &block)
-    if item = items.where(:shop_id => shop_id, :product_id => product_id).first
+    buy_state = ProductItem._get_state_val attributes[:buy_state]
+    if item = items.find_by(
+      :buy_state => buy_state,
+      :shop_id => shop_id,
+      :product_id => product_id)
       yield item
       item
     else
@@ -42,13 +46,20 @@ class Cart < ActiveRecord::Base
   end
 
   def create_transaction(people)
-    done = shop_items.map { |shop, pro_items| save_transcation(shop, pro_items, people) }.all?
+    done = shop_items.map do |header, pro_items|
+      if header[:buy_state] == :guarantee
+        save_transcation(header[:shop], pro_items, people)
+      else
+        create_direct_transaction(header[:shop], pro_items, people)
+      end
+    end.all?
+
     destroy if done # FIXME :should't be items.clear?
     done
   end
 
   def shop_items
-    items.group_by { |item| item.shop }
+    items.group_by { |item| {shop: item.shop, buy_state: item.buy_state} }
   end
 
   def save_transcation(shop, pro_items, people)
@@ -57,4 +68,9 @@ class Cart < ActiveRecord::Base
     transaction.save
   end
 
+  def create_direct_transaction(shop, pro_items, people)
+    transaction = people.direct_transactions.build(seller_id: shop.id)
+    transaction.items = pro_items
+    transaction.save
+  end
 end

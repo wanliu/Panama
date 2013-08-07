@@ -3,6 +3,7 @@ Panama::Application.routes.draw do
   resources :shop_products do
     member do
       post :buy, :to => "shop_products#buy"
+      post :direct_buy, :to => "shop_products#direct_buy"
     end
   end
 
@@ -64,6 +65,15 @@ Panama::Application.routes.draw do
 
     resources :addresses, :controller => "people/addresses" do
 
+    end
+
+    resources :direct_transactions, :controller => "people/direct_transactions" do
+      member do
+        get :dialog, :to => "people/direct_transactions#dialog"
+        get :messages, :to => "people/direct_transactions#messages"
+        post :send_message, :to => "people/direct_transactions#send_message"
+        post :completed, :to => "people/direct_transactions#completed"
+      end
     end
 
     match 'recharges/ibank', :to => "people/recharges#ibank", :via => :post
@@ -239,6 +249,15 @@ Panama::Application.routes.draw do
         end
       end
 
+      resources :direct_transactions, :to => "shops/direct_transactions" do
+        member do
+          get :dialog, :to => "shops/direct_transactions#dialog"
+          get :messages, :to => "shops/direct_transactions#messages"
+          post :send_message, :to => "shops/direct_transactions#send_message"
+          post :dispose, :to => "shops/direct_transactions#dispose"
+        end
+      end
+
       resources :categories, :controller => "shops/categories" do
         collection do
           get :category_children
@@ -248,6 +267,8 @@ Panama::Application.routes.draw do
         end
       end
 
+      resources :shop_banks, :controller => "shops/shop_banks"
+
       resources :products, :controller => "shops/products" do
         collection do
           get :category_page
@@ -256,7 +277,8 @@ Panama::Application.routes.draw do
         end
       end
 
-      resources :shop_products, :controller => "shops/shop_products"
+      resources :shop_products, :controller => "shops/shop_products" do
+      end
 
       resources :transactions, :controller => "shops/transactions" do
         member do

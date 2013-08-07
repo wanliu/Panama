@@ -1,4 +1,5 @@
 @import "core";
+@import 'banks';
 @import './lib/chose-friend';
 @import './admins/shops';
 @import 'communities';
@@ -14,6 +15,8 @@
 @import './lib/typeahead';
 @import 'product_comment';
 @import 'ask_buy';
+@import 'admins/shops/shop_banks';
+@import 'direct_transaction';
 
 
 $left-side-admin-width: 160px;

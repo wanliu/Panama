@@ -56,7 +56,7 @@ class ShopProductsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
-      format.json { render json: @shop_product }
+      format.json { render json: @shop_product.as_json.merge(product: @shop_product.product.as_json) }
     end
   end
 
@@ -69,12 +69,33 @@ class ShopProductsController < ApplicationController
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
         :price => @shop_product.price,
-        :user_id => current_user
+        :user_id => current_user,
+        :buy_state => :guarantee
       })
       if @order.save
         format.json{ render :json => @order }
       else
-        format.json{ render :json => draw_errors_message, :status => 403 }
+        format.json{ render :json => draw_errors_message(@order), :status => 403 }
+      end
+    end
+  end
+
+  def direct_buy
+    @shop_product = ShopProduct.find(params[:id])
+    respond_to do |format|
+      @order = current_user.direct_transactions.build(seller_id: @shop_product.shop_id)
+      @order.items.build({
+        :product_id => @shop_product.product_id,
+        :amount => params[:amount],
+        :title => @shop_product.product.try(:name),
+        :price => @shop_product.price,
+        :user_id => current_user,
+        :buy_state => :direct
+      })
+      if @order.save
+        format.json{ render :json => @order }
+      else
+        format.json{ render :json => draw_errors_message(@order), :status => 403 }
       end
     end
   end
