@@ -55,8 +55,21 @@
         realtime: {
           url: '<%= faye_server_uri %>',
           token: '<%= token %>'
+        },
+        shop: {
+          token: "<%=current_shop.im_token %>"
         }
       })
+    }
+
+    var direct_transaction = function(elem){
+      new ShopDirectTransactionView({
+        shop: {
+          token: "<%=current_shop.im_token %>"
+        },
+        realtime_url: '<%= faye_server_uri %>',
+        token: "<%= token %>",
+        el: $(elem)})
     }
 
     $(".transaction").each(function(i, elem){
@@ -70,7 +83,6 @@
         name: "<%=current_shop.name %>",
         id: "<%=current_shop.id %>",
         token: "<%=current_shop.im_token %>"},
-
       tranOpts: {
         transactions: {
           tran_panel: $(".transaction_list"),
@@ -78,14 +90,14 @@
         },
         direct_transactions:{
           tran_panel: $(".direct_transactions"),
-          tran_card: function(ele){}
+          tran_card: direct_transaction
         }
       },
       template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
     })
 
     <% @undirect_tansactions.each do |ut| %>
-      dispose_view.add({
+      dispose_view.add_direct({
         id: <%=ut.id %>,
         number: "<%= ut.number %>",
         buyer_login: "<%=ut.buyer.login %>",
@@ -95,12 +107,12 @@
         state_title: '<%=t("direct_transaction_state.#{ut.state.name}") %>',
         address: "",
         unmessages_count: "<%=ut.unmessages.count %>",
-        _type: "direct_transactions"
+        _type: ""
       })
     <% end %>
 
     <% @untransactions.each do |t| %>
-      dispose_view.add({
+      dispose_view.add_order({
         id: <%=t.id %>,
         number: "<%= t.number %>",
         buyer_login: "<%=t.buyer.login %>",
@@ -119,7 +131,7 @@
     })
 
     $(".direct_transactions>.direct").each(function(i, elem){
-      new ShopDirectTransactionView({el: $(elem)})
+      direct_transaction(elem)
     })
   </script>
 </div>

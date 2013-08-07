@@ -1,7 +1,7 @@
 require 'net/http'
 
 class FayeClient
-  def self.send(channel, params)
+  def self.send(channel, params = {})
     uri = URI.parse(Settings.defaults['faye_server'])
     token = Settings.defaults['faye_token']
 

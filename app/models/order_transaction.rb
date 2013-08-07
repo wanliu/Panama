@@ -36,7 +36,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :delivery_manner
   belongs_to :logistics_company
 
-  has_many :operators, class_name: "TransactionOperator", dependent: :destroy
+  has_many :operators, class_name: "TransactionOperator"
 
   has_many  :items,
             class_name: "ProductItem",
@@ -66,13 +66,7 @@ class OrderTransaction < ActiveRecord::Base
 
   after_create :notice_user, :notice_new_order, :state_change_detail
 
-  def notice_user
-    Notification.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-      :body => "你有新的订单")
-  end
+  after_destroy :notice_destroy, :destroy_operators
 
   state_machine :initial => :order do
 
@@ -230,6 +224,22 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def notice_user
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "你有新的订单")
+  end
+
+  def notice_destroy
+    if operator_state
+      FayeClient.send("/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
+    else
+      realtime_dispose({type: "destroy" ,values: as_json})
+    end
+  end
+
   #如果卖家没有发货直接删除明细，返还买家的金额
   def refund_handle_detail_return_money(refund)
     product_ids = refund.refund_product_ids
@@ -382,9 +392,9 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def operator_create(toperator_id)
-    unless operator.try(:id) == toperator_id
+    unless current_operator.try(:id) == toperator_id
       _operator = operators.create(operator_id: toperator_id)
-      self.update_attribute(:operator_id, _operator.id)
+      self.update_attribute(:operator_id, _operator.id) if _operator.valid?
     end
     notice_order_dispose
     self.update_attribute(:operator_state, true)
@@ -607,4 +617,7 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def destroy_operators
+    operators.destroy_all
+  end
 end
