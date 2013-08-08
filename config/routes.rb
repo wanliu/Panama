@@ -184,7 +184,7 @@ Panama::Application.routes.draw do
     collection do
       get "connect/:token", :to => "users#connect"
       get "disconnect/:id", :to => "users#disconnect"
-      get "contact_friends"
+      get "followings"
     end
   end
 
