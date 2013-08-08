@@ -1,73 +1,7 @@
 <section class="right-sidebar widget widget-tabs">
-	<!-- <header>
-		<ul class="nav nav-tabs">
-			<li class="active">
-				<a href="#stats" data-toggle="tab"><%=icon :'eye-open'%></a>
-			</li>
-			<li class="">
-				<a href="#report" data-toggle="tab"><%=icon :user %></a>
-			</li>
-			 
-		</ul>
-		<div id="sidebar-settings" class="settings">
-			<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">Icons</button>
-			<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">Auto</button>
-		</div>  
-	</header>
-	<div class="body tab-content">
-		<div id="stats" class="tab-pane clearfix active">
-			<h5 class="tab-header"><i class="icon-group"></i> Last logged-in users</h5>
-			<ul class="users-list">
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-					<div class="user-info">
-						<div class="name"><a href="#">Finees Lund</a></div>
-						<div class="position">Product Designer</div>
-						<div class="time">Last logged-in: Mar 20, 18:46</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div id="report" class="tab-pane">
-			<h5 class="tab-header"><i class="icon-star"></i> Popular contacts</h5>
-			<ul class="users-list user-list-no-hover">
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Jessica Johnsson</a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>
-								Call
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>
-								Message
-							</button>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div id="dropdown1" class="tab-pane">
-			<h5 class="tab-header"><i class="icon-comments"></i> Top Commenters</h5>
-			<ul class="users-list">
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Frans Garey</a></div>
-						<div class="comment">
-							Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-							sed quia
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div> -->
 </section>
+
+<!-- js模板 -->
 <div id="right-sidebar-templates" style='display: none;'>
 	<div class="main">
 		<header>
@@ -98,11 +32,14 @@
 </div>
 
 <script type="text/javascript">
-		var friends_view = {
+		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
+		var transaction_message_view = {
 			top : {klass: "icon-group", tool_tip: "show messages" },
 			container_view : TransactionView };
+		right_sidebar.register(transaction_message_view);
 
-		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
-		right_sidebar.register(friends_view);
-
+		var friends_message_view = {
+			top : {klass: "icon-group", tool_tip: "show messages" },
+			container_view : FriendsContainerView };
+		right_sidebar.register(friends_message_view);
 </script>
