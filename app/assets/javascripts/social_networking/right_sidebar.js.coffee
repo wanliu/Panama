@@ -39,8 +39,8 @@ class RightSideBar extends Backbone.View
 
 	add_top: (container, id)->
 		top = container.top || {}
-		@$('ul.nav-tabs').append(
-			"<li class='active'>
+		top_li = @$('ul.nav-tabs').append(
+			"<li #{ if @any_active_view() then '' else 'class="active"' }>
 				<a href='##{ id }' data-toggle='tab'>
 					<i class='#{ if top.klass then top.klass else '' }'>
 						#{ if top.title then top.title else '' }
@@ -77,6 +77,7 @@ class ContainerView extends Backbone.View
 			$(div).removeClass('active')
 
 		$(@el).addClass("active");
+		$(@parent_view)
 
 	fill_header: () ->
 
