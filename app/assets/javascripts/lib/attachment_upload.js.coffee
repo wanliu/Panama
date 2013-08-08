@@ -209,7 +209,7 @@ class root.AttachmentUpload extends Backbone.View
       @$el.append(view.render())
       setTimeout () =>
         view.change_style()
-      , 50
+      , 80
 
     default_choose_img: (model) ->
       if @default_enabled
