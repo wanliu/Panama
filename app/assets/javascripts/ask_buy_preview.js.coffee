@@ -1,6 +1,8 @@
 #= require backbone
 #= require lib/hogan
 
+root = (window || @)
+
 class Preview extends Backbone.View
   events: {
     "click .close" : "hide",
