@@ -1,13 +1,15 @@
 <section class="right-sidebar widget widget-tabs">
 	<header>
 		<ul class="nav nav-tabs">
-			<li class="active">
+			<li class="">
 				<a href="#stats" data-toggle="tab"><%=icon :'eye-open'%></a>
 			</li>
 			<li class="">
 				<a href="#report" data-toggle="tab"><%=icon :user %></a>
 			</li>
-			 
+			<li class="active">
+				<a href="#activities-notice" data-toggle="tab"><%=icon :flag %></a>
+			</li> 
 		</ul>
 		<div id="sidebar-settings" class="settings">
 			<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">Icons</button>
@@ -15,7 +17,7 @@
 		</div>  
 	</header>
 	<div class="body tab-content">
-		<div id="stats" class="tab-pane clearfix active">
+		<div id="stats" class="tab-pane">
 			<h5 class="tab-header"><i class="icon-group"></i> Last logged-in users</h5>
 			<ul class="users-list">
 				<li>
@@ -148,6 +150,27 @@
 							<button class="btn btn-mini btn-warning">
 								<i class="icon-envelope-alt"></i>
 								Message
+							</button>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div id="activities-notice" class="tab-pane clearfix active">
+			<h5 class="tab-header">
+				<i class="icon-star"></i>活动通知列表
+			</h5>
+			<ul class="notice-list notice-list-no-hover">
+				<li class="notice">
+					<%= image_tag Activity.first.photos.avatar, :class => "pull-left img-circle" %>
+					<div>
+						<div class="url"><a href="#"><%= Activity.first.title %></a></div>
+						<div class="options">
+							<button class="btn btn-mini btn-success">
+								<i class="icon-phone"></i>忽略
+							</button>
+							<button class="btn btn-mini btn-warning">
+								<i class="icon-envelope-alt"></i>查看
 							</button>
 						</div>
 					</div>

@@ -36,25 +36,9 @@
 	@include transparent(rgb(0,0,0),0.55);
 }
 
-// model
-
-.model-popup-backdrop {
-	// @include filter(blur(20px));
-	@include filter(none);
-}
-
 .to-blur {
 	@include filter(blur(3px));
 	@include transition(0.0s);
-}
-
-.modal-body {
-	.author_image {
-		width: 50px;
-	}
-
-	height: auto;
-	max-height: 525px;
 }
 
 .dialog {
@@ -67,45 +51,4 @@
 	@include background-clip(padding-box);
 	outline: none;
 	margin-bottom: 20px;
-}
-
-// comments and reply
-
-.big_comments_and_reply {
-	text-align: left;
-	.comments {
-		.comment {
-			padding: 0px 20px 10px 60px;
-			min-height: 60px;
-			.people-image {
-				margin-left: -60px;
-				float: left;
-				width: 50px;
-				height: 50px;
-			}
-
-			.author-name {
-				font-size: 16px;
-				font-weight: bold;
-			}
-
-
-		}
-	}
-
-	.reply_form {
-		padding: 0px 20px 10px 60px;
-		.user-info {
-			margin-left: -60px;
-			float: left;
-			width: 50px;
-			height: 50px;
-		}
-
-		.message {
-			textarea {
-				width: 100%;
-			}
-		}
-	}
 }

@@ -33,7 +33,7 @@
 //= require typeaheadExtension
 //= require lib/activity_base_info
 //= require ask_buy
-
+//= require activity
 
 root = window || this;
 
