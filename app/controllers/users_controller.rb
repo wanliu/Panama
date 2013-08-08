@@ -21,4 +21,11 @@ class UsersController < ApplicationController
       format.json{ render :json => @user }
     end
   end
+
+  def contact_friends
+    contact_friends = current_user.contact_friends
+    respond_to do |format|
+      format.json{ render :json => contact_friends }
+    end
+  end
 end
