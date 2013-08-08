@@ -2,7 +2,7 @@ root = (window || @)
 
 class ActivitiesContainerView extends ContainerView
 	fill_header: () ->
-		$(@el).prepend('<h5 class="tab-header"><i class="icon-group"></i>活动消息列表</h5>')
+		$(@el).prepend('<h5 class="tab-header"><i class="icon-star"></i>活动消息列表</h5>')
 
 	bind_items: () ->
 		# @colleciton = new root.FriendCollection()

@@ -1,246 +1,4 @@
 <section class="right-sidebar widget widget-tabs">
-<<<<<<< HEAD
-	<!-- <header>
-		<ul class="nav nav-tabs">
-			<li class="">
-				<a href="#stats" data-toggle="tab"><%=icon :'eye-open'%></a>
-			</li>
-			<li class="">
-				<a href="#report" data-toggle="tab"><%=icon :user %></a>
-			</li>
-			<li class="active">
-				<a href="#activities-notice" data-toggle="tab"><%=icon :flag %></a>
-			</li> 
-		</ul>
-		<div id="sidebar-settings" class="settings">
-			<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">Icons</button>
-			<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">Auto</button>
-		</div>  
-	</header>
-	<div class="body tab-content">
-		<div id="stats" class="tab-pane">
-			<h5 class="tab-header"><i class="icon-group"></i> Last logged-in users</h5>
-			<ul class="users-list">
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-					<div class="user-info">
-						<div class="name"><a href="#">Finees Lund</a></div>
-						<div class="position">Product Designer</div>
-						<div class="time">Last logged-in: Mar 20, 18:46</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Erebus Novak</a></div>
-						<div class="position">Software Engineer</div>
-						<div class="time">Last logged-in: Mar 23, 9:02</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Leopoldo Reier</a></div>
-						<div class="position">Chief Officer</div>
-						<div class="time">Last logged-in: Jun 6, 15:34</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Frans Garey</a></div>
-						<div class="position">Financial Assistant</div>
-						<div class="time">Last logged-in: Jun 8, 17:20</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Jessica Johnsson</a></div>
-						<div class="position">Sales Manager</div>
-						<div class="time">Last logged-in: Jun 8, 9:13</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div id="report" class="tab-pane">
-			<h5 class="tab-header"><i class="icon-star"></i> Popular contacts</h5>
-			<ul class="users-list user-list-no-hover">
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Jessica Johnsson</a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>
-								Call
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>
-								Message
-							</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Frans Garey</a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>
-								Call
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>
-								Message
-							</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Erebus Novak</a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>
-								Call
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>
-								Message
-							</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Leopoldo Reier</a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>
-								Call
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>
-								Message
-							</button>
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Finees Lund</a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>
-								Call
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>
-								Message
-							</button>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div id="activities-notice" class="tab-pane clearfix active">
-			<h5 class="tab-header">
-				<i class="icon-star"></i>活动通知列表
-			</h5>
-			<ul class="notice-list notice-list-no-hover">
-				<li class="notice">
-					<%= image_tag Activity.first.photos.avatar, :class => "pull-left img-circle" %>
-					<div>
-						<div class="url"><a href="#"><%= Activity.first.title %></a></div>
-						<div class="options">
-							<button class="btn btn-mini btn-success">
-								<i class="icon-phone"></i>忽略
-							</button>
-							<button class="btn btn-mini btn-warning">
-								<i class="icon-envelope-alt"></i>查看
-							</button>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div id="dropdown1" class="tab-pane">
-			<h5 class="tab-header"><i class="icon-comments"></i> Top Commenters</h5>
-			<ul class="users-list">
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Frans Garey</a></div>
-						<div class="comment">
-							Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit,
-							sed quia
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Finees Lund</a></div>
-						<div class="comment">
-							Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-							eu fugiat.
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Jessica Johnsson</a></div>
-						<div class="comment">
-							Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-							deserunt.
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Erebus Novak</a></div>
-						<div class="comment">
-							Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium
-							doloremque.
-						</div>
-					</div>
-				</li>
-				<li>
-					<%= image_tag current_user.icon, :class => "pull-left img-circle" %>
-
-					<div class="user-info">
-						<div class="name"><a href="#">Leopoldo Reier</a></div>
-						<div class="comment">
-							Laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis
-							et quasi.
-						</div>
-					</div>
-				</li>
-			</ul>
-		</div>
-	</div> -->
-=======
->>>>>>> sidebar
 </section>
 
 <!-- js模板 -->
@@ -275,12 +33,12 @@
 	</div>
 
 	<div class='activity-item'>
-			<%#= image_tag current_user.icon, :class => "pull-left img-circle" %>
-			<div class="user-info">
-				<div class="name"><a href="#">88 Lund</a></div>
-				<div class="position">Product </div>
-				<div class="time">Lan: Mar 20, 18:46</div>
-			</div>
+		<%= image_tag Activity.first.photos.avatar, :class => "pull-left img-circle" %>
+		<div class="user-info">
+			<div class="name"><a href="#"><%= Activity.first.title %></a></div>
+			<div class="position">Activity</div>
+			<div class="time"><%= Activity.first.updated_at %></div>
+		</div>
 	</div>
 </div>
 
@@ -292,7 +50,7 @@
 		right_sidebar.register(transaction_message_view);
 
 		var activities_view = {
-			top : { kclass: "icon-group", tool_tip: "活动消息列表" },
+			top : { klass: "icon-star", tool_tip: "活动消息列表" },
 			container_view : ActivitiesContainerView
 		}
 		right_sidebar.register(activities_view);
@@ -301,5 +59,4 @@
 			top : {klass: "icon-group", tool_tip: "show messages" },
 			container_view : FriendsContainerView };
 		right_sidebar.register(friends_message_view);
-
 </script>

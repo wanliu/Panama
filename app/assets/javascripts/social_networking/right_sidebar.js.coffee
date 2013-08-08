@@ -39,6 +39,7 @@ class RightSideBar extends Backbone.View
 
 	add_top: (container, id)->
 		top = container.top || {}
+		debugger
 		top_li = @$('ul.nav-tabs').append(
 			"<li #{ if @any_active_view() then '' else 'class="active"' }>
 				<a href='##{ id }' data-toggle='tab'>
