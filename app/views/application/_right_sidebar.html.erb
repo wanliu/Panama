@@ -34,7 +34,7 @@
 <script type="text/javascript">
 		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
 		var transaction_message_view = {
-			top : {klass: "icon-group", tool_tip: "show messages" },
+			top : {klass: "icon-edit", tool_tip: "交易消息" },
 			container_view : TransactionView };
 		right_sidebar.register(transaction_message_view);
 
@@ -43,3 +43,4 @@
 			container_view : FriendsContainerView };
 		right_sidebar.register(friends_message_view);
 </script>
+<%= render_widget :chat %>
