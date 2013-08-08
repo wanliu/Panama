@@ -103,8 +103,11 @@
 
 <script type="text/javascript">
 		var right_sidebar = new RightSideBar({el: ".right-sidebar"});
-		var message_view = { top       : { title: "messages", klass: "this-class", tool_tip: "show messages" },
+		var message_view = { top : { title: "messages",
+									 klass: "icon-eye-open", 
+									 tool_tip: "show messages" 
+									},
 							 heder_html: '<h5 class="tab-header"><i class="icon-group"></i> Last logged-in users</h5>',
-							 container_view : MessageContainerView };
+							 container_view : TransactionView };
 		right_sidebar.register(message_view);
 </script>
