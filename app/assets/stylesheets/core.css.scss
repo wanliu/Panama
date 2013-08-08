@@ -576,29 +576,6 @@ ul {
 	}
 }
 
-// Social Sidebar
-
-.right-sidebar {
-	position: absolute;
-	display: none;
-	width: 200px;
-	margin-bottom: 0px;
-
-	header {
-		.nav {
-			float: left;
-		}
-	}
-	.settings {
-		padding: 5px;
-		.btn-auto {
-			display: none;
-		}
-		display: inline-block;
-	}
-
-}
-
 .right-mini .right-sidebar {
 	width: auto;
 
@@ -626,8 +603,7 @@ ul {
 	}
 }
 
-.open_right_side
-.right-sidebar {
+.open_right_side .right-sidebar {
 	position: fixed;
 	right: 0;
 	top: 0;
@@ -640,61 +616,76 @@ ul {
 	width: 70px;
 }
 
+.right-sidebar {
+	position: absolute;
+	display: none;
+	width: 200px;
+	margin-bottom: 0px;
 
-.right-sidebar .tab-content {
-	overflow: visible;
-}
-
-.right-sidebar header ul {
-	margin: 0px;
-}
-
-
-.users-list {
-	list-style: none;
-	margin: 0px;
-
-}
-
-.users-list li:hover {
-	@include transparent(rgb(51,51,51),0.25);
-
-	// position: absolute;
-
-	width: 300px;
-	margin-left: -100px;
-}
-.right-mini .users-list li:hover {
-	width: 300px;
-	margin-left: -240px;
-
-	.user-info {
-		display: block;
+	header {
+		.nav {
+			float: left;
+		}
 	}
-}
 
-.users-list li {
-	// border-top: 1px solid rgba(51,51,51,0.25);
-	padding: 12px;
-	min-width: 60px;
-	margin: 0 -12px;
-	cursor: pointer;
-	height: 50px;
-	@include transition(width 0.0s, margin 0.3s);
-	overflow: hidden;
-}
+	.settings {
+		padding: 5px;
+		.btn-auto {
+			display: none;
+		}
+		display: inline-block;
+	}
 
-.users-list .name, .users-list .time, .users-list .position {
-	line-height: 16px;
-}
+	header ul {
+		margin: 0px;
+	}
 
-.users-list li img {
-	width: 50px;
-}
+	.tab-content {
+		overflow: visible;
+	}
 
+	.notices-list {
+		list-style: none;
+		margin: 0px;
 
-.users-list .user-info {
-	margin-left: 62px;
+		.name, .time, .position {
+			line-height: 16px;
+		}
+
+		li img {
+			width: 50px;
+		}
+
+		li {
+			// border-top: 1px solid rgba(51,51,51,0.25);
+			padding: 12px;
+			min-width: 60px;
+			margin: 0 -12px;
+			cursor: pointer;
+			height: 50px;
+			@include transition(width 0.0s, margin 0.3s);
+			overflow: hidden;
+		}
+
+		li:hover {
+			@include transparent(rgb(51,51,51),0.25);
+			width: 300px;
+			margin-left: -100px;
+		}
+
+		.user-info {
+			margin-left: 62px;
+		}
+
+		.right-mini .users-list li:hover {
+			width: 300px;
+			margin-left: -240px;
+
+			.user-info {
+				display: block;
+			}
+		}
+	}
 }
 
 #activities-notice {

@@ -18,18 +18,27 @@ class ActivitiesContainerView extends ContainerView
 			@addOne(model)
 
 	addOne: (model) ->
-		activity_view = new ActivityView({model: model})
+		activity_view = new ActivityNoticeView({model: model})
 		@$(".activities-list").append(activity_view.render().el)
 
 
-class ActivityView extends Backbone.View
+class ActivityNoticeView extends Backbone.View
 	tagName: 'li'
 	template: (options) ->
 		html = $("#right-sidebar-templates .activity-item").html()
 		html = html.replace('&lt;', '<').replace('&gt', '>')
 		_.template(html)(options)
 
-	# initialize: () ->
+	events:
+		"click" : "show_modal"
+
+	show_modal: () ->
+		@model = new ActivityModel({ id: 32 })
+		@model.fetch success: (model) =>
+			view = new ActivityView({
+				model    : @model 
+			})
+			view.modal()
 
 	render: () ->
 		html = @template(model: @model)
