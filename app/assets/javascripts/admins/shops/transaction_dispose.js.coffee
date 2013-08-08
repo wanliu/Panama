@@ -67,7 +67,6 @@ class TransactionEvent extends Backbone.View
     else
       "order#{@model.id}"
 
-
 class exports.TransactionDispose extends Backbone.View
 
   initialize: (options) ->
@@ -96,6 +95,14 @@ class exports.TransactionDispose extends Backbone.View
 
   add_direct: (data) ->
     @direct_transactions.add(_.extend(data, {_type: "direct_transactions"}))
+
+  add_orders: (items) ->
+    _.each items, (item) =>
+      @add_order(item)
+
+  add_directs: (items) ->
+    _.each items, (item) =>
+      @add_direct(item)
 
   init_el: () ->
     @$tbody = @$("tbody")

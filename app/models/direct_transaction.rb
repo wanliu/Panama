@@ -32,6 +32,7 @@ class DirectTransaction < ActiveRecord::Base
     attra["items_count"] = items_count
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("direct_transaction_state.#{state.name}")
+    attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
   end
 

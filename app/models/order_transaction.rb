@@ -449,6 +449,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra["stotal"] = stotal
+    attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
   end
 
