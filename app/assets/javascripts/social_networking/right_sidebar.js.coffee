@@ -73,7 +73,7 @@ class ContainerView extends Backbone.View
 		@bind_items()
 
 	active: () ->
-		_.each @parent_view.children('div'), (div) ->
+		_.each $(@parent_view.el).children('div'), (div) ->
 			$(div).removeClass('active')
 
 		$(@el).addClass("active");

@@ -3,7 +3,7 @@ root = (window || @)
 class FriendsContainerView extends ContainerView
 	fill_header: () ->
 		$(@el).prepend(
-    '<h5 class="tab-header">
+        '<h5 class="tab-header">
 			<i class="icon-group"></i> 我关注的
 		</h5>')
 		@fill_modal()

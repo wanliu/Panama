@@ -32,10 +32,14 @@
 </div>
 
 <script type="text/javascript">
-		var friends_view = {
+		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
+		var transaction_message_view = {
+			top : {klass: "icon-group", tool_tip: "show messages" },
+			container_view : TransactionView };
+		right_sidebar.register(transaction_message_view);
+
+		var friends_message_view = {
 			top : {klass: "icon-group", tool_tip: "show messages" },
 			container_view : FriendsContainerView };
-
-		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
-		right_sidebar.register(friends_view);
+		right_sidebar.register(friends_message_view);
 </script>
