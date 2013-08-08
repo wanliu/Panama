@@ -1,5 +1,5 @@
 <section class="right-sidebar widget widget-tabs">
-	<header>
+	<!-- <header>
 		<ul class="nav nav-tabs">
 			<li class="">
 				<a href="#stats" data-toggle="tab"><%=icon :'eye-open'%></a>
@@ -237,9 +237,42 @@
 				</li>
 			</ul>
 		</div>
+	</div> -->
+</section>
+<div id="right-sidebar-templates" style='display: none;'>
+	<div class="main">
+		<header>
+			<ul class="nav nav-tabs">
+			</ul>
+			<div id="sidebar-settings" class="settings">
+				<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">Icons</button>
+				<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">Auto</button>
+			</div>
+		</header>
+		<div class="body tab-content">
+		</div>
 	</div>
-</section>	
+
+	<div class="container">
+			<ul class="users-list">
+			</ul>
+	</div>
+
+	<div class='sign-item'>
+			<%#= image_tag current_user.icon, :class => "pull-left img-circle" %>
+			<div class="user-info">
+				<div class="name"><a href="#">Finees Lund</a></div>
+				<div class="position">Product Designer</div>
+				<div class="time">Last logged-in: Mar 20, 18:46</div>
+			</div>
+	</div>
+</div>
 
 <script type="text/javascript">
-	var right_sidebar = new RightSideBar({el: ".right-sidebar"})
+		var friends_view = {
+			top : {klass: "icon-group", tool_tip: "show messages" },
+			container_view : FriendsContainerView };
+
+		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
+		right_sidebar.register(friends_view);
 </script>
