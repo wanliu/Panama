@@ -36,15 +36,6 @@
 
     <script type="text/javascript">
     var activites = new ActivitiesView({el: '#activities'});
-
-      $(document).ready(function(){
-         new AskBuyPreview({
-            el: $("#activities"),
-            parent_el: $("#popup-layout"),
-            preview_template: "<%=j render 'ask_buy/preview_dialog' %>",
-            comment_template: "<%=j render 'ask_buy/comment' %>"
-         })
-      })
     </script>
 </div>
 

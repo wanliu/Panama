@@ -54,7 +54,7 @@ class Preview extends Backbone.View
 
 class root.AskBuyPreview extends Backbone.View
   events: {
-    "click .ask_buy .in-box" : 'preview'
+    "click .in-box" : 'preview'
   }
 
   initialize: (options) ->
