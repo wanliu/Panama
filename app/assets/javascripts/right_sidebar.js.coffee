@@ -1,8 +1,7 @@
 # var right_bar = new RightSideBar({el: ".right-sidebar"})
 # 容器视图
 # var message_view = { top       : { title: "messages", klass: "this-class", tool_tip: "show messages" },  #顶部按钮
-# 					   heder_html: '<h5 class="tab-header"><i class="icon-group"></i> Last logged-in users</h5>', # 容器discription
-# 					   container_view : MessageContainerView }    # 容器中的item-view
+# 					   				 container_view : MessageContainerView }    # 容器container view
 # 注册容器视图
 # right_bar.register(message_view)
 
@@ -24,11 +23,10 @@ class RightSideBar extends Backbone.View
 
 	register: (container) ->
 		container_id      = _.uniqueId('sidebar_')
-		container_options = _.extend(container, { id: container_id })
+		container_options = _.extend(container, { id: container_id, parent_view: @ })
 		container_view    = new container.container_view(container_options)
 		@add_top(container, container_id)
 		@add_container(container_view)
-		debugger
 		container_view.active() unless @any_active_view()
 
 	toggleIcons: (e) ->
@@ -67,6 +65,7 @@ class ContainerView extends Backbone.View
 	className: "tab-pane clearfix"
 
 	initialize: () ->
+		@parent_view = @options.parent_view
 		html = @template(header: (@options.header_html || ""))
 		$(@el).html(html)
 		$(@el).attr('id', @options.id)
@@ -74,15 +73,14 @@ class ContainerView extends Backbone.View
 		@bind_items()
 
 	active: () ->
+		_.each @parent_view.children('div'), (div) ->
+			$(div).removeClass('active')
+
 		$(@el).addClass("active");
 
 	fill_header: () ->
 
 	bind_items: () ->
 
-class MessageContainerView extends ContainerView
-	bind_items: () ->
-
 root.RightSideBar = RightSideBar
 root.ContainerView = ContainerView
-root.MessageContainerView = MessageContainerView

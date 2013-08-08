@@ -22,10 +22,10 @@ class UsersController < ApplicationController
     end
   end
 
-  def contact_friends
-    contact_friends = current_user.contact_friends
+  def followings
+    followings = current_user.format_followings
     respond_to do |format|
-      format.json{ render :json => contact_friends }
+      format.json{ render :json => followings }
     end
   end
 end
