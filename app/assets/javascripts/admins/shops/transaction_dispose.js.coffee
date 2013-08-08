@@ -91,10 +91,10 @@ class exports.TransactionDispose extends Backbone.View
     @notice_msg()
 
   add_order: (data) ->
-    @transactions.add(_.extend(data, {_type: "transactions"}))
+    @transactions.add(_.extend({}, data, {_type: "transactions"}))
 
   add_direct: (data) ->
-    @direct_transactions.add(_.extend(data, {_type: "direct_transactions"}))
+    @direct_transactions.add(_.extend({}, data, {_type: "direct_transactions"}))
 
   add_orders: (items) ->
     _.each items, (item) =>
