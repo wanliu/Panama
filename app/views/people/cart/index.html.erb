@@ -33,7 +33,8 @@
                   <%= item.title %>
                 </div>
                 <div>
-                  <span class="label label-success">
+                  <% buy_state = item.buy_state.name == :direct ? "default" : "success" %>
+                  <span class="label label-<%=buy_state %>">
                     <%=t "product_item.buy_state.#{item.buy_state.name}"  %>
                   </span>
                 </div>
