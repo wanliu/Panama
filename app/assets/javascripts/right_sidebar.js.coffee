@@ -21,9 +21,6 @@ class RightSideBar extends Backbone.View
 	initialize: () ->
 		$(@el).html(@template())
 		@register_counter = 0
-		@activities_notice = new ActivitiesNotice({ 
-			el: @$el.find("#activities-notice") 
-		})
 
 	register: (container) ->
 		container_id      = _.uniqueId('sidebar_')
@@ -31,7 +28,6 @@ class RightSideBar extends Backbone.View
 		container_view    = new container.container_view(container_options)
 		@add_top(container, container_id)
 		@add_container(container_view)
-		debugger
 		container_view.active() unless @any_active_view()
 
 	toggleIcons: (e) ->
@@ -85,12 +81,6 @@ class ContainerView extends Backbone.View
 
 class MessageContainerView extends ContainerView
 	bind_items: () ->
-
-class ActivitiesNotice extends Backbone.View
-
-	initialize: (options) ->
-		_.extend(options, @)
-		@$el = $(@el)
 
 
 root.RightSideBar = RightSideBar

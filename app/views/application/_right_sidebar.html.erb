@@ -254,8 +254,10 @@
 	</div>
 
 	<div class="container">
-			<ul class="users-list">
-			</ul>
+		<ul class="users-list">
+		</ul>
+		<ul class="activities-list">
+		</ul>
 	</div>
 
 	<div class='sign-item'>
@@ -266,6 +268,15 @@
 				<div class="time">Last logged-in: Mar 20, 18:46</div>
 			</div>
 	</div>
+
+	<div class='activity-item'>
+			<%#= image_tag current_user.icon, :class => "pull-left img-circle" %>
+			<div class="user-info">
+				<div class="name"><a href="#">88 Lund</a></div>
+				<div class="position">Product </div>
+				<div class="time">Lan: Mar 20, 18:46</div>
+			</div>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -273,6 +284,12 @@
 			top : {klass: "icon-group", tool_tip: "show messages" },
 			container_view : FriendsContainerView };
 
+		var activities_view = {
+			top : { kclass: "icon-group", tool_tip: "活动消息列表" },
+			container_view : ActivitiesContainerView
+		}
+
 		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
 		right_sidebar.register(friends_view);
+		right_sidebar.register(activities_view);
 </script>
