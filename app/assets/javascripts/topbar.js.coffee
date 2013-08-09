@@ -10,6 +10,7 @@ class TopBar extends Backbone.View
 	initialize: (@options) ->
 		@resultTarget = $(@options['results'] || '#activities')
 		$('.link.friends').bind('click', $.proxy(@toggleFriends, @))
+		@toggleFriends()
 
 	toggleFriends: () ->
 		$("body").toggleClass("open_right_side")

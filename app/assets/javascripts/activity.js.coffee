@@ -147,8 +147,8 @@ class ActivityPreview extends Backbone.View
 	launchActivity: (event) ->
 		@model.fetch success: (model) =>
 			view = new ActivityView({
-				el       : @$el,
-				model    : @model })
+				model    : @model 
+			})
 			view.modal()
 		false
 
