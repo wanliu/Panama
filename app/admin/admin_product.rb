@@ -22,7 +22,14 @@ ActiveAdmin.register Product, :title => "产品" do
   index do
     column :id
     column :name
+    column "预览图" do |row|
+      image_tag row.photos.header
+      # if row.attachments.length > 0
+      #   image_tag row.attachments.first.file.url("100x100")
+      # end
+    end
     column :properties do |product|
+      product.attach_properties!
       properties_string = product.properties.map do |prop|
         "#{prop.name}: #{prop.property_type}< #{product.send(prop.name).inspect} >"
       end
@@ -107,7 +114,7 @@ ActiveAdmin.register Product, :title => "产品" do
   end
 
   member_action :update_plus, :method => :put do
-    p = params[:product]    
+    p = params[:product]
     @product = Product.find(params[:id])
     category_id = p[:category_id]
     @product.category_id = category_id unless category_id.nil?
