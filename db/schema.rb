@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
