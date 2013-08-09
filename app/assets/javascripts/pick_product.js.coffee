@@ -1,6 +1,9 @@
 root = window || @
 
 class root.WizardView extends Backbone.View
+
+  @category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
+
   events:
     "click .second_class_category_tree a" : "get_category_products"
     "click .add_to_select" : "get_products_infor"
@@ -13,7 +16,7 @@ class root.WizardView extends Backbone.View
     return if $(event.target.className).is('.input')
     td = $(event.target)
     tr = td.parent()
-    
+
     td.addClass('input')
       .html("<input type='text' value='#{td.text()}' />")
       .find('input')
@@ -31,15 +34,20 @@ class root.WizardView extends Backbone.View
     $body = $(event.target).parents(".accordion-body")
     $body.removeClass("in").attr("style", "")
     @url =  event.target.attributes.href.value + "/products"
+
+    category_product_template = @options['category_product_template'] || @category_product_template
+    @category_product_tpl ||= Hogan.compile(category_product_template)
+
     $.ajax({
       type: "get",
       url: @url,
       dataType: "json",
       data:{ shop_id : shop_id },
       success: (data) =>
-        $("select[name=product]").html("")
-        _.each(data, (product)->
-          $("select[name=product]").append("<option id="+product.id+" value="+product.id+">"+product.name+"</option>")
+        category_product_list = ".category_product_list"
+        $(category_product_list).empty()
+        _.each(data, (product) =>
+          $(category_product_list).append(@category_product_tpl.render(product))
         )
     })
     false
@@ -50,7 +58,7 @@ class root.WizardView extends Backbone.View
       url: "/shop_products",
       data: {product_ids: product_ids },
       dataType: "json",
-      success: (products) =>      
+      success: (products) =>
         @options.select_handle(products)
     })
     false
@@ -61,7 +69,7 @@ class root.WizardView extends Backbone.View
       product_ids.push($(this).val())
       $(this).remove()
     @render_product_infor(product_ids)
-        
+
   update_product = (product_id, field, value) ->
     data = if field is "price edit"
       shop_product:
@@ -80,7 +88,7 @@ class root.WizardView extends Backbone.View
 
   selectAll : () ->
     $("input[type=checkbox]").each(() ->
-      $(this).attr("checked",!this.checked); 
+      $(this).attr("checked",!this.checked);
     )
     false
 
@@ -95,7 +103,7 @@ class root.WizardView extends Backbone.View
     if $(event.target).attr("class") is 'delete_product'
       tr = $(event.target).parents("tr")
       product_id = tr.attr("id")
-    else 
+    else
       product_id = product_id
       tr = tr
     $.ajax({
@@ -104,19 +112,24 @@ class root.WizardView extends Backbone.View
       dataType: "json",
       success: () ->
         tr.remove()
-    })   
+    })
 
-class root.ProductView extends Backbone.View 
-   
+class root.ProductView extends Backbone.View
+  tr_template: """
+      <tr id='{{id}}><td><input type='checkbox'></td>
+        <td class='name'>{{ name }} </td>
+        <td class='price edit'> {{ price }}</td>
+        <td class='inventory edit'> {{ inventory }}</td>
+        <td><a href='#' class='delete_product'>删除</a></td></tr>"
+  """
   initialize: (@options) ->
     @products = @options['models']
+    template = @options['template'] || @tr_template
+    @template = Hogan.compile(template)
+
     _.each @products, (model) =>
-      @render(model)    
+      @render(model)
 
   render: (product) ->
-    tr = "<tr id='#{product.id}'><td><input type='checkbox'></td>
-          <td class='name'>#{ product.name } </td>
-          <td class='price edit'> #{product.price }</td>
-          <td class='inventory edit'> #{ product.inventory }</td> 
-          <td><a href='#' class='delete_product'>删除</a></td></tr>"    
-    $(@el).append(tr)
+    pr = @template.render(product) # product_result
+    $(@el).append(pr)

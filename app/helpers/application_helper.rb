@@ -220,6 +220,33 @@ module ApplicationHelper
     end
   end
 
+  def build_menu2(root, element_id = nil, options = { :ul_class => 'tree-body collapse',
+                                                      :li_class => 'tree-group',
+                                                      :first_class => 'tree-nav',
+                                                      :toggle => 'slide' })
+    output = ActiveSupport::SafeBuffer.new
+    if root.children && root.children.size && root.children.size > 0
+      content_tag(:ul, :class => options[:first_class] || options[:ul_class], :id => element_id || dom_id(root)) do
+        options.delete(:first_class)
+        root.children.map do |node|
+          if node.children && node.children.size > 0
+            output.concat(content_tag(:li, :class => options[:li_class]) do
+              link_to("##{dom_id(node)}", :html => {tabindex: -1}, 'data-id' => node.id, 'data-name' => node.name, 'data-toggle' => options[:toggle]) {
+                icon('caret-right') + " " + node.name
+                } +
+              build_menu2(node, nil, options)
+            end)
+          else
+            output.concat(content_tag(:li) do
+              link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name
+            end)
+          end
+        end
+        output
+      end
+    end
+  end
+
   def breadcrumb_button(name, array)
     # debugger
     output = "".html_safe
