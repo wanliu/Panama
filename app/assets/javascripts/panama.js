@@ -79,7 +79,7 @@ $.ajaxSetup({
   },
   error: function(xhr, error, thr){
     if(error.status == 500){
-      $.pnotify({
+      pnotify({
         title: '请求出错！',
         text: error.responseText,
         type: 'error',
