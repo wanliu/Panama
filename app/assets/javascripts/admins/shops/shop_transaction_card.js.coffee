@@ -11,6 +11,7 @@ class ShopTransactionCard extends TransactionCardBase
     @filter_delivery_code()
     @initMessagePanel()
     @countdown()
+    @realtime_load()
 
   events:
     "click .page-header .btn" : "clickAction"
@@ -47,6 +48,10 @@ class ShopTransactionCard extends TransactionCardBase
     callbacks:
       onenterstate: (event, from, to, msg) ->
         console.log "event: #{event} from #{from} to #{to}"
+
+  realtime_load: () ->
+    @realtime.subscribe "/OrderTransaction/#{@options.id}/#{@options.shop.token}/#{@rt_options.token}/destroy", () =>
+      @remove()
 
   getNotifyName: () ->
     super + "-seller"
@@ -135,8 +140,6 @@ class ShopTransactionCard extends TransactionCardBase
     else
       @$dprice_panel.show()
       @$dprice_edit_panel.hide()
-
-
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

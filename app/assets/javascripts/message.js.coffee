@@ -145,6 +145,7 @@ class TransactionMessageView extends Backbone.View
     @template = options.template
     @faye_url = options.faye_url
     @tansaction_id = options.tansaction_id
+    @realtime_key = options.realtime_key
     @shop = options.shop
 
   _add_msg: (model) ->
@@ -180,7 +181,7 @@ class TransactionMessageView extends Backbone.View
       @add_message(message)
 
   receive_notice_url: () ->
-    "/chat/receive/OrderTransaction/#{@shop.token}/#{@tansaction_id}_#{@current_user.token}"
+    "/chat/receive/#{@realtime_key}/#{@shop.token}/#{@tansaction_id}_#{@current_user.token}"
 
   max_scrollTop: () ->
     mheight = @$message_panel.find(">.message-list").height()

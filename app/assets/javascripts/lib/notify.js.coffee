@@ -112,6 +112,8 @@ class Notifier
       options["stack"] = @stack_options[options.stack]
     if options.hasOwnProperty("avatar")
       options["text"] = "<img class='img-circle' src='#{options["avatar"]}' alt='头像'/>#{options["text"]}"
+
+    options.styling = "bootstrap"
     $.pnotify options
 
 window.notifier = new Notifier()

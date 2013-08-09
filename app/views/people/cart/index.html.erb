@@ -29,7 +29,15 @@
                 <%= image_tag item.header, :class => "img-polaroid" %>
               <% end %>
               <td>
-                <%= item.title %>
+                <div>
+                  <%= item.title %>
+                </div>
+                <div>
+                  <% buy_state = item.buy_state.name == :direct ? "default" : "success" %>
+                  <span class="label label-<%=buy_state %>">
+                    <%=t "product_item.buy_state.#{item.buy_state.name}"  %>
+                  </span>
+                </div>
               </td>
               <td>
                 <%= link_to '#' do %>

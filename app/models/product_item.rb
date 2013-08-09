@@ -2,7 +2,7 @@ class ProductItem < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::MemoryAssociation
 
-  attr_accessible :amount, :price, :title, :total, :transaction_id, :cart, :product_id, :product, :shop_id
+  attr_accessible :amount, :price, :title, :total, :owner, :cart, :product_id, :product, :shop_id
 
   attr_accessor :options
 
@@ -49,8 +49,7 @@ class ProductItem < ActiveRecord::Base
 
   belongs_to :cart, inverse_of: :items, :counter_cache => :items_count
   belongs_to :product
-  belongs_to :transaction,
-             class_name: "OrderTransaction"
+  belongs_to :owner, :polymorphic => true
              # primary_key: 'transaction_id'
 
   belongs_to :shop
@@ -60,12 +59,13 @@ class ProductItem < ActiveRecord::Base
   delegate :icon, :header, :avatar, :preview, :to => :photos
   delegate :price_options, :prices_definition, :prices, :to => :product, :allow_nil => true
 
+  #购买方式 direct: 直接购买 guarantee: 担保
+  acts_as_status :buy_state, [:direct, :guarantee]
 
   memories :properties, :properties_values, :property_items
 
   before_save do
     update_total
-    init_data
   end
 
   after_create do
@@ -88,10 +88,6 @@ class ProductItem < ActiveRecord::Base
 
   def update_total
     self.total = self.price * self.amount
-  end
-
-  def init_data
-    self.user_id = cart.user_id
   end
 
   def options

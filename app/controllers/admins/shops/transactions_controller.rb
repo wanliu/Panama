@@ -6,10 +6,13 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @untransactions = transactions.where(:operator_state => false)
     @transactions = transactions.where(:operator_state => true).joins(:operator)
     .where("transaction_operators.operator_id=?", current_user.id)
+    @direct_tansactions = current_shop.direct_transactions.uncomplete.where(:operator_id => current_user.id).order("created_at desc")
+    @undirect_tansactions = current_shop.direct_transactions.where(:operator_id => nil)
   end
 
   def complete
     @transactions = current_shop_order.completed.order("created_at desc")
+    @direct_transactions = current_shop.direct_transactions.completed
   end
 
   def page
@@ -104,7 +107,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def dialogue
     @transaction = current_shop_order.find_by(:id => params[:id])
     @transaction_message_url = shop_admins_transaction_path(current_shop.name, @transaction.id)
-    render :partial => "transactions/dialogue", :layout => "transaction_message", :locals => {
+    render :partial => "transactions/dialogue", :layout => "message", :locals => {
       :transaction_message_url => @transaction_message_url,
       :transaction => @transaction }
   end

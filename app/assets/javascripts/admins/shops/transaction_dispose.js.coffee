@@ -7,10 +7,10 @@ exports = window || @
 
 class Transaction extends Backbone.Model
   set_url: (shop_name) ->
-    @urlRoot = "/shops/#{shop_name}/admins/transactions"
+    @urlRoot = "/shops/#{shop_name}/admins/#{@get('_type')}"
   dispose: (callback) ->
     $.ajax(
-      url: "#{@urlRoot}/#{@.id}/dispose"
+      url: "#{@urlRoot}/#{@id}/dispose"
       type: "POST",
       success: callback
     )
@@ -43,7 +43,7 @@ class TransactionEvent extends Backbone.View
     else
       first_tran_el.before(template)
 
-    @tran_card @tran_panel.find("#order#{@model.id}")
+    @tran_card @tran_panel.find("##{@elem_id()}")
     @remove_tran()
 
   remove_tran: () ->
@@ -61,19 +61,28 @@ class TransactionEvent extends Backbone.View
   change_state: () ->
     @$(".state").html(@model.get("state_title"))
 
+  elem_id: () ->
+    if @model.get("_type") == "direct_transactions"
+      "direct#{@model.id}"
+    else
+      "order#{@model.id}"
+
 class exports.TransactionDispose extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
     @transactions = new TransactionList()
     @transactions.bind("add", @add_data, @)
+    @direct_transactions = new TransactionList()
+    @direct_transactions.bind("add", @add_data, @)
+
     @init_el()
     @bind_realtime()
     @notice_msg()
 
   add_data: (model) ->
     model.set_url(@shop.name)
-    view = new TransactionEvent(_.extend({}, @tranOpts,
+    view = new TransactionEvent(_.extend({}, @tranOpts[model.get('_type')],
       model: model,
       template: @template
     ))
@@ -81,8 +90,19 @@ class exports.TransactionDispose extends Backbone.View
     @$tbody.append view.render()
     @notice_msg()
 
-  add: (data) ->
-    @transactions.add(data)
+  add_order: (data) ->
+    @transactions.add(_.extend({}, data, {_type: "transactions"}))
+
+  add_direct: (data) ->
+    @direct_transactions.add(_.extend({}, data, {_type: "direct_transactions"}))
+
+  add_orders: (items) ->
+    _.each items, (item) =>
+      @add_order(item)
+
+  add_directs: (items) ->
+    _.each items, (item) =>
+      @add_direct(item)
 
   init_el: () ->
     @$tbody = @$("tbody")
@@ -93,7 +113,7 @@ class exports.TransactionDispose extends Backbone.View
     @notice_msg()
 
   notice_msg: () ->
-    if @transactions.length <= 0
+    if @transactions.length <= 0 && @direct_transactions.length <= 0
       @$tbody.html('')
       @$tbody.append("
       <tr class='notice_message'>
@@ -106,33 +126,60 @@ class exports.TransactionDispose extends Backbone.View
     @client = Realtime.client(@realtime_url)
 
     @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
-      data = info.values
-      switch info.type
-        when "chat"
-          @realtime_chat(data)
-        when "new"
-          @add data
-        when "change"
-          @realtime_change(data)
-        when "dispose"
-          @realtime_dispose(data)
+      @realtime_help(info, 'transactions')
 
-  realtime_dispose: (data) ->
-    model = @transactions.get(data.id)
+    @client.subscribe "/DirectTransaction/#{@shop_key()}/un_dispose", (info) =>
+      @realtime_help(info, 'direct_transactions')
+
+  realtime_help: (info, type) ->
+    data = info.values
+
+    switch info.type
+      when "chat"
+        @realtime_chat(data, type)
+      when "new"
+        @add(data, type)
+      when "change"
+        @realtime_change(data, type)
+      when "dispose"
+        @realtime_dispose(data, type)
+      when "destroy"
+        @realtime_destroy(data, type)
+
+  realtime_destroy: (data, type) ->
+    model = @where_transaction(data.id, type)
     if model?
       @remove_tran model
 
-  realtime_chat: (data) ->
-    model = @transactions.get(data.owner.id)
+  realtime_dispose: (data, type) ->
+    model = @where_transaction(data.id, type)
+    if model?
+      @remove_tran model
+
+  realtime_chat: (data, type) ->
+    model = @where_transaction(data.owner.id, type)
     if model?
       model.set("unmessages_count", data.owner.unmessages_count)
     else
-      @add data.owner
+      @add data.owner, type
 
-  realtime_change: (data) ->
-    model = @transactions.get(data.id)
+  realtime_change: (data, type) ->
+    model = @where_transaction(data.id, type)
     if model?
       model.set("state_title", data.state_title)
 
+  where_transaction: (id, type) ->
+    if type == "direct_transactions"
+      @direct_transactions.get(id)
+    else
+      @transactions.get(id)
+
   shop_key: () ->
     @shop.token
+
+  add: (data, type) ->
+    if type == "direct_transactions"
+      @add_direct data
+    else
+      @add_order data
+

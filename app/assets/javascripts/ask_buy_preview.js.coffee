@@ -1,6 +1,8 @@
 #= require backbone
 #= require lib/hogan
 
+root = (window || @)
+
 class Preview extends Backbone.View
   events: {
     "click .close" : "hide",
@@ -54,7 +56,7 @@ class Preview extends Backbone.View
 
 class root.AskBuyPreview extends Backbone.View
   events: {
-    "click .ask_buy .in-box" : 'preview'
+    "click .in-box" : 'preview'
   }
 
   initialize: (options) ->

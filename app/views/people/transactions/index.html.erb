@@ -4,39 +4,54 @@
     <h2 class="page-title">交易订单 <small>交易的清单</small></h2>
   </div>
 </div>
+<% if @transactions.count > 0 || @direct_transactions.count > 0 %>
 <div class='row-fluid'>
-  <div id='transactions' class=' span12'>
-    <% if @transactions.size > 0 %>
-      <% @transactions.each do |transaction| %>
-        <%= render partial: 'transaction',
-                   object:  transaction,
-                   locals: {
-                     state:  transaction.state,
-                     people: @people
-                   } %>
-      <% end %>
-
-
-      <%= paginate @transactions %>
-
-    <% else %>
-      <h1>太好了你的交易清单是空的, 进入市场去购物吧</h1>
-    <% end %>
+  <div class='span12 direct_transactions'>
+  <% @direct_transactions.each do | dt | %>
+    <%= render "people/direct_transactions/show", :direct_transaction => dt %>
+  <% end %>
   </div>
 </div>
+<div class='row-fluid'>
+  <div id='transactions' class=' span12'>
+    <% @transactions.each do |transaction| %>
+      <%= render partial: 'transaction',
+                 object:  transaction,
+                 locals: {
+                   state:  transaction.state,
+                   people: @people
+                 } %>
+    <% end %>
+
+
+    <%= paginate @transactions %>
+  </div>
+</div>
+<% else %>
+  <h2>亲爱的顾客：</h2>
+  <h3>&nbsp;&nbsp;&nbsp;&nbsp;你的交易清单是空的, 进入市场去购物吧～～～～</h3>
+<% end %>
 <script type="text/javascript">
-  $(".transaction").each(function(i, elem){
-    var card = new TransactionCard({
-      el: elem,
-      realtime: {
-        url: '<%= faye_server_uri %>',
-        token: '<%= token %>' }
-      });
-  });
+  $(document).ready(function(){
+    $(".transaction").each(function(i, elem){
+      var card = new TransactionCard({
+        el: elem,
+        realtime: {
+          url: '<%= faye_server_uri %>',
+          token: '<%= token %>' }
+        });
+    });
 
-  new TransactionBubbling({
-    url: "http://<%=request.env['HTTP_HOST'] %>/people/<%=current_user.login %>/transactions#order"
+    new TransactionBubbling({
+      url: "http://<%=request.env['HTTP_HOST'] %>/people/<%=current_user.login %>/transactions#order"
+    })
+
+    new TransactionsView({el: "#transactions" });
+
+    $(".direct_transactions>.direct").each(function(i, elem){
+      new DirectTransactionView({
+        login: "<%=current_user.login %>",
+        el: $(elem)})
+    })
   })
-
-  new TransactionsView({el: "#transactions" });
 </script>

@@ -1,0 +1,10 @@
+<% active_section :completed %>
+<%= render :partial => "show", :locals => { direct_transaction: @direct_transaction  } %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    new DirectTransactionView({
+      login: "<%=current_user.login %>",
+      el: $(".direct")
+    })
+  })
+</script>

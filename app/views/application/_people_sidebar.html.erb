@@ -1,6 +1,6 @@
 <div id='people-sidebar' class="sidebar nav nav-collapse collapse affix-top" >
   <div class='avatar'>
-    <a href="person_path(@people)">
+    <a href="<%= person_path(@people) %>">
     <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
     </a>
     <h4><%= @people.login %></h4>

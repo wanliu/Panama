@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130801094652) do
+ActiveRecord::Schema.define(:version => 20130807030054) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
+    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
-    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -112,13 +112,6 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
-
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
@@ -298,6 +291,16 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "direct_transactions", :force => true do |t|
+    t.integer  "seller_id"
+    t.integer  "buyer_id"
+    t.decimal  "total",       :precision => 10, :scale => 0
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.integer  "state"
+    t.integer  "operator_id"
+  end
+
   create_table "file_entities", :force => true do |t|
     t.string   "name"
     t.string   "stat"
@@ -352,6 +355,11 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
     t.integer "warehouse_id"
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
+
+  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
+  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
+  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
 
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
@@ -452,7 +460,6 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
-    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
   end
@@ -504,18 +511,20 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
   end
 
   create_table "product_items", :force => true do |t|
-    t.integer  "transaction_id"
     t.string   "title"
-    t.decimal  "amount",         :precision => 10, :scale => 0
-    t.decimal  "price",          :precision => 10, :scale => 2, :default => 0.0
-    t.decimal  "total",          :precision => 10, :scale => 2, :default => 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.decimal  "amount",     :precision => 10, :scale => 0, :default => 0
+    t.decimal  "price",      :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "total",      :precision => 10, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
     t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
     t.integer  "user_id"
+    t.integer  "buy_state"
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   add_index "product_items", ["options"], :name => "index_product_items_on_options"
@@ -638,6 +647,16 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "shop_banks", :force => true do |t|
+    t.integer  "shop_id"
+    t.integer  "bank_id"
+    t.string   "code"
+    t.string   "name"
+    t.boolean  "state"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "shop_groups", :force => true do |t|
     t.integer  "shop_id"
@@ -814,10 +833,10 @@ ActiveRecord::Schema.define(:version => 20130801094652) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4
+    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
     t.string   "im_token"
   end
 

@@ -5,4 +5,4 @@
 #= require backbone
 #= require lib/hogan
 #= require lib/postmessage
-#= require transaction_message
+#= require message

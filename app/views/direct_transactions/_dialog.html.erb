@@ -1,0 +1,45 @@
+<div class='direct_transaction_dialog_panel'>
+  <div class="toolbar">
+  </div>
+  <div class="message_panel">
+    <div class='message-list'>
+      <div class="messages">
+        正在加载...
+      </div>
+      <div class='foot-line'></div>
+    </div>
+  </div>
+  <div class='foot row-fluid'>
+    <form class="message-form">
+      <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>" />
+      <textarea rows=3 class="span12 textarea-message" name='content' placehold='输入你的信息'></textarea>
+      <div class='message_send'>
+        <input type='submit' value='提交' class='btn btn-primary disabled' />
+      </div>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var template = Hogan.compile("<%=j render :partial => 'direct_transactions/message' %>")
+
+    new TransactionMessageView({
+      el: $(".direct_transaction_dialog_panel"),
+      remote_url: "<%=dtm_url %>",
+      template: template,
+      current_user: {
+        id: <%=current_user.id %>,
+        token: "<%=current_user.im_token %>",
+        login: "<%=current_user.login %>"
+      },
+      faye_url: "<%=faye_server_uri %>",
+      tansaction_id: <%=direct_transaction.id %>,
+      shop: {
+        id: "<%=direct_transaction.seller.id %>",
+        name: "<%=direct_transaction.seller.name %>",
+        token: "<%=direct_transaction.seller.im_token%>"
+      },
+      realtime_key: 'DirectTransaction'
+    })
+  })
+</script>
