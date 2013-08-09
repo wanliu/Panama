@@ -1,8 +1,8 @@
 <!-- 竞价 -->
 <%= simple_form_for @activity, :remote => true, :url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction'}, :type => :json do |f| %>
 
-  <%= f.input :shop_product,
-              :label => "商品",
+  <%#= f.input :shop_product,
+              :label => "商品1",
               :input_html => {
                   class: :typeahead,
                   placeHolder: '商品名称...',
@@ -10,10 +10,11 @@
                   required: true
               } %>
 
-  <ul class="typeahead dropdown-menu typeahead_list"></ul>
-
-
-  <%= f.text_field :shop_product_id, type: :hidden %>
+  <%= f.input :shop_product_id,
+              :collection => [],
+              :input_html => {
+                :class => "shop_product_id"
+              } %>
 
   <%= f.input :title,
               :label => '活动名称',
@@ -28,7 +29,7 @@
   </div>
 
   <%= f.input :description, as: :text,
-              :lable => '活动描述', 
+              :lable => '活动描述',
               :input_html=>{class: :span3, rows: 3} %>
 
   <%= f.input :price,
@@ -60,10 +61,24 @@
       }
     });
 
-    new TypeaheadExtension({
-      el: $('.typeahead'),
-      source: '/search/shop_products',
-      field: 'name',
+    // new TypeaheadExtension({
+    //   el: $('.typeahead'),
+    //   source: '/search/shop_products',
+    //   field: 'name',
+    //   select: function(id){
+    //     activity_view.fetch_product(id)
+    //   }
+    // });
+
+    var shop_product_elem = $(".form_activity_auction .shop_product_id")
+    shop_product_elem.chosenEx({
+      allow_single_deselect : true,
+      placeholder_text : "选择一个商品",
+      no_results_text : "没有以该关键词开头的商品",
+      remote: {
+        url: "/search/shop_products",
+        dataType: "json"
+      },
       select: function(id){
         activity_view.fetch_product(id)
       }

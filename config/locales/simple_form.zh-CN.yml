@@ -14,3 +14,7 @@
         describe: 描述
       product_item:
         amount: 数量
+      activity:
+        shop_product: 商品
+        shop_product_id: 商品
+        title: 活动名称

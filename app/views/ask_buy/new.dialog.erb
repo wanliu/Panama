@@ -1,7 +1,12 @@
 <%= simple_form_for @ask_buy, :remote => true, :url => ask_buy_index_path, :html => { class: 'form-horizontal form_ask_buy' }  do |f| %>
-  <%= f.input :title, :input_html => {
+  <%#= f.input :title, :input_html => {
     :class => "ask_buy_title"
   } %>
+  <%= f.input :title,
+              :collection => [],
+              :input_html => {
+                :class => "ask_buy_title"
+              } %>
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
@@ -40,14 +45,27 @@
       }
     })
 
-    new TypeaheadExtension({
-      el: $("input.ask_buy_title"),
-      field: "name",
-      source: "/product_search",
+    // new TypeaheadExtension({
+    //   el: $("input.ask_buy_title"),
+    //   field: "name",
+    //   source: "/product_search",
+    //   select: function(id){
+    //     view.fetch_product(id)
+    //   }
+    // })
+
+    $('.form_ask_buy .ask_buy_title').chosenEx({
+      allow_single_deselect : true,
+      placeholder_text : "选择一个商品",
+      no_results_text : "没有以该关键词开头的商品",
+      remote: {
+        url: "/product_search",
+        dataType: "json"
+      },
       select: function(id){
         view.fetch_product(id)
       }
-    })
+    });
 
   })
 </script>

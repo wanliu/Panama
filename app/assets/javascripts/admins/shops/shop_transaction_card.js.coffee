@@ -76,7 +76,7 @@ class ShopTransactionCard extends TransactionCardBase
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
-    unless /back/.test _event
+    if !/back/.test(_event) && !/refresh_returned/.test(_event)
       @save_delivery_code () =>
         @slideAfterEvent(_event)
 
