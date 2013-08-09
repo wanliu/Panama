@@ -53,13 +53,32 @@ class FriendView extends Backbone.View
 		@
 
 	talk_to_friend: () ->
-		$('.modal.message-talk-box').modal('show')
+		if @$iframe
+			@$iframe.show()
+		else
+			@init_and_show_iframe()
+
+	init_and_show_iframe: () ->
+		@$iframe= $(@make("div"))
+		@$iframe.addClass("chat_dialogue_panel")
+		@$iframe.css("left", "5px")
+
+		@$iframe.append(
+            "<iframe></iframe>
+				<a class='close_label' href='javascript:void(0)'></a>")
+
+		@$iframe.children("a.close_label").click (e) =>
+			@$iframe.hide()
+
+		$("body").append(@$iframe)
+
+		@$iframe.children("iframe").attr("src", "/chat_messages/dialogue/generate_and_display/#{ @model.get('follow_id') }")
 
 	template: _.template(
-    "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
-    <div class='user-info'>
-      <div class='name'><a href='#''><%= model.get('name') %></a></div>
-        <div class='type'><%= model.get('follow_type')  %></div>
-    </div>")
+        "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
+	    <div class='user-info'>
+	      <div class='name'><a href='#''><%= model.get('name') %></a></div>
+	        <div class='type'><%= model.get('follow_type')  %></div>
+	    </div>")
 
 root.FriendsContainerView = FriendsContainerView
