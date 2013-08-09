@@ -39,6 +39,3 @@ class RealtimeClient
 
 root.client = (uri) ->
   @clients[uri] ?= new RealtimeClient(uri)
-
-
-

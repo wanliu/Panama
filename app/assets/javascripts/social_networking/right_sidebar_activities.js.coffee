@@ -1,6 +1,37 @@
 root = (window || @)
 
 class ActivitiesContainerView extends ContainerView
+	initialize: (options) ->
+		_.extend(@, options)
+		@notices = new ActivityNoticeList()
+		@notices.bind("add", @add_data, @)
+		@bind_realtime()
+		@notice_msg()
+
+	add_data: (model) ->
+		model.set_url(35)
+		view = new ActivityNoticeView({
+			model, model
+		})
+		@notice_msg()
+
+	add: (data) ->
+		@notices.add(data)
+
+	notice_msg: () ->
+
+	bind_realtime: () ->
+		@client = Realtime.client(@realtime_url)
+		@client.subscribe "/Activity/35/un_dispose", (info) =>
+			@realtime_help(info, 'activities')
+
+	realtime_help: (info, type) ->
+		data = info.values
+		switch info.type
+			when "new"
+				@add(_.extend(data, {_type: type}))
+
+
 	fill_header: () ->
 		$(@el).prepend('<h5 class="tab-header"><i class="icon-star"></i>活动消息列表</h5>')
 
@@ -32,6 +63,11 @@ class ActivityNoticeView extends Backbone.View
 	events:
 		"click" : "show_modal"
 
+	initialize: (options) ->
+		_.extend(@, options)
+		@$el = $(@el)
+		@$el.html(@template.render(@model.toJSO()))
+
 	show_modal: () ->
 		@model = new ActivityModel({ id: 32 })
 		@model.fetch success: (model) =>
@@ -44,5 +80,21 @@ class ActivityNoticeView extends Backbone.View
 		html = @template(model: @model)
 		$(@el).html(html)
 		@
+
+
+class ActivityNotice extends Backbone.Model
+	set_url: (activity_id) ->
+		@urlRoot = "activities/#{activity_id}"
+
+	dispose: (callback) ->
+		$.ajax(
+			url: "#{@urlRoot}/#{@id}/dispose"
+			type: "POST",
+			success: callback
+		)
+
+class ActivityNoticeList extends Backbone.Collection
+	model: ActivityNotice
+
 
 root.ActivitiesContainerView = ActivitiesContainerView

@@ -51,7 +51,8 @@
 
 	var activities_view = {
 		top : { klass: "icon-star", tool_tip: "活动消息列表" },
-		container_view : ActivitiesContainerView
+		container_view : ActivitiesContainerView,
+		realtime_url: '<%= faye_server_uri %>'
 	}
 	right_sidebar.register(activities_view);
 
