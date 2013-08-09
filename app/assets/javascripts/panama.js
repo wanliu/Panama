@@ -17,6 +17,7 @@
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
 //= require lib/jquery.columnview
+//= require lib/jquery.slimscroll
 //= require lib/bootstrap-datetimepicker.min
 //= require lib/colorpicker/js/bootstrap-colorpicker
 //= require lib/depend_select

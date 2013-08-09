@@ -47,6 +47,7 @@ class ShopProduct < ActiveRecord::Base
   def as_json(*args)
     attra = super *args
     attra["name"] = product.name
+    attra["url"] = product.photos.icon
     attra
   end
 
