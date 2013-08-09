@@ -1,7 +1,10 @@
 # var right_bar = new RightSideBar({el: ".right-sidebar"})
 # 容器视图
-# var message_view = { top       : { title: "messages", klass: "this-class", tool_tip: "show messages" },  #顶部按钮
-# 					   				 container_view : MessageContainerView }    # 容器container view
+# var message_view = { top : { title: "messages",
+ #                             klass: "this-class", 
+ #                             tool_tip: "show messages" 
+ # 							  },  #顶部按钮
+# 					   		   container_view : MessageContainerView }    # 容器container view
 # 注册容器视图
 # right_bar.register(message_view)
 

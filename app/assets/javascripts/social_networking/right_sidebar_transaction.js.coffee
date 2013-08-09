@@ -5,7 +5,7 @@ class TransactionView extends ContainerView
 							<a href='/people/{{current_user}}/transactions/{{transaction_id}}'>这里</a>
 							 查看详情</div></li>"
 	template1: "<li><p><i class=' icon-volume-up'></i>&nbsp;你的订单买家已经{{state}},点击
-	 						<a href='/shops/{{current_user}}/admins/transactions/{{transaction_id}}'>这里</a>
+	 						<a href='/shops/{{current_user}}/admins/order_refunds#refund1'>这里</a>
 	 						 查看详情<p></li>"
 
 	talking_message_modal: '<div class="modal hide fade message-talk-box">
@@ -38,8 +38,8 @@ class TransactionView extends ContainerView
 		@collecton = new Backbone.Collection
 		@collecton.bind('add', @addOne, @)
 		# @collecton.add({state: "uncomplete", current_user: "xifengzhu",transaction_id: 4})
-		@collecton.add({state: "completed", current_user: "SA",transaction_id: 7})
-		@collecton.add({state: "completed", current_user: "SA",transaction_id: 2})
+		@collecton.add({state: "redund", current_user: "SA",refund_id: 1})
+		# @collecton.add({state: "completed", current_user: "SA",transaction_id: 2})
 
 	addOne: (model) ->
 		row_item = Hogan.compile(@template1)

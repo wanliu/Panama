@@ -366,6 +366,7 @@ class OrderTransaction < ActiveRecord::Base
   def state_change_detail
     state_details.update_all(:expired_state => false)
     state_details.create(:state => state)
+    faye_send("/change_state/messages",{:type =>"new",:values => as_json })
   end
 
   def current_operator
