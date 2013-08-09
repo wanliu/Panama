@@ -117,7 +117,7 @@ class MessageViewList extends Backbone.View
 
     @content_el.scrollTop(mheight-pheight)
 
-class window.ChatView extends Backbone.View
+class ChatView extends Backbone.View
   on_class: "online",
   off_class: "offline",
   display_state: true,
