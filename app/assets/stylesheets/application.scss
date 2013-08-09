@@ -109,3 +109,9 @@
 		}
 	}
 }
+
+.form_activity_auction, .form_ask_buy{
+	.chzn-container .chzn-results{
+		max-height: 250px;
+	}
+}
