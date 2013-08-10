@@ -119,8 +119,11 @@ Panama::Application.routes.draw do
     end
 
     resources :notifications,:except => :show, :controller => "people/notifications" do
+      member do
+        get :enter, :to => "people/notifications#show"
+      end
       collection do
-        get "/:id/enter", :to => "people/notifications#show"
+        get :unread, :to => "people/notifications#unread"
       end
     end
 

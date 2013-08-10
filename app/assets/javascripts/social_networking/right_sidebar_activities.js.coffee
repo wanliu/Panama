@@ -6,7 +6,7 @@ class ActivitiesContainerView extends ContainerView
 		@notices = new ActivityNoticeList()
 		@notices.bind("add", @add_data, @)
 		@bind_realtime()
-		@notice_msg()
+		@urlRoot = "people/z2009zxiaolong/notifications"
 		super
 
 	add_data: (model) ->
@@ -36,8 +36,9 @@ class ActivitiesContainerView extends ContainerView
 	bind_items: () ->
 		@collection = new Backbone.Collection(url: "/activities")
 		@collection.bind('reset', @addAll, @)
+		@collection.bind('fetch', @addAll, @)
 		@collection.bind('add', @addOne, @)
-		# @collection.reset([{name: "6666", inline: true}, {name: "8888", inline: true}])
+		@collection.fetch({ url: '#{@urlRoot}/unread?type=Activity' })
 
 	addAll: (collecton) ->
 		@$(".activities-list").html('')
@@ -62,7 +63,6 @@ class ActivityNoticeView extends Backbone.View
 	initialize: (options) ->
 		_.extend(@, options)
 		@$el = $(@el)
-		@show_modal()
 
 	show_modal: () ->
 		@model = new ActivityModel({ id: 32 })
