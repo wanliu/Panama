@@ -6,6 +6,14 @@ class ActivitiesController < ApplicationController
 
   respond_to :html, :dialog
 
+  def notice
+    @activity = Activity.find(params[:id])
+    @activity.notice_user
+    respond_to do |format|
+      format.json { render json: @activity }
+    end
+  end
+
   def index
     @activities = Activity.where("status = ?", Activity.statuses[:access])
     @ask_buy = AskBuy.all

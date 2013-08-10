@@ -11,6 +11,7 @@ class Activity < ActiveRecord::Base
   belongs_to :shop_product
   belongs_to :author, :class_name => "User"
   belongs_to :shop
+  has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
 
   has_many :activity_rules, autosave: true
 
@@ -32,11 +33,12 @@ class Activity < ActiveRecord::Base
   after_create :notice_user, :notice_new_activity
 
   def notice_user
-    Notification.create!(
+    notifications.create!(
       :user_id => author.id,
       :mentionable_user_id => User.last.id,
       :url => "/activities/#{id}",
       :body => "有新活动发布")
+    notice_new_activity()
   end
 
   def init_data
