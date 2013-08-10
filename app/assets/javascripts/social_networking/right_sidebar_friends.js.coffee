@@ -26,7 +26,7 @@ class FriendsContainerView extends ContainerView
 			sender = @collection.find (model) ->
 				model.get('follow_id') == message.send_user_id
 			if sender
-				@top(sender.view)
+				@top(sender)
 			else
 				model = new Backbone.Model()
 				model.fetch
