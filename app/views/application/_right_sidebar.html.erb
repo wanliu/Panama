@@ -32,13 +32,15 @@
 </div>
 
 <script type="text/javascript">
-		new TransactionStateChange({
-			realtime_url: '<%= faye_server_uri %>'
-		});	
 		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
+
 		var transaction_message_view = {
 			top : {klass: "icon-edit", tool_tip: "交易消息" },
-			container_view : TransactionView };
+			container_view: TransactionView.extend({
+				realtime_url: '<%= faye_server_uri %>',
+				current_user: '<%= current_user %>'
+			}),
+		};
 		right_sidebar.register(transaction_message_view);
 
 		var friends_message_view = {

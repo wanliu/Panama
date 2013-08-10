@@ -329,11 +329,26 @@ class OrderTransaction < ActiveRecord::Base
       event = pay_manner.code
     end
     filter_fire_event!(events, event)
+    Notification.create!(
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "你有新的订单")
+  end
+
+  def system_fire_event!(event)
+    buyer_fire_event!(event)
+    seller_fire_event!(event)
   end
 
   def seller_fire_event!(event)
     events = %w(back delivered)
     filter_fire_event!(events, event)
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/people/#{buyer.name}/transactions#{id}",
+      :body => "你有新的订单")
   end
 
   def refund_items
@@ -366,7 +381,6 @@ class OrderTransaction < ActiveRecord::Base
   def state_change_detail
     state_details.update_all(:expired_state => false)
     state_details.create(:state => state)
-    faye_send("/change_state/messages",{:type =>"new",:values => as_json })
   end
 
   def current_operator
@@ -464,6 +478,11 @@ class OrderTransaction < ActiveRecord::Base
           :event => "refresh_#{ename}")
       end
     end
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "你有新的订单")
   end
 
   def valid_transfer_sheet?

@@ -1,11 +1,12 @@
+#= require lib/realtime_client
 root = window || @
 class TransactionView extends ContainerView
 
-	template2: "<li><div class='user-info'>你购买的产品已经{{state}},点击
-							<a href='/people/{{current_user}}/transactions/{{transaction_id}}'>这里</a>
+	template2: "<li><div class='user-info'>你订单{{number}}已经{{state_title}},点击
+							<a href='/people/{{current_user}}/transactions/{{id}}'>这里</a>
 							 查看详情</div></li>"
-	template1: "<li><p><i class=' icon-volume-up'></i>&nbsp;你的订单买家已经{{state}},点击
-	 						<a href='/shops/{{current_user}}/admins/order_refunds#refund1'>这里</a>
+	template1: "<li><p><i class=' icon-volume-up'></i>&nbsp;你的订单{{number}}买家已经{{state_title}},点击
+	 						<a href='/shops/{{current_user}}/admins/transactions/{{id}}'>这里</a>
 	 						 查看详情<p></li>"
 
 	talking_message_modal: '<div class="modal hide fade message-talk-box">
@@ -31,18 +32,16 @@ class TransactionView extends ContainerView
 	fill_modal: () ->
 		$('body').append(@talking_message_modal)
 
-	
-
-
 	bind_items: () ->
-		@collecton = new Backbone.Collection
-		@collecton.bind('add', @addOne, @)
-		# @collecton.add({state: "uncomplete", current_user: "xifengzhu",transaction_id: 4})
-		@collecton.add({state: "redund", current_user: "SA",refund_id: 1})
-		# @collecton.add({state: "completed", current_user: "SA",transaction_id: 2})
+		@collection = new Backbone.Collection
+		@collection.bind('add', @addOne, @)
+		@client = Realtime.client(@realtime_url)
+		@client.subscribe "/change_state/messages/", (info) =>		
+			@collection.add(info)
 
 	addOne: (model) ->
 		row_item = Hogan.compile(@template1)
 		@$('ul').append(row_item.render(model.toJSON()))
+		
 
 root.TransactionView = TransactionView

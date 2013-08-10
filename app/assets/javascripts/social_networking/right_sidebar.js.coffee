@@ -8,7 +8,7 @@
 # 注册容器视图
 # right_bar.register(message_view)
 
-
+#= require lib/realtime_client
 root = (window || @)
 
 
