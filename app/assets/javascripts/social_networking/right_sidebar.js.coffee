@@ -57,17 +57,15 @@ class RightSideBar extends Backbone.View
 
 
 class ContainerView extends Backbone.View
-	template: (options) ->
-		html = $("#right-sidebar-templates .container").html()
-		html = html.replace("&lt;", "<").replace("&gt;", ">")
-		_.template(html)(options)
+	template: () ->
+		$("#right-sidebar-templates .container").html()
 
 	className: "tab-pane clearfix"
 
 	initialize: () ->
 		@parent_view = @options.parent_view
 
-		html = @template(header: (@options.header_html || ""))
+		html = @template()
 		$(@el).html(html)
 
 		@view_id = @options.id

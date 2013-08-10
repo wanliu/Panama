@@ -1,56 +1,66 @@
 root = (window || @)
 
 class FriendsContainerView extends ContainerView
-	initialize: () ->
-		@followings = []
-		@strangers  = []
-		@contacted  = []
-		super
-		@$("ul.users-list").addClass("followings")
+	template: () ->
+		""
 
-	fill_header: () ->
-		$(@el).prepend(
+	initialize: () ->
+		super
+		@followers_view = new FollowersView(parent_view: @)
+
+		@set_default_view(@followers_view)
+
+	set_default_view: (view) ->
+		view.seted_default()
+		@default_view = view
+
+	bind_item: () ->
+		@client = Realtime.client(@faye_url)
+		@client.receive_message @token, (message) =>
+			@process_message message
+
+	process_message: (message) ->
+	# sender = @collection.find (model) ->
+	# 		model.get('follow_id') == message.send_user_id
+	# 	if sender
+	# 		@top(sender)
+	# 	else
+	# 		model = new Backbone.Model()
+	# 		model.fetch
+	# 			url: "/users/#{message.send_user_id}"
+	# 			success: (model) =>
+	# 				# @collection.add(model)
+	# 				@addStranger(model)
+		@default_view.process(message) || @stranger_view.process(message)
+
+
+class FollowersView extends Backbone.View
+	template:
         '<h5 class="tab-header followings">
 			<i class="icon-group"></i> 我关注的[<span class="num">0</span>]
-		</h5>')
-		@fill_modal()
+		</h5>
+		<ul class="notices-list users-list followings">
+		</ul>'
 
-	bind_items: () ->
+	initialize: () ->
+		@$parent_view = $(@options.parent_view.el)
 		@collection = new Backbone.Collection()
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
+		@render()
+
+	render: () ->
+		$(@el).html(@template)
+
+	seted_default: () ->
+		@is_default_view = true
+		@$parent_view.append(@el)
 		@collection.fetch(url: "/users/followings")
 
-		@client = Realtime.client(@faye_url)
-		@client.receive_message @token, (message) =>
-			sender = @collection.find (model) ->
-				model.get('follow_id') == message.send_user_id
-			if sender
-				@top(sender)
-			else
-				model = new Backbone.Model()
-				model.fetch
-					url: "/users/#{message.send_user_id}"
-					success: (model) =>
-						# @collection.add(model)
-						@addStranger(model)
-
-	top: (model) ->
-		friend_view = model.view
-		friend_view.remove()
-		if @is_follwing(model)
-			@$("ul.users-list.followings").prepend(friend_view.el)
-		else if @is_stranger(model)
-			@$("ul.users-list.strangers").prepend(friend_view.el)
-		friend_view.delegateEvents()
-		@active()
-		friend_view.active()
-
-	addAll: (collection) ->
-		@$(".users-list").html('')
+	addAll: () ->
+		@$("ul").html('')
+		@$("h5 .num").html(@collection.length)
 		@collection.each (model) =>
-			@followings.push model
-			@$(".followings .num").html(@followings.length)
 			@addOne(model)
 
 	addOne: (model) ->
@@ -58,59 +68,53 @@ class FriendsContainerView extends ContainerView
 		model.view  = friend_view
 		@$(".users-list").prepend(friend_view.render().el)
 
-	addStranger: (model) ->
-		if @$("h5.strangers").length isnt 0
-			@$(".strangers .num").html(@followings.length)
-		else
-			$(@el).append(
-				'<h5 class="tab-header strangers">
-					<i class="icon-group"></i> 陌生人[<span class="num">0</span>]
-				</h5><ul class="notices-list users-list strangers">')
+	process: (message) ->
+		exist_model = @include(message) ->
+			model.get('follow_id') == message.send_user_id
+		if exist_model
+			@top(sender)
 
-		if @is_stranger(model)
-			exist_model = _.find @strangers, (item) ->
-				item.id is model.id
-			@top(exist_model)
-		else
-			@strangers.push model
-			@addOneStranger(model)
-			@$(".strangers .num").html(@strangers.length)
+	include: (model) ->
+		_.find @collection.models, (item) ->
+			item.get("follow_id") is model.send_user_id
 
+	top: (model) ->
+		
 
-	addOneStranger: (model) ->
+class StrangersView extends Backbone.View
+	template:
+        '<h5 class="tab-header strangers">
+			<i class="icon-group"></i> 陌生人[<span class="num">0</span>]
+		</h5>
+		<ul class="notices-list users-list strangers">
+		</ul>'
+
+	initialize: () ->
+		@$parent_view = $(@options.parent_view.el)
+		@collection = new Backbone.Collection()
+		@collection.bind('reset', @addAll, @)
+		@collection.bind('add', @addOne, @)
+		@render()
+
+	render: () ->
+		$(@el).html(@template)
+
+	seted_default: () ->
+		@is_default_view = true
+		@$parent_view.append(@el)
+		# @collection.fetch(url: "/users/followings")
+
+	addAll: () ->
+		@$("ul").html('')
+		@$("h5 .num").html(@collection.length)
+		@collection.each (model) =>
+			@addOne(model)
+
+	addOne: (model) ->
 		friend_view = new FriendView({ model: model, parent_view: @ })
 		model.view  = friend_view
-		@$(".users-list.strangers").prepend(friend_view.render().el)
+		@$(".users-list").prepend(friend_view.render().el)
 
-
-	fill_modal: () ->
-		$('body').append(@talking_message_modal)
-
-	is_follwing: (model) ->
-		_.any @followings, (item) ->
-			item.get('id') is model.id
-
-	is_stranger: (model) ->
-		_.any @strangers, (item) ->
-			item.get('id') is model.id
-
-	is_contacted: (model) ->
-		_.any @contacted, (item) ->
-			item.get('id') is model.id
-
-	talking_message_modal: '<div class="modal hide fade message-talk-box">
-		  <div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		    <h3><img src="/default_img/t5050_default_avatar.jpg" />sss</h3>
-		  </div>
-		  <div class="modal-body">
-		    <p>One fine body…</p>
-		  </div>
-		  <div class="modal-footer">
-		    <a href="#" class="btn">Close</a>
-		    <a href="#" class="btn btn-primary">Save changes</a>
-		  </div>
-		</div>'
 
 class FriendView extends Backbone.View
 	tagName: 'li'
