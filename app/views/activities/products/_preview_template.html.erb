@@ -6,7 +6,7 @@
         <img src="{{photos.avatar}}" class="preview a-{{id}}" alt />
       {{/photos.avatar}}
       {{^photos.avatar}}
-        <%= image_tag ImageUploader.new.url("240240") %>
+        <%#= image_tag ImageUploader.new.url("240240") %>
       {{/photos.avatar}}
     </div>
       <div class='summary'>
@@ -18,7 +18,7 @@
         <img src="{{seller.photos.icon}}" class='author img-circle' alt="Author" />
         {{/seller.photos.icon}}
         {{^seller.photos.icon}}
-          <%= image_tag AvatarUploader.new.url("5050"), :class => 'author img-circle' %>
+          <%#= image_tag AvatarUploader.new.url("5050"), :class => 'author img-circle' %>
         {{/seller.photos.icon}}
         {{#seller.name}}
           <p>{{seller.name}}</p>
