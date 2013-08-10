@@ -33,16 +33,23 @@
 	</div>
 
 	<div class='activity-item'>
-		<%= image_tag Activity.first.photos.avatar, :class => "pull-left img-circle" %>
+		<% unless Activity.first.blank? %>
+		<%= image_tag Activity.first.photos.avatar,:class => "pull-left img-circle" %>
 		<div class="user-info">
 			<div class="name"><a href="#"><%= Activity.first.title %></a></div>
 			<div class="position">Activity</div>
 			<div class="time"><%= Activity.first.updated_at %></div>
 		</div>
+		<% end %>
 	</div>
 </div>
 
 <script type="text/javascript">
+	// var FriendChatCollection = Backbone.Collection.extend({
+	// 	faye_url: "<%= faye_server_uri %>",
+	// 	token: "<%= current_user.im_token %>"
+	// })
+
 	window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
 	var transaction_message_view = {
 		top : {klass: "icon-group", tool_tip: "show messages" },
@@ -57,8 +64,10 @@
 
 	var friends_message_view = {
 		top : {klass: "icon-group", tool_tip: "show messages" },
-		container_view : FriendsContainerView };
+		container_view : FriendsContainerView.extend({
+			faye_url: "<%= faye_server_uri %>",
+			token: "<%= current_user.im_token %>"
+		})
+	};
 	right_sidebar.register(friends_message_view);
 </script>
-
-<%= render_widget :chat %>
