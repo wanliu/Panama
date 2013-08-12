@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807030054) do
+ActiveRecord::Schema.define(:version => 20130812084747) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -113,22 +113,15 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
 
-  create_table "admins", :force => true do |t|
-    t.string   "uid"
-    t.string   "login"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0, :default => 0
-    t.float    "amount",                                    :default => 0.0
+    t.decimal  "price",      :precision => 10, :scale => 0
+    t.float    "amount"
     t.text     "describe"
-    t.integer  "status",                                    :default => 0
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.integer  "status"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.integer  "user_id"
   end
 
@@ -363,6 +356,11 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.decimal "last_time",    :precision => 20, :scale => 10
   end
 
+  add_index "inventory_caches", ["last_time"], :name => "index_inventory_caches_on_last_time"
+  add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
+  add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
+  add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
+
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"
@@ -413,9 +411,10 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
-    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+    t.integer  "shop_product_id"
+    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -442,8 +441,10 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
+    t.string   "shipped_state"
     t.string   "order_state"
     t.integer  "delivery_manner_id"
+    t.integer  "delivery_type_id"
     t.integer  "logistics_company_id"
   end
 
@@ -462,7 +463,6 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
-    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
   end
@@ -503,6 +503,7 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.integer  "star_logistics"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.integer  "product_id"
   end
 
   create_table "product_delivery_types", :force => true do |t|
@@ -515,15 +516,15 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",     :precision => 10, :scale => 0
+    t.decimal  "amount",     :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",      :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",      :precision => 10, :scale => 2, :default => 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
-    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
+    t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "buy_state"
     t.integer  "owner_id"
@@ -697,6 +698,7 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end
@@ -836,10 +838,10 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4
+    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
     t.string   "im_token"
   end
 

@@ -10,18 +10,24 @@ class PeopleController < ApplicationController
   layout "people"
 
   def show
-    @user_checking = current_user.user_checking
     @people = User.find_by(:login => params[:id])
-    @user_auth = UserAuth.new(@user_checking.attributes)
     current_ability(@people)
   end
 
-   def show_bill
+  def edit
+    @user_checking = current_user.user_checking
+    @user_auth = UserAuth.new(@user_checking.attributes)
     @people = User.find_by(:login => params[:id])
     current_ability(@people)
-    authorize! :show_bill, People
-    render :template => "people/base/show_bill"
-   end
+    authorize! :manage, User
+  end
+
+  # def show_bill
+  #   @people = User.find_by(:login => params[:id])
+  #   current_ability(@people)
+  #   authorize! :show_bill, People
+  #   render :template => "people/base/show_bill"
+  # end
 
   def show_invite
     valid_invite_user

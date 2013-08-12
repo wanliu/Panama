@@ -53,8 +53,7 @@ class ShopProductsController < ApplicationController
 
   def show
     @shop_product = ShopProduct.find(params[:id])
-    @product_comments = ProductComment.joins(" left join product_items as pi on product_comments.product_item_id=pi.id")
-    .where("pi.product_id=? and product_comments.shop_id=?", @shop_product.product_id, @shop_product.shop.id)
+    @product_comments = ProductComment.where("product_id=? and shop_id=?", @shop_product.product_id, @shop_product.shop.id)
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
