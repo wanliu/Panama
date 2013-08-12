@@ -1,5 +1,7 @@
 #describe: 聊天
 
+root = window || @
+
 class ChatMessage extends Backbone.Model
   urlRoot: "/chat_messages"
   create: (token, callback) ->
@@ -171,3 +173,5 @@ class window.ChatView extends Backbone.View
 
   read_friend_messsage: () ->
     @msg_view.read(@friend.id)
+
+root.ChatView = ChatView
