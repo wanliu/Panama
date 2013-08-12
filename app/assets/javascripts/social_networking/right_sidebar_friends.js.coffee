@@ -141,10 +141,10 @@ class FriendView extends Backbone.View
 
 	active: () ->
 		if !@$iframe || @$iframe.is(":hidden")
-			$(@el).css('background-color', 'orange')
+			$(@el).addClass('active')
 
 	undo_active: () ->
-		$(@el).css('background-color', '')
+		$(@el).removeClass('active')
 
 	init_and_show_iframe: () ->
 		@$iframe= $(@make("div"))

@@ -62,7 +62,7 @@ class TransactionMessageView extends FriendView
 		window.location.replace(@model.get('url'))
 
 	active: () ->
-		$(@el).css('background-color', 'orange')
+		$(@el).addClass('active')
 
 
 
