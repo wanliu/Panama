@@ -40,7 +40,7 @@ class TransactionView extends ContainerView
 	top: (model) ->
 		@active()
 		exsited_model = _.find @collection.models, (item) ->
-			item.id = model.id
+			item.id is model.id
 		exsited_model.view.active() if exsited_model && exsited_model.view
 
 
