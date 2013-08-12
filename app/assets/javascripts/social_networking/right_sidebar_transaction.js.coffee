@@ -2,42 +2,29 @@
 root = window || @
 class TransactionView extends ContainerView
 
-	template1: "<li><p><i class=' icon-volume-up'></i>{{body}},点击
-	 						<a href='{{url}}'>这里</a>
-	 						 查看详情<p></li>"
-
-	talking_message_modal: '<div class="modal hide fade message-talk-box">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	    <h3><img src="/default_img/t5050_default_avatar.jpg" />sss</h3>
-	  </div>
-	  <div class="modal-body">
-	    <p>One fine body…</p>
-	  </div>
-	  <div class="modal-footer">
-	    <a href="#" class="btn">Close</a>
-	    <a href="#" class="btn btn-primary">Save changes</a>
-	  </div>
-	</div>'
+	template: () -> ""
 
 	fill_header: () ->
 		$(@el).prepend(
         '<h5 class="tab-header">
-			<i class="icon-edit"></i> 交易消息
-		</h5>')
-		@fill_modal()
-	fill_modal: () ->
-		$('body').append(@talking_message_modal)
+			<i class="icon-edit"></i> 交易消息[<span class="num">0</span>]
+		</h5>
+		<ul class="notices-list users-list followings">
+		</ul>')
 
 	bind_items: () ->
 		@collection = new Backbone.Collection
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
-		@collection.fetch(url: "/people/#{@current_user_login}/notifications")
+		# @collection.fetch(url: "/people/#{@current_user_login}/notifications")
+
 		@client = Realtime.client(@realtime_url)
-		@client.monitor_people_notification @token, (info) =>	
-			@collection.add(info.value) if info.type == "OrderTransaction"
-			 	
+		@client.monitor_people_notification @token, (info) =>
+			model = info.value
+			if info.type == "OrderTransaction"
+				@collection.add(model)
+				@top(model)
+
 
 	addAll: (collecton) ->
 	 	@collection.each (model) =>
@@ -45,9 +32,39 @@ class TransactionView extends ContainerView
 	 			@addOne(model)
 
 	addOne: (model) ->
-		debugger
-		row_item = Hogan.compile(@template1)
-		@$('ul').append(row_item.render(model.toJSON()))
-		
+		@$("h5 .num").html(@collection.length)
+		message_view = new TransactionMessageView({ model: model, parent_view: @ })
+		model.view  = message_view
+		@$(".users-list").prepend(message_view.render().el)
+
+	top: (model) ->
+		@active()
+		exsited_model = _.find @collection.models, (item) ->
+			item.id = model.id
+		exsited_model.view.active() if exsited_model && exsited_model.view
+
+
+class TransactionMessageView extends FriendView
+	tagName: 'li'
+
+	events:
+		"click" : "direct_to_transaction_detail"
+
+	template: (options) ->
+		# _.template("<i class=' icon-volume-up'></i>
+  #       			<%= model.get('body') %>,点击<a href='<%= model.get('url') %>'>这里</a>查看详情")(options)
+		_.template("<i class=' icon-volume-up'></i>
+					<%= model.get('body') %>,点击查看详情")(options)
+
+
+	direct_to_transaction_detail: () ->
+		@undo_active()
+		window.location.replace(@model.get('url'))
+
+	active: () ->
+		$(@el).css('background-color', 'orange')
+
+
+
 
 root.TransactionView = TransactionView

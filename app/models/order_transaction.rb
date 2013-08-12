@@ -334,7 +334,7 @@ class OrderTransaction < ActiveRecord::Base
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-      :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}")) 
+      :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
   end
 
   def system_fire_event!(event)

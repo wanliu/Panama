@@ -129,7 +129,7 @@ class FriendView extends Backbone.View
 	render: () ->
 		html = @template(model: @model)
 		$(@el).html(html)
-		$(@el).append(@talking_message_modal)
+		# $(@el).append(@talking_message_modal)
 		@
 
 	talk_to_friend: () ->
@@ -173,3 +173,4 @@ class FriendView extends Backbone.View
 	    </div>")
 
 root.FriendsContainerView = FriendsContainerView
+root.FriendView = FriendView

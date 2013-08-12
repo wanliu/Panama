@@ -43,17 +43,17 @@
 </div>
 
 <script type="text/javascript">
-		window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
+	window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
 
-		var transaction_message_view = {
-			top : {klass: "icon-edit", tool_tip: "交易消息" },
-			container_view: TransactionView.extend({
-				realtime_url: '<%= faye_server_uri %>',
-				token: '<%= current_user.im_token %>',
-				current_user_login: '<%= current_user.login %>'
-			}),
-		};
-		right_sidebar.register(transaction_message_view);
+	var transaction_message_view = {
+		top : {klass: "icon-edit", tool_tip: "交易消息" },
+		container_view: TransactionView.extend({
+			realtime_url: '<%= faye_server_uri %>',
+			token: '<%= current_user.im_token %>',
+			current_user_login: '<%= current_user.login %>'
+		}),
+	};
+	right_sidebar.register(transaction_message_view);
 
 	var friends_message_view = {
 		top : {klass: "icon-group", tool_tip: "show messages" },
