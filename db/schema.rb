@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807030054) do
+ActiveRecord::Schema.define(:version => 20130812114257) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -397,6 +397,8 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.boolean  "read",                :default => false
     t.string   "url"
     t.text     "body"
+    t.string   "targeable_type"
+    t.integer  "targeable_id"
   end
 
   create_table "order_reasons", :force => true do |t|
@@ -568,6 +570,7 @@ ActiveRecord::Schema.define(:version => 20130807030054) do
     t.integer  "default_attachment_id"
     t.integer  "shops_category_id"
     t.string   "brand_name"
+    t.string   "emc13"
   end
 
   create_table "products_properties", :force => true do |t|
