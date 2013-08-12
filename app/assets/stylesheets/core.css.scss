@@ -576,29 +576,6 @@ ul {
 	}
 }
 
-// Social Sidebar
-
-.right-sidebar {
-	position: absolute;
-	display: none;
-	width: 200px;
-	margin-bottom: 0px;
-
-	header {
-		.nav {
-			float: left;
-		}
-	}
-	.settings {
-		padding: 5px;
-		.btn-auto {
-			display: none;
-		}
-		display: inline-block;
-	}
-
-}
-
 .right-mini .right-sidebar {
 	width: auto;
 
@@ -626,8 +603,7 @@ ul {
 	}
 }
 
-.open_right_side
-.right-sidebar {
+.open_right_side .right-sidebar {
 	position: fixed;
 	right: 0;
 	top: 0;
@@ -640,63 +616,101 @@ ul {
 	width: 70px;
 }
 
+.right-sidebar {
+	position: absolute;
+	display: none;
+	width: 200px;
+	margin-bottom: 0px;
 
-.right-sidebar .tab-content {
-	overflow: visible;
-}
+	header {
+		.nav {
+			float: left;
+		}
+	}
 
-.right-sidebar header ul {
-	margin: 0px;
-}
+	.settings {
+		padding: 5px;
+		.btn-auto {
+			display: none;
+		}
+		display: inline-block;
+	}
 
+	header ul {
+		margin: 0px;
+	}
 
-.users-list {
-	list-style: none;
-	margin: 0px;
+	.tab-content {
+		overflow: visible;
+	}
 
-}
+	.notices-list {
+		list-style: none;
+		margin: 0px;
 
-.users-list li:hover {
-	@include transparent(rgb(51,51,51),0.25);
+		.name, .time, .position {
+			line-height: 16px;
+		}
 
-	// position: absolute;
+		li img {
+			width: 50px;
+		}
 
-	width: 300px;
-	margin-left: -100px;
-}
-.right-mini .users-list li:hover {
-	width: 300px;
-	margin-left: -240px;
+		li {
+			// border-top: 1px solid rgba(51,51,51,0.25);
+			padding: 12px;
+			min-width: 60px;
+			margin: 0 -12px;
+			cursor: pointer;
+			height: 50px;
+			@include transition(width 0.0s, margin 0.3s);
+			overflow: hidden;
+		}
 
-	.user-info {
-		display: block;
+		li:hover {
+			@include transparent(rgb(51,51,51),0.25);
+			width: 300px;
+			margin-left: -100px;
+		}
+
+		.user-info {
+			margin-left: 62px;
+		}
+
+		.right-mini .users-list li:hover {
+			width: 300px;
+			margin-left: -240px;
+
+			.user-info {
+				display: block;
+			}
+		}
 	}
 }
 
-.users-list li {
-	// border-top: 1px solid rgba(51,51,51,0.25);
-	padding: 12px;
-	min-width: 60px;
-	margin: 0 -12px;
-	cursor: pointer;
-	height: 50px;
-	@include transition(width 0.0s, margin 0.3s);
-	overflow: hidden;
+#activities-notice {
+	.notice-list {
+		li {
+			padding: 12px;
+			min-width: 60px;
+			margin: 0 -12px;
+			cursor: pointer;
+			height: 50px;
+			@include transition(width 0.0s, margin 0.3s);
+			overflow: hidden;
+
+			img {
+				width: 50px;
+			}
+		}
+
+		li:hover {
+			@include transparent(rgb(51,51,51),0.25);
+			width: 300px;
+			margin-left: -100px;
+		}
+	}
 }
-
-.users-list .name, .users-list .time, .users-list .position {
-	line-height: 16px;
-}
-
-.users-list li img {
-	width: 50px;
-}
-
-
-.users-list .user-info {
-	margin-left: 62px;
-}
-
 
 // chosen select
 .chzn-container-active .chzn-single {
@@ -793,10 +807,91 @@ ul {
 
 }
 
-.model-popup-backdrop {
-	color: #555;
-}
+#popup-layout {
+	.model-popup-backdrop {
+		background-color: rgba(51, 51, 51, 0.6);
+		@include filter(none);
+		color: #555;
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 1040;
+		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#e5ffffff', endColorstr='#e5ffffff');
+		overflow-y: scroll;
+		padding: 20px 0;
 
+		.modal {
+			position: relative;
+			opacity: 1;
+		}
+
+		.picture {
+			img {
+				margin: 0 auto;
+				display: block
+			}
+		}
+
+		.dialog {
+			z-index: 1050;
+			background-color: white;
+			border: 1px solid #999999;
+			// border: 1px solid rgba(0, 0, 0, 0.3);
+			@include border-radius(1px);
+			@include box-shadow (0 3px 7px rgba(0, 0, 0, 0.3));
+			@include background-clip(padding-box);
+			outline: none;
+			margin-bottom: 20px;
+
+			.modal-body {
+				.author_image {
+					width: 50px;
+				}
+				height: auto;
+				max-height: 525px;
+			}
+			
+			.big_comments_and_reply {
+				text-align: left;
+				.comments {
+					.comment {
+						padding: 0px 20px 10px 60px;
+						min-height: 60px;
+						.people-image {
+							margin-left: -60px;
+							float: left;
+							width: 50px;
+							height: 50px;
+						}
+
+						.author-name {
+							font-size: 16px;
+							font-weight: bold;
+						}
+					}
+				}
+
+				.reply_form {
+					padding: 0px 20px 10px 60px;
+					.user-info {
+						margin-left: -60px;
+						float: left;
+						width: 50px;
+						height: 50px;
+					}
+
+					.message {
+						textarea {
+							width: 100%;
+						}
+					}
+				}
+			}
+		}
+	}
+}
 
 input[type="text"], input[type="password"], .ui-autocomplete-input, textarea, .uneditable-input {
 	@include border-radius(1px);

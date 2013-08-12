@@ -6,6 +6,14 @@ class ActivitiesController < ApplicationController
 
   respond_to :html, :dialog
 
+  def notice
+    @activity = Activity.find(params[:id])
+    @activity.notice_user
+    respond_to do |format|
+      format.json { render json: @activity }
+    end
+  end
+
   def index
     @activities = Activity.where("status = ?", Activity.statuses[:access])
     @ask_buy = AskBuy.all
@@ -28,6 +36,7 @@ class ActivitiesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.js { render "activities/show" }
       format.dialog { render "show.dialog", :layout => false }
       format.json {
         render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) }

@@ -18,6 +18,7 @@
 
 	<div class="container">
 			<ul class="users-list">
+				<%#= render_widget :notification %>
 			</ul>
 	</div>
 
@@ -38,7 +39,7 @@
 			top : {klass: "icon-edit", tool_tip: "交易消息" },
 			container_view: TransactionView.extend({
 				realtime_url: '<%= faye_server_uri %>',
-				current_user: '<%= current_user %>'
+				token: '<%= current_user.im_token %>'
 			}),
 		};
 		right_sidebar.register(transaction_message_view);
@@ -49,4 +50,3 @@
 		right_sidebar.register(friends_message_view);
 		
 </script>
-<%= render_widget :chat %>

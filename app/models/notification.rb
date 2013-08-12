@@ -8,7 +8,8 @@ class Notification < ActiveRecord::Base
   attr_accessible :url, :body, :mentionable_user_id, :user_id
 
   belongs_to :user
-  belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"
+  belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"  
+  belongs_to :targeable, :polymorphic => true
 
   validates_presence_of :user
   validates_presence_of :mentionable_user
@@ -17,7 +18,11 @@ class Notification < ActiveRecord::Base
 
   def realtime_push_to_client
     count = Notification.unreads.where(user_id: user_id).count
-    FayeClient.send("/notification/#{user.login}", {count: count})
+    FayeClient.send("/notification/#{ user.im_token}", {
+      count: count, 
+      type: targeable_type, 
+      value: targeable.as_json.merge(:url => self.url)
+    })
   end
 
   def self.create!(options)

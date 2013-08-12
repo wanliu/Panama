@@ -86,5 +86,6 @@ class ContainerView extends Backbone.View
 
 	bind_items: () ->
 
+
 root.RightSideBar = RightSideBar
 root.ContainerView = ContainerView

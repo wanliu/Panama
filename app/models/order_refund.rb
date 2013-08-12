@@ -29,6 +29,7 @@ class OrderRefund < ActiveRecord::Base
 
   has_many :items, class_name: "OrderRefundItem", dependent: :destroy
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
+  has_many :notifications, :as => :targeable, dependent: :destroy
 
   validates :order_reason, :presence => true
   validates :order, :presence => true
