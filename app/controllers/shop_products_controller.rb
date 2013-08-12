@@ -71,7 +71,8 @@ class ShopProductsController < ApplicationController
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
         :price => @shop_product.price,
-        :user_id => current_user,
+        :user_id => current_user.id,
+        :shop_id => @shop_product.shop_id,
         :buy_state => :guarantee
       })
       if @order.save
@@ -91,7 +92,8 @@ class ShopProductsController < ApplicationController
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
         :price => @shop_product.price,
-        :user_id => current_user,
+        :user_id => current_user.id,
+        :shop_id =>  @shop_product.shop_id,
         :buy_state => :direct
       })
       if @order.save
