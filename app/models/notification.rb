@@ -18,7 +18,11 @@ class Notification < ActiveRecord::Base
 
   def realtime_push_to_client
     count = Notification.unreads.where(user_id: user_id).count
-    FayeClient.send("/notification/#{user.login}", {count: count})
+    FayeClient.send("/notification/#{ user.im_token}", {
+      count: count, 
+      type: targeable_type, 
+      value: self
+    })
   end
 
   def self.create!(options)

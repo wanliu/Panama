@@ -29,6 +29,7 @@ class OrderRefund < ActiveRecord::Base
 
   has_many :items, class_name: "OrderRefundItem", dependent: :destroy
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
+  has_many :notifications, :as => :targeable, dependent: :destroy
 
   validates :order_reason, :presence => true
   validates :order, :presence => true
@@ -165,10 +166,20 @@ class OrderRefund < ActiveRecord::Base
 
   def seller_fire_events!(event)
     type_fire_events!(%w(shipped_agree unshipped_agree  refuse sign), event)
+    notifications.create!(
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
+      :url => "/shops/#{seller.name}/admins/order_refunds##{id}",
+      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}"+"退货")) 
   end
 
   def buyer_fire_events!(event)
     type_fire_events!(%w(delivered), event)
+    notifications.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
+      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}"+"退货")) 
   end
 
   def update_buyer_and_seller_and_operate
@@ -304,11 +315,11 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def notify_shop_refund
-    Notification.create!(
+    notifications.create!(
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
-      :body => "有人要退货了")
+      :body => "有人申请退货了")
   end
 
   def type_fire_events!(states, event)

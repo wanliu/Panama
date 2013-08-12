@@ -46,6 +46,14 @@ class ChatMessagesController < ApplicationController
     end
   end
 
+  # 合二为一
+  def generate_and_display
+    token     = Dialogue.generate(params[:friend_id], current_user.id).token
+    @dialogue = Dialogue.display(token, current_user.id)
+    @dialogue_id = params[:friend_id]
+    render action: :display
+  end
+
   #读取信息通知
   def read
     @messages = current_user.receive_messages.unread

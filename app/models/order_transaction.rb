@@ -37,6 +37,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :logistics_company
 
   has_many :operators, class_name: "TransactionOperator", dependent: :destroy
+  has_many :notifications, :as => :targeable, dependent: :destroy
 
   has_many  :items,
             class_name: "ProductItem",
@@ -64,10 +65,10 @@ class OrderTransaction < ActiveRecord::Base
     update_total_count
   end
 
-  after_create :notice_user, :notice_new_order, :state_change_detail
+  after_create  :notice_new_order, :state_change_detail, :notice_user
 
   def notice_user
-    Notification.create!(
+    notifications.create!(
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
@@ -329,11 +330,37 @@ class OrderTransaction < ActiveRecord::Base
       event = pay_manner.code
     end
     filter_fire_event!(events, event)
+    notifications.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
+  end
+
+  def system_fire_event!(event)
+    events = %w(expired audit_transfer audit_failure)
+    filter_fire_event!(events, event)
+    notifications.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
+     notifications.create!(
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
+      :url => "/people/#{buyer.login}/transactions##{id}",
+      :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}"))
+
   end
 
   def seller_fire_event!(event)
     events = %w(back delivered)
     filter_fire_event!(events, event)
+    notifications.create!(
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
+      :url => "/people/#{buyer.login}/transactions##{id}",
+      :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}")) 
   end
 
   def refund_items

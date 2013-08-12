@@ -8,8 +8,8 @@ class RealtimeClient
     @client = new Faye.Client(server_uri) if server_uri?
     @events = {}
 
-  monitor_people_notification: (token, callback = (data) -> ) ->
-    @subscribe("/notification/#{token}", (data) ->
+  monitor_people_notification: (im_token, callback = (data) -> ) ->
+    @subscribe("/notification/#{im_token}", (data) ->
       callback(data)
     )
 
