@@ -166,8 +166,10 @@ class FriendView extends Backbone.View
 	template: _.template(
         "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
 	    <div class='user-info'>
-	      <div class='name'><a href='#''><%= model.get('name') || model.get('login') %></a></div>
-	        <div class='type'><%= model.get('follow_type') || 'User' %></div>
+			<div class='name'>
+				<a href='#''><%= model.get('name') || model.get('login') %></a>
+			</div>
+			<div class='type'><%= model.get('follow_type') || 'User' %></div>
 	    </div>")
 
 root.FriendsContainerView = FriendsContainerView
