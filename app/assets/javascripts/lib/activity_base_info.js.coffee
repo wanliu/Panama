@@ -29,6 +29,7 @@ class root.ActivityBaseInfoView extends Backbone.View
     $.ajax
       type: "get"
       dataType: "json"
+      data: {version_name: @upload_options.version_name }
       url: "/shop_products/#{shop_product_id}"
       success: (data) =>
         @load_info(data)

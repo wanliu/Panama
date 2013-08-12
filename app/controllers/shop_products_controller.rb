@@ -57,7 +57,7 @@ class ShopProductsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
-      format.json { render json: @shop_product.as_json.merge(product: @shop_product.product.as_json) }
+      format.json { render json: @shop_product.as_json.merge(product: @shop_product.product.as_json(params[:version_name])) }
     end
   end
 

@@ -30,6 +30,7 @@ class root.AskBuyView extends Backbone.View
     $.ajax(
       type: "get",
       url: "/products/#{product_id}/base_info",
+      data: {version_name: @upload_params.version_name},
       success: (product) =>
         @atta.destroy_all()
         @$title.val(product.name)
