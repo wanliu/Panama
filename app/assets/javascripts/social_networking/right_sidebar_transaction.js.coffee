@@ -36,7 +36,7 @@ class TransactionView extends ContainerView
 		@collection.fetch(url: "/people/#{@current_user_login}/notifications")
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>	
-			@collection.add(info.value) if info.type == "OrderTransaction"
+			@collection.add(info.value) if info.type == "OrderTransaction" || info.type == "OrderRefund"
 			 	
 
 	addAll: (collecton) ->
