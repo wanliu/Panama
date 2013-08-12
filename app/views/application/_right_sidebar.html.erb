@@ -19,6 +19,9 @@
 	<div class="container">
 			<ul class="notices-list users-list">
 			</ul>
+
+			<ul class="notices-list activities-list">
+			</ul>
 	</div>
 
 	<div class='sign-item'>
@@ -33,7 +36,7 @@
 	<div class='activity-item'>
 		<% unless Activity.first.blank? %>
 			<%= image_tag Activity.first.photos.avatar,:class => "pull-left img-circle" %>
-			<div class="user-info">
+			<div class="activity-info">
 				<div class="name"><a href="#"><%= Activity.first.title %></a></div>
 				<div class="position">Activity</div>
 				<div class="time"><%= Activity.first.updated_at %></div>

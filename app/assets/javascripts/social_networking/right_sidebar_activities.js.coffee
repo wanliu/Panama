@@ -1,22 +1,11 @@
 root = (window || @)
 
 class ActivitiesContainerView extends ContainerView
+	
 	initialize: (options) ->
 		_.extend(@, options)
-		@notices = new ActivityNoticeList()
-		@notices.bind("add", @add_data, @)
 		@bind_realtime()
-		@urlRoot = "people/z2009zxiaolong/notifications"
 		super
-
-	add_data: (model) ->
-		view = new ActivityNoticeView(model: model)
-		@notice_msg()
-
-	add: (data) ->
-		@notices.add(data)
-
-	notice_msg: () ->
 
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
@@ -29,12 +18,11 @@ class ActivitiesContainerView extends ContainerView
 			when "new"
 				@add(_.extend(data, {_type: type}))
 
-
 	fill_header: () ->
 		$(@el).prepend('<h5 class="tab-header"><i class="icon-star"></i>活动消息列表</h5>')
 
 	bind_items: () ->
-		@collection = new Backbone.Collection(url: "/activities")
+		@collection = new Backbone.Collection()
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
 		@collection.fetch({ url: 'people/agilejzl/notifications/unread?type=Activity' })
@@ -45,16 +33,20 @@ class ActivitiesContainerView extends ContainerView
 			@addOne(model)
 
 	addOne: (model) ->
-		activity_view = new ActivityNoticeView({model: model})
+		activity_view = new ActivityNoticeView({ model: model })
 		@$(".activities-list").append(activity_view.render().el)
 
 
 class ActivityNoticeView extends Backbone.View
 	tagName: 'li'
-	template: (options) ->
-		html = $("#right-sidebar-templates .activity-item").html()
-		html = html.replace('&lt;', '<').replace('&gt', '>')
-		_.template(html)(options)
+	template: _.template(
+        "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
+	    <div class='user-info'>
+			<div class='name'>
+				<a href='#''><%= model.get('body') %></a>
+			</div>
+			<div class='type'><%= model.get('url') %></div>
+	    </div>")
 
 	events:
 		"click" : "show_modal"
@@ -64,32 +56,16 @@ class ActivityNoticeView extends Backbone.View
 		@$el = $(@el)
 
 	show_modal: () ->
-		@model = new ActivityModel({ id: 1 })
-		@model.fetch success: (model) =>
+		activity_model = new ActivityModel({ id: @model.get('targeable_id') })
+		activity_model.fetch success: (model) =>
 			view = new ActivityView({
 				model    : model 
 			})
 			view.modal()
 
 	render: () ->
-		html = @template(model: @model)
-		$(@el).html(html)
+		$(@el).html(@template(model: @model))
 		@
-
-
-class ActivityNotice extends Backbone.Model
-	set_url: (activity_id) ->
-		@urlRoot = "activities/#{activity_id}"
-
-	dispose: (callback) ->
-		$.ajax(
-			url: "#{@urlRoot}/#{@id}/dispose"
-			type: "POST",
-			success: callback
-		)
-
-class ActivityNoticeList extends Backbone.Collection
-	model: ActivityNotice
 
 
 root.ActivitiesContainerView = ActivitiesContainerView
