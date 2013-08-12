@@ -36,9 +36,8 @@ class ActivitiesContainerView extends ContainerView
 	bind_items: () ->
 		@collection = new Backbone.Collection(url: "/activities")
 		@collection.bind('reset', @addAll, @)
-		@collection.bind('fetch', @addAll, @)
 		@collection.bind('add', @addOne, @)
-		@collection.fetch({ url: '#{@urlRoot}/unread?type=Activity' })
+		@collection.fetch({ url: 'people/agilejzl/notifications/unread?type=Activity' })
 
 	addAll: (collecton) ->
 		@$(".activities-list").html('')
@@ -65,7 +64,7 @@ class ActivityNoticeView extends Backbone.View
 		@$el = $(@el)
 
 	show_modal: () ->
-		@model = new ActivityModel({ id: 32 })
+		@model = new ActivityModel({ id: 1 })
 		@model.fetch success: (model) =>
 			view = new ActivityView({
 				model    : model 
