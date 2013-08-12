@@ -73,4 +73,6 @@ class Cart < ActiveRecord::Base
     transaction.items = pro_items
     transaction.save
   end
+
+  private
 end

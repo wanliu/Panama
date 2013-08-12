@@ -1,3 +1,4 @@
+#encoding: utf-8
 class ProductItem < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::MemoryAssociation
@@ -8,7 +9,6 @@ class ProductItem < ActiveRecord::Base
 
   cattr_accessor :product_options
   @@product_options = {}
-
 
   has_and_belongs_to_many   :properties do
       def [](name)
@@ -49,6 +49,7 @@ class ProductItem < ActiveRecord::Base
 
   belongs_to :cart, inverse_of: :items, :counter_cache => :items_count
   belongs_to :product
+  belongs_to :user
   belongs_to :owner, :polymorphic => true
              # primary_key: 'transaction_id'
 
@@ -63,6 +64,12 @@ class ProductItem < ActiveRecord::Base
   acts_as_status :buy_state, [:direct, :guarantee]
 
   memories :properties, :properties_values, :property_items
+
+  validates :user, :presence => true
+  validates :shop, :presence => true
+  validates :product, :presence => true
+
+  validate :valid_buyer_self_product?
 
   before_save do
     update_total
@@ -121,4 +128,8 @@ class ProductItem < ActiveRecord::Base
     Hash[keys.map { |k| [k, photos.send(k) ]}]
   end
 
+  private
+  def valid_buyer_self_product?
+    errors.add(:shop, "不能购买自己的商品！") if user == shop.user
+  end
 end
