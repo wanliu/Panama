@@ -20,7 +20,7 @@ class ActivitiesContainerView extends ContainerView
 
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
-		@client.subscribe "/Activity/35/un_dispose", (info) =>
+		@client.subscribe "/Activity/un_dispose", (info) =>
 			@realtime_help(info, 'activities')
 
 	realtime_help: (info, type) ->

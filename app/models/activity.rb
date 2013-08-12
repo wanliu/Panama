@@ -103,7 +103,7 @@ class Activity < ActiveRecord::Base
   end
 
   def realtime_dispose(data = {})
-    faye_send("/Activity/35/un_dispose", data)
+    faye_send("/Activity/un_dispose", data)
   end
 
   def faye_send(channel, options)
