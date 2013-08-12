@@ -7,30 +7,20 @@ class FriendsContainerView extends ContainerView
 	initialize: () ->
 		super
 		@followers_view = new FollowersView(parent_view: @)
-
 		@set_default_view(@followers_view)
+
+		@stranger_view  = new StrangersView(parent_view: @)
 
 	set_default_view: (view) ->
 		view.seted_default()
 		@default_view = view
 
-	bind_item: () ->
+	bind_items: () ->
 		@client = Realtime.client(@faye_url)
 		@client.receive_message @token, (message) =>
 			@process_message message
 
 	process_message: (message) ->
-	# sender = @collection.find (model) ->
-	# 		model.get('follow_id') == message.send_user_id
-	# 	if sender
-	# 		@top(sender)
-	# 	else
-	# 		model = new Backbone.Model()
-	# 		model.fetch
-	# 			url: "/users/#{message.send_user_id}"
-	# 			success: (model) =>
-	# 				# @collection.add(model)
-	# 				@addStranger(model)
 		@default_view.process(message) || @stranger_view.process(message)
 
 
@@ -43,10 +33,13 @@ class FollowersView extends Backbone.View
 		</ul>'
 
 	initialize: () ->
+		@parent_view  = @options.parent_view
 		@$parent_view = $(@options.parent_view.el)
+
 		@collection = new Backbone.Collection()
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
+
 		@render()
 
 	render: () ->
@@ -59,27 +52,34 @@ class FollowersView extends Backbone.View
 
 	addAll: () ->
 		@$("ul").html('')
-		@$("h5 .num").html(@collection.length)
 		@collection.each (model) =>
 			@addOne(model)
 
 	addOne: (model) ->
+		@$("h5 .num").html(@collection.length)
 		friend_view = new FriendView({ model: model, parent_view: @ })
 		model.view  = friend_view
 		@$(".users-list").prepend(friend_view.render().el)
 
 	process: (message) ->
-		exist_model = @include(message) ->
-			model.get('follow_id') == message.send_user_id
+		exist_model = @include(message)
 		if exist_model
-			@top(sender)
+			@top(exist_model)
+			true
+		else
+			false
 
 	include: (model) ->
 		_.find @collection.models, (item) ->
 			item.get("follow_id") is model.send_user_id
 
 	top: (model) ->
-		
+		@parent_view.active()
+		friend_view = model.view
+		friend_view.remove()
+		@$("ul").prepend(friend_view.el)
+		friend_view.delegateEvents()
+		friend_view.active()
 
 class StrangersView extends Backbone.View
 	template:
@@ -90,10 +90,13 @@ class StrangersView extends Backbone.View
 		</ul>'
 
 	initialize: () ->
+		@parent_view  = @options.parent_view
 		@$parent_view = $(@options.parent_view.el)
+
 		@collection = new Backbone.Collection()
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
+
 		@render()
 
 	render: () ->
@@ -106,14 +109,45 @@ class StrangersView extends Backbone.View
 
 	addAll: () ->
 		@$("ul").html('')
-		@$("h5 .num").html(@collection.length)
 		@collection.each (model) =>
 			@addOne(model)
 
 	addOne: (model) ->
+		@$("h5 .num").html(@collection.length)
+		if @collection.length is 1 and @parent_view.$('.strangers').length is 0
+			@$parent_view.append(@el)
+
 		friend_view = new FriendView({ model: model, parent_view: @ })
 		model.view  = friend_view
 		@$(".users-list").prepend(friend_view.render().el)
+
+	process: (message) ->
+		model = new Backbone.Model()
+		model.fetch
+			url: "/users/#{message.send_user_id}"
+			success: (model) =>
+				@addStranger(model)
+
+	addStranger: (model) ->
+		exist_model = @include(model)
+		if exist_model
+			@top(sender)
+			true
+		else
+			@collection.add(model)
+			@top(model)
+
+	include: (model) ->
+		_.find @collection.models, (item) ->
+			item.id is model.id
+
+	top: (model) ->
+		@parent_view.active()
+		friend_view = model.view
+		friend_view.remove()
+		@$("ul").prepend(friend_view.el)
+		friend_view.delegateEvents()
+		friend_view.active()
 
 
 class FriendView extends Backbone.View
