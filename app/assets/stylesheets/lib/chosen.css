@@ -99,7 +99,7 @@
   z-index: 1010;
 }
 .chzn-container-single .chzn-search input {
-  background: #fff url('chosen-sprite.png') no-repeat 100% -20px;
+  background: #fff url('chosen-sprite.png') no-repeat 100% -22px;
   background: url('chosen-sprite.png') no-repeat 100% -20px -webkit-gradient(linear, 0 0, 0 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
   background: url('chosen-sprite.png') no-repeat 100% -20px -webkit-linear-gradient(top, #eeeeee 1%, #ffffff 15%);
   background: url('chosen-sprite.png') no-repeat 100% -20px -moz-linear-gradient(top, #eeeeee 1%, #ffffff 15%);

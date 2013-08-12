@@ -1,0 +1,12 @@
+<div class='row-fluid'>
+    <div class='span7 widget'>
+      <%= render  :partial => "people/base/user_information",
+      :locals => { :url => "/user_checkings/update_user_auth" } %>
+      <input type="button" class="modify pull-right" value="修改">
+   </div>
+</div>
+<script type="text/javascript">
+  $(".modify").bind("click",function(){
+    $(".user_auth").submit();
+  })
+</script>

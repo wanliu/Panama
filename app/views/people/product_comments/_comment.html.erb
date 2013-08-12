@@ -10,7 +10,7 @@
     <div class='row-fluid comment'>
       <div class='span5'>
         <div>
-          <img class="img-polaroid" src="<%=product_comment.product_item.product.photos.header %>" />
+          <img class="img-polaroid" src="<%=item.product.photos.header %>" />
         </div>
         <div class="product_name">
           商品名称：
@@ -47,7 +47,7 @@
               </div>
             </div>
             <div class='span7 comments'>
-              <% comment = product_comment.comment %>
+              <% comment = product_comment.try(:comment) %>
               <% if comment.present? %>
                 <div class='row-fluid'>
                   <div class='span2'>

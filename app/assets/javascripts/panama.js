@@ -17,6 +17,7 @@
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
 //= require lib/jquery.columnview
+//= require lib/jquery.slimscroll
 //= require lib/bootstrap-datetimepicker.min
 //= require lib/colorpicker/js/bootstrap-colorpicker
 //= require lib/depend_select
@@ -78,7 +79,7 @@ $.ajaxSetup({
   },
   error: function(xhr, error, thr){
     if(error.status == 500){
-      $.pnotify({
+      pnotify({
         title: '请求出错！',
         text: error.responseText,
         type: 'error',

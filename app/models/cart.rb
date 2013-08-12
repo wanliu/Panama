@@ -59,7 +59,7 @@ class Cart < ActiveRecord::Base
   end
 
   def shop_items
-    items.group_by { |item| {shop: item.shop, buy_state: item.buy_state} }
+    items.group_by { |item| {shop: item.shop, buy_state: item.buy_state.name} }
   end
 
   def save_transcation(shop, pro_items, people)
@@ -73,4 +73,6 @@ class Cart < ActiveRecord::Base
     transaction.items = pro_items
     transaction.save
   end
+
+  private
 end

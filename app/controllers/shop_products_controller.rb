@@ -53,10 +53,13 @@ class ShopProductsController < ApplicationController
 
   def show
     @shop_product = ShopProduct.find(params[:id])
+    @product_comments = ProductComment.where("product_id=? and shop_id=?", @shop_product.product_id, @shop_product.shop.id)
     respond_to do |format|
       format.html # show.html.erb
       format.dialog { render "show.dialog", :layout => false }
-      format.json { render json: @shop_product.as_json.merge(product: @shop_product.product.as_json) }
+      format.json { render json: @shop_product.as_json.merge(
+        product: @shop_product.product.as_json(
+          version_name: params[:version_name])) }
     end
   end
 
@@ -69,7 +72,8 @@ class ShopProductsController < ApplicationController
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
         :price => @shop_product.price,
-        :user_id => current_user,
+        :user_id => current_user.id,
+        :shop_id => @shop_product.shop_id,
         :buy_state => :guarantee
       })
       if @order.save
@@ -89,7 +93,8 @@ class ShopProductsController < ApplicationController
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
         :price => @shop_product.price,
-        :user_id => current_user,
+        :user_id => current_user.id,
+        :shop_id =>  @shop_product.shop_id,
         :buy_state => :direct
       })
       if @order.save

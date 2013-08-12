@@ -67,7 +67,9 @@ class ActivitiesController < ApplicationController
       :amount => params[:product_item][:amount],
       :title => @activity.description,
       :price => @activity.activity_price,
-      :buy_state => :guarantee
+      :buy_state => :guarantee,
+      :shop_id => @activity.shop_id,
+      :user_id => current_user.id
     })
     @transaction.items.each{|item| item.update_total }
     @transaction.save

@@ -1,0 +1,23 @@
+
+.tree-nav {
+	color: white;
+	padding: 10px 0;
+	@include transparent(rgb(51,51,51), 0.4);
+
+	li a {
+		color: inherit;
+		text-decoration: none;
+		display: block;
+		padding: 8px 20px;
+	}
+
+	li a:hover, li a:focus {
+		@include transparent(rgb(51,51,51), 0.25);
+		zoom: 1;
+	}
+
+	.tree-body {
+		// @include transition(1s);
+		padding-left: 20px;
+	}
+}

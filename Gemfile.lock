@@ -21,7 +21,7 @@ GIT
 
 GIT
   remote: git://github.com/hysios/tire.git
-  revision: 212b9ea499698d0629849045dcd55ba2b53fcd5a
+  revision: 0adc4f061ae3907606b6f7acb254eaa5a260742f
   specs:
     tire (0.6.1)
       activemodel (>= 3.0)
@@ -348,7 +348,7 @@ GEM
     mongoid-tree (1.0.1)
       mongoid (>= 3.0, <= 4.0)
     moped (1.4.2)
-    multi_json (1.7.7)
+    multi_json (1.7.8)
     multipart-post (1.2.0)
     mysql2 (0.3.11)
     nested_form (0.3.2)

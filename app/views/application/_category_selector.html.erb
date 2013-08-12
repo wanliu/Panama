@@ -1,5 +1,9 @@
-<div id="category-selector" class="nav nav-collapse collapse">
-    <ul id="forms-collapse-1" class="side-nav">
-        <%= root_category_tree %>
-    </ul>
-</div>
+    <!-- <ul id="forms-collapse-1" class="side-nav"> -->
+        <%#= root_category_tree %>
+    <!-- </ul> -->
+<%= build_menu2 Category.root %>
+
+
+<script type="text/javascript">
+	ts = new TreeSlide({el: ".tree-nav"});
+</script>

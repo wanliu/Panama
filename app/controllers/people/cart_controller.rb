@@ -21,7 +21,7 @@ class People::CartController < People::BaseController
     if @item.save
       render :json => @item.as_json.merge(:img_path => @item.photos.icon)
     else
-      render json: @item.errors, status: :unprocessable_entity
+      render json: draw_errors_message(@item), status: :unprocessable_entity
     end
   end
 
