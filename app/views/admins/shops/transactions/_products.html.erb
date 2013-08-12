@@ -1,3 +1,10 @@
+<fieldset>
+  <legend class="section">商品信息
+    <span class='pull-right'>
+      合计(包含运费): <%=number_to_currency(transaction.stotal) %>
+    </span>
+  </legend>
+
 <div class='products'>
   <table class="table table-striped table-images">
     <thead>
@@ -16,9 +23,6 @@
           <div class="btn-group">
             <%= link_to 'javascript:void(0)', :class => "btn detials download " do %>
               <%= icon :download %>
-            <% end %>
-            <%= link_to 'javascript:void(0)', :class => "btn print" do %>
-              <%= icon :print %>
             <% end %>
           </div>
 
@@ -47,19 +51,11 @@
     </tr>
     <% end %>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan='5' class='stotal'>
-          合计(包含运费): <%=number_to_currency(transaction.stotal) %>
-        </td>
-      </tr>
-    </tfoot>
   </table>
-
   <div class='print_display'>
   </div>
 </div>
-
+</fieldset>
 <script type="text/javascript">
   $(document).ready(function(){
     new OrderExport({

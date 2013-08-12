@@ -782,7 +782,7 @@ ul {
 	.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
 		// border: 1px solid #dddddd;
 		// border-color: transparent;
-	}	
+	}
 
 	.nav-tabs > .active > a {
 		background-color: white;
@@ -810,4 +810,12 @@ h2 small {
   margin-bottom: 10px;
   padding: 10px;
   background-color: rgba(51, 51, 51, 0.4);
+}
+
+.section {
+	font-size: 14px;
+	color: #d7d7d7;
+	vertical-align: middle;
+	line-height: 30px;
+	padding: 10px 0 0;
 }
