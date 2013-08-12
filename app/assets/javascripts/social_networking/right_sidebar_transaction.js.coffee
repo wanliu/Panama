@@ -21,7 +21,7 @@ class TransactionView extends ContainerView
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>
 			model = info.value
-			if info.type == "OrderTransaction"
+			if info.type == "OrderTransaction" || info.type == "OrderRefund"
 				@collection.add(model)
 				@top(model)
 
