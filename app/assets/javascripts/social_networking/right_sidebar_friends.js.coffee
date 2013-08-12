@@ -21,7 +21,7 @@ class FriendsContainerView extends ContainerView
 			@process_message message
 
 	process_message: (message) ->
-		@default_view.process(message) || @stranger_view.process(message)
+		@followers_view.process(message) || @stranger_view.process(message)
 
 
 class FollowersView extends Backbone.View
