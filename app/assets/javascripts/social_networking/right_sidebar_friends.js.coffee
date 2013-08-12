@@ -48,6 +48,9 @@ class FollowersView extends Backbone.View
 	seted_default: () ->
 		@is_default_view = true
 		@$parent_view.append(@el)
+		@init_fetch()
+
+	init_fetch: () ->
 		@collection.fetch(url: "/users/followings")
 
 	addAll: () ->
@@ -81,7 +84,7 @@ class FollowersView extends Backbone.View
 		friend_view.delegateEvents()
 		friend_view.active()
 
-class StrangersView extends Backbone.View
+class StrangersView extends FollowersView
 	template:
         '<h5 class="tab-header strangers">
 			<i class="icon-group"></i> 陌生人[<span class="num">0</span>]
@@ -89,37 +92,35 @@ class StrangersView extends Backbone.View
 		<ul class="notices-list users-list strangers">
 		</ul>'
 
-	initialize: () ->
-		@parent_view  = @options.parent_view
-		@$parent_view = $(@options.parent_view.el)
+	# initialize: () ->
+	# 	@parent_view  = @options.parent_view
+	# 	@$parent_view = $(@options.parent_view.el)
 
-		@collection = new Backbone.Collection()
-		@collection.bind('reset', @addAll, @)
-		@collection.bind('add', @addOne, @)
+	# 	@collection = new Backbone.Collection()
+	# 	@collection.bind('reset', @addAll, @)
+	# 	@collection.bind('add', @addOne, @)
 
-		@render()
+	# 	@render()
 
-	render: () ->
-		$(@el).html(@template)
+	# render: () ->
+	# 	$(@el).html(@template)
 
-	seted_default: () ->
-		@is_default_view = true
-		@$parent_view.append(@el)
+	# seted_default: () ->
+	# 	@is_default_view = true
+	# 	@$parent_view.append(@el)
 		# @collection.fetch(url: "/users/followings")
 
-	addAll: () ->
-		@$("ul").html('')
-		@collection.each (model) =>
-			@addOne(model)
+	init_fetch: () ->
+
+	# addAll: () ->
+	# 	@$("ul").html('')
+	# 	@collection.each (model) =>
+	# 		@addOne(model)
 
 	addOne: (model) ->
-		@$("h5 .num").html(@collection.length)
 		if @collection.length is 1 and @parent_view.$('.strangers').length is 0
 			@$parent_view.append(@el)
-
-		friend_view = new FriendView({ model: model, parent_view: @ })
-		model.view  = friend_view
-		@$(".users-list").prepend(friend_view.render().el)
+		super
 
 	process: (message) ->
 		model = new Backbone.Model()
@@ -141,14 +142,13 @@ class StrangersView extends Backbone.View
 		_.find @collection.models, (item) ->
 			item.id is model.id
 
-	top: (model) ->
-		@parent_view.active()
-		friend_view = model.view
-		friend_view.remove()
-		@$("ul").prepend(friend_view.el)
-		friend_view.delegateEvents()
-		friend_view.active()
-
+	# top: (model) ->
+	# 	@parent_view.active()
+	# 	friend_view = model.view
+	# 	friend_view.remove()
+	# 	@$("ul").prepend(friend_view.el)
+	# 	friend_view.delegateEvents()
+	# 	friend_view.active()
 
 class FriendView extends Backbone.View
 	tagName: 'li'
