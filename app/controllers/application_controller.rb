@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   end
 
   # 绑定登陆和服务选择(买家，卖家？)
-  def login_and_service_required
+  def login_and_service_required    
     if !current_user
       login_required
     elsif current_user.services.empty?

@@ -21,7 +21,7 @@ class Notification < ActiveRecord::Base
     FayeClient.send("/notification/#{ user.im_token}", {
       count: count, 
       type: targeable_type, 
-      value: targeable.as_json.merge(:url => self.url)
+      value: self
     })
   end
 

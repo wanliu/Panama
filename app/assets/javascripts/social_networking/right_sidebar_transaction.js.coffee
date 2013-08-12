@@ -2,10 +2,7 @@
 root = window || @
 class TransactionView extends ContainerView
 
-	template2: "<li><div class='user-info'>你订单{{number}}已经{{state_title}},点击
-							<a href='{{url}}'>这里</a>
-							 查看详情</div></li>"
-	template1: "<li><p><i class=' icon-volume-up'></i>&nbsp;你的订单{{number}}买家已经{{state_title}},点击
+	template1: "<li><p><i class=' icon-volume-up'></i>{{body}},点击
 	 						<a href='{{url}}'>这里</a>
 	 						 查看详情<p></li>"
 
@@ -33,18 +30,22 @@ class TransactionView extends ContainerView
 		$('body').append(@talking_message_modal)
 
 	bind_items: () ->
-		# @collection = new Backbone.Collection(url: "/notifications")
-		# @collection.bind('reset', @addAll, @)
+		@collection = new Backbone.Collection
+		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
+		@collection.fetch(url: "/people/#{@current_user_login}/notifications")
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>	
-			@collection.add(info.value)
+			@collection.add(info.value) if info.type == "OrderTransaction"
+			 	
 
-	# addAll: (collecton) ->
-	# 	@collection.each (model) =>
-	# 		@addOne(model)
+	addAll: (collecton) ->
+	 	@collection.each (model) =>
+	 		if model.attributes.targeable_type == "OrderTransaction"
+	 			@addOne(model)
 
 	addOne: (model) ->
+		debugger
 		row_item = Hogan.compile(@template1)
 		@$('ul').append(row_item.render(model.toJSON()))
 		
