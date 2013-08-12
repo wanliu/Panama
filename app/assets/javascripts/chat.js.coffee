@@ -6,3 +6,4 @@
 #= require lib/hogan
 #= require lib/postmessage
 #= require message
+#= require chats/chat
