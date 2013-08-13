@@ -18,9 +18,10 @@ class CategoryController < ApplicationController
     @category = Category.find(params[:id])
     @shop_products = Shop.find(params[:shop_id]).shop_products
     if @shop_products.present?
-      @products = Product.where("category_id in (?) and id not in (?)", @category.descendants.map { |c| c.id },@shop_products.map{|s| s.product_id})
+      @products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
     else
-      @products = Product.where("category_id in (?) ", @category.descendants.map { |c| c.id })
+      @products = Product.where("category_id =? ", @category.id )
+      # @products = Product.where("category_id in (?) ", @category.descendants.map { |c| c.id })
     end
 
     respond_to do |format|

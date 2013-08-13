@@ -5,12 +5,12 @@ class root.WizardView extends Backbone.View
   @category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
 
   events:
-    "click .second_class_category_tree a" : "get_category_products"
-    "click .add_to_select" : "get_products_infor"
+    "click .leaf_node" : "get_category_products"
+    "click .add_to_shop" : "add_to_shop"
     "click .edit" : "edit_table"
     "click .delete_product" : "delete_product"
     "click .deleteAll" : "deleteAll"
-    "click .select_all" : "selectAll"
+    "click .product_list > li" : "select_many"
 
   edit_table: (event) ->
     return if $(event.target.className).is('.input')
@@ -31,10 +31,7 @@ class root.WizardView extends Backbone.View
 
   get_category_products: (event) ->
     shop_id = @options.shop_id
-    $body = $(event.target).parents(".accordion-body")
-    $body.removeClass("in").attr("style", "")
     @url =  event.target.attributes.href.value + "/products"
-
     category_product_template = @options['category_product_template'] || @category_product_template
     @category_product_tpl ||= Hogan.compile(category_product_template)
 
@@ -63,10 +60,10 @@ class root.WizardView extends Backbone.View
     })
     false
 
-  get_products_infor: () ->
+  add_to_shop: () ->
     product_ids = []
-    $("select[name=product] option:selected").each () ->
-      product_ids.push($(this).val())
+    $(".checked_product").each () ->
+      product_ids.push($(this).attr("id"))
       $(this).remove()
     @render_product_infor(product_ids)
 
@@ -86,11 +83,12 @@ class root.WizardView extends Backbone.View
         alert(messager)
     })
 
-  selectAll : () ->
-    $("input[type=checkbox]").each(() ->
-      $(this).attr("checked",!this.checked);
-    )
-    false
+  select_many : (event) ->
+    el = $(event.currentTarget)
+    if el.hasClass('checked_product')
+      el.removeClass("checked_product")  
+    else
+      el.addClass("checked_product")
 
   deleteAll: () ->
     $('input[type="checkbox"]:checked').each((i,el) =>
