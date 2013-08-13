@@ -8,6 +8,10 @@ class AskBuy < ActiveRecord::Base
   has_many :comments, :as => :targeable
 
   validates :user, :presence => true
+  validates :title, :presence => true
+  validates :price, :numericality => true
+  validates :amount, :presence => true, :numericality => { :greater_than => 0 }
+
 
   define_graphical_attr :photos, :handler => :default_photo
 

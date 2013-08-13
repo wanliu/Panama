@@ -2,7 +2,7 @@
 address: 0.0.0.0
 pid: tmp/pids/thin.pid
 timeout: 120
-port: 8080
+port: 9292
 log: log/thin.log
 max_conns: 20480
 require: []

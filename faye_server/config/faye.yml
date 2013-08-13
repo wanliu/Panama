@@ -1,0 +1,16 @@
+defaults: &defaults
+  faye_token:
+    - "panama_e891dbec62c031f1754b3324530ae095"
+    - "neza_8a2fb2585a738ffd6fea5f636ecf8205"
+  redis_port: 6379
+  redis_server: "127.0.0.1"
+  redis_key_prefix: "online_user_"
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
