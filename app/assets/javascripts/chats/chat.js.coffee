@@ -12,10 +12,11 @@ class ChatMessage extends Backbone.Model
       success: callback
     )
 
-  read: (friend_id, callback = (message) -> ) ->
+  read: (friend_id, token, callback = (message) -> ) ->
     @fetch(
       url: "#{@urlRoot}/read/#{friend_id}",
       type: "POST",
+      data: {authenticity_token: token}
       success: callback
     )
 
@@ -172,6 +173,8 @@ class window.ChatView extends Backbone.View
     @state_el.addClass(@off_class).removeClass(@on_class)
 
   read_friend_messsage: () ->
-    @msg_view.read(@friend.id)
+    data = @form_data()
+    token = data.authenticity_token
+    @msg_view.read(@friend.id, token)
 
 root.ChatView = ChatView
