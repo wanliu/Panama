@@ -23,7 +23,6 @@ class Activities::AuctionController < Activities::BaseController
         Attachment.find_by(:id => v)
       end.compact
     end
-
     if params[:activity][:activity_price]
       @activity.activity_rules.build(name: 'activity_price',
                                      value_type: 'dvalue',
