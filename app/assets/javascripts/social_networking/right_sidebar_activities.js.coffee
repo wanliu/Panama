@@ -25,7 +25,7 @@ class ActivitiesContainerView extends RealTimeContainerView
     $(@el).prepend('<h5 class="tab-header"><i class="icon-star"></i>活动消息</h5>')
 
   bind_items: () ->
-    @urlRoot = "people/#{@current_user_login}/notifications"
+    @urlRoot = "/people/#{@current_user_login}/notifications"
     @collection = new Backbone.Collection()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
@@ -83,11 +83,9 @@ class ActivityNoticeView extends Backbone.View
 
   remove: () ->
     $.ajax(
-      url: "#{@model.url}/enter"
       type: "GET",
       dataType: "json",
-      success: =>
-
+      url: "#{@model.url}/enter"
     )
     super
 
