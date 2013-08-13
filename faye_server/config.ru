@@ -7,7 +7,7 @@ require 'logger'
 
 Faye::WebSocket.load_adapter('thin')
 
-config = YAML.load_file("config/application.yml")[ENV['RACK_ENV']]
+config = YAML.load_file("config/faye.yml")[ENV['RACK_ENV']]
 _tokens = config["faye_token"]
 
 FAYE_TOKENS = _tokens.is_a?(String) ?  [_tokens] : _tokens
