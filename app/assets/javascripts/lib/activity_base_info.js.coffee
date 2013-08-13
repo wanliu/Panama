@@ -17,6 +17,8 @@ class root.ActivityBaseInfoView extends Backbone.View
       template: "",
 
       input_name: "activity[attachment_ids]",
+
+      data: []
     }
   }
 
@@ -24,6 +26,9 @@ class root.ActivityBaseInfoView extends Backbone.View
 
   initialize: (options) ->
     _.extend(@upload_options , @default_options.params, options.params)
+
+    if @upload_options.data.length > 0
+      @load_attachments(@upload_options.data)
 
   fetch_product: (shop_product_id) ->
     $.ajax

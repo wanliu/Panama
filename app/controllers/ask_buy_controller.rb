@@ -12,13 +12,13 @@ class AskBuyController < ApplicationController
   def create
     @product = Product.find_by(:name => params[:ask_buy][:title])
     params[:ask_buy][:product_id] = @product.id if @product.present?
+    attachment_ids = params[:ask_buy].delete(:attachment_ids)
     @ask_buy = AskBuy.new(params[:ask_buy])
     @ask_buy.user_id = current_user.id
-    if @ask_buy.attachments.present?
-      @ask_buy.attachments = params[:ask_buy][:attachment_ids].map do | k,v |
-        Attachment.find_by(:id => v)
-      end.compact
-    end
+    @ask_buy.attachments = attachment_ids.map do | k,v |
+      Attachment.find_by(:id => v)
+    end.compact
+
     respond_to do |format|
       if @ask_buy.save
         format.json{ render :json => @ask_buy }

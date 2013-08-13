@@ -1,14 +1,6 @@
 <!-- 竞价 -->
 <%= simple_form_for @activity, :remote => true, :url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction'}, :type => :json do |f| %>
 
-  <%#= f.input :shop_product,
-              :label => "商品1",
-              :input_html => {
-                  class: :typeahead,
-                  placeHolder: '商品名称...',
-                  autocomplete: 'off',
-                  required: true
-              } %>
   <%= f.input :shop_product_id,
               :collection => [],
               :input_html => {
@@ -51,12 +43,14 @@
               input_html: { name: 'activity[end_time]' } %>
 
   <script type="text/javascript">
+    var data = <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
     var activity_view = new ActivityBaseInfoView({
       el: $(".form_activity_auction"),
       params: {
         url_upload: "<%=attachments_path %>",
         default_img_url: "<%=default_img_url('100x100') %>",
-        template: '<%=j render "product_upload" %>'
+        template: '<%=j render "product_upload" %>',
+        data: data
       }
     });
 
