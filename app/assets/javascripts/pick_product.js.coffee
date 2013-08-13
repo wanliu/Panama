@@ -7,25 +7,25 @@ class root.WizardView extends Backbone.View
   events:
     "click .leaf_node" : "get_category_products"
     "click .add_to_shop" : "add_to_shop"
-    "click .edit" : "edit_table"
+    "click .label-default" : "edit_shop_product"
     "click .delete_product" : "delete_product"
     "click .deleteAll" : "deleteAll"
     "click .product_list > li" : "select_many"
 
-  edit_table: (event) ->
-    return if $(event.target.className).is('.input')
-    td = $(event.target)
-    tr = td.parent()
+  edit_shop_product: (event) ->
+    return if $(event.currentTarget.className).is('.input')
+    area = $(event.currentTarget).text()
+    li = area.parent()
 
-    td.addClass('input')
+    area.addClass('input')
       .html("<input type='text' value='#{td.text()}' />")
       .find('input')
       .focus()
       .blur(() ->
-        $(this).parent().removeClass('input').html($(this).val() || 0)
-        id = tr.attr("id")
-        field = td.attr("class")
-        value = td.text()
+        $(this).removeClass('input').html($(this).val() || 0)
+        id = li.attr("id")
+        field = area.attr("class")
+        value = area.text()
         update_product(id, field, value)
       )
 
