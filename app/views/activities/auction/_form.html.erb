@@ -9,7 +9,6 @@
                   autocomplete: 'off',
                   required: true
               } %>
-
   <%= f.input :shop_product_id,
               :collection => [],
               :input_html => {
@@ -75,6 +74,9 @@
       allow_single_deselect : true,
       placeholder_text : "选择一个商品",
       no_results_text : "没有以该关键词开头的商品",
+      <% if @activity.shop_product.present? %>
+      data: [{id: <%= @activity.shop_product_id %>, name: "<%= @activity.shop_product.name %>"}],
+      <% end %>
       remote: {
         url: "/search/shop_products",
         dataType: "json"

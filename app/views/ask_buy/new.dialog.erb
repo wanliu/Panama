@@ -58,6 +58,9 @@
       allow_single_deselect : true,
       placeholder_text : "选择一个商品",
       no_results_text : "没有以该关键词开头的商品",
+      <% if @ask_buy.product.present? %>
+      data: [{id: <%= @ask_buy.product_id %>, name: "<%=@ask_buy.product.name %>"}]
+      <% end %>
       remote: {
         url: "/product_search",
         dataType: "json"
