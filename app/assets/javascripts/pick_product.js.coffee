@@ -10,21 +10,22 @@ class root.WizardView extends Backbone.View
     "click .label-default" : "edit_shop_product"
     "click .delete_product" : "delete_product"
     "click .deleteAll" : "deleteAll"
-    "click .product_list > li" : "select_many"
+    "click .category_product_list > li" : "select_many"
+    "click .select_all" : "select_all"
 
   edit_shop_product: (event) ->
     return if $(event.currentTarget.className).is('.input')
-    area = $(event.currentTarget).text()
+    area = $(event.currentTarget)
     li = area.parent()
 
     area.addClass('input')
-      .html("<input type='text' value='#{td.text()}' />")
+      .html("<input type='text' value='#{area.text()}' />")
       .find('input')
       .focus()
       .blur(() ->
-        $(this).removeClass('input').html($(this).val() || 0)
-        id = li.attr("id")
-        field = area.attr("class")
+        area.removeClass('input').html($(this).val() || 0).append("<i class='icon-edit'></i>")
+        id = li.parent().attr("id")
+        field = area
         value = area.text()
         update_product(id, field, value)
       )
@@ -68,7 +69,7 @@ class root.WizardView extends Backbone.View
     @render_product_infor(product_ids)
 
   update_product = (product_id, field, value) ->
-    data = if field is "price edit"
+    data = if field.hasClass("price")
       shop_product:
         price: value
     else
@@ -90,12 +91,26 @@ class root.WizardView extends Backbone.View
     else
       el.addClass("checked_product")
 
-  deleteAll: () ->
-    $('input[type="checkbox"]:checked').each((i,el) =>
-      tr = $(el).parents("tr")
-      product_id = $(el).parents("tr").attr("id")
-      @delete_product(tr,product_id)
-    )
+  select_all : ()->
+    if $(".select_all").text() == "全选"
+      $(".category_product_list .product_item").each(()->
+        if !$(this).hasClass("checked_product")
+          $(this).addClass("checked_product")
+      )
+      $(".select_all").text("取消")
+    else
+      $(".category_product_list .product_item").each(()->
+        if $(this).hasClass("checked_product")
+          $(this).removeClass("checked_product")
+      )
+      $(".select_all").text("全选")
+
+  # deleteAll: () ->
+  #   $('input[type="checkbox"]:checked').each((i,el) =>
+  #     tr = $(el).parents("tr")
+  #     product_id = $(el).parents("tr").attr("id")
+  #     @delete_product(tr,product_id)
+  #   )
 
   delete_product: (tr,product_id) =>
     if $(event.target).attr("class") is 'delete_product'

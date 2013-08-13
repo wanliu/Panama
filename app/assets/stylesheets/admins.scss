@@ -177,7 +177,7 @@ $left-side-admin-width: 160px;
 }
 
 .checked_product{
-  @include transparent(rgb(51,51,51), 0.25);
+  background-color: rgba(51, 51, 51, 0.6);
   border-left: 2px solid $blue;
 }
 

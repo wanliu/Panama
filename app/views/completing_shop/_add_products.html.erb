@@ -39,10 +39,12 @@
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
 			</ul>
 			<div class='buttons'>
-				<%= link_to '#', :class => 'btn add_to_shop' do %>
+				<%= link_to '#', :class => 'btn add_to_shop pull-right' do %>
 				<%= icon 'arrow-right' %>
 				<% end %>
+				<button class='btn select_all'>全选</button>
 			</div>
+
 		</div>
 
 
@@ -80,8 +82,8 @@
 
 				<!--<span>单价 <input name='price' type='number' value='{{ price }}'/></span>-->
 				<!--<span>库存 <input name='inventory' type='number' value='{{ inventory }}'/></span>-->
-				<section> 单价 <span class='label label-default'>{{ price }} <i class='icon-edit'></i></span></section>
-				<section> 库存 <span class='label label-default'>{{ inventory }} <i class='icon-edit'></i></span></section>
+				<section> 单价 <span class='label label-default price'>{{ price }} <i class='icon-edit'></i></span></section>
+				<section> 库存 <span class='label label-default inventory'>{{ inventory }} <i class='icon-edit'></i></span></section>
 			</li>
 		</script>
 
