@@ -38,34 +38,16 @@
 </div>
 
 <script type="text/javascript">
-	window.right_sidebar = window.right_sidebar || new RightSideBar({el: ".right-sidebar"});
+	RealTimeContainerView.bind_runtime({
+		realtime_url: '<%= faye_server_uri %>',
+		token: '<%= current_user.im_token %>',
+		current_user_login: '<%= current_user.login %>'
+	});
 
-	var activities_message_view = {
-		top : {klass: "icon-star", tool_tip: "活动消息" },
-		container_view: ActivitiesContainerView.extend({
-			realtime_url: '<%= faye_server_uri %>',
-			token: '<%= current_user.im_token %>',
-			current_user_login: '<%= current_user.login %>'
-		}),
-	};
-	right_sidebar.register(activities_message_view); 
+	window.right_sidebar ||
+	(window.right_sidebar = new RightSideBar({el: ".right-sidebar"}));
 
-	var transaction_message_view = {
-		top : {klass: "icon-edit", tool_tip: "交易消息" },
-		container_view: TransactionView.extend({
-			realtime_url: '<%= faye_server_uri %>',
-			token: '<%= current_user.im_token %>',
-			current_user_login: '<%= current_user.login %>'
-		}),
-	};
-	right_sidebar.register(transaction_message_view);
-
-	var friends_message_view = {
-		top : {klass: "icon-group", tool_tip: "show messages" },
-		container_view : FriendsContainerView.extend({
-			faye_url: "<%= faye_server_uri %>",
-			token: "<%= current_user.im_token %>"
-		})
-	};
-	right_sidebar.register(friends_message_view);
+	right_sidebar.register(ActivitiesContainerView,
+						   TransactionView,
+						   FriendsContainerView);
 </script>

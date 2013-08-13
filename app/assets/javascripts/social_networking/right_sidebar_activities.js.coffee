@@ -1,7 +1,10 @@
 root = (window || @)
 
-class ActivitiesContainerView extends ContainerView
-  
+class ActivitiesContainerView extends RealTimeContainerView
+  top_tip:
+    klass   : "icon-star"
+    tool_tip: "活动消息"
+
   initialize: (options) ->
     _.extend(@, options)
     @bind_realtime()

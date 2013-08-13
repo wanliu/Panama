@@ -1,6 +1,9 @@
 #= require lib/realtime_client
 root = window || @
-class TransactionView extends ContainerView
+class TransactionView extends RealTimeContainerView
+	top_tip:
+		klass   : "icon-edit"
+		tool_tip: "交易消息"
 
 	template: () -> ""
 

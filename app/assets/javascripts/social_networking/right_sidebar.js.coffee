@@ -24,13 +24,14 @@ class RightSideBar extends Backbone.View
 		$(@el).html(@template())
 		@register_counter = 0
 
-	register: (container) ->
-		container_id      = _.uniqueId('sidebar_')
-		container_options = _.extend(container, { id: container_id, parent_view: @ })
-		container_view    = new container.container_view(container_options)
-		@add_top(container, container_id)
-		@add_container(container_view)
-		container_view.active() unless @any_active_view()
+	register: (containers...) ->
+		for container in containers
+			container_id      = _.uniqueId('sidebar_')
+			container_options = { id: container_id, parent_view: @ }
+			container_view    = new container(container_options)
+			@add_top(container_view, container_id)
+			@add_container(container_view)
+			container_view.active() unless @any_active_view()
 
 	toggleIcons: (e) ->
 		$("body").addClass('right-mini')
@@ -41,7 +42,7 @@ class RightSideBar extends Backbone.View
 		$(window).trigger('resize')
 
 	add_top: (container, id)->
-		top = container.top || {}
+		top = container.top_tip || {}
 		top_li = @$('ul.nav-tabs').append(
 			"<li>
 				<a href='##{ id }' data-toggle='tab'>
@@ -101,5 +102,13 @@ class ContainerView extends Backbone.View
 	bind_items: () ->
 
 
-root.RightSideBar = RightSideBar
+class RealTimeContainerView extends ContainerView
+
+RealTimeContainerView.bind_runtime = (options) ->
+	_.extend(@prototype, options)
+
+
+
+root.RightSideBar  = RightSideBar
 root.ContainerView = ContainerView
+root.RealTimeContainerView = RealTimeContainerView

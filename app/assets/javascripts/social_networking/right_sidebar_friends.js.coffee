@@ -1,6 +1,10 @@
 root = (window || @)
 
-class FriendsContainerView extends ContainerView
+class FriendsContainerView extends RealTimeContainerView
+	top_tip:
+		klass   : "icon-group"
+		tool_tip: "show messages"
+
 	template: () ->
 		""
 
@@ -16,7 +20,7 @@ class FriendsContainerView extends ContainerView
 		@default_view = view
 
 	bind_items: () ->
-		@client = Realtime.client(@faye_url)
+		@client = Realtime.client(@realtime_url)
 		@client.receive_message @token, (message) =>
 			@process_message message
 

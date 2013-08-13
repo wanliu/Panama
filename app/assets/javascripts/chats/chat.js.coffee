@@ -120,12 +120,13 @@ class MessageViewList extends Backbone.View
 
     @content_el.scrollTop(mheight-pheight)
 
-class window.ChatView extends Backbone.View
+class ChatView extends Backbone.View
   on_class: "online",
   off_class: "offline",
   display_state: true,
   initialize: () ->
     @init_el()
+    @form = @$("form")
     @msg_view = new ChatMessage()
     @msgs_view = new MessageViewList(el: @$content_panel)
 
@@ -172,8 +173,15 @@ class window.ChatView extends Backbone.View
   offline: (friend_id) ->
     @state_el.addClass(@off_class).removeClass(@on_class)
 
+  form_data: () ->
+    data = {}
+    inputs = @form.serializeArray()
+    _.each inputs, (input) =>
+      data[input.name] = input.value
+    data
+
   read_friend_messsage: () ->
-    data = @form_data()
+    data  = @form_data()
     token = data.authenticity_token
     @msg_view.read(@friend.id, token)
 
