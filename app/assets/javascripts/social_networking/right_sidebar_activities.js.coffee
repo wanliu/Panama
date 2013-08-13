@@ -43,6 +43,7 @@ class ActivitiesContainerView extends ContainerView
     model = @collection.get(id)
     @collection.remove model if model?   
 
+
 class ActivityNoticeView extends Backbone.View
   tagName: 'li'
   template: _.template(

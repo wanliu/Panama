@@ -164,7 +164,6 @@ Panama::Application.routes.draw do
       post 'unlike'
       post 'to_cart'
       post 'join'
-      get 'notice'
     end
   end
 
