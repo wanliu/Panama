@@ -33,12 +33,12 @@ class Activity < ActiveRecord::Base
   after_create :notice_user, :notice_new_activity
 
   def notice_user
-    notifications.create!(
+    notifications.create!({
       :user_id => author.id,
       :mentionable_user_id => User.last.id,
       :url => "/activities/#{id}",
-      :body => "有新活动发布")
-    notice_new_activity()
+      :body => "有新活动发布"
+    })
   end
 
   def init_data
