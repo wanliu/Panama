@@ -96,6 +96,14 @@ class MyCart extends Backbone.View
 			@total_amounts()
 			@totals_money()
 			pnotify(title: "系统提醒", text: "加入购物成功！")
+		.fail (data) ->
+			try
+				messages = JSON.parse(data.responseText)
+				pnotify(title: "出错了", text: messages.join(), type: "error")
+			catch error
+				pnotify(title: "出错了", text: data, type: "error")
+
+
 
 	total_amounts: () ->
 		trs = @$(".cart_main tr")

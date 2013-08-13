@@ -39,7 +39,7 @@ module CategoryHelper
   def li_begin_of(category)
   		"<li class='accordion-group'>
 	      <a class='accordion-toggle collapsed' data-toggle='collapse' data-parent='#forms-collapse-#{ category.parent.id }' href='#forms-collapse-#{ category.id }'>
-	        <i class='icon-edit'></i>
+	        <i class='icon-caret-right'></i>
 	        <span class='name'> #{ category.name } </span>
 	      </a>"
   end

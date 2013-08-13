@@ -14,9 +14,11 @@ class AskBuyController < ApplicationController
     params[:ask_buy][:product_id] = @product.id if @product.present?
     @ask_buy = AskBuy.new(params[:ask_buy])
     @ask_buy.user_id = current_user.id
-    @ask_buy.attachments = params[:ask_buy][:attachment_ids].map do | k,v |
-      Attachment.find_by(:id => v)
-    end.compact
+    if @ask_buy.attachments.present?
+      @ask_buy.attachments = params[:ask_buy][:attachment_ids].map do | k,v |
+        Attachment.find_by(:id => v)
+      end.compact
+    end
     respond_to do |format|
       if @ask_buy.save
         format.json{ render :json => @ask_buy }

@@ -190,7 +190,7 @@ class TransactionCardBase extends AbstructStateView
     , 1300
 
   notify: (title, message, type) ->
-    $.pnotify({
+    pnotify({
       title: title,
       text: message,
       type: type

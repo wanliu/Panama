@@ -19,7 +19,7 @@
 @import "modal";
 @import "stream_item";
 @import "responsive-stream";
-// @import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
+//@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
 @import "./lib/notify/pnotify";
 @import 'ask_buy';
 
@@ -51,4 +51,50 @@
 	@include background-clip(padding-box);
 	outline: none;
 	margin-bottom: 20px;
+}
+// comments and reply
+
+.big_comments_and_reply {
+	text-align: left;
+	.comments {
+		.comment {
+			padding: 0px 20px 10px 60px;
+			min-height: 60px;
+			.people-image {
+				margin-left: -60px;
+				float: left;
+				width: 50px;
+				height: 50px;
+			}
+
+			.author-name {
+				font-size: 16px;
+				font-weight: bold;
+			}
+
+
+		}
+	}
+
+	.reply_form {
+		padding: 0px 20px 10px 60px;
+		.user-info {
+			margin-left: -60px;
+			float: left;
+			width: 50px;
+			height: 50px;
+		}
+
+		.message {
+			textarea {
+				width: 100%;
+			}
+		}
+	}
+}
+
+.form_activity_auction, .form_ask_buy{
+	.chzn-container .chzn-results{
+		max-height: 250px;
+	}
 }

@@ -1,17 +1,18 @@
 
 table.followers{
 
-	thead{
+  thead{
 
-		.title{
-			width: 90%;
-		}
-	}
+    .title{
+      width: 90%;
+      text-align: left;
+    }
+  }
 
-	tbody{
+  tbody{
 
-		td{
-			vertical-align: middle;
-		}
-	}
+    td{
+      vertical-align: middle;
+    }
+  }
 }

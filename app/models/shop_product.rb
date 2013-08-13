@@ -43,10 +43,12 @@ class ShopProduct < ActiveRecord::Base
   end
 
   delegate :photos, :to => :product
+  delegate :name, :to => :product
 
   def as_json(*args)
     attra = super *args
     attra["name"] = product.name
+    attra["url"] = product.photos.icon
     attra
   end
 

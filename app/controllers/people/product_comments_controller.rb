@@ -17,8 +17,10 @@ class People::ProductCommentsController < People::BaseController
     respond_to do |format|
       @product_comment = ProductComment.new(params[:product_comment].merge(product_item: @item))
       if @product_comment.save
-        @comment = @product_comment.comments.create(
+        @comment = Comment.new(
           :content => content, :user_id => current_user.id)
+        @comment.targeable = @product_comment
+        @comment.save
         format.json{ render :json => @comment  }
       else
         format.json{ render :json => draw_errors_message(@product_comment), :status => 403 }

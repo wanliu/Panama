@@ -15,6 +15,8 @@
 @import './lib/typeahead';
 @import 'product_comment';
 @import 'ask_buy';
+@import 'lib/transparent';
+@import 'lib/tree_slide';
 @import 'admins/shops/shop_banks';
 @import 'direct_transaction';
 
@@ -107,4 +109,98 @@ $left-side-admin-width: 160px;
   .product-comment{
     @include panel-background;
   }
+}
+
+#category-selector .side-nav li i[class*=icon] {
+  float: left;
+}
+
+.panel {
+  padding-top: 10px;
+  @include transparent(rgb(51,51,51), 0.4);
+  h4 {
+    margin: 0 10px 10px 10px;
+  }
+
+  .info {
+    margin: 10px;
+  }
+
+  .search-form {
+    margin: 0px 10px 0px 10px;
+  }
+}
+
+
+
+.product_list {
+  // @include border-radius(1px);
+  color: #f8f8f8;
+  // padding: 10px;
+  // overflow-y: auto;
+
+}
+
+.product_item:nth-child(odd) {
+  // @include transparent(rgb(51,51,51), 0.25);
+}
+
+.product_item {
+  padding: 10px 10px 10px 70px;
+  border-top: 1px solid #222;
+  border-top: 1px solid rgba(51,51,51,0.25);
+  border-left: 2px solid transparent;
+  .product_img {
+    width: 50px;
+    float: left;
+    margin-left: -60px;
+  }
+
+  input {
+    width: 50px;
+    display: inline-block;
+  }
+
+  section {
+    display: inline-block;
+    .label:hover {
+      background: $grayLighter;
+      color: $black;
+    }
+  }
+
+
+  &:hover {
+    @include transparent(rgb(51,51,51), 0.25);
+    border-left: 2px solid $blue;
+  }
+}
+
+.dialog_product .nav-tabs {
+  border-bottom: none;
+  margin-bottom: 2px;
+
+}
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+  @include transparent(rgb(51,51,51), 0.4);
+}
+
+.search-header {
+  @include transparent(rgb(51,51,51), 0.4);
+  padding: 10px 25px 0 25px;
+  form {
+    margin: 0px;
+
+    .input-append {
+      margin-bottom: 0px;
+    }
+  }
+}
+
+
+.nav .user_icon {
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
 }

@@ -1,3 +1,4 @@
+# encoding : utf-8
 require 'panama_core'
 
 class Product < ActiveRecord::Base
@@ -8,6 +9,8 @@ class Product < ActiveRecord::Base
   # include Redis::Search
   include Tire::Model::Search
   include Tire::Model::Callbacks
+
+  validates :emc13, format: { with: /^\d{13,}$/, message: "请输入真实有效emc13码，只能是13位数字" }
 
   attr_accessible :description,
                   :name,
@@ -178,6 +181,7 @@ class Product < ActiveRecord::Base
   def as_json(*args)
     options = args.extract_options!
     attrs = super *args
+    attrs["url"] = photos.icon
     attrs["attachments"] = format_attachment(options[:version_name]) unless options[:only]
     attrs
   end

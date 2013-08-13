@@ -74,10 +74,60 @@
           <div class='row-fluid' style='margin-top: 20px'>
             <div class='span12'>
               <ul class="nav nav-tabs">
-                <li class="active"><a href="#">商品详细</a></li>
-                <li><a href="#">评论</a></li>
-                <li><a href="#">Messages</a></li>
+                <li class="active">
+                  <a href="#details" data-toggle="tab">
+                    商品详细
+                  </a>
+                </li>
+                <li>
+                  <a href="#comment" data-toggle="tab">
+                    评论
+                  </a>
+                </li>
+                <li>
+                  <a href="#message" data-toggle="tab">
+                    Messages
+                  </a>
+                </li>
               </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="details">
+                  <p>I'm in Section 1.</p>
+                </div>
+                <div class="tab-pane" id="comment">
+                  <% if @product_comments.present? %>
+                    <% @product_comments.each do |c| %>
+                      <div class='row-fluid'>
+                        <div class='span6'>
+                          <p>
+                            <%=c.comment.content %>
+                          </p>
+                          <p>
+                          <small rel='tooltip' title="<%=I18n.l c.comment.created_at, :format => :long %>">
+                          <%= time_ago_in_words c.comment.created_at %>
+                          <span class="display-state"></span>
+                          </small>
+                          </p>
+                        </div>
+                        <div class='span4'>
+                          <div>服务：<%=c.star_service %></div>
+                          <div>物流：<%=c.star_logistics %></div>
+                          <div>商品：<%=c.star_product %></div>
+                        </div>
+                        <div class='span2'>
+                          <img src="<%=c.user.photos.icon %>" />
+                          <%=c.user.login %>
+                        </div>
+                      </div>
+                    <% end %>
+                  <% else %>
+                    暂时没有评论
+                  <% end %>
+                </div>
+                <div class="tab-pane" id="message">
+                  <p>H3254453.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

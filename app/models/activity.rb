@@ -52,7 +52,8 @@ class Activity < ActiveRecord::Base
     attachments.first ? attachments.first.file : Attachment.new.file
   end
 
-  validates :price,:start_time,:end_time,:shop_product_id,:presence => true
+  validates :title, :activity_price, :price,:start_time, :end_time, :shop_product_id, :presence => true
+  validates :price, :activity_price, :numericality => { :greater_than => 0 }
 
   def like
     likes.size

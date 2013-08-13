@@ -36,8 +36,8 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :delivery_manner
   belongs_to :logistics_company
 
-  has_many :operators, class_name: "TransactionOperator", dependent: :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
+  has_many :operators, class_name: "TransactionOperator"
 
   has_many  :items,
             class_name: "ProductItem",
@@ -74,6 +74,7 @@ class OrderTransaction < ActiveRecord::Base
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
   end
+  after_destroy :notice_destroy, :destroy_operators
 
   state_machine :initial => :order do
 
@@ -228,6 +229,22 @@ class OrderTransaction < ActiveRecord::Base
 
     before_transition :waiting_transfer => :waiting_audit do |order, transition|
       order.valid_transfer_sheet?
+    end
+  end
+
+  def notice_user
+    Notification.create!(
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :body => "你有新的订单")
+  end
+
+  def notice_destroy
+    if operator_state
+      FayeClient.send("/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
+    else
+      realtime_dispose({type: "destroy" ,values: as_json})
     end
   end
 
@@ -409,9 +426,9 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def operator_create(toperator_id)
-    unless operator.try(:id) == toperator_id
+    unless current_operator.try(:id) == toperator_id
       _operator = operators.create(operator_id: toperator_id)
-      self.update_attribute(:operator_id, _operator.id)
+      self.update_attribute(:operator_id, _operator.id) if _operator.valid?
     end
     notice_order_dispose
     self.update_attribute(:operator_state, true)
@@ -466,6 +483,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra["stotal"] = stotal
+    attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
   end
 
@@ -634,4 +652,7 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def destroy_operators
+    operators.destroy_all
+  end
 end

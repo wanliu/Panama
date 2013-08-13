@@ -1,6 +1,5 @@
 #= require panama
 #= require social_sidebar
-#= require lib/jquery.nanoscroller
 #= require shop_products
 
 root = window || @

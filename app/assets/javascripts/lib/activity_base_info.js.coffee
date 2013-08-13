@@ -29,11 +29,13 @@ class root.ActivityBaseInfoView extends Backbone.View
     $.ajax
       type: "get"
       dataType: "json"
+      data: {version_name: @upload_options.version_name }
       url: "/shop_products/#{shop_product_id}"
       success: (data) =>
         @load_info(data)
 
-  load_info: (product) ->
+  load_info: (data) ->
+    product = data.product
     @$('[name="activity[shop_product]"]').val(product.name);
     @$('[name="activity[shop_product_id]"]').val(product.id);
     @$('[name="activity[price]"]').val(product.price);

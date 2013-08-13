@@ -67,6 +67,7 @@
 
       $form.on("ajax:success", function(){
         $form[0].reset();
+        $("#active_dialog").modal('hide');
       });
 
       $form.on("ajax:error", function(event, xhr, state){
