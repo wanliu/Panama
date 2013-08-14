@@ -1,5 +1,6 @@
 #= require backbone
 #= require lib/hogan
+root = (window || @)
 
 root = (window || @)
 

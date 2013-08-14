@@ -115,8 +115,11 @@ Panama::Application.routes.draw do
     end
 
     resources :notifications,:except => :show, :controller => "people/notifications" do
+      member do
+        get :enter, :to => "people/notifications#show"
+      end
       collection do
-        get "/:id/enter", :to => "people/notifications#show"
+        get :unread, :to => "people/notifications#unread"
       end
     end
 
@@ -180,6 +183,7 @@ Panama::Application.routes.draw do
     collection do
       get "connect/:token", :to => "users#connect"
       get "disconnect/:id", :to => "users#disconnect"
+      get "followings"
     end
   end
 
@@ -212,6 +216,7 @@ Panama::Application.routes.draw do
     collection do
       post "dialogue/generate/:friend_id", :to => "chat_messages#generate"
       get "dialogue/display/:token", :to => "chat_messages#display"
+      get "dialogue/generate_and_display/:friend_id", :to => "chat_messages#generate_and_display"
       post "read/:friend_id", :to => "chat_messages#read"
     end
   end

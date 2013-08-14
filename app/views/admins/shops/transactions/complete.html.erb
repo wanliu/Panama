@@ -35,7 +35,7 @@
               </tr>
             <% end %>
           <% else %>
-            <tr><td colspan="5">暂没有已完成订单</td></tr>
+            <tr class="widget"><td colspan="5">您暂时还没有担保交易记录</td></tr>
           <% end %>
         </tbody>
       </table>
@@ -62,21 +62,25 @@
           </tr>
         </thead>
         <tbody>
-          <% @direct_transactions.each do |t| %>
-            <tr class="transaction_complete-<%=t.id%>">
-              <td>
-                <%= image_tag t.buyer.photos.icon %>
-                <%= t.buyer.login %>
-              </td>
-              <td><%= t.number %></td>
-              <td><%= t.total %></td>
-              <td>
-                <%= t.created_at.strftime("%Y-%d-%m %H:%M") %>
-              </td>
-              <td>
-                <a class="btn btn-info btn-small" href="/shops/<%=t.seller.name %>/admins/direct_transactions/<%= t.id %>">明细</a>
-              </td>
-            </tr>
+          <% if @direct_transactions.present? %>
+            <% @direct_transactions.each do |t| %>
+              <tr class="transaction_complete-<%=t.id%>">
+                <td>
+                  <%= image_tag t.buyer.photos.icon %>
+                  <%= t.buyer.login %>
+                </td>
+                <td><%= t.number %></td>
+                <td><%= t.total %></td>
+                <td>
+                  <%= t.created_at.strftime("%Y-%d-%m %H:%M") %>
+                </td>
+                <td>
+                  <a class="btn btn-info btn-small" href="/shops/<%=t.seller.name %>/admins/direct_transactions/<%= t.id %>">明细</a>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr class="widget"><td colspan="5">暂无直接交易记录</td></tr>
           <% end %>
         </tbody>
       </table>

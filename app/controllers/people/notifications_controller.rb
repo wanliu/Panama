@@ -2,17 +2,17 @@
 class People::NotificationsController < People::BaseController
     before_filter :login_and_service_required
 
-    def index
+    def index      
       authorize! :index, Notification
       @notifications = Notification
       unless params[:all] == "1"
           @notifications = Notification.unreads
       end
       @notifications = @notifications.where(:user_id => @people.id)
-      .order(read: :asc)
+      .order(read: :asc)      
       respond_to do | format |
           format.html
-          format.json
+          format.json{ render json: @notifications}
       end
     end
 
@@ -26,6 +26,13 @@ class People::NotificationsController < People::BaseController
           else
               format.html{ redirect_to person_notifications_path(@people.login) }
           end
+      end
+    end
+
+    def unread
+      @notifications = Notification.unreads.where({ :targeable_type => params[:type] })
+      respond_to do |format|
+        format.json { render json: @notifications }
       end
     end
 end
