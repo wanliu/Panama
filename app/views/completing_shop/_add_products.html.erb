@@ -109,17 +109,38 @@
 				}
 			});
 
-			$('.my_product_list').slimScroll({ height: 500 , railVisible: true});
+			var scroll = $('.my_product_list').slimScroll({ height: 500 , railVisible: true});
+			$(".slimScrollDiv").css("overflow","")
+
 		</script>
 		<!-- <a href="#" class="deleteAll">删除选中</a> -->
 	</div>
 </div>
 <script type="text/javascript">
-	$('.my_product_list .price').editable({
-        type:  'text',
-        pk:    628,
-        name:  'price',
-        url:   '/shop_products/628',  
-        title: 'change your price'
-    });
+	$('.my_product_list>li').each(function(i, elem){
+		debugger
+		$(".price", elem).editable({
+	        type:  'text',
+	        pk:    elem.id,
+	        name:  'price',        
+	        url:   "/shop_products/"+elem.id+"/update_attribute",  
+	        title: 'change your price',
+	        ajaxOptions: {
+	        	type: 'put',
+	        	dataType: 'json'
+	    	}  
+		})
+		$(".inventory", elem).editable({
+	        type:  'text',
+	        pk:    elem.id,
+	        name:  'inventory',        
+	        url:   "/shop_products/"+elem.id+"/update_attribute",    
+	        title: 'change your price',
+	        ajaxOptions: {
+	        	type: 'put',
+	        	dataType: 'json'
+	    	}  
+		})
+	})
+	
 </script>
