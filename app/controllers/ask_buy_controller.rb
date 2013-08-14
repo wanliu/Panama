@@ -11,7 +11,7 @@ class AskBuyController < ApplicationController
 
   def create
     @product = Product.find_by(:name => params[:ask_buy][:title])
-    params[:ask_buy][:product_id] = @product.id if @product.present?
+    params[:ask_buy][:product_id] = @product.try(:id)
     attachment_ids = params[:ask_buy].delete(:attachment_ids)
     @ask_buy = AskBuy.new(params[:ask_buy])
     @ask_buy.user_id = current_user.id

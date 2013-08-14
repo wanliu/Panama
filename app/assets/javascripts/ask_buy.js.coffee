@@ -34,7 +34,6 @@ class root.AskBuyView extends Backbone.View
       data: {version_name: @upload_params.version_name},
       success: (product) =>
         @atta.destroy_all()
-        @$title.val(product.name)
         @$price.val(product.price)
         @init_attachment(product.attachments)
     )
