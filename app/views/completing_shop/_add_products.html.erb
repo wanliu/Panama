@@ -27,8 +27,12 @@
         </div>
 	</div>
 	<div class="span4">
-		<div class='panel'>
-			<h4><i class='icon-th-large'></i> 分类商品</h4>
+		<div class='panel' style="margin-right:10px;">
+			<h4><i class='icon-th-large'></i> 分类商品
+				<!-- <i class="icon-foursquare"></i> -->
+				<button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
+			</h4>
+
     		<form class='search-form'>
 				<div class="input-append">
 	                <input type="search" id="search-input">
@@ -38,21 +42,25 @@
 			<ul class='category_product_list product_list'>
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
 			</ul>
-			<div class='buttons'>
-				<%= link_to '#', :class => 'btn add_to_shop pull-right' do %>
-				<%= icon 'arrow-right' %>
-				<% end %>
-				<button class='btn select_all'>全选</button>
+			<div class="btn-group btn-group-vertical pull-right position">
+				<div class='buttons'>
+					<%= link_to '#', :class => 'btn add_to_shop' do %>
+					<%= icon 'arrow-right' %>
+					<% end %>
+				</div>
+				<div class='buttons'>
+					<%= link_to '#', :class => 'btn remove_from_shop pull-right' do %>
+					<%= icon 'arrow-left' %>
+					<% end %>
+				</div>
 			</div>
-
 		</div>
-
 
 		<script type="text/jstemplate" id="category_product_show" >
 			<li id="{{ id }}" class='product_item'>
 				<img src="{{ url }}" alt="{{name}}" class='product_img' />
 				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-				<span>单价: {{ price }}</span>
+				<span>单价:<i class='icon-jpy'></i> {{ price }}</span>
 				<span>库存: {{ inventory }}</span>
 			</li>
 		</script>
@@ -62,7 +70,7 @@
 		</script>
 	</div>
 	<div class="span4">
-		<div class='panel'>
+		<div class='panel' style="margin-left:8px;">
 			<h4><i class='icon-th-large'></i> 库存商品</h4>
     		<form class='search-form'>
 				<div class="input-append">
@@ -106,3 +114,12 @@
 		<!-- <a href="#" class="deleteAll">删除选中</a> -->
 	</div>
 </div>
+<script type="text/javascript">
+	$('.my_product_list .price').editable({
+        type:  'text',
+        pk:    628,
+        name:  'price',
+        url:   '/shop_products/628',  
+        title: 'change your price'
+    });
+</script>

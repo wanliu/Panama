@@ -4,6 +4,7 @@ Panama::Application.routes.draw do
     member do
       post :buy, :to => "shop_products#buy"
       post :direct_buy, :to => "shop_products#direct_buy"
+      post :delete_many, :to => "shop_products#delete_many"
     end
   end
 

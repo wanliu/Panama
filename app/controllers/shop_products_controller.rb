@@ -113,4 +113,13 @@ class ShopProductsController < ApplicationController
       format.json{ head :no_content }
     end
   end
+
+  def delete_many
+    product_ids = params[:product_ids]
+    ShopProduct.where("id in (?)",product_ids).delete_all
+
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
+  end
 end

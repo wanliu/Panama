@@ -19,6 +19,7 @@
 @import 'lib/tree_slide';
 @import 'admins/shops/shop_banks';
 @import 'direct_transaction';
+@import 'bootstrap-editable';
 
 
 $left-side-admin-width: 160px;
@@ -122,6 +123,11 @@ $left-side-admin-width: 160px;
     margin: 0 10px 10px 10px;
   }
 
+  .position {
+    position: relative;
+    bottom: 310px;
+    left: 37px;
+  }
   .info {
     margin: 10px;
   }
@@ -145,11 +151,25 @@ $left-side-admin-width: 160px;
   // @include transparent(rgb(51,51,51), 0.25);
 }
 
+
+.my_product_list{
+  .product_item{
+    &:hover {
+      /*@include transparent(rgb(51,51,51), 0.25);*/
+      border-left: 3px solid $blue;
+    }
+  }
+  .checked_product{
+    /*background-color: rgba(51, 51, 51, 0.6);*/
+    border-left: 3px solid $blue;
+  }
+}
+
 .product_item {
   padding: 10px 10px 10px 70px;
   border-top: 1px solid #222;
   border-top: 1px solid rgba(51,51,51,0.25);
-  border-left: 2px solid transparent;
+  border-left: 3px solid transparent;
   .product_img {
     width: 50px;
     float: left;
@@ -172,13 +192,13 @@ $left-side-admin-width: 160px;
 
   &:hover {
     @include transparent(rgb(51,51,51), 0.25);
-    border-left: 2px solid $blue;
+    border-left: 3px solid $red;
   }
 }
 
 .checked_product{
   background-color: rgba(51, 51, 51, 0.6);
-  border-left: 2px solid $blue;
+  border-left: 3px solid $red;
 }
 
 .dialog_product .nav-tabs {

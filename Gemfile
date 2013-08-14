@@ -9,6 +9,9 @@ gem 'rails', '3.2.8'
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
 
+#user this soft delete
+gem "acts_as_paranoid", "~>0.4.0"
+
 # acts_as_tree
 gem 'mongoid-tree',  '~> 1.0.1', :require => 'mongoid/tree'
 gem 'ancestry', '~> 1.3.0'
