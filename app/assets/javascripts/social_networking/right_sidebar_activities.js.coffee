@@ -16,7 +16,7 @@ class ActivitiesContainerView extends RealTimeContainerView
       @realtime_help(info, 'activities')
 
   realtime_help: (info, type) ->
-    data = info.values
+    data = info.value
     switch info.type
       when "new"
         @collection.add(_.extend(data, {_type: type}))
@@ -50,12 +50,12 @@ class ActivitiesContainerView extends RealTimeContainerView
 class ActivityNoticeView extends Backbone.View
   tagName: 'li'
   template: _.template(
-        "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
+        "<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
       <div class='user-info'>
       <div class='name'>
         <a href='#''><%= model.get('body') %></a>
       </div>
-      <div class='type'><%= model.get('url') %></div>
+      <div class='type'><%= model.get('targeable').title %></div>
       </div>")
 
   events:

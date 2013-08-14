@@ -30,9 +30,12 @@ class People::NotificationsController < People::BaseController
     end
 
     def unread
-      @notifications = Notification.unreads.where({ :targeable_type => params[:type] })
+      @notifications = Notification.unreads.where({ 
+        :mentionable_user_id => current_user.id, 
+        :targeable_type => params[:type] }).includes(:targeable)
       respond_to do |format|
-        format.json { render json: @notifications }
+        format.json { render json: Notification.format_unreads(@notifications) }
       end
     end
+
 end
