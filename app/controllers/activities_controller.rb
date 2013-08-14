@@ -72,9 +72,17 @@ class ActivitiesController < ApplicationController
       :user_id => current_user.id
     })
     @transaction.items.each{|item| item.update_total }
-    @transaction.save
-    redirect_to person_transactions_path(current_user.login),
-                  notice: 'Transaction was successfully created.'
+    respond_to do |format|
+      if @transaction.save
+        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
+        format.html{
+          redirect_to person_transactions_path(current_user.login),
+                    notice: 'Transaction was successfully created.'
+        }
+      else
+        format.js{ render "error_join" }
+      end
+    end
   end
 
   # GET /activities/new
