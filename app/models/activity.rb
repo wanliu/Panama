@@ -30,14 +30,14 @@ class Activity < ActiveRecord::Base
 
   before_create :init_data
 
-  after_create :notice_user, :notice_new_activity
+  after_create :create_notice
 
-  def notice_user
-    following_users = author.followings.where({:follow_type => User})
-    following_users.each do |user|
-      notifications.create!({
+  def create_notice
+    following_users = author.followings.where({:follow_type => User}).select(:follow_id)
+    following_users.each do |follow|
+      notifications.create({
         :user_id => author.id,
-        :mentionable_user_id => user.id,
+        :mentionable_user_id => follow.follow_id,
         :url => "/activities/#{id}",
         :body => "有新活动发布"
       })
@@ -97,20 +97,4 @@ class Activity < ActiveRecord::Base
     UserMailer.delay.send_activity_rejected_notify(author.email, author, rejected_reason, url)
   end
 
-  private
-  def notice_new_activity
-   realtime_dispose({type: "new" ,values: as_json})
-  end
-
-  def notice_activity_dispose
-    realtime_dispose({type: "dispose" ,values: as_json})
-  end
-
-  def realtime_dispose(data = {})
-    faye_send("/Activity/un_dispose", data)
-  end
-
-  def faye_send(channel, options)
-    FayeClient.send(channel, options)
-  end
 end
