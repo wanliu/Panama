@@ -9,7 +9,7 @@ class Comment < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :targeable, :polymorphic => true
-  has_many :replies
+  has_many :replies, dependent: :destroy
 
   validates :content, :presence => true
   validate :validate_user_exists?, :validate_targeable_exists_and_nil?

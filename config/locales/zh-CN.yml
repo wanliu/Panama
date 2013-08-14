@@ -212,13 +212,17 @@ zh-CN:
       bank: 银行
       category: 分类
       admin_user: 管理员
+      user_checking: 用户审核
       order_refund: 退货
     attributes:
       activity:
         id: 编号
+        shop: 商店
         product: 产品
         product_id: 产品
+        shop_product: 商店产品
         preview: 预览图
+        title: 标题
         description: 活动描述
         author: 创建人
         author_id: 创建人
@@ -231,6 +235,8 @@ zh-CN:
         end_time: 结束时间
         like: 喜欢人数
         participate: 参与人数
+        rejected_reason: 拒绝的理由
+        status: 状态
       product:
         id: 编号
         name: 名称
@@ -255,6 +261,8 @@ zh-CN:
         name: 商店名
         user: 用户
         photo: 商店实图
+        actived: 审核通过
+        im_token: 安全码
         created_at: 创建时间
         updated_at: 更新时间
       property:
@@ -296,6 +304,7 @@ zh-CN:
         updated_at: 更新时间
         action_link: 操作
         stotal: 总金额
+        logistics_company: 物流公司
       category:
         id: 编号
         name: 分类名
@@ -318,14 +327,29 @@ zh-CN:
         password_confirmation: 验证密码
         created_at: 创建时间
         updated_at: 更新时间
-
-      content:
-        name: 名称
-        tool: 操作
-      price_option:
-        name: 名称
-        title: 标题
-        property: 值
+      user_checking:
+        user: 用户
+        service: 服务类型
+        shop_name: 商店名
+        ower_name: 公司法人
+        ower_photo: 法人照片
+        phone: 联系电话
+        industry_type: 产业类型
+        shop_photo: 商店图片
+        shop_url: 商店URL
+        shop_summary: 商店简介
+        company_name: 公司名
+        company_address: 公司地址
+        company_license: 营业执照
+        company_license_photo: 营业执照图片
+        ower_shenfenzheng_number: 身份证号
+        products_added: 是否已添加产品
+        rejected: 是否被拒绝
+        rejected_reason: 拒绝的理由
+        rejected_times: 被拒绝次数
+        checked: 是否已审核
+        created_at: 创建时间
+        updated_at: 更新时间
       order_refund:
         id: 编号
         order_transaction: 订单
@@ -333,8 +357,26 @@ zh-CN:
         state: 状态
         buyer: 买家
         seller: 卖家
-        decription: "退货描述"
-        action_link: "操作"
+        decription: 退货描述
+        action_link: 操作
+        order: 订单
+        operator: 接单员
+        order_reason: 退货理由
+        delivery_code: 快递单号
+        refuse_reason: 退货理由
+        delivery_price: 快递价格
+        delivery_manner: 发货方式
+        logistics_company: 物流公司
+        order_state: 订单状态
+        created_at: 创建时间
+        updated_at: 更新时间
+      content:
+        name: 名称
+        tool: 操作
+      price_option:
+        name: 名称
+        title: 标题
+        property: 值
   mongoid:
     models:
       content: "内容"

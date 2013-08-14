@@ -1,5 +1,7 @@
 #describe: 聊天
 
+root = window || @
+
 class ChatMessage extends Backbone.Model
   urlRoot: "/chat_messages"
   create: (token, callback) ->
@@ -10,10 +12,11 @@ class ChatMessage extends Backbone.Model
       success: callback
     )
 
-  read: (friend_id, callback = (message) -> ) ->
+  read: (friend_id, token, callback = (message) -> ) ->
     @fetch(
       url: "#{@urlRoot}/read/#{friend_id}",
       type: "POST",
+      data: {authenticity_token: token}
       success: callback
     )
 
@@ -123,6 +126,7 @@ class ChatView extends Backbone.View
   display_state: true,
   initialize: () ->
     @init_el()
+    @form = @$("form")
     @msg_view = new ChatMessage()
     @msgs_view = new MessageViewList(el: @$content_panel)
 
@@ -169,5 +173,16 @@ class ChatView extends Backbone.View
   offline: (friend_id) ->
     @state_el.addClass(@off_class).removeClass(@on_class)
 
+  form_data: () ->
+    data = {}
+    inputs = @form.serializeArray()
+    _.each inputs, (input) =>
+      data[input.name] = input.value
+    data
+
   read_friend_messsage: () ->
-    @msg_view.read(@friend.id)
+    data  = @form_data()
+    token = data.authenticity_token
+    @msg_view.read(@friend.id, token)
+
+root.ChatView = ChatView

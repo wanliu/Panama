@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     root << widget(:chat)
   end
 
-  helper_method :current_user, :current_admin, :my_cart, :get_city
+  helper_method :current_user, :current_admin, :my_cart, :get_city, :draw_errors_message
 
   before_filter :set_locale
 
@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   end
 
   # 绑定登陆和服务选择(买家，卖家？)
-  def login_and_service_required
+  def login_and_service_required    
     if !current_user
       login_required
     elsif current_user.services.empty?

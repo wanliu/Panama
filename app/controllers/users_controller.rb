@@ -21,4 +21,11 @@ class UsersController < ApplicationController
       format.json{ render :json => @user }
     end
   end
+
+  def followings
+    followings = current_user.format_followings
+    respond_to do |format|
+      format.json{ render :json => followings }
+    end
+  end
 end
