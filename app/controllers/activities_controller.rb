@@ -65,7 +65,7 @@ class ActivitiesController < ApplicationController
     @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
       :amount => params[:product_item][:amount],
-      :title => @activity.description,
+      :title => @activity.title,
       :price => @activity.activity_price,
       :buy_state => :guarantee,
       :shop_id => @activity.shop_id,
