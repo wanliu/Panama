@@ -14,16 +14,17 @@ class root.AskBuyView extends Backbone.View
 
     template: "",
 
-    input_name: "ask_buy[attachment_ids]"
+    input_name: "ask_buy[attachment_ids]",
+
+    data: []
   }
 
   upload_params: {}
 
   initialize: () ->
     _.extend(@upload_params, @params, @options.params)
-    @$title = @$(".ask_buy_title")
     @$price = @$("#ask_buy_price")
-    @init_attachment([])
+    @init_attachment(@upload_params.data)
 
   fetch_product: (product_id) ->
     return if _.isEmpty(product_id)
@@ -33,7 +34,6 @@ class root.AskBuyView extends Backbone.View
       data: {version_name: @upload_params.version_name},
       success: (product) =>
         @atta.destroy_all()
-        @$title.val(product.name)
         @$price.val(product.price)
         @init_attachment(product.attachments)
     )
