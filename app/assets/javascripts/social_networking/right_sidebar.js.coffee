@@ -1,16 +1,8 @@
 # var right_bar = new RightSideBar({el: ".right-sidebar"})
-# 容器视图
-# var message_view = { top : { title: "messages",
- #                             klass: "this-class", 
- #                             tool_tip: "show messages" 
- # 							  },  #顶部按钮
-# 					   		   container_view : MessageContainerView }    # 容器container view
-# 注册容器视图
-# right_bar.register(message_view)
+# right_bar.register(ContainerView)
 
 #= require lib/realtime_client
 root = (window || @)
-
 
 class RightSideBar extends Backbone.View
 	template: () ->
@@ -61,6 +53,8 @@ class RightSideBar extends Backbone.View
 
 
 class ContainerView extends Backbone.View
+	too_tip: ""
+
 	template: () ->
 		$("#right-sidebar-templates .container").html()
 
