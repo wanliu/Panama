@@ -377,7 +377,7 @@ class OrderTransaction < ActiveRecord::Base
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
       :url => "/people/#{buyer.login}/transactions##{id}",
-      :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}")) 
+      :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}"))
   end
 
   def refund_items

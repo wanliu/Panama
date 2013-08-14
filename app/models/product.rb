@@ -11,6 +11,7 @@ class Product < ActiveRecord::Base
   include Tire::Model::Callbacks
 
   validates :emc13, format: { with: /^\d{13,}$/, message: "请输入真实有效emc13码，只能是13位数字" }
+  validates :emc13, :uniqueness => true
 
   attr_accessible :description,
                   :name,

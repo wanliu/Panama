@@ -2,6 +2,7 @@
 class ShopProduct < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  acts_as_paranoid
 
   attr_accessible :shop_id, :product_id, :price, :inventory,:photos,:name
 

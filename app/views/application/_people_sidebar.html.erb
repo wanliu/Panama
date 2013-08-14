@@ -18,7 +18,6 @@
   </div>
 
   <ul id="people-side-nav" class="side-nav">
-    <% if can? :show_bill, People %>
     <li class='accordion-group'>
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#info-collapse">
         <i class="icon-user"></i>
@@ -26,24 +25,32 @@
       </a>
       <ul id="info-collapse" class="accordion-body collapse">
         <li>
+          <a class='people-person_info' href="<%=person_path(@people.login) %>">
+            基本资料
+          </a>
+        </li>
+        <% if can? :manage, User %>
+        <li>
           <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>地址
           </a>
         </li>
-        <% unless @people.is_seller? %>
-        <li>
-          <a class='people-create_shop' href="/completing_shop/authenticate_license">
-            我要开店
-          </a>
-        </li>
+        <% end %>
+        <% if can? :manage, User %>
+          <% unless @people.is_seller? %>
+          <li>
+            <a class='people-create_shop' href="/completing_shop/authenticate_license">
+              我要开店
+            </a>
+          </li>
+          <% end %>
         <% end %>
       </ul>
     </li>
-    <% end %>
     <% if can? :manage, User %>
-        <li>
-          <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
-          购物车</a>
-        </li>
+      <li>
+        <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
+        购物车</a>
+      </li>
     <% end %>
     <% if can? :index, OrderTransaction %>
       <li class="accordion-group">
@@ -84,13 +91,19 @@
     <li class='accordion-group'>
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#soical-collapse"><i class="icon-group"></i> <span class="name">社区</span></a>
       <ul id="soical-collapse" class="accordion-body collapse">
-        <li><a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">商品评论</a>
+        <% if can? :manage, User %>
+        <li>
+          <a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">商品评论</a>
         </li>
-        <li><a class='people-following' href="<%=person_followings_path(@people.login) %>">我关注的
+        <% end %>
+        <li>
+          <a class='people-following' href="<%=person_followings_path(@people.login) %>">我关注的
           </a>
         </li>
-        <li><a class='people-followers' href="<%=person_followers_path(@people.login) %>">关注我的
-          </a></li>
+        <li>
+          <a class='people-followers' href="<%=person_followers_path(@people.login) %>">关注我的
+          </a>
+        </li>
       </ul>
     </li>
   </ul>

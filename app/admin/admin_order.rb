@@ -1,6 +1,18 @@
 #encoding: utf-8
 ActiveAdmin.register OrderTransaction do
 
+  scope :等待审核, default: true do
+    OrderTransaction.where("state = 'waiting_audit'")
+  end
+
+  scope :被驳回 do
+    OrderTransaction.where("state = 'waiting_audit_failure'")
+  end
+
+  scope :已审核通过 do
+    OrderTransaction.joins(:pay_manner).joins(:state_details).where("transaction_state_details.state='waiting_delivery' and pay_manners.code = 'bank_transfer'")
+  end
+
   index do
     column :state do |order|
       I18n.t("order_states.buyer.#{order.state}")
@@ -35,15 +47,15 @@ ActiveAdmin.register OrderTransaction do
     end
   end
 
-  controller do
-    def index
-      index! do |format|
-        @order_transactions = @order_transactions.where(
-          :state => "waiting_audit").page(params[:page]) if params[:q].nil?
-        format.html
-      end
-    end
-  end
+  # controller do
+  #   def index
+  #     index! do |format|
+  #       @order_transactions = @order_transactions.where(
+  #         :state => "waiting_audit").page(params[:page]) if params[:q].nil?
+  #       format.html
+  #     end
+  #   end
+  # end
 
   member_action :audit, :method => :post do
     order = OrderTransaction.find(params[:id])

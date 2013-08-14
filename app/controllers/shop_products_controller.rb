@@ -51,6 +51,11 @@ class ShopProductsController < ApplicationController
     end
   end
 
+  def update_attribute
+    params[:shop_product] = { params.delete(:name) => params.delete(:value) }
+    update
+  end
+    
   def show
     @shop_product = ShopProduct.find(params[:id])
     @product_comments = ProductComment.where("product_id=? and shop_id=?", @shop_product.product_id, @shop_product.shop.id)
@@ -108,6 +113,15 @@ class ShopProductsController < ApplicationController
   def destroy
     @product = ShopProduct.find(params[:id])
     @product.destroy
+
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
+  end
+
+  def delete_many
+    product_ids = params[:product_ids]
+    ShopProduct.where("id in (?)",product_ids).delete_all
 
     respond_to do |format|
       format.json{ head :no_content }
