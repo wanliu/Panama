@@ -9,20 +9,9 @@ class NotificationsContainerView extends RealTimeContainerView
 		super
 		@transactions_view = new TransactionContainerView(parent_view: @)
 		@activities_view = new ActivitiesContainerView(parent_view: @)
-		@set_default_view()
-
-	set_default_view: () ->
-		@transactions_view.seted_default()
-		@activities_view.seted_default()
-		@default_view = @transactions_view
 
 
 class TransactionContainerView extends RealTimeContainerView
-
-	initialize: () ->
-		super
-		@bind_items()
-
 	fill_header: () ->
 		$(@el).prepend(
 				'<h5 class="tab-header transactions">
@@ -34,13 +23,16 @@ class TransactionContainerView extends RealTimeContainerView
 	bind_items: () ->
 		@parent_view  = @options.parent_view
 		@$parent_view = $(@options.parent_view.el)
+		@$parent_view.append(@el)
 
 		@collection = new Backbone.Collection
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
 		@urlRoot = "/people/#{@current_user_login}/notifications"
 		@collection.fetch(url: "#{@urlRoot}/unread?type=OrderTransaction")
+		@bind_realtime()
 
+	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>
 			model = info.value
@@ -48,14 +40,10 @@ class TransactionContainerView extends RealTimeContainerView
 				@collection.add(model)
 				@top(model)
 
-	seted_default: () ->
-		@is_default_view = true
-		@$parent_view.append(@el)
-
 	addAll: (collecton) ->
 		@collection.each (model) =>
-			# if model.attributes.targeable_type == "OrderTransaction"
-			@addOne(model)
+			if model.attributes.targeable_type == "OrderTransaction"
+				@addOne(model)
 
 	addOne: (model) ->
 		@$("h5 .num").html(@collection.length)
@@ -90,10 +78,6 @@ class TransactionMessageView extends FriendView
 
 class ActivitiesContainerView extends RealTimeContainerView
 
-	initialize: () ->
-		super
-		@bind_items()
-
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
 		@client.subscribe "/Activity/un_dispose", (info) =>
@@ -115,6 +99,7 @@ class ActivitiesContainerView extends RealTimeContainerView
 	bind_items: () ->
 		@parent_view  = @options.parent_view
 		@$parent_view = $(@options.parent_view.el)
+		@$parent_view.append(@el)
 		@bind_realtime()
 
 		@urlRoot = "/people/#{@current_user_login}/notifications"
@@ -122,10 +107,6 @@ class ActivitiesContainerView extends RealTimeContainerView
 		@collection.bind('reset', @addAll, @)
 		@collection.bind('add', @addOne, @)
 		@collection.fetch({ url: "#{@urlRoot}/unread?type=Activity" })
-
-	seted_default: () ->
-		@is_default_view = true
-		@$parent_view.append(@el)
 
 	addAll: (collecton) ->
 		@collection.each (model) =>
@@ -158,8 +139,7 @@ class ActivityMessageView extends Backbone.View
 	events:
 		"click" : "show_modal"
 
-	initialize: (options) ->
-		_.extend(@, options)
+	initialize: () ->
 		@$el = $(@el)
 		@model.bind('remove', @remove, @)
 
@@ -168,10 +148,9 @@ class ActivityMessageView extends Backbone.View
 			id: @model.get('targeable_id') 
 		})
 		activity_model.fetch success: (model) =>
-			view = new ActivityView({
+			new ActivityView({
 				model    : model 
-			})
-			view.modal()     
+			}).modal()     
 			@trigger("remove_model", @model.id)
 
 	render: () ->
@@ -185,5 +164,6 @@ class ActivityMessageView extends Backbone.View
 			url: "#{@model.url}/enter"
 		)
 		super
+
 
 root.NotificationsContainerView = NotificationsContainerView 
