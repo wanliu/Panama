@@ -38,14 +38,13 @@ module ApplicationHelper
   end
 
   def current_shop
-
     @current_shop = Shop.find_by(:name => params[:shop_id]) unless params[:shop_id].blank?
-    # if @current_shop.user != current_user &&
-    #   @current_shop.find_employee(current_user.id).nil?
-    #   redirect_to shop_path(params[:shop_id])
-    #   return
-    # end
-    # @current_shop
+    if @current_shop.user != current_user &&
+      @current_shop.find_employee(current_user.id).nil?
+      redirect_to shop_path(params[:shop_id])
+      return
+    end
+    @current_shop
   end
 
   def token

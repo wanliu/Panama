@@ -234,8 +234,8 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_user
     Notification.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
   end
@@ -348,8 +348,8 @@ class OrderTransaction < ActiveRecord::Base
     end
     filter_fire_event!(events, event)
     notifications.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
   end
@@ -358,13 +358,13 @@ class OrderTransaction < ActiveRecord::Base
     events = %w(expired audit_transfer audit_failure)
     filter_fire_event!(events, event)
     notifications.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
      notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
       :url => "/people/#{buyer.login}/transactions##{id}",
       :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}"))
 
@@ -374,8 +374,8 @@ class OrderTransaction < ActiveRecord::Base
     events = %w(back delivered)
     filter_fire_event!(events, event)
     notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
+      :user_id => seller.user.id,
+      :mentionable_user_id => buyer.id,
       :url => "/people/#{buyer.login}/transactions##{id}",
       :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}"))
   end
