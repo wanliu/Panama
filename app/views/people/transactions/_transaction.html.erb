@@ -44,7 +44,7 @@
       <div class='span5'>
         <div class="transaction-footer">
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
-          <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
+          <iframe frameborder="0" name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>">
           </iframe>
         </div>
       </div>

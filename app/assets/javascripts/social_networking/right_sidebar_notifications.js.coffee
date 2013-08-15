@@ -70,6 +70,7 @@ class TransactionMessageView extends FriendView
 
 	template: (options) ->
 		_.template("<i class=' icon-volume-up'></i>
+					<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
 					<%= model.get('body') %>,点击查看详情")(options)
 
 	direct_to_transaction_detail: () ->
