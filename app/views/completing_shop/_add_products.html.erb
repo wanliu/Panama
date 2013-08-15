@@ -2,7 +2,7 @@
 	<div class="span4">
 		<header>
 		    <ul class="nav nav-tabs">
-		        <li class="active">
+		        <li class="active" id ="sort">
 		            <a href="#categories" data-toggle="tab">分类</a>
 		        </li>
 		        <li>
@@ -13,12 +13,10 @@
 		<div class="body tab-content">
             <div id="categories" class="tab-pane active clearfix">
             	<div class='search-header'>
-            		<form>
-					<div class="input-append">
-	                    <input type="search" id="search-input">
-	                    <button type="button" class="btn btn-transparent">Search</button>
+					<div class="input-append controls-row">
+	                    <input class="span8" type="search" id="search-input3">
+	                    <button type="button" class="btn btn-transparent span4">Search</button>
 	                </div>
-	                </form>
             	</div>
             	<%= render "category_selector" %>
             </div>
@@ -27,30 +25,39 @@
         </div>
 	</div>
 	<div class="span4">
-		<div class='panel'>
-			<h4><i class='icon-th-large'></i> 分类商品</h4>
-    		<form class='search-form'>
-				<div class="input-append">
-	                <input type="search" id="search-input">
-	                <button type="button" class="btn btn-transparent">Search</button>
+		<div class='panel' style="margin-right:13px;">
+			<h4><i class='icon-th-large'></i> 分类商品
+				<!-- <i class="icon-foursquare"></i> -->
+				<button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
+			</h4>
+			<div class='search-header'>
+				<div class="input-append controls-row">
+	                <input class="span8" type="search" id="search-input1">
+	                <button type="button" class="btn btn-transparent span4">Search</button>
 	            </div>
-            </form>
+	        </div>
 			<ul class='category_product_list product_list'>
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
 			</ul>
-			<div class='buttons'>
-				<%= link_to '#', :class => 'btn add_to_shop' do %>
-				<%= icon 'arrow-right' %>
-				<% end %>
+			<div class="btn-group btn-group-vertical pull-right position">
+				<div class='buttons'>
+					<%= link_to '#', :class => 'btn add_to_shop' do %>
+					<%= icon 'arrow-right' %>
+					<% end %>
+				</div>
+				<div class='buttons'>
+					<%= link_to '#', :class => 'btn remove_from_shop pull-right' do %>
+					<%= icon 'arrow-left' %>
+					<% end %>
+				</div>
 			</div>
 		</div>
-
 
 		<script type="text/jstemplate" id="category_product_show" >
 			<li id="{{ id }}" class='product_item'>
 				<img src="{{ url }}" alt="{{name}}" class='product_img' />
 				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-				<span>单价: {{ price }}</span>
+				<span>单价:<i class='icon-jpy'></i> {{ price }}</span>
 				<span>库存: {{ inventory }}</span>
 			</li>
 		</script>
@@ -60,14 +67,14 @@
 		</script>
 	</div>
 	<div class="span4">
-		<div class='panel'>
+		<div class='panel' style="margin-left:8px;">
 			<h4><i class='icon-th-large'></i> 库存商品</h4>
-    		<form class='search-form'>
-				<div class="input-append">
-	                <input type="search" id="search-input">
-	                <button type="button" class="btn btn-transparent">Search</button>
-	            </div>
-            </form>
+			<div class='search-header'>
+				<div class="input-append controls-row">
+		            <input class="span8" type="search" id="search-input2">
+		            <button type="button" class="btn btn-transparent span4">Search</button>
+		        </div>
+		    </div>
 			<ul class='my_product_list product_list'>
 			</ul>
 		</div>
@@ -80,8 +87,8 @@
 
 				<!--<span>单价 <input name='price' type='number' value='{{ price }}'/></span>-->
 				<!--<span>库存 <input name='inventory' type='number' value='{{ inventory }}'/></span>-->
-				<section> 单价 <span class='label label-default'>{{ price }} <i class='icon-edit'></i></span></section>
-				<section> 库存 <span class='label label-default'>{{ inventory }} <i class='icon-edit'></i></span></section>
+				<section> 单价 <span class='label label-default price'>{{ price }} <i class='icon-edit'></i></span></section>
+				<section> 库存 <span class='label label-default inventory'>{{ inventory }} <i class='icon-edit'></i></span></section>
 			</li>
 		</script>
 
@@ -99,8 +106,60 @@
 				}
 			});
 
-			$('.my_product_list').slimScroll({ height: 500 , railVisible: true});
+			var scroll = $('.my_product_list').slimScroll({ height: 500 , railVisible: true});
+			$(".slimScrollDiv").css("overflow","")
+
 		</script>
 		<!-- <a href="#" class="deleteAll">删除选中</a> -->
 	</div>
 </div>
+<script type="text/javascript">
+	var bind_editable = function(elem, class_name){
+		id = $(elem).attr("id")
+		$("."+ class_name , elem).editable({
+	        type:  'text',
+	        pk:    id,
+	        name:  class_name,        
+	        url:   "/shop_products/"+ id +"/update_attribute",  
+	        title: 'change your '+class_name,
+	        ajaxOptions: {
+	        	type: 'put',
+	        	dataType: 'json'
+	    	},
+		    validate: function(value) {
+			    if(isNaN($.trim(value))) {
+			        return 'This must be a number';
+			        value = 0.0
+			    }
+			}  
+		})
+	};
+	$('.my_product_list>li').each(function(i, elem){
+		bind_editable(elem, "price")
+		bind_editable(elem, "inventory")
+	});
+
+	var Filter = function(id_name,target){
+		$("#"+id_name).keyup(function(){
+			var filter = $(this).val(), count = 0;
+			$("."+target+" li").each(function(){
+				if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+					$(this).fadeOut();
+				} else {
+					$(this).show()// $(this).show();
+					count++;
+				}
+			});
+			var numberItems = count;
+			$("#filter-count").text("Number of Comments = "+count);
+		})
+		false
+	};
+
+	$(document).ready(function(){
+		Filter("search-input3","tree-nav");
+		Filter("search-input1","category_product_list");
+		Filter("search-input2","my_product_list")
+	})
+	
+</script>

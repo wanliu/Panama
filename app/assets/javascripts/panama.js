@@ -31,13 +31,14 @@
 //= require topbar
 //= require social_networking/right_sidebar
 //= require social_networking/right_sidebar_friends
-//= require social_networking/right_sidebar_activities
-//= require social_networking/right_sidebar_transaction
+//= require social_networking/right_sidebar_notifications
 //= require pick_product
 //= require typeaheadExtension
 //= require lib/activity_base_info
 //= require ask_buy
+//= require bootstrap-editable
 //= require activity
+
 
 root = window || this;
 
