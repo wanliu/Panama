@@ -47,6 +47,9 @@
               </div>
             </div>
             <div class='span7 comments'>
+              <% if product_comment.present? %>
+                <input type='hidden' name='id' value="<%=product_comment.id %>" />
+              <% end %>
               <% comment = product_comment.try(:comment) %>
               <% if comment.present? %>
                 <div class='row-fluid'>

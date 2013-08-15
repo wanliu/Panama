@@ -10,13 +10,18 @@ class People::ProductCommentsController < People::BaseController
   end
 
   def create
-    content = params[:product_comment].delete(:content)
-    product_item_id = params[:product_comment].delete(:product_item_id)
+    opt = params[:product_comment]
+    content, id = opt.delete(:content), opt.delete(:id)
+    product_item_id = opt.delete(:product_item_id)
     @item = ProductItem.find_by(:id => product_item_id, :user_id => current_user.id)
 
     respond_to do |format|
-      @product_comment = ProductComment.new(params[:product_comment].merge(product_item: @item))
-      if @product_comment.save
+      @product_comment = if id.blank?
+        ProductComment.create(opt.merge(product_item: @item))
+      else
+        ProductComment.find(id)
+      end
+      if @product_comment.valid?
         @comment = Comment.new(
           :content => content, :user_id => current_user.id)
         @comment.targeable = @product_comment
