@@ -125,7 +125,13 @@
 	        ajaxOptions: {
 	        	type: 'put',
 	        	dataType: 'json'
-	    	}  
+	    	},
+		    validate: function(value) {
+			    if(isNaN($.trim(value))) {
+			        return 'This must be a number';
+			        value = 0.0
+			    }
+			}  
 		})
 	};
 	$('.my_product_list>li').each(function(i, elem){
