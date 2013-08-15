@@ -36,8 +36,8 @@ class Activity < ActiveRecord::Base
     following_users = author.followings.where({:follow_type => User}).select(:follow_id)
     following_users.each do |follow|
       notifications.create({
-        :user_id => author.id,
-        :mentionable_user_id => follow.follow_id,
+        :user_id => follow.follow_id,
+        :mentionable_user_id => author.id,
         :url => "/activities/#{id}",
         :body => "有新活动发布"
       })

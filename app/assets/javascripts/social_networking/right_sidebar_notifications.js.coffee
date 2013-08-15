@@ -9,6 +9,15 @@ class NotificationsContainerView extends RealTimeContainerView
 		super
 		@transactions_view = new TransactionContainerView(parent_view: @)
 		@activities_view = new ActivitiesContainerView(parent_view: @)
+		@bind_realtime()
+
+	bind_realtime: () ->
+		@client = Realtime.client(@realtime_url)
+		@client.monitor_people_notification @token, (info) =>
+			if info.type == "OrderTransaction" || info.type == "OrderRefund"
+				@transactions_view.realtime_help(info)
+			else if info.type == "Activity"
+				@activities_view.realtime_help(info)
 
 
 class TransactionContainerView extends RealTimeContainerView
@@ -30,15 +39,10 @@ class TransactionContainerView extends RealTimeContainerView
 		@collection.bind('add', @addOne, @)
 		@urlRoot = "/people/#{@current_user_login}/notifications"
 		@collection.fetch(url: "#{@urlRoot}/unread?type=OrderTransaction")
-		@bind_realtime()
 
-	bind_realtime: () ->
-		@client = Realtime.client(@realtime_url)
-		@client.monitor_people_notification @token, (info) =>
-			model = info.value
-			if info.type == "OrderTransaction" || info.type == "OrderRefund"
-				@collection.add(model)
-				@top(model)
+	realtime_help: (info) ->
+		@collection.add(info.value)
+		@top(model)
 
 	addAll: (collecton) ->
 		@collection.each (model) =>
@@ -78,16 +82,19 @@ class TransactionMessageView extends FriendView
 
 class ActivitiesContainerView extends RealTimeContainerView
 
-	bind_realtime: () ->
-		@client = Realtime.client(@realtime_url)
-		@client.subscribe "/Activity/un_dispose", (info) =>
-			@realtime_help(info, 'activities')
+	bind_items: () ->
+		@parent_view  = @options.parent_view
+		@$parent_view = $(@options.parent_view.el)
+		@$parent_view.append(@el)
 
-	realtime_help: (info, type) ->
-		data = info.value
-		switch info.type
-			when "new"
-				@collection.add(_.extend(data, {_type: type}))
+		@urlRoot = "/people/#{@current_user_login}/notifications"
+		@collection = new Backbone.Collection()
+		@collection.bind('reset', @addAll, @)
+		@collection.bind('add', @addOne, @)
+		@collection.fetch({ url: "#{@urlRoot}/unread?type=Activity" })
+
+	realtime_help: (info) ->
+		@collection.add(info.value)
 
 	fill_header: () ->
 		$(@el).prepend('<h5 class="tab-header activities">
@@ -95,18 +102,6 @@ class ActivitiesContainerView extends RealTimeContainerView
 			</h5>
 			<ul class="notices-list activities-list activities">
 			</ul>')
-
-	bind_items: () ->
-		@parent_view  = @options.parent_view
-		@$parent_view = $(@options.parent_view.el)
-		@$parent_view.append(@el)
-		@bind_realtime()
-
-		@urlRoot = "/people/#{@current_user_login}/notifications"
-		@collection = new Backbone.Collection()
-		@collection.bind('reset', @addAll, @)
-		@collection.bind('add', @addOne, @)
-		@collection.fetch({ url: "#{@urlRoot}/unread?type=Activity" })
 
 	addAll: (collecton) ->
 		@collection.each (model) =>
