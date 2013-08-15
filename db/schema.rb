@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130814023854) do
-=======
-ActiveRecord::Schema.define(:version => 20130812114257) do
->>>>>>> 4cbb10292947073047d5b43c03b1c8293fcd4798
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -48,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20130812114257) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|

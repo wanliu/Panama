@@ -37,14 +37,15 @@ ActiveAdmin.register OrderTransaction do
       order.transfer_sheet.try(:bank)
     end
     column :action_link do |order|
-      if order.waiting_audit_state?
-        content_tag :div do
-          link = link_to "通过", audit_system_order_transaction_path(order), :method => :post
-          link1 = link_to "未通过", audit_failure_system_order_transaction_path(order), :method => :post
-          "#{link}  #{link1}".html_safe
-        end
+      content_tag :div do
+        view_link = link_to "查看", system_order_transaction_path(order), :method => :get
+        view_link.html_safe
       end
     end
+  end
+
+  show do
+    render "check_info"
   end
 
   # controller do
