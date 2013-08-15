@@ -1,0 +1,88 @@
+<table>
+	<colgroup width="20%"></colgroup>
+	<colgroup width="80%"></colgroup>
+	<tbody>
+		<tr>
+			<td>编号</td>
+			<td><%= @order_transaction.id %></td>
+		</tr>
+		<tr>
+			<td>状态</td>
+			<td><%= @order_transaction.state %></td>
+		</tr>
+		<tr>
+			<td>总计项</td>
+			<td><%= @order_transaction.items_count %></td>
+		</tr>
+		<tr>
+			<td>小计</td>
+			<td><%= @order_transaction.total %></td>
+		</tr>
+		<tr>
+			<td>卖家</td>
+			<td><%= @order_transaction.seller.name %></td>
+		</tr>
+		<tr>
+			<td>买家</td>
+			<td><%= @order_transaction.buyer.login %></td>
+		</tr>
+		<tr>
+			<td>创建时间</td>
+			<td><%= @order_transaction.created_at %></td>
+		</tr>
+		<tr>
+			<td>更新时间</td>
+			<td><%= @order_transaction.updated_at %></td>
+		</tr>
+		<tr>
+			<td>收货地址</td>
+			<td><%= @order_transaction.address.location %></td>
+		</tr>
+		<tr>
+			<td>已接单</td>
+			<td><%= @order_transaction.operator_state %></td>
+		</tr>
+		<tr>
+			<td>接单员</td>
+			<td><%= @order_transaction.operator.try(:login) || "无" %></td>
+		</tr>
+		<tr>
+			<td>配送方式</td>
+			<td><%= @order_transaction.delivery_type.try(:name) %></td>
+		</tr>
+		<tr>
+			<td>配送费用</td>
+			<td><%= @order_transaction.delivery_price %></td>
+		</tr>
+		<tr>
+			<td>配送地邮编</td>
+			<td><%= @order_transaction.address.zip_code %></td>
+		</tr>
+		<tr>
+			<td>支付方式</td>
+			<td><%= @order_transaction.pay_manner.name %></td>
+		</tr>
+		<tr>
+			<td>配送类型</td>
+			<td><%= @order_transaction.delivery_manner.name %></td>
+		</tr>
+		<tr>
+			<td>物流公司</td>
+			<td><%= @order_transaction.logistics_company.try(:name) || "无" %></td>
+		</tr>
+	</tbody>
+</table>
+
+<% if @order_transaction.waiting_audit_state? %>
+	<%= button_to "审核通过", { action: :audit } %>
+	<%= button_to "审核未通过", { action: :audit_failure } %>
+<% end %>
+
+<style type="text/css">
+	form.button_to {
+		display: inline;
+	}
+	form.button_to div {
+		display: inline;
+	}
+</script>

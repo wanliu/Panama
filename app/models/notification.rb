@@ -24,10 +24,10 @@ class Notification < ActiveRecord::Base
       })
     else
       count = Notification.unreads.where(user_id: user_id).count
-      FayeClient.send("/notification/#{ user.im_token }", {
+      FayeClient.send("/notification/#{ mentionable_user.im_token }", {
         count: count, 
         type: targeable_type, 
-        value: self
+        value: format_unread
       })
     end
   end
@@ -45,6 +45,10 @@ class Notification < ActiveRecord::Base
         :id => targeable.id,
         :title => targeable.title,
         :img_url => targeable.photos.avatar
+      }
+    else
+      attra[:targeable] = {
+        :img_url => mentionable_user.photos.avatar
       }
     end
     attra
