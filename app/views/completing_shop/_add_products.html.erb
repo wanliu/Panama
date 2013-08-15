@@ -13,12 +13,10 @@
 		<div class="body tab-content">
             <div id="categories" class="tab-pane active clearfix">
             	<div class='search-header'>
-            		<form>
-					<div class="input-append">
-	                    <input type="search" id="search-input3">
-	                    <button type="button" class="btn btn-transparent">Search</button>
+					<div class="input-append controls-row">
+	                    <input class="span8" type="search" id="search-input3">
+	                    <button type="button" class="btn btn-transparent span4">Search</button>
 	                </div>
-	                </form>
             	</div>
             	<%= render "category_selector" %>
             </div>
@@ -27,18 +25,17 @@
         </div>
 	</div>
 	<div class="span4">
-		<div class='panel' style="margin-right:10px;">
+		<div class='panel' style="margin-right:13px;">
 			<h4><i class='icon-th-large'></i> 分类商品
 				<!-- <i class="icon-foursquare"></i> -->
 				<button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
 			</h4>
-
-    		<form class='search-form'>
-				<div class="input-append">
-	                <input type="search" id="search-input1">
-	                <button type="button" class="btn btn-transparent">Search</button>
+			<div class='search-header'>
+				<div class="input-append controls-row">
+	                <input class="span8" type="search" id="search-input1">
+	                <button type="button" class="btn btn-transparent span4">Search</button>
 	            </div>
-            </form>
+	        </div>
 			<ul class='category_product_list product_list'>
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
 			</ul>
@@ -72,12 +69,12 @@
 	<div class="span4">
 		<div class='panel' style="margin-left:8px;">
 			<h4><i class='icon-th-large'></i> 库存商品</h4>
-    		<form class='search-form'>
-				<div class="input-append">
-	                <input type="search" id="search-input2">
-	                <button type="button" class="btn btn-transparent">Search</button>
-	            </div>
-            </form>
+			<div class='search-header'>
+				<div class="input-append controls-row">
+		            <input class="span8" type="search" id="search-input2">
+		            <button type="button" class="btn btn-transparent span4">Search</button>
+		        </div>
+		    </div>
 			<ul class='my_product_list product_list'>
 			</ul>
 		</div>
@@ -150,6 +147,7 @@
 			var numberItems = count;
 			$("#filter-count").text("Number of Comments = "+count);
 		})
+		false
 	};
 
 	$(document).ready(function(){
