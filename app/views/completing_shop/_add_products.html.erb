@@ -2,7 +2,7 @@
 	<div class="span4">
 		<header>
 		    <ul class="nav nav-tabs">
-		        <li class="active">
+		        <li class="active" id ="sort">
 		            <a href="#categories" data-toggle="tab">分类</a>
 		        </li>
 		        <li>
@@ -15,7 +15,7 @@
             	<div class='search-header'>
             		<form>
 					<div class="input-append">
-	                    <input type="search" id="search-input">
+	                    <input type="search" id="search-input3">
 	                    <button type="button" class="btn btn-transparent">Search</button>
 	                </div>
 	                </form>
@@ -153,6 +153,7 @@
 	};
 
 	$(document).ready(function(){
+		Filter("search-input3","tree-nav");
 		Filter("search-input1","category_product_list");
 		Filter("search-input2","my_product_list")
 	})
