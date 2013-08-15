@@ -72,7 +72,18 @@ class TransactionMessageView extends FriendView
 	direct_to_transaction_detail: () ->
 		@undo_active()
 		debugger
-		window.location.replace(@model.get('url'))
+		@notification_id = @model.get('id')
+		$.ajax({
+			type: "put",
+			dataType: "json",
+			data:{ id : @notification_id}
+			url: "/people/"+@model.get('mentionable_user_id')+"/notifications/read_notification"
+			success: ()->
+				window.location.replace(@model.get('url'))
+			error: ()->
+				alert("something is wrong ")
+		})
+		
 
 	active: () ->
 		$(@el).addClass('active')

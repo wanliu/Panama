@@ -122,6 +122,7 @@ Panama::Application.routes.draw do
       end
       collection do
         get :unread, :to => "people/notifications#unread"
+        put :read_notification, :to => "people/notifications#read_notification"
       end
     end
 

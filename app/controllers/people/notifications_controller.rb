@@ -29,6 +29,13 @@ class People::NotificationsController < People::BaseController
       end
     end
 
+    def read_notification
+      @notification = Notification.find_by(:user_id => params[:person_id], :id => params[:id])
+      authorize! :read, @notification
+      @notification.update_attribute(:read, true)
+      render nothing: true
+    end
+
     def unread
       @notifications = Notification.unreads.where({ 
         :mentionable_user_id => current_user.id, 
@@ -37,5 +44,4 @@ class People::NotificationsController < People::BaseController
         format.json { render json: Notification.format_unreads(@notifications) }
       end
     end
-
 end
