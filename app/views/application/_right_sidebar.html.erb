@@ -17,10 +17,6 @@
 	</div>
 
 	<div class="container">
-			<ul class="notices-list users-list">
-			</ul>
-			<ul class="notices-list activities-list">
-			</ul>
 	</div>
 
 	<div class='activity-item'>
@@ -37,7 +33,6 @@
 	window.right_sidebar ||
 	(window.right_sidebar = new RightSideBar({el: ".right-sidebar"}));
 
-	right_sidebar.register(ActivitiesContainerView,
-						   TransactionView,
+	right_sidebar.register(NotificationsContainerView,
 						   FriendsContainerView);
 </script>

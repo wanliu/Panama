@@ -35,9 +35,26 @@
 
     		<form class='search-form'>
 				<div class="input-append">
-	                <input type="search" id="search-input">
+	                <input type="search" id="search-input1">
 	                <button type="button" class="btn btn-transparent">Search</button>
 	            </div>
+	            <script type="text/javascript">
+	            	$(document).ready(function(){
+						$("#search-input1").keyup(function(){
+							var filter = $(this).val(), count = 0;
+							$(".category_product_list li").each(function(){
+								if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+									$(this).fadeOut();
+								} else {
+									$(this).show();
+									count++;
+								}
+							});
+							var numberItems = count;
+							$("#filter-count").text("Number of Comments = "+count);
+						});
+					});
+	            </script>
             </form>
 			<ul class='category_product_list product_list'>
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
@@ -74,8 +91,25 @@
 			<h4><i class='icon-th-large'></i> 库存商品</h4>
     		<form class='search-form'>
 				<div class="input-append">
-	                <input type="search" id="search-input">
+	                <input type="search" id="search-input2">
 	                <button type="button" class="btn btn-transparent">Search</button>
+	                <script type="text/javascript">
+	            	$(document).ready(function(){
+						$("#search-input2").keyup(function(){
+							var filter = $(this).val(), count = 0;
+							$(".my_product_list li").each(function(){
+								if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+									$(this).fadeOut();
+								} else {
+									$(this).show();
+									count++;
+								}
+							});
+							var numberItems = count;
+							$("#filter-count").text("Number of Comments = "+count);
+						});
+					});
+	            </script>
 	            </div>
             </form>
 			<ul class='my_product_list product_list'>
@@ -117,30 +151,24 @@
 	</div>
 </div>
 <script type="text/javascript">
+	var bind_editable = function(elem, class_name){
+		id = $(elem).attr("id")
+		$("."+ class_name , elem).editable({
+	        type:  'text',
+	        pk:    id,
+	        name:  class_name,        
+	        url:   "/shop_products/"+ id +"/update_attribute",  
+	        title: 'change your '+class_name,
+	        ajaxOptions: {
+	        	type: 'put',
+	        	dataType: 'json'
+	    	}  
+		})
+	}
+
 	$('.my_product_list>li').each(function(i, elem){
-		debugger
-		$(".price", elem).editable({
-	        type:  'text',
-	        pk:    elem.id,
-	        name:  'price',        
-	        url:   "/shop_products/"+elem.id+"/update_attribute",  
-	        title: 'change your price',
-	        ajaxOptions: {
-	        	type: 'put',
-	        	dataType: 'json'
-	    	}  
-		})
-		$(".inventory", elem).editable({
-	        type:  'text',
-	        pk:    elem.id,
-	        name:  'inventory',        
-	        url:   "/shop_products/"+elem.id+"/update_attribute",    
-	        title: 'change your price',
-	        ajaxOptions: {
-	        	type: 'put',
-	        	dataType: 'json'
-	    	}  
-		})
+		bind_editable(elem, "price")
+		bind_editable(elem, "inventory")
 	})
 	
 </script>
