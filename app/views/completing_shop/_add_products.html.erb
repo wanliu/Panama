@@ -38,23 +38,6 @@
 	                <input type="search" id="search-input1">
 	                <button type="button" class="btn btn-transparent">Search</button>
 	            </div>
-	            <script type="text/javascript">
-	            	$(document).ready(function(){
-						$("#search-input1").keyup(function(){
-							var filter = $(this).val(), count = 0;
-							$(".category_product_list li").each(function(){
-								if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-									$(this).fadeOut();
-								} else {
-									$(this).show();
-									count++;
-								}
-							});
-							var numberItems = count;
-							$("#filter-count").text("Number of Comments = "+count);
-						});
-					});
-	            </script>
             </form>
 			<ul class='category_product_list product_list'>
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
@@ -93,23 +76,6 @@
 				<div class="input-append">
 	                <input type="search" id="search-input2">
 	                <button type="button" class="btn btn-transparent">Search</button>
-	                <script type="text/javascript">
-	            	$(document).ready(function(){
-						$("#search-input2").keyup(function(){
-							var filter = $(this).val(), count = 0;
-							$(".my_product_list li").each(function(){
-								if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-									$(this).fadeOut();
-								} else {
-									$(this).show();
-									count++;
-								}
-							});
-							var numberItems = count;
-							$("#filter-count").text("Number of Comments = "+count);
-						});
-					});
-	            </script>
 	            </div>
             </form>
 			<ul class='my_product_list product_list'>
@@ -164,11 +130,31 @@
 	        	dataType: 'json'
 	    	}  
 		})
-	}
-
+	};
 	$('.my_product_list>li').each(function(i, elem){
 		bind_editable(elem, "price")
 		bind_editable(elem, "inventory")
+	});
+
+	var Filter = function(id_name,target){
+		$("#"+id_name).keyup(function(){
+			var filter = $(this).val(), count = 0;
+			$("."+target+" li").each(function(){
+				if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+					$(this).fadeOut();
+				} else {
+					$(this).show()// $(this).show();
+					count++;
+				}
+			});
+			var numberItems = count;
+			$("#filter-count").text("Number of Comments = "+count);
+		})
+	};
+
+	$(document).ready(function(){
+		Filter("search-input1","category_product_list");
+		Filter("search-input2","my_product_list")
 	})
 	
 </script>
