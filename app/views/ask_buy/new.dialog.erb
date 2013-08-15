@@ -1,12 +1,7 @@
 <%= simple_form_for @ask_buy, :remote => true, :url => ask_buy_index_path, :html => { class: 'form-horizontal form_ask_buy' }  do |f| %>
-  <%#= f.input :title, :input_html => {
+  <%= f.input :title, :input_html => {
     :class => "ask_buy_title"
   } %>
-  <%= f.input :title,
-              :collection => [],
-              :input_html => {
-                :class => "ask_buy_title"
-              } %>
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
@@ -18,7 +13,7 @@
   <%= f.input :describe, :as => :text %>
 <% end %>
 
-<template class='upload_template'>
+<script type="text/template" class='upload_template'>
   <div class="attachable">
     <img class="img-rounded attachable-preview" />
     <input type="hidden" />
@@ -31,7 +26,7 @@
       </div>
     </div>
   </div>
-</template>
+</script>
 
 <script type='text/javascript'>
   $(document).ready(function(){
@@ -46,30 +41,14 @@
       }
     })
 
-    // new TypeaheadExtension({
-    //   el: $("input.ask_buy_title"),
-    //   field: "name",
-    //   source: "/product_search",
-    //   select: function(id){
-    //     view.fetch_product(id)
-    //   }
-    // })
-
-    $('.form_ask_buy .ask_buy_title').chosenEx({
-      allow_single_deselect : true,
-      placeholder_text : "选择一个商品",
-      no_results_text : "没有以该关键词开头的商品",
-      <% if @ask_buy.product.present? %>
-      data: [{id: <%= @ask_buy.product_id %>, name: "<%=@ask_buy.product.name %>"}]
-      <% end %>
-      remote: {
-        url: "/product_search",
-        dataType: "json"
-      },
+    new TypeaheadExtension({
+      el: $("input.ask_buy_title"),
+      field: "name",
+      source: "/product_search",
       select: function(id){
         view.fetch_product(id)
       }
-    });
+    })
 
   })
 </script>
