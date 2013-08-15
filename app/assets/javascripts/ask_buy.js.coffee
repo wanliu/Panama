@@ -24,6 +24,7 @@ class root.AskBuyView extends Backbone.View
   initialize: () ->
     _.extend(@upload_params, @params, @options.params)
     @$price = @$("#ask_buy_price")
+    @$title = @$(".ask_buy_title")
     @init_attachment(@upload_params.data)
 
   fetch_product: (product_id) ->
@@ -35,6 +36,7 @@ class root.AskBuyView extends Backbone.View
       success: (product) =>
         @atta.destroy_all()
         @$price.val(product.price)
+        @$title.val(product.name)
         @init_attachment(product.attachments)
     )
 
