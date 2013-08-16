@@ -8,7 +8,7 @@
 @import 'font-awesome';
 @import 'lib/stroll';
 
-body {
+body, html {
 	// $bgcolor1: #69D2E7;
 	// $bgcolor2: #A7DBD8;
 	// $bgcolor3: #E0E4CC;
@@ -811,7 +811,7 @@ ul {
 	.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
 		// border: 1px solid #dddddd;
 		// border-color: transparent;
-	}	
+	}
 
 	.nav-tabs > .active > a {
 		background-color: white;
@@ -864,10 +864,13 @@ ul {
 				.author_image {
 					width: 50px;
 				}
+			}
+
+			.main-show{
 				height: auto;
 				max-height: 525px;
 			}
-			
+
 			.big_comments_and_reply {
 				text-align: left;
 				.comments {
@@ -903,6 +906,12 @@ ul {
 						}
 					}
 				}
+			}
+		}
+
+		.dialog#purchase-forms{
+			.modal-body{
+				height: 140px;
 			}
 		}
 	}
