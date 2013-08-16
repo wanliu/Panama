@@ -47,8 +47,13 @@ class TransactionsContainerView extends NotificationsContainerView
 		@collection.bind('add', @add_one, @)
 
 	realtime_help: (info) ->
-		@collection.add(info.value)
+		model = info.value
+		@collection.add(model)
+		@active_one(model)
 		@top(model)
+
+	active_one: (model) ->
+		@collection.get(model.id).view.active()
 
 	add_one: (model) ->
 		@$("h5 .num").html(@collection.length)
@@ -56,7 +61,7 @@ class TransactionsContainerView extends NotificationsContainerView
 		message_view = new TransactionMessageView({ 
 			model: model, 
 			parent_view: @ })
-		model.view  = message_view
+		model.view = message_view
 		@$(".transactions-list").prepend(message_view.render().el)
 
 	top: (model) ->
@@ -74,7 +79,7 @@ class TransactionMessageView extends Backbone.View
 
 	template: (options) ->
 		_.template("<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
-					<div class='user-info'>
+					<div class='transaction-info'>
 						<i class=' icon-volume-up'></i>
 						<%= model.get('body') %>,点击查看详情
 					</div>")(options)
@@ -107,7 +112,12 @@ class ActivitiesContainerView extends NotificationsContainerView
 		@collection.bind('add', @add_one, @)
 
 	realtime_help: (info) ->
-		@collection.add(info.value)
+		model = info.value
+		@collection.add(model)
+		@active_one(model)
+
+	active_one: (model) ->
+		@collection.get(model.id).view.active()
 
 	fill_header: () ->
 		$(@el).prepend('<h5 class="tab-header activities">
@@ -136,7 +146,7 @@ class ActivityMessageView extends Backbone.View
 	tagName: 'li'
 	template: _.template(
 				"<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
-			<div class='user-info'>
+			<div class='activity-info'>
 			<div class='name'>
 				<a href='#''><%= model.get('body') %></a>
 			</div>
@@ -154,7 +164,10 @@ class ActivityMessageView extends Backbone.View
 			new ActivityView({
 				model    : model 
 			}).modal()
-			@remove()    
+			@remove()
+
+	active: () ->
+		$(@el).addClass('active')
 
 	render: () ->
 		$(@el).html(@template(model: @model))
