@@ -233,7 +233,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_user
-    Notification.create!(
+    notifications.create!(
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
