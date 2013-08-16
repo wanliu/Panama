@@ -9,6 +9,11 @@ class ProductComment < ActiveRecord::Base
   belongs_to :shop
   has_one :comment, :as => :targeable, :dependent => :destroy
 
+  validates :product_item_id, :uniqueness => true, :presence => true
+  validates :shop, :presence => true
+  validates :user, :presence => true
+  validates :product_id, :presence => true
+
   before_create :init_data
 
   private
@@ -20,4 +25,5 @@ class ProductComment < ActiveRecord::Base
     self.star_product = 5 if self.star_product > 5
     self.star_service = 5 if self.star_service > 5
   end
+
 end

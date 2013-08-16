@@ -28,7 +28,7 @@ class window.DirectTransactionView extends Backbone.View
       url: "/people/#{@login}/direct_transactions/#{@direct_transaction_id}/completed",
       type: 'POST',
       success: () =>
-        @el.remove()
+        @$el.remove()
     )
 
   close: () ->
@@ -37,7 +37,7 @@ class window.DirectTransactionView extends Backbone.View
         url: "/people/#{@login}/direct_transactions/#{@direct_transaction_id}",
         type: "DELETE",
         success: () =>
-          @el.remove()
+          @$el.remove()
       )
 
 

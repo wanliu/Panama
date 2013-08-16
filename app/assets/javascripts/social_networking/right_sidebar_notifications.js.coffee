@@ -9,6 +9,15 @@ class NotificationsContainerView extends RealTimeContainerView
 		super
 		@transactions_view = new TransactionContainerView(parent_view: @)
 		@activities_view = new ActivitiesContainerView(parent_view: @)
+		@bind_realtime()
+
+	bind_realtime: () ->
+		@client = Realtime.client(@realtime_url)
+		@client.monitor_people_notification @token, (info) =>
+			if info.type == "OrderTransaction" || info.type == "OrderRefund"
+				@transactions_view.realtime_help(info)
+			else if info.type == "Activity"
+				@activities_view.realtime_help(info)
 
 
 class TransactionContainerView extends RealTimeContainerView
@@ -26,26 +35,21 @@ class TransactionContainerView extends RealTimeContainerView
 		@$parent_view.append(@el)
 
 		@collection = new Backbone.Collection
-		@collection.bind('reset', @addAll, @)
-		@collection.bind('add', @addOne, @)
+		@collection.bind('reset', @add_all, @)
+		@collection.bind('add', @add_one, @)
 		@urlRoot = "/people/#{@current_user_login}/notifications"
 		@collection.fetch(url: "#{@urlRoot}/unread?type=OrderTransaction")
-		@bind_realtime()
 
-	bind_realtime: () ->
-		@client = Realtime.client(@realtime_url)
-		@client.monitor_people_notification @token, (info) =>
-			model = info.value
-			if info.type == "OrderTransaction" || info.type == "OrderRefund"
-				@collection.add(model)
-				@top(model)
+	realtime_help: (info) ->
+		@collection.add(info.value)
+		@top(model)
 
-	addAll: (collecton) ->
+	add_all: (collecton) ->
 		@collection.each (model) =>
 			if model.attributes.targeable_type == "OrderTransaction"
-				@addOne(model)
+				@add_one(model)
 
-	addOne: (model) ->
+	add_one: (model) ->
 		@$("h5 .num").html(@collection.length)
 		message_view = new TransactionMessageView({ 
 			login: @current_user_login,
@@ -68,9 +72,11 @@ class TransactionMessageView extends FriendView
 		"click" : "direct_to_transaction_detail"
 
 	template: (options) ->
-		_.template("<i class=' icon-volume-up'></i>
-					<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
-					<%= model.get('body') %>,点击查看详情")(options)
+		_.template("<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+					<div class='user-info'>
+						<i class=' icon-volume-up'></i>
+						<%= model.get('body') %>,点击查看详情
+					</div>")(options)
 
 	direct_to_transaction_detail: () ->
 		@undo_active()
@@ -83,8 +89,6 @@ class TransactionMessageView extends FriendView
 			success: () =>
 				window.location.replace(@model.get('url'))
 		})
-		
-		
 
 	active: () ->
 		$(@el).addClass('active')
@@ -92,16 +96,19 @@ class TransactionMessageView extends FriendView
 
 class ActivitiesContainerView extends RealTimeContainerView
 
-	bind_realtime: () ->
-		@client = Realtime.client(@realtime_url)
-		@client.subscribe "/Activity/un_dispose", (info) =>
-			@realtime_help(info, 'activities')
+	bind_items: () ->
+		@parent_view  = @options.parent_view
+		@$parent_view = $(@options.parent_view.el)
+		@$parent_view.append(@el)
 
-	realtime_help: (info, type) ->
-		data = info.value
-		switch info.type
-			when "new"
-				@collection.add(_.extend(data, {_type: type}))
+		@urlRoot = "/people/#{@current_user_login}/notifications"
+		@collection = new Backbone.Collection()
+		@collection.bind('reset', @add_all, @)
+		@collection.bind('add', @add_one, @)
+		@collection.fetch({ url: "#{@urlRoot}/unread?type=Activity" })
+
+	realtime_help: (info) ->
+		@collection.add(info.value)
 
 	fill_header: () ->
 		$(@el).prepend('<h5 class="tab-header activities">
@@ -110,33 +117,22 @@ class ActivitiesContainerView extends RealTimeContainerView
 			<ul class="notices-list activities-list activities">
 			</ul>')
 
-	bind_items: () ->
-		@parent_view  = @options.parent_view
-		@$parent_view = $(@options.parent_view.el)
-		@$parent_view.append(@el)
-		@bind_realtime()
-
-		@urlRoot = "/people/#{@current_user_login}/notifications"
-		@collection = new Backbone.Collection()
-		@collection.bind('reset', @addAll, @)
-		@collection.bind('add', @addOne, @)
-		@collection.fetch({ url: "#{@urlRoot}/unread?type=Activity" })
-
-	addAll: (collecton) ->
+	add_all: (collecton) ->
 		@collection.each (model) =>
-			@addOne(model)
+			@add_one(model)
 
-	addOne: (model) ->
+	add_one: (model) ->
 		@$("h5 .num").html(@collection.length)
 		model.url = "#{@urlRoot}/#{model.id}"
 		activity_view = new ActivityMessageView({ model: model, parent_view: @ })
 		model.view = activity_view
 		@$(".activities-list").prepend(activity_view.render().el)
-		activity_view.bind("remove_model", _.bind(@remove_model, @))
+		activity_view.bind("remove_model", _.bind(@remove_one, @))
 
-	remove_model: (id) ->
+	remove_one: (id) ->
 		model = @collection.get(id)
-		@collection.remove model if model?   
+		@collection.remove model if model?
+		@$("h5 .num").html(@collection.length)
 
 
 class ActivityMessageView extends Backbone.View
@@ -153,10 +149,6 @@ class ActivityMessageView extends Backbone.View
 	events:
 		"click" : "show_modal"
 
-	initialize: () ->
-		@$el = $(@el)
-		@model.bind('remove', @remove, @)
-
 	show_modal: () ->
 		activity_model = new ActivityModel({ 
 			id: @model.get('targeable_id') 
@@ -164,8 +156,8 @@ class ActivityMessageView extends Backbone.View
 		activity_model.fetch success: (model) =>
 			new ActivityView({
 				model    : model 
-			}).modal()     
-			@trigger("remove_model", @model.id)
+			}).modal()
+			@remove()    
 
 	render: () ->
 		$(@el).html(@template(model: @model))
@@ -175,7 +167,9 @@ class ActivityMessageView extends Backbone.View
 		$.ajax(
 			type: "GET",
 			dataType: "json",
-			url: "#{@model.url}/enter"
+			url: "#{@model.url}/enter",
+			success: () =>
+				@trigger("remove_model", @model.id)
 		)
 		super
 

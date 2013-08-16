@@ -17,19 +17,12 @@ class Notification < ActiveRecord::Base
   after_create :realtime_push_to_client
 
   def realtime_push_to_client
-    if self.targeable_type == "Activity"
-      FayeClient.send("/Activity/un_dispose", {
-        type: :new,
-        value: format_unread
-      })
-    else
-      count = Notification.unreads.where(user_id: user_id).count
-      FayeClient.send("/notification/#{ mentionable_user.im_token }", {
-        count: count, 
-        type: targeable_type, 
-        value: format_unread
-      })
-    end
+    count = Notification.unreads.where(user_id: user_id).count
+    FayeClient.send("/notification/#{ mentionable_user.im_token }", {
+      count: count, 
+      type: targeable_type, 
+      value: format_unread
+    })
   end
 
   def self.format_unreads(notifications = [])
