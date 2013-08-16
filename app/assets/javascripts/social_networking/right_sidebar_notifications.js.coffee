@@ -69,9 +69,11 @@ class TransactionMessageView extends FriendView
 		"click" : "direct_to_transaction_detail"
 
 	template: (options) ->
-		_.template("<i class=' icon-volume-up'></i>
-					<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
-					<%= model.get('body') %>,点击查看详情")(options)
+		_.template("<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+					<div class='user-info'>
+						<i class=' icon-volume-up'></i>
+						<%= model.get('body') %>,点击查看详情
+					</div>")(options)
 
 	direct_to_transaction_detail: () ->
 		@undo_active()
