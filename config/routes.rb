@@ -119,10 +119,10 @@ Panama::Application.routes.draw do
     resources :notifications,:except => :show, :controller => "people/notifications" do
       member do
         get :enter, :to => "people/notifications#show"
+        post :mark_as_read, :to => "people/notifications#mark_as_read"
       end
       collection do
-        get :unread, :to => "people/notifications#unread"
-        put :read_notification, :to => "people/notifications#read_notification"
+        get :unreads, :to => "people/notifications#unreads"
       end
     end
 

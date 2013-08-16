@@ -5,12 +5,6 @@ class NotificationsContainerView extends RealTimeContainerView
 		klass   : "icon-star"
 		tool_tip: "显示消息通知"
 
-	initialize: () ->
-		super
-		@transactions_view = new TransactionContainerView(parent_view: @)
-		@activities_view = new ActivitiesContainerView(parent_view: @)
-		@bind_realtime()
-
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>
@@ -19,8 +13,24 @@ class NotificationsContainerView extends RealTimeContainerView
 			else if info.type == "Activity"
 				@activities_view.realtime_help(info)
 
+	bind_items: () ->
+		@urlRoot = "/people/#{@current_user_login}/notifications"
+		@transactions_view = new TransactionsContainerView(parent_view: @)
+		@activities_view = new ActivitiesContainerView(parent_view: @)
+		@collection = new Backbone.Collection
+		@collection.bind('reset', @add_all, @)
+		@collection.fetch(url: "#{@urlRoot}/unreads")
+		@bind_realtime()
 
-class TransactionContainerView extends RealTimeContainerView
+	add_all: () ->
+		@collection.each (model) =>
+			if model.attributes.targeable_type == "Activity"
+				@activities_view.collection.add(model)
+			else
+				@transactions_view.collection.add(model)
+
+
+class TransactionsContainerView extends NotificationsContainerView
 	fill_header: () ->
 		$(@el).prepend(
 				'<h5 class="tab-header transactions">
@@ -33,26 +43,17 @@ class TransactionContainerView extends RealTimeContainerView
 		@parent_view  = @options.parent_view
 		@$parent_view = $(@options.parent_view.el)
 		@$parent_view.append(@el)
-
 		@collection = new Backbone.Collection
-		@collection.bind('reset', @add_all, @)
 		@collection.bind('add', @add_one, @)
-		@urlRoot = "/people/#{@current_user_login}/notifications"
-		@collection.fetch(url: "#{@urlRoot}/unread?type=OrderTransaction")
 
 	realtime_help: (info) ->
 		@collection.add(info.value)
 		@top(model)
 
-	add_all: (collecton) ->
-		@collection.each (model) =>
-			if model.attributes.targeable_type == "OrderTransaction"
-				@add_one(model)
-
 	add_one: (model) ->
 		@$("h5 .num").html(@collection.length)
+		model.url = "#{@parent_view.urlRoot}/#{model.id}"
 		message_view = new TransactionMessageView({ 
-			login: @current_user_login,
 			model: model, 
 			parent_view: @ })
 		model.view  = message_view
@@ -65,7 +66,7 @@ class TransactionContainerView extends RealTimeContainerView
 		exsited_model.view.active() if exsited_model && exsited_model.view
 
 
-class TransactionMessageView extends FriendView
+class TransactionMessageView extends Backbone.View
 	tagName: 'li'
 
 	events:
@@ -79,13 +80,11 @@ class TransactionMessageView extends FriendView
 					</div>")(options)
 
 	direct_to_transaction_detail: () ->
-		@undo_active()
-		@notification_id = @model.get('id')
 		$.ajax({
-			type: "put",
+			type: "POST",
 			dataType: "json",
-			data:{ id : @notification_id}
-			url: "/people/#{@options.login}/notifications/read_notification"
+			data:{ id : @model.id }
+			url: "#{@model.url}/mark_as_read",
 			success: () =>
 				window.location.replace(@model.get('url'))
 		})
@@ -93,19 +92,19 @@ class TransactionMessageView extends FriendView
 	active: () ->
 		$(@el).addClass('active')
 
+	render: () ->
+		$(@el).html(@template(model: @model))
+		@
 
-class ActivitiesContainerView extends RealTimeContainerView
+
+class ActivitiesContainerView extends NotificationsContainerView 
 
 	bind_items: () ->
 		@parent_view  = @options.parent_view
 		@$parent_view = $(@options.parent_view.el)
 		@$parent_view.append(@el)
-
-		@urlRoot = "/people/#{@current_user_login}/notifications"
-		@collection = new Backbone.Collection()
-		@collection.bind('reset', @add_all, @)
+		@collection = new Backbone.Collection
 		@collection.bind('add', @add_one, @)
-		@collection.fetch({ url: "#{@urlRoot}/unread?type=Activity" })
 
 	realtime_help: (info) ->
 		@collection.add(info.value)
@@ -117,14 +116,12 @@ class ActivitiesContainerView extends RealTimeContainerView
 			<ul class="notices-list activities-list activities">
 			</ul>')
 
-	add_all: (collecton) ->
-		@collection.each (model) =>
-			@add_one(model)
-
 	add_one: (model) ->
 		@$("h5 .num").html(@collection.length)
-		model.url = "#{@urlRoot}/#{model.id}"
-		activity_view = new ActivityMessageView({ model: model, parent_view: @ })
+		model.url = "#{@parent_view.urlRoot}/#{model.id}"
+		activity_view = new ActivityMessageView({ 
+			model: model, 
+			parent_view: @ })
 		model.view = activity_view
 		@$(".activities-list").prepend(activity_view.render().el)
 		activity_view.bind("remove_model", _.bind(@remove_one, @))
@@ -165,9 +162,9 @@ class ActivityMessageView extends Backbone.View
 
 	remove: () ->
 		$.ajax(
-			type: "GET",
+			type: "POST",
 			dataType: "json",
-			url: "#{@model.url}/enter",
+			url: "#{@model.url}/mark_as_read",
 			success: () =>
 				@trigger("remove_model", @model.id)
 		)
