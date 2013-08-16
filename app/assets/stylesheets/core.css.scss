@@ -588,6 +588,12 @@ ul {
 		display: none;
 	}
 
+	li:hover {
+		.user-info {
+			display: block;
+		}
+	}
+
 	.settings {
 		.btn-icons {
 			display: none;
