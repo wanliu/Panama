@@ -17,7 +17,6 @@ class People::NotificationsController < People::BaseController
     end
 
     def show
-      debugger
       @notification = Notification.find_by(:mentionable_user_id => @people.id, :id => params[:id])
       respond_to do | format |
           unless @notification.nil?
