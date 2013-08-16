@@ -169,7 +169,7 @@ class OrderRefund < ActiveRecord::Base
     notifications.create!(
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
-      :url => "/people/#{buyer.login}/transactions##{id}",
+      :url => "/people/#{buyer.login}/order_refunds#refund#{id}",
       :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货") 
   end
 

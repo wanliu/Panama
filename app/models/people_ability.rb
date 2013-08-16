@@ -7,7 +7,7 @@ class PeopleAbility
       current_user ||= User.new
       if current_user == people
         can :read, Notification do |notice|
-          notice.user_id == current_user.id
+          notice.mentionable_user_id == current_user.id
         end
         can :show_bill, People
         can :manage, User

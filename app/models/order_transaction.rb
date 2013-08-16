@@ -69,8 +69,8 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_user
     notifications.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :body => "你有新的订单")
   end
@@ -351,7 +351,7 @@ class OrderTransaction < ActiveRecord::Base
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-      :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
+      :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
   end
 
   def system_fire_event!(event)
@@ -361,12 +361,12 @@ class OrderTransaction < ActiveRecord::Base
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-      :body => "您的订单#{number}已经"+I18n.t("order_states.buyer.#{state}"))
+      :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
      notifications.create!(
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/people/#{buyer.login}/transactions##{id}",
-      :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}"))
+      :body => "您的订单#{number} 卖家已经"+I18n.t("order_states.seller.#{state}"))
 
   end
 
@@ -377,7 +377,7 @@ class OrderTransaction < ActiveRecord::Base
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/people/#{buyer.login}/transactions##{id}",
-      :body => "您的订单#{number}已经"+I18n.t("order_states.seller.#{state}"))
+      :body => "您的订单#{number}卖家已经"+I18n.t("order_states.seller.#{state}"))
   end
 
   def refund_items

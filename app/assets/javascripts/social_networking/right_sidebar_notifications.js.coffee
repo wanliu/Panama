@@ -47,7 +47,10 @@ class TransactionContainerView extends RealTimeContainerView
 
 	addOne: (model) ->
 		@$("h5 .num").html(@collection.length)
-		message_view = new TransactionMessageView({ model: model, parent_view: @ })
+		message_view = new TransactionMessageView({ 
+			login: @current_user_login,
+			model: model, 
+			parent_view: @ })
 		model.view  = message_view
 		@$(".transactions-list").prepend(message_view.render().el)
 
@@ -71,18 +74,16 @@ class TransactionMessageView extends FriendView
 
 	direct_to_transaction_detail: () ->
 		@undo_active()
-		debugger
 		@notification_id = @model.get('id')
 		$.ajax({
 			type: "put",
 			dataType: "json",
 			data:{ id : @notification_id}
-			url: "/people/"+@model.get('mentionable_user_id')+"/notifications/read_notification"
-			success: ()->
+			url: "/people/#{@options.login}/notifications/read_notification"
+			success: () =>
 				window.location.replace(@model.get('url'))
-			error: ()->
-				alert("something is wrong ")
 		})
+		
 		
 
 	active: () ->
