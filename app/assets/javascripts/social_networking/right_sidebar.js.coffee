@@ -19,9 +19,8 @@ class RightSideBar extends Backbone.View
 	register: (containers...) ->
 		for container in containers
 			unless @is_registered(container)
-				container_id      = _.uniqueId('sidebar_')
-				container_options = { id: container_id, parent_view: @ }
-				container_view    = new container(container_options)
+				container_id   = _.uniqueId('sidebar_')
+				container_view = new container({ id: container_id, parent_view: @ })
 				@add_top(container_view, container_id)
 				@add_container(container_view)
 
