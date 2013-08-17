@@ -58,7 +58,7 @@ class ChatMessage < ActiveRecord::Base
     FayeClient.send(channel, data) if channel.present? && data.present?
   end
 
-  #通知接收人已经读取信息
+  #接收人已经读取信息(取消提醒)
   def self.notice_read_state(receive_user, send_user_id)
     FayeClient.send("/chat/change/message/#{receive_user.try(:im_token)}", send_user_id)
   end

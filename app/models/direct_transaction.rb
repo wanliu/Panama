@@ -13,7 +13,8 @@ class DirectTransaction < ActiveRecord::Base
 
   has_many :items, :class_name => "ProductItem", :as => :owner
   has_many :messages, :class_name => "ChatMessage", :as => :owner
-
+  has_many :notifications, :as => :targeable, dependent: :destroy
+  
   before_create :init_data
 
   after_create :notice_seller, :notice_new
@@ -37,9 +38,9 @@ class DirectTransaction < ActiveRecord::Base
   end
 
   def notice_seller
-    Notification.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
+    notifications.create!(
+      :user_id => buyer.id,
+      :mentionable_user_id => seller.user.id,
       :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
       :body => "你有新的订单")
   end

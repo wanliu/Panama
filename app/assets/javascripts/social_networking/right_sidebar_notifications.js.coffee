@@ -8,10 +8,10 @@ class NotificationsContainerView extends RealTimeContainerView
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>
-			if info.type == "OrderTransaction" || info.type == "OrderRefund"
-				@transactions_view.realtime_help(info)
-			else if info.type == "Activity"
+			if info.type == "Activity"
 				@activities_view.realtime_help(info)
+			else
+				@transactions_view.realtime_help(info)
 
 	bind_items: () ->
 		@urlRoot = "/people/#{@current_user_login}/notifications"
@@ -30,14 +30,14 @@ class NotificationsContainerView extends RealTimeContainerView
 				@transactions_view.collection.add(model)
 
 
+
 class TransactionsContainerView extends NotificationsContainerView
 	fill_header: () ->
 		$(@el).prepend(
-				'<h5 class="tab-header transactions">
-			<i class="icon-edit"></i>交易消息[<span class="num">0</span>]
-		</h5>
-		<ul class="notices-list transactions-list transactions">
-		</ul>')
+		    '<h5 class="tab-header transactions">
+			    <i class="icon-edit"></i>交易消息[<span class="num">0</span>]
+		    </h5>
+		    <ul class="notices-list transactions-list transactions"></ul>')
 
 	bind_items: () ->
 		@parent_view  = @options.parent_view
@@ -48,6 +48,7 @@ class TransactionsContainerView extends NotificationsContainerView
 
 	realtime_help: (info) ->
 		@collection.add(info.value)
+		@active()
 		@top(model)
 
 	add_one: (model) ->
@@ -60,7 +61,7 @@ class TransactionsContainerView extends NotificationsContainerView
 		@$(".transactions-list").prepend(message_view.render().el)
 
 	top: (model) ->
-		@active()
+		@parent_view.active()
 		exsited_model = _.find @collection.models, (item) ->
 			item.id is model.id
 		exsited_model.view.active() if exsited_model && exsited_model.view
@@ -88,9 +89,6 @@ class TransactionMessageView extends Backbone.View
 			success: () =>
 				window.location.replace(@model.get('url'))
 		})
-
-	active: () ->
-		$(@el).addClass('active')
 
 	render: () ->
 		$(@el).html(@template(model: @model))
@@ -169,6 +167,5 @@ class ActivityMessageView extends Backbone.View
 				@trigger("remove_model", @model.id)
 		)
 		super
-
 
 root.NotificationsContainerView = NotificationsContainerView 
