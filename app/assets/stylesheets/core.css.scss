@@ -684,6 +684,7 @@ ul {
 			&.active {
 				background-color: #E5603B;
 			}
+			z-index: 8888;
 			width: 300px;
 			margin-left: -100px;
 		}
@@ -703,35 +704,6 @@ ul {
 	}
 }
 
-#activities-notice {
-	.notice-list {
-		li {
-			padding: 12px;
-			min-width: 60px;
-			margin: 0 -12px;
-			cursor: pointer;
-			height: 50px;
-			@include transition(width 0.0s, margin 0.3s);
-			overflow: hidden;
-
-			img {
-				width: 50px;
-			}
-		}
-
-		li:hover {
-			@include transparent(rgb(51,51,51),0.25);
-			width: 300px;
-			margin-left: -100px;
-		}
-	}
-}
-
-// chosen select
-.chzn-container-active .chzn-single {
-
-}
-
 .chzn-container-single .chzn-single {
 	height: 28px;
 	@include border-radius(1px);
@@ -742,11 +714,6 @@ ul {
 	color: #333;
 	@include border-radius(1px);
 }
-
-.chzn-container-active .chzn-single-with-drop {
-
-}
-
 
 // table-images
 .table-images td img {
