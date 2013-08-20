@@ -28,6 +28,8 @@ class NotificationsContainerView extends RealTimeContainerView
 				@activities_view.collection.add(model)
 			else
 				@transactions_view.collection.add(model)
+		new TransactionsChatRemind(parent_view: @)
+
 
 
 
@@ -45,6 +47,7 @@ class TransactionsContainerView extends NotificationsContainerView
 		@$parent_view.append(@el)
 		@collection = new Backbone.Collection
 		@collection.bind('add', @add_one, @)
+
 
 	realtime_help: (info) ->
 		@collection.add(info.value)

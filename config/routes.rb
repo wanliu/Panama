@@ -44,11 +44,13 @@ Panama::Application.routes.draw do
         post "delay_sign", :to => "people/transactions#delay_sign"
         post 'transfer', :to => "people/transactions#transfer"
         get 'print', :to => "people/transactions#print"
+        post "mark_as_read", :to => "people/transaction#mark_as_read"
       end
 
       collection do
         post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
         get "completed", :to => "people/transactions#completed"
+        get "unread_messages", :to => "people/transactions#unread_messages"
       end
     end
 

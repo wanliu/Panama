@@ -206,6 +206,28 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def unread_messages
+    authorize! :index, OrderTransaction
+    @messages = current_user.chat_messages
+      .unread
+      .where(:owner_type => ["OrderTransaction", "DirectTransaction", "OrderRefund"]).last
+    debugger
+    respond_to do |format|
+      format.json{ render :json => @messages }
+    end  
+  end
+
+  def mark_as_read
+    @transaction = current_user.transactions.find(params[:id])
+    @messages = @transaction.messages.unreads.where("created_at" < Time.now)
+    @messages.each do |message|
+      message.update_attributes(:read, true)
+    end
+    respond_to do | format |
+      format.json { head :no_content }
+    end
+  end
+
   private
   def current_order
     OrderTransaction.where(:buyer_id => @people.id)
