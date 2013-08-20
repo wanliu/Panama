@@ -43,7 +43,7 @@ class TransactionsChatRemind extends Backbone.View
 class TransactionChatRemindView extends Backbone.View
 
 	events:
-		"click" : "direct_to_transaction_detail"
+		"click" : "message_handle"
 
 	initialize: () ->
 		@model.bind("change:count", @change_count, @)
@@ -51,33 +51,41 @@ class TransactionChatRemindView extends Backbone.View
 
 	template: (options) ->
 		_.template("<li id=<%= model.get('owner_id') %> >
-			<img src='<%= model.get('send_user').avatar_url %>' class='pull-left img-circle' />
-					<div class='user-info'>
-						<span class='content'>
-							<%= model.get('content') %>
-						</span>
-						<span class='badge badge-important count'>
-							<%=model.get('count') %>
-    					</span>
-					</div></li>")(options)
+						<img src='<%= model.get('send_user').avatar_url %>' class='pull-left img-circle' />
+						<div class='user-info'>
+							<span class='badge badge-important count'>
+								<%=model.get('count') %>
+	    					</span>
+							<span class='content'>
+								<%= model.get('content') %>
+							</span>
+						</div></li>")(options)
 
-	render: () ->
-		$(@el).html(@template(model: @model))
-		@
-
-	direct_to_transaction_detail: () ->
-		# $.ajax({
-		# 	type: "POST",
-		# 	dataType: "json",
-		# 	data:{ id : @model.id }
-		# 	url: "",
-		# 	success: () =>
-		# 		window.location.replace(@model.get('url'))
-		# })
 	change_count: () ->
 		@$(".count").html(@model.get('count'))
 
 	change_content: () ->
 		@$(".content").html(@model.get('content'))
+
+	render: () ->
+		$(@el).html(@template(model: @model))
+		@
+
+	message_handle: () ->
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			data:{ id : @model.id }
+			url: "/people/#{@current_user_login}/transactions/#{ @model.get('owner_id')}/mark_as_read",
+			success: () =>
+				path = window.location.pathname 
+				people_url = "/people/#{current_user_login}/transaction"
+				shop_url = "/shops/#{ current_user_login }/admins/pending"
+				if path == people_url
+					window.location.replace(people_url+"##{@model.get('owner_id')}")
+				else if path == shop_url
+					window.location.replace(shop_url+"##{model.get('owner_id')}")
+					
+		})
 
 root.TransactionsChatRemind = TransactionsChatRemind

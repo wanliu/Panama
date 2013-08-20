@@ -8,6 +8,7 @@
 class ChatMessage < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
+  attr_accessor :count
 
   attr_accessible :content, :receive_user, :send_user
   attr_protected :send_user_id, :receive_user_id, :read

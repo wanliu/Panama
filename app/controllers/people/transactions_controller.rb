@@ -208,12 +208,17 @@ class People::TransactionsController < People::BaseController
 
   def unread_messages
     authorize! :index, OrderTransaction
-    @messages = current_user.chat_messages
-      .unread
-      .where(:owner_type => ["OrderTransaction", "DirectTransaction", "OrderRefund"]).last
-    debugger
+    @messages = ChatMessage.find_by_sql("select *, count(*) as count from 
+        (select * from chat_messages 
+                 where receive_user_id= #{ @people.id } AND 'read'=0 order by id desc
+        ) as chat_messages group by owner_id, owner_type")
+    _messages = @messages.map do |m|
+      attrs = m.attributes
+      attrs["send_user"] = m.send_user.as_json
+      attrs  
+    end
     respond_to do |format|
-      format.json{ render :json => @messages }
+      format.json{ render :json => _messages }
     end  
   end
 
