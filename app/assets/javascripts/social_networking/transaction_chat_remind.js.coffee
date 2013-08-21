@@ -76,18 +76,11 @@ class TransactionChatRemindView extends Backbone.View
 		$.ajax({
 			type: "post",
 			dataType: "json",
+			data:{owner_type: @model.get('owner_type')}
 			url: "/people/#{@current_user_login}/transactions/#{ @model.get('owner_id')}/mark_as_read",
-			success: () =>
-				path = window.location.pathname 
-				people_url = "/people/#{@current_user_login}/transactions"
-				shop_url = "/shops/#{ @current_user_login }/admins/pending"
-				if path == people_url
-					window.location.replace(people_url+"#order#{@model.get('owner_id')}")
+			success: (data) =>
+					window.location.replace(data.url)
 					_this.$el.remove()
-				else if path == shop_url
-					window.location.replace(shop_url+"##{model.get('owner_id')}")
-			error: ()->
-				alert("some thing is wrong")
 		})
 
 root.TransactionsChatRemind = TransactionsChatRemind

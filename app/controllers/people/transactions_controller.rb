@@ -208,11 +208,11 @@ class People::TransactionsController < People::BaseController
 
   def unread_messages
     authorize! :index, OrderTransaction
-    @messages = ChatMessage.find_by_sql("select *, count(*) as count from 
-        (select * from chat_messages 
-                 where receive_user_id= #{ @people.id }  order by id desc
-        ) as chat_messages group by owner_id, owner_type")
-    debugger
+    @messages = ChatMessage.select("chat_messages.*, cm.count")
+               .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count  
+                                      from chat_messages where `read`=0 group by owner_id, owner_type) as cm 
+                                      on chat_messages.id=cm.id")
+
     _messages = @messages.map do |m|
       attrs = m.attributes
       attrs["send_user"] = m.send_user.as_json
@@ -224,12 +224,19 @@ class People::TransactionsController < People::BaseController
   end
 
   def mark_as_read
-    @transaction = current_user.transactions.find(params[:id])
+    @transaction = Kernel.const_get(params[:owner_type]).find_by(:id => params[:id])
+    # if  == "OrderTransaction"
+    #   @transaction = current_user.transactions.find(params[:id])
+    # else if params[:owner_type] == "DirectTransaction"
+    #   @transaction = current_user.direct_transactions.find(params[:id])
+    # end
+    @url = @transaction.notice_url(current_user)
+
     @messages = @transaction.messages.unread
     @messages.update_all(read: true)
     
     respond_to do | format |
-      format.json { head :no_content }
+      format.json { render json:{:url => @url} }
     end
   end
 

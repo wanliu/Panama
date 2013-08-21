@@ -37,6 +37,14 @@ class DirectTransaction < ActiveRecord::Base
     attra
   end
 
+  def notice_url(current_user)
+    url = if self.buyer == current_user
+      "/people/#{current_user.login}/transactions#direct#{self.id}"
+    else
+      "shops/#{transaction.seller.name }/admins/pending#direct#{self.id}"
+    end
+  end
+
   def notice_seller
     notifications.create!(
       :user_id => buyer.id,
