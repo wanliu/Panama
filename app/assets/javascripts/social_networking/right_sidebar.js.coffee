@@ -18,12 +18,25 @@ class RightSideBar extends Backbone.View
 
 	register: (containers...) ->
 		for container in containers
-			container_id      = _.uniqueId('sidebar_')
-			container_options = { id: container_id, parent_view: @ }
-			container_view    = new container(container_options)
-			@add_top(container_view, container_id)
-			@add_container(container_view)
-			container_view.active() unless @any_active_view()
+			unless @is_registered(container)
+				container_id   = _.uniqueId('sidebar_')
+				container_view = new container({ id: container_id, parent_view: @ })
+				@add_top(container_view, container_id)
+				@add_container(container_view)
+
+				@registered_containers[String(container)] = container_view
+				container_view.active() unless @any_active_view()
+
+	undo_register: (containers...) ->
+		for container in containers
+			if @is_registered(container)
+				container_view = @registered_containers[String(container)]
+				delete @registered_containers[String(container)]
+				container_view.remove()
+
+	is_registered: (container) ->
+		@registered_containers ?= {}
+		@registered_containers[String(container)]?
 
 	toggleIcons: (e) ->
 		$("body").addClass('right-mini')
@@ -90,6 +103,22 @@ class ContainerView extends Backbone.View
 				$(div).addClass('active')
 			else
 				$(div).removeClass('active')
+
+	remove: () ->
+		@active_first_brother_when_deleted()
+		@remove_header_li()
+		super
+
+	active_first_brother_when_deleted: () ->
+		if $(@el).hasClass('active')
+			containers = _.values @parent_view.registered_containers
+			if containers.length > 0
+				containers[0].active()
+			else
+				$(@parent_view.el).css('display', 'none')
+
+	remove_header_li: () ->
+		@parent_view.$("header li a[href=##{ @view_id }]").parent('li').remove()
 
 	fill_header: () ->
 

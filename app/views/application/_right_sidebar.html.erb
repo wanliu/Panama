@@ -15,9 +15,6 @@
 		<div class="body tab-content">
 		</div>
 	</div>
-
-	<div class="container">
-	</div>
 </div>
 
 <script type="text/javascript">
@@ -32,5 +29,28 @@
 
 	right_sidebar.register(NotificationsContainerView,
 						   FriendsContainerView);
-	
+
+  $(function(){
+  	height = ($(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true) -10)/2
+  	$('ul', '.notices-list').slimScroll({ 
+  		height: height,
+  		disableFadeOut: true
+  	}).on("click", "li", function(event){
+  		$(this).siblings(".clone").remove()
+  	}).on("mouseover", "li", function(event){
+			$(this).after("<li class='clone'></li>")
+			$(this).css("position", "absolute")
+			$(this).css("margin-left", "-120px")
+			$(".slimScrollDiv", '.notices-list').css("overflow", "visible")
+			offset_top = $(this).siblings(".clone").offset().top
+			$(this).offset({top: offset_top})
+		}).on("mouseout", "li", function(event){
+			$(this).removeAttr("style")
+			$(this).siblings(".clone").remove()
+			$(".slimScrollDiv", '.notices-list').css("overflow", "hidden")
+		}).on("mousewheel", "li", function(event){
+			$(this).removeAttr("style")
+			$(this).siblings(".clone").remove()
+		})
+  })	
 </script>
