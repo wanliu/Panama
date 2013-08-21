@@ -3661,3 +3661,15 @@ I, [2013-08-21T18:03:40.047002 #7163]  INFO -- : message: {"channel"=>"/transact
 I, [2013-08-21T18:03:57.631993 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"g8qgvl5vicie8x0e0w52wxgxx8ozoaj", "connectionType"=>"websocket", "id"=>"7"}
 I, [2013-08-21T18:03:58.448536 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"5sv6fn9ueqpel8fbl753jzcm30f26nx", "connectionType"=>"websocket", "id"=>"5"}
 I, [2013-08-21T18:03:58.449515 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"5sv6fn9ueqpel8fbl753jzcm30f26nx", "connectionType"=>"websocket", "id"=>"5"}
+I, [2013-08-21T18:04:13.961215 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"i9j9y5bnan62q50xc6d4gmglz107hbk", "connectionType"=>"websocket", "id"=>"a"}
+I, [2013-08-21T18:04:21.719636 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"7a7br7o17ox31u6muq6z803bq8ooy4d", "connectionType"=>"websocket", "id"=>"4"}
+I, [2013-08-21T18:04:42.639698 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"g8qgvl5vicie8x0e0w52wxgxx8ozoaj", "connectionType"=>"websocket", "id"=>"8"}
+I, [2013-08-21T18:04:43.455549 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"5sv6fn9ueqpel8fbl753jzcm30f26nx", "connectionType"=>"websocket", "id"=>"6"}
+I, [2013-08-21T18:04:43.456629 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"5sv6fn9ueqpel8fbl753jzcm30f26nx", "connectionType"=>"websocket", "id"=>"6"}
+I, [2013-08-21T18:04:58.968336 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"i9j9y5bnan62q50xc6d4gmglz107hbk", "connectionType"=>"websocket", "id"=>"b"}
+I, [2013-08-21T18:05:06.726695 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"7a7br7o17ox31u6muq6z803bq8ooy4d", "connectionType"=>"websocket", "id"=>"5"}
+I, [2013-08-21T18:05:27.648556 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"g8qgvl5vicie8x0e0w52wxgxx8ozoaj", "connectionType"=>"websocket", "id"=>"9"}
+I, [2013-08-21T18:05:28.465409 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"5sv6fn9ueqpel8fbl753jzcm30f26nx", "connectionType"=>"websocket", "id"=>"7"}
+I, [2013-08-21T18:05:28.466136 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"5sv6fn9ueqpel8fbl753jzcm30f26nx", "connectionType"=>"websocket", "id"=>"7"}
+I, [2013-08-21T18:05:43.975919 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"i9j9y5bnan62q50xc6d4gmglz107hbk", "connectionType"=>"websocket", "id"=>"c"}
+I, [2013-08-21T18:05:51.733090 #7163]  INFO -- : system: {"channel"=>"/meta/connect", "clientId"=>"7a7br7o17ox31u6muq6z803bq8ooy4d", "connectionType"=>"websocket", "id"=>"6"}
