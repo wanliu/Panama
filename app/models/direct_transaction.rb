@@ -41,7 +41,7 @@ class DirectTransaction < ActiveRecord::Base
     url = if self.buyer == current_user
       "/people/#{current_user.login}/transactions#direct#{self.id}"
     else
-      "shops/#{transaction.seller.name }/admins/pending#direct#{self.id}"
+      "/shops/#{ self.seller.name }/admins/pending#direct#{self.id}"
     end
   end
 

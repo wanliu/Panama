@@ -37,7 +37,7 @@ class TransactionsChatRemind extends Backbone.View
 			model: model, 
 			parent_view: @ })
 		model.view  = remind_view
-		$(".transactions-list").prepend(remind_view.render().el)
+		$(".right-sidebar .transactions").prepend(remind_view.render().el)
 				
 
 class TransactionChatRemindView extends Backbone.View
@@ -49,10 +49,10 @@ class TransactionChatRemindView extends Backbone.View
 		@current_user_login =  @options.parent_view.current_user_login
 		@model.bind("change:count", @change_count, @)
 		@model.bind("change:content", @change_content, @)
+		$(@el).attr("id", @model.get('owner_id'))
 
 	template: (options) ->
-		_.template("<li id=<%= model.get('owner_id') %> >
-						<img src='<%= model.get('send_user').avatar_url %>' class='pull-left img-circle' />
+		_.template("<img src='<%= model.get('send_user').avatar_url %>' class='pull-left img-circle'/>
 						<div class='user-info'>
 							<span class='badge badge-important count'>
 								<%=model.get('count') %>
@@ -60,7 +60,7 @@ class TransactionChatRemindView extends Backbone.View
 							<span class='content'>
 								<%= model.get('content') %>
 							</span>
-						</div></li>")(options)
+						</div>")(options)
 
 	change_count: () ->
 		@$(".count").html(@model.get('count'))

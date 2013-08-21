@@ -72,7 +72,7 @@ class OrderTransaction < ActiveRecord::Base
     url = if self.buyer == current_user
       "/people/#{ current_user.login}/transactions#order#{ self.id}"
     else
-      "shops/#{ transaction.seller.name }/admins/pending#order#{ self.id}"
+      "/shops/#{ self.seller.name }/admins/pending#order#{ self.id}"
     end
   end
 
