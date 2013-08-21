@@ -41,11 +41,12 @@ class TransactionsChatRemind extends Backbone.View
 				
 
 class TransactionChatRemindView extends Backbone.View
-
+	tagName: "li"
 	events:
 		"click" : "message_handle"
 
 	initialize: () ->
+		@current_user_login =  @options.parent_view.current_user_login
 		@model.bind("change:count", @change_count, @)
 		@model.bind("change:content", @change_content, @)
 
@@ -73,19 +74,20 @@ class TransactionChatRemindView extends Backbone.View
 
 	message_handle: () ->
 		$.ajax({
-			type: "POST",
+			type: "post",
 			dataType: "json",
-			data:{ id : @model.id }
 			url: "/people/#{@current_user_login}/transactions/#{ @model.get('owner_id')}/mark_as_read",
 			success: () =>
 				path = window.location.pathname 
-				people_url = "/people/#{current_user_login}/transaction"
-				shop_url = "/shops/#{ current_user_login }/admins/pending"
+				people_url = "/people/#{@current_user_login}/transactions"
+				shop_url = "/shops/#{ @current_user_login }/admins/pending"
 				if path == people_url
-					window.location.replace(people_url+"##{@model.get('owner_id')}")
+					window.location.replace(people_url+"#order#{@model.get('owner_id')}")
+					_this.$el.remove()
 				else if path == shop_url
 					window.location.replace(shop_url+"##{model.get('owner_id')}")
-					
+			error: ()->
+				alert("some thing is wrong")
 		})
 
 root.TransactionsChatRemind = TransactionsChatRemind

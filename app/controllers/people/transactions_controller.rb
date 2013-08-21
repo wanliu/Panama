@@ -210,8 +210,9 @@ class People::TransactionsController < People::BaseController
     authorize! :index, OrderTransaction
     @messages = ChatMessage.find_by_sql("select *, count(*) as count from 
         (select * from chat_messages 
-                 where receive_user_id= #{ @people.id } AND 'read'=0 order by id desc
+                 where receive_user_id= #{ @people.id }  order by id desc
         ) as chat_messages group by owner_id, owner_type")
+    debugger
     _messages = @messages.map do |m|
       attrs = m.attributes
       attrs["send_user"] = m.send_user.as_json
@@ -224,10 +225,9 @@ class People::TransactionsController < People::BaseController
 
   def mark_as_read
     @transaction = current_user.transactions.find(params[:id])
-    @messages = @transaction.messages.unreads.where("created_at" < Time.now)
-    @messages.each do |message|
-      message.update_attributes(:read, true)
-    end
+    @messages = @transaction.messages.unread
+    @messages.update_all(read: true)
+    
     respond_to do | format |
       format.json { head :no_content }
     end
