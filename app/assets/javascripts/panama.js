@@ -29,6 +29,7 @@
 //= require lib/jquery.cookie
 //= require sidebar
 //= require topbar
+//= require social_networking/transaction_chat_remind
 //= require social_networking/right_sidebar
 //= require social_networking/right_sidebar_friends
 //= require social_networking/right_sidebar_notifications

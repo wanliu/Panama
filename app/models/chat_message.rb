@@ -8,6 +8,7 @@
 class ChatMessage < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)
+  attr_accessor :count
 
   attr_accessible :content, :receive_user, :send_user
   attr_protected :send_user_id, :receive_user_id, :read
@@ -26,7 +27,7 @@ class ChatMessage < ActiveRecord::Base
 
   validate :valid_receive_user_presence?
 
-  after_create :notic_receive_user
+  after_create :notic_receive_user, :remind_receive_user
   before_create :join_contact_friend
 
   def self.all(user_id = nil, friend_id = nil)
@@ -50,6 +51,12 @@ class ChatMessage < ActiveRecord::Base
   def change_state
     self.update_attribute(:read, true)
     ChatMessage.notice_read_state(receive_user, send_user_id)
+  end
+
+  def remind_receive_user
+    FayeClient.send(
+      "/transaction/chat/message/#{receive_user.try(:im_token)}", as_json
+    )
   end
 
   #通知接收人

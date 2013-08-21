@@ -67,6 +67,15 @@ class OrderTransaction < ActiveRecord::Base
 
   after_create  :notice_new_order, :state_change_detail, :notice_user
 
+
+  def notice_url(current_user)
+    url = if self.buyer == current_user
+      "/people/#{ current_user.login}/transactions#order#{ self.id}"
+    else
+      "shops/#{ transaction.seller.name }/admins/pending#order#{ self.id}"
+    end
+  end
+
   def notice_user
     notifications.create!(
       :user_id => buyer.id,

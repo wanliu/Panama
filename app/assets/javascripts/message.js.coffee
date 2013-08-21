@@ -190,7 +190,6 @@ class TransactionMessageView extends Backbone.View
     @$message_panel.scrollTop(mheight-pheight)
 
   notice_bubbing: (message) ->
-    debugger
     pm({
       target : window.parent,
       type : "transaction_chat_notice",
