@@ -80,11 +80,12 @@ class TransactionMessageView extends Backbone.View
 		"click" : "direct_to_transaction_detail"
 
 	template: (options) ->
-		_.template("<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
-					<div class='transaction-info'>
-						<i class=' icon-volume-up'></i>
-						<%= model.get('body') %>,点击查看详情
-					</div>")(options)
+		_.template("
+			<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+			<div class='transaction-info'>
+				<i class=' icon-volume-up'></i>
+				<%= model.get('body') %>,点击查看详情
+			</div>")(options)
 
 	direct_to_transaction_detail: () ->
 		$.ajax({
@@ -148,13 +149,13 @@ class ActivitiesContainerView extends NotificationsContainerView
 
 class ActivityMessageView extends Backbone.View
 	tagName: 'li'
-	template: _.template(
-				"<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+	template: _.template("
+			<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
 			<div class='activity-info'>
-			<div class='name'>
-				<a href='#''><%= model.get('body') %></a>
-			</div>
-			<div class='type'><%= model.get('targeable').title %></div>
+				<div class='name'>
+					<a href='#''><%= model.get('body') %></a>
+				</div>
+				<div class='type'><%= model.get('targeable').title %></div>
 			</div>")
 
 	events:
