@@ -33,7 +33,8 @@
   $(function(){
   	height = ($(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true) -10)/2
   	$('ul', '.notices-list').slimScroll({ 
-  		height: height
+  		height: height,
+  		disableFadeOut: true
   	}).on("click", "li", function(event){
   		$(this).siblings(".clone").remove()
   	}).on("mouseover", "li", function(event){
