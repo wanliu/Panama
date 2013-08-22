@@ -188,6 +188,7 @@ class ActivityMessageView extends Backbone.View
 				model    : model 
 			}).modal()
 			@remove()
+			$('.notices-list ul').mouseleave()
 
 	active: () ->
 		$(@el).addClass('active')
