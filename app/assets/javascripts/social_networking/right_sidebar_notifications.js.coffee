@@ -7,10 +7,10 @@ class NotificationsContainerView extends RealTimeContainerView
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>
-			if info.type == "OrderTransaction" || info.type == "OrderRefund"
-				@transactions_view.realtime_help(info)
-			else if info.type == "Activity"
+			if info.type == "Activity"
 				@activities_view.realtime_help(info)
+			else
+				@transactions_view.realtime_help(info)
 
 	bind_items: () ->
 		@urlRoot = "/people/#{@current_user_login}/notifications"
@@ -28,6 +28,9 @@ class NotificationsContainerView extends RealTimeContainerView
 				@activities_view.collection.add(model)
 			else
 				@transactions_view.collection.add(model)
+		new TransactionsChatRemind(parent_view: @)
+
+
 
 
 class TransactionsContainerView extends NotificationsContainerView
@@ -48,6 +51,7 @@ class TransactionsContainerView extends NotificationsContainerView
 		@collection = new Backbone.Collection
 		@collection.bind('add', @add_one, @)
 
+
 	realtime_help: (info) ->
 		model = info.value
 		@collection.add(model)
@@ -67,7 +71,7 @@ class TransactionsContainerView extends NotificationsContainerView
 		$("ul", @el).prepend(message_view.render().el)
 
 	top: (model) ->
-		@active()
+		@parent_view.active()
 		exsited_model = _.find @collection.models, (item) ->
 			item.id is model.id
 		exsited_model.view.active() if exsited_model && exsited_model.view
@@ -96,9 +100,6 @@ class TransactionMessageView extends Backbone.View
 			success: () =>
 				window.location.replace(@model.get('url'))
 		})
-
-	active: () ->
-		$(@el).addClass('active')
 
 	render: () ->
 		$(@el).html(@template(model: @model))
@@ -187,6 +188,5 @@ class ActivityMessageView extends Backbone.View
 				@trigger("remove_model", @model.id)
 		)
 		super
-
 
 root.NotificationsContainerView = NotificationsContainerView 

@@ -3,12 +3,13 @@
 @import "lib/transparent";
 
 .transaction:first-child{
-	padding-top: 0px;
+	padding-top: 50px;
 }
 
 .transaction {
-	/*padding-top: 20px;*/
-	margin-bottom: 20px;
+	padding-top: 80px !important;
+	margin-top: -80px;
+	margin-bottom: 40px;
 
 	.container-fluid {
 		padding-left: 20px;
@@ -274,3 +275,10 @@
 	display:none;
 	margin-left:200px;
 }
+.direct{
+	padding-top: 0px !important;
+	margin-top: 0px;
+	margin-bottom: 40px;
+}
+
+
