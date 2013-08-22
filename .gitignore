@@ -28,3 +28,4 @@
 /config/email.yml
 /config/application.yml
 /assets/images/
+/faye_server/log/
