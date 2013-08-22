@@ -30,27 +30,25 @@
 	right_sidebar.register(NotificationsContainerView,
 						   FriendsContainerView);
 
-  $(function(){
-  	height = ($(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true) -10)/2
-  	$('ul', '.notices-list').slimScroll({ 
-  		height: height,
-  		disableFadeOut: true
-  	}).on("click", "li", function(event){
-  		$(this).siblings(".clone").remove()
-  	}).on("mouseover", "li", function(event){
-			$(this).after("<li class='clone'></li>")
-			$(this).css("position", "absolute")
-			$(this).css("margin-left", "-120px")
-			$(".slimScrollDiv", '.notices-list').css("overflow", "visible")
-			offset_top = $(this).siblings(".clone").offset().top
-			$(this).offset({top: offset_top})
-		}).on("mouseout", "li", function(event){
-			$(this).removeAttr("style")
-			$(this).siblings(".clone").remove()
-			$(".slimScrollDiv", '.notices-list').css("overflow", "hidden")
-		}).on("mousewheel", "li", function(event){
-			$(this).removeAttr("style")
-			$(this).siblings(".clone").remove()
-		})
-  })	
+	var height = $(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true) -10
+	$('.notices-list ul').slimScroll({ 
+		height: height/2,
+		disableFadeOut: true
+	}).on("click", "li", function(event){
+		$(this).siblings(".clone").remove()
+	}).on("mousewheel", "li", function(event){
+		$(this).removeAttr("style").siblings(".clone").remove()
+	}).on("mouseout", "li", function(event){
+		$(this).removeAttr("style").siblings(".clone").remove()
+		$('.notices-list .slimScrollDiv').css("overflow", "hidden")
+	}).on("mouseover", "li", function(event){
+		$(this).css({
+			position: 'absolute',
+			'margin-left': '-120px'
+		}).after("<li class='clone'></li>")
+		$('.notices-list .slimScrollDiv').css("overflow", "visible")
+		var offset_top = $(this).siblings(".clone").offset().top
+		$(this).offset({ top: offset_top })
+	})
+  
 </script>

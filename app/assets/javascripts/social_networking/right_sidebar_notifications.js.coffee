@@ -166,6 +166,7 @@ class ActivityMessageView extends Backbone.View
 			id: @model.get('targeable_id') 
 		})
 		activity_model.fetch success: (model) =>
+			# $('.notices-list ul').unbind('mousewheel')
 			new ActivityView({
 				model    : model 
 			}).modal()
