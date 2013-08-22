@@ -27,8 +27,15 @@ class root.ActivityBaseInfoView extends Backbone.View
   initialize: (options) ->
     _.extend(@upload_options , @default_options.params, options.params)
 
+    @$el = $(@el)
     if @upload_options.data.length > 0
       @load_attachments(@upload_options.data)
+
+    @$el.on "ajax:success", _.bind(@ajax_success, @)
+
+  ajax_success: () ->
+    @$("img.preview").show()
+    @atta_destroy_all()
 
   fetch_product: (shop_product_id) ->
     $.ajax
@@ -50,16 +57,19 @@ class root.ActivityBaseInfoView extends Backbone.View
     @load_attachments(product.attachments)
 
   load_attachments: (attachments) ->
-    @$("img.preview").remove()
-    @$(".attachment-list>li").remove()
-
-    new AttachmentUpload({
+    @$("img.preview").hide()
+    @atta_destroy_all()
+    @attas = new AttachmentUpload({
       el: @$(".attachment-list"),
       data: attachments,
       default_enabled: false,
       limit: 5,
       params: @upload_options
     })
+
+  atta_destroy_all: () ->
+    if @attas?
+      @attas.destroy_all()
 
   render: () ->
     @$el
