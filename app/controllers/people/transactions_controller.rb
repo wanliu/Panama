@@ -211,7 +211,7 @@ class People::TransactionsController < People::BaseController
     @messages = ChatMessage.select("chat_messages.*, cm.count")
                .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count  
                                       from chat_messages where `read`=0 group by owner_id, owner_type) as cm 
-                                      on chat_messages.id=cm.id")
+                                      on chat_messages.id=cm.id").where("chat_messages.receive_user_id=?", @people.id)
 
     _messages = @messages.map do |m|
       attrs = m.attributes

@@ -17,10 +17,17 @@ class NotificationsContainerView extends RealTimeContainerView
 		$(@el).append('<div class="notices-list"></div>')
 		@transactions_view = new TransactionsContainerView(parent_view: @)
 		@activities_view = new ActivitiesContainerView(parent_view: @)
+		@tran_view = new TransactionsChatRemind(parent_view: @)
 		@collection = new Backbone.Collection
+		@transactions_view.bind('add_count',@handle_number, @)
+		@transactions_view.bind('remove_count',@handle_number, @)
+		
+		@tran_view.bind('add_count',@handle_number, @)
+		@tran_view.bind('remove_count',@handle_number, @)
 		@collection.bind('reset', @add_all, @)
 		@collection.fetch(url: "#{@urlRoot}/unreads")
 		@bind_realtime()
+
 
 	add_all: () ->
 		@collection.each (model) =>
@@ -28,9 +35,11 @@ class NotificationsContainerView extends RealTimeContainerView
 				@activities_view.collection.add(model)
 			else
 				@transactions_view.collection.add(model)
-		new TransactionsChatRemind(parent_view: @)
 
-
+	handle_number: ()->
+		debugger
+		@number = @tran_view.collection.length + @transactions_view.collection.length
+		@$("h5 .num").html(@number)
 
 
 class TransactionsContainerView extends NotificationsContainerView
@@ -62,13 +71,20 @@ class TransactionsContainerView extends NotificationsContainerView
 		@collection.get(model.id).view.active()
 
 	add_one: (model) ->
-		@$("h5 .num").html(@collection.length)
+		# @$("h5 .num").html(@collection.length)
 		model.url = "#{@parent_view.urlRoot}/#{model.id}"
 		message_view = new TransactionMessageView({ 
 			model: model, 
 			parent_view: @ })
 		model.view = message_view
 		$("ul", @el).prepend(message_view.render().el)
+		message_view.bind("remove_one", _.bind(@remove_one, @))
+		@trigger("add_count")
+
+	remove_one: (id)->
+		model = @collection.get(id)
+		@collection.remove model if model?
+		@trigger("remove_count")
 
 	top: (model) ->
 		@parent_view.active()
@@ -92,6 +108,7 @@ class TransactionMessageView extends Backbone.View
 			</div>")(options)
 
 	direct_to_transaction_detail: () ->
+		@trigger("remove_one", @model.id)
 		$.ajax({
 			type: "POST",
 			dataType: "json",

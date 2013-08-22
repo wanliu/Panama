@@ -5,7 +5,6 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     transactions = current_shop_order.uncomplete.order("created_at desc")
     @untransactions = transactions.where(:operator_state => false)
     @transactions = transactions.where(:operator_state => true).joins(:operator)
-    .where("transaction_operators.operator_id=?", current_user.id)
     @direct_tansactions = current_shop.direct_transactions.uncomplete.where(:operator_id => current_user.id).order("created_at desc")
     @undirect_tansactions = current_shop.direct_transactions.where(:operator_id => nil)
   end

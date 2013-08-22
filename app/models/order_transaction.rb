@@ -80,7 +80,7 @@ class OrderTransaction < ActiveRecord::Base
     notifications.create!(
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :url => "/shops/#{seller.name}/admins/pending",
       :body => "你有新的订单")
   end
   after_destroy :notice_destroy, :destroy_operators
@@ -241,13 +241,13 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def notice_user
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-      :body => "你有新的订单")
-  end
+  # def notice_user
+  #   notifications.create!(
+  #     :user_id => buyer.id,
+  #     :mentionable_user_id => seller.user.id,
+  #     :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+  #     :body => "你有新的订单")
+  # end
 
   def notice_destroy
     if operator_state
@@ -356,11 +356,21 @@ class OrderTransaction < ActiveRecord::Base
       event = pay_manner.code
     end
     filter_fire_event!(events, event)
+
     notifications.create!(
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :url => location_url,
       :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
+  end
+
+#根据订单的状态决定跳转的页面
+  def location_url
+     location_url = if self.operator_state == true
+      "/shops/#{seller.name}/admins/transactions##{id}"
+    else
+      "/shops/#{seller.name}/admins/pending"
+    end
   end
 
   def system_fire_event!(event)
@@ -369,7 +379,7 @@ class OrderTransaction < ActiveRecord::Base
     notifications.create!(
       :user_id => buyer.id,
       :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :url => location_url,
       :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
      notifications.create!(
       :user_id => seller.user.id,
