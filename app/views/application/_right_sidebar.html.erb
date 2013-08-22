@@ -32,8 +32,7 @@
 
 	var height = $(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true) -10
 	$('.notices-list ul').slimScroll({ 
-		height: height/2,
-		disableFadeOut: true
+		height: height/2
 	}).on("click", "li", function(event){
 		$(this).siblings(".clone").remove()
 	}).on("mousewheel", "li", function(event){
@@ -50,5 +49,4 @@
 		var offset_top = $(this).siblings(".clone").offset().top
 		$(this).offset({ top: offset_top })
 	})
-  
 </script>
