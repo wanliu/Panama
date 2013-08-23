@@ -367,7 +367,7 @@ class OrderTransaction < ActiveRecord::Base
 #根据订单的状态决定跳转的页面
   def location_url
      location_url = if self.operator_state == true
-      "/shops/#{seller.name}/admins/transactions##{id}"
+      "/shops/#{seller.name}/admins/transactions/#{id}"
     else
       "/shops/#{seller.name}/admins/pending"
     end
