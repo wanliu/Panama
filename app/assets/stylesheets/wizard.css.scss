@@ -1,24 +1,6 @@
 @import "core";
-@import 'banks';
-@import './lib/chose-friend';
-@import './admins/shops';
-@import 'communities';
-@import 'attachments';
-@import 'attachment_uploader';
-@import "caret";
-@import "progress";
-@import "transaction";
-@import "admins/shops/products";
-@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
-@import "./lib/notify/pnotify";
-@import "bootstrap-datetimepicker.min";
-@import './lib/typeahead';
-@import 'product_comment';
-@import 'ask_buy';
 @import 'lib/transparent';
 @import 'lib/tree_slide';
-@import 'admins/shops/shop_banks';
-@import 'direct_transaction';
 @import 'bootstrap-editable';
 
 body {
@@ -148,4 +130,5 @@ h2 small {
 		zoom: 1;
 	}
 }
+
 
