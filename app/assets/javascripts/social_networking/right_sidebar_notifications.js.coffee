@@ -37,7 +37,6 @@ class NotificationsContainerView extends RealTimeContainerView
 				@transactions_view.collection.add(model)
 
 	handle_number: ()->
-		debugger
 		@number = @tran_view.collection.length + @transactions_view.collection.length
 		@$("h5 .num").html(@number)
 
