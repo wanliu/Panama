@@ -7,24 +7,24 @@ class root.Upload extends Backbone.View
     initialize: () ->
       @current_user = @options.current_user
       @verify_authenticity_token = @options.verify_authenticity_token
-      # default_avatar : "/assets/default_avatar.png"
-      # avatar_path : "uploads/user/avatar/"
-      @$el = $(@el)
-      # @$el.html(this.template())   
-      @$avatar = @$("img.normal_picture")
-      @init_avatar()
-      @show_avatar(@current_user.avatar)
-
-    init_avatar: (options) ->                 
+      @targets = @options.targets
+      _(@targets).each (target) =>
+        element = target.el
+        inputName = target.input_name
+        @init_avatar(element, inputName)
+        @$avatar = element.find("img.normal_picture")
+        @show_avatar(target.photo)
+        
+    init_avatar: (element, inputName) =>              
       fileupload = new qq.FileUploader({
-        element: @$("div.upload_user_avatar")[0],
+        element: element.find("div.upload_user_avatar")[0],
         allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
         sizeLimit: 1048576, 
         minSizeLimit: 0, 
         debug : true,
         multiple: false,
-        action: "/accounts/registrations/upload_avatar/#{@current_user.id}",
-        inputName: "avatar",
+        action: "/user_checkings/upload_photo/#{@current_user.id}?field_name=#{inputName}",
+        inputName: inputName,
         template: '<div class="qq-uploader">' +
         '<pre class="qq-upload-drop-area"><span>{dragZoneText}</span></pre>' +
         '<div class="qq-upload-button btn btn-success" style="width: auto;">{uploadButtonText}</div>' +
@@ -33,7 +33,8 @@ class root.Upload extends Backbone.View
         cancelButtonText: "取消上传",
         uploadButtonText: '<i class="icon-upload icon-white"></i> 上传头像',        
         onComplete: (id, filename, data) =>
-          @$("ul.qq-upload-list").hide();                    
+          element.find("ul.qq-upload-list").hide();
+          @$avatar = element.find("img.normal_picture")                    
           if data.success                                           
             @show_avatar(data.avatar_filename)      
 
