@@ -15,6 +15,7 @@ class RightSideBar extends Backbone.View
 	initialize: () ->
 		$(@el).html(@template())
 		@register_counter = 0
+		@toggleIcons()
 
 	register: (containers...) ->
 		for container in containers
