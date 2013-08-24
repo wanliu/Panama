@@ -14,13 +14,14 @@
           <legend class="section">商店信息</legend>
           <%= f.input :shop_name, label: '商店名称' %>
 
-          <div class="main_panle1 offset1">
-            <div class="reset_avatar">
-              <div class="photo_span" >
-                <span>商店图标：</span>
-                <img class="bottom normal_picture img-polaroid" style="width: 120px;height: 120px;"/>
+          <div class="main_panle1 row-controls">
+            <div class="reset_avatar span12">
+              <div class="photo_span span5" >
+                <label class="string control-label cell"> 商店图标</label>
+                <!-- <span>商店图标</span> -->
+                <img class="bottom normal_picture img-polaroid my_img" />
               </div>  
-              <div id="image_bottom">
+              <div id="image_bottom" class="span6 vatical-center" >
                 <div class="hidden_one" id="hidden_text">请选择一张您电脑中的图片，然后点击“上传”<br>支持jpg、png、gif图片类型，不能大于1MB。<br />
                 </div>
                 <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
@@ -36,13 +37,13 @@
           <%= f.input :company_address, label: '营业地址' %>
           <%= f.input :company_license, label: '营业执照号' %>
 
-          <div class="main_panle2 offset1">
-            <div class="reset_avatar">
-              <div class="photo_span" >
-                <span>营业执照照片：</span>
-                <img class="bottom normal_picture img-polaroid" style="width: 120px;height: 120px;"/>
+          <div class="main_panle2 row-controls">
+            <div class="reset_avatar span12">
+              <div class="photo_span span5" >
+                <label class="string control-label cell"> 营业执照照片</label>
+                <img class="bottom normal_picture img-polaroid my_img"/>
               </div>  
-              <div id="image_bottom">
+              <div id="image_bottom" class="span6 vatical-center">
                 <div class="hidden_one" id="hidden_text">请选择一张您电脑中的图片，然后点击“上传”<br>支持jpg、png、gif图片类型，不能大于1MB。<br />
                 </div>
                 <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
@@ -52,13 +53,13 @@
           </div> 
 
           <legend class="section">个人信息</legend>
-          <div class="main_panle3 offset1 ">
-            <div class="reset_avatar">
-              <div class="photo_span" >
-                <span>法人头像：</span>
-                <img class="bottom normal_picture img-polaroid" style="width: 120px;height: 120px;"/>
+          <div class="main_panle3 row-controls ">
+            <div class="reset_avatar span12">
+              <div class="photo_span span5" >
+                <label class="string control-label cell"> 法人头像</label>
+                <img class="bottom normal_picture img-polaroid my_img" style="width:120px;height:120px;" />
               </div>  
-              <div id="image_bottom">
+              <div id="image_bottom" class="span6 vatical-center">
                 <div class="hidden_one " id="hidden_text">请选择一张您电脑中的图片，然后点击“上传”<br>支持jpg、png、gif图片类型，不能大于1MB。<br />
                 </div>
                 <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
