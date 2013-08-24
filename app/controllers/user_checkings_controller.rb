@@ -1,5 +1,6 @@
+# encoding : utf-8
 class UserCheckingsController < ApplicationController
-  before_filter :login_and_service_required
+  before_filter :login_required
 
   def update_user_auth
   	@user_checking = current_user.user_checking
@@ -13,5 +14,25 @@ class UserCheckingsController < ApplicationController
   	@shop_auth = params[:shop_auth]
   	@user_checking.update_attributes(@shop_auth)
   	redirect_to "/shops/#{ @user_checking.user.login }/admins/shop_info"
+  end
+
+  #上传头像
+  def upload_photo
+    field_name = params[:field_name]
+    file = params[:avatar].is_a?(ActionDispatch::Http::UploadedFile) ? params[:avatar] : params[:file]
+    unless file.nil?
+        @user_checking = User.find(params[:id]).user_checking
+        if @user_checking.send(field_name)
+            @user_checking.send(field_name).remove! if  @user_checking.send(field_name)
+        end
+        @user_checking.send("#{field_name}=",file)
+        if @user_checking.save
+            render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
+        else
+            render :text => "{success: false, error: '上传头像失败！'}"
+        end
+    else
+        render :text => "{success: false, error: '请上传头像！'}"
+    end
   end
 end

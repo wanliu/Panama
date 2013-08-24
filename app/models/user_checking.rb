@@ -4,6 +4,7 @@ class UserChecking < ActiveRecord::Base
                   :company_name, :company_address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
                   :rejected, :rejected_reason, :checked
+  attr_accessor :uploader_secure_token
 
   belongs_to :user
   belongs_to :service
@@ -11,6 +12,11 @@ class UserChecking < ActiveRecord::Base
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true
   validates :industry_type, presence: true, if: :service_choosen?
+
+  mount_uploader :company_license_photo, ImageUploader
+  mount_uploader :ower_photo, ImageUploader
+  mount_uploader :shop_photo, ImageUploader
+
 
   def current_step
     if service.service_type == "buyer"
