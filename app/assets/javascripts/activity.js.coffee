@@ -271,10 +271,7 @@ class ActivitiesView extends Backbone.View
         new ProductPreview(model: model, template: @pdPreview).render()
 
 
-
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview
 root.ActivityView = ActivityView
 root.ActivitiesView = ActivitiesView
-
-

@@ -65,6 +65,57 @@ class ShopProductPreview extends Backbone.View
 			view.modal()
 		false
 
+
+class CycleIter
+  constructor: (@data, @pos = 0) ->
+
+  next: () ->
+    @pos = 0 unless @pos < @data.length
+    @data[@pos++]
+
+
+class ShopProductsView extends Backbone.View
+
+  initialize: (@options) ->
+    $(window).resize($.proxy(@relayoutColumns, @))
+    @relayoutColumns()
+
+  resizeWrap: (e) ->
+    @$el.width(@adjustNumber() * 246)
+
+  adjustNumber: () ->
+    $wrap = $('.wrap')
+    count = parseInt(($wrap.width() - 25) / 246)
+
+  relayoutColumns: () ->
+    shop_products = @fetchResults()
+    new_dom = $("<div id='shop_products'/>")
+    new_dom.append("<div class='column' />") for i in [0...@adjustNumber()]
+
+    cycle = new CycleIter(new_dom.find(".column"))
+
+    for act in shop_products
+      target = cycle.next()
+      $(target).append(act)
+
+    @$el.replaceWith(new_dom)
+    @$el = new_dom
+    @resizeWrap()
+
+  fetchResults: () ->
+    row = 0
+    columns = @$(".column")
+    results = []
+    while _(_(columns).map (elem, i ) ->
+      node = $(elem).find(">div")[row]
+      results.push(node) if node?
+      node).any()
+      row++
+
+    results
+
+
 root.ShopProductView = ShopProductView
 root.ShopProductModel = ShopProductModel
 root.ShopProductPreview = ShopProductPreview
+root.ShopProductsView = ShopProductsView
