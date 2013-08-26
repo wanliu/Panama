@@ -1,5 +1,5 @@
 class UserSessionsController < ApplicationController
-  before_filter :login_and_service_required, :only => [ :destroy ]
+  # before_filter :login_and_service_required, :only => [ :destroy ]
 
   respond_to :html
 
