@@ -5,8 +5,7 @@ Copyright (c) 2011 by Harvest
 #= require lib/select-parser
 #= require lib/abstract-chosen
 
-root = this
-$ = jQuery
+root = window || @
 
 $.fn.extend({
   chosen: (options) ->
@@ -180,7 +179,7 @@ class Chosen extends AbstractChosen
   results_build: ->
     @parsing = true
     @results_data = root.SelectParser.select_to_array @form_field
-
+    
     if @is_multiple and @choices > 0
       @search_choices.find("li.search-choice").remove()
       @choices = 0
@@ -204,7 +203,7 @@ class Chosen extends AbstractChosen
           this.single_deselect_control_build() if @allow_single_deselect
 
     this.search_field_disabled()
-    this.show_search_field_default()
+    # this.show_search_field_default()
     this.search_field_scale()
 
     @search_results.html content
