@@ -20,11 +20,13 @@
 /coverage
 /tmp
 /vendor/bundle
+/vendor/ruby
 /vendor/cache
 /public/uploads
 /public/category
 /public/attachment
 /public/assets
+/public/user_checking
 /config/email.yml
 /config/application.yml
 /assets/images/
