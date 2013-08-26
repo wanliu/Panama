@@ -131,10 +131,12 @@
 			}  
 		})
 	};
-	$('.my_product_list>li').each(function(i, elem){
-		bind_editable(elem, "price")
-		bind_editable(elem, "inventory")
+
+	$(document).delegate($('.my_product_list>li'), 'click',function(i, elem){
+		bind_editable(elem, "price");
+		bind_editable(elem, "inventory")	
 	});
+
 
 	var Filter = function(id_name,target){
 		$("#"+id_name).keyup(function(){
