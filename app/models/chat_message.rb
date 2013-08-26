@@ -55,8 +55,8 @@ class ChatMessage < ActiveRecord::Base
 
   def remind_receive_user
     FayeClient.send(
-      "/transaction/chat/message/#{receive_user.try(:im_token)}", as_json
-    )
+      "/transaction/chat/message/remind/#{receive_user.try(:im_token)}", as_json
+    ) if "%w(OrderTransaction DirectTransaction)".include?(owner_type)
   end
 
   #通知接收人

@@ -4,6 +4,33 @@ class NotificationsContainerView extends RealTimeContainerView
 	top_tip:
 		klass   : "icon-star"
 
+	fill_header: () ->
+		$(@el).prepend('
+			<h5 class="tab-header">
+				<i class="icon-edit"></i>消息通知[<span class="num">0</span>]
+			</h5>')
+
+	bind_items: () ->
+		@bind_view()
+		@bind_collection()
+		@bind_realtime()
+
+	bind_view: () ->
+		@urlRoot = "/people/#{@current_user_login}/notifications"
+		$(@el).append('<div class="notices-list"></div>')
+		@transactions_view = new TransactionsContainerView(parent_view: @)
+		@activities_view = new ActivitiesContainerView(parent_view: @)
+		@tran_view = new TransactionsChatRemind(parent_view: @)
+
+	bind_collection: () ->
+		@views = [@transactions_view, @tran_view, @activities_view]
+		_.each @views, (item) =>
+			item.bind('add_count',@handle_number, @)
+			item.bind('remove_count',@handle_number, @)
+		@collection = new Backbone.Collection
+		@collection.bind('reset', @add_all, @)
+		@collection.fetch(url: "#{@urlRoot}/unreads")
+
 	bind_realtime: () ->
 		@client = Realtime.client(@realtime_url)
 		@client.monitor_people_notification @token, (info) =>
@@ -12,15 +39,10 @@ class NotificationsContainerView extends RealTimeContainerView
 			else
 				@transactions_view.realtime_help(info)
 
-	bind_items: () ->
-		@urlRoot = "/people/#{@current_user_login}/notifications"
-		$(@el).append('<div class="notices-list"></div>')
-		@transactions_view = new TransactionsContainerView(parent_view: @)
-		@activities_view = new ActivitiesContainerView(parent_view: @)
-		@collection = new Backbone.Collection
-		@collection.bind('reset', @add_all, @)
-		@collection.fetch(url: "#{@urlRoot}/unreads")
-		@bind_realtime()
+	handle_number: (number = 0) ->
+		_.each @views, (item) =>
+			number += item.collection.length
+		@$("h5 .num").html(number)
 
 	add_all: () ->
 		@collection.each (model) =>
@@ -28,21 +50,13 @@ class NotificationsContainerView extends RealTimeContainerView
 				@activities_view.collection.add(model)
 			else
 				@transactions_view.collection.add(model)
-		new TransactionsChatRemind(parent_view: @)
-
-
 
 
 class TransactionsContainerView extends NotificationsContainerView
 	className: "transactions-list"
 
 	fill_header: () ->
-		$(@el).prepend('
-			<h5 class="tab-header">
-				<i class="icon-edit"></i>交易消息[<span class="num">0</span>]
-			</h5>
-			<ul class="transactions">
-			</ul>')
+		$(@el).prepend('<ul class="transactions"></ul>')
 
 	bind_items: () ->
 		@parent_view  = @options.parent_view
@@ -50,7 +64,6 @@ class TransactionsContainerView extends NotificationsContainerView
 		@parent_view.$('div.notices-list').append(@el)
 		@collection = new Backbone.Collection
 		@collection.bind('add', @add_one, @)
-
 
 	realtime_help: (info) ->
 		model = info.value
@@ -62,13 +75,19 @@ class TransactionsContainerView extends NotificationsContainerView
 		@collection.get(model.id).view.active()
 
 	add_one: (model) ->
-		@$("h5 .num").html(@collection.length)
 		model.url = "#{@parent_view.urlRoot}/#{model.id}"
 		message_view = new TransactionMessageView({ 
 			model: model, 
 			parent_view: @ })
 		model.view = message_view
 		$("ul", @el).prepend(message_view.render().el)
+		message_view.bind("remove_one", _.bind(@remove_one, @))
+		@trigger("add_count")
+
+	remove_one: (id)->
+		model = @collection.get(id)
+		@collection.remove model if model?
+		@trigger("remove_count")
 
 	top: (model) ->
 		@parent_view.active()
@@ -92,6 +111,7 @@ class TransactionMessageView extends Backbone.View
 			</div>")(options)
 
 	direct_to_transaction_detail: () ->
+		@trigger("remove_one", @model.id)
 		$.ajax({
 			type: "POST",
 			dataType: "json",
@@ -125,15 +145,9 @@ class ActivitiesContainerView extends NotificationsContainerView
 		@collection.get(model.id).view.active()
 
 	fill_header: () ->
-		$(@el).prepend('
-			<h5 class="tab-header">
-				<i class="icon-star"></i>活动消息[<span class="num">0</span>]
-			</h5>
-			<ul class="activities">
-			</ul>')
+		$(@el).prepend('<ul class="activities"></ul>')
 
 	add_one: (model) ->
-		@$("h5 .num").html(@collection.length)
 		model.url = "#{@parent_view.urlRoot}/#{model.id}"
 		activity_view = new ActivityMessageView({ 
 			model: model, 
@@ -141,23 +155,26 @@ class ActivitiesContainerView extends NotificationsContainerView
 		model.view = activity_view
 		$("ul", @el).prepend(activity_view.render().el)
 		activity_view.bind("remove_model", _.bind(@remove_one, @))
+		@trigger("add_count")
 
 	remove_one: (id) ->
 		model = @collection.get(id)
 		@collection.remove model if model?
 		@$("h5 .num").html(@collection.length)
+		@trigger("remove_count")
 
 
 class ActivityMessageView extends Backbone.View
 	tagName: 'li'
+
 	template: _.template("
-			<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
-			<div class='activity-info'>
-				<div class='name'>
-					<a href='#''><%= model.get('body') %></a>
-				</div>
-				<div class='type'><%= model.get('targeable').title %></div>
-			</div>")
+		<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+		<div class='activity-info'>
+			<div class='name'>
+				<a href='#''><%= model.get('body') %></a>
+			</div>
+			<div class='type'><%= model.get('targeable').title %></div>
+		</div>")
 
 	events:
 		"click" : "show_modal"
@@ -171,6 +188,7 @@ class ActivityMessageView extends Backbone.View
 				model    : model 
 			}).modal()
 			@remove()
+			$('.notices-list').mouseleave()
 
 	active: () ->
 		$(@el).addClass('active')
@@ -188,5 +206,6 @@ class ActivityMessageView extends Backbone.View
 				@trigger("remove_model", @model.id)
 		)
 		super
+
 
 root.NotificationsContainerView = NotificationsContainerView 

@@ -21,6 +21,7 @@ Panama::Application.routes.draw do
 
   match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth",:via => :put
   match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth",:via => :put
+  match "user_checkings/upload_photo/:id", :to => "user_checkings#upload_photo",:via => :post
 
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"

@@ -30,14 +30,21 @@ class Activity < ActiveRecord::Base
 
   before_create :init_data
 
-  after_create :create_notice
+  def notice_author(sender, message)
+    notifications.create({
+      :user_id => sender.id, 
+      :mentionable_user_id => author.id,
+      :url => "/activities/#{id}",
+      :body => message
+    })
+  end
 
-  def create_notice
-    following_users = author.followings.where({:follow_type => User}).select(:follow_id)
-    following_users.each do |follow|
+  def notice_followers
+    followers = author.followers.where({:follow_type => User})
+    followers.each do |follower|
       notifications.create({
         :user_id => author.id,
-        :mentionable_user_id => follow.follow_id,
+        :mentionable_user_id => follower.user_id,
         :url => "/activities/#{id}",
         :body => "有新活动发布"
       })

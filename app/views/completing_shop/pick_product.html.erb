@@ -1,3 +1,4 @@
+
 <div class="row-fluid">
   <div class='offset1 span10'>
   	<div class='dialog'>
@@ -7,7 +8,7 @@
 	  	<%= render "add_products" %>
 		<div class='row-fluid'>
 			<%= form_for @user_checking, :url => wizard_path, :method => :put, class: "form-horizontal" do |f| %>
-				<div class="span12 form-actions">
+				<div class="span11 form-actions">
 					<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
 					<%= f.submit "完成", class: "btn btn-primary" %>
 				</div>

@@ -6,6 +6,7 @@ class TransactionsChatRemind extends Backbone.View
 		@realtime_url = @options.parent_view.realtime_url
 		@token = @options.parent_view.token
 		@current_user_login = @options.parent_view.current_user_login
+		# @receive_notice_url()
 		@bind_realtime()
 		@bind_items()
 
@@ -13,6 +14,7 @@ class TransactionsChatRemind extends Backbone.View
 		@collection = new Backbone.Collection
 		@collection.bind('reset', @add_all, @)
 		@collection.bind('add', @add_one, @)
+		@collection.bind('remove',@remove_one, @)
 		@collection.fetch(url: "/people/#{@current_user_login}/transactions/unread_messages")
 
 	bind_realtime: () ->
@@ -26,7 +28,7 @@ class TransactionsChatRemind extends Backbone.View
 				@collection.add(msg)
 
 	receive_notice_url: () ->
-		"/transaction/chat/message/#{@token}"
+		"/transaction/chat/message/remind/#{@token}"
 
 	add_all: () ->
 		@collection.each (model) =>
@@ -38,7 +40,14 @@ class TransactionsChatRemind extends Backbone.View
 			parent_view: @ })
 		model.view  = remind_view
 		$(".right-sidebar .transactions").prepend(remind_view.render().el)
-				
+		remind_view.bind("remove_model", _.bind(@remove_one, @))
+		@trigger("add_count")
+
+	remove_one: (id)->
+		model = @collection.get(id)
+		@collection.remove model if model?
+		@trigger("remove_count")
+		# @$("h5 .num").html(@collection.length)
 
 class TransactionChatRemindView extends Backbone.View
 	tagName: "li"
@@ -72,7 +81,10 @@ class TransactionChatRemindView extends Backbone.View
 		$(@el).html(@template(model: @model))
 		@
 
+	
+
 	message_handle: () ->
+		@trigger("remove_model", @model.id)
 		$.ajax({
 			type: "post",
 			dataType: "json",

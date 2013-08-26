@@ -7,26 +7,9 @@ class root.WizardView extends Backbone.View
   events:
     "click .leaf_node" : "get_category_products"
     "click .add_to_shop" : "add_to_shop"
-    # "click .label-default" : "edit_shop_product"
     "click .remove_from_shop" : "remove_from_shop"
     "click .product_list > li" : "select_many"
     "click .select_all" : "select_all"
-
-  # edit_shop_product: (event) ->
-  #   return if $(event.currentTarget.className).is('.input')
-  #   area = $(event.currentTarget)
-  #   li = area.parent()
-
-  #   input = $("<input type='text' value='#{area.text()}' />")
-  #   area.addClass('input').html(input)
-  #   .find("input")
-  #   .blur(() ->
-  #     area.removeClass('input').html($(this).val() || 0).append("<i class='icon-edit'></i>")
-  #     id = li.parent().attr("id")
-  #     field = area
-  #     value = area.text()
-  #     update_product(id, field, value)
-  #   )
 
   get_category_products: (event) ->
     shop_id = @options.shop_id
@@ -66,21 +49,6 @@ class root.WizardView extends Backbone.View
       $(this).remove()
     @render_product_infor(product_ids)
 
-  # update_product = (product_id, field, value) ->
-  #   data = if field.hasClass("price")
-  #     shop_product:
-  #       price: value
-  #   else
-  #     shop_product:
-  #       inventory: value
-  #   $.ajax({
-  #     type: "put",
-  #     url: "/shop_products/#{product_id}",
-  #     dataType: "json",
-  #     data: data,
-  #     error: (messager) ->
-  #       alert(messager)
-  #   })
 
   select_many : (event) ->
     el = $(event.currentTarget)
