@@ -1,6 +1,5 @@
 # var right_bar = new RightSideBar({el: ".right-sidebar"})
 # right_bar.register(ContainerView)
-
 #= require lib/realtime_client
 root = (window || @)
 
@@ -14,7 +13,7 @@ class RightSideBar extends Backbone.View
 	initialize: () ->
 		$(@el).html(@template())
 		@register_counter = 0
-		@toggleIcons()
+		@init_states()
 
 	register: (containers...) ->
 		for container in containers
@@ -38,9 +37,28 @@ class RightSideBar extends Backbone.View
 		@registered_containers ?= {}
 		@registered_containers[String(container)]?
 
-	toggleIcons: () ->
-		$("body").toggleClass('right-mini')
+	init_states: () ->
+		if local_storage('sidebar_state')
+			@sidebar_state = local_storage('sidebar_state')
+		else
+			@sidebar_state = { 
+				'right-mini' : true,
+				tab_active: "notifications"
+			}
+			local_storage('sidebar_state', @sidebar_state)
+		@apply_states()
+
+	apply_states: () ->
+		if @sidebar_state['right-mini'] == true
+			$("body").addClass('right-mini')
+		else
+			$("body").removeClass('right-mini')
 		$(window).trigger('resize')
+
+	toggleIcons: () ->
+		@sidebar_state['right-mini'] = !@sidebar_state['right-mini']
+		local_storage('sidebar_state', @sidebar_state)
+		@apply_states()
 
 	add_top: (container, id)->
 		top = container.top_tip || {}
@@ -125,7 +143,6 @@ class RealTimeContainerView extends ContainerView
 
 RealTimeContainerView.bind_runtime = (options) ->
 	_.extend(@prototype, options)
-
 
 
 root.RightSideBar  = RightSideBar
