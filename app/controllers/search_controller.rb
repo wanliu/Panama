@@ -47,9 +47,8 @@ class SearchController < ApplicationController
 
   def shop_products
     if current_user.shop
-      query = params[:q].gsub(/[\+\-\*\/\.\,]/, "")
+      query = filter_special_sym(params[:q])
       shop_id = current_user.shop.id
-
       s = ShopProduct.search2 do
         query do
           string "name:#{query} AND seller.id:#{shop_id}"
