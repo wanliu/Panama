@@ -3,7 +3,7 @@ Chosen source: generate output using 'cake build'
 Copyright (c) 2011 by Harvest
 ###
 
-root = this
+root = window || @
 
 class AbstractChosen
 

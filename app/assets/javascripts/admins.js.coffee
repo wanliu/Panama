@@ -28,3 +28,4 @@
 #= require twitter/bootstrap/modal
 #= require admins/shops/product_comment
 #= require admins/shops/shop_direct_transaction
+#= require upload_photo

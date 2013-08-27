@@ -20,6 +20,7 @@
 /coverage
 /tmp
 /vendor/bundle
+/vendor/ruby
 /vendor/cache
 /public/uploads
 /public/category

@@ -1,8 +1,7 @@
 #= require 'jquery'
 #= require 'lib/chosen.jquery'
 
-root = this
-$ = jQuery
+root = window || @
 
 $.fn.extend({
     chosenEx: (options) ->
@@ -43,7 +42,7 @@ class ChosenEx extends Chosen
 
     if @remote_options.url != ""
       @search_field.unbind()
-      @search_field.bind('keyup', $.proxy(@keyupRemote,@))
+      @search_field.bind('keyup', $.proxy(@keyupRemote, @))
 
     if $.isFunction(@options.select)
       @search_results.on "mouseup", "li", $.proxy(@_select, @)
@@ -90,9 +89,8 @@ class ChosenEx extends Chosen
 
   keyupRemote: (event) ->
     search_value = $(event.target).val().trim()
-    key_code = event.which ? event.keyCode
-
-    if search_value != "" && @tmp_search_value != search_value
+    key_code = event.keyCode || event.which
+    if search_value != "" && @last_keyword != search_value
       @fetchRemote(search_value)
 
     switch key_code
@@ -105,7 +103,7 @@ class ChosenEx extends Chosen
 
   fetchRemote: (search_value) ->
     if @remote_options.url?
-      @tmp_search_value = search_value
+      @last_keyword = search_value
       data = {}
       data[@remote_options.param_name] = search_value
       $.ajax({
@@ -133,7 +131,6 @@ class ChosenEx extends Chosen
 
     $(this.form_field).html(strHtml)
     $(this.form_field).trigger("liszt:updated")
-    @search_field.val(@tmp_search_value)
 
   text_html: () ->
     @strH = @remote_options.no_results_text
