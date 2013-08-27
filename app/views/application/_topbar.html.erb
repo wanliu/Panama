@@ -40,98 +40,13 @@
             </a>
         </li>
     <% end %>
-
-    <!-- 聊天信息 -->
-<!--     <li class="dropdown">
-        <a href="#" title="Messages" id="messages" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-comments"></i>
-        </a>
-        <ul id="messages-menu" class="dropdown-menu messages" role="menu">
-            <li role="presentation">
-                <a href="#" class="text-align-center see-all">
-                    See all messages <i class="icon-arrow-right"></i>
-                </a>
-            </li>
-        </ul>
-    </li> -->
-    <!-- 通知信息 -->
-   <!--  <li class="dropdown">
-        <%= link_to_notice %>
-        <ul id="support-menu" class="dropdown-menu support" role="menu">
-            <li role="presentation">
-                <a href="#" class="support-ticket">
-                    <div class="picture">
-                        <span class="label label-important"><i class="icon-bell-alt"></i></span>
-                    </div>
-                    <div class="details">
-                        Check out this awesome ticket
-                    </div>
-                </a>
-            </li>
-
-            <li role="presentation">
-                <a href="#" class="support-ticket">
-                    <div class="picture">
-                        <span class="label label-warning"><i class="icon-question-sign"></i></span>
-                    </div>
-                    <div class="details">
-                        "What is the best way to get ...
-                    </div>
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="#" class="support-ticket">
-                    <div class="picture">
-                        <span class="label label-success"><i class="icon-tag"></i></span>
-                    </div>
-                    <div class="details">
-                        This is just a simple notification
-                    </div>
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="#" class="support-ticket">
-                    <div class="picture">
-                        <span class="label label-info"><i class="icon-info-sign"></i></span>
-                    </div>
-                    <div class="details">
-                        12 new orders has arrived today
-                    </div>
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="#" class="support-ticket">
-                    <div class="picture">
-                        <span class="label label-important"><i class="icon-plus"></i></span>
-                    </div>
-                    <div class="details">
-                        One more thing that just happened
-                    </div>
-                </a>
-            </li>
-            <li role="presentation">
-                <a href="#" class="text-align-center see-all">
-                    See all tickets <i class="icon-arrow-right"></i>
-                </a>
-            </li>
-        </ul>
-    </li> -->
     <li class="divider"></li>
     <li><%= link_to_admin %></li>
-<!--     <li class="hidden-phone">
-        <a href="#" id="settings" title="" data-toggle="popover" data-placement="bottom" data-original-title="Settings">
-            <i class="icon-cog"></i>
-        </a>
-    </li>
- -->    <!-- 帐号信息 -->
     <li class="hidden-phone dropdown">
         <a href="#" title="Account" id="account" class="dropdown-toggle" data-toggle="dropdown">
             <%= account_info %>
         </a>
         <ul id="account-menu" class="dropdown-menu account" role="menu">
-            <!-- <li role="presentation" class="account-picture">
-                <%#= account_info %>
-            </li> -->
             <li role="presentation">
                 <%= link_to_account %>
             </li>
@@ -143,12 +58,6 @@
             <i class="icon-reorder"></i>
         </a>
     </li>
-<!--     <li role="presentation">
-        <a href="component_calendar.html" class="link friends">
-            <i class="icon-resize-horizontal "></i>
-        </a>
-    </li> -->
-    <!-- <li class="hidden-phone"><a href="login.html"><i class="icon-signout"></i></a></li> -->
 </ul>
 <%= javascript_include_tag "my_cart" %>
 

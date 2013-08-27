@@ -413,11 +413,18 @@ zh-CN:
   shop_info: 店铺信息
   product_comments: 商品评论
   shop_banks: 银行帐户
+  
+  completing_shop: 注册商店
+  completing_people: 注册用户
 
+  notifications: 提醒
   people: 基本信息
   addresses: 地址
   cart: 购物车
   transactions: 交易
+  completed: 完成
+  followings: 关注的人
+  followers: 我关注的人
 
   shop_group:
     sale: "销售组"
@@ -616,3 +623,5 @@ zh-CN:
   shop_info: "基础信息"
   index: ""
   show: "显示页"
+
+  edit: 编辑
