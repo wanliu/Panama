@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
   end
 
   # 绑定登陆和服务选择(买家，卖家？)
-  def login_and_service_required   
+  def login_and_service_required
     if !current_user
       login_required
     elsif current_user.services.empty?
@@ -112,6 +112,10 @@ class ApplicationController < ActionController::Base
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
     end
+  end
+
+  def filter_special_sym(query)
+    query.gsub(/[\+\-\*\.\,]/, "").gsub(/\//, "\\/")
   end
 
   def login_or_admin_required

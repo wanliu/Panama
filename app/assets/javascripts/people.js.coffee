@@ -33,3 +33,4 @@
 #= require topic
 #= require people/product_comment
 #= require people/direct_transaction
+#= require upload_photo

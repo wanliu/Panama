@@ -232,3 +232,36 @@ $left-side-admin-width: 160px;
   height: 40px;
   margin-top: -20px;
 }
+
+$margin-top: 20px;
+.main_panle2,.main_panle3,.main_panle1{
+
+  .cell{
+    margin-top: $margin-top;
+  }
+
+  .my_img{
+    width: 5*$margin-top;
+    height: 6*$margin-top;
+  }
+
+  .qq-upload-button{
+    margin-left: 85px;
+  }
+}
+.locate{
+  margin-top:50px;
+}
+
+.locate1{
+   margin-top:30px;
+}
+.cell{margin-left:15*$margin-top}
+
+.form-horizontal .controls {
+  margin-left: 120px !important; 
+}
+.control-label {
+    width: 100px !important;
+}
+
