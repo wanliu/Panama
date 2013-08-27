@@ -51,7 +51,10 @@ class SearchController < ApplicationController
       shop_id = current_user.shop.id
       s = ShopProduct.search2 do
         query do
-          string "name:#{query} AND seller.id:#{shop_id}"
+          boolean do
+            should { string "*#{query}*", fields: ["first_name", "any_name", "primitive"] }
+            should { string "seller.id:#{shop_id}" }
+          end
         end
       end
       products = s.results
