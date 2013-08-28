@@ -1,8 +1,8 @@
 #encoding: utf-8
 class ShopProduct < ActiveRecord::Base
+  acts_as_paranoid
   include Tire::Model::Search
   include Tire::Model::Callbacks
-  acts_as_paranoid
 
   attr_accessible :shop_id, :product_id, :price, :inventory,:photos,:name
 
