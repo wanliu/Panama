@@ -13,6 +13,10 @@ class ShopProduct < ActiveRecord::Base
 
   validate :valid_shop_and_product_uniq?
 
+  after_destroy do
+    self.index.remove self
+  end
+
   # Tire 索引结构的 json
   def to_indexed_json
     {
