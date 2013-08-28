@@ -27,6 +27,8 @@ class window.ShopProductToolbar extends Backbone.View
       data: {amount: @amount.val()}
       success: () =>
         window.location.href = "/people/#{@login}/transactions"
+      error: (data) ->
+        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
     )
 
   create_direct_buy: () ->
@@ -36,6 +38,8 @@ class window.ShopProductToolbar extends Backbone.View
       data: {amount: @amount.val()}
       success: () =>
         window.location.href = "/people/#{@login}/transactions"
+      error: (data) ->
+        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
     )
 
   cart: () ->
