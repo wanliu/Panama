@@ -1,8 +1,8 @@
 #encoding: utf-8
 class ShopProduct < ActiveRecord::Base
+  acts_as_paranoid
   include Tire::Model::Search
   include Tire::Model::Callbacks
-  acts_as_paranoid
 
   attr_accessible :shop_id, :product_id, :price, :inventory,:photos,:name
 
@@ -12,6 +12,10 @@ class ShopProduct < ActiveRecord::Base
   belongs_to :product
 
   validate :valid_shop_and_product_uniq?
+
+  after_destroy do
+    self.index.remove self
+  end
 
   # Tire 索引结构的 json
   def to_indexed_json

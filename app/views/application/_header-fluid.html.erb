@@ -6,19 +6,23 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      	<div id="logo">
-    	<h1><a  href="#"><img src="/assets/logo-large.png" style="height:40px;width:60px;">万流市场</a></h1>
-      	</div>
+      <div id="logo">
+        <h1>
+          <a href="#">
+            <img src="/assets/logo-large.png" style="height:40px;width:60px;">万流市场
+          </a>
+        </h1>
+      </div>
 
-  		<form id="top_search" class="form-search pull-right">
+      <form id="top_search" class="form-search pull-right">
         <div class="input-append">
-  			<%= text_field_tag :query, nil, :class=>"span5 search-query" %>
-  			<%= submit_tag l(:search, '搜  索'), :class=> "btn"%>
+        <%= text_field_tag :query, nil, :class=>"span5 search-query" %>
+        <%= submit_tag l(:search, '搜  索'), :class=> "btn"%>
         </div>
-  		</form>
-		<div id="topbar" class="nav-collapse collapse pull-right">
-			<%= render "topbar" %>
-    	</div><!--/.nav-collapse -->
+      </form>
+    <div id="topbar" class="nav-collapse collapse pull-right">
+      <%= render "topbar" %>
+      </div><!--/.nav-collapse -->
 
     </div>
   </div>

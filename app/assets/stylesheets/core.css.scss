@@ -675,6 +675,7 @@ ul {
 
 			.transaction-info {
 				height: 50px;
+				display: none;
 			}
 		}
 
@@ -690,6 +691,9 @@ ul {
 			}
 			width: 300px;
 			// margin-left: -120px;
+			.transaction-info{
+				display: block;
+			}
 		}
 
 		.user-info {
