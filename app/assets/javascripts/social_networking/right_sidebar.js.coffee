@@ -8,12 +8,12 @@ class RightSideBar extends Backbone.View
 		$("#right-sidebar-templates .main").html()
 
 	events:
-		"click #sidebar-settings>button": "toggleIcons"
+		"click header>ul>li"    : "toggleTabs"
+		"click .settings>button": "toggleIcons"
 
 	initialize: () ->
 		$(@el).html(@template())
 		@register_counter = 0
-		@init_states()
 
 	register: (containers...) ->
 		for container in containers
@@ -24,7 +24,8 @@ class RightSideBar extends Backbone.View
 				@add_container(container_view)
 
 				@registered_containers[String(container)] = container_view
-				container_view.active() unless @any_active_view()
+				# container_view.active() unless @any_active_view()
+		@init_states()
 
 	undo_register: (containers...) ->
 		for container in containers
@@ -39,26 +40,40 @@ class RightSideBar extends Backbone.View
 
 	init_states: () ->
 		if local_storage('sidebar_state')
-			@sidebar_state = local_storage('sidebar_state')
+			@states = local_storage('sidebar_state')
 		else
-			@sidebar_state = { 
-				'right-mini' : true,
-				tab_active: "notifications"
+			@states = { 
+				'right_mini' : false,
+				'actived_tab': String(NotificationsContainerView)
 			}
-			local_storage('sidebar_state', @sidebar_state)
+			local_storage('sidebar_state', @states)
 		@apply_states()
 
 	apply_states: () ->
-		if @sidebar_state['right-mini'] == true
+		if @states['right_mini'] == true
 			$("body").addClass('right-mini')
 		else
 			$("body").removeClass('right-mini')
+		setTimeout () =>
+			@registered_containers[@states['actived_tab']].active()
+		, 100
 		$(window).trigger('resize')
 
 	toggleIcons: () ->
-		@sidebar_state['right-mini'] = !@sidebar_state['right-mini']
-		local_storage('sidebar_state', @sidebar_state)
+		@states['right_mini'] = !@states['right_mini']
+		local_storage('sidebar_state', @states)
 		@apply_states()
+
+	toggleTabs: (event) ->
+		id = $("a", event.currentTarget).attr("href").substr(1)
+		container = @find_container(id)
+		# container.active()
+		@states['actived_tab'] = String(container.constructor)
+		local_storage('sidebar_state', @states)
+
+	find_container: (id) ->
+		_.find @registered_containers, (view) => 
+			return view.id == id
 
 	add_top: (container, id)->
 		top = container.top_tip || {}
