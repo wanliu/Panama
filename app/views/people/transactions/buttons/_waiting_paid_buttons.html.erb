@@ -4,7 +4,7 @@
       <%= link_to '#',
             :class => 'btn btn-large',
             'event-name' => 'back' do %>
-        <%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
+        <%= raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
       <% end %>
     <% end %>
     <% if transaction.valid_payment?  %>
