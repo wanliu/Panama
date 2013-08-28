@@ -60,30 +60,30 @@ namespace "index" do
 
       mapping :product, {
         "properties" => {
-            "name" => {
-                "type" => "multi_field",
-                "fields" => {
-                    "first_name" => {
-                        "type" => "string",
-                        "store" => "no",
-                        "term_vector" => "with_positions_offsets",
-                        "analyzer" => "none_analyzer",
-                        "boost" => 10
-                    },
-                    "any_name" => {
-                        "type" => "string",
-                        "store" => "no",
-                        "term_vector" => "with_positions_offsets",
-                        "analyzer" => "only_analyzer",
-                        "boost" => 10
-                    },
-                    "primitive" => {
-                        "type" => "string",
-                        "store" => "yes",
-                        "analyzer" => "keyword"
-                    }
-                }
+          "name" => {
+            "type" => "multi_field",
+            "fields" => {
+              "first_name" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "none_analyzer",
+                "boost" => 10
+              },
+              "any_name" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "only_analyzer",
+                "boost" => 10
+              },
+              "name" => {
+                "type" => "string",
+                "store" => "yes",
+                "analyzer" => "keyword"
+              }
             }
+          }
         }
       }
     end
@@ -149,23 +149,23 @@ namespace "index" do
                 "type" => "multi_field",
                 "fields" => {
                     "first_name" => {
-                        "type" => "string",
-                        "store" => "no",
-                        "term_vector" => "with_positions_offsets",
-                        "analyzer" => "none_analyzer",
-                        "boost" => 10
+                      "type" => "string",
+                      "store" => "no",
+                      "term_vector" => "with_positions_offsets",
+                      "analyzer" => "none_analyzer",
+                      "boost" => 10
                     },
                     "any_name" => {
-                        "type" => "string",
-                        "store" => "no",
-                        "term_vector" => "with_positions_offsets",
-                        "analyzer" => "only_analyzer",
-                        "boost" => 10
+                      "type" => "string",
+                      "store" => "no",
+                      "term_vector" => "with_positions_offsets",
+                      "analyzer" => "only_analyzer",
+                      "boost" => 10
                     },
-                    "primitive" => {
-                        "type" => "string",
-                        "store" => "yes",
-                        "analyzer" => "keyword"
+                    "name" => {
+                      "type" => "string",
+                      "store" => "yes",
+                      "analyzer" => "keyword"
                     }
                 }
             }

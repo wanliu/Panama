@@ -52,8 +52,8 @@ class SearchController < ApplicationController
       s = ShopProduct.search2 do
         query do
           boolean do
-            should { string "*#{query}*", fields: ["first_name", "any_name", "primitive"] }
-            should { string "seller.id:#{shop_id}" }
+            must { string "*#{query}*", fields: ["first_name", "any_name", "name"] }
+            must { string "seller.id:#{shop_id}" }
           end
         end
       end
