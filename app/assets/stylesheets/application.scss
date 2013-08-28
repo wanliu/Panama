@@ -26,75 +26,76 @@
 
 // activity-category
 .activity-category {
-	margin: 0px;
+  margin: 0px;
 }
 
 .activity-category.affix {
-	position: fixed;
-	top: 40px;
-	z-index: 1032;
-	@include transparent(rgb(0,0,0),0.55);
+  position: fixed;
+  top: 40px;
+  z-index: 1032;
+  @include transparent(rgb(0,0,0),0.55);
 }
 
 .to-blur {
-	@include filter(blur(3px));
-	@include transition(0.0s);
+  @include filter(blur(3px));
+  @include transition(0.0s);
 }
 
 .dialog {
-	z-index: 1050;
-	background-color: white;
-	border: 1px solid #999999;
-	// border: 1px solid rgba(0, 0, 0, 0.3);
-	@include border-radius(1px);
-	@include box-shadow (0 3px 7px rgba(0, 0, 0, 0.3));
-	@include background-clip(padding-box);
-	outline: none;
-	margin-bottom: 20px;
+  z-index: 1050;
+  background-color: white;
+  border: 1px solid #999999;
+  // border: 1px solid rgba(0, 0, 0, 0.3);
+  @include border-radius(1px);
+  @include box-shadow (0 3px 7px rgba(0, 0, 0, 0.3));
+  @include background-clip(padding-box);
+  outline: none;
+  margin-bottom: 20px;
 }
 // comments and reply
 
 .big_comments_and_reply {
-	text-align: left;
-	.comments {
-		.comment {
-			padding: 0px 20px 10px 60px;
-			min-height: 60px;
-			.people-image {
-				margin-left: -60px;
-				float: left;
-				width: 50px;
-				height: 50px;
-			}
+  text-align: left;
+  .comments {
+    .comment {
+      padding: 0px 20px 10px 60px;
+      min-height: 60px;
+      .people-image {
+        margin-left: -60px;
+        float: left;
+        width: 50px;
+        height: 50px;
+      }
 
-			.author-name {
-				font-size: 16px;
-				font-weight: bold;
-			}
+      .author-name {
+        font-size: 16px;
+        font-weight: bold;
+      }
 
 
-		}
-	}
+    }
+  }
 
-	.reply_form {
-		padding: 0px 20px 10px 60px;
-		.user-info {
-			margin-left: -60px;
-			float: left;
-			width: 50px;
-			height: 50px;
-		}
+  .reply_form {
+    padding: 0px 20px 10px 60px;
+    .user-info {
+      margin-left: -60px;
+      float: left;
+      width: 50px;
+      height: 50px;
+    }
 
-		.message {
-			textarea {
-				width: 100%;
-			}
-		}
-	}
+    .message {
+      textarea {
+        width: 100%;
+      }
+    }
+  }
 }
 
 .form_activity_auction, .form_ask_buy{
-	.chzn-container .chzn-results{
-		max-height: 250px;
-	}
+  .chzn-container .chzn-results{
+    max-height: 250px;
+  }
 }
+
