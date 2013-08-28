@@ -11,4 +11,12 @@ class Admins::Shops::ShopBanksController < Admins::Shops::SectionController
       format.html{ redirect_to shop_admins_shop_banks_path(current_shop) }
     end
   end
+
+  def destroy
+  	@shop_bank = current_shop.banks.find(params[:id])
+  	@shop_bank.destroy
+  	respond_to do |format|
+  		format.json { head :no_content }
+  	end
+  end
 end
