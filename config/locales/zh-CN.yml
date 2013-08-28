@@ -431,6 +431,7 @@ zh-CN:
     inventory: "仓库组"
     admin: "管理组"
 
+  circles: 圈子
   topic:
     circle: "限定范圈"
     external: "外扩圈子"
