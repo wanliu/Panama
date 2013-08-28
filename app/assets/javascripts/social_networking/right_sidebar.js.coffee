@@ -1,6 +1,5 @@
 # var right_bar = new RightSideBar({el: ".right-sidebar"})
 # right_bar.register(ContainerView)
-
 #= require lib/realtime_client
 root = (window || @)
 
@@ -9,12 +8,12 @@ class RightSideBar extends Backbone.View
 		$("#right-sidebar-templates .main").html()
 
 	events:
-		"click #sidebar-settings>button": "toggleIcons"
+		"click header>ul>li"    : "toggleTabs"
+		"click .settings>button": "toggleIcons"
 
 	initialize: () ->
 		$(@el).html(@template())
 		@register_counter = 0
-		@toggleIcons()
 
 	register: (containers...) ->
 		for container in containers
@@ -25,7 +24,8 @@ class RightSideBar extends Backbone.View
 				@add_container(container_view)
 
 				@registered_containers[String(container)] = container_view
-				container_view.active() unless @any_active_view()
+				# container_view.active() unless @any_active_view()
+		@init_states()
 
 	undo_register: (containers...) ->
 		for container in containers
@@ -38,9 +38,40 @@ class RightSideBar extends Backbone.View
 		@registered_containers ?= {}
 		@registered_containers[String(container)]?
 
-	toggleIcons: () ->
-		$("body").toggleClass('right-mini')
+	init_states: () ->
+		if local_storage('sidebar_state')
+			@states = local_storage('sidebar_state')
+		else
+			@states = { 
+				'right_mini' : false,
+				'actived_tab': String(NotificationsContainerView)
+			}
+			local_storage('sidebar_state', @states)
+		@apply_states()
+
+	apply_states: () ->
+		if @states['right_mini'] == true
+			$("body").addClass('right-mini')
+		else
+			$("body").removeClass('right-mini')
+		@registered_containers[@states['actived_tab']].active()
 		$(window).trigger('resize')
+
+	toggleIcons: () ->
+		@states['right_mini'] = !@states['right_mini']
+		local_storage('sidebar_state', @states)
+		@apply_states()
+
+	toggleTabs: (event) ->
+		id = $("a", event.currentTarget).attr("href").replace("#", "")
+		container = @find_container(id)
+		# container.active()
+		@states['actived_tab'] = String(container.constructor)
+		local_storage('sidebar_state', @states)
+
+	find_container: (id) ->
+		_.find @registered_containers, (view) => 
+			return view.id == id
 
 	add_top: (container, id)->
 		top = container.top_tip || {}
@@ -125,7 +156,6 @@ class RealTimeContainerView extends ContainerView
 
 RealTimeContainerView.bind_runtime = (options) ->
 	_.extend(@prototype, options)
-
 
 
 root.RightSideBar  = RightSideBar
