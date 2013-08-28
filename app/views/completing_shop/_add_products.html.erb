@@ -87,8 +87,8 @@
 
 				<!--<span>单价 <input name='price' type='number' value='{{ price }}'/></span>-->
 				<!--<span>库存 <input name='inventory' type='number' value='{{ inventory }}'/></span>-->
-				<section> 单价 <span class='label label-default price'>{{ price }} <i class='icon-edit'></i></span></section>
-				<section> 库存 <span class='label label-default inventory'>{{ inventory }} <i class='icon-edit'></i></span></section>
+				<section> 单价 <span class='label label-default editable-click price'>{{ price }} <i class='icon-edit'></i></span></section>
+				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }} <i class='icon-edit'></i></span></section>
 			</li>
 		</script>
 
@@ -132,10 +132,12 @@
 		})
 	};
 
-	$(document).delegate($('.my_product_list>li'), 'click',function(i, elem){
-		bind_editable(elem, "price");
-		bind_editable(elem, "inventory")	
+	$(document).delegate( '.my_product_list>li', 'click',function(i, elem){
+		debugger
+		bind_editable($(this), "price");
+		bind_editable($(this), "inventory")	
 	});
+	
 
 
 	var Filter = function(id_name,target){
