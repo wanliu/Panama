@@ -54,9 +54,7 @@ class RightSideBar extends Backbone.View
 			$("body").addClass('right-mini')
 		else
 			$("body").removeClass('right-mini')
-		setTimeout () =>
-			@registered_containers[@states['actived_tab']].active()
-		, 100
+		@registered_containers[@states['actived_tab']].active()
 		$(window).trigger('resize')
 
 	toggleIcons: () ->
@@ -65,7 +63,7 @@ class RightSideBar extends Backbone.View
 		@apply_states()
 
 	toggleTabs: (event) ->
-		id = $("a", event.currentTarget).attr("href").substr(1)
+		id = $("a", event.currentTarget).attr("href").replace("#", "")
 		container = @find_container(id)
 		# container.active()
 		@states['actived_tab'] = String(container.constructor)
