@@ -2,7 +2,7 @@
 class Address < ActiveRecord::Base
   include Custom::Validators
 
-  attr_accessible :country, :road, :zip_code, :province_id, :city_id, :area_id, :contact_name, :contact_phone
+  attr_accessible :user_id, :country, :road, :zip_code, :province_id, :city_id, :area_id, :contact_name, :contact_phone
 
   has_many :transaction,
              class_name: 'OrderTransaction'

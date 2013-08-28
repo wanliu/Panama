@@ -112,8 +112,9 @@ class ShopProductsController < ApplicationController
     end
   end
 
-  def destroy
+  def destroy  
     @product = ShopProduct.find(params[:id])
+    # ShopProduct.tire.index.remove @product  #this will remove them from the index
     @product.destroy
 
     respond_to do |format|
@@ -123,7 +124,11 @@ class ShopProductsController < ApplicationController
 
   def delete_many
     product_ids = params[:product_ids]
-    ShopProduct.where("id in (?)",product_ids).delete_all
+    # product_ids.each do |product_id|
+    #   @product = ShopProduct.find(product_id)
+    #   ShopProduct.tire.index.remove @product
+    # end
+    ShopProduct.where("id in (?)",product_ids).destroy_all
 
     respond_to do |format|
       format.json{ head :no_content }
