@@ -1,6 +1,7 @@
 #encoding: utf-8
 class ShopBank < ActiveRecord::Base
   attr_accessible :bank_id, :code, :name, :state
+  acts_as_paranoid
 
   belongs_to :bank
   belongs_to :shop

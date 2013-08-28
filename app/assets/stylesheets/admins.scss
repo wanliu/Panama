@@ -226,11 +226,23 @@ $left-side-admin-width: 160px;
   }
 }
 
+.attention{
+  a:link{
+    color: #2A3F49;
+  }
+  span{
+    color: #2A3F49;
+  }
+}
 
 .nav .user_icon {
   width: 40px;
   height: 40px;
   margin-top: -20px;
+}
+
+.delete_bank{
+  color: $grayLighter;
 }
 
 $margin-top: 20px;
