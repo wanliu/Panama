@@ -1,8 +1,9 @@
-#encoding: utf-8 
+#coding: utf-8 
+
 class People::AddressesController < People::BaseController
 
 	def index
-		@addresses = Address.where(:user_id => current_user.id)
+		@addresses = Address.where(:user_id => @people.id)
 	end
 
 	def edit
@@ -11,9 +12,10 @@ class People::AddressesController < People::BaseController
 	end
 
 	def create
-		@address = Address.new(params[:address])
-		@address.user_id = current_user.id
-		unless @address.save
+		@address = Address.create(params[:address].merge(
+			user_id: @people.id
+		))
+		unless @address.valid?
 			flash[:error] = "请确定输入的地址非空！"
 		end
 		redirect_to person_addresses_path
