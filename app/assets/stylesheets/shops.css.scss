@@ -21,6 +21,11 @@
       overflow: hidden;
       padding: 5px;
       // border-bottom: 1px solid #e7e7e7;
+
+      img.preview{
+        width: 220px;
+        max-width: none;
+      }
     }
   }
 }
@@ -44,5 +49,20 @@
 
       margin-right: 10px;
     }
+  }
+}
+
+#shop_products{
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.load_msg{
+  text-align: center;
+  display: none;
+
+  img{
+    width:50px;
+    height:50px;
   }
 }
