@@ -55,7 +55,7 @@ class ShopProductsController < ApplicationController
     params[:shop_product] = { params.delete(:name) => params.delete(:value) }
     update
   end
-    
+
   def show
     @shop_product = ShopProduct.find(params[:id])
     @product_comments = ProductComment.where("product_id=? and shop_id=?", @shop_product.product_id, @shop_product.shop.id)
@@ -93,7 +93,7 @@ class ShopProductsController < ApplicationController
     @shop_product = ShopProduct.find(params[:id])
     respond_to do |format|
       @order = current_user.direct_transactions.build(seller_id: @shop_product.shop_id)
-      @order.items.build({
+      @item = @order.items.build({
         :product_id => @shop_product.product_id,
         :amount => params[:amount],
         :title => @shop_product.product.try(:name),
@@ -105,7 +105,9 @@ class ShopProductsController < ApplicationController
       if @order.save
         format.json{ render :json => @order }
       else
-        format.json{ render :json => draw_errors_message(@order), :status => 403 }
+        format.json{
+          _errors = draw_errors_message(@order) + draw_errors_message(@item)
+          render :json => _errors, :status => 403 }
       end
     end
   end
