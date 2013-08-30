@@ -6,6 +6,9 @@ class ShopProductsController < ApplicationController
 	def index
 	    @shop = Shop.find(params[:shop_id])
 	    @products = @shop.shop_products
+      @products = @products.offset(params[:offset]) if params[:offset].present?
+      @products = @products.limit(params[:limit]) if params[:limit].present?
+
 	    respond_to do |format|
 	      format.json { render json: @products }
 	    end
@@ -112,7 +115,7 @@ class ShopProductsController < ApplicationController
     end
   end
 
-  def destroy  
+  def destroy
     @product = ShopProduct.find(params[:id])
     # ShopProduct.tire.index.remove @product  #this will remove them from the index
     @product.destroy

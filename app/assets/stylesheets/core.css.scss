@@ -28,7 +28,7 @@ body, html {
 
 
 	font: 14px/1.5 "Microsoft Yahei",tahoma,arial!important;
-	padding-bottom: 100px;
+	/*padding-bottom: 100px;*/
 	@include transparent($bgcolor1, 0.91);
 	@include filter-gradient($bgcolor1, $bgcolor3, horizontal); // IE6-9 fallback on horizontal gradient
 	@include background(linear-gradient(150deg, rgba($bgcolor1, 0.91), rgba(lighten($bgcolor2, 10%), 0.91), rgba($bgcolor3, 0.91)), url('bgnoise_lg_dark.png'));
@@ -619,6 +619,12 @@ ul {
 
 .right-mini .right-sidebar {
 	width: 80px;
+
+	.notices-list{
+		li .transaction-info{
+			display: none;
+		}
+	}
 }
 
 .right-sidebar {
@@ -673,7 +679,6 @@ ul {
 
 			.transaction-info {
 				height: 50px;
-				display: none;
 			}
 		}
 

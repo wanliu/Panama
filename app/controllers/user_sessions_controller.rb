@@ -13,6 +13,7 @@ class UserSessionsController < ApplicationController
       user = User.new(:uid => omniauth['uid'])
       user.login = omniauth["info"]["login"]
       user.email = omniauth["info"]["email"]
+      user.photo.filename = omniauth["info"]["avatar"]
     else
       user.generate_token
     end

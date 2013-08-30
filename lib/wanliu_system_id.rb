@@ -30,7 +30,8 @@ module OmniAuth
             {
               :name => raw_info["info"]['name'],
               :email => raw_info["info"]['email'],
-              :login => raw_info["info"]["login"]
+              :login => raw_info["info"]["login"],
+              :avatar => raw_info["info"]["avatar"]
             }
             end
 

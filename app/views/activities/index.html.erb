@@ -16,7 +16,7 @@
 			</ul>
 		</div>
   </section>
-  <div id="activities" >
+  <div id="activities">
 		<!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
 		<% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
 		  <div class="column">
