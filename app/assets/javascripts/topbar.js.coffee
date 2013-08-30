@@ -4,8 +4,7 @@ class TopBar extends Backbone.View
 
 	events: 
 		"click .link.friends": "toggleFriends"
-		"submit form": "enterSearch"
-
+		"submit form"        : "enterSearch"
 
 	initialize: (@options) ->
 		@resultTarget = $(@options['results'] || '#activities')
@@ -21,16 +20,15 @@ class TopBar extends Backbone.View
 		@$("[type=search]")
 		query = @$("[type=search]").val()
 		if query > ""
-			$.get("/search/products", { q: query }, $.proxy(@successSearch, @))
+			$.get("/search/products", 
+				{ q: query }, 
+				$.proxy(@successSearch, @)
+			)
 		false
 
 	successSearch: (data) ->
 		@$("[type=search]").val("")
 		$(window).trigger('search_result:reset', data: data)
-
-
-class GlobalTopBar extends TopBar
-	
 
 
 root.TopBar = TopBar

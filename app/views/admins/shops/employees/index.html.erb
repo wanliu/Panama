@@ -7,6 +7,7 @@
 				<button type="button" class="close" data-dismiss="alert">x</button>
 				<p class='content'></p>
 			</div>
+			<span><strong>please input invited email </strong></span>
 			<input type="text" name='login' />
 			<button type="submit" class="btn">邀请</button>
 		</form>
@@ -91,10 +92,12 @@
 </script>
 
 <script type="text/template" class='group-user-template'>
-	<div class='alert alert-info group-user span3'>
+	<div class="span3">
+	<div class='alert alert-info group-user'>
 		<img class='img-rounded avatar' />
 			{{login}}
 		<a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
+	</div>
 	</div>
 </script>
 

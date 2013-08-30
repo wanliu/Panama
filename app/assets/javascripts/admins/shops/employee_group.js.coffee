@@ -222,7 +222,7 @@ class GroupEmployeeListView extends Backbone.View
 
   render_group: () ->
     li = $("<li data-value-id=#{@group.id} />")
-    li.html("<span class='close-group icon-remove'></span>")
+    # li.html("<span class='close-group icon-remove'></span>")   
     li.append($("<a href='#group-#{@group.id}' data-toggle='tab'>#{@group.get('name')}</a>"))
     li
 

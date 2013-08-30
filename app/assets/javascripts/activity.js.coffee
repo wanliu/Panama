@@ -182,9 +182,11 @@ class ProductPreview extends Backbone.View
     @$el = $(@template.render(@model)) if @template
     @
 
+
 class ActivityModel extends Backbone.Model
 
   urlRoot: '/activities'
+
 
 class CycleIter
   constructor: (@data, @pos = 0) ->
@@ -232,7 +234,6 @@ class ActivitiesView extends Backbone.View
     count = parseInt(($wrap.width() - 25) / 246)
 
   relayoutColumns: () ->
-
     activities = @fetchResults()
     new_dom = $("<div id='activities'/>")
     new_dom.append("<div class='column' />") for i in [0...@adjustNumber()]
