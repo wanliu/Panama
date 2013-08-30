@@ -58,6 +58,7 @@
   }
 
   .topic-panel{
+    color: black;
     .topic{
       margin-right:5px;
 
@@ -74,7 +75,8 @@
       }
 
       hr.line{
-        margin:5px 0px
+        margin:5px 0px;
+        border-top: 1px solid #e5e5e5;
       }
 
       .middle-line{
@@ -107,33 +109,53 @@
 
       .more_comment, .hide_more_comment{
         float:right;
+        padding-right: 20px;
       }
 
       .hide_more_comment{
         display: none;
       }
 
-      .topic_nav{
-        text-align: right;
-      }
+
 
       .comment_panel{
         display: none;
-        margin-top: 5px;
+        margin-top: 20px;
+        .user_login{
+          padding-left: 0px;
+        }
       }
 
       .comments_panel{
         margin-top: 10px;
+        .topic_comment{
+          .content_panel{
+            .user_login{
+              margin-left: 10px;
+              a{
+                color: #262626;
+                font-weight: bold;
+              }
+            }
+          }
+        }
       }
 
       .comment_panel, .comments_panel{
+        .comment_form{
+          margin-bottom: 0px;
+        }
+
+        .user_login{
+          overflow: hidden;
+        }
 
         .notice{
           text-align: center;
         }
 
         .topic_comment{
-          margin-top: 20px;
+          margin-top: 0px;
 
           .comment_nav{
             font-size: 10px;
@@ -154,6 +176,8 @@
           .content{
             clear: both;
             word-break: break-all;
+            padding-top: 5px;
+            padding-bottom: 5px;
           }
         }
 
@@ -167,13 +191,13 @@
 
 
         textarea{
-          width: 460px;
+          width: 80%;
+          margin-left: 10px;
           height: 75px;
         }
 
-        .user_login{
-          text-align: center;
-        }
+        
+
 
         .user_avatar{
           text-align: center;
@@ -185,4 +209,32 @@
       }
     }
   }
+}
+
+.topic-panel{
+  .well-msg{
+    margin-left: 20px !important;
+    background-color: white;
+    p{
+      color: #404040;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+  }
+}
+
+.row-fluid{
+  .send_user{
+    margin-left: 10px;
+    color: #262626;
+    font-weight: bold;
+  }
+  .topic_date{
+    margin-left: 10px;
+    color: #999;
+  }
+}
+
+.show_comment{
+  margin-top: 20px;
 }

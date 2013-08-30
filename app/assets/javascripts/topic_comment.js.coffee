@@ -67,8 +67,8 @@ class CommentView extends Backbone.View
     @user_el.append( @user_template() )
 
     @user_el.find(".user_avatar").append(@avatar_img())
-    @user_el.find(".user_login").append(@user_login())
     @render_panel()
+    
 
     if @is_current_user()
       @comment_nav.append(@nav_edit_el()).append(@nav_remove_el())
@@ -92,6 +92,7 @@ class CommentView extends Backbone.View
     @comment_nav.append @create_time_el()
 
     @content_panel = @comment_el.find(".content_panel")
+    @content_panel.find(".user_login").append(@user_login())
 
   render_edit: () ->
     @comment_el.find(".edit_panel").remove()
@@ -147,13 +148,13 @@ class CommentView extends Backbone.View
 
   content_template: () ->
     "<div class='content_panel'>
+      <div class='user_login'></div>
       <div class='comment_nav'></div>
       <div class='content'></div>
     </div>"
 
   user_template: () ->
-    "<div class='user_avatar'></div>
-    <div class='user_login'></div>"
+    "<div class='user_avatar'></div>"
 
   avatar_img: () ->
     "<img src='#{@model.get("user_icon_url")}' class='img-polaroid' />"
@@ -186,10 +187,10 @@ class CommentView extends Backbone.View
     </div>"
 
 
-class TopicCommentView extends Backbone.View
+class root.TopicCommentView extends Backbone.View
   notice_el: "<div class='notice'>暂时没有回复信息!</div>"
   events: {
-    "click button.show_comment" : "show_comment"
+    "click input.show_comment" : "show_comment"
     "click input:button.cancel" : "cancel_comment"
     "submit form.comment_form" : "create_comment"
     "click .more_comment" : "show_all_comment"
@@ -233,6 +234,7 @@ class TopicCommentView extends Backbone.View
     @topic_el.find(".notice").remove()
 
   show_comment: () ->
+    @$(".show_comment").hide()
     @$(".comment_panel").toggle() if @current_user?
 
   show_last_comment: () ->
@@ -247,6 +249,7 @@ class TopicCommentView extends Backbone.View
 
   cancel_comment: () ->
     @$(".comment_panel").hide()
+    @$(".show_comment").show()
 
   create_comment: () ->
     data = {}
@@ -259,7 +262,8 @@ class TopicCommentView extends Backbone.View
       @textarea_el.val("")
       @comments.add data
       @change_comment()
-
+    @$(".show_comment").show()
+    @$(".comment_panel").hide()
     return false
 
   inspect_notice: () ->
@@ -284,5 +288,5 @@ class TopicCommentView extends Backbone.View
   change_comment: () ->
     @comment = new Comment()
     @comment.fetch_topic_count(@topic.id, (model, data) =>
-      @more_comment_el.html("<span>#{data}<span>条评论") if parseInt(data) > 2
+      @more_comment_el.html("<span>#{data}<span>条评论  <i class='icon-chevron-down'></i>") if parseInt(data) > 2
     )
