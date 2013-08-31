@@ -35,6 +35,7 @@ ActiveAdmin.register UserChecking do
       if user_checking.user.try(:shop)
         shop = user_checking.user.shop
         shop.actived = true
+        shop.photo = user_checking.shop_photo
         shop.save!
       end
     end

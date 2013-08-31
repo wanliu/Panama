@@ -4,6 +4,11 @@
       :locals => { :url => "/user_checkings/update_user_auth" } %>
       <input type="button" class="modify pull-right" value="修改">
    </div>
+
+   <div class='span7 widget' style="margin-left:-2px;">
+      <%= render  :partial => "people/user_login_info" %>
+   </div>
+
 </div>
 <script type="text/javascript">
   $(".modify").bind("click",function(){

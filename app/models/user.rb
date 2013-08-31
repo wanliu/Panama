@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
 
   #暂时方法
   def grapical_handler
-    AvatarUploader.new
+    photo.filename
   end
 
   def self.exists?(user_id)

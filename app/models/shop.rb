@@ -6,6 +6,7 @@ class Shop < ActiveRecord::Base
   extend FriendlyId
 
   attr_accessible :name, :user
+  attr_accessor :uploader_secure_token
 
   has_many :products, dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"

@@ -26,6 +26,10 @@ class UserCheckingsController < ApplicationController
             @user_checking.send(field_name).remove! if  @user_checking.send(field_name)
         end
         @user_checking.send("#{field_name}=",file)
+        if @user_checking.user.try(:shop)  &&  field_name == "shop_photo"
+          @user_checking.user.try(:shop).photo = file
+          @user_checking.user.try(:shop).save
+        end 
         if @user_checking.save
             render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
         else
