@@ -190,6 +190,7 @@ Panama::Application.routes.draw do
       get "connect/:token", :to => "users#connect"
       get "disconnect/:id", :to => "users#disconnect"
       get "followings"
+      post "upload_avatar/:id", :to => "users#upload_avatar"
     end
   end
 

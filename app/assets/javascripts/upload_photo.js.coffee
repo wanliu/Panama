@@ -8,6 +8,7 @@ class root.Upload extends Backbone.View
       @current_user = @options.current_user
       @verify_authenticity_token = @options.verify_authenticity_token
       @targets = @options.targets
+      @action = @options.action
       _(@targets).each (target) =>
         element = target.el
         inputName = target.input_name
@@ -23,7 +24,7 @@ class root.Upload extends Backbone.View
         minSizeLimit: 0, 
         debug : true,
         multiple: false,
-        action: "/user_checkings/upload_photo/#{@current_user.id}?field_name=#{inputName}",
+        action: @action+"#{@current_user.id}?field_name=#{inputName}",
         inputName: inputName,
         template: '
           <div class="qq-uploader">

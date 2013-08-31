@@ -157,7 +157,7 @@ class CommentView extends Backbone.View
     "<div class='user_avatar'></div>"
 
   avatar_img: () ->
-    "<img src='#{@model.get("user_icon_url")}' class='img-polaroid' />"
+    "<img src='#{@model.get("user_icon_url")}' class='img-rounded' />"
 
   user_login: () ->
     "<a href='javascript:void(0)'>#{@model.get("user_login")}</a>"

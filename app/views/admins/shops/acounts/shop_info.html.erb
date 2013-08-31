@@ -79,8 +79,18 @@
 					</div>
 				</div>
 			</div>
+			<% end %>
+			<% if !current_user.user_checking.checked %>
+				<button class="modify">修改</button>
+			<% else %>
+				<script type="text/javascript">
+					$("input").attr("readonly","readonly");
+					$(".tool").each(function(){
+						$(this).hide();
+					});
+				</script>
 		<% end %>
-		<% if current_user.user_checking.checked %>
+		<% if !current_user.user_checking.checked %>
 			<button class="modify pull-right">修改</button>
 		<% else %>
 			<script type="text/javascript">
@@ -97,6 +107,7 @@
 	$(function(){
 		new Upload({
 			verify_authenticity_token: "<%=form_authenticity_token  %>",
+			action: "/user_checkings/upload_photo/",
 			current_user: { id: "<%=current_user.id %>", 
 				login: "<%= current_user.login %>",
 			},

@@ -15,6 +15,7 @@ class UserSessionsController < ApplicationController
       user.email = omniauth["info"]["email"]
       user.photo.filename = omniauth["info"]["avatar"]
     else
+      user.photo.filename = omniauth["info"]["avatar"]
       user.generate_token
     end
     user.save
