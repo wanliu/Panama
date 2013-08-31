@@ -35,7 +35,7 @@
 				<div class="row-fluid">
 					<div class="span5 reset_avatar main_panle2">
 						<div class="photo_span cell" >
-							<span> 营业执照</span>
+							<span>营业执照</span>
 							<img class="bottom normal_picture img-polaroid"/>
 						</div>  
 						<div id="image_bottom">
@@ -61,10 +61,10 @@
 					<div class="span5 reset_avatar main_panle3">
 						<div class="photo_span cell" >
 							<span>身份证照</span>
-							<img class="bottom normal_picture img-polaroid offset1 my_img" />
+							<img class="bottom normal_picture img-polaroid" />
 						</div>  
 						<div id="image_bottom">
-							<div class="hidden_one " id="hidden_text">
+							<div class="hidden_one" id="hidden_text">
 								请选择小于1MB的jpg<br />
 								、png或gif格式的图片<br />
 							</div>
@@ -101,9 +101,9 @@
 				login: "<%= current_user.login %>",
 			},
 			targets: [
-				{el: $(".main_panle1"), input_name: "shop_photo", photo: "<%= @user_checking.try(:shop_photo) %>"},
-				{el: $(".main_panle2"), input_name: "company_license_photo", photo: "<%= @user_checking.try(:company_license_photo) %>"},
-				{el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>"}
+				{ el: $(".main_panle1"), input_name: "shop_photo", photo: "<%= @user_checking.try(:shop_photo) %>" },
+				{ el: $(".main_panle2"), input_name: "company_license_photo", photo: "<%= @user_checking.try(:company_license_photo) %>" },
+				{ el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>" }
 			]
 		})   
 	});
