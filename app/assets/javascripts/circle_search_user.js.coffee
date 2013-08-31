@@ -1,9 +1,11 @@
 #describe: 搜索用户
 
+root = window || @
+
 class UserList extends Backbone.Collection
   url: "/search/users"
 
-class SearchUserView extends Backbone.View
+class root.SearchUserView extends Backbone.View
   className: "search_user circle_friend"
 
   initialize: (options) ->
