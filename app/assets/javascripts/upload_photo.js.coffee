@@ -26,13 +26,20 @@ class root.Upload extends Backbone.View
         multiple: false,
         action: @action+"#{@current_user.id}?field_name=#{inputName}",
         inputName: inputName,
-        template: '<div class="qq-uploader">' +
-        '<pre class="qq-upload-drop-area"><span>{dragZoneText}</span></pre>' +
-        '<div class="qq-upload-button btn btn-success" style="width: auto;">{uploadButtonText}</div>' +
-        '<ul class="qq-upload-list" style="margin-top: 10px; text-align: center;"></ul>' +
-        '</div>',
+        template: '
+          <div class="qq-uploader">
+            <pre class="qq-upload-drop-area">
+              <span>{dragZoneText}</span>
+            </pre>
+            <div class="qq-upload-button btn btn-success" style="width: auto;">
+              <i class="icon-upload icon-white"></i>
+              {uploadButtonText}
+            </div>
+            <ul class="qq-upload-list" style="margin-top: 10px; text-align: center;">
+            </ul>
+          </div>',
         cancelButtonText: "取消上传",
-        uploadButtonText: '<i class="icon-upload icon-white"></i> 上传头像',        
+        uploadButtonText: '上传头像',        
         onComplete: (id, filename, data) =>
           element.find("ul.qq-upload-list").hide();
           @$avatar = element.find("img.normal_picture")                    
@@ -45,8 +52,8 @@ class root.Upload extends Backbone.View
           })
 
         messages : {
-          typeError : "请选择正确的{file}头像图片，只支持{extensions}图片",
-          sizeError : "{file}头像图片，超过{sizeLimit}了！"
+          typeError : "请选择正确的{file}图片，只支持{extensions}图片",
+          sizeError : "{file}图片，超过{sizeLimit}了！"
         }
       })
 
