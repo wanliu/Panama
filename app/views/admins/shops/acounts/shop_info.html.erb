@@ -15,8 +15,7 @@
 						</div>  
 						<div id="image_bottom">
 							<div class="hidden_one" id="hidden_text">
-								请选择小于1MB的jpg<br />
-								、png或gif格式的图片<br />
+								<%= upload_tip %>
 							</div>
 							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
 							</div>
@@ -40,8 +39,7 @@
 						</div>  
 						<div id="image_bottom">
 							<div class="hidden_one" id="hidden_text">
-								请选择小于1MB的jpg<br />
-								、png或gif格式的图片<br />
+								<%= upload_tip %>
 							</div>
 							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
 							</div>
@@ -65,8 +63,7 @@
 						</div>  
 						<div id="image_bottom">
 							<div class="hidden_one" id="hidden_text">
-								请选择小于1MB的jpg<br />
-								、png或gif格式的图片<br />
+								<%= upload_tip %>
 							</div>
 							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
 							</div>
@@ -80,26 +77,17 @@
 				</div>
 			</div>
 			<% end %>
-			<% if !current_user.user_checking.checked %>
-				<button class="modify">修改</button>
+
+			<% if current_user.user_checking.checked %>
+				<button class="modify pull-right">修改</button>
 			<% else %>
 				<script type="text/javascript">
-					$("input").attr("readonly","readonly");
-					$(".tool").each(function(){
+					$(".shop_info input").attr("readonly", "readonly");
+					$(".shop_info #image_bottom").each(function(){
 						$(this).hide();
 					});
 				</script>
-		<% end %>
-		<% if !current_user.user_checking.checked %>
-			<button class="modify pull-right">修改</button>
-		<% else %>
-			<script type="text/javascript">
-				$(".shop_info input").attr("readonly","readonly");
-				$(".shop_info #image_bottom").each(function(){
-					$(this).hide();
-				});
-			</script>
-		<% end %>	
+			<% end %>	
 	</div>	
 </div>
 
