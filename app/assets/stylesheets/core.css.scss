@@ -663,52 +663,37 @@ ul {
 			line-height: 16px;
 		}
 
-		li img {
-			width: 50px;
-		}
+		ul {
+			margin-left: -10px;
 
-		li {
-			// border-top: 1px solid rgba(51,51,51,0.25);
-			padding: 5px 0px;
-			min-width: 60px;
-			margin: 0;
-			cursor: pointer;
-			height: 50px;
-			@include transition(width 0.0s, margin 0.3s);
-			overflow: hidden;
+			li img {
+				width: 50px;
+				margin-right: 5px;
+			}
 
-			.transaction-info {
+			li {
+				// border-top: 1px solid rgba(51,51,51,0.25);
+				padding: 8px 10px;
+				min-width: 60px;
+				margin: 0;
+				cursor: pointer;
 				height: 50px;
+				@include transition(width 0.0s, margin 0.3s);
+				overflow: hidden;
 			}
-		}
 
-		li.active {
-			background-color: #E5603B;
-			margin-top: 1px;
-		}
-
-		li:hover {
-			@include transparent(rgb(51,51,51),0.25);
-			&.active {
+			li.active {
 				background-color: #E5603B;
+				margin-top: 1px;
 			}
-			width: 300px;
-			// margin-left: -120px;
-			.transaction-info{
-				display: block;
-			}
-		}
 
-		.user-info {
-			margin-left: 62px;
-		}
-
-		.right-mini .users-list li:hover {
-			width: 300px;
-			margin-left: -240px;
-
-			.user-info {
-				display: block;
+			li:hover {
+				@include transparent(rgb(51,51,51),0.25);
+				&.active {
+					background-color: #E5603B;
+				}
+				width: 300px;
+				// margin-left: -120px;
 			}
 		}
 	}
