@@ -124,8 +124,7 @@ ul {
 	margin: 15px 0 0px;
 	border: none;
 
-	.navbar {
-
+	.navbar{
 		.navbar-inner {
 			background: transparent;
 			@include transparent(rgb(0,0,0),0.0);
@@ -151,21 +150,31 @@ ul {
 		}
 	}
 
-	.navbar.affix {
+	.navbar-back{
+		height: 50px;
+	}
+
+	.navbar-back.affix, .navbar.affix {
 		top: 0px;
 		position: fixed;
 		left: 0px;
 		right: 0px;
 		z-index: 1030;
-		// @include background(rgba(0,0,0,0.5));
-		@include transparent(rgb(0,0,0),0.55);
 
 		.nav>li>a {
 			color: white;
 		}
 	}
 
-	.navbar.affix-top {
+	.navbar-back.affix{
+		@include transparent(rgb(0,0,0),0.55);
+		background: black;
+		opacity: 0.55;
+		filter: alpha(opacity=55);
+		z-index: 1029;
+	}
+
+	.navbar-back.affix-top, .navbar.affix-top {
 		position: fixed;
 		top: 15px;
 		right:0px;
@@ -561,20 +570,20 @@ ul {
 
 .open_right_side {
 
-	.navbar.affix {
+	.navbar-back.affix, .navbar.affix {
 		right: 200px;
 	}
 
-	.navbar.affix-top {
+	.navbar-back.affix-top, .navbar.affix-top {
 		right: 200px;
 	}
 
 	&.right-mini {
-		.navbar.affix {
+		.navbar-back.affix, .navbar.affix {
 			right: 80px;
 		}
 
-		.navbar.affix-top {
+		.navbar-back.affix-top, .navbar.affix-top {
 			right: 80px;
 		}
 	}
