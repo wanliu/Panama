@@ -1,7 +1,9 @@
 class Image < ActiveRecord::Base
   attr_accessible :filename
+  belongs_to :imageable, :polymorphic => true  
 
-  belongs_to :imageable, :polymorphic => true
+  attr_accessor :uploader_secure_token
+  mount_uploader :filename, ImageUploader
 
   def default_url
     "http://panama-img.b0.upaiyun.com/product_blank.gif"

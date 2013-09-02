@@ -81,7 +81,7 @@ class FollowingUserView extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @followers_list = new exports.CircleList([], @remote_url)
+    @followers_list = new CircleList([], @remote_url)
     @followers_list.bind("reset", @all, @)
     @followers_list.bind("add", @add, @)
     @refresh()

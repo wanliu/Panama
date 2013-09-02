@@ -196,14 +196,11 @@
           height: 75px;
         }
 
-        
-
-
         .user_avatar{
           text-align: center;
           img{
-            width: 20px;
-            height: 20px;
+            width: 35px;
+            height: 35px;
           }
         }
       }
@@ -237,4 +234,10 @@
 
 .show_comment{
   margin-top: 20px;
+}
+
+.user-info{
+  img{
+    max-width: 130%;
+  }
 }

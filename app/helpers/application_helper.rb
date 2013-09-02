@@ -247,7 +247,6 @@ module ApplicationHelper
   end
 
   def breadcrumb_button(name, array)
-    # debugger
     output = "".html_safe
     array.shift
     # ISSUE: 临时方案, 需要修改 rails.view.js 的 提交 bug
@@ -280,4 +279,7 @@ module ApplicationHelper
     {:attachment_ids => attachments.map{|k, v| v} }
   end
 
+  def upload_tip
+    '请选择小于1MB的jpg、<br />png或gif格式的图片<br />'.html_safe
+  end
 end

@@ -3,27 +3,25 @@
 		<form>
 		<div class='in-box'>
 			<%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
-<!-- 			<h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
-			<h4 class="right_bottom1 ">现价: <span><%= activity.activity_price %></span></h4>
- -->		</div>
-<!-- 		<div class="corner"><h4>特价</h4></div>
+ 			<!-- <h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
+			<h4 class="right_bottom1 ">现价: <span><%= activity.activity_price %></span></h4> -->
+		</div>
+		<!-- <div class="corner"><h4>特价</h4></div> -->
 
-
- -->
- 			<div class='summary'>
-				<h5 class="title"><%= activity.title %></h5>
-				<p style="word-wrap:break-word;"><%= activity.description %> </p>
- 			</div>
-			<div class='userinfo'>
-				<%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
-				<p>
-					<a href="<%= person_path(activity.author) %>">
-						<%= activity.author.login %>
-					</a>
-				</p>
-				<span>参与 <%= activity.participate || 0%> </span>
-				<span class='like-count'>支持 <%= activity.like || 0 %></span>
-			</div>
+		<div class='summary'>
+			<h5 class="title"><%= activity.title %></h5>
+			<p style="word-wrap:break-word;"><%= activity.description %></p>
+		</div>
+		<div class='userinfo'>
+			<%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
+			<p>
+				<a href="<%= person_path(activity.author) %>">
+					<%= activity.author.login %>
+				</a>
+			</p>
+			<span>参与 <%= activity.participate || 0%> </span>
+			<span class='like-count'>支持 <%= activity.like || 0 %></span>
+		</div>
 		<div class="buttons">
 			<%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
 				<%#= icon(:'shopping-cart') + " 参与" %>
@@ -78,5 +76,4 @@
 	var id = <%= activity.id %>;
 	var model = new ActivityModel({ id: id });
 	new ActivityPreview({ el: $("[activity-id=" + id + "]"), model: model});
-
 </script>

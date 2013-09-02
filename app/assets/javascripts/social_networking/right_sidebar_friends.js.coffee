@@ -5,11 +5,9 @@ class FriendsContainerView extends RealTimeContainerView
 		klass   : "icon-group"
 		tool_tip: "show messages"
 
-	template: () ->
-		""
-
 	initialize: () ->
 		super
+		$(@el).append('<div class="notices-list"></div>')
 		@followers_view = new FollowersView(parent_view: @)
 		@set_default_view(@followers_view)
 
@@ -29,11 +27,14 @@ class FriendsContainerView extends RealTimeContainerView
 
 
 class FollowersView extends Backbone.View
+	className: "followings-list"
+		
 	template:
-        '<h5 class="tab-header followings">
-			<i class="icon-group"></i> 我关注的[<span class="num">0</span>]
+    '<h5 class="tab-header followings">
+			<i class="icon-group"></i>
+			 我关注的[<span class="num">0</span>]
 		</h5>
-		<ul class="notices-list users-list followings">
+		<ul class="users-list followings">
 		</ul>'
 
 	initialize: () ->
@@ -51,7 +52,8 @@ class FollowersView extends Backbone.View
 
 	seted_default: () ->
 		@is_default_view = true
-		@$parent_view.append(@el)
+		# @$parent_view.append(@el)
+		@parent_view.$('div.notices-list').append(@el)
 		@init_fetch()
 
 	init_fetch: () ->
@@ -88,19 +90,22 @@ class FollowersView extends Backbone.View
 		friend_view.delegateEvents()
 		friend_view.active()
 
+
 class StrangersView extends FollowersView
 	template:
-        '<h5 class="tab-header strangers">
-			<i class="icon-group"></i> 陌生人[<span class="num">0</span>]
+    '<h5 class="tab-header strangers">
+			<i class="icon-group"></i>
+			 陌生人[<span class="num">0</span>]
 		</h5>
-		<ul class="notices-list users-list strangers">
+		<ul class="users-list strangers">
 		</ul>'
 
 	init_fetch: () ->
 
 	addOne: (model) ->
 		if @collection.length is 1 and @parent_view.$('.strangers').length is 0
-			@$parent_view.append(@el)
+			# @$parent_view.append(@el)
+			@parent_view.$('div.notices-list').append(@el)
 		super
 
 	process: (message) ->
@@ -123,6 +128,7 @@ class StrangersView extends FollowersView
 	find_exist: (model) ->
 		_.find @collection.models, (item) ->
 			item.id is model.id
+
 
 class FriendView extends Backbone.View
 	tagName: 'li'
@@ -156,8 +162,8 @@ class FriendView extends Backbone.View
 		@$iframe.css("left", "5px")
 
 		@$iframe.append(
-            "<iframe></iframe>
-				<a class='close_label' href='javascript:void(0)'></a>")
+			"<iframe></iframe>
+			<a class='close_label' href='javascript:void(0)'></a>")
 
 		@$iframe.children("a.close_label").click (e) =>
 			@$iframe.hide()
@@ -168,13 +174,14 @@ class FriendView extends Backbone.View
 		@$iframe.children("iframe").attr("src", "/chat_messages/dialogue/generate_and_display/#{ friend_id }")
 
 	template: _.template(
-        "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
-	    <div class='user-info'>
+  	"<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
+  	<div class='user-info'>
 			<div class='name'>
 				<a href='#''><%= model.get('name') || model.get('login') %></a>
 			</div>
 			<div class='type'><%= model.get('follow_type') || 'User' %></div>
-	    </div>")
+  	</div>")
+
 
 root.FriendsContainerView = FriendsContainerView
 root.FriendView = FriendView

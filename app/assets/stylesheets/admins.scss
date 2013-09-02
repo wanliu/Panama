@@ -238,47 +238,60 @@ $left-side-admin-width: 160px;
 .nav .user_icon {
   width: 40px;
   height: 40px;
-  margin-top: -20px;
+  /*margin-top: -20px;*/
 }
 
 .delete_bank{
   color: $grayLighter;
 }
 
-$margin-top: 20px;
-.main_panle2,.main_panle3,.main_panle1{
+.shop_info {
+  $margin-top: 20px;
 
-  .cell{
-    margin-top: $margin-top;
+  .form-horizontal .controls {
+    margin-left: 100px !important; 
   }
 
-  .my_img{
-    width: 5*$margin-top;
-    height: 6*$margin-top;
+  .section {
+    margin-bottom: 20px;
+
+    legend {
+      margin-bottom: 0px;
+    }
+
+    .reset_avatar {
+      min-width: 150px;
+      max-height: 200px;
+      text-align: center;
+
+      .popover{
+        color:black;
+      }
+
+      .cell{
+        margin-top: $margin-top;
+      }
+
+      .normal_picture{
+        width: 5*$margin-top;
+        height: 5*$margin-top;
+      }
+    }
+
+    .input_locate {
+      margin-top: 50px;
+      margin-left: -10px;
+
+      input {
+        width: 100%;
+        min-width: 90px;
+      }
+
+      .control-label {
+        width: 80px !important;
+      }
+    }
   }
-
-  .qq-upload-button{
-    margin-left: 85px;
-  }
-}
-.locate{
-  margin-top:50px;
-}
-
-.locate1{
-   margin-top:30px;
-}
-.cell{margin-left:15*$margin-top}
-
-.form-horizontal .controls {
-  margin-left: 120px !important; 
-}
-.control-label {
-    width: 100px !important;
-}
-
-.popover{
-  color:black;
 }
 
 .form-search-user{
@@ -290,4 +303,3 @@ $margin-top: 20px;
     margin-top: 10px;
   }
 }
-
