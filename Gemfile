@@ -159,7 +159,7 @@ gem 'redis-search', '0.9.0'
 gem 'redis'
 gem "wicked"
 
-## Search 
+## Search
 gem 'tire', :github => "hysios/tire"
 gem 'tire-settings', :github => "hysios/tire-settings"
 gem 'yajl-ruby'
