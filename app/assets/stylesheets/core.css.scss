@@ -666,37 +666,52 @@ ul {
 			line-height: 16px;
 		}
 
-		ul {
-			margin-left: -10px;
+		li img {
+			width: 50px;
+		}
 
-			li img {
-				width: 50px;
-				margin-right: 5px;
-			}
+		li {
+			// border-top: 1px solid rgba(51,51,51,0.25);
+			padding: 5px 0px;
+			min-width: 60px;
+			margin: 0;
+			cursor: pointer;
+			height: 50px;
+			@include transition(width 0.0s, margin 0.3s);
+			overflow: hidden;
 
-			li {
-				// border-top: 1px solid rgba(51,51,51,0.25);
-				padding: 8px 10px;
-				min-width: 60px;
-				margin: 0;
-				cursor: pointer;
+			.transaction-info {
 				height: 50px;
-				@include transition(width 0.0s, margin 0.3s);
-				overflow: hidden;
 			}
+		}
 
-			li.active {
+		li.active {
+			background-color: #E5603B;
+			margin-top: 1px;
+		}
+
+		li:hover {
+			@include transparent(rgb(51,51,51),0.25);
+			&.active {
 				background-color: #E5603B;
-				margin-top: 1px;
 			}
+			width: 300px;
+			// margin-left: -120px;
+			.transaction-info{
+				display: block;
+			}
+		}
 
-			li:hover {
-				@include transparent(rgb(51,51,51),0.25);
-				&.active {
-					background-color: #E5603B;
-				}
-				width: 300px;
-				// margin-left: -120px;
+		.user-info {
+			margin-left: 62px;
+		}
+
+		.right-mini .users-list li:hover {
+			width: 300px;
+			margin-left: -240px;
+
+			.user-info {
+				display: block;
 			}
 		}
 	}
@@ -787,18 +802,30 @@ ul {
 
 }
 
+body>.model-popup-backdrop{
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1040;
+	background-color: black;
+	opacity: 0.7;
+	filter: alpha(opacity=70);
+}
+
 #popup-layout {
-	.model-popup-backdrop {
-		background-color: rgba(51, 51, 51, 0.6);
-		@include filter(none);
+	.container{
+		width: 100%;
+	}
+	.dialog-panel {
 		color: #555;
 		position: fixed;
 		top: 0;
 		right: 0;
 		bottom: 0;
 		left: 0;
-		z-index: 1040;
-		filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#e5ffffff', endColorstr='#e5ffffff');
+		z-index: 1045;
 		overflow-y: scroll;
 		padding: 20px 0;
 
