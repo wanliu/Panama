@@ -1,7 +1,7 @@
 <div class="address address<%=address.id%>">
 	<div class="address-details">
 		<div class="address-button">
-			<h3><%= address.try(:location_without_contact) %></h3>
+			<h4><%= address.try(:location_without_contact) %></h4>
 			<div class="pull-right">
 				<a class="btn" data-toggle="modal" href="addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
 				<%= button_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn btn-danger" %>
