@@ -1,4 +1,4 @@
-.model-popup-backdrop {
+/*.model-popup-backdrop {
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -6,7 +6,7 @@
 	left: 0;
 	z-index: 1040;
 	// background-color: rgba(255,255,255, 0.9);
-	@include transparent(rgb(51,51,51), 0.6);		
+	@include transparent(rgb(51,51,51), 0.6);
 	overflow-y: scroll;
 
 	padding: 20px 0;
@@ -24,4 +24,4 @@
 		}
 	}
 
-}
+}*/

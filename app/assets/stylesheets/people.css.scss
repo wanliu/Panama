@@ -344,7 +344,7 @@
 }
 
 
-$margin-top: 20px;
+/* $margin-top: 20px;
 .main_panle2,.main_panle3,.main_panle1{
 
   .cell{
@@ -367,4 +367,53 @@ $margin-top: 20px;
 .locate1{
    margin-top:30px;
 }
-.cell{margin-left:15*$margin-top}
+.cell{margin-left:15*$margin-top} */
+
+.user_info {
+  $margin-top: 20px;
+
+  .form-horizontal .controls {
+    margin-left: 100px !important; 
+  }
+
+  .section {
+    margin-bottom: 20px;
+
+    legend {
+      margin-bottom: 0px;
+    }
+
+    .reset_avatar {
+      min-width: 150px;
+      max-height: 200px;
+      text-align: center;
+
+      .popover{
+        color:black;
+      }
+
+      .cell{
+        margin-top: $margin-top;
+      }
+
+      .normal_picture{
+        width: 5*$margin-top;
+        height: 5*$margin-top;
+      }
+    }
+
+    .input_locate {
+      margin-top: 50px;
+      margin-left: -10px;
+
+      input {
+        width: 100%;
+        min-width: 90px;
+      }
+
+      .control-label {
+        width: 80px !important;
+      }
+    }
+  }
+}

@@ -1,24 +1,25 @@
 <header class="page-header">
-    <div class="navbar affix-top" data-spy="affix" data-offset-top="20">
-        <div class="navbar-inner">
-            <%= render "topbar" %>
+  <div class="navbar affix-top" data-spy="affix" data-offset-top="20">
+    <div class="navbar-inner">
+      <%= render "topbar" %>
 
 <!--                     <div class="notifications pull-right">
-                <div class="alert pull-right">
-                    <a href="#" class="close" data-dismiss="alert">×</a>
-                    <i class="icon-info-sign"></i> Check out Light Blue <a id="notification-link" href="#">settings</a> on the right!
-                </div>
-            </div> -->
-        </div>
+          <div class="alert pull-right">
+              <a href="#" class="close" data-dismiss="alert">×</a>
+              <i class="icon-info-sign"></i> Check out Light Blue <a id="notification-link" href="#">settings</a> on the right!
+          </div>
+      </div> -->
     </div>
+  </div>
 </header>
+
 <div id="active_dialog" class="active_dialog modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel">发布您的活动</h3>
   </div>
   <div class="modal-body">
-    <p>One fine body…</p>
+    <p>正在加载...</p>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -32,7 +33,7 @@
     <h3 id="myModalLabel">发布求购信息</h3>
   </div>
   <div class="modal-body">
-    <p>One fine body…</p>
+    <p>正在加载...</p>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -41,7 +42,7 @@
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function(){
+  $(function(){
     $(".save_activity").on('click', function(type){
       var $a = $(".activity_select>.active");
       var content_id = $a.find(">a").attr('href')
@@ -73,7 +74,6 @@
       $form.on("ajax:error", function(event, xhr, state){
         $form.replaceWith(xhr.responseText);
       });
-
     });
   });
 </script>

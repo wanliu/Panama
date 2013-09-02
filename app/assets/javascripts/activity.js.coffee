@@ -37,11 +37,12 @@ class ActivityView extends Backbone.View
 
   initialize: (@options) ->
     _.extend(@, @options)
-    backdrop = "<div class='model-popup-backdrop in' />"
-
+    @$backdrop = $("<div class='model-popup-backdrop in' />")
+    @$dialog_panel = $("<div class='dialog-panel'></div>")
     @loadTemplate () =>
-      @$backdrop ||= $(backdrop).appendTo("#popup-layout")
-      @$el = $(@render()).appendTo(@$backdrop)
+      @$dialog_panel.appendTo("#popup-layout")
+      @$el = $(@render()).appendTo(@$dialog_panel)
+      @$backdrop.appendTo("body")
       $(window).scroll()
     super
 
@@ -80,6 +81,7 @@ class ActivityView extends Backbone.View
     false
 
   close: () ->
+    @$dialog_panel.remove()
     @$backdrop.remove()
     @unmodal()
 
