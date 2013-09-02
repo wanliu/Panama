@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   #上传头像
   def upload_avatar
     field_name = params[:field_name]
-    file = params[:avatar].is_a?(ActionDispatch::Http::UploadedFile) ? params[:avatar] : params[:file]
+      file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name] 
     unless file.nil?
         @user_photo = User.find(params[:id]).photo
         if @user_photo.send(field_name)

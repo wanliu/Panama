@@ -80,26 +80,16 @@
 				</div>
 			</div>
 			<% end %>
-			<% if !current_user.user_checking.checked %>
-				<button class="modify">修改</button>
+			<% if current_user.user_checking.checked %>
+				<button class="modify pull-right">修改</button>
 			<% else %>
 				<script type="text/javascript">
-					$("input").attr("readonly","readonly");
-					$(".tool").each(function(){
+					$(".shop_info input").attr("readonly","readonly");
+					$(".shop_info #image_bottom").each(function(){
 						$(this).hide();
 					});
 				</script>
-		<% end %>
-		<% if !current_user.user_checking.checked %>
-			<button class="modify pull-right">修改</button>
-		<% else %>
-			<script type="text/javascript">
-				$(".shop_info input").attr("readonly","readonly");
-				$(".shop_info #image_bottom").each(function(){
-					$(this).hide();
-				});
-			</script>
-		<% end %>	
+			<% end %>	
 	</div>	
 </div>
 
