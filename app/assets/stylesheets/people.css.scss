@@ -14,15 +14,16 @@
 @import "product_comment";
 @import "people/following";
 @import "communities";
-@import "./lib/chose-friend";
+@import "lib/chose-friend";
 @import "people/community_people";
 @import "attachment_uploader";
 @import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
-@import "./lib/notify/pnotify";
-@import 'order_refund';
+@import "lib/notify/pnotify";
+@import "lib/transparent";
+@import "order_refund";
 @import "bootstrap-datetimepicker.min";
-@import './lib/typeahead';
-@import 'direct_transaction';
+@import "lib/typeahead";
+@import "direct_transaction";
 
 
 #people-sidebar.affix-top {
@@ -139,7 +140,7 @@
   .form-actions {
     margin-bottom: 0px;
     padding-bottom: 0px;
-    background: rgba(51,51,51,0.25);
+    @include transparent(rgb(51,51,51), 0.25);
     border-top: none;
     form {
       float: right;
@@ -300,7 +301,7 @@
       }
 
       .error{
-        input[type='text']{
+        input[type="text"]{
           border: 1px solid red;
         }
       }
