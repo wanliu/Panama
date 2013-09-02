@@ -31,7 +31,7 @@
 						   FriendsContainerView);
 
 	var height = $(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true)
-	$('.notices-list').slimScroll({ 
+	$('.notices-list').slimScroll({
 		height: height
 	}).on("click", "li", function(event){
 		$(this).siblings(".clone").remove()
@@ -43,6 +43,7 @@
 	}).on("mouseover", "li", function(event){
 		$(this).css({
 			position: 'absolute',
+			'padding-left': '5px',
 			'margin-left': '-120px'
 		}).after("<li class='clone'></li>")
 		$('.slimScrollDiv').css("overflow", "visible")
