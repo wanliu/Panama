@@ -73,9 +73,11 @@ class CycleIter
     @pos = 0 unless @pos < @data.length
     @data[@pos++]
 
+
 class LoadShopProducts extends Backbone.View
   offset: 0,
   limit: 10,
+
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -95,7 +97,7 @@ class LoadShopProducts extends Backbone.View
         @$load_msg.hide()
         @add_columns(data)
         @offset += @limit
-        console.log(@offset)
+        # console.log(@offset)
     )
 
   min_column_el: () ->
@@ -116,6 +118,7 @@ class LoadShopProducts extends Backbone.View
 
   sp_el: () ->
     @el.find("#shop_products")
+
 
 class ShopProductsView extends Backbone.View
 

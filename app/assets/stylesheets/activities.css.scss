@@ -217,6 +217,7 @@ ul.inline li {
 	padding-right: 3px;
 	overflow: hidden;
 	position: relative;
+
 	.out-box {
 		background: $white;
 
@@ -229,7 +230,7 @@ ul.inline li {
 			border-bottom: 1px solid #e7e7e7;
 
 			.preview {
-
+				// cursor: pointer;
 			}
 
 			.right_bottom2 {
@@ -249,12 +250,8 @@ ul.inline li {
 				right: 10px;
 				color: $red;
 				@include text-shadow(0px 0px 2px rgba(255, 255, 255, 0.6));
-
 			}
-
-
 		}
-
 
 		.corner {
 			@include transform(rotate(45deg));
@@ -275,8 +272,8 @@ ul.inline li {
 		}
 
 		.info {
-
 			padding: 5px 10px;
+			border-bottom: 1px solid #e7e7e7;
 
 			.title {
 				font-size: 13px;
@@ -297,8 +294,6 @@ ul.inline li {
 				margin-right: 20px;
 				opacity: 0.5
 			}
-			border-bottom: 1px solid #e7e7e7;
-
 		}
 
 		.comments_and_reply {
@@ -324,14 +319,9 @@ ul.inline li {
 					background: #f0f0f0;
 					// height: 30px;
 				}
-
 			}
 		}
-
-
-
 	}
-
 
 	>img:active {
 		margin: 2px;
@@ -343,16 +333,16 @@ ul.inline li {
 		left: 10px;
 		display: none;
 	}
-	hr {
 
+	hr {
 		margin: 5px 0px;
 	}
+
 	&:hover {
 		.buttons {
 			display: block;
 		}
 	}
-
 }
 
 .big_comments_and_reply {

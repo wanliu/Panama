@@ -1,7 +1,7 @@
 <div id="main" class="content">
   <section class="widget">
     <div class="body">
-      <h3 class='page-title'>商店<%=@shop.name%></h3>
+      <h3 class='page-title'>商店<%= @shop.name %></h3>
     </div>
   </section>
   <div class='shop_product_panel'>
@@ -12,7 +12,7 @@
     </div>
   </div>
   <script type="text/javascript">
-    $(document).ready(function(){
+    $(function(){
       new ShopProductsView({el: '#shop_products'})
       new LoadShopProducts({
         el: $('.shop_product_panel'),
