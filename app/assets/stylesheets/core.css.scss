@@ -103,6 +103,7 @@ ul {
 		margin-top: 0px;
 		position: fixed!important;
 		z-index: 1031;
+		display: block;
 	}
 
 	&.sidebar-icons {
@@ -120,6 +121,10 @@ ul {
 					display: block;
 				}
 			}
+		}
+
+		.title{
+			display: none;
 		}
 		// top: 13px;
 	}
