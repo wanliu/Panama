@@ -15,7 +15,6 @@ class root.WizardView extends Backbone.View
 		category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
 		template = @options['category_product_template'] || category_product_template
 		@category_product_tpl ||= Hogan.compile(template)
-		debugger
 
 		$.ajax({
 			type: "get",
