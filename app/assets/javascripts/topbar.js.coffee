@@ -2,7 +2,7 @@ root = (window || @)
 
 class TopBar extends Backbone.View
 
-	events: 
+	events:
 		"click .link.friends": "toggleFriends"
 		"submit form"        : "enterSearch"
 
@@ -12,7 +12,16 @@ class TopBar extends Backbone.View
 		@toggleFriends()
 
 	toggleFriends: () ->
-		$("body").toggleClass("open_right_side")
+		sidebar = $('.right-sidebar')
+		callback = () ->
+			$("body").toggleClass("open_right_side")
+
+		if sidebar.css('display') == "block"
+			callback()
+			callback = () ->
+
+		$('.right-sidebar').animate({ width: 'toggle'}, callback)
+
 		$(window).trigger('resize')
 		false
 
@@ -20,8 +29,8 @@ class TopBar extends Backbone.View
 		@$("[type=search]")
 		query = @$("[type=search]").val()
 		if query > ""
-			$.get("/search/products", 
-				{ q: query }, 
+			$.get("/search/products",
+				{ q: query },
 				$.proxy(@successSearch, @)
 			)
 		false
