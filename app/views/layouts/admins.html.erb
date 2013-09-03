@@ -4,27 +4,32 @@
 <%= render "head", :styles => [:admins], :javascripts => [:admins] %>
 
 <body class="<%= controller.controller_name %>" style="zoom: 1">
-    <%= render "chromeframe" %>
-    <div class="logo" data-spy="affix" data-offset-top="20">
-        <h4><a href="/"><img src="/assets/logo-large.png" style="height:40px;width:60px;">万流市场</a></h4>
-    </div>
+	<%= render "chromeframe" %>
+	<div class="logo" data-spy="affix" data-offset-top="20">
+		<h4>
+			<a href="/">
+				<img src="/assets/logo-large.png" style="height:40px;width:60px;">
+				<span class='title'>万流市场</span>
+			</a>
+		</h4>
+	</div>
 	<%= render "flashes" %>
 
 	<%= side_bar :admin_left_side %>
-    <div class="wrap">
-        <%= render "header" %>
-      	<div class='content container-fluid'>
-        	<%= yield %>
-      	</div>
-    </div>
+	<div class="wrap">
+		<%= render "header" %>
+		<div class='content container-fluid'>
+			<%= yield %>
+		</div>
+	</div>
 
-    <div id="popup-layout"></div>
-    <%= render "right_sidebar" %>
-    <%#= render 'header' %>
-    <%= render "footer" %>
-    <%# Javascript at the bottom for fast page loading %>
-    <%= render "baidu_analyzer" %>
-    <%#= render "javascripts" %>
+	<div id="popup-layout"></div>
+	<%= render "right_sidebar" %>
+	<%#= render 'header' %>
+	<%= render "footer" %>
+	<%# Javascript at the bottom for fast page loading %>
+	<%= render "baidu_analyzer" %>
+	<%#= render "javascripts" %>
 	<%= javascripts_codes %>
 </body>
 </html>
