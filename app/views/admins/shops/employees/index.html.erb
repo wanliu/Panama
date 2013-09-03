@@ -1,4 +1,5 @@
 <% admin_active_section :employees %>
+
 <div class='employee-groups widget span8'>
 	<div class='invite-employee'>
 		<form class="form-search-user">
@@ -12,6 +13,7 @@
 			<button type="submit" class="btn">邀请</button>
 		</form>
 	</div>
+
 	<div class='employees span8'>
 		<h4>成员</h4>
 		<div class='span3'>
@@ -19,7 +21,7 @@
 				<% @employees.each do |e| %>
 					<div class='alert alert-info employee' data-value-id="<%=e.id %>" data-value-login="<%=e.login %>">
 						<img class='img-rounded avatar' src="<%=e.photos.icon %>" />
-						<%=e.login %>
+						<%= e.login %>
 						<a href='javascript:void(0)' class='remove'>移除</a>
 					</div>
 				<% end %>
@@ -28,6 +30,7 @@
 			<% end %>
 		</div>
 	</div>
+
 	<div class="user-groups span8">
 		<h4>用户组</h4>
 		<ul class="nav nav-tabs user-group-header">
@@ -75,7 +78,7 @@
 
 <script type="text/template" class='permission-group-template'>
 	<% @resources.each do |r| %>
-		<div class="resource-panel well <%=r.id %>">
+		<div class="resource-panel well <%= r.id %>">
 			<label class="checkbox resource">
 				<input type="checkbox" /><%= r.resource %>
 			</label>
@@ -93,11 +96,11 @@
 
 <script type="text/template" class='group-user-template'>
 	<div class="span3">
-	<div class='alert alert-info group-user'>
-		<img class='img-rounded avatar' />
-			{{login}}
-		<a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
-	</div>
+		<div class='alert alert-info group-user'>
+			<img class='img-rounded avatar' />
+				{{login}}
+			<a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
+		</div>
 	</div>
 </script>
 
@@ -112,5 +115,4 @@
 			permission_template: _permission_template
 		})
 	})
-
 </script>

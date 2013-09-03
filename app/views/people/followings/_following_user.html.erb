@@ -1,23 +1,17 @@
 <% if followings.count > 0 %>
-  <% followings.each do |f| %>
-    <tr data-value-id="<%=f.id %>" data-value-follow-id="<%=f.follow_id %>" >
-      <td>
-        <img src="<%=f.follow.icon %>" class="img-polaroid" />
-        <%=f.follow.login %>
-      </td>
-      <td>
-      <% if can? :destroy, Following %>
-        <input type='button' class='btn btn-small btn-primary unfollow' value='取消关注' />
-      <% else %>
-        <% unless current_user.nil? || f.follow == current_user %>
-          <input type='button' class='btn btn-small btn-primary follow' value='关注' />
-        <% end %>
-      <% end %>
-      </td>
-    </tr>
-  <% end %>
+	<% followings.each do |f| %>
+		<div class='alert alert-info follow' data-value-id="<%=f.id %>" data-value-follow-id="<%=f.follow_id %>" >
+			<img src="<%= f.follow.icon %>" class="img-rounded avatar" />
+			<%= f.follow.login %>
+			<% if can? :destroy, Following %>
+				<input type='button' class='btn btn-small btn-primary unfollow' value='取消关注' />
+			<% else %>
+				<% unless current_user.nil? || f.follow == current_user %>
+					<input type='button' class='btn btn-small btn-primary follow' value='关注' />
+				<% end %>
+			<% end %>
+		</div>
+	<% end %>
 <% else %>
-  <tr>
-    <td colspan='2'>暂时没有关注的用户!</td>
-  </tr>
+	<div class='alert alert-warning'>暂时没有关注的用户</div>
 <% end %>

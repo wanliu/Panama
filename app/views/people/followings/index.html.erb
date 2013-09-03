@@ -1,36 +1,31 @@
 <% active_section :following %>
-<table class='table followers follow-user'>
-  <thead>
-    <tr>
-      <th class='title'>关注的用户</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render :partial => "following_user", :locals => {followings: @u_followings} %>
-  </tbody>
-</table>
-<table class='table followers follow-shop'>
-  <thead>
-    <tr>
-      <th class='title'>关注的商店</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= render :partial => "following_shop", :locals => {followings: @s_followings } %>
-  </tbody>
-</table>
-<script type='text/javascript'>
-    new FollowListView({
-      el: $("table.follow-user"),
-      login: "<%=current_user.login %>",
-      follow_type: "user"
-    })
 
-    new FollowListView({
-      el: $("table.follow-shop"),
-      login: "<%=current_user.login %>",
-      follow_type: "shop"
-    })
+<div class='followers widget span8'>
+	<div class='follow-users'>
+		<h4 class='title'>关注的用户</h4>
+		<div class='span3'>
+			<%= render :partial => "following_user", :locals => {followings: @u_followings} %>
+		</div>
+	</div>
+
+	<div class='follow-shops'>
+		<h4 class='title'>关注的商店</h4>
+		<div class='span3'>
+			<%= render :partial => "following_shop", :locals => {followings: @s_followings } %>
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	new FollowListView({
+		follow_type: "user",
+		el: $(".followers .follow-users"),
+		login: "<%=current_user.login %>"
+	})
+
+	new FollowListView({
+		follow_type: "shop",
+		el: $(".followers .follow-shops"),
+		login: "<%=current_user.login %>"
+	})
 </script>
