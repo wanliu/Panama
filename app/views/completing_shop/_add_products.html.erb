@@ -1,28 +1,28 @@
 <div class='row-fluid dialog_product'>
 	<div class="span4">
 		<header>
-		    <ul class="nav nav-tabs">
-		        <li class="active" id ="sort">
-		            <a href="#categories" data-toggle="tab">分类</a>
-		        </li>
-		        <li>
-		            <a href="#brands" data-toggle="tab">品牌</a>
-		        </li>
-		    </ul>
+			<ul class="nav nav-tabs">
+				<li class="active" id ="sort">
+					<a href="#categories" data-toggle="tab">分类</a>
+				</li>
+				<li>
+					<a href="#brands" data-toggle="tab">品牌</a>
+				</li>
+			</ul>
 		</header>
 		<div class="body tab-content">
-            <div id="categories" class="tab-pane active clearfix">
-            	<div class='search-header'>
+			<div id="categories" class="tab-pane active clearfix">
+				<div class='search-header'>
 					<div class="input-append controls-row">
-	                    <input class="span8" type="search" id="search-input3">
-	                    <button type="button" class="btn btn-transparent span4">Search</button>
-	                </div>
-            	</div>
-            	<%= render "category_selector" %>
-            </div>
-            <div id="brands" class="tab-pane">
-            </div>
-        </div>
+						<input class="span8" type="search" id="search-input3">
+						<button type="button" class="btn btn-transparent span4">搜索</button>
+					</div>
+				</div>
+				<%= render "category_selector" %>
+			</div>
+			<div id="brands" class="tab-pane">
+			</div>
+		</div>
 	</div>
 	<div class="span4">
 		<div class='panel' style="margin-right:13px;">
@@ -32,10 +32,10 @@
 			</h4>
 			<div class='search-header'>
 				<div class="input-append controls-row">
-	                <input class="span8" type="search" id="search-input1">
-	                <button type="button" class="btn btn-transparent span4">Search</button>
-	            </div>
-	        </div>
+					<input class="span8" type="search" id="search-input1">
+					<button type="button" class="btn btn-transparent span4">搜索</button>
+				</div>
+			</div>
 			<ul class='category_product_list product_list'>
 				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
 			</ul>
@@ -63,7 +63,10 @@
 		</script>
 
 		<script type="text/javascript">
-			$('.category_product_list').slimScroll({ height: 500 , railVisible: true});
+			$('.category_product_list').slimScroll({ 
+				height     : 500 , 
+				railVisible: true
+			});
 		</script>
 	</div>
 	<div class="span4">
@@ -71,14 +74,13 @@
 			<h4><i class='icon-th-large'></i> 库存商品</h4>
 			<div class='search-header'>
 				<div class="input-append controls-row">
-		            <input class="span8" type="search" id="search-input2">
-		            <button type="button" class="btn btn-transparent span4">Search</button>
-		        </div>
-		    </div>
+					<input class="span8" type="search" id="search-input2">
+					<button type="button" class="btn btn-transparent span4">搜索</button>
+				</div>
+			</div>
 			<ul class='my_product_list product_list'>
 			</ul>
 		</div>
-
 
 		<script type="text/jstemplate" id="product_show" >
 			<li id="{{ id }}" class='product_item'>
@@ -93,11 +95,15 @@
 		</script>
 
 		<script type="text/javascript">
-			var product_view = new ProductView({ el : $(".my_product_list"), models: <%=raw @products.to_json %> , template: $("#product_show").text()});
+			var product_view = new ProductView({ 
+				el      : $(".my_product_list"), 
+				models  : <%=raw @products.to_json %>, 
+				template: $("#product_show").text()
+			});
 
 			new WizardView({
 				el: $(".dialog_product"),
-				category_product_template: $("#category_product_show").text(),
+				category_product_template: $("#category_product_show").html(),
 				shop_id: <%= current_user.shop.try(:id) %>,
 				select_handle: function(models){
 					_.each(models, function(model){
@@ -106,28 +112,29 @@
 				}
 			});
 			var scroll = $('.my_product_list').slimScroll({ height: 500 , railVisible: true});
-			$(".slimScrollDiv").css("overflow","")
+			// $(".slimScrollDiv").css("overflow","")
 		</script>
 	</div>
 </div>
+
 <script type="text/javascript">
 	var bind_editable = function(elem, class_name){
 		id = $(elem).attr("id")
 		$("."+ class_name , elem).editable({
-	        type:  'text',
-	        pk:    id,
-	        name:  class_name,        
-	        url:   "/shop_products/"+ id +"/update_attribute",  
-	        title: 'change your '+class_name,
-	        ajaxOptions: {
-	        	type: 'put',
-	        	dataType: 'json'
-	    	},
-		    validate: function(value) {
-			    if(isNaN($.trim(value))) {
-			        return 'This must be a number';
-			        value = 0.0
-			    }
+				type:  'text',
+				pk:    id,
+				name:  class_name,        
+				url:   "/shop_products/"+ id +"/update_attribute",  
+				title: 'change your '+class_name,
+				ajaxOptions: {
+					type: 'put',
+					dataType: 'json'
+			},
+			validate: function(value) {
+				if(isNaN($.trim(value))) {
+						return 'This must be a number';
+						value = 0.0
+				}
 			}  
 		})
 	};
@@ -136,8 +143,6 @@
 		bind_editable($(this), "price");
 		bind_editable($(this), "inventory")	
 	});
-	
-
 
 	var Filter = function(id_name,target){
 		$("#"+id_name).keyup(function(){
@@ -151,14 +156,13 @@
 				}
 			});
 			var numberItems = count;
-			$("#filter-count").text("Number of Comments = "+count);
+			$("#filter-count").text("Number of Comments = " + count);
 		})
 		false
 	};
 
-	$(document).ready(function(){
+	$(function(){
 		Filter("search-input1","category_product_list");
 		Filter("search-input2","my_product_list")
 	})
-	
 </script>
