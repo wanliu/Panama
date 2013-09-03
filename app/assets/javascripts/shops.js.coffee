@@ -101,7 +101,7 @@ class LoadShopProducts extends Backbone.View
     )
 
   min_column_el: () ->
-    columns = @sp_el().find(">.column")
+    columns = @sp_el().find(".columns>.column")
     cls = _.map columns, (c) -> $(c).height()
     $(columns[cls.indexOf(_.min(cls))])
 
@@ -127,7 +127,7 @@ class ShopProductsView extends Backbone.View
     @relayoutColumns()
 
   resizeWrap: (e) ->
-    @$el.width(@adjustNumber() * 246)
+    @$el.width(@$columns.width())
 
   adjustNumber: () ->
     $wrap = $('.wrap')
@@ -136,9 +136,10 @@ class ShopProductsView extends Backbone.View
   relayoutColumns: () ->
     shop_products = @fetchResults()
     new_dom = $("<div id='shop_products'/>")
-    new_dom.append("<div class='column' />") for i in [0...@adjustNumber()]
+    @$columns = $("<div class='columns' />").appendTo(new_dom)
+    @$columns.append("<div class='column' />") for i in [0...@adjustNumber()]
 
-    cycle = new CycleIter(new_dom.find(".column"))
+    cycle = new CycleIter(@$columns.find(".column"))
 
     for act in shop_products
       target = cycle.next()

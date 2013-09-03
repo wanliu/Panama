@@ -12,6 +12,14 @@ $rightSideBarWidth: 200px;
 
 #activities {
 	margin: 0 auto;
+
+	.columns{
+		display: inline-block;
+
+		.column:last-child{
+			margin-right: 0px
+		}
+	}
 }
 
 // #social_sidebar {

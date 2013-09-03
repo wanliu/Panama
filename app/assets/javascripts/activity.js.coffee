@@ -209,7 +209,7 @@ class ActivitiesView extends Backbone.View
     @relayoutColumns()
 
   resizeWrap: (e) ->
-    @$el.width(@adjustNumber() * 246)
+    @$el.width(@$columns.width())
 
   appendResult: (e, data) ->
 
@@ -238,9 +238,11 @@ class ActivitiesView extends Backbone.View
   relayoutColumns: () ->
     activities = @fetchResults()
     new_dom = $("<div id='activities'/>")
-    new_dom.append("<div class='column' />") for i in [0...@adjustNumber()]
+    @$columns = $("<div class='columns'></div>").appendTo(new_dom)
 
-    cycle = new CycleIter(new_dom.find(".column"))
+    @$columns.append("<div class='column' />") for i in [0...@adjustNumber()]
+
+    cycle = new CycleIter(@$columns.find(".column"))
 
     for act in activities
       target = cycle.next()
