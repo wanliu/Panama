@@ -16,11 +16,10 @@ class ShopProductView extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
-    backdrop = "<div class='model-popup-backdrop in' />"
-
     @loadTemplate () =>
-      @$backdrop ||= $(backdrop).appendTo("#popup-layout")
-      @$el = $(@render()).appendTo(@$backdrop)
+      @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+      @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
+      @$el = $(@render()).appendTo(@$dialog)
       $(window).scroll()
     super
 
@@ -43,6 +42,7 @@ class ShopProductView extends Backbone.View
     $("body").removeClass("noScroll")
 
   close: () ->
+    @$dialog.remove()
     @$backdrop.remove()
     @unmodal()
 
@@ -86,6 +86,7 @@ class LoadShopProducts extends Backbone.View
     $(window).scroll(_.bind(@scroll_load, @))
 
   fetch: () ->
+    console.log("fetch.....#{@offset}")
     @$load_msg.show()
     $.ajax(
       url: "/shop_products",
@@ -97,7 +98,6 @@ class LoadShopProducts extends Backbone.View
         @$load_msg.hide()
         @add_columns(data)
         @offset += @limit
-        # console.log(@offset)
     )
 
   min_column_el: () ->
@@ -108,13 +108,19 @@ class LoadShopProducts extends Backbone.View
   add_columns: (data) ->
     _.each data, (c) =>
       @min_column_el().append(@template.render(c))
+      new ShopProductPreview({
+        el: $("[shop-product-id=#{c.id}]"),
+        model: new ShopProductModel(id: c.id),
+        product_id: c.product_id
+      });
 
   scroll_load: () ->
     sp = @sp_el()
     sp_height = sp.offset().top + sp.height()
     w_height = $(window).height() + $(window).scrollTop()
     if sp_height <= w_height
-      setTimeout _.bind(@fetch, @), 200
+      clearTimeout(@timeout_id) if @timeout_id
+      @timeout_id = setTimeout _.bind(@fetch, @), 250
 
   sp_el: () ->
     @el.find("#shop_products")
@@ -134,6 +140,7 @@ class ShopProductsView extends Backbone.View
     count = parseInt(($wrap.width() - 25) / 246)
 
   relayoutColumns: () ->
+    console.log("relayoutColumns.......")
     shop_products = @fetchResults()
     new_dom = $("<div id='shop_products'/>")
     @$columns = $("<div class='columns' />").appendTo(new_dom)
