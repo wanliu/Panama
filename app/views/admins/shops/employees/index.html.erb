@@ -16,19 +16,17 @@
 
 	<div class='employees span8'>
 		<h4>成员</h4>
-		<div class='span3'>
-			<% if @employees.count > 0 %>
-				<% @employees.each do |e| %>
-					<div class='alert alert-info employee' data-value-id="<%=e.id %>" data-value-login="<%=e.login %>">
-						<img class='img-rounded avatar' src="<%=e.photos.icon %>" />
-						<%= e.login %>
-						<a href='javascript:void(0)' class='remove'>移除</a>
-					</div>
-				<% end %>
-			<% else %>
-				<div class='alert alert-warning'>暂无雇员</div>
+		<% if @employees.count > 0 %>
+			<% @employees.each do |e| %>
+				<div class='span2 alert alert-info employee' data-value-id="<%= e.id %>" data-value-login="<%=e.login %>">
+					<img class='img-rounded avatar' src="<%= e.photos.icon %>" />
+					<%= e.login %>
+					<a href='javascript:void(0)' class='remove'>移除</a>
+				</div>
 			<% end %>
-		</div>
+		<% else %>
+			<div class='alert alert-warning'>暂无雇员</div>
+		<% end %>
 	</div>
 
 	<div class="user-groups span8">
@@ -95,16 +93,14 @@
 </script>
 
 <script type="text/template" class='group-user-template'>
-	<div class="span3">
-		<div class='alert alert-info group-user'>
-			<img class='img-rounded avatar' />
-				{{login}}
-			<a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
-		</div>
+	<div class='span2 alert alert-info group-user'>
+		<img class='img-rounded avatar' />
+			{{login}}
+		<a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
 	</div>
 </script>
 
-<script type='text/javascript' >
+<script type='text/javascript'>
 	$(function(){        
 		template = Hogan.compile($(".group-user-template").html())
 		_permission_template = Hogan.compile($(".permission-group-template").html())        

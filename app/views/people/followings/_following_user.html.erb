@@ -1,6 +1,6 @@
 <% if followings.count > 0 %>
 	<% followings.each do |f| %>
-		<div class='alert alert-info follow' data-value-id="<%=f.id %>" data-value-follow-id="<%=f.follow_id %>" >
+		<div class='span2 alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%= f.follow_id %>" >
 			<img src="<%= f.follow.icon %>" class="img-rounded avatar" />
 			<%= f.follow.login %>
 			<% if can? :destroy, Following %>
@@ -13,5 +13,5 @@
 		</div>
 	<% end %>
 <% else %>
-	<div class='alert alert-warning'>暂时没有关注的用户</div>
+	<div class='span2 alert alert-warning'>暂时没有关注的用户</div>
 <% end %>
