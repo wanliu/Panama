@@ -55,6 +55,14 @@
 #shop_products{
   margin-right: auto;
   margin-left: auto;
+
+  .columns{
+    display: inline-block;
+
+    .column:last-child{
+      margin-right: 0;
+    }
+  }
 }
 
 .load_msg{
