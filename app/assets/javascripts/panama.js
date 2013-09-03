@@ -3,6 +3,7 @@
 //= require jquery_ujs
 //= require core_extend/core
 //= require lib/jquery.raty
+//= require lib/jquery.resize
 //= require lib/underscore
 //= require backbone
 //= require twitter/bootstrap
