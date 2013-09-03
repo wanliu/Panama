@@ -78,7 +78,7 @@
 			</div>
 			<% end %>
 
-			<% if current_user.user_checking.checked %>
+			<% if !current_user.user_checking.checked %>
 				<button class="modify pull-right">修改</button>
 			<% else %>
 				<script type="text/javascript">
