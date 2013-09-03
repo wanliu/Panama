@@ -14,7 +14,7 @@ class DirectTransaction < ActiveRecord::Base
   has_many :items, :class_name => "ProductItem", :as => :owner
   has_many :messages, :class_name => "ChatMessage", :as => :owner
   has_many :notifications, :as => :targeable, dependent: :destroy
-  
+
   before_create :init_data
 
   after_create :notice_seller, :notice_new
@@ -29,7 +29,7 @@ class DirectTransaction < ActiveRecord::Base
   def as_json(*args)
     attra = super *args
     attra["number"] =  number
-    attra["buyer_login"] = buyer.login
+    attra["buyer_login"] = buyer.try(:login)
     attra["items_count"] = items_count
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("direct_transaction_state.#{state.name}")

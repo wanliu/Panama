@@ -19,11 +19,12 @@ class Follow extends Backbone.Model
       success: success_callback,
     )
 
+
 class FollowView extends Backbone.View
-  events: {
+  events: 
     "click input:button.unfollow" : "unfollow",
-    "click input:button.follow" : "follow"
-  }
+    "click input:button.follow"   : "follow"
+  
   initialize: (opts) ->
     _.extend(@, opts)
 
@@ -45,11 +46,12 @@ class FollowView extends Backbone.View
       button.removeClass("follow").removeClass("btn-info")
       .addClass("unfollow").addClass("btn-primary")
 
+
 class FollowListView extends Backbone.View
 
   initialize: (opts) ->
     _.extend(@, opts)
-    @$tbody = @$("tbody>tr")
+    @$tbody = @$("div.follow")
     @load_all_tr()
 
   load_all_tr: () ->
@@ -66,5 +68,5 @@ class FollowListView extends Backbone.View
         el: $(tr)
       )
 
+
 root.FollowListView = FollowListView
-root

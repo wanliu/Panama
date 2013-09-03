@@ -309,6 +309,7 @@ ul {
 	padding-left: 16px;
 }
 /*:not(.collapsed) ie 8 bug*/
+
 .side-nav li a.accordion-toggle+.accordion-body li.active a {
 	@include transparent(rgb(13,13,13),0.25);
 }
@@ -633,12 +634,7 @@ ul {
 }
 
 .open_right_side .right-sidebar {
-	position: fixed;
-	right: 0;
-	top: 0;
-	bottom: 0px;
 	display: block;
-
 }
 
 .right-mini .right-sidebar {
@@ -652,10 +648,13 @@ ul {
 }
 
 .right-sidebar {
-	position: absolute;
 	display: none;
 	width: 200px;
 	margin-bottom: 0px;
+	position: fixed;
+	right: 0;
+	top: 0;
+	bottom: 0px;
 
 	header {
 		.nav {

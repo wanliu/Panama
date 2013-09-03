@@ -1,12 +1,11 @@
 <% if followings.count > 0 %>
-  <% followings.each do |f| %>
-    <tr data-value-id="<%=f.id %>" data-value-follow-id="<%=f.follow_id %>">
-      <td><%=f.follow.name %></td>
-      <td><input type='button' class='btn btn-small btn-primary unfollow' value='取消关注' /></td>
-    </tr>
-  <% end %>
+	<% followings.each do |f| %>
+		<div class='span3 alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%=f.follow_id %>">
+			<img src="<%= f.follow.photo %>" class="img-rounded avatar" />
+			<%= f.follow.name %>
+			<input type='button' class='btn btn-small btn-primary unfollow' value='取消关注' />
+		</div>
+	<% end %>
 <% else %>
-  <tr>
-    <td colspan='2'>暂时没有关注的商店</td>
-  </tr>
+	<div class='span3 alert alert-warning'>暂时没有关注的商店</div>
 <% end %>
