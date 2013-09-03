@@ -308,8 +308,8 @@ ul {
 	border-right: none;
 	padding-left: 16px;
 }
-
-.side-nav li a.accordion-toggle:not(.collapsed)+.accordion-body li.active a {
+/*:not(.collapsed) ie 8 bug*/
+.side-nav li a.accordion-toggle+.accordion-body li.active a {
 	@include transparent(rgb(13,13,13),0.25);
 }
 
