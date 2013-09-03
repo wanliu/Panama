@@ -5,7 +5,7 @@ class ShopProductsController < ApplicationController
 
 	def index
 	    @shop = Shop.find(params[:shop_id])
-	    @products = @shop.shop_products
+	    @products = @shop.shop_products.includes(:product)
       @products = @products.offset(params[:offset]) if params[:offset].present?
       @products = @products.limit(params[:limit]) if params[:limit].present?
 

@@ -12,7 +12,16 @@ class TopBar extends Backbone.View
 		@toggleFriends()
 
 	toggleFriends: () ->
-		$("body").toggleClass("open_right_side")
+		sidebar = $('.right-sidebar')
+		callback = () ->
+			$("body").toggleClass("open_right_side")
+
+		if sidebar.css('display') == "none"
+			callback()
+			callback = () ->
+
+		$('.right-sidebar').animate({ width: 'toggle'}, callback)
+
 		$(window).trigger('resize')
 		false
 
