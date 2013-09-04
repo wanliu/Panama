@@ -269,27 +269,28 @@ $left-side-admin-width: 160px;
       }
 
       .cell{
-        margin-top: $margin-top;
+        margin-top: 2*$margin-top;
       }
 
       .normal_picture{
         width: 5*$margin-top;
-        height: 5*$margin-top;
+        height: 5.5*$margin-top;
       }
     }
-
     .input_locate {
       margin-top: 50px;
       margin-left: -10px;
-
+      margin-bottom: 20px;
       input {
         width: 100%;
         min-width: 90px;
       }
-
       .control-label {
         width: 80px !important;
       }
+    }
+    .input_locate1{
+      margin-top: 0px;
     }
   }
 }
@@ -302,4 +303,8 @@ $left-side-admin-width: 160px;
   button{
     margin-top: 10px;
   }
+}
+
+.hidden_one{
+  text-align: center;
 }
