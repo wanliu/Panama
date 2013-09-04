@@ -1,4 +1,4 @@
-<nav id="sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
+<nav id="left_sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
 	<ul id="admin-side-nav" class="side-nav">
 		<% sections(:top).each do |section| %>
 			<%= render :partial => "section", :locals => section %>
@@ -108,5 +108,7 @@
 			.parents(".accordion-body")
 			.addClass("in");
 	}
-	new SideBar({ el: "#sidebar" })
+	$(function(){
+		new LeftSideBar({ el: "#left_sidebar" })
+	})
 </script>

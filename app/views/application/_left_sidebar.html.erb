@@ -1,4 +1,4 @@
-<nav id="sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
+<nav id="left_sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
 	<ul id="side-nav" class="side-nav">
 		<li class="active">
 			<a href="/">
@@ -53,5 +53,7 @@
 </nav>
 
 <script type="text/javascript">
-	new SideBar({ el: "#sidebar" })
+	$(function(){
+		new LeftSideBar({ el: "#left_sidebar" })
+	})
 </script>
