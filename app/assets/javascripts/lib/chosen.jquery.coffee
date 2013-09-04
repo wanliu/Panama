@@ -50,7 +50,7 @@ class Chosen extends AbstractChosen
     container_props =
       id: @container_id
       class: container_classes.join ' '
-      style: 'width: ' + (@f_width) + 'px;' #use parens around @f_width so coffeescript doesn't think + ' px' is a function parameter
+      style: 'width: 100%' #+  (@f_width) + 'px;' #use parens around @f_width so coffeescript doesn't think + ' px' is a function parameter
       title: @form_field.title
 
     container_div = ($ "<div />", container_props)
@@ -67,7 +67,8 @@ class Chosen extends AbstractChosen
     dd_top = @container.height()
     dd_width = (@f_width - get_side_border_padding(@dropdown))
 
-    @dropdown.css({"width": dd_width  + "px", "top": dd_top + "px"})
+    #dd_width  + "px"
+    @dropdown.css({"width": "100%", "top": dd_top + "px"})
 
     @search_field = @container.find('input').first()
     @search_results = @container.find('ul.chzn-results').first()
@@ -82,7 +83,8 @@ class Chosen extends AbstractChosen
       @search_container = @container.find('div.chzn-search').first()
       @selected_item = @container.find('.chzn-single').first()
       sf_width = dd_width - get_side_border_padding(@search_container) - get_side_border_padding(@search_field)
-      @search_field.css( {"width" : sf_width + "px"} )
+      # {"width" : sf_width + "px"}
+      @search_field.css( {"width" : "100%"} )
 
     this.results_build()
     this.set_tab_index()
@@ -179,7 +181,7 @@ class Chosen extends AbstractChosen
   results_build: ->
     @parsing = true
     @results_data = root.SelectParser.select_to_array @form_field
-    
+
     if @is_multiple and @choices > 0
       @search_choices.find("li.search-choice").remove()
       @choices = 0

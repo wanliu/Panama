@@ -86,7 +86,6 @@ class LoadShopProducts extends Backbone.View
     $(window).scroll(_.bind(@scroll_load, @))
 
   fetch: () ->
-    console.log("fetch.....#{@offset}")
     @$load_msg.show()
     $.ajax(
       url: "/shop_products",
@@ -140,7 +139,6 @@ class ShopProductsView extends Backbone.View
     count = parseInt(($wrap.width() - 25) / 246)
 
   relayoutColumns: () ->
-    console.log("relayoutColumns.......")
     shop_products = @fetchResults()
     new_dom = $("<div id='shop_products'/>")
     @$columns = $("<div class='columns' />").appendTo(new_dom)
