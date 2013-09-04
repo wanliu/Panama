@@ -6,6 +6,8 @@
       address:
         zip_code: 邮编
         road: 街道
+        contact_name: 联系人
+        contact_phone: 联系电话
       ask_buy:
         title: 商品名称
         product_id: 商品

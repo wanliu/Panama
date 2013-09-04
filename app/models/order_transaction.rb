@@ -496,7 +496,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["number"] = number
     attra["pay_manner_name"] = pay_manner.try(:name)
     attra["delivery_manner_name"] = delivery_manner.try(:name)
-    attra["buyer_login"] = buyer.login
+    attra["buyer_login"] = buyer.try(:login)
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:location)
     attra["unmessages_count"] = unmessages.count

@@ -56,19 +56,9 @@
     </div>
     <%= address_form.input :road, :input_html => { :class => :span12 } %>
 
-    <div class="row-fluid">
-      <div class='span2'>
-        *联系人
-      </div>
-      <div class='span4'>
-        <%=address_form.input_field :contact_name, :class => :span12 %>
-      </div>
-      <div class='span2'>
-        <%= address_form.label :contact_phone, :label => "联系电话", :wrapper => :inline_label, :class => :label_zip_code %>
-      </div>
-      <div class='span4'>
-        <%=address_form.input_field :contact_phone, :class => :span12 %>
-      </div>
+    <div class='row-fluid'>
+      <%=address_form.input :contact_name, :wrapper_html => {:class => :contact_name_wrapper }, :input_html => {:class => :span12} %>
+      <%=address_form.input :contact_phone, :wrapper_html => {:class => :contact_phone_wrapper }, :input_html => {:class => :span12} %>
     </div>
   <% end %>
   </div>
