@@ -24,6 +24,19 @@
 
 $left-side-admin-width: 160px;
 
+.sidebar{
+  .side-nav{
+    .cell{
+      margin-left: 20px;
+    }
+    img {
+      margin: 15px;
+      width: 120px;
+      margin-bottom: 5px;
+    } 
+}
+}
+
 #admin_content {
   position: relative;
   margin-top: 20px;
@@ -312,3 +325,5 @@ $left-side-admin-width: 160px;
 .paddings{
   padding-top: 20px; 
 }
+
+
