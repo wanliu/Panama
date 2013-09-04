@@ -35,7 +35,8 @@
   top: 0px;
 
   .avatar {
-    margin: 10px;
+    margin: 15px;
+    width: 120px;
 
     img {
       /*width: 60px;*/
@@ -416,4 +417,13 @@
       }
     }
   }
+}
+
+.user-community-people .circle-panel .title .add-circle {
+    /*float: right;*/
+    margin-right: 42px;
+}
+
+.user-community-people .search_user input {
+  width: 182px;
 }

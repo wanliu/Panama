@@ -24,6 +24,19 @@
 
 $left-side-admin-width: 160px;
 
+.sidebar{
+  .side-nav{
+    .cell{
+      margin-left: 20px;
+    }
+    img {
+      margin: 15px;
+      width: 120px;
+      margin-bottom: 5px;
+    } 
+}
+}
+
 #admin_content {
   position: relative;
   margin-top: 20px;
@@ -253,7 +266,7 @@ $left-side-admin-width: 160px;
   }
 
   .section {
-    margin-bottom: 20px;
+    margin-bottom: $margin-top;
 
     legend {
       margin-bottom: 0px;
@@ -280,7 +293,7 @@ $left-side-admin-width: 160px;
     .input_locate {
       margin-top: 50px;
       margin-left: -10px;
-      margin-bottom: 20px;
+      margin-bottom: $margin-top;
       input {
         width: 100%;
         min-width: 90px;
@@ -308,3 +321,9 @@ $left-side-admin-width: 160px;
 .hidden_one{
   text-align: center;
 }
+
+.paddings{
+  padding-top: 20px; 
+}
+
+

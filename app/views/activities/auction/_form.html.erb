@@ -3,6 +3,9 @@
 
   <%= f.input :shop_product_id,
               :collection => [],
+              :wrapper_html => {
+                :class => "shop_product_wrap"
+              },
               :input_html => {
                 :class => "shop_product_id"
               } %>
