@@ -14,14 +14,16 @@
 							<img class="bottom normal_picture img-polaroid"/>
 						</div>  
 						<div id="image_bottom">
-							<div class="hidden_one" id="hidden_text">
+							<div class="hidden_one offset2" id="hidden_text">
 								<%= upload_tip %>
 							</div>
-							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >             
 							</div>
 						</div>
 					</div>
-					<div class="span7 input_locate">
+					<br />
+					<br />
+					<div class="span7 input_locate1 input_locate">
 						<%= f.input :shop_name, label: '商店名称' %>
 						<%#= f.input :shop_url, label: '商店地址' %>
 						<%= f.input :shop_summary, label: '商店简介' %>
@@ -38,10 +40,10 @@
 							<img class="bottom normal_picture img-polaroid"/>
 						</div>  
 						<div id="image_bottom">
-							<div class="hidden_one" id="hidden_text">
+							<div class="hidden_one offset2" id="hidden_text">
 								<%= upload_tip %>
 							</div>
-							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >                
 							</div>
 						</div> 
 					</div>
@@ -62,11 +64,10 @@
 							<img class="bottom normal_picture img-polaroid" />
 						</div>  
 						<div id="image_bottom">
-							<div class="hidden_one" id="hidden_text">
+							<div class="hidden_one offset2" id="hidden_text">
 								<%= upload_tip %>
 							</div>
-							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
-							</div>
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >               </div>
 						</div>
 					</div>
 					<div class="span7 input_locate">
@@ -78,7 +79,7 @@
 			</div>
 			<% end %>
 
-			<% if !current_user.user_checking.checked %>
+			<% if current_user.user_checking.checked %>
 				<button class="modify pull-right">修改</button>
 			<% else %>
 				<script type="text/javascript">
