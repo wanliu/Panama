@@ -1,6 +1,6 @@
 root = (window || @)
 
-class SideBar extends Backbone.View
+class LeftSideBar extends Backbone.View
 	ICON_CLASS = "sidebar-icons"
 
 	events: 
@@ -48,4 +48,4 @@ class SideBar extends Backbone.View
 		$(window).trigger('resize')
 
 		
-root.SideBar = SideBar
+root.LeftSideBar = LeftSideBar

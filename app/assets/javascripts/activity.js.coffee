@@ -62,17 +62,15 @@ class ActivityView extends Backbone.View
     #   .css('display', 'block')
     #   .css('top', '10%')
     # $(".wrap").addClass("to-blur")
-    # $("#sidebar").addClass("to-blur")
+    # $("#left_sidebar").addClass("to-blur")
     # $(".right-sidebar").addClass("to-blur")
     $("body").addClass("noScroll")
 
   unmodal: () ->
     # $(".wrap").removeClass("to-blur")
-    # $("#sidebar").removeClass("to-blur")
+    # $("#left_sidebar").removeClass("to-blur")
     # $(".right-sidebar").removeClass("to-blur")
     $("body").removeClass("noScroll")
-
-  # events
 
   addToCard: (e) ->
     $target = $(e.currentTarget)
