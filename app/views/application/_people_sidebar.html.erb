@@ -91,11 +91,10 @@
     <li class='accordion-group'>
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#soical-collapse"><i class="icon-group"></i> <span class="name">社区</span></a>
       <ul id="soical-collapse" class="accordion-body collapse">
-        <% if can? :manage, User %>
         <li>
-          <a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">商品评论</a>
+          <a class='people-communities' href="<%=person_communities_path(@people.login) %>">万流吧
+          </a>
         </li>
-        <% end %>
         <li>
           <a class='people-following' href="<%=person_followings_path(@people.login) %>">我关注的
           </a>
@@ -104,6 +103,11 @@
           <a class='people-followers' href="<%=person_followers_path(@people.login) %>">关注我的
           </a>
         </li>
+        <% if can? :manage, User %>
+        <li>
+          <a class='people-product-comment' href="<%=person_product_comments_path(@people.login) %>">商品评论</a>
+        </li>
+        <% end %>
       </ul>
     </li>
   </ul>

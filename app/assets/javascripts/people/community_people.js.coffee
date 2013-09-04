@@ -223,3 +223,5 @@ class CommunityPeopleView extends Backbone.View
       _.bind(@circle_view_list.remove_all_circle_user, @circle_view_list))
 
     @friend_view.othe_circle_user()
+
+root.CommunityPeopleView = CommunityPeopleView

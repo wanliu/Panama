@@ -41,7 +41,7 @@ class Notification < ActiveRecord::Base
       }
     else
       attra[:targeable] = {
-        :img_url => mentionable_user.photos.avatar
+        :img_url => user.photos.avatar
       }
     end
     attra
