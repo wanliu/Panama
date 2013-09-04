@@ -715,7 +715,7 @@ ul {
 			}
 			width: 300px;
 			// margin-left: -120px;
-			
+
 			.transaction-info{
 				display: block;
 			}
@@ -940,4 +940,19 @@ h2 small {
   margin-bottom: 10px;
   padding: 10px;
   background-color: rgba(51, 51, 51, 0.4);
+}
+
+#active_dialog{
+	.modal-body{
+		max-height: none;
+		height: 515px;
+
+		.form_activity_auction{
+		  .shop_product_wrap{
+		    .controls{
+		      width: 400px;
+		    }
+		  }
+		}
+	}
 }
