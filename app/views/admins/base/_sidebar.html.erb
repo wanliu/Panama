@@ -103,11 +103,12 @@
 <script type="text/javascript">
 	var section = "<%= yield :admin_siderbar %>";
 	if(section != ""){
-		$("#<%= name %> ul li #" + section).parents("li")
+		$("#left_sidebar ul li #" + section).parents("li")
 			.addClass("active")
 			.parents(".accordion-body")
 			.addClass("in");
 	}
+	
 	$(function(){
 		new LeftSideBar({ el: "#left_sidebar" })
 	})

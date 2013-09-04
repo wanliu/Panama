@@ -1,4 +1,4 @@
-<div id='people-sidebar' class="sidebar nav nav-collapse collapse affix-top" >
+<nav id='people-sidebar' class="sidebar nav nav-collapse collapse affix-top" >
   <div class='avatar'>
     <a href="<%= person_path(@people) %>">
     <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
@@ -48,8 +48,10 @@
     </li>
     <% if can? :manage, User %>
       <li>
-        <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>"><i class="icon-shopping-cart"></i>
-        购物车</a>
+        <a class="people-cart" href="<%=person_cart_index_path(@people.login) %>">
+          <i class="icon-shopping-cart"></i>
+          <span class="name">购物车</span>
+        </a>
       </li>
     <% end %>
     <% if can? :index, OrderTransaction %>
@@ -107,27 +109,29 @@
       </ul>
     </li>
   </ul>
+  
   <div id="sidebar-settings" class="settings">
-      <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
-      <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
+    <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
+    <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
   </div>
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $(".people-<%= yield :people_siderbar %>")
+</nav>
+
+<script type="text/javascript">
+  var section = "<%= yield :people_siderbar %>"
+  if (section != "") {
+    $(".people-" + section)
       .parents("li").addClass("active")
       .parents(".accordion-body").addClass("in")
+  }
 
-      new Followers({
-        login: "<%= current_user.login %>",
-        people_id: "<%= @people.id %>",
-        follow_type: "User",
-        el: $(".isfollowing") })
+  $(function(){
+    new Followers({
+      login: "<%= current_user.login %>",
+      people_id: "<%= @people.id %>",
+      follow_type: "User",
+      el: $(".isfollowing") })
 
-      new PeopleSideView({
-        el: $("#people-sidebar")
-      });
-    })
-
-  </script>
-
-</div>
+    new LeftSideBar({ el: "#people-sidebar" })
+    new PeopleSideView({ el: $("#people-sidebar") })
+  })
+</script>
