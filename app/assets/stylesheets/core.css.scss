@@ -7,6 +7,7 @@
 @import "contact_friend";
 @import 'font-awesome';
 @import 'lib/stroll';
+@import "attachments";
 
 body, html {
 	// $bgcolor1: #69D2E7;
@@ -362,9 +363,9 @@ ul {
 	}
 }
 
-.side-nav li a.accordion-toggle:not(.collapsed)+.accordion-body li a:hover {
+/*.side-nav li a.accordion-toggle:not(.collapsed)+.accordion-body li a:hover {
 	@include transparent(rgb(13,13,13), 0.25);
-}
+}*/
 
 .sidebar .accordion-group {
 	background: none;
@@ -763,8 +764,10 @@ ul {
 	@include transparent(rgb(51,51,51), 0.25);
 }
 
-.table-hover tbody tr:hover > td, .table-hover tbody tr:hover > th {
-	@include transparent(rgb(51,51,51), 0.6);
+.table-hover tbody tr:hover{
+	>td, >th{
+		@include transparent(rgb(51,51,51), 0.6);
+	}
 }
 
 .table-bordered th, .table-bordered td {
