@@ -37,8 +37,8 @@ module TextFormat
       def convert(text)
         @stores.each_index do |i|
           store = @stores[i]
-          text.gsub! store[0] do
-            store[1].call($~)
+          text.gsub! store[0] do |match|
+            store[1].call(match)
           end
         end
         text

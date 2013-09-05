@@ -1,9 +1,9 @@
-<div class='product-comment' >
+<div class='product-comment widget' >
   <div class='row-fluid'>
     <div class='seller span4'>
       <%= link_to product_comment.user.login, person_path(product_comment.user) %>
     </div>
-    <div class='span4'>订单编号：<%=product_comment.product_item.transaction.number %></div>
+    <div class='span4'>订单编号：<%=product_comment.product_item.owner.number %></div>
   </div>
   <div class='row-fluid comment'>
     <div class='span5'>
