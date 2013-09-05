@@ -10,7 +10,7 @@
   </div>
   <%= f.input :price %>
   <%= f.input :amount, input_html: { value: 1 } %>
-  <%= f.input :describe, :as => :text %>
+  <%= f.input :describe, :as => :text, input_html:{cols: 200,rows: 3,class: 'span3'} %>
 <% end %>
 
 <script type="text/template" class='upload_template'>
