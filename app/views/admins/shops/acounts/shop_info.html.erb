@@ -1,7 +1,7 @@
 <% admin_active_section :shop_info %>
 
 <div class='row-fluid'>
-	<div class='span7 widget shop_info'>
+	<div class='span8 widget shop_info'>
 		<%= simple_form_for @shop_auth,
 		url: '/user_checkings/update_shop_auth',
 		html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
@@ -79,7 +79,7 @@
 			<% end %>
 
 			<% if current_user.user_checking.checked %>
-				<button class="modify pull-right">修改</button>
+				<button class="modify pull-right btn">修改</button>
 			<% else %>
 				<script type="text/javascript">
 					$(".shop_info input").attr("readonly","readonly");

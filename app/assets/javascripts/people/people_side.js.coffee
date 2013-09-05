@@ -34,6 +34,6 @@ class PeopleSideView extends Backbone.View
       .width(200)
       .height(200)
 
+
 exports.PeopleSideView = PeopleSideView
 exports
-

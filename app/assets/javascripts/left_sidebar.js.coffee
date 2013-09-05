@@ -32,7 +32,7 @@ class LeftSideBar extends Backbone.View
 		@apply_states()
 
 	toggleAuto: (event) ->
-		$(".logo").removeClass(ICON_CLASS)
+		# $(".logo").removeClass(ICON_CLASS)
 		$(@$el).removeClass(ICON_CLASS)
 		@$(".side-nav").removeClass(ICON_CLASS)
 		@$(".attention").show()
@@ -40,7 +40,7 @@ class LeftSideBar extends Backbone.View
 		$(window).trigger('resize')
 
 	toggleIcons: (event) ->
-		$(".logo").addClass(ICON_CLASS)
+		# $(".logo").addClass(ICON_CLASS)
 		$(@$el).addClass(ICON_CLASS)
 		@$(".side-nav").addClass(ICON_CLASS)
 		@$(".attention").hide()
