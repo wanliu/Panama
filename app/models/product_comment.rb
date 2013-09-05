@@ -14,7 +14,9 @@ class ProductComment < ActiveRecord::Base
   validates :user, :presence => true
   validates :product_id, :presence => true
 
-  before_create :init_data
+  before_validation(:on => :create) do
+    init_data
+  end
 
   private
   def init_data

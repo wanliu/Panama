@@ -1,65 +1,65 @@
 <div class='row-fluid'>
-  <div class='offset2 span8'>
-    <div class='dialog'>
-      <div class="page-header">
-        <h2 class="page-title">买家信息验证</h2>
-      </div>
-      <fieldset>
-        <%= simple_form_for @user_auth,
-                url: '/completing_people/authenticate_license',
-                html: { method: :put, class: "form-horizontal" } do |f| %>
-          <legend class="section">基本信息</legend>
-          <div class="container-fluid">
-            <div class="row-fluid">
-              <div class="span5">
-                <div class="main_panle1 ">
-                  <div class="reset_avatar offset2">
-                    <div class="photo_span cell" >
-                      <span>身份证照</span>
-                      <img class="bottom normal_picture img-polaroid my_img">
-                    </div>  
-                    <div id="image_bottom">
-                      <div class="hidden_one " id="hidden_text">请选择一张您电脑中的图片，然后点击“上传”<br>支持jpg、png、gif图片类型，不能大于1MB。<br />
-                      </div>
-                      <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
-                      </div>
-                    </div>
-                  </div>
-                </div> 
-              </div>
-              <div class="span7 locate"  style="margin-left:-40px">
-                <%= f.input :ower_name, label: '真实姓名', input_html: { class: 'input-block-level' } %>
-                <%= f.input :ower_shenfenzheng_number, label: '身份证号', input_html: { class: 'input-block-level' } %>
-                <%= f.input :phone, label: '联系电话', input_html: { class: 'input-block-level' } %>
-              </div>
-            </div>
-          </div>
-          </br>
+	<div class='span8 offset2 dialog'>
+		<div class="page-header">
+			<h2 class="page-title">买家信息验证</h2>
+		</div>
+		<fieldset>
+		<%= simple_form_for @user_auth,
+			url: '/completing_people/authenticate_license',
+			html: { method: :put, class: "form-horizontal" } do |f| %>
+			<div class="section">
+				<!-- <div>基本信息</div> -->
+				<div class="row-fluid">
+					<div class="span5 reset_avatar main_panle1">
+						<span>身份证照</span>
+						<div class="photo_span" >
+							<img class="bottom normal_picture img-polaroid">
+						</div>  
+						<div id="image_bottom">
+							<div class="hidden_one muted" id="hidden_text">
+								<%= upload_tip %>
+							</div>
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
+							</div>
+						</div>
+					</div>
 
-          <div class="control-group">
-            <div class="controls pull-right">
-              <%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
-              <%= f.submit "完成", class: "btn btn-primary" %>
-            </div>
-          </div>
-        <% end %>
-      </fieldset>
-       <%= button_to "以后再说", { action: :skip }, class: "btn btn-primary" %>
-    </div>
-  </div>
+					<div class="span7 input_locate">
+						<%= f.input :ower_name, label: '真实姓名' %>
+						<%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
+						<%= f.input :phone, label: '联系电话' %>
+					</div>
+				</div>
+				<br>
+				<div class="row-fluid">
+					<div class="pull-left">
+						<%= button_to "以后再说", { action: :skip }, class: "btn btn-primary" %>
+					</div>
+					<div class="pull-right">
+						<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
+						<%= f.submit "完成", class: "btn btn-primary" %>
+					</div>
+				</div>
+			</div>
+		<% end %>
+		</fieldset>
+	</div>
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-    new Upload({
-      verify_authenticity_token: "<%=form_authenticity_token  %>",
-      action: "/user_checkings/upload_photo/",
-      current_user: { id: "<%=current_user.id %>", 
-        login: "<%= current_user.login %>",
-      },
-      targets: [
-        {el: $(".main_panle1"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>"}
-      ]
-    })   
-  })
+	$(function(){
+		new Upload({
+			verify_authenticity_token: "<%= form_authenticity_token %>",
+			action: "/user_checkings/upload_photo/",
+			current_user: { 
+				id: "<%= current_user.id %>", 
+				login: "<%= current_user.login %>"
+			},
+			targets: [{
+				el: $(".main_panle1"), 
+				input_name: "ower_photo", 
+				photo: "<%= @user_checking.try(:ower_photo) %>"
+			}]
+		})
+	})
 </script>
