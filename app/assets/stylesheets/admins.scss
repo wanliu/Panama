@@ -276,33 +276,33 @@ $left-side-admin-width: 160px;
       max-height: 200px;
       text-align: center;
 
-      .popover{
+      .popover {
         color:black;
       }
 
-      .cell{
+      .cell {
         margin-top: 2*$margin-top;
       }
 
-      .normal_picture{
+      .normal_picture {
         width: 5*$margin-top;
         height: 5.5*$margin-top;
       }
     }
+
     .input_locate {
       margin-top: 50px;
       margin-left: -10px;
       margin-bottom: $margin-top;
+
       input {
         width: 100%;
         min-width: 90px;
       }
+
       .control-label {
         width: 80px !important;
       }
-    }
-    .input_locate1{
-      margin-top: 0px;
     }
   }
 }

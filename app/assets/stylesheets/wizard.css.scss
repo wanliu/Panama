@@ -1,7 +1,7 @@
 @import "core";
-@import 'lib/transparent';
-@import 'lib/tree_slide';
-@import 'bootstrap-editable';
+@import "lib/transparent";
+@import "lib/tree_slide";
+@import "bootstrap-editable";
 
 body {
 	color: $grayDark;
@@ -10,7 +10,6 @@ body {
 .logo {
 	top: 0px;
 }
-
 
 h2 small {
 	color: $gray;
@@ -67,7 +66,7 @@ h2 small {
       border-left: 3px solid $blue;
     }
   }
-  .checked_product{
+  .checked_product {
     background-color: rgba(51, 51, 51, 0.6);
     border-left: 3px solid $blue;
   }
@@ -78,6 +77,7 @@ h2 small {
   border-top: 1px solid #222;
   border-top: 1px solid rgba(51,51,51,0.25);
   border-left: 3px solid transparent;
+
   .product_img {
     width: 50px;
     float: left;
@@ -97,7 +97,6 @@ h2 small {
     }
   }
 
-
   &:hover {
     @include transparent(rgb(51,51,51), 0.25);
     border-left: 3px solid $red;
@@ -112,7 +111,7 @@ h2 small {
 .dialog_product .nav-tabs {
   border-bottom: none;
   margin-bottom: 2px;
-  li a{
+  li a {
   	color: black;
   }
 }
@@ -134,22 +133,38 @@ h2 small {
 	color: black;
 }
 
-
 $margin-top: 20px;
-.main_panle2,.main_panle3,.main_panle1{
 
-  .cell{
-    margin-top: $margin-top;
+.form-horizontal {
+  margin: 10px;
+
+  .reset_avatar {
+    min-width: 150px;
+    max-height: 200px;
+    text-align: center;
+
+    .normal_picture {
+      width: 5*$margin-top;
+      height: 5*$margin-top;
+    }
   }
 
-  .my_img{
-    width: 5*$margin-top;
-    height: 6*$margin-top;
-  }
+  .input_locate {
+    margin-top: 30px;
+    margin-left: -10px;
 
-  .qq-upload-button{
-    margin-left: 85px;
+    input {
+      width: 100%;
+      min-width: 90px;
+      max-width: 240px;
+    }
+
+    .control-label {
+      width: 80px !important;
+    }
+
+    .controls {
+      margin-left: 100px !important;
+    }
   }
 }
-
-.cell{margin-left:15*$margin-top}

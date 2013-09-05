@@ -352,42 +352,20 @@
   }
 }
 
-
 .pinner-icon{
     margin-top: -2px;
     display: block !important;
 }
 
-
-/* $margin-top: 20px;
-.main_panle2,.main_panle3,.main_panle1{
-
-  .cell{
-    margin-top: $margin-top;
-  }
-
-  .my_img{
-    width: 5*$margin-top;
-    height: 6*$margin-top;
-  }
-
-  .qq-upload-button{
-    margin-left: 85px;
-  }
-}
-.locate{
-  margin-top:50px;
-}
-
-.locate1{
-   margin-top:30px;
-}
-.cell{margin-left:15*$margin-top} */
-
 .user_info {
   $margin-top: 20px;
 
-  .form-horizontal .controls {
+  .modify{
+    margin-right: 20px;
+    width: 80px;
+  }
+
+  dd, .controls {
     margin-left: 100px !important;
   }
 
@@ -403,7 +381,7 @@
       max-height: 200px;
       text-align: center;
 
-      .popover{
+      .popover {
         color:black;
       }
 
@@ -426,7 +404,7 @@
         min-width: 90px;
       }
 
-      .control-label {
+      dt, .control-label {
         width: 80px !important;
       }
     }
@@ -434,17 +412,10 @@
 }
 
 .user-community-people .circle-panel .title .add-circle {
-    /*float: right;*/
-    margin-right: 42px;
+  /*float: right;*/
+  margin-right: 42px;
 }
 
 .user-community-people .search_user input {
   width: 182px;
-}
-
-.user_info{
-  .modify{
-    margin-right: 20px;
-    width: 80px;
-  }
 }

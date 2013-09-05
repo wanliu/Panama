@@ -15,23 +15,14 @@
 			</div>
 		</div>
 		<div class="span7 input_locate">
-			<div class="control-group string optional">
-				<label class="string optional control-label" for="user_email">
-					邮箱
-				</label>
-				<div class="controls">
-					<input disabled="disabled" class="string optional" id="user_email" type="text" value="<%= @people.email %>">
-				</div>
-			</div>
-
-			<div class="control-group string optional">
-				<label class="string optional control-label" for="user_login">
-					登录名
-				</label>
-				<div class="controls">
-					<input disabled="disabled" class="string optional" id="user_login" type="text" value="<%= @people.login %>">
-				</div>
-			</div>
+			<dl class="dl-horizontal">
+			  <dt>邮箱</dt>
+			  <dd><%= @people.email %></dd>
+			</dl>
+			<dl class="dl-horizontal">
+			  <dt>登录名</dt>
+			  <dd><%= @people.login %></dd>
+			</dl>
 		</div>
 	</div>
 </div>
