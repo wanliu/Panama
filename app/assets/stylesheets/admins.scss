@@ -33,7 +33,7 @@ $left-side-admin-width: 160px;
       margin: 15px;
       width: 120px;
       margin-bottom: 5px;
-    } 
+    }
 }
 }
 
@@ -118,12 +118,6 @@ $left-side-admin-width: 160px;
   }
 }
 
-
-.comment-list {
-  .product-comment{
-    @include panel-background;
-  }
-}
 
 #category-selector .side-nav li i[class*=icon] {
   float: left;
@@ -267,7 +261,7 @@ $left-side-admin-width: 160px;
   }
 
   .form-horizontal .controls {
-    margin-left: 100px !important; 
+    margin-left: 100px !important;
   }
 
   .section {
@@ -328,7 +322,7 @@ $left-side-admin-width: 160px;
 }
 
 .paddings{
-  padding-top: 20px; 
+  padding-top: 20px;
 }
 
 
