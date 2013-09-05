@@ -16,7 +16,7 @@
 							<img class="bottom normal_picture img-polaroid">
 						</div>  
 						<div id="image_bottom">
-							<div class="hidden_one muted" id="hidden_text">
+							<div class="hidden_one" id="hidden_text">
 								<%= upload_tip %>
 							</div>
 							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
@@ -33,10 +33,10 @@
 				<br>
 				<div class="row-fluid">
 					<div class="pull-left">
-						<%= button_to "以后再说", { action: :skip }, class: "btn btn-primary" %>
+						<%= button_to "跳过", { action: :skip }, class: "btn btn-primary" %>
+						<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
 					</div>
 					<div class="pull-right">
-						<%= link_to '上一步', previous_wizard_path, :class => 'btn btn-primary' %>
 						<%= f.submit "完成", class: "btn btn-primary" %>
 					</div>
 				</div>
