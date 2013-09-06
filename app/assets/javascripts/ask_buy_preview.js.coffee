@@ -24,12 +24,14 @@ class Preview extends Backbone.View
     )
 
   render: (data) ->
+    @$backdrop = $("<div class='model-popup-backdrop in'></div>").appendTo("body")
     @$el.html(@template.render(data))
     @parent_el.html @$el
     @textarea = @$("textarea[name='content']")
     @btn = @$(".submit-comment")
 
   hide: () ->
+    @$backdrop.remove()
     @el.remove()
 
   comment: () ->
