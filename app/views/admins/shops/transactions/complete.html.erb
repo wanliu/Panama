@@ -8,14 +8,14 @@
 <div class='row-fluid'>
   <div class='span8'>
     <section class='widget'>
-      <table class='table table-images table-hover complete'>
+      <table class='table table-hover table-images complete'>
         <thead>
           <tr>
-            <th class="span1">买家</th>
-            <th class="span2">订单编号</th>
-            <th class="span3">到货地址</th>
-            <th class="span2">下单日期</th>
-            <th class="span1">操作</th>
+            <th>买家</th>
+            <th>订单编号</th>
+            <th>到货地址</th>
+            <th>下单日期</th>
+            <th style="min-width:45px;">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +27,9 @@
                   <%= t.buyer.login %>
                 </td>
                 <td><%= t.number %></td>
-                <td style="text-align:left;"><%=t.address.try(:location) %></td>
+                <td style="text-align:left;">
+                  <%= t.address.location_without_contact %>
+                </td>
                 <td><%= t.created_at.strftime("%Y-%d-%m %H:%M") %></td>
                 <td>
                   <a class="btn btn-info btn-small" href="/shops/<%=t.seller.name %>/admins/transactions/<%= t.id %>">明细</a>
@@ -35,7 +37,9 @@
               </tr>
             <% end %>
           <% else %>
-            <tr class="widget"><td colspan="5">您暂时还没有担保交易记录</td></tr>
+            <tr class="widget">
+              <td colspan="5">您暂时还没有担保交易记录</td>
+            </tr>
           <% end %>
         </tbody>
       </table>
