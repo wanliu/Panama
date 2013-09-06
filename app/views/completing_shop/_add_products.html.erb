@@ -18,7 +18,7 @@
 						<button type="button" class="btn btn-transparent span4">搜索</button>
 					</div>
 				</div>
-				<%= render "category_selector" %>
+				<%= render "category_selector"%>
 			</div>
 			<div id="brands" class="tab-pane">
 			</div>
@@ -26,7 +26,7 @@
 	</div>
 	<div class="span4">
 		<div class='panel' style="margin-right:13px;">
-			<h4><i class='icon-th-large'></i> 分类商品
+			<h4><i class='icon-th-large'></i>分类商品
 				<!-- <i class="icon-foursquare"></i> -->
 				<button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
 			</h4>
@@ -37,7 +37,7 @@
 				</div>
 			</div>
 			<ul class='category_product_list product_list'>
-				<p class='info'><i class="icon-arrow-left"></i> 请从左边分类中选择添加...</p>
+				<p class='info'><i class="icon-arrow-left"></i>请从左边选择分类添加...</p>
 			</ul>
 			<div class="btn-group btn-group-vertical pull-right position">
 				<div class='buttons'>
@@ -64,14 +64,14 @@
 
 		<script type="text/javascript">
 			$('.category_product_list').slimScroll({ 
-				height     : 500 , 
+				height     : 500, 
 				railVisible: true
 			});
 		</script>
 	</div>
 	<div class="span4">
 		<div class='panel diffrent'>
-			<h4><i class='icon-th-large'></i> 库存商品</h4>
+			<h4><i class='icon-th-large'></i>库存商品</h4>
 			<div class='search-header'>
 				<div class="input-append controls-row">
 					<input class="span8" type="search" id="search-input2">
@@ -97,7 +97,7 @@
 		<script type="text/javascript">
 			var product_view = new ProductView({ 
 				el      : $(".my_product_list"), 
-				models  : <%=raw @products.to_json %>, 
+				models  : <%= raw @products.to_json %>, 
 				template: $("#product_show").html()
 			});
 
@@ -111,7 +111,10 @@
 					})
 				}
 			});
-			var scroll = $('.my_product_list').slimScroll({ height: 500 , railVisible: true});
+			var scroll = $('.my_product_list').slimScroll({ 
+				height: 500, 
+				railVisible: true
+			});
 			// $(".slimScrollDiv").css("overflow","")
 		</script>
 	</div>
@@ -121,11 +124,11 @@
 	var bind_editable = function(elem, class_name){
 		id = $(elem).attr("id")
 		$("."+ class_name , elem).editable({
-				type:  'text',
-				pk:    id,
-				name:  class_name,        
-				url:   "/shop_products/"+ id +"/update_attribute",  
-				title: 'change your '+class_name,
+				pk   :    id,
+				type :  'text',
+				name :  class_name,
+				title: 'change your '+ class_name,
+				url  :   "/shop_products/"+ id +"/update_attribute",
 				ajaxOptions: {
 					type: 'put',
 					dataType: 'json'
@@ -135,7 +138,7 @@
 						return 'This must be a number';
 						value = 0.0
 				}
-			}  
+			}
 		})
 	};
 
@@ -162,7 +165,7 @@
 	};
 
 	$(function(){
-		Filter("search-input1","category_product_list");
+		Filter("search-input1","category_product_list")
 		Filter("search-input2","my_product_list")
 	})
 </script>
