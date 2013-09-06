@@ -498,7 +498,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["delivery_manner_name"] = delivery_manner.try(:name)
     attra["buyer_login"] = buyer.try(:login)
     attra["seller_name"] = seller.name
-    attra["address"] = address.try(:location)
+    attra["address"] = address.try(:location_without_contact)
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra["stotal"] = stotal
@@ -600,9 +600,9 @@ class OrderTransaction < ActiveRecord::Base
 
   def number
     if id > 99999999
-      "WL#{ id }"
+      id
     else
-      "WL#{ '0' * (9 - id.to_s.length) }#{ id }"
+      "#{ '0' * (9 - id.to_s.length) }#{ id }"
     end
   end
 
