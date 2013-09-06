@@ -32,6 +32,7 @@ class Preview extends Backbone.View
     @btn = @$(".submit-comment")
 
   hide: () ->
+    $("body").removeClass("noScroll")
     @$backdrop.remove()
     @el.remove()
 
