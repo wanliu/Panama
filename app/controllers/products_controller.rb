@@ -30,7 +30,7 @@ class ProductsController < ApplicationController
   def base_info
     @product = Product.find(params[:id])
     respond_to do |format|
-      format.json{ render :json => @product }
+      format.json{ render :json => @product.as_json(:version_name => params[:version_name]) }
     end
   end
 

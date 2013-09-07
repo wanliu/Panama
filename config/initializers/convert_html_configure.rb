@@ -8,8 +8,15 @@ module TextFormatHtml
         include TextFormat::Html
 
         define_format_rule(/@(\w{3,20})/) do |login|
-          user = User.find_by(login: login[1..login.length-1])
-          user.nil? ? login : "<a href='/users/#{user.id}'>#{login}</a>"
+          if login.present?
+            login.slice!(0)
+            user = User.find_by(login: login)
+            login = "@#{login}"
+            if user.present?
+              login = "<a href='/users/#{user.id}'>#{login}</a>"
+            end
+            login
+          end
         end
       end
     end

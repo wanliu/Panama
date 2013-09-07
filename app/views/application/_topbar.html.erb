@@ -1,67 +1,71 @@
 <ul id='topbar' class="nav pull-right">
-  <form id="search-form" class="navbar-search">
-    <input type="search" class="search-query" placeholder="搜索...">
-  </form>
-  <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-    <i class="icon-plus"></i>&nbsp;发布</a>
-    <ul class="dropdown-menu publish">
-      <% if current_user.is_seller? && current_user.shop.try(:actived?) %>
-        <li>
-          <a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog" data-keyboard="false">优惠活动</a>
-        </li>
-      <% end %>
-      <li>
-        <a href="/ask_buy/new.dialog" class="create_buy" data-toggle='modal' data-target='#ask_buy_dialog' data-keyboard="false">求购信息</a>
-      </li>
-    </ul>
-  </li>
+	<form id="search-form" class="navbar-search">
+		<input type="search" class="search-query" placeholder="搜索...">
+	</form>
+	<li class="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		<i class="icon-plus"></i>&nbsp;发布</a>
+		<ul class="dropdown-menu publish">
+			<% if current_user.is_seller? && current_user.shop.try(:actived?) %>
+				<li>
+					<a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog" data-keyboard="false">
+						优惠活动
+					</a>
+				</li>
+			<% end %>
+			<li>
+				<a href="/ask_buy/new.dialog" class="create_buy" data-toggle='modal' data-target='#ask_buy_dialog' data-keyboard="false">
+					求购信息
+				</a>
+			</li>
+		</ul>
+	</li>
 
-  <!--购物车信息-->
-  <li class="dropdown shoppingcart">
-    <a href="#" title="cart" id="cart" class="dropdown-toggle" data-toggle="dropdown">
-       <i class="icon-shopping-cart handle"></i>
-      <span id="shop_count" class="badge badge-important">0</span>
-    </a>
-     <ul id="shopping-cart" class="dropdown-menu support" role="menu">
-      <li role="presentation">
-        <div class="details">
-          <%= render_widget :my_cart %>
-        </div>
-      </li>
-    </ul>
-  </li>
+	<!--购物车信息-->
+	<li class="dropdown shoppingcart">
+		<a href="#" title="我的购物车" id="cart" class="dropdown-toggle" data-toggle="dropdown">
+			<i class="icon-shopping-cart handle"></i>
+			<span id="shop_count" class="badge badge-important">0</span>
+		</a>
+		 <ul id="shopping-cart" class="dropdown-menu support" role="menu">
+			<li role="presentation">
+				<div class="details">
+					<%= render_widget :my_cart %>
+				</div>
+			</li>
+		</ul>
+	</li>
 
-  <!--商店入口-->
-  <% if current_user.is_seller? && current_user.shop.try(:name) && current_user.shop.actived? %>
-    <li class="dropdown">
-      <a href="/shops/<%= current_user.shop.name %>/">
-        <i class="icon-building handle"></i>
-      </a>
-    </li>
-  <% end %>
-  <li class="divider"></li>
-  <li><%= link_to_admin %></li>
-  <li class="hidden-phone dropdown">
-    <a href="#" title="Account" id="account" class="dropdown-toggle" data-toggle="dropdown">
-      <%= account_info %>
-    </a>
-    <ul id="account-menu" class="dropdown-menu account" role="menu">
-      <li role="presentation">
-        <%= link_to_account %>
-      </li>
-      <li><%= link_to_logout %></li>
-     </ul>
-  </li>
-  <li class="visible-phone">
-    <a href="#" class="btn-navbar" data-toggle="collapse" data-target=".sidebar" title="">
-      <i class="icon-reorder"></i>
-    </a>
-  </li>
+	<!--商店入口-->
+	<% if current_user.is_seller? && current_user.shop.try(:name) && current_user.shop.actived? %>
+		<li class="dropdown">
+			<a href="/shops/<%= current_user.shop.name %>/" title="我的商店">
+				<i class="icon-building handle"></i>
+			</a>
+		</li>
+	<% end %>
+	<li class="divider"></li>
+	<li><%= link_to_admin %></li>
+	<li class="hidden-phone dropdown">
+		<a href="#" title="我的头像" id="account" class="dropdown-toggle" data-toggle="dropdown">
+			<%= account_info %>
+		</a>
+		<ul id="account-menu" class="dropdown-menu account" role="menu">
+			<li role="presentation">
+				<%= link_to_account %>
+			</li>
+			<li><%= link_to_logout %></li>
+		 </ul>
+	</li>
+	<li class="visible-phone">
+		<a href="#" class="btn-navbar" data-toggle="collapse" data-target=".sidebar" title="">
+			<i class="icon-reorder"></i>
+		</a>
+	</li>
 </ul>
 <%= javascript_include_tag "my_cart" %>
 
 <script type="text/javascript">
-  var topbar = new TopBar({ el: "#topbar" });
-  // var pb = new PublishButton({el: ".publish_button"})
+	var topbar = new TopBar({ el: "#topbar" });
+	// var pb = new PublishButton({el: ".publish_button"})
 </script>

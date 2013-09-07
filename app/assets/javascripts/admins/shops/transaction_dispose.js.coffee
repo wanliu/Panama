@@ -182,4 +182,3 @@ class exports.TransactionDispose extends Backbone.View
       @add_direct data
     else
       @add_order data
-
