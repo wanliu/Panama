@@ -95,13 +95,13 @@ module ApplicationHelper
 
   def link_to_logout
     link_to logout_path, :method => :delete do
-      icon(:signout) + ' ' + t(:logout)
+      icon(:signout) + ' 注销登录'
     end
   end
 
   def link_to_admin
     if action_controller.respond_to?(:admin?)
-      link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings" do
+      link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings", :title => "商店管理" do
         icon :cog
       end
     end
@@ -109,7 +109,7 @@ module ApplicationHelper
 
   def link_to_account
     link_to person_path(current_user) do
-      icon(:user) + ' ' + t(:account)
+      icon(:user) + ' 我的账户'
     end
   end
 

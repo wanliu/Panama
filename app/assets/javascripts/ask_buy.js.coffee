@@ -27,6 +27,12 @@ class root.AskBuyView extends Backbone.View
     @$title = @$(".ask_buy_title")
     @init_attachment(@upload_params.data)
 
+    @$el.on "ajax:success", _.bind(@ajax_success, @)
+
+  ajax_success: () ->
+    pnotify({title: '提醒', text: "求购信息发布成功！"})
+    @atta_destroy_all()
+
   fetch_product: (product_id) ->
     return if _.isEmpty(product_id)
     $.ajax(
@@ -34,14 +40,19 @@ class root.AskBuyView extends Backbone.View
       url: "/products/#{product_id}/base_info",
       data: {version_name: @upload_params.version_name},
       success: (product) =>
-        @atta.destroy_all()
+        @attas.destroy_all()
         @$price.val(product.price)
         @$title.val(product.name)
         @init_attachment(product.attachments)
     )
 
+  atta_destroy_all: () ->
+    if @attas?
+      @attas.destroy_all()
+      @attas.add_blank_preview()
+
   init_attachment: (attachments) ->
-    @atta = new AttachmentUpload(
+    @attas = new AttachmentUpload(
       el: @$(".attachment-list"),
       data: attachments,
       default_enabled: false,

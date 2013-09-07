@@ -13,31 +13,28 @@ class HoverManager
 	signalProcess: (event) ->
 		_(@over_elements).include(event.currentTarget)
 
-
 	checkStatus: (event) ->
 
+
 class MyCart extends Backbone.View
-	# el: "#my_cart"
 	el: $('.shoppingcart')
 
 	events:
 		"click .shoppingcart": "toggleCartBox"
-		"click .clear_list": "clear_list"
+		"click .clear_list"  : "clear_list"
 
-	item_row: """
-		<tr id= "product_item{{id}}">
+	item_row: 
+		'<tr id="product_item{{id}}">
 			<td><img src="{{icon}}" ></td>
 			<td><span class="title" data-toggle="tooltip" title="{{title}}">{{title}}</span></td>
 			<td>{{amount}}</td>
 			<td class="row">{{total}}</td>
-		</tr>
-	"""
+		</tr>'
 
 	initialize: (@options) ->
 		@hm = new HoverManager($("a.handle, #cart_box"))
 		@totals_money()
 		@total_amounts()
-
 
 	toggleCartBox: (event) ->
 		$("#cart_box")
@@ -103,8 +100,6 @@ class MyCart extends Backbone.View
 			catch error
 				pnotify(title: "出错了", text: data, type: "error")
 
-
-
 	total_amounts: () ->
 		trs = @$(".cart_main tr")
 		s = 0
@@ -118,7 +113,6 @@ class MyCart extends Backbone.View
 				totals += parseFloat($(this).find(".row").html())
 			$(".cart_bottom tr td").html("商品总价：" + totals)
 
-
 	trHtml: (product_item) ->
 		row_tpl = Hogan.compile(@item_row)
 		row_tpl.render(product_item)
@@ -130,7 +124,6 @@ class MyCart extends Backbone.View
 		height: target.height()
 		opacity: 0.25
 
-class CartBox extends Backbone.View
 
 myCart = new MyCart
 
@@ -142,5 +135,5 @@ $ ->
 		myCart.addToCart($(selector), $form, urlAction)
 		false
 
+
 root.myCart = myCart
-root

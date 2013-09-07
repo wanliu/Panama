@@ -80,9 +80,9 @@
       el: $("table.untransactions"),
       realtime_url: '<%= faye_server_uri %>',
       shop: {
-        name: "<%=current_shop.name %>",
-        id: "<%=current_shop.id %>",
-        token: "<%=current_shop.im_token %>"},
+        name: "<%= current_shop.name %>",
+        id: "<%= current_shop.id %>",
+        token: "<%= current_shop.im_token %>"},
       tranOpts: {
         transactions: {
           tran_panel: $(".transaction_list"),
@@ -93,11 +93,11 @@
           tran_card: direct_transaction
         }
       },
-      template: Hogan.compile("<%=j render :partial => 'untransaction' %>")
+      template: Hogan.compile("<%= j render :partial => 'untransaction' %>")
     })
 
-    dispose_view.add_directs(<%=@undirect_tansactions.as_json.to_json.html_safe %>)
-    dispose_view.add_orders(<%=@untransactions.as_json.to_json.html_safe %>)
+    dispose_view.add_directs(<%= @undirect_tansactions.as_json.to_json.html_safe %>)
+    dispose_view.add_orders(<%= @untransactions.as_json.to_json.html_safe %>)
 
     new TransactionBubbling({
       url: "http://<%=request.env['HTTP_HOST'] %>/shops/<%=current_shop.name %>/admins/pending#order"
@@ -108,4 +108,3 @@
     })
   </script>
 </div>
-

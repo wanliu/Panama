@@ -13,7 +13,7 @@ class Address < ActiveRecord::Base
   belongs_to :addressable, :polymorphic => true
 
   def location_without_contact
-    "#{country}#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}#{road}，邮编#{zip_code}"
+    "#{country}#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}#{road}"
   end
 
   def location
