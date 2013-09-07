@@ -121,12 +121,14 @@ class TransactionCard extends TransactionCardBase
     url = @transaction.urlRoot
     delivery_type_id = @$("select.order_delivery_type_id").val()
     @transaction.fetch(
-        url: "#{url}/get_delivery_price",
-        data: {delivery_type_id: delivery_type_id},
-        type: "POST",
-        success: (model, data) ->
-            @$("input:hidden.price").val(data.delivery_price)
-            @$(".delivery_price").html("¥ #{parseFloat(data.delivery_price).toFixed(2)}")
+      type: "POST",
+      url: "#{url}/get_delivery_price",
+      data: {
+        delivery_type_id: delivery_type_id
+      },
+      success: (model, data) ->
+        @$("input:hidden.price").val(data.delivery_price)
+        @$(".delivery_price").html(data.delivery_price.toMoney())
     )
 
   validate_transfer: (transfers, form) ->
