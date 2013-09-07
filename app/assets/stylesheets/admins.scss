@@ -33,7 +33,7 @@ $left-side-admin-width: 160px;
       margin: 15px;
       width: 120px;
       margin-bottom: 5px;
-    } 
+    }
 }
 }
 
@@ -119,12 +119,6 @@ $left-side-admin-width: 160px;
 }
 
 
-.comment-list {
-  .product-comment{
-    @include panel-background;
-  }
-}
-
 #category-selector .side-nav li i[class*=icon] {
   float: left;
 }
@@ -186,6 +180,7 @@ $left-side-admin-width: 160px;
   border-top: 1px solid #222;
   border-top: 1px solid rgba(51,51,51,0.25);
   border-left: 3px solid transparent;
+
   .product_img {
     width: 50px;
     float: left;
@@ -205,22 +200,25 @@ $left-side-admin-width: 160px;
     }
   }
 
-
   &:hover {
     @include transparent(rgb(51,51,51), 0.25);
-    border-left: 3px solid $red;
+    // border-left: 3px solid $red;
   }
 }
 
-.checked_product{
-  background-color: rgba(51, 51, 51, 0.6);
+.checked_product {
+  @include transparent(rgb(51,51,51), 0.6);
   border-left: 3px solid $red;
+
+  &:hover {
+    @include transparent(rgb(51,51,51), 0.6);
+    border-left: 3px solid $red;
+  }
 }
 
 .dialog_product .nav-tabs {
   border-bottom: none;
   margin-bottom: 2px;
-
 }
 
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
@@ -267,7 +265,7 @@ $left-side-admin-width: 160px;
   }
 
   .form-horizontal .controls {
-    margin-left: 100px !important; 
+    margin-left: 100px !important;
   }
 
   .section {
@@ -328,7 +326,7 @@ $left-side-admin-width: 160px;
 }
 
 .paddings{
-  padding-top: 20px; 
+  padding-top: 20px;
 }
 
 
