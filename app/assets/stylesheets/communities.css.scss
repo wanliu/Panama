@@ -105,6 +105,8 @@
     }
 
     .topic-comments{
+      /*max-height: 300px;
+      overflow: auto;*/
       margin-top: 15px;
 
       .more_comment, .hide_more_comment{
@@ -191,7 +193,7 @@
 
 
         textarea{
-          width: 80%;
+          width: 96%;
           margin-left: 10px;
           height: 75px;
         }
