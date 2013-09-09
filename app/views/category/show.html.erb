@@ -1,8 +1,8 @@
-<% @products.each do |product| %>
-	<div class="well">
-		<%= link_to product do
-			image_tag(product.photos.header)
-		end%>
-		<div><%= product.name %></div>
-	</div>
+<% @shop_products.each do |product| %>
+  <div class="widget">
+    <%= link_to product do
+      image_tag(product.photos.header)
+    end %>
+    <div><%= product.name %></div>
+  </div>
 <% end %>

@@ -6,12 +6,12 @@ class CategoryController < ApplicationController
 
   def index
     @category = Category.where(:name => '_products_root').first
-    @products = Product.page params[:page]
+    @products = ShopProduct.page(params[:page] || 1)
   end
 
   def show
     @category = Category.find(params[:id])
-    @products = Product.where(:category_id => @category).limit(60)
+    @shop_products = ShopProduct.search2("category.id:#{@category.id}").results
   end
 
   def products

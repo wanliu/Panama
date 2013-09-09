@@ -15,7 +15,7 @@ class SearchController < ApplicationController
   end
 
   def products
-    query = params[:q]
+    query = filter_special_sym(params[:q])
     s = Tire.search ["products", "shop_products"] do
         query do
           string "name:#{query}"
