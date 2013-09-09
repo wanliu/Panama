@@ -327,7 +327,10 @@
   .address-list{
     .address {
       @include panel-background;
-
+      background-color: rgba(51, 51, 51, 0.25);
+      border-width: medium;
+      border-style: dashed;
+      border-color: rgb(188, 194, 115);
       .in-box {
         position: relative;
         overflow: hidden;
@@ -405,4 +408,23 @@
 
 .user-community-people .search_user input {
   width: 182px;
+}
+.address-details{
+  .code{
+    border:1px red solid;
+    padding: 6px 10px 6px 10px;
+  }
+  .m-t{
+    margin-top: 5px;
+  }
+  .button_group{
+    margin-top: -30px;
+  }
+  .stamp-image{
+    height:80px;
+    width:80px;
+    border:2px dashed #887979;
+    background-color:#fff;
+    padding:6px;
+  }
 }
