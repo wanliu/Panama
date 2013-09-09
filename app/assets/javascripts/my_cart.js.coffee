@@ -13,31 +13,32 @@ class HoverManager
 	signalProcess: (event) ->
 		_(@over_elements).include(event.currentTarget)
 
-
 	checkStatus: (event) ->
 
+
 class MyCart extends Backbone.View
-	# el: "#my_cart"
 	el: $('.shoppingcart')
 
 	events:
 		"click .shoppingcart": "toggleCartBox"
-		"click .clear_list": "clear_list"
+		"click .clear_list"  : "clear_list"
 
-	item_row: """
-		<tr id= "product_item{{id}}">
+	item_row: 
+		'<tr id="product_item{{id}}" class="cart_main">
 			<td><img src="{{icon}}" ></td>
-			<td><span class="title" data-toggle="tooltip" title="{{title}}">{{title}}</span></td>
+			<td>
+				<span class="title" data-toggle="tooltip" title="{{title}}">
+					{{title}}
+				</span>
+			</td>
 			<td>{{amount}}</td>
 			<td class="row">{{total}}</td>
-		</tr>
-	"""
+		</tr>'
 
 	initialize: (@options) ->
 		@hm = new HoverManager($("a.handle, #cart_box"))
-		@totals_money()
 		@total_amounts()
-
+		@totals_money()
 
 	toggleCartBox: (event) ->
 		$("#cart_box")
@@ -53,8 +54,8 @@ class MyCart extends Backbone.View
 	      type: "post",
 	      url: "/mycart/clear_list",
 	      success: () =>
-	       $(".cart_main tr").remove()
-	       $("#shop_count").html($(".cart_main tr").size())
+	       $(".cart_main").remove()
+	       $("#shop_count").html($(".cart_main").size())
 	       @totals_money()
     	})
 
@@ -91,33 +92,30 @@ class MyCart extends Backbone.View
 				trObj = $("#product_item#{item.id}")
 				trObj.replaceWith(@trHtml(item))
 			else
-				$(".cart_main").append(@trHtml(item))
+				$(".cart_table").append(@trHtml(item))
 				$("#cart_box .checkout").removeClass("disabled")
 			@total_amounts()
 			@totals_money()
-			pnotify(title: "系统提醒", text: "加入购物成功！")
-		.fail (data) ->
+			pnotify(title: "系统提醒", text: "加入购物车成功！")
+		.fail (data) =>
 			try
 				messages = JSON.parse(data.responseText)
 				pnotify(title: "出错了", text: messages.join(), type: "error")
 			catch error
 				pnotify(title: "出错了", text: data, type: "error")
 
-
-
 	total_amounts: () ->
-		trs = @$(".cart_main tr")
+		trs = @$(".cart_main")
 		s = 0
 		for e in trs
 			s += parseInt($(e).find("td:nth(2)").text())
 		$("#shop_count").html(s)
 
 	totals_money: () ->
-		totals = 0.0
-		$(".cart_main tr").each () ->
-				totals += parseFloat($(this).find(".row").html())
-			$(".cart_bottom tr td").html("商品总价：" + totals)
-
+		totals = 0
+		$(".cart_main").each (i, e) =>
+			totals += parseFloat($(e).find(".row").text())
+		$("#cart_box .product_total").html("总计：￥#{totals.toFixed(2)}")
 
 	trHtml: (product_item) ->
 		row_tpl = Hogan.compile(@item_row)
@@ -130,17 +128,16 @@ class MyCart extends Backbone.View
 		height: target.height()
 		opacity: 0.25
 
-class CartBox extends Backbone.View
 
 myCart = new MyCart
 
 $ ->
-	$("[add-to-cart]").on "click", (event) ->
+	$("[add-to-cart]").on "click", (event) =>
 		$form     = $(@).parents("form")
 		selector  = $(@).attr('add-to-cart')
 		urlAction = $(@).attr('add-to-action')
 		myCart.addToCart($(selector), $form, urlAction)
 		false
 
+
 root.myCart = myCart
-root

@@ -61,13 +61,12 @@
           <div class="modal-body">
             <%= hidden_field 'activity', 'id', :value => activity.id %>
             <%= f.label :price %>
-            <input type='text' class='span12' value="<%=activity.activity_price %>"  readonly=true />
+            <input type='text' class='span12' value="<%= activity.activity_price %>"  readonly="true" />
             <%= f.input :amount, input_html: {
               :class => "span12"
             } %>
           </div>
           <div class="modal-footer">
-
             <div class="btn-group">
               {{#liked}}
               <a class="btn unlike-button active" href="#">取消喜欢</a>
@@ -94,7 +93,9 @@
 <script type="text/template" id="comment-template">
   <div class="comment hide">
     <img class="people-image" src="<%= current_user.avatar %>">
-    <span class="author-name"><%= current_user.login %></span>
+    <span class="author-name">
+      <%= current_user.login %>
+    </span>
     <div class="message">
       <%%= content %>
     </div>

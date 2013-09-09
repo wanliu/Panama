@@ -1,12 +1,13 @@
 <div class='row-fluid user_info'>
 	<div class='span8 widget'>
-		<%= render  :partial => "people/base/user_info",
+		<div class="paddings">
+			<%= render  :partial => "people/base/user_info",
 		:locals => { :url => "/user_checkings/update_user_auth" } %>
-		<input type="button" class="modify pull-right btn" value="修改">
-		<%= render :partial => "people/user_login_info" %>
-		<br />
-		<br />
-	</div>
+		<input type="button" class="modify pull-right btn"  value="修改">
+		</div>
+		<div class="paddings">
+			<%= render :partial => "people/user_login_info" %>
+		</div>
 </div>
 
 <script type="text/javascript">

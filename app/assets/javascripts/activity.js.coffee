@@ -5,7 +5,6 @@
 #= require jquery
 #= require backbone
 #= require lib/hogan
-#= require my_cart
 #= require ask_buy_preview
 
 root = window || @

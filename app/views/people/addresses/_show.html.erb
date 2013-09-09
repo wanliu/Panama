@@ -1,28 +1,46 @@
 <div class="address address<%=address.id%>">
 	<div class="address-details">
-		<div class="address-button">
-			<h4><%= address.try(:location_without_contact) %></h4>
-			<div class="pull-right">
-				<a class="btn" data-toggle="modal" href="addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
-				<%= button_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn btn-danger" %>
-			</div>
-		</div>
 		<div class="in-box">
 			<div class="row-fluid">
+				<div class="pull-left m-t">
+					<% address.zip_code.length.times do |i| %>
+						<span class="code"><%= address.zip_code[i] %></span>
+					<% end %>
+				</div>
+				<div class="pull-right">
+						<img src="/assets/beauty.jpg" class="stamp-image">
+				</div>
+			</div>
+			<div class="row-fluid offset1" style="margin-top:-50px;">
+				<div class="span8">
+					<h5><%= address.try(:location_without_contact) %></h5>
+				</div>
+			</div>
+			<div class="row-fluid offset1">
 				<div class="span2">
-					<label class="control-label">联系人：</label>
+					<label class="control-label"><i class=" icon-user-md"></i>&nbsp;联系人：</label>
 				</div>
 				<div class="span10">
 					<%= address.try(:contact_name) %>
 				</div>
 			</div>
 
-			<div class="row-fluid">
+			<div class="row-fluid offset1">
 				<div class="span2">
-					<label class="control-label">联系电话：</label>
+					<label class="control-label"><i class="icon-phone-sign"></i>&nbsp;电&nbsp;&nbsp;&nbsp;话：</label>
 				</div>
-				<div class="span10">
+
+				<div class="span6">
 					<%= address.try(:contact_phone) %>
+				</div>
+			</div>
+
+			<div class="row-fluid button_group">
+				<div class="pull-right" style="height:30px;">
+					<%= button_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn btn-danger" %>
+				</div>
+				<div class="pull-right">
+					<a class="btn" data-toggle="modal" href="addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
 				</div>
 			</div>
 		</div>

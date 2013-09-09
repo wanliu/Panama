@@ -75,37 +75,46 @@
   position: relative;
 }
 
-.main-sidebar {
-}
-
 // .right-sidebar {
 //   width: 300px;
 //   position: absolute;
 //   right: 0px;
 // }
 
-.product-item {
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid $tableBorder;
-
-  h1 {
-    font-size: 18px;
-    line-height: 18px;
-  }
-
-  &:hover {
-    border-color: $blue;
-    @include box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
-  }
-}
-
 .cart-container {
+  .cart-total {
+    // margin-bottom: 10px;
+    // padding: 10px;
+    // border: 1px solid $tableBorder;
+    div {
+      display: inline-block;
+    }
+  }
+
+  .product-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    // border: 1px solid $tableBorder;
+
+    h1 {
+      font-size: 18px;
+      line-height: 18px;
+    }
+
+    &:hover {
+      border-color: $blue;
+      @include box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
+    }
+  }
+
   table {
     tr {
       td {
         input {
           margin-top: 15px;
+          &.spinner-input{
+            width: 20px;
+          }
         }
         .img-seller {
           width: 30px;
@@ -126,26 +135,6 @@
       }
     }
   }
-
-  .cart-total {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid $tableBorder;
-    text-align: right;
-    div {
-      display: inline-block;
-    }
-  }
-
-  .form-actions {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-    @include transparent(rgb(51,51,51), 0.25);
-    border-top: none;
-    form {
-      float: right;
-    }
-  }
 }
 
 .controls {
@@ -155,7 +144,6 @@
 }
 
 .depend_select {
-
   width: 90px;
 }
 
@@ -163,52 +151,48 @@
   cursor: pointer;
 }
 
-.transaction-body{
-
-  .label_zip_code{
+.transaction-body {
+  .label_zip_code {
     width: 76px !important;
   }
 
-  .row-fluid{
+  .row-fluid {
     line-height: 30px;
     /*padding-left: 20px;*/
 
-    .title{
+    .title {
       text-align: right;
       padding-right: 10px;
     }
   }
 
-  .address-form{
+  .address-form {
     .controls, .controls-row{
       margin-left: 90px;
     }
-    .control-label{
+    .control-label {
       width: 80px;
     }
 
-    .contact_name_wrapper, .contact_phone_wrapper{
+    .contact_name_wrapper, .contact_phone_wrapper {
       float: left;
       width: 50%;
-
-
     }
 
-    input, select{
+    input, select {
       min-height: 100%;
       height: 30px;
     }
   }
 
-  .returned_panel{
-    input, select{
+  .returned_panel {
+    input, select {
       min-height: 100%;
       height: 30px;
     }
   }
 
   .paymanner{
-
     .paymanner_panel{
       line-height:30px;
 
@@ -343,7 +327,10 @@
   .address-list{
     .address {
       @include panel-background;
-
+      background-color: rgba(51, 51, 51, 0.25);
+      border-width: medium;
+      border-style: dashed;
+      border-color: rgb(188, 194, 115);
       .in-box {
         position: relative;
         overflow: hidden;
@@ -360,6 +347,13 @@
 .user_info {
   $margin-top: 20px;
 
+  .paddings{
+    padding-bottom: 40px;
+  }
+  hr{
+    margin: 0px;
+  }
+
   .modify{
     margin-right: 20px;
     width: 80px;
@@ -371,11 +365,7 @@
 
   .section {
     margin-bottom: 20px;
-
-    legend {
-      margin-bottom: 0px;
-    }
-
+    margin-top: 20px;
     .reset_avatar {
       min-width: 150px;
       max-height: 200px;
@@ -418,4 +408,23 @@
 
 .user-community-people .search_user input {
   width: 182px;
+}
+.address-details{
+  .code{
+    border:1px red solid;
+    padding: 6px 10px 6px 10px;
+  }
+  .m-t{
+    margin-top: 5px;
+  }
+  .button_group{
+    margin-top: -30px;
+  }
+  .stamp-image{
+    height:80px;
+    width:80px;
+    border:2px dashed #887979;
+    background-color:#fff;
+    padding:6px;
+  }
 }

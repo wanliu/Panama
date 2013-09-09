@@ -115,6 +115,7 @@ class CommentView extends Backbone.View
     @comment_nav.find(".nav_tag").hide()
 
   reply: () ->
+    $(@el).parents().find(".show_comment").hide()
     @trigger("set_reply_user", @model.get("user_login"))
 
   remove: () ->
