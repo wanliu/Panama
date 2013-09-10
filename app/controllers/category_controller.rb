@@ -14,6 +14,16 @@ class CategoryController < ApplicationController
     @shop_products = ShopProduct.search2("category.id:#{@category.id}").results
   end
 
+  def category_products
+    @category = Category.find(params[:id])
+    @products = Product.where("category_id in (?) ", @category.descendants.map { |c| c.id })
+
+    respond_to do |format|
+      # format.html 
+      format.json { render json: @products }
+    end
+  end
+
   def products
     @category = Category.find(params[:id])
     @shop_products = Shop.find(params[:shop_id]).shop_products

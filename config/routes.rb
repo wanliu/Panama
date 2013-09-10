@@ -233,11 +233,12 @@ Panama::Application.routes.draw do
 
   resources :category do
     member do
-      get "products"
+      get :products
+      get :category_products
     end
   end
-  # shop admins routes
 
+  # shop admins routes
   resources :shops, :except => :index do
     collection do
       get "topic_categories/:id", :to => "shops#topic_categories"
