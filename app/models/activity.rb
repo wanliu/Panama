@@ -32,7 +32,7 @@ class Activity < ActiveRecord::Base
 
   def notice_author(sender, message)
     notifications.create({
-      :user_id => sender.id, 
+      :user_id => sender.id,
       :mentionable_user_id => author.id,
       :url => "/activities/#{id}",
       :body => message
@@ -60,7 +60,7 @@ class Activity < ActiveRecord::Base
   end
 
   validates :title, :activity_price, :price,:start_time, :end_time, :shop_product_id, :presence => true
-  validates :price, :activity_price, :numericality => { :greater_than => 0 }
+  validates :price, :activity_price, :numericality => { :greater_than_or_equal_to => 0 }
 
   def like
     likes.size

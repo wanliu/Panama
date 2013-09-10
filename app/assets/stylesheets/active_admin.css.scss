@@ -82,3 +82,11 @@ body.system_categories{
     width: 80%;
   }
 }
+
+.fragments-group>li{
+  float: left;
+
+  >label{
+    float: none !important;
+  }
+}

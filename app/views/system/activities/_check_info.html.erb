@@ -19,8 +19,10 @@
 			<td><%= @activity.description %></td>
 		</tr>
 		<tr>
-			<td>活动产品</td>
-			<td><%= @activity.product_id %></td>
+			<td>商店</td>
+			<td>
+				<%= @activity.shop.name %>
+			</td>
 		</tr>
 		<tr>
 			<td>价格</td>
