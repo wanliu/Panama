@@ -643,7 +643,7 @@ ul {
 	width: 80px;
 
 	.notices-list{
-		li .transaction-info{
+		li .transaction-info, li .activity-info{
 			display: none;
 		}
 	}
@@ -717,7 +717,7 @@ ul {
 			width: 300px;
 			// margin-left: -120px;
 
-			.transaction-info{
+			.transaction-info, .activity-info{
 				display: block;
 			}
 		}
