@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 ActiveAdmin.register Activity do
+  form :partial => "form"
 
   scope :等待审核, default: true do
     Activity.where("status = ?", Activity.statuses[:wait])
