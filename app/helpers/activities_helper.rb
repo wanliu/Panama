@@ -24,6 +24,8 @@ module ActivitiesHelper
       case activity.class.name
       when "AskBuy"
         render "ask_buy/preview", ask_buy: activity
+      when "ShopProduct"
+        render "shop_products/preview", shop_product: activity
       else
       end
     end
