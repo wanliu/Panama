@@ -6,11 +6,11 @@ ActiveAdmin.register Activity do
     Activity.where("status = ?", Activity.statuses[:wait])
   end
 
-  scope :被驳回 do
+  scope :未通过 do
     Activity.where("status = ?", Activity.statuses[:rejected])
   end
 
-  scope :已审核通过 do
+  scope :已通过 do
     Activity.where("status = ?", Activity.statuses[:access])
   end
 
