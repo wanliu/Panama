@@ -20,10 +20,6 @@
 	top: 0px;
 }
 
-.wrap {
-	margin-left: 300px;
-}
-
 #category-sidebar {
 	.second_class_categories {
 		top: 0;
@@ -43,6 +39,7 @@
 			margin-left: 20px;
 			padding: 10px 0;
 			border-bottom: 1px dashed;
+
 			& > a {
 				border-bottom: 1px solid white;
 				text-align: left;
@@ -50,6 +47,7 @@
 				display: block;
 				padding: 4px 10px 4px 0;
 			}
+			
 			li.third_class_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
