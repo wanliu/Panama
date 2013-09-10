@@ -237,7 +237,7 @@ module ApplicationHelper
             end)
           else
             output.concat(content_tag(:li) do
-              link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name, 'class' => 'leaf_node', 'onclick' => 'javascript:void(0);return false;' 
+              link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name, 'class' => 'leaf_node', 'onclick' => 'javascript:void(0);return false;'
             end)
           end
         end

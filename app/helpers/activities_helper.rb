@@ -24,8 +24,15 @@ module ActivitiesHelper
       case activity.class.name
       when "AskBuy"
         render "ask_buy/preview", ask_buy: activity
+      when "ShopProduct"
+        render "shop_products/preview", shop_product: activity
       else
       end
     end
+  end
+
+  def product_categories
+    category_ids = ShopProduct.joins(:product).select("distinct category_id").limit(10).pluck(:category_id)
+    Category.where(:id => category_ids)
   end
 end

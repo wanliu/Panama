@@ -63,5 +63,11 @@ class Category < ActiveRecord::Base
     hash = {name: '_products_root', ancestry: nil}
     where(hash).first_or_create(hash)
   end
+
+  def self.last_children
+    Category.joins("left join categories as c
+      on concat(categories.ancestry,'/',categories.id)=c.ancestry")
+    .where("c.ancestry is NULL and not categories.ancestry is NULL")
+  end
 end
 
