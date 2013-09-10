@@ -21,10 +21,20 @@ ActiveAdmin.register Activity do
         image_tag row.attachments.first.file.url("100x100")
       end
     end
-    column :description
+    column :title
+    column '商店' do |a|
+      a.shop.try(:name)
+    end
     column :author
 
-    default_actions
+    column do |c|
+      link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
+      if c.status == Activity.statuses[:rejected]
+        link_2 = link_to "编辑", edit_system_activity_path(c), :class =>"member_link"
+        link_3 = link_to "删除", system_activity_path(c), :method => :delete, :confirm => "Are you sure?", :class =>"member_link"
+      end
+      link_1 + (link_2 || "") + (link_3 || "")
+    end
   end
 
   show do
