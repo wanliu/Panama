@@ -4,6 +4,7 @@
 
 @import "core";
 @import "shops";
+@import "lib/transparent";
 
 .category-sidebar {
 	width: 280px;
@@ -11,12 +12,12 @@
 
 
 #category-sidebar.affix-top {
-  position: absolute;
+ 	position: absolute;
 }
 
 #category-sidebar {
-  width: 200px;
-  top: 0px;
+	width: 170px;
+	top: 0px;
 }
 
 .wrap {
@@ -25,15 +26,16 @@
 
 #category-sidebar {
 	.second_class_categories {
+		top: 0;
+		left: 180px;
 		height: auto;
+		display: none;
+		min-width: 752px;
 		position: absolute;
 		padding-right: 20px;
 		padding-bottom: 20px;
-		background-color: rgba(63, 184, 175, 0.91);
-		top: 0;
-		left: 201px;
-		min-width: 752px;
-		display: none;
+		@include transparent(rgb(62, 112, 108), 0.91);
+		
 		.second_class_category_tree {
 			width: 230px;
 			display: inline-block;

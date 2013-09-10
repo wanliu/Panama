@@ -7,14 +7,7 @@
   <%# end %>
   <body class="<%= controller.controller_name %>" style="zoom: 1">
     <%= render "chromeframe" %>
-    <div class="logo" data-spy="affix" data-offset-top="20">
-      <h4>
-        <a href="/">
-          <img src="/assets/logo-large.png" style="height:40px;width:60px;" />
-          <span class='title'>万流市场</span>
-        </a>
-      </h4>
-    </div>
+    <%= render "logo" %>
     <%= render "left_sidebar" %>
     <div class="wrap">
       <%= render "header" %>
