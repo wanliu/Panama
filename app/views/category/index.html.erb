@@ -6,12 +6,6 @@
 </div>
  -->
  <div class="main">
-	<!-- <section class="widget">
-	    <div class="body">
-	        <h3 class='page-title'>
-			</h3>
-	    </div>
-	 </section> -->
 	<div id="activities">
 			<!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
 		<% (0...@products.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
@@ -22,8 +16,5 @@
 			 </div>
 		<% end %>
 	</div>
-  	<script type="text/javascript">
-		new ActivitiesView({el: '#activities'})
-    </script>
 </div>
 <%= paginate  @products %>

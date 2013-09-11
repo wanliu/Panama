@@ -1,0 +1,134 @@
+<div id="activity" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">活动调整</h3>
+  </div>
+  <form class="schedule">
+    <div class="modal-body">
+      <div class="row-fluid span9 ">
+        <input class="activity_id" type="hidden">
+        <div class="row offset2">
+          标题: <input class="title" type="text" readOnly = "readOnly">
+        </div>
+        <div class="row offset2">
+          描述: <input class="description" type="text" readOnly = "readOnly">
+        </div>
+        <div class="row offset2">
+          起始时间:<input class="begin_time" type="date">
+        </div>
+        <div class="row offset2">
+          起始时间:<input class="end_time" type="date">
+        </div>
+       </div>
+    </div>
+  </form>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="update_activities btn btn-primary">保存</button>
+  </div>
+</div>
+<div id='calendar'></div>
+<div id='text'></div>
+<script type="text/javascript">
+
+$(document).ready(function () {
+  $(".update_activities").bind("click",function(){
+    eventt = getData();
+    updateEvent(eventt);
+  });
+  DisplayCalendar();
+})
+
+function getData(){
+  var eventt = new Object();
+  eventt.id = $(".activity_id").val();
+  eventt.title = $(".title").val();
+  eventt.start_time = $(".begin_time").val();
+  eventt.end_time = $(".end_time").val();
+  eventt.description = $(".description").val();
+  $('#activity').modal('hide');
+  return eventt;
+}
+
+function updateEvent(my_event,dayDelta,minuteDelta,revertFunc) {
+  datas = JSON.stringify(my_event);
+  $.ajax({
+    type: "POST",
+    contentType: "application/json",
+    dataType: "json",
+    data: datas ,
+    url: "/system/activities/"+ my_event.id + "/modify",
+  });
+}
+
+function DisplayCalendar() {
+  $('div[id*=calendar]').fullCalendar({
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+    buttonText:{
+      prev:     '上翻',
+      next:     '下翻',
+      prevYear: '去年',
+      nextYear: '明年',
+      today:    '今天',
+      month:    ' 月 ',
+      week:     ' 周 ',
+      day:      ' 日 '
+    },
+    selectable: true,
+    editable:true,
+    defaultView: 'month',
+    height: 500,
+    slotMinutes: 30,
+    timeFormat: 'h:mm t{ - h:mm t} ',
+    dragOpacity: "0.5",
+
+    events: function(start, end, callback) {
+      $.ajax({
+          url: '/system/activities/schedule_sort1',
+          dataType: 'json',
+          data: {
+              start: Math.round(start.getTime() / 1000),
+              end: Math.round(end.getTime() / 1000)
+          },
+          success: function(data){
+            var events =[];
+            $(data).each(function(){
+              events.push({
+                id : this.id,
+                title: this.title,
+                description: this.description,
+                start: this.start_time,
+                end: this.end_time
+              });
+            });
+            callback(events);
+          }
+      });
+    },
+
+    eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
+      updateEvent(event,dayDelta);
+    },
+
+    eventResize: function(event, dayDelta, minuteDelta, revertFunc){
+      updateEvent(event,dayDelta);
+    },
+
+    eventClick: function(event, element) {
+      $(".activity_id").val(event.id);
+      $(".title").val(event.title);
+      $(".description").val(event.description);
+      $(".begin_time").val((event.start).format("yyyy-MM-dd"));
+      $(".end_time").val((event.end).format("yyyy-MM-dd"));
+      $('#activity').modal();
+      $('#calendar').fullCalendar('updateEvent', event);     
+    }
+  })
+}
+
+
+</script>
