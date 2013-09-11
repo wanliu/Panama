@@ -20,8 +20,8 @@
 			wrap_id: 'shop_products'
 		})
 		new LoadShopProducts({
-			el: $('.shop_products_panel'),
 			shop_id: <%= @shop.id %>,
+			el: $('.shop_products_panel'),
 			template: Hogan.compile("<%= j render 'shop_products/page' %>")
 		})
 	})

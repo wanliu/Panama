@@ -29,8 +29,6 @@ class ShopProductView extends Backbone.View
 			@template = data
 			handle.call(@)
 			@delegateEvents()
-			#$.get "/products/#{@product_id}?layout=false", (data) =>
-			# $(".main-show").html(data)
 
 	render: () ->
 		tpl = Hogan.compile(@template)
