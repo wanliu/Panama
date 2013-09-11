@@ -26,9 +26,15 @@ class Activity < ActiveRecord::Base
   # validates_associated :product
   validates_presence_of :author
 
+  validate :validate_update_access?, :on => :update
+
   define_graphical_attr :photos, :handler => :default_photo
 
   before_create :init_data
+
+  before_destroy do
+    validate_destroy_access?
+  end
 
   def notice_author(sender, message)
     notifications.create({
@@ -104,4 +110,16 @@ class Activity < ActiveRecord::Base
     UserMailer.delay.send_activity_rejected_notify(author.email, author, rejected_reason, url)
   end
 
+  def validate_destroy_access?
+    if Activity.statuses[:access] == self.status
+      errors.add(:status, "已经审核了,不能删除！")
+      return false
+    end
+  end
+
+  def validate_update_access?
+    if Activity.statuses[:access] == self.status
+      errors.add(:status, "已经审核了,不能修改！")
+    end
+  end
 end
