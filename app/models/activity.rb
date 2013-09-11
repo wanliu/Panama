@@ -5,6 +5,10 @@ class Activity < ActiveRecord::Base
   include Tire::Model::Callbacks
   include MessageQueue::Activity
 
+  scope :wait,lambda{ where(:status => statuses[:wait]) }
+  scope :access,lambda{ where(:status => statuses[:access]) }
+  scope :rejected,lambda{ where(:status => statuses[:rejected]) }
+
   attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
                   :description, :like, :participate, :author_id, :status, :rejected_reason
 
@@ -76,7 +80,6 @@ class Activity < ActiveRecord::Base
     participates.size
   end
 
-
   def as_json(options = nil)
     atts = super(:include => {
           :author   => {
@@ -102,6 +105,15 @@ class Activity < ActiveRecord::Base
     { :wait => 0, :access => 1, :rejected => 2 }
   end
 
+  def start_sale?
+    if Activity.statuses[:access] == status
+      if start_time < DateTime.now
+        return true
+      end
+    end
+    return false
+  end
+
   def send_checked_mail
     UserMailer.delay.send_activity_checked_notify(author.email, author, url)
   end
@@ -118,7 +130,7 @@ class Activity < ActiveRecord::Base
   end
 
   def validate_update_access?
-    if Activity.statuses[:access] == self.status
+    if Activity.statuses[:access] == Activity.find(self.id).status
       errors.add(:status, "已经审核了,不能修改！")
     end
   end

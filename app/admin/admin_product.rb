@@ -38,7 +38,9 @@ ActiveAdmin.register Product, :title => "产品" do
 
     end
     column :action_link do |product|
-      link_to "修改", edit_plus_system_product_path(product)
+      link_1 = link_to "修改", edit_plus_system_product_path(product), :class => :member_link
+      link_2 = link_to "查看", system_product_path(product)
+      link_1 + link_2
     end
   end
 

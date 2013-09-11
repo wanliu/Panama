@@ -46,7 +46,7 @@ class Activities::AuctionController < Activities::BaseController
       [:start_time, :end_time].each do |field|
         unless activity_params[field].blank?
           date = Date.strptime(activity_params[field], '%m/%d/%Y')
-          activity_params[field] = date.to_time.in_time_zone
+          activity_params[field] = Time.zone.parse(date.to_s)
         end
       end
     end

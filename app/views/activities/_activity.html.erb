@@ -78,10 +78,12 @@
               {{/liked}}
             </div>
             <div class="btn-group">
+              <% if activity.start_sale? %>
               <button class="btn btn-danger" type="submit" name="join">
                 <%= icon(:'shopping-cart', :white) + " 参与" %>
               </button>
               <a class="btn btn-danger partic-button" href="#">{{participate}}{{^participate}}0{{/participate}}</a>
+              <% end %>
             </div>
           </div>
         <% end %>

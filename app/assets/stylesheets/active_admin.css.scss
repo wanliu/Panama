@@ -90,3 +90,9 @@ body.system_categories{
     float: none !important;
   }
 }
+
+.formtastic.product{
+  li.category{
+    clear: both;
+  }
+}
