@@ -167,6 +167,9 @@ Panama::Application.routes.draw do
       post 'to_cart'
       post 'join'
     end
+    collection do
+      get 'tomorrow'
+    end
   end
 
   namespace :activities do

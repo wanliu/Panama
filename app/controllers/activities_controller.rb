@@ -7,7 +7,7 @@ class ActivitiesController < ApplicationController
   respond_to :html, :dialog
 
   def index
-    @activities = Activity.where("status = ?", Activity.statuses[:access])
+    @activities = Activity.access
     @ask_buy = AskBuy.all
     respond_to do |format|
       format.html # index.html.erb
@@ -58,6 +58,11 @@ class ActivitiesController < ApplicationController
     else
       render json: @item.errors, status: :unprocessable_entity
     end
+  end
+
+  def tomorrow
+    date = DateTime.now.tomorrow.midnight
+    @activities = Activity.access.where('start_time between ? and ?', date, date+1.day)
   end
 
   def join

@@ -37,6 +37,12 @@ module ApplicationHelper
     @current_admin ||= AdminUser.where(:uid => session[:admin_id]).first if session[:admin_id]
   end
 
+  def side_nav_for(name)
+    content_for(:side_nav) do
+      name.to_s
+    end
+  end
+
   def current_shop
     @current_shop = Shop.find_by(:name => params[:shop_id]) unless params[:shop_id].blank?
     if @current_shop.user != current_user &&

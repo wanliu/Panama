@@ -1,59 +1,64 @@
 <nav id="left_sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
-	<ul id="side-nav" class="side-nav">
-		<li class="active">
-			<a href="/">
-				<i class="icon-desktop"></i>
-				<span class="name">热卖</span>
-			</a>
-		</li>
-		<li class="accordion-group">
-			<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#forms-collapse">
-				<i class="icon-edit"></i>
-				<span class="name">分类</span>
-			</a>
-			<ul id="forms-collapse" class="accordion-body collapse">
-				<li><a href="form_account.html">Account</a></li>
-				<li><a href="form_article.html">Article</a></li>
-				<li><a href="form_elements.html">Elements</a></li>
-				<li><a href="form_validation.html">Validation</a></li>
-				<li><a href="form_wizard.html">Wizard</a></li>
-			</ul>
-		</li>
-		<li>
-			<a href="#">
-				<i class="icon-calendar"></i>
-				<span class='name'>明日预告</span>
-			</a>
-		</li>
-		<li>
-			<a href="#" class='link friends'>
-				<i class="icon-group"></i>
-				<span class='name'>社交</span>
-			</a>
-		</li>
-		<li class="accordion-group">
-			<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#stats-collapse">
-				<i class="icon-bar-chart"></i>
-				<span class="name">搜索</span>
-			</a>
-			<ul id="stats-collapse" class="accordion-body collapse">
-				<li><a href="stat_statistics.html">Stats</a></li>
-				<li><a href="stat_charts.html">Charts</a></li>
-				<li><a href="stat_realtime.html">Realtime</a></li>
-			</ul>
-		</li>
-		<li class="visible-phone">
-			<a href="logout"><i class="icon-signout"></i> <span class="name">登出</span></a>
-		</li>
-	</ul>
-	<div id="sidebar-settings" class="settings">
-		<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
-		<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
-	</div>
+  <ul id="side-nav" class="side-nav">
+    <li class="active">
+      <a href="/" class='side-fiery'>
+        <i class="icon-desktop"></i>
+        <span class="name">热卖</span>
+      </a>
+    </li>
+    <li class="accordion-group">
+      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#forms-collapse">
+        <i class="icon-edit"></i>
+        <span class="name">分类</span>
+      </a>
+      <ul id="forms-collapse" class="accordion-body collapse">
+        <li><a href="form_account.html">Account</a></li>
+        <li><a href="form_article.html">Article</a></li>
+        <li><a href="form_elements.html">Elements</a></li>
+        <li><a href="form_validation.html">Validation</a></li>
+        <li><a href="form_wizard.html">Wizard</a></li>
+      </ul>
+    </li>
+    <li>
+      <a class='side-tomorrow' href="<%=tomorrow_activities_path %>">
+        <i class="icon-calendar"></i>
+        <span class='name'>明日预告</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class='link friends'>
+        <i class="icon-group"></i>
+        <span class='name'>社交</span>
+      </a>
+    </li>
+    <li class="accordion-group">
+      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#stats-collapse">
+        <i class="icon-bar-chart"></i>
+        <span class="name">搜索</span>
+      </a>
+      <ul id="stats-collapse" class="accordion-body collapse">
+        <li><a href="stat_statistics.html">Stats</a></li>
+        <li><a href="stat_charts.html">Charts</a></li>
+        <li><a href="stat_realtime.html">Realtime</a></li>
+      </ul>
+    </li>
+    <li class="visible-phone">
+      <a href="logout"><i class="icon-signout"></i> <span class="name">登出</span></a>
+    </li>
+  </ul>
+  <div id="sidebar-settings" class="settings">
+    <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
+    <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
+  </div>
 </nav>
 
 <script type="text/javascript">
-	$(function(){
-		new LeftSideBar({ el: "#left_sidebar" })
-	})
+  $(function(){
+    new LeftSideBar({ el: "#left_sidebar" })
+
+    var side_class = "<%= yield :side_nav %>"
+
+    $("#side-nav li.active").removeClass("active")
+    $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in")
+  })
 </script>
