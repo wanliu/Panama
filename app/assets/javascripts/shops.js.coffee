@@ -1,6 +1,7 @@
 #= require panama
 #= require social_sidebar
 #= require shop_products
+#= require lib/infinite_scroll
 
 root = window || @
 
@@ -74,60 +75,17 @@ class CycleIter
 		@data[@pos++]
 
 
-class LoadShopProducts extends Backbone.View
-	offset: 0,
-	limit: 10,
+class LoadShopProducts extends InfiniteScrollView
+	msg_el: ".load_msg",
+	sp_el: "#shop_products",
+	fetch_url: "/shop_products"
 
-	initialize: (options) ->
-		_.extend(@, options)
-		@$el = $(@el)
-		@fetch()
-		$(window).scroll(_.bind(@scroll_load, @))
-
-	fetch: () ->
-		@$el.find(".load_msg").show()
-		$.ajax(
-			url: "/shop_products",
-			data: {
-				shop_id: @shop_id,
-				offset: @offset,
-				limit: @limit
-			},
-			success: (data) =>
-				if data[0] == undefined
-				# if data.length < 10 # 小于pageSize
-					@$(".load_msg").html('<div class="text-center">亲，已经到底啦</div>')
-				else
-					@$el.find(".load_msg").hide()
-					@add_columns(data)
-					@offset += @limit
-		)
-
-	min_column_el: () ->
-		columns = @sp_el().find(".columns>.column")
-		cls = _.map columns, (c) -> $(c).height()
-		$(columns[cls.indexOf(_.min(cls))])
-
-	add_columns: (data) ->
-		_.each data, (c) =>
-			@min_column_el().append(@template.render(c))
-			new ShopProductPreview({
-				el: $("[shop-product-id=#{c.id}]"),
-				model: new ShopProductModel(id: c.id),
-				product_id: c.product_id
-			})
-
-	scroll_load: () ->
-		if $(".load_msg").css("display") != "block"
-			sp = @sp_el()
-			sp_height = sp.offset().top + sp.height()
-			w_height = $(window).height() + $(window).scrollTop()
-			if sp_height <= w_height
-				clearTimeout(@timeout_id) if @timeout_id
-				@timeout_id = setTimeout _.bind(@fetch, @), 250
-
-	sp_el: () ->
-		@el.find("#shop_products")
+	add_column: (c) ->
+		new ShopProductPreview({
+			el: $("[shop-product-id=#{c.id}]"),
+			model: new ShopProductModel(id: c.id),
+			product_id: c.product_id
+		})
 
 
 class ShopProductsView extends Backbone.View
