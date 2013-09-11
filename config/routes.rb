@@ -167,6 +167,9 @@ Panama::Application.routes.draw do
       post 'to_cart'
       post 'join'
     end
+    collection do
+      get 'tomorrow'
+    end
   end
 
   namespace :activities do
@@ -233,11 +236,12 @@ Panama::Application.routes.draw do
 
   resources :category do
     member do
-      get "products"
+      get :products
+      get :shop_products
     end
   end
-  # shop admins routes
 
+  # shop admins routes
   resources :shops, :except => :index do
     collection do
       get "topic_categories/:id", :to => "shops#topic_categories"

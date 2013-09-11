@@ -4,6 +4,7 @@
 
 @import "core";
 @import "shops";
+@import "lib/transparent";
 
 .category-sidebar {
 	width: 280px;
@@ -11,29 +12,26 @@
 
 
 #category-sidebar.affix-top {
-  position: absolute;
+ 	position: absolute;
 }
 
 #category-sidebar {
-  width: 280px;
-  top: 0px;
-}
-
-.wrap {
-	margin-left: 300px;
+	width: 170px;
+	top: 0px;
 }
 
 #category-sidebar {
 	.second_class_categories {
+		top: 0;
+		left: 170px;
 		height: auto;
+		display: none;
+		min-width: 752px;
 		position: absolute;
 		padding-right: 20px;
 		padding-bottom: 20px;
-		background-color: rgba(63, 184, 175, 0.91);
-		top: 0;
-		left: 281px;
-		min-width: 752px;
-		display: none;
+		@include transparent(rgb(62, 112, 108), 0.91);
+		
 		.second_class_category_tree {
 			width: 230px;
 			display: inline-block;
@@ -41,6 +39,7 @@
 			margin-left: 20px;
 			padding: 10px 0;
 			border-bottom: 1px dashed;
+
 			& > a {
 				border-bottom: 1px solid white;
 				text-align: left;
@@ -48,6 +47,7 @@
 				display: block;
 				padding: 4px 10px 4px 0;
 			}
+			
 			li.third_class_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;

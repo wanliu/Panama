@@ -19,8 +19,10 @@
 			<td><%= @activity.description %></td>
 		</tr>
 		<tr>
-			<td>活动产品</td>
-			<td><%= @activity.product_id %></td>
+			<td>商店</td>
+			<td>
+				<%= @activity.shop.name %>
+			</td>
 		</tr>
 		<tr>
 			<td>价格</td>
@@ -111,11 +113,11 @@
 	<div class='checking'>
 		<%= button_to "审核通过", { action: :check } %>
 		<% if @activity.status != Activity.statuses[:rejected] %>
-			<%= submit_tag "驳回", class: "activity_reject" %>
+			<%= submit_tag "拒绝", class: "activity_reject" %>
 			<%= form_tag "/system/activities/#{ @activity.id }/reject",
 				method: :post, class: "activity_reject", style: "display: none;" do %>
 				<div class='reject'>
-					<h3>驳回理由：</h3>
+					<h3>拒绝理由：</h3>
 					<%= text_area_tag "reject_reason", nil, rows: 10 %><br>
 					<%= submit_tag "确定" %>
 					<%= button_tag "取消", class: "cancel" %>
@@ -149,7 +151,7 @@
 
 			check_for_reason: function(event) {
 				if (!$('textarea').val()) {
-					alert("请填写驳回原因！")
+					alert("请填写拒绝的原因！")
 					return false;
 				}
 			}

@@ -193,13 +193,11 @@ class CycleIter
   next: () ->
     @pos = 0 unless @pos < @data.length
     @data[@pos++]
+    
 
 class ActivitiesView extends Backbone.View
-
-  COLUMN_WIDTH = 233
-
   initialize: (@options) ->
-
+    _.extend(@, @options)
     $(window).bind('search_result:append', $.proxy(@appendResult, @))
     $(window).bind('search_result:reset', $.proxy(@setResult, @))
     $(window).resize($.proxy(@relayoutColumns, @))
@@ -234,9 +232,8 @@ class ActivitiesView extends Backbone.View
 
   relayoutColumns: () ->
     activities = @fetchResults()
-    new_dom = $("<div id='activities'/>")
+    new_dom = $("<div id='#{@wrap_id}'/>")
     @$columns = $("<div class='columns'></div>").appendTo(new_dom)
-
     @$columns.append("<div class='column' />") for i in [0...@adjustNumber()]
 
     cycle = new CycleIter(@$columns.find(".column"))

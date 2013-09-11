@@ -1,16 +1,18 @@
 #encoding: utf-8
 
 ActiveAdmin.register Activity do
+  config.clear_action_items!
+  form :partial => "form"
 
   scope :等待审核, default: true do
     Activity.where("status = ?", Activity.statuses[:wait])
   end
 
-  scope :被驳回 do
+  scope :未通过 do
     Activity.where("status = ?", Activity.statuses[:rejected])
   end
 
-  scope :已审核通过 do
+  scope :已通过 do
     Activity.where("status = ?", Activity.statuses[:access])
   end
 
@@ -21,9 +23,21 @@ ActiveAdmin.register Activity do
         image_tag row.attachments.first.file.url("100x100")
       end
     end
-    column :description
+    column :title
+    column '商店' do |a|
+      a.shop.try(:name)
+    end
     column :author
     default_actions
+
+    column do |c|
+      link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
+      if c.status == Activity.statuses[:wait]
+        link_2 = link_to "编辑", edit_system_activity_path(c), :class =>"member_link"
+        link_3 = link_to "删除", system_activity_path(c), :method => :delete, :confirm => "Are you sure?", :class =>"member_link"
+      end
+      link_1 + (link_2 || "") + (link_3 || "")
+    end
   end
 
   show do
@@ -56,6 +70,14 @@ ActiveAdmin.register Activity do
     respond_to do |format|
       format.json{  head :no_content  }
     end
+
+  action_item do
+    if params[:action] == "show"
+      if activity.status == Activity.statuses[:wait]
+        link = link_to "编辑活动", edit_system_activity_path(activity)
+      end
+    end
+    (link || "")
   end
 
   member_action :check, method: :post do

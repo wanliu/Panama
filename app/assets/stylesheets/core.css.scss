@@ -138,7 +138,7 @@ ul {
 	.navbar{
 		.navbar-inner {
 			background: transparent;
-			@include transparent(rgb(0,0,0),0.0);
+			@include transparent(rgb(0,0,0), 0.0);
 			@include box-shadow(none);
 			border: none;
 			.nav>li>a {
@@ -336,8 +336,10 @@ ul {
 .side-nav li a {
 	color: inherit;
 	text-decoration: none;
+	outline: none;
 	display: block;
 	padding: 8px 20px;
+	background: url('/assets/blank.png') no-repeat;
 }
 
 .side-nav li i[class*=icon] {
@@ -357,10 +359,8 @@ ul {
 }
 
 /*.side-nav li a:hover, .side-nav li a:focus ie8 bug*/
-.side-nav li:hover, .side-nav li:focus {
-	>a{
-		@include transparent(rgb(51,51,51),0.25);
-	}
+.side-nav li>a:hover{
+	@include transparent(rgb(51,51,51),0.25);
 }
 
 /*.side-nav li a.accordion-toggle:not(.collapsed)+.accordion-body li a:hover {
@@ -559,6 +559,7 @@ ul {
 .nav-tabs>li>a {
 	@include border-radius(1px 1px 0 0);
 	color: #f8f8f8;
+	background: url('/assets/blank.png') no-repeat;
 }
 
 .nav-tabs>li>a:hover, .nav-tabs>li>a:focus {
@@ -566,8 +567,9 @@ ul {
 }
 
 /*.nav>li>a:hover, .nav>li>a:focus ie 8 bug*/
-.nav>li:hover>a, .nav>li:focus>a {
+.nav>li>a:hover {
 	@include transparent(rgb(51,51,51),0.25);
+	outline: none;
 }
 
 .nav-tabs>.active>a,
@@ -643,7 +645,7 @@ ul {
 	width: 80px;
 
 	.notices-list{
-		li .transaction-info{
+		li .transaction-info, li .activity-info{
 			display: none;
 		}
 	}
@@ -717,7 +719,7 @@ ul {
 			width: 300px;
 			// margin-left: -120px;
 
-			.transaction-info{
+			.transaction-info, .activity-info{
 				display: block;
 			}
 		}

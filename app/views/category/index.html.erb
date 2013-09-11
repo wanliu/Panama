@@ -1,20 +1,24 @@
-<!-- <div class='row-fluid'>
-	<div class='span8'>
-		<%#= render :partial => "search_product", :collection => @products %>
-		<%#= paginate  @products %>
-	</div>
-</div>
- -->
- <div class="main">
-	<div id="activities">
+<div id="main" class="content">
+	<div id="category_products">
 			<!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
 		<% (0...@products.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
 			<div class="column">
 				<% indexs.each do |index| %>
-				  <%= render_activity @products[index] %>
+					<%= render_activity @products[index] %>
 				<% end %>
 			 </div>
 		<% end %>
 	</div>
+
+	<div class='load_msg'>
+		<img src='/assets/loading_max.gif' />正在加载...
+	</div>
+
 </div>
-<%= paginate  @products %>
+
+<script type="text/javascript">
+	new ActivitiesView({
+		el: '#category_products',
+		wrap_id: 'category_products'
+	})
+</script>

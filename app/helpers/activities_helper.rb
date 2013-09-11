@@ -30,4 +30,9 @@ module ActivitiesHelper
       end
     end
   end
+
+  def product_categories
+    category_ids = ShopProduct.joins(:product).select("distinct category_id").limit(10).pluck(:category_id)
+    Category.where(:id => category_ids)
+  end
 end

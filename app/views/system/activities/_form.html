@@ -1,0 +1,31 @@
+<%= semantic_form_for @activity, :url => system_activity_path(@activity) do |f| %>
+    <%= f.inputs "活动" do  %>
+        <li>
+          <%=f.label :id %>
+          <span><%=@activity.id %></span>
+        </li>
+        <li>
+          <%=f.label :title %>
+          <span><%=@activity.title %></span>
+        </li>
+        <li>
+          <%=f.label :author %>
+          <span><%=@activity.author.login %></span>
+        </li>
+        <li>
+          <label>商家</label>
+          <span><%=@activity.shop.name %></span>
+        </li>
+        <li>
+          <%=f.label :price %>
+          <span><%=@activity.price %></span>
+        </li>
+        <%=f.input :start_time %>
+        <%=f.input :end_time %>
+        <%=f.input :description, :as => :text %>
+        <%=f.actions do  %>
+          <%=f.action :submit %>
+          <a href="<%=system_activity_path(@activity) %>">返回</a>
+        <% end %>
+    <% end %>
+<% end %>

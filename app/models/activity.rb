@@ -5,6 +5,10 @@ class Activity < ActiveRecord::Base
   include Tire::Model::Callbacks
   include MessageQueue::Activity
 
+  scope :wait,lambda{ where(:status => statuses[:wait]) }
+  scope :access,lambda{ where(:status => statuses[:access]) }
+  scope :rejected,lambda{ where(:status => statuses[:rejected]) }
+
   attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
                   :description, :like, :participate, :author_id, :status, :rejected_reason
 
@@ -26,13 +30,19 @@ class Activity < ActiveRecord::Base
   # validates_associated :product
   validates_presence_of :author
 
+  validate :validate_update_access?, :on => :update
+
   define_graphical_attr :photos, :handler => :default_photo
 
   before_create :init_data
 
+  before_destroy do
+    validate_destroy_access?
+  end
+
   def notice_author(sender, message)
     notifications.create({
-      :user_id => sender.id, 
+      :user_id => sender.id,
       :mentionable_user_id => author.id,
       :url => "/activities/#{id}",
       :body => message
@@ -60,7 +70,7 @@ class Activity < ActiveRecord::Base
   end
 
   validates :title, :activity_price, :price,:start_time, :end_time, :shop_product_id, :presence => true
-  validates :price, :activity_price, :numericality => { :greater_than => 0 }
+  validates :price, :activity_price, :numericality => { :greater_than_or_equal_to => 0 }
 
   def like
     likes.size
@@ -69,7 +79,6 @@ class Activity < ActiveRecord::Base
   def participate
     participates.size
   end
-
 
   def as_json(options = nil)
     atts = super(:include => {
@@ -96,6 +105,15 @@ class Activity < ActiveRecord::Base
     { :wait => 0, :access => 1, :rejected => 2 }
   end
 
+  def start_sale?
+    if Activity.statuses[:access] == status
+      if start_time < DateTime.now
+        return true
+      end
+    end
+    return false
+  end
+
   def send_checked_mail
     UserMailer.delay.send_activity_checked_notify(author.email, author, url)
   end
@@ -104,4 +122,16 @@ class Activity < ActiveRecord::Base
     UserMailer.delay.send_activity_rejected_notify(author.email, author, rejected_reason, url)
   end
 
+  def validate_destroy_access?
+    if Activity.statuses[:access] == self.status
+      errors.add(:status, "已经审核了,不能删除！")
+      return false
+    end
+  end
+
+  def validate_update_access?
+    if Activity.statuses[:access] == Activity.find(self.id).status
+      errors.add(:status, "已经审核了,不能修改！")
+    end
+  end
 end
