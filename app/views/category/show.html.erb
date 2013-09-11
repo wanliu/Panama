@@ -14,7 +14,11 @@
 
 <script type="text/javascript">
 	$(function(){
-		new CategoryProductsView({el: '#category_products'})
+		// new CategoryProductsView({el: '#category_products'})
+		new ActivitiesView({
+			el: '#category_products',
+			wrap_id: 'category_products'
+		})
 		new LoadCategoryProducts({
 			el: $('.category_products_panel'),
 			category_id: <%= @category.id %>,
