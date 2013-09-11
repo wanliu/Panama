@@ -11,6 +11,7 @@
 root = window || @
 
 class Category extends Backbone.Model
+	
 
 class AbstractRow extends DNDView
 
@@ -24,6 +25,7 @@ class AbstractRow extends DNDView
 			else
 				break
 		results
+
 
 class CategoryRow extends AbstractRow
 	form: "form"
@@ -127,6 +129,7 @@ class CategoryRow extends AbstractRow
 					.done () ->
 						@remove()
 		false
+
 
 root.CategoryRow = CategoryRow
 root.CategoryModel = Category

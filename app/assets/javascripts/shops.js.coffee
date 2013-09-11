@@ -81,20 +81,20 @@ class LoadShopProducts extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @$load_msg = @$el.find(".load_msg")
     @fetch()
     $(window).scroll(_.bind(@scroll_load, @))
 
   fetch: () ->
-    @$load_msg.show()
+    @$el.find(".load_msg").show()
     $.ajax(
       url: "/shop_products",
       data: {
         shop_id: @shop_id,
         offset: @offset,
-        limit: @limit},
+        limit: @limit
+      },
       success: (data) =>
-        @$load_msg.hide()
+        @$el.find(".load_msg").hide()
         @add_columns(data)
         @offset += @limit
     )
