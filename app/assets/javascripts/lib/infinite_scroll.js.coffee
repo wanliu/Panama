@@ -1,6 +1,7 @@
 
 root = window || @
 
+# 抽象出的无限滚动加载视图
 class InfiniteScrollView extends Backbone.View
 	offset: 0,
 	limit: 10,
@@ -41,10 +42,11 @@ class InfiniteScrollView extends Backbone.View
 
 	add_columns: (data) ->
 		_.each data, (c) =>
-			@min_column_el().append(@template.render(c))
 			@add_column(c)
+			@min_column_el().append(@template.render(c))
 
 	add_column: (c) ->
+		# 由具体的子视图实现
 
 	scroll_load: () ->
 		if $(@msg_el).css("display") != "block"
