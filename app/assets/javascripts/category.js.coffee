@@ -33,10 +33,10 @@ class LoadCategoryProducts extends Backbone.View
 			c.img_url = c.attachments[0].url
 			@min_column_el().append(@template.render(c))
 			# new CategoryProductPreview({
-			#   el: $("[Category-product-id=#{c.id}]"),
+			#   el: $("[category-product-id=#{c.id}]"),
 			#   model: new CategoryProductModel(id: c.id),
 			#   product_id: c.product_id
-			# });
+			# })
 
 	scroll_load: () ->
 		sp = @sp_el()
@@ -74,55 +74,4 @@ class CategoryProductModel extends Backbone.Model
 	urlRoot: '/category/#{@id}'
 
 
-class CycleIter
-  constructor: (@data, @pos = 0) ->
-
-  next: () ->
-    @pos = 0 unless @pos < @data.length
-    @data[@pos++]
-
-
-class CategoryProductsView extends Backbone.View
-
-  initialize: (@options) ->
-    $(window).resize($.proxy(@relayoutColumns, @))
-    @relayoutColumns()
-
-  resizeWrap: (e) ->
-    @$el.width(@$columns.width())
-
-  adjustNumber: () ->
-    $wrap = $('.wrap')
-    count = parseInt(($wrap.width() - 25) / 246)
-
-  relayoutColumns: () ->
-    shop_products = @fetchResults()
-    new_dom = $("<div id='category_products'/>")
-    @$columns = $("<div class='columns' />").appendTo(new_dom)
-    @$columns.append("<div class='column' />") for i in [0...@adjustNumber()]
-
-    cycle = new CycleIter(@$columns.find(".column"))
-
-    for act in shop_products
-      target = cycle.next()
-      $(target).append(act)
-
-    @$el.replaceWith(new_dom)
-    @$el = new_dom
-    @resizeWrap()
-
-  fetchResults: () ->
-    row = 0
-    columns = @$(".column")
-    results = []
-    while _(_(columns).map (elem, i ) ->
-      node = $(elem).find(">div")[row]
-      results.push(node) if node?
-      node).any()
-      row++
-
-    results
-
-
-root.CategoryProductsView = CategoryProductsView
 root.LoadCategoryProducts = LoadCategoryProducts

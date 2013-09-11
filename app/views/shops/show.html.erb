@@ -15,7 +15,10 @@
 
 <script type="text/javascript">
 	$(function(){
-		new ShopProductsView({el: '#shop_products'})
+		new ActivitiesView({
+			el: '#shop_products',
+			wrap_id: 'shop_products'
+		})
 		new LoadShopProducts({
 			el: $('.shop_products_panel'),
 			shop_id: <%= @shop.id %>,

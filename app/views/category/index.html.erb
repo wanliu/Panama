@@ -23,7 +23,10 @@
 		<% end %>
 	</div>
 		<script type="text/javascript">
-			new ActivitiesView({el: '#activities'})
+			new ActivitiesView({
+				el: '#activities',
+				wrap_id: 'activities'
+			})
 		</script>
 </div>
 <%= paginate  @products %>
