@@ -256,11 +256,11 @@ module ApplicationHelper
     output = "".html_safe
     array.shift
     # ISSUE: 临时方案, 需要修改 rails.view.js 的 提交 bug
-    last = array.pop || OpenStruct.new(:name => 'Noselected')
+    last = array.pop || OpenStruct.new(:name => '未选择')
     # BUG: 'data-remote' => category_page_shop_admins_products_path, 设置这个参数,会触发
     #   jquery_ujs 不正常的功能
     output = link_to '#',  'data-toggle' => 'modal' do
-      content_tag :ul, :class => [:breadcrumb, :btn, name] do
+      content_tag :ul, :class => [:breadcrumb, name] do
         array.each do |e|
           output << content_tag(:li) do
             link_to(e.name, '#') +
