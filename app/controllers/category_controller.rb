@@ -5,8 +5,16 @@ class CategoryController < ApplicationController
 	before_filter :login_required, only: :products
 
 	def index
-		@category = Category.where(:name => '_products_root').first
-		@products = ShopProduct.page(params[:page] || 1)
+		@category = Category.root
+		@products = Product.joins(:shop_products).where("shop_products.deleted_at is NULL")
+
+		@products = @products.offset(params[:offset]) if params[:offset].present?
+		@products = @products.limit(params[:limit]) if params[:limit].present?
+		
+		respond_to do |format|
+			format.html
+			format.json { render json: @products.as_json(:version_name => "240x240") }
+		end
 	end
 
 	def show
@@ -22,6 +30,7 @@ class CategoryController < ApplicationController
 		@products = @products.limit(params[:limit]) if params[:limit].present?
 
 		respond_to do |format|
+			format.html
 			format.json { render json: @products.as_json(:version_name => "240x240") }
 		end
 	end
