@@ -8,7 +8,6 @@ class CompletingShopController < Wicked::WizardController
     service_id = Service.where(service_type: "seller").first.id
     @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
     @shop_auth = ShopAuth.new(@user_checking.attributes)
-
     if @user_checking.checked
       redirect_to "/"
     else
@@ -46,7 +45,7 @@ class CompletingShopController < Wicked::WizardController
 
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
-      # @user_checking.shop_photo = 
+      # @user_checking.shop_photo =
       if @user_checking.user.shop.blank?
         @user_checking.user.create_shop(name: @shop_auth.shop_name)
       end
