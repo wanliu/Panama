@@ -1,12 +1,11 @@
 class CompletingPeopleController < Wicked::WizardController
   layout "wizard"
   before_filter :login_required_without_service_choosen
+  before_filter :validate_step_info, :only => :show
 
   steps :pick_industry, :authenticate_license#, :waiting_audit
 
   def show
-  	service_id = Service.where(service_type: "buyer").first.id
-  	@user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
     @user_auth = UserAuth.new(@user_checking.attributes)
     render_wizard
   end
@@ -16,7 +15,7 @@ class CompletingPeopleController < Wicked::WizardController
     case step
     when :pick_industry
       save_industry_type
-  	when :authenticate_license
+    when :authenticate_license
       save_license
     # when :waiting_audit
     end
@@ -31,8 +30,10 @@ class CompletingPeopleController < Wicked::WizardController
 
   private
     def save_industry_type
-      @user_checking.update_attributes(params[:user_checking])
-    	render_wizard(@user_checking)
+      if @user_checking.industry_type.blank?
+        @user_checking.update_attributes(params[:user_checking])
+      end
+      render_wizard(@user_checking)
     end
 
     def save_license
@@ -40,7 +41,7 @@ class CompletingPeopleController < Wicked::WizardController
       if @user_auth.valid?
         @user_checking.update_attributes(@user_auth.update_options)
 
-        current_user.services << Service.where(service_type: "buyer")
+        current_user.services << Service.buyer
 
         # render_wizard(@user_checking)
         redirect_to '/'
@@ -53,5 +54,15 @@ class CompletingPeopleController < Wicked::WizardController
       user_checking = current_user.user_checking
       current_user.services << Service.where(service_type: user_checking.service.service_type)
       redirect_to '/'
+    end
+
+    def validate_step_info
+      @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: Service.buyer.id)
+      case step
+      when :pick_industry
+        if @user_checking.industry_type.present?
+          redirect_to '/completing_people/authenticate_license'
+        end
+      end
     end
 end
