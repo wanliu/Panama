@@ -17,6 +17,7 @@ class InfiniteScrollView extends Backbone.View
 		$(@msg_el).show()
 		$.ajax(
 			url: @fetch_url,
+			dataType: "json",
 			data: {
 				shop_id: @shop_id,
 				offset: @offset,

@@ -12,24 +12,33 @@
 			</h3>
 			</div>
 	 </section> -->
-	<div id="category_products">
+	<div class='category_products_panel'>
+		<div id="category_products">
 			<!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
-		<% (0...@products.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
-			<div class="column">
-				<% indexs.each do |index| %>
-					<%= render_activity @products[index] %>
-				<% end %>
-			 </div>
-		<% end %>
-	</div>
-	<div class='load_msg'>
-		<img src='/assets/loading_max.gif' />正在加载...
+			<!-- <% (0...@products.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
+				<div class="column">
+					<% indexs.each do |index| %>
+						<%= render_activity @products[index] %>
+					<% end %>
+				 </div>
+			<% end %> -->
+		</div>
+		<div class='load_msg'>
+			<img src='/assets/loading_max.gif' />正在加载...
+		</div>
 	</div>
 </div>
 
 <script type="text/javascript">
-	new ActivitiesView({
-		el: '#category_products',
-		wrap_id: 'category_products'
+	$(function(){
+		new ActivitiesView({
+			el: '#category_products',
+			wrap_id: 'category_products'
+		})
+		new LoadCategoryProducts({
+			el: $('.category_products_panel'),
+			fetch_url: "/category",
+			template: Hogan.compile("<%= j render 'category/page' %>")
+		})
 	})
 </script>
