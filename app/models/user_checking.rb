@@ -1,3 +1,4 @@
+#encoding: utf-8
 class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :service_id, :industry_type,
                   :shop_name, :shop_photo, :shop_url, :shop_summary,
@@ -12,6 +13,8 @@ class UserChecking < ActiveRecord::Base
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true
   validates :industry_type, presence: true, if: :service_choosen?
+
+  validate :validate_user_already_exists?
 
   mount_uploader :company_license_photo, ImageUploader
   mount_uploader :ower_photo, ImageUploader
@@ -77,4 +80,11 @@ class UserChecking < ActiveRecord::Base
         "pick_industry"
       end
     end
+
+  private
+  def validate_user_already_exists?
+    if UserChecking.where("user_id=? and id<>?", user_id, id.to_s).count > 0
+      errors.add(:user_id, "该用户已经存在了，服务商！")
+    end
+  end
 end
