@@ -973,3 +973,20 @@ h2 small {
 	@include transparent(rgb(0, 0, 0), 0);
 }
 
+.breadcrumb{
+	li.icon{
+		margin-right: 10px
+	}
+
+	li{
+		a{
+			color: white;
+		}
+	}
+
+	li.active{
+		color: #C7C4C;
+		text-shadow: none;
+	}
+}
+

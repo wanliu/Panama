@@ -6,32 +6,39 @@ class CategoryController < ApplicationController
 
 	def index
 		@category = Category.root
-		@products = Product.joins(:shop_products).where("shop_products.deleted_at is NULL")
+		# @products = Product.joins(:shop_products).where("shop_products.deleted_at is NULL")
 
-		@products = @products.offset(params[:offset]) if params[:offset].present?
-		@products = @products.limit(params[:limit]) if params[:limit].present?
-		
+		# @products = @products.offset(params[:offset]) if params[:offset].present?
+		# @products = @products.limit(params[:limit]) if params[:limit].present?
+
 		respond_to do |format|
 			format.html
-			format.json { render json: @products.as_json(:version_name => "240x240") }
+			# format.json { render json: @products.as_json(
+			# 	:methods => :photo_avatar,
+			# 	:version_name => "240x240") }
 		end
 	end
 
 	def show
 		@category = Category.find(params[:id])
-		@shop_products = ShopProduct.search2("category.id:#{@category.id}").results
+		# @shop_products = ShopProduct.search2("category.id:#{@category.id}").results
 	end
 
 	def shop_products
-		@category = Category.find(params[:id])
-		@products = Product.joins(:shop_products).where("shop_products.deleted_at is NULL and category_id in (?) ", @category.descendants.map { |c| c.id })
-
-		@products = @products.offset(params[:offset]) if params[:offset].present?
-		@products = @products.limit(params[:limit]) if params[:limit].present?
+		@category = if params[:id].blank?
+			Category.root
+		else
+			Category.find(params[:id])
+		end
+		@shop_products = ShopProduct.joins(:product).where(
+			"products.category_id" => @category.descendants.pluck(:id))
+		@shop_products = @shop_products.offset(params[:offset]) if params[:offset].present?
+		@shop_products = @shop_products.limit(params[:limit]) if params[:limit].present?
 
 		respond_to do |format|
 			format.html
-			format.json { render json: @products.as_json(:version_name => "240x240") }
+			format.json { render json: @shop_products.as_json(
+				:version_name => "240x240") }
 		end
 	end
 

@@ -252,28 +252,30 @@ module ApplicationHelper
     end
   end
 
-  def breadcrumb_button(name, array)
+  def breadcrumb_button(name, array, icon_name = nil, &block)
     output = "".html_safe
-    array.shift
+    array.shift if array.length > 1
     # ISSUE: 临时方案, 需要修改 rails.view.js 的 提交 bug
     last = array.pop || OpenStruct.new(:name => '未选择')
     # BUG: 'data-remote' => category_page_shop_admins_products_path, 设置这个参数,会触发
     #   jquery_ujs 不正常的功能
-    output = link_to '#',  'data-toggle' => 'modal' do
-      content_tag :ul, :class => [:breadcrumb, name] do
-        array.each do |e|
-          output << content_tag(:li) do
-            link_to(e.name, '#') +
-            # e.name +
-            content_tag(:span, '|', :class => "divider")
-          end
-        end
-
+    #output = link_to '#',  'data-toggle' => 'modal' do
+    content_tag :ul, :class => [:breadcrumb, name] do
+      if icon_name.present?
+        output << content_tag(:li, :class => 'icon'){ link_to icon(icon_name), "#" }
+      end
+      array.each do |e|
         output << content_tag(:li) do
-          last.name
+          url = yield e if block_given?
+          url + content_tag(:span, '|', :class => "divider")
         end
       end
+
+      output << content_tag(:li, :class => "active") do
+        yield last if block_given?
+      end
     end
+    #end
   end
 
   def get_delivery_type

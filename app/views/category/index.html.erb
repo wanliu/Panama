@@ -1,20 +1,12 @@
 <div id="main" class="content">
-	<!-- <section class="widget">
-			<div class="body">
-					<h3 class='page-title'>
-			</h3>
-			</div>
-	 </section> -->
+	<section class="widget">
+		<%= breadcrumb_button(dom_id(@category), ["所有分类"], 'eye-open') do |name|  %>
+			<% name %>
+		<% end %>
+	 </section>
 	<div class='category_products_panel'>
 		<div id="category_products">
-			<!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
-			<!-- <% (0...@products.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
-				<div class="column">
-					<% indexs.each do |index| %>
-						<%= render_activity @products[index] %>
-					<% end %>
-				 </div>
-			<% end %> -->
+
 		</div>
 		<div class='load_msg'>
 			<img src='/assets/loading_max.gif' />正在加载...
@@ -31,7 +23,7 @@
 		})
 		new LoadCategoryProducts({
 			el: $('.category_products_panel'),
-			fetch_url: "/category",
+			fetch_url: "/category/shop_products",
 			template: Hogan.compile("<%= j render 'category/page' %>")
 		})
 	})

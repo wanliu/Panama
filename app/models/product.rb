@@ -176,15 +176,23 @@ class Product < ActiveRecord::Base
   end
 
   def default_photo
-    default_attachment ? default_attachment.file : Attachment.new.file
+    default_by_attachment.file
+  end
+
+  def default_by_attachment
+    default_attachment ? default_attachment : Attachment.new
   end
 
   def as_json(*args)
-    options = args.extract_options!
     attrs = super *args
+    options = args.extract_options!
     attrs["url"] = photos.icon
     attrs["attachments"] = format_attachment(options[:version_name]) unless options[:only]
     attrs
+  end
+
+  def photo_avatar
+    photos.avatar
   end
 
   def format_attachment(version_name = nil)
@@ -192,8 +200,7 @@ class Product < ActiveRecord::Base
     unless default_attachment.blank?
       temp << default_attachment.as_json(options).merge(:default_state => true)
     end
-    attachments.each{| atta | temp << atta.as_json(options) }
-    temp
+    attachments.map{| atta | atta.as_json(options) } + temp
   end
 
   def to_item

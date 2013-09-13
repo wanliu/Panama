@@ -1,13 +1,15 @@
 <div class="shop_product" category-product-id="{{id}}" style="display: inline-block">
-	<div class='out-box'>
-		<div class='in-box'>
-			<img src="{{img_url}}" class='preview a-{{id}}' />
-			<div class='summary'>
-				<h4 class="title">
-					{{name}}
-				</h4>
-				<p>{{description}}</p>
-			</div>
-		</div>
-	</div>
+  <div class='out-box'>
+    <div class='in-box'>
+      {{#product}}
+        <img src="{{photo_avatar}}" class='preview a-{{id}}' />
+      {{/product}}
+      <div class='summary'>
+        <h4 class="title">
+          {{name}}
+        </h4>
+        <p>{{description}}</p>
+      </div>
+    </div>
+  </div>
 </div>
