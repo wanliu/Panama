@@ -27,6 +27,17 @@
         max-width: none;
         cursor: pointer;
       }
+
+      .summary{
+
+        .info{
+          margin-right: 40px;
+
+          .name{
+            display: inline-block;
+          }
+        }
+      }
     }
   }
 }

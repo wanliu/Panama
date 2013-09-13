@@ -1,7 +1,7 @@
 <div id="main" class="content">
 	<section class="widget">
 		<%= breadcrumb_button(dom_id(@category), @category.ancestors + [@category], 'eye-open') do |c|  %>
-			<% c==@category ? c.name : link_to(c.name, category_path(c)) %>
+			<%c == @category ? c.name : link_to(c.name, category_path(c)) %>
 		<% end %>
 	</section>
 	<div class='category_products_panel'>

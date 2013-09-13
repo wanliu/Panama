@@ -8,7 +8,12 @@
         <h4 class="title">
           {{name}}
         </h4>
-        <p>{{description}}</p>
+        <div class='info'>
+          {{#shop}}
+          <img src="{{icon_url}}" class='img-polaroid' />
+          <p class='name'><a href='/shops/{{name}}'>{{name}}</a></p>
+          {{/shop}}
+        </div>
       </div>
     </div>
   </div>

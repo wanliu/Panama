@@ -10,7 +10,8 @@ class ShopProductsController < ApplicationController
 		@products = @products.limit(params[:limit]) if params[:limit].present?
 
 		respond_to do |format|
-			format.json { render json: @products }
+			format.json { render json: @products.as_json(
+				:includes => :shop) }
 		end
 	end
 
