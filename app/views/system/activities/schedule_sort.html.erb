@@ -1,8 +1,8 @@
-  <div class="row">
-    <div class="blue span3" style="background-color:blue;height:30px;width:80px;"></div>
-    <span class="span2">已审核活动</span>
+<div class="row">
+    <div class="blue span3" style="background-color:rgb(115, 115, 199);height:30px;width:80px;"></div>
+    <span class="span2"><strong>已审核活动</strong></span>
     <div class="red span2" style="background-color:#dd4b39;height:30px;width:80px;"></div>
-    <span class="span2">未审核活动</span>
+    <span class="span2"><strong>未审核活动</strong></span>
   </div>
 <div class="adjust_activities">
   <div id="activity" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -107,6 +107,18 @@ function DisplayCalendar() {
       week:     ' 周 ',
       day:      ' 日 '
     },
+    monthNames:['一月','二月', '三月', '四月', '五月', '六月', 
+                '七月','八月', '九月', '十月', '十一月', '十二月'],
+    dayNames:['星期日', '星期一', '星期二', '星期三','星期四', '星期五', '星期六'],
+    dayNamesShort:['星期日', '星期一', '星期二', '星期三','星期四', '星期五', '星期六'],
+    monthNamesShort:['一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月'],
+
+    titleFormat:{
+      month: 'yyyy MMMM',  
+      week: "yyyy年 MMM d[ yyyy]日 {'&#8212;'[ MMM] d}日 ",               
+      day: 'yyyy年 MMM d日, dddd '                  
+    },
     selectable: true,
     editable:true,
     defaultView: 'month',
@@ -128,7 +140,7 @@ function DisplayCalendar() {
             $(data).each(function(i,d){
               var use_ful = new Object();
               if (d.status == 1){                
-                $.extend(use_ful, { backgroundColor: 'blue',textColor: 'white'});
+                $.extend(use_ful, { backgroundColor: 'rgb(115, 115, 199)',textColor: 'white'});
               }else{
                 $.extend(use_ful, { backgroundColor: '#dd4b39',textColor: 'white'});
               };
@@ -186,7 +198,7 @@ function DisplayCalendar() {
         $('.tooltipevent').fadeIn('500');
         $('.tooltipevent').fadeTo('10', 1.9);
       }).mousemove(function(e) {
-        left = $('.tooltipevent').position().left;
+        var left = $('.tooltipevent').position().left;
         if (left > window.screen.availWidth-400){
           $('.tooltipevent').css('top', e.pageY + 10);
           $('.tooltipevent').css('left', e.pageX - 300);
