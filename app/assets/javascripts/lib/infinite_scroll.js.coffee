@@ -43,9 +43,10 @@ class InfiniteScrollView extends Backbone.View
 
 	add_columns: (data) ->
 		_.each data, (c) =>
-			@before_add(c)
-			@min_column_el().append(@template.render(c))
-			@add_column(c)
+			# @before_add(c)
+			# @min_column_el().append(@template.render(c))
+			# @add_column(c)
+			@add_one(c)
 
 	before_add: (c) ->
 
