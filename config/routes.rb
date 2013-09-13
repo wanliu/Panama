@@ -237,7 +237,9 @@ Panama::Application.routes.draw do
   resources :category do
     member do
       get :products
-      get :shop_products
+    end
+    collection do
+      get "shop_products", :to => "category#shop_products"
     end
   end
 

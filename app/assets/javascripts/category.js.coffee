@@ -9,15 +9,12 @@ class LoadCategoryProducts extends InfiniteScrollView
 	msg_el: ".load_msg",
 	sp_el: "#category_products"
 
-	before_add: (c) ->
-		c.img_url = c.attachments[0].url
-
 	add_column: (c) ->
 		new ShopProductPreview({
 		  el: $("[category-product-id=#{c.id}]"),
 		  model: new ShopProductModel(id: c.id),
 		  product_id: c.product_id
 		})
-		
+
 
 root.LoadCategoryProducts = LoadCategoryProducts

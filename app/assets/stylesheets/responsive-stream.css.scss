@@ -13,14 +13,14 @@ $rightSideBarWidth: 200px;
 #main{
 	#activities, #forecast{
 		margin: 0 auto;
+	}
+}
 
-		.columns{
-			display: inline-block;
+.columns{
+	display: inline-block;
 
-			.column:last-child{
-				margin-right: 0px
-			}
-		}
+	.column:last-child{
+		margin-right: 0px
 	}
 }
 
