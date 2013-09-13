@@ -1,3 +1,9 @@
+  <div class="row">
+    <div class="blue span3" style="background-color:blue;height:30px;width:80px;"></div>
+    <span class="span2">已审核活动</span>
+    <div class="red span2" style="background-color:#dd4b39;height:30px;width:80px;"></div>
+    <span class="span2">未审核活动</span>
+  </div>
 <div class="adjust_activities">
   <div id="activity" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="adjust-modal-header">
@@ -122,7 +128,9 @@ function DisplayCalendar() {
             $(data).each(function(i,d){
               var use_ful = new Object();
               if (d.status == 1){                
-                $.extend(use_ful, { backgroundColor: 'green',textColor: 'white'});
+                $.extend(use_ful, { backgroundColor: 'blue',textColor: 'white'});
+              }else{
+                $.extend(use_ful, { backgroundColor: '#dd4b39',textColor: 'white'});
               };
               use_ful.start = d.start_time;
               use_ful.end = d.end_time;

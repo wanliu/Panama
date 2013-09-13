@@ -16,7 +16,6 @@ class AfterSignupController < Wicked::WizardController
     		[CompletingShopController, "shop"]
     	end
     	wizard_url = "/completing_" << wizard_controller.last
-
     	redirect_to "#{ wizard_url }/#{ @user_checking.current_step }"
     end
   end

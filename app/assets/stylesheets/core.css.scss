@@ -967,3 +967,9 @@ h2 small {
 		max-height: 470px;
 	}
 }
+
+.breadcrumb {
+	margin: 0px;
+	@include transparent(rgb(0, 0, 0), 0);
+}
+

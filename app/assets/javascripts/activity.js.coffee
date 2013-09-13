@@ -193,7 +193,7 @@ class CycleIter
   next: () ->
     @pos = 0 unless @pos < @data.length
     @data[@pos++]
-    
+
 
 class ActivitiesView extends Backbone.View
   initialize: (@options) ->
