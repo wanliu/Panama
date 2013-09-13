@@ -115,7 +115,9 @@ class ApplicationController < ActionController::Base
   end
 
   def filter_special_sym(query)
-    query.gsub(/[\+\-\*\.\,\/]/, "\\/")
+    if query.present?
+      query.gsub(/[\+\-\*\.\,\/]/, "\\/")
+    end
   end
 
   def login_or_admin_required

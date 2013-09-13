@@ -6,11 +6,7 @@ class SearchController < ApplicationController
     query_val = "%#{params[:q]}%"
     users = User.where("id<>#{current_user.id} and (login like ? or email like ?)", query_val, query_val).limit(params[:limit])
     respond_to do |format|
-      _users = users.as_json.map do |u|
-        u["value"] = u["login"]
-        u
-      end
-      format.json{ render :json => _users }
+      format.json{ render :json => users.as_json(:methods => :value) }
     end
   end
 
@@ -18,7 +14,9 @@ class SearchController < ApplicationController
     query = filter_special_sym(params[:q])
     s = Tire.search ["products", "shop_products"] do
         query do
-          string "name:#{query}"
+          boolean do
+            must { string "*#{query}*", fields: ["first_name", "any_name", "name"] }
+          end
         end
 
         sort("_script" => {
@@ -63,6 +61,19 @@ class SearchController < ApplicationController
     end
     respond_to do |format|
       format.json { render json: products }
+    end
+  end
+
+  def activities
+    query = filter_special_sym(params[:q])
+    _size, _from = params[:limit], params[:offset]
+    s = Activity.search2 :type => ['activity', 'ask_buy'] do
+      from _from
+      size _size
+    end
+    @results = s.results
+    respond_to do |format|
+      format.json{ render :json => @results }
     end
   end
 end

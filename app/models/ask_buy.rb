@@ -1,5 +1,8 @@
 class AskBuy < ActiveRecord::Base
   include Graphical::Display
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
   attr_accessible :amount, :describe, :price, :product_id, :status, :title
 
   belongs_to :product
@@ -12,7 +15,6 @@ class AskBuy < ActiveRecord::Base
   validates :price, :numericality => true
   validates :amount, :presence => true, :numericality => { :greater_than => 0 }
 
-
   define_graphical_attr :photos, :handler => :default_photo
 
   def default_photo
@@ -23,10 +25,45 @@ class AskBuy < ActiveRecord::Base
     end
   end
 
+  def self.index_name
+    "activities"
+  end
+
   def as_json(*args)
     attra = super *args
     attra["user"] = user.as_json
     attra["url"] = photos.preview
     attra
+  end
+
+  def to_indexed_json
+    {
+      :title   => title,
+      :user => {
+        :id        =>  user.id,
+        :login     =>  user.login,
+        :photos    => {
+          :icon      => user.photos.icon,
+          :header    => user.photos.header,
+          :avatar    => user.photos.avatar
+        }
+      },
+      :product_id  =>  product_id,
+      :category    => {
+        :id        => product.try(:category).try(:id),
+        :name      => product.try(:category).try(:name)
+      },
+      :describe    => describe,
+      :price       => price,
+      :amount      => amount,
+      :status      => status,
+      :created_at  => created_at,
+      :updated_at  => updated_at,
+      :photos      => {
+        :icon         => photos.icon,
+        :header       => photos.header,
+        :avatar       => photos.avatar
+      }
+    }.to_json
   end
 end

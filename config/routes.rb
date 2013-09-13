@@ -402,6 +402,7 @@ Panama::Application.routes.draw do
   # Search Engine
   match "search/users", :to => "search#users"
   match "search/products", :to => "search#products"
+  match "search/activities", :to => "search#activities"
   match "search/shop_products", :to => "search#shop_products", :via => :get
 
 

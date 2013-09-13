@@ -134,4 +134,43 @@ class Activity < ActiveRecord::Base
       errors.add(:status, "已经审核了,不能修改！")
     end
   end
+
+  def to_indexed_json
+    {
+      :title   => title,
+      :activity_type => activity_type,
+      :shop_product_id  => shop_product_id,
+      :description    => description,
+      :price          => price,
+      :start_time     => start_time,
+      :end_time       => end_time,
+      :participate    => participate,
+      :status      => status,
+      :created_at  => created_at,
+      :updated_at  => updated_at,
+      :author => {
+        :id        =>  author.id,
+        :login     =>  author.login,
+        :photos    => {
+          :icon      => author.photos.icon,
+          :header    => author.photos.header,
+          :avatar    => author.photos.avatar
+        }
+      },
+      :shop        => {
+        :id        => shop.id,
+        :name      => shop.name,
+        :photos    => {
+          :icon      => shop.photos.icon,
+          :header    => shop.photos.header,
+          :avatar    => shop.photos.avatar
+        }
+      },
+      :photos      => {
+        :icon         => photos.icon,
+        :header       => photos.header,
+        :avatar       => photos.avatar
+      }
+    }.to_json
+  end
 end

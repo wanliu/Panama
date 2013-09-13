@@ -123,6 +123,10 @@ class User < ActiveRecord::Base
     photos.icon
   end
 
+  def value
+    login
+  end
+
   def avatar
     photos.avatar
   end
