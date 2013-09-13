@@ -28,8 +28,7 @@ ActiveAdmin.register Activity do
       a.shop.try(:name)
     end
     column :author
-    default_actions
-
+    
     column do |c|
       link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
       if c.status == Activity.statuses[:wait]
@@ -42,6 +41,15 @@ ActiveAdmin.register Activity do
 
   show do
     render "check_info"
+  end
+
+  action_item do
+    if params[:action] == "show"
+      if activity.status == Activity.statuses[:wait]
+        link = link_to "编辑活动", edit_system_activity_path(activity)
+      end
+    end
+    (link || "")
   end
 
   action_item  do
@@ -63,13 +71,13 @@ ActiveAdmin.register Activity do
   member_action :modify, :method => :post do
     activity = Activity.find(params[:id])
     activity.update_attributes(
-      :start_time => Time.parse(params[:start_time]),
-      :end_time => Time.parse(params[:end_time])
+      :start_time => Time.parse(params[:start]),
+      :end_time => Time.parse(params[:end])
     )
-    debugger
     respond_to do |format|
       format.json{  head :no_content  }
     end
+  end
 
   action_item do
     if params[:action] == "show"

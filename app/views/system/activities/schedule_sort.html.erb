@@ -1,34 +1,48 @@
-<div id="activity" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">活动调整</h3>
-  </div>
-  <form class="schedule">
-    <div class="modal-body">
-      <div class="row-fluid span9 ">
-        <input class="activity_id" type="hidden">
-        <div class="row offset2">
-          标题: <input class="title" type="text" readOnly = "readOnly">
-        </div>
-        <div class="row offset2">
-          描述: <input class="description" type="text" readOnly = "readOnly">
-        </div>
-        <div class="row offset2">
-          起始时间:<input class="begin_time" type="date">
-        </div>
-        <div class="row offset2">
-          起始时间:<input class="end_time" type="date">
-        </div>
-       </div>
+<div class="adjust_activities">
+  <div id="activity" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="adjust-modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 class="titleModal">活动调整</h3>
     </div>
-  </form>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <button class="update_activities btn btn-primary">保存</button>
+
+    <form class="form-horizontal schedule">
+      <input type ="hidden" class="activity_id">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">标题</label>
+        <div class="controls">
+          <input type="text" class="title" readOnly = "readOnly">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">描述</label>
+        <div class="controls">
+          <input type="text" class="description" readOnly = "readOnly">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">起始时间</label>
+        <div class="controls">
+          <input class="begin_time" type="date" style="padding: 8px 10px 7px;">
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">起始时间</label>
+        <div class="controls">
+          <input class="end_time" type="date" style="padding: 8px 10px 7px;">
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+      <button class="update_activities btn btn-primary">保存</button>
+    </div>
   </div>
+  <div id='calendar'></div>
+  <div id='text'></div>
 </div>
-<div id='calendar'></div>
-<div id='text'></div>
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -43,14 +57,14 @@ function getData(){
   var eventt = new Object();
   eventt.id = $(".activity_id").val();
   eventt.title = $(".title").val();
-  eventt.start_time = $(".begin_time").val();
-  eventt.end_time = $(".end_time").val();
+  eventt.start = $(".begin_time").val();
+  eventt.end = $(".end_time").val();
   eventt.description = $(".description").val();
   $('#activity').modal('hide');
   return eventt;
 }
 
-function updateEvent(my_event,dayDelta,minuteDelta,revertFunc) {
+function updateEvent(my_event) {
   datas = JSON.stringify(my_event);
   $.ajax({
     type: "POST",
@@ -58,8 +72,17 @@ function updateEvent(my_event,dayDelta,minuteDelta,revertFunc) {
     dataType: "json",
     data: datas ,
     url: "/system/activities/"+ my_event.id + "/modify",
+    success: function(){
+      pnotify({title: '提醒', text: "活动修改成功!",type: "success"});
+      $("#calendar").fullCalendar('refetchEvents'); 
+    },
+    error: function(){
+      pnotify({title: '错误', text: "修改发生错误,请稍后再试",type: "error"});
+      revertFunc();
+    }
   });
 }
+
 
 function DisplayCalendar() {
   $('div[id*=calendar]').fullCalendar({
@@ -96,14 +119,18 @@ function DisplayCalendar() {
           },
           success: function(data){
             var events =[];
-            $(data).each(function(){
-              events.push({
-                id : this.id,
-                title: this.title,
-                description: this.description,
-                start: this.start_time,
-                end: this.end_time
-              });
+            $(data).each(function(i,d){
+              var use_ful = new Object();
+              if (d.status == 1){                
+                $.extend(use_ful, { backgroundColor: 'green',textColor: 'white'});
+              };
+              use_ful.start = d.start_time;
+              use_ful.end = d.end_time;
+              use_ful.description = d.description;
+              use_ful.id = d.id;
+              use_ful.title = d.title;
+              use_ful.status = d.status;
+              events.push(use_ful);
             });
             callback(events);
           }
@@ -111,24 +138,61 @@ function DisplayCalendar() {
     },
 
     eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
-      updateEvent(event,dayDelta);
+      if (event.status == 1){
+        pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
+        revertFunc();
+      }else{
+        updateEvent(event);  
+      }
     },
 
     eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-      updateEvent(event,dayDelta);
+      updateEvent(event);
     },
 
     eventClick: function(event, element) {
-      $(".activity_id").val(event.id);
-      $(".title").val(event.title);
-      $(".description").val(event.description);
-      $(".begin_time").val((event.start).format("yyyy-MM-dd"));
-      $(".end_time").val((event.end).format("yyyy-MM-dd"));
-      $('#activity').modal();
-      $('#calendar').fullCalendar('updateEvent', event);     
+      $('.tooltipevent').remove();
+      if (event.status == 1){
+        pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
+      }else{
+        $(".activity_id").val(event.id);
+        $(".title").val(event.title);
+        $(".description").val(event.description);
+        $(".begin_time").val((event.start).format("yyyy-MM-dd"));
+        $(".end_time").val((event.end).format("yyyy-MM-dd"));
+        $('#activity').modal();
+        $('#calendar').fullCalendar('updateEvent', event);     
+      }
+    },
+
+    eventMouseover: function(calEvent,jsEvent){
+      var tooltip = '<div class="tooltipevent" style="width:250px;height:150px;background:rgba(42, 173, 173, 0.65);position:absolute;z-index:10001;border: 5px rgba(49, 168, 168, 0.9) solid;">'+ 
+        '标题: '+ calEvent.title + '<br/>' + 
+        '描述: '+ calEvent.description + '<br/>' +
+        '开始时间: '+ calEvent.start.format("yyyy-MM-dd") + '<br/>' +
+        '结束时间: '+ calEvent.end.format("yyyy-MM-dd") +
+      '</div>';
+      $("body").append(tooltip);
+      $(this).mouseover(function(e) {
+        $(this).css('z-index', 10000);
+        $('.tooltipevent').fadeIn('500');
+        $('.tooltipevent').fadeTo('10', 1.9);
+      }).mousemove(function(e) {
+        left = $('.tooltipevent').position().left;
+        if (left > window.screen.availWidth-400){
+          $('.tooltipevent').css('top', e.pageY + 10);
+          $('.tooltipevent').css('left', e.pageX - 300);
+        }else{
+          $('.tooltipevent').css('top', e.pageY + 10);
+          $('.tooltipevent').css('left', e.pageX + 20);
+        }
+      });
+    },
+
+    eventMouseout: function(calEvent, jsEvent) {
+      $(this).css('z-index', 8);
+      $('.tooltipevent').remove();
     }
   })
 }
-
-
 </script>
