@@ -4,3 +4,6 @@
 //= require lib/attachment_upload
 //= require system/category_tree
 //= require system/simpledatepicker
+//= require lib/fullcalendar
+//= require twitter/bootstrap/modal
+//= require core_extend/core

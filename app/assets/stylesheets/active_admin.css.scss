@@ -13,6 +13,9 @@
 @import "active_admin/base";
 @import "attachments";
 @import "system/simpledatepicker";
+@import "system/fullcalendar";
+@import "twitter/bootstrap.css";
+@import "lib/notify/pnotify";
 // Overriding any nonvariable SASS must be done after the fact.
 // For example, to change the default statustag color:
 //
@@ -94,5 +97,42 @@ body.system_categories{
 .formtastic.product{
   li.category{
     clear: both;
+  }
+}
+
+.adjust_activities{
+  #activity{ 
+    margin: 0 auto 20px;
+    padding:5px;
+    border-top: 1px solid #ddd;
+  }
+  .adjust-modal-header h3 {
+    padding: 9px 15px;
+    line-height: 30px;
+  }
+  .modal-footer{
+    padding: 14px 15px 15px;
+    border-top: 1px solid #ddd;
+  }
+  .modal{
+    left:30%;
+  }
+  #calendar{
+    & > table:first-child{
+      td{border:0px;} 
+    }
+    td{ border: 1px #ddd solid; }
+    .fc-button{
+      padding: 4px 6px 4px 6px;
+    }
+  }
+}
+
+.schedule_sort{
+  .ui-pnotify {
+    div {
+      padding: 4px;
+      margin: 2px;
+    }
   }
 }
