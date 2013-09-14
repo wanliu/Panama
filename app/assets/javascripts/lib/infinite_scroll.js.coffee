@@ -4,7 +4,8 @@ root = window || @
 # 抽象出的无限滚动加载视图
 class InfiniteScrollView extends Backbone.View
 	offset: 0,
-	limit: 10,
+	limit: 20,
+	init_size: 40,
 	msg_tip: '<div class="text-center">亲，已经到底啦</div>'
 
 	initialize: (options) ->
@@ -15,25 +16,27 @@ class InfiniteScrollView extends Backbone.View
 
 	fetch: () ->
 		$(@msg_el).show()
+		@fetch_size ||= @init_size
 		$.ajax(
 			url: @fetch_url,
 			dataType: "json",
 			data: {
 				shop_id: @shop_id,
 				offset: @offset,
-				limit: @limit
+				limit: @fetch_size
 			},
 			success: (data) =>
 				if data.length == 0
 					$(@msg_el).html(@msg_tip)
-				else if data.length == @limit
+				else if data.length == @fetch_size
 					$(@msg_el).hide()
 					@add_columns(data)
-					@offset += @limit
+					@offset += @fetch_size
 				else
 					@add_columns(data)
-					@offset += @limit
+					@offset += @fetch_size
 					$(@msg_el).html(@msg_tip)
+				@fetch_size = @limit unless @fetch_size == @limit
 		)
 
 	min_column_el: () ->
