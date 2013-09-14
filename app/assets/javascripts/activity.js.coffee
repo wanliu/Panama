@@ -127,11 +127,16 @@ class ActivityView extends Backbone.View
 		content = @$("textarea",".message").val()
 		return unless content.trim() != ""
 		comment = {content: content, targeable_id: @model.id}
-		$.post('/comments/activity', {comment: comment}, () =>
-			comment_template = _.template($('#comment-template').html())
-			@$(".comments").append(comment_template(comment))
-			@$(".comments>.comment").last().slideDown("slow")
-			@$("textarea",".message").val("")
+		$.ajax(
+			url: '/comments/activity',
+			data: {comment: comment}
+			type: 'POST'
+			dataType: "JSON"
+			success: (data) =>
+				comment_template = _.template($('#comment-template').html())
+				@$(".comments").append(comment_template(comment))
+				@$(".comments>.comment").last().slideDown("slow")
+				@$("textarea",".message").val("")
 		)
 
 	filter_state: () ->

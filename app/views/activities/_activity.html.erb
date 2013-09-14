@@ -22,7 +22,9 @@
               {{#comments}}
               <div class="comment">
                 <img class='people-image' src="{{ user.photos.header }}">
-                <span class='author-name'>{{ user.login }}</span>
+                <span class='author-name'>
+                  <a href='/people/{{user.login}}'>{{ user.login }}</a>
+                </span>
                 <div class="message">{{{ content_html }}}</div>
               </div>
               {{/comments}}
@@ -96,7 +98,7 @@
   <div class="comment hide">
     <img class="people-image" src="<%= current_user.avatar %>">
     <span class="author-name">
-      <%= current_user.login %>
+      <a href='/people/<%=current_user.login %>'><%= current_user.login %></a>
     </span>
     <div class="message">
       <%%= content %>

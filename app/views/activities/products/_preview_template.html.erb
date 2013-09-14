@@ -21,7 +21,9 @@
           <%#= image_tag AvatarUploader.new.url("5050"), :class => 'author img-circle' %>
         {{/seller.photos.icon}}
         {{#seller.name}}
-          <p>{{seller.name}}</p>
+        <p>
+          <a href='/shops/{{seller.name}}'>{{seller.name}}</a>
+        </p>
         {{/seller.name}}
         {{^seller.name}}
           <p>暂无卖家</p>
