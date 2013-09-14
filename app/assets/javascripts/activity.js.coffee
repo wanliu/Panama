@@ -173,6 +173,10 @@ class ActivityPreview extends Backbone.View
 	like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
 	unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
 
+	initialize: (options) ->
+		_.extend(@, options)
+		@model ?= new ActivityModel({ id: @id }) 
+
 	launchActivity: (event) ->
 		@model.fetch success: (model) =>
 			view = new ActivityView({
@@ -357,16 +361,20 @@ class LoadActivities extends InfiniteScrollView
 	fetch_url: "/search/activities"
 
 	add_one: (c) ->
-		switch c.activity_type
-			when "auction"
-				template = Hogan.compile($("#auction-preview-template").text())
-				@min_column_el().append(template.render(c))
-				@add_effect()
-				model = new ActivityModel({ id: c.id })
-				new ActivityPreview({
-					el: $("[activity-id=" + c.id + "]"),
-					model: model
-				})
+		console.log c._type
+		switch c._type
+			when "activity"
+				switch c.activity_type
+					when "auction"
+						template = Hogan.compile($("#auction-preview-template").text())
+						@min_column_el().append(template.render(c))
+						@add_effect()
+						new ActivityPreview({
+							id: c.id,
+							el: $("[activity-id=" + c.id + "]")
+						})
+			when "ask_buy"
+				debugger
 
 	add_effect: () ->
 		effect = "fadeInRight"
