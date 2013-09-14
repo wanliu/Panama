@@ -169,7 +169,7 @@ function DisplayCalendar() {
     },
 
     eventClick: function(event, element) {
-      // $('.tooltipevent').remove();
+      $('.tooltipevent').remove();
       if (event.status == 1){
         pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
       }else{
@@ -196,7 +196,10 @@ function DisplayCalendar() {
         $('.tooltipevent').fadeIn('500');
         $('.tooltipevent').fadeTo('10', 1.9);
       }).mousemove(function(e) {
-        var left = $('.tooltipevent').position().left;
+        var left = 0;
+        if ($('.tooltipevent')){
+          var left = $('.tooltipevent').position().left;
+        };
         if (left > window.screen.availWidth-500){
           $('.tooltipevent').css('top', e.pageY + 10);
           $('.tooltipevent').css('left', e.pageX - 300);
