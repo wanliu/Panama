@@ -6,6 +6,7 @@
 #= require backbone
 #= require lib/hogan
 #= require ask_buy_preview
+#= require shop_products
 #= require lib/infinite_scroll
 
 root = window || @
@@ -204,11 +205,62 @@ class ActivityPreview extends Backbone.View
 
 
 class ProductPreview extends Backbone.View
+	events: {
+		'click .ask_buy_feture' : 'ask_buy'
+	}
+	initialize: () ->
+		@template = Hogan.compile($("#product-preview-template").text())
+		@$el = $(@template.render(@model)) if @template
 
 	render: () ->
-		@template = @options? and @options['template']
-		@$el = $(@template.render(@model)) if @template
 		@
+
+	ask_buy: () ->
+		try
+			link = $(".create_ask_buy")
+			dialog = $("#{link.attr('data-target')}")
+			dialog.on "shown", () =>
+				ask_buy_view.fetch_product(@model.id)
+
+			$(".modal-body", dialog).load link.attr("href"), () =>
+				dialog.modal('show')
+
+			false
+		catch error
+			false
+
+
+
+
+class ShopProductView extends Backbone.View
+	events: {
+		'click .buy' : 'buy'
+	}
+	initialize: () ->
+		@template = Hogan.compile($("#product-preview-template").text())
+		@$el = $(@template.render(@model)) if @template
+		new ShopProductPreview({
+			shop_product_id: @model.id,
+			el: @$el
+		})
+	render: () ->
+		@
+
+	buy: () ->
+		try
+			$.ajax(
+				url: "/shop_products/#{@model.id}/direct_buy",
+				type: "POST",
+				data: {amount: 1}
+				success: (data) =>
+					window.location.href = "/people/#{data.buyer_login}/transactions"
+				error: (data) ->
+					pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+			)
+			false
+		catch error
+			false
+
 
 
 class ActivityModel extends Backbone.Model
@@ -291,12 +343,14 @@ class ActivitiesView extends Backbone.View
 
 
 	generateView: (model, default_type = "product") ->
-		@pdPreview ||= Hogan.compile($("#product-preview-template").text())
-		switch model.type || default_type
+		switch model._type || default_type
 			when "product"
-				new ProductPreview(model: model, template: @pdPreview).render()
+				new ProductPreview(model: model).render()
+			when "shop_product"
+				new ShopProductView(model: model).render()
 			else
-				new ProductPreview(model: model, template: @pdPreview).render()
+				console.error('没有模板')
+
 
 
 class LoadActivities extends InfiniteScrollView

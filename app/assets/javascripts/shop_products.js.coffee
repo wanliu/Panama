@@ -49,6 +49,7 @@ class ShopProductPreview extends Backbone.View
 
 	initialize: (options) ->
 		_.extend(@, options)
+		@model ?= new ShopProductModel({id: @shop_product_id})
 
 	launchShopProduct: (event) ->
 		@model.fetch success: (model) =>
