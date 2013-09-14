@@ -11,6 +11,7 @@ class LoadCategoryProducts extends InfiniteScrollView
 
 	add_one: (c) ->
 		# c.img_url = c.attachments[0].url
+		debugger
 		template = Hogan.compile($("#category_product-preview-template").text())
 		@min_column_el().append(template.render(c))
 		new ShopProductPreview({

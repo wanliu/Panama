@@ -2,9 +2,9 @@
 	<div class='out-box'>
 		<form>
 			<div class='in-box'>
-				{{#photos.avatar}}
-					<img src='{{photos.avatar}}' class="preview a-{{id}}" />
-				{{/photos.avatar}}
+				{{#photos}}
+					<img src='{{avatar}}' class="preview a-{{id}}" />
+				{{/photos}}
 			</div>
 
 			<div class='summary'>
@@ -13,9 +13,9 @@
 			</div>
 			
 			<div class='userinfo'>
-				{{#author.photos.icon}}
-					<img src='{{author.photos.icon}}' class="author img-circle" />
-				{{/author.photos.icon}}
+				{{#author.photos}}
+					<img src='{{icon}}' class="author img-circle" />
+				{{/author.photos}}
 				<p>
 					<a href="<%= person_path('{{author}}') %>">
 						{{ author.login }}
