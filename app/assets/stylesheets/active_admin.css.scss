@@ -135,4 +135,20 @@ body.system_categories{
       margin: 2px;
     }
   }
+  .tooltipevent
+  {
+    font-size: 14px;
+    position: absolute;
+    width: 250px;
+    max-width: 400px;
+    text-align: left; 
+    padding: 4px;
+    border: #87CEEB solid 7px;
+    border-radius: 5px;
+    background: #00BFFF;
+    z-index: 1000;
+    span{
+      font-size: 16px;
+    } 
+  }
 }

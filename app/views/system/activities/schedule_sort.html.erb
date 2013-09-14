@@ -47,10 +47,8 @@
     </div>
   </div>
   <div id='calendar'></div>
-  <div id='text'></div>
 </div>
 <script type="text/javascript">
-
 $(document).ready(function () {
   $(".update_activities").bind("click",function(){
     eventt = getData();
@@ -186,11 +184,11 @@ function DisplayCalendar() {
     },
 
     eventMouseover: function(calEvent,jsEvent){
-      var tooltip = '<div class="tooltipevent" style="width:250px;height:150px;background:rgba(42, 173, 173, 0.65);position:absolute;z-index:10001;border: 5px rgba(49, 168, 168, 0.9) solid;">'+ 
-        '标题: '+ calEvent.title + '<br/>' + 
-        '描述: '+ calEvent.description + '<br/>' +
-        '开始时间: '+ calEvent.start.format("yyyy-MM-dd") + '<br/>' +
-        '结束时间: '+ calEvent.end.format("yyyy-MM-dd") +
+      var tooltip = '<div class="tooltipevent">'+ 
+        '<span>标题: &nbsp;</span> '+ calEvent.title + '<br/>' + 
+        '<span>描述:  &nbsp;</span>'+ calEvent.description + '<br/>' +
+        '<span>开始时间: &nbsp;</span>'+ calEvent.start.format("yyyy-MM-dd") + '<br/>' +
+        '<span>结束时间: &nbsp;</span>'+ calEvent.end.format("yyyy-MM-dd") +
       '</div>';
       $("body").append(tooltip);
       $(this).mouseover(function(e) {
@@ -198,8 +196,11 @@ function DisplayCalendar() {
         $('.tooltipevent').fadeIn('500');
         $('.tooltipevent').fadeTo('10', 1.9);
       }).mousemove(function(e) {
-        var left = $('.tooltipevent').position().left;
-        if (left > window.screen.availWidth-400){
+        var left = 0;
+        if ($('.tooltipevent')){
+          var left = $('.tooltipevent').position().left;
+        };
+        if (left > window.screen.availWidth-500){
           $('.tooltipevent').css('top', e.pageY + 10);
           $('.tooltipevent').css('left', e.pageX - 300);
         }else{
