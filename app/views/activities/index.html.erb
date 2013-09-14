@@ -1,44 +1,44 @@
 <% side_nav_for 'fiery' %>
 <div id="main" class="content">
-  <section class="widget">
-    <div class="body">
-      <ul id="activity-category" class="nav nav-tabs activity-category" >
-        <li class="active">
-          <a href='#' ><%=icon 'eye-open' %> </a>
-        </li>
-        <% product_categories.each do |c| %>
-        <li>
-          <a href="<%= category_path(c) %>"><%=c.name %></a>
-        </li>
-        <% end %>
-      </ul>
-    </div>
-  </section>
-  <div id="activities">
-    <!-- m列，按下标公式1n, 2n +1, 3n + 2.... mn + 3分类竖向排列 -->
-    <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
-      <div class="column">
-      <% indexs.each do |index| %>
-        <%= render_activity @activities[index] %>
-      <% end %>
-      </div>
-    <% end %>
-
-    <% @ask_buy.each do |a| %>
-      <div class="column">
-      <%= render_activity a %>
-      </div>
-    <% end %>
-  </div>
-
-  <script type="text/javascript">
-    new ActivitiesView({
-      el: '#activities',
-      wrap_id: "activities"
-    })
-  </script>
+	<section class="widget">
+		<div class="body">
+			<ul id="activity-category" class="nav nav-tabs activity-category" >
+				<li class="active">
+					<a href='#' ><%=icon 'eye-open' %> </a>
+				</li>
+				<% product_categories.each do |c| %>
+				<li>
+					<a href="<%= category_path(c) %>"><%=c.name %></a>
+				</li>
+				<% end %>
+			</ul>
+		</div>
+	</section>
+	<div class='activities_panel'>
+		<div id="activities">
+		</div>
+		<div class='load_msg'>
+			<img src='/assets/loading_max.gif' />正在加载...
+		</div>
+	</div>
 </div>
 
 <script type="text/template" id="product-preview-template">
-  <%= render "activities/products/preview_template" %>
+	<%= render "activities/products/preview_template" %>
+</script>
+
+<script type="text/template" id="auction-preview-template">
+	<%= render "activities/auction/preview_template" %>
+</script>
+
+<script type="text/javascript">
+	$(function(){
+		new ActivitiesView({
+			el: '#activities',
+			wrap_id: "activities"
+		})
+		new LoadActivities({
+			el: $('.activities_panel')
+		})
+	})
 </script>

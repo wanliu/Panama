@@ -30,15 +30,14 @@ class CategoryController < ApplicationController
 		else
 			Category.find(params[:id])
 		end
-		@shop_products = ShopProduct.joins(:product).where(
+		@shop_products = ShopProduct.joins(:product).joins(:shop).where(
 			"products.category_id" => @category.descendants.pluck(:id))
 		@shop_products = @shop_products.offset(params[:offset]) if params[:offset].present?
 		@shop_products = @shop_products.limit(params[:limit]) if params[:limit].present?
 
 		respond_to do |format|
 			format.html
-			format.json { render json: @shop_products.as_json(
-				:version_name => "240x240") }
+			format.json { render json: @shop_products.as_json(:version_name => "240x240") }
 		end
 	end
 
