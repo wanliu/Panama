@@ -230,8 +230,6 @@ class ProductPreview extends Backbone.View
 			false
 
 
-
-
 class ShopProductView extends Backbone.View
 	events: {
 		'click .buy' : 'buy'

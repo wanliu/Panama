@@ -25,10 +25,6 @@ class AskBuy < ActiveRecord::Base
     end
   end
 
-  def self.index_name
-    "activities"
-  end
-
   def as_json(*args)
     attra = super *args
     attra["user"] = user.as_json
