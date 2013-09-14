@@ -68,6 +68,9 @@ class ProductItem < ActiveRecord::Base
   validates :user, :presence => true
   validates :shop, :presence => true
   validates :product, :presence => true
+  validates :price, :numericality => true
+
+  validates_numericality_of :amount, :greater_than => 0
 
   validate :valid_buyer_self_product?
 

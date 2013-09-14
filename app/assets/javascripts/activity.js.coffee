@@ -6,6 +6,7 @@
 #= require backbone
 #= require lib/hogan
 #= require ask_buy_preview
+#= require shop_products
 #= require lib/infinite_scroll
 
 root = window || @
@@ -30,6 +31,8 @@ class ActivityView extends Backbone.View
 		"click .unlike-button"    : "unlike"
 		"click .partic-button"    : 'addToCard'
 		"click .submit-comment"     : "addComment"
+		"keyup textarea[name=message]" : 'filter_state'
+		'submit form.new_product_item' : 'validate_date'
 	}
 
 	like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
@@ -125,12 +128,38 @@ class ActivityView extends Backbone.View
 		content = @$("textarea",".message").val()
 		return unless content.trim() != ""
 		comment = {content: content, targeable_id: @model.id}
-		$.post('/comments/activity', {comment: comment})
-		comment_template = _.template($('#comment-template').html())
-		@$(".comments").append(comment_template(comment))
-		@$(".comments>.comment").last().slideDown("slow")
-		@$("textarea",".message").val("")
+		$.ajax(
+			url: '/comments/activity',
+			data: {comment: comment}
+			type: 'POST'
+			dataType: "JSON"
+			success: (data) =>
+				comment_template = _.template($('#comment-template').html())
+				@$(".comments").append(comment_template(comment))
+				@$(".comments>.comment").last().slideDown("slow")
+				@$("textarea",".message").val("")
+		)
 
+	filter_state: () ->
+		message = @$("textarea",".message").val().trim()
+		comment = @$(".submit-comment")
+		if _.isEmpty(message)
+			comment.addClass("disabled")
+		else
+			comment.removeClass("disabled")
+
+	validate_date: () ->
+		values = @$("form.new_product_item").serializeArray()
+		data = {}
+		_.each values, (v) -> data[v.name] = v.value
+
+		if parseFloat(data['product_item[amount]']) <= 0
+			pnotify({text: "数量不能少于等于0"})
+			return false
+
+		unless /^\d+(\.?\d+)?$/.test(data['product_item[amount]'])
+			pnotify({text: "请输入正确的数量！"})
+			return false
 
 class ActivityPreview extends Backbone.View
 
@@ -176,11 +205,62 @@ class ActivityPreview extends Backbone.View
 
 
 class ProductPreview extends Backbone.View
+	events: {
+		'click .ask_buy_feture' : 'ask_buy'
+	}
+	initialize: () ->
+		@template = Hogan.compile($("#product-preview-template").text())
+		@$el = $(@template.render(@model)) if @template
 
 	render: () ->
-		@template = @options? and @options['template']
-		@$el = $(@template.render(@model)) if @template
 		@
+
+	ask_buy: () ->
+		try
+			link = $(".create_ask_buy")
+			dialog = $("#{link.attr('data-target')}")
+			dialog.on "shown", () =>
+				ask_buy_view.fetch_product(@model.id)
+
+			$(".modal-body", dialog).load link.attr("href"), () =>
+				dialog.modal('show')
+
+			false
+		catch error
+			false
+
+
+
+
+class ShopProductView extends Backbone.View
+	events: {
+		'click .buy' : 'buy'
+	}
+	initialize: () ->
+		@template = Hogan.compile($("#product-preview-template").text())
+		@$el = $(@template.render(@model)) if @template
+		new ShopProductPreview({
+			shop_product_id: @model.id,
+			el: @$el
+		})
+	render: () ->
+		@
+
+	buy: () ->
+		try
+			$.ajax(
+				url: "/shop_products/#{@model.id}/direct_buy",
+				type: "POST",
+				data: {amount: 1}
+				success: (data) =>
+					window.location.href = "/people/#{data.buyer_login}/transactions"
+				error: (data) ->
+					pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+			)
+			false
+		catch error
+			false
+
 
 
 class ActivityModel extends Backbone.Model
@@ -263,12 +343,14 @@ class ActivitiesView extends Backbone.View
 
 
 	generateView: (model, default_type = "product") ->
-		@pdPreview ||= Hogan.compile($("#product-preview-template").text())
-		switch model.type || default_type
+		switch model._type || default_type
 			when "product"
-				new ProductPreview(model: model, template: @pdPreview).render()
+				new ProductPreview(model: model).render()
+			when "shop_product"
+				new ShopProductView(model: model).render()
 			else
-				new ProductPreview(model: model, template: @pdPreview).render()
+				console.error('没有模板')
+
 
 
 class LoadActivities extends InfiniteScrollView
@@ -283,7 +365,7 @@ class LoadActivities extends InfiniteScrollView
 				@min_column_el().append(template.render(c))
 				@add_effect()
 				model = new ActivityModel({ id: c.id })
-				new ActivityPreview({ 
+				new ActivityPreview({
 					el: $("[activity-id=" + c.id + "]"),
 					model: model
 				})
@@ -300,7 +382,7 @@ class LoadActivities extends InfiniteScrollView
 				# $(event.currentTarget)
 				# .find(".preview")
 				# .addClass("animate0 " + "flipInY")
-			
+
 		$(@el, '.activity').mouseleave (event) =>
 			$(event.currentTarget)
 				.find(".right_bottom2")
@@ -311,7 +393,7 @@ class LoadActivities extends InfiniteScrollView
 				# $(event.currentTarget)
 				#	.find(".preview")
 				# .removeClass("animate0 " + "flipInY");
-				
+
 
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview

@@ -30,8 +30,10 @@ class CategoryController < ApplicationController
 		else
 			Category.find(params[:id])
 		end
+		category_ids = @category.descendants.pluck(:id)
+		category_ids << @category.id
 		@shop_products = ShopProduct.joins(:product).joins(:shop).where(
-			"products.category_id" => @category.descendants.pluck(:id))
+			"products.category_id" => category_ids)
 		@shop_products = @shop_products.offset(params[:offset]) if params[:offset].present?
 		@shop_products = @shop_products.limit(params[:limit]) if params[:limit].present?
 

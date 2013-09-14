@@ -6,14 +6,14 @@ class UserCheckingsController < ApplicationController
   	@user_checking = current_user.user_checking
   	@user_auth = params[:user_auth]
   	@user_checking.update_attributes(@user_auth)
-	redirect_to person_path(current_user)
+	  redirect_to person_path(current_user)
   end
 
   def update_shop_auth
   	@user_checking = current_user.user_checking
   	@shop_auth = params[:shop_auth]
   	@user_checking.update_attributes(@shop_auth)
-  	redirect_to "/shops/#{ @user_checking.user.login }/admins/shop_info"
+  	redirect_to "/shops/#{ @user_checking.try(:shop_name) }/admins/shop_info"
   end
 
   #上传头像
@@ -23,7 +23,7 @@ class UserCheckingsController < ApplicationController
     unless file.nil?
         @user_checking = User.find(params[:id]).user_checking
         if @user_checking.send(field_name)
-            @user_checking.send(field_name).remove! if  @user_checking.send(field_name)
+          @user_checking.send(field_name).remove! if  @user_checking.send(field_name)
         end
         @user_checking.send("#{field_name}=",file)
         if @user_checking.user.try(:shop)  &&  field_name == "shop_photo"
@@ -31,12 +31,12 @@ class UserCheckingsController < ApplicationController
           @user_checking.user.try(:shop).save
         end 
         if @user_checking.save
-            render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
+          render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
         else
-            render :text => "{success: false, error: '上传头像失败！'}"
+          render :text => "{success: false, error: '上传头像失败！'}"
         end
     else
-        render :text => "{success: false, error: '请上传头像！'}"
+      render :text => "{success: false, error: '请上传头像！'}"
     end
   end
 end

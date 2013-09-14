@@ -28,7 +28,7 @@ class TopBar extends Backbone.View
 		false
 
 	successSearch: (data) ->
-		@$("[type=search]").val("")
+		#@$("[type=search]").val("")
 		$(window).trigger('search_result:reset', data: data)
 
 
