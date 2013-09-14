@@ -69,6 +69,9 @@ class ProductItem < ActiveRecord::Base
   validates :shop, :presence => true
   validates :product, :presence => true
 
+  validates_numericality_of :price, :greater_than => 0
+  validates_numericality_of :amount, :greater_than => 0
+
   validate :valid_buyer_self_product?
 
   before_save do
