@@ -24,19 +24,19 @@
 		</div>
 		<div class="buttons">
 			<% if activity.start_sale? %>
-			<%= link_to '#', class: 'btn btn-danger launch-button' do %>
-				<%= icon('shopping-cart') + " 参与" %>
-			<% end %>
+				<%= link_to '#', class: 'btn btn-danger launch-button' do %>
+					<%= icon('shopping-cart') + " 查看" %>
+				<% end %>
 
-			<% if activity.likes.exists?(current_user) %>
-				<%= link_to '#', class: 'btn unlike-button active' do %>
-					<%= "取消支持" %>
+				<% if activity.likes.exists?(current_user) %>
+					<%= link_to '#', class: 'btn unlike-button active' do %>
+						<%= "取消支持" %>
+					<% end %>
+				<% else %>
+					<%= link_to '#', class: 'btn like-button' do %>
+						<%= icon(:'thumbs-up') + " 支持" %>
+					<% end %>
 				<% end %>
-			<% else %>
-				<%= link_to '#', class: 'btn like-button' do %>
-					<%= icon(:'thumbs-up') + " 支持" %>
-				<% end %>
-			<% end %>
 			<% end %>
 		</div>
 	<!-- 	<div class="comments_and_reply">
