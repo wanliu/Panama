@@ -30,6 +30,8 @@ class ActivityView extends Backbone.View
 		"click .unlike-button"    : "unlike"
 		"click .partic-button"    : 'addToCard'
 		"click .submit-comment"     : "addComment"
+		"keyup textarea[name=message]" : 'filter_state'
+		'submit form.new_product_item' : 'validate_date'
 	}
 
 	like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
@@ -125,12 +127,33 @@ class ActivityView extends Backbone.View
 		content = @$("textarea",".message").val()
 		return unless content.trim() != ""
 		comment = {content: content, targeable_id: @model.id}
-		$.post('/comments/activity', {comment: comment})
-		comment_template = _.template($('#comment-template').html())
-		@$(".comments").append(comment_template(comment))
-		@$(".comments>.comment").last().slideDown("slow")
-		@$("textarea",".message").val("")
+		$.post('/comments/activity', {comment: comment}, () =>
+			comment_template = _.template($('#comment-template').html())
+			@$(".comments").append(comment_template(comment))
+			@$(".comments>.comment").last().slideDown("slow")
+			@$("textarea",".message").val("")
+		)
 
+	filter_state: () ->
+		message = @$("textarea",".message").val().trim()
+		comment = @$(".submit-comment")
+		if _.isEmpty(message)
+			comment.addClass("disabled")
+		else
+			comment.removeClass("disabled")
+
+	validate_date: () ->
+		values = @$("form.new_product_item").serializeArray()
+		data = {}
+		_.each values, (v) -> data[v.name] = v.value
+
+		if parseFloat(data['product_item[amount]']) <= 0
+			pnotify({text: "数量不能少于等于0"})
+			return false
+
+		unless /^\d+(\.?\d+)?$/.test(data['product_item[amount]'])
+			pnotify({text: "请输入正确的数量！"})
+			return false
 
 class ActivityPreview extends Backbone.View
 
@@ -283,7 +306,7 @@ class LoadActivities extends InfiniteScrollView
 				@min_column_el().append(template.render(c))
 				@add_effect()
 				model = new ActivityModel({ id: c.id })
-				new ActivityPreview({ 
+				new ActivityPreview({
 					el: $("[activity-id=" + c.id + "]"),
 					model: model
 				})
@@ -300,7 +323,7 @@ class LoadActivities extends InfiniteScrollView
 				# $(event.currentTarget)
 				# .find(".preview")
 				# .addClass("animate0 " + "flipInY")
-			
+
 		$(@el, '.activity').mouseleave (event) =>
 			$(event.currentTarget)
 				.find(".right_bottom2")
@@ -311,7 +334,7 @@ class LoadActivities extends InfiniteScrollView
 				# $(event.currentTarget)
 				#	.find(".preview")
 				# .removeClass("animate0 " + "flipInY");
-				
+
 
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview
