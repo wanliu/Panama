@@ -67,7 +67,7 @@ class SearchController < ApplicationController
   def activities
     query = filter_special_sym(params[:q])
     _size, _from = params[:limit], params[:offset]
-    s = Activity.search2 :type => ['activity', 'ask_buy'] do
+    s = Tire.search ['activities', 'ask_buys'] do
       from _from
       size _size
     end
