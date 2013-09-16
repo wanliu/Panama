@@ -53,7 +53,7 @@ ActiveAdmin.register Activity do
   end
 
   action_item  do
-    link_to "排承", schedule_sort_system_activities_path                
+    link_to "排程日历", schedule_sort_system_activities_path                
   end
 
   collection_action :schedule_sort, :method => :get do 

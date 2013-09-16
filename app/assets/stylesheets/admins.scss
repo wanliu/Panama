@@ -331,3 +331,9 @@ $left-side-admin-width: 160px;
 .paddings{
   padding-top: 20px;
 }
+
+.bill_detail{
+  .cell{ padding-top: 18px;}
+  .dl-horizontal dt{ width: 80px; text-align: center;}
+  .dl-horizontal dd{ margin-left: 10px;}
+}

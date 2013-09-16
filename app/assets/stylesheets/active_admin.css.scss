@@ -9,12 +9,12 @@
 
 // Active Admin's got SASS!
 //
+@import "twitter/bootstrap.css";
 @import "active_admin/mixins";
 @import "active_admin/base";
 @import "attachments";
 @import "system/simpledatepicker";
 @import "system/fullcalendar";
-@import "twitter/bootstrap.css";
 @import "lib/notify/pnotify";
 // Overriding any nonvariable SASS must be done after the fact.
 // For example, to change the default statustag color:
@@ -152,3 +152,6 @@ body.system_categories{
     } 
   }
 }
+
+table.index_table td{ vertical-align: middle !important; text-align: center;}
+table.index_table th{ text-align: center !important; }
