@@ -47,6 +47,11 @@ class InfiniteScrollView extends Backbone.View
 	add_columns: (data) ->
 		_.each data, (c) =>
 			@add_one(c)
+		@after_add()
+
+	add_one: (c) ->
+
+	after_add: () ->
 
 	scroll_load: () ->
 		if $(@msg_el).css("display") != "block"

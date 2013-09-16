@@ -24,7 +24,7 @@ ANIMATES = ["flash", "bounce", "shake", "tada", "swing", "wobble", "wiggle", "pu
 
 class ActivityView extends Backbone.View
 
-	events: {
+	events: 
 		"click [data-dismiss=modal]": "close"
 		"click .animate-play"     : "playAnimate"
 		"click .like-button"    : "like"
@@ -33,7 +33,6 @@ class ActivityView extends Backbone.View
 		"click .submit-comment"     : "addComment"
 		"keyup textarea[name=message]" : 'filter_state'
 		'submit form.new_product_item' : 'validate_date'
-	}
 
 	like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
 	unlike_template: '<a class="btn unlike-button active" href="#">取消喜欢</a>'
@@ -161,6 +160,7 @@ class ActivityView extends Backbone.View
 			pnotify({text: "请输入正确的数量！"})
 			return false
 
+
 class ActivityPreview extends Backbone.View
 
 	events:
@@ -168,7 +168,6 @@ class ActivityPreview extends Backbone.View
 		"click .like-button"  : "like"
 		"click .unlike-button"  : "unlike"
 		"click .launch-button"  : "launchActivity"
-
 
 	like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
 	unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
@@ -235,9 +234,9 @@ class ProductPreview extends Backbone.View
 
 
 class ShopProductView extends Backbone.View
-	events: {
+	events: 
 		'click .buy' : 'buy'
-	}
+	
 	initialize: () ->
 		@template = Hogan.compile($("#product-preview-template").text())
 		@$el = $(@template.render(@model)) if @template
@@ -262,7 +261,6 @@ class ShopProductView extends Backbone.View
 			false
 		catch error
 			false
-
 
 
 class ActivityModel extends Backbone.Model
@@ -329,7 +327,6 @@ class ActivitiesView extends Backbone.View
 		@$el = new_dom
 		@resizeWrap()
 
-
 	fetchResults: () ->
 		row = 0
 		columns = @$(".column")
@@ -340,9 +337,7 @@ class ActivitiesView extends Backbone.View
 			results.push(node) if node?
 			node).any()
 			row++
-
 		results
-
 
 	generateView: (model, default_type = "product") ->
 		switch model._type || default_type
@@ -354,31 +349,25 @@ class ActivitiesView extends Backbone.View
 				console.error('没有模板')
 
 
-
 class LoadActivities extends InfiniteScrollView
 	msg_el: ".load_msg",
 	sp_el: "#activities",
 	fetch_url: "/search/activities"
 
 	add_one: (c) ->
-		console.log c._type
 		switch c._type
 			when "activity"
 				switch c.activity_type
 					when "auction"
 						template = Hogan.compile($("#auction-preview-template").text())
 						@min_column_el().append(template.render(c))
-						@add_effect()
-						new ActivityPreview({
-							id: c.id,
-							el: $("[activity-id=" + c.id + "]")
-						})
 			when "ask_buy"
-				debugger
+				template = Hogan.compile($("#ask_buy-preview-template").text())
+				@min_column_el().append(template.render(c))
 
-	add_effect: () ->
+	after_add: () ->
 		effect = "fadeInRight"
-		$(@el, '.activity').hover (event) =>
+		$('.activity').hover (event) =>
 			$(event.currentTarget)
 				.find(".right_bottom2")
 				.addClass("animate1 " + effect)
@@ -389,7 +378,7 @@ class LoadActivities extends InfiniteScrollView
 				# .find(".preview")
 				# .addClass("animate0 " + "flipInY")
 
-		$(@el, '.activity').mouseleave (event) =>
+		$('.activity').mouseleave (event) =>
 			$(event.currentTarget)
 				.find(".right_bottom2")
 				.removeClass("animate1 " + effect)
@@ -398,7 +387,7 @@ class LoadActivities extends InfiniteScrollView
 				.removeClass("animate2 " + effect)
 				# $(event.currentTarget)
 				#	.find(".preview")
-				# .removeClass("animate0 " + "flipInY");
+				# .removeClass("animate0 " + "flipInY")
 
 
 root.ActivityModel = ActivityModel

@@ -23,14 +23,14 @@
 
               <div class="comments">
                 {{#comments}}
-                <%= render  "ask_buy/comment" %>
+                  <%= render  "ask_buy/comment" %>
                 {{/comments}}
               </div>
               <div class="reply_form">
                 <div class='user-info'>
                   <img src="<%= current_user.photos.icon %>">
                   <a href='javascript:void(0)'>
-                    <%=current_user.login %>
+                    <%= current_user.login %>
                   </a>
                 </div>
                 <div class='message'>
@@ -46,7 +46,9 @@
       <div class="span3">
         <div class="dialog">
           <div class="modal-body">
-            <img class="author_image" src={{user.header_url}} />
+            {{#user.photos}}
+              <img class="author_image" src='{{icon}}' />
+            {{/user.photos}}
             <h4>{{user.login}}</h4>
             <p>关注 55</p>
             <p>粉丝 100</p>

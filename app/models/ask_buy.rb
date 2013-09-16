@@ -28,7 +28,7 @@ class AskBuy < ActiveRecord::Base
   def as_json(*args)
     attra = super *args
     attra["user"] = user.as_json
-    attra["url"] = photos.preview
+    attra["url"] = photos.default
     attra
   end
 
