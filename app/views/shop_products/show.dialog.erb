@@ -103,7 +103,7 @@
                             <%=c.comment.content %>
                           </p>
                           <p>
-                          <small rel='tooltip' title="<%=I18n.l c.comment.created_at, :format => :long %>">
+                          <small rel='tooltip' title="<%= I18n.l c.comment.created_at, :format => :long %>">
                           <%= time_ago_in_words c.comment.created_at %>
                           <span class="display-state"></span>
                           </small>

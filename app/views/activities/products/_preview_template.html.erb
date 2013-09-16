@@ -17,9 +17,7 @@
         {{#seller.photos.icon}}
         <img src="{{seller.photos.icon}}" class='author img-circle' alt="Author" />
         {{/seller.photos.icon}}
-        {{^seller.photos.icon}}
-          <%#= image_tag AvatarUploader.new.url("5050"), :class => 'author img-circle' %>
-        {{/seller.photos.icon}}
+
         {{#seller.name}}
         <p>
           <a href='/shops/{{seller.name}}'>{{seller.name}}</a>
@@ -32,13 +30,16 @@
         <span class='like-count'>喜欢 {{like}}{{^like}}0{{/like}}</span>
       </div>
     <div class="buttons">
-      <%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
-        <%#= icon(:'shopping-cart') + " 参与" %>
-      <%# end %>
-
-      <%= link_to '#', class: 'btn btn-danger launch-button' do %>
+      {{#seller}}
+      <%= button_tag class: 'btn btn-danger launch-button buy' do %>
         <%= icon('shopping-cart') + " 购买" %>
       <% end %>
+      {{/seller}}
+      {{^seller}}
+        <%= button_tag class: 'btn btn-info launch-button ask_buy_feture' do %>
+        <%= icon('shopping-cart') + " 求购" %>
+        <% end %>
+      {{/seller}}
 
     </div>
     </form>

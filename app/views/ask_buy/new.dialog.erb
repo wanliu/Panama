@@ -31,7 +31,7 @@
 <script type='text/javascript'>
   $(document).ready(function(){
     var data = <%= @ask_buy.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
-    view = new AskBuyView({
+    window.ask_buy_view = new AskBuyView({
       el: $("form.form_ask_buy"),
       params: {
         url_upload: "<%=attachments_path %>",
@@ -46,7 +46,7 @@
       field: "name",
       source: "/product_search",
       select: function(id){
-        view.fetch_product(id)
+        ask_buy_view.fetch_product(id)
       }
     })
 

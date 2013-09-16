@@ -67,13 +67,27 @@ class SearchController < ApplicationController
   def activities
     query = filter_special_sym(params[:q])
     _size, _from = params[:limit], params[:offset]
-    s = Activity.search2 :type => ['activity', 'ask_buy'] do
+    s = Tire.search ['activities', 'ask_buys'] do
       from _from
       size _size
     end
-    @results = s.results
+    @results = deal_results(s.results)
     respond_to do |format|
       format.json{ render :json => @results }
+    end
+  end
+
+  private
+  def deal_results(results)
+    rs = results.map do |result|
+      if result.type == "activity"
+        activity = Activity.find(result.id)
+        result = result.to_hash.merge({
+          is_start: activity.start_sale?, 
+          likes: activity.likes.exists?(current_user)
+        })
+      end
+      result
     end
   end
 end
