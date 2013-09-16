@@ -20,13 +20,13 @@
 
             <div class="comments">
               {{#comments}}
-              <div class="comment">
-                <img class='people-image' src="{{ user.photos.header }}">
-                <span class='author-name'>
-                  <a href='/people/{{user.login}}'>{{ user.login }}</a>
-                </span>
-                <div class="message">{{{ content_html }}}</div>
-              </div>
+                <div class="comment">
+                  <img class='people-image' src="{{ user.photos.header }}">
+                  <span class='author-name'>
+                    <a href='/people/{{user.login}}'>{{ user.login }}</a>
+                  </span>
+                  <div class="message">{{{ content_html }}}</div>
+                </div>
               {{/comments}}
             </div>
             <div class="reply_form">

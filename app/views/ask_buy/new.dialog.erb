@@ -29,7 +29,7 @@
 </script>
 
 <script type='text/javascript'>
-  $(document).ready(function(){
+  $(function(){
     var data = <%= @ask_buy.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
     window.ask_buy_view = new AskBuyView({
       el: $("form.form_ask_buy"),
