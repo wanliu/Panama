@@ -169,7 +169,12 @@ function DisplayCalendar() {
     },
 
     eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-      updateEvent(event,revertFunc);
+      if (event.status == 1){
+        pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
+        revertFunc();
+      }else{
+        updateEvent(event,revertFunc);
+      }
     },
 
     eventClick: function(event, element) {
