@@ -1,5 +1,5 @@
 
-root = window || this
+root = window || @
 
 class TreeSlide extends Backbone.View
 
@@ -12,10 +12,18 @@ class TreeSlide extends Backbone.View
 		if $collapse_target.toggleClass("in").hasClass("in")
 			$collapse_target.css('height', 'auto');
 			@$(e.target).find('i').removeClass("icon-caret-right").addClass("icon-caret-down")
+			@foldOtherRoot($collapse_target)
 		else
 			$collapse_target.css('height', '0px');
 			@$(e.target).find('i').removeClass("icon-caret-down").addClass("icon-caret-right")
 		false
+
+	foldOtherRoot: (el) ->
+		target_tree = el.parents(".tree-group").last()
+		target_tree.siblings().each (i, elem) =>
+			if $(elem).find(">ul").hasClass("in")
+				$(elem).find(">ul").removeClass("in").css('height', '0px')
+				$(elem).find('i').removeClass("icon-caret-down").addClass("icon-caret-right")
 
 	openSlide: (e) ->
 		$collapse_target = @$(@$(e.target).attr('href'))
