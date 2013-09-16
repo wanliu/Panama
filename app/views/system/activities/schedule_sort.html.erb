@@ -68,7 +68,7 @@ function getData(){
   return eventt;
 }
 
-function updateEvent(my_event) {
+function updateEvent(my_event,revertFunc) {
   datas = JSON.stringify(my_event);
   $.ajax({
     type: "POST",
@@ -164,12 +164,12 @@ function DisplayCalendar() {
         pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
         revertFunc();
       }else{
-        updateEvent(event);  
+        updateEvent(event,revertFunc);  
       }
     },
 
     eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-      updateEvent(event);
+      updateEvent(event,revertFunc);
     },
 
     eventClick: function(event, element) {
@@ -183,7 +183,7 @@ function DisplayCalendar() {
         $(".begin_time").val((event.start).format("yyyy-MM-dd"));
         $(".end_time").val((event.end).format("yyyy-MM-dd"));
         $('#activity').modal();
-        $('#calendar').fullCalendar('updateEvent', event);     
+        $('#calendar').fullCalendar('updateEvent', event,revertFunc);     
       }
     },
 
