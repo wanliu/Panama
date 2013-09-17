@@ -18,6 +18,7 @@ Panama::Application.routes.draw do
   end
   resources :completing_shop
   resources :user_auths
+  resources :catalog
 
   match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth",:via => :put
   match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth",:via => :put
