@@ -29,7 +29,7 @@ ActiveAdmin.register Activity do
     end
     column :author
     
-    column do |c|
+    column "操作" do |c|
       link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
       if c.status == Activity.statuses[:wait]
         link_2 = link_to "编辑", edit_system_activity_path(c), :class =>"member_link"
