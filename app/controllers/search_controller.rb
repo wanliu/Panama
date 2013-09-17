@@ -12,10 +12,16 @@ class SearchController < ApplicationController
 
   def products
     query = filter_special_sym(params[:q])
-    s = Tire.search ["products", "shop_products"] do
+    val = query.gsub(/ /, "")
+    s = Tire.search ["products", "shop_products", "activities", "ask_buys"] do
         query do
           boolean do
-            must { string "*#{query}*", fields: ["first_name", "any_name", "name"] }
+            should do
+              string "*#{query}*", fields: ["first_name", "any_name", "first_title", "any_name"]
+            end
+            should do
+               string "*#{val}*", :fields => ["name", "title"]
+            end
           end
         end
 
@@ -25,16 +31,7 @@ class SearchController < ApplicationController
             :order  => "desc"
           }, "_score" => {})
 
-        # constant_score do
-        #   query do
-        #     string "name:#{query}"
-        #   end
-
-        #   boost 1.2
-        # end
         size 30
-
-        # analyzer　:standard
       end
     @results = s.results
     respond_to do |format|
@@ -70,6 +67,14 @@ class SearchController < ApplicationController
     s = Tire.search ['activities', 'ask_buys'] do
       from _from
       size _size
+      query do
+        boolean do
+          must_not do
+            string "status:0"
+          end
+        end
+      end
+      sort { by :updated_at, 'desc' }
     end
     @results = deal_results(s.results)
     respond_to do |format|
@@ -83,7 +88,7 @@ class SearchController < ApplicationController
       if result.type == "activity"
         activity = Activity.find(result.id)
         result = result.to_hash.merge({
-          is_start: activity.start_sale?, 
+          is_start: activity.start_sale?,
           likes: activity.likes.exists?(current_user)
         })
       end
