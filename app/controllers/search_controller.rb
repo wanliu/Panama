@@ -67,6 +67,14 @@ class SearchController < ApplicationController
     s = Tire.search ['activities', 'ask_buys'] do
       from _from
       size _size
+      query do
+        boolean do
+          must_not do
+            string "status:0"
+          end
+        end
+      end
+      sort { by :updated_at, 'desc' }
     end
     @results = deal_results(s.results)
     respond_to do |format|
