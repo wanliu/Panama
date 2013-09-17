@@ -25,14 +25,14 @@ ANIMATES = ["flash", "bounce", "shake", "tada", "swing", "wobble", "wiggle", "pu
 class ActivityView extends Backbone.View
 
 	events: 
-		"click [data-dismiss=modal]": "close"
-		"click .animate-play"     : "playAnimate"
-		"click .like-button"    : "like"
-		"click .unlike-button"    : "unlike"
-		"click .partic-button"    : 'addToCard'
-		"click .submit-comment"     : "addComment"
-		"keyup textarea[name=message]" : 'filter_state'
-		'submit form.new_product_item' : 'validate_date'
+		"click [data-dismiss=modal]"  : "close"
+		"click .animate-play"         : "playAnimate"
+		"click .like-button"          : "like"
+		"click .unlike-button"        : "unlike"
+		"click .partic-button"        : 'addToCard'
+		"click .submit-comment"       : "addComment"
+		"keyup textarea[name=message]": 'filter_state'
+		'submit form.new_product_item': 'validate_date'
 
 	like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
 	unlike_template: '<a class="btn unlike-button active" href="#">取消喜欢</a>'
@@ -178,9 +178,7 @@ class ActivityPreview extends Backbone.View
 
 	launchActivity: (event) ->
 		@model.fetch success: (model) =>
-			view = new ActivityView({
-				el       : @$el,
-				model    : @model })
+			view = new ActivityView({ model: @model })
 			view.modal()
 		false
 
@@ -345,6 +343,13 @@ class ActivitiesView extends Backbone.View
 				new ProductPreview(model: model).render()
 			when "shop_product"
 				new ShopProductView(model: model).render()
+			when "activity"
+				new ActivityPreview({ 
+					id: model.id,
+					el: $("[activity-id=" + model.id + "]")
+				})
+			when "ask_buy"
+
 			else
 				console.error('没有模板')
 
