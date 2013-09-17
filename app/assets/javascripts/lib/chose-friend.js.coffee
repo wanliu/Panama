@@ -429,8 +429,11 @@ class ChoseFriend
     }
 
     followings: {
-      template: "<a><img src='{{icon_url}}' class='avatar img-polaroid' /><span class='value'>{{name}}</span></a>"
-
+      template: "
+        <a>
+          <img src='{{icon_url}}' class='avatar img-polaroid' />
+          <span class='value'>{{name}}</span>
+        </a>"
       data: []
     }
 
@@ -453,9 +456,15 @@ class ChoseFriend
     close_label: $("<a class='close-label'></a>")
 
     init_template: "
-      <li class='chose-item init-item' data-value='circle' data-toggle='popover' data-content='你所有的圈子' index=0><a><i class='icon-film'></i>您的圈子</a></li>
-      <li class='chose-item init-item' data-value='puliceity' data-toggle='popover' data-content='所有人可以看' index=1><a><i class='icon-fire'></i>公开</a></li>
-      <li class='chose-item init-item' data-value='external' data-toggle='popover' data-content='您圈子中的所有成员，以及这些成员的圈子中的所有人。' index=2><a><i class='icon-eye-open'></i>外扩圈子</a></li>
+      <li class='chose-item init-item' data-value='circle' data-toggle='popover' data-content='你所有的圈子' index=0>
+        <a><i class='icon-film'></i>您的圈子</a>
+      </li>
+      <li class='chose-item init-item' data-value='puliceity' data-toggle='popover' data-content='所有人可以看' index=1>
+        <a><i class='icon-fire'></i>公开</a>
+      </li>
+      <li class='chose-item init-item' data-value='external' data-toggle='popover' data-content='您圈子中的所有成员，以及这些成员的圈子中的所有人。' index=2>
+        <a><i class='icon-eye-open'></i>外扩圈子</a>
+      </li>
     "
   }
 
