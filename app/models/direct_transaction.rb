@@ -48,7 +48,7 @@ class DirectTransaction < ActiveRecord::Base
   def notice_seller
     notifications.create!(
       :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
+      :mentionable_user_id => seller.user_id,
       :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
       :body => "你有新的订单")
   end
