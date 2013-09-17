@@ -26,7 +26,7 @@ module CategoryHelper
 
   def second_class_category_tree_of(category)
     html = "<li class='second_class_category_tree'>
-              <a href='javascript: void(0)'>
+              <a href='/category/#{ category.id }'>
                 <span>#{ category.name }</span>
               </a>
               <ul>"

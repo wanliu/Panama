@@ -28,6 +28,7 @@ class root.WizardView extends Backbone.View
 					$(category_product_list).append(@category_product_tpl.render(product))
 				)
 		})
+		$(".select_all").text("全选")
 		false
 
 	render_product_infor: (product_ids) =>
@@ -47,12 +48,13 @@ class root.WizardView extends Backbone.View
 			product_ids.push($(this).attr("id"))
 			$(this).remove()
 		@render_product_infor(product_ids)
-
+		$(".select_all").text("全选")
 
 	select_many : (event) ->
 		el = $(event.currentTarget)
 		if el.hasClass('checked_product')
-			el.removeClass("checked_product")  
+			el.removeClass("checked_product")
+			$(".select_all").text("全选") 
 		else
 			el.addClass("checked_product")
 

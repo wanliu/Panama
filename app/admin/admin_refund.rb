@@ -4,15 +4,15 @@ ActiveAdmin.register OrderRefund do
   index do
     column :id
     column :order_transaction do |refund|
-      refund.order.number
+      refund.try(:order).try(:number)
     end
     column :total
     column :state
     column :buyer do |refund|
-      refund.buyer.login
+      refund.try(:buyer).try(:login)
     end
     column :seller do |refund|
-      refund.seller.name
+      refund.try(:seller).try(:name)
     end
     column :decription
     column :action_link do |refund|
