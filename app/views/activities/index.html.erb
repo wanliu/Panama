@@ -39,6 +39,10 @@
 	<%= render "ask_buy/comment" %>
 </script>
 
+<script type="text/template" id="ask_buy-preview_dialog">
+	<%= render "ask_buy/preview_dialog" %>
+</script>
+
 <script type="text/javascript">
 	$(function(){
 		new ActivitiesView({
@@ -47,6 +51,10 @@
 		})
 		new LoadActivities({
 			el: $('.activities_panel')
+		})
+
+		new AskBuyPreview({
+			el: $(".activities_panel")
 		})
 	})
 </script>

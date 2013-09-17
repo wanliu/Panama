@@ -11,7 +11,7 @@ class Preview extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @template = Hogan.compile(@template)
+    @template = Hogan.compile($("#ask_buy-preview_dialog").html())
     @fetch_dialog()
 
   fetch_dialog: () ->
@@ -25,7 +25,7 @@ class Preview extends Backbone.View
     @$backdrop = $("<div class='model-popup-backdrop in'></div>").appendTo("body")
     $("body").addClass("noScroll")
     @$el.html(@template.render(data))
-    @parent_el.html @$el
+    $("#popup-layout").html @$el
     @textarea = @$("textarea[name='content']")
     @btn = @$(".submit-comment")
 
@@ -59,7 +59,7 @@ class Preview extends Backbone.View
 
 class AskBuyPreview extends Backbone.View
   events: {
-    "click .in-box" : 'preview'
+    "click .column>.ask_buy .in-box" : 'preview'
   }
 
   initialize: (options) ->
@@ -69,10 +69,7 @@ class AskBuyPreview extends Backbone.View
     event_el = $(event.currentTarget.parentElement).parent()
     asK_buy_id = event_el.attr('ask-buy-id')
     new Preview(
-      parent_el: @parent_el,
-      asK_buy_id: asK_buy_id,
-      comment_template: @comment_template,
-      template: @preview_template
+      asK_buy_id: asK_buy_id
     )
 
 
