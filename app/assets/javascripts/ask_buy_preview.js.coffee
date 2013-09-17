@@ -59,18 +59,15 @@ class Preview extends Backbone.View
 
 class AskBuyPreview extends Backbone.View
   events: {
-    "click .column>.ask_buy .in-box" : 'preview'
+    "click .ask_buy .preview" : 'preview'
   }
 
   initialize: (options) ->
     _.extend(@, options)
 
   preview: (event) ->
-    event_el = $(event.currentTarget.parentElement).parent()
-    asK_buy_id = event_el.attr('ask-buy-id')
-    new Preview(
-      asK_buy_id: asK_buy_id
-    )
+    id = $(event.currentTarget).parents(".ask_buy").attr("ask-buy-id")
+    new Preview( asK_buy_id: id )
 
 
 root.AskBuyPreview = AskBuyPreview

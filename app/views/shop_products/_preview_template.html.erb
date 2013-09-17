@@ -1,12 +1,9 @@
-<div class='product' product-id='{{ id }}' id="product{{ id }}">
+<div class='shop_product' shop-product-id='{{ id }}' id="shop_product{{ id }}">
   <div class='out-box'>
     <form>
     <div class='in-box'>
       {{#photos.avatar}}
         <img src="{{photos.avatar}}" class="preview a-{{id}}" alt />
-      {{/photos.avatar}}
-      {{^photos.avatar}}
-        <%#= image_tag ImageUploader.new.url("240240") %>
       {{/photos.avatar}}
     </div>
       <div class='summary'>
@@ -17,14 +14,22 @@
         {{#seller.photos.icon}}
         <img src="{{seller.photos.icon}}" class='author img-circle' alt="Author" />
         {{/seller.photos.icon}}
-        <p>暂无卖家</p>
+
+        {{#seller.name}}
+        <p>
+          <a href='/shops/{{seller.name}}'>{{seller.name}}</a>
+        </p>
+        {{/seller.name}}
         <span>关注 {{participate}}{{^participate}}0{{/participate}}</span>
         <span class='like-count'>喜欢 {{like}}{{^like}}0{{/like}}</span>
       </div>
     <div class="buttons">
-      <%= button_tag class: 'btn btn-info launch-button ask_buy_feture' do %>
-      <%= icon('shopping-cart') + " 求购" %>
+      {{#seller}}
+      <%= button_tag class: 'btn btn-danger launch-button buy' do %>
+        <%= icon('shopping-cart') + " 购买" %>
       <% end %>
+      {{/seller}}
+
     </div>
     </form>
 

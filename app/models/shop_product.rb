@@ -54,7 +54,7 @@ class ShopProduct < ActiveRecord::Base
     attra = super *args
     options = args.extract_options!
     attra["name"] = product.name
-    attra["shop"] = shop.as_json
+    attra["seller"] = shop.as_json
     attra["url"] = product.photos.icon
     attra["product"] = product.as_json(options["version_name"])
     attra["product"]["photo_avatar"] = product.photos.avatar

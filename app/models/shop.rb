@@ -57,6 +57,7 @@ class Shop < ActiveRecord::Base
 
   def as_json(*args)
     attribute = super *args
+    attribute["photos"] = photos.attributes
     attribute["icon_url"] = icon_url
 
     attribute

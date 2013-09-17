@@ -14,18 +14,21 @@
 </div>
 
 <script type="text/template" id="category_product-preview-template">
-	<%= render "category/page" %>
+	<%= render "shop_products/preview_template" %>
 </script>
 
 <script type="text/javascript">
 	$(function(){
 		new ActivitiesView({
-			el: '#category_products',
-			wrap_id: 'category_products'
+			el: '#category_products'
 		})
 		new LoadCategoryProducts({
 			el: $('.category_products_panel'),
 			fetch_url: "/category/shop_products?id=<%= @category.id %>"
 		})
+
+        new ShopProductPreview({
+            el: $("#category_products")
+        })
 	})
 </script>
