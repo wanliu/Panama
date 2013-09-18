@@ -24,14 +24,16 @@
 		current_user_login: '<%= current_user.login %>'
 	});
 
+	var sidebar_el = $(".right-sidebar")
+
 	window.right_sidebar ||
-	(window.right_sidebar = new RightSideBar({el: ".right-sidebar"}));
+	(window.right_sidebar = new RightSideBar({el: sidebar_el}));
 
 	right_sidebar.register(NotificationsContainerView,
 						   FriendsContainerView);
 
-	var height = $(window).height() - $(".right-sidebar header").outerHeight(true) - $(".right-sidebar .body").outerHeight(true)
-	$('.notices-list').slimScroll({
+	var height = sidebar_el.height() - $("header", sidebar_el).height();
+	$('.body', sidebar_el).slimScroll({
 		height: height
 	}).on("click", "li", function(event){
 		$(this).siblings(".clone").remove()
