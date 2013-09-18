@@ -17,7 +17,8 @@ $rightSideBarWidth: 200px;
 }
 
 .columns{
-	display: inline-block;
+	/*display: inline-block;*/
+	text-align: center;
 
 	.column:last-child{
 		margin-right: 0px
@@ -49,6 +50,7 @@ $rightSideBarWidth: 200px;
 	width: 233px;
 	display: inline-block;
 	vertical-align: top;
+	text-align: left;
 	margin-right: $columnGutter
 }
 

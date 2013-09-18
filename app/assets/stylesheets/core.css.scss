@@ -244,7 +244,7 @@ ul {
 	margin-right:  200px;
 }
 
-.right-mini .wrap {
+.open_right_side.right-mini .wrap {
 	margin-right:  60px;
 }
 
@@ -971,7 +971,7 @@ h2 small {
 
 .breadcrumb {
 	margin: 0px;
-	/*@include transparent(rgb(0, 0, 0), 0);*/	
+	/*@include transparent(rgb(0, 0, 0), 0);*/
 	@include transparent(rgb(51, 51, 51), 0);
 }
 
