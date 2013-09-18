@@ -17,10 +17,10 @@ describe Admins::Shops::ProductsController do
   before :each do
     @options = {
       :product => {
-        :name => "某某产品",
+        :name => "某某商品",
         :price => 5,
         :summary => "简单说明一下",
-        :description => "描述产品",
+        :description => "描述商品",
         :shop_id => shop.id,
         :category_id => category.id,
         :shops_category_id => shops_category.id,
@@ -33,7 +33,7 @@ describe Admins::Shops::ProductsController do
   end
 
   describe "GET 'index'" do
-    it "获取所有产品信息" do
+    it "获取所有商品信息" do
       product.valid?.should be_true
       get 'index',current_shop , get_session
       response.should be_success
@@ -47,7 +47,7 @@ describe Admins::Shops::ProductsController do
 
   describe 'GET show' do
 
-    it "获取单个产品信息" do
+    it "获取单个商品信息" do
       get "show", {:id => product.id}.merge(current_shop), get_session
 
       response.should be_success
@@ -58,7 +58,7 @@ describe Admins::Shops::ProductsController do
 
   describe 'GET new ' do
 
-    it "显示产品添加页面" do
+    it "显示商品添加页面" do
       get 'new',current_shop , get_session
       response.should be_success
       response.should render_template(:new)
@@ -68,13 +68,13 @@ describe Admins::Shops::ProductsController do
 
   describe 'POST create' do
 
-    it "变动产品信息" do
+    it "变动商品信息" do
       expect{
         post :create, @options, get_session
       }.to change(Product, :count).by(1)
     end
 
-    it "添加产品基本信息" do
+    it "添加商品基本信息" do
       post 'create', @options, get_session
 
       response.should be_success
@@ -84,7 +84,7 @@ describe Admins::Shops::ProductsController do
       attachment_ids.map{|k, v| v}.should eq(assigns(:product).attachment_ids)
     end
 
-    it "添加产品信息不完整" do
+    it "添加商品信息不完整" do
       @options[:product].delete(:name)
       post 'create', @options, get_session
 
@@ -92,7 +92,7 @@ describe Admins::Shops::ProductsController do
       response.should render_template(:edit)
     end
 
-    it "附加产品属性" do
+    it "附加商品属性" do
       @options[:product][:category_id] = 72
       @options[:product].merge!({
         color: 0xFF0000,
@@ -112,7 +112,7 @@ describe Admins::Shops::ProductsController do
 
   describe "GET edit" do
 
-    it "显示产品编辑页面" do
+    it "显示商品编辑页面" do
       get "edit", {:id => product.id}.merge(current_shop), get_session
 
       response.should be_success
@@ -123,7 +123,7 @@ describe Admins::Shops::ProductsController do
 
   describe "POST update" do
 
-    it "更新产品信息" do
+    it "更新商品信息" do
       options = {
         :id => product.id,
         :product => {
@@ -137,7 +137,7 @@ describe Admins::Shops::ProductsController do
       assigns(:product).name.should eq(options[:product][:name])
     end
 
-    it "更新无效产品信息" do
+    it "更新无效商品信息" do
       options = {
         :id => product.id,
         :product => {
@@ -171,7 +171,7 @@ describe Admins::Shops::ProductsController do
 
   describe "DELETE destroy" do
 
-    it "删除产品信息" do
+    it "删除商品信息" do
       delete "destroy", {:id => product.id}.merge(current_shop), get_session
       response.should be_success
       response.body.should eq("ok")
@@ -180,7 +180,7 @@ describe Admins::Shops::ProductsController do
 
   describe "GET accept_product" do
 
-    it "修改产品分类" do
+    it "修改商品分类" do
       kuzhi = FactoryGirl.create(:kuzhi, :shop => shop)
       options = {
         :product_id => product.id,
@@ -195,7 +195,7 @@ describe Admins::Shops::ProductsController do
 
   describe "get products_by_category" do
 
-    it "获取分类产品" do
+    it "获取分类商品" do
       get "products_by_category", {:shops_category_id => shops_category.id}.merge(current_shop), get_session
       response.should be_success
       assigns(:products).each{ | p | p.shops_category.id.should eq(shops_category.id) } if assigns(:products) != nil

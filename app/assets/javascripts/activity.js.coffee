@@ -60,19 +60,9 @@ class ActivityViewPreview extends Backbone.View
     tpl.render(@model.attributes)
 
   modal: () ->
-    # @$el
-    #   .addClass("in")
-    #   .css('display', 'block')
-    #   .css('top', '10%')
-    # $(".wrap").addClass("to-blur")
-    # $("#left_sidebar").addClass("to-blur")
-    # $(".right-sidebar").addClass("to-blur")
     $("body").addClass("noScroll")
 
   unmodal: () ->
-    # $(".wrap").removeClass("to-blur")
-    # $("#left_sidebar").removeClass("to-blur")
-    # $(".right-sidebar").removeClass("to-blur")
     $("body").removeClass("noScroll")
 
   addToCard: (e) ->
@@ -180,7 +170,7 @@ class ActivityPreview extends Backbone.View
   launchActivity: (event) ->
     @load_view(event.currentTarget)
     @model.fetch success: (model) =>
-      view = new ActivityViewPreview({ model: @model })
+      view = new ActivityViewPreview({ model: model })
       view.modal()
     false
 
@@ -341,7 +331,7 @@ class ActivitiesView extends Backbone.View
 
 
 class LoadActivities extends InfiniteScrollView
-  msg_el: ".load_msg",
+  msg_el: ".scroll-load-msg",
   sp_el: "#activities",
   fetch_url: "/search/activities"
 

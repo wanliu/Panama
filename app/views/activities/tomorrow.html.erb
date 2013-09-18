@@ -3,7 +3,7 @@
   <section class="widget">
     明日预告
   </section>
-  <div class='forecast'>
+  <div id="activities" class='forecast'>
     <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
       <div class="column">
       <% indexs.each do |index| %>
@@ -13,8 +13,11 @@
     <% end %>
   </div>
 </div>
+
 <script type="text/javascript">
-  new ActivitiesView({
-    wrap_id: "forecast",
-    el: '#main .forecast'})
+  $(function(){
+    // new ActivityPreview({
+    //   el: $("#activities")
+    // })
+  })
 </script>

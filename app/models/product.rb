@@ -31,14 +31,14 @@ class Product < ActiveRecord::Base
   define_graphical_attr :photos, :handler => :default_photo
 
   belongs_to :shop                                                                # 所属商店
-  belongs_to :category, :autosave => true                                         # 产品类型
+  belongs_to :category, :autosave => true                                         # 商品类型
   belongs_to :shops_category                                                      # 商店分类
   belongs_to :default_attachment, :class_name => "Attachment"                     # 默认图片
   has_and_belongs_to_many :attachments, :class_name => "Attachment"               # 图片相册
   has_many   :inventory_caches, :class_name => "InventoryCache", :dependent => :destroy                   #
   has_many   :item_in_outs, :dependent => :destroy
   has_many   :comments, :as => :targeable, :dependent => :destroy                                         # 评论
-  has_many   :contents, :as => :contentable, :dependent => :destroy                                       # 产品内容配置组
+  has_many   :contents, :as => :contentable, :dependent => :destroy                                       # 商品内容配置组
   has_many   :price_options, :as => :optionable, :autosave => true, :dependent => :destroy
   has_many   :shop_products
   has_and_belongs_to_many :properties, :uniq => true do
@@ -76,7 +76,7 @@ class Product < ActiveRecord::Base
     end
   end
 
-  # 产品名称搜索
+  # 商品名称搜索
   # redis_search_index(:title_field => :name,
   #                    :score_field => :created_at,
   #                    :prefix_index_enable => true,

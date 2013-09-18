@@ -1,5 +1,5 @@
 #encoding: utf-8
-ActiveAdmin.register Product, :title => "产品" do
+ActiveAdmin.register Product, :title => "商品" do
   config.clear_action_items!
   filter :id
   filter :category
@@ -15,7 +15,7 @@ ActiveAdmin.register Product, :title => "产品" do
   filter :brand_name
 
   action_item do
-    link_to "新增产品", new_plus_system_products_path
+    link_to "新增商品", new_plus_system_products_path
   end
 
 
@@ -47,7 +47,7 @@ ActiveAdmin.register Product, :title => "产品" do
   show do |product|
 
     div do
-      panel("产品基本属性") do
+      panel("商品基本属性") do
         attributes_table_for(product) do
           attrbute_names = product.attributes.map { |attr, _| attr }
           attrbute_names.delete("default_attachment_id")
@@ -70,7 +70,7 @@ ActiveAdmin.register Product, :title => "产品" do
     end
 
     div do
-      panel("产品属性") do
+      panel("商品属性") do
         attributes_table_for(product) do
           product.properties.each do |prop|
             row(prop.title) do

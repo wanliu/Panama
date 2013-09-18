@@ -485,7 +485,7 @@ describe OrderTransaction, "订单流通记录" do
               @refund.create_items([@order.items[0].id])
             end
 
-            it "标识退货产品" do
+            it "标识退货商品" do
               order_refund.should eq(0)
               @order.refund_handle_product_item(@refund)
               order_refund.should eq(1)
@@ -783,7 +783,7 @@ describe OrderTransaction, "订单流通记录" do
     end
 
     describe "build_items" do
-      it "批量建立订单产品" do
+      it "批量建立订单商品" do
         order = OrderTransaction.new
         expect { order.build_items(items) }.to change { order.items.size }.by(2)
       end
@@ -793,7 +793,7 @@ describe OrderTransaction, "订单流通记录" do
       before do
         @order.build_items(items)
       end
-      it "计算产品数" do
+      it "计算商品数" do
         count_sum = items.reduce(0) { |s, i| s + i[:amount] }
         expect { @order.update_total_count }.to change { @order.items_count }.by(count_sum)
       end

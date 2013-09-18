@@ -1,5 +1,5 @@
 # author : huxinghai
-# describe : 产品ajax上传
+# describe : 商品ajax上传
 
 #= require jquery
 #= require lib/underscore

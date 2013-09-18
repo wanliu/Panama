@@ -22,7 +22,7 @@ describe Comment,"评论模型" do
 
     def product_params
         {
-            :content => "这产品很好，实用...",
+            :content => "这商品很好，实用...",
             :user_id => anonymous.id,
             :targeable_id => product.id,
             :targeable_type => "Product"
@@ -91,7 +91,7 @@ describe Comment,"评论模型" do
         end
     end
 
-    describe "产品评论" do
+    describe "商品评论" do
 
         it "调用" do
             expect{
@@ -104,7 +104,7 @@ describe Comment,"评论模型" do
             comment.targeable_type.should eq(product.class.name)
         end
 
-        it "应该属于产品" do
+        it "应该属于商品" do
             comment = Comment.product(product_params)
             comment.targeable.should be_an_instance_of(Product)
         end
