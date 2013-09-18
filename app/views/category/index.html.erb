@@ -13,7 +13,7 @@
 </div>
 
 <script type="text/template" id="category_product-preview-template">
-	<%= render "category/page" %>
+	<%= render "shop_products/preview_template" %>
 </script>
 
 <script type="text/javascript">
@@ -26,5 +26,9 @@
 			el: $('.category_products_panel'),
 			fetch_url: "/category/shop_products"
 		})
+
+        new ShopProductPreview({
+            el: $("#category_products")
+        })
 	})
 </script>

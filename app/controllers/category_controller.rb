@@ -39,7 +39,8 @@ class CategoryController < ApplicationController
 
 		respond_to do |format|
 			format.html
-			format.json { render json: @shop_products.as_json(:version_name => "240x240") }
+			format.json { render json: @shop_products.as_json(
+				:include => "photos") }
 		end
 	end
 

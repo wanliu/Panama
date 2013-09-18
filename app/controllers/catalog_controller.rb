@@ -1,5 +1,5 @@
 class CatalogController < ApplicationController
-	
+	layout  "category"
 	def index
     	@catalogs = Catalog.all
     	respond_to do |format|
@@ -9,6 +9,10 @@ class CatalogController < ApplicationController
 	end
 
 	def show
+		@catalog = Catalog.find(params[:id])
+	end
+
+	def products
 		catelog = Catalog.find(params[:id])
 		@category_ids = []
 		catelog.categories.each do |category|
@@ -21,7 +25,21 @@ class CatalogController < ApplicationController
 
 		respond_to do |format|
 			format.html
-			format.json { render json: @shop_products.as_json(:version_name => "240x240") }
+			format.json { render json: @shop_products.as_json(:include => "photos") }
+		end
+	end
+
+	def children_categories
+		@category_ids = []
+		catelog = Catalog.find(params[:id])
+		catelog.categories.each do |category|
+			@category_ids << category.id
+		end
+		@category = Category.where(:id => @category_ids)
+
+		respond_to do |format|
+			format.html
+			format.json { render json: @category }
 		end
 	end
 end
