@@ -40,7 +40,7 @@ class CommentsController < ApplicationController
     end
   end
 
-  #产品评论
+  #商品评论
   def product
     @comment = Comment.product(params[:comment].merge(:user_id => current_user.id))
     respond_to do |format|

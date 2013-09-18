@@ -34,7 +34,7 @@ ActiveAdmin.register Category do
 
   show do |category|
     div do
-      panel("产品 基本属性") do
+      panel("商品 基本属性") do
         attributes_table_for(category) do
           attrbute_names = category.attributes.map { |attr, _| attr }
           attrbute_names.each do |column|

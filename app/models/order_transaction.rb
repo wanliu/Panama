@@ -274,7 +274,7 @@ class OrderTransaction < ActiveRecord::Base
     items.where(:product_id => product_ids)
   end
 
-  #订单产品全退货了
+  #订单商品全退货了
   def not_product_refund(product_ids)
     items.where("product_id not in (?)", product_ids).first
   end

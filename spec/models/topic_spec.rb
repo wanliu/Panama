@@ -21,7 +21,7 @@ describe Topic, "贴子模型" do
       :user_id => current_user.id,
       :owner_id => shop.id,
       :owner_type => "Shop",
-      :content => "我们的产品是安全的..",
+      :content => "我们的商品是安全的..",
       :status => "circle"
     }
   end
@@ -77,7 +77,7 @@ describe Topic, "贴子模型" do
       topic = shop.topics.create(
         :status => :circle,
         :user_id => current_user.id,
-        :content => "随着物流上涨，我们产品也涨价")
+        :content => "随着物流上涨，我们商品也涨价")
       topic.valid?.should be_true
     end
 

@@ -203,7 +203,7 @@ zh-CN:
       comment: "评论"
       shop_group: "权限组"
       activity: "活动"
-      product: "产品"
+      product: "商品"
       shop: "商店"
       property: "属性"
       property_item: "属性项"
@@ -218,9 +218,9 @@ zh-CN:
       activity:
         id: 编号
         shop: 商店
-        product: 产品
-        product_id: 产品
-        shop_product: 商店产品
+        product: 商品
+        product_id: 商品
+        shop_product: 商店商品
         preview: 预览图
         title: 标题
         description: 活动描述
@@ -250,8 +250,8 @@ zh-CN:
         shops_category_id: 商店分类
         default_attachment_id: 默认附加属性
         price: 价格
-        summary: 产品概述
-        description: 产品描述
+        summary: 商品概述
+        description: 商品描述
         created_at: 创建时间
         updated_at: 更新时间
         brand_name: 品牌名
@@ -343,7 +343,7 @@ zh-CN:
         company_license: 营业执照
         company_license_photo: 营业执照图片
         ower_shenfenzheng_number: 身份证号
-        products_added: 是否已添加产品
+        products_added: 是否已添加商品
         rejected: 是否被拒绝
         rejected_reason: 拒绝的理由
         rejected_times: 被拒绝次数
@@ -393,7 +393,7 @@ zh-CN:
   dashboard: 状态
   contents: 内容
   categories: 分类
-  product: 产品
+  product: 商品
   category: 分类
   pending: 未处理
   complete: 完成的
@@ -484,7 +484,7 @@ zh-CN:
     create: "创建"
     update: "更新"
     delete_confirmation: "确定删除?"
-    product: 产品
+    product: 商品
     new_model: "新建%{model}"
     create_model: "新建%{model}"
     edit_model: "编辑%{model}"
@@ -615,7 +615,7 @@ zh-CN:
   simple_form:
     lables:
       activity:
-        product: "产品"
+        product: "商品"
   my_cart: 购物车
   chat: 交谈
   unread_notification: "%{count} 未读信息"

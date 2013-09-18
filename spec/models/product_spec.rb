@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe Product, "产品模型" do
+describe Product, "商品模型" do
 
     let(:shop){ FactoryGirl.create(:shop, :user => FactoryGirl.create(:user)) }
     let(:category) { FactoryGirl.create(:category) }
@@ -30,7 +30,7 @@ describe Product, "产品模型" do
         {
             :name => "iPhone",
             :price => 5,
-            :description => "电子产品",
+            :description => "电子商品",
             :summary => "电子",
             :category_id => category.id,
             :shops_category_id => yifu.id,
@@ -160,7 +160,7 @@ describe Product, "产品模型" do
     end
 
 
-    # 为产品增加一些附加属性,这些属性可以通过系统配置来进行管理, 同时产品的属性,默认来至于所属的分类
+    # 为商品增加一些附加属性,这些属性可以通过系统配置来进行管理, 同时商品的属性,默认来至于所属的分类
     # 所为,必须要测试分类的属性的转换,对其产生的影响
     describe "附加属性" do
         let(:apple) { Product.first }
@@ -170,7 +170,7 @@ describe Product, "产品模型" do
 
         let(:pants) { PropertyValue.first }
 
-        # properties 将包含 产品的属性表 Property
+        # properties 将包含 商品的属性表 Property
         # Property
         #   name: string 类型,属性的名称
         #   title: string 类型, 标题显示
@@ -244,7 +244,7 @@ describe Product, "产品模型" do
                 end
             end
 
-            describe "不同的分类,产品属性不一样" do
+            describe "不同的分类,商品属性不一样" do
                 let(:make_in) { Property.where(:name => 'make_in').first }
                 let(:flavor) { Property.where(:name => 'flavor').first }
                 let(:color) { Property.where(:name => 'color').first }

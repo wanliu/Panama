@@ -18,7 +18,7 @@ describe CommentsController, "评论控制器" do
 
   def product_params
     {
-      :content => "这产品很好，实用...",
+      :content => "这商品很好，实用...",
       :user_id => anonymous.id,
       :targeable_id => product.id,
       :targeable_type => "Product"
@@ -67,7 +67,7 @@ describe CommentsController, "评论控制器" do
 
   describe "POST product" do
 
-    it "产品评论" do
+    it "商品评论" do
       expect{
           post :product, person_params.merge({:comment => product_params}), get_session
         }.to change(Comment, :count).by(1)
@@ -78,7 +78,7 @@ describe CommentsController, "评论控制器" do
       assigns(:comment).targeable_type.should eq("Product")
     end
 
-    it "评论属于产品" do
+    it "评论属于商品" do
       post :product, person_params.merge({:comment => product_params}), get_session
       assigns(:comment).targeable.should be_an_instance_of(Product)
     end

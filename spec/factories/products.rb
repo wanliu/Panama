@@ -3,7 +3,7 @@
 FactoryGirl.define do
 
   factory :product do | f |
-    sequence(:name){ |n| "测试产品#{n}" }
+    sequence(:name){ |n| "测试商品#{n}" }
     price 1.5
     summary "某某公司"
     description "描述某某公司"
