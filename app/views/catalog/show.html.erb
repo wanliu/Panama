@@ -21,8 +21,10 @@
 			el: '#category_products',
 			wrap_id: 'category_products'
 		})
+		
 		new LoadCategoryProducts({
-			el: $('.category_products_panel')
+			el: $('.category_products_panel'),
+			fetch_url: "/category/shop_products?id=<%= @category.id %>"
 		})
 	})
 </script>
