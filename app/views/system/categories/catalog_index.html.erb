@@ -1,0 +1,16 @@
+<table class="index_table index">
+	<tr>
+		<th>热推分类名</th>
+		<th>挂载分类名</th>
+		<th>创建时间</th>
+	</tr>
+	<% @catalogs.each do |catalog| %>
+		<tr>
+			<td><%= catalog.title %></td>
+			<td><%= catalog.categories.map { |c| c.name } %></td>
+			<td><%= catalog.created_at %></td>
+		</tr>
+	<% end %>
+</table>
+<br/>
+<%= render "new_hot" %>

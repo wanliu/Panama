@@ -10,6 +10,10 @@ ActiveAdmin.register Category do
     link_to("新增分类", new_plus_system_categories_path) 
   end
 
+  action_item do   
+    link_to("热推分类", catalog_index_system_categories_path) 
+  end
+
   action_item :only => :show do   
     link_to("同步属性", all_attach_attributes_system_category_path(params[:id]))
   end
@@ -138,6 +142,24 @@ ActiveAdmin.register Category do
   collection_action :new_plus, :title => "新增分类" do
     @category = Category.new
   end
+
+
+  collection_action :catalog_index, :method => :get do
+    @catalog = Catalog.new
+    @catalogs = Catalog.all
+  end
+
+  # collection_action :new_hot, :title => "热推分类" do
+  #   @catalog = Catalog.new
+  # end
+
+  collection_action :create_hot, :method => :post do 
+    @catalog = Catalog.create(:title => params["catalog"]["title"])
+    @catalog.categories << Category.find(params[:parent_id])
+    redirect_to catalog_index_system_categories_path
+  end
+
+
 
   collection_action :create_plus, :method => :post do
     @category = Category.new(params[:category])

@@ -16,7 +16,7 @@ class Preview extends Backbone.View
 
   fetch_dialog: () ->
     $.ajax(
-      url: "/ask_buy/#{@asK_buy_id}",
+      url: "/ask_buy/#{@ask_buy_id}",
       success: (data) =>
         @render(data)
     )
@@ -38,7 +38,7 @@ class Preview extends Backbone.View
     content = @textarea.val()
     return false if _.isEmpty(content)
     $.ajax(
-      url: "/ask_buy/#{@asK_buy_id}/comment",
+      url: "/ask_buy/#{@ask_buy_id}/comment",
       type: 'POST',
       data: {comment: {content: content}},
       success: (comment) =>
@@ -67,7 +67,7 @@ class AskBuyPreview extends Backbone.View
 
   preview: (event) ->
     id = $(event.currentTarget).parents(".ask_buy").attr("ask-buy-id")
-    new Preview( asK_buy_id: id )
+    new Preview( ask_buy_id: id )
 
 
 root.AskBuyPreview = AskBuyPreview
