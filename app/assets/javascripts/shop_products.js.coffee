@@ -79,7 +79,7 @@ class ShopProductPreview extends Backbone.View
       false
 
   load_view: (target) ->
-    @el = $(target).parents(".shop_product")
+    @$el = @el = $(target).parents(".shop_product")
     @model = new ShopProductModel({id: @el.attr('shop-product-id')})
     @delegateEvents()
 

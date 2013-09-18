@@ -147,6 +147,7 @@ class Activity < ActiveRecord::Base
       :end_time       => end_time,
       :participate    => participate,
       :status      => status,
+      :like        => like,
       :created_at  => created_at,
       :updated_at  => updated_at,
       :author => {
