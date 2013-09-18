@@ -281,8 +281,7 @@ class ActivitiesView extends Backbone.View
         @appendResult(e, product)
 
   adjustNumber: () ->
-    $wrap = $('.wrap')
-    count = parseInt(($wrap.width() - 25) / 246)
+    count = parseInt(@$('.columns').width() / 235)
 
   relayoutColumns: () ->
     activities = @fetchResults()

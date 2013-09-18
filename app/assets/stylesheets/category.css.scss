@@ -16,7 +16,7 @@
 }
 
 #category-sidebar {
-	width: 170px;
+	width: 160px;
 	top: 0px;
 }
 
@@ -31,7 +31,7 @@
 		padding-right: 20px;
 		padding-bottom: 20px;
 		@include transparent(rgb(62, 112, 108), 0.91);
-		
+
 		.second_class_category_tree {
 			width: 230px;
 			display: inline-block;
@@ -47,7 +47,7 @@
 				display: block;
 				padding: 4px 10px 4px 0;
 			}
-			
+
 			li.third_class_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
