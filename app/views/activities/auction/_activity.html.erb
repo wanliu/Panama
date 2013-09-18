@@ -65,11 +65,4 @@
 			// 	.find(".preview")
 			// 	.removeClass("animate0 " + "flipInY");
 		})
-	var id = <%= activity.id %>;
-	var model = new ActivityModel({ id: id });
-	new ActivityPreview({ 
-		id: <%= activity.id %>,
-		el: $("[activity-id=" + id + "]")
-	});
-
 </script>

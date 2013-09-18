@@ -6,7 +6,7 @@
 root = window || @
 
 class LoadShopProducts extends InfiniteScrollView
-	msg_el: ".load_msg",
+	msg_el: ".scroll-load-msg",
 	sp_el: "#shop_products",
 	fetch_url: "/shop_products"
 

@@ -331,7 +331,7 @@ class ActivitiesView extends Backbone.View
 
 
 class LoadActivities extends InfiniteScrollView
-  msg_el: ".load_msg",
+  msg_el: ".scroll-load-msg",
   sp_el: "#activities",
   fetch_url: "/search/activities"
 

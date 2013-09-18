@@ -6,7 +6,7 @@
 root = window || @
 
 class LoadCategoryProducts extends InfiniteScrollView
-	msg_el: ".load_msg",
+	msg_el: ".scroll-load-msg",
 	sp_el: "#category_products"
 
 	add_one: (c) ->
