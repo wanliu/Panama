@@ -152,6 +152,9 @@ body.system_categories{
     } 
   }
 }
+.formtastic{
+  .label{ background-color: white;}
+}
 
 table.index_table td{ vertical-align: middle !important; text-align: center;}
 table.index_table th{ text-align: center !important; }

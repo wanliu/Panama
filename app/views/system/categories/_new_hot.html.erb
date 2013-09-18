@@ -1,0 +1,54 @@
+<%= stylesheet_link_tag "system/category" %>
+
+<%= semantic_form_for @catalog, :url => create_hot_system_categories_path do |f| %>
+  <%= f.inputs "热推分类" do %>
+    <%= f.input :title,:label => '分类名' %>
+     <%= f.input :ancestry, :as => :category, :name => :parent_id  %>
+  <% end %>
+  <%= f.actions %>
+<% end %>
+
+<script>
+function admin_category_selector(el) {
+	var selector_el = (el instanceof jQuery) ? el : $(el);
+
+	// 控制菜单显示
+	control_list_show();
+
+	// 单击选择分类
+	selector_el.find('a').on('click', bind_click);
+
+	function control_list_show() {
+	    selector_el.find('li').on('mouseenter', function(e) {
+	        $(this).children('ul').css('display', 'block');
+	    });
+	    selector_el.find('li').on('mouseleave', function(e) {
+	        $(this).find('ul').hide();
+	    });
+	    selector_el.find('ul').on('mouseleave', function(e) {
+	        $(this).hide();
+	    });
+	}
+
+	function bind_click(event) {
+		var category_id = $(this).attr('data-id');
+		$('#catalog_ancestry').val(category_id);
+
+		var category_name = $(this).attr('data-name');
+		$('input.mock_prodcut_category_id').val(category_name);
+
+		selector_el.children('ul').hide();
+		return false;
+	}
+}
+
+$(function(){
+	var el = $("div.category-parent-class");
+	admin_category_selector(el);
+		$("input.mock_prodcut_category_id").val("默认")
+	$('input.mock_prodcut_category_id').on('click', function(e){
+		el.show();
+		el.children('ul').css('display', 'block');
+	});
+})
+</script>
