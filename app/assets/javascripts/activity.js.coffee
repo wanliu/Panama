@@ -209,7 +209,7 @@ class ActivityPreview extends Backbone.View
     @$('.like-count').text(s - n)
 
   load_view: (target) ->
-    @el = $(target).parents(".activity")
+    @$el = @el = $(target).parents(".activity")
     @model = new ActivityModel({ id: @el.attr("activity-id") })
     @delegateEvents()
 
@@ -263,7 +263,7 @@ class CycleIter
 class ActivitiesView extends Backbone.View
   initialize: (@options) ->
     _.extend(@, @options)
-
+    $("<div class='columns'></div>").appendTo(@$el)
     $(window).bind('search_result:append', $.proxy(@appendResult, @))
     $(window).bind('search_result:reset', $.proxy(@setResult, @))
     $(window).resize($.proxy(@relayoutColumns, @))
@@ -296,17 +296,17 @@ class ActivitiesView extends Backbone.View
 
   relayoutColumns: () ->
     activities = @fetchResults()
-    #new_dom = $("<div id='#{@wrap_id}'/>")
-    @$columns = $("<div class='columns'></div>")
-    @$el.html(@$columns)
-    @$columns.append("<div class='column' />") for i in [0...@adjustNumber()]
 
-    cycle = new CycleIter(@$columns.find(".column"))
+    columns = $("<div class='columns'></div>")
+    columns.append("<div class='column' />") for i in [0...@adjustNumber()]
+
+    cycle = new CycleIter(columns.find(".column"))
 
     for act in activities
       target = cycle.next()
       $(target).append(act)
 
+    @$(".columns").replaceWith(columns)
     @resizeWrap()
 
   fetchResults: () ->

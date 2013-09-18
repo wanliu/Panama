@@ -18,6 +18,6 @@ class window.ProductPreview extends Backbone.View
     catch error
       false
   load_view: (target) ->
-    @el = $(target).parents(".product")
+    @$el = @el = $(target).parents(".product")
     @id = @el.attr("product-id")
     @delegateEvents()
