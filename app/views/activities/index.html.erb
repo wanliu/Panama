@@ -6,11 +6,11 @@
                 <li class="active">
                     <a href='#' ><%=icon 'eye-open' %> </a>
                 </li>
-                <% product_categories.each do |c| %>
+           <!--      <%# product_categories.each do |c| %>
                 <li>
-                    <a href="<%= category_path(c) %>"><%=c.name %></a>
+                    <a href="<%#= category_path(c) %>"><%#=c.name %></a>
                 </li>
-                <% end %>
+                <%# end %> -->
             </ul>
         </div>
     </section>
@@ -71,5 +71,8 @@
         new ProductPreview({
             el: $("#activities")
         })
+	    new CatalogView({
+			el: $("#activity-category")
+		})
     })
 </script>
