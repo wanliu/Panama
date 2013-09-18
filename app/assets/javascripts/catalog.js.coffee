@@ -19,7 +19,7 @@ class CatalogView extends Backbone.View
 		@collection.fetch(url: "/catalog")
 
 	add_all: (models)->
-		models.each (model) ->
-			$(@el).html(@template(model: @model))
+		models.each (model) =>
+			@$el.append(@template(model: model))
 
 root.CatalogView = CatalogView
