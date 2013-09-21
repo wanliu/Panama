@@ -16,8 +16,18 @@ Panama::Application.routes.draw do
       post 'skip'
     end
   end
+
+  resources :catalog do 
+    member do
+      get :products, :to => "catalog#products"
+      get :children_categories, :to => "catalog#children_categories"
+    end
+  end
+
   resources :completing_shop
   resources :user_auths
+
+  match "catalog/products"
 
   match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth",:via => :put
   match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth",:via => :put
