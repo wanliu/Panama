@@ -8,11 +8,11 @@ class Shop < ActiveRecord::Base
   attr_accessible :name, :user
   attr_accessor :uploader_secure_token
 
-  has_many :products, dependent: :destroy
+  has_many :products, :class_name => "ShopProduct", dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
   has_many :transactions, class_name: "OrderTransaction", :foreign_key => "seller_id"
   has_many :shop_users
-  has_many :shop_products
+  # has_many :shop_products
   has_many :contents, :as => :contentable, dependent: :destroy
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy

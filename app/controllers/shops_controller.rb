@@ -46,7 +46,6 @@ class ShopsController < ApplicationController
   def show
     @shop = Shop.find_by(:name => params[:id])
     @content = PanamaCore::Contents.fetch_for(@shop, :index, :locals => { :shop_name => @shop.name })
-    @shop_products = @shop.shop_products
 
     respond_to do |format|
       format.html

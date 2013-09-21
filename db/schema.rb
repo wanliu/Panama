@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130917072556) do
+ActiveRecord::Schema.define(:version => 20130921071256) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -29,10 +29,12 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "activities", :force => true do |t|
+    t.string   "url"
     t.datetime "created_at",                                                                  :null => false
     t.datetime "updated_at",                                                                  :null => false
     t.string   "activity_type",   :limit => 14
     t.string   "description"
+    t.integer  "product_id"
     t.decimal  "price",                         :precision => 10, :scale => 2
     t.datetime "start_time"
     t.datetime "end_time"
@@ -85,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.string   "road"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.integer  "transaction_id"
     t.integer  "user_id"
     t.integer  "province_id"
     t.integer  "city_id"
@@ -109,6 +112,14 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
+
+  create_table "ask_buy_paticipates", :force => true do |t|
+    t.integer  "ask_buy_id"
+    t.integer  "user_id"
+    t.integer  "shop_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
@@ -711,6 +722,7 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end

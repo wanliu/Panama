@@ -6,7 +6,8 @@ class Preview extends Backbone.View
   events: {
     "click .close" : "hide",
     "click .submit-comment" : 'comment',
-    "keyup textarea[name='content']" : 'filter_status'
+    "keyup textarea[name='content']" : 'filter_status',
+    "click [name='join']" : "join"
   }
   initialize: (options) ->
     _.extend(@, options)
@@ -26,6 +27,7 @@ class Preview extends Backbone.View
     $("body").addClass("noScroll")
     @$el.html(@template.render(data))
     $("#popup-layout").html @$el
+    @filter_current(data)
     @textarea = @$("textarea[name='content']")
     @btn = @$(".submit-comment")
 
@@ -53,8 +55,27 @@ class Preview extends Backbone.View
       @btn.removeClass("disabled")
 
   render_comment: (comment) ->
-    comment = Hogan.compile(@comment_template).render(comment)
+    comment = Hogan.compile($("#ask_buy-comment-template").html()).render(comment)
     @$(".comments").append(comment)
+
+  filter_current: (ask_buy) ->
+    @$btn_join = @$(".modal-footer").find("[name='join']")
+    if @$btn_join.length > 0
+      if @$btn_join.attr("guest-value") is ask_buy.user_id.toString()
+        @$btn_join.remove()
+
+      if ask_buy.status == 1
+        @$btn_join.remove()
+
+  join: () ->
+    $.ajax(
+      url: "/ask_buy/#{@ask_buy_id}/join",
+      type: "POST",
+      success: () ->
+        pnotify(text: "参与求购成功,等待用户付款！")
+      error: (xhr) ->
+        pnotify(text: JSON.parse(xhr.responseText).join(""),type: "error")
+    )
 
 
 class AskBuyPreview extends Backbone.View

@@ -11,7 +11,7 @@ class LoadShopProducts extends InfiniteScrollView
 	fetch_url: "/shop_products"
 
 	add_one: (c) ->
-		template = Hogan.compile($("#shop_products-preview-template").text())
+		template = Hogan.compile($("#shop_products-preview-template").html())
 		@min_column_el().append(template.render(c))
 
 root.LoadShopProducts = LoadShopProducts

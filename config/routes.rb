@@ -17,7 +17,7 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :catalog do 
+  resources :catalog do
     member do
       get :products, :to => "catalog#products"
       get :children_categories, :to => "catalog#children_categories"
@@ -218,6 +218,7 @@ Panama::Application.routes.draw do
   resources :ask_buy do
     member do
       post :comment, :to => "ask_buy#comment"
+      post :join, :to => "ask_buy#join"
     end
   end
 
