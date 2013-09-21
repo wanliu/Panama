@@ -9,6 +9,7 @@ class AskBuy < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :attachments
   has_many :comments, :as => :targeable
+  has_one :paticipate, :class_name => "AskBuyPaticipate"
 
   validates :user, :presence => true
   validates :title, :presence => true
