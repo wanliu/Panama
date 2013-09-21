@@ -29,12 +29,10 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
   add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "activities", :force => true do |t|
-    t.string   "url"
     t.datetime "created_at",                                                                  :null => false
     t.datetime "updated_at",                                                                  :null => false
     t.string   "activity_type",   :limit => 14
     t.string   "description"
-    t.integer  "product_id"
     t.decimal  "price",                         :precision => 10, :scale => 2
     t.datetime "start_time"
     t.datetime "end_time"
@@ -87,7 +85,6 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.string   "road"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
-    t.integer  "transaction_id"
     t.integer  "user_id"
     t.integer  "province_id"
     t.integer  "city_id"
