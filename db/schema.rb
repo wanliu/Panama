@@ -116,12 +116,12 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0
-    t.float    "amount"
+    t.decimal  "price",      :precision => 10, :scale => 0, :default => 0
+    t.float    "amount",                                    :default => 0.0
     t.text     "describe"
-    t.integer  "status"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.integer  "status",                                    :default => 0
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.integer  "user_id"
   end
 
@@ -424,10 +424,9 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
-    t.integer  "shop_product_id"
-    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -454,10 +453,8 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
-    t.string   "shipped_state"
     t.string   "order_state"
     t.integer  "delivery_manner_id"
-    t.integer  "delivery_type_id"
     t.integer  "logistics_company_id"
   end
 
@@ -535,9 +532,9 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.datetime "created_at",                                                 :null => false
     t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
+    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
-    t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "buy_state"
     t.integer  "owner_id"
@@ -714,7 +711,6 @@ ActiveRecord::Schema.define(:version => 20130917072556) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
-    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end
