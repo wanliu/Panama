@@ -66,14 +66,12 @@ ul {
   top: 50px!important;
 }
 
-
 .btn {
 	color: #fff;
 	@include text-shadow(none);
 	&:hover {
 		color: #fff
 	}
-
 }
 
 .noScroll {
@@ -86,8 +84,6 @@ ul {
 	line-height: 1;
 	margin: 11px 0 15px;
 }
-
-// logo
 
 .logo {
 	position: absolute;

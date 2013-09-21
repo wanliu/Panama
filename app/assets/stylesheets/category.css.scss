@@ -5,24 +5,17 @@
 @import "shops";
 @import "lib/transparent";
 
-.category-sidebar {
-	width: 280px;
-}
-
-
 #category-sidebar.affix-top {
  	position: absolute;
 }
 
 #category-sidebar {
-	width: 160px;
 	top: 0px;
-}
+	width: 160px;
 
-#category-sidebar {
 	.second_class_categories {
 		top: 0;
-		left: 170px;
+		left: 160px;
 		height: auto;
 		display: none;
 		min-width: 752px;
