@@ -70,7 +70,7 @@ class SearchController < ApplicationController
       query do
         boolean do
           must_not do
-            string "status:0"
+            string "activity.status:0"
           end
         end
       end
