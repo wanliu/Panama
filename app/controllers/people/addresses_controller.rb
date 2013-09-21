@@ -15,7 +15,9 @@ class People::AddressesController < People::BaseController
 		@address = Address.create(params[:address].merge(
 			user_id: @people.id
 		))
-		unless @address.valid?
+		if @address.valid?
+			flash[:success] = "创建收货地址成功！"
+		else
 			flash[:error] = "请确定输入的地址非空！"
 		end
 		redirect_to person_addresses_path
@@ -23,7 +25,9 @@ class People::AddressesController < People::BaseController
 
 	def update
 		@address = Address.find(params[:id])
-		unless @address.update_attributes(params[:address]) 
+		if @address.update_attributes(params[:address])
+			flash[:success] = "修改收货地址成功！"
+		else
 			flash[:error] = "请确定修改后的地址非空！"
 		end
 		redirect_to person_addresses_path
@@ -31,6 +35,7 @@ class People::AddressesController < People::BaseController
 
 	def destroy
 		Address.delete(params[:id])
+		flash[:success] = "删除收货地址成功！"
 		redirect_to person_addresses_path
 	end
 end

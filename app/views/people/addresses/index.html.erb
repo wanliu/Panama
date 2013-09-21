@@ -13,11 +13,13 @@
 				</div>
 
 				<div class="address-list">
-					<% if flash[:error] %>
-						<div class="alert alert-error">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<%= flash[:error] %>
-						</div>
+					<% unless flash.empty? %>
+						<% flash.each do |f| %>
+							<div class="alert alert-<%=f[0]%>">
+								<button type="button" class="close" data-dismiss="alert">×</button>
+								<%= f[1] %>
+							</div>
+						<% end %>
 					<% end %>
 					<% @addresses.each do |address| %>
 						<%= render "show", :address => address %>
