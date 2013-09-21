@@ -498,7 +498,7 @@ class OrderTransaction < ActiveRecord::Base
     attra["delivery_manner_name"] = delivery_manner.try(:name)
     attra["buyer_login"] = buyer.try(:login)
     attra["seller_name"] = seller.name
-    attra["address"] = address.try(:location_without_contact)
+    attra["address"] = address.try(:address_only)
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = I18n.t("order_states.seller.#{state}")
     attra["stotal"] = stotal

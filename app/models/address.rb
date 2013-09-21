@@ -12,12 +12,12 @@ class Address < ActiveRecord::Base
   belongs_to :area, :inverse_of => :address , class_name: "City"      # 县
   belongs_to :addressable, :polymorphic => true
 
-  def location_without_contact
+  def address_only
     "#{country}#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}#{road}"
   end
 
   def location
-    "#{contact_name}：#{contact_phone}，#{location_without_contact}"
+    "#{contact_name}：#{contact_phone}，#{address_only}"
   end
 
   validates :road, :presence => true

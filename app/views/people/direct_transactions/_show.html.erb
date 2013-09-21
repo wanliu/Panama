@@ -1,13 +1,13 @@
 <div class='row-fluid widget direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>">
   <div class='span7 direct-info'>
     <div class='row-fluid'>
-      <div class='span4 avatar'>
+      <div class='span7 avatar'>
         <img src="<%=direct_transaction.seller.photos.header %>" class='img-polaroid' />
         <h1>
           <%=direct_transaction.seller.name %>
         </h1>
       </div>
-      <div class='span8'>
+      <div class='span5'>
         <% if direct_transaction.state == :uncomplete %>
         <button type="button" class="close pull-right">×</button>
         <input type='button' class='btn btn-large btn-primary pull-right completed' value='交易成功' />
@@ -26,24 +26,31 @@
           </tr>
         </thead>
         <tbody>
-        <% direct_transaction.seller.banks.each do |shop_bank| %>
-        <tr>
-          <td class='bank-wrapper'>
-            <div class="bank_card">
-              <label for="bank_<%=shop_bank.bank.code %>">
-                <span class="banks bank-<%=shop_bank.bank.code %>">
-                  <%=shop_bank.bank.name %>
-                </span>
-              </label>
-            </div>
-          </td>
-          <td><%=shop_bank.name %></td>
-          <td><%=shop_bank.code %></td>
-        </tr>
+        <% if direct_transaction.seller.banks.blank? %>
+          <tr>
+            <td colspan="3">暂时没有</td>
+          </tr>
+        <% else %>
+          <% direct_transaction.seller.banks.each do |shop_bank| %>
+          <tr>
+            <td class='bank-wrapper'>
+              <div class="bank_card">
+                <label for="bank_<%=shop_bank.bank.code %>">
+                  <span class="banks bank-<%=shop_bank.bank.code %>">
+                    <%= shop_bank.bank.name %>
+                  </span>
+                </label>
+              </div>
+            </td>
+            <td><%= shop_bank.name %></td>
+            <td><%= shop_bank.code %></td>
+          </tr>
+          <% end %>
         <% end %>
         </tbody>
       </table>
     </div>
+
     <div class='row-fluid'>
       <table class='table table-striped products'>
         <thead>

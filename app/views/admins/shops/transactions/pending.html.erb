@@ -100,7 +100,7 @@
     dispose_view.add_orders(<%= @untransactions.as_json.to_json.html_safe %>)
 
     new TransactionBubbling({
-      url: "http://<%=request.env['HTTP_HOST'] %>/shops/<%=current_shop.name %>/admins/pending#order"
+      url: "http://<%= request.env['HTTP_HOST'] %>/shops/<%= current_shop.name %>/admins/pending#order"
     })
 
     $(".direct_transactions>.direct").each(function(i, elem){
