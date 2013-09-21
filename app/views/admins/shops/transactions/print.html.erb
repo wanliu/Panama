@@ -37,7 +37,7 @@
   <% end %>
   <tr>
     <td>地址</td>
-    <td colspan='3'><%=@transaction.address.try(:location_without_contact) %></td>
+    <td colspan='3'><%=@transaction.address.try(:address_only) %></td>
   </tr>
   <tr>
     <td colspan='4'>
