@@ -46,8 +46,12 @@
           <div class="modal-body">
             <img class="author_image" src="<%=@ask_buy.user.photos.icon %>" />
             <h4><%=@ask_buy.user.login %></h4>
-            <p>关注 55</p>
-            <p>粉丝 100</p>
+            <p>
+              关注 <%=@ask_buy.user.followings.count %>
+            </p>
+            <p>
+              粉丝 <%=@ask_buy.user.followers.count %>
+            </p>
           </div>
           <div class="modal-footer">
           </div>
