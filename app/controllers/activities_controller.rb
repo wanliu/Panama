@@ -7,8 +7,8 @@ class ActivitiesController < ApplicationController
   respond_to :html, :dialog
 
   def index
-    @activities = Activity.access
-    @ask_buy = AskBuy.all
+    # @activities = Activity.access
+    # @ask_buy = AskBuy.all
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @activities }
@@ -78,6 +78,7 @@ class ActivitiesController < ApplicationController
       :user_id => current_user.id
     })
     @transaction.items.each{|item| item.update_total }
+    @activity.activities_participates.create(:user_id => current_user.id)
     respond_to do |format|
       if @transaction.save
         format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }

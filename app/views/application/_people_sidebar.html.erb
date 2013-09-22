@@ -89,7 +89,14 @@
           <a class='people-notification' href="<%=person_notifications_path(@people.login) %>">提醒</a>
         </li>
       <%end%>
-      <li><a href="my_activity">我参于的活动</a></li>
+      <li>
+        <a class='people-activity_likes' href="/people/<%=@people.login %>/activities/likes">
+          喜欢的活动
+        </a>
+      </li>
+      <li>
+        <a class='people-my_activity' href="/people/<%=@people.login %>/my_activity">我参于的活动</a>
+      </li>
       <li><a href="expired">往期活动</a></li>
       <li>
         <a class='people-ask_buy' href="<%=person_ask_buy_index_path(@people.login) %>">求购</a>

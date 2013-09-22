@@ -75,7 +75,6 @@ Panama::Application.routes.draw do
     end
 
     resources :addresses, :controller => "people/addresses" do
-
     end
 
     resources :direct_transactions, :controller => "people/direct_transactions" do
@@ -147,6 +146,14 @@ Panama::Application.routes.draw do
     end
 
     resources :ask_buy, :controller => "people/ask_buy"
+
+    resources :activities, :controller => "people/activities" do
+      collection do
+        get "likes", :to => "people/activities#likes"
+      end
+    end
+
+    match 'my_activity', :to => "people/activities#my_activity"
   end
 
   match "mycart", :to => "people/cart#add_to_cart", :as => :add_to_cart, :via => [:post, :put]
