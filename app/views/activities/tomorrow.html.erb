@@ -1,15 +1,24 @@
 <% side_nav_for 'tomorrow' %>
+
 <div id="main" class="content">
   <section class="widget">
     明日预告
   </section>
   <div id="activities" class='forecast'>
-    <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
-      <div class="column">
-      <% indexs.each do |index| %>
-        <%= render_activity @activities[index] %>
-      <% end %>
+    <% if @activities.size == 0 %>
+      <div class="row-fluid">
+        <div class="text-center">
+          暂时没有活动，尽请期待！
+        </div>
       </div>
+    <% else %>
+      <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
+        <div class="column">
+        <% indexs.each do |index| %>
+          <%= render_activity @activities[index] %>
+        <% end %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </div>

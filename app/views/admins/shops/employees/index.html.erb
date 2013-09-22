@@ -1,16 +1,18 @@
 <% admin_active_section :employees %>
 
 <div class='employee-groups widget span8'>
-	<div class='invite-employee'>
+	<div class='invite-employee span8'>
 		<form class="form-search-user">
 			<input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>" />
 			<div class="alert alert-message" style='display:none'>
 				<button type="button" class="close" data-dismiss="alert">x</button>
 				<p class='content'></p>
 			</div>
-			<span style="vertical-align: -40%; margin-left:20px;"><strong>请输入邀请人的Email地址 </strong></span>
+			<span>
+				<strong>请输入邀请人的Email地址</strong>
+			</span>
 			<input type="text" name='login' />
-			<button type="submit" class="btn">邀请</button>
+			<button type="submit" class="btn btn-primary">邀请</button>
 		</form>
 	</div>
 
@@ -21,7 +23,7 @@
 				<div class='span3 alert alert-info employee' data-value-id="<%= e.id %>" data-value-login="<%=e.login %>">
 					<img class='img-rounded avatar' src="<%= e.photos.icon %>" />
 					<%= e.login %>
-					<a href='javascript:void(0)' class='remove'>移除</a>
+					<a href='javascript:void(0)' class='btn btn-danger remove'>移除</a>
 				</div>
 			<% end %>
 		<% else %>
@@ -32,7 +34,6 @@
 	<div class="user-groups span8">
 		<h4>用户组</h4>
 		<ul class="nav nav-tabs user-group-header">
-
 		</ul>
 		<div class="tab-content user-group-content">
 		</div>
@@ -96,14 +97,15 @@
 	<div class='span3 alert alert-info group-user'>
 		<img class='img-rounded avatar' />
 			{{login}}
-		<a href='javascript:void(0)' class='remove-shop-user-group'>移除</a>
+		<a href='javascript:void(0)' class='btn btn-danger remove-shop-user-group'>移除</a>
 	</div>
 </script>
 
 <script type='text/javascript'>
-	$(function(){        
+	$(function(){
 		template = Hogan.compile($(".group-user-template").html())
-		_permission_template = Hogan.compile($(".permission-group-template").html())        
+		_permission_template = Hogan.compile($(".permission-group-template").html())
+
 		new EmployeeGroup({
 			el: $(".employee-groups"),
 			shop: "<%=current_shop.name %>",

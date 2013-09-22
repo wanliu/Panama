@@ -106,7 +106,7 @@ class TopicView extends Backbone.View
     }).popover("show")
 
 class TopicViewList extends Backbone.View
-  notice_el: $("<div class='alert alert-block'>暂时没有信息!</div>")
+  notice_el: $("<div class='alert alert-info alert-block'>暂时没有信息!</div>")
 
   events: {
     "click input:button.send_topic": "create",
