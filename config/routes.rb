@@ -146,6 +146,7 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :ask_buy, :controller => "people/ask_buy"
   end
 
   match "mycart", :to => "people/cart#add_to_cart", :as => :add_to_cart, :via => [:post, :put]
