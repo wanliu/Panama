@@ -70,11 +70,14 @@ class SearchController < ApplicationController
       query do
         boolean do
           must_not do
-            string "status:0"
+            string "activity.status:0"
           end
         end
       end
-      sort { by :updated_at, 'desc' }
+      sort do
+        by :created_at, 'desc'
+      end
+
     end
     @results = deal_results(s.results)
     respond_to do |format|

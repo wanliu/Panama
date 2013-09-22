@@ -46,7 +46,7 @@ class CategoryController < ApplicationController
 
 	def products
 		@category = Category.find(params[:id])
-		@shop_products = Shop.find(params[:shop_id]).shop_products
+		@shop_products = Shop.find(params[:shop_id]).products
 		if @shop_products.present?
 			@products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
 		else

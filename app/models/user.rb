@@ -22,9 +22,6 @@ class User < ActiveRecord::Base
            class_name: "DirectTransaction",
            foreign_key: "buyer_id"
 
-  has_many :trade_incomes, class_name: "TradeIncome", foreign_key: "trade_income_id"
-  has_many :trade_payments, class_name: "TradePayment", foreign_key: "trade_payment_id"
-
   has_many :credits
   has_many :addresses, class_name: "Address", dependent: :destroy
   has_many :followings, dependent: :destroy
@@ -114,6 +111,7 @@ class User < ActiveRecord::Base
     attribute["icon_url"] = icon
     attribute["avatar_url"] = avatar
     attribute["header_url"] = photos.header
+    attribute["photos"] = photos.attributes
     attribute["connect_state"] = connect_state
 
     attribute

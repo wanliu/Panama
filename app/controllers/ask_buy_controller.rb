@@ -1,3 +1,4 @@
+#encoding: utf-8
 class AskBuyController < ApplicationController
   before_filter :login_and_service_required
 
@@ -36,6 +37,7 @@ class AskBuyController < ApplicationController
         ask_buy["comments"] = @ask_buy.comments{|c| c.as_json}
         render :json => ask_buy
       end
+      format.dialog{ render :layout => false }
     end
   end
 
@@ -48,6 +50,25 @@ class AskBuyController < ApplicationController
         format.json{ render :json => @comment }
       else
         format.json{ render :json => draw_errors_message(@comment), :status => 403 }
+      end
+    end
+  end
+
+  def join
+    @ask_buy = AskBuy.find(params[:id])
+    respond_to do |format|
+      if current_user.id == @ask_buy.user_id || !current_user.is_seller? || @ask_buy.paticipate.present?
+        format.json{ render :json => ['不能参与自己的求购或者不是供应商！'], :status => 403 }
+      else
+        @paticipate = AskBuyPaticipate.create(
+          :ask_buy => @ask_buy,
+          :user => current_user,
+          :shop => current_user.shop)
+        if @paticipate.valid?
+          format.json{ head :no_content }
+        else
+          format.json{ render :json => draw_errors_message(@paticipate), :status => 403 }
+        end
       end
     end
   end

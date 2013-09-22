@@ -1,13 +1,13 @@
 <div id="direct<%=direct_transaction.id %>" class='row-fluid widget direct transaction' data-value-id="<%=direct_transaction.id %>">
   <div class='span7 direct-info'>
     <div class='row-fluid'>
-      <div class='span4 avatar'>
+      <div class='span7 avatar'>
         <img src="<%=direct_transaction.buyer.photos.header %>" class='img-polaroid' />
         <h1>
           <%=direct_transaction.buyer.login %>
         </h1>
       </div>
-      <div class='span8'>
+      <div class='span5'>
         <h4 class='pull-right'>
           <%=t "direct_transaction_state.#{direct_transaction.state.name}" %>
         </h4>

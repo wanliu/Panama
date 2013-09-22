@@ -8,16 +8,18 @@
 		<div class='row-fluid'>
 			<div class="addresses-panel">
 				<div class="addresses-button">
-					<button href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">新增</button>
+					<button href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">添加地址</button>
 					已有<%= @addresses.count %>个地址
 				</div>
 
 				<div class="address-list">
-					<% if flash[:error] %>
-						<div class="alert alert-error">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<%= flash[:error] %>
-						</div>
+					<% unless flash.empty? %>
+						<% flash.each do |f| %>
+							<div class="alert alert-<%=f[0]%>">
+								<button type="button" class="close" data-dismiss="alert">×</button>
+								<%= f[1] %>
+							</div>
+						<% end %>
 					<% end %>
 					<% @addresses.each do |address| %>
 						<%= render "show", :address => address %>

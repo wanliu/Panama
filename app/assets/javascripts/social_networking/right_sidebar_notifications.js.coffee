@@ -184,9 +184,7 @@ class ActivityMessageView extends Backbone.View
 			id: @model.get('targeable_id') 
 		})
 		activity_model.fetch success: (model) =>
-			new ActivityView({
-				model    : model 
-			}).modal()
+			new ActivityViewPreview({model: model}).modal()
 			@remove()
 			$('.notices-list').mouseleave()
 

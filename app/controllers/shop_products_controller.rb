@@ -5,7 +5,7 @@ class ShopProductsController < ApplicationController
 
 	def index
 		@shop = Shop.find(params[:shop_id])
-		@products = @shop.shop_products.includes(:product)
+		@products = @shop.products.includes(:product)
 		@products = @products.offset(params[:offset]) if params[:offset].present?
 		@products = @products.limit(params[:limit]) if params[:limit].present?
 
@@ -19,7 +19,7 @@ class ShopProductsController < ApplicationController
 		if current_user.shop.present?
 			product_ids   = params[:product_ids]
 			shop_products = product_ids.map do |product_id|
-				current_user.shop.shop_products.create(
+				current_user.shop.products.create(
 					product_id: product_id,
 					price: 0,
 					inventory: 1

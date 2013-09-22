@@ -43,7 +43,7 @@
       </div>
       </form>
     </div>
-    <h4>银行帐户</h4>
+    <h4>已有银行帐户</h4>
     <table class='table table-striped table-images'>
       <thead>
         <tr>
@@ -67,7 +67,7 @@
         </td>
         <td><%=shop_bank.name %></td>
         <td><%=shop_bank.code %></td>
-        <td><a href="#" class="delete_bank">删除</a></td>
+        <td><a href="#" class="btn btn-danger delete_bank">删除</a></td>
       </tr>
       <% end %>
       </tbody>
@@ -79,17 +79,19 @@
 <script type="text/javascript">
   $(function(){
     $(".delete_bank").bind("click",function(event){
-      shop_id = "<%= @shop_banks.try(:first).try(:shop_id) %>";
-      tr = event.target.parentElement.parentElement;
-      id = $(tr).attr("id");
-      $.ajax({
-        type: "delete",
-        url: " /shops/<%= current_shop.name %>/admins/shop_banks/"+id,
-        dataType: "json",
-        success: function(){
-          tr.remove()
-        } 
-      })
+      if(confirm("确定删除该银行账户吗？")){
+        shop_id = "<%= @shop_banks.try(:first).try(:shop_id) %>";
+        tr = event.target.parentElement.parentElement;
+        id = $(tr).attr("id");
+        $.ajax({
+          type: "delete",
+          url: " /shops/<%= current_shop.name %>/admins/shop_banks/"+id,
+          dataType: "json",
+          success: function(){
+            tr.remove()
+          } 
+        })
+      }
     })
   })
 </script>

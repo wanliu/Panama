@@ -1,27 +1,29 @@
 <div class='ask_buy' ask-buy-id='{{id}}' id="ask_buy_{{id}}">
-	<div class='out-box'>
-		<div class='in-box'>
-			{{#photos}}
-				<img src='{{avatar}}', class="preview a-{{id}}" />
-			{{/photos}}
-		</div>
-		<div class='summary'>
-			<p class="title">{{title}} 求购</p>
-			<p class='describe' style="">{{describe}} </p>
-		</div>
-		<div class='userinfo'>
-			{{#user.photos}}
-				<img src='{{icon}}', class="author img-circle" />
-			{{/user.photos}}
-			<p>
-				<a href="<%= person_path('{{user}}') %>">
-					{{#user}}
-						{{login}}
-					{{/user}}
-				</a>
-			</p><br />
-		</div>
-		<div class="buttons">
-		</div>
-	</div>
+  <div class='out-box'>
+    <div class='in-box'>
+      {{#photos}}
+        <img src='{{avatar}}', class="preview a-{{id}}" />
+      {{/photos}}
+    </div>
+    <div class='summary'>
+      <p class="title">{{title}} 求购</p>
+      <p class='describe' style="">{{describe}} </p>
+    </div>
+    <div class='userinfo'>
+      {{#user.photos}}
+        <img src='{{icon}}', class="author img-circle" />
+      {{/user.photos}}
+      <p>
+        <a href="<%= person_path('{{user}}') %>">
+          {{#user}}
+            {{login}}
+          {{/user}}
+        </a><br />
+        <span class='notify'>
+        </span>
+      </p>
+    </div>
+    <div class="buttons">
+    </div>
+  </div>
 </div>

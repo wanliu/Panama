@@ -11,7 +11,6 @@ class LoadCategoryProducts extends InfiniteScrollView
 	sp_el: "#category_products"
 
 	add_one: (c) ->
-
 		template = Hogan.compile($("#category_product-preview-template").html())
 		@min_column_el().append(template.render(c))
 

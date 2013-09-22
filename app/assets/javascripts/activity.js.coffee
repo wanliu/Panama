@@ -170,8 +170,7 @@ class ActivityPreview extends Backbone.View
   launchActivity: (event) ->
     @load_view(event.currentTarget)
     @model.fetch success: (model) =>
-      view = new ActivityViewPreview({ model: model })
-      view.modal()
+      new ActivityViewPreview({model: model}).modal()
     false
 
   like: (event) ->
@@ -233,6 +232,8 @@ class AskBuyViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("#ask_buy-preview-template").html())
     @$el = $(@template.render(@model)) if @template
+    if @model.status == 1
+      $(".notify", @$el).html("已经有商家参与")
   render: () ->
     @
 
@@ -336,17 +337,6 @@ class LoadActivities extends InfiniteScrollView
 
   add_one: (c) ->
     $(window).trigger("search_result:append", c)
-    ###
-    switch c._type
-      when "activity"
-        switch c.activity_type
-          when "auction"
-            template = Hogan.compile($("#auction-preview-template").html())
-            $(template.render(c)).appendTo(@min_column_el())
-      when "ask_buy"
-        template = Hogan.compile($("#ask_buy-preview-template").html())
-        $(template.render(c)).appendTo(@min_column_el())
-    ###
 
   after_add: () ->
     effect = "fadeInRight"
