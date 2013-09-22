@@ -719,7 +719,6 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
-    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end
