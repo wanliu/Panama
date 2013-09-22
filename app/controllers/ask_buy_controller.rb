@@ -37,6 +37,7 @@ class AskBuyController < ApplicationController
         ask_buy["comments"] = @ask_buy.comments{|c| c.as_json}
         render :json => ask_buy
       end
+      format.dialog{ render :layout => false }
     end
   end
 

@@ -74,7 +74,10 @@ class SearchController < ApplicationController
           end
         end
       end
-      sort { by :updated_at, 'desc' }
+      sort do
+        by :created_at, 'desc'
+      end
+
     end
     @results = deal_results(s.results)
     respond_to do |format|
