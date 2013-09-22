@@ -44,10 +44,20 @@
       <div class="span3">
         <div class="dialog">
           <div class="modal-body">
-            <img class="author_image" src="<%=@ask_buy.user.photos.icon %>" />
-            <h4><%=@ask_buy.user.login %></h4>
-            <p>关注 55</p>
-            <p>粉丝 100</p>
+            <a href="<%= person_path(@ask_buy.user) %>">
+              <img class="author_image" src="<%=@ask_buy.user.photos.icon %>" />
+            </a>
+            <h4>
+              <a href="<%= person_path(@ask_buy.user) %>">
+                <%=@ask_buy.user.login %>
+              </a>
+            </h4>
+            <p>
+              关注 <%=@ask_buy.user.followings.count %>
+            </p>
+            <p>
+              粉丝 <%=@ask_buy.user.followers.count %>
+            </p>
           </div>
           <div class="modal-footer">
           </div>
@@ -70,12 +80,26 @@
           </div>
           <div class="modal-footer">
             <div class="btn-group">
-            <% if current_user.is_seller? && @ask_buy.user_id != current_user.id %>
+            <% if current_user.is_seller? &&
+              @ask_buy.user_id != current_user.id &&
+              @ask_buy.status !=1 %>
               <button class="btn btn-danger" type="button" name="join">
                 <%= icon(:'shopping-cart', :white) + " 参与" %>
               </button>
             <% end %>
             </div>
+            <% if @ask_buy.paticipate.present? %>
+            <div class='seller-info'>
+              <a href="/shops/<%=@ask_buy.paticipate.shop.name %>">
+              <img src="<%=@ask_buy.paticipate.shop.photos.icon %>" />
+              </a>
+              <span>
+                <a href="/shops/<%=@ask_buy.paticipate.shop.name %>">
+                  <%=@ask_buy.paticipate.shop.name %>
+                </a> 参与
+              </span>
+            </div>
+            <% end %>
           </div>
         </div>
       </div>
