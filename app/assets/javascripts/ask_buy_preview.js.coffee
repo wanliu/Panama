@@ -12,7 +12,6 @@ class Preview extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    #@template = Hogan.compile($("#ask_buy-preview_dialog").html())
     @fetch_dialog()
 
   fetch_dialog: () ->
