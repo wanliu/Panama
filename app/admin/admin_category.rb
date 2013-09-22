@@ -149,13 +149,17 @@ ActiveAdmin.register Category do
     @catalogs = Catalog.all
   end
 
-  # collection_action :new_hot, :title => "热推分类" do
-  #   @catalog = Catalog.new
-  # end
+  collection_action :catalog_delete, :method => :delete do
+    @catalog = Catalog.find(params[:id])
+    @catalog.destroy
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
+  end
 
   collection_action :create_hot, :method => :post do 
     @catalog = Catalog.create(:title => params["catalog"]["title"])
-    @catalog.categories << Category.find(params[:parent_id])
+    @catalog.categories << Category.where(:id => params[:parent_id])
     redirect_to catalog_index_system_categories_path
   end
 

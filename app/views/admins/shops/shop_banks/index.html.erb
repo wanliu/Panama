@@ -79,7 +79,6 @@
 <script type="text/javascript">
   $(function(){
     $(".delete_bank").bind("click",function(event){
-      debugger
       shop_id = "<%= @shop_banks.try(:first).try(:shop_id) %>";
       tr = event.target.parentElement.parentElement;
       id = $(tr).attr("id");
