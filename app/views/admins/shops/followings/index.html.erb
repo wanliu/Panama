@@ -1,23 +1,17 @@
-<% if @followings.count > 0 %>
-<table class="table following-list">
-  <thead>
-    <tr>
-      <th>用户</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @followings.each do | following | %>
-      <tr>
-        <td>
-          <img src="<%=following.user.icon %>" class='img-polaroid' />
+<div class='followers widget span8'>
+  <div class='follow-users span8'>
+    <h4 class='title'>被关注</h4>
+    <% if @followings.count > 0 %>
+      <% @followings.each do |following| %>
+        <div class='span3 alert alert-info follow'>
+          <img src="<%= following.user.icon %>" class='img-polaroid' />
           <%=following.user.login %>
-        </td>
-      </tr>
+        </div>
+      <% end %>
+    <% else %>
+      <div class='span3 alert alert-warning'>
+        暂时没有被关注
+      </div>
     <% end %>
-  </tbody>
-</table>
-<% else %>
-  <div class='alert'>
-    暂无关注用户
   </div>
-<% end %>
+</div>

@@ -24,9 +24,9 @@ class UsersController < ApplicationController
   end
 
   def followings
-    followings = current_user.format_followings
+    @followings = current_user.format_followings
     respond_to do |format|
-      format.json{ render :json => followings }
+      format.json{ render :json => @followings }
     end
   end
 
