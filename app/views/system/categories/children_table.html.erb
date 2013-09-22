@@ -12,8 +12,9 @@
   </td>
 </tr>
 <% end %>
+
 <script type="text/javascript">
-  $(document).ready(function(){
+  $(function(){
     $(".pagination").hide();
     var label = "共有 <b><%=Category.count %></b> 分类, 当前显示<b><%=@category.children.count %></b>条"
     $(".pagination_information").html(label)

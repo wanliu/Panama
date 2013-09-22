@@ -1,3 +1,7 @@
+<!-- <div class="category_sidebar">
+	<%= render :partial => "tree", :locals => { :root => Category.root } %>
+</div> -->
+
 <table class="index_table index">
 	<tr>
 		<th>热推分类名</th>
@@ -14,21 +18,22 @@
 		</tr>
 	<% end %>
 </table>
-<br/>
+
+<%= render "new_hot" %>
+
 <script type="text/javascript">
 	$(function() {
 		$(".delete_catalog").bind("click",function(event){
-		    tr = event.target.parentElement.parentElement;
-		    id = $(tr).attr("id");
-		    $.ajax({
-		        type: "delete",
-		        url: "/system/categories/catalog_delete?id="+id,
-		        dataType: "json",
-		        success: function(){
-		          tr.remove()
-		        } 
-		    })
+			tr = event.target.parentElement.parentElement;
+			id = $(tr).attr("id");
+			$.ajax({
+					type: "delete",
+					url: "/system/categories/catalog_delete?id="+id,
+					dataType: "json",
+					success: function(){
+						tr.remove()
+					} 
+			})
 		})
 	})
 </script>
-<%= render "new_hot" %>
