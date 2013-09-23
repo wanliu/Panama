@@ -16,6 +16,8 @@ class root.ActivityBaseInfoView extends Backbone.View
 
       template: "",
 
+      type: "",
+
       input_name: "activity[attachment_ids]",
 
       data: []
@@ -46,13 +48,18 @@ class root.ActivityBaseInfoView extends Backbone.View
       success: (data) =>
         @load_info(data)
 
-  load_info: (data) ->
+  load_info: (data) =>
     product = data.product
+    if @options.params.type == "focus"
+       @$('[name="activity[title]"]').val(product.name + '  聚焦');
+    else
+      @$('[name="activity[title]"]').val(product.name + '  竞价');
+
     @$('[name="activity[shop_product]"]').val(product.name);
     @$('[name="activity[shop_product_id]"]').val(product.id);
     @$('[name="activity[price]"]').val(product.price);
     @$('[name="activity[activity_price]"]').val(product.price);
-    @$('[name="activity[title]"]').val(product.name + '  竞价');
+   
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
 
