@@ -2,13 +2,13 @@
 
 <%= semantic_form_for @catalog, :url => create_hot_system_categories_path do |f| %>
     <%= f.inputs "热推分类" do %>
-    <%= f.input :title,:label => '分类名' %>
-    <%= f.input :ancestry,
-     			:label => '挂载分类', 
-              	:as => :category, 
-              	:name => :parent_id  %>
-  <% end %>
-  <%= f.actions %>
+	    <%= f.input :title,:label => '分类名' %>
+	    <%= f.input :ancestry,
+	     			:label => '挂载分类', 
+	              	:as => :category, 
+	              	:name => :parent_id  %>
+	<% end %>
+	<%= f.actions %>
 <% end %>
 
 <script>
@@ -39,6 +39,9 @@ function admin_category_selector(el) {
 
 		var category_name = $(this).attr('data-name');
 		$('input.mock_prodcut_category_id').val(category_name);
+
+		// var choice = $(".category.input").last().clone(true);
+		// $(".category.input").last().after(choice);
 
 		selector_el.children('ul').hide();
 		return false;

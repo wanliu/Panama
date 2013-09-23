@@ -7,7 +7,7 @@
     <% end %>
     <span><%=c.name %></span>
     <% if c.children.length > 0 %>
-      <% last_ch = c.children.last  %>
+      <% last_ch = c.children.last %>
       <ul style='display:none;'>
         <% c.children.each do |ch| %>
           <% class_name, hitarea_name = tree_cls_name(ch, last_ch) %>

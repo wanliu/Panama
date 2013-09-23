@@ -1,5 +1,5 @@
 class CatalogController < ApplicationController
-	layout  "category", except: [:new]
+	layout  "category"
 	def index
     	@catalogs = Catalog.all
     	respond_to do |format|
@@ -11,18 +11,6 @@ class CatalogController < ApplicationController
 	def show
 		@catalog = Catalog.find(params[:id])
 	end
-
-	# def new
-	# 	@catalog = Catalog.new
-	# end
-
-	# def create
-	# 	@catalog = Category.create(params[:catalog])
-	# 	respond_to do |format|
-	# 		format.html
-	# 		format.json{ render json: @catalog }
-	# 	end
-	# end
 
 	def products
 		catelog = Catalog.find(params[:id])

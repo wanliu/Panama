@@ -951,7 +951,7 @@ h2 small {
 #active_dialog{
 	.modal-body{
 		max-height: none;
-		height: 515px;
+		/*height: 515px;*/
 
 		.form_activity_auction{
 		  .shop_product_wrap{
@@ -960,6 +960,14 @@ h2 small {
 		    }
 		  }
 		}
+	}
+}
+
+.form_activity_focus{
+	.shop_product_wrap{
+	    .controls{
+		    width: 400px;
+	    }
 	}
 }
 
@@ -1001,5 +1009,9 @@ h2 small {
     width:50px;
     height:50px;
   }
+}
+
+.m_f_30{
+	margin-left: -30px;
 }
 
