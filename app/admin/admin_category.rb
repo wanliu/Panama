@@ -11,7 +11,7 @@ ActiveAdmin.register Category do
   end
 
   action_item do   
-    link_to("热推分类", catalog_index_system_categories_path) 
+    link_to("栏目管理", catalog_index_system_categories_path) 
   end
 
   action_item :only => :show do   
@@ -134,7 +134,7 @@ ActiveAdmin.register Category do
     @category = Category.new
   end
 
-  collection_action :catalog_index, :method => :get do
+  collection_action :catalog_index, :title=> "栏目", :method => :get do
     @catalog = Catalog.new
     @catalogs = Catalog.all
   end
@@ -148,9 +148,16 @@ ActiveAdmin.register Category do
   end
 
   collection_action :create_hot, :method => :post do 
-    @catalog = Catalog.create(:title => params["catalog"]["title"])
-    @catalog.categories << Category.where(:id => params[:parent_id])
-    redirect_to catalog_index_system_categories_path
+    @catalog = Catalog.new(:title => params["catalog"]["title"])
+    category_ids = params[:category_ids].split(" ")
+    category_ids.each do |category_id|
+      @catalog.categories << Category.where(:id => category_id)
+    end
+    if @catalog.save
+      redirect_to catalog_index_system_categories_path
+    else
+      render "catalog_index"
+    end
   end
 
   collection_action :create_plus, :method => :post do

@@ -1,5 +1,4 @@
 # 分类树
-
 root = (window || @)
 
 class root.CategoryTree
@@ -8,8 +7,17 @@ class root.CategoryTree
     $.extend(@, options)
     # @el.on("click", "li.expandable", $.proxy(@load_tree, @))
     # @el.on("click", "li.collapsable", $.proxy(@load_tree, @))
-    @el.on("click", "li", $.proxy(@load_tree, @))
-    # @el.find(">li").click()
+    @el.on("click", "li>span", $.proxy(@load_tree, @))
+    @el.on("click", "li>input", $.proxy(@save_categories, @))
+
+  save_categories: (event) ->
+    category_ids = ""
+    category_names = ""
+    $(@el).find(":checked").parent("li").each (i, li) =>
+      category_ids += " #{$(li).attr('data-value-id')}"
+      category_names += " #{$(li).attr('data-value-name')}"
+    $("#category_ids").val(category_ids.trim())
+    $("#category_names").val(category_names.trim())
 
   camelcase: (str) ->
     str.toUpperCase().substring(0, 1) + str.substring(1, str.length)
@@ -44,26 +52,26 @@ class root.CategoryTree
     @load_table(li)
 
   load_tree: (event) ->
-    li = $(event.currentTarget);
-    ul = li.find(">ul");
+    li = $(event.currentTarget).parent("li");
+    ul = li.find(">ul")
     if ul.find(">li").length > 0
       @toggle_tree(li)
     else
-      id = li.attr("data-value-id");
+      id = li.attr("data-value-id")
       $.ajax({
         url: "/system/categories/#{id}/children_category",
         success: (data, xhr) =>
-          ul.html(data);
-          @toggle_tree(li);
+          ul.html(data)
+          @toggle_tree(li)
       })
     false
 
   load_table: (li) ->
-    id = li.attr("data-value-id");
+    id = li.attr("data-value-id")
     $.ajax({
       url: "/system/categories/#{id}/children_table",
       success: (data, xhr) =>
         tbody = @table_el.find("tbody")
-        tbody.find(">tr").remove();
+        tbody.find(">tr").remove()
         tbody.html(data)
     })
