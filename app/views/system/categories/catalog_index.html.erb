@@ -1,11 +1,13 @@
-<!-- <div class="category_sidebar">
-	<%= render :partial => "tree", :locals => { :root => Category.root } %>
-</div> -->
+<style type="text/css">
+	body.active_admin ul {
+		list-style: none;
+	}
+</style>
 
 <table class="index_table index">
 	<tr>
-		<th>热推分类名</th>
-		<th>挂载分类名</th>
+		<th>栏目名</th>
+		<th>包含的分类</th>
 		<th>创建时间</th>
 		<th>操作</th>
 	</tr>
@@ -14,11 +16,16 @@
 			<td><%= catalog.title %></td>
 			<td><%= catalog.categories.map { |c| c.name } %></td>
 			<td><%= catalog.created_at %></td>
-			<td><a href="#" class="delete_catalog">删除</a></td>
+			<td>
+				<a href="#" class="delete_catalog">删除</a>
+			</td>
 		</tr>
 	<% end %>
 </table>
 
+<div class="category_sidebar">
+	<%= render :partial => "tree", :locals => { :root => Category.root } %>
+</div>
 <%= render "new_hot" %>
 
 <script type="text/javascript">

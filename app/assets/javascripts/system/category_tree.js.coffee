@@ -8,6 +8,16 @@ class root.CategoryTree
     # @el.on("click", "li.expandable", $.proxy(@load_tree, @))
     # @el.on("click", "li.collapsable", $.proxy(@load_tree, @))
     @el.on("click", "li>span", $.proxy(@load_tree, @))
+    @el.on("click", "li>input", $.proxy(@save_categories, @))
+
+  save_categories: (event) ->
+    category_ids = ""
+    category_names = ""
+    $(@el).find(":checked").parent("li").each (i, li) =>
+      category_ids += " #{$(li).attr('data-value-id')}"
+      category_names += " #{$(li).attr('data-value-name')}"
+    $("#category_ids").val(category_ids.trim())
+    $("#category_names").val(category_names.trim())
 
   camelcase: (str) ->
     str.toUpperCase().substring(0, 1) + str.substring(1, str.length)

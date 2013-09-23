@@ -2,7 +2,7 @@
 
 <% @category.children.each do |c| %>
   <% class_name, hitarea_name = tree_cls_name(c, last) %>
-  <li class='<%=class_name %>' data-value-id="<%= c.id %>">
+  <li class='<%=class_name %>' data-value-id="<%= c.id %>" data-value-name="<%= c.name %>">
     <% if hitarea_name.present? %>
       <div class="hitarea <%=hitarea_name %>">
       </div>
@@ -15,13 +15,14 @@
       <ul style='display:none;'>
         <% c.children.each do |ch| %>
           <% class_name, hitarea_name = tree_cls_name(ch, last_ch) %>
-          <li class='<%=class_name %>' data-value-id="<%=ch.id %>">
+          <li class='<%=class_name %>' data-value-id="<%=ch.id %>" data-value-name="<%= ch.name %>">
             <% if hitarea_name.present? %>
               <div class="hitarea <%=hitarea_name %>">
               </div>
             <% end %>
             <input type="checkbox" name="check_category">
             <span><%= ch.name %></span>
+
             <% if ch.children.length > 0 %>
               <ul style='display:none;'></ul>
             <% end %>
