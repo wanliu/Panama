@@ -1,8 +1,8 @@
 <!-- 聚焦 -->
-<%= simple_form_for @activity, 
-                    :url => activities_focus_path, 
-                    :remote => true,  
-                    :html => { class: 'form-horizontal m_f_30 form_activity_focus' }, 
+<%= simple_form_for @activity,
+                    :url => activities_focus_path,
+                    :remote => true,
+                    :html => { class: 'form-horizontal form_activity_focus' },
                     :type => :json do |f| %>
 
 
@@ -12,7 +12,8 @@
                 :class => "shop_product_wrap"
               },
               :input_html => {
-                :class => "shop_product_id1"
+                :class => "shop_product_id",
+                :id => "activity_focus_shop_product_id"
               } %>
 
  <div class="control-group">
@@ -25,26 +26,23 @@
 
 
   <div class="row bettwen">
-   <!--  <div class="span3"> -->
-      <%=f.input  :people_number, 
-                  :label => "人数", 
-                  :input_html => {
-                    :class => "span2"
-                  },
-                  :wrapper_html => {
-                    :class => "span3"
-                  } %>
-  <!--   </div>
-    <div class="span3"> -->
-      <%= f.input :price, 
-                  :label => "价格", 
-                  :input_html => {
-                    :class => "span2"
-                  },
-                  :wrapper_html => {
-                    :class => "span3"
-                  } %>
-   <!--  </div> -->
+  <%=f.input  :people_number,
+              :label => "人数",
+              :input_html => {
+                :class => "span2"
+              },
+              :wrapper_html => {
+                :class => "span3"
+              } %>
+
+  <%= f.input :price,
+              :label => "价格",
+              :input_html => {
+                :class => "span2"
+              },
+              :wrapper_html => {
+                :class => "span3"
+              } %>
   </div>
 
 
@@ -83,7 +81,7 @@
       }
     });
 
-    var shop_product_elem1 = $(".form_activity_focus .shop_product_id1")
+    var shop_product_elem1 = $(".form_activity_focus .shop_product_id")
     shop_product_elem1.chosenEx({
       allow_single_deselect : true,
       placeholder_text : "选择一个商品",
