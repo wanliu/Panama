@@ -8,8 +8,17 @@ class Activities::FocusController < Activities::BaseController
 	    end
     end
 
-	 def create
-
+	def create
+		respond_to do |format|
+	      if @activity.save
+	        format.js { render "activities/add_activity" }
+	      else
+	        @activity.extend(ScoreExtension)
+	        format.js{ render :partial => "activities/auction/form",
+	                         :locals  => { :activity => @activity },
+	                         :status  => 400 }
+	      end
+	    end
 	end
 end
 
