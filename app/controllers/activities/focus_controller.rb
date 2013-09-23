@@ -9,7 +9,6 @@ class Activities::FocusController < Activities::BaseController
     end
 
 	def create
-		debugger
 		slice_options = [:shop_product_id,:people_number, :price, :start_time, :end_time, :attachment_ids]
 		activity_params = params[:activity].slice(*slice_options)
     	parse_time!(activity_params)
@@ -59,4 +58,3 @@ module FocusExtension
   				:start, :end, :price, :description
 
 end
-
