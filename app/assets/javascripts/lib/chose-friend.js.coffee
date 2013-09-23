@@ -12,6 +12,7 @@ class ChoseDropDown
   circle_class: "circle-line"
   followings_class: "followings-line"
   circle_complete: (data) ->
+
   followings_complete: (data) ->
 
   constructor: (opts) ->
@@ -239,7 +240,7 @@ class ChoseFriend
 
       event.stopPropagation()
 
-    $(window).click () =>
+    $(document).click () =>
       @chose_view.input.val("")
       @chose_view.hide()
       @drop_down.hide()
