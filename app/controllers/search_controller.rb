@@ -41,6 +41,7 @@ class SearchController < ApplicationController
   end
 
   def shop_products
+    debugger
     if current_user.shop
       query = filter_special_sym(params[:q])
       shop_id = current_user.shop.id
@@ -64,13 +65,22 @@ class SearchController < ApplicationController
   def activities
     query = filter_special_sym(params[:q])
     _size, _from = params[:limit], params[:offset]
+    toDay = DateTime.now.midnight
     s = Tire.search ['activities', 'ask_buys'] do
       from _from
       size _size
+
       query do
+
         boolean do
           must_not do
             string "activity.status:0"
+          end
+          must do
+            range "activity.start_time", {lte: toDay}
+          end
+          must do
+            range "activity.end_time", {gt: toDay}
           end
         end
       end

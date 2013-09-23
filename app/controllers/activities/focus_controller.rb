@@ -16,7 +16,8 @@ end
 
 module FocusExtension
 
-  attr_accessor :price, :product,:people_number,:picture
+  attr_accessor :price, :product, :people_number,:pictrue, 
+  				:start, :end, :price, :description
 
 end
 

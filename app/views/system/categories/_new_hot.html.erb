@@ -6,7 +6,7 @@
     <li class="string input optional stringish" id="category_ids_input">
     	<label class=" label" for="category_ids">包含的分类</label>
     	<input id="category_ids" maxlength="255" name="category_ids" type="hidden">
-    	<input maxlength="255" id="category_names" type="text" readonly="readonly"/>
+    	<input maxlength="255" id="category_names" type="text" value="点击左边分类树来选择分类" readonly="readonly"/>
 		</li>
   <% end %>
   <%= f.actions %>
@@ -44,6 +44,20 @@
 			selector_el.children('ul').hide();
 			return false;
 		}
+	}
+
+	function bind_click(event) {
+		var category_id = $(this).attr('data-id');
+		$('#catalog_ancestry').val(category_id);
+
+		var category_name = $(this).attr('data-name');
+		$('input.mock_prodcut_category_id').val(category_name);
+
+		// var choice = $(".category.input").last().clone(true);
+		// $(".category.input").last().after(choice);
+
+		selector_el.children('ul').hide();
+		return false;
 	}
 
 	$(function(){

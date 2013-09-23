@@ -6,7 +6,7 @@ module TextFormat
     include ActionView::Helpers::TextHelper
 
     module ClassMethods
-      def define_format_rule(reg, &block)        
+      def define_format_rule(reg, &block)
         @customer_match_rule ||= CustomerMatch.new
         @customer_match_rule.stores << [reg, block]
       end
@@ -16,7 +16,7 @@ module TextFormat
       end
     end
 
-    def text_format_html(content)      
+    def text_format_html(content)
       text = simple_format auto_link(content)
       text = _customer.convert(text) unless _customer.nil?
       text

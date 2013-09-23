@@ -13,9 +13,9 @@
 	</tr>
 	<% @catalogs.each do |catalog| %>
 		<tr id="<%= catalog.id %>">
-			<td><%= catalog.title %></td>
-			<td><%= catalog.categories.map { |c| c.name } %></td>
-			<td><%= catalog.created_at %></td>
+			<td class="title"><%= catalog.title %></td>
+			<td class="category"><%= catalog.categories.map { |c| c.name } %></td>
+			<td class="time"><%= catalog.created_at %></td>
 			<td>
 				<a href="#" class="delete_catalog">删除</a>
 			</td>
@@ -26,6 +26,7 @@
 <div class="category_sidebar">
 	<%= render :partial => "tree", :locals => { :root => Category.root } %>
 </div>
+
 <%= render "new_hot" %>
 
 <script type="text/javascript">

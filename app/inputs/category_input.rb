@@ -17,7 +17,7 @@ class CategoryInput < Formtastic::Inputs::StringInput
 
   def mock_input(category)
     name = category.try(:name) || "未选择"
-    "<input type='text' class='mock_prodcut_category_id' style='width:30%;' value='#{name}' readonly>".html_safe
+    "<input type='text' class='mock_prodcut_category_id' value='#{name}' readonly>".html_safe
   end
 
   def generate_ul_tree
