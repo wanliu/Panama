@@ -13,11 +13,23 @@ class root.CategoryTree
   save_categories: (event) ->
     category_ids = ""
     category_names = ""
+    # @check_category(event)
     $(@el).find(":checked").parent("li").each (i, li) =>
       category_ids += " #{$(li).attr('data-value-id')}"
       category_names += " #{$(li).attr('data-value-name')}"
     $("#category_ids").val(category_ids.trim())
     $("#category_names").val(category_names.trim())
+
+  check_category: (event) ->
+    # 如果子类没有全选中，则使父分类不选中
+    if $(event.currentTarget).parent("li").siblings("li").find("input:not(checked)").size() > 0
+      $($(event.currentTarget).parents("li")[1]).find(">input")[0].checked = false
+    # 如果选中某分类，则使所有子分类的不选中
+    if $(event.currentTarget)[0].checked
+      inputs = $(event.currentTarget).parent("li").children("ul").find(">li>input")
+      inputs.each (i, el) =>
+        el.checked = false
+        true
 
   camelcase: (str) ->
     str.toUpperCase().substring(0, 1) + str.substring(1, str.length)
