@@ -77,7 +77,7 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   end
 
   def category_root
-    @categories = Category.find_by(:name => '_products_root').children
+    @categories = Category.root.children
     respond_to do | format |
       format.json{ render :json => @categories.as_json(root: false) }
     end
@@ -106,7 +106,6 @@ class Admins::Shops::CategoriesController < Admins::Shops::SectionController
   end
 
   private
-
   def full_name(category)
     ancestor_arr = category.ancestors.after_depth(0)
     ancestor_arr.each do |parent|

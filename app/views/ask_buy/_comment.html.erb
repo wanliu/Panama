@@ -1,5 +1,13 @@
 <div class="comment">
-  <img class='people-image' src="{{ user_header_url }}">
-  <span class='author-name'>{{ user_login }}</span>
-  <div class="message">{{{ content_html }}}</div>
+  <a href="/people/{{user_login}}">
+    <img class='people-image' src="{{ user_header_url }}">
+  </a>
+  <span class='author-name'>
+  <a href="/people/{{user_login}}">
+    {{ user_login }}
+  </a>
+  </span>
+  <div class="message">
+    {{{ content_html }}}
+  </div>
 </div>

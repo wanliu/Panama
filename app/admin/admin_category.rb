@@ -18,14 +18,10 @@ ActiveAdmin.register Category do
     link_to("同步属性", all_attach_attributes_system_category_path(params[:id]))
   end
 
-
-
   index do
-
     div :class => "category_sidebar" do
       render :partial => "tree", :locals => { :root => Category.root }
     end
-
     column :id
     column :name
     column :ancestry
@@ -122,11 +118,6 @@ ActiveAdmin.register Category do
     end
   end
 
-  member_action :children_table, :method => :get do
-    @category = Category.find(params[:id])
-    render :layout => false
-  end
-
   member_action :update, :method => :put do
     p = params[:category]
     @category = Category.find(params[:id])
@@ -142,7 +133,6 @@ ActiveAdmin.register Category do
   collection_action :new_plus, :title => "新增分类" do
     @category = Category.new
   end
-
 
   collection_action :catalog_index, :method => :get do
     @catalog = Catalog.new
@@ -162,12 +152,6 @@ ActiveAdmin.register Category do
     @catalog.categories << Category.where(:id => params[:parent_id])
     redirect_to catalog_index_system_categories_path
   end
-
-  # collection_action :add_category_to_catalog, :method => :post do 
-  #   @catalog = Catalog.find(params[:id])
-  #   @catalog.categories << Category.where(:id => params[:parent_id])
-  #   redirect_to catalog_index_system_categories_path
-  # end
 
   collection_action :create_plus, :method => :post do
     @category = Category.new(params[:category])
@@ -235,6 +219,11 @@ ActiveAdmin.register Category do
     @template = Template.find(template_name, root)
     @template.data = params[:template][:data]
     redirect_to system_category_path
+  end
+
+  member_action :children_table, :method => :get do
+    @category = Category.find(params[:id])
+    render :layout => false
   end
 
   member_action :children_category, :method => :get do
