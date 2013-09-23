@@ -18,7 +18,7 @@ class Activity < ActiveRecord::Base
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
 
   has_many :activity_rules, autosave: true
-  has_many :price_lists, dependent: :destroy,autosave: true
+  has_many :price_lists, dependent: :destroy
 
   has_many :comments, :as => :targeable
   has_many :activities_likes

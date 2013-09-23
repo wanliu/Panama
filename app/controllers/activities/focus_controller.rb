@@ -9,7 +9,7 @@ class Activities::FocusController < Activities::BaseController
     end
 
 	def create
-		slice_options = [:shop_product_id,:people_number, :price, :start_time, :end_time, :attachment_ids]
+		slice_options = [:shop_product_id,:people_number, :price, :start_time, :end_time, :attachment_ids, :title]
 		activity_params = params[:activity].slice(*slice_options)
     	parse_time!(activity_params)
 
@@ -30,11 +30,6 @@ class Activities::FocusController < Activities::BaseController
 		respond_to do |format|
 		    if @activity.save(:validate => false)
 		        format.js { render "activities/add_activity" }
-		    # else
-		    #     # @activity.extend(ScoreExtension)
-		    #     format.js{ render :partial => "activities/focus/form",
-		    #                       :locals  => { :activity => @activity },
-		    #                       :status  => 400 }
 		    end
 	    end
 	end
