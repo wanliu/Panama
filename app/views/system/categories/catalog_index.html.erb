@@ -7,13 +7,16 @@
 	</tr>
 	<% @catalogs.each do |catalog| %>
 		<tr id="<%= catalog.id %>">
-			<td><%= catalog.title %></td>
-			<td><%= catalog.categories.map { |c| c.name } %></td>
-			<td><%= catalog.created_at %></td>
-			<td><a href="#" class="delete_catalog">删除</a></td>
+			<td class="title"><%= catalog.title %></td>
+			<td class-="category"><%= catalog.categories.map { |c| c.name } %></td>
+			<td class="time"><%= catalog.created_at %></td>
+			<td>
+				<a href="#" class="delete_catalog">删除</a>
+			</td>
 		</tr>
 	<% end %>
 </table>
+
 <br/>
 <script type="text/javascript">
 	$(function() {

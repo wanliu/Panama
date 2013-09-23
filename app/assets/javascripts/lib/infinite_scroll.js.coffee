@@ -6,7 +6,7 @@ class InfiniteScrollView extends Backbone.View
 	offset: 0,
 	limit: 20,
 	init_size: 40,
-	msg_tip: '<div class="text-center">亲，已经到底啦</div>'
+	msg_tip: '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
 
 	initialize: (options) ->
 		_.extend(@, options)

@@ -163,7 +163,11 @@ ActiveAdmin.register Category do
     redirect_to catalog_index_system_categories_path
   end
 
-
+  # collection_action :add_category_to_catalog, :method => :post do 
+  #   @catalog = Catalog.find(params[:id])
+  #   @catalog.categories << Category.where(:id => params[:parent_id])
+  #   redirect_to catalog_index_system_categories_path
+  # end
 
   collection_action :create_plus, :method => :post do
     @category = Category.new(params[:category])
