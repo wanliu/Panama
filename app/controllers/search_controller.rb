@@ -75,12 +75,12 @@ class SearchController < ApplicationController
           must_not do
             string "activity.status:0"
           end
-          # must do
-          #   range "activity.start_time", {lte: toDay}
-          # end
-          # must do
-          #   range "activity.end_time", {gt: toDay}
-          # end
+          must do
+            range "activity.start_time", {lte: toDay}
+          end
+          must do
+            range "activity.end_time", {gt: toDay}
+          end
         end
       end
       sort do
