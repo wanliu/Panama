@@ -209,18 +209,18 @@ class People::TransactionsController < People::BaseController
   def unread_messages
     authorize! :index, OrderTransaction
     @messages = ChatMessage.select("chat_messages.*, cm.count")
-               .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count  
-                                      from chat_messages where `read`=0 group by owner_id, owner_type) as cm 
+               .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count
+                                      from chat_messages where `read`=0 group by owner_id, owner_type) as cm
                                       on chat_messages.id=cm.id").where("chat_messages.receive_user_id=?", @people.id)
 
     _messages = @messages.map do |m|
       attrs = m.attributes
       attrs["send_user"] = m.send_user.as_json
-      attrs  
+      attrs
     end
     respond_to do |format|
       format.json{ render :json => _messages }
-    end  
+    end
   end
 
   def mark_as_read
@@ -234,7 +234,7 @@ class People::TransactionsController < People::BaseController
 
     @messages = @transaction.messages.unread
     @messages.update_all(read: true)
-    
+
     respond_to do | format |
       format.json { render json:{:url => @url} }
     end

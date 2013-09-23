@@ -19,21 +19,23 @@
     <td>运输方式</td>
     <td><%=@transaction.delivery_manner.try(:name) %></td>
   </tr>
-  <% if @transaction.delivery_manner.express? %>
-  <tr>
-    <td>配送方式</td>
-    <td><%=@transaction.delivery_type.try(:name) %></td>
-    <td>运费</td>
-    <td><%=@transaction.delivery_price %></td>
-  </tr>
-  <% if @transaction.logistics_company.present? %>
-  <tr>
-    <td>快递公司</td>
-    <td><%=@transaction.logistics_company.name %></td>
-    <td>运单号</td>
-    <td><%=@transaction.delivery_code %></td>
-  </tr>
-  <% end %>
+  <% if @transaction.delivery_manner.present? %>
+    <% if @transaction.delivery_manner.express? %>
+      <tr>
+        <td>配送方式</td>
+        <td><%=@transaction.delivery_type.try(:name) %></td>
+        <td>运费</td>
+        <td><%=@transaction.delivery_price %></td>
+      </tr>
+      <% if @transaction.logistics_company.present? %>
+      <tr>
+        <td>快递公司</td>
+        <td><%=@transaction.logistics_company.name %></td>
+        <td>运单号</td>
+        <td><%=@transaction.delivery_code %></td>
+      </tr>
+      <% end %>
+    <% end %>
   <% end %>
   <tr>
     <td>地址</td>
