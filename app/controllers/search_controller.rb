@@ -41,7 +41,6 @@ class SearchController < ApplicationController
   end
 
   def shop_products
-    debugger
     if current_user.shop
       query = filter_special_sym(params[:q])
       shop_id = current_user.shop.id

@@ -2,7 +2,7 @@
 <%= simple_form_for @activity,
                     :url => activities_focus_path,
                     :remote => true,
-                    :html => { class: 'form-horizontal form_activity_focus' },
+                    :html => { class: 'form-horizontal m_f_30 form_activity_focus' },
                     :type => :json do |f| %>
 
 
@@ -29,16 +29,19 @@
   <%=f.input  :people_number,
               :label => "人数",
               :input_html => {
-                :class => "span2"
+                :class => "span2",
+                :name => "activity[people_number][0]"
               },
               :wrapper_html => {
                 :class => "span3"
               } %>
 
+
   <%= f.input :price,
               :label => "价格",
               :input_html => {
-                :class => "span2"
+                :class => "span2",
+                :name => "activity[price][0]"
               },
               :wrapper_html => {
                 :class => "span3"
@@ -54,20 +57,25 @@
 
 
   <%= f.input :start,
-              :as         => :date_picker,
+              :as      => :date_picker,
               required: true,
-              :label => '开始时间',
+              :label   => '开始时间',
               input_html: { name: 'activity[start_time]' } %>
 
   <%= f.input :end,
-              :as         => :date_picker,
+              :as      => :date_picker,
               required: true,
-              :label => '结束时间',
+              :label   => '结束时间',
               input_html: { name: 'activity[end_time]' } %>
 
   <script type="text/javascript">
+    var i = 0
     $(".add_range").bind("click", function(){
-      $(".addLine").prepend($(".bettwen").last().clone(true))
+      i = i+1;
+      one_line = $(".bettwen").last().clone(true);
+      one_line.find("#activity_people_number").attr("name", "activity[people_number][" + i +"]");
+      one_line.find("#activity_price").attr("name", "activity[price][" + i +"]");
+      $(".addLine").prepend(one_line);
     });
 
     var data1 = <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
