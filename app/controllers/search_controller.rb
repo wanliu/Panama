@@ -61,11 +61,11 @@ class SearchController < ApplicationController
     end
   end
 
-  def activities
-    query = filter_special_sym(params[:q])
-    _size, _from = params[:limit], params[:offset]
+  def index
+    _size, _from, q = params[:limit], params[:offset], (params[:q] || {})
+    category_ids = query_catalog(q[:catalog_id]) if q[:catalog_id].present?
     toDay = DateTime.now.midnight
-    s = Tire.search ['activities', 'ask_buys'] do
+    s = Tire.search ['activities', 'ask_buys', 'shop_products', 'products'] do
       from _from
       size _size
 
@@ -75,13 +75,27 @@ class SearchController < ApplicationController
             filtered do
               filter :range, :end_time => {gt: toDay}
               filter :range, :start_time => {lte: toDay}
-              filter :term, {:_type => "activity"}
-              filter :term, {:status => 1}
+              filter :term, :_type => "activity"
+              filter :term, :status => 1
+              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
             end
           end
           should do
             filtered do
               filter :term, {:_type => "ask_buy"}
+              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
+            end
+          end
+          should do
+            filtered do
+              filter :term, {:_type => "product"}
+              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
+            end
+          end
+          should do
+            filtered do
+              filter :term, {:_type => "shop_product"}
+              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
             end
           end
         end
@@ -111,6 +125,17 @@ class SearchController < ApplicationController
         })
       end
       result
+    end
+  end
+
+  def query_catalog(catalog_id)
+    cl = Catalog.find_by(:id => catalog_id)
+    if cl.present?
+      cs = Category.where(
+        :id => cl.categories.pluck("categories.id"))
+      cs.map{|c| c.descendants.pluck("id") }.flatten
+    else
+      []
     end
   end
 end

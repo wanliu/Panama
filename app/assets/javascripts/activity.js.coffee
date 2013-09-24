@@ -234,7 +234,7 @@ class AskBuyViewTemplate extends Backbone.View
     @$el = $(@template.render(@model)) if @template
     if @model.status == 1
       $(".notify", @$el).html("已经有商家参与")
-      
+
   render: () ->
     @
 
@@ -334,7 +334,7 @@ class ActivitiesView extends Backbone.View
 class LoadActivities extends InfiniteScrollView
   msg_el: ".scroll-load-msg",
   sp_el: "#activities",
-  fetch_url: "/search/activities"
+  fetch_url: "/search"
 
   add_one: (c) ->
     $(window).trigger("search_result:append", c)

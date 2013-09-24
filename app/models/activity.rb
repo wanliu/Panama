@@ -190,6 +190,10 @@ class Activity < ActiveRecord::Base
         :icon         => photos.icon,
         :header       => photos.header,
         :avatar       => photos.avatar
+      },
+      :category    => {
+        :id        => shop_product.category.id,
+        :name        => shop_product.category.name
       }
     }.to_json
   end

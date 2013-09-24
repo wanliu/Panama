@@ -167,6 +167,8 @@ class Product < ActiveRecord::Base
       :price       => price,
       :shop_id     => shop_id,
       :updated_at  => updated_at,
+      :score       => 0.01,
+      :start_time_ms => created_at.to_f,
       :photos      => {
         :icon      => photos.icon,
         :header    => photos.header,

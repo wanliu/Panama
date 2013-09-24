@@ -7,10 +7,13 @@ class InfiniteScrollView extends Backbone.View
 	limit: 20,
 	init_size: 40,
 	msg_tip: '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
+	search_options: {
 
+	}
 	initialize: (options) ->
 		_.extend(@, options)
 		@$el = $(@el)
+		@remove_columns()
 		@fetch()
 		$(window).scroll(_.bind(@scroll_load, @))
 
@@ -20,11 +23,7 @@ class InfiniteScrollView extends Backbone.View
 		$.ajax(
 			url: @fetch_url,
 			dataType: "json",
-			data: {
-				shop_id: @shop_id,
-				offset: @offset,
-				limit: @fetch_size
-			},
+			data: _.extend({}, {q: @search_options}, offset: @offset,limit: @fetch_size),
 			success: (data) =>
 				if data.length == 0
 					$(@msg_el).html(@msg_tip)
@@ -60,6 +59,10 @@ class InfiniteScrollView extends Backbone.View
 			if sp_height <= w_height
 				clearTimeout(@timeout_id) if @timeout_id
 				@timeout_id = setTimeout _.bind(@fetch, @), 250
+	remove_columns: () ->
+		$(@sp_el).find(".columns>.column").children().remove()
+
+
 
 
 root.InfiniteScrollView = InfiniteScrollView

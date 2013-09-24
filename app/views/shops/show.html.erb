@@ -23,7 +23,7 @@
 			el: '#shop_products'
 		})
 		new LoadShopProducts({
-			shop_id: <%= @shop.id %>,
+			search_options: {shop_id: <%= @shop.id %>},
 			el: $('.shop_products_panel')
 		})
 
