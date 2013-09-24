@@ -20,11 +20,9 @@
 @import "stream_item";
 @import "responsive-stream";
 //@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
-@import "./lib/notify/pnotify";
-@import 'ask_buy';
+@import "lib/notify/pnotify";
+@import "ask_buy";
 
-
-// activity-category
 .activity-category {
   margin: 0px;
 }
@@ -52,7 +50,6 @@
   outline: none;
   margin-bottom: 20px;
 }
-// comments and reply
 
 .big_comments_and_reply {
   text-align: left;
@@ -71,8 +68,6 @@
         font-size: 16px;
         font-weight: bold;
       }
-
-
     }
   }
 

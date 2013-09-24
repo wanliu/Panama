@@ -33,14 +33,15 @@ ActiveAdmin.register Activity do
       link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
       if c.status == Activity.statuses[:wait]
         link_2 = link_to "编辑", edit_system_activity_path(c), :class =>"member_link"
-        link_3 = link_to "删除", system_activity_path(c), :method => :delete, :confirm => "Are you sure?", :class =>"member_link"
+        link_3 = link_to "删除", system_activity_path(c), :method => :delete, :confirm => "确定删除吗？", :class =>"member_link"
       end
       link_1 + (link_2 || "") + (link_3 || "")
     end
   end
 
   show do
-    render "check_info"
+    @activity = Activity.find(params[:id])
+    render "check_#{@activity.activity_type}"
   end
 
   action_item do
@@ -56,7 +57,7 @@ ActiveAdmin.register Activity do
     link_to "排程日历", schedule_sort_system_activities_path                
   end
 
-  collection_action :schedule_sort, :method => :get do 
+  collection_action :schedule_sort, :title => "活动日历", :method => :get do 
   end
 
   collection_action :schedule_sort1, :method => :get do 

@@ -2,9 +2,8 @@
 <%= simple_form_for @activity,
                     :url => activities_focus_path,
                     :remote => true,
-                    :html => { class: 'form-horizontal form_activity_focus' },
+                    :html => { class: 'form-horizontal m_f_30 form_activity_focus' },
                     :type => :json do |f| %>
-
 
   <%= f.input :shop_product_id,
               :collection => [],
@@ -16,7 +15,11 @@
                 :id => "activity_focus_shop_product_id"
               } %>
 
- <div class="control-group">
+  <%= f.input :title,
+              :label => '活动名称',
+              :warpper => false %>
+
+  <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
       <img data-src="holder.js/140x140" class="img-rounded preview" alt="140x140" style="" src="<%= default_img_url('100x100') %>">
@@ -24,50 +27,60 @@
     </div>
   </div>
 
-
   <div class="row bettwen">
   <%=f.input  :people_number,
               :label => "人数",
               :input_html => {
-                :class => "span2"
+                :class => "span2",
+                :name => "activity[people_number][0]"
               },
+              :required => true,
               :wrapper_html => {
                 :class => "span3"
-              } %>
+              },
+              required: true %>
 
-  <%= f.input :price,
+
+  <%= f.input :activity_price,
               :label => "价格",
               :input_html => {
-                :class => "span2"
+                :class => "span2",
+                :name => "activity[activity_price][0]"
               },
               :wrapper_html => {
                 :class => "span3"
-              } %>
+              },
+              required: true %>
   </div>
-
 
   <div class="control-group addLine">
     <div class="pull-right" style="padding-right:115px;">
-      <button class="btn add_range"  type="button"><i class="icon-plus"></i>Add</li></button>
+      <button class="btn add_range" type="button">
+        <i class="icon-plus"></i>添加
+      </button>
     </div>
   </div>
 
-
   <%= f.input :start,
-              :as         => :date_picker,
+              :as      => :date_picker,
               required: true,
-              :label => '开始时间',
+              :label   => '开始时间',
               input_html: { name: 'activity[start_time]' } %>
 
   <%= f.input :end,
-              :as         => :date_picker,
+              :as      => :date_picker,
               required: true,
-              :label => '结束时间',
+              :label   => '结束时间',
               input_html: { name: 'activity[end_time]' } %>
 
   <script type="text/javascript">
+    var i = 0
     $(".add_range").bind("click", function(){
-      $(".addLine").prepend($(".bettwen").last().clone(true))
+      i = i+1;
+      one_line = $(".bettwen").last().clone(true);
+      one_line.find("#activity_people_number").attr("name", "activity[people_number][" + i +"]");
+      one_line.find("#activity_price").attr("name", "activity[activity_price][" + i +"]");
+      $(".addLine").prepend(one_line);
     });
 
     var data1 = <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
@@ -77,6 +90,7 @@
         url_upload: "<%= attachments_path %>",
         default_img_url: "<%= default_img_url('100x100') %>",
         template: '<%= j render "product_upload" %>',
+        type: "focus" ,
         data: data1
       }
     });
@@ -102,5 +116,5 @@
     });
   </script>
 
-<% end %>
 
+<% end %>

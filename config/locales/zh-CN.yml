@@ -192,6 +192,15 @@ zh-CN:
       short: ! '%b%d日 %H:%M'
     pm: 下午
   # remove these aliases after 'activemodel' and 'activerecord' namespaces are removed from Rails repository
+  formtastic:
+    :yes: '是'
+    :no: '否'
+    :create: '创建%{model}'
+    :update: '更新%{model}'
+    :submit: '提交%{model}'
+    :cancel: '取消%{model}'
+    :reset: '取消%{model}'
+    :required: '必需的'
   activemodel:
     errors:
       <<: *errors
@@ -354,20 +363,27 @@ zh-CN:
       order_refund:
         id: 编号
         order_transaction: 订单
+        order_transaction_id: 订单ID
         total: 总金额
         state: 状态
         buyer: 买家
+        buyer_id: 买家
         seller: 卖家
+        seller_id: 卖家
         decription: 退货描述
         action_link: 操作
         order: 订单
         operator: 接单员
+        operator_id: 接单员
         order_reason: 退货理由
+        order_reason_id: 退货理由
         delivery_code: 快递单号
         refuse_reason: 退货理由
         delivery_price: 快递价格
         delivery_manner: 发货方式
+        delivery_manner_id: 发货方式
         logistics_company: 物流公司
+        logistics_company_id: 物流公司
         order_state: 订单状态
         created_at: 创建时间
         updated_at: 更新时间
