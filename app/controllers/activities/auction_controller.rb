@@ -2,7 +2,7 @@ class Activities::AuctionController < Activities::BaseController
 
   def new
     @activity = Activity.new
-    @activity.extend(AuctionExtension)
+    # @activity.extend(AuctionExtension)
 
     respond_to do |format|
       format.html { render :layout => false }
@@ -35,8 +35,8 @@ class Activities::AuctionController < Activities::BaseController
       else
         # @activity.extend(ScoreExtension)
         format.js{ render :partial => "activities/auction/form",
-                         :locals  => { :activity => @activity },
-                         :status  => 400 }
+                          :locals  => { :activity => @activity },
+                          :status  => 400 }
       end
     end
   end
@@ -53,9 +53,8 @@ class Activities::AuctionController < Activities::BaseController
 end
 
 
-module AuctionExtension
+# module AuctionExtension
 
-  attr_accessor :price, :product, :pictrue, :number, :start_time,
-                :end_time, :activity_price, :description
+#   attr_accessor  :product, :activity_price
 
-end
+# end
