@@ -5,7 +5,6 @@
                     :html => { class: 'form-horizontal m_f_30 form_activity_focus' },
                     :type => :json do |f| %>
 
-
   <%= f.input :shop_product_id,
               :collection => [],
               :wrapper_html => {
@@ -16,18 +15,17 @@
                 :id => "activity_focus_shop_product_id"
               } %>
 
-   <%= f.input :title,
+  <%= f.input :title,
               :label => '活动名称',
               :warpper => false %>
 
- <div class="control-group">
+  <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
       <img data-src="holder.js/140x140" class="img-rounded preview" alt="140x140" style="" src="<%= default_img_url('100x100') %>">
       <ul class='attachment-list'></ul>
     </div>
   </div>
-
 
   <div class="row bettwen">
   <%=f.input  :people_number,
@@ -40,7 +38,6 @@
                 :class => "span3"
               } %>
 
-
   <%= f.input :price,
               :label => "价格",
               :input_html => {
@@ -52,13 +49,13 @@
               } %>
   </div>
 
-
   <div class="control-group addLine">
     <div class="pull-right" style="padding-right:115px;">
-      <button class="btn add_range"  type="button"><i class="icon-plus"></i>Add</li></button>
+      <button class="btn add_range" type="button">
+        <i class="icon-plus"></i>添加
+      </button>
     </div>
   </div>
-
 
   <%= f.input :start,
               :as      => :date_picker,
@@ -71,49 +68,47 @@
               required: true,
               :label   => '结束时间',
               input_html: { name: 'activity[end_time]' } %>
-
-  <script type="text/javascript">
-    var i = 0
-    $(".add_range").bind("click", function(){
-      i = i+1;
-      one_line = $(".bettwen").last().clone(true);
-      one_line.find("#activity_people_number").attr("name", "activity[people_number][" + i +"]");
-      one_line.find("#activity_price").attr("name", "activity[price][" + i +"]");
-      $(".addLine").prepend(one_line);
-    });
-
-    var data1 = <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
-    var activity_view1 = new ActivityBaseInfoView({
-      el: $(".form_activity_focus"),
-      params: {
-        url_upload: "<%= attachments_path %>",
-        default_img_url: "<%= default_img_url('100x100') %>",
-        template: '<%= j render "product_upload" %>',
-        type: "focus" ,
-        data: data1
-      }
-    });
-
-    var shop_product_elem1 = $(".form_activity_focus .shop_product_id")
-    shop_product_elem1.chosenEx({
-      allow_single_deselect : true,
-      placeholder_text : "选择一个商品",
-      no_results_text : "没有以该关键词开头的商品",
-      <% if @activity.shop_product.present? %>
-        data: [{
-          id: <%= @activity.shop_product_id %>,
-          name: "<%= @activity.shop_product.name %>"
-        }],
-      <% end %>
-      remote: {
-        url: "/search/shop_products",
-        dataType: "json"
-      },
-      select: function(id){
-        activity_view1.fetch_product(id)
-      }
-    });
-  </script>
-
 <% end %>
 
+<script type="text/javascript">
+  var i = 0
+  $(".add_range").bind("click", function(){
+    i = i+1;
+    one_line = $(".bettwen").last().clone(true);
+    one_line.find("#activity_people_number").attr("name", "activity[people_number][" + i +"]");
+    one_line.find("#activity_price").attr("name", "activity[price][" + i +"]");
+    $(".addLine").prepend(one_line);
+  });
+
+  var data1 = <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
+  var activity_view1 = new ActivityBaseInfoView({
+    el: $(".form_activity_focus"),
+    params: {
+      url_upload: "<%= attachments_path %>",
+      default_img_url: "<%= default_img_url('100x100') %>",
+      template: '<%= j render "product_upload" %>',
+      type: "focus" ,
+      data: data1
+    }
+  });
+
+  var shop_product_elem1 = $(".form_activity_focus .shop_product_id")
+  shop_product_elem1.chosenEx({
+    allow_single_deselect : true,
+    placeholder_text : "选择一个商品",
+    no_results_text : "没有以该关键词开头的商品",
+    <% if @activity.shop_product.present? %>
+      data: [{
+        id: <%= @activity.shop_product_id %>,
+        name: "<%= @activity.shop_product.name %>"
+      }],
+    <% end %>
+    remote: {
+      url: "/search/shop_products",
+      dataType: "json"
+    },
+    select: function(id){
+      activity_view1.fetch_product(id)
+    }
+  });
+</script>
