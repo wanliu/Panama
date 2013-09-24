@@ -37,8 +37,7 @@
               :required => true,
               :wrapper_html => {
                 :class => "span3"
-              },
-              required: true %>
+              } %>
 
 
   <%= f.input :activity_price,
@@ -54,24 +53,26 @@
   </div>
 
   <div class="control-group addLine">
-    <div class="pull-right" style="padding-right:115px;">
+    <div class="pull-right" style="padding-right:100px;">
       <button class="btn add_range" type="button">
         <i class="icon-plus"></i>添加
       </button>
     </div>
   </div>
 
-  <%= f.input :start,
+  <%= f.input :start_time,
               :as      => :date_picker,
               required: true,
               :label   => '开始时间',
-              input_html: { name: 'activity[start_time]' } %>
+              id: "activity_focus_start_time",
+              input_html: { name: 'activity[start_time]'} %>
 
-  <%= f.input :end,
+  <%= f.input :end_time,
               :as      => :date_picker,
               required: true,
               :label   => '结束时间',
-              input_html: { name: 'activity[end_time]' } %>
+              id: "activity_focus_end_time",
+              input_html: { name: 'activity[end_time]'} %>
 
   <script type="text/javascript">
     var i = 0
