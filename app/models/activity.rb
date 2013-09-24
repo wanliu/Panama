@@ -139,7 +139,6 @@ class Activity < ActiveRecord::Base
 
   def to_indexed_json
     {
-      # :is_start => start_sale?,
       :title   => title,
       :activity_type => activity_type,
       :shop_product_id  => shop_product_id,
