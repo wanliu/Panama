@@ -65,6 +65,8 @@ class Activity < ActiveRecord::Base
 
   def init_data
     self.shop_id = author.shop.id
+    self.like = like
+    self.participate = participate
   end
 
   def default_photo
@@ -132,10 +134,24 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def update_like
+    self.update_attribute(:like, like)
+  end
+
+  def update_participate
+    self.update_attribute(:participate, participate)
+  end
+
   def validate_update_access?
     if Activity.statuses[:access] == Activity.find(self.id).status
       errors.add(:status, "已经审核了,不能修改！")
     end
+  end
+
+  def sort_score
+    t = ((like * 5) + (participate * 100))
+    t = 1 if t <= 0
+    t
   end
 
   def to_indexed_json
@@ -145,11 +161,13 @@ class Activity < ActiveRecord::Base
       :shop_product_id  => shop_product_id,
       :description    => description,
       :price          => price,
+      :start_time_ms  => start_time.to_f,
       :start_time     => start_time,
       :end_time       => end_time,
       :participate    => participate,
       :status      => status,
       :like        => like,
+      :score       => sort_score,
       :created_at  => created_at,
       :updated_at  => updated_at,
       :author => {

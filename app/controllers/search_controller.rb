@@ -70,22 +70,28 @@ class SearchController < ApplicationController
       size _size
 
       query do
-
         boolean do
-          must_not do
-            string "activity.status:0"
+          should do
+            filtered do
+              filter :range, :end_time => {gt: toDay}
+              filter :range, :start_time => {lte: toDay}
+              filter :term, {:_type => "activity"}
+              filter :term, {:status => 1}
+            end
           end
-          must do
-            range "activity.start_time", {lte: toDay}
-          end
-          must do
-            range "activity.end_time", {gt: toDay}
+          should do
+            filtered do
+              filter :term, {:_type => "ask_buy"}
+            end
           end
         end
       end
-      sort do
-        by :created_at, 'desc'
-      end
+
+      sort("_script" => {
+        :script => "doc['score'].value/((time()-doc['start_time_ms'].value) / 3600)",
+        :type   => "number",
+        :order  => "desc"
+      }, "_score" => {})
 
     end
     @results = deal_results(s.results)
