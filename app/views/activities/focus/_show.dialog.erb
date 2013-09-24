@@ -15,7 +15,12 @@
             原价: <span>{{price}}</span>
           </h4>
           <h4 class="right_bottom1 animate2 fadeInRight">
-            现价: <span><%= activity.activity_price %></span>
+            现价: 
+            <span>
+              <% activity.activity_rules.each do |ar| %>
+                人数<%= ar.dvalue %>时，价格为<%= number_to_currency(ar.value) %>;
+              <% end %>
+            </span>
           </h4>
           <h4>商品描述：</h4>
           <span style="word-wrap:break-word;margin-left:10px;">{{description}}</span>

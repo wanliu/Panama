@@ -1,7 +1,8 @@
 class Activities::FocusController < Activities::BaseController
+
 	def new
 	    @activity = Activity.new
-	    @activity.extend(FocusExtension)
+	    # @activity.extend(FocusExtension)
 
 	    respond_to do |format|
 	      format.html { render :layout => false }
@@ -9,7 +10,7 @@ class Activities::FocusController < Activities::BaseController
     end
 
 	def create
-		slice_options = [:shop_product_id,:people_number, :activity_price, :start_time, :end_time, :attachment_ids, :title]
+		slice_options = [:shop_product_id, :people_number, :activity_price, :start_time, :end_time, :attachment_ids, :title]
 		activity_params = params[:activity].slice(*slice_options)
     	parse_time!(activity_params)
 
@@ -20,17 +21,19 @@ class Activities::FocusController < Activities::BaseController
 	        Attachment.find_by(:id => v)
 	      end.compact
 	    end
-	    
-    	activity_params[:activity_price].map do |key,val|
-    		activity_params[:people_number].map do |key1,val1| 
-    			#value为人数， dvalue为价格
-				@activity.activity_rules <<  ActivityRule.create(:name => "activity_price", :value => val, :value_type => "dvalue",:dvalue => val1.to_d ) if key == key1
-    		end
-    	end
+
+	    if activity_params[:activity_price] && activity_params[:people_number]
+	    	activity_params[:activity_price].map do |key,val|
+	    		activity_params[:people_number].map do |key1,val1| 
+	    			#value为人数， dvalue为价格
+					@activity.activity_rules.build(:name => "activity_price", :value => val, :value_type => "dvalue", :dvalue => val1.to_d ) if key == key1
+	    		end
+	    	end
+	    end
 
 
 		respond_to do |format|
-		    if @activity.save!
+		    if @activity.save
 		        format.js { render "activities/add_activity" }
 		    else
 		    	format.js{ render :partial => "activities/focus/form",
@@ -39,7 +42,6 @@ class Activities::FocusController < Activities::BaseController
 		    end
 	    end
 	end
-
 
 	private
     def parse_time!(activity_params)
@@ -53,9 +55,8 @@ class Activities::FocusController < Activities::BaseController
 end
 
 
-module FocusExtension
+# module FocusExtension
 
-    attr_accessor  :product, :people_number,:pictrue, 
-  				   :start, :end, :activity_price
+#     attr_accessor :activity_price
 
-end
+# end

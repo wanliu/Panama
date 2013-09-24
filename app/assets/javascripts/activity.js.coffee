@@ -23,7 +23,7 @@ ANIMATES = ["flash", "bounce", "shake", "tada", "swing", "wobble", "wiggle", "pu
       "rotateInUpRight", "rotateOut", "rotateOutDownLeft", "rotateOutDownRight", "rotateOutUpLeft",
       "rotateOutUpRight", "lightSpeedIn", "lightSpeedOut", "hinge", "rollIn", "rollOut",]
 
-class ActivityViewPreview extends Backbone.View
+class ActivityView extends Backbone.View
 
   events:
     "click [data-dismiss=modal]"  : "close"
@@ -170,7 +170,7 @@ class ActivityPreview extends Backbone.View
   launchActivity: (event) ->
     @load_view(event.currentTarget)
     @model.fetch success: (model) =>
-      new ActivityViewPreview({model: model}).modal()
+      new ActivityView({model: model}).modal()
     false
 
   like: (event) ->
@@ -366,6 +366,6 @@ class LoadActivities extends InfiniteScrollView
 
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview
-root.ActivityViewPreview = ActivityViewPreview
+root.ActivityView = ActivityView
 root.ActivitiesView = ActivitiesView
 root.LoadActivities = LoadActivities

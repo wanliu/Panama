@@ -5,11 +5,13 @@ class Activity < ActiveRecord::Base
   include Tire::Model::Callbacks
   include MessageQueue::Activity
 
+  attr_accessor :people_number
+
   scope :wait,lambda{ where(:status => statuses[:wait]) }
   scope :access,lambda{ where(:status => statuses[:access]) }
   scope :rejected,lambda{ where(:status => statuses[:rejected]) }
 
-  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
+  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title, 
                   :description, :like, :participate, :author_id, :status, :rejected_reason
 
   belongs_to :shop_product
@@ -73,7 +75,7 @@ class Activity < ActiveRecord::Base
 
   validates :title, :activity_price, :start_time, :end_time, :shop_product_id, :presence => true
   validates :activity_price, :numericality => { :greater_than_or_equal_to => 0 }
-  # validates :price, :numericality => { :greater_than_or_equal_to => 0 }, :allow_nil => true
+  validates :price, :numericality => { :greater_than_or_equal_to => 0 }, :allow_nil => true
 
   def like
     likes.size
