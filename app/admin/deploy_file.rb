@@ -9,7 +9,6 @@
 
 # end
 
-
 ActiveAdmin.register_page "VFS" do
   # menu :label => "My Menu Item Label", :parent => "Dashboard"
 
@@ -22,7 +21,7 @@ ActiveAdmin.register_page "VFS" do
   end
 
   action_item do
-    link_to "增加文件", "/system/vfs_file_add"
+    link_to "添加文件", "/system/vfs_file_add"
   end
 
   content do

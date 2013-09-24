@@ -8,6 +8,7 @@ class root.CategoryTree
     # @el.on("click", "li.expandable", $.proxy(@load_tree, @))
     # @el.on("click", "li.collapsable", $.proxy(@load_tree, @))
     @el.on("click", "li>span", $.proxy(@load_tree, @))
+    @el.on("click", "li>.hitarea", $.proxy(@load_tree, @))
     @el.on("click", "li>input", $.proxy(@save_categories, @))
 
   save_categories: (event) ->
