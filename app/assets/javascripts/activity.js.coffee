@@ -222,7 +222,7 @@ class ShopProductViewTemplate extends Backbone.View
 
 class ActivityViewTemplate extends Backbone.View
   initialize: () ->
-    @template = Hogan.compile($("#auction-preview-template").html())
+    @template = Hogan.compile($("##{@model.activity_type}-preview-template").html())
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
@@ -234,6 +234,7 @@ class AskBuyViewTemplate extends Backbone.View
     @$el = $(@template.render(@model)) if @template
     if @model.status == 1
       $(".notify", @$el).html("已经有商家参与")
+      
   render: () ->
     @
 
@@ -318,7 +319,7 @@ class ActivitiesView extends Backbone.View
       when "shop_product"
         new ShopProductViewTemplate(model: model).render()
       when "activity"
-        new ActivityViewTemplate(model: model).render()
+        new ActivityViewTemplate({model: model}).render()
       when "ask_buy"
         new AskBuyViewTemplate(model: model).render()
       else

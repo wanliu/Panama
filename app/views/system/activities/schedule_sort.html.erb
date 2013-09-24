@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="blue span3" style="background-color:rgb(115, 115, 199);height:30px;width:80px;"></div>
+  <div class="blue span3" style="background-color:rgb(115, 115, 199);height:30px;width:80px;"></div>
     <span class="span2"><strong>已审核活动</strong></span>
     <div class="red span2" style="background-color:#dd4b39;height:30px;width:80px;"></div>
     <span class="span2"><strong>未审核活动</strong></span>
@@ -48,181 +48,181 @@
   </div>
   <div id='calendar'></div>
 </div>
+
 <script type="text/javascript">
-$(document).ready(function () {
-  $(".update_activities").bind("click",function(){
-    eventt = getData();
-    updateEvent(eventt);
-  });
-  DisplayCalendar();
-})
-
-function getData(){
-  var eventt = new Object();
-  eventt.id = $(".activity_id").val();
-  eventt.title = $(".title").val();
-  eventt.start = $(".begin_time").val();
-  eventt.end = $(".end_time").val();
-  eventt.description = $(".description").val();
-  $('#activity').modal('hide');
-  return eventt;
-}
-
-function updateEvent(my_event,revertFunc) {
-  datas = JSON.stringify(my_event);
-  $.ajax({
-    type: "POST",
-    contentType: "application/json",
-    dataType: "json",
-    data: datas ,
-    url: "/system/activities/"+ my_event.id + "/modify",
-    success: function(){
-      pnotify({title: '提醒', text: "活动修改成功!",type: "success"});
-      $("#calendar").fullCalendar('refetchEvents'); 
-    },
-    error: function(){
-      pnotify({title: '错误', text: "修改发生错误,请稍后再试",type: "error"});
-      revertFunc();
-    }
-  });
-}
-
-
-function DisplayCalendar() {
-  var date = new Date();
-  var d = date.getDate();
-  var m = date.getMonth();
-  var y = date.getFullYear();
-  $('div[id*=calendar]').fullCalendar({
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    },
-    buttonText:{
-      prev:     '上翻',
-      next:     '下翻',
-      prevYear: '去年',
-      nextYear: '明年',
-      today:    '今天',
-      month:    ' 月 ',
-      week:     ' 周 ',
-      day:      ' 日 '
-    },
-    monthNames:['一月','二月', '三月', '四月', '五月', '六月', 
-                '七月','八月', '九月', '十月', '十一月', '十二月'],
-    dayNames:['星期日', '星期一', '星期二', '星期三','星期四', '星期五', '星期六'],
-    dayNamesShort:['星期日', '星期一', '星期二', '星期三','星期四', '星期五', '星期六'],
-    monthNamesShort:['一月', '二月', '三月', '四月', '五月', '六月',
-                    '七月', '八月', '九月', '十月', '十一月', '十二月'],
-
-    titleFormat:{
-      month: 'yyyy MMMM',  
-      week: "yyyy年 MMM d[ yyyy]日 {'&#8212;'[ MMM] d}日 ",               
-      day: 'yyyy年 MMM d日, dddd '                  
-    },
-    selectable: true,
-    editable:true,
-    defaultView: 'month',
-    height: 500,
-    slotMinutes: 30,
-    timeFormat: 'h:mm t{ - h:mm t} ',
-    dragOpacity: "0.5",
-
-    events: function(start, end, callback) {
-      $.ajax({
-          url: '/system/activities/schedule_sort1',
-          dataType: 'json',
-          data: {
-              start: Math.round(start.getTime() / 1000),
-              end: Math.round(end.getTime() / 1000)
-          },
-          success: function(data){
-            var events =[];
-            $(data).each(function(i,d){
-              var use_ful = new Object();
-              if (d.status == 1){                
-                $.extend(use_ful, { backgroundColor: 'rgb(115, 115, 199)',textColor: 'white'});
-              }else{
-                $.extend(use_ful, { backgroundColor: '#dd4b39',textColor: 'white'});
-              };
-              use_ful.start = d.start_time;
-              use_ful.end = d.end_time;
-              use_ful.description = d.description;
-              use_ful.id = d.id;
-              use_ful.title = d.title;
-              use_ful.status = d.status;
-              events.push(use_ful);
-            });
-            callback(events);
-          }
-      });
-    },
-
-    eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
-      if (event.status == 1){
-        pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
-        revertFunc();
-      }else{
-        updateEvent(event,revertFunc);  
-      }
-    },
-
-    eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-      if (event.status == 1){
-        pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
-        revertFunc();
-      }else{
-        updateEvent(event,revertFunc);
-      }
-    },
-
-    eventClick: function(event, element) {
-      $('.tooltipevent').remove();
-      if (event.status == 1){
-        pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
-      }else{
-        $(".activity_id").val(event.id);
-        $(".title").val(event.title);
-        $(".description").val(event.description);
-        $(".begin_time").val((event.start).format("yyyy-MM-dd"));
-        $(".end_time").val((event.end).format("yyyy-MM-dd"));
-        $('#activity').modal();
-        $('#calendar').fullCalendar('updateEvent', event,revertFunc);     
-      }
-    },
-
-    eventMouseover: function(calEvent,jsEvent){
-      var tooltip = '<div class="tooltipevent">'+ 
-        '<span>标题: &nbsp;</span> '+ calEvent.title + '<br/>' + 
-        '<span>描述:  &nbsp;</span>'+ calEvent.description + '<br/>' +
-        '<span>开始时间: &nbsp;</span>'+ calEvent.start.format("yyyy-MM-dd") + '<br/>' +
-        '<span>结束时间: &nbsp;</span>'+ calEvent.end.format("yyyy-MM-dd") +
-      '</div>';
-      $("body").append(tooltip);
-      $(this).mouseover(function(e) {
-        $(this).css('z-index', 10000);
-        $('.tooltipevent').fadeIn('500');
-        $('.tooltipevent').fadeTo('10', 1.9);
-      }).mousemove(function(e) {
-        var left = 0;
-        if ($('.tooltipevent')){
-          var left = $('.tooltipevent').position().left;
-        };
-        if (left > window.screen.availWidth-500){
-          $('.tooltipevent').css('top', e.pageY + 10);
-          $('.tooltipevent').css('left', e.pageX - 300);
-        }else{
-          $('.tooltipevent').css('top', e.pageY + 10);
-          $('.tooltipevent').css('left', e.pageX + 20);
-        }
-      });
-    },
-
-    eventMouseout: function(calEvent, jsEvent) {
-      $(this).css('z-index', 8);
-      $('.tooltipevent').remove();
-    }
+  $(function () {
+    $(".update_activities").bind("click",function(){
+      eventt = getData();
+      updateEvent(eventt);
+    });
+    DisplayCalendar();
   })
-}
+
+  function getData(){
+    var eventt = new Object();
+    eventt.id = $(".activity_id").val();
+    eventt.title = $(".title").val();
+    eventt.start = $(".begin_time").val();
+    eventt.end = $(".end_time").val();
+    eventt.description = $(".description").val();
+    $('#activity').modal('hide');
+    return eventt;
+  }
+
+  function updateEvent(my_event,revertFunc) {
+    datas = JSON.stringify(my_event);
+    $.ajax({
+      type: "POST",
+      contentType: "application/json",
+      dataType: "json",
+      data: datas ,
+      url: "/system/activities/"+ my_event.id + "/modify",
+      success: function(){
+        pnotify({title: '提醒', text: "活动修改成功!",type: "success"});
+        $("#calendar").fullCalendar('refetchEvents'); 
+      },
+      error: function(){
+        pnotify({title: '错误', text: "修改发生错误,请稍后再试",type: "error"});
+        revertFunc();
+      }
+    });
+  }
+
+  function DisplayCalendar() {
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+    $('div[id*=calendar]').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      },
+      buttonText:{
+        prev:     '上翻',
+        next:     '下翻',
+        prevYear: '去年',
+        nextYear: '明年',
+        today:    '今天',
+        month:    ' 月 ',
+        week:     ' 周 ',
+        day:      ' 日 '
+      },
+      monthNames:['一月','二月', '三月', '四月', '五月', '六月', 
+                  '七月','八月', '九月', '十月', '十一月', '十二月'],
+      dayNames:['星期日', '星期一', '星期二', '星期三','星期四', '星期五', '星期六'],
+      dayNamesShort:['星期日', '星期一', '星期二', '星期三','星期四', '星期五', '星期六'],
+      monthNamesShort:['一月', '二月', '三月', '四月', '五月', '六月',
+                      '七月', '八月', '九月', '十月', '十一月', '十二月'],
+
+      titleFormat:{
+        month: 'yyyy MMMM',  
+        week: "yyyy年 MMM d[ yyyy]日 {'&#8212;'[ MMM] d}日 ",               
+        day: 'yyyy年 MMM d日, dddd '                  
+      },
+      selectable: true,
+      editable:true,
+      defaultView: 'month',
+      height: 500,
+      slotMinutes: 30,
+      timeFormat: 'h:mm t{ - h:mm t} ',
+      dragOpacity: "0.5",
+
+      events: function(start, end, callback) {
+        $.ajax({
+            url: '/system/activities/schedule_sort1',
+            dataType: 'json',
+            data: {
+                start: Math.round(start.getTime() / 1000),
+                end: Math.round(end.getTime() / 1000)
+            },
+            success: function(data){
+              var events =[];
+              $(data).each(function(i,d){
+                var use_ful = new Object();
+                if (d.status == 1){                
+                  $.extend(use_ful, { backgroundColor: 'rgb(115, 115, 199)',textColor: 'white'});
+                }else{
+                  $.extend(use_ful, { backgroundColor: '#dd4b39',textColor: 'white'});
+                };
+                use_ful.start = d.start_time;
+                use_ful.end = d.end_time;
+                use_ful.description = d.description;
+                use_ful.id = d.id;
+                use_ful.title = d.title;
+                use_ful.status = d.status;
+                events.push(use_ful);
+              });
+              callback(events);
+            }
+        });
+      },
+
+      eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
+        if (event.status == 1){
+          pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
+          revertFunc();
+        }else{
+          updateEvent(event,revertFunc);  
+        }
+      },
+
+      eventResize: function(event, dayDelta, minuteDelta, revertFunc){
+        if (event.status == 1){
+          pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
+          revertFunc();
+        }else{
+          updateEvent(event,revertFunc);
+        }
+      },
+
+      eventClick: function(event, element) {
+        $('.tooltipevent').remove();
+        if (event.status == 1){
+          pnotify({title: '提醒', text: "该活动已经通过审核,不能进行修改 ~~",type: "error"});
+        }else{
+          $(".activity_id").val(event.id);
+          $(".title").val(event.title);
+          $(".description").val(event.description);
+          $(".begin_time").val((event.start).format("yyyy-MM-dd"));
+          $(".end_time").val((event.end).format("yyyy-MM-dd"));
+          $('#activity').modal();
+          $('#calendar').fullCalendar('updateEvent', event,revertFunc);     
+        }
+      },
+
+      eventMouseover: function(calEvent,jsEvent){
+        var tooltip = '<div class="tooltipevent">'+ 
+          '<span>标题: &nbsp;</span> '+ calEvent.title + '<br/>' + 
+          '<span>描述:  &nbsp;</span>'+ calEvent.description + '<br/>' +
+          '<span>开始时间: &nbsp;</span>'+ calEvent.start.format("yyyy-MM-dd") + '<br/>' +
+          '<span>结束时间: &nbsp;</span>'+ calEvent.end.format("yyyy-MM-dd") +
+        '</div>';
+        $("body").append(tooltip);
+        $(this).mouseover(function(e) {
+          $(this).css('z-index', 10000);
+          $('.tooltipevent').fadeIn('500');
+          $('.tooltipevent').fadeTo('10', 1.9);
+        }).mousemove(function(e) {
+          var left = 0;
+          if ($('.tooltipevent')){
+            var left = $('.tooltipevent').position().left;
+          };
+          if (left > window.screen.availWidth-500){
+            $('.tooltipevent').css('top', e.pageY + 10);
+            $('.tooltipevent').css('left', e.pageX - 300);
+          }else{
+            $('.tooltipevent').css('top', e.pageY + 10);
+            $('.tooltipevent').css('left', e.pageX + 20);
+          }
+        });
+      },
+
+      eventMouseout: function(calEvent, jsEvent) {
+        $(this).css('z-index', 8);
+        $('.tooltipevent').remove();
+      }
+    })
+  }
 </script>

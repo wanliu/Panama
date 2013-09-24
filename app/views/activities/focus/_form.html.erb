@@ -5,7 +5,6 @@
                     :html => { class: 'form-horizontal m_f_30 form_activity_focus' },
                     :type => :json do |f| %>
 
-
   <%= f.input :shop_product_id,
               :collection => [],
               :wrapper_html => {
@@ -16,18 +15,17 @@
                 :id => "activity_focus_shop_product_id"
               } %>
 
-   <%= f.input :title,
+  <%= f.input :title,
               :label => '活动名称',
               :warpper => false %>
 
- <div class="control-group">
+  <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
       <img data-src="holder.js/140x140" class="img-rounded preview" alt="140x140" style="" src="<%= default_img_url('100x100') %>">
       <ul class='attachment-list'></ul>
     </div>
   </div>
-
 
   <div class="row bettwen">
   <%=f.input  :people_number,
@@ -55,13 +53,13 @@
               required: true %>
   </div>
 
-
   <div class="control-group addLine">
     <div class="pull-right" style="padding-right:115px;">
-      <button class="btn add_range"  type="button"><i class="icon-plus"></i>Add</li></button>
+      <button class="btn add_range" type="button">
+        <i class="icon-plus"></i>添加
+      </button>
     </div>
   </div>
-
 
   <%= f.input :start,
               :as      => :date_picker,
@@ -118,5 +116,5 @@
     });
   </script>
 
-<% end %>
 
+<% end %>

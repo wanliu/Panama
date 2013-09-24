@@ -59,4 +59,3 @@ module FocusExtension
   				   :start, :end, :activity_price
 
 end
-

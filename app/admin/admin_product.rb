@@ -38,9 +38,9 @@ ActiveAdmin.register Product, :title => "商品" do
 
     end
     column :action_link do |product|
-      link_1 = link_to "修改", edit_plus_system_product_path(product), :class => :member_link
-      link_2 = link_to "查看", system_product_path(product)
-      link_1 + link_2
+      link_view = link_to "查看", system_product_path(product)
+      link_edit = link_to "修改", edit_plus_system_product_path(product), :class => :member_link
+      "#{link_view} #{link_edit}".html_safe
     end
   end
 
@@ -82,7 +82,7 @@ ActiveAdmin.register Product, :title => "商品" do
     end
   end
 
-  collection_action :new_plus do
+  collection_action :new_plus, :title => "新增" do
     @product = Product.new
   end
 
@@ -101,7 +101,7 @@ ActiveAdmin.register Product, :title => "商品" do
     @product = Product.find(params[:id])
   end
 
-  member_action :edit_plus do
+  member_action :edit_plus, :title => "编辑" do
     @product = Product.find(params[:id])
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?

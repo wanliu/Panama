@@ -16,11 +16,12 @@ ActiveAdmin.register OrderRefund do
     end
     column :decription
     column :action_link do |refund|
+      link_view = link_to "查看", system_order_refund_path(refund)
       if refund.state == "apply_failure"
         link_agree = link_to "同意", agree_system_order_refund_path(refund), :method => :post
         link_close = link_to "关闭", close_system_order_refund_path(refund), :method => :post
-        "#{link_agree} #{link_close}".html_safe
       end
+        "#{link_view} #{link_agree} #{link_close}".html_safe
     end
   end
 
