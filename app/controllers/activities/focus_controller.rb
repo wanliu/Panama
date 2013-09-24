@@ -21,8 +21,6 @@ class Activities::FocusController < Activities::BaseController
 	        Attachment.find_by(:id => v)
 	      end.compact
 	    end
-	    
-	    debugger
 
 	    if activity_params[:activity_price] && activity_params[:people_number]
 	    	activity_params[:activity_price].map do |key,val|
