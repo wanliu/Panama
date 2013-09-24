@@ -80,7 +80,7 @@
       i = i+1;
       one_line = $(".bettwen").last().clone(true);
       one_line.find("#activity_people_number").attr("name", "activity[people_number][" + i +"]");
-      one_line.find("#activity_price").attr("name", "activity[activity_price][" + i +"]");
+      one_line.find("#activity_activity_price").attr("name", "activity[activity_price][" + i +"]");
       $(".addLine").prepend(one_line);
     });
 
