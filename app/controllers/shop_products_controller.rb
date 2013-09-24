@@ -4,7 +4,8 @@ class ShopProductsController < ApplicationController
 	before_filter :login_and_service_required, only: :buy
 
 	def index
-		@shop = Shop.find(params[:shop_id])
+		q = params[:q]
+		@shop = Shop.find(q[:shop_id])
 		@products = @shop.products.includes(:product)
 		@products = @products.offset(params[:offset]) if params[:offset].present?
 		@products = @products.limit(params[:limit]) if params[:limit].present?
