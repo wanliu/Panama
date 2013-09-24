@@ -18,7 +18,6 @@ class Activity < ActiveRecord::Base
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
 
   has_many :activity_rules, autosave: true
-  has_many :price_lists, dependent: :destroy
 
   has_many :comments, :as => :targeable
   has_many :activities_likes
@@ -72,7 +71,7 @@ class Activity < ActiveRecord::Base
 
   validates :title, :activity_price, :start_time, :end_time, :shop_product_id, :presence => true
   validates :activity_price, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :price, :numericality => { :greater_than_or_equal_to => 0 }, :allow_nil => true
+  # validates :price, :numericality => { :greater_than_or_equal_to => 0 }, :allow_nil => true
 
   def like
     likes.size

@@ -33,7 +33,7 @@ class Activities::AuctionController < Activities::BaseController
       if @activity.save
         format.js { render "activities/add_activity" }
       else
-        @activity.extend(ScoreExtension)
+        # @activity.extend(ScoreExtension)
         format.js{ render :partial => "activities/auction/form",
                          :locals  => { :activity => @activity },
                          :status  => 400 }
