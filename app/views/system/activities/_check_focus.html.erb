@@ -18,7 +18,7 @@
 			<td>活动价格</td>
 			<td>
 				<% @activity.activity_rules.each do |ar| %>
-					人数<%= ar.dvalue %>时，价格为<%= number_to_currency(ar.value) %>;
+					人数<%= ar.value %>时，价格为<%= number_to_currency(ar.dvalue) %>;
 				<% end %>
 			</td>
 		</tr>
