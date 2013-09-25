@@ -17,16 +17,16 @@ class Activities::FocusController < Activities::BaseController
     	@activity = current_user.activities.build(activity_params)
 	    @activity.activity_type = "focus"
 	    unless activity_params[:attachment_ids].nil?
-	      @activity.attachments = activity_params[:attachment_ids].map do |k, v|
-	        Attachment.find_by(:id => v)
-	      end.compact
+		    @activity.attachments = activity_params[:attachment_ids].map do |k, v|
+		        Attachment.find_by(:id => v)
+		    end.compact
 	    end
 
 	    if activity_params[:activity_price] && activity_params[:people_number]
 	    	activity_params[:activity_price].map do |key,val|
 	    		activity_params[:people_number].map do |key1,val1| 
 	    			#value为人数， dvalue为价格
-					@activity.activity_rules.build(:name => "activity_price", :value => val, :value_type => "dvalue", :dvalue => val1.to_d ) if key == key1
+					@activity.activity_rules.build(:name => "activity_price", :value => val1, :value_type => "dvalue", :dvalue => val.to_d ) if key == key1
 	    		end
 	    	end
 	    end

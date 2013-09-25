@@ -33,7 +33,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :author
 
   validate :validate_update_access?, :on => :update
-
+  
   define_graphical_attr :photos, :handler => :default_photo
 
   before_create :init_data
