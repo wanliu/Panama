@@ -69,5 +69,14 @@
             load_view.reset_fetch(data)
           }
         })
+
+        $("#category-sidebar .second_class_categories a")
+            .attr("href", "#")
+            .on("click", function(){
+                $(this).parents(".second_class_categories").hide()
+                load_view.reset_fetch({
+                    category_id: $(this).attr("data-category_id")
+                })
+        });
   })
 </script>

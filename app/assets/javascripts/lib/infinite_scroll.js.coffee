@@ -69,6 +69,4 @@ class InfiniteScrollView extends Backbone.View
 		@fetch()
 
 
-
-
 root.InfiniteScrollView = InfiniteScrollView
