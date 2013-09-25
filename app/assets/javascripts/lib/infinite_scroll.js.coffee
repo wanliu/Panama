@@ -13,7 +13,6 @@ class InfiniteScrollView extends Backbone.View
 	initialize: (options) ->
 		_.extend(@, options)
 		@$el = $(@el)
-		@remove_columns()
 		@fetch()
 		$(window).scroll(_.bind(@scroll_load, @))
 
@@ -61,6 +60,13 @@ class InfiniteScrollView extends Backbone.View
 				@timeout_id = setTimeout _.bind(@fetch, @), 250
 	remove_columns: () ->
 		$(@sp_el).find(".columns>.column").children().remove()
+
+	reset_fetch: (options) ->
+		@search_options = options
+		@remove_columns()
+		@offset = 0
+		@fetch_size = @init_size
+		@fetch()
 
 
 
