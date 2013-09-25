@@ -6,17 +6,13 @@
         <span class="name">热卖</span>
       </a>
     </li>
-    <li class="accordion-group">
-      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#forms-collapse">
+    <li class="accordion-group" id="category-sidebar">
+      <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#">
         <i class="icon-edit"></i>
         <span class="name">分类</span>
       </a>
-      <ul id="forms-collapse" class="accordion-body collapse">
-        <li><a href="form_account.html">Account</a></li>
-        <li><a href="form_article.html">Article</a></li>
-        <li><a href="form_elements.html">Elements</a></li>
-        <li><a href="form_validation.html">Validation</a></li>
-        <li><a href="form_wizard.html">Wizard</a></li>
+      <ul id="forms-collapse" class="accordion-body">
+        <%= root_category_tree %>
       </ul>
     </li>
     <li>
@@ -47,7 +43,7 @@
     </li>
   </ul>
   <div id="sidebar-settings" class="settings">
-    <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
+    <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图&nbsp;标</button>
     <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
   </div>
 </nav>
@@ -60,5 +56,12 @@
 
     $("#side-nav li.active").removeClass("active")
     $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in")
+
+    $("#category-sidebar > ul > li").mouseenter(function(event){
+      $($(this).children('a').attr('href')).show();
+    });
+    $("#category-sidebar > ul > li").mouseleave(function(event){
+      $($(this).children('a').attr('href')).hide();
+    });
   })
 </script>
