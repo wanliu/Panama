@@ -43,7 +43,7 @@
         new ActivitiesView({
             el: '#activities'
         })
-        new LoadActivities({
+        var load_view = new LoadActivities({
             el: $('.activities_panel')
         })
 
@@ -66,10 +66,7 @@
         new CatalogViewList({
           el: $("#activity-category"),
           search: function(data){
-            new LoadActivities({
-                search_options: data,
-                el: $('.activities_panel')
-            })
+            load_view.reset_fetch(data)
           }
         })
   })

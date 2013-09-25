@@ -1,76 +1,69 @@
 <div class='activity' activity-id='<%= activity.id %>' id="activity<%= activity.id %>">
-	<div class='out-box'>
-		<form>
-		<div class='in-box'>
-			<%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
- 			<!-- <h5 class="right_bottom2 ">原价: <span><%= activity.price %></span></h5>
-			<h4 class="right_bottom1 ">现价: <span><%= activity.activity_price %></span></h4> -->
-		</div>
-		<!-- <div class="corner"><h4>特价</h4></div> -->
+  <div class='out-box'>
+    <form>
+    <div class='in-box'>
+      <%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
+    </div>
 
-		<div class='summary'>
-			<h5 class="title"><%= activity.title %></h5>
-			<p style="word-wrap:break-word;"><%= activity.description %></p>
-		</div>
-		<div class='userinfo'>
-			<%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
-			<p>
-				<a href="<%= person_path(activity.author) %>">
-					<%= activity.author.login %>
-				</a>
-			</p>
-			<span>参与 <%= activity.participate || 0%> </span>
-			<span class='like-count'>支持 <%= activity.like || 0 %></span>
-		</div>
-		<div class="buttons">
-			<% if activity.start_sale? %>
-				<%= link_to '#', class: 'btn btn-danger launch-button' do %>
-					<%= icon('shopping-cart') + " 查看" %>
-				<% end %>
+    <div class='summary'>
+      <h5 class="title"><%= activity.title %></h5>
+      <p style="word-wrap:break-word;"><%= activity.description %></p>
+    </div>
+    <div class='userinfo'>
+      <%= image_tag activity.author.icon, :class => [:author, :'img-circle'] %>
+      <p>
+        <a href="<%= person_path(activity.author) %>">
+          <%= activity.author.login %>
+        </a>
+      </p>
+      <span>参与 <%= activity.participate || 0%> </span>
+      <span class='like-count'>支持 <%= activity.like || 0 %></span>
+    </div>
+    <div class="buttons">
+      <% if activity.start_sale? %>
+        <%= link_to '#', class: 'btn btn-danger launch-button' do %>
+          <%= icon('shopping-cart') + " 查看" %>
+        <% end %>
 
-				<% if activity.likes.exists?(current_user) %>
-					<%= link_to '#', class: 'btn unlike-button active' do %>
-						<%= "取消支持" %>
-					<% end %>
-				<% else %>
-					<%= link_to '#', class: 'btn like-button' do %>
-						<%= icon(:'thumbs-up') + " 支持" %>
-					<% end %>
-				<% end %>
-			<% end %>
-		</div>
-	<!-- 	<div class="comments_and_reply">
-			<%#= render "people/attribution", people: activity.author if activity.author %>
-			<%#= render "comments/last_and_reply", target: activity %>
-		</div> -->
-		</form>
+        <% if activity.likes.exists?(current_user) %>
+          <%= link_to '#', class: 'btn unlike-button active' do %>
+            <%= "取消支持" %>
+          <% end %>
+        <% else %>
+          <%= link_to '#', class: 'btn like-button' do %>
+            <%= icon(:'thumbs-up') + " 支持" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+    </form>
 
-	</div>
+  </div>
 </div>
 
 <script type="text/javascript">
-	var effect = "fadeInRight";
-	$('.activity')
-		.hover(function(event){
-			$(event.currentTarget)
-				.find(".right_bottom2")
-				.addClass("animate1 " + effect);
-			$(event.currentTarget)
-				.find(".right_bottom1")
-				.addClass("animate2 " + effect);
-			// $(event.currentTarget)
-			// 	.find(".preview")
-			// 	.addClass("animate0 " + "flipInY");
-		})
-		.mouseleave(function(event){
-			$(event.currentTarget)
-				.find(".right_bottom2")
-				.removeClass("animate1 " + effect);
-			$(event.currentTarget)
-				.find(".right_bottom1")
-				.removeClass("animate2 " + effect);
-			// $(event.currentTarget)
-			// 	.find(".preview")
-			// 	.removeClass("animate0 " + "flipInY");
-		})
+  var effect = "fadeInRight";
+  $('.activity')
+    .hover(function(event){
+      $(event.currentTarget)
+        .find(".right_bottom2")
+        .addClass("animate1 " + effect);
+      $(event.currentTarget)
+        .find(".right_bottom1")
+        .addClass("animate2 " + effect);
+      // $(event.currentTarget)
+      //  .find(".preview")
+      //  .addClass("animate0 " + "flipInY");
+    })
+    .mouseleave(function(event){
+      $(event.currentTarget)
+        .find(".right_bottom2")
+        .removeClass("animate1 " + effect);
+      $(event.currentTarget)
+        .find(".right_bottom1")
+        .removeClass("animate2 " + effect);
+      // $(event.currentTarget)
+      //  .find(".preview")
+      //  .removeClass("animate0 " + "flipInY");
+    })
 </script>

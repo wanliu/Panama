@@ -46,7 +46,7 @@ class ActivityView extends Backbone.View
       @$dialog_panel.appendTo("#popup-layout")
       @$el = $(@render()).appendTo(@$dialog_panel)
       @$backdrop.appendTo("body")
-      $(window).scroll()
+      #$(window).scroll()
     super
 
   loadTemplate: (handle) ->
@@ -255,7 +255,7 @@ class CycleIter
 class ActivitiesView extends Backbone.View
   initialize: (@options) ->
     _.extend(@, @options)
-    $("<div class='columns'></div>").appendTo(@$el)
+
     $(window).bind('search_result:append', $.proxy(@appendResult, @))
     $(window).bind('search_result:reset', $.proxy(@setResult, @))
     $(window).resize($.proxy(@relayoutColumns, @))
@@ -286,6 +286,7 @@ class ActivitiesView extends Backbone.View
     count = parseInt(@$('.columns').width() / 235)
 
   relayoutColumns: () ->
+    @render_columns()
     activities = @fetchResults()
 
     columns = $("<div class='columns'></div>")
@@ -329,6 +330,9 @@ class ActivitiesView extends Backbone.View
     columns = @$(".columns>.column")
     cls = _.map columns, (c) -> $(c).height()
     $(columns[cls.indexOf(_.min(cls))])
+
+  render_columns: () ->
+    $("<div class='columns'></div>").appendTo(@$el)
 
 
 class LoadActivities extends InfiniteScrollView

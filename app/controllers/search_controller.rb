@@ -104,9 +104,6 @@ class SearchController < ApplicationController
       sort("_script" => {
         :script => "doc['score'].value/((time()-doc['start_time_ms'].value) / 3600)",
         :type   => "number",
-        :params => {
-          to_day: toDay
-        },
         :order  => "desc"
       }, "_score" => {})
 
