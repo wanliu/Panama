@@ -5,9 +5,9 @@ root  =  window || @
 
 class CatalogView extends Backbone.View
 	tagName: "li"
-	events: {
+	events: 
 		"click" : "search"
-	}
+	
 	initialize: (options) ->
 		_.extend(@, options)
 		$(@el).html(@template())
@@ -37,7 +37,6 @@ class CatalogViewList extends Backbone.View
 		@collection.fetch(url: "/catalog")
 
 	add_all: (models)->
-
 		models.each (model) =>
 			view = new CatalogView(model: model)
 			view.bind("search", @search)
@@ -45,12 +44,13 @@ class CatalogViewList extends Backbone.View
 
 	search: (data) ->
 
+
 class CatalogChildrenView extends Backbone.View
 
 	initialize: (options) ->
 		_.extend(@, options)
 		@$el = $(@el)
-		catalog_id = @.catalog_id
+		catalog_id = @catalog_id
 		@get_catalog_children(catalog_id)
 
 	template: (model) ->
