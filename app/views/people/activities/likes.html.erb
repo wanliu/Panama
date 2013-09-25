@@ -12,23 +12,27 @@
         </tr>
       </thead>
       <tbody>
-      <% @activities.each do |a| %>
-      <tr>
-        <td><%=a.title %></td>
-        <td><%=a.price %></td>
-        <td><%=t("activity.type.#{a.activity_type}") %></td>
-        <td>
-          <a href="/shops/<%=a.shop.name %>">
-            <img src="<%=a.shop.photos.icon %>" />
-            <%=a.shop.name %>
-          </a>
-        </td>
-        <td>
-          <a href="javascript:void(0)">
-            查看
-          </a>
-        </td>
-      </tr>
+      <% if !@activities.present? %>
+        <tr><td colspan="4" style="text-align:center;">您还没有喜欢的活动哦,赶紧去添加吧～～</td></tr>
+      <% else %>
+        <% @activities.each do |a| %>
+        <tr>
+          <td><%=a.title %></td>
+          <td><%=a.price %></td>
+          <td><%=t("activity.type.#{a.activity_type}") %></td>
+          <td>
+            <a href="/shops/<%=a.shop.name %>">
+              <img src="<%=a.shop.photos.icon %>" />
+              <%=a.shop.name %>
+            </a>
+          </td>
+          <td>
+            <a href="javascript:void(0)">
+              查看
+            </a>
+          </td>
+        </tr>
+        <% end %>
       <% end %>
       </tbody>
     </table>

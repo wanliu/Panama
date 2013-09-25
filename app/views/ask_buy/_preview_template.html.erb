@@ -14,11 +14,11 @@
         <img src='{{icon}}', class="author img-circle" />
       {{/user.photos}}
       <p>
-        <a href="<%= person_path('{{user}}') %>">
-          {{#user}}
-            {{login}}
-          {{/user}}
+        {{#user}}
+        <a href="/people/{{login}}">          
+            {{login}}          
         </a><br />
+        {{/user}}
         <span class='notify'>
         </span>
       </p>
