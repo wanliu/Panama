@@ -64,6 +64,8 @@ class InfiniteScrollView extends Backbone.View
 	reset_fetch: (options) ->
 		@search_options = options
 		@remove_columns()
+		@offset = 0
+		@fetch_size = @init_size
 		@fetch()
 
 
