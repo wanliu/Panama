@@ -11,7 +11,7 @@
         <i class="icon-edit"></i>
         <span class="name">分类</span>
       </a>
-      <ul id="forms-collapse" class="accordion-body">
+      <ul id="forms-collapse" class="accordion-body" style="display:none;">
         <%= root_category_tree %>
       </ul>
     </li>
@@ -50,6 +50,14 @@
 
 <script type="text/javascript">
   $(function(){
+    $("#forms-collapse").find(".icon-caret-right").remove();
+    $("#forms-collapse").children().css("color","#BBB");
+    $("#forms-collapse .accordion-group > ul").css("color","white");
+
+    $("#category-sidebar").bind("click",function(){
+      $("#forms-collapse").toggle();
+    })
+
     new LeftSideBar({ el: "#left_sidebar" })
 
     var side_class = "<%= yield :side_nav %>"
