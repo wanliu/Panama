@@ -173,6 +173,10 @@ class Product < ActiveRecord::Base
         :icon      => photos.icon,
         :header    => photos.header,
         :avatar    => photos.avatar
+      },
+      :category    => {
+        :id        => category.id,
+        :name      => category.name
       }
     }.to_json
   end
