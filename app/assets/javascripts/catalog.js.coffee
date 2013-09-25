@@ -21,7 +21,15 @@ class CatalogView extends Backbone.View
 	search: () ->
 		$(@el).parent().find("li").removeClass("active")
 		$(@el).addClass("active")
-		@trigger("search", catalog_id: @model.id)
+		$.ajax(
+			url: "/catalog/#{@model.id}/children_categories",
+			type: "GET",
+			dataType: "json",
+			success: (data) =>
+				category_ids = _.map data, (d) -> d.id
+				category_ids.push("") if category_ids.length <= 0
+				@trigger("search", category_id: category_ids)
+		)
 
 
 class CatalogViewList extends Backbone.View

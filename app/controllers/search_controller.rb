@@ -63,7 +63,6 @@ class SearchController < ApplicationController
 
   def index
     _size, _from, q = params[:limit], params[:offset], (params[:q] || {})
-    category_ids = query_catalog(q[:catalog_id]) if q[:catalog_id].present?
     toDay = DateTime.now.midnight
     s = Tire.search ['activities', 'ask_buys', 'shop_products', 'products'] do
       from _from
@@ -77,25 +76,25 @@ class SearchController < ApplicationController
               filter :range, :start_time => {lte: toDay}
               filter :term, :_type => "activity"
               filter :term, :status => 1
-              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
+              filter :terms, {"category.id" => q[:category_id]} if q[:category_id].present?
             end
           end
           should do
             filtered do
               filter :term, {:_type => "ask_buy"}
-              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
+              filter :terms, {"category.id" => q[:category_id]} if q[:category_id].present?
             end
           end
           should do
             filtered do
               filter :term, {:_type => "product"}
-              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
+              filter :terms, {"category.id" => q[:category_id]} if q[:category_id].present?
             end
           end
           should do
             filtered do
               filter :term, {:_type => "shop_product"}
-              filter :terms, {"category.id" => category_ids} if q[:catalog_id].present?
+              filter :terms, {"category.id" => q[:category_id]} if q[:category_id].present?
             end
           end
         end
