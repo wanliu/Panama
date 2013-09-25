@@ -1,7 +1,7 @@
 var m = new ActivityModel({ id: <%= @activity.id %> })
 m.fetch({
 	success: function(model){
-		view = new ActivityViewPreview({ model: model })
+		view = new ActivityView({ model: model })
 		view.modal()
 	}
 })

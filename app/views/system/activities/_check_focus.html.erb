@@ -15,8 +15,16 @@
 			<td><%= @activity.activity_type %></td>
 		</tr>
 		<tr>
+			<td>活动价格</td>
+			<td>
+				<% @activity.activity_rules.each do |ar| %>
+					人数<%= ar.value %>时，价格为<%= number_to_currency(ar.dvalue) %>;
+				<% end %>
+			</td>
+		</tr>
+		<tr>
 			<td>活动描述</td>
-			<td><%= @activity.description %></td>
+			<td><%= @activity.description || "暂无" %></td>
 		</tr>
 		<tr>
 			<td>商店</td>
@@ -35,10 +43,6 @@
 		<tr>
 			<td>创建人</td>
 			<td><%= @activity.author.login %></td>
-		</tr>
-		<tr>
-			<td>限制数量</td>
-			<td><%= @activity.limit_count %></td>
 		</tr>
 		<tr>
 			<td>喜欢人数</td>
