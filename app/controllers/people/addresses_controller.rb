@@ -3,7 +3,7 @@
 class People::AddressesController < People::BaseController
 
 	def index
-		@addresses = Address.where(:user_id => @people.id)
+		@addresses = Address.where(:targeable_type => "User")
 	end
 
 	def edit
@@ -12,9 +12,7 @@ class People::AddressesController < People::BaseController
 	end
 
 	def create
-		@address = Address.create(params[:address].merge(
-			user_id: @people.id
-		))
+		@address = @people.addresses.create(params[:address])
 		if @address.valid?
 			flash[:success] = "创建收货地址成功！"
 		else

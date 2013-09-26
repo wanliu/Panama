@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130921071256) do
+ActiveRecord::Schema.define(:version => 20130926081102) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -82,20 +82,18 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
   end
 
   create_table "addresses", :force => true do |t|
-    t.string   "country"
     t.string   "zip_code"
     t.string   "road"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.integer  "transaction_id"
-    t.integer  "user_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "province_id"
     t.integer  "city_id"
     t.integer  "area_id"
-    t.integer  "addressable_id"
-    t.string   "addressable_type"
+    t.integer  "targeable_id"
+    t.string   "targeable_type"
     t.string   "contact_name"
     t.string   "contact_phone"
+    t.time     "deleted_at"
   end
 
   create_table "admin_users", :force => true do |t|
@@ -500,6 +498,14 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.string   "ability"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "price_lists", :force => true do |t|
+    t.integer  "people_number"
+    t.decimal  "price",         :precision => 10, :scale => 0
+    t.integer  "activity_id"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
   end
 
   create_table "price_options", :force => true do |t|
