@@ -76,4 +76,3 @@ class Category < ActiveRecord::Base
     .where("c.ancestry is NULL and not categories.ancestry is NULL")
   end
 end
-

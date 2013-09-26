@@ -4,7 +4,7 @@
     <div class="body">
       <ul id="activity-category" class="nav nav-tabs activity-category" >
         <li>
-            <a href='#' ><%=icon 'eye-open' %> </a>
+          <a href='#' ><%=icon 'eye-open' %> </a>
         </li>
       </ul>
     </div>
@@ -13,70 +13,78 @@
     <div id="activities">
     </div>
     <div class='scroll-load-msg'>
-        <img src='/assets/loading_max.gif' />正在加载...
+      <img src='/assets/loading_max.gif' />正在加载...
     </div>
   </div>
 </div>
 
 <script type="text/template" id="product-preview-template">
-    <%= render "activities/products/preview_template" %>
+  <%= render "activities/products/preview_template" %>
 </script>
 
 <script type="text/template" id="shop-product-preview-template">
-    <%= render "shop_products/preview_template" %>
+  <%= render "shop_products/preview_template" %>
 </script>
 
 <script type="text/template" id="auction-preview-template">
-    <%= render "activities/auction/preview_template" %>
+  <%= render "activities/auction/preview_template" %>
 </script>
 
 <script type="text/template" id="focus-preview-template">
-    <%= render "activities/focus/preview_template" %>
+  <%= render "activities/focus/preview_template" %>
 </script>
 
 <script type="text/template" id="ask_buy-preview-template">
-    <%= render "ask_buy/preview_template" %>
+  <%= render "ask_buy/preview_template" %>
 </script>
 
 <script type="text/javascript">
-    $(function(){
-        new ActivitiesView({
-            el: '#activities'
-        })
-        var load_view = new LoadActivities({
-            el: $('.activities_panel')
-        })
+  $(function(){
+    new ActivitiesView({
+      el: '#activities'
+    })
 
-        new ActivityPreview({
-            el: $("#activities")
-        })
+    var load_view = new LoadActivities({
+      el: $('.activities_panel')
+    })
 
-        new AskBuyPreview({
-            el: $("#activities")
-        })
+    new ActivityPreview({
+      el: $("#activities")
+    })
 
-        new ShopProductPreview({
-            el: $("#activities")
-        })
+    new AskBuyPreview({
+      el: $("#activities")
+    })
 
-        new ProductPreview({
-            el: $("#activities")
-        })
+    new ShopProductPreview({
+      el: $("#activities")
+    })
 
-        new CatalogViewList({
-          el: $("#activity-category"),
-          search: function(data){
-            load_view.reset_fetch(data)
+    new ProductPreview({
+      el: $("#activities")
+    })
+
+    new CatalogViewList({
+      el: $("#activity-category"),
+      search: function(data){
+        load_view.reset_fetch(data)
+      }
+    })
+
+    $("#category-sidebar .second_class_categories a")
+      .attr("href", "#")
+      .on("click", function(){
+        $(this).parents(".second_class_categories").hide()
+        category_id = $(this).attr("data-category_id")
+        $.ajax({
+          url: "/category/"+category_id+"/subtree_ids",
+          type: "GET",
+          dataType: "json",
+          success: function(data){
+            load_view.reset_fetch({ category_id: data })
           }
-        })
-
-        $("#category-sidebar .second_class_categories a")
-            .attr("href", "#")
-            .on("click", function(){
-                $(this).parents(".second_class_categories").hide()
-                load_view.reset_fetch({
-                    category_id: $(this).attr("data-category_id")
-                })
-        });
+        }
+      )
+    });
   })
 </script>

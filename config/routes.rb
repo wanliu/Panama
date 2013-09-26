@@ -20,7 +20,7 @@ Panama::Application.routes.draw do
   resources :catalog do
     member do
       get :products, :to => "catalog#products"
-      get :children_categories, :to => "catalog#children_categories"
+      get :categories_id, :to => "catalog#categories_id"
     end
   end
 
@@ -256,6 +256,7 @@ Panama::Application.routes.draw do
   resources :category do
     member do
       get :products
+      get :subtree_ids, :to => "category#subtree_ids"
     end
     collection do
       get "shop_products", :to => "category#shop_products"
