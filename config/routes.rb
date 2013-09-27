@@ -17,6 +17,8 @@ Panama::Application.routes.draw do
     end
   end
 
+  resources :yellow_page
+
   resources :catalog do
     member do
       get :products, :to => "catalog#products"

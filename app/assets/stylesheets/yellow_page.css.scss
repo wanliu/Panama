@@ -1,0 +1,94 @@
+// Place all the styles related to the yellow_page controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.yellow_page{
+	.new_user, .buyer_user, .seller_user{  
+				background-color: white;
+				margin-bottom: 20px; 
+				margin-left: 20px;
+				-webkit-border-radius: 2px;
+				border-radius: 2px;
+				-webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
+				box-shadow: 1px 2px 0 rgba(0,0,0,.05);
+				background-color: #fff;
+				width: 30%;
+			}
+	.base_info{
+		.user_info{
+			position: relative;
+			.user_icon{ 
+				float:left; 
+				margin-right:5px; 
+				width: 70px; 
+				height: 70px; 
+				cursor: pointer;
+			}
+		}
+	}
+	.title{ float:left;padding-top:4px;}
+	.tel{ color: #737373; font-size: 11px; }
+	.name{  color: #404040;
+			font-size: 13px;
+			font-weight: bold;
+		}
+
+	.yellow_base_info{
+		-webkit-border-radius: 3px;
+		border-radius: 3px;
+		background-color: #fff;
+		overflow: hidden;
+		position: absolute;
+		text-align: center;
+		top:70px;
+		left:0px;
+		width: 240px;
+		height: 300;
+		z-index:1;
+		.userinfo{
+			margin-top: 110px;
+			.contact{
+				line-height: 30px;
+				background-color: rgba(231, 192, 192, 0.09);
+				.icon-leaf{
+					color: green;
+				}	
+			}
+		}
+		.login, .shop_name{
+			-webkit-transition: color .218s;
+			transition: color .218s;
+			color: #427fed;
+			font-weight: bold;
+			margin-bottom: -40px;
+		}
+		.industry_type{
+			color: #737373;
+			font-size: 12px;
+			line-height: 20px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin-top: 40px;
+		}
+		.entry, .add_friend{
+			text-align: center;
+		}
+		.bg_nature{
+			opacity: .80;
+			background-color: #000;
+			height: 135px;
+			left: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+			padding-top: 0px;
+			width: 240px;
+			height: 150px;
+		}
+		div{
+			padding-top: 6px;
+		}
+		.circle_avatar{
+			position: relative;
+		}
+	}
+}

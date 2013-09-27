@@ -1,5 +1,7 @@
 #encoding: utf-8
 class UserChecking < ActiveRecord::Base
+  include Graphical::Display
+
   attr_accessible :user_id, :service_id, :industry_type,
                   :shop_name, :shop_photo, :shop_url, :shop_summary,
                   :company_name, :company_address, :company_license, :company_license_photo,
@@ -20,6 +22,8 @@ class UserChecking < ActiveRecord::Base
   mount_uploader :ower_photo, ImageUploader
   mount_uploader :shop_photo, ImageUploader
 
+  define_graphical_attr :ower_photos, :handler => :ower_photo
+  define_graphical_attr :shop_photos, :handler => :shop_photo
 
   def current_step
     if service.service_type == "buyer"
@@ -27,6 +31,17 @@ class UserChecking < ActiveRecord::Base
     else
       find_seller_current_step
     end
+  end
+
+  def as_json(*args)
+    attas = super *args
+    attas['ower_photos'] = ower_photos.attributes
+    attas['shop_photos'] = shop_photos.attributes
+    attas
+  end
+
+  def grapical_handler
+
   end
 
   def update_rejected_times
