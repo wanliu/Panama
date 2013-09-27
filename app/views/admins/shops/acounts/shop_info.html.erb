@@ -49,7 +49,7 @@
 					</div>
 					<div class="span7 input_locate">
 						<%= f.input :company_name, label: '营业店名' %>
-						<%= f.input :company_address, label: '营业地址' %>
+						<%= f.input :address_id, label: '营业地址' %>
 						<%= f.input :company_license, label: '营业执照号' %>
 					</div>
 				</div>
@@ -68,7 +68,8 @@
 							<div class="hidden_one offset2" id="hidden_text">
 								<%= upload_tip %>
 							</div>
-							<div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >               </div>
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >               
+							</div>
 						</div>
 					</div>
 					<div class="span7 input_locate">
@@ -78,18 +79,18 @@
 					</div>
 				</div>
 			</div>
-			<% end %>
+		<% end %>
 
-			<% if !current_user.user_checking.checked %>
-				<button class="modify pull-right btn btn-primary">修改</button>
-			<% else %>
-				<script type="text/javascript">
-					$(".shop_info input").attr("readonly","readonly");
-					$(".shop_info #image_bottom").each(function(){
-						$(this).hide();
-					});
-				</script>
-			<% end %>	
+		<% if current_user.user_checking.checked %>
+			<button class="modify pull-right btn btn-primary">修改</button>
+		<% else %>
+			<script type="text/javascript">
+				$(".shop_info input").attr("readonly","readonly");
+				$(".shop_info #image_bottom").each(function(){
+					$(this).hide();
+				});
+			</script>
+		<% end %>	
 	</div>	
 </div>
 
@@ -109,6 +110,7 @@
 		})   
 	});
 
+	// 禁止回车提交表单
 	$(".shop_info .modify").bind("click", function(){
 		$(".shop_info .shop_auth").submit();
 	})

@@ -66,6 +66,7 @@
   <%= render "people/transactions/funcat/pay_manner", :transaction => transaction %>
 <% end %>
 </div>
+
 <script type="text/javascript">
   $("#address_id_<%=transaction.id%>", ".transaction-<%=transaction.id%>-order").chosen({
       allow_single_deselect : true,

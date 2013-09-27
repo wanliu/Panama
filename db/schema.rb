@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130926081102) do
+ActiveRecord::Schema.define(:version => 20130926093545) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -847,7 +847,6 @@ ActiveRecord::Schema.define(:version => 20130926081102) do
     t.string   "shop_url"
     t.string   "shop_summary"
     t.string   "company_name"
-    t.string   "company_address"
     t.string   "company_license"
     t.string   "company_license_photo"
     t.string   "ower_name"
@@ -859,6 +858,7 @@ ActiveRecord::Schema.define(:version => 20130926081102) do
     t.string   "rejected_reason"
     t.boolean  "checked",                  :default => false
     t.integer  "rejected_times",           :default => 0
+    t.integer  "address_id"
   end
 
   create_table "users", :force => true do |t|

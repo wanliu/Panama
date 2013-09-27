@@ -2,13 +2,14 @@
 class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :service_id, :industry_type,
                   :shop_name, :shop_photo, :shop_url, :shop_summary,
-                  :company_name, :company_address, :company_license, :company_license_photo,
+                  :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
                   :rejected, :rejected_reason, :checked
   attr_accessor :uploader_secure_token
 
   belongs_to :user
   belongs_to :service
+  has_one :address, as: :targeable, class_name: "Address", dependent: :destroy
 
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true
