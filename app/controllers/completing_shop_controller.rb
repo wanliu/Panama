@@ -48,7 +48,7 @@ class CompletingShopController < Wicked::WizardController
     end
 
     if @address.valid?
-      render json: { address: @address.address_only }
+      render json: { id: @address.id, address: @address.address_only }
     else
       render json: {}, :status => 403
     end
