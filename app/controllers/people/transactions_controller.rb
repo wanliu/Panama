@@ -267,10 +267,7 @@ class People::TransactionsController < People::BaseController
     if args[:address_id].present?
       Address.find(args[:address_id])
     else
-      address = Address.new(gener_address_arg(params[:address]))
-      address.user_id = current_user.id
-      address.save
-      address
+      current_user.addresses.create(gener_address_arg(params[:address]))
     end
   end
 

@@ -11,7 +11,7 @@ FactoryGirl.define do
     f.province :province
     f.city :city
     f.area :area
-    f.addressable :addressable
+    f.targeable :targeable
   end
 end
 

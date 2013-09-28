@@ -26,18 +26,24 @@ Panama::Application.routes.draw do
   resources :catalog do
     member do
       get :products, :to => "catalog#products"
-      get :children_categories, :to => "catalog#children_categories"
+      get :categories_id, :to => "catalog#categories_id"
     end
   end
 
-  resources :completing_shop
+  resources :completing_shop do
+    member do
+      match "edit_address", :to => "completing_shop#edit_address"
+      match "update_address", :to => "completing_shop#update_address"
+    end
+  end
+
   resources :user_auths
 
   match "catalog/products"
 
-  match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth",:via => :put
-  match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth",:via => :put
-  match "user_checkings/upload_photo/:id", :to => "user_checkings#upload_photo",:via => :post
+  match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth", :via => :put
+  match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth", :via => :put
+  match "user_checkings/upload_photo/:id", :to => "user_checkings#upload_photo", :via => :post
 
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
@@ -262,6 +268,7 @@ Panama::Application.routes.draw do
   resources :category do
     member do
       get :products
+      get :subtree_ids, :to => "category#subtree_ids"
     end
     collection do
       get "shop_products", :to => "category#shop_products"
@@ -361,6 +368,8 @@ Panama::Application.routes.draw do
       match "pending", :to => "shops/transactions#pending"
       match "complete", :to => "shops/transactions#complete"
       match "shop_info", :to => "shops/acounts#shop_info"
+      match "edit_address", :to => "shops/acounts#edit_address"
+      match "update_address", :to => "shops/acounts#update_address"
       match "bill_detail", :to => "shops/acounts#bill_detail"
 
       resources :order_refunds, :controller => "shops/order_refunds" do

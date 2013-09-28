@@ -20,3 +20,5 @@
         shop_product: 商品
         shop_product_id: 商品
         title: 活动名称
+      shop_auth:
+        address_id: 营业地址

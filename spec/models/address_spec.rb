@@ -9,7 +9,7 @@ describe Address, "地址" do
     it { should belong_to(:province).class_name('City') }
     it { should belong_to(:city).class_name('City') }
     it { should belong_to(:area).class_name('City') }
-    it { should belong_to(:addressable) }
+    it { should belong_to(:targeable) }
   end
 
   describe "验证检查" do
@@ -25,7 +25,7 @@ describe Address, "地址" do
     it { address.should respond_to(:province) }
     it { address.should respond_to(:city) }
     it { address.should respond_to(:area) }
-    it { address.should respond_to(:addressable) }
+    it { address.should respond_to(:targeable) }
     it { address.should respond_to(:country) }
     it { address.should respond_to(:road) }
     it { address.should respond_to(:zip_code) }
@@ -40,7 +40,7 @@ describe Address, "地址" do
                                      province: province,
                                      city: city,
                                      area: area,
-                                     addressable: nil) }
+                                     targeable: nil) }
 
   describe "数据验证" do
     it ("默认") { address.should be_valid }
