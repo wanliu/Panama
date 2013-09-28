@@ -24,6 +24,6 @@ class Admins::Shops::AcountsController < Admins::Shops::SectionController
 			render json: { address: @address.address_only }
 		else
 			render json: {}, :status => 403
-		end	
+		end
 	end
 end
