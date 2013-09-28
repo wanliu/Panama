@@ -345,7 +345,8 @@ class LoadActivities extends InfiniteScrollView
 
   initialize: (options) ->
     super options
-    $(window).bind("reset_search", _.bind(@reset_fetch, @))
+    $(window).bind "reset_search", (e, data) =>
+      @reset_fetch(data)
 
   add_one: (c) ->
     $(window).trigger("search_result:append", c)

@@ -24,7 +24,7 @@ class SearchController < ApplicationController
             string "*#{query}*", fields: ["first_name", "any_name", "first_title", "any_title"]
           end
           should do
-             string "*#{val}*", :fields => ["name", "title"]
+            string "*#{val}*", :fields => ["name", "title"]
           end
         end
       end
@@ -75,29 +75,21 @@ class SearchController < ApplicationController
         boolean do
           should do
             filtered do
-              #filter :range, :end_time => {gt: toDay}
-              #filter :range, :start_time => {lte: toDay}
-              filter :term, :_type => "activity"
-              filter :term, :status => 1
-              filter :terms, {"category.id" => conditions[:catalog_id]} if q[:catalog_id].present?
-            end
-          end
-          should do
-            filtered do
-              filter :term, :_type => "ask_buy"
-              filter :terms, {"category.id" => conditions[:catalog_id]} if q[:catalog_id].present?
-            end
-          end
-          should do
-            filtered do
-              filter :term, :_type => "product"
-              filter :terms, {"category.id" => conditions[:catalog_id]} if q[:catalog_id].present?
-            end
-          end
-          should do
-            filtered do
-              filter :term, :_type => "shop_product"
-              filter :terms, {"category.id" => conditions[:catalog_id]} if q[:catalog_id].present?
+              if q[:title].present?
+                val = conditions[:title].gsub(/ /,'')
+                filter :query, :query_string => {
+                  :query => "*#{val}*",
+                  :fields => ["first_name", "any_name", "first_title", "any_title", "name", "title"]
+                }
+              end
+              filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
+              if q[:catalog_id].present?
+                filter :terms, {"category.id" => conditions[:catalog_id]}
+              end
+
+              if q[:category_id].present?
+                filter :terms, {"category.id" => conditions[:category_id]}
+              end
             end
           end
         end
@@ -119,12 +111,16 @@ class SearchController < ApplicationController
                 start_time_ms = start_time.getTime();
 
             if(total<=0) total = 1;
-            if(start_time > this.to_day){
-              return total/((start_time_ms-to_day_ms)/this.one_houre);
-            }else if(start_time < this.to_day && end_time < this.to_day){
-              return total/((this.to_day_ms-end_time_ms)/this.one_houre);
+            if(doc.status.value==1){
+              if(start_time > this.to_day){
+                return total/((start_time_ms-to_day_ms)/this.one_houre);
+              }else if(start_time < this.to_day && end_time < this.to_day){
+                return total/((this.to_day_ms-end_time_ms)/this.one_houre);
+              }else{
+                return total/((this.to_day_ms-start_time_ms)/this.one_houre);
+              }
             }else{
-              return total/((this.to_day_ms-start_time_ms)/this.one_houre);
+              return 0.01
             }
           }
 
@@ -134,11 +130,11 @@ class SearchController < ApplicationController
           }
 
           analyze.prototype.product = function(){
-            return 0.01;
+            return 0.0001;
           }
 
           analyze.prototype.shop_product = function(){
-            return 0.0001;
+            return 0.001;
           }
           an = new analyze();
           an[doc._type.value]();",
@@ -169,11 +165,12 @@ class SearchController < ApplicationController
 
   def query_catalog(catalog_id)
     cl = Catalog.find_by(:id => catalog_id)
-    if cl.present?
-      Category.descendants(cl.categories.pluck("categories.ancestry")).pluck("id")
-    else
-      []
-    end
+    cl.present? ? cl.category_ids : []
+  end
+
+  def query_category(category_id)
+    c = Category.find_by(:id => category_id)
+    c.present? ? c.subtree_ids : []
   end
 
   @@conditions = {}
@@ -182,7 +179,15 @@ class SearchController < ApplicationController
       key = key.to_sym
       case key
       when :catalog_id
-        catalog_condition(key, q)
+        condition_stores(key, q[key]) do
+          query_catalog(q[key])
+        end
+      when :category_id
+        condition_stores(key, q[key]) do
+          query_category(q[key])
+        end
+      when :title
+        @@conditions[key] = filter_special_sym(q[key])
       else
         @@conditions[key] = q[key]
       end
@@ -190,10 +195,12 @@ class SearchController < ApplicationController
     @@conditions
   end
 
-  def catalog_condition(key, q)
-    _key = "#{key}_#{q[key]}".to_sym
+  def condition_stores(key, val, &block)
+    _key = "#{key}_#{val}".to_sym
     unless @@conditions.key?(_key)
-      @@conditions[key] = @@conditions[_key] = query_catalog(q[key])
+      @@conditions[_key] = yield
     end
+    @@conditions[key] = @@conditions[_key]
   end
+
 end

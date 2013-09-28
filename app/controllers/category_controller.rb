@@ -59,4 +59,11 @@ class CategoryController < ApplicationController
 		end
 	end
 
+	def subtree_ids
+		@category_ids = Category.find(params[:id]).subtree_ids
+		respond_to do |format|
+			format.html
+			format.json { render json: @category_ids }
+		end
+	end
 end

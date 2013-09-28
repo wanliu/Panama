@@ -24,7 +24,7 @@ module Session
                          province: province,
                          city: city,
                          area: area,
-                         addressable: nil)
+                         targeable: nil)
     end
 
     def my_cart

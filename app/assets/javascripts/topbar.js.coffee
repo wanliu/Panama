@@ -20,16 +20,8 @@ class TopBar extends Backbone.View
 	enterSearch: (e) ->
 		@$("[type=search]")
 		query = @$("[type=search]").val()
-		if query > ""
-			$.get("/search/products",
-				{ q: query },
-				$.proxy(@successSearch, @)
-			)
+		$(window).trigger('reset_search', {title: query})
 		false
-
-	successSearch: (data) ->
-		#@$("[type=search]").val("")
-		$(window).trigger('search_result:reset', data: data)
 
 
 root.TopBar = TopBar

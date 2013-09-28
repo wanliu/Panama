@@ -1,9 +1,7 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-exports = window || @
 
-class exports.Addresses extends Backbone.View
+root = window || @
+
+class AddressesView extends Backbone.View
 	initialize: (options) ->
 		_.extend(@, options)
 		@$el = $(@el)
@@ -17,3 +15,27 @@ class exports.Addresses extends Backbone.View
 
 	update_address: (event) ->
 		@$el.find("form#edit_address_form").submit()
+
+
+class AddressEditView extends Backbone.View
+	events:
+		"click .edit-button" : "update_address"
+
+	update_address: (event) ->
+		$.ajax(
+			type: "POST",
+			dataType: "JSON",
+			data: @$("form").serialize(),
+			url: @$("form").attr("action"),
+			success: (data) =>
+				@$(".address_input").val(data.address)
+				@$("#edit_address").modal('hide')
+				pnotify({text: "修改地址成功！"})
+			error: (data) =>
+				pnotify({text: "请确定地址不为空！"})
+		)
+		false
+
+
+root.AddressesView = AddressesView
+root.AddressEditView = AddressEditView

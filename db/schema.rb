@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130921071256) do
+ActiveRecord::Schema.define(:version => 20130926093545) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -82,20 +82,18 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
   end
 
   create_table "addresses", :force => true do |t|
-    t.string   "country"
     t.string   "zip_code"
     t.string   "road"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.integer  "transaction_id"
-    t.integer  "user_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "province_id"
     t.integer  "city_id"
     t.integer  "area_id"
-    t.integer  "addressable_id"
-    t.string   "addressable_type"
+    t.integer  "targeable_id"
+    t.string   "targeable_type"
     t.string   "contact_name"
     t.string   "contact_phone"
+    t.time     "deleted_at"
   end
 
   create_table "admin_users", :force => true do |t|
@@ -124,12 +122,12 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0, :default => 0
-    t.float    "amount",                                    :default => 0.0
+    t.decimal  "price",      :precision => 10, :scale => 0
+    t.float    "amount"
     t.text     "describe"
-    t.integer  "status",                                    :default => 0
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.integer  "status"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.integer  "user_id"
   end
 
@@ -432,9 +430,10 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
-    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+    t.integer  "shop_product_id"
+    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -461,8 +460,10 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
+    t.string   "shipped_state"
     t.string   "order_state"
     t.integer  "delivery_manner_id"
+    t.integer  "delivery_type_id"
     t.integer  "logistics_company_id"
   end
 
@@ -540,9 +541,9 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.datetime "created_at",                                                 :null => false
     t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
-    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
+    t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "buy_state"
     t.integer  "owner_id"
@@ -719,6 +720,7 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
+    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end
@@ -841,7 +843,6 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.string   "shop_url"
     t.string   "shop_summary"
     t.string   "company_name"
-    t.string   "company_address"
     t.string   "company_license"
     t.string   "company_license_photo"
     t.string   "ower_name"
@@ -853,6 +854,7 @@ ActiveRecord::Schema.define(:version => 20130921071256) do
     t.string   "rejected_reason"
     t.boolean  "checked",                  :default => false
     t.integer  "rejected_times",           :default => 0
+    t.integer  "address_id"
   end
 
   create_table "users", :force => true do |t|

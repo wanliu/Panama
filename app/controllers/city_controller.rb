@@ -2,6 +2,10 @@ class CityController < ApplicationController
 
     def index
 
+        respond_to do |format|
+            format.html
+            format.json { head :no_content }
+        end
     end
 
     # GET /city/1
@@ -10,8 +14,8 @@ class CityController < ApplicationController
         @city =  City.find(params[:id]).children
 
         respond_to do |format|
-        format.html # show.html.erb
-        format.json { render json: @city }
+            format.html # show.html.erb
+            format.json { render json: @city }
         end
     end
 end

@@ -61,7 +61,7 @@ class InfiniteScrollView extends Backbone.View
   remove_columns: () ->
     $(@sp_el).find(".columns>.column").children().remove()
 
-  reset_fetch: (e, options) ->
+  reset_fetch: (options) ->
     @search_options = options
     @remove_columns()
     @offset = 0
