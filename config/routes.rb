@@ -17,7 +17,11 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :yellow_page
+  resources :yellow_page do
+    collection do 
+      get :search, :to => "yellow_page#search"
+    end
+  end
 
   resources :catalog do
     member do

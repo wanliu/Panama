@@ -6,24 +6,39 @@ root = window || @
 class YellowInfoPreview extends Backbone.View
 	
 	events: 
-		"mouseover .yellow_page .user_info .user_icon" : "delay_get"
-		"mouseout  .yellow_page .user_info .user_icon" :  "delay_dispear"
-		"mouseover .yellow_base_info"  : "show"
-		"mouseout  .yellow_base_info" : "delay_dispear"
+		"mouseover .user_icon" : "delay_get"
+		"mouseout  .user_icon" :  "delay_dispear"
+
+		"mouseenter .yellow_base_info"  : "change_status"
+		"mouseleave  .yellow_base_info" : "dispear"
 	
 	initialize: () ->
 		@template1 = Hogan.compile($("#yellow_page_hover_buyer_template").html())
 		@template2 = Hogan.compile($("#yellow_page_hover_seller_template").html())
+		@flag = ""
 
-	delay_get: (event) ->
+	delay_get: () ->
+		@flag = "in"
 		setTimeout () =>
-			@load_user_info(event)
-		, 1000
+			@load_user_info()
+		, 2000
 
-	load_user_info: (event) ->
-		id = event.currentTarget.parentElement.id
-		if $(event.currentTarget.parentElement).find(".yellow_base_info").length > 0
-			$(event.currentTarget.parentElement).find(".yellow_base_info").fadeIn("slow")
+	delay_dispear: () ->
+		@flag = "out"
+		setTimeout () =>
+			@dispear()
+		, 2000
+
+	change_status: () ->
+		@flag = "in"
+
+	load_user_info: () ->
+		id = @el.id
+		if $(@el).find(".yellow_base_info").length > 0
+			if @flag == "in"
+				$(@el).find(".yellow_base_info").fadeIn("slow")
+			else
+				$(@el).find(".yellow_base_info").fadeOut("slow")
 		else
 			$.ajax({
 				dataType: "json",
@@ -31,7 +46,10 @@ class YellowInfoPreview extends Backbone.View
 				url: "/yellow_page/"+id,
 				success: (user) =>
 					modal = @render(user)
-					$(event.currentTarget.parentElement).append(modal)
+					if @flag = "in"
+						$(@el).append(modal)
+					else
+						$(@el).append(modal).css("display","none")
 			})
 
 	render: (user) =>
@@ -41,18 +59,18 @@ class YellowInfoPreview extends Backbone.View
 			tpl = @template2
 		tpl.render(user)
 
+	dispear: () ->
+		if @flag = "out"
+			$(@el).find(".yellow_base_info").fadeOut("slow")
 
-	delay_dispear: (event) ->
-		setTimeout () =>
-			@dispear(event)
-		, 1000
+	show: () ->
+		$(@el).show()
 
-	dispear: (event) ->
-		$(event.currentTarget.parentElement).find(".yellow_base_info").fadeOut("slow")
 
-	show: (event) ->
-		$(event.currentTarget).show()
-		
+class YellowInfoPreviewList extends Backbone.View
 
-root.YellowInfoPreview = YellowInfoPreview
+	initialize: () ->
+		_.each $(".user_info"), (el) ->
+			new YellowInfoPreview({el: el})
 
+root.YellowInfoPreviewList = YellowInfoPreviewList

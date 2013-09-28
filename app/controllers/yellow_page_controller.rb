@@ -5,12 +5,13 @@ class YellowPageController < ApplicationController
 		@seller_users = UserChecking.where(:checked => true, :service_id => 2)
 		@buyer_users  = UserChecking.where(:service_id => 1)
 		@new_users    =  UserChecking.order('created_at DESC').limit(15)
-
+		@address = Address.new
 		respond_to do |format|
 			format.html
 			format.json{ render :json => { :seller_users => @seller_users,
 				                           :buyer_users => @buyer_users,
-				                           :new_users => @new_users }}
+				                           :new_users => @new_users,
+				                           :address => @address }}
 		end
 	end
 
@@ -21,5 +22,10 @@ class YellowPageController < ApplicationController
 	      # format.js { render "yellow_page/show" }
 	      format.json { render json: @user }
 	    end
+	end
+
+
+	def search
+		debugger
 	end
 end

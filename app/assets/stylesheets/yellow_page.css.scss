@@ -3,15 +3,15 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .yellow_page{
 	.new_user, .buyer_user, .seller_user{  
-				background-color: white;
+				@include transparent(rgb(51,51,51),0.4);
 				margin-bottom: 20px; 
 				margin-left: 20px;
 				-webkit-border-radius: 2px;
 				border-radius: 2px;
 				-webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
 				box-shadow: 1px 2px 0 rgba(0,0,0,.05);
-				background-color: #fff;
 				width: 30%;
+				background-color: "";
 			}
 	.base_info{
 		.user_info{
@@ -26,7 +26,7 @@
 		}
 	}
 	.title{ float:left;padding-top:4px;}
-	.tel{ color: #737373; font-size: 11px; }
+	.tel{ color: #9bd0f6; font-size: 11px; }
 	.name{  color: #404040;
 			font-size: 13px;
 			font-weight: bold;
@@ -48,6 +48,7 @@
 			margin-top: 110px;
 			.contact{
 				line-height: 30px;
+				padding-top: 20px;
 				background-color: rgba(231, 192, 192, 0.09);
 				.icon-leaf{
 					color: green;
