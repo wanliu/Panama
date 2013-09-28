@@ -47,9 +47,32 @@
 							</div>
 						</div> 
 					</div>
+					<% address = current_user.user_checking.address %>
 					<div class="span7 input_locate">
 						<%= f.input :company_name, label: '营业店名' %>
-						<%= f.input :address_id, label: '营业地址' %>
+						<%#= f.input :address_id, label: '营业地址' %>
+						<div data-id="<%= address.id %>" class="control-group string required address">
+							<%= f.label :address_id, wrapper: :inline_label %>
+							<div class="controls">
+								<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
+								<a class="btn" data-toggle="modal" href="<%= shop_admins_edit_address_path %>" data-target="#edit_address">编辑</a>
+								<%= f.input_field :address_id, :class => :hide  %>
+
+								<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										<h3 id="myModalLabel">编辑地址</h3>
+									</div>
+									<div class="modal-body">
+										
+									</div>
+									<div class="modal-footer">
+										<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+										<button class="btn btn-primary edit-button">保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
 						<%= f.input :company_license, label: '营业执照号' %>
 					</div>
 				</div>
@@ -81,7 +104,7 @@
 			</div>
 		<% end %>
 
-		<% if current_user.user_checking.checked %>
+		<% if !current_user.user_checking.checked %>
 			<button class="modify pull-right btn btn-primary">修改</button>
 		<% else %>
 			<script type="text/javascript">
@@ -89,6 +112,7 @@
 				$(".shop_info #image_bottom").each(function(){
 					$(this).hide();
 				});
+				$("[data-target=#edit_address]").hide();
 			</script>
 		<% end %>	
 	</div>	
@@ -97,7 +121,7 @@
 <script type="text/javascript">
 	$(function(){
 		new Upload({
-			verify_authenticity_token: "<%=form_authenticity_token  %>",
+			verify_authenticity_token: "<%=form_authenticity_token %>",
 			action: "/user_checkings/upload_photo/",
 			current_user: { id: "<%=current_user.id %>", 
 				login: "<%= current_user.login %>",
@@ -113,5 +137,9 @@
 	// 禁止回车提交表单
 	$(".shop_info .modify").bind("click", function(){
 		$(".shop_info .shop_auth").submit();
+	})
+
+	new AddressEditView({
+		el: "div.address"
 	})
 </script>

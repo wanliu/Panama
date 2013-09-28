@@ -29,16 +29,16 @@ class Address < ActiveRecord::Base
 
   validate :valid_address_uniqueness?
 
-
   private
   def valid_address_uniqueness?
     if Address.where("
+      id<>? and
       road=? and
       province_id=? and
       city_id=? and
       area_id=? and
       contact_name=? and
-      contact_phone=? and id<>?", road, province_id,
+      contact_phone=?", road, province_id,
       city_id, area_id, contact_name, contact_phone, id).first.present?
       errors.add(:province_id, "地址已经存在了！")
     end
