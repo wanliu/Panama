@@ -55,6 +55,11 @@ class Category < ActiveRecord::Base
     node.descendants.include?(self)
   end
 
+  def self.descendants(ancestries)
+    wh = ancestries.map{|anc| "categories.ancestry like '#{anc}%' or categories.ancestry='#{anc}'"}.join(" or ")
+    where(wh)
+  end
+
   def indent
     parent_indent = self.parent.nil? ? -1 : self.parent.indent
     parent_indent+=1
@@ -71,4 +76,3 @@ class Category < ActiveRecord::Base
     .where("c.ancestry is NULL and not categories.ancestry is NULL")
   end
 end
-

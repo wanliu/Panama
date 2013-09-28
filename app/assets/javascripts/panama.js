@@ -40,7 +40,7 @@
 //= require ask_buy
 //= require bootstrap-editable
 //= require activity
-
+//= require addresses
 
 root = window || this;
 
