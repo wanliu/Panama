@@ -3,8 +3,8 @@
   <section class="widget">
     <div class="body">
       <ul id="activity-category" class="nav nav-tabs activity-category" >
-        <li>
-            <a href='#' ><%=icon 'eye-open' %> </a>
+        <li class='active'>
+            <a href='/' ><%=icon 'eye-open' %> </a>
         </li>
       </ul>
     </div>
@@ -43,7 +43,8 @@
         new ActivitiesView({
             el: '#activities'
         })
-        var load_view = new LoadActivities({
+
+        new LoadActivities({
             el: $('.activities_panel')
         })
 
@@ -64,10 +65,7 @@
         })
 
         new CatalogViewList({
-          el: $("#activity-category"),
-          search: function(data){
-            load_view.reset_fetch(data)
-          }
+          el: $("#activity-category")
         })
 
         $("#category-sidebar .second_class_categories a")

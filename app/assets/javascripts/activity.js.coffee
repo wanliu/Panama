@@ -223,14 +223,17 @@ class ShopProductViewTemplate extends Backbone.View
 class ActivityViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("##{@model.activity_type}-preview-template").html())
+    @model.description = @model.sort[0]
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
     @
 
+
 class AskBuyViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("#ask_buy-preview-template").html())
+    @model.describe = @model.sort[0]
     @$el = $(@template.render(@model)) if @template
     if @model.status == 1
       $(".notify", @$el).html("已经有商家参与")
@@ -339,6 +342,10 @@ class LoadActivities extends InfiniteScrollView
   msg_el: ".scroll-load-msg",
   sp_el: "#activities",
   fetch_url: "/search"
+
+  initialize: (options) ->
+    super options
+    $(window).bind("reset_search", _.bind(@reset_fetch, @))
 
   add_one: (c) ->
     $(window).trigger("search_result:append", c)
