@@ -1,6 +1,6 @@
 class CatalogController < ApplicationController
   layout  "category"
-  
+
   def index
       @catalogs = Catalog.all
       respond_to do |format|
@@ -31,13 +31,7 @@ class CatalogController < ApplicationController
   end
 
   def categories_id
-    # ancestry_ids = Catalog.find(params[:id]).categories.pluck("ancestry")
-    # @categories = Category.descendants(ancestry_ids)
-    categories = Catalog.find(params[:id]).categories
-    @category_ids = []
-    categories.map { |category|
-      @category_ids |= Category.find(category.id).subtree_ids
-    }
+    @category_ids = Catalog.find(params[:id]).category_ids
     respond_to do |format|
       format.html
       format.json { render json: @category_ids }

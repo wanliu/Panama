@@ -11,7 +11,7 @@ class Activity < ActiveRecord::Base
   scope :access,lambda{ where(:status => statuses[:access]) }
   scope :rejected,lambda{ where(:status => statuses[:rejected]) }
 
-  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title, 
+  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
                   :description, :like, :participate, :author_id, :status, :rejected_reason
 
   belongs_to :shop_product
@@ -33,7 +33,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :author
 
   validate :validate_update_access?, :on => :update
-  
+
   define_graphical_attr :photos, :handler => :default_photo
 
   before_create :init_data
@@ -161,13 +161,11 @@ class Activity < ActiveRecord::Base
       :shop_product_id  => shop_product_id,
       :description    => description,
       :price          => price,
-      :start_time_ms  => start_time.to_f,
       :start_time     => start_time,
       :end_time       => end_time,
       :participate    => participate,
       :status      => status,
       :like        => like,
-      :score       => sort_score,
       :created_at  => created_at,
       :updated_at  => updated_at,
       :author => {

@@ -3,8 +3,8 @@
   <section class="widget">
     <div class="body">
       <ul id="activity-category" class="nav nav-tabs activity-category" >
-        <li>
-          <a href='#' ><%=icon 'eye-open' %> </a>
+        <li class='active'>
+            <a href='/' ><%=icon 'eye-open' %> </a>
         </li>
       </ul>
     </div>
@@ -39,52 +39,41 @@
 </script>
 
 <script type="text/javascript">
-  $(function(){
-    new ActivitiesView({
-      el: '#activities'
-    })
+    $(function(){
+        new ActivitiesView({
+            el: '#activities'
+        })
 
-    var load_view = new LoadActivities({
-      el: $('.activities_panel')
-    })
+        var load_view = new LoadActivities({
+            el: $('.activities_panel')
+        })
 
-    new ActivityPreview({
-      el: $("#activities")
-    })
+        new ActivityPreview({
+          el: $("#activities")
+        })
 
-    new AskBuyPreview({
-      el: $("#activities")
-    })
+        new AskBuyPreview({
+          el: $("#activities")
+        })
 
-    new ShopProductPreview({
-      el: $("#activities")
-    })
+        new ShopProductPreview({
+          el: $("#activities")
+        })
 
-    new ProductPreview({
-      el: $("#activities")
-    })
-
-    new CatalogViewList({
-      el: $("#activity-category"),
-      search: function(data){
-        load_view.reset_fetch(data)
-      }
-    })
-
-    $("#category-sidebar .second_class_categories a")
-      .attr("href", "#")
-      .on("click", function(){
-        $(this).parents(".second_class_categories").hide()
-        category_id = $(this).attr("data-category_id")
-        $.ajax({
-          url: "/category/"+category_id+"/subtree_ids",
-          type: "GET",
-          dataType: "json",
-          success: function(data){
-            load_view.reset_fetch({ category_id: data })
+        new CatalogViewList({
+          el: $("#activity-category"),
+          search: function(data){
+            load_view.reset_fetch(data)
           }
-        }
-      )
-    });
-  })
+        })
+
+        $("#category-sidebar .second_class_categories a")
+        .attr("href", "#")
+        .on("click", function(){
+          $(this).parents(".second_class_categories").hide()
+          category_id = $(this).attr("data-category_id")
+          load_view.reset_fetch({ category_id: category_id })
+        })
+
+    })
 </script>
