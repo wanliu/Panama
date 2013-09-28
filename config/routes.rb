@@ -24,7 +24,13 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :completing_shop
+  resources :completing_shop do
+    member do
+      match "edit_address", :to => "completing_shop#edit_address"
+      match "update_address", :to => "completing_shop#update_address"
+    end
+  end
+
   resources :user_auths
 
   match "catalog/products"

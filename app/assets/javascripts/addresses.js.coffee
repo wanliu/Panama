@@ -33,6 +33,7 @@ class AddressEditView extends Backbone.View
 				pnotify({text: "修改地址成功！"})
 			error: (data) =>
 				pnotify({text: "请确定地址不为空！"})
+				alert("请确定地址不为空！")
 		)
 		false
 
