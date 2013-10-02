@@ -11,12 +11,12 @@ class SearchController < ApplicationController
   end
 
   def products
-    #_size, _from= params[:limit], params[:offset]
+    _size, _from= params[:limit], params[:offset]
     query = filter_special_sym(params[:q])
     val = query.gsub(/ /, "")
     s = Tire.search ["products", "shop_products", "activities", "ask_buys"] do
-      # from _from
-      # size _size
+      from _from
+      size _size
 
       query do
         boolean do
@@ -96,48 +96,7 @@ class SearchController < ApplicationController
       end
 
       sort("_script" => {
-        :script => "
-          var analyze = function(){
-            this.one_houre = 3600000;
-            this.to_day = new Date();
-            this.to_day_ms = this.to_day.getTime();
-          }
-
-          analyze.prototype.activity = function(){
-            var start_time = new Date(doc.start_time.value),
-                end_time = new Date(doc.end_time.value),
-                total = (doc.like.value * 5) + (doc.participate.value * 100),
-                end_time_ms = end_time.getTime(),
-                start_time_ms = start_time.getTime();
-
-            if(total<=0) total = 1;
-            if(doc.status.value==1){
-              if(start_time > this.to_day){
-                return total/((start_time_ms-to_day_ms)/this.one_houre);
-              }else if(start_time < this.to_day && end_time < this.to_day){
-                return total/((this.to_day_ms-end_time_ms)/this.one_houre);
-              }else{
-                return total/((this.to_day_ms-start_time_ms)/this.one_houre);
-              }
-            }else{
-              return 0.01
-            }
-          }
-
-          analyze.prototype.ask_buy = function(){
-            var c = new Date(doc.created_at.value)
-            return 10/((this.to_day_ms - c.getTime())/this.one_houre);
-          }
-
-          analyze.prototype.product = function(){
-            return 0.0001;
-          }
-
-          analyze.prototype.shop_product = function(){
-            return 0.001;
-          }
-          an = new analyze();
-          an[doc._type.value]();",
+        :script => "global_sort",
         :type   => "number",
         :lang   => "js",
         :order  => "desc"

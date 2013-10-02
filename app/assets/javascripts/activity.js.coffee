@@ -2,13 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-#= require jquery
-#= require backbone
-#= require lib/hogan
 #= require ask_buy_preview
 #= require product_preview
 #= require shop_products
 #= require lib/infinite_scroll
+#= require_tree ./activities
 
 root = window || @
 
@@ -223,7 +221,6 @@ class ShopProductViewTemplate extends Backbone.View
 class ActivityViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("##{@model.activity_type}-preview-template").html())
-    @model.description = @model.sort[0]
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
@@ -233,7 +230,6 @@ class ActivityViewTemplate extends Backbone.View
 class AskBuyViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("#ask_buy-preview-template").html())
-    @model.describe = @model.sort[0]
     @$el = $(@template.render(@model)) if @template
     if @model.status == 1
       $(".notify", @$el).html("已经有商家参与")
