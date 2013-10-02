@@ -53,13 +53,15 @@
 					<div class="span7 input_locate">
 						<%= f.input :company_name, label: '营业店名' %>
 						<%#= f.input :address_id, label: '营业地址' %>
-						<% address = @address || Address.new %>
+						<% address = current_user.user_checking.address || Address.new %>
 						<div data-id="<%= address.id %>" class="control-group string required address">
+							<div class="hide">
+								<%= f.input :address_id, input_html: { value: address.id }  %>
+							</div>
 							<%= f.label :address_id, wrapper: :inline_label %>
 							<div class="controls">
 								<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
 								<a class="btn" data-toggle="modal" href="<%= edit_address_completing_shop_path %>" data-target="#edit_address">编辑</a>
-								<%= f.input_field :address_id, :class => :hide  %>
 
 								<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 									<div class="modal-header">

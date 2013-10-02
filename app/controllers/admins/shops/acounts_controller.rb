@@ -21,7 +21,7 @@ class Admins::Shops::AcountsController < Admins::Shops::SectionController
 		@address = current_user.user_checking.address
 		@address.update_attributes(params[:address])
 		if @address.valid?
-			render json: { address: @address.address_only }
+			render json: { id: @address.id, address: @address.address_only }
 		else
 			render json: {}, :status => 403
 		end
