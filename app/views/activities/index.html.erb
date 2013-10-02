@@ -4,7 +4,7 @@
     <div class="body">
       <ul id="activity-category" class="nav nav-tabs activity-category" >
         <li class='active'>
-            <a href='/' ><%=icon 'eye-open' %> </a>
+          <a href='/' ><%=icon 'eye-open' %> </a>
         </li>
       </ul>
     </div>
@@ -57,6 +57,10 @@
         })
 
         new ShopProductPreview({
+          el: $("#activities")
+        })
+
+        new ProductPreview({
           el: $("#activities")
         })
 
