@@ -19,7 +19,7 @@ Panama::Application.routes.draw do
 
   resources :yellow_page do
     collection do 
-      get :search, :to => "yellow_page#search"
+      post :search, :to => "yellow_page#search"
     end
   end
 

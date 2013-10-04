@@ -27,7 +27,7 @@ class YellowInfoPreview extends Backbone.View
 		@flag = "out"
 		setTimeout () =>
 			@dispear()
-		, 2000
+		, 3000
 
 	change_status: () ->
 		@flag = "in"

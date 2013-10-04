@@ -1,5 +1,5 @@
 <div class="address-panel"> 
-<%= simple_form_for :address, :remote => true, :url => search_yellow_page_index_path, :html => { :class => 'form-horizontal'} do |address_form| %>
+<%= simple_form_for :address, :remote => true, :url => search_yellow_page_index_path, :html => { :class => 'form-horizontal',:id => locals[:id] } do |address_form| %>
     <label class="chosen optional control-label" for="address" style="padding-right:10px;">选择省,市,县</label> 
     <div class="controls ">
       	<div class="control-group row">
@@ -8,7 +8,7 @@
                      :children => :city_id,
                      :object => @address,
                      :wrapper => :inline,
-                     :input_html => { class: "span12", :id => locals[:id]+"0"},
+                     :input_html => { class: "span12"},
                      :wrapper_html => { class: "span3"},
                      :collection => get_city %>
 
@@ -18,7 +18,7 @@
                      :target => :province,
                      :object => @address,
                      :wrapper => :inline,
-                     :input_html => { class: "span12", :id => locals[:id]+"1"},
+                     :input_html => { class: "span12"},
                      :wrapper_html => { class: "span3"},
                      :collection_url => "/city/" %>
 
@@ -27,11 +27,17 @@
                      :object => @address,
                      :target => :city,
                      :wrapper => :inline,
-                     :input_html => { class: "span12", :id => locals[:id]+"2"},
+                     :input_html => { class: "span12"},
                      :wrapper_html => { class: "span3 "},
                      :collection_url => "/city/" %>
         <%= address_form.error :province_id %>
-        <input type="button" class="btn" value="确定"/>
+        <button  class="btn">确定</button>
+        <%= address_form.input  :type,
+                                :as => :hidden,
+                                :input_html => { 
+                                    :value => locals[:id]
+                                },
+                                :wrapper_html => {class: "hidden" } %>
         </div> 
     </div>
 <% end %>
