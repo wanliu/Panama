@@ -8,7 +8,7 @@
                      :children => :city_id,
                      :object => @address,
                      :wrapper => :inline,
-                     :input_html => { class: "span12"},
+                     :input_html => { class: "span12", form_id: locals[:id] },
                      :wrapper_html => { class: "span3"},
                      :collection => get_city %>
 
@@ -18,7 +18,7 @@
                      :target => :province,
                      :object => @address,
                      :wrapper => :inline,
-                     :input_html => { class: "span12"},
+                     :input_html => { class: "span12", form_id: locals[:id] },
                      :wrapper_html => { class: "span3"},
                      :collection_url => "/city/" %>
 
@@ -27,7 +27,7 @@
                      :object => @address,
                      :target => :city,
                      :wrapper => :inline,
-                     :input_html => { class: "span12"},
+                     :input_html => { class: "span12", form_id: locals[:id] },
                      :wrapper_html => { class: "span3"},
                      :collection_url => "/city/" %>
         <%= address_form.error :province_id %>
