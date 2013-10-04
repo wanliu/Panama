@@ -349,7 +349,7 @@ zh-CN:
         shop_url: 商店URL
         shop_summary: 商店简介
         company_name: 公司名
-        company_address: 公司地址
+        address: 公司地址
         company_license: 营业执照
         company_license_photo: 营业执照图片
         ower_shenfenzheng_number: 身份证号
