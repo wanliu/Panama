@@ -1,3 +1,13 @@
 // Place all the styles related to the shop_products controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.shop_product_dialog{
+
+	form.product{
+		.shop-product-product, .send-product-price, .star{
+			padding-top: 5px;
+			margin-bottom: 5px;
+		}
+	}
+}
