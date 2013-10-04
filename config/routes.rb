@@ -202,7 +202,11 @@ Panama::Application.routes.draw do
       end
     end
     resources :courage
-    resources :focus
+    resources :focus do
+      member do
+        post 'join'
+      end
+    end
     resources :package
     resources :score
   end

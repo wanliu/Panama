@@ -40,6 +40,10 @@ class Activities::FocusController < Activities::BaseController
     end
   end
 
+  def join
+
+  end
+
   private
   def parse_time!(activity_params)
     [:start_time, :end_time].each do |field|
