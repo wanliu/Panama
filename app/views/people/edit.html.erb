@@ -1,18 +1,19 @@
+<% active_section :person_info %>
 <div class='row-fluid user_info'>
-	<div class='span8 widget'>
-		<div class="paddings">
-			<%= render  :partial => "people/base/user_info",
-		:locals => { :url => "/user_checkings/update_user_auth" } %>
-			<input type="button" class="modify pull-right btn btn-primary" value="修改">
-		</div>
-		<div class="paddings">
-			<%= render :partial => "people/user_login_info" %>
-		</div>
+  <div class='span8 widget'>
+    <div class="paddings">
+      <%= render  :partial => "people/base/user_info",
+    :locals => { :url => "/user_checkings/update_user_auth" } %>
+      <input type="button" class="modify pull-right btn btn-primary" value="修改">
+    </div>
+    <div class="paddings">
+      <%= render :partial => "people/user_login_info" %>
+    </div>
 </div>
 
 <script type="text/javascript">
-	$("#user_auth_ower_shenfenzheng_number").attr("readOnly","readOnly");
-	$(".user_info .modify").bind("click",function(){
-		$(".user_info .user_auth").submit();
-	})
+  $("#user_auth_ower_shenfenzheng_number").attr("readOnly","readOnly");
+  $(".user_info .modify").bind("click",function(){
+    $(".user_info .user_auth").submit();
+  })
 </script>
