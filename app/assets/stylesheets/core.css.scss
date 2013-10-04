@@ -1071,3 +1071,25 @@ h2 small {
 .error .chzn-container-single .chzn-single{
 	border: 1px solid #b94a48;
 }
+
+.dialog-panel{
+	.activity-auction, .activity-focus{
+
+		.modal-body{
+			.describe{
+				word-wrap:break-word;
+				margin-left:10px;
+			}
+		}
+
+		.modal-footer{
+			.reply_form{
+				.message{
+					textarea{
+						max-width:710px;
+					}
+				}
+			}
+		}
+	}
+}

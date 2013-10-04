@@ -1,38 +1,42 @@
-<div class="container">
-  <div class="row-fluid ">
+<div class="container activity-auction">
+  <div class="row-fluid">
     <div class="offset1 span7">
       <!-- 主展示框 -->
       <div id="main-model" class="dialog">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3>{{title}}</h3>
+          <h3><%=activity.title %></h3>
         </div>
         <div class="modal-body main-show">
           <div class='picture'>
-            <img class="preview b-{{id}}" src="{{url}}" />
+            <img class="preview" src="<%=activity.photos.default %>" />
           </div>
           <h4 class="right_bottom2 animate1 fadeInRight">
-            原价: <span>{{price}}</span>
+            原价: <span><%=activity.price %></span>
           </h4>
           <h4 class="right_bottom1 animate2 fadeInRight">
             现价: <span><%= activity.activity_price %></span>
           </h4>
           <h4>商品描述：</h4>
-          <span style="word-wrap:break-word;margin-left:10px;">{{description}}</span>
+          <span class='describe'>
+            <%= activity.description %>
+          </span>
         </div>
         <div class="modal-footer">
           <div class="big_comments_and_reply">
 
             <div class="comments">
-              {{#comments}}
-                <div class="comment">
-                  <img class='people-image' src="{{ user.photos.header }}">
-                  <span class='author-name'>
-                    <a href='/people/{{user.login}}'>{{ user.login }}</a>
-                  </span>
-                  <div class="message">{{{ content_html }}}</div>
-                </div>
-              {{/comments}}
+              <% activity.comments.each do |c| %>
+              <div class="comment">
+                <img class='people-image' src="<%=c.user.photos.header %>">
+                <span class='author-name'>
+                  <a href='/people/<%=c.user.login %>'>
+                    <%=c.user.login %>
+                  </a>
+                </span>
+                <div class="message"><%=raw c.content_html %></div>
+              </div>
+              <% end %>
             </div>
             <div class="reply_form">
               <div class='user-info'>
@@ -42,7 +46,7 @@
                 </a>
               </div>
               <div class='message'>
-                <textarea name='message' placeholder="发表评论..." style="max-width:710px;"></textarea>
+                <textarea name='message' placeholder="发表评论..."></textarea>
               </div>
               <button class="submit-comment disabled btn btn-danger">评论</button>
             </div>
@@ -54,10 +58,10 @@
     <div class="span3">
       <div class="dialog" id="activity-actions">
         <div class="modal-body">
-          <img class="author_image" src={{author.photos.header}} />
-          <h4>{{author.login}}</h4>
-          <p>关注 55</p>
-          <p>粉丝 100</p>
+          <img class="author_image" src="<%=activity.author.photos.header %>"  />
+          <h4><%= activity.author.login %></h4>
+          <p>关注 <%= activity.author.followings.count %></p>
+          <p>粉丝 <%= activity.author.followers.count %></p>
         </div>
         <div class="modal-footer">
         </div>
@@ -74,21 +78,21 @@
           </div>
           <div class="modal-footer">
             <div class="btn-group">
-              {{#liked}}
+            <% if activity.user_liked?(current_user) %>
               <a class="btn unlike-button active" href="#">取消喜欢</a>
-              <a class="btn like-count active" href="#">{{like}}{{^like}}0{{/like}}</a>
-              {{/liked}}
-              {{^liked}}
+            <% else %>
               <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
-              <a class="btn like-count" href="#">{{like}}{{^like}}0{{/like}}</a>
-              {{/liked}}
+            <% end %>
+            <a class="btn like-count active" href="#"><%=activity.like %></a>
             </div>
             <div class="btn-group">
               <% if activity.start_sale? %>
               <button class="btn btn-danger" type="submit" name="join">
                 <%= icon(:'shopping-cart', :white) + " 参与" %>
               </button>
-              <a class="btn btn-danger partic-button" href="#">{{participate}}{{^participate}}0{{/participate}}</a>
+              <a class="btn btn-danger partic-button" href="#">
+                <%=activity.participate %>
+              </a>
               <% end %>
             </div>
           </div>
