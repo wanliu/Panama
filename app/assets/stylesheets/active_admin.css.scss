@@ -101,7 +101,7 @@ body.system_categories{
 }
 
 .adjust_activities{
-  #activity{ 
+  #activity{
     margin: 0 auto 20px;
     padding:5px;
     border-top: 1px solid #ddd;
@@ -119,7 +119,7 @@ body.system_categories{
   }
   #calendar{
     & > table:first-child{
-      td{border:0px;} 
+      td{border:0px;}
     }
     td{ border: 1px #ddd solid; }
     .fc-button{
@@ -142,7 +142,7 @@ body.system_categories{
     position: absolute;
     width: 250px;
     max-width: 400px;
-    text-align: left; 
+    text-align: left;
     padding: 4px;
     border: #87CEEB solid 7px;
     border-radius: 5px;
@@ -150,7 +150,7 @@ body.system_categories{
     z-index: 1000;
     span{
       font-size: 16px;
-    } 
+    }
   }
 }
 .formtastic{
@@ -162,3 +162,9 @@ body.system_categories{
 }
 table.index_table td{ vertical-align: middle !important; text-align: center;}
 table.index_table th{ text-align: center !important; }
+
+#activity_start_time_input, #activity_end_time_input{
+  select{
+    width: auto;
+  }
+}

@@ -111,6 +111,18 @@ class Activity < ActiveRecord::Base
     { :wait => 0, :access => 1, :rejected => 2 }
   end
 
+  def user_liked?(user)
+    user_id = user
+    user_id = user.id if user.kind_of?(User)
+    likes.exists?(["users.id=?", user_id])
+  end
+
+  def user_participated?(user)
+    user_id = user
+    user_id = user.id if user.kind_of?(User)
+    participates.exists?(["users.id=?", user_id])
+  end
+
   def start_sale?
     if Activity.statuses[:access] == status
       if start_time < DateTime.now
@@ -183,8 +195,10 @@ class Activity < ActiveRecord::Base
       },
       :category    => {
         :id        => shop_product.category.id,
-        :name        => shop_product.category.name
-      }
+        :name      => shop_product.category.name
+      },
+      :participate_ids => participates.pluck("users.id"),
+      :like_ids => likes.pluck("users.id")
     }.to_json
   end
   private

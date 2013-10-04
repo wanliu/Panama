@@ -9,6 +9,33 @@ class Activities::AuctionController < Activities::BaseController
     end
   end
 
+  def join
+    @activity = Activity.find_by(:id => params[:id], :activity_type => :auction)
+    @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
+    @transaction.items.build({
+      :product_id => @activity.shop_product.product_id,
+      :amount => params[:product_item][:amount],
+      :title => @activity.title,
+      :price => @activity.activity_price,
+      :buy_state => :guarantee,
+      :shop_id => @activity.shop_id,
+      :user_id => current_user.id
+    })
+    @transaction.items.each{|item| item.update_total }
+    @activity.activities_participates.build(:user_id => current_user.id)
+    respond_to do |format|
+      if @transaction.save
+        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
+        format.html{
+          redirect_to person_transactions_path(current_user.login),
+                    notice: 'Transaction was successfully created.'
+        }
+      else
+        format.js{ render "/activities/error_join" }
+      end
+    end
+  end
+
   def create
     slice_options = [:shop_product_id, :price, :start_time, :end_time, :description, :attachment_ids,:title]
     activity_params = params[:activity].slice(*slice_options)
@@ -42,14 +69,14 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   private
-    def parse_time!(activity_params)
-      [:start_time, :end_time].each do |field|
-        unless activity_params[field].blank?
-          date = Date.strptime(activity_params[field], '%m/%d/%Y')
-          activity_params[field] = Time.zone.parse(date.to_s)
-        end
+  def parse_time!(activity_params)
+    [:start_time, :end_time].each do |field|
+      unless activity_params[field].blank?
+        date = Date.strptime(activity_params[field], '%m/%d/%Y')
+        activity_params[field] = Time.zone.parse(date.to_s)
       end
     end
+  end
 end
 
 

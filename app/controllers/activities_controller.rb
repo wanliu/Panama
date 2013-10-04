@@ -65,33 +65,6 @@ class ActivitiesController < ApplicationController
     @activities = Activity.access.where('start_time between ? and ?', date, date+1.day)
   end
 
-  def join
-    @activity = Activity.find(params[:activity][:id])
-    @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
-    @transaction.items.build({
-      :product_id => @activity.shop_product.product_id,
-      :amount => params[:product_item][:amount],
-      :title => @activity.title,
-      :price => @activity.activity_price,
-      :buy_state => :guarantee,
-      :shop_id => @activity.shop_id,
-      :user_id => current_user.id
-    })
-    @transaction.items.each{|item| item.update_total }
-    @activity.activities_participates.create(:user_id => current_user.id)
-    respond_to do |format|
-      if @transaction.save
-        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
-        format.html{
-          redirect_to person_transactions_path(current_user.login),
-                    notice: 'Transaction was successfully created.'
-        }
-      else
-        format.js{ render "error_join" }
-      end
-    end
-  end
-
   # GET /activities/new
   # GET /activities/new.json
   def new

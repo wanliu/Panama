@@ -54,8 +54,7 @@ class ActivityView extends Backbone.View
       @delegateEvents()
 
   render: () ->
-    tpl = Hogan.compile(@template)
-    tpl.render(@model.attributes)
+    @template
 
   modal: () ->
     $("body").addClass("noScroll")
