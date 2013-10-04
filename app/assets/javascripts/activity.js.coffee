@@ -2,13 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-#= require jquery
-#= require backbone
-#= require lib/hogan
 #= require ask_buy_preview
 #= require product_preview
 #= require shop_products
 #= require lib/infinite_scroll
+#= require_tree ./activities
 
 root = window || @
 
@@ -228,6 +226,7 @@ class ActivityViewTemplate extends Backbone.View
   render: () ->
     @
 
+
 class AskBuyViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("#ask_buy-preview-template").html())
@@ -339,6 +338,11 @@ class LoadActivities extends InfiniteScrollView
   msg_el: ".scroll-load-msg",
   sp_el: "#activities",
   fetch_url: "/search"
+
+  initialize: (options) ->
+    super options
+    $(window).bind "reset_search", (e, data) =>
+      @reset_fetch(data)
 
   add_one: (c) ->
     $(window).trigger("search_result:append", c)

@@ -1,5 +1,4 @@
 
-
 root = window || @
 
 class DependSelectView extends Backbone.View
@@ -23,11 +22,13 @@ class DependSelectView extends Backbone.View
 
 	callback: (data) ->
 		strHtml = "<option value=''>--请选择--</option>"
-		strHtml += "<option value='"+num["id"]+"'>"+num["name"]+"</option>" for num in data
+		_.each data, (num) =>
+			strHtml += "<option value='#{num["id"]}'>#{num["name"]}</option>"
 		@el.html(strHtml)
 
 	reset: () ->
 		$("."+@children).data().depend.el.html("") if this.children != ""
 		$("."+@children).data().depend.reset() if $("."+@children).data().depend.children != ""
+
 
 root.DependSelectView = DependSelectView

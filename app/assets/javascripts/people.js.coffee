@@ -24,7 +24,6 @@
 #= require people/transaction_refund
 #= require people/transaction_delay_sign
 #= require people/transaction_view
-#= require people/addresses
 #= require lib/transaction_bubbling
 #= require lib/state_progress
 #= require lib/attachment_upload

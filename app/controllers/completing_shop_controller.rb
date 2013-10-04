@@ -34,6 +34,26 @@ class CompletingShopController < Wicked::WizardController
     end
   end
 
+  def edit_address
+    @address = current_user.user_checking.address || Address.new
+    render layout: false
+  end
+
+  def update_address
+    @address = current_user.user_checking.address
+    if @address.blank?
+      current_user.user_checking.address = @address = Address.create(params[:address])
+    else
+      @address.update_attributes(params[:address])
+    end
+
+    if @address.valid?
+      render json: { id: @address.id, address: @address.address_only }
+    else
+      render json: {}, :status => 403
+    end
+  end
+
   private
   def save_industry_type
     @user_checking.update_attributes(params[:user_checking])

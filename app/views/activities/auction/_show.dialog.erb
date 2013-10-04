@@ -64,9 +64,8 @@
       </div>
 
       <div class="dialog" id="purchase-forms">
-        <%= simple_form_for product_item, :url => join_activity_path, :remote => true do |f| %>
+        <%= simple_form_for product_item, :url => join_activities_auction_path(activity), :remote => true do |f| %>
           <div class="modal-body">
-            <%= hidden_field 'activity', 'id', :value => activity.id %>
             <%= f.label :price %>
             <input type='text' class='span12' value="<%= activity.activity_price %>"  readonly="true" />
             <%= f.input :amount, input_html: {
