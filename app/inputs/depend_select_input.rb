@@ -1,7 +1,6 @@
 class DependSelectInput < SimpleForm::Inputs::CollectionSelectInput
 
   def input
-    debugger
     isif = reflection.blank?
     strID = isif ? "" : "_id"
     url = input_options[:collection_url] || ""
