@@ -189,7 +189,6 @@ Panama::Application.routes.draw do
       post 'like'
       post 'unlike'
       post 'to_cart'
-      post 'join'
     end
     collection do
       get 'tomorrow'
@@ -197,7 +196,11 @@ Panama::Application.routes.draw do
   end
 
   namespace :activities do
-    resources :auction
+    resources :auction do
+      member do
+        post 'join'
+      end
+    end
     resources :courage
     resources :focus
     resources :package
@@ -363,6 +366,7 @@ Panama::Application.routes.draw do
       match "complete", :to => "shops/transactions#complete"
       match "shop_info", :to => "shops/acounts#shop_info"
       get "edit_address", :to => "shops/acounts#edit_address"
+      post "create_address", :to => "shops/acounts#create_address"
       put "update_address", :to => "shops/acounts#update_address"
       match "bill_detail", :to => "shops/acounts#bill_detail"
 

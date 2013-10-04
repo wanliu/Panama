@@ -14,7 +14,7 @@
             <div class="span5 preview">
               <%= image_tag product.photos.preview, :id => 'zoom_01', "data-zoom-image" => "http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg" %>
               <script type="text/javascript">
-              $("#zoom_01").elevateZoom();
+                //$("#zoom_01").elevateZoom();
               </script>
             </div>
             <div class="span7 property">
@@ -31,15 +31,15 @@
                 <hr>
                   <%= simple_form_for ProductItem.new,
                     :url => person_transactions_path(current_user),
-                    :html => {:class => 'form-horizontal' } do |f| %>
+                    :html => {:class => 'form-horizontal product' } do |f| %>
                     <input type='hidden' value="<%=@shop_product.id %>" name="shop_product_id" />
                     <div class="control-group">
                       <label class="control-label" for="inputEmail">
                         价格
                       </label>
                       <div class="controls">
-                        <p class="text-surprised sub-product-price">
-                          <%= product.price %>
+                        <p class="text-surprised shop-product-price">
+                          <%= @shop_product.price %>
                         </p>
                       </div>
                       <label class="control-label" for="inputEmail">
@@ -47,7 +47,7 @@
                       </label>
                       <div class="controls">
                         <p class="text-surprised send-product-price">
-                          <%= product.price %>
+                          10
                         </p>
                       </div>
                       <label class="control-label" for="inputEmail">

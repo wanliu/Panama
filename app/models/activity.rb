@@ -183,8 +183,10 @@ class Activity < ActiveRecord::Base
       },
       :category    => {
         :id        => shop_product.category.id,
-        :name        => shop_product.category.name
-      }
+        :name      => shop_product.category.name
+      },
+      :participate_ids => participates.pluck("users.id"),
+      :like_ids => likes.pluck("users.id")
     }.to_json
   end
   private

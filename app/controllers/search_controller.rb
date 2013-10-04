@@ -67,7 +67,7 @@ class SearchController < ApplicationController
     _size, _from, q = params[:limit], params[:offset], (params[:q] || {})
     toDay = DateTime.now.midnight
     conditions = get_coditions(q)
-    s = Tire.search ['activities', 'ask_buys', 'shop_products', 'products'] do
+    s = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
       from _from
       size _size
 
@@ -96,11 +96,11 @@ class SearchController < ApplicationController
       end
 
       sort("_script" => {
-        :script => "global_sort",
+        :script => "doc['score'].value",
         :type   => "number",
         :lang   => "js",
         :order  => "desc"
-      }, "_score" => {})
+      })
     end
     @results = deal_results(s.results)
     respond_to do |format|
