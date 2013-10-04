@@ -1,6 +1,7 @@
 @import "another_bootstrap";
 @import "compass/css3";
 @import "caret";
+@import "lib/notify/pnotify";
 @import "lib/transparent";
 @import "lib/chosen";
 @import "my_cart";
@@ -1009,10 +1010,6 @@ h2 small {
 	}
 }
 
-.m_f_30{
-	margin-left: -30px;
-}
-
 #category-sidebar.affix-top {
  	position: absolute;
  	z-index: 1;
@@ -1068,4 +1065,9 @@ h2 small {
 
 .depend_select {
   width: 90px;
+}
+
+
+.error .chzn-container-single .chzn-single{
+	border: 1px solid #b94a48;
 }

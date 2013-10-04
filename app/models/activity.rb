@@ -7,11 +7,11 @@ class Activity < ActiveRecord::Base
 
   attr_accessor :people_number
 
-  scope :wait,lambda{ where(:status => statuses[:wait]) }
-  scope :access,lambda{ where(:status => statuses[:access]) }
-  scope :rejected,lambda{ where(:status => statuses[:rejected]) }
+  scope :wait, lambda{ where(:status => statuses[:wait]) }
+  scope :access, lambda{ where(:status => statuses[:access]) }
+  scope :rejected, lambda{ where(:status => statuses[:rejected]) }
 
-  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title, 
+  attr_accessible :url, :shop_product_id, :start_time, :end_time, :price, :title,
                   :description, :like, :participate, :author_id, :status, :rejected_reason
 
   belongs_to :shop_product
@@ -33,7 +33,8 @@ class Activity < ActiveRecord::Base
   validates_presence_of :author
 
   validate :validate_update_access?, :on => :update
-  
+  validate :validate_focus?
+
   define_graphical_attr :photos, :handler => :default_photo
 
   before_create :init_data
@@ -142,17 +143,6 @@ class Activity < ActiveRecord::Base
     self.update_attribute(:participate, participate)
   end
 
-  def validate_update_access?
-    if Activity.statuses[:access] == Activity.find(self.id).status
-      errors.add(:status, "已经审核了,不能修改！")
-    end
-  end
-
-  def sort_score
-    t = ((like * 5) + (participate * 100))
-    t = 1 if t <= 0
-    t
-  end
 
   def to_indexed_json
     {
@@ -161,13 +151,11 @@ class Activity < ActiveRecord::Base
       :shop_product_id  => shop_product_id,
       :description    => description,
       :price          => price,
-      :start_time_ms  => start_time.to_f,
       :start_time     => start_time,
       :end_time       => end_time,
       :participate    => participate,
       :status      => status,
       :like        => like,
-      :score       => sort_score,
       :created_at  => created_at,
       :updated_at  => updated_at,
       :author => {
@@ -198,5 +186,20 @@ class Activity < ActiveRecord::Base
         :name        => shop_product.category.name
       }
     }.to_json
+  end
+  private
+  def validate_focus?
+    if activity_type == "focus"
+      if activity_rules.length <= 0
+        errors.add(:people_number, "不能为空！")
+        errors.add(:activity_price, "不能为空！")
+      end
+    end
+  end
+
+  def validate_update_access?
+    if Activity.statuses[:access] == Activity.find(self.id).status
+      errors.add(:status, "已经审核了,不能修改！")
+    end
   end
 end

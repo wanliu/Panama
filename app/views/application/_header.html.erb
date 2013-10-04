@@ -40,30 +40,9 @@
 <script type="text/javascript">
   $(function(){
     $(".save_activity").on('click', function(type){
-      var $a = $(".activity_select>.active");
-      var content_id = $a.find(">a").attr('href')
-      var $form = $(".activity_forms>" + content_id + " form");
+      var $form = $(".activity_forms>.active>form");
 
-      // 验证人数跟价格是否为空，且必须为数字
-      if (content_id == "#focus"){
-        for (var i = 0;i < $(".activity_people_number").length; i++){
-          $($(".activity_people_number")[i].parentElement.parentElement).removeClass("error");
-          $($(".activity_activity_price")[i].parentElement.parentElement).removeClass("error");
-          if ($(".activity_people_number")[i].value == "" || isNaN($(".activity_people_number")[i].value) ){
-            $($(".activity_people_number")[i].parentElement.parentElement).addClass("error");
-            return false;
-          }
-          if ($(".activity_activity_price")[i].value == "" || isNaN($(".activity_activity_price")[i].value) ){
-            $($(".activity_activity_price")[i].parentElement.parentElement).addClass("error");
-            return false;
-          }
-        }
-        $form.submit();
-      }
-
-      if (content_id == "#auction"){
-        $form.submit();
-      }
+      $form.submit();
 
       $form.on("ajax:success", function(){
         $form[0].reset();

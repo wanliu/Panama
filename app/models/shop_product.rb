@@ -38,8 +38,6 @@ class ShopProduct < ActiveRecord::Base
       :created_at  => created_at,
       :price       => price,
       :inventory   => inventory,
-      :score       => 0.1,
-      :start_time_ms => created_at.to_f,
       :updated_at  => updated_at,
       :photos      => {
         :icon         => product.photos.icon,

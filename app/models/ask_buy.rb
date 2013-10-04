@@ -53,8 +53,6 @@ class AskBuy < ActiveRecord::Base
       :describe    => describe,
       :price       => price,
       :amount      => amount,
-      :start_time_ms => created_at.to_f,
-      :score       => 1,
       :status      => status,
       :created_at  => created_at,
       :updated_at  => updated_at,
