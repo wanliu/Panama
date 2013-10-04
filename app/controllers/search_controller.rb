@@ -96,7 +96,7 @@ class SearchController < ApplicationController
       end
 
       sort("_script" => {
-        :script => "doc['score'].value",
+        :script => "global_sort",
         :type   => "number",
         :lang   => "js",
         :order  => "desc"
