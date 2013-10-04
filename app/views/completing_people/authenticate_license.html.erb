@@ -28,6 +28,32 @@
 						<%= f.input :ower_name, label: '真实姓名' %>
 						<%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
 						<%= f.input :phone, label: '联系电话' %>
+						<%= f.input :company_name, label: '营业店名' %>
+						<% address = current_user.user_checking.address || Address.new %>
+						<div data-id="<%= address.id %>" class="control-group string required address">
+							<div class="hide">
+								<%= f.input :address_id, input_html: { value: address.id }  %>
+							</div>
+							<%= f.label :address_id, wrapper: :inline_label %>
+							<div class="controls">
+								<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
+								<a class="btn" data-toggle="modal" href="<%= edit_address_completing_person_path %>" data-target="#edit_address">编辑</a>
+
+								<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										<h3 id="myModalLabel">编辑地址</h3>
+									</div>
+									<div class="modal-body">
+										
+									</div>
+									<div class="modal-footer">
+										<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+										<button class="btn btn-primary edit-button">保存</button>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<br>
@@ -60,6 +86,10 @@
 				input_name: "ower_photo", 
 				photo: "<%= @user_checking.try(:ower_photo) %>"
 			}]
+		})
+
+		new AddressEditView({
+			el: "div.address"
 		})
 	})
 </script>

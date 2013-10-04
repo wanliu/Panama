@@ -22,3 +22,5 @@
         title: 活动名称
       shop_auth:
         address_id: 营业地址
+      user_auth:
+        address_id: 营业地址
