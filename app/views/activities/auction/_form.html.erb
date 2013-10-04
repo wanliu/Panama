@@ -47,20 +47,19 @@
               input_html: { name: 'activity[end_time]' } %>
 
   <script type="text/javascript">
-    var data = <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
-    var activity_view = new ActivityBaseInfoView({
+
+    var activity_view = new ActivityAuctionView({
       el: $(".form_activity_auction"),
       params: {
         url_upload: "<%= attachments_path %>",
         default_img_url: "<%= default_img_url('100x100') %>",
         template: '<%= j render "product_upload" %>',
-        type: "auction",
-        data: data
+        data: <%= @activity.attachments.as_json({version_name: "100x100"}).to_json.html_safe %>
       }
     });
 
-    var shop_product_elem = $(".form_activity_auction .shop_product_id")
-    shop_product_elem.chosenEx({
+    var sp_elem = $(".form_activity_auction .shop_product_id")
+    sp_elem.chosenEx({
       allow_single_deselect : true,
       placeholder_text : "选择一个商品",
       no_results_text : "没有以该关键词开头的商品",

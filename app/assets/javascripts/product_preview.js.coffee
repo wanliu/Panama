@@ -1,6 +1,6 @@
 class window.ProductPreview extends Backbone.View
   events: {
-    'click .product .ask_buy_feture' : 'ask_buy'
+    'click .product .ask_buy_feature' : 'ask_buy'
   }
 
   ask_buy: (event) ->

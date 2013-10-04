@@ -29,11 +29,11 @@ class AddressEditView extends Backbone.View
 			url: @$("form").attr("action"),
 			success: (data) =>
 				@$(".address_input").val(data.address)
+				@$("#shop_auth_address_id").val(data.id)
 				@$("#edit_address").modal('hide')
 				pnotify({text: "修改地址成功！"})
 			error: (data) =>
 				pnotify({text: "请确定地址不为空！"})
-				alert("请确定地址不为空！")
 		)
 		false
 
