@@ -1,37 +1,43 @@
-<div class='shop_product' shop-product-id='{{ id }}' id="shop_product{{ id }}">
+<div class='shop_product' shop-product-id='{{id}}' id="shop_product{{id}}">
   <div class='out-box'>
     <form>
-    <div class='in-box'>
-      {{#photos.avatar}}
-        <img src="{{photos.avatar}}" class="preview a-{{id}}" alt />
-      {{/photos.avatar}}
-    </div>
+      <div class='in-box'>
+        {{#photos}}
+          <img src="{{avatar}}" class="preview a-{{id}}" alt />
+        {{/photos}}
+      </div>
+
       <div class='summary'>
         <h5 class="title">{{name}}</h5>
         <p> 价格 {{price}} </p>
       </div>
+
       <div class='userinfo'>
-        {{#seller.photos.icon}}
-        <img src="{{seller.photos.icon}}" class='author img-circle' alt="Author" />
-        {{/seller.photos.icon}}
+        {{#seller.photos}}
+          <img src="{{icon}}" class='author img-circle' alt="Author" />
+        {{/seller.photos}}
 
         {{#seller.name}}
-        <p>
-          <a href='/shops/{{seller.name}}'>{{seller.name}}</a>
-        </p>
+          <p>
+            <a href='/shops/{{seller.name}}'>{{seller.name}}</a>
+          </p>
         {{/seller.name}}
-        <span>关注 {{participate}}{{^participate}}0{{/participate}}</span>
-        <span class='like-count'>喜欢 {{like}}{{^like}}0{{/like}}</span>
+        <span>
+          关注{{participate}}{{^participate}}0{{/participate}}
+        </span>
+        <span class='like-count'>
+          喜欢
+          {{like}}{{^like}}0{{/like}}
+        </span>
       </div>
-    <div class="buttons">
-      {{#seller}}
-      <%= button_tag class: 'btn btn-danger launch-button buy' do %>
-        <%= icon('shopping-cart') + " 购买" %>
-      <% end %>
-      {{/seller}}
 
-    </div>
+      <div class="buttons">
+        {{#seller}}
+          <%= button_tag class: 'btn btn-danger launch-button buy' do %>
+            <%= icon('shopping-cart') + " 购买" %>
+          <% end %>
+        {{/seller}}
+      </div>
     </form>
-
   </div>
 </div>
