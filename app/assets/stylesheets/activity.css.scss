@@ -3,11 +3,19 @@
 @import "compass/css3";
 @import "lib/transparent";
 
+.activity, .ask_buy, .product {
+  height: 373px;
+}
+
+.shop_product {
+  height: auto;
+}
+
 .activity, .ask_buy, .product, .shop_product {
   // width: 225px;
   margin: 0px 3px 15px 0px;
   padding: 0px;
-  height: 373px;
+  // height: 373px;
   overflow: hidden;
   position: relative;
   z-index: 0;
