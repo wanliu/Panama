@@ -10,16 +10,8 @@
       {{/photos.avatar}}
     </div>
       <div class='summary'>
-        <h4 class="title">{{name}}</h4>
-        <p> 价格 {{price}} </p>
-      </div>
-      <div class='userinfo'>
-        {{#seller.photos.icon}}
-        <img src="{{seller.photos.icon}}" class='author img-circle' alt="Author" />
-        {{/seller.photos.icon}}
+        <h5 class="title">{{name}}</h5>
         <p>暂无卖家</p>
-        <span>关注 {{participate}}{{^participate}}0{{/participate}}</span>
-        <span class='like-count'>喜欢 {{like}}{{^like}}0{{/like}}</span>
       </div>
     <div class="buttons">
       <%= button_tag class: 'btn btn-info launch-button ask_buy_feature', :type => 'button' do %>

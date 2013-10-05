@@ -74,6 +74,27 @@ class SearchController < ApplicationController
       query do
         boolean do
           should do
+            custom_score :script => "global_sort", :lang => :js do
+              filtered do
+                filter :terms, :_type => [:activity, :ask_buy]
+              end
+            end
+          end
+          should do
+            custom_score :script => "0.001" do
+              filtered do
+                filter :term, :_type => :shop_product
+              end
+            end
+          end
+          should do
+            custom_score :script => "0.0001" do
+              filtered do
+                filter :term, :_type => :product
+              end
+            end
+          end
+          should do
             filtered do
               if q[:title].present?
                 val = conditions[:title].gsub(/ /,'')
@@ -93,14 +114,9 @@ class SearchController < ApplicationController
             end
           end
         end
-      end
 
-      sort("_script" => {
-        :script => "global_sort",
-        :type   => "number",
-        :lang   => "js",
-        :order  => "desc"
-      })
+      end
+      sort{ by :_score, :desc }
     end
     @results = deal_results(s.results)
     respond_to do |format|
