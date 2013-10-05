@@ -1,16 +1,16 @@
-<div class="shop_product" shop-product-id="{{id}}" style="display: inline-block">
+<div class='shop_product' shop-product-id='{{id}}' id="shop_product{{id}}">
 	<div class='out-box'>
-		<div class='in-box'>
-			{{#product}}
-			<img src="{{photo_avatar}}" class='preview a-{{id}}' />
-			{{/product}}
-			<div class='summary'>
-				<h5 class="title">
-					{{name}}
-				</h5>
-				<p>{{product.description}}</p>
-				<div class='price'>价格: {{price}}</div>
+		<form>
+			<div class='in-box'>
+				{{#product}}
+					<img src="{{photo_avatar}}" class="preview a-{{id}}" alt />
+				{{/product}}
 			</div>
-		</div>
+
+			<div class='summary'>
+				<h5 class="title">{{name}}</h5>
+				<p> 价格 {{price}} </p>
+			</div>
+		</form>
 	</div>
 </div>

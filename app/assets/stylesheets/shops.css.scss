@@ -1,5 +1,5 @@
-@import "shop_products";
 @import "application";
+@import "shop_products";
 
 .model-popup-backdrop {
   .modal-body {
@@ -8,60 +8,5 @@
 }
 
 .shop_product {
-  // width: 225px;
-	padding: 0px 3px 15px 0px;
-  margin: 0px;
-  overflow: hidden;
-  position: relative;
-
-	.out-box {
-    @include transparent(rgb(51,51,51), 0.4);
-    color: white;
-    .in-box {
-      position: relative;
-      overflow: hidden;
-      padding: 5px;
-      // border-bottom: 1px solid #e7e7e7;
-
-      img.preview{
-        width: 220px;
-        max-width: none;
-        cursor: pointer;
-      }
-
-      .summary{
-
-        .info{
-          margin-right: 40px;
-
-          .name{
-            display: inline-block;
-          }
-        }
-      }
-    }
-  }
+  height: auto;
 }
-
-
-.shop_product_dialog{
-
-  .toolbar{
-
-    ul.dropdown-menu{
-      li{
-        text-align: left;
-      }
-    }
-
-    .buy_manner{
-      input[type='radio']{
-        margin-top: 0px;
-        margin-left: 10px;
-      }
-
-      margin-right: 10px;
-    }
-  }
-}
-

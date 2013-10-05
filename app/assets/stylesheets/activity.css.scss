@@ -19,8 +19,8 @@
   }
 
   .out-box {
-    @include transparent(rgb(51,51,51), 0.4);
     color: white;
+    @include transparent(rgb(51,51,51), 0.4);
 
     form {
       margin: 0px;
@@ -33,7 +33,7 @@
       padding: 5px;
       // border-bottom: 1px solid #e7e7e7;
 
-      .preview {
+      img.preview {
         cursor: pointer;
         min-height: 150px;
       }
