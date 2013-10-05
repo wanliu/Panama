@@ -2,13 +2,15 @@
 	<h3>入驻买家</h3>
 	<div>热门城市：北京 上海 广州 深圳 成都 杭州 南京 天津 武汉</div>
 	<%= render "new_address",locals: {:id => "buyer_user_form"} %>
-	<% @buyer_users.each do |buyer_user| %>
-		<div class='span3 buyer_user user_info' id="<%= buyer_user.id %>">
-			<img src="<%= buyer_user.ower_photos.icon %>" class="user_icon"/>
-			<div  class="pull-right title"> 
-				<div class="name"><a herf="#"><%= buyer_user.try(:user).try(:login) %></a></div>
-				<div class="tel"><i class="icon-phone-sign"></i> <%= buyer_user.try(:phone)%></div>
+	<div class ="wrapper">
+		<% @buyer_users.each do |buyer_user| %>
+			<div class='span3 buyer_user user_info' id="<%= buyer_user.id %>">
+				<img src="<%= buyer_user.ower_photos.icon %>" class="user_icon"/>
+				<div  class="pull-right title"> 
+					<div class="name"><a herf="#"><%= buyer_user.try(:user).try(:login) %></a></div>
+					<div class="tel"><i class="icon-phone-sign"></i> <%= buyer_user.try(:phone)%></div>
+				</div>
 			</div>
-		</div>
-	<% end %>
+		<% end %>
+	</div>
 </div>

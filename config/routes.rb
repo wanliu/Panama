@@ -33,7 +33,7 @@ Panama::Application.routes.draw do
   resources :completing_shop do
     member do
       get "edit_address", :to => "completing_shop#edit_address"
-      put "update_address", :to => "completing_shop#update_address"
+      post "update_address", :to => "completing_shop#update_address"
     end
   end
 

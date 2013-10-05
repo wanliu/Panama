@@ -2,17 +2,19 @@
 	<h3>新入驻成员</h3>
 	<div>热门城市：北京 上海 广州 深圳 成都 杭州 南京 天津 武汉</div>
 	<%= render "new_address" , locals: {:id => "new_user_form"} %>
-	<% @new_users.each do |new_user| %>
-	<div class='span3 new_user user_info' id="<%= new_user.id %>">
-		<% if new_user.service_id == 1 %>
-		     <img src="<%= new_user.ower_photos.icon %>" class="user_icon"/>
-		<% else %>
-			<img src="<%= new_user.shop_photos.icon %>" class="user_icon" />
+	<div class="wrapper">
+		<% @new_users.each do |new_user| %>
+			<div class='span3 new_user user_info' id="<%= new_user.id %>">
+				<% if new_user.service_id == 1 %>
+				     <img src="<%= new_user.ower_photos.icon %>" class="user_icon"/>
+				<% else %>
+					<img src="<%= new_user.shop_photos.icon %>" class="user_icon" />
+				<% end %>
+				<div  class="pull-right title"> 
+					<div class="name"><a herf="#"><%= new_user.try(:user).try(:login) %></a></div>
+					<div class="tel"><i class="icon-phone-sign"></i> <%= new_user.try(:phone)%></div>
+				</div>
+			</div>
 		<% end %>
-		<div  class="pull-right title"> 
-			<div class="name"><a herf="#"><%= new_user.try(:user).try(:login) %></a></div>
-			<div class="tel"><i class="icon-phone-sign"></i> <%= new_user.try(:phone)%></div>
-		</div>
 	</div>
-<% end %>
 </div>

@@ -93,7 +93,8 @@
 		}
 	}
 }
-.address_panel{
-	.hidden{ position: absolute;}
-	.control-group{ margin-bottom: 0px;}
+.address-panel{
+	.controls {
+		.hidden{ position: absolute;}
+	}
 }

@@ -17,9 +17,23 @@
 <script type="text/template" id= "yellow_page_hover_seller_template">
     <%= render "yellow_page/hover_seller_template" %>
 </script>
+
+<script type="text/template" id= "seller_base_template">
+    <%= render "yellow_page/seller_base_template" %>
+</script>
+
+<script type="text/template" id= "buyer_base_template">
+    <%= render "yellow_page/buyer_base_template" %>
+</script>
+
+
+
 <script type="text/javascript">
 	$(function() {
 		new YellowInfoPreviewList({
+			el: $(".yellow_page")
+		})
+		new SearchUserViewList({
 			el: $(".yellow_page")
 		})
 	})

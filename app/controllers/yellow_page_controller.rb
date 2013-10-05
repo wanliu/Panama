@@ -26,6 +26,20 @@ class YellowPageController < ApplicationController
 
 
 	def search
-		debugger
+		p = params[:address]
+		user_checking_ids = Address.where(:targeable_type =>"UserChecking", :province_id => p[:province_id], :city_id => p[:city_id],:area_id => p[:area_id]).pluck("id")
+		if user_checking_ids.length > 0 
+			options ={:id => user_checking_ids }
+			unless p[:type] == "new_user_form"			
+				options.merge({ :service_id => (p[:type] == "seller_user_form" ? 2 : 1) })
+			end			
+			@users = UserChecking.where(options).order("created_at desc").limit(15)
+		else
+			@users = []
+		end
+		respond_to do |format|
+			format.html
+			format.json{ render json: @users}
+		end
 	end
 end

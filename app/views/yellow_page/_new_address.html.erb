@@ -1,5 +1,5 @@
 <div class="address-panel"> 
-<%= simple_form_for :address, :remote => true, :url => search_yellow_page_index_path, :html => { :class => 'form-horizontal',:id => locals[:id] } do |address_form| %>
+<%= simple_form_for :address, :remote => true, :url => search_yellow_page_index_path, :html => { :class => 'form-horizontal address_from_post',:id => locals[:id] } do |address_form| %>
     <label class="chosen optional control-label" for="address" style="padding-right:10px;">选择省,市,县</label> 
     <div class="controls ">
       	<div class="control-group row">
@@ -31,7 +31,7 @@
                      :wrapper_html => { class: "span3 "},
                      :collection_url => "/city/" %>
         <%= address_form.error :province_id %>
-        <button  class="btn">确定</button>
+        <input type="button"  class="btn search_user" value="确定" />
         <%= address_form.input  :type,
                                 :as => :hidden,
                                 :input_html => { 
