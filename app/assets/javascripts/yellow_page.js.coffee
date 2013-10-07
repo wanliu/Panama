@@ -6,50 +6,25 @@ root = window || @
 class YellowInfoPreview extends Backbone.View
 	
 	events: 
-		"mouseover .user_icon" : "delay_get"
-		"mouseout  .user_icon" :  "delay_dispear"
-
-		"mouseenter .yellow_base_info"  : "change_status"
-		"mouseleave  .yellow_base_info" : "dispear"
+		"mouseenter": "load_user_info"
+		"mouseleave": "hide_user_info"
 	
 	initialize: () ->
 		@template1 = Hogan.compile($("#yellow_page_hover_buyer_template").html())
 		@template2 = Hogan.compile($("#yellow_page_hover_seller_template").html())
-		@flag = ""
-
-	delay_get: () ->
-		@flag = "in"
-		setTimeout () =>
-			@load_user_info()
-		, 2000
-
-	delay_dispear: () ->
-		@flag = "out"
-		setTimeout () =>
-			@dispear()
-		, 3000
-
-	change_status: () ->
-		@flag = "in"
 
 	load_user_info: () ->
-		id = @el.id
 		if $(@el).find(".yellow_base_info").length > 0
-			if @flag == "in"
-				$(@el).find(".yellow_base_info").fadeIn("slow")
-			else
-				$(@el).find(".yellow_base_info").fadeOut("slow")
+			@show_user_info()
 		else
 			$.ajax({
 				dataType: "json",
 				type: "get",
-				url: "/yellow_page/"+id,
+				url: "/yellow_page/" + @el.id,
 				success: (user) =>
 					modal = @render(user)
-					if @flag = "in"
-						$(@el).append(modal)
-					else
-						$(@el).append(modal).css("display","none")
+					$(@el).append(modal)
+					@show_user_info()
 			})
 
 	render: (user) =>
@@ -59,18 +34,24 @@ class YellowInfoPreview extends Backbone.View
 			tpl = @template2
 		tpl.render(user)
 
-	dispear: () ->
-		if @flag = "out"
-			$(@el).find(".yellow_base_info").fadeOut("slow")
+	show_user_info: () =>
+		$(".yellow_base_info").stop()
+		$(@el).find(".yellow_base_info").slideDown({
+			speed: "slow",
+			start: () =>
+				_.each $(".yellow_base_info"), (el) =>
+					$(el).hide() unless el == $(@el).find(".yellow_base_info")[0]
+		})
 
-	show: () ->
-		$(@el).show()
+	hide_user_info: () ->
+		$(@el).find(".yellow_base_info").hide()
 
 
 class YellowInfoPreviewList extends Backbone.View
 
 	initialize: () ->
-		_.each $(".user_info"), (el) ->
+		_.each $(".user_info"), (el) =>
 			new YellowInfoPreview({el: el})
+
 
 root.YellowInfoPreviewList = YellowInfoPreviewList
