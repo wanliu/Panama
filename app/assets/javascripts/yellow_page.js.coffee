@@ -10,7 +10,7 @@ class YellowInfoPreview extends Backbone.View
 		"mouseout  .user_icon" :  "delay_dispear"
 
 		"mouseenter .yellow_base_info"  : "change_status"
-		"mouseleave  .yellow_base_info" : "dispear"
+		"mouseleave .yellow_base_info" : "dispear"
 	
 	initialize: () ->
 		@template1 = Hogan.compile($("#yellow_page_hover_buyer_template").html())

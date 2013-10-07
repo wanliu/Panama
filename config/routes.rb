@@ -21,7 +21,8 @@ Panama::Application.routes.draw do
 
   resources :yellow_page do
     collection do 
-      post :search, :to => "yellow_page#search"
+      get :search, :to => "yellow_page#search"
+      get :hot_city_name, :to => "yellow_page#hot_city_name"
     end
   end
 
