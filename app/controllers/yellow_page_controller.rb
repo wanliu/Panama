@@ -3,7 +3,7 @@ class YellowPageController < ApplicationController
 
 	def index
 		@seller_users = UserChecking.where(:checked => true, :service_id => 2)
-		@buyer_users  = UserChecking.where(:service_id => 1)
+		@buyer_users  = UserChecking.where(:checked => true, :service_id => 1)
 		@new_users    =  UserChecking.order('created_at DESC').limit(15)
 
 		@address = Address.new
@@ -52,18 +52,20 @@ class YellowPageController < ApplicationController
 
 
 	def search
+		args = { :targeable_type =>"UserChecking"}
 		if params[:address]
 			p = params[:address]
-			user_checking_ids = Address.where(:targeable_type =>"UserChecking", :province_id => p[:province_id], :city_id => p[:city_id],:area_id => p[:area_id]).pluck("id")
+			args.merge({ :province_id => p[:province_id], :city_id => p[:city_id],:area_id => p[:area_id]})
 		else
 			p = params[:args]
-			user_checking_ids = Address.where(:targeable_type =>"UserChecking",:area_id => p[:area_id]).pluck("id")
+			args.merge({ :area_id => p[:area_id]})
 		end
-		if user_checking_ids.length > 0 
-			options ={:id => user_checking_ids }
-			unless p[:type] == "new_user_form"			
-				options.merge({ :service_id => (p[:type] == "seller_user_form" ? 2 : 1) })
-			end			
+		address_ids = Address.where(args).pluck("targeable_id")
+		if address_ids.length > 0 
+			options = {:id => address_ids }
+			unless p[:type] == "new_user"
+				options.merge!({ :service_id => (p[:type] == "seller_user" ? 2 : 1) })
+			end		
 			@users = UserChecking.where(options).order("created_at desc").limit(15)
 		else
 			@users = []

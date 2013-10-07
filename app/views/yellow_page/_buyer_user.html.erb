@@ -6,7 +6,7 @@
 
 		</span>
 	</div>
-	<%= render "new_address",locals: {:id => "buyer_user_form"} %>
+	<%= render "new_address",locals: {:id => "buyer_user"} %>
 	<div class ="wrapper">
 		<% @buyer_users.each do |buyer_user| %>
 			<div class='span3 buyer_user user_info' id="<%= buyer_user.id %>">

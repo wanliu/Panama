@@ -14,7 +14,10 @@
 		background-color: "";
 	}
 	.base_info{
-		.alert{ margin-right: 20px; margin-left: 20px; }
+		.alert{ 
+			margin-right: 20px; 
+			margin-left: 20px; 
+		}
 		.user_info{
 			position: relative;
 			.user_icon { 
@@ -26,10 +29,10 @@
 			}
 		}
 	}
-	
+
 	.title { 
 		float:left;
-		padding-top:4px; 
+		padding-top:15px; 
 	}
 
 	.tel { 
@@ -115,13 +118,17 @@
 
 .address-panel{
 	.address_from_post{
+		padding-top: 10px;
 		.error{
 			border: 1px solid red;
 		}
-		.search_user{ margin-left: 20px;}
-		padding-top: 10px;
+		.search_user{ 
+			margin-left: 20px;
+		}
 		.controls {
-			.hidden{ position: absolute;}
+			.hidden{ 
+				position: absolute;
+			}
 		}
 		.control-group:first-child div{
 			margin-left: 5px;
@@ -134,8 +141,11 @@
 }
 
 .hot_city{
-	a{ color: white; font-size: 15px;}
 	padding-left: 20px;
+	a{ 
+		color: white; 
+		font-size: 15px;
+	}
 }
 
 

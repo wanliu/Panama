@@ -47,6 +47,7 @@ class SearchUserView extends Backbone.View
 			url: "yellow_page/search",
 			success: (datas) =>
 				@render(datas)
+				new YellowInfoPreviewList({el :@el})
 		})
 		return false
 
@@ -54,7 +55,7 @@ class SearchUserView extends Backbone.View
 		values = $(@el).find("form.address_from_post").serializeArray()
 		data = {}
 		_.each values, (v) -> data[v.name] = v.value
-
+		
 		$.ajax({
 			type: "get",
 			dataType: "json",
@@ -62,6 +63,7 @@ class SearchUserView extends Backbone.View
 			url: "/yellow_page/search"
 			success: (datas) =>
 				@render(datas)
+				new YellowInfoPreviewList({el :@el})
 		})
 
 	render: (datas) =>
