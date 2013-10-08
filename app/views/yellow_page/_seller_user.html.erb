@@ -1,0 +1,25 @@
+<div class='base_info widget span9 seller'>
+	<h3>入驻卖家</h3>
+	<div class="hot_city seller">
+		<strong>热门城市: </strong>
+		<span>
+			
+		</span>
+	</div>
+	<%= render "new_address",locals: {:id => "seller_user"} %>
+	<div class="wrapper">
+		<% @seller_users.each do |seller_user| %>
+			<div class='span3 seller_user  user_info' id="<%= seller_user.id %>">
+				<div>
+					<a href="shops/<%= seller_user.try(:shop_name) %>">
+						<img src="<%= seller_user.shop_photos.icon %>" class="user_icon"/>
+					</a>
+				</div>
+				<div  class="pull-right title"> 
+					<div class="name"><a href="shops/<%= seller_user.try(:shop_name) %>"><%= seller_user.try(:shop_name) %></a></div>
+					<div class="tel"><i class="icon-phone-sign"></i> <%= seller_user.try(:phone)%></div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
