@@ -20,7 +20,6 @@ class Activity < ActiveRecord::Base
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
 
   has_many :activity_rules, autosave: true
-
   has_many :comments, :as => :targeable
   has_many :activities_likes
   has_many :likes, :through => :activities_likes, :source => :user
@@ -32,7 +31,7 @@ class Activity < ActiveRecord::Base
   # validates_associated :product
   validates_presence_of :author
 
-  validate :validate_update_access?, :on => :update
+  validate :validate_update_access?, :on => :update, :except => :update_like
   validate :validate_focus?
 
   define_graphical_attr :photos, :handler => :default_photo
@@ -142,7 +141,7 @@ class Activity < ActiveRecord::Base
 
   def validate_destroy_access?
     if Activity.statuses[:access] == self.status
-      errors.add(:status, "已经审核了,不能删除！")
+      errors.add(:status, "已经审核了，不能删除！")
       return false
     end
   end
@@ -154,7 +153,6 @@ class Activity < ActiveRecord::Base
   def update_participate
     self.update_attribute(:participate, participate)
   end
-
 
   def to_indexed_json
     {
@@ -201,6 +199,7 @@ class Activity < ActiveRecord::Base
       :like_ids => likes.pluck("users.id")
     }.to_json
   end
+
   private
   def validate_focus?
     if activity_type == "focus"
@@ -213,7 +212,7 @@ class Activity < ActiveRecord::Base
 
   def validate_update_access?
     if Activity.statuses[:access] == Activity.find(self.id).status
-      errors.add(:status, "已经审核了,不能修改！")
+      errors.add(:status, "已经审核了，不能修改！")
     end
   end
 end

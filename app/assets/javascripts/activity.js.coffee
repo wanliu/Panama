@@ -38,12 +38,10 @@ class ActivityView extends Backbone.View
 
   initialize: (@options) ->
     _.extend(@, @options)
-    @$backdrop = $("<div class='model-popup-backdrop in' />")
-    @$dialog_panel = $("<div class='dialog-panel'></div>")
+    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+    @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @loadTemplate () =>
-      @$dialog_panel.appendTo("#popup-layout")
-      @$el = $(@render()).appendTo(@$dialog_panel)
-      @$backdrop.appendTo("body")
+      @$el = $(@render()).appendTo(@$dialog)
       #$(window).scroll()
     super
 
@@ -69,7 +67,7 @@ class ActivityView extends Backbone.View
     false
 
   close: () ->
-    @$dialog_panel.remove()
+    @$dialog.remove()
     @$backdrop.remove()
     @unmodal()
 
@@ -88,19 +86,19 @@ class ActivityView extends Backbone.View
       , 100
 
   like: (event) ->
-    @model.url()
-    $.post(@model.url() + "/like")
-    @$('.like-button').replaceWith(@unlike_template)
-    @$('.like-count').addClass("active")
-    @incLike()
+    $.post(@model.url() + "/like", (data) =>
+      @$('.like-button').replaceWith(@unlike_template)
+      @$('.like-count').addClass("active")
+      @incLike()
+    )
     false
 
   unlike: (event) ->
-    @model.url()
-    $.post(@model.url() + "/unlike")
-    @$('.unlike-button').replaceWith(@like_template)
-    @$('.like-count').removeClass("active")
-    @decLike()
+    $.post(@model.url() + "/unlike", (data) => 
+      @$('.unlike-button').replaceWith(@like_template)
+      @$('.like-count').removeClass("active")
+      @decLike()
+    )
     false
 
   incLike: (n = 1) ->
@@ -152,10 +150,10 @@ class ActivityView extends Backbone.View
 class ActivityPreview extends Backbone.View
 
   events:
-    "click .activity .preview"    : "launchActivity"
+    "click .activity .preview"      : "launchActivity"
+    "click .activity .launch-button": "launchActivity"
     "click .activity .like-button"  : "like"
-    "click .activity .unlike-button"  : "unlike"
-    "click .activity .launch-button"  : "launchActivity"
+    "click .activity .unlike-button": "unlike"
 
   like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
   unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
@@ -166,24 +164,23 @@ class ActivityPreview extends Backbone.View
 
   launchActivity: (event) ->
     @load_view(event.currentTarget)
-    @model.fetch success: (model) =>
-      new ActivityView({model: model}).modal()
+    new ActivityView({model: @model}).modal()
     false
 
   like: (event) ->
     @load_view(event.currentTarget)
-    @model.url()
-    $.post(@model.url() + "/like")
-    @$('.like-button').replaceWith(@unlike_template)
-    @incLike()
+    $.post(@model.url() + "/like", (data) =>
+      @$('.like-button').replaceWith(@unlike_template)
+      @incLike()
+    )
     false
 
   unlike: (event) ->
     @load_view(event.currentTarget)
-    @model.url()
-    $.post(@model.url() + "/unlike")
-    @$('.unlike-button').replaceWith(@like_template)
-    @decLike()
+    $.post(@model.url() + "/unlike", (data) =>
+      @$('.unlike-button').replaceWith(@like_template)
+      @decLike()
+    )
     false
 
   incLike: (n = 1) ->

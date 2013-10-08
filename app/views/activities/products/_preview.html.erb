@@ -1,28 +1,28 @@
 <div class='activity' activity-id='<%= activity.id %>' id="activity<%= activity.id %>">
-	<div class='out-box'>
-		<form>
-		<div class='in-box'>
-			<%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
-		</div>
-		<div class='summary'>
-			<h4 class="title"><%= activity.name %></h4>
-			<p>价格 <%= activity.price %> </p>
-			</div>
-		<div class='userinfo'>
-			<%= image_tag activity.seller.photos.icon, :class => [:author, :'img-circle'] %>
-			<p><%= activity.seller.name %></p>
-			<span>参与 <%= activity.participate || 0%> </span>
-			<span class='like-count'>支持 <%= activity.like || 0 %></span>
-		</div>
-		<div class="buttons">
-			<%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
-				<%#= icon(:'shopping-cart') + " 参与" %>
-			<%# end %>
-			<%= link_to '#', class: 'btn btn-danger launch-button' do %>
-				<%= icon('shopping-cart') + " 购买" %>
-			<% end %>
+  <div class='out-box'>
+    <form>
+    <div class='in-box'>
+      <%= image_tag activity.photos.avatar, :class => "preview a-#{activity.id}" %>
+    </div>
+    <div class='summary'>
+      <h4 class="title"><%= activity.name %></h4>
+      <p>价格 <%= activity.price %> </p>
+      </div>
+    <div class='userinfo'>
+      <%= image_tag activity.seller.photos.icon, :class => [:author, :'img-circle'] %>
+      <p><%= activity.seller.name %></p>
+      <span>参与 <%= activity.participate || 0%> </span>
+      <span class='like-count'>支持 <%= activity.like || 0 %></span>
+    </div>
+    <div class="buttons">
+      <%#= link_to_mycart to_cart_activity_path(activity), ".preview.a-#{activity.id}", :class =>'btn btn-danger partic-button' do %>
+        <%#= icon(:'shopping-cart') + " 参与" %>
+      <%# end %>
+      <%= link_to '#', class: 'btn btn-danger launch-button' do %>
+        <%= icon('shopping-cart') + " 购买" %>
+      <% end %>
 
-		</div>
-		</form>
-	</div>
+    </div>
+    </form>
+  </div>
 </div>

@@ -72,12 +72,11 @@
         })
 
         $("#category-sidebar .second_class_categories a")
-        .attr("href", "#")
-        .on("click", function(){
-          $(this).parents(".second_class_categories").hide()
-          category_id = $(this).attr("data-category_id")
-          load_view.reset_fetch({ category_id: category_id })
-        })
-
+          .attr("href", "#")
+          .on("click", function(){
+            $(this).parents(".second_class_categories").hide()
+            category_id = $(this).attr("data-category_id")
+            load_view.reset_fetch({ category_id: category_id })
+          })
     })
 </script>

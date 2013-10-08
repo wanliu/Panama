@@ -1,7 +1,7 @@
+
 class window.ProductPreview extends Backbone.View
-  events: {
+  events: 
     'click .product .ask_buy_feature' : 'ask_buy'
-  }
 
   ask_buy: (event) ->
     try
@@ -17,6 +17,7 @@ class window.ProductPreview extends Backbone.View
       false
     catch error
       false
+
   load_view: (target) ->
     @$el = @el = $(target).parents(".product")
     @id = @el.attr("product-id")

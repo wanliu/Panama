@@ -3,35 +3,45 @@
 @import "compass/css3";
 @import "lib/transparent";
 
+.activity, .ask_buy, .product {
+  height: 373px;
+}
+
+.shop_product {
+  height: auto;
+}
 
 .activity, .ask_buy, .product, .shop_product {
   // width: 225px;
-  padding: 0px 3px 15px 0px;
-  margin: 0px;
+  margin: 0px 3px 15px 0px;
+  padding: 0px;
+  // height: 373px;
   overflow: hidden;
   position: relative;
+  z-index: 0;
 
-  .clock{
+  .clock {
     text-align:right;
     color:red;
     font-size: 18px;
   }
 
   .out-box {
-    @include transparent(rgb(51,51,51), 0.4);
     color: white;
+    @include transparent(rgb(51,51,51), 0.4);
 
     form {
       margin: 0px;
     }
 
     .in-box {
+      height: 230px;
       position: relative;
       overflow: hidden;
       padding: 5px;
       // border-bottom: 1px solid #e7e7e7;
 
-      .preview {
+      img.preview {
         cursor: pointer;
         min-height: 150px;
       }
@@ -44,14 +54,13 @@
         text-decoration: line-through;
         color: #ccc;
         padding: 0 10px 0 10px;
+
         @include border-top-left-radius(10px);
         @include border-bottom-left-radius(10px);
-
         @include transparent($black,0.5);
         h5 {
           margin: 0px;
         }
-
       }
 
       .right_bottom1 {
@@ -61,6 +70,7 @@
         right: 0px;
         color: $red;
         padding: 0 10px 0 10px;
+
         // @include text-shadow(0px 0px 1px rgba(255, 255, 255, 1));
         @include border-top-left-radius(10px);
         @include border-bottom-left-radius(10px);
@@ -69,10 +79,8 @@
         h4 {
           margin: 0px;
         }
-
       }
     }
-
 
     .corner {
       @include transform(rotate(45deg));
@@ -94,15 +102,16 @@
 
     .summary {
       padding: 5px;
+      height: 60px;
+      overflow-y: hidden;
 
-      .describe{
+      .describe {
         word-wrap: break-word;
         margin-bottom: 0px;
       }
     }
 
     .userinfo {
-
       padding: 5px 5px 5px 60px;
 
       .author {
@@ -121,7 +130,6 @@
       .title{
         margin-right: 5px;
       }
-
     }
 
     .comments_and_reply {
@@ -147,17 +155,8 @@
           background: #f0f0f0;
           // height: 30px;
         }
-
       }
     }
-
-
-
-  }
-
-
-  >img:active {
-    margin: 2px;
   }
 
   .buttons {
@@ -166,14 +165,16 @@
     left: 10px;
     display: none;
   }
-  hr {
 
+  hr {
     margin: 5px 0px;
   }
+
   &:hover {
+    // border: 2px solid #ef6060;
+
     .buttons {
       display: block;
     }
   }
-
 }
