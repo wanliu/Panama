@@ -14,7 +14,7 @@ class YellowInfoPreview extends Backbone.View
 		@template2 = Hogan.compile($("#yellow_page_hover_seller_template").html())
 
 	load_user_info: () ->
-		if $(@el).find(".yellow_base_info").length > 0
+		if @$(".yellow_base_info").length > 0
 			@show_user_info()
 		else
 			$.ajax({
@@ -36,15 +36,16 @@ class YellowInfoPreview extends Backbone.View
 
 	show_user_info: () =>
 		$(".yellow_base_info").stop()
-		$(@el).find(".yellow_base_info").slideDown({
+		@$(".yellow_base_info").slideUp()
+		@$(".yellow_base_info").slideDown({
 			speed: "slow",
 			start: () =>
 				_.each $(".yellow_base_info"), (el) =>
-					$(el).hide() unless el == $(@el).find(".yellow_base_info")[0]
+					$(el).hide() unless el == @$(".yellow_base_info")[0]
 		})
 
 	hide_user_info: () ->
-		$(@el).find(".yellow_base_info").hide()
+		@$(".yellow_base_info").hide()
 
 
 class YellowInfoPreviewList extends Backbone.View

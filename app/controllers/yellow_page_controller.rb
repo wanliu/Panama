@@ -1,10 +1,10 @@
 class YellowPageController < ApplicationController
-	 layout "application"
+	layout "application"
 
 	def index
 		@seller_users = UserChecking.where(:checked => true, :service_id => 2)
 		@buyer_users  = UserChecking.where(:checked => true, :service_id => 1)
-		@new_users    =  UserChecking.order('created_at DESC').limit(15)
+		@new_users    = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 
 		@address = Address.new
 		respond_to do |format|
@@ -12,8 +12,7 @@ class YellowPageController < ApplicationController
 			format.json{ render :json => { :seller_users => @seller_users,
 										   :buyer_users => @buyer_users,
 										   :new_users => @new_users,
-										   :address => @address,
-										   :hot_cities => @hot_cities }}
+										   :address => @address }}
 		end
 	end
 
@@ -21,7 +20,6 @@ class YellowPageController < ApplicationController
 		@user = UserChecking.find(params[:id])
 		respond_to do |format|
 		  format.html # show.html.erb
-		  # format.js { render "yellow_page/show" }
 		  format.json { render json: @user }
 		end
 	end
@@ -55,14 +53,14 @@ class YellowPageController < ApplicationController
 		args = { :targeable_type =>"UserChecking"}
 		if params[:address]
 			p = params[:address]
-			args.merge({ :province_id => p[:province_id], :city_id => p[:city_id],:area_id => p[:area_id]})
+			args.merge!({ :province_id => p[:province_id], :city_id => p[:city_id],:area_id => p[:area_id]})
 		else
 			p = params[:args]
-			args.merge({ :area_id => p[:area_id]})
+			args.merge!({ :area_id => p[:area_id]})
 		end
 		address_ids = Address.where(args).pluck("targeable_id")
 		if address_ids.length > 0 
-			options = {:id => address_ids }
+			options = {:id => address_ids,:checked => true }
 			unless p[:type] == "new_user"
 				options.merge!({ :service_id => (p[:type] == "seller_user" ? 2 : 1) })
 			end		

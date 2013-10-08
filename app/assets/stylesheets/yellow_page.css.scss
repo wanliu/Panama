@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .yellow_page{
+	.row-fluid [class*="span"]:first-child {
+		margin-left: 20px;
+	}
+
 	.new_user, .buyer_user, .seller_user{  
 		@include transparent(rgb(51,51,51),0.4);
 		margin-bottom: 20px; 
@@ -13,6 +17,7 @@
 		width: 30%;
 		background-color: "";
 	}
+	.newer{ margin-left: 15px!important;}
 	.base_info{
 		.alert{ 
 			margin-right: 20px; 
@@ -30,20 +35,22 @@
 		}
 	}
 
-	.title { 
-		float:left;
-		padding-top:15px; 
-	}
+	.wrapper{
+		.title { 
+			float:left;
+			padding-top:15px; 
+		}
 
-	.tel { 
-		color: #9bd0f6; 
-		font-size: 11px; 
-	}
+		.tel { 
+			color: #9bd0f6; 
+			font-size: 13px; 
+		}
 
-	.name {  
-		color: #404040;
-		font-size: 13px;
-		font-weight: bold;
+		.name {  
+			color: #404040;
+			font-size: 13px;
+			font-weight: bold;
+		}
 	}
 
 	.yellow_base_info {
@@ -82,7 +89,7 @@
 
 		.industry_type {
 			color: #737373;
-			font-size: 12px;
+			font-size: 13px;
 			line-height: 20px;
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -114,38 +121,34 @@
 			position: relative;
 		}
 	}
-}
-
-.address-panel{
-	.address_from_post{
-		padding-top: 10px;
-		.error{
-			border: 1px solid red;
-		}
-		.search_user{ 
-			margin-left: 20px;
-		}
-		.controls {
-			.hidden{ 
-				position: absolute;
+	.address-panel{
+		.address_from_post{
+			padding-top: 10px;
+			.error{
+				border: 1px solid red;
+			}
+			.search_user{ 
+				margin-left: 20px;
+			}
+			.controls {
+				.hidden{ 
+					position: absolute;
+				}
+			}
+			.control-group:first-child div{
+				margin-left: 5px;
 			}
 		}
-		.control-group:first-child div{
-			margin-left: 5px;
+	}
+
+	.hot_city{
+		padding-left: 20px;
+		a{ 
+			color: white; 
+			font-size: 15px;
 		}
 	}
 }
 
-.row-fluid [class*="span"]:first-child {
-	margin-left: 20px;
-}
-
-.hot_city{
-	padding-left: 20px;
-	a{ 
-		color: white; 
-		font-size: 15px;
-	}
-}
 
 
