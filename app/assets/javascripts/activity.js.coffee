@@ -88,19 +88,19 @@ class ActivityView extends Backbone.View
       , 100
 
   like: (event) ->
-    @model.url()
-    $.post(@model.url() + "/like")
-    @$('.like-button').replaceWith(@unlike_template)
-    @$('.like-count').addClass("active")
-    @incLike()
+    $.post(@model.url() + "/like", (data) =>
+      @$('.like-button').replaceWith(@unlike_template)
+      @$('.like-count').addClass("active")
+      @incLike()
+    )
     false
 
   unlike: (event) ->
-    @model.url()
-    $.post(@model.url() + "/unlike")
-    @$('.unlike-button').replaceWith(@like_template)
-    @$('.like-count').removeClass("active")
-    @decLike()
+    $.post(@model.url() + "/unlike", (data) => 
+      @$('.unlike-button').replaceWith(@like_template)
+      @$('.like-count').removeClass("active")
+      @decLike()
+    )
     false
 
   incLike: (n = 1) ->
@@ -152,10 +152,10 @@ class ActivityView extends Backbone.View
 class ActivityPreview extends Backbone.View
 
   events:
-    "click .activity .preview"    : "launchActivity"
+    "click .activity .preview"      : "launchActivity"
     "click .activity .like-button"  : "like"
-    "click .activity .unlike-button"  : "unlike"
-    "click .activity .launch-button"  : "launchActivity"
+    "click .activity .unlike-button": "unlike"
+    "click .activity .launch-button": "launchActivity"
 
   like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
   unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
@@ -172,18 +172,18 @@ class ActivityPreview extends Backbone.View
 
   like: (event) ->
     @load_view(event.currentTarget)
-    @model.url()
-    $.post(@model.url() + "/like")
-    @$('.like-button').replaceWith(@unlike_template)
-    @incLike()
+    $.post(@model.url() + "/like", (data) =>
+      @$('.like-button').replaceWith(@unlike_template)
+      @incLike()
+    )
     false
 
   unlike: (event) ->
     @load_view(event.currentTarget)
-    @model.url()
-    $.post(@model.url() + "/unlike")
-    @$('.unlike-button').replaceWith(@like_template)
-    @decLike()
+    $.post(@model.url() + "/unlike", (data) =>
+      @$('.unlike-button').replaceWith(@like_template)
+      @decLike()
+    )
     false
 
   incLike: (n = 1) ->

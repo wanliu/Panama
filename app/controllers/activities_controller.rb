@@ -31,23 +31,26 @@ class ActivitiesController < ApplicationController
       format.js { render "activities/show" }
       format.dialog { render "show.dialog", :layout => false }
       format.json {
-        render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) }
+        render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) 
+      }
     end
   end
 
   def like
     @activity = Activity.find(params[:id])
-    @activity.likes.find(current_user)
-  rescue ActiveRecord::RecordNotFound
-    @activity.likes << current_user
-  ensure
+    begin
+      @activity.likes << current_user
+    rescue ActiveRecord::RecordInvalid
+    end
     render :text => :OK
   end
 
   def unlike
     @activity = Activity.find(params[:id])
-    @activity.likes.find(current_user)
-    @activity.likes.delete(current_user)
+    begin
+      @activity.likes.delete(current_user)
+    rescue ActiveRecord::RecordNotFound
+    end
     render :text => :OK
   end
 

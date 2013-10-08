@@ -11,6 +11,14 @@
 				<h5 class="title">{{name}}</h5>
 				<p> 价格 {{price}} </p>
 			</div>
+
+			<div class="buttons">
+				{{#seller}}
+					<%= button_tag class: 'btn btn-danger launch-button buy' do %>
+						<%= icon('shopping-cart') + " 购买" %>
+					<% end %>
+				{{/seller}}
+			</div>
 		</form>
 	</div>
 </div>
