@@ -38,12 +38,10 @@ class ActivityView extends Backbone.View
 
   initialize: (@options) ->
     _.extend(@, @options)
-    @$backdrop = $("<div class='model-popup-backdrop in' />")
-    @$dialog_panel = $("<div class='dialog-panel'></div>")
+    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+    @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @loadTemplate () =>
-      @$dialog_panel.appendTo("#popup-layout")
-      @$el = $(@render()).appendTo(@$dialog_panel)
-      @$backdrop.appendTo("body")
+      @$el = $(@render()).appendTo(@$dialog)
       #$(window).scroll()
     super
 
@@ -69,7 +67,7 @@ class ActivityView extends Backbone.View
     false
 
   close: () ->
-    @$dialog_panel.remove()
+    @$dialog.remove()
     @$backdrop.remove()
     @unmodal()
 
@@ -153,9 +151,9 @@ class ActivityPreview extends Backbone.View
 
   events:
     "click .activity .preview"      : "launchActivity"
+    "click .activity .launch-button": "launchActivity"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
-    "click .activity .launch-button": "launchActivity"
 
   like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
   unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
@@ -166,8 +164,7 @@ class ActivityPreview extends Backbone.View
 
   launchActivity: (event) ->
     @load_view(event.currentTarget)
-    @model.fetch success: (model) =>
-      new ActivityView({model: model}).modal()
+    new ActivityView({model: @model}).modal()
     false
 
   like: (event) ->

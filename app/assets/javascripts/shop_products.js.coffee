@@ -13,11 +13,11 @@ class ShopProductView extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
+    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+    @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @loadTemplate () =>
-      @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
-      @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
       @$el = $(@render()).appendTo(@$dialog)
-      $(window).scroll()
+      # $(window).scroll()
     super
 
   loadTemplate: (handle) ->
@@ -53,13 +53,12 @@ class ShopProductPreview extends Backbone.View
 
   launchShopProduct: (event) ->
     @load_view(event.currentTarget)
-    @model.fetch success: (model) =>
-      view = new ShopProductView({
-        el         : @$el,
-        model      : @model,
-        product_id : @product_id
-      })
-      view.modal()
+    view = new ShopProductView({
+      el         : @$el,
+      model      : @model,
+      product_id : @product_id
+    })
+    view.modal()
     false
 
   buy: (event) ->
@@ -83,11 +82,11 @@ class ShopProductPreview extends Backbone.View
     @model = new ShopProductModel({id: @el.attr('shop-product-id')})
     @delegateEvents()
 
+
 class ShopProductToolbar extends Backbone.View
-  events: {
+  events: 
     "click .toolbar .buy" : "buy"
-    "click .toolbar .cart" : "cart"
-  }
+    "click .toolbar .cart": "cart"
 
   initialize: () ->
     @$el = $(@el)
@@ -102,7 +101,6 @@ class ShopProductToolbar extends Backbone.View
       @create_order()
     else
       @create_direct_buy()
-
 
   create_order: () ->
     $.ajax(

@@ -2,23 +2,36 @@
 #= require lib/hogan
 root = (window || @)
 
-class Preview extends Backbone.View
-  events: {
-    "click .close" : "hide",
-    "click .submit-comment" : 'comment',
-    "keyup textarea[name='content']" : 'filter_status',
-    "click [name='join']" : "join"
-  }
+class AskBuyView extends Backbone.View
+  events:
+    "click .close"                  : "hide"
+    "click .submit-comment"         : 'comment'
+    "keyup textarea[name='content']": 'filter_status'
+    "click [name='join']"           : "join"
+  
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @fetch_dialog()
+    @loadTemplate()
 
-  fetch_dialog: () ->
+  loadTemplate: () ->
+    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+    @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
+    @fetch_dialog () =>
+      @$el = $(@render()).appendTo(@$dialog)
+      # $(window).scroll()
+      @textarea = @$("textarea[name='content']")
+      @btn = @$(".submit-comment")
+      @fetch_comment()
+    super
+
+  fetch_dialog: (handle) ->
     $.ajax(
       url: "/ask_buy/#{@ask_buy_id}.dialog",
       success: (data) =>
-        @render(data)
+        @template = data
+        handle.call(@)
+        @delegateEvents()
     )
 
   fetch_comment: () ->
@@ -30,18 +43,11 @@ class Preview extends Backbone.View
           @render_comment(comment)
     )
 
-  render: (template) ->
-    @template = template
-    @$backdrop = $("<div class='model-popup-backdrop in'></div>").appendTo("body")
-    $("body").addClass("noScroll")
-    @$el.html(@template)
-    $("#popup-layout").html @$el
-    @textarea = @$("textarea[name='content']")
-    @btn = @$(".submit-comment")
-    @fetch_comment()
+  render: () ->
+    @template
 
   hide: () ->
-    @$el.remove()
+    @$dialog.remove()
     @$backdrop.remove()
     $("body").removeClass("noScroll")
 
@@ -73,23 +79,22 @@ class Preview extends Backbone.View
       url: "/ask_buy/#{@ask_buy_id}/join",
       type: "POST",
       success: () ->
-        pnotify(text: "参与求购成功,等待用户付款！")
+        pnotify(text: "参与求购成功，等待用户付款！")
       error: (xhr) ->
         pnotify(text: JSON.parse(xhr.responseText).join(""),type: "error")
     )
 
 
 class AskBuyPreview extends Backbone.View
-  events: {
-    "click .ask_buy .preview" : 'preview'
-  }
+  events: 
+    "click .ask_buy .preview" : 'launch'
 
   initialize: (options) ->
     _.extend(@, options)
 
-  preview: (event) ->
+  launch: (event) ->
     id = $(event.currentTarget).parents(".ask_buy").attr("ask-buy-id")
-    new Preview( ask_buy_id: id )
+    new AskBuyView( ask_buy_id: id )
 
 
 root.AskBuyPreview = AskBuyPreview
