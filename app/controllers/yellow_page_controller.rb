@@ -48,29 +48,29 @@ class YellowPageController < ApplicationController
 		end
 	end
 
-
 	def search
-		args = { :targeable_type =>"UserChecking"}
-		if params[:address]
-			p = params[:address]
-			args.merge!({ :province_id => p[:province_id], :city_id => p[:city_id],:area_id => p[:area_id]})
-		else
-			p = params[:args]
-			args.merge!({ :area_id => p[:area_id]})
+		address = params[:address]
+		type = address[:type]
+		address.delete("type")
+		address.merge!({:targeable_type =>"UserChecking"})
+		address_ids = Address.where(address).pluck("targeable_id")
+		@users = _search(address_ids,type)
+		respond_to do |format|
+			format.html
+			format.json{ render json: @users}
 		end
-		address_ids = Address.where(args).pluck("targeable_id")
+	end
+
+
+	def _search(address_ids,type)
 		if address_ids.length > 0 
 			options = {:id => address_ids,:checked => true }
-			unless p[:type] == "new_user"
-				options.merge!({ :service_id => (p[:type] == "seller_user" ? 2 : 1) })
+			unless type == "new_user"
+				options.merge!({ :service_id => (type == "seller_user" ? 2 : 1) })
 			end		
 			@users = UserChecking.where(options).order("created_at desc").limit(15)
 		else
 			@users = []
-		end
-		respond_to do |format|
-			format.html
-			format.json{ render json: @users}
 		end
 	end
 end

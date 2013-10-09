@@ -43,7 +43,7 @@ class SearchUserView extends Backbone.View
 		$.ajax({
 			dataType: "json",
 			type: "get",
-			data:{args: {area_id: id,type: type}} ,
+			data:{address: {area_id: id,type: type}} ,
 			url: "yellow_page/search",
 			success: (datas) =>
 				@render(datas)
