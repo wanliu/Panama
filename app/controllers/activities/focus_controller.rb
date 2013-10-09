@@ -41,7 +41,22 @@ class Activities::FocusController < Activities::BaseController
   end
 
   def join
+    @activity = Activity.find_by(:id => params[:id])
+    return unjoin() if @activity.user_participated?(current_user)
+    begin
+      @activity.participates << current_user
+    rescue ActiveRecord::RecordInvalid
+    end
+    render :text => :OK
+  end
 
+  def unjoin
+    @activity = Activity.find(params[:id])
+    begin
+      @activity.participates.delete(current_user)
+    rescue ActiveRecord::RecordNotFound
+    end
+    render :text => :OK
   end
 
   private
