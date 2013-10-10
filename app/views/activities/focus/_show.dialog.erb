@@ -1,4 +1,4 @@
-<div class="container activity-foucs">
+<div class="container focus">
   <div class="row-fluid ">
     <div class="offset1 span7">
       <!-- 主展示框 -->
@@ -83,21 +83,28 @@
           </div>
           <div class="modal-footer">
             <div class="btn-group">
-            <% if activity.user_liked?(current_user) %>
-              <a class="btn unlike-button active" href="#">取消喜欢</a>
-            <% else %>
-              <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
-            <% end %>
-            <a class="btn like-count active" href="#"><%=activity.like %></a>
+              <% if activity.user_liked?(current_user) %>
+                <a class="btn unlike-button active" href="#">取消喜欢</a>
+              <% else %>
+                <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
+              <% end %>
+              <a class="btn like-count active" href="#"><%= activity.like %></a>
             </div>
             <div class="btn-group">
               <% if activity.start_sale? %>
-              <button class="btn btn-danger" type="submit" name="join">
-                <%= icon(:'shopping-cart', :white) + " 参与" %>
-              </button>
-              <a class="btn btn-danger partic-button" href="#">
-                <%=activity.participate %>
-              </a>
+                <!-- <button class="btn btn-danger partic-button" type="submit" name="join">
+                  <%= icon(:'shopping-cart', :white) + " 参与" %>
+                </button> -->
+                <% if activity.user_participated?(current_user) %>
+                  <button class="btn btn-danger unpartic-button" type="submit" name="unjoin">
+                    取消参与
+                  </button>
+                <% else %>
+                  <button class="btn btn-danger partic-button active" type="submit" name="join">
+                    <%= icon(:'shopping-cart', :white) + " 参与" %>
+                  </button>
+                <% end %>
+                <a class="btn btn-danger partic-count active" href="#"><%= activity.participate %></a>
               <% end %>
             </div>
           </div>

@@ -24,17 +24,25 @@ ANIMATES = ["flash", "bounce", "shake", "tada", "swing", "wobble", "wiggle", "pu
 class ActivityView extends Backbone.View
 
   events:
-    "click [data-dismiss=modal]"  : "close"
-    "click .animate-play"         : "playAnimate"
-    "click .like-button"          : "like"
-    "click .unlike-button"        : "unlike"
-    "click .partic-button"        : 'addToCard'
-    "click .submit-comment"       : "addComment"
-    "keyup textarea[name=message]": 'filter_state'
-    'submit form.new_product_item': 'validate_date'
+    "click [data-dismiss=modal]"    : "close"
+    "click .animate-play"           : "playAnimate"
+    "click .like-button"            : "like"
+    "click .unlike-button"          : "unlike"
+    "click .auction .partic-button" : 'addToCard'
+    "click .submit-comment"         : "addComment"
+    "keyup textarea[name=message]"  : 'filter_state'
+    'submit form.new_product_item'  : 'validate_date'
+    "click .focus .partic-button"   : "joinFocus"
+    "click .focus .unpartic-button" : "unjoinFocus"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
-  unlike_template: '<a class="btn unlike-button active" href="#">取消喜欢</a>'
+  unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
+  unpartic_template: '<button class="btn btn-danger unpartic-button" type="submit" name="unjoin">
+                     取消参与
+                  </button>'
+  partic_template: '<button class="btn btn-danger partic-button active" type="submit" name="join">
+                    <i class="icon-shopping-cart icon-white"></i> 参与
+                  </button>'
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -50,6 +58,34 @@ class ActivityView extends Backbone.View
       @template = data
       handle.call(@)
       @delegateEvents()
+
+  joinFocus: (event) ->
+    $.post($("form", @el).attr("action"), (data) =>
+      @$('.partic-button').replaceWith(@unpartic_template)
+      @$('.like-count').addClass("active")
+      pnotify({text: "成功参与聚焦活动！"})
+      @incPartic()
+      false
+    )
+    false
+
+  unjoinFocus: (event) ->
+    $.post($("form", @el).attr("action"), (data) => 
+      @$('.unpartic-button').replaceWith(@partic_template)
+      @$('.partic-count').removeClass("active")
+      pnotify({text: "成功取消参与聚焦活动！"})
+      @decPartic()
+      false
+    )
+    false
+
+  incPartic: (n = 1) ->
+    s = parseInt(@$('.partic-count').text()) || 0
+    @$('.partic-count').text(s + n)
+
+  decPartic: (n = 1) ->
+    s = parseInt(@$('.partic-count').text()) || 0
+    @$('.partic-count').text(s - n)
 
   render: () ->
     @template
@@ -150,8 +186,8 @@ class ActivityView extends Backbone.View
 class ActivityPreview extends Backbone.View
 
   events:
-    "click .activity .preview"      : "launchActivity"
-    "click .activity .launch-button": "launchActivity"
+    "click .activity .preview"      : "launch"
+    "click .activity .launch-button": "launch"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
 
@@ -162,16 +198,18 @@ class ActivityPreview extends Backbone.View
     _.extend(@, options)
     #@model ?= new ActivityModel({ id: @id })
 
-  launchActivity: (event) ->
+  launch: (event) ->
     @load_view(event.currentTarget)
-    new ActivityView({model: @model}).modal()
+    new ActivityView({
+      model: @model,
+      el: $("#popup-layout")
+    }).modal()
     false
 
   like: (event) ->
     @load_view(event.currentTarget)
     $.post(@model.url() + "/like", (data) =>
       @$('.like-button').replaceWith(@unlike_template)
-      @incLike()
     )
     false
 

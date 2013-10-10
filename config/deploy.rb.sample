@@ -5,6 +5,7 @@ set :user, "root"
 set :password, "**"
 set :domain, "***"
 
+# 210.245.164.192 Yunvm.com789
 
 default_run_options[:pty] = true
 set :use_sudo,false

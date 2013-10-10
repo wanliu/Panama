@@ -214,6 +214,7 @@ Panama::Application.routes.draw do
     resources :focus do
       member do
         post 'join'
+        post 'unjoin'
       end
     end
     resources :package

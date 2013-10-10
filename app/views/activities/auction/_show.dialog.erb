@@ -1,18 +1,18 @@
-<div class="container activity-auction">
+<div class="container auction">
   <div class="row-fluid">
     <div class="offset1 span7">
       <!-- 主展示框 -->
       <div id="main-model" class="dialog">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3><%=activity.title %></h3>
+          <h3><%= activity.title %></h3>
         </div>
         <div class="modal-body main-show">
           <div class='picture'>
-            <img class="preview" src="<%=activity.photos.default %>" />
+            <img class="preview" src="<%= activity.photos.default %>" />
           </div>
           <h4 class="right_bottom2 animate1 fadeInRight">
-            原价: <span><%=activity.price %></span>
+            原价: <span><%= activity.price %></span>
           </h4>
           <h4 class="right_bottom1 animate2 fadeInRight">
             现价: <span><%= activity.activity_price %></span>
@@ -31,10 +31,10 @@
                 <img class='people-image' src="<%=c.user.photos.header %>">
                 <span class='author-name'>
                   <a href='/people/<%=c.user.login %>'>
-                    <%=c.user.login %>
+                    <%= c.user.login %>
                   </a>
                 </span>
-                <div class="message"><%=raw c.content_html %></div>
+                <div class="message"><%= raw c.content_html %></div>
               </div>
               <% end %>
             </div>
@@ -42,7 +42,7 @@
               <div class='user-info'>
                 <img src="<%= current_user.photos.header %>">
                 <a href="<%= person_path(current_user) %>">
-                  <%=current_user.login %>
+                  <%= current_user.login %>
                 </a>
               </div>
               <div class='message'>
@@ -58,7 +58,7 @@
     <div class="span3">
       <div class="dialog" id="activity-actions">
         <div class="modal-body">
-          <img class="author_image" src="<%=activity.author.photos.header %>"  />
+          <img class="author_image" src="<%= activity.author.photos.header %>"  />
           <h4><%= activity.author.login %></h4>
           <p>关注 <%= activity.author.followings.count %></p>
           <p>粉丝 <%= activity.author.followers.count %></p>
@@ -83,7 +83,7 @@
             <% else %>
               <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
             <% end %>
-            <a class="btn like-count active" href="#"><%=activity.like %></a>
+            <a class="btn like-count active" href="#"><%= activity.like %></a>
             </div>
             <div class="btn-group">
               <% if activity.start_sale? %>
@@ -91,7 +91,7 @@
                 <%= icon(:'shopping-cart', :white) + " 参与" %>
               </button>
               <a class="btn btn-danger partic-button" href="#">
-                <%=activity.participate %>
+                <%= activity.participate %>
               </a>
               <% end %>
             </div>
