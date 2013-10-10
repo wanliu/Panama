@@ -61,7 +61,6 @@ class YellowPageController < ApplicationController
 		end
 	end
 
-
 	def _search(address_ids,type)
 		if address_ids.length > 0 
 			options = {:id => address_ids,:checked => true }

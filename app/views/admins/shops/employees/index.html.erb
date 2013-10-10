@@ -20,7 +20,7 @@
 		<h4>成员</h4>
 		<% if @employees.count > 0 %>
 			<% @employees.each do |e| %>
-				<div class='span3 alert alert-info employee' data-value-id="<%= e.id %>" data-value-login="<%=e.login %>">
+				<div class='span2 alert alert-info employee' data-value-id="<%= e.id %>" data-value-login="<%=e.login %>">
 					<img class='img-rounded avatar' src="<%= e.photos.icon %>" />
 					<%= e.login %>
 					<a href='javascript:void(0)' class='btn btn-danger remove'>移除</a>
@@ -94,7 +94,7 @@
 </script>
 
 <script type="text/template" class='group-user-template'>
-	<div class='span3 alert alert-info group-user'>
+	<div class='span2 alert alert-info group-user'>
 		<img class='img-rounded avatar' />
 			{{login}}
 		<a href='javascript:void(0)' class='btn btn-danger remove-shop-user-group'>移除</a>
