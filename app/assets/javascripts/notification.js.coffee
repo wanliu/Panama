@@ -46,7 +46,7 @@ class TransactionView extends Backbone.View
 
 	template: 
 		"<a href='{{ url }}'>
-			<span class='label label-info'><i class='icon-info-sign'></i></span>
+			<span class='label label-warning'><i class='icon-info-sign'></i></span>
 			{{ body }}
 		</a>"
 
@@ -94,7 +94,7 @@ class ActivityViews extends Backbone.View
 
 	template: 
 		"<a href='#'>
-			<span class='label label-info'><i class='icon-bell-alt'></i></span>
+			<span class='label label-success'><i class='icon-bell-alt'></i></span>
 			{{ body }}
 		</a>"
 

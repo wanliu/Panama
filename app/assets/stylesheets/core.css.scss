@@ -1119,3 +1119,8 @@ h2 small {
 		padding-right: 4px;
 	}
 }
+
+.navbar .pull-right > li > .dropdown-menu, .navbar .nav > li > .dropdown-menu.pull-right {
+	left: auto;
+	right: 20px;
+}
