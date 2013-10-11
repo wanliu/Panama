@@ -3,8 +3,7 @@ class ChatMessagesController < ApplicationController
   before_filter :login_and_service_required
 
   def index
-    @messages = current_user.messages(params[:friend_id])
-    .order("created_at desc").limit(30)
+    @messages = current_user.chat_messages.order("created_at desc").limit(30)
 
     @messages.where(
       :send_user_id => params[:friend_id],
@@ -12,6 +11,7 @@ class ChatMessagesController < ApplicationController
     ).update_all(read: true)
 
     ChatMessage.notice_read_state(current_user, params[:friend_id])
+
     respond_to do |format|
       format.json{ render :json => @messages.reverse }
     end
@@ -20,7 +20,7 @@ class ChatMessagesController < ApplicationController
   def create
     receive_user = User.find(params[:chat_message].delete(:receive_user_id))
     @message = current_user.chat_messages.create(
-      params[:chat_message].merge(receive_user: receive_user))
+      params[:chat_message].merge(:send_user => current_user, :receive_user => receive_user))
 
     respond_to do |format|
       if @message.valid?
@@ -56,8 +56,7 @@ class ChatMessagesController < ApplicationController
 
   #读取信息通知
   def read
-    @messages = current_user.receive_messages.unread
-    .where(send_user_id: params[:friend_id])
+    @messages = current_user.chat_messages.unread.where(send_user_id: params[:friend_id])
     @messages.update_all(read: true)
 
     ChatMessage.notice_read_state(current_user, params[:friend_id])
