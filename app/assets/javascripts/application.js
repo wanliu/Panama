@@ -17,3 +17,5 @@
 //= require catalog
 //= require yellow_page
 //= require search_users
+//= require notification 
+

@@ -1097,3 +1097,17 @@ h2 small {
 		}
 	}
 }
+
+#notification_count{
+	top: 6px;
+	left: -12px;
+	position: relative;
+	@include transparent(rgb(51,51,51), 0.5);
+}
+
+.notification{
+	.badge{
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+}
