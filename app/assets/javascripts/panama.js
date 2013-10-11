@@ -41,6 +41,8 @@
 //= require bootstrap-editable
 //= require activity
 //= require addresses
+//= require search_users
+//= require notification 
 
 root = window || this;
 
