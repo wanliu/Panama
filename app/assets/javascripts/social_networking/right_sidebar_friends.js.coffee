@@ -174,13 +174,13 @@ class FriendView extends Backbone.View
 		@$iframe.children("iframe").attr("src", "/chat_messages/dialogue/generate_and_display/#{ friend_id }")
 
 	template: _.template(
-  	"<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
-  	<div class='user-info'>
+		"<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
+		<div class='user-info hide'>
 			<div class='name'>
 				<a href='#''><%= model.get('name') || model.get('login') %></a>
 			</div>
 			<div class='type'><%= model.get('follow_type') || 'User' %></div>
-  	</div>")
+		</div>")
 
 
 root.FriendsContainerView = FriendsContainerView

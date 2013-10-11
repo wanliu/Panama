@@ -557,8 +557,8 @@ ul {
 .widget-tabs .body {
 	@include transparent(rgb(51,51,51),0.4);
 	margin-top: 0;
-	padding-left: 12px;
-	padding-right: 18px;
+	padding-left: 5px;
+	padding-right: 5px;
 	@include border-radius(0 0 1px 1px);
 }
 
@@ -634,11 +634,11 @@ ul {
 		display: none;
 	}
 
-	li:hover {
-		.user-info {
-			display: block;
-		}
-	}
+	// li:hover {
+	// 	.user-info {
+	// 		display: block;
+	// 	}
+	// }
 
 	.settings {
 		.btn-icons {
@@ -661,7 +661,7 @@ ul {
 }
 
 .right-mini .right-sidebar {
-	width: 80px;
+	width: 60px;
 
 	.notices-list{
 		li .transaction-info, li .activity-info{
@@ -678,6 +678,10 @@ ul {
 	right: 0;
 	top: 0;
 	bottom: 0px;
+
+	&.right-sidebar {
+		@include transparent(rgb(51,51,51), 0);
+	}
 
 	header {
 		.nav {
@@ -705,6 +709,10 @@ ul {
 		margin: 0px;
 		list-style: none;
 
+		&:first-child  {
+			margin-top: 20px;
+		}
+
 		.name, .time, .position {
 			line-height: 16px;
 		}
@@ -720,10 +728,11 @@ ul {
 			padding: 5px 0px;
 			/*min-width: 60px;*/
 			margin: 0;
-			cursor: pointer;
+			width: 50px;
 			height: 50px;
+			cursor: pointer;
 			overflow: hidden;
-			@include transition(width 0.0s, margin 0.3s);
+			// @include transition(width 0.0s, margin 0.3s);
 		}
 
 		li.active {
@@ -736,7 +745,7 @@ ul {
 			&.active {
 				background-color: #E5603B;
 			}
-			width: 300px;
+			// width: 300px;
 			// margin-left: -120px;
 
 			.transaction-info, .activity-info{
@@ -744,18 +753,18 @@ ul {
 			}
 		}
 
-		.user-info {
-			margin-left: 62px;
-		}
+		// .user-info {
+		// 	margin-left: 62px;
+		// }
 
-		.right-mini .users-list li:hover {
-			width: 300px;
-			margin-left: -240px;
+		// .right-mini .users-list li:hover {
+		// 	width: 300px;
+		// 	margin-left: -240px;
 
-			.user-info {
-				display: block;
-			}
-		}
+		// 	.user-info {
+		// 		display: block;
+		// 	}
+		// }
 	}
 }
 
@@ -798,7 +807,6 @@ ul {
 .avatar {
 	width: 50px;
 }
-
 
 .controls  {
 	img.private {
