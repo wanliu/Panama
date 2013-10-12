@@ -869,7 +869,7 @@ body>.model-popup-backdrop{
 	.container{
 		width: 100%;
 	}
-	.dialog-panel {
+	.dialog-panel{
 		color: #555;
 		position: fixed;
 		top: 0;
@@ -880,81 +880,83 @@ body>.model-popup-backdrop{
 		overflow-y: scroll;
 		padding: 60px 0;
 
-		.modal {
-			position: relative;
-			opacity: 1;
-		}
-
-		.picture {
-			img {
-				margin: 0 auto;
-				display: block
+		>.activity-focus, .activity-auction, .ask_buy{
+			.modal {
+				position: relative;
+				opacity: 1;
 			}
-		}
 
-		.dialog {
-			z-index: 1050;
-			background-color: white;
-			border: 1px solid #999999;
-			// border: 1px solid rgba(0, 0, 0, 0.3);
-			@include border-radius(1px);
-			@include box-shadow (0 3px 7px rgba(0, 0, 0, 0.3));
-			@include background-clip(padding-box);
-			outline: none;
-			margin-bottom: 20px;
-
-			.modal-body {
-				.author_image {
-					width: 50px;
+			.picture {
+				img {
+					margin: 0 auto;
+					display: block
 				}
 			}
 
-			.main-show{
-				height: auto;
-				max-height: 525px;
-			}
+			.dialog {
+				z-index: 1050;
+				background-color: white;
+				border: 1px solid #999999;
+				// border: 1px solid rgba(0, 0, 0, 0.3);
+				@include border-radius(1px);
+				@include box-shadow (0 3px 7px rgba(0, 0, 0, 0.3));
+				@include background-clip(padding-box);
+				outline: none;
+				margin-bottom: 20px;
 
-			.big_comments_and_reply {
-				text-align: left;
-				.comments {
-					.comment {
+				.modal-body {
+					.author_image {
+						width: 50px;
+					}
+				}
+
+				.main-show{
+					height: auto;
+					max-height: 525px;
+				}
+
+				.big_comments_and_reply {
+					text-align: left;
+					.comments {
+						.comment {
+							padding: 0px 20px 10px 60px;
+							min-height: 60px;
+							.people-image {
+								margin-left: -60px;
+								float: left;
+								width: 50px;
+								height: 50px;
+							}
+
+							.author-name {
+								font-size: 16px;
+								font-weight: bold;
+							}
+						}
+					}
+
+					.reply_form {
 						padding: 0px 20px 10px 60px;
-						min-height: 60px;
-						.people-image {
+						.user-info {
 							margin-left: -60px;
 							float: left;
 							width: 50px;
 							height: 50px;
 						}
 
-						.author-name {
-							font-size: 16px;
-							font-weight: bold;
-						}
-					}
-				}
-
-				.reply_form {
-					padding: 0px 20px 10px 60px;
-					.user-info {
-						margin-left: -60px;
-						float: left;
-						width: 50px;
-						height: 50px;
-					}
-
-					.message {
-						textarea {
-							width: 100%;
+						.message {
+							textarea {
+								width: 100%;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		.dialog#purchase-forms{
-			.modal-body{
-				height: 140px;
+			.dialog#purchase-forms{
+				.modal-body{
+					height: 140px;
+				}
 			}
 		}
 	}
