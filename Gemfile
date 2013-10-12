@@ -71,7 +71,7 @@ gem 'compass-css-arrow', '~> 0.0.3'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-
+gem 'capistrano', '2.9.0', :require => false
 # image uploader
 gem "carrierwave", '~> 0.8.0'
 gem "carrierwave-mongoid", '~> 0.1.0', :require => 'carrierwave/mongoid'

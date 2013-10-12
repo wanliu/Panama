@@ -9,39 +9,30 @@ namespace "index" do
       create({
         "index" => {
             "analysis" => {
-                "analyzer" => {
-                    "none_analyzer" => {
-                        "tokenizer" => "none_pinyin",
-                        "filter" => ["standard"]
-                    },
-                    "only_analyzer" => {
-                        "tokenizer" => "only_pinyin",
-                        "filter" => ["standard"]
-                    },
-                    "replace_blank" => {
-                      "tokenizer" => "keyword",
-                      "filter" => ["replace_blank"]
-                    }
+              "analyzer" => {
+                "pinyin_analyzer" => {
+                  "tokenizer" => "my_pinyin",
+                  "filter" => ["standard", "nGram"]
                 },
-                "tokenizer" => {
-                    "none_pinyin" => {
-                        "type" => "pinyin",
-                        "first_letter" => "none",
-                        "padding_char" => ""
-                    },
-                    "only_pinyin" => {
-                        "type" => "pinyin",
-                        "first_letter" => "only",
-                        "padding_char" => ""
-                    }
-                },
-                "filter" => {
-                  "replace_blank" => {
-                    "type" => "pattern_replace",
-                    "pattern" => " ",
-                    "replacement" => ""
-                  }
+                "replace_blank" => {
+                  "tokenizer" => "keyword",
+                  "filter" => ["replace_blank"]
                 }
+              },
+              "tokenizer" => {
+                "my_pinyin" => {
+                  "type" => "pinyin",
+                  "first_letter" => "prefix",
+                  "padding_char" => ""
+                }
+              },
+              "filter" => {
+                "replace_blank" => {
+                  "type" => "pattern_replace",
+                  "pattern" => " ",
+                  "replacement" => ""
+                }
+              }
             }
         }
       })
@@ -52,21 +43,14 @@ namespace "index" do
           "name" => {
             "type" => "multi_field",
             "fields" => {
-              "first_name" => {
-                "type" => "string",
-                "store" => "no",
-                "term_vector" => "with_positions_offsets",
-                "analyzer" => "only_analyzer",
-                "boost" => 10
-              },
-              "any_name" => {
-                "type" => "string",
-                "store" => "no",
-                "term_vector" => "with_positions_offsets",
-                "analyzer" => "none_analyzer",
-                "boost" => 10
-              },
               "name" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
                 "type" => "string",
                 "store" => "no",
                 "analyzer" => "replace_blank"
@@ -84,13 +68,9 @@ namespace "index" do
         "index" => {
             "analysis" => {
                 "analyzer" => {
-                    "none_analyzer" => {
-                        "tokenizer" => "none_pinyin",
-                        "filter" => ["standard"]
-                    },
-                    "only_analyzer" => {
-                        "tokenizer" => "only_pinyin",
-                        "filter" => ["standard"]
+                    "pinyin_analyzer" => {
+                      "tokenizer" => "my_pinyin",
+                      "filter" => ["standard", "nGram"]
                     },
                     "replace_blank" => {
                       "tokenizer" => "keyword",
@@ -98,16 +78,11 @@ namespace "index" do
                     }
                 },
                 "tokenizer" => {
-                    "none_pinyin" => {
-                        "type" => "pinyin",
-                        "first_letter" => "none",
-                        "padding_char" => ""
-                    },
-                    "only_pinyin" => {
-                        "type" => "pinyin",
-                        "first_letter" => "only",
-                        "padding_char" => ""
-                    }
+                  "my_pinyin" => {
+                    "type" => "pinyin",
+                    "first_letter" => "prefix",
+                    "padding_char" => ""
+                  }
                 },
                 "filter" => {
                   "replace_blank" => {
@@ -126,21 +101,14 @@ namespace "index" do
             "name" => {
                 "type" => "multi_field",
                 "fields" => {
-                    "first_name" => {
-                      "type" => "string",
-                      "store" => "no",
-                      "term_vector" => "with_positions_offsets",
-                      "analyzer" => "only_analyzer",
-                      "boost" => 10
-                    },
-                    "any_name" => {
-                      "type" => "string",
-                      "store" => "no",
-                      "term_vector" => "with_positions_offsets",
-                      "analyzer" => "none_analyzer",
-                      "boost" => 10
-                    },
                     "name" => {
+                      "type" => "string",
+                      "store" => "no",
+                      "term_vector" => "with_positions_offsets",
+                      "analyzer" => "pinyin_analyzer",
+                      "boost" => 10
+                    },
+                    "primitive" => {
                       "type" => "string",
                       "store" => "no",
                       "analyzer" => "replace_blank"
@@ -158,13 +126,9 @@ namespace "index" do
         "index" => {
           "analysis" => {
             "analyzer" => {
-              "none_analyzer" => {
-                "tokenizer" => "none_pinyin",
-                "filter" => ["standard"]
-              },
-              "only_analyzer" => {
-                "tokenizer" => "only_pinyin",
-                "filter" => ["standard"]
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
               },
               "replace_blank" => {
                 "tokenizer" => "keyword",
@@ -172,14 +136,9 @@ namespace "index" do
               }
             },
             "tokenizer" => {
-              "none_pinyin" => {
+              "my_pinyin" => {
                 "type" => "pinyin",
-                "first_letter" => "none",
-                "padding_char" => ""
-              },
-              "only_pinyin" => {
-                "type" => "pinyin",
-                "first_letter" => "only",
+                "first_letter" => "prefix",
                 "padding_char" => ""
               }
             },
@@ -201,21 +160,14 @@ namespace "index" do
           "title" => {
             "type" => "multi_field",
             "fields" => {
-              "first_title" => {
-                "type" => "string",
-                "store" => "no",
-                "term_vector" => "with_positions_offsets",
-                "analyzer" => "only_analyzer",
-                "boost" => 10
-              },
-              "any_title" => {
-                "type" => "string",
-                "store" => "no",
-                "term_vector" => "with_positions_offsets",
-                "analyzer" => "none_analyzer",
-                "boost" => 10
-              },
               "title" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
                 "type" => "string",
                 "store" => "no",
                 "analyzer" => "replace_blank"
@@ -232,39 +184,30 @@ namespace "index" do
       create({
         "index" => {
           "analysis" => {
-              "analyzer" => {
-                  "none_analyzer" => {
-                      "tokenizer" => "none_pinyin",
-                      "filter" => ["standard"]
-                  },
-                  "only_analyzer" => {
-                      "tokenizer" => "only_pinyin",
-                      "filter" => ["standard"]
-                  },
-                  "replace_blank" => {
-                    "tokenizer" => "keyword",
-                    "filter" => ["replace_blank"]
-                  }
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
               },
-              "tokenizer" => {
-                  "none_pinyin" => {
-                      "type" => "pinyin",
-                      "first_letter" => "none",
-                      "padding_char" => ""
-                  },
-                  "only_pinyin" => {
-                      "type" => "pinyin",
-                      "first_letter" => "only",
-                      "padding_char" => ""
-                  }
-              },
-              "filter" => {
-                "replace_blank" => {
-                  "type" => "pattern_replace",
-                  "pattern" => " ",
-                  "replacement" => ""
-                }
+              "replace_blank" => {
+                "tokenizer" => "keyword",
+                "filter" => ["replace_blank"]
               }
+            },
+            "tokenizer" => {
+                "my_pinyin" => {
+                    "type" => "pinyin",
+                    "first_letter" => "prefix",
+                    "padding_char" => ""
+                }
+            },
+            "filter" => {
+              "replace_blank" => {
+                "type" => "pattern_replace",
+                "pattern" => " ",
+                "replacement" => ""
+              }
+            }
           }
         }
       })
@@ -276,21 +219,14 @@ namespace "index" do
           "title" => {
             "type" => "multi_field",
             "fields" => {
-              "first_title" => {
-                "type" => "string",
-                "store" => "no",
-                "term_vector" => "with_positions_offsets",
-                "analyzer" => "only_analyzer",
-                "boost" => 10
-              },
-              "any_title" => {
-                "type" => "string",
-                "store" => "no",
-                "term_vector" => "with_positions_offsets",
-                "analyzer" => "none_analyzer",
-                "boost" => 10
-              },
               "title" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
                 "type" => "string",
                 "store" => "no",
                 "analyzer" => "replace_blank"

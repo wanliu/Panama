@@ -6,7 +6,6 @@ class Product < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::SynchronousProperty
   include PanamaCore::InventoryCache
-  # include Redis::Search
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
@@ -75,12 +74,6 @@ class Product < ActiveRecord::Base
       select { |pv| pv.property_id == property.id }.first unless property.nil?
     end
   end
-
-  # 商品名称搜索
-  # redis_search_index(:title_field => :name,
-  #                    :score_field => :created_at,
-  #                    :prefix_index_enable => true,
-  #                    :ext_fields  => [:price])
 
   def prices_definition
     price_options.map do |po|
