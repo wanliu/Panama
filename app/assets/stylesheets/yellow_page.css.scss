@@ -2,9 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .yellow_page{
-	.row-fluid [class*="span"]:first-child {
+	/*.row-fluid [class*="span"]:first-child {
 		margin-left: 20px;
-	}
+	}*/
 
 	.new_user, .buyer_user, .seller_user{  
 		@include transparent(rgb(51,51,51),0.4);
@@ -17,7 +17,7 @@
 		width: 30%;
 		background-color: "";
 	}
-	.newer{ margin-left: 15px!important;}
+	/*.newer{ margin-left: -15px;}*/
 	.base_info{
 		.alert{ 
 			margin-right: 20px; 
