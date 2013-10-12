@@ -11,7 +11,6 @@ class  NotificationView extends Backbone.View
 		@activitys_contain_view = new ActivityContainer(parent_view: @)
 		@collection.bind('reset', @add_all, @)
 		@collection.fetch(url: "#{@urlRoot}/unreads")
-		
 
 	add_all: () ->
 		$("#notification_count").text(@collection.length)
@@ -41,14 +40,15 @@ class TransactionContainer extends Backbone.View
 class TransactionView extends Backbone.View
 	tagName: "li"
 	className: "transactions_li"
+
 	events: 
 		"click" : "direct_to_transaction_detail"
 
-	template: " <a href='{{ url }}'>
-					<span class='label label-warning'><i class='icon-info-sign'></i></span>
-					{{ body }}
-				</a>
-				"
+	template: 
+		"<a href='{{ url }}'>
+			<span class='label label-warning'><i class='icon-info-sign'></i></span>
+			{{ body }}
+		</a>"
 
 	render: (model) ->
 		$(@el).html(Hogan.compile(@template).render(model))
@@ -62,6 +62,7 @@ class TransactionView extends Backbone.View
 			success: () =>
 				window.location.replace(@model.get('url'))
 		})
+
 
 class ActivityContainer extends Backbone.View
 
@@ -83,6 +84,7 @@ class ActivityContainer extends Backbone.View
 		$("#notification_count").html($("#notification_count").text() - 1)
 		el.remove()
 
+
 class ActivityViews extends Backbone.View
 	tagName: "li"
 	className: "activitys_li"
@@ -90,11 +92,12 @@ class ActivityViews extends Backbone.View
 	events:
 		"click " : "show_modal"
 
-	template: "	<a href='#'>
-					<span class='label label-success'><i class='icon-bell-alt'></i></span>
-					{{ body }}
-				</a>
-			"
+	template: 
+		"<a href='#'>
+			<span class='label label-success'><i class='icon-bell-alt'></i></span>
+			{{ body }}
+		</a>"
+
 	initialize: () ->
 		_.extend(@, @options)
 
@@ -123,5 +126,6 @@ class ActivityViews extends Backbone.View
 			success: () =>
 				@parent_view.remove_one(@model.id,@el)
 		)
+
 
 root.NotificationView = NotificationView

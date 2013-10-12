@@ -10,37 +10,37 @@ class SearchController < ApplicationController
     end
   end
 
-  def products
-    _size, _from= params[:limit], params[:offset]
-    query = filter_special_sym(params[:q])
-    val = query.gsub(/ /, "")
-    s = Tire.search ["products", "shop_products", "activities", "ask_buys"] do
-      from _from
-      size _size
+  # def products
+  #   _size, _from= params[:limit], params[:offset]
+  #   query = filter_special_sym(params[:q])
+  #   val = query.gsub(/ /, "")
+  #   s = Tire.search ["products", "shop_products", "activities", "ask_buys"] do
+  #     from _from
+  #     size _size
 
-      query do
-        boolean do
-          should do
-            string "*#{query}*", fields: ["first_name", "any_name", "first_title", "any_title"]
-          end
-          should do
-            string "*#{val}*", :fields => ["name", "title"]
-          end
-        end
-      end
+  #     query do
+  #       boolean do
+  #         should do
+  #           string "*#{query}*", fields: ["first_name", "any_name", "first_title", "any_title"]
+  #         end
+  #         should do
+  #           string "*#{val}*", :fields => ["name", "title"]
+  #         end
+  #       end
+  #     end
 
-      sort("_script" => {
-          :script => "doc['_type'].value",
-          :type   => "string",
-          :order  => "desc"
-        }, "_score" => {})
-    end
-    @results = s.results
-    respond_to do |format|
-      format.json { render :json => @results }
-      format.html { render :products }
-    end
-  end
+  #     sort("_script" => {
+  #         :script => "doc['_type'].value",
+  #         :type   => "string",
+  #         :order  => "desc"
+  #       }, "_score" => {})
+  #   end
+  #   @results = s.results
+  #   respond_to do |format|
+  #     format.json { render :json => @results }
+  #     format.html { render :products }
+  #   end
+  # end
 
   def shop_products
     if current_user.shop
@@ -49,7 +49,7 @@ class SearchController < ApplicationController
       s = ShopProduct.search2 do
         query do
           boolean do
-            must { string "*#{query}*", fields: ["first_name", "any_name", "name"] }
+            must { string "name:#{query} OR primitive:#{query}*", :default_operator => "AND" }
             must { string "seller.id:#{shop_id}" }
           end
         end
@@ -74,47 +74,49 @@ class SearchController < ApplicationController
       query do
         boolean do
           should do
-            custom_score :script => "global_sort", :lang => :js do
+            custom_score :script => :activitySort, :lang => :native do
               filtered do
-                filter :terms, :_type => [:activity, :ask_buy]
+                filter :term, :_type => :activity
               end
             end
           end
+
           should do
-            custom_score :script => "0.001" do
+            custom_score :script => :askbuySort, :lang => :native do
+              filtered do
+                filter :term, :_type => :ask_buy
+              end
+            end
+          end
+
+          should do
+            custom_score :script => :shopProductSort, :lang => :native do
               filtered do
                 filter :term, :_type => :shop_product
               end
             end
           end
-          should do
-            custom_score :script => "0.0001" do
-              filtered do
-                filter :term, :_type => :product
-              end
-            end
-          end
-          should do
+
+          must do
             filtered do
               if q[:title].present?
                 val = conditions[:title].gsub(/ /,'')
                 filter :query, :query_string => {
-                  :query => "*#{val}*",
-                  :fields => ["first_name", "any_name", "first_title", "any_title", "name", "title"]
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}*",
+                  :default_operator => "AND"
                 }
               end
               filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
               if q[:catalog_id].present?
-                filter :terms, {"category.id" => conditions[:catalog_id]}
+                filter :terms, "category.id" => conditions[:catalog_id]
               end
 
               if q[:category_id].present?
-                filter :terms, {"category.id" => conditions[:category_id]}
+                filter :terms, "category.id" => conditions[:category_id]
               end
             end
           end
         end
-
       end
       sort{ by :_score, :desc }
     end
