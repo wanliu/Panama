@@ -19,7 +19,6 @@ class  NotificationView extends Backbone.View
 			info = model.attributes
 			if model.attributes.targeable_type == "Activity"
 				@activitys_contain_view.collection.add(model)
-				console.log("activity")
 			else
 				@transactions_contain_view.collection.add(model)
 				

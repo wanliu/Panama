@@ -38,9 +38,9 @@ class People::NotificationsController < People::BaseController
 
   def unreads
     @notifications = Notification.unreads
-        # .where(:mentionable_user_id => @people.id)
-        # .order(updated_at: :asc)
-        # .includes(:targeable)
+      .where(:mentionable_user_id => @people.id)
+      .order(updated_at: :asc)
+      .includes(:targeable)
     respond_to do |format|
       format.json { render json: @notifications.format_unreads(@notifications) }
     end
