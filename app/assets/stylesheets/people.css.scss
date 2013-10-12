@@ -419,7 +419,16 @@
   }
 }
 .people_info{
-  .cell{ padding-top: 18px;}
-  .dl-horizontal dt{ width: 80px; text-align: center;}
+  .cell{ 
+    padding-top: 18px;
+    img{
+      height: 110px;
+      width: 110px;
+    }
+  }
+  .dl-horizontal dt{ 
+    width: 80px; 
+    text-align: center;
+  }
   .dl-horizontal dd{ margin-left: 10px;}
 }

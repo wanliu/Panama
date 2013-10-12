@@ -18,7 +18,6 @@ describe User, "用户模型" do
   it{ should have_many(:followings) }
   it{ should have_many(:contact_friends) }
   it{ should have_many(:chat_messages) }
-  it{ should have_many(:receive_messages) }
 
 	it "检查属性" do
 		u = User.new

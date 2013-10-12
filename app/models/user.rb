@@ -32,8 +32,9 @@ class User < ActiveRecord::Base
   has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   has_many :friend_groups, dependent: :destroy
   has_many :contact_friends, dependent: :destroy
-  has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
-  has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
+  # has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
+  # has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
+  has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
   has_and_belongs_to_many :services
@@ -65,7 +66,7 @@ class User < ActiveRecord::Base
   end
 
   def messages(friend_id)
-    ChatMessage.all(id, friend_id)
+    chat_messages.all(id, friend_id)
   end
 
   def connect

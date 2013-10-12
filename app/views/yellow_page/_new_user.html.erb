@@ -1,0 +1,36 @@
+<div class='base_info widget span9 newer'>
+	<h3>新入驻成员</h3>
+		<div class="hot_city newer">
+			<strong>热门城市: </strong>
+			<span></span>
+		</div>
+	<%= render "new_address" , locals: {:id => "new_user"} %>
+	<div class="wrapper">
+		<% @new_users.each do |new_user| %>
+			<div class='span3 new_user user_info' id="<%= new_user.id %>">
+			    <div>
+					<% if new_user.service_id == 1 %>
+				    	<a href="people/<%= new_user.try(:user).try(:login) %>">
+				    		<img src="<%= new_user.ower_photos.icon %>" class="user_icon"/>
+				    	</a>
+					<% else %>
+						<span class="label label-important pull-right">卖家</span>
+						<a href="shops/<%= new_user.try(:shop_name) %>">
+							<img src="<%= new_user.shop_photos.icon %>" class="user_icon" />
+						</a>
+					<% end %>
+				</div>
+				<div  class="pull-right title"> 
+					<div class="name">
+					<% if new_user.service_id == 1 %>
+						<a href="people/<%= new_user.try(:user).try(:login) %>"><%= new_user.try(:user).try(:login) %></a>
+					<% else %>
+						<a href="shops/<%= new_user.try(:shop_name) %>"><%= new_user.try(:shop_name) %></a>
+					<% end %>
+					</div>
+					<div class="tel"><i class="icon-phone-sign"></i> <%= new_user.try(:phone)%></div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>

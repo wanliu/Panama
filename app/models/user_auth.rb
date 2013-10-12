@@ -6,7 +6,7 @@ class UserAuth
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  ATTR_FIELDS = [:user_id, :ower_photo, :ower_name, :ower_shenfenzheng_number, :phone,:chekced]
+  ATTR_FIELDS = [:user_id, :ower_photo, :ower_name, :ower_shenfenzheng_number, :phone, :chekced, :company_name, :address_id]
   attr_accessor *ATTR_FIELDS
 
   # 在这里添加不能重复的字段

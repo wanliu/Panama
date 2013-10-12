@@ -14,6 +14,15 @@ Panama::Application.routes.draw do
   resources :completing_people do
     member do
       post 'skip'
+      get "edit_address"
+      match "update_address"
+    end
+  end
+
+  resources :yellow_page do
+    collection do 
+      get :search, :to => "yellow_page#search"
+      get :hot_city_name, :to => "yellow_page#hot_city_name"
     end
   end
 
@@ -26,8 +35,8 @@ Panama::Application.routes.draw do
 
   resources :completing_shop do
     member do
-      get "edit_address", :to => "completing_shop#edit_address"
-      put "update_address", :to => "completing_shop#update_address"
+      get "edit_address"
+      match "update_address"
     end
   end
 
@@ -205,6 +214,7 @@ Panama::Application.routes.draw do
     resources :focus do
       member do
         post 'join'
+        post 'unjoin'
       end
     end
     resources :package
@@ -369,9 +379,9 @@ Panama::Application.routes.draw do
       match "pending", :to => "shops/transactions#pending"
       match "complete", :to => "shops/transactions#complete"
       match "shop_info", :to => "shops/acounts#shop_info"
-      get "edit_address", :to => "shops/acounts#edit_address"
       post "create_address", :to => "shops/acounts#create_address"
-      put "update_address", :to => "shops/acounts#update_address"
+      get "edit_address", :to => "shops/acounts#edit_address"
+      match "update_address", :to => "shops/acounts#update_address"
       match "bill_detail", :to => "shops/acounts#bill_detail"
 
       resources :order_refunds, :controller => "shops/order_refunds" do

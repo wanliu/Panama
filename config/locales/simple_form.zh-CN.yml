@@ -9,7 +9,7 @@
         contact_name: 联系人
         contact_phone: 联系电话
       ask_buy:
-        title: 商品名称
+        title: 名称
         product_id: 商品
         price: 单价
         amount: 数量
@@ -21,4 +21,6 @@
         shop_product_id: 商品
         title: 活动名称
       shop_auth:
+        address_id: 营业地址
+      user_auth:
         address_id: 营业地址

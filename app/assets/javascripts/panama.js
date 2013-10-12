@@ -20,6 +20,7 @@
 //= require lib/jquery.columnview
 //= require lib/jquery.slimscroll
 //= require lib/bootstrap-datetimepicker.min
+//= require lib/bootstrap-datetimepicker-zh-CN
 //= require lib/colorpicker/js/bootstrap-colorpicker
 //= require lib/depend_select
 //= require lib/spinner
@@ -40,6 +41,8 @@
 //= require bootstrap-editable
 //= require activity
 //= require addresses
+//= require search_users
+//= require notification 
 
 root = window || this;
 

@@ -38,8 +38,7 @@ class Shop < ActiveRecord::Base
   validates_presence_of :user
 
   mount_uploader :photo, ImageUploader
-  define_graphical_attr :photos, :handler => :photo, :allow => [:icon, :header, :avatar, :preview]
-  configrue_graphical :icon => "30x30",  :header => "100x100", :avatar => "420x420", :preview => "420x420"
+  define_graphical_attr :photos, :handler => :photo  
   friendly_id :name
 
   #所有圈子好友
