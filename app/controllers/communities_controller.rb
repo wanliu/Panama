@@ -6,12 +6,26 @@ class CommunitiesController < ApplicationController
 	end
 
 	def index
-		@new_users    = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
+		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
+		@new_users = UserChecking.order('created_at DESC').limit(10)
+		@circles = Circle.where(:type => "advance")
+						 .joins("left join circle_friends as cf on circles.id=cf.id")
+						 .select("circles.*, count(cf.id) as count")
+						 .order("count desc").limit(10)
+
+		@top_10_circles = Shop.where(:follow_type => "Shop")
+					  .joins("left join followings as follow on shops.id = follow.user_id")
+					  .select("shops.*, count(follow.id) as followers")
+					  .group("shops.id")
+					  .order("followers desc").limit(10)
+
 		@address = Address.new
 		respond_to do |format|
 			format.html
 			format.json{ render :json =>{ :new_users => @new_users,
-										  :address => @address }}
+										  :address => @address,
+										  :circles => @circles,
+										  :top_10_circles => @top_10_circles }}
 		end
 	end
 
@@ -25,7 +39,6 @@ class CommunitiesController < ApplicationController
 
 
 	def hot_city_name
-		debugger
 		@hot_cities = Address.find( :all,
 									:joins =>  "LEFT JOIN `cities` ON cities.id = area_id" ,
 									:select => "count(*) as hot_score,area_id,cities.name",
@@ -34,7 +47,6 @@ class CommunitiesController < ApplicationController
 									},
 									:group => "area_id",
 									:order => "hot_score DESC")
-		debugger
 		respond_to do |format|
 		    format.html # show.html.erb
 		    format.json { render json: @hot_cities }

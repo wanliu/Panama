@@ -37,7 +37,7 @@ class SearchUserView extends Backbone.View
 			url: "communities/search",
 			success: (datas) =>
 				@render(datas)
-				new YellowInfoPreview({el : @el })
+				new YellowInfoPreviewList({el : @el })
 		})
 		return false
 
@@ -53,7 +53,7 @@ class SearchUserView extends Backbone.View
 			url: "/communities/search"
 			success: (datas) =>
 				@render(datas)
-				new YellowInfoPreview({el : @el })
+				new YellowInfoPreviewList({el : @el })
 		})
 		return false
 

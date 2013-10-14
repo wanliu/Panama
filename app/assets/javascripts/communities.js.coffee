@@ -6,15 +6,15 @@ root = window || @
 class YellowInfoPreview extends Backbone.View
 	
 	events: 
-		"mouseenter": "load_user_info"
-		"mouseleave": "hide_user_info"
+		"mouseenter ": "load_user_info"
+		"mouseleave ": "hide_user_info"
 	
 	initialize: () ->
 		_.extend(@, @options)
 		@template1 = Hogan.compile($("#yellow_page_hover_buyer_template").html())
 		@template2 = Hogan.compile($("#yellow_page_hover_seller_template").html())
 
-	load_user_info: () ->
+	load_user_info: (event) ->
 		if @$(".yellow_base_info").length > 0
 			@show_user_info()
 		else
@@ -48,6 +48,11 @@ class YellowInfoPreview extends Backbone.View
 	hide_user_info: () ->
 		@$(".yellow_base_info").hide()
 
+class YellowInfoPreviewList extends Backbone.View
+
+	initialize: () ->
+		_.each $(".user_info"), (el) =>
+			new YellowInfoPreview({el: el})
 
 
-root.YellowInfoPreview = YellowInfoPreview
+root.YellowInfoPreviewList = YellowInfoPreviewList
