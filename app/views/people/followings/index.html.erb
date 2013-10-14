@@ -14,13 +14,13 @@
 
 <script type='text/javascript'>
 	new FollowListView({
-		follow_type: "user",
+		follow_type: "User",
 		el: $(".followers .follow-users"),
 		login: "<%=current_user.login %>"
 	})
 
 	new FollowListView({
-		follow_type: "shop",
+		follow_type: "Shop",
 		el: $(".followers .follow-shops"),
 		login: "<%=current_user.login %>"
 	})

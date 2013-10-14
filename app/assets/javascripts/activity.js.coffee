@@ -70,7 +70,7 @@ class ActivityView extends Backbone.View
     false
 
   unjoinFocus: (event) ->
-    $.post($("form", @el).attr("action"), (data) => 
+    $.post($("form", @el).attr("action"), (data) =>
       @$('.unpartic-button').replaceWith(@partic_template)
       @$('.partic-count').removeClass("active")
       pnotify({text: "成功取消参与聚焦活动！"})
@@ -130,7 +130,7 @@ class ActivityView extends Backbone.View
     false
 
   unlike: (event) ->
-    $.post(@model.url() + "/unlike", (data) => 
+    $.post(@model.url() + "/unlike", (data) =>
       @$('.unlike-button').replaceWith(@like_template)
       @$('.like-count').removeClass("active")
       @decLike()
@@ -201,8 +201,7 @@ class ActivityPreview extends Backbone.View
   launch: (event) ->
     @load_view(event.currentTarget)
     new ActivityView({
-      model: @model,
-      el: $("#popup-layout")
+      model: @model
     }).modal()
     false
 

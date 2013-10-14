@@ -186,6 +186,9 @@ class root.AttachmentUpload extends Backbone.View
     data: []
     default_enabled: true  #开启默认图片选择
     limit: 10              #最多上传数量
+    params: {
+
+    }
     initialize : () ->
       _.extend(@, @options)
       @$el = $(@el)

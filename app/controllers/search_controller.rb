@@ -10,38 +10,6 @@ class SearchController < ApplicationController
     end
   end
 
-  # def products
-  #   _size, _from= params[:limit], params[:offset]
-  #   query = filter_special_sym(params[:q])
-  #   val = query.gsub(/ /, "")
-  #   s = Tire.search ["products", "shop_products", "activities", "ask_buys"] do
-  #     from _from
-  #     size _size
-
-  #     query do
-  #       boolean do
-  #         should do
-  #           string "*#{query}*", fields: ["first_name", "any_name", "first_title", "any_title"]
-  #         end
-  #         should do
-  #           string "*#{val}*", :fields => ["name", "title"]
-  #         end
-  #       end
-  #     end
-
-  #     sort("_script" => {
-  #         :script => "doc['_type'].value",
-  #         :type   => "string",
-  #         :order  => "desc"
-  #       }, "_score" => {})
-  #   end
-  #   @results = s.results
-  #   respond_to do |format|
-  #     format.json { render :json => @results }
-  #     format.html { render :products }
-  #   end
-  # end
-
   def shop_products
     if current_user.shop
       query = filter_special_sym(params[:q])
@@ -93,6 +61,14 @@ class SearchController < ApplicationController
             custom_score :script => :shopProductSort, :lang => :native do
               filtered do
                 filter :term, :_type => :shop_product
+              end
+            end
+          end
+
+          should do
+            custom_score :script => :productSort, :lang => :native do
+              filtered do
+                filter :term, :_type => :product
               end
             end
           end

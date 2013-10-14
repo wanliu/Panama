@@ -134,6 +134,14 @@ class User < ActiveRecord::Base
     followings.exists?(follow_id: user_id, follow_type: "User")
   end
 
+  def follow_user(user_id)
+    followings.find_by(follow_id: user_id, follow_type: "User")
+  end
+
+  def follow_shop(shop_id)
+    followings.find_by(follow_id: shop_id, follow_type: "Shop")
+  end
+
   def is_follow_shop?(shop_id)
     followings.exists?(follow_id: shop_id, follow_type: "Shop")
   end
