@@ -7,6 +7,7 @@ class SearchUserView extends Backbone.View
 		"click .hot_city_search" : "hot_city_search"
 
 	initialize: () ->
+		_.extend(@, @options)
 		@get_hot_cities()
 		@buyer_template = Hogan.compile($("#buyer_base_template").html())
 		@seller_template = Hogan.compile($("#seller_base_template").html())
@@ -16,22 +17,11 @@ class SearchUserView extends Backbone.View
 						<span>您搜索的区域暂时没有成员～～～～</span>
 					</div>")
 
-	judge_type: () -> 
-		type = ""
-		if $(@el).hasClass("newer")
-			type = "new_user"
-		else if $(@el).hasClass("buyer")
-			type = "buyer_user"
-		else
-			type = "seller_user"
-
 	get_hot_cities: () ->
-		type = @judge_type()
 		$.ajax({
 			dataType: "json",
 			type: "get",
-			data: {type: type},
-			url: "yellow_page/hot_city_name",
+			url: "/communities/hot_city_name",
 			success: (datas) =>
 				_.each datas, (data) =>
 					@$(".hot_city span").append(@hot_city_template.render(data))
@@ -44,10 +34,10 @@ class SearchUserView extends Backbone.View
 			dataType: "json",
 			type: "get",
 			data:{address: {area_id: id,type: type}} ,
-			url: "yellow_page/search",
+			url: "communities/search",
 			success: (datas) =>
 				@render(datas)
-				new YellowInfoPreviewList({el : @el })
+				new YellowInfoPreview({el : @el })
 		})
 		return false
 
@@ -60,10 +50,10 @@ class SearchUserView extends Backbone.View
 			type: "get",
 			dataType: "json",
 			data:  data,
-			url: "/yellow_page/search"
+			url: "/communities/search"
 			success: (datas) =>
 				@render(datas)
-				new YellowInfoPreviewList({el : @el })
+				new YellowInfoPreview({el : @el })
 		})
 		return false
 
@@ -81,10 +71,4 @@ class SearchUserView extends Backbone.View
 				@$(".wrapper").append(tpl.render(data))
 
 
-class SearchUserViewList extends Backbone.View
-
-	initialize: () ->
-		_.each $(".base_info"), (el) ->
-			new SearchUserView({el: el})
-
-root.SearchUserViewList = SearchUserViewList
+root.SearchUserView = SearchUserView

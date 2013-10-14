@@ -9,7 +9,7 @@
 	.new_user, .buyer_user, .seller_user{  
 		@include transparent(rgb(51,51,51),0.4);
 		margin-bottom: 20px; 
-		margin-left: 20px;
+		margin-left: 10px;
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
 		-webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
@@ -36,20 +36,25 @@
 	}
 
 	.wrapper{
-		.title { 
-			float:left;
-			padding-top:15px; 
-		}
+		.user_info:first-child{
+			margin-left: 10px;
+		};
+		.user_info{
+			.title { 
+				float:left;
+				padding-top:15px; 
+			}
 
-		.tel { 
-			color: #9bd0f6; 
-			font-size: 13px; 
-		}
+			.tel { 
+				color: #9bd0f6; 
+				font-size: 13px; 
+			}
 
-		.name {  
-			color: #404040;
-			font-size: 13px;
-			font-weight: bold;
+			.name {  
+				color: #404040;
+				font-size: 13px;
+				font-weight: bold;
+			}
 		}
 	}
 

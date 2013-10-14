@@ -54,8 +54,8 @@ Panama::Application.routes.draw do
   match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post
 
   match "communities/:name", :to => "communities#index", :via => :get
-  match "communities/:name/search", :to => "communities#search", :via => :post
-  match "communities/:name/hot_city_name", :to => "communities#hot_city_name", :via => :post
+  match "communities/:name/search", :to => "communities#search", :via => :get
+  match "communities/hot_city_name", :to => "communities#hot_city_name", :via => :get
 
   resources :people do
 

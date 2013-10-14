@@ -10,6 +10,7 @@ class YellowInfoPreview extends Backbone.View
 		"mouseleave": "hide_user_info"
 	
 	initialize: () ->
+		_.extend(@, @options)
 		@template1 = Hogan.compile($("#yellow_page_hover_buyer_template").html())
 		@template2 = Hogan.compile($("#yellow_page_hover_seller_template").html())
 
@@ -20,7 +21,7 @@ class YellowInfoPreview extends Backbone.View
 			$.ajax({
 				dataType: "json",
 				type: "get",
-				url: "/yellow_page/" + @el.id,
+				url: "/communities/" + @el.id,
 				success: (user) =>
 					modal = @render(user)
 					$(@el).append(modal)
@@ -48,11 +49,5 @@ class YellowInfoPreview extends Backbone.View
 		@$(".yellow_base_info").hide()
 
 
-class YellowInfoPreviewList extends Backbone.View
 
-	initialize: () ->
-		_.each $(".user_info"), (el) =>
-			new YellowInfoPreview({el: el})
-
-
-root.YellowInfoPreviewList = YellowInfoPreviewList
+root.YellowInfoPreview = YellowInfoPreview
