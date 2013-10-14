@@ -6,3 +6,32 @@
     max-height: 99999px;
   }
 }
+
+.column{
+  .shop_product{
+    height: 300px;
+  }
+}
+
+.shop_info{
+  margin-bottom: 20px;
+  height: 100px;
+
+  .body{
+    margin-left: 15px;
+  }
+
+  .body, .photo{
+    display: inline-block;
+    vertical-align: top;
+
+    .page-title{
+      margin-top: 0px;
+    }
+
+    .follow{
+      cursor: pointer;
+      margin-left: 10px;
+    }
+  }
+}
