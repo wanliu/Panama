@@ -33,8 +33,10 @@ class Circle extends Backbone.Model
       success: callback
     )
 
+
 class CircleList extends Backbone.Collection
   model: Circle
+
   set_url: (url) ->
     @url = url
 
@@ -61,12 +63,13 @@ class CircleList extends Backbone.Collection
   followers: () ->
     @fetch( url: "#{@url}/followers" )
 
+
 class CircleUser extends Backbone.View
   tagName: "span"
   className: "label user"
-  events: {
+  events: 
     "click .remove_user" : "cloes_user"
-  }
+  
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -85,8 +88,10 @@ class CircleUser extends Backbone.View
   remove: () ->
     @$el.remove()
 
+
 class CircleUserList extends Backbone.View
   notice_el: "<div class='notice'>暂时没有好友!</div>"
+
   initialize: (options) ->
     _.extend(@, options)
     @user_list = new CircleList([], @remote_url)
@@ -122,11 +127,12 @@ class CircleUserList extends Backbone.View
     if @user_list.length <= 0
       @el.html(@notice_el)
 
+
 class CircleView extends Backbone.View
   className: "alert alert-info circle"
-  events: {
+  events: 
     "click .remove_circle" : "delete_circle"
-  }
+  
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -165,12 +171,13 @@ class CircleView extends Backbone.View
   remove_user: (user_id) ->
     @circle_user_list.find_remove(user_id)
 
+
 class CircleViewList extends Backbone.View
-  events: {
-    "click .add-circle" : "show_add_circle"
-    "click .save-circle" : "create_circle"
-    "keypress input.circle_name" : "key_up"
-  }
+  events: 
+    "click .add-circle"         : "show_add_circle"
+    "click .save-circle"        : "create_circle"
+    "keypress input#circle_name": "key_up"
+  
   initialize: (options) ->
     _.extend(@, options)
 
@@ -202,16 +209,16 @@ class CircleViewList extends Backbone.View
     @add_panel.modal("show")
 
   create_circle: () ->
-    val = @$("input.circle_name").val().trim()
+    val = @$("input#circle_name").val().trim()
     if val is ""
       @$(".error").html("名称不能为空！")
       return
-
-    @circle = new Circle({name: val}, @remote_url)
+    debugger
+    @circle = new Circle($("form.circle_from_post").serializeHash(), @remote_url)
     @circle.save({},
       success: (model, data) =>
         @circles.add(data)
-        @$("input.circle_name").val('')
+        @$("input#circle_name").val('')
         @add_panel.modal("hide")
 
       error: (model, data) =>

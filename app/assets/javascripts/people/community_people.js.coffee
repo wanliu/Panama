@@ -200,6 +200,7 @@ class FriendView extends Backbone.View
 
   remove_user: (user_id) ->
     @trigger("remove_user", user_id)
+    
 
 class CommunityPeopleView extends Backbone.View
 

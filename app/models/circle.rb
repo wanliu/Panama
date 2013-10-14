@@ -15,7 +15,7 @@ class Circle < ActiveRecord::Base
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
   belongs_to :city
-  belongs_to :setting
+  belongs_to :setting, class_name: "CircleSetting"
 
   validate :valid_name?
 
