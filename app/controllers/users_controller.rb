@@ -33,20 +33,20 @@ class UsersController < ApplicationController
   #上传头像
   def upload_avatar
     field_name = params[:field_name]
-      file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name] 
+      file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name]
     unless file.nil?
-        @user_photo = User.find(params[:id]).photo
-        if @user_photo.send(field_name)
-            @user_photo.send(field_name).remove!
-        end
-        @user_photo.send("#{field_name}=",file)
-        if @user_photo.save
-            render :text => "{success: true, avatar_filename: '#{@user_photo.send(field_name)}'}"
-        else
-            render :text => "{success: false, error: '上传头像失败！'}"
-        end
+      @user_photo = User.find(params[:id]).photo
+      if @user_photo.send(field_name)
+        @user_photo.send(field_name).remove!
+      end
+      @user_photo.send("#{field_name}=",file)
+      if @user_photo.save
+        render :text => "{success: true, avatar_filename: '#{@user_photo.send(field_name)}'}"
+      else
+        render :text => "{success: false, error: '上传头像失败！'}"
+      end
     else
-        render :text => "{success: false, error: '请上传头像！'}"
+      render :text => "{success: false, error: '请上传头像！'}"
     end
   end
 end

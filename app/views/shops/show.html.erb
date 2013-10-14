@@ -24,7 +24,7 @@
         </span>
         <% if current_user != @shop.user  %>
           <% if current_user.is_follow_shop?(@shop.id) %>
-            <span class="label label-success unfollow">取消关注</span>
+            <span data-value-id="<%= current_user.follow_shop(@shop.id).id %>" class="label label-success unfollow">取消关注</span>
           <% else %>
             <span class="label label-success follow">+ 关注</span>
           <% end %>
@@ -59,6 +59,27 @@
 
     new ShopProductPreview({
       el: $("#shop_products")
+    })
+
+    new FollowView({
+      data: {
+        follow_id: <%=@shop.id %>,
+        follow_type: "Shop"
+      },
+      login: "<%=current_user.login %>",
+      el: $(".shop_info"),
+      change_follow: function(btn){
+        var follow_el = $(".shop_info .followers");
+        var count = parseInt(follow_el.text());
+        if(btn.hasClass("follow")){
+          btn.html("+ 关注");
+          count -= 1;
+        }else{
+          btn.html("取消关注");
+          count += 1;
+        }
+        follow_el.html(count);
+      }
     })
   })
 </script>
