@@ -2,28 +2,28 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.shop_product_dialog {
-	.toolbar{
-		ul.dropdown-menu {
-			li{
-				text-align: left;
-			}
-		}
+.shop_product_dialog{
+  .toolbar{
+    ul.dropdown-menu {
+      li{
+        text-align: left;
+      }
+    }
 
-		.buy_manner {
-			input[type='radio']{
-			margin-top: 0px;
-			margin-left: 10px;
-		}
+    .buy_manner {
+      input[type='radio']{
+      margin-top: 0px;
+      margin-left: 10px;
+    }
 
-			margin-right: 10px;
-		}
-	}
+      margin-right: 10px;
+    }
+  }
 
-	form.product{
-		.shop-product-product, .send-product-price, .star{
-			padding-top: 5px;
-			margin-bottom: 5px;
-		}
-	}
+  form.product{
+    .shop-product-product, .send-product-price, .star{
+      padding-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
 }

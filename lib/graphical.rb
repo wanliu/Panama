@@ -44,24 +44,24 @@ module Graphical
 
           #定义graphical attribute
           def define_graphical_attr(*args)
-              attribute, options = args
-              raise "not setting attribute argument!" if attribute.nil?
-              options = {
-                  :handler => :attachment ,
-                  :allow => [:icon, :avatar, :preview, :header]
-              }.merge(options || {})
-              options[:allow].push(:default)
+            attribute, options = args
+            raise "not setting attribute argument!" if attribute.nil?
+            options = {
+              :handler => :attachment ,
+              :allow => [:icon, :avatar, :preview, :header]
+            }.merge(options || {})
+            options[:allow].push(:default)
 
-             self.instance_eval do
-                  define_method attribute do
-                      ImageType.new(self, options)
-                  end
-             end
+            self.instance_eval do
+              define_method attribute do
+                ImageType.new(self, options)
+              end
+            end
           end
 
           #配置图片类型
           def configrue_graphical(options = {})
-              @config ||= Graphical::Display.config.merge(options)
+            @config ||= Graphical::Display.config.merge(options)
           end
         end
 

@@ -18,7 +18,6 @@ class ShopsController < ApplicationController
   layout 'shops'
 
   def title
-
     @title = "首页 #{Shop.find(params[:id]).name}"
   end
 
@@ -53,21 +52,6 @@ class ShopsController < ApplicationController
     end
   end
 
-  # GET /shops/new
-  # GET /shops/new.json
-  def new
-    @shop = Shop.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @shop }
-    end
-  end
-
-  # GET /shops/1/edit
-  def edit
-    @shop = Shop.find_by(:name => params[:id])
-  end
 
   # POST /shops
   # POST /shops.json

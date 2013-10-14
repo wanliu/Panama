@@ -83,11 +83,6 @@
         icon_url: "<%=current_user.photos.icon %>"}
       <% end %>
     })
-
-    new AttachmentUpload({
-      el: $(".topic_upload"),
-      remote: "<%=attachments_path %>"
-    })
 </script>
 
 

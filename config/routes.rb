@@ -20,7 +20,7 @@ Panama::Application.routes.draw do
   end
 
   resources :yellow_page do
-    collection do 
+    collection do
       get :search, :to => "yellow_page#search"
       get :hot_city_name, :to => "yellow_page#hot_city_name"
     end
@@ -140,8 +140,8 @@ Panama::Application.routes.draw do
 
     resources :followings, :controller => "people/followings" do
       collection do
-        post "user/:user_id" => "people/followings#user"
-        post "shop/:shop_id" => "people/followings#shop"
+        post "User/:user_id" => "people/followings#user"
+        post "Shop/:shop_id" => "people/followings#shop"
       end
     end
 
