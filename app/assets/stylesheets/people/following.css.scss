@@ -16,3 +16,17 @@ table.followers{
     }
   }
 }
+
+
+.followers{
+  .notify-message, .follow{
+    display: inline-block;
+
+    .info, .avatar{
+      display: inline-block;
+      vertical-align: top;
+    }
+
+
+  }
+}
