@@ -6,7 +6,7 @@
 #   owner: 所属者(商店与用户)
 #   user_id: 操作员
 class Circle < ActiveRecord::Base
-  attr_accessible :name, :owner_id, :owner_type
+  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :created_type
 
   belongs_to :owner, :polymorphic => true
 
@@ -14,6 +14,8 @@ class Circle < ActiveRecord::Base
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
+  belongs_to :city
+  belongs_to :setting
 
   validate :valid_name?
 
