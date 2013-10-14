@@ -2,14 +2,22 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .yellow_page{
-	/*.row-fluid [class*="span"]:first-child {
-		margin-left: 20px;
-	}*/
 
-	.new_user, .buyer_user, .seller_user{  
+	.businiess_communites{
+		@include transparent(rgb(51,51,51),0.4);
+		.user_icon { 
+				float:left; 
+				margin-right:5px; 
+				width: 70px; 
+				height: 70px; 
+				cursor: pointer;
+			}
+	}
+
+	.new_user{  
 		@include transparent(rgb(51,51,51),0.4);
 		margin-bottom: 20px; 
-		margin-left: 10px;
+		margin-left: 20px;
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
 		-webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
@@ -37,7 +45,7 @@
 
 	.wrapper{
 		.user_info:first-child{
-			margin-left: 10px;
+			margin-left: 20px;
 		};
 		.user_info{
 			.title { 
@@ -155,6 +163,11 @@
 		a{ 
 			color: white; 
 			font-size: 15px;
+		}
+	}
+	.shops-list{
+		.top_image{
+			padding-top: 8px;
 		}
 	}
 }

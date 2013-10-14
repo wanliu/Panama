@@ -29,12 +29,11 @@ class SearchUserView extends Backbone.View
 
 	hot_city_search: (event) ->
 		id = event.currentTarget.id
-		type = @judge_type()
 		$.ajax({
 			dataType: "json",
 			type: "get",
-			data:{address: {area_id: id,type: type}} ,
-			url: "communities/search",
+			data:{address: {area_id: id}} ,
+			url: "/communities/search",
 			success: (datas) =>
 				@render(datas)
 				new YellowInfoPreviewList({el : @el })

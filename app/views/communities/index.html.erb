@@ -4,34 +4,38 @@
 	    	<div class="span9">
 		    	<%= render "show_special" %> 		     
 				<%= render "new_user" %>
-				<%#= render "buyer_user" %>
+				<%= render "business_communities" %>
 				<%#= render "seller_user" %>
 			</div>
 			<div class="span3">
 				<!--排行榜-->
 				<div class="top_10 widget">
 					<h4>排行榜</h4>
-					<ul class="user-list ">
-						<li id ="#" class="widget row" style="margin-left:0px;margin-bottom:2px;">
-							<div class="top_image span4">
-								<img src= "/default_img/t5050_default_avatar.jpg"/>
-							</div>
-							<div class="span6"> 
-								<div class="shop_name"><a href="#">天赐宝贝</a></div>
-								<div class="follows"><span>关注人数: 100</span></div>
-								<a href="#" class="btn btn-warning" style="padding:0px;">+关注</a>
-							</div>     
-	                    </li>
-	                    <li id ="#" class="widget row" style="margin-left:0px;margin-bottom:2px;">
-							<div class="top_image span4">
-								<img src= "/default_img/t5050_default_avatar.jpg"/>
-							</div>
-							<div class="span6"> 
-								<div class="shop_name"><a href="#">天赐宝贝</a></div>
-								<div class="follows"><span>关注人数: 100</span></div>
-								<a href="#" class="btn btn-warning" style="padding:0px;">+关注</a>
-							</div>     
-	                    </li>
+					<ul class="shops-list ">
+						<% @top_10_shops.each do |shop|%>
+							<li id ="<%= shop.id %>" class="widget row" style="margin-left:0px;margin-bottom:2px;">
+								<div class="top_image span4">
+									<a href="shops/shop.name">
+										<img src= "<%=shop.photos.icon %>"/>
+									</a>
+								</div>
+								<div class="span7"> 
+									<div class="shop_name">
+										<a href="shops/shop.name"><%=shop.name %></a>
+									</div>
+									<div class="follows">
+										<span>关注人数: 
+											<% if shop.followers.count == 0 %>
+												暂无关注
+											<% else %>
+												<%=shop.followers.count %>
+											<% end %>
+										</span>
+									</div>
+									<a href="#" class="btn btn-warning" style="padding:0px;">+关注</a>
+								</div>     
+		                    </li>
+						<% end %>
 					</ul>
 				</div>
 			</div>

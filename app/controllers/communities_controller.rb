@@ -8,16 +8,15 @@ class CommunitiesController < ApplicationController
 	def index
 		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 		@new_users = UserChecking.order('created_at DESC').limit(10)
-		@circles = Circle.where(:type => "advance")
+		@circles = Circle.where(:created_type => "advance")
 						 .joins("left join circle_friends as cf on circles.id=cf.id")
 						 .select("circles.*, count(cf.id) as count")
 						 .order("count desc").limit(10)
 
-		@top_10_circles = Shop.where(:follow_type => "Shop")
-					  .joins("left join followings as follow on shops.id = follow.user_id")
-					  .select("shops.*, count(follow.id) as followers")
-					  .group("shops.id")
-					  .order("followers desc").limit(10)
+		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.user_id and follow.follow_type = 'User'")
+							.select("shops.*, count(follow.id) as followers")
+							.group("shops.id")
+							.order("followers desc").limit(10)
 
 		@address = Address.new
 		respond_to do |format|
@@ -25,7 +24,7 @@ class CommunitiesController < ApplicationController
 			format.json{ render :json =>{ :new_users => @new_users,
 										  :address => @address,
 										  :circles => @circles,
-										  :top_10_circles => @top_10_circles }}
+										  :top_10_shops => @top_10_shops }}
 		end
 	end
 

@@ -1,0 +1,28 @@
+<div class=' base_info widget'>
+	<h3>耒阳商圈</h3>
+	<div class ="wrapper row-fluid">
+		<% @circles.each do |circle| %>
+			<div class='businiess_communites span4' id="<%= circle.id %>">
+				<div class="head_img">
+					<a href="shops/<%= circle.owner.name %>">
+						<img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
+					</a>
+				</div>
+				<div  class="circle_detail"> 
+					<div class ="circle_name">
+						<a href ="#"><%=circle.name %></a>
+					</div>
+					<div class="create_name">
+						<span>创建者</span>
+						<a href="people/<%= circle.owner.try(:user).try(:login) %>">
+							<%= circle.owner.user.login %>
+						</a>
+					</div>
+					<div class="join">
+						<button class="btn">加入该商圈</button>
+					</div>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>

@@ -33,12 +33,6 @@
                      :collection_url => "/city/" %>
         <%= address_form.error :province_id %>
         <input type="button"  class="btn search_user" value="确定" />
-        <%= address_form.input  :type,
-                                :as => :hidden,
-                                :input_html => { 
-                                    :value => locals[:id]
-                                },
-                                :wrapper_html => {class: "hidden" } %>
         </div> 
     </div>
 <% end %>
