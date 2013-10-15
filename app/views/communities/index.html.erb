@@ -11,28 +11,33 @@
 				<!--排行榜-->
 				<div class="top_10 widget">
 					<h4>排行榜</h4>
+					<hr />
 					<ul class="shops-list ">
 						<% @top_10_shops.each do |shop|%>
-							<li id ="<%= shop.id %>" class="widget row" style="margin-left:0px;margin-bottom:2px;">
+							<li data-value-id="<%= shop.id %>" class="widget row top_shop" style="margin-left:0px;margin-bottom:2px;">
 								<div class="top_image span4">
-									<a href="shops/shop.name">
+									<a href="shops/<%=shop.name %>">
 										<img src= "<%=shop.photos.icon %>"/>
 									</a>
 								</div>
 								<div class="span7"> 
 									<div class="shop_name">
-										<a href="shops/shop.name"><%=shop.name %></a>
+										<a href="shops/<%=shop.name %>"><%=shop.name %></a>
 									</div>
 									<div class="follows">
-										<span>关注人数: 
-											<% if shop.followers.count == 0 %>
-												暂无关注
-											<% else %>
-												<%=shop.followers.count %>
-											<% end %>
+										关注人数: 
+										<span class="follows_count">	
+											<%=shop.followers.count %>
 										</span>
 									</div>
-									<a href="#" class="btn btn-warning" style="padding:0px;">+关注</a>
+									<% if current_user != shop.user  %>
+							            <% if current_user.is_follow_shop?(shop.id) %>
+							            	<span data-value-id="<%= current_user.follow_shop(shop.id).id %>" class="label  btn-warning unfollow">取消关注</span>
+							            <% else %>
+							                <span class="label  btn-warning follow">+ 关注</span>
+							            <% end %>
+							        <% end %>
+									<!-- <a href="#" class="btn btn-warning follow" style="padding:0px;">+关注</a> -->
 								</div>     
 		                    </li>
 						<% end %>
@@ -68,5 +73,28 @@
 			el: $(".base_info")
 		})
 		$(".depend_select>option[value=]").html("--请选择--")
+
+		$(".shops-list .top_shop").each(function(i, elem){
+			new FollowView({
+				data: {
+					follow_id:  $(elem).attr("data-value-id"),
+					follow_type: "Shop"
+				},
+				login: "<%=current_user.login %>",
+				el: $(elem),
+				change_follow: function(btn){
+				    var follow_el = this.$(".follows_count");
+					var count = parseInt(follow_el.text());
+					if(btn.hasClass("follow")){
+					    btn.html("+ 关注");
+					    count -= 1;
+					}else{
+					    btn.html("取消关注");
+					    count += 1;
+					}
+					follow_el.html(count);
+				}
+    		})
+		})
 	})
 </script>
