@@ -209,22 +209,22 @@ class CircleViewList extends Backbone.View
     @add_panel.modal("show")
 
   create_circle: () ->
-    val = @$("input#circle_name").val().trim()
-    if val is ""
-      @$(".error").html("名称不能为空！")
-      return
-    debugger
-    @circle = new Circle($("form.circle_from_post").serializeHash(), @remote_url)
+    return pnotify("请填写圈子名称") if @$("#circle_name").val().trim() is ""
+    return pnotify("请完善地区位置") if @$("#address_area_id").val().trim() is ""
+    $form = $("form.circle_from_post")
+    @circle = new Circle($form.serializeHash(), @remote_url)
     @circle.save({},
       success: (model, data) =>
         @circles.add(data)
-        @$("input#circle_name").val('')
+        $form[0].reset()
         @add_panel.modal("hide")
+        pnotify("成功添加圈子")
 
       error: (model, data) =>
         data = JSON.parse(data.responseText)
-        _.each data, (d) =>
-          @$(".error").append(d)
+        # _.each data, (d) =>
+        #   @$(".error").append(d)
+        pnotify("添加圈子失败了~~~")
     )
 
   key_up: (e) ->

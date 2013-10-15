@@ -11,6 +11,7 @@ class Circle < ActiveRecord::Base
   belongs_to :owner, :polymorphic => true
 
   validates :name, :presence => true
+  validates :city_id, :presence => true
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive

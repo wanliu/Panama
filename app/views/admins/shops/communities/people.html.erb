@@ -32,8 +32,9 @@
               <h3>添加圈子</h3>
             </div>
             <div class="modal-body">
-              <%= simple_form_for :circle, :remote => true, :html => { :class => 'form-horizontal circle_from_post'} do |form| %>
+              <%= simple_form_for :circle, :remote => true, :html => {:class => 'form-horizontal circle_from_post'} do |form| %>
                 <%= form.input :name, label: "名称" %>
+                <%= form.error :name, id: 'name_error' %>
                 <%= form.input :description, label: "描述" %>
                 <%= simple_fields_for :address do |address_form| %>
                   <label class="chosen optional control-label" for="transaction_address">选择地区</label>

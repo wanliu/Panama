@@ -9,10 +9,13 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   end
 
   def create
-    @circle = current_shop.circles.new(params[:circle].merge!({ created_type: "advance", city_id: params[:address][:area_id] }))
-    setting = CircleSetting.create(params[:setting])
-    @circle.setting_id = setting.id
-    @circle.save
+    begin
+      Circle.transaction do
+        @circle = current_shop.circles.create(params[:circle].merge({ created_type: "advance", city_id: params[:address][:area_id], setting_id: CircleSetting.create(params[:setting]).id }))
+      end
+    rescue Exception => ex
+    end
+
     respond_to do |format|
       if @circle.valid?
         format.json{ render json: @circle }
