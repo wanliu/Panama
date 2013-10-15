@@ -1,13 +1,12 @@
 class CommunitiesController < ApplicationController
 	layout "application"
 
-	def city
-		render 'index'
-	end
+	before_filter :current_city, :only => [:index]
 
 	def index
 		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 		@new_users = UserChecking.order('created_at DESC').limit(10)
+
 		@circles= Circle.where(:created_type => "advance")
 						.joins("left join circle_friends as cf on circles.id=cf.id")
 						.select("circles.*, count(cf.id) as count")
@@ -27,7 +26,8 @@ class CommunitiesController < ApplicationController
 			format.json{ render :json =>{ :new_users => @new_users,
 										  :address => @address,
 										  :circles => @circles,
-										  :top_10_shops => @top_10_shops }}
+										  :top_10_shops => @top_10_shops,
+										  :city => @current_city }}
 		end
 	end
 
@@ -38,7 +38,6 @@ class CommunitiesController < ApplicationController
 		  format.json { render json: @user }
 		end
 	end
-
 
 	def hot_city_name
 		@hot_cities = Address.find( :all,
@@ -73,5 +72,9 @@ class CommunitiesController < ApplicationController
 		else
 			@users = []
 		end
+	end
+
+	def current_city
+		@current_city = City.where(:name => params[:name]).first
 	end
 end
