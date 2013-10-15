@@ -1,5 +1,6 @@
 <% admin_active_section :communities %>
 <% community_active :people  %>
+
 <div class='row-fluid shop_community_people'>
   <div class='span8 widget'>
     <%= render :partial => "admins/base/community_nav" %>
@@ -32,13 +33,52 @@
               <h3>添加圈子</h3>
             </div>
             <div class="modal-body">
-              <div class="control-group">
-                <label class="control-label">名称</label>
-                <div class="controls">
-                  <input type="text" name="circle[name]" class="circle_name" placeholder="名称">
-                  <span class='error' style='color: red;'></span>
+              <%= simple_form_for :circle, :remote => true, :html => { :class => 'form-horizontal circle_from_post'} do |form| %>
+                <%= form.input :name, label: "名称" %>
+                <%= form.input :description, label: "描述" %>
+                <%= simple_fields_for :address do |address_form| %>
+                  <label class="chosen optional control-label" for="transaction_address">选择地区</label>
+                  <div class="controls controls-row">
+                    <div class="control-group">
+                      <%= address_form.input :province_id,
+                                   :as => :depend_select,
+                                   :children => :city_id,
+                                   :wrapper => :inline,
+                                   :collection => get_city %>
+
+                      <%= address_form.input :city_id,
+                                   :as => :depend_select,
+                                   :children => :area_id,
+                                   :target => :province,
+                                   :wrapper => :inline,
+                                   :collection_url => "/city/" %>
+
+                      <%= address_form.input :area_id,
+                                   :as => :depend_select,
+                                   :target => :city,
+                                   :wrapper => :inline,
+                                   :collection_url => "/city/" %>
+
+                      <%= address_form.error :province_id %>
+                    </div>
+                  </div>
+                <% end %>
+
+                <%= simple_fields_for :setting do |form| %>
+                  <%= form.input :limit_city, as: :boolean, label: "限制地区" %>
+                  <%= form.input :limit_join, as: :boolean, label: "验证加入" %>
+                <% end %>
+              <% end %>
+              <!-- <form class="form-horizontal">
+                <div class="control-group">
+                  
+                  <label class="control-label">名称</label>
+                  <div class="controls">
+                    <input type="text" name="circle[name]" class="circle_name" placeholder="名称">
+                    <span class='error' style='color: red;'></span>
+                  </div>
                 </div>
-              </div>
+              </form> -->
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -51,6 +91,7 @@
     </div>
   </div>
 </div>
+
 <script text='text/javascript'>
   new CommunityPeopleView({
     el: $(".shop_community_people"),
