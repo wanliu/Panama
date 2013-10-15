@@ -19,6 +19,10 @@
         vertical-align: middle;
         display: table-cell;
 
+        .attachable-preview{
+          cursor: pointer;
+        }
+
         .attachment-upload{
 
           .qq-upload-list{

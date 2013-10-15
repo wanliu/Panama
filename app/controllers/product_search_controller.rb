@@ -6,7 +6,14 @@ class ProductSearchController < ApplicationController
     s = Product.search2 do
       query do
         boolean do
-          must { string "*#{query}*", fields: ["first_name", "any_name", "name"] }
+          must {
+            filtered do
+              filter :query, :query_string => {
+                :query => "name:#{query} OR primitive:#{query}*",
+                :default_operator => "AND"
+              }
+            end
+          }
         end
       end
     end

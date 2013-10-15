@@ -23,7 +23,7 @@ class AskBuyView extends Backbone.View
       @textarea = @$("textarea[name='content']")
       @btn = @$(".submit-comment")
       @fetch_comment()
-    super
+    #super
 
   fetch_dialog: (handle) ->
     $.ajax(

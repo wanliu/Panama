@@ -20,6 +20,10 @@
     }
   }
 
+  .main-show{
+    overflow: visibility!important;
+  }
+
   form.product{
     .shop-product-product, .send-product-price, .star{
       padding-top: 5px;
