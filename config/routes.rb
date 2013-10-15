@@ -383,6 +383,7 @@ Panama::Application.routes.draw do
       resources :communities, :controller => "shops/communities" do
         collection do
           get :people
+          get :settings
         end
       end
 
