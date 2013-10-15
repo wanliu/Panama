@@ -19,9 +19,8 @@ class CircleFriends < ActiveRecord::Base
 
   def validate_condition?
     if self.circle.setting.limit_city == true 
-      area_id = UserChecking.joins("right join addresses on addresses.targeable_id = user_checkings.user_id ")
-                            .where("user_id = ? and addresses.area_id<>?",self.user_id, self.circle.city_id).count
-      if area_id < 1
+      area_id = UserChecking.joins("right join addresses on addresses.targeable_id = user_checkings.user_id ").where("user_id =? and addresses.area_id<>?",self.user_id, self.circle.city_id).count
+      if area_id > 0
         return true
       else
         errors.add(:area_id, "该圈子不对你所在地区开放!")
