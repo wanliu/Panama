@@ -213,7 +213,6 @@ class CircleViewList extends Backbone.View
     if val is ""
       @$(".error").html("名称不能为空！")
       return
-    debugger
     @circle = new Circle($("form.circle_from_post").serializeHash(), @remote_url)
     @circle.save({},
       success: (model, data) =>

@@ -8,15 +8,18 @@ class CommunitiesController < ApplicationController
 	def index
 		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 		@new_users = UserChecking.order('created_at DESC').limit(10)
-		@circles = Circle.where(:created_type => "advance")
-						 .joins("left join circle_friends as cf on circles.id=cf.id")
-						 .select("circles.*, count(cf.id) as count")
-						 .order("count desc").limit(10)
+		@circles= Circle.where(:created_type => "advance")
+						.joins("left join circle_friends as cf on circles.id=cf.id")
+						.select("circles.*, count(cf.id) as count")
+						.group("circles.id")
+						.order("count desc")
+						.limit(10)
 
-		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.user_id and follow.follow_type = 'User'")
-							.select("shops.*, count(follow.id) as followers")
+		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
+							.select("shops.*, count(follow.id) as count")
 							.group("shops.id")
-							.order("followers desc").limit(10)
+							.order("count desc")
+							.limit(10)
 
 		@address = Address.new
 		respond_to do |format|

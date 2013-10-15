@@ -99,6 +99,31 @@ class People::CirclesController < People::BaseController
     end
   end
 
+  def apply_join
+    @circle = Circle.find(params[:id]) 
+    friend = @circle.friends.build(:user_id => @people.id)
+    respond_to do |format|
+      unless friend.valid?
+        format.json { render json: {message: "该圈只对指定地区开放!"}, status: 403}
+      else
+        if @circle.setting.limit_join 
+          Notification.create!(
+            :user_id => @people.id,
+            :mentionable_user_id => @circle.owner.id,
+            :url => "",
+            :body => "#{@people}申请加入圈子#{@circle.name}")
+            format.json{ render json:{ message: "请求已经发送~~~" }}    
+        else
+          if friend.save
+            format.json{ render json:{ message: "成功加入该圈~~~" }}
+          else
+            format.json{ render json:{ message: "加入失败~~"}}
+          end
+        end 
+      end           
+    end
+  end
+
   private
   def circle_find_user(user_id, circle)
     circle.friends.find_by(user_id: user_id)

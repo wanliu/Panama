@@ -19,6 +19,27 @@ class Circle < ActiveRecord::Base
 
   validate :valid_name?
 
+  validate :validate_condition
+
+  def validate_condition
+      if self.etting.limit_city == true 
+        area_id = UserChecking.joins("right join addresses on addresses.targeable_id = user_checkings.user_id ")
+                              .where(":user_id =>? and addresses.area_id<>?",user_id, circle.city_id).count
+        if area_id
+          if self.setting.limit_join == true
+            Notification.create!(
+              :user_id => id,
+              :mentionable_user_id => circle.owner.id,
+              :url => "",
+              :body => "#{@people}申请加入圈子#{@circle.name}")
+          else
+             @circle.join_friend(params[id])#加入该圈子
+          end
+        end
+      end
+    
+  end
+
   def friend_count
     friends.count
   end

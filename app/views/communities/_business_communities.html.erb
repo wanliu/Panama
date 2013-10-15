@@ -3,7 +3,7 @@
 	<hr />
 	<div class ="wrapper row-fluid circles-list">
 		<% @circles.each do |circle| %>
-			<div class='businiess_communites span4' id="<%= circle.id %>">
+			<div class='businiess_community span4' id="<%= circle.id %>">
 				<div class="head_img">
 					<a href="shops/<%= circle.owner.name %>">
 						<img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
@@ -21,7 +21,7 @@
 						</a>
 					</div>
 					<div class="join">
-						<a href="#" class="label label-warning add_circle">加入该商圈</a>
+						<a href="#" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入该商圈</a>
 					</div>
 				</div>
 			</div>
@@ -29,7 +29,10 @@
 	</div>
 </div>
 <script type="text/javascript">
-	new ApplyJoinCircleList({
-		el: $(".circles-list")
+	$(function() {
+		new ApplyJoinCircleList({
+			el: $(".circles-list"),
+			current_user_login: '<%= current_user.login %>'
+		})
 	})
 </script>

@@ -17,4 +17,5 @@
 //= require catalog
 //= require communities
 //= require following
+//= require apply_join_circle
 

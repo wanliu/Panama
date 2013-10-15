@@ -19,12 +19,12 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :yellow_page do
-    collection do
-      get :search, :to => "yellow_page#search"
-      get :hot_city_name, :to => "yellow_page#hot_city_name"
-    end
-  end
+  # resources :yellow_page do
+  #   collection do
+  #     get :search, :to => "yellow_page#search"
+  #     get :hot_city_name, :to => "yellow_page#hot_city_name"
+  #   end
+  # end
 
   resources :catalog do
     member do
@@ -129,6 +129,7 @@ Panama::Application.routes.draw do
 
     resources :circles, :controller => "people/circles" do
       collection do
+        post :apply_join
         get "friends"
         get "addedyou"
         get "all_friends"

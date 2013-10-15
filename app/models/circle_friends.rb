@@ -15,6 +15,20 @@ class CircleFriends < ActiveRecord::Base
 
 
   validate :valid_some_user_and_circle?
+  validate :validate_condition?
+
+  def validate_condition?
+    if self.circle.setting.limit_city == true 
+      area_id = UserChecking.joins("right join addresses on addresses.targeable_id = user_checkings.user_id ")
+                            .where("user_id = ? and addresses.area_id<>?",self.user_id, self.circle.city_id).count
+      if area_id < 1
+        return true
+      else
+        errors.add(:area_id, "该圈子不对你所在地区开放!")
+        return false
+      end
+    end    
+  end
 
   def valid_some_user_and_circle?
     if CircleFriends.exists?(["circle_id=? and user_id=? and id<>?", circle_id, user_id, id.to_s])
