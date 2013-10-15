@@ -1,8 +1,9 @@
 class CommunitiesController < ApplicationController
 	layout "application"
 
+	before_filter :current_city, :only => [:index]
+
 	def index
-		@city = City.where(:name => params[:name]).first
 		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 		@new_users = UserChecking.order('created_at DESC').limit(10)
 		@circles = Circle.where(:created_type => "advance")
@@ -23,7 +24,7 @@ class CommunitiesController < ApplicationController
 										  :address => @address,
 										  :circles => @circles,
 										  :top_10_circles => @top_10_circles,
-										  :city => @city }}
+										  :city => @current_city }}
 		end
 	end
 
@@ -69,5 +70,9 @@ class CommunitiesController < ApplicationController
 		else
 			@users = []
 		end
+	end
+
+	def current_city
+		@current_city = City.where(:name => params[:name]).first
 	end
 end
