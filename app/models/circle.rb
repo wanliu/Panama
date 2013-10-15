@@ -8,6 +8,9 @@
 class Circle < ActiveRecord::Base
   attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :created_type
 
+  scope :basic, lambda{ where(:created_type => :basic) }
+  scope :advance, lambda{ where(:created_type => :advance) }
+
   belongs_to :owner, :polymorphic => true
 
   validates :name, :presence => true
@@ -25,7 +28,7 @@ class Circle < ActiveRecord::Base
     notifications.create!(
       :user_id => sender.id,
       :mentionable_user_id => owner.id,
-      :url => "shops/#{owner.name}/admins/communities/settings",
+      :url => "/shops/#{owner.name}/admins/communities/settings",
       :body => message)
   end
 
