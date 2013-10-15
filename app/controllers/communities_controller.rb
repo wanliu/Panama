@@ -1,14 +1,11 @@
 class CommunitiesController < ApplicationController
 	layout "application"
 
-	def city
-		render 'index'
-	end
-
 	def index
+		@city = City.where(:name => params[:name]).first
 		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 		@new_users = UserChecking.order('created_at DESC').limit(10)
-		@circles = Circle.where(:type => "advance")
+		@circles = Circle.where(:created_type => "advance")
 						 .joins("left join circle_friends as cf on circles.id=cf.id")
 						 .select("circles.*, count(cf.id) as count")
 						 .order("count desc").limit(10)
@@ -25,7 +22,8 @@ class CommunitiesController < ApplicationController
 			format.json{ render :json =>{ :new_users => @new_users,
 										  :address => @address,
 										  :circles => @circles,
-										  :top_10_circles => @top_10_circles }}
+										  :top_10_circles => @top_10_circles,
+										  :city => @city }}
 		end
 	end
 
