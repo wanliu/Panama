@@ -106,13 +106,9 @@ class People::CirclesController < People::BaseController
       unless friend.valid?
         format.json { render json: {message: "该圈只对指定地区开放!"}, status: 403}
       else
-        if @circle.setting.limit_join 
-          Notification.create!(
-            :user_id => @people.id,
-            :mentionable_user_id => @circle.owner.id,
-            :url => "",
-            :body => "#{@people}申请加入圈子#{@circle.name}")
-            format.json{ render json:{ message: "请求已经发送~~~" }}    
+        if @circle.setting.limit_join
+          @circle.notice_owner(@people, "#{@people.login}申请加入圈子#{@circle.name}") 
+          format.json{ render json:{ message: "请求已经发送~~~" }}    
         else
           if friend.save
             format.json{ render json:{ message: "成功加入该圈~~~" }}
