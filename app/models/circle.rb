@@ -15,10 +15,19 @@ class Circle < ActiveRecord::Base
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
+  has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
 
   validate :valid_name?
+
+  def notice_owner(sender, message)
+    notifications.create!(
+      :user_id => sender.id,
+      :mentionable_user_id => owner.id,
+      :url => "shops/#{owner.name}/admins/communities/settings",
+      :body => message)
+  end
 
   def friend_count
     friends.count
@@ -38,6 +47,14 @@ class Circle < ActiveRecord::Base
     uid = user
     uid = user.id if user.is_a?(User)
     friends.find_by(user_id: uid).destroy
+  end
+
+  def already_has?(user_id)
+    begin
+      friends.find(user_id)
+    rescue
+      false
+    end
   end
 
   def valid_name?

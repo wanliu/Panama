@@ -1,6 +1,7 @@
 class CommunitiesController < ApplicationController
 	layout "application"
 
+	before_filter :login_and_service_required
 	before_filter :current_city, :only => [:index]
 
 	def index
