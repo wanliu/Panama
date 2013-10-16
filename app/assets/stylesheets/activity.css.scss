@@ -3,17 +3,16 @@
 @import "compass/css3";
 @import "lib/transparent";
 
-.activity, .ask_buy, .product {
+/*.activity, .ask_buy, .product {
   height: 373px;
 }
-
+*/
 .shop_product {
   height: auto;
 }
 
 .column{
   .activity, .ask_buy, .product, .shop_product {
-    // width: 225px;
     margin: 0px 0px 15px 0px;
     padding: 0px;
     height: 362px;

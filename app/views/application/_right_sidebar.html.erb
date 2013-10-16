@@ -1,55 +1,46 @@
 <section class="right-sidebar widget widget-tabs">
+  <div class="main">
+    <div class="body tab-content"></div>
+  </div>
 </section>
 
 <!-- js模板 -->
-<div id="right-sidebar-templates" style='display: none;'>
-	<div class="main">
-		<header>
-			<ul class="nav nav-tabs">
-			</ul>
-			<!-- <div id="sidebar-settings" class="settings">
-				<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
-				<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自动</button>	
-			</div> -->
-		</header>
-		<div class="body tab-content">
-		</div>
-	</div>
-</div>
+<!-- <div id="right-sidebar-templates" style='display: none;'>
+  <div class="main">
+    <div class="body tab-content">
+    </div>
+  </div>
+</div> -->
 
 <script type="text/javascript">
-	RealTimeContainerView.bind_runtime({
-		realtime_url: '<%= faye_server_uri %>',
-		token: '<%= current_user.im_token %>',
-		current_user_login: '<%= current_user.login %>'
-	});
+  RealTimeContainerView.bind_runtime({
+    realtime_url: '<%= faye_server_uri %>',
+    token: '<%= current_user.im_token %>',
+    current_user_login: '<%= current_user.login %>'
+  });
 
-	var sidebar_el = $(".right-sidebar")
-	window.right_sidebar ||
-	(window.right_sidebar = new RightSideBar({el: sidebar_el}));
 
-	right_sidebar.register(FriendsContainerView);
+  window.right_sidebar ||
+  (window.right_sidebar = new RightSideBar({el: $(".right-sidebar")}));
 
-	var height = sidebar_el.height() - $("header", sidebar_el).height();
-	$('.body', sidebar_el).slimScroll({
-		height: height
-	})
-	//.on("click", "li", function(event){
-	// 	$(this).siblings(".clone").remove()
-	// }).on("mousewheel", "li", function(event){
-	// 	$(this).removeAttr("style").siblings(".clone").remove()
-	// }).on("mouseout", "li", function(event){
-	// 	$(this).removeAttr("style").siblings(".clone").remove()
-	// 	$('.slimScrollDiv').css("overflow", "hidden")
-	// }).on("mouseover", "li", function(event){
-	// 	$(this).css({
-	// 		position: 'absolute',
-	// 		'padding-left': '5px',
-	// 		'margin-left': '-120px'
-	// 	}).after("<li class='clone'></li>")
-	// 	$('.slimScrollDiv').css("overflow", "visible")
-	// 	var offset_top = $(this).siblings(".clone").offset().top
-	// 	$(this).offset({ top: offset_top })
-	// })
-	// $(".right-sidebar .slimScrollBar").hide()
+  right_sidebar.register(FriendsContainerView);
+
+  //.on("click", "li", function(event){
+  //  $(this).siblings(".clone").remove()
+  // }).on("mousewheel", "li", function(event){
+  //  $(this).removeAttr("style").siblings(".clone").remove()
+  // }).on("mouseout", "li", function(event){
+  //  $(this).removeAttr("style").siblings(".clone").remove()
+  //  $('.slimScrollDiv').css("overflow", "hidden")
+  // }).on("mouseover", "li", function(event){
+  //  $(this).css({
+  //    position: 'absolute',
+  //    'padding-left': '5px',
+  //    'margin-left': '-120px'
+  //  }).after("<li class='clone'></li>")
+  //  $('.slimScrollDiv').css("overflow", "visible")
+  //  var offset_top = $(this).siblings(".clone").offset().top
+  //  $(this).offset({ top: offset_top })
+  // })
+  // $(".right-sidebar .slimScrollBar").hide()
 </script>
