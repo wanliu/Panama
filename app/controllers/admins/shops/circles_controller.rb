@@ -2,7 +2,7 @@
 class Admins::Shops::CirclesController < Admins::Shops::SectionController
 
   def index
-    @circles = current_shop.circles.order("created_at desc")
+    @circles = current_shop.circles
     respond_to do |format|
       format.json{ render json: @circles.as_json(methods: :friend_count) }
     end
@@ -11,7 +11,12 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   def create
     begin
       Circle.transaction do
-        @circle = current_shop.circles.create(params[:circle].merge({ created_type: "advance", city_id: params[:address][:area_id], setting_id: CircleSetting.create(params[:setting]).id }))
+        @circle = current_shop.circles.create(
+          params[:circle].merge({ 
+            created_type: "advance", 
+            city_id: params[:address][:area_id], 
+            setting_id: CircleSetting.create(params[:circle][:setting]).id 
+        }))
       end
     rescue Exception => ex
     end
@@ -40,7 +45,22 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   end
 
   def update
-    debugger
+    @circle = current_shop.circles.find(params[:id])
+    begin
+      Circle.transaction do
+        @circle.update_attributes(params[:circle].merge({city_id: params[:address][:area_id]}))
+        @circle.setting.update_attributes(params[:circle][:setting])
+      end
+    rescue Exception => ex
+    end
+
+    respond_to do |format|
+      if @circle.valid?
+        format.json{ render json: @circle }
+      else
+        format.json{ render json: draw_errors_message(@circle), status: 403 }
+      end
+    end
   end
 
   #加入好友
