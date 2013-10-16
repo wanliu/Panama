@@ -70,23 +70,12 @@
                   <%= form.input :limit_join, as: :boolean, label: "验证加入" %>
                 <% end %>
               <% end %>
-              <!-- <form class="form-horizontal">
-                <div class="control-group">
-                  
-                  <label class="control-label">名称</label>
-                  <div class="controls">
-                    <input type="text" name="circle[name]" class="circle_name" placeholder="名称">
-                    <span class='error' style='color: red;'></span>
-                  </div>
-                </div>
-              </form> -->
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
               <button class="btn btn-primary save-circle">保存</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -96,12 +85,26 @@
 <script type="text/template" id="community-template">
   <div class="header">
     <span>{{name}}</span>
+    <i class="icon-edit pull-right" data-toggle="modal" href="/shops/<%=current_shop.name%>/admins/circles/{{id}}/edit" data-target="#edit_circle{{id}}"></i>
     <i class="icon-user pull-right"></i>
     <a class='close-label remove_circle' href="javascript:void(0)"></a>
   </div>
-  
   <hr />
   <div class='user-list'></div>
+
+  <div id="edit_circle{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>编辑圈子</h3>
+    </div>
+    <div class="modal-body">
+      
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+      <button class="btn btn-primary save-circle">保存</button>
+    </div>
+  </div>
 </script>
 
 <script text='text/javascript'>

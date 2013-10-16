@@ -74,6 +74,7 @@ class AddedYouUserView extends Backbone.View
       revertDuration: 200,
       zIndex: 1
     })
+    
 
 class YouCircleUserView extends Backbone.View
   className: "you_circle_user_panel circle_friend"

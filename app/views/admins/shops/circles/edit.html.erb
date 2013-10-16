@@ -1,0 +1,38 @@
+<%= simple_form_for @circle, :url => "update_shop_admins_circle_path(@circle)", :html => {:class => 'form-horizontal circle_from_post'} do |form| %>
+  <%= form.input :name, label: "名称" %>
+  <%= form.error :name, id: 'name_error' %>
+  <%= form.input :description, label: "描述" %>
+  <%= simple_fields_for :address do |address_form| %>
+    <label class="chosen optional control-label" for="transaction_address">选择地区</label>
+    <div class="controls controls-row">
+      <div class="control-group">
+        <%= address_form.input :province_id,
+                     :as => :depend_select,
+                     :children => :city_id,
+                     :wrapper => :inline,
+                     :collection => get_city %>
+
+        <%= address_form.input :city_id,
+                     :as => :depend_select,
+                     :children => :area_id,
+                     :target => :province,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
+
+        <%= address_form.input :area_id,
+                     :as => :depend_select,
+                     :target => :city,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
+
+        <%= address_form.error :province_id %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= simple_fields_for :setting do |form| %>
+    <%= form.input :limit_city, as: :boolean, label: "限制地区" %>
+    <%= form.input :limit_join, as: :boolean, label: "验证加入" %>
+  <% end %>
+<% end %>
+  

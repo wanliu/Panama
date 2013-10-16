@@ -2,7 +2,7 @@
 class Admins::Shops::CirclesController < Admins::Shops::SectionController
 
   def index
-    @circles = current_shop.circles
+    @circles = current_shop.circles.order("created_at desc")
     respond_to do |format|
       format.json{ render json: @circles.as_json(methods: :friend_count) }
     end
@@ -32,6 +32,15 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
       format.html
       format.json{ render json: @circle }
     end
+  end
+
+  def edit
+    @circle = Circle.find(params[:id])
+    render layout: false
+  end
+
+  def update
+    debugger
   end
 
   #加入好友
