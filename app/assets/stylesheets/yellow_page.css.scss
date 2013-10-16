@@ -8,33 +8,40 @@
 		border-top: 1px solid #eeeeee;
 		border-bottom: 1px solid white;
 	}
+
+	.circles{
+		.businiess_community:first-child{
+			margin-left: 10px;
+		}
 	
-	.businiess_community{
-		@include transparent(rgb(51,51,51),0.4);
-		.head_img{ 
-			a{
-				position: relative;
-				.label-important{
-					background-color: #db4a37;
+		.businiess_community{
+			margin-bottom: 20px;
+			@include transparent(rgb(51,51,51),0.4);
+			.head_img{ 
+				a{
+					position: relative;
+					.label-important{
+						background-color: #db4a37;
+					}
 				}
 			}
-		}
-		.circle_count{
-			position: absolute;
-		    right: 5px;
-			top: 50px;
-		    padding-left: 5px;
-		    padding-right: 5px;
-		}
-		.user_icon { 
-			float:left; 
-			margin-right:5px; 
-			width: 70px; 
-			height: 70px; 
-			cursor: pointer;
-		}
-		.circle_detail{
-			margin-left: 90px;
+			.circle_count{
+				position: absolute;
+			    right: 5px;
+				top: 50px;
+			    padding-left: 5px;
+			    padding-right: 5px;
+			}
+			.user_icon { 
+				float:left; 
+				margin-right:5px; 
+				width: 70px; 
+				height: 70px; 
+				cursor: pointer;
+			}
+			.circle_detail{
+				margin-left: 90px;
+			}
 		}
 	}
 

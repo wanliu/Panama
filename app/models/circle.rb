@@ -52,6 +52,14 @@ class Circle < ActiveRecord::Base
     friends.find_by(user_id: uid).destroy
   end
 
+  def already_has?(user_id)
+    begin
+      friends.find(user_id)
+    rescue
+      false
+    end
+  end
+
   def valid_name?
     if Circle.where("name=? and id<>? and owner_id=? and owner_type=?",
      name, id.to_s, owner_id, owner_type).count > 0

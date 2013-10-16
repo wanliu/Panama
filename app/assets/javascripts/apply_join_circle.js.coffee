@@ -12,7 +12,11 @@ class ApplyJoinCircle extends Backbone.View
 			data:{ id: $(@el).attr("data-value-id")},
 			url: "/people/#{@options.current_user_login}/circles/apply_join",
 			success: (notice) =>
-				$(@el).html("<a href='#' class='label label-warning waiting'>等待确认</a>")
+				pnotify({text: notice.message })
+				if notice.type == "waiting"
+					$(@el).html("<span class='label label-warning waiting'>等待确认</span>")
+				else
+					$(@el).html("<span class='label label-warning be_in'>已加入</span>")
 			error: (notice)=>
 				message = JSON.parse(notice.responseText).message
 				pnotify({text: message })
