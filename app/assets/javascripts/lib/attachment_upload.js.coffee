@@ -75,7 +75,6 @@ class AttachmentView extends Backbone.View
         overflow: 'visible',
         position: 'static'
       )
-      @$("input:file").height(@$el.height())
 
     init_data: () ->
       @hidden_input.val(@model.id)

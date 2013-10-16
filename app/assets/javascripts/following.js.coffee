@@ -70,14 +70,12 @@ class FollowListView extends Backbone.View
         login: @login,
         el: $(tr),
         change_follow: (button) ->
-          if button.hasClass("unfollow")
+          if button.hasClass("follow")
             button.val("关注")
-            button.removeClass("unfollow").removeClass("btn-primary")
-            .addClass("follow").addClass("btn-info")
+            button.removeClass("btn-primary").addClass("btn-info")
           else
             button.val("取消关注")
-            button.removeClass("follow").removeClass("btn-info")
-            .addClass("unfollow").addClass("btn-primary")
+            button.removeClass("btn-info").addClass("btn-primary")
 
 
 root.FollowView = FollowView

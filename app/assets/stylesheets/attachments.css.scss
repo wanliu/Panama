@@ -19,10 +19,24 @@
         vertical-align: middle;
         display: table-cell;
 
+        .attachable-preview{
+          cursor: pointer;
+        }
+
         .attachment-upload{
 
           .qq-upload-list{
             display: none;
+          }
+
+          .qq-upload-button{
+            overflow: visible;
+            position: static;
+
+            input[type='file']{
+              height: 100%;
+              width: 100%;
+            }
           }
         }
 

@@ -16,7 +16,7 @@
         <tr><td colspan="4" style="text-align:center;">您还没有参与过的活动哦,赶紧去参与吧～～</td></tr>
       <% else %>
         <% @activities.each do |a| %>
-        <tr>
+        <tr class='activity' activity-id="<%=a.id %>">
           <td><%=a.title %></td>
           <td><%=a.price %></td>
           <td><%=t("activity.type.#{a.activity_type}") %></td>
@@ -27,7 +27,7 @@
             </a>
           </td>
           <td>
-            <a href="javascript:void(0)">
+            <a class='preview' href="javascript:void(0)">
               查看
             </a>
           </td>
@@ -40,3 +40,10 @@
   <div class='span5'>
   </div>
 </div>
+<script type='text/javascript'>
+  $(function(){
+    new ActivityPreview({
+      el: $("tbody")
+    })
+  })
+</script>

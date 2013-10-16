@@ -531,6 +531,10 @@ ul {
 // content
 .content {
 	padding: 25px 2.5641%;
+
+	>.widget{
+		margin-left: 0px;
+	}
 }
 
 .account .user_icon {
