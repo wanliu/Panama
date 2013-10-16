@@ -40,7 +40,9 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   end
 
   def edit
-    @circle = Circle.find(params[:id])
+    @circle = current_shop.circles.find(params[:id])
+    ancestor_ids = @circle.city.ancestor_ids
+    @address = Address.new({ province_id: ancestor_ids[1], city_id: ancestor_ids[2], area_id: @circle.city_id })
     render layout: false
   end
 
