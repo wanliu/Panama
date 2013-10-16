@@ -130,8 +130,10 @@ class CircleUserList extends Backbone.View
 
 class CircleView extends Backbone.View
   className: "alert alert-info circle"
+
   events: 
-    "click .remove_circle" : "delete_circle"
+    "click .remove_circle": "delete_circle"
+    "click i.icon-edit"   : "edit_circle"
   
   initialize: (options) ->
     _.extend(@, options)
@@ -151,10 +153,14 @@ class CircleView extends Backbone.View
     @model.bind("remove_user", _.bind(@remove_user, @))
 
   render: () ->
+    if @model.attributes.created_type == "advance"
+      $(@el).find("i.icon-user").before('<i class="icon-edit pull-right"></i>')
     @$el
 
+  edit_circle: () ->
+
   delete_circle: () ->
-    if confirm("是否确认删除#{@model.get('name')}圈子?")
+    if confirm("确认删除#{@model.get('name')}圈子?")
       @model.destroy()
       @$el.remove()
 
