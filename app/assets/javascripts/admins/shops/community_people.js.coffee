@@ -9,7 +9,7 @@ class YouCircleUserView extends Backbone.View
   events: {
     "click .remove_you_user" : "delete_user"
   }
-  className: "you_circle_user circle_friend"
+  className: "you_circle_users circle_friend"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -80,7 +80,7 @@ class YouCircleUserView extends Backbone.View
     @inspect_notice()
 
 class FollowingUserView extends Backbone.View
-  className: "follow_user circle_friend"
+  className: "follow_users circle_friend"
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)

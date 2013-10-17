@@ -9,7 +9,9 @@
 </div>
 
 <script type="text/javascript">
-  var nav = $(".community-nav>ul")
-  nav.find(">li").removeClass("active")
-  nav.find(">li.<%= yield :active_community %>").addClass("active")
+  $(function(){
+    var nav = $(".community-nav>ul")
+    nav.find(">li").removeClass("active")
+    nav.find(">li.<%= yield :active_community %>").addClass("active")
+  })
 </script>
