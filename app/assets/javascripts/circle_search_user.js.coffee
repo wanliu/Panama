@@ -6,7 +6,7 @@ class UserList extends Backbone.Collection
   url: "/search/users"
 
 class root.SearchUserView extends Backbone.View
-  className: "search_user circle_friend"
+  className: "search_users circle_friend"
 
   initialize: (options) ->
     _.extend(@, options)

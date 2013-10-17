@@ -4,11 +4,11 @@
 root = window || @
 
 class YellowInfoPreview extends Backbone.View
-	
-	events: 
+
+	events:
 		"mouseenter ": "load_user_info"
 		"mouseleave ": "hide_user_info"
-	
+
 	initialize: () ->
 		_.extend(@, @options)
 		@template1 = Hogan.compile($("#yellow_page_hover_buyer_template").html())
@@ -29,7 +29,7 @@ class YellowInfoPreview extends Backbone.View
 			})
 
 	render: (user) =>
-		if user.service_id == 1 
+		if user.service_id == 1
 			tpl = @template1
 		else
 			tpl = @template2

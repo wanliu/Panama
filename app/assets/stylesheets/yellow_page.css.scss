@@ -10,49 +10,45 @@
 	}
 
 	.circles{
-		.businiess_community:first-child{
-			margin-left: 20px;
-		}
-	
+
 		.businiess_community{
-			position: relative;
-			.popover{
-				top:-60px;
-			}
-			.head_img{ 
-				a{
-					position: relative;
-					.label-important{
-						background-color: #db4a37;
+			margin-left: 20px;
+			margin-bottom: 20px;
+			width: 30%;
+
+			@include transparent(rgb(51,51,51),0.4);
+			.head_img{
+				position: relative;
+				.popover{
+					top:-60px;
+				}
+				.head_img{
+					a{
+						position: relative;
+						.label-important{
+							background-color: #db4a37;
+						}
 					}
 				}
 			}
-			.circle_count{
-				border-radius:0px;
-				position: absolute;
-			    right: 5px;
-				top: 50px;
-				padding-left: 7px;
-				padding-right: 7px;
-				padding-bottom: 3px;
-				padding-top: 3px;
-			}
-			.user_icon { 
-				float:left; 
-				margin-right:5px; 
-				width: 70px; 
-				height: 70px; 
+
+			.user_icon {
+				float:left;
+				margin-right:5px;
+				width: 70px;
+				height: 70px;
 				cursor: pointer;
 			}
 			.circle_detail{
-				margin-left: 90px;
+				margin-left: 80px;
 			}
 		}
 	}
 
-	.new_user,.seller_user, .businiess_community{  
+
+	.new_user,.seller_user, .businiess_community{
 		@include transparent(rgb(51,51,51),0.4);
-		margin-bottom: 20px; 
+		margin-bottom: 20px;
 		margin-left: 20px;
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
@@ -63,17 +59,17 @@
 	}
 	/*.newer{ margin-left: -15px;}*/
 	.base_info{
-		.alert{ 
-			margin-right: 20px; 
-			margin-left: 20px; 
+		.alert{
+			margin-right: 20px;
+			margin-left: 20px;
 		}
 		.user_info{
 			position: relative;
-			.user_icon { 
-				float:left; 
-				margin-right:5px; 
-				width: 70px; 
-				height: 70px; 
+			.user_icon {
+				float:left;
+				margin-right:5px;
+				width: 70px;
+				height: 70px;
 				cursor: pointer;
 			}
 		}
@@ -82,19 +78,20 @@
 	.wrapper{
 		.user_info:first-child{
 			margin-left: 20px;
-		};
+		}
+
 		.user_info{
-			.title { 
+			.title {
 				float:left;
-				padding-top:15px; 
+				padding-top:15px;
 			}
 
-			.tel { 
-				color: #9bd0f6; 
-				font-size: 13px; 
+			.tel {
+				color: #9bd0f6;
+				font-size: 13px;
 			}
 
-			.name {  
+			.name {
 				color: #404040;
 				font-size: 13px;
 				font-weight: bold;
@@ -124,7 +121,7 @@
 				background-color: rgba(231, 192, 192, 0.09);
 				.icon-leaf {
 					color: green;
-				}	
+				}
 			}
 		}
 
@@ -174,17 +171,18 @@
 			}
 		}
 	}
+
 	.address-panel{
 		.address_from_post{
 			padding-top: 10px;
 			.error{
 				border: 1px solid red;
 			}
-			.search_user{ 
+			.search_user{
 				margin-left: 20px;
 			}
 			.controls {
-				.hidden{ 
+				.hidden{
 					position: absolute;
 				}
 			}
@@ -196,12 +194,12 @@
 
 	.hot_city{
 		padding-left: 20px;
-		a{ 
-			color: white; 
+		a{
+			color: white;
 			font-size: 15px;
 		}
 	}
-	
+
 	.top_10{
 		h4{
 			margin-top: 0px;
