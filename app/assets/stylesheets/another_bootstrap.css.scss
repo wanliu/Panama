@@ -2,12 +2,9 @@ $gridColumnWidth: 70px;
 $gridGutterWidth: 10px;
 
 @import "variables";
-
 // import original bootstrap
 @import "twitter/bootstrap";
 // @import "twitter/bootstrap-responsive";
-
-
 @import "another_responsive";
 
 .btn {
@@ -24,11 +21,10 @@ $gridGutterWidth: 10px;
 	/*height: 80px;*/
 }
 
-
 .nav{
 	.user_icon{
-		width: 40px;
-		height: 40px;
+		width: 30px;
+		height: 30px;
 		margin-top: -10px;
 	}
 }

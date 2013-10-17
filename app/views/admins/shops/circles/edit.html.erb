@@ -2,7 +2,7 @@
   <%= form.input :name, label: "名称", disabled: true %>
   <%= form.error :name, id: 'name_error' %>
   <%= form.input :description, label: "描述" %>
-  <%= simple_fields_for :address do |address_form| %>
+  <%= simple_fields_for @address do |address_form| %>
     <label class="chosen optional control-label" for="circle_address">选择地区</label>
     <div class="controls controls-row">
       <div class="control-group">
