@@ -21,10 +21,18 @@ class CommunitiesController < ApplicationController
 							.order("count desc")
 							.limit(10)
 
-		@address = Address.new
+		@current_city = City.find(2028)
+		ancestor_ids = @current_city.ancestor_ids
+    	@address = Address.new({ province_id: ancestor_ids[1], city_id: @current_city.id })
+
+    	if params[:city_name].blank?
+    		render_url = "index"
+    	else
+    		render_url = "city_index"
+    	end
 		respond_to do |format|
-			format.html
-			format.json{ render :json =>{ :new_users => @new_users,
+			format.html { render render_url }
+			format.json { render render_url, :json =>{ :new_users => @new_users,
 										  :address => @address,
 										  :circles => @circles,
 										  :top_10_shops => @top_10_shops,
