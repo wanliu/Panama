@@ -80,20 +80,8 @@
           follow_type: "Shop"
         },
         login: "<%=current_user.login %>",
-        el: $(elem),
-        change_follow: function(btn){
-            var follow_el = this.$(".follows_count");
-          var count = parseInt(follow_el.text());
-          if(btn.hasClass("follow")){
-              btn.html("+ 关注");
-              count -= 1;
-          }else{
-              btn.html("取消关注");
-              count += 1;
-          }
-          follow_el.html(count);
-        }
-        })
+        el: $(elem)
+      })
     })
   })
 </script>

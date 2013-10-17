@@ -100,23 +100,19 @@ class People::CirclesController < People::BaseController
   end
 
   def apply_join
-    @circle = Circle.find(params[:id]) 
-    friend = @circle.friends.build(:user_id => @people.id)
+    @circle = Circle.find(params[:id])
     respond_to do |format|
-      unless friend.valid?
-        format.json { render json:{ message: "该圈只对指定地区开放!"}, status: 403 }
+      if @circle.setting.limit_join
+        @circle.notice_owner(@people, "#{@people.login}申请加入圈子#{@circle.name}")
+        format.json{ render json:{ message: "请求已经发送~~~",type: "waiting" }}
       else
-        if @circle.setting.limit_join
-          @circle.notice_owner(@people, "#{@people.login}申请加入圈子#{@circle.name}") 
-          format.json{ render json:{ message: "请求已经发送~~~",type: "waiting" }}    
+        friend = @circle.friends.build(:user_id => @people.id)
+        if friend.save
+          format.json{ render json:{ message: "成功加入该圈~~~",type: "success" }}
         else
-          if friend.save
-            format.json{ render json:{ message: "成功加入该圈~~~",type: "success" }}
-          else
-            format.json{ render json:{ message: "加入失败~~"}}
-          end
-        end 
-      end           
+          format.json{ render json:{ message: draw_errors_message(friend)}, status: 403}
+        end
+      end
     end
   end
 

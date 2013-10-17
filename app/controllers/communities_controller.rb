@@ -21,7 +21,7 @@ class CommunitiesController < ApplicationController
 							.order("count desc")
 							.limit(10)
 
-		@address = Address.new
+		@address = Address.first
 		respond_to do |format|
 			format.html
 			format.json{ render :json =>{ :new_users => @new_users,
