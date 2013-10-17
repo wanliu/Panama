@@ -21,21 +21,34 @@
     .circle_user_panel{
       .circle_friend{
         display: none;
+
+        .user{
+          display: inline-block;
+        }
       }
 
       .login{
         margin-left: 10px;
       }
 
-      .you_circle_user{
-        position: relative;
-        .remove_you_user{
-          position: absolute;
-          top: 0;
-          right: 0;
+      .you_circle_users{
+
+
+        .you_circle_user{
+          display: inline-block;
+          position: relative;
+          margin-left: 5px;
+
+          .remove_you_user{
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+        }
+        .you_circle_user:first-child{
+          margin-left: 0px;
         }
       }
-
     }
   }
 

@@ -2,11 +2,24 @@ class CommunitiesController < ApplicationController
 	layout "application"
 
 	before_filter :login_and_service_required
-	before_filter :current_city, :only => [:index]
+
+	def ip_search(client_ip)
+		# address = IPSearch.ip_query(client_ip)
+		address = IPSearch.ip_query("124.228.76.190")
+		if address.blank?
+			[]
+		else
+			address_detail = address["content"]["address_detail"]
+			province = address_detail["province"]
+			city = address_detail["city"]
+			province_id = City.where(:name => province).pluck("id")[0]
+			city_id = City.find(province_id).children.find_by_name(city).id
+			{ province_id: province_id, city_id: city_id }
+		end
+	end
 
 	def index
-		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
-		@new_users = UserChecking.order('created_at DESC').limit(10)
+		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 
 		@circles= Circle.where(:created_type => "advance")
 						.joins("left join circle_friends as cf on circles.id=cf.id")
@@ -14,6 +27,7 @@ class CommunitiesController < ApplicationController
 						.group("circles.id")
 						.order("count desc")
 						.limit(10)
+		# @circles= Circle.where(:created_type => "advance").joins("left join circle_friends as cf on circles.id=cf.id left join cities as city on circles.city_id = ?", current_city_id).select("circles.*, count(cf.id) as count").group("circles.id").order("count desc").limit(10)
 
 		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
 							.select("shops.*, count(follow.id) as count")
@@ -21,22 +35,19 @@ class CommunitiesController < ApplicationController
 							.order("count desc")
 							.limit(10)
 
-		@current_city = City.find(2028)
-		ancestor_ids = @current_city.ancestor_ids
-    	@address = Address.new({ province_id: ancestor_ids[1], city_id: @current_city.id })
+		address_ids = ip_search(request.remote_ip)
+		@current_city = City.find(address_ids[:city_id])
+		@address = Address.new(address_ids)
+    	render_url = ( params[:city_name].blank? ? :index : :city_index )
 
-    	if params[:city_name].blank?
-    		render_url = "index"
-    	else
-    		render_url = "city_index"
-    	end
 		respond_to do |format|
 			format.html { render render_url }
 			format.json { render render_url, :json =>{ :new_users => @new_users,
 										  :address => @address,
 										  :circles => @circles,
 										  :top_10_shops => @top_10_shops,
-										  :city => @current_city }}
+										  :city => @current_city,
+										  :address_choice => @address_choice }}
 		end
 	end
 
@@ -53,7 +64,7 @@ class CommunitiesController < ApplicationController
 									:joins =>  "LEFT JOIN `cities` ON cities.id = area_id" ,
 									:select => "count(*) as hot_score,area_id,cities.name",
 									:conditions => {
-									   :targeable_type => "UserChecking", 
+									   :targeable_type => "UserChecking",
 									},
 									:group => "area_id",
 									:order => "hot_score DESC")
@@ -75,15 +86,11 @@ class CommunitiesController < ApplicationController
 	end
 
 	def _search(address_ids)
-		if address_ids.length > 0 
+		if address_ids.length > 0
 			options = {:id => address_ids,:checked => true }
 			@users = UserChecking.where(options).order("created_at desc").limit(15)
 		else
 			@users = []
 		end
-	end
-
-	def current_city
-		@current_city = City.where(:name => params[:name]).first
 	end
 end

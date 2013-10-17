@@ -67,19 +67,7 @@
         follow_type: "Shop"
       },
       login: "<%=current_user.login %>",
-      el: $(".shop_info"),
-      change_follow: function(btn){
-        var follow_el = $(".shop_info .followers");
-        var count = parseInt(follow_el.text());
-        if(btn.hasClass("follow")){
-          btn.html("+ 关注");
-          count -= 1;
-        }else{
-          btn.html("取消关注");
-          count += 1;
-        }
-        follow_el.html(count);
-      }
+      el: $(".shop_info")
     })
   })
 </script>

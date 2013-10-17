@@ -2,7 +2,7 @@ root  = window || @
 
 class ApplyJoinCircle extends Backbone.View
 
-	events: 
+	events:
 		"click " : "apply_join_circle"
 
 	apply_join_circle: () ->
@@ -29,7 +29,7 @@ class ApplyJoinCircleList extends Backbone.View
 	initialize: () ->
 		_.extend(@, @options)
 		_.each $(".add_circle"), (el) =>
-			new ApplyJoinCircle({ 
+			new ApplyJoinCircle({
 				el: el,
 				current_user_login: @current_user_login,
 			})
