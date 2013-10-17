@@ -133,7 +133,7 @@ class CircleView extends Backbone.View
 
   events: 
     "click .remove_circle": "delete_circle"
-    "click i.icon-edit"   : "edit_circle"
+    "click .update-circle": "update_circle"
   
   initialize: (options) ->
     _.extend(@, options)
@@ -153,11 +153,9 @@ class CircleView extends Backbone.View
     @model.bind("remove_user", _.bind(@remove_user, @))
 
   render: () ->
-    if @model.attributes.created_type == "advance"
-      $(@el).find("i.icon-user").before('<i class="icon-edit pull-right"></i>')
+    if @model.attributes.created_type != "advance"
+      $(@el).find("i.icon-edit").hide()
     @$el
-
-  edit_circle: () ->
 
   delete_circle: () ->
     if confirm("确认删除#{@model.get('name')}圈子?")
@@ -176,6 +174,22 @@ class CircleView extends Backbone.View
 
   remove_user: (user_id) ->
     @circle_user_list.find_remove(user_id)
+
+  update_circle: (event) ->
+    return pnotify("请填写圈子名称") if @$("#circle_name").val().trim() is ""
+    return pnotify("请完善地区位置") if @$("#address_area_id").val().trim() is ""
+    $form = $("form.edit_circle_from")
+    $.ajax(
+      url: $form.attr("action")
+      data: $form.serialize()
+      type: 'PUT'
+      dataType: "JSON"
+      success: (data) =>
+        @$(".edit_circle_panel").modal("hide")
+        pnotify("成功修改圈子")
+      error: (data) =>
+        pnotify("修改圈子失败了~~~")
+    )
 
 
 class CircleViewList extends Backbone.View
@@ -208,8 +222,7 @@ class CircleViewList extends Backbone.View
       template: @template,
       remote_url: @remote_url
     })
-
-    @circle_el.append(circle_view.render())
+    @circle_el.prepend(circle_view.render())
 
   show_add_circle: () ->
     @add_panel.modal("show")
@@ -217,7 +230,7 @@ class CircleViewList extends Backbone.View
   create_circle: () ->
     return pnotify("请填写圈子名称") if @$("#circle_name").val().trim() is ""
     return pnotify("请完善地区位置") if @$("#address_area_id").val().trim() is ""
-    $form = $("form.circle_from_post")
+    $form = $("form.create_circle_from")
     @circle = new Circle($form.serializeHash(), @remote_url)
     @circle.save({},
       success: (model, data) =>
@@ -239,6 +252,7 @@ class CircleViewList extends Backbone.View
   remove_all_circle_user: (user_id) ->
     @circles.each (model) =>
       model.trigger("remove_user", user_id)
+
 
 root.Circle = Circle
 root.CircleList = CircleList

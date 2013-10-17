@@ -119,7 +119,7 @@ class YouCircleUserView extends Backbone.View
       @$el.html("暂无用户...")
 
   bind_drop: () ->
-    @$el.find(".you_user").draggable({
+    @$(".you_user").draggable({
       helper: 'clone',
       opacity: 0.7,
       revert: true,
@@ -200,7 +200,6 @@ class FriendView extends Backbone.View
 
   remove_user: (user_id) ->
     @trigger("remove_user", user_id)
-    
 
 class CommunityPeopleView extends Backbone.View
 

@@ -21,6 +21,10 @@
     .circle_user_panel{
       .circle_friend{
         display: none;
+
+        .user{
+          display: inline-block;
+        }
       }
 
       .login{
@@ -28,6 +32,7 @@
       }
 
       .you_circle_user{
+        display: inline-block;
         position: relative;
         .remove_you_user{
           position: absolute;

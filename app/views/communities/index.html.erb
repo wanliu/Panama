@@ -65,36 +65,36 @@
 </script>
 
 <script type="text/javascript">
-	$(function() {
-		new YellowInfoPreviewList({
-			el: $(".base_info")
-		})
-		new SearchUserView({
-			el: $(".base_info")
-		})
-		$(".depend_select>option[value=]").html("--请选择--")
+  $(function() {
+    new YellowInfoPreviewList({
+      el: $(".base_info")
+    })
+    new SearchUserView({
+      el: $(".base_info")
+    })
+    $(".depend_select>option[value=]").html("--请选择--")
 
-		$(".shops-list .top_shop").each(function(i, elem){
-			new FollowView({
-				data: {
-					follow_id:  $(elem).attr("data-value-id"),
-					follow_type: "Shop"
-				},
-				login: "<%=current_user.login %>",
-				el: $(elem),
-				change_follow: function(btn){
-				    var follow_el = this.$(".follows_count");
-					var count = parseInt(follow_el.text());
-					if(btn.hasClass("follow")){
-					    btn.html("+ 关注");
-					    count -= 1;
-					}else{
-					    btn.html("取消关注");
-					    count += 1;
-					}
-					follow_el.html(count);
-				}
-    		})
-		})
-	})
+    $(".shops-list .top_shop").each(function(i, elem){
+      new FollowView({
+        data: {
+          follow_id:  $(elem).attr("data-value-id"),
+          follow_type: "Shop"
+        },
+        login: "<%=current_user.login %>",
+        el: $(elem),
+        change_follow: function(btn){
+            var follow_el = this.$(".follows_count");
+          var count = parseInt(follow_el.text());
+          if(btn.hasClass("follow")){
+              btn.html("+ 关注");
+              count -= 1;
+          }else{
+              btn.html("取消关注");
+              count += 1;
+          }
+          follow_el.html(count);
+        }
+        })
+    })
+  })
 </script>

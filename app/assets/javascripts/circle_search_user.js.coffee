@@ -45,9 +45,16 @@ class root.SearchUserView extends Backbone.View
       @bind_drop()
 
   add: (model) ->
-    @$el.append("<span class='panel-pj user' data-value-id='#{model.id}'>
-      <img src='#{model.get("icon_url")}' class='img-polaroid' />
-      <span class='login'>#{model.get("login")}</span></span>")
+    @$el.append("
+      <div class='panel-pj user' data-value-id='#{model.id}'>
+        <div>
+          <img src='#{model.get("icon_url")}' class='img-polaroid' />
+        </div>
+        <div>
+          <label class='label login'>#{model.get("login")}</label>
+        </div>
+      </div>
+    ")
 
   hide_to_switch: () ->
     @hide()
