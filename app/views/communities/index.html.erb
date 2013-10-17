@@ -9,18 +9,18 @@
 			</div>
 			<div class="span3">
 				<!--排行榜-->
-				<div class="top_10 widget">
+				<div class="top_10">
 					<h4>排行榜</h4>
 					<hr />
-					<ul class="shops-list ">
+					<ul class="shops-list row-fluid">
 						<% @top_10_shops.each do |shop|%>
-							<li data-value-id="<%= shop.id %>" class="widget row top_shop" style="margin-left:0px;margin-bottom:2px;">
+							<li data-value-id="<%= shop.id %>" class="top_shop row-fluid">
 								<div class="top_image span4">
 									<a href="shops/<%=shop.name %>">
 										<img src= "<%=shop.photos.icon %>"/>
 									</a>
 								</div>
-								<div class="span7"> 
+								<div class="span8"> 
 									<div class="shop_name">
 										<a href="shops/<%=shop.name %>"><%=shop.name %></a>
 									</div>

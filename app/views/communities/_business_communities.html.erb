@@ -1,9 +1,15 @@
 <div class=' widget circles'>
-	<h3>耒阳商圈</h3>
+	<h3><%= @current_city %>商圈</h3>
 	<hr />
 	<div class ="wrapper row-fluid circles-list">
 		<% @circles.each do |circle| %>
 			<div class='businiess_community span3' id="<%= circle.id %>">
+				<div class="popover top" style="color:black;">
+					<div class="arrow"></div>
+					<h3 class="popover-title"><%=circle.name %></h3>
+					<div class="popover-content"><%=circle.description %></div>
+				</div>
+
 				<div class="head_img">
 					<a href="shops/<%= circle.owner.name %>">
 						<img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
@@ -41,6 +47,12 @@
 		new ApplyJoinCircleList({
 			el: $(".circles-list"),
 			current_user_login: '<%= current_user.login %>'
+		})
+		$(".businiess_community").bind("mouseenter",function(){
+			$(this).find(".popover").css("display","block");
+		})
+		$(".businiess_community").bind("mouseleave",function(){
+			$(this).find(".popover").css("display","none");
 		})
 	})
 </script>
