@@ -45,7 +45,7 @@ class CommunitiesController < ApplicationController
 									:joins =>  "LEFT JOIN `cities` ON cities.id = area_id" ,
 									:select => "count(*) as hot_score,area_id,cities.name",
 									:conditions => {
-									   :targeable_type => "UserChecking", 
+									   :targeable_type => "UserChecking",
 									},
 									:group => "area_id",
 									:order => "hot_score DESC")
@@ -67,7 +67,7 @@ class CommunitiesController < ApplicationController
 	end
 
 	def _search(address_ids)
-		if address_ids.length > 0 
+		if address_ids.length > 0
 			options = {:id => address_ids,:checked => true }
 			@users = UserChecking.where(options).order("created_at desc").limit(15)
 		else
