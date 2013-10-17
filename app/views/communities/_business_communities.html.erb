@@ -1,5 +1,5 @@
 <div class=' widget circles'>
-  <h3>耒阳商圈</h3>
+  <h3><%= @current_city %>商圈</h3>
   <hr />
   <div class ="wrapper row-fluid circles-list">
     <% @circles.each do |circle| %>
@@ -41,6 +41,18 @@
     new ApplyJoinCircleList({
       el: $(".circles-list"),
       current_user_login: '<%= current_user.login %>'
+    })
+  })
+  $(function() {
+    new ApplyJoinCircleList({
+      el: $(".circles-list"),
+      current_user_login: '<%= current_user.login %>'
+    })
+    $(".businiess_community").bind("mouseenter",function(){
+      $(this).find(".popover").css("display","block");
+    })
+    $(".businiess_community").bind("mouseleave",function(){
+      $(this).find(".popover").css("display","none");
     })
   })
 </script>

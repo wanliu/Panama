@@ -4,9 +4,17 @@ class CommunitiesController < ApplicationController
 	before_filter :login_and_service_required
 	before_filter :current_city, :only => [:index]
 
+
+
+	def ip_search(client_ip)
+		ip = IPSearchAsk::IpSearch.new
+		ip.find_ip_location(client_ip) 
+		current_city = ip.country[0]
+	end
+
 	def index
-		# @new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
-		@new_users = UserChecking.order('created_at DESC').limit(10)
+		@current_city = ip_search(request.remote_ip)
+		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 
 		@circles= Circle.where(:created_type => "advance")
 						.joins("left join circle_friends as cf on circles.id=cf.id")
@@ -14,12 +22,14 @@ class CommunitiesController < ApplicationController
 						.group("circles.id")
 						.order("count desc")
 						.limit(10)
+		# @circles= Circle.where(:created_type => "advance").joins("left join circle_friends as cf on circles.id=cf.id left join cities as city on circles.city_id = ?", current_city_id).select("circles.*, count(cf.id) as count").group("circles.id").order("count desc").limit(10)
 
 		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
 							.select("shops.*, count(follow.id) as count")
 							.group("shops.id")
 							.order("count desc")
 							.limit(10)
+		# @top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'").select("shops.*, count(follow.id) as count").group("shops.id").order("count desc").limit(10)
 
 		@address = Address.first
 		respond_to do |format|

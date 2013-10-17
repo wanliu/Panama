@@ -27,7 +27,7 @@ class Circle < ActiveRecord::Base
   def notice_owner(sender, message)
     notifications.create!(
       :user_id => sender.id,
-      :mentionable_user_id => owner.id,
+      :mentionable_user_id => owner.user_id,
       :url => "/shops/#{owner.name}/admins/communities/settings",
       :body => message)
   end

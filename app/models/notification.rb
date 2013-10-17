@@ -8,7 +8,7 @@ class Notification < ActiveRecord::Base
   attr_accessible :url, :body, :mentionable_user_id, :user_id, :targeable_type, :targeable_id
 
   belongs_to :user
-  belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"  
+  belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"
   belongs_to :targeable, :polymorphic => true
 
   validates_presence_of :user
@@ -19,8 +19,8 @@ class Notification < ActiveRecord::Base
   def realtime_push_to_client
     count = Notification.unreads.where(user_id: user_id).count
     FayeClient.send("/notification/#{ mentionable_user.im_token }", {
-      count: count, 
-      type: targeable_type, 
+      count: count,
+      type: targeable_type,
       value: format_unread
     })
   end
@@ -33,7 +33,7 @@ class Notification < ActiveRecord::Base
 
   def format_unread
     attra = self.as_json
-    if self.targeable_type == "Activity"        
+    if self.targeable_type == "Activity"
       attra[:targeable] = {
         :id => targeable.id,
         :title => targeable.title,
