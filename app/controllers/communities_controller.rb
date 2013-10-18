@@ -4,18 +4,17 @@ class CommunitiesController < ApplicationController
 	before_filter :login_and_service_required
 
 	def index
-		@city = city_by_ip(request.remote_ip)
-		@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
-		# return "/cities/#{cookies[:city]}/communities" unless cookies[:city].blank?
-		# cookies[:city] = { 
-		# 	value: @city.id, 
-		# 	expires: 1.months.from_now }
-
-		respond_to do |format|
-			format.html
-			format.json{ render :json => {
-				:address => @address
-			}}
+		if !cookies[:city_id].blank?
+			redirect_to "/cities/#{cookies[:city_id]}/communities"
+		else
+			@city = city_by_ip(request.remote_ip)
+			@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
+			respond_to do |format|
+				format.html
+				format.json{ render :json => {
+					:address => @address
+				}}
+			end
 		end
 	end
 
@@ -40,7 +39,11 @@ class CommunitiesController < ApplicationController
 							.limit(10)
 							
 		@city = City.find(params[:city_id])
+		cookies[:city_id] = { 
+			value: @city.id, 
+			expires: 1.months.from_now }
 		@address = Address.new
+
 		respond_to do |format|
 			format.html
 			format.json { render  :json =>{ :new_users => @new_users,
