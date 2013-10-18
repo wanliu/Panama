@@ -2,29 +2,11 @@ class CommunitiesController < ApplicationController
 	layout "application"
 
 	before_filter :login_and_service_required
-	before_filter :current_city, :only => [:index]
-
-
-
-	def ip_search(client_ip)
-		# address = IPSearch.ip_query(client_ip)
-		address = IPSearch.ip_query("124.228.76.190")
-		if address.blank?
-			[]
-		else
-			address_detail = address["content"]["address_detail"]
-			province = address_detail["province"]
-			city = address_detail["city"]
-			province_id = City.where(:name => province).pluck("id")[0]
-			city_id = City.find(province_id).children.find_by_name(city).id
-			[province_id,city_id]
-		end
-	end
 
 	def index
-		address_ids = ip_search(request.remote_ip)
-
-		@address_choice = Address.new({ province_id: address_ids[0], city_id: address_ids[1], area_id: "" })
+		@city = city_by_ip(request.remote_ip)
+		@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
+    	url = ( params[:city_name].blank? ? :index : :city_index )
 
 		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 
@@ -34,7 +16,7 @@ class CommunitiesController < ApplicationController
 						.group("circles.id")
 						.order("count desc")
 						.limit(10)
-		# @circles= Circle.where(:created_type => "advance").joins("left join circle_friends as cf on circles.id=cf.id left join cities as city on circles.city_id = ?", current_city_id).select("circles.*, count(cf.id) as count").group("circles.id").order("count desc").limit(10)
+		# @circles= Circle.where(:created_type => "advance").joins("left join circle_friends as cf on circles.id=cf.id left join cities as city on circles.city_id = ?", @city.id).select("circles.*, count(cf.id) as count").group("circles.id").order("count desc").limit(10)
 
 		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
 							.select("shops.*, count(follow.id) as count")
@@ -42,14 +24,13 @@ class CommunitiesController < ApplicationController
 							.order("count desc")
 							.limit(10)
 
-		@address = Address.first
 		respond_to do |format|
-			format.html
-			format.json{ render :json =>{ :new_users => @new_users,
+			format.html { render url }
+			format.json { render url, :json =>{ :new_users => @new_users,
 										  :address => @address,
 										  :circles => @circles,
 										  :top_10_shops => @top_10_shops,
-										  :city => @current_city,
+										  :city => @city,
 										  :address_choice => @address_choice }}
 		end
 	end
@@ -95,9 +76,5 @@ class CommunitiesController < ApplicationController
 		else
 			@users = []
 		end
-	end
-
-	def current_city
-		@current_city = City.where(:name => params[:name]).first
 	end
 end
