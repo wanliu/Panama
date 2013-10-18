@@ -1,7 +1,7 @@
 <div class='base_info newer widget'>
 	<h3>新入驻成员</h3>
 	<div class="pull-right" style="padding-right:20px;">
-		<span>您所在的地区: <%#= @current_city.try(:name) %></span>
+		<span>您所在的地区: <%= @city.try(:name) %></span>
 	</div>
 	<div class="hot_city newer">
 		<strong>热门城市: </strong>

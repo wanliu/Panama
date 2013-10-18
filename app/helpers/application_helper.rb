@@ -290,4 +290,16 @@ module ApplicationHelper
   def upload_tip
     '请选择小于1MB的jpg/png<br />gif格式的图片<br />'.html_safe
   end
+
+  def city_by_ip(client_ip)
+    # address = IPSearch.ip_query(client_ip)
+    address = IPSearch.ip_query("124.228.76.190")
+    if address.blank?
+      []
+    else
+      address_detail = address["content"]["address_detail"]
+      province_id = City.where(name: address_detail["province"]).pluck("id")[0]
+      City.find(province_id).children.find_by_name(address_detail["city"])
+    end
+  end
 end

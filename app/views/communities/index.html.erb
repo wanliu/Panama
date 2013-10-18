@@ -79,7 +79,7 @@
 				</div>
 		 	</div>
 		 	请选择地区：<br>
-		 	<% @current_city.children.each do |city| %>
+		 	<% @city.children.each do |city| %>
 		 		<a href="/cities/<%= city.name %>/communities"><%= city.name %></a>
 		 	<% end %>
 		<% end %>
