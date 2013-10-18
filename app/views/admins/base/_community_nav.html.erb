@@ -1,9 +1,17 @@
 <div class="navbar">
   <div class="navbar-inner community-nav">
     <ul class="nav">
-      <li class="active home"><a href="<%=shop_admins_communities_path(current_shop.name) %>">主页</a></li>
-      <li class='people'><a href="<%=people_shop_admins_communities_path(current_shop.name) %>">找人</a></li>
-      <li class='setting'><a href="<%=settings_shop_admins_communities_path(current_shop.name) %>">设置</a></li>
+      <li class="active community-home">
+        <a href="<%=shop_admins_communities_path(current_shop.name) %>">主页</a>
+      </li>
+      <li class='community-people'><a href="<%=people_shop_admins_communities_path(current_shop.name) %>">找人</a>
+      </li>
+      <li class='community-setting'>
+        <a href="<%=settings_shop_admins_communities_path(current_shop.name) %>">设置</a>
+      </li>
+      <li class='community-messages'>
+        <a href="<%=messages_shop_admins_communities_path(current_shop.name) %>">消息</a>
+      </li>
     </ul>
   </div>
 </div>
@@ -12,6 +20,6 @@
   $(function(){
     var nav = $(".community-nav>ul")
     nav.find(">li").removeClass("active")
-    nav.find(">li.<%= yield :active_community %>").addClass("active")
+    nav.find(">li.community-<%= yield :active_community %>").addClass("active")
   })
 </script>

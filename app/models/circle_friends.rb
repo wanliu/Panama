@@ -18,16 +18,17 @@ class CircleFriends < ActiveRecord::Base
   validate :validate_setting?
 
   def validate_setting?
-    if self.circle.setting.try(:limit_city) == true 
-      area_id = UserChecking.joins("right join addresses on addresses.targeable_id = user_checkings.user_id ")
-                            .where("user_id = ? and addresses.area_id<>?",self.user_id, self.circle.city_id).count
+    if self.circle.setting.try(:limit_city) == true
+      area_id = Address.joins("left join user_checkings as uc
+        on uc.id=addresses.targeable_id and addresses.targeable_type='UserChecking'")
+      .where("uc.user_id=? and addresses.area_id=?", user_id, circle.city_id).count
       if area_id > 0
         return true
       else
         errors.add(:area_id, "该圈子不对你所在地区开放!")
         return false
       end
-    end    
+    end
   end
 
   def valid_some_user_and_circle?

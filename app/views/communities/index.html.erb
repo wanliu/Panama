@@ -30,14 +30,17 @@
 					             :collection_url => "/city/" %>
 				</div>
 		 	</div>
-		 	请选择地区：<br>
-		 	<% @city.children.each do |city| %>
-		 		<a href="/cities/<%= city.id %>/communities"><%= city.name %></a>
-		 	<% end %>
+
+      <div class="area_list">
+        直接选择：<br>
+  		 	<% @city.children.each do |city| %>
+  		 		<a href="/cities/<%= city.id %>/communities"><%= city.name %></a>
+  		 	<% end %>
+      </div>
 		<% end %>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-primary save-area">进入</button>
+      <button class="btn btn-primary enter-area hide">进入</button>
     </div>
 </div>
 
@@ -82,6 +85,17 @@
         login: "<%=current_user.login %>",
         el: $(elem)
       })
+    })
+
+    $("#set_area_modal #address_province_id").bind("change", function(){
+      $("#set_area_modal .area_list").hide()
+    })
+    $("#set_area_modal #address_city_id").bind("change", function(){
+      $("#set_area_modal .area_list").hide()
+    })
+    $("#set_area_modal #address_area_id").bind("change", function(){
+      $selected = $(this).find("option:selected")
+      window.location.href = "/cities/"+$selected.val()+"/communities"
     })
   })
 </script>

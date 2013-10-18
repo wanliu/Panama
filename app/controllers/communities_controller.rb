@@ -1,16 +1,20 @@
 class CommunitiesController < ApplicationController
-	layout "application"
+	layout "communities"
 
 	before_filter :login_and_service_required
 
 	def index
-		@city = city_by_ip(request.remote_ip)
-		@address = Address.new({ province_id: @city.try(:parent).try(:id), city_id: @city.try(:id) })
-		respond_to do |format|
-			format.html
-			format.json{ render :json => {
-				:address => @address
-			}}
+		if !cookies[:city_id].blank?
+			redirect_to "/cities/#{cookies[:city_id]}/communities"
+		else
+			@city = city_by_ip(request.remote_ip)
+			@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
+			respond_to do |format|
+				format.html
+				format.json{ render :json => {
+					:address => @address
+				}}
+			end
 		end
 	end
 
@@ -36,7 +40,11 @@ class CommunitiesController < ApplicationController
 							.limit(10)
 
 		@city = City.find(params[:city_id])
+		cookies[:city_id] = { 
+			value: @city.id, 
+			expires: 1.months.from_now }
 		@address = Address.new
+
 		respond_to do |format|
 			format.html
 			format.json { render  :json =>{ :new_users => @new_users,
@@ -51,7 +59,7 @@ class CommunitiesController < ApplicationController
 		@user = UserChecking.find(params[:id])
 		respond_to do |format|
 		  format.html # show.html.erb
-		  format.json { render json: @user }
+		  format.json{ render json: @user }
 		end
 	end
 
@@ -65,8 +73,8 @@ class CommunitiesController < ApplicationController
 									:group => "area_id",
 									:order => "hot_score DESC")
 		respond_to do |format|
-		    format.html # show.html.erb
-		    format.json { render json: @hot_cities }
+			format.html # show.html.erb
+			format.json { render json: @hot_cities }
 		end
 	end
 

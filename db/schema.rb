@@ -251,6 +251,17 @@ ActiveRecord::Schema.define(:version => 20131018071738) do
     t.text     "content_html"
   end
 
+  create_table "community_notifications", :force => true do |t|
+    t.boolean  "state",        :default => false
+    t.text     "body"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.integer  "send_user_id"
+    t.integer  "circle_id"
+  end
+
   create_table "contact_friends", :force => true do |t|
     t.integer  "user_id"
     t.integer  "friend_id"
