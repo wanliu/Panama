@@ -4,14 +4,6 @@ class CommunitiesController < ApplicationController
 	before_filter :login_and_service_required
 	before_filter :current_city, :only => [:index]
 
-
-
-	def ip_search(client_ip)
-		ip = IPSearchAsk::IpSearch.new
-		ip.find_ip_location(client_ip) 
-		current_city = ip.country[0]
-	end
-
 	def index
 		@current_city = ip_search(request.remote_ip)
 		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
@@ -46,7 +38,7 @@ class CommunitiesController < ApplicationController
 		@user = UserChecking.find(params[:id])
 		respond_to do |format|
 		  format.html # show.html.erb
-		  format.json { render json: @user }
+		  format.json{ render json: @user }
 		end
 	end
 
@@ -87,5 +79,12 @@ class CommunitiesController < ApplicationController
 
 	def current_city
 		@current_city = City.where(:name => params[:name]).first
+	end
+
+	private
+	def ip_search(client_ip)
+		ip = IPSearchAsk::IpSearch.new
+		ip.find_ip_location(client_ip)
+		current_city = ip.country[0]
 	end
 end

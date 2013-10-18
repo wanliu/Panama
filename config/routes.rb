@@ -55,8 +55,8 @@ Panama::Application.routes.draw do
 
   match "cities/:name/communities", :to => "communities#index", :via => :get
   match "cities/:name/communities/search", :to => "communities#search", :via => :get
-  resources :communities do 
-    collection do 
+  resources :communities do
+    collection do
       get "hot_city_name", :to => "communities#hot_city_name"
       get "search", :to => "communities#search"
     end
@@ -384,6 +384,10 @@ Panama::Application.routes.draw do
         collection do
           get :people
           get :settings
+          get :messages
+          get "apply_join/:cn_id", :to => "shops/communities#apply_join"
+          post "join_circle/:cn_id", :to => "shops/communities#join_circle"
+          post "refuse_join/:cn_id", :to => "shops/communities#refuse_join"
         end
       end
 

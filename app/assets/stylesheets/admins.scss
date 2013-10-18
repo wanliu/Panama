@@ -338,3 +338,15 @@ $left-side-admin-width: 160px;
   .dl-horizontal dt{ width: 80px; text-align: center;}
   .dl-horizontal dd{ margin-left: 10px;}
 }
+
+.apply-notify{
+  text-align: center;
+
+  .message{
+    display: inline-block;
+
+    .toolbar{
+
+    }
+  }
+}
