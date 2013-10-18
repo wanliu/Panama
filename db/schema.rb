@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131014035839) do
+ActiveRecord::Schema.define(:version => 20131018071738) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
+    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
-    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -122,12 +122,12 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0
-    t.float    "amount"
+    t.decimal  "price",      :precision => 10, :scale => 0, :default => 0
+    t.float    "amount",                                    :default => 0.0
     t.text     "describe"
-    t.integer  "status"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.integer  "status",                                    :default => 0
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.integer  "user_id"
   end
 
@@ -294,6 +294,20 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
+  create_table "delivery_addresses", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "zip_code"
+    t.string   "road"
+    t.integer  "province_id"
+    t.integer  "city_id"
+    t.integer  "area_id"
+    t.string   "contact_name"
+    t.string   "contact_phone"
+    t.time     "deleted_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "delivery_manners", :force => true do |t|
     t.string   "code"
     t.string   "name"
@@ -441,10 +455,9 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
-    t.integer  "shop_product_id"
-    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -471,10 +484,8 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
-    t.string   "shipped_state"
     t.string   "order_state"
     t.integer  "delivery_manner_id"
-    t.integer  "delivery_type_id"
     t.integer  "logistics_company_id"
   end
 
@@ -552,9 +563,9 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
     t.datetime "created_at",                                                 :null => false
     t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
+    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
-    t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "buy_state"
     t.integer  "owner_id"
@@ -731,7 +742,6 @@ ActiveRecord::Schema.define(:version => 20131014035839) do
     t.datetime "updated_at",                    :null => false
     t.string   "photo"
     t.integer  "user_id"
-    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
   end

@@ -13,6 +13,7 @@
 					<h4>排行榜</h4>
 					<hr />
 					<ul class="shops-list ">
+					<% unless  @top_10.blank?  %>
 						<% @top_10_shops.each do |shop|%>
 							<li data-value-id="<%= shop.id %>" class="row top_shop">
 								<div class="top_image span4">
@@ -41,6 +42,9 @@
 								</div>     
 		                    </li>
 						<% end %>
+					<% else %>
+						<li style="text-align:center;">该地区暂时还没有卖家入驻</li>
+					<% end %>
 					</ul>
 				</div>
 			</div>
