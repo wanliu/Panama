@@ -33,10 +33,9 @@
 	$(function(){
 		$(".navbar #search-form").hide()
 		$("#address_area_id").bind("change", function(){
-			debugger
 			if($(this).val().trim() != ""){
 				$selected = $(this).find("option:selected")
-				window.location.href = "/cities/"+$selected.text()+"/communities"
+				window.location.href = "/cities/"+$selected.val()+"/communities"
 			}
 		})
 	})

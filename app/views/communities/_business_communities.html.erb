@@ -4,6 +4,12 @@
   <div class ="wrapper row-fluid circles-list">
     <% @circles.each do |circle| %>
       <div class='businiess_community span3' id="<%= circle.id %>">
+        <div class="popover top">
+          <div class="arrow"></div>
+          <h3 class="popover-title"><%=circle.name %></h3>
+          <div class="popover-content"><%=circle.description %></div>
+        </div>
+
         <div class="head_img">
           <a href="/shops/<%= circle.owner.name %>">
             <img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
@@ -28,7 +34,7 @@
                   <a href="#" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入该商圈</a>
               <% end %>
             <% else %>
-              <span data-value-id="<%=circle.id %>" class="label label-warning">你是群主</span>
+              <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
             <% end %>
           </div>
         </div>

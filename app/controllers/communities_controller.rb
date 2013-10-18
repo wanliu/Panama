@@ -6,36 +6,48 @@ class CommunitiesController < ApplicationController
 	def index
 		@city = city_by_ip(request.remote_ip)
 		@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
-		url = ( params[:city_name].blank? ? :index : :city_index )
 		# return "/cities/#{cookies[:city]}/communities" unless cookies[:city].blank?
 		# cookies[:city] = { 
-		# 	value: @city.name, 
+		# 	value: @city.id, 
 		# 	expires: 1.months.from_now }
 
-		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
+		respond_to do |format|
+			format.html
+			format.json{ render :json => {
+				:address => @address
+			}}
+		end
+	end
 
-		@circles= Circle.where(:created_type => "advance")
-						.joins("left join circle_friends as cf on circles.id=cf.id")
+	def city_index
+		@new_users = UserChecking.joins("right join addresses as addr on addr.targeable_id = user_checkings.id ")
+								 .where("user_checkings.checked = true and addr.area_id = ?", params[:city_id])
+								 .group('user_checkings.id')
+								 .order('created_at DESC')
+								 .limit(15)
+
+		@circles= Circle.joins("left join circle_friends as cf on circles.id=cf.id left join addresses as addr on addr.area_id = circles.city_id ")
+						.where(:created_type => "advance",:city_id => params[:city_id])
 						.select("circles.*, count(cf.id) as count")
 						.group("circles.id")
 						.order("count desc")
 						.limit(10)
-		# @circles= Circle.where(:created_type => "advance").joins("left join circle_friends as cf on circles.id=cf.id left join cities as city on circles.city_id = ?", @city.id).select("circles.*, count(cf.id) as count").group("circles.id").order("count desc").limit(10)
 
 		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
 							.select("shops.*, count(follow.id) as count")
 							.group("shops.id")
 							.order("count desc")
 							.limit(10)
-
+							
+		@city = City.find(params[:city_id])
+		@address = Address.new
 		respond_to do |format|
-			format.html { render url }
-			format.json { render url, :json =>{ :new_users => @new_users,
-										  :address => @address,
-										  :circles => @circles,
-										  :top_10_shops => @top_10_shops,
-										  :city => @city,
-										  :address_choice => @address_choice }}
+			format.html
+			format.json { render  :json =>{ :new_users => @new_users,
+										    :circles => @circles,
+										    :top_10_shops => @top_10_shops,
+										    :city => @city,
+										    :address => @address }}
 		end
 	end
 

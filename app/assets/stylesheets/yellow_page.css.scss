@@ -16,19 +16,19 @@
 			margin-left: 20px;
 			margin-bottom: 20px;
 			width: 30%;
+			position: relative;
+
+			.popover{
+				top:-65px;
+				color: black;
+			}
 
 			@include transparent(rgb(51,51,51),0.4);
 			.head_img{
-				position: relative;
-				.popover{
-					top:-60px;
-				}
-				.head_img{
-					a{
-						position: relative;
-						.label-important{
-							background-color: #db4a37;
-						}
+				a{
+					position: relative;
+					.label-important{
+						background-color: #db4a37;
 					}
 				}
 			}
@@ -213,6 +213,7 @@
 				border-top: 1px solid rgba(51,51,51,0.25);
 				padding-top: 10px;
 				padding-bottom: 10px;
+				margin-left: 0px;
 			}
 			li:hover {
 				@include transparent(rgb(51,51,51), 0.25);
