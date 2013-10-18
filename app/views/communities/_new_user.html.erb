@@ -33,7 +33,10 @@
 						<a href="/shops/<%= new_user.try(:shop_name) %>"><%= new_user.try(:shop_name) %></a>
 					<% end %>
 					</div>
-					<div class="tel"><i class="icon-phone-sign"></i> <%= new_user.try(:phone)%></div>
+					<div class="tel"> 
+						<i class=" icon-star"></i>
+						<a href="#"><%= new_user.try(:industry_type)%></a>
+					</div>
 				</div>
 			</div>
 		<% end %>
