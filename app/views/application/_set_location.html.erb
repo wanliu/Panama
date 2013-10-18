@@ -1,0 +1,43 @@
+<div class="set_location" data-spy="affix" data-offset-top="20">
+	<%= simple_form_for @address, :url => "/", :html => {:class => 'form-horizontal set_location_form'} do |address_form| %>
+		<label class="chosen optional control-label" for="circle_address"></label>
+		<div class="controls controls-row">
+			<div class="control-group">
+				<%= address_form.input :province_id,
+							 :as => :depend_select,
+							 :children => :city_id,
+							 :wrapper => :inline,
+							 :object => @address,
+							 :collection => get_city %>
+
+				<%= address_form.input :city_id,
+							 :as => :depend_select,
+							 :children => :area_id,
+							 :target => :province,
+							 :wrapper => :inline,
+							 :object => @address,
+							 :collection_url => "/city/" %>
+
+				<%= address_form.input :area_id,
+							 :as => :depend_select,
+							 :target => :city,
+							 :wrapper => :inline,
+							 :object => @address,
+							 :collection_url => "/city/" %>
+			</div>
+		</div>
+	<% end %>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$(".navbar #search-form").hide()
+		$("#address_area_id").bind("change", function(){
+			debugger
+			if($(this).val().trim() != ""){
+				$selected = $(this).find("option:selected")
+				window.location.href = "/cities/"+$selected.text()+"/communities"
+			}
+		})
+	})
+</script>

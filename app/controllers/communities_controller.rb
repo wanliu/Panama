@@ -1,12 +1,16 @@
 class CommunitiesController < ApplicationController
-	layout "application"
+	layout "communities"
 
 	before_filter :login_and_service_required
 
 	def index
 		@city = city_by_ip(request.remote_ip)
 		@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
-    	url = ( params[:city_name].blank? ? :index : :city_index )
+		url = ( params[:city_name].blank? ? :index : :city_index )
+		# return "/cities/#{cookies[:city]}/communities" unless cookies[:city].blank?
+		# cookies[:city] = { 
+		# 	value: @city.name, 
+		# 	expires: 1.months.from_now }
 
 		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
 
@@ -53,8 +57,8 @@ class CommunitiesController < ApplicationController
 									:group => "area_id",
 									:order => "hot_score DESC")
 		respond_to do |format|
-		    format.html # show.html.erb
-		    format.json { render json: @hot_cities }
+			format.html # show.html.erb
+			format.json { render json: @hot_cities }
 		end
 	end
 
