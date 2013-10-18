@@ -1,36 +1,53 @@
 class CommunitiesController < ApplicationController
-	layout "application"
+	layout "communities"
 
 	before_filter :login_and_service_required
-	before_filter :current_city, :only => [:index]
 
 	def index
-		@current_city = ip_search(request.remote_ip)
-		@new_users = UserChecking.where(:checked => true).order('created_at DESC').limit(15)
+		@city = city_by_ip(request.remote_ip)
+		@address = Address.new({ province_id: @city.parent.id, city_id: @city.id })
+		# return "/cities/#{cookies[:city]}/communities" unless cookies[:city].blank?
+		# cookies[:city] = {
+		# 	value: @city.id,
+		# 	expires: 1.months.from_now }
 
-		@circles= Circle.where(:created_type => "advance")
-						.joins("left join circle_friends as cf on circles.id=cf.id")
+		respond_to do |format|
+			format.html
+			format.json{ render :json => {
+				:address => @address
+			}}
+		end
+	end
+
+	def city_index
+		@new_users = UserChecking.joins("right join addresses as addr on addr.targeable_id = user_checkings.id ")
+								 .where("user_checkings.checked = true and addr.area_id = ?", params[:city_id])
+								 .group('user_checkings.id')
+								 .order('created_at DESC')
+								 .limit(15)
+
+		@circles= Circle.joins("left join circle_friends as cf on circles.id=cf.id left join addresses as addr on addr.area_id = circles.city_id ")
+						.where(:created_type => "advance",:city_id => params[:city_id])
 						.select("circles.*, count(cf.id) as count")
 						.group("circles.id")
 						.order("count desc")
 						.limit(10)
-		# @circles= Circle.where(:created_type => "advance").joins("left join circle_friends as cf on circles.id=cf.id left join cities as city on circles.city_id = ?", current_city_id).select("circles.*, count(cf.id) as count").group("circles.id").order("count desc").limit(10)
 
 		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
 							.select("shops.*, count(follow.id) as count")
 							.group("shops.id")
 							.order("count desc")
 							.limit(10)
-		# @top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'").select("shops.*, count(follow.id) as count").group("shops.id").order("count desc").limit(10)
 
-		@address = Address.first
+		@city = City.find(params[:city_id])
+		@address = Address.new
 		respond_to do |format|
 			format.html
-			format.json{ render :json =>{ :new_users => @new_users,
-										  :address => @address,
-										  :circles => @circles,
-										  :top_10_shops => @top_10_shops,
-										  :city => @current_city }}
+			format.json { render  :json =>{ :new_users => @new_users,
+										    :circles => @circles,
+										    :top_10_shops => @top_10_shops,
+										    :city => @city,
+										    :address => @address }}
 		end
 	end
 
@@ -52,8 +69,8 @@ class CommunitiesController < ApplicationController
 									:group => "area_id",
 									:order => "hot_score DESC")
 		respond_to do |format|
-		    format.html # show.html.erb
-		    format.json { render json: @hot_cities }
+			format.html # show.html.erb
+			format.json { render json: @hot_cities }
 		end
 	end
 
@@ -75,16 +92,5 @@ class CommunitiesController < ApplicationController
 		else
 			@users = []
 		end
-	end
-
-	def current_city
-		@current_city = City.where(:name => params[:name]).first
-	end
-
-	private
-	def ip_search(client_ip)
-		ip = IPSearchAsk::IpSearch.new
-		ip.find_ip_location(client_ip)
-		current_city = ip.country[0]
 	end
 end

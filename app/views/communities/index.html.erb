@@ -1,50 +1,47 @@
-<div class="content container-fluid yellow_page">
-  <div class="container-fluid ">
-    <div class="row-fluid">
-      <div class="span9">
-        <%= render "show_special" %>
-        <%= render "new_user" %>
-        <%= render "business_communities" %>
-        <%#= render "seller_user" %>
+<div id="set_area_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <h3>地区选择</h3>
+    </div>
+    <div class="modal-body">
+      	<%= simple_form_for @address, :url => "/", :html => {:class => 'form-horizontal edit_circle_from'} do |address_form| %>
+		    <label class="chosen optional control-label" for="circle_address">选择地区</label>
+		    <div class="controls controls-row">
+				<div class="control-group">
+					<%= address_form.input :province_id,
+					             :as => :depend_select,
+					             :children => :city_id,
+					             :object => @circle,
+					             :wrapper => :inline,
+					             :collection => get_city %>
+
+					<%= address_form.input :city_id,
+					             :as => :depend_select,
+					             :children => :area_id,
+					             :target => :province,
+					             :object => @circle,
+					             :wrapper => :inline,
+					             :collection_url => "/city/" %>
+
+					<%= address_form.input :area_id,
+					             :as => :depend_select,
+					             :target => :city,
+					             :object => @circle,
+					             :wrapper => :inline,
+					             :collection_url => "/city/" %>
+				</div>
+		 	</div>
+
+      <div class="area_list">
+        直接选择：<br>
+  		 	<% @city.children.each do |city| %>
+  		 		<a href="/cities/<%= city.id %>/communities"><%= city.name %></a>
+  		 	<% end %>
       </div>
-      <div class="span3">
-        <!--排行榜-->
-        <div class="top_10 widget">
-          <h4>排行榜</h4>
-          <hr />
-          <ul class="shops-list ">
-            <% @top_10_shops.each do |shop|%>
-              <li data-value-id="<%= shop.id %>" class="widget row top_shop" style="margin-left:0px;margin-bottom:2px;">
-                <div class="top_image span4">
-                  <a href="/shops/<%=shop.name %>">
-                    <img src= "<%=shop.photos.icon %>"/>
-                  </a>
-                </div>
-                <div class="span7">
-                  <div class="shop_name">
-                    <a href="/shops/<%=shop.name %>"><%=shop.name %></a>
-                  </div>
-                  <div class="follows">
-                    关注人数:
-                    <span class="follows_count">
-                      <%=shop.followers.count %>
-                    </span>
-                  </div>
-                  <% if current_user != shop.user%>
-                      <% if current_user.is_follow_shop?(shop.id) %>
-                        <span data-value-id="<%= current_user.follow_shop(shop.id).id %>" class="label  btn-warning unfollow">取消关注</span>
-                      <% else %>
-                          <span class="label  btn-warning follow">+ 关注</span>
-                      <% end %>
-                  <% end %>
-                </div>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+		<% end %>
     </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary enter-area hide">进入</button>
     </div>
-  </div>
 </div>
 
 <script type="text/template" id = "yellow_page_hover_buyer_template" >
@@ -64,6 +61,12 @@
 </script>
 
 <script type="text/javascript">
+	$("#set_area_modal").modal({
+		show: true,
+		keyboard: false,
+		backdrop: "static"
+	});
+
   $(function() {
     new YellowInfoPreviewList({
       el: $(".base_info")
@@ -82,6 +85,17 @@
         login: "<%=current_user.login %>",
         el: $(elem)
       })
+    })
+
+    $("#set_area_modal #address_province_id").bind("change", function(){
+      $("#set_area_modal .area_list").hide()
+    })
+    $("#set_area_modal #address_city_id").bind("change", function(){
+      $("#set_area_modal .area_list").hide()
+    })
+    $("#set_area_modal #address_area_id").bind("change", function(){
+      $selected = $(this).find("option:selected")
+      window.location.href = "/cities/"+$selected.val()+"/communities"
     })
   })
 </script>
