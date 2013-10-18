@@ -9,12 +9,12 @@
 			</div>
 			<div class="span3">
 				<!--排行榜-->
-				<div class="top_10 widget">
+				<div class="top_10">
 					<h4>排行榜</h4>
 					<hr />
 					<ul class="shops-list ">
 						<% @top_10_shops.each do |shop|%>
-							<li data-value-id="<%= shop.id %>" class="widget row top_shop" style="margin-left:0px;margin-bottom:2px;">
+							<li data-value-id="<%= shop.id %>" class="row top_shop">
 								<div class="top_image span4">
 									<a href="shops/<%=shop.name %>">
 										<img src= "<%=shop.photos.icon %>"/>
