@@ -24,12 +24,18 @@ class Circle < ActiveRecord::Base
 
   validate :valid_name?
 
-  def notice_owner(sender, message)
+  def apply_join_notice(sender)
+    c = CommunityNotification.create({
+      :circle => self,
+      :send_user => sender,
+      :target => owner,
+      :body => "#{sender.login}申请加入圈子#{name}"})
+    url = "/shops/#{owner.name}/admins/communities/apply_join/#{c.id}"
     notifications.create!(
       :user_id => sender.id,
       :mentionable_user_id => owner.user_id,
-      :url => "/shops/#{owner.name}/admins/communities/settings",
-      :body => message)
+      :url => url,
+      :body => c.body)
   end
 
   def friend_count

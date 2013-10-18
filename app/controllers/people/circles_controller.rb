@@ -101,17 +101,21 @@ class People::CirclesController < People::BaseController
 
   def apply_join
     @circle = Circle.find(params[:id])
+    friend = @circle.friends.build(:user_id => @people.id)
     respond_to do |format|
-      if @circle.setting.limit_join
-        @circle.notice_owner(@people, "#{@people.login}申请加入圈子#{@circle.name}")
-        format.json{ render json:{ message: "请求已经发送~~~",type: "waiting" }}
-      else
-        friend = @circle.friends.build(:user_id => @people.id)
-        if friend.save
-          format.json{ render json:{ message: "成功加入该圈~~~",type: "success" }}
+      if friend.valid?
+        if @circle.setting.limit_join
+          @circle.apply_join_notice(@people)
+          format.json{ render json:{ message: "请求已经发送~~~",type: "waiting" }}
         else
-          format.json{ render json:{ message: draw_errors_message(friend)}, status: 403}
+          if friend.save
+            format.json{ render json:{ message: "成功加入该圈~~~",type: "success" }}
+          else
+            format.json{ render json:{ message: draw_errors_message(friend)}, status: 403}
+          end
         end
+      else
+        format.json{ render json:{ message: draw_errors_message(friend)}, status: 403}
       end
     end
   end
@@ -119,5 +123,9 @@ class People::CirclesController < People::BaseController
   private
   def circle_find_user(user_id, circle)
     circle.friends.find_by(user_id: user_id)
+  end
+
+  def encrypt(login)
+    Crypto.encrypt(login)
   end
 end

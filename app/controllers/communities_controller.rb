@@ -37,7 +37,7 @@ class CommunitiesController < ApplicationController
 							.group("shops.id")
 							.order("count desc")
 							.limit(10)
-							
+
 		@city = City.find(params[:city_id])
 		cookies[:city_id] = { 
 			value: @city.id, 
@@ -58,7 +58,7 @@ class CommunitiesController < ApplicationController
 		@user = UserChecking.find(params[:id])
 		respond_to do |format|
 		  format.html # show.html.erb
-		  format.json { render json: @user }
+		  format.json{ render json: @user }
 		end
 	end
 

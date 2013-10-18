@@ -31,7 +31,7 @@
               <% if circle.already_has?(current_user.id) %>
                 <span data-value-id="<%=circle.id %>" class="label label-warning">已加入</span>
               <% else %>
-                  <a href="#" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入该商圈</a>
+                  <a href="javascript:void(0)" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入该商圈</a>
               <% end %>
             <% else %>
               <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
