@@ -31,7 +31,7 @@
         </li>
         <% if can? :manage, User %>
         <li>
-          <a class='people-addresses' href='<%= person_addresses_path(@people.login) %>'>
+          <a class='people-addresses' href='<%= person_delivery_addresses_path(@people.login) %>'>
             收货地址
           </a>
         </li>

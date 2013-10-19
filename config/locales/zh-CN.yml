@@ -287,7 +287,7 @@ zh-CN:
       order_transaction:
         id: 编号
         items_count: 总计项
-        address: 收货地址
+        delivery_addresses: 收货地址
         address_id: 收货地址
         delivery_type: 配送方式
         delivery_type_id: 配送方式
@@ -438,7 +438,7 @@ zh-CN:
   notifications: 提醒
   people: 基本信息
   settings: 设置
-  addresses: 地址
+  delivery_addresses: 地址
   cart: 购物车
   transactions: 交易
   completed: 完成
