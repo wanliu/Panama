@@ -538,7 +538,8 @@ ul {
 	// content
 	>.content {
 		padding: 25px 2.5641%;
-		>.widget{
+	}
+	>.widget{
 		margin-left: 0px;
 	}
 }
@@ -988,9 +989,9 @@ h2 small {
 
 .form_activity_focus{
 	.shop_product_wrap{
-			.controls{
-				width: 400px;
-			}
+		.controls{
+			width: 400px;
+		}
 	}
 }
 
@@ -1075,16 +1076,18 @@ h2 small {
 			li.third_class_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
-				a { padding-left: 4px; }
+				a { 
+					padding-left: 4px; 
+				}
 			}
 		}
 	}
 }
 
 .controls {
-  .inline {
-    display: inline;
-  }
+    .inline {
+    	display: inline;
+    }
 }
 
 .depend_select {
