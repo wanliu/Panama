@@ -22,13 +22,6 @@ class PeopleController < ApplicationController
     authorize! :manage, User
   end
 
-  # def show_bill
-  #   @people = User.find_by(:login => params[:id])
-  #   current_ability(@people)
-  #   authorize! :show_bill, People
-  #   render :template => "people/base/show_bill"
-  # end
-
   def show_invite
     valid_invite_user
   end
@@ -90,14 +83,13 @@ class PeopleController < ApplicationController
   end
 
   def valid_user(login)
-      @people = User.find_by(:login => login)
+    @people = User.find_by(:login => login)
 
-      if @people != current_user
-        @error_messages = "你不是邀请的对象"
-        render template: "errors/errors_403", status: 403, layout: "error"
-        return false
-      end
-      return true
+    if @people != current_user
+      @error_messages = "你不是邀请的对象"
+      render_error
+    end
+    return true
   end
 
   def valid_invite_options(options)
@@ -111,6 +103,10 @@ class PeopleController < ApplicationController
     elsif @shop.nil?
       "商店不存在"
     end
+    render_error
+  end
+
+  def render_error
     if @error_messages
       render template: "errors/errors_403", status: 403, layout: "error"
       return false

@@ -25,7 +25,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
-  gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails', :git => 'git://github.com/anjlab/bootstrap-rails.git'
+  gem 'anjlab-bootstrap-rails', '2.3.1.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails', '~> 1.0.3'
   gem 'compass-h5bp', '~> 0.1.0'
@@ -35,7 +35,7 @@ group :assets do
 end
 
 gem 'cache_digests', '~> 0.2.0'
-# gem 'jquery-rails', '~> 2.1.3'
+gem 'jquery-rails', '2.1.4'
 gem 'html5-rails', '~> 0.0.6'
 # gem 'requirejs-rails', '~> 0.9.0'
 
@@ -71,7 +71,7 @@ gem 'compass-css-arrow', '~> 0.0.3'
 
 # Deploy with Capistrano
 # gem 'capistrano'
-gem 'capistrano', '2.9.0', :require => false
+# gem 'capistrano', '2.9.0', :require => false
 # image uploader
 gem "carrierwave", '~> 0.8.0'
 gem "carrierwave-mongoid", '~> 0.1.0', :require => 'carrierwave/mongoid'
@@ -166,4 +166,4 @@ gem 'yajl-ruby'
 
 gem "delayed_job_active_record"
 gem "daemons"
-
+gem 'rubyzip', '< 1.0.0'

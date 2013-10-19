@@ -18,7 +18,9 @@
 						<button type="button" class="btn btn-transparent span4">搜索</button>
 					</div>
 				</div>
-				<%= render "category_selector"%>
+				<div>
+					<%= render "category_selector"%>
+				</div>
 			</div>
 			<div id="brands" class="tab-pane">
 			</div>
@@ -63,8 +65,8 @@
 		</script>
 
 		<script type="text/javascript">
-			$('.category_product_list').slimScroll({ 
-				height     : 500, 
+			$('.category_product_list').slimScroll({
+				height     : 500,
 				railVisible: true
 			});
 		</script>
@@ -95,9 +97,9 @@
 		</script>
 
 		<script type="text/javascript">
-			var product_view = new ProductView({ 
-				el      : $(".my_product_list"), 
-				models  : <%= raw @products.to_json %>, 
+			var product_view = new ProductView({
+				el      : $(".my_product_list"),
+				models  : <%= raw @products.to_json %>,
 				template: $("#product_show").html()
 			});
 
@@ -111,8 +113,8 @@
 					})
 				}
 			});
-			var scroll = $('.my_product_list').slimScroll({ 
-				height: 500, 
+			var scroll = $('.my_product_list').slimScroll({
+				height: 500,
 				railVisible: true
 			});
 			// $(".slimScrollDiv").css("overflow","")
@@ -144,11 +146,11 @@
 
 	$(document).delegate( '.my_product_list>li', 'click',function(i, elem){
 		bind_editable($(this), "price");
-		bind_editable($(this), "inventory")	
+		bind_editable($(this), "inventory")
 	});
 
 	var Filter = function(id_name,target){
-		$("#"+id_name).keyup(function(){
+		$(id_name).keyup(function(){
 			var filter = $(this).val(), count = 0;
 			$("."+target+" li").each(function(){
 				if ($(this).text().search(new RegExp(filter, "i")) < 0) {
@@ -158,14 +160,13 @@
 					count++;
 				}
 			});
-			var numberItems = count;
-			$("#filter-count").text("Number of Comments = " + count);
+			$("#filter-count").text("Number of Comments = "+ count);
 		})
 		false
 	};
 
 	$(function(){
-		Filter("search-input1","category_product_list")
-		Filter("search-input2","my_product_list")
+		Filter("#search-input1","category_product_list")
+		Filter("#search-input2","my_product_list")
 	})
 </script>

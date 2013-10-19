@@ -12,22 +12,40 @@
 
     .buy_manner {
       input[type='radio']{
-      margin-top: 0px;
-      margin-left: 10px;
-    }
+        margin-top: 0px;
+        margin-left: 10px;
+      }
 
       margin-right: 10px;
     }
   }
 
-  .main-show{
-    overflow: visibility!important;
+  .dialog{
+    .main-show{
+      overflow: visibility;
+      max-height: none;
+      padding-top: 5px;
+    }
   }
 
   form.product{
-    .shop-product-product, .send-product-price, .star{
-      padding-top: 5px;
-      margin-bottom: 5px;
+    .control-group{
+      .control-label{
+        width: 60px;
+      }
+
+      .controls{
+        margin-left: 80px;
+
+        .text, .star{
+          padding-top: 5px;
+          margin-bottom: 5px;
+
+          input.amount{
+            width: 50px;
+          }
+        }
+      }
     }
   }
 }

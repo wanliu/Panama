@@ -3,16 +3,19 @@
 root = (window || @)
 
 class RightSideBar extends Backbone.View
-	template: () ->
-		$("#right-sidebar-templates .main").html()
+	#template: () ->
+	#	$("#right-sidebar-templates .main").html()
 
 	events:
 		"click header>ul>li"    : "toggleTabs"
 		"click .settings>button": "toggleIcons"
 
 	initialize: () ->
-		$(@el).html(@template())
+		#$(@el).html(@template())
+		@$('.body').slimScroll(
+			height: $(window).height())
 		@register_counter = 0
+		$(window).resize($.proxy(@auto_resize, @))
 
 	register: (containers...) ->
 		for container in containers
@@ -38,8 +41,8 @@ class RightSideBar extends Backbone.View
 		@registered_containers[String(container)]?
 
 	init_states: () ->
-		# @states = local_storage('sidebar_state') || { 
-		@states = { 
+		# @states = local_storage('sidebar_state') || {
+		@states = {
 			'right_mini' : true,
 			'actived_tab': String(FriendsContainerView)
 		}
@@ -66,7 +69,7 @@ class RightSideBar extends Backbone.View
 		local_storage('sidebar_state', @states)
 
 	find_container: (id) ->
-		_.find @registered_containers, (view) => 
+		_.find @registered_containers, (view) =>
 			return view.id == id
 
 	add_top: (container, id)->
@@ -86,6 +89,11 @@ class RightSideBar extends Backbone.View
 	any_active_view: () ->
 		_.any @$('.body').children('div'), (div) ->
 			$(div).hasClass('active')
+
+	auto_resize: () ->
+		height = $(window).height();
+		@$(".slimScrollDiv").height(height)
+		@$(".body").height(height)
 
 
 class ContainerView extends Backbone.View
