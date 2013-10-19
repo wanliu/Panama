@@ -292,10 +292,10 @@ module ApplicationHelper
   end
 
   def city_by_ip(client_ip)
-    # address = IPSearch.ip_query(client_ip)
-    address = IPSearch.ip_query("124.228.76.190")
+    client_ip = "124.228.76.190" unless Rails.env.production?
+    address = IPSearch.ip_query(client_ip)
     if address.blank?
-      []
+      City.find_by_name("衡阳市")
     else
       address_detail = address["content"]["address_detail"]
       province_id = City.where(name: address_detail["province"]).pluck("id")[0]
