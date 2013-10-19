@@ -9,7 +9,7 @@
 	</div>
 	<%= render "new_address" , locals: {:id => "new_user"} %>
 	<div class="wrapper row-fluid">
-		<% unless @new_user.blank? %>
+		<% if  @new_users.length > 0 %>
 			<% @new_users.each do |new_user| %>
 				<div class='span3 new_user user_info' id="<%= new_user.id %>">
 				    <div>
