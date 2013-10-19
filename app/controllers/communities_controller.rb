@@ -19,8 +19,7 @@ class CommunitiesController < ApplicationController
 	end
 
 	def city_index
-
-		@new_users = UserChecking.joins("right join addresses as addr on addr.targeable_id = user_checkings.id ")
+		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
 								 .where("user_checkings.checked = true and addr.area_id = ?", params[:city_id])
 								 .group('user_checkings.id')
 								 .order('created_at DESC')
@@ -33,12 +32,14 @@ class CommunitiesController < ApplicationController
 						.order("count desc")
 						.limit(10)
 
-		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id  right join addresses as addr on addr.targeable_id=shops.id")
-							.where("follow.follow_type = 'Shop' and addr.targeable_type='Shop' and addr.area_id=?", params[:city_id])
-							.select("shops.*, count(follow.id) as count")
-							.group("shops.id")
-							.order("count desc")
-							.limit(10)
+		# @top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id left join user_checkings as uc on uc.owner_id = shops.id left join addresses as adddr on addr.id = uc.address_id")
+		# 					.where("follow.follow_type = 'Shop' and uc.owner_type ='Shop' and addr.area_id=?", params[:city_id])
+		# 					.select("shops.*, count(follow.id) as count")
+		# 					.group("shops.id")
+		# 					.order("count desc")
+		# 					.limit(10)
+
+		# shops = Shop.joins("left join user_checkings as uc on uc.owner_id = shops.id left join addresses as addr on uc.address_id = addr.id").where("uc.owner_type='Shop' and addr.area_id=?",params[:city_id])
 
 		@city = City.find(params[:city_id])
 		cookies[:city_id] = { 
