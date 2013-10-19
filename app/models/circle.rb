@@ -35,6 +35,7 @@ class Circle < ActiveRecord::Base
       :user_id => sender.id,
       :mentionable_user_id => owner.user_id,
       :url => url,
+      :targeable => c,
       :body => c.body)
   end
 

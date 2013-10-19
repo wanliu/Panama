@@ -8,6 +8,7 @@ class Admins::Shops::CommunitiesController < Admins::Shops::SectionController
 
   def apply_join
     @cnotification = current_shop_notification.find(params[:cn_id])
+    @cnotification.read_notify
   end
 
   def join_circle
