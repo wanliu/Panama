@@ -20,9 +20,7 @@ class ApplyJoinCircle extends Backbone.View
 			error: (notice)=>
 				message = JSON.parse(notice.responseText).message
 				pnotify({text: message })
-
 		})
-		false
 
 
 class ApplyJoinCircleList extends Backbone.View

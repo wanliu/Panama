@@ -20,15 +20,11 @@ class CommunitiesController < ApplicationController
 
 	def city_index
 
-		# Address.joins("left joins users as u on u.id= addresses.targeable_id and addresses.targeable_type= 'User' left joins shops as s on s.id = addresses.targeable_id and addresses.targeable_type= 'Shop'").where("")
-
 		@new_users = UserChecking.joins("right join addresses as addr on addr.targeable_id = user_checkings.id ")
 								 .where("user_checkings.checked = true and addr.area_id = ?", params[:city_id])
 								 .group('user_checkings.id')
 								 .order('created_at DESC')
 								 .limit(15)
-
-		@new_users = UserChecking.all
 
 		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.id left join addresses as addr on addr.area_id = circles.city_id ")
 						.where(:created_type => "advance",:city_id => params[:city_id])
@@ -74,7 +70,7 @@ class CommunitiesController < ApplicationController
 							 .group("addresses.area_id")
 							 .order("count desc")
 							 .limit(8)
-							 
+
 		respond_to do |format|
 			format.html # show.html.erb
 			format.json { render json: @hot_cities }
