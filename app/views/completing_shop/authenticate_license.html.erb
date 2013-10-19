@@ -17,22 +17,22 @@
 						<div class="photo_span cell" >
 							<span>商店图标</span>
 							<img class="bottom normal_picture img-polaroid"/>
-						</div>  
+						</div>
 						<div id="image_bottom">
-							<div class="hidden_one" id="hidden_text"> 
+							<div class="hidden_one" id="hidden_text">
 								<%= upload_tip %>
 							</div>
-							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
 							</div>
 						</div>
-					</div> 
+					</div>
 					<div class="span7 input_locate" >
 						<%= f.input :shop_name, label: '商店名称' %>
 						<%#= f.input :shop_url, label: '商店地址' %>
 						<%= f.input :shop_summary, label: '商店简介' %>
 					</div>
 				</div>
-				
+
 				<h3>营业信息</h3>
 				<hr />
 				<div class="row-fluid">
@@ -40,7 +40,7 @@
 						<div class="photo_span" >
 							<span> 营业执照</span>
 							<img class="bottom normal_picture img-polaroid"/>
-						</div>  
+						</div>
 						<div id="image_bottom">
 							<div class="hidden_one" id="hidden_text">
 								<%= upload_tip %>
@@ -52,7 +52,6 @@
 
 					<div class="span7 input_locate">
 						<%= f.input :company_name, label: '营业店名' %>
-						<%#= f.input :address_id, label: '营业地址' %>
 						<% address = current_user.user_checking.address || Address.new %>
 						<div data-id="<%= address.id %>" class="control-group string required address">
 							<div class="hide">
@@ -69,7 +68,7 @@
 										<h3 id="myModalLabel">编辑地址</h3>
 									</div>
 									<div class="modal-body">
-										
+
 									</div>
 									<div class="modal-footer">
 										<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -89,12 +88,12 @@
 						<div class="photo_span" >
 							<span>身份证照</span>
 							<img class="bottom normal_picture img-polaroid" />
-						</div>  
+						</div>
 						<div id="image_bottom">
 							<div class="hidden_one" id="hidden_text">
 								<%= upload_tip %>
 							</div>
-							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >                
+							<div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
 							</div>
 						</div>
 					</div>
@@ -124,21 +123,21 @@
 		new Upload({
 			verify_authenticity_token: "<%= form_authenticity_token %>",
 			action: "/user_checkings/upload_photo/",
-			current_user: { id: "<%= current_user.id %>", 
+			current_user: { id: "<%= current_user.id %>",
 				login: "<%= current_user.login %>",
 			},
 			targets: [
 				{
-					el: $(".main_panle1"), 
-					input_name: "shop_photo", 
+					el: $(".main_panle1"),
+					input_name: "shop_photo",
 					photo: "<%= @user_checking.try(:shop_photo) %>"
 				},{
-					el: $(".main_panle2"), 
-					input_name: "company_license_photo", 
+					el: $(".main_panle2"),
+					input_name: "company_license_photo",
 					photo: "<%= @user_checking.try(:company_license_photo) %>"
 				},{
-					el: $(".main_panle3"), 
-					input_name: "ower_photo", 
+					el: $(".main_panle3"),
+					input_name: "ower_photo",
 					photo: "<%= @user_checking.try(:ower_photo) %>"
 				}
 			]

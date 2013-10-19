@@ -42,7 +42,8 @@ class CompletingShopController < Wicked::WizardController
   def update_address
     @address = current_user.user_checking.address
     if @address.blank?
-      current_user.user_checking.address = @address = Address.create(params[:address])
+      @address = Address.create(params[:address])
+      current_user.user_checking.update_attribute(:address, @address.id)
     else
       @address.update_attributes(params[:address])
     end
@@ -62,12 +63,13 @@ class CompletingShopController < Wicked::WizardController
 
   def save_license
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
-
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
-      # @user_checking.shop_photo =
+
       if @user_checking.user.shop.blank?
-        @user_checking.user.create_shop(name: @shop_auth.shop_name)
+        @shop = @user_checking.user.create_shop(name: @shop_auth.shop_name)
+        @user_checking.owner = @shop
+        @user_checking.save
       end
       render_wizard(@user_checking)
     else

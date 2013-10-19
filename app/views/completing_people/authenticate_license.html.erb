@@ -14,7 +14,7 @@
 						<span>身份证照</span>
 						<div class="photo_span" >
 							<img class="bottom normal_picture img-polaroid">
-						</div>  
+						</div>
 						<div id="image_bottom">
 							<div class="hidden_one" id="hidden_text">
 								<%= upload_tip %>
@@ -29,7 +29,7 @@
 						<%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
 						<%= f.input :phone, label: '联系电话' %>
 						<%= f.input :company_name, label: '营业店名' %>
-						<% address = current_user.user_checking.address || Address.new %>
+						<% address = @user_checking.address || Address.new %>
 						<div data-id="<%= address.id %>" class="control-group string required address">
 							<div class="hide">
 								<%= f.input :address_id, input_html: { value: address.id }  %>
@@ -45,7 +45,7 @@
 										<h3 id="myModalLabel">编辑地址</h3>
 									</div>
 									<div class="modal-body">
-										
+
 									</div>
 									<div class="modal-footer">
 										<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -77,13 +77,13 @@
 		new Upload({
 			verify_authenticity_token: "<%= form_authenticity_token %>",
 			action: "/user_checkings/upload_photo/",
-			current_user: { 
-				id: "<%= current_user.id %>", 
+			current_user: {
+				id: "<%= current_user.id %>",
 				login: "<%= current_user.login %>"
 			},
 			targets: [{
-				el: $(".main_panle1"), 
-				input_name: "ower_photo", 
+				el: $(".main_panle1"),
+				input_name: "ower_photo",
 				photo: "<%= @user_checking.try(:ower_photo) %>"
 			}]
 		})

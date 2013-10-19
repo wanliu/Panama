@@ -35,8 +35,10 @@ class CompletingPeopleController < Wicked::WizardController
 
   def update_address
     @address = current_user.user_checking.address
+
     if @address.blank?
-      current_user.user_checking.address = @address = Address.create(params[:address])
+      @address = Address.create(params[:address])
+      current_user.user_checking.update_attribute(:address_id, @address.id)
     else
       @address.update_attributes(params[:address])
     end
@@ -60,7 +62,8 @@ class CompletingPeopleController < Wicked::WizardController
       @user_auth = UserAuth.new(params[:user_auth].merge(user_id: @user_checking.user.id))
       if @user_auth.valid?
         @user_checking.update_attributes(@user_auth.update_options)
-
+        @user_checking.owner = @user_checking.user
+        @user_checking.save
         current_user.services << Service.buyer
 
         # render_wizard(@user_checking)
