@@ -75,7 +75,6 @@ class AttachmentView extends Backbone.View
         overflow: 'visible',
         position: 'static'
       )
-      @$("input:file").height(@$el.height())
 
     init_data: () ->
       @hidden_input.val(@model.id)
@@ -186,6 +185,9 @@ class root.AttachmentUpload extends Backbone.View
     data: []
     default_enabled: true  #开启默认图片选择
     limit: 10              #最多上传数量
+    params: {
+
+    }
     initialize : () ->
       _.extend(@, @options)
       @$el = $(@el)

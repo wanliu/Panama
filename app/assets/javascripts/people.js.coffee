@@ -11,7 +11,7 @@
 #= require lib/chose-friend
 #= require lib/modify_number
 #= require people/followers
-#= require people/following
+#= require following
 #= require people/cart
 #= require people/community_people
 #= require people/order_refund_card

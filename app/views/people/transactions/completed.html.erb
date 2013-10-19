@@ -1,97 +1,97 @@
 <% active_section :completed %>
 
 <div class='row-fluid'>
-	<div class='span8'>
-		<h2 class='page-title'>担保交易</h2>
-	</div>
+  <div class='span8'>
+    <h4 class='page-title'>担保交易</h4>
+  </div>
 </div>
 <div class='row-fluid'>
-	<div class='span8'>
-		<section class='widget'>
-			<table class='table table-images table-hover complete'>
-				<thead>
-					<tr>
-						<th style="width:60px;">卖家</th>
-						<th>订单编号</th>
-						<th>到货地址</th>
-						<th>下单日期</th>
-						<th style="min-width:45px;">操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% if @transactions.present? %>
-						<% @transactions.each do |t| %>
-						<tr class="transaction_complete-<%=t.id%>">
-							<td>
-								<%= image_tag t.seller.photos.icon %>
-								<%= t.seller.name %>
-							</td>
-							<td><%= t.number %></td>
-							<td style="text-align:left;">
-								<%= t.address.address_only %>
-							</td>
-							<td><%= t.created_at.strftime("%Y-%d-%m %H:%M") %></td>
-							<td>
-								<a class="btn btn-info btn-small" href="/people/<%= t.buyer.login %>/transactions/<%= t.id %>">明细</a>
-							</td>
-						</tr>
-						<% end %>
-						<% else %>
-							<tr class="widget">
-								<td colspan="5">您暂无担保交易记录</td>
-							</tr>
-						<% end %>
-				</tbody>
-			</table>
-		</section>
-	</div>
+  <div class='span8'>
+    <section class='widget'>
+      <table class='table table-images table-hover complete'>
+        <thead>
+          <tr>
+            <th style="width:60px;">卖家</th>
+            <th>订单编号</th>
+            <th>到货地址</th>
+            <th>下单日期</th>
+            <th style="min-width:45px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @transactions.present? %>
+            <% @transactions.each do |t| %>
+            <tr class="transaction_complete-<%=t.id%>">
+              <td>
+                <%= image_tag t.seller.photos.icon %>
+                <%= t.seller.name %>
+              </td>
+              <td><%= t.number %></td>
+              <td style="text-align:left;">
+                <%= t.address.address_only %>
+              </td>
+              <td><%= t.created_at.strftime("%Y-%d-%m %H:%M") %></td>
+              <td>
+                <a class="btn btn-info btn-small" href="/people/<%= t.buyer.login %>/transactions/<%= t.id %>">明细</a>
+              </td>
+            </tr>
+            <% end %>
+            <% else %>
+              <tr class="widget">
+                <td colspan="5">您暂无担保交易记录</td>
+              </tr>
+            <% end %>
+        </tbody>
+      </table>
+    </section>
+  </div>
 </div>
 
 <div class='row-fluid'>
-	<div class='span8'>
-		<h2 class='page-title'>直接交易</h2>
-	</div>
+  <div class='span8'>
+    <h4 class='page-title'>直接交易</h4>
+  </div>
 </div>
 <div class='row-fluid'>
-	<div class='span8'>
-		<section class='widget'>
-			<table class='table table-images table-hover complete'>
-				<thead>
-					<tr>
-						<th>卖家</th>
-						<th>编号</th>
-						<th>金额</th>
-						<th>下单日期</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% if @direct_transactions.present? %>
-						<% @direct_transactions.each do |t| %>
-						<tr class="transaction_complete-<%=t.id%>">
-							<td>
-								<%= image_tag t.seller.photos.icon %>
-								<%= t.seller.name %>
-							</td>
-							<td><%= t.number %></td>
-							<td>
-								<%= t.total %>
-							</td>
-							<td>
-								<%= t.created_at.strftime("%Y-%d-%m %H:%M") %>
-							</td>
-							<td>
-								<a class="btn btn-info btn-small" href="/people/<%=t.buyer.login %>/direct_transactions/<%= t.id %>">
-									明细
-								</a>
-							</td>
-						</tr>
-						<% end %>
-					<% else %>
-						<tr class="widget"><td colspan="5">您暂无直接交易记录</td></tr>
-					<% end %>
-				</tbody>
-			</table>
-		</section>
-	</div>
+  <div class='span8'>
+    <section class='widget'>
+      <table class='table table-images table-hover complete'>
+        <thead>
+          <tr>
+            <th>卖家</th>
+            <th>编号</th>
+            <th>金额</th>
+            <th>下单日期</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @direct_transactions.present? %>
+            <% @direct_transactions.each do |t| %>
+            <tr class="transaction_complete-<%=t.id%>">
+              <td>
+                <%= image_tag t.seller.photos.icon %>
+                <%= t.seller.name %>
+              </td>
+              <td><%= t.number %></td>
+              <td>
+                <%= t.total %>
+              </td>
+              <td>
+                <%= t.created_at.strftime("%Y-%d-%m %H:%M") %>
+              </td>
+              <td>
+                <a class="btn btn-info btn-small" href="/people/<%=t.buyer.login %>/direct_transactions/<%= t.id %>">
+                  明细
+                </a>
+              </td>
+            </tr>
+            <% end %>
+          <% else %>
+            <tr class="widget"><td colspan="5">您暂无直接交易记录</td></tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  </div>
 </div>

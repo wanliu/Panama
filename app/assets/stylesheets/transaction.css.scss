@@ -190,6 +190,10 @@
 		.address_input {
 			padding-right: 60px;
 			position: relative;
+
+			.control-group{
+				margin-bottom: 10px;
+			}
 		}
 
 		.address-add {

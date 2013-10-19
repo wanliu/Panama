@@ -2,6 +2,7 @@
 #= require social_sidebar
 #= require shop_products
 #= require lib/infinite_scroll
+#= require following
 
 root = window || @
 

@@ -1,4 +1,6 @@
 <% community_active :people  %>
+<% admin_active_section :communities %>
+
 <div class='row-fluid shop_community_people'>
   <div class='span8 widget'>
     <%= render :partial => "admins/base/community_nav" %>
@@ -13,7 +15,6 @@
             <input type='text' placeholder='查找用户' />
           </div>
           <div class='circle_user_panel'>
-
           </div>
         </div>
       </div>
@@ -31,29 +32,84 @@
               <h3>添加圈子</h3>
             </div>
             <div class="modal-body">
-              <div class="control-group">
-                <label class="control-label">名称</label>
-                <div class="controls">
-                  <input type="text" name="circle[name]" class="circle_name" placeholder="名称">
-                  <span class='error' style='color: red;'></span>
-                </div>
-              </div>
+              <%= simple_form_for :circle, :remote => true, :html => {:class => 'form-horizontal create_circle_from'} do |form| %>
+                <%= form.input :name, label: "名称" %>
+                <%= form.error :name, id: 'name_error' %>
+                <%= form.input :description, label: "描述" %>
+                <%= simple_fields_for :address do |address_form| %>
+                  <label class="chosen optional control-label" for="transaction_address">选择地区</label>
+                  <div class="controls controls-row">
+                    <div class="control-group">
+                      <%= address_form.input :province_id,
+                                   :as => :depend_select,
+                                   :children => :city_id,
+                                   :wrapper => :inline,
+                                   :collection => get_city %>
+
+                      <%= address_form.input :city_id,
+                                   :as => :depend_select,
+                                   :children => :area_id,
+                                   :target => :province,
+                                   :wrapper => :inline,
+                                   :collection_url => "/city/" %>
+
+                      <%= address_form.input :area_id,
+                                   :as => :depend_select,
+                                   :target => :city,
+                                   :wrapper => :inline,
+                                   :collection_url => "/city/" %>
+
+                      <%= address_form.error :province_id %>
+                    </div>
+                  </div>
+                <% end %>
+
+                <%= form.simple_fields_for :setting do |f| %>
+                  <%= f.input :limit_city, as: :boolean, label: "限制地区" %>
+                  <%= f.input :limit_join, as: :boolean, label: "验证加入" %>
+                <% end %>
+              <% end %>
             </div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
               <button class="btn btn-primary save-circle">保存</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script type="text/template" id="community-template">
+  <div class="header">
+    <span>{{name}}</span>
+    <i class="icon-edit pull-right" data-toggle="modal" data-keyboard="false" href="/shops/<%=current_shop.name%>/admins/circles/{{id}}/edit" data-target="#edit_circle{{id}}"></i>
+    <i class="icon-user pull-right"></i>
+    <a class='close-label remove_circle' href="javascript:void(0)"></a>
+  </div>
+  <hr />
+  <div class='user-list'></div>
+
+  <div id="edit_circle{{id}}" class="modal hide fade edit_circle_panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>编辑圈子</h3>
+    </div>
+    <div class="modal-body">
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+      <button class="btn btn-primary update-circle">保存</button>
+    </div>
+  </div>
+</script>
+
 <script text='text/javascript'>
   new CommunityPeopleView({
     el: $(".shop_community_people"),
     remote_url: "<%=shop_admins_circles_path(current_shop.name) %>",
-    circle_template: Hogan.compile("<%=j render :partial =>'circles/info' %>")
+    circle_template: Hogan.compile($("#community-template").html())
   })
 </script>

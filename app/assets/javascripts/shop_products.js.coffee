@@ -84,7 +84,7 @@ class ShopProductPreview extends Backbone.View
 
 
 class ShopProductToolbar extends Backbone.View
-  events: 
+  events:
     "click .toolbar .buy" : "buy"
     "click .toolbar .cart": "cart"
 

@@ -19,12 +19,12 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :yellow_page do
-    collection do 
-      get :search, :to => "yellow_page#search"
-      get :hot_city_name, :to => "yellow_page#hot_city_name"
-    end
-  end
+  # resources :yellow_page do
+  #   collection do
+  #     get :search, :to => "yellow_page#search"
+  #     get :hot_city_name, :to => "yellow_page#hot_city_name"
+  #   end
+  # end
 
   resources :catalog do
     member do
@@ -52,6 +52,15 @@ Panama::Application.routes.draw do
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
   match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
   match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post
+
+  match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
+  match "cities/:city_id/communities", :to => "communities#city_index", :via => :get
+  resources :communities do
+    collection do
+      get "hot_city_name", :to => "communities#hot_city_name"
+      get "search", :to => "communities#search"
+    end
+  end
 
   resources :people do
 
@@ -89,7 +98,7 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :addresses, :controller => "people/addresses" do
+    resources :delivery_addresses, :controller => "people/delivery_addresses" do
     end
 
     resources :direct_transactions, :controller => "people/direct_transactions" do
@@ -119,6 +128,7 @@ Panama::Application.routes.draw do
 
     resources :circles, :controller => "people/circles" do
       collection do
+        post :apply_join
         get "friends"
         get "addedyou"
         get "all_friends"
@@ -130,8 +140,8 @@ Panama::Application.routes.draw do
 
     resources :followings, :controller => "people/followings" do
       collection do
-        post "user/:user_id" => "people/followings#user"
-        post "shop/:shop_id" => "people/followings#shop"
+        post "User/:user_id" => "people/followings#user"
+        post "Shop/:shop_id" => "people/followings#shop"
       end
     end
 
@@ -373,6 +383,11 @@ Panama::Application.routes.draw do
       resources :communities, :controller => "shops/communities" do
         collection do
           get :people
+          get :settings
+          get :messages
+          get "apply_join/:cn_id", :to => "shops/communities#apply_join"
+          post "join_circle/:cn_id", :to => "shops/communities#join_circle"
+          post "refuse_join/:cn_id", :to => "shops/communities#refuse_join"
         end
       end
 

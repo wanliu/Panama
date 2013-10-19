@@ -1,0 +1,33 @@
+<% admin_active_section :communities %>
+<% community_active :messages %>
+<div class='row-fluid shop_community_messages'>
+  <div class='span8 widget'>
+    <%= render :partial => "admins/base/community_nav" %>
+    <div class='row-fluid'>
+      <table class='table table-striped'>
+        <thead>
+          <tr>
+            <th>内容</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @notifications.each do |n| %>
+          <tr>
+            <td>
+              <%=n.body %>
+            </td>
+            <td>
+              <%= n.state ? '已读' : '未读' %>
+            </td>
+            <td>
+              <%= link_to "查看", "#{shop_admins_communities_path(current_shop)}/apply_join/#{n.id}" %>
+            </td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -9,7 +9,18 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   end
 
   def create
-    @circle = current_shop.circles.create(params[:circle])
+    begin
+      Circle.transaction do
+        @circle = current_shop.circles.create(
+          params[:circle].merge({ 
+            created_type: "advance", 
+            city_id: params[:address][:area_id], 
+            setting_id: CircleSetting.create(params[:circle][:setting]).id 
+        }))
+      end
+    rescue Exception => ex
+    end
+
     respond_to do |format|
       if @circle.valid?
         format.json{ render json: @circle }
@@ -25,6 +36,32 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
     respond_to do |format|
       format.html
       format.json{ render json: @circle }
+    end
+  end
+
+  def edit
+    @circle = current_shop.circles.find(params[:id])
+    ancestor_ids = @circle.city.ancestor_ids
+    @address = Address.new({ province_id: ancestor_ids[1], city_id: ancestor_ids[2], area_id: @circle.city_id })
+    render layout: false
+  end
+
+  def update
+    @circle = current_shop.circles.find(params[:id])
+    begin
+      Circle.transaction do
+        @circle.update_attributes(params[:circle].merge({city_id: params[:address][:area_id]}))
+        @circle.setting.update_attributes(params[:circle][:setting])
+      end
+    rescue Exception => ex
+    end
+
+    respond_to do |format|
+      if @circle.valid?
+        format.json{ render json: @circle }
+      else
+        format.json{ render json: draw_errors_message(@circle), status: 403 }
+      end
     end
   end
 

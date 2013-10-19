@@ -33,8 +33,10 @@ class Circle extends Backbone.Model
       success: callback
     )
 
+
 class CircleList extends Backbone.Collection
   model: Circle
+
   set_url: (url) ->
     @url = url
 
@@ -61,12 +63,13 @@ class CircleList extends Backbone.Collection
   followers: () ->
     @fetch( url: "#{@url}/followers" )
 
+
 class CircleUser extends Backbone.View
   tagName: "span"
   className: "label user"
-  events: {
+  events: 
     "click .remove_user" : "cloes_user"
-  }
+  
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -85,8 +88,10 @@ class CircleUser extends Backbone.View
   remove: () ->
     @$el.remove()
 
+
 class CircleUserList extends Backbone.View
   notice_el: "<div class='notice'>暂时没有好友!</div>"
+
   initialize: (options) ->
     _.extend(@, options)
     @user_list = new CircleList([], @remote_url)
@@ -122,11 +127,14 @@ class CircleUserList extends Backbone.View
     if @user_list.length <= 0
       @el.html(@notice_el)
 
+
 class CircleView extends Backbone.View
   className: "alert alert-info circle"
-  events: {
-    "click .remove_circle" : "delete_circle"
-  }
+
+  events: 
+    "click .remove_circle": "delete_circle"
+    "click .update-circle": "update_circle"
+  
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -145,10 +153,12 @@ class CircleView extends Backbone.View
     @model.bind("remove_user", _.bind(@remove_user, @))
 
   render: () ->
+    if @model.attributes.created_type != "advance"
+      $(@el).find("i.icon-edit").hide()
     @$el
 
   delete_circle: () ->
-    if confirm("是否确认删除#{@model.get('name')}圈子?")
+    if confirm("确认删除#{@model.get('name')}圈子?")
       @model.destroy()
       @$el.remove()
 
@@ -165,12 +175,29 @@ class CircleView extends Backbone.View
   remove_user: (user_id) ->
     @circle_user_list.find_remove(user_id)
 
+  update_circle: (event) ->
+    return pnotify("请填写圈子名称") if @$("#circle_name").val().trim() is ""
+    return pnotify("请完善地区位置") if @$("#address_area_id").val().trim() is ""
+    $form = $("form.edit_circle_from")
+    $.ajax(
+      url: $form.attr("action")
+      data: $form.serialize()
+      type: 'PUT'
+      dataType: "JSON"
+      success: (data) =>
+        @$(".edit_circle_panel").modal("hide")
+        pnotify("成功修改圈子")
+      error: (data) =>
+        pnotify("修改圈子失败了~~~")
+    )
+
+
 class CircleViewList extends Backbone.View
-  events: {
-    "click .add-circle" : "show_add_circle"
-    "click .save-circle" : "create_circle"
-    "keypress input.circle_name" : "key_up"
-  }
+  events: 
+    "click .add-circle"         : "show_add_circle"
+    "click .save-circle"        : "create_circle"
+    "keypress input#circle_name": "key_up"
+  
   initialize: (options) ->
     _.extend(@, options)
 
@@ -195,29 +222,28 @@ class CircleViewList extends Backbone.View
       template: @template,
       remote_url: @remote_url
     })
-
-    @circle_el.append(circle_view.render())
+    @circle_el.prepend(circle_view.render())
 
   show_add_circle: () ->
     @add_panel.modal("show")
 
   create_circle: () ->
-    val = @$("input.circle_name").val().trim()
-    if val is ""
-      @$(".error").html("名称不能为空！")
-      return
-
-    @circle = new Circle({name: val}, @remote_url)
+    return pnotify("请填写圈子名称") if @$("#circle_name").val().trim() is ""
+    return pnotify("请完善地区位置") if @$("#address_area_id").val().trim() is ""
+    $form = $("form.create_circle_from")
+    @circle = new Circle($form.serializeHash(), @remote_url)
     @circle.save({},
       success: (model, data) =>
         @circles.add(data)
-        @$("input.circle_name").val('')
+        $form[0].reset()
         @add_panel.modal("hide")
+        pnotify("成功添加圈子")
 
       error: (model, data) =>
         data = JSON.parse(data.responseText)
-        _.each data, (d) =>
-          @$(".error").append(d)
+        # _.each data, (d) =>
+        #   @$(".error").append(d)
+        pnotify("添加圈子失败了~~~")
     )
 
   key_up: (e) ->
@@ -226,6 +252,7 @@ class CircleViewList extends Backbone.View
   remove_all_circle_user: (user_id) ->
     @circles.each (model) =>
       model.trigger("remove_user", user_id)
+
 
 root.Circle = Circle
 root.CircleList = CircleList

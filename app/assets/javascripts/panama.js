@@ -42,7 +42,7 @@
 //= require activity
 //= require addresses
 //= require search_users
-//= require notification 
+//= require notification
 
 root = window || this;
 

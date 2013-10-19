@@ -1,14 +1,55 @@
 // Place all the styles related to the yellow_page controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
 .yellow_page{
-	.row-fluid [class*="span"]:first-child {
-		margin-left: 20px;
+	hr {
+		margin: 10px 0;
+		border: 0;
+		border-top: 1px solid #eeeeee;
+		border-bottom: 1px solid white;
 	}
 
-	.new_user, .buyer_user, .seller_user{  
+	.circles{
+
+		.businiess_community{
+			margin-left: 20px;
+			margin-bottom: 20px;
+			width: 30%;
+			position: relative;
+
+			.popover{
+				top:-65px;
+				color: black;
+			}
+
+			@include transparent(rgb(51,51,51),0.4);
+			.head_img{
+				a{
+					position: relative;
+					.label-important{
+						background-color: #db4a37;
+					}
+				}
+			}
+
+			.user_icon {
+				float:left;
+				margin-right:5px;
+				width: 70px;
+				height: 70px;
+				cursor: pointer;
+			}
+			.circle_detail{
+				margin-left: 80px;
+			}
+		}
+	}
+
+
+	.new_user, .seller_user, .buyer_user, .businiess_community{
 		@include transparent(rgb(51,51,51),0.4);
-		margin-bottom: 20px; 
+		margin-bottom: 20px;
 		margin-left: 20px;
 		-webkit-border-radius: 2px;
 		border-radius: 2px;
@@ -17,39 +58,45 @@
 		width: 30%;
 		background-color: "";
 	}
-	.newer{ margin-left: 15px!important;}
+	/*.newer{ margin-left: -15px;}*/
 	.base_info{
-		.alert{ 
-			margin-right: 20px; 
-			margin-left: 20px; 
+		.alert{
+			margin-right: 20px;
+			margin-left: 20px;
 		}
 		.user_info{
 			position: relative;
-			.user_icon { 
-				float:left; 
-				margin-right:5px; 
-				width: 70px; 
-				height: 70px; 
+			.user_icon {
+				float:left;
+				margin-right:5px;
+				width: 70px;
+				height: 70px;
 				cursor: pointer;
 			}
 		}
 	}
 
 	.wrapper{
-		.title { 
-			float:left;
-			padding-top:15px; 
+		.user_info:first-child{
+			margin-left: 20px;
 		}
 
-		.tel { 
-			color: #9bd0f6; 
-			font-size: 13px; 
-		}
+		.user_info{
+			.title {
+				float:left;
+				padding-top:15px;
+			}
 
-		.name {  
-			color: #404040;
-			font-size: 13px;
-			font-weight: bold;
+			.tel {
+				color: #9bd0f6;
+				font-size: 13px;
+			}
+
+			.name {
+				color: #404040;
+				font-size: 13px;
+				font-weight: bold;
+			}
 		}
 	}
 
@@ -75,7 +122,7 @@
 				background-color: rgba(231, 192, 192, 0.09);
 				.icon-leaf {
 					color: green;
-				}	
+				}
 			}
 		}
 
@@ -125,17 +172,18 @@
 			}
 		}
 	}
+
 	.address-panel{
 		.address_from_post{
 			padding-top: 10px;
 			.error{
 				border: 1px solid red;
 			}
-			.search_user{ 
+			.search_user{
 				margin-left: 20px;
 			}
 			.controls {
-				.hidden{ 
+				.hidden{
 					position: absolute;
 				}
 			}
@@ -147,12 +195,46 @@
 
 	.hot_city{
 		padding-left: 20px;
-		a{ 
-			color: white; 
+		a{
+			color: white;
 			font-size: 15px;
+		}
+	}
+
+	.top_10{
+		h4{
+			margin-top: 0px;
+			padding-top: 20px;
+			padding-left: 10px;
+		}
+		@include transparent(rgb(51,51,51),0.4);
+		.shops-list{
+			li{
+				border-top: 1px solid rgba(51,51,51,0.25);
+				padding-top: 10px;
+				padding-bottom: 10px;
+				margin-left: 0px;
+			}
+			li:hover {
+				@include transparent(rgb(51,51,51), 0.25);
+			}
+			.top_image{
+				padding-top: 8px;
+				padding-left: 20px;
+			}
 		}
 	}
 }
 
-
-
+.communities{
+	.detail_city_choice{
+		border-radius: 5px;
+		border: 5px solid #00BFFF;
+	}
+	.area_list{
+		a{ color: #0000CC;}
+		.city_name{
+			margin-left: 6px;
+		}
+	}
+}

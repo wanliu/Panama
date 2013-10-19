@@ -9,7 +9,7 @@
 @import "progress";
 @import "transaction";
 @import "admins/shops/products";
-@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";
+/*@import "jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom";*/
 @import "lib/notify/pnotify";
 @import "bootstrap-datetimepicker.min";
 @import "lib/typeahead";
@@ -20,6 +20,7 @@
 @import "admins/shops/shop_banks";
 @import "direct_transaction";
 @import "bootstrap-editable";
+@import "admins/shops/community_people";
 
 
 $left-side-admin-width: 160px;
@@ -247,8 +248,8 @@ $left-side-admin-width: 160px;
 }
 
 .nav .user_icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   /*margin-top: -20px;*/
 }
 
@@ -336,4 +337,16 @@ $left-side-admin-width: 160px;
   .cell{ padding-top: 18px;}
   .dl-horizontal dt{ width: 80px; text-align: center;}
   .dl-horizontal dd{ margin-left: 10px;}
+}
+
+.apply-notify{
+  text-align: center;
+
+  .message{
+    display: inline-block;
+
+    .toolbar{
+
+    }
+  }
 }

@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
            foreign_key: "buyer_id"
 
   has_many :credits
-  has_many :addresses, as: :targeable, class_name: "Address", dependent: :destroy
+  has_many :delivery_addresses
   has_many :followings, dependent: :destroy
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
@@ -132,6 +132,14 @@ class User < ActiveRecord::Base
 
   def is_follow_user?(user_id)
     followings.exists?(follow_id: user_id, follow_type: "User")
+  end
+
+  def follow_user(user_id)
+    followings.find_by(follow_id: user_id, follow_type: "User")
+  end
+
+  def follow_shop(shop_id)
+    followings.find_by(follow_id: shop_id, follow_type: "Shop")
   end
 
   def is_follow_shop?(shop_id)
