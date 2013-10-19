@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
            foreign_key: "buyer_id"
 
   has_many :credits
-  has_many :addresses, as: :targeable, class_name: "Address", dependent: :destroy
+  has_many :delivery_addresses
   has_many :followings, dependent: :destroy
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy

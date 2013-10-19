@@ -37,7 +37,7 @@
 
 			<div class="row-fluid button_group">
 				<div class="pull-right">
-					<a class="btn" data-toggle="modal" href="addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
+					<a class="btn" data-toggle="modal" href="delivery_addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
 				<%= link_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn btn-danger" %>
 				</div>
 			</div>

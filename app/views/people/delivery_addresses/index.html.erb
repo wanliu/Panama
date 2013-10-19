@@ -1,4 +1,4 @@
-<% active_section :addresses %>
+<% active_section :delivery_addresses %>
 
 <div class='row-fluid'>
 	<div class="span8 widget">
@@ -28,8 +28,8 @@
 					<% end %>
 				</div>
 
-				<%= render :partial => "people/addresses/new", 
-								:locals => {:address => @people.addresses.build} %>
+				<%= render :partial => "people/delivery_addresses/new", 
+								:locals => {:address => @people.delivery_addresses.build} %>
 			</div>
 		</div>
 	</div>

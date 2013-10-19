@@ -6,16 +6,38 @@
 #   owner: 所属者(商店与用户)
 #   user_id: 操作员
 class Circle < ActiveRecord::Base
-  attr_accessible :name, :owner_id, :owner_type
+  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :created_type
+
+  scope :basic, lambda{ where(:created_type => :basic) }
+  scope :advance, lambda{ where(:created_type => :advance) }
 
   belongs_to :owner, :polymorphic => true
 
   validates :name, :presence => true
+  validates :city_id, :presence => true
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
+  has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
+  belongs_to :city
+  belongs_to :setting, class_name: "CircleSetting"
 
   validate :valid_name?
+
+  def apply_join_notice(sender)
+    c = CommunityNotification.create({
+      :circle => self,
+      :send_user => sender,
+      :target => owner,
+      :body => "#{sender.login}申请加入圈子#{name}"})
+    url = "/shops/#{owner.name}/admins/communities/apply_join/#{c.id}"
+    notifications.create!(
+      :user_id => sender.id,
+      :mentionable_user_id => owner.user_id,
+      :url => url,
+      :targeable => c,
+      :body => c.body)
+  end
 
   def friend_count
     friends.count
@@ -35,6 +57,14 @@ class Circle < ActiveRecord::Base
     uid = user
     uid = user.id if user.is_a?(User)
     friends.find_by(user_id: uid).destroy
+  end
+
+  def already_has?(user_id)
+    begin
+      friends.find(user_id)
+    rescue
+      false
+    end
   end
 
   def valid_name?

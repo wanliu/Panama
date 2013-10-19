@@ -5,7 +5,7 @@ class Shop < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
 
-  attr_accessible :name, :user
+  attr_accessible :name, :user, :address
   attr_accessor :uploader_secure_token
 
   has_many :products, :class_name => "ShopProduct", dependent: :destroy
@@ -20,6 +20,7 @@ class Shop < ActiveRecord::Base
   has_many :topic_categories, dependent: :destroy
   has_many :banks, :class_name => "ShopBank", :dependent => :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
+  belongs_to :address
   # has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
   # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
@@ -38,7 +39,7 @@ class Shop < ActiveRecord::Base
   validates_presence_of :user
 
   mount_uploader :photo, ImageUploader
-  define_graphical_attr :photos, :handler => :photo  
+  define_graphical_attr :photos, :handler => :photo
   friendly_id :name
 
   #所有圈子好友

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130926093545) do
+ActiveRecord::Schema.define(:version => 20131019074650) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -84,13 +84,11 @@ ActiveRecord::Schema.define(:version => 20130926093545) do
   create_table "addresses", :force => true do |t|
     t.string   "zip_code"
     t.string   "road"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.integer  "province_id"
     t.integer  "city_id"
     t.integer  "area_id"
-    t.integer  "targeable_id"
-    t.string   "targeable_type"
     t.string   "contact_name"
     t.string   "contact_phone"
     t.time     "deleted_at"
@@ -215,12 +213,23 @@ ActiveRecord::Schema.define(:version => 20130926093545) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "circle_settings", :force => true do |t|
+    t.boolean  "limit_city", :default => false
+    t.boolean  "limit_join", :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
   create_table "circles", :force => true do |t|
     t.string   "name"
     t.integer  "owner_id"
     t.string   "owner_type"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.string   "description"
+    t.integer  "city_id"
+    t.integer  "setting_id"
+    t.string   "created_type", :default => "basic"
   end
 
   create_table "cities", :force => true do |t|
@@ -238,6 +247,17 @@ ActiveRecord::Schema.define(:version => 20130926093545) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.text     "content_html"
+  end
+
+  create_table "community_notifications", :force => true do |t|
+    t.boolean  "state",        :default => false
+    t.text     "body"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.integer  "send_user_id"
+    t.integer  "circle_id"
   end
 
   create_table "contact_friends", :force => true do |t|
@@ -282,6 +302,20 @@ ActiveRecord::Schema.define(:version => 20130926093545) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "delivery_addresses", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "zip_code"
+    t.string   "road"
+    t.integer  "province_id"
+    t.integer  "city_id"
+    t.integer  "area_id"
+    t.string   "contact_name"
+    t.string   "contact_phone"
+    t.time     "deleted_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "delivery_manners", :force => true do |t|
     t.string   "code"
@@ -719,6 +753,7 @@ ActiveRecord::Schema.define(:version => 20130926093545) do
     t.integer  "user_id"
     t.string   "im_token"
     t.boolean  "actived",    :default => false
+    t.integer  "address_id"
   end
 
   create_table "shops_categories", :force => true do |t|
@@ -851,6 +886,8 @@ ActiveRecord::Schema.define(:version => 20130926093545) do
     t.boolean  "checked",                  :default => false
     t.integer  "rejected_times",           :default => 0
     t.integer  "address_id"
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   create_table "users", :force => true do |t|

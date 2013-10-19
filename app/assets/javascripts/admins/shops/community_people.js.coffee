@@ -9,7 +9,7 @@ class YouCircleUserView extends Backbone.View
   events: {
     "click .remove_you_user" : "delete_user"
   }
-  className: "you_circle_user circle_friend"
+  className: "you_circle_users circle_friend"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -35,11 +35,15 @@ class YouCircleUserView extends Backbone.View
     @inspect_notice()
 
   template: (model) ->
-    "<span class='panel-pj you_circle_user' data-value-id='#{model.id}'>
-      <img src='#{model.get('icon_url')}' class='img-polaroid'  />
-      <span class='login'>#{model.get('login')}</span>
-      <a href='javascript:void(0)' class='close-label remove_you_user'></a>
-    </span>"
+    "<div class='panel-pj you_circle_user' data-value-id='#{model.id}'>
+      <div>
+        <img src='#{model.get('icon_url')}' class='img-polaroid'  />
+      </div>
+      <div>
+        <lable class='label login'>#{model.get('login')}</label>
+        <a href='javascript:void(0)' class='close-label remove_you_user'></a>
+      </div>
+    </div>"
 
   show: () ->
     @$el.show()
@@ -75,9 +79,8 @@ class YouCircleUserView extends Backbone.View
     @trigger("remove_user", model.id)
     @inspect_notice()
 
-
 class FollowingUserView extends Backbone.View
-  className: "follow_user circle_friend"
+  className: "follow_users circle_friend"
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -108,10 +111,14 @@ class FollowingUserView extends Backbone.View
     @$el.hide()
 
   template: (model) ->
-    "<span class='panel-pj follow_user' data-value-id='#{model.id}'>
-      <img src='#{model.get('icon_url')}' class='img-polaroid'  />
-      <span class='login'>#{model.get('login')}</span>
-    </span>"
+    "<div class='panel-pj follow_user' data-value-id='#{model.id}'>
+      <div>
+        <img src='#{model.get('icon_url')}' class='img-polaroid'  />
+      </div>
+      <div>
+        <label class='label login'>#{model.get('login')}</label>
+      </div>
+    </div>"
 
   refresh: () ->
     @followers_list.followers()
@@ -128,7 +135,6 @@ class FollowingUserView extends Backbone.View
       revertDuration: 200,
       zIndex: 1
     })
-
 
 class CircleFriendView extends Backbone.View
   events: {

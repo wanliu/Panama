@@ -1,0 +1,40 @@
+<%= simple_form_for @circle, :url => shop_admins_circle_path(current_shop, @circle), :html => {:class => 'form-horizontal edit_circle_from'} do |form| %>
+  <%= form.input :name, label: "名称", disabled: true %>
+  <%= form.error :name, id: 'name_error' %>
+  <%= form.input :description, label: "描述" %>
+  <%= simple_fields_for @address do |address_form| %>
+    <label class="chosen optional control-label" for="circle_address">选择地区</label>
+    <div class="controls controls-row">
+      <div class="control-group">
+        <%= address_form.input :province_id,
+                     :as => :depend_select,
+                     :children => :city_id,
+                     :object => @circle,
+                     :wrapper => :inline,
+                     :collection => get_city %>
+
+        <%= address_form.input :city_id,
+                     :as => :depend_select,
+                     :children => :area_id,
+                     :target => :province,
+                     :object => @circle,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
+
+        <%= address_form.input :area_id,
+                     :as => :depend_select,
+                     :target => :city,
+                     :object => @circle,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
+
+        <%= address_form.error :province_id %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= form.simple_fields_for :setting do |f| %>
+    <%= f.input :limit_city, as: :boolean, label: "限制地区", input_html: { checked: @circle.setting.limit_city } %>
+    <%= f.input :limit_join, as: :boolean, label: "验证加入", input_html: { checked: @circle.setting.limit_join } %>
+  <% end %>
+<% end %>

@@ -11,7 +11,8 @@ class UserChecking < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :service
-  has_one :address, as: :targeable, class_name: "Address", dependent: :destroy
+  belongs_to :address
+  belongs_to :owner, :polymorphic => true
 
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true

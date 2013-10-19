@@ -1,0 +1,37 @@
+<% admin_active_section :communities %>
+<% community_active :messages %>
+<div class='row-fluid shop_community_messages'>
+  <div class='span8 widget'>
+    <%=render :partial => "admins/base/community_nav" %>
+    <div class='row-fluid'>
+      <div class='apply-notify'>
+        <form>
+          <div class='message'>
+            <div>
+              <a href="<%=person_path(@cnotification.send_user.login) %>">
+                <img src="<%=@cnotification.send_user.photos.icon %>" />
+                <%=@cnotification.send_user.login %>
+              </a>
+              用户申请加入你的<%=@cnotification.circle.name %>圈子
+            </div>
+            <% unless @cnotification.state %>
+              <div class='toolbar'>
+                <input type='button' value='同意' class='btn btn-primary agree' />
+                <input type='button' value='拒绝' class='btn refuse' />
+              </div>
+            <% end %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type='text/javascript'>
+  $(function(){
+    new CommunityApplyJoin({
+      el: $('.apply-notify'),
+      cn_id: <%=@cnotification.id %>,
+      remote_url: "<%= shop_admins_communities_path(current_shop) %>"
+    })
+  })
+</script>

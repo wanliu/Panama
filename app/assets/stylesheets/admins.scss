@@ -248,8 +248,8 @@ $left-side-admin-width: 160px;
 }
 
 .nav .user_icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   /*margin-top: -20px;*/
 }
 
@@ -337,4 +337,16 @@ $left-side-admin-width: 160px;
   .cell{ padding-top: 18px;}
   .dl-horizontal dt{ width: 80px; text-align: center;}
   .dl-horizontal dd{ margin-left: 10px;}
+}
+
+.apply-notify{
+  text-align: center;
+
+  .message{
+    display: inline-block;
+
+    .toolbar{
+
+    }
+  }
 }

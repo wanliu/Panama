@@ -38,15 +38,24 @@ class FollowView extends Backbone.View
     @model.destroy success: (model, data) =>
       @$(".unfollow").addClass("follow").removeClass("unfollow")
       @change_callback(@$(".follow"))
+      @change_follow_count(-1)
+      @$(".follow").html("+ 关注")
 
   follow: () ->
     @model.follow (model, data) =>
       @$(".follow").addClass("unfollow").removeClass("follow")
       @change_callback(@$(".unfollow"))
+      @change_follow_count(1)
+      @$(".unfollow").html("取消关注")
 
   change_callback: (button) ->
     if _.isFunction(@change_follow)
       @change_follow.call(@, button)
+
+  change_follow_count: (number) ->
+    elem = @$(".follows_count")
+    if elem.length > 0
+      elem.html(parseInt(elem.text())+number);
 
 
 class FollowListView extends Backbone.View

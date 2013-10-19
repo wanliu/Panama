@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
+<%= html_tag :class => "no-js" %>
+  <%#= cache do %>
+  <meta property="wb:webmaster" content="dbb1f735ab507967" />
+    <%= render "head", :styles => ['application'], :javascripts => ['application'] %>
+  <%# end %>
+  <body class="<%= controller.controller_name %>" style="zoom: 1">
+    <%= render "chromeframe" %>
+    <%= render "logo" %>
+    <%= render "set_location" %>
+    <%= render "left_sidebar" %>
+    <div class="wrap">
+      <%= render "header" %>
+      <%= yield %>
+    </div>
+    <div id="popup-layout"></div>
+    <%= render "right_sidebar" %>
+    <%#= render 'header' %>
+    <%= render "footer" %>
+    <%# Javascript at the bottom for fast page loading %>
+    <%= render "baidu_analyzer" %>
+
+  </body>
+</html>
