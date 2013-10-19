@@ -65,11 +65,10 @@ class CommunitiesController < ApplicationController
 
 	def hot_city_name
 		@hot_cities = Address.joins("left join cities as c on c.id=addresses.area_id")
-							 .select("count(addresses.area_id) as count,c.name")
+							 .select("count(addresses.area_id) as count,c.name,addresses.area_id")
 							 .group("addresses.area_id")
 							 .order("count desc")
 							 .limit(8)
-
 		respond_to do |format|
 			format.html # show.html.erb
 			format.json { render json: @hot_cities }
@@ -77,22 +76,13 @@ class CommunitiesController < ApplicationController
 	end
 
 	def search
-		address = params[:address]
-		address.merge!({:targeable_type =>"UserChecking"})
-		address_ids = Address.where(address).pluck("targeable_id")
-		@users = _search(address_ids)
+		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
+							 .where("addr.area_id=?",params[:address][:area_id])
+							 .group("user_checkings.id")
+							 .order("user_checkings.created_at desc")
 		respond_to do |format|
 			format.html
 			format.json{ render json: @users}
-		end
-	end
-
-	def _search(address_ids)
-		if address_ids.length > 0
-			options = {:id => address_ids,:checked => true }
-			@users = UserChecking.where(options).order("created_at desc").limit(15)
-		else
-			@users = []
 		end
 	end
 end
