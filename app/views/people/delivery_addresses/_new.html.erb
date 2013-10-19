@@ -5,7 +5,7 @@
   </div>
   <div class="modal-body">
     <div class="address-panel"> 
-      <%= simple_form_for :address, :html => {:id => "new_address_form", :class => 'form-horizontal'} do |address_form| %>
+      <%= simple_form_for :delivery_addresses, :html => {:id => "new_addresses_form", :class => 'form-horizontal'} do |address_form| %>
         <label class="chosen optional control-label" for="address">选择省,市,县</label> 
         <div class="controls">
           <div class="control-group">
@@ -38,11 +38,11 @@
         <%= address_form.input :contact_name, :label => "联系人"  %>
         <%= address_form.input :contact_phone, :label => "联系电话" %>
       
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary save-button">保存</button>
+      </div>
       <% end %>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <button class="btn btn-primary save-button">保存</button>
   </div>
 </div>

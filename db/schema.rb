@@ -305,6 +305,20 @@ ActiveRecord::Schema.define(:version => 20131018090219) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
+  create_table "delivery_addresses", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "zip_code"
+    t.string   "road"
+    t.integer  "province_id"
+    t.integer  "city_id"
+    t.integer  "area_id"
+    t.string   "contact_name"
+    t.string   "contact_phone"
+    t.time     "deleted_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "delivery_manners", :force => true do |t|
     t.string   "code"
     t.string   "name"

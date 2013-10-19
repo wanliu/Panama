@@ -25,14 +25,15 @@ class CommunitiesController < ApplicationController
 								 .order('created_at DESC')
 								 .limit(15)
 
-		@circles= Circle.joins("left join circle_friends as cf on circles.id=cf.id left join addresses as addr on addr.area_id = circles.city_id ")
+		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.id left join addresses as addr on addr.area_id = circles.city_id ")
 						.where(:created_type => "advance",:city_id => params[:city_id])
 						.select("circles.*, count(cf.id) as count")
 						.group("circles.id")
 						.order("count desc")
 						.limit(10)
 
-		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id and follow.follow_type = 'Shop'")
+		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id  right join addresses as addr on addr.targeable_id=shops.id")
+							.where("follow.follow_type = 'Shop' and addr.targeable_type='Shop' and addr.area_id=?", params[:city_id])
 							.select("shops.*, count(follow.id) as count")
 							.group("shops.id")
 							.order("count desc")

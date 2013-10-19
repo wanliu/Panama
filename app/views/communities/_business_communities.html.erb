@@ -1,43 +1,47 @@
 <div class=' widget circles'>
   <h3><%= @city.try(:name).to_s.gsub(" ", "") %>商圈</h3>
   <div class ="wrapper row-fluid circles-list">
-    <% @circles.each do |circle| %>
-      <div class='businiess_community span3' id="<%= circle.id %>">
-        <div class="popover top">
-          <div class="arrow"></div>
-          <h3 class="popover-title"><%=circle.name %></h3>
-          <div class="popover-content"><%=circle.description %></div>
-        </div>
-
-        <div class="head_img">
-          <a href="/shops/<%= circle.owner.name %>">
-            <img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
-          </a>
-        </div>
-        <div  class="circle_detail">
-          <div class ="circle_name">
-            <a href ="#"><%=circle.name %></a>
+    <% if @circles.length > 0 %>
+      <% @circles.each do |circle| %>
+        <div class='businiess_community span3' id="<%= circle.id %>">
+          <div class="popover top">
+            <div class="arrow"></div>
+            <h3 class="popover-title"><%=circle.name %></h3>
+            <div class="popover-content"><%=circle.description %></div>
           </div>
-          <div class="create_name">
-            <span><i class="icon-user"></i></span>
-            <a href="/people/<%= circle.owner.try(:user).try(:login) %>">
-              <%= circle.owner.user.login %>
+
+          <div class="head_img">
+            <a href="/shops/<%= circle.owner.name %>">
+              <img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
             </a>
           </div>
-          <div class="join">
-            <span class="label label-important circle_count"><%=circle.friend_count %></span>
-            <% if current_user.shop != circle.owner  %>
-              <% if circle.already_has?(current_user.id) %>
-                <span data-value-id="<%=circle.id %>" class="label label-warning">已加入</span>
+          <div  class="circle_detail">
+            <div class ="circle_name">
+              <a href ="#"><%=circle.name %></a>
+            </div>
+            <div class="create_name">
+              <span><i class="icon-user"></i></span>
+              <a href="/people/<%= circle.owner.try(:user).try(:login) %>">
+                <%= circle.owner.user.login %>
+              </a>
+            </div>
+            <div class="join">
+              <span class="label label-important circle_count"><%=circle.friend_count %></span>
+              <% if current_user.shop != circle.owner  %>
+                <% if circle.already_has?(current_user.id) %>
+                  <span data-value-id="<%=circle.id %>" class="label label-warning">已加入</span>
+                <% else %>
+                    <a href="javascript:void(0)" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入该商圈</a>
+                <% end %>
               <% else %>
-                  <a href="javascript:void(0)" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入该商圈</a>
+                <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
               <% end %>
-            <% else %>
-              <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
-            <% end %>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
+    <% else %>
+      <div class="widget">该地区暂时还没有商家入驻</div>
     <% end %>
   </div>
 </div>

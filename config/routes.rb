@@ -98,7 +98,7 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :addresses, :controller => "people/addresses" do
+    resources :delivery_addresses, :controller => "people/delivery_addresses" do
     end
 
     resources :direct_transactions, :controller => "people/direct_transactions" do
