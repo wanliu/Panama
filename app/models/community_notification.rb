@@ -9,6 +9,6 @@ class CommunityNotification < ActiveRecord::Base
     n = Notification.find_by(
       :targeable_id => id,
       :targeable_type => "CommunityNotification")
-    n.update_attribute(:read, true) if n.parsent?
+    n.update_attribute(:read, true) if n.present?
   end
 end

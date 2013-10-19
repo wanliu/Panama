@@ -28,7 +28,8 @@ class ApplyJoinCircle extends Backbone.View
 class ApplyJoinCircleList extends Backbone.View
 	initialize: () ->
 		_.extend(@, @options)
-		_.each $(".add_circle"), (el) =>
+		els = $(".add_circle")
+		_.each els, (el) =>
 			new ApplyJoinCircle({
 				el: el,
 				current_user_login: @current_user_login,

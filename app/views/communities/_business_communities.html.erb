@@ -51,12 +51,6 @@
       el: $(".circles-list"),
       current_user_login: '<%= current_user.login %>'
     })
-  })
-  $(function() {
-    new ApplyJoinCircleList({
-      el: $(".circles-list"),
-      current_user_login: '<%= current_user.login %>'
-    })
     $(".businiess_community").bind("mouseenter",function(){
       $(this).find(".popover").css("display","block");
     })
