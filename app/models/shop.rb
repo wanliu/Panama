@@ -20,7 +20,7 @@ class Shop < ActiveRecord::Base
   has_many :topic_categories, dependent: :destroy
   has_many :banks, :class_name => "ShopBank", :dependent => :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
-  # has_one  :address, as: :targeable, class_name: "Address", dependent: :destroy
+  belongs_to :address
   # has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
   # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
