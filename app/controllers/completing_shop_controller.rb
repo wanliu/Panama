@@ -67,7 +67,7 @@ class CompletingShopController < Wicked::WizardController
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
 
       if @user_checking.user.shop.blank?
-        @shop = @user_checking.user.create_shop(name: @shop_auth.shop_name)
+        @shop = @user_checking.user.create_shop(name: @shop_auth.shop_name, address: @user_checking.address)
         @user_checking.owner = @shop
         @user_checking.save
       end

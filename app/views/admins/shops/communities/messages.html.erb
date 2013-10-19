@@ -22,7 +22,7 @@
               <%= n.state ? '已读' : '未读' %>
             </td>
             <td>
-              <%= link_to "查看", apply_join_shop_admins_communities_path(current_shop, n.id) %>
+              <%= link_to "查看", "#{shop_admins_communities_path(current_shop)}/#{n.id}" %>
             </td>
           </tr>
           <% end %>
