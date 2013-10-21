@@ -3,34 +3,6 @@
 @import "compass/css3";
 @import "lib/transparent";
 
-.activity.auction{
-  height: 363px;
-  .out-box {
-     @include transparent(rgb(51,51,51), 0.4);
-  }
-}
-
-.activity.focus{
-  height: 363px;
-  .out-box {
-     @include transparent(rgb(71,71,71), 0.4);
-  }
-}
-
-.ask_buy {
-  height: 363px;
-  .out-box {
-    @include transparent(rgb(77, 99, 44), 0.4);
-  }
-}
-
-.shop_product {
-  height: auto;
-  .out-box {
-    @include transparent(rgb(91,91,91), 0.4);
-  }
-}
-
 .column{
   .activity, .ask_buy, .product, .shop_product {
     // width: 225px;
@@ -53,6 +25,15 @@
 
       form {
         margin: 0px;
+      }
+
+      .activity_tag {
+        top: 0;
+        right: 0;
+        width: 150px;
+        height: 150px;
+        z-index: 8888;
+        position: absolute;
       }
 
       .in-box {
@@ -211,6 +192,47 @@
       .buttons {
         display: block;
       }
+    }
+  }
+
+  // 自定义各种活动的不同展示效果
+  .activity.auction{
+    height: 363px;
+    .out-box {
+      @include transparent(rgb(51,51,51), 0.4);
+
+      .activity_tag {
+        background: url('/assets/tags/auction_tag.png') no-repeat;
+      }
+    }
+  }
+
+  .activity.focus{
+    height: 363px;
+    .out-box {
+      @include transparent(rgb(71,71,71), 0.4);
+
+      .activity_tag {
+        background: url('/assets/tags/focus_tag.png') no-repeat;
+      }
+    }
+  }
+
+  .ask_buy {
+    height: 363px;
+    .out-box {
+      @include transparent(rgb(77, 99, 44), 0.4);
+
+      .activity_tag {
+        background: url('/assets/tags/askbuy_tag.png') no-repeat;
+      }
+    }
+  }
+
+  .shop_product {
+    height: auto;
+    .out-box {
+      @include transparent(rgb(91,91,91), 0.4);
     }
   }
 }
