@@ -51,7 +51,7 @@ module CategoryHelper
   def descendant_categories_html(category)
   	html = ""
   	if category.children.size > 0
-	      html << "<ul id='forms-collapse-#{ category.id }' class='accordion-body collapse second_class_categories'>"
+	      html << "<ul id='forms-collapse-#{ category.id }' class='accordion-body collapse lv2_categories'>"
 	        category.children.each do |child|
 	        	html << second_class_category_tree_of(child)
 	        end
