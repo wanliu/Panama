@@ -14,7 +14,8 @@ module CategoryHelper
 
   def root_category_tree
   	html = ""
-  	Category.root.children.each do |category|
+    root = (Category.root.children.size == 1 ? Category.root.children[0] : Category.root)
+  	root.children.each do |category|
   		html << first_class_category_tree_of(category)
   	end
   	html.html_safe
