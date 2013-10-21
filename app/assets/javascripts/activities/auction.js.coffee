@@ -21,3 +21,19 @@ class root.ActivityAuctionView extends ActivityBaseInfoView
 
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
+
+class root.AuctionBuyView extends Backbone.View
+
+  initialize: () ->
+    @activity_id = @options.activity_id
+    @load_template (html) ->
+      @$el.html(html)
+      $("#popup-layout").html(@el)
+      @delegateEvents()
+
+  load_template: (callback) ->
+    $.ajax(
+      url: "/activities/auction/#{@activity_id}/buy.dialog",
+      success: (html) =>
+        callback.call(@, html)
+    )

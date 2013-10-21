@@ -9,6 +9,16 @@ class Activities::AuctionController < Activities::BaseController
     end
   end
 
+  def buy
+    @activity = Activity.find_by(:id =>params[:id], :activity_type => :auction)
+    @transaction = OrderTransaction.new
+    @address = DeliveryAddress.new
+    respond_to do |format|
+      format.dialog{ render :layout => false }
+      format.html{ render :layout => false }
+    end
+  end
+
   def join
     @activity = Activity.find_by(:id => params[:id], :activity_type => :auction)
     @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
@@ -78,10 +88,3 @@ class Activities::AuctionController < Activities::BaseController
     end
   end
 end
-
-
-# module AuctionExtension
-
-#   attr_accessor  :product, :activity_price
-
-# end

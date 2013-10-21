@@ -194,3 +194,18 @@
     }
   }
 }
+
+
+#auction_buy_dialog{
+  width: 640px;
+
+  form.buy_activity{
+    .title{
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    #order_transaction_address_id{
+      width: 100%;
+    }
+  }
+}

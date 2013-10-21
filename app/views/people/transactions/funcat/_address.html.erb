@@ -5,8 +5,7 @@
           :remote=>true do |f| %>
   <div class="address_input">
     <%= f.input :address_id,
-          #:as => :chosen,
-          :collection => people.addresses,
+          :collection => people.delivery_addresses,
           :object => transaction,
           :selected => "",
           :include_blank => true,

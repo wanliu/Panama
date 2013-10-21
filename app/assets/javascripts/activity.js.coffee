@@ -182,12 +182,11 @@ class ActivityView extends Backbone.View
       pnotify({text: "请输入正确的数量！"})
       return false
 
-
 class ActivityPreview extends Backbone.View
 
   events:
     "click .activity .preview"      : "launch"
-    "click .activity .launch-button": "launch"
+    "click .activity .launch-button": "buy"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
 
@@ -196,7 +195,6 @@ class ActivityPreview extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
-    #@model ?= new ActivityModel({ id: @id })
 
   launch: (event) ->
     @load_view(event.currentTarget)
@@ -233,6 +231,9 @@ class ActivityPreview extends Backbone.View
     @model = new ActivityModel({ id: @el.attr("activity-id") })
     @delegateEvents()
 
+  buy: (event) ->
+    @load_view(event.currentTarget)
+    new AuctionBuyView({activity_id: @model.id})
 
 class ProductViewTemplate extends Backbone.View
   initialize: () ->
