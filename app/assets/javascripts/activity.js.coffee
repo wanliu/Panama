@@ -188,6 +188,7 @@ class ActivityPreview extends Backbone.View
   events:
     "click .activity .preview"      : "launch"
     "click .activity .launch-button": "launch"
+    "click .activity .activity_tag" : "launch"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
 
