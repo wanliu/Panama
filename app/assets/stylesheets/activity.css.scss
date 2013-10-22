@@ -13,12 +13,6 @@
     position: relative;
     z-index: 0;
 
-    .clock {
-      text-align:right;
-      color:red;
-      font-size: 18px;
-    }
-
     .out-box {
       color: white;
       @include transparent(rgb(51,51,51), 0.4);
@@ -108,7 +102,13 @@
         height: 46px;
         overflow-y: hidden;
 
-        .title{
+        .price {
+          color: red;
+          opacity: 0.8;
+          font-size: 16px;
+        }
+
+        .title {
           margin-top: 0px;
           margin-bottom: 5px;
         }
@@ -146,6 +146,18 @@
 
         .title{
           margin-right: 5px;
+        }
+
+        .time-left {
+          opacity: 1;
+          float: right;
+          color: yellow;
+          font-size: 1.1em;
+          margin-right: 5px;
+        }
+
+        .time-left.over {
+          opacity: 0.5;
         }
       }
 
