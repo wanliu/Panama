@@ -187,6 +187,7 @@ class ActivityPreview extends Backbone.View
   events:
     "click .activity .preview"      : "launch"
     "click .activity .launch-button": "buy"
+    "click .activity .activity_tag" : "launch"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
 
@@ -241,6 +242,7 @@ class ProductViewTemplate extends Backbone.View
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
+    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @
 
 class ShopProductViewTemplate extends Backbone.View
@@ -258,17 +260,34 @@ class ActivityViewTemplate extends Backbone.View
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
+    str = @format_time()
+    $time_left = @$el.find(".time-left").html(str)
+    $time_left.addClass("over") unless str != "已结束"
+    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @
+
+  format_time: () ->
+    time_left =  Date.parse(@model.end_time) - new Date()
+    return "已结束" unless time_left > 0
+    leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数
+    # leave2 = leave1%(3600*1000)
+    # leave3 = leave2%(60*1000)
+
+    days = Math.floor(time_left/(24*3600*1000))
+    hours = Math.floor(leave1/(3600*1000))
+    # minutes = Math.floor(leave2/(60*1000))
+    # seconds = Math.round(leave3/1000)
+    "还剩#{days}天#{hours}时"
 
 
 class AskBuyViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("#ask_buy-preview-template").html())
     @$el = $(@template.render(@model)) if @template
-    if @model.status == 1
-      $(".notify", @$el).html("已经有商家参与")
 
   render: () ->
+    $(".notify", @$el).html("已经有商家参与") if @model.status == 1
+    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @
 
 

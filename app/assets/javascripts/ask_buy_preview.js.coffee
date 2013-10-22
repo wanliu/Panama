@@ -87,7 +87,8 @@ class AskBuyView extends Backbone.View
 
 class AskBuyPreview extends Backbone.View
   events:
-    "click .ask_buy .preview" : 'launch'
+    "click .ask_buy .preview"     : 'launch'
+    "click .ask_buy .activity_tag": "launch"
 
   initialize: (options) ->
     _.extend(@, options)

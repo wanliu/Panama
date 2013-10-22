@@ -50,26 +50,11 @@
 
 <script type="text/javascript">
   $(function(){
-    $("#forms-collapse").find(".icon-caret-right").remove();
-    $("#forms-collapse").children().css("color","rgba(217, 255, 205, 0.77)");
-    $("#forms-collapse .accordion-group > ul").css("color","white");
-
-    $("#category-sidebar>a").bind("click",function(){
-      $("#forms-collapse").toggle();
-    })
-
-    new LeftSideBar({ el: "#left_sidebar" })
+    new CategoryTree({el: "#category-sidebar"})
+    new LeftSideBar({el: "#left_sidebar"})
 
     var side_class = "<%= yield :side_nav %>"
-
     $("#side-nav li.active").removeClass("active")
     $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in")
-
-    $("#category-sidebar > ul > li").mouseenter(function(event){
-      $($(this).children('a').attr('href')).show();
-    });
-    $("#category-sidebar > ul > li").mouseleave(function(event){
-      $($(this).children('a').attr('href')).hide();
-    });
   })
 </script>

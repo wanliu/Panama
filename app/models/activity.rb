@@ -67,6 +67,9 @@ class Activity < ActiveRecord::Base
     self.shop_id = author.shop.id
     self.like = like
     self.participate = participate
+    if self.activity_type == "focus"
+      self.price = self.activity_rules.map{|a| a.dvalue}.min
+    end
   end
 
   def default_photo

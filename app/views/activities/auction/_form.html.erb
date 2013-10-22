@@ -11,6 +11,7 @@
                 :id => "activity_auction_shop_product"
               } %>
 
+  <div class="activity_info">
   <%= f.input :title,
               :label => '活动名称',
               :warpper => false %>
@@ -45,9 +46,9 @@
               :as         => :date_picker,
               required: true,
               input_html: { name: 'activity[end_time]' } %>
+  </div>
 
   <script type="text/javascript">
-
     var activity_view = new ActivityAuctionView({
       el: $(".form_activity_auction"),
       params: {

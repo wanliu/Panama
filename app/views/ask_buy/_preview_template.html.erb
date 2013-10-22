@@ -1,32 +1,35 @@
 <div class='ask_buy' ask-buy-id='{{id}}' id="ask_buy_{{id}}">
   <div class='out-box'>
-    <div class='in-box'>
-      {{#photos}}
-        <img src='{{avatar}}', class="preview a-{{id}}" />
-      {{/photos}}
-    </div>
-    <div class='summary'>
-      <h5 class="title">{{title}} 求购</h5>
-      <p class='describe'>
-        <span class='price'>单价 {{price}}</span>
-        <span class='amount'>数量 {{amount}}</span>
-      </p>
-    </div>
-    <div class='userinfo'>
-      {{#user.photos}}
-        <img src='{{icon}}', class="author img-circle" />
-      {{/user.photos}}
-      <p>
-        {{#user}}
-        <a href="/people/{{login}}">
-            {{login}}
-        </a><br />
-        {{/user}}
-        <span class='notify'>
-        </span>
-      </p>
-    </div>
-    <div class="buttons">
-    </div>
+    <span class="activity_tag"></span>
+    <form>
+      <div class='in-box'>
+        {{#photos}}
+          <img src='{{avatar}}', class="preview a-{{id}}" />
+        {{/photos}}
+      </div>
+      <div class='summary'>
+        <h5 class="title">{{title}} 求购</h5>
+        <p class='describe'>
+          单价 <span class='price'>￥{{price}}</span>
+          数量 <span class='amount'>{{amount}}</span>
+        </p>
+      </div>
+      <div class='userinfo'>
+        {{#user.photos}}
+          <img src='{{icon}}', class="author img-circle" />
+        {{/user.photos}}
+        <p>
+          {{#user}}
+          <a href="/people/{{login}}">
+              {{login}}
+          </a><br />
+          {{/user}}
+          <span class='notify'>
+          </span>
+        </p>
+      </div>
+      <div class="buttons">
+      </div>
+    </form>
   </div>
 </div>

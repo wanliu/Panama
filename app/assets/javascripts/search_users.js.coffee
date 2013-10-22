@@ -11,7 +11,7 @@ class SearchUserView extends Backbone.View
     @get_hot_cities()
     @buyer_template = Hogan.compile($("#buyer_base_template").html())
     @seller_template = Hogan.compile($("#seller_base_template").html())
-    @hot_city_template = Hogan.compile("<a id={{ area_id }} href='#' class='hot_city_search'>{{ name }}</a>&nbsp;")
+    @hot_city_template = Hogan.compile("<a id='{{ area_id }}' href='#' class='hot_city_search'>{{ name }}</a>&nbsp;")
     @notice = $("<div class='alert'>
             <button type='button' class='close' data-dismiss='alert'>&times;</button>
             <span>您搜索的区域暂时没有成员～～～～</span>

@@ -1,5 +1,6 @@
-<div class='activity' activity-id='{{id}}' id="activity{{id}}">
+<div class='activity auction' activity-id='{{id}}' id="activity{{id}}">
   <div class='out-box'>
+    <span class="activity_tag"></span>
     <form>
       <div class='in-box'>
         {{#photos}}
@@ -8,8 +9,10 @@
       </div>
 
       <div class='summary'>
-        <h5 class="title">{{ title }}</h5>
-        <p class='describe'>单价 {{price}}</p>
+        <h5 class="title">{{title}}</h5>
+        <p class='describe'>
+          单价 <span class='price'>￥{{price}}</span>
+        </p>
       </div>
 
       <div class='userinfo'>
@@ -20,6 +23,7 @@
           <a href="/shops/{{shop.name}}">
             {{ shop.name }}
           </a>
+          <span class="time-left"></span>
         </p>
         <span class='title'>参与</span>
         <span>{{ participate}} </span>
