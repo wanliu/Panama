@@ -170,7 +170,7 @@ class OrderRefund < ActiveRecord::Base
       :user_id => seller.user.id,
       :mentionable_user_id => buyer.id,
       :url => "/people/#{buyer.login}/order_refunds#refund#{id}",
-      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货") 
+      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货")
   end
 
   def buyer_fire_events!(event)
@@ -179,7 +179,7 @@ class OrderRefund < ActiveRecord::Base
       :user_id => buyer.id,
       :mentionable_user_id =>seller.user.id,
       :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
-      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货") 
+      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货")
   end
 
   def update_buyer_and_seller_and_operate

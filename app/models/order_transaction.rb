@@ -225,6 +225,7 @@ class OrderTransaction < ActiveRecord::Base
 
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
       order.valid_delivery?
+      order.valid_delivery_manner?
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
@@ -240,14 +241,6 @@ class OrderTransaction < ActiveRecord::Base
       order.valid_transfer_sheet?
     end
   end
-
-  # def notice_user
-  #   notifications.create!(
-  #     :user_id => buyer.id,
-  #     :mentionable_user_id => seller.user.id,
-  #     :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-  #     :body => "你有新的订单")
-  # end
 
   def notice_destroy
     if operator_state
@@ -418,11 +411,6 @@ class OrderTransaction < ActiveRecord::Base
 
   def get_delivery_price(delivery_id)
     delivery_type.try(:price) || 0
-    # product_ids = items.map{|item| item.product_id}
-    # ProductDeliveryType.where(
-    #   :product_id => product_ids,
-    #   :delivery_type_id => delivery_id)
-    # .select("max(delivery_price) as delivery_price")[0].delivery_price || 0
   end
 
   #变更状态
@@ -577,7 +565,11 @@ class OrderTransaction < ActiveRecord::Base
       else
         self.delivery_price = get_delivery_price(self.delivery_type_id)
       end
-    else
+    end
+  end
+
+  def valid_delivery_manner?
+    if delivery_manner.nil?
       errors.add(:delivery_manner_id, "没有选择运输方式!")
     end
   end
@@ -636,13 +628,13 @@ class OrderTransaction < ActiveRecord::Base
     unless %w(order close).include?(state)
       errors.add(:pay_manner_id, "请选择付款方式!") if pay_manner.nil?
       errors.add(:address, "地址不存在！") if address.nil?
-      if delivery_manner.present?
-        if delivery_type.nil? && !delivery_manner.local_delivery?
-          errors.add(:delivery_type_id, "请选择运送类型!")
-        end
-      else
-        errors.add(:delivery_manner_id, "请选择配送方式!")
-      end
+      # if delivery_manner.present?
+      #   if delivery_type.nil? && !delivery_manner.local_delivery?
+      #     errors.add(:delivery_type_id, "请选择运送类型!")
+      #   end
+      # else
+      #   errors.add(:delivery_manner_id, "请选择配送方式!")
+      # end
     end
   end
 

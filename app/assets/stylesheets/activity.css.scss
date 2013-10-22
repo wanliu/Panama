@@ -217,6 +217,22 @@
 
     .item-info{
       margin-top: 8px;
+
+      .pay_manner{
+        padding-top: 4px;
+        padding-bottom: 4px;
+        span:first-child{
+          margin-left: 0px
+        };
+
+        span{
+          margin-left: 10px
+        }
+
+        input[type=radio]{
+          margin-top: 0;
+        }
+      }
     }
 
     #order_transaction_address_id{

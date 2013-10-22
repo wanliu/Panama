@@ -32,10 +32,12 @@ class Activities::AuctionController < Activities::BaseController
       :shop_id => @activity.shop_id,
       :user_id => current_user.id
     })
+    @transaction.pay_manner = PayManner.find(params[:pay_manner_id])
     @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
     respond_to do |format|
       if @transaction.save
+        @transaction.buyer_fire_event!("buy")
         format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
         format.html{
           redirect_to person_transactions_path(current_user.login),
