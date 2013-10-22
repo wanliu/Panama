@@ -30,14 +30,14 @@ class CommunitiesController < ApplicationController
 						.select("circles.*, count(cf.id) as count")
 						.group("circles.id")
 						.order("count desc")
-						.limit(10)
+						.limit(9)
 
-		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id left join addresses as addr on shops.address_id = addr.id")
-							.where("follow.follow_type = 'Shop' and addr.area_id=?", params[:city_id])
-							.select("shops.*, count(follow.id) as count")
-							.group("shops.id")
-							.order("count desc")
-							.limit(10)
+		@top_10_shops = Shop.joins("left join followings as follow on follow.follow_id = shops.id left join addresses as addr on shops.address_id = addr.id")
+		 	.where("follow.follow_type='Shop' and addr.area_id=?", params[:city_id])
+		 	.select("shops.*,count(follow.id) as count")
+		 	.group("shops.id")
+		 	.order("count desc")
+		 	.limit(10)
 
 		@city = City.find(params[:city_id])
 		cookies[:city_id] = { 

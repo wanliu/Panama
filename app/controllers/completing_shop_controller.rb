@@ -43,7 +43,7 @@ class CompletingShopController < Wicked::WizardController
     @address = current_user.user_checking.address
     if @address.blank?
       @address = Address.create(params[:address])
-      current_user.user_checking.update_attribute(:address, @address.id)
+      current_user.user_checking.update_attribute(:address_id, @address.id)
     else
       @address.update_attributes(params[:address])
     end

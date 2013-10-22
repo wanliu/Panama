@@ -69,5 +69,46 @@ class SearchUserView extends Backbone.View
           @seller_template
         @$(".wrapper").append(tpl.render(data))
 
+class FindUserView extends Backbone.View
 
+  initialize: () ->
+    _.extend(@, @options)
+    @buyer_template = Hogan.compile($("#buyer_base_template").html())
+    @seller_template = Hogan.compile($("#seller_base_template").html())
+    @notice = $("<div class='alert'>
+            <button type='button' class='close' data-dismiss='alert'>&times;</button>
+            <span>没有找到符合要求的用户或商店</span>
+          </div>")
+
+  events: 
+    "click .find_people" : "find_user"
+
+  find_user: () ->
+    $.ajax({
+      dataType: "json",
+      url: "/search/user_checkings",
+      type: "get",
+      data: {q: @$(".input_info").val() ,area_id: @options.area_id }
+      success: (datas) =>
+        debugger
+        @render(datas)
+        new YellowInfoPreviewList({el : @el })
+    })
+
+  render: (datas) =>
+    debugger
+    if datas.length == 0
+      $(@notice).insertBefore(@$(".wrapper"))
+    else
+      @$(".alert").fadeOut()
+      @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
+      _.each datas, (data) =>
+        tpl = if data.service_id == 1
+          @buyer_template
+        else
+          @seller_template
+        @$(".wrapper").append(tpl.render(data))
+
+
+root.FindUserView = FindUserView
 root.SearchUserView = SearchUserView

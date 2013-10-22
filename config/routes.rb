@@ -200,7 +200,11 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :city
+  resources :city do 
+    collection do 
+      get 'province'
+    end
+  end
   resources :delivery_types
 
   resources :activities do
@@ -463,6 +467,7 @@ Panama::Application.routes.draw do
   match "shops/:shop_id/admins/", :to => "admins/shops/dashboard#index", as: :shop_admins
 
   # Search Engine
+  match "search/user_checkings", :to => "search#user_checkings", :via => :get
   match "search/users", :to => "search#users"
   match "search/products", :to => "search#products"
   match "search", :to => "search#index"

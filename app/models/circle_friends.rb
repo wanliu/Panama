@@ -23,7 +23,7 @@ class CircleFriends < ActiveRecord::Base
       uc = UserChecking.find_by(:owner_id => user_id,
         :owner_type => "User")
 
-      if uc.address.area_id == circle.city_id
+      if uc.present? && uc.address.area_id == circle.city_id
         return true
       else
         errors.add(:area_id, "该圈子不对你所在地区开放!")

@@ -8,6 +8,15 @@ class CityController < ApplicationController
         end
     end
 
+
+    def province
+        @province = City.where(:ancestry=>"1")
+        respond_to do |format|
+            format.html
+            format.json { render json: @province}
+        end
+    end
+
     # GET /city/1
     # GET /city/1.json
     def show

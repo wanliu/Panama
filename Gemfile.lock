@@ -58,7 +58,7 @@ GEM
     active_utils (2.0.1)
       activesupport (>= 2.3.11)
       i18n
-    activeadmin (0.6.0)
+    activeadmin (0.5.1)
       arbre (>= 1.0.1)
       bourbon (>= 1.0.0)
       devise (>= 1.1.2)
@@ -517,7 +517,7 @@ PLATFORMS
 
 DEPENDENCIES
   ac_uniquify (~> 0.1.0)
-  activeadmin
+  activeadmin (~> 0.5.1)
   activemerchant
   activemerchant_patch_for_china
   acts_as_paranoid (~> 0.4.0)
