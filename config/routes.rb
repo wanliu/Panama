@@ -221,6 +221,7 @@ Panama::Application.routes.draw do
   namespace :activities do
     resources :auction do
       member do
+        get 'buy'
         post 'join'
       end
     end

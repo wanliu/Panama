@@ -56,8 +56,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find(params[:id])
     respond_to do |format|
       if @transaction.state_name == :waiting_delivery
-        @transaction.delivery_code = params[:delivery_code]
-        @transaction.logistics_company_id = params[:logistics_company_id]
+        @transaction.delivery_manner_id = params[:delivery_manner_id]
+        if @transaction.delivery_manner.express?
+          @transaction.delivery_code = params[:delivery_code]
+          @transaction.logistics_company_id = params[:logistics_company_id]
+        end
         if @transaction.save
           format.json{ head :no_content }
         else

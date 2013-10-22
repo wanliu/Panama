@@ -29,15 +29,16 @@ class DeliveryAddress < ActiveRecord::Base
 
   private
   def valid_address_uniqueness?
-    if Address.where("
+    if DeliveryAddress.exists?(["
       id<>? and
       road=? and
+      user_id=? and
       province_id=? and
       city_id=? and
       area_id=? and
       contact_name=? and
-      contact_phone=?", road, province_id,
-      city_id, area_id, contact_name, contact_phone, id).first.present?
+      contact_phone=?", id, road, user_id, province_id,
+      city_id, area_id, contact_name, contact_phone])
       errors.add(:province_id, "地址已经存在了！")
     end
   end

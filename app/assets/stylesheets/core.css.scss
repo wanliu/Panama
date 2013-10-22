@@ -866,8 +866,6 @@ ul {
 		border: 1px solid #dddddd;
 		border-bottom-color: transparent;
 	}
-
-
 }
 
 body>.model-popup-backdrop{
@@ -1050,7 +1048,7 @@ h2 small {
 	width: 160px;
 	z-index: 1;
 
-	.second_class_categories {
+	.lv2_categories {
 		top: 0;
 		left: 160px;
 		height: auto;
@@ -1081,8 +1079,8 @@ h2 small {
 			li.third_class_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
-				a { 
-					padding-left: 4px; 
+				a {
+					padding-left: 4px;
 				}
 			}
 		}
@@ -1142,172 +1140,4 @@ h2 small {
 .navbar .pull-right > li > .dropdown-menu, .navbar .nav > li > .dropdown-menu.pull-right {
 	left: auto;
 	right: 25px;
-}
-
-.activity, .ask_buy, .product, .shop_product {
-  // width: 225px;
-  margin: 0px 3px 15px 0px;
-  padding: 0px;
-  // height: 373px;
-  overflow: hidden;
-  position: relative;
-  z-index: 0;
-
-  .clock {
-    text-align:right;
-    color:red;
-    font-size: 18px;
-  }
-
-  .out-box {
-    color: white;
-    @include transparent(rgb(51,51,51), 0.4);
-
-    form {
-      margin: 0px;
-    }
-
-    .in-box {
-      height: 220px;
-      position: relative;
-      overflow: hidden;
-      padding: 5px;
-      // border-bottom: 1px solid #e7e7e7;
-
-      img.preview {
-        cursor: pointer;
-        min-height: 150px;
-      }
-
-      .right_bottom2 {
-        position: absolute;
-        bottom: 30px;
-        text-align: right;
-        right: 0px;
-        text-decoration: line-through;
-        color: #ccc;
-        padding: 0 10px 0 10px;
-
-        @include border-top-left-radius(10px);
-        @include border-bottom-left-radius(10px);
-        @include transparent($black,0.5);
-        h5 {
-          margin: 0px;
-        }
-      }
-
-      .right_bottom1 {
-        position: absolute;
-        text-align: right;
-        bottom: 5px;
-        right: 0px;
-        color: $red;
-        padding: 0 10px 0 10px;
-
-        // @include text-shadow(0px 0px 1px rgba(255, 255, 255, 1));
-        @include border-top-left-radius(10px);
-        @include border-bottom-left-radius(10px);
-        background: rgba($blue, 0.5);
-
-        h4 {
-          margin: 0px;
-        }
-      }
-    }
-
-    .corner {
-      @include transform(rotate(45deg));
-      @include box-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
-      position: absolute;
-      right:-30px;
-      top:20px;
-      width: 128px;
-      height: 30px;
-      background: $red;
-      text-align: center;
-
-      h4 {
-        line-height: 30px;
-        color: $white;
-        margin: 0px;
-      }
-    }
-
-    .summary {
-      padding: 5px;
-      height: 60px;
-      overflow-y: hidden;
-
-      .describe {
-        word-wrap: break-word;
-        margin-bottom: 0px;
-      }
-    }
-
-    .userinfo {
-      padding: 5px 5px 5px 60px;
-
-      .author {
-        width: 50px;
-        height: 50px;
-        margin-left: -55px;
-        float: left;
-      }
-
-      span {
-        font-size: 0.8em;
-        margin-right: 20px;
-        opacity: 0.5
-      }
-
-      .title{
-        margin-right: 5px;
-      }
-    }
-
-    .comments_and_reply {
-      padding: 5px;
-
-      .people-attribution {
-        margin-bottom: 10px;
-      }
-
-      .reply_form {
-        padding: 0px 10px 10px 34px;
-        .head-icon {
-          margin: 0 0 0 -34px;
-          float: left;
-          width: 20px;
-          height: 20px;
-        }
-
-        .message textarea {
-          width: 155px;
-          font-size: 1em;
-          border: 1px solid #ccc;
-          background: #f0f0f0;
-          // height: 30px;
-        }
-      }
-    }
-  }
-
-  .buttons {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    display: none;
-  }
-
-  hr {
-    margin: 5px 0px;
-  }
-
-  &:hover {
-    // border: 2px solid #ef6060;
-
-    .buttons {
-      display: block;
-    }
-  }
 }

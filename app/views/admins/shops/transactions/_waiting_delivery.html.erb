@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <% if transaction.delivery_manner.express? %>
+  <% if transaction.delivery_manner && transaction.delivery_manner.express? %>
   <div class="row-fluid">
     <div class='span2 title'>物流公司</div>
     <div class='span4'>
@@ -50,6 +50,39 @@
         <i class='icon-edit'></i>
       </a>
       <% end %>
+    </div>
+  </div>
+  <% else %>
+  <div class='row-fluid'>
+    <div class='span2 title'>
+      运输方式
+    </div>
+    <div class='span4'>
+      <select name='delivery_manner_id' class='span12 delivery_manner_id'>
+        <% DeliveryManner.avaliable.each do |item| %>
+        <option value="<%=item.id %>">
+          <%=item.name %>
+        </option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+  <div class='row-fluid express-info'>
+    <div class='span2 title'>
+      配送公司
+    </div>
+    <div class='span4'>
+      <select name='logistics_company_id' class='span12 logistics_company_id'>
+      <% LogisticsCompany.all.each do |log| %>
+      <option value="<%=log.id %>"><%=log.name %></option>
+      <% end %>
+      </select>
+    </div>
+    <div class='span2 title'>
+      运送单号
+    </div>
+    <div class='span4'>
+      <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code span12' />
     </div>
   </div>
   <% end %>

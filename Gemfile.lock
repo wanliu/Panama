@@ -517,7 +517,7 @@ PLATFORMS
 
 DEPENDENCIES
   ac_uniquify (~> 0.1.0)
-  activeadmin (~> 0.5.1)
+  activeadmin (= 0.5.1)
   activemerchant
   activemerchant_patch_for_china
   acts_as_paranoid (~> 0.4.0)

@@ -15,6 +15,7 @@
                 :id => "activity_focus_shop_product_id"
               } %>
 
+  <div class="activity_info">
   <%= f.input :title,
               :label => '活动名称',
               :warpper => false %>
@@ -72,9 +73,9 @@
               :label   => '结束时间',
               id: "activity_focus_end_time",
               input_html: { name: 'activity[end_time]'} %>
+  </div>
 
   <script type="text/javascript">
-
     var view = new ActivityFocusView({
       el: $(".form_activity_focus"),
       params: {

@@ -1,5 +1,6 @@
 <div class='activity focus' activity-id='{{ id }}' id="activity{{ id }}">
   <div class='out-box'>
+    <span class="activity_tag"></span>
     <form>
       <div class='in-box'>
         {{#photos}}
@@ -10,7 +11,7 @@
       <div class='summary'>
         <h5 class="title">{{ title }}</h5>
         <p class="describe">
-          {{ description }}
+          单价 <span class='price'>￥{{price}}</span>
         </p>
       </div>
 
@@ -22,6 +23,7 @@
           <a href="/shops/{{shop.name}}">
             {{ shop.name }}
           </a>
+          <span class="time-left"></span>
         </p>
         <span class='title'>参与</span>
         <span>{{ participate}} </span>
@@ -32,7 +34,7 @@
       <div class="buttons">
         {{#is_start}}
           <%= link_to '#', class: 'btn btn-danger launch-button' do %>
-            <%= icon('shopping-cart') + " 查看" %>
+            <%= icon('shopping-cart') + " 购买" %>
           <% end %>
         {{/is_start}}
 

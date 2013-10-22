@@ -3,34 +3,6 @@
 @import "compass/css3";
 @import "lib/transparent";
 
-.activity.auction{
-  height: 363px;
-  .out-box {
-     @include transparent(rgb(51,51,51), 0.4);
-  }
-}
-
-.activity.focus{
-  height: 363px;
-  .out-box {
-     @include transparent(rgb(71,71,71), 0.4);
-  }
-}
-
-.ask_buy {
-  height: 363px;
-  .out-box {
-    @include transparent(rgb(77, 99, 44), 0.4);
-  }
-}
-
-.shop_product {
-  height: auto;
-  .out-box {
-    @include transparent(rgb(91,91,91), 0.4);
-  }
-}
-
 .column{
   .activity, .ask_buy, .product, .shop_product {
     // width: 225px;
@@ -41,18 +13,22 @@
     position: relative;
     z-index: 0;
 
-    .clock {
-      text-align:right;
-      color:red;
-      font-size: 18px;
-    }
-
     .out-box {
       color: white;
       @include transparent(rgb(51,51,51), 0.4);
 
       form {
         margin: 0px;
+      }
+
+      .activity_tag {
+        top: 0;
+        right: 0;
+        width: 150px;
+        height: 150px;
+        z-index: 8888;
+        cursor: pointer;
+        position: absolute;
       }
 
       .in-box {
@@ -126,7 +102,13 @@
         height: 46px;
         overflow-y: hidden;
 
-        .title{
+        .price {
+          color: red;
+          opacity: 0.8;
+          font-size: 16px;
+        }
+
+        .title {
           margin-top: 0px;
           margin-bottom: 5px;
         }
@@ -164,6 +146,18 @@
 
         .title{
           margin-right: 5px;
+        }
+
+        .time-left {
+          opacity: 1;
+          float: right;
+          color: yellow;
+          font-size: 1.1em;
+          margin-right: 5px;
+        }
+
+        .time-left.over {
+          opacity: 0.5;
         }
       }
 
@@ -211,6 +205,105 @@
       .buttons {
         display: block;
       }
+    }
+  }
+
+  // 自定义各种活动的不同展示效果
+  .activity.auction{
+    .out-box {
+      @include transparent(rgb(51,51,51), 0.4);
+
+      .activity_tag {
+        background: url('/assets/tags/auction_tag.png') no-repeat;
+      }
+    }
+  }
+
+  .activity.focus{
+    .out-box {
+      @include transparent(rgb(71,71,71), 0.4);
+
+      .activity_tag {
+        background: url('/assets/tags/focus_tag.png') no-repeat;
+      }
+    }
+  }
+
+  .ask_buy {
+    .out-box {
+      @include transparent(rgb(77, 99, 44), 0.4);
+
+      .activity_tag {
+        background: url('/assets/tags/askbuy_tag.png') no-repeat;
+      }
+    }
+  }
+
+  .shop_product {
+    .out-box {
+      @include transparent(rgb(91,91,91), 0.4);
+    }
+  }
+}
+
+
+#auction_buy_dialog{
+  width: 640px;
+
+  .activity_info{
+    margin-bottom: 15px;
+  }
+
+  .modal-body{
+    height: auto;
+    overflow: visible;
+    max-height: auto;
+  }
+
+  form.buy_activity{
+    .title{
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .item-info{
+      margin-top: 8px;
+
+      .pay_manner{
+        padding-top: 4px;
+        padding-bottom: 4px;
+        span:first-child{
+          margin-left: 0px
+        };
+
+        span{
+          margin-left: 10px
+        }
+
+        input[type=radio]{
+          margin-top: 0;
+        }
+      }
+    }
+
+    #order_transaction_address_id{
+      width: 100%;
+    }
+
+    .address-info{
+      display: none;
+
+      .row-fluid{
+        margin-top: 8px;
+
+        .control-label{
+          float: none;
+          width: auto;
+          padding: 0;
+          text-align: left;
+        }
+      }
+
     }
   }
 }

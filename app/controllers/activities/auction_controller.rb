@@ -9,8 +9,19 @@ class Activities::AuctionController < Activities::BaseController
     end
   end
 
+  def buy
+    @activity = activity_auction.find_by(:id =>params[:id])
+    @transaction = OrderTransaction.new
+    @address = DeliveryAddress.new
+    respond_to do |format|
+      format.dialog{ render :layout => false }
+      format.html{ render :layout => false }
+    end
+  end
+
   def join
-    @activity = Activity.find_by(:id => params[:id], :activity_type => :auction)
+    address = params[:address]
+    @activity = activity_auction.find_by(:id => params[:id])
     @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
     @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
@@ -21,10 +32,12 @@ class Activities::AuctionController < Activities::BaseController
       :shop_id => @activity.shop_id,
       :user_id => current_user.id
     })
+    @transaction.pay_manner = PayManner.find(params[:pay_manner_id])
+    @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
-    @activity.activities_participates.build(:user_id => current_user.id)
     respond_to do |format|
       if @transaction.save
+        @transaction.buyer_fire_event!("buy")
         format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
         format.html{
           redirect_to person_transactions_path(current_user.login),
@@ -77,11 +90,16 @@ class Activities::AuctionController < Activities::BaseController
       end
     end
   end
+
+  def activity_auction
+    Activity.where(:activity_type => "auction")
+  end
+
+  def delivery_address(address)
+    if address[:id].present?
+      current_user.delivery_addresses.find(address[:id])
+    else
+      current_user.delivery_addresses.create(address)
+    end
+  end
 end
-
-
-# module AuctionExtension
-
-#   attr_accessor  :product, :activity_price
-
-# end
