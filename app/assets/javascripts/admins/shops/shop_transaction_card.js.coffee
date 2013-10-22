@@ -21,6 +21,7 @@ class ShopTransactionCard extends TransactionCardBase
     "keyup .delivery_code"    : "filter_delivery_code"
     "click .dprice_edit"      : "show_dprice_edit"
     "blur input:text[name=delivery_price]" : "update_dprice"
+    "change select.delivery_manner_id" : "change_delivery_manner"
 
   states:
     initial: 'none'
@@ -81,24 +82,33 @@ class ShopTransactionCard extends TransactionCardBase
         @slideAfterEvent(_event)
 
   filter_delivery_code: () ->
-    delivery_code = @$("input:text.delivery_code").val()
-    button = @$(".delivered")
-    if delivery_code == ""
-      button.addClass("disabled")
-    else
-      button.removeClass("disabled")
+    if @delivery_manner_el().text().trim() == "快递运输"
+      delivery_code = @$("input:text.delivery_code").val()
+      button = @$(".delivered")
+      if delivery_code == ""
+        button.addClass("disabled")
+      else
+        button.removeClass("disabled")
+
 
   save_delivery_code: (cb) ->
-    input = @$("input:text.delivery_code")
-    select = @$("select[name=logistics_company_id]")
-    if input.length > 0 && select.length > 0
-      delivery_code = input.val()
-      logistics_company_id = select.val()
+    delivery = @$("input:text.delivery_code")
+    logistics = @$("select[name=logistics_company_id]")
+    delivery_manner = @delivery_manner_el()
+
+    if delivery.length > 0 && logistics.length > 0 &&
+     delivery_manner.length > 0
+      delivery_code = delivery.val()
+      logistics_company_id = logistics.val()
+      delivery_manner_id = delivery_manner.val()
       urlRoot = @transaction.urlRoot
       @transaction.fetch(
         url: "#{urlRoot}/update_delivery",
         type: "PUT",
-        data: {delivery_code: delivery_code, logistics_company_id: logistics_company_id},
+        data: {
+          delivery_manner_id: delivery_manner_id,
+          delivery_code: delivery_code,
+          logistics_company_id: logistics_company_id},
         success: cb,
         error: () =>
           @notify("错误信息", '请填写发货单号!', "error")
@@ -140,6 +150,18 @@ class ShopTransactionCard extends TransactionCardBase
     else
       @$dprice_panel.show()
       @$dprice_edit_panel.hide()
+
+  change_delivery_manner: () ->
+    if @delivery_manner_el().text().trim() == "快递运输"
+      @$(".express-info").show()
+      @filter_delivery_code()
+    else
+      @$(".express-info").hide()
+      @$(".delivered").removeClass("disabled")
+
+
+  delivery_manner_el: () ->
+    @$("select.delivery_manner_id>option:selected")
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

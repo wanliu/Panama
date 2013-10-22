@@ -182,12 +182,11 @@ class ActivityView extends Backbone.View
       pnotify({text: "请输入正确的数量！"})
       return false
 
-
 class ActivityPreview extends Backbone.View
 
   events:
     "click .activity .preview"      : "launch"
-    "click .activity .launch-button": "launch"
+    "click .activity .launch-button": "buy"
     "click .activity .activity_tag" : "launch"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
@@ -197,7 +196,6 @@ class ActivityPreview extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
-    #@model ?= new ActivityModel({ id: @id })
 
   launch: (event) ->
     @load_view(event.currentTarget)
@@ -234,6 +232,9 @@ class ActivityPreview extends Backbone.View
     @model = new ActivityModel({ id: @el.attr("activity-id") })
     @delegateEvents()
 
+  buy: (event) ->
+    @load_view(event.currentTarget)
+    new AuctionBuyView({activity_id: @model.id})
 
 class ProductViewTemplate extends Backbone.View
   initialize: () ->
@@ -268,7 +269,7 @@ class ActivityViewTemplate extends Backbone.View
   format_time: () ->
     time_left =  Date.parse(@model.end_time) - new Date()
     return "已结束" unless time_left > 0
-    leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数 
+    leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数
     # leave2 = leave1%(3600*1000)
     # leave3 = leave2%(60*1000)
 

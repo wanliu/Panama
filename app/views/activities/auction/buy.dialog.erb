@@ -1,0 +1,184 @@
+<div id="auction_buy_dialog" class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>确认购买</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row-fluid activity_info">
+      <div class='span4'>
+        <img src="<%=@activity.photos.preview %>" />
+      </div>
+      <div class='span8'>
+        <div class='row-fluid'>
+          <div class='span12'>
+            <%= @activity.title %>
+          </div>
+        </div>
+        <div class='row-fluid'>
+          <div class='span2'>
+            单价
+          </div>
+          <div class='span10'>
+            <%=@activity.price %>
+          </div>
+        </div>
+        <div class='row-fluid'>
+          <div class='span2'>
+            商店
+          </div>
+          <div class='span10'>
+            <a href='/shops/<%=@activity.shop.name %>'>
+              <%=@activity.shop.name %>
+            </a>
+          </div>
+        </div>
+        <div class='row-fluid'>
+          <div class='span2'>
+            发布人
+          </div>
+          <div class='span10'>
+            <a href='/people/<%=@activity.author.login %>'>
+              <%=@activity.author.login %>
+            </a>
+          </div>
+        </div>
+        <div class='row-fluid'>
+          <div class='span2'>
+            参与
+          </div>
+          <div class='span4'>
+            <%=@activity.participate %>
+          </div>
+          <div class='span2'>支持</div>
+          <div class='span4'>
+            <%=@activity.like %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='row-fluid fill_info'>
+      <div class='span12'>
+        <%= simple_form_for @transaction,
+        :url => join_activities_auction_path(@activity), :html => { :class => "buy_activity form-horizontal" } do |f| %>
+        <div class='row-fluid'>
+          <div class='span2 title'>
+            <abbr title="required">*</abbr>选择地址
+          </div>
+          <div class='span9 <%="error" if @transaction.errors[:address_id].size > 0 %>' >
+            <select class='span12 address_id' name='address[id]'>
+              <option></option>
+              <% addresses = current_user.delivery_addresses %>
+              <% address_id = @transaction.address_id.nil? ? addresses.first.id : @transaction.address_id %>
+              <% addresses.each do |d| %>
+
+              <option value="<%=d.id %>" selected="<%= d.id == address_id ? "selected" : "" %>">
+                <%=d.location %>
+              </option>
+              <% end %>
+            </select>
+          </div>
+          <div class='span1'>
+            <%= button_tag icon(:list), :class => "btn address_bar", :type => "button" %>
+          </div>
+        </div>
+        <div class='row-fluid'>
+          <div class='span12 address-info'>
+            <%= simple_fields_for :address, @transaction.address do |address_form| %>
+            <div class='row-fluid'>
+              <div class='span2 title'>选择省,市,县</div>
+              <div class="span7">
+                  <%= address_form.input :province_id,
+                               :as => :depend_select,
+                               :children => :city_id,
+                               :wrapper => :inline,
+                               :wrapper_html => {
+                                :class => "span4"
+                               },
+                               :input_html => {
+                                :class => "address_province_id"
+                               },
+                               :collection => get_city %>
+                  <%= address_form.input :city_id,
+                               :as => :depend_select,
+                               :children => :area_id,
+                               :input_html => {
+                                :class => "address_city_id"
+                               },
+                               :target => :province,
+                               :wrapper => :inline,
+                               :wrapper_html => {
+                                :class => "span4"
+                                },
+                               :collection_url => "/city/" %>
+                  <%= address_form.input :area_id,
+                               :as => :depend_select,
+                               :target => :city,
+                               :wrapper => :inline,
+                               :wrapper_html => {
+                                :class => "span4"
+                               },
+                               :input_html => {
+                                :class => "address_area_id"
+                               },
+                               :collection_url => "/city/" %>
+                  <%= address_form.error :province_id %>
+              </div>
+              <div class='span1 title'>
+                <%= address_form.label :zip_code, :wrapper => :inline_label, :class => :label_zip_code %>
+              </div>
+              <div class='span2'>
+                <%= address_form.input_field :zip_code, :class => :span12  %>
+              </div>
+            </div>
+            <div class='row-fluid'>
+              <div class='span2 title'>
+                <%= address_form.label :road, :wrapper => :inline_label %>
+              </div>
+              <div class='span10'>
+                <%= address_form.input_field :road, :class => :span12 %>
+              </div>
+            </div>
+            <div class='row-fluid'>
+              <div class='span2 title'>
+                <%=address_form.label :contact_name, :wrapper => :inline_label %>
+              </div>
+              <div class='span4'>
+                <%=address_form.input_field :contact_name, :class => "span12" %>
+              </div>
+              <div class='span2 title'>
+                <%=address_form.label :contact_phone, :wrapper => :inline_label %>
+              </div>
+              <div class='span4'>
+                <%=address_form.input_field :contact_phone, :class => "span12" %>
+              </div>
+            </div>
+            <% end %>
+          </div>
+        </div>
+        <div class='row-fluid item-info'>
+          <div class='span2 title'>
+            支付方式
+          </div>
+          <div class='span5 pay_manner'>
+            <% PayManner.all.each do |p| %>
+            <span>
+              <input type='radio' name='pay_manner_id' value='<%=p.id %>' <%="checked" if p.default_state %> /><%=p.name %>
+            </span>
+            <% end %>
+          </div>
+          <div class='span1 title'>
+            <abbr title="required">*</abbr>数量
+          </div>
+          <div class='span4 <%="error" if @transaction.errors["items.amount"].size > 0 %>'>
+            <input type='text' class='span12' name='product_item[amount]' value='1' />
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary confirm">确认</button>
+  </div>
+</div>

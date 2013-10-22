@@ -245,3 +245,65 @@
     }
   }
 }
+
+
+#auction_buy_dialog{
+  width: 640px;
+
+  .activity_info{
+    margin-bottom: 15px;
+  }
+
+  .modal-body{
+    height: auto;
+    overflow: visible;
+    max-height: auto;
+  }
+
+  form.buy_activity{
+    .title{
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .item-info{
+      margin-top: 8px;
+
+      .pay_manner{
+        padding-top: 4px;
+        padding-bottom: 4px;
+        span:first-child{
+          margin-left: 0px
+        };
+
+        span{
+          margin-left: 10px
+        }
+
+        input[type=radio]{
+          margin-top: 0;
+        }
+      }
+    }
+
+    #order_transaction_address_id{
+      width: 100%;
+    }
+
+    .address-info{
+      display: none;
+
+      .row-fluid{
+        margin-top: 8px;
+
+        .control-label{
+          float: none;
+          width: auto;
+          padding: 0;
+          text-align: left;
+        }
+      }
+
+    }
+  }
+}

@@ -265,9 +265,9 @@ class People::TransactionsController < People::BaseController
   def generate_address
     args = params[:order_transaction]
     if args[:address_id].present?
-      Address.find(args[:address_id])
+      DeliveryAddress.find(args[:address_id])
     else
-      current_user.addresses.create(gener_address_arg(params[:address]))
+      current_user.delivery_addresses.create(gener_address_arg(params[:address]))
     end
   end
 
@@ -286,7 +286,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def get_delivery_manner(delivery_manner_id)
-    DeliveryManner.find_by(:id => delivery_manner_id) || DeliveryManner.default
+    DeliveryManner.find_by(:id => delivery_manner_id)
   end
 
   def gener_address_arg(a)

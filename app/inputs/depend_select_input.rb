@@ -9,17 +9,18 @@ class DependSelectInput < SimpleForm::Inputs::CollectionSelectInput
     input_html_options[:class].push(dom_id)
     $form_id = (input_html_options[:form_id].blank? ? "" : "[form_id=#{input_html_options[:form_id]}]")
     $children = (children.blank? ? "" : "#{$form_id}.#{children}")
-    
+
     @builder.collection_select(
       attribute_name, collection, value_method, label_method,
       input_options, input_html_options
-    ) +
-    <<-JAVASCRIPT
+    ) + <<-JAVASCRIPT
       <SCRIPT type='text/javascript'>
-        new DependSelectView({
-          el: "#{$form_id}.#{dom_id}", 
-          children: "#{$children}", 
-          url: "#{url}"
+        $(function(){
+          new DependSelectView({
+            el: "#{$form_id}.#{dom_id}",
+            children: "#{$children}",
+            url: "#{url}"
+          })
         })
       </SCRIPT>
     JAVASCRIPT
@@ -27,7 +28,7 @@ class DependSelectInput < SimpleForm::Inputs::CollectionSelectInput
   end
 
   def children
-    input_options[:children].blank? ? "" : children_dom_id    
+    input_options[:children].blank? ? "" : children_dom_id
   end
 
   def collection

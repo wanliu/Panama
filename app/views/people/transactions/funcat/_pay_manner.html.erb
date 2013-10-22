@@ -38,16 +38,26 @@
     <div class="controls controls-row">
       <div class='delivery_manner_panel'>
         <span class='chose_name'>
-          <%= DeliveryManner.default.try(:name) || "未设定" %>
+          卖家选择
         </span>
         <a href='javascript:void(0)' class='mdify_show'>修改</a>
       </div>
       <div class='chose_delivery_manner_panel'>
         <ul>
+          <li>
+            <span class='title'>
+              <input type="radio" name='order_transaction[delivery_manner_id]' checked />
+              <span class='name'>
+                卖家选择
+              </span>
+              <span class='code'>
+              </span>
+            </span>
+          </li>
           <% DeliveryManner.avaliable.each do |item| %>
           <li>
             <span class='title'>
-              <input type="radio" name='order_transaction[delivery_manner_id]' value='<%=item.id %>' <%='checked' if item.default_state %> />
+              <input type="radio" name='order_transaction[delivery_manner_id]' value='<%=item.id %>' />
               <span class='name'>
                 <%=item.name %>
               </span>
