@@ -10,7 +10,7 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def buy
-    @activity = Activity.find_by(:id =>params[:id], :activity_type => :auction)
+    @activity = activity_auction.find_by(:id =>params[:id])
     @transaction = OrderTransaction.new
     @address = DeliveryAddress.new
     respond_to do |format|
@@ -20,7 +20,8 @@ class Activities::AuctionController < Activities::BaseController
   end
 
   def join
-    @activity = Activity.find_by(:id => params[:id], :activity_type => :auction)
+    address = params[:address]
+    @activity = activity_auction.find_by(:id => params[:id])
     @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
     @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
@@ -31,8 +32,8 @@ class Activities::AuctionController < Activities::BaseController
       :shop_id => @activity.shop_id,
       :user_id => current_user.id
     })
+    @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
-    @activity.activities_participates.build(:user_id => current_user.id)
     respond_to do |format|
       if @transaction.save
         format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
@@ -85,6 +86,18 @@ class Activities::AuctionController < Activities::BaseController
         date = Date.strptime(activity_params[field], '%m/%d/%Y')
         activity_params[field] = Time.zone.parse(date.to_s)
       end
+    end
+  end
+
+  def activity_auction
+    Activity.where(:activity_type => "auction")
+  end
+
+  def delivery_address(address)
+    if address[:id].present?
+      current_user.delivery_addresses.find(address[:id])
+    else
+      current_user.delivery_addresses.create(address)
     end
   end
 end

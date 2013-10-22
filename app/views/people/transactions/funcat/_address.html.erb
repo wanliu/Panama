@@ -7,7 +7,7 @@
     <%= f.input :address_id,
           :collection => people.delivery_addresses,
           :object => transaction,
-          :selected => "",
+          :selected => transaction.address_id,
           :include_blank => true,
           :label_method => :location,
           :value_method => :id,

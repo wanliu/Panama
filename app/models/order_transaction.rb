@@ -24,7 +24,7 @@ class OrderTransaction < ActiveRecord::Base
   attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
 
   belongs_to :address,
-          foreign_key: 'address_id'
+          foreign_key: 'address_id', class_name: "DeliveryAddress"
   belongs_to :delivery_type,
           foreign_key: "delivery_type_id"
 
