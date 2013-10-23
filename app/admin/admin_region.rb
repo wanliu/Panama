@@ -31,7 +31,8 @@ ActiveAdmin.register Region do
   end
 
   collection_action :create do 
-    Region.create(:name => params[:region_name])
+    region = Region.create!(:name => params[:region_name])
+    params[:part_ids].map { |city_id| RegionCity.create!(:region_id => region.id, :city_id => city_id) }
   end
 
   collection_action :new_plus, :title => "划分区域" do

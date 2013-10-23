@@ -16,7 +16,7 @@
             </select>
         </div>
         <div class="address">
-            <ul class="address_part span9">
+            <ul class="address_part_list span9">
                 <span class="region_name">请选择区域所在城市</span>
             </ul>
         </div>
@@ -41,6 +41,9 @@
     $(function(){
         new SelectRegionView({
             el: $(".address_select")
+        })
+        new RegionView({
+            el : $(".region")
         })
     })
 </script>

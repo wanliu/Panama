@@ -9,4 +9,4 @@
 //= require core_extend/core
 //= require lib/depend_select
 //= require system/select_region
-//= require upload_photo
+//= require system/region
