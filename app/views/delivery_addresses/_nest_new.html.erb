@@ -1,0 +1,5 @@
+<%= simple_fields_for :address, address do |address_form| %>
+<%= render :partial => "form", :locals => {
+    :address_form => address_form
+  } %>
+<% end %>

@@ -111,6 +111,12 @@ ul {
 	position: absolute;
 	margin-left: 150px;
 	margin-top: 20px;
+	.controls {
+		margin-left: 310px;
+	}
+	.control-label {
+		width: 280px;
+	}
 }
 
 .logo {
@@ -539,6 +545,9 @@ ul {
 	>.content {
 		padding: 25px 2.5641%;
 	}
+	>.widget{
+		margin-left: 0px;
+	}
 }
 
 .account .user_icon {
@@ -857,8 +866,6 @@ ul {
 		border: 1px solid #dddddd;
 		border-bottom-color: transparent;
 	}
-
-
 }
 
 body>.model-popup-backdrop{
@@ -986,9 +993,9 @@ h2 small {
 
 .form_activity_focus{
 	.shop_product_wrap{
-			.controls{
-				width: 400px;
-			}
+		.controls{
+			width: 400px;
+		}
 	}
 }
 
@@ -1021,7 +1028,6 @@ h2 small {
 	}
 }
 
-
 .scroll-load-msg{
 	text-align: center;
 	display: none;
@@ -1042,7 +1048,7 @@ h2 small {
 	width: 160px;
 	z-index: 1;
 
-	.second_class_categories {
+	.lv2_categories {
 		top: 0;
 		left: 160px;
 		height: auto;
@@ -1073,22 +1079,23 @@ h2 small {
 			li.third_class_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
-				a { padding-left: 4px; }
+				a {
+					padding-left: 4px;
+				}
 			}
 		}
 	}
 }
 
 .controls {
-  .inline {
-    display: inline;
-  }
+    .inline {
+    	display: inline;
+    }
 }
 
 .depend_select {
   width: 90px;
 }
-
 
 .error .chzn-container-single .chzn-single{
 	border: 1px solid #b94a48;

@@ -8,7 +8,7 @@ class SpinnerInput < SimpleForm::Inputs::Base
 
   	discern_class = "spinner_"+object.class.to_s+"_"+attribute_name.to_s+"_#{input_html_options[:panel_class]}"
     <<-JAVASCRIPT
-		<div id="MySpinner" class="spinner #{discern_class}" style="margin-top:4px;">
+		<div id="MySpinner" class="spinner #{discern_class}">
 	      #{@builder.text_field(attribute_name, input_html_options)}
 	      <div class="spinner-buttons  btn-group btn-group-vertical">
 	        <a href='javascript:void(0)' class="btn spinner-up" style="height:9px;">

@@ -5,6 +5,10 @@ class People::DeliveryAddressesController < People::BaseController
 		@addresses = DeliveryAddress.all
 	end
 
+	def new
+		@address = DeliveryAddress.new
+	end
+
 	def edit
 		@address = DeliveryAddress.find(params[:id])
 		render layout: false

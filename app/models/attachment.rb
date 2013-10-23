@@ -4,6 +4,7 @@ class Attachment < ActiveRecord::Base
 
   # belongs_to :attachable, :polymorphic => true
   has_many :default_product, :class_name => "Product"
+  has_and_belongs_to_many :attachments_region_pictures, :class_name => "AttachmentsRegionPicture"
   has_and_belongs_to_many :products, :class_name => "Product"
   has_and_belongs_to_many :activities, :class_name => "Activity"
 

@@ -1,4 +1,4 @@
-<div id="set_area_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="set_area_modal" class="modal hide fade detail_city_choice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
       <h3>地区选择</h3>
     </div>
@@ -34,7 +34,7 @@
       <div class="area_list">
         直接选择：<br>
   		 	<% @city.children.each do |city| %>
-  		 		<a href="/cities/<%= city.id %>/communities"><%= city.name %></a>
+  		 		<a href="/cities/<%= city.id %>/communities" class="city_name"><%= city.name %></a>
   		 	<% end %>
       </div>
 		<% end %>

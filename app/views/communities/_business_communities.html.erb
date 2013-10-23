@@ -12,7 +12,7 @@
 
           <div class="head_img">
             <a href="/shops/<%= circle.owner.name %>">
-              <img src="<%= circle.owner.photos.icon %>" class="user_icon"/>
+              <img src="<%= circle.owner.photos.header %>" class="circle_icon"/>
             </a>
           </div>
           <div  class="circle_detail">
@@ -38,6 +38,11 @@
               <% end %>
             </div>
           </div>
+          <% @friends.each do |friend| %>
+            <% if friend.circle_id == circle.id %>
+              <img src="<%=friend.photos.icon %>" class="friends_icons"/>
+            <% end %>
+          <% end %>
         </div>
       <% end %>
     <% else %>

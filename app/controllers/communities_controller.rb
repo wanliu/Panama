@@ -19,25 +19,31 @@ class CommunitiesController < ApplicationController
 	end
 
 	def city_index
-		@new_users = UserChecking.joins("right join addresses as addr on addr.targeable_id = user_checkings.id ")
+		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
 								 .where("user_checkings.checked = true and addr.area_id = ?", params[:city_id])
 								 .group('user_checkings.id')
 								 .order('created_at DESC')
 								 .limit(15)
 
-		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.id left join addresses as addr on addr.area_id = circles.city_id ")
-						.where(:created_type => "advance",:city_id => params[:city_id])
+		my_circles_ids = current_user.circles.pluck("id")
+		my_friends = CircleFriends.where(:circle_id => my_circles_ids).select("distinct user_id").pluck("user_id")
+
+
+		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.circle_id left join addresses as addr on addr.area_id = circles.city_id")
+						.where("created_type = 'advance' and circles.city_id =? ", params[:city_id])
 						.select("circles.*, count(cf.id) as count")
 						.group("circles.id")
 						.order("count desc")
-						.limit(10)
+						.limit(9)
 
-		@top_10_shops = Shop.joins("left join followings as follow on shops.id = follow.follow_id  right join addresses as addr on addr.targeable_id=shops.id")
-							.where("follow.follow_type = 'Shop' and addr.targeable_type='Shop' and addr.area_id=?", params[:city_id])
-							.select("shops.*, count(follow.id) as count")
-							.group("shops.id")
-							.order("count desc")
-							.limit(10)
+		@friends = User.joins("right join circle_friends as cf on cf.user_id = users.id ").select("users.*, cf.circle_id as circle_id").where("cf.circle_id in (?) and users.id in (?)",@circles.pluck("circles.id"), my_friends).limit(3)
+
+		@top_10_shops = Shop.joins("left join followings as follow on follow.follow_id = shops.id left join addresses as addr on shops.address_id = addr.id")
+		 	.where("follow.follow_type='Shop' and addr.area_id=?", params[:city_id])
+		 	.select("shops.*,count(follow.id) as count")
+		 	.group("shops.id")
+		 	.order("count desc")
+		 	.limit(10)
 
 		@city = City.find(params[:city_id])
 		cookies[:city_id] = { 
@@ -64,14 +70,11 @@ class CommunitiesController < ApplicationController
 	end
 
 	def hot_city_name
-		@hot_cities = Address.find( :all,
-									:joins =>  "LEFT JOIN `cities` ON cities.id = area_id" ,
-									:select => "count(*) as hot_score,area_id,cities.name",
-									:conditions => {
-									   :targeable_type => "UserChecking",
-									},
-									:group => "area_id",
-									:order => "hot_score DESC")
+		@hot_cities = Address.joins("left join cities as c on c.id=addresses.area_id")
+							 .select("count(addresses.area_id) as count,c.name,addresses.area_id")
+							 .group("addresses.area_id")
+							 .order("count desc")
+							 .limit(8)
 		respond_to do |format|
 			format.html # show.html.erb
 			format.json { render json: @hot_cities }
@@ -79,22 +82,13 @@ class CommunitiesController < ApplicationController
 	end
 
 	def search
-		address = params[:address]
-		address.merge!({:targeable_type =>"UserChecking"})
-		address_ids = Address.where(address).pluck("targeable_id")
-		@users = _search(address_ids)
+		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
+							 .where("addr.area_id=?",params[:address][:area_id])
+							 .group("user_checkings.id")
+							 .order("user_checkings.created_at desc")
 		respond_to do |format|
 			format.html
 			format.json{ render json: @users}
-		end
-	end
-
-	def _search(address_ids)
-		if address_ids.length > 0
-			options = {:id => address_ids,:checked => true }
-			@users = UserChecking.where(options).order("created_at desc").limit(15)
-		else
-			@users = []
 		end
 	end
 end

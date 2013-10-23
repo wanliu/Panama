@@ -8,7 +8,7 @@ class AskBuyView extends Backbone.View
     "click .submit-comment"         : 'comment'
     "keyup textarea[name='content']": 'filter_status'
     "click [name='join']"           : "join"
-  
+
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -23,7 +23,7 @@ class AskBuyView extends Backbone.View
       @textarea = @$("textarea[name='content']")
       @btn = @$(".submit-comment")
       @fetch_comment()
-    super
+    #super
 
   fetch_dialog: (handle) ->
     $.ajax(
@@ -86,8 +86,9 @@ class AskBuyView extends Backbone.View
 
 
 class AskBuyPreview extends Backbone.View
-  events: 
-    "click .ask_buy .preview" : 'launch'
+  events:
+    "click .ask_buy .preview"     : 'launch'
+    "click .ask_buy .activity_tag": "launch"
 
   initialize: (options) ->
     _.extend(@, options)

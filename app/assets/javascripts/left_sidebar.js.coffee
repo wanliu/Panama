@@ -49,5 +49,33 @@ class LeftSideBar extends Backbone.View
 		$(".wrap").addClass(ICON_CLASS)
 		$(window).trigger('resize')
 
+
+class CategoryTree extends Backbone.View
+	events:
+		"click >a"                  : "toggle_tree"
+		"mouseenter >ul>li"         : "show_children"
+		"mouseleave >ul>li"         : "hide_children"
+		"mouseleave .lv2_categories": "hide_categories"
+
+	initialize: () ->
+		@$(".icon-caret-right").remove()
+		@$("#forms-collapse").children().css("color","rgba(217, 255, 205, 0.77)")
+		@$(".accordion-group >ul").css("color","white")
+
+	toggle_tree: (event) ->
+		@$("#forms-collapse").toggle()
+
+	show_children: (event) ->
+		@$($(event.target).attr('href')).show()
+
+	hide_children: (event) ->
+		@$($(event.target).attr('href')).hide()
+
+	hide_categories: (event) ->
+		setTimeout () =>
+			$(event.target).hide()
+		, 300
+
 		
 root.LeftSideBar = LeftSideBar
+root.CategoryTree = CategoryTree

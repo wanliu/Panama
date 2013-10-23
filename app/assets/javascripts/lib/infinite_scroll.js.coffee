@@ -4,7 +4,7 @@ root = window || @
 # 抽象出的无限滚动加载视图
 class InfiniteScrollView extends Backbone.View
   offset: 0,
-  limit: 20,
+  limit: 40,
   init_size: 40,
   msg_tip: '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
   search_options: {

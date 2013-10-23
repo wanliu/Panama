@@ -41,11 +41,11 @@
 <script type="text/javascript">
     $(function(){
         new ActivitiesView({
-            el: '#activities'
+          el: '#activities'
         })
 
         var load_view = new LoadActivities({
-            el: $('.activities_panel')
+          el: $('.activities_panel')
         })
 
         new ActivityPreview({
@@ -71,10 +71,10 @@
           }
         })
 
-        $("#category-sidebar .second_class_categories a")
+        $("#category-sidebar .lv2_categories a")
           .attr("href", "#")
           .on("click", function(){
-            $(this).parents(".second_class_categories").hide()
+            $(this).parents(".lv2_categories").hide()
             category_id = $(this).attr("data-category_id")
             load_view.reset_fetch({ category_id: category_id })
           })

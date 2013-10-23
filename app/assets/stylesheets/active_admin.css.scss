@@ -168,3 +168,28 @@ table.index_table th{ text-align: center !important; }
     width: auto;
   }
 }
+
+.region{
+  .address_part{
+    background-color: rgb(215, 215, 230);
+    border: 3px solid rgb(185, 158, 189);
+    li{
+      font-size: 14px;
+      padding-bottom: 5px;
+      list-style:none;
+      float: left;
+      padding-left: 20px;
+      input{
+        margin: 0px;
+      }
+    }
+  }
+  .region_name{
+    font-size: 16px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    .region_name_input{
+      margin-left: 10px;
+    }
+  }
+}

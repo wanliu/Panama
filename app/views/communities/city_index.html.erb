@@ -12,7 +12,7 @@
 				<div class="top_10">
 					<h4>排行榜</h4>
 					<ul class="shops-list ">
-					<% unless  @top_10.blank?  %>
+					<% if  @top_10_shops.length > 0  %>
 						<% @top_10_shops.each do |shop|%>
 							<li data-value-id="<%= shop.id %>" class="row top_shop">
 								<div class="top_image span4">
@@ -75,6 +75,11 @@
 		new SearchUserView({
 			el: $(".base_info")
 		})
+		new FindUserView({
+			el: $(".base_info"),
+			area_id: "<%=@city.id %>"
+		})
+
 		$(".depend_select>option[value=]").html("--请选择--")
 
 		$(".shops-list .top_shop").each(function(i, elem){

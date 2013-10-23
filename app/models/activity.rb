@@ -67,6 +67,9 @@ class Activity < ActiveRecord::Base
     self.shop_id = author.shop.id
     self.like = like
     self.participate = participate
+    if self.activity_type == "focus"
+      self.price = self.activity_rules.map{|a| a.dvalue}.min
+    end
   end
 
   def default_photo
@@ -161,8 +164,8 @@ class Activity < ActiveRecord::Base
       :shop_product_id  => shop_product_id,
       :description    => description,
       :price          => price,
-      :start_time     => start_time,
-      :end_time       => end_time,
+      :start_time     => start_time.strftime("%Y-%m-%d %H:%M:%S"),
+      :end_time       => end_time.strftime("%Y-%m-%d %H:%M:%S"),
       :participate    => participate,
       :status      => status,
       :like        => like,
