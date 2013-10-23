@@ -16,10 +16,12 @@
         </div>
         <div class='row-fluid'>
           <div class='span2'>
-            单价
+            人数/单价
           </div>
           <div class='span10'>
-            <%=@activity.price %>
+            <% @activity.activity_rules.each do |rule| %>
+              <%=rule.value %>/<%=rule.type_val %>
+            <% end %>
           </div>
         </div>
         <div class='row-fluid'>
@@ -59,7 +61,7 @@
     <div class='row-fluid fill_info'>
       <div class='span12'>
         <%= simple_form_for @transaction,
-        :url => join_activities_auction_path(@activity), :html => { :class => "buy_activity form-horizontal" } do |f| %>
+        :url => join_activities_focu_path(@activity), :html => { :class => "buy_activity form-horizontal" } do |f| %>
         <div class='row-fluid'>
           <div class='span2 title'>
             <abbr title="required">*</abbr>选择地址
@@ -170,7 +172,7 @@
             <abbr title="required">*</abbr>数量
           </div>
           <div class='span4 <%="error" if @transaction.errors["items.amount"].size > 0 %>'>
-            <input type='text' class='span12' name='product_item[amount]' value='1' />
+            <input type='text' class='span12' name='product_item[amount]' value="<%= @product_item.try(:amount) || 1 %>" />
           </div>
         </div>
         <% end %>

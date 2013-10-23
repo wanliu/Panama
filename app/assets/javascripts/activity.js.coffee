@@ -7,6 +7,7 @@
 #= require shop_products
 #= require lib/infinite_scroll
 #= require_tree ./activities
+#= require activity_buy
 
 root = window || @
 
@@ -46,8 +47,11 @@ class ActivityView extends Backbone.View
 
   initialize: (@options) ->
     _.extend(@, @options)
-    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+
     @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
+    if $("body>.model-popup-backdrop").length <= 0
+      @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+
     @loadTemplate () =>
       @$el = $(@render()).appendTo(@$dialog)
       #$(window).scroll()
@@ -234,7 +238,7 @@ class ActivityPreview extends Backbone.View
 
   buy: (event) ->
     @load_view(event.currentTarget)
-    new AuctionBuyView({activity_id: @model.id})
+    new ActivityBuyView({activity_id: @model.id})
 
 class ProductViewTemplate extends Backbone.View
   initialize: () ->

@@ -15,6 +15,16 @@ class ActivitiesController < ApplicationController
     end
   end
 
+  def buy
+    @activity = Activity.find_by(:id =>params[:id])
+    @transaction = OrderTransaction.new
+    @product_item = ProductItem.new
+    respond_to do |format|
+      format.dialog{ render :layout => false }
+      format.html{ render :layout => false }
+    end
+  end
+
   # GET /activities/1
   # GET /activities/1.json
   def show
@@ -31,7 +41,7 @@ class ActivitiesController < ApplicationController
       format.js { render "activities/show" }
       format.dialog { render "show.dialog", :layout => false }
       format.json {
-        render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user)) 
+        render json: @activity.as_json.merge(liked: @activity.likes.exists?(current_user))
       }
     end
   end

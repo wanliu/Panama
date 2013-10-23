@@ -18,12 +18,18 @@ class AskBuy < ActiveRecord::Base
 
   define_graphical_attr :photos, :handler => :default_photo
 
+  after_create :init_data
+
   def default_photo
     if attachments.count > 0
     	attachments.first.file
     else
      	Attachment.new.file
     end
+  end
+
+  def init_data
+    self.title = "#{self.title} 求购"
   end
 
   def as_json(*args)
