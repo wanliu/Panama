@@ -90,13 +90,11 @@ class FindUserView extends Backbone.View
       type: "get",
       data: {q: @$(".input_info").val() ,area_id: @options.area_id }
       success: (datas) =>
-        debugger
         @render(datas)
         new YellowInfoPreviewList({el : @el })
     })
 
   render: (datas) =>
-    debugger
     if datas.length == 0
       $(@notice).insertBefore(@$(".wrapper"))
     else

@@ -30,6 +30,10 @@ ActiveAdmin.register Region do
     end
   end
 
+  collection_action :create do 
+    Region.create(:name => params[:region_name])
+  end
+
   collection_action :new_plus, :title => "划分区域" do
     @region = Region.new
     @address = Address.new
