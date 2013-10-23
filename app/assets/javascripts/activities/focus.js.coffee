@@ -4,9 +4,9 @@
 #= require ../lib/activity_base_info
 root = window || @
 class root.ActivityFocusView extends ActivityBaseInfoView
-  events: {
+  events: 
     "click .add_range": "clone_elem"
-  }
+  
   initialize: () ->
     super
 
@@ -14,11 +14,9 @@ class root.ActivityFocusView extends ActivityBaseInfoView
     product = data.product
     @$('[name="activity[title]"]').val(product.name + ' 聚焦');
     @$('[name="activity[shop_product_id]"]').val(product.id);
-    @fill_time()
 
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
-    # @$(".activity_info").show()
 
   clone_elem: () ->
     one_line = @$(".bettwen:eq(0)").clone(true)
@@ -32,11 +30,3 @@ class root.ActivityFocusView extends ActivityBaseInfoView
     $price.attr("name", "activity[activity_price][#{iden}]")
 
     @$(".bettwen-warp").append(one_line)
-
-  fill_time: () ->
-    start_time = new Date()
-    end_time = new Date()
-    start_time.setDate(start_time.getDate() + 1)
-    end_time.setDate(end_time.getDate() + 8)
-    @$('[name="activity[start_time]"]').val(start_time.format("MM/dd/yyyy"))
-    @$('[name="activity[end_time]"]').val(end_time.format("MM/dd/yyyy"))

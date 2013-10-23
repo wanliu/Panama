@@ -40,12 +40,18 @@
   <%= f.input :start_time,
               :as         => :date_picker,
               required: true,
-              input_html: { name: 'activity[start_time]' } %>
+              input_html: { 
+                name: 'activity[start_time]', 
+                value: (DateTime.now + 1.days).strftime('%m/%d/%Y') 
+              } %>
 
   <%= f.input :end_time,
               :as         => :date_picker,
               required: true,
-              input_html: { name: 'activity[end_time]' } %>
+              input_html: { 
+                name: 'activity[end_time]', 
+                value: (DateTime.now + 8.days).strftime('%m/%d/%Y')
+              } %>
   </div>
 
   <script type="text/javascript">

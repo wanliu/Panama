@@ -29,7 +29,8 @@ class Activity < ActiveRecord::Base
   has_many :participates, :through => :activities_participates, :source => :user
 
   # validates_associated :product
-  validates_presence_of :author
+  validates :price, :activity_price, :numericality => { :greater_than => 0 }, :presence => true
+  validates :author, :title, :activity_price, :start_time, :end_time, :shop_product_id, :presence => true
 
   validate :validate_update_access?, :on => :update, :except => :update_like
   validate :validate_focus?
@@ -75,10 +76,6 @@ class Activity < ActiveRecord::Base
   def default_photo
     attachments.first ? attachments.first.file : Attachment.new.file
   end
-
-  validates :title, :activity_price, :start_time, :end_time, :shop_product_id, :presence => true
-  validates :activity_price, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :price, :numericality => { :greater_than_or_equal_to => 0 }, :allow_nil => true
 
   def like
     likes.size

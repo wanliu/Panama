@@ -17,18 +17,10 @@ class root.ActivityAuctionView extends ActivityBaseInfoView
     @$('[name="activity[shop_product_id]"]').val(product.id)
     @$('[name="activity[price]"]').val(product.price)
     @$('[name="activity[activity_price]"]').val(product.price)
-    @fill_time()
 
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
 
-  fill_time: () ->
-    start_time = new Date()
-    end_time = new Date()
-    start_time.setDate(start_time.getDate() + 1)
-    end_time.setDate(end_time.getDate() + 8)
-    @$('[name="activity[start_time]"]').val(start_time.format("MM/dd/yyyy"))
-    @$('[name="activity[end_time]"]').val(end_time.format("MM/dd/yyyy"))
 
 class root.AuctionBuyView extends Backbone.View
   events: {
@@ -101,7 +93,6 @@ class root.AuctionBuyView extends Backbone.View
       data: @get_date(),
       type: "POST",
       success: (xhr) ->
-
 
       error: (xhr) ->
 

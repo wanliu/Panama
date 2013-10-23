@@ -1,25 +1,27 @@
-<div class='product' product-id='{{ id }}' id="product{{ id }}">
+<div class='product' product-id='{{id}}' id="product{{id}}">
   <div class='out-box'>
     <form>
-    <div class='in-box'>
-      {{#photos.avatar}}
-        <img src="{{photos.avatar}}" class="preview a-{{id}}" alt />
-      {{/photos.avatar}}
-      {{^photos.avatar}}
-        <%#= image_tag ImageUploader.new.url("240240") %>
-      {{/photos.avatar}}
-    </div>
+      <div class='in-box'>
+        {{#photos.avatar}}
+          <img src="{{photos.avatar}}" class="preview a-{{id}}" alt />
+        {{/photos.avatar}}
+        {{^photos.avatar}}
+          <%#= image_tag ImageUploader.new.url("240240") %>
+        {{/photos.avatar}}
+      </div>
       <div class='summary'>
         <h5 class="title">{{name}}</h5>
         <p class='describe'>暂无卖家</p>
       </div>
-      <div class='info'>
+      <div class='userinfo'>
+        <div class='author'>
+          <%= button_tag class: 'btn btn-info launch-button ask_buy_feature', :type => 'button' do %>
+            <%= icon('shopping-cart') + " 求购" %>
+          <% end %>
+        </div>
       </div>
-    <div class="buttons">
-      <%= button_tag class: 'btn btn-info launch-button ask_buy_feature', :type => 'button' do %>
-      <%= icon('shopping-cart') + " 求购" %>
-      <% end %>
-    </div>
+      <div class="buttons">
+      </div>
     </form>
   </div>
 </div>

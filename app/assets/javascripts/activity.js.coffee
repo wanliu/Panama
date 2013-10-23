@@ -270,14 +270,16 @@ class ActivityViewTemplate extends Backbone.View
     time_left =  Date.parse(@model.end_time) - new Date()
     return "已结束" unless time_left > 0
     leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数
-    # leave2 = leave1%(3600*1000)
+    leave2 = leave1%(3600*1000)
     # leave3 = leave2%(60*1000)
 
     days = Math.floor(time_left/(24*3600*1000))
+    return "还剩#{days}天" if days > 0
     hours = Math.floor(leave1/(3600*1000))
-    # minutes = Math.floor(leave2/(60*1000))
+    return "仅剩#{hours}小时" if hours > 0
+    minutes = Math.floor(leave2/(60*1000))
+    return "最后#{minutes}分钟" if minutes > 0
     # seconds = Math.round(leave3/1000)
-    "还剩#{days}天#{hours}时"
 
 
 class AskBuyViewTemplate extends Backbone.View

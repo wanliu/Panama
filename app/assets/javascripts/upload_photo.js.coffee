@@ -38,8 +38,8 @@ class root.Upload extends Backbone.View
             <ul class="qq-upload-list" style="margin-top: 10px; text-align: center;">
             </ul>
           </div>',
-        cancelButtonText: "取消上传",
-        uploadButtonText: '上传头像',        
+        cancelButtonText: '取消上传',
+        uploadButtonText: '上传图片',        
         onComplete: (id, filename, data) =>
           element.find("ul.qq-upload-list").hide();
           @$avatar = element.find("img.normal_picture")                    
