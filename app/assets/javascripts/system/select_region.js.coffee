@@ -42,7 +42,16 @@ class  root.SelectRegionView extends Backbone.View
 		new DependSelectView({
 			el: el,
 			children: children,
-			url: url     
+			url: url,
+			type: "direct_get",
+			call_back: (data) =>
+				strHtml = ""
+				_.each data, (part) =>
+					strHtml += "<li>
+						<input type='checkbox' id='#{part["id"]}' value='#{part["name"]}'/>
+							#{part["name"]}
+					</li>" 
+				$(".address_part").html(strHtml)
 		})
 
 

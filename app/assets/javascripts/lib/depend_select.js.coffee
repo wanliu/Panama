@@ -20,7 +20,8 @@ class DependSelectView extends Backbone.View
 			success: $.proxy(@callback,@)
 		})
 
-	callback: (data) ->
+	callback: (data) =>
+		@call_back.call(@, data)  if @type =="direct_get"
 		strHtml = "<option value=''>--请选择--</option>"
 		_.each data, (num) =>
 			strHtml += "<option value='#{num["id"]}'>#{num["name"]}</option>"
