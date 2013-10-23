@@ -1,46 +1,61 @@
 <div class="region">
-    <div class="region_name">请输入区域名 
-        <input type="text" name="region_name" class="region_name_input">
+  <div class="region_name">请输入区域名
+    <input type="text" name="region_name" class="region_name_input">
+  </div>
+  <div class="controls ">
+      <div class="address_select">
+          <span style="font-size: 16px;padding-right: 10px;">请选择省、市</span>
+          <select class="address_province_id">
+              <option>==请选择省==</option>
+          </select>
+          <select class="address_city_id">
+              <option>==请选择市==</option>
+          </select>
+          <select class="address_area_id">
+              <option>==请选择市==</option>
+          </select>
+      </div>
+      <div class="address">
+          <ul class="address_part">
+              <span class="region_name">请选择区域所在城市</span>
+          </ul>
+      </div>
+  </div>
+  <div class="reset_avatar main_panle">
+    <div id="image_bottom">
+      <div class="hidden_one" id="hidden_text">
+          <%#= upload_tip %>
+      </div>
+      <div class="update_photo_panle  upload_user_avatar file-box">
+      </div>
     </div>
-    <div class="controls ">
-      	<div class="address_select">
-            <span style="font-size: 16px;padding-right: 10px;">请选择省、市</span>
-            <select class="address_province_id">
-                <option>==请选择省==</option>
-            </select>
-            <select class="address_city_id">
-                <option>==请选择市==</option>
-            </select>
-            <select class="address_area_id">
-                <option>==请选择市==</option>
-            </select>
-        </div>
-        <div class="address">
-            <ul class="address_part span9">
-                <span class="region_name">请选择区域所在城市</span>
-            </ul>
-        </div>
-    </div>
-    <div class="reset_avatar main_panle">
-        <div class="photo_span" >
-            <span> 上传区域图片</span>
-            <img class="bottom normal_picture img-polaroid"/>
-        </div>
-        <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
-                <%= upload_tip %>
-            </div>
-            <div class="update_photo_panle  upload_user_avatar file-box">
-            </div>
-        </div>
-    </div>
-    <button class="region_create btn">创建</button>
+  </div>
+  <div class='photo_upload'>
+    <ul class='attachment-list'></ul>
+  </div>
+  <div class='region_create'>
+    <button class="btn">创建</button>
+  </div>
 </div>
 
 <script type="text/javascript">
-    $(function(){
-        new SelectRegionView({
-            el: $(".address_select")
-        })
+  $(function(){
+    new SelectRegionView({
+      el: $(".address_select")
     })
+
+    new AttachmentUpload({
+      el: $(".attachment-list"),
+      limit: 5,
+      default_enabled: false,
+      params: {
+        url_upload: "/attachments",
+        default_img_url: "<%= default_img_url('100x100') %>",
+        version_name: "100x100",
+        template: "<%=j render 'upload_template' %>",
+        input_name: "address[attachment_ids]",
+      }
+    })
+
+  })
 </script>

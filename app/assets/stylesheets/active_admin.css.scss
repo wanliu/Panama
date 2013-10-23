@@ -192,4 +192,23 @@ table.index_table th{ text-align: center !important; }
       margin-left: 10px;
     }
   }
+  .photo_upload{
+    height: 116px;
+
+    ul.attachment-list{
+      margin: 0px;
+      padding: 0px;
+
+      li{
+        margin-top: 0px;
+        padding-top: 0;
+        display: inline-block;
+      }
+    }
+  }
+
+  .region_create{
+    clear: both;
+    margin-top: 5px;
+  }
 }
