@@ -9,21 +9,11 @@ class Activities::AuctionController < Activities::BaseController
     end
   end
 
-  def buy
-    @activity = activity_auction.find_by(:id =>params[:id])
-    @transaction = OrderTransaction.new
-    @address = DeliveryAddress.new
-    respond_to do |format|
-      format.dialog{ render :layout => false }
-      format.html{ render :layout => false }
-    end
-  end
-
   def join
     address = params[:address]
     @activity = activity_auction.find_by(:id => params[:id])
     @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
-    @transaction.items.build({
+    @product_item = @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
       :amount => params[:product_item][:amount],
       :title => @activity.title,
@@ -44,7 +34,7 @@ class Activities::AuctionController < Activities::BaseController
                     notice: 'Transaction was successfully created.'
         }
       else
-        format.js{ render "/activities/error_join" }
+        format.html{ render :partial => "/activities/auction/buy.dialog", :status => 403 }
       end
     end
   end

@@ -1,6 +1,8 @@
 <div id="category-sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80" >
 	<ul id="forms-collapse" class="side-nav">
-		<%= root_category_tree %>
+		<% cache do %>
+			<%= root_category_tree %>
+		<% end %>
 	</ul>
 	<div id="sidebar-settings" class="settings">
 		<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图&nbsp;标</button>

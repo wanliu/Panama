@@ -12,7 +12,9 @@
         <span class="name">分类</span>
       </a>
       <ul id="forms-collapse" class="accordion-body" style="display:none;">
-        <%= root_category_tree %>
+        <% cache do %>
+          <%= root_category_tree %>
+        <% end %>
       </ul> 
     </li>
     <li>

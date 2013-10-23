@@ -212,6 +212,7 @@ Panama::Application.routes.draw do
       post 'like'
       post 'unlike'
       post 'to_cart'
+      get 'buy'
     end
     collection do
       get 'tomorrow'
@@ -221,7 +222,6 @@ Panama::Application.routes.draw do
   namespace :activities do
     resources :auction do
       member do
-        get 'buy'
         post 'join'
       end
     end

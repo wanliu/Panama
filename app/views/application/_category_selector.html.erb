@@ -1,5 +1,7 @@
 <!-- <ul id="forms-collapse-1" class="side-nav">
-	<%#= root_category_tree %>
+	<% cache do %>
+		<%#= root_category_tree %>
+	<% end %>
 </ul> -->
 <%= build_menu2 Category.root %>
 

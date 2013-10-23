@@ -63,6 +63,14 @@ class Activity < ActiveRecord::Base
     end
   end
 
+  def focus_price
+    if activity_type == "focus"
+      activity_rules.order(:value).find_by("value>#{participate}").type_val
+    else
+      0
+    end
+  end
+
   def init_data
     self.shop_id = author.shop.id
     self.like = like
