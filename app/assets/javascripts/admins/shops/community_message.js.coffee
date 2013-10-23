@@ -14,7 +14,7 @@ class root.CommunityApplyJoin extends Backbone.View
       success: () ->
         pnotify({text: "加入成功！"})
       error: (rep) ->
-        m = JSON.pase(rep.responseText).messages.join()
+        m = JSON.parse(rep.responseText).messages.join()
         pnotify({text: m, type: "error"})
         window.location.href = @options.remote_url
     )

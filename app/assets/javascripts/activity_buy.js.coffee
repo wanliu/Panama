@@ -1,28 +1,5 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
-
-#= require ../lib/activity_base_info
-
 root = window || @
-
-class root.ActivityAuctionView extends ActivityBaseInfoView
-
-  initialize: () ->
-    super
-
-  fill_info: (data) ->
-    product = data.product
-    @$('[name="activity[title]"]').val(product.name + ' 竞价')
-    @$('[name="activity[shop_product_id]"]').val(product.id)
-    @$('[name="activity[price]"]').val(product.price)
-    @$('[name="activity[activity_price]"]').val(product.price)
-
-    @$('ul.product_selector').hide();
-    @load_attachments(product.attachments)
-    
-
-class root.AuctionBuyView extends Backbone.View
+class root.ActivityBuyView extends Backbone.View
   events: {
     "click .address_bar" : "toggle",
     "click [data-dismiss='modal']" : "close",
@@ -35,22 +12,24 @@ class root.AuctionBuyView extends Backbone.View
 
   load_template: (callback) ->
     $.ajax(
-      url: "/activities/auction/#{@activity_id}/buy.dialog",
+      url: "/activities/#{@activity_id}/buy.dialog",
       success: (html) =>
         callback.call(@, html)
     )
 
   render: (html) ->
     @$el.html(html)
-    @$address_info = @$(".address-info")
-    @$form = @$("form.buy_activity")
     $("#popup-layout").html(@el)
 
     @load_binding()
-    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+    if $("body>.model-popup-backdrop").length <= 0
+      @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+
     @delegateEvents()
 
   load_binding: () ->
+    @$address_info = @$(".address-info")
+    @$form = @$("form.buy_activity")
     @load_depend_chose()
     @address_chose()
 
@@ -92,10 +71,10 @@ class root.AuctionBuyView extends Backbone.View
       url: @$form.attr("action"),
       data: @get_date(),
       type: "POST",
-      success: (xhr) ->
-
-      error: (xhr) ->
-
+      dateType: "html",
+      error: (xhr) =>
+        @$el.html(xhr.responseText)
+        @load_binding()
     )
 
   get_date: () ->

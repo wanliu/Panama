@@ -61,7 +61,7 @@ class Circle < ActiveRecord::Base
 
   def already_has?(user_id)
     begin
-      friends.find(user_id)
+      friends.where(:user_id => user_id)
     rescue
       false
     end

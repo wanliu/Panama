@@ -1,7 +1,10 @@
 <div class="set_location" data-spy="affix" data-offset-top="20">
 
 	<%= simple_form_for @address, :url => "/", :html => {:class => 'form-horizontal set_location_form'} do |address_form| %>
-		<label class="chosen optional control-label change_area" for="circle_address">切换地区</label>
+		<label class="chosen optional control-label" for="circle_address">
+			<span>您所在的地区: <%= @city.try(:name) %> </span>&nbsp;&nbsp;
+			<span class="change_area">切换地区</span>
+		</label>
 		<div class="controls controls-row hide">
 			<div class="control-group">
 				<%= address_form.input :province_id,

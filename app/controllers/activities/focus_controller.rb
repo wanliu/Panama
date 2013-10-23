@@ -41,13 +41,33 @@ class Activities::FocusController < Activities::BaseController
   end
 
   def join
-    @activity = Activity.find_by(:id => params[:id])
-    return unjoin() if @activity.user_participated?(current_user)
-    begin
-      @activity.participates << current_user
-    rescue ActiveRecord::RecordInvalid
+    @activity = focus_activity.find_by(:id => params[:id])
+    address = params[:address]
+    @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
+    @product_item = @transaction.items.build({
+      :product_id => @activity.shop_product.product_id,
+      :amount => params[:product_item][:amount],
+      :title => @activity.title,
+      :price => @activity.focus_price,
+      :buy_state => :guarantee,
+      :shop_id => @activity.shop_id,
+      :user_id => current_user.id
+    })
+    @transaction.pay_manner = PayManner.find(params[:pay_manner_id])
+    @transaction.address = delivery_address(address)
+    @transaction.items.each{|item| item.update_total }
+    respond_to do |format|
+      if @transaction.save
+        @transaction.buyer_fire_event!("buy")
+        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
+        format.html{
+          redirect_to person_transactions_path(current_user.login),
+                    notice: 'Transaction was successfully created.'
+        }
+      else
+        format.html{ render :partial => "/activities/auction/buy.dialog", :status => 403 }
+      end
     end
-    render :text => :OK
   end
 
   def unjoin
@@ -68,8 +88,16 @@ class Activities::FocusController < Activities::BaseController
       end
     end
   end
-end
 
-# module FocusExtension
-#     attr_accessor :activity_price
-# end
+  def focus_activity
+    Activity.where(:activity_type => "focus")
+  end
+
+  def delivery_address(address)
+    if address[:id].present?
+      current_user.delivery_addresses.find(address[:id])
+    else
+      current_user.delivery_addresses.create(address)
+    end
+  end
+end

@@ -59,6 +59,12 @@ class UserChecking < ActiveRecord::Base
     UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, shop_url)
   end
 
+  def self.users_checking_query
+    joins("left join shops sh on user_checkings.owner_id = sh.id and user_checkings.owner_type = 'Shop'
+           left join users us on user_checkings.owner_id = us.id and user_checkings.owner_type = 'User'
+           left join addresses ad on ad.id = user_checkings.address_id")
+  end
+
   protected
     def service_choosen?
       persisted? && !service.blank?
