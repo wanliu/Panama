@@ -15,9 +15,12 @@
 		.businiess_community{
 			margin-left: 20px;
 			margin-bottom: 20px;
-			width: 30%;
 			position: relative;
-
+			.friends_icons{
+				height: 30px;
+				width: 30px;
+				padding-top: 5px;
+			}
 			.popover{
 				top:-65px;
 				color: black;
@@ -33,15 +36,15 @@
 				}
 			}
 
-			.user_icon {
+			.circle_icon {
 				float:left;
 				margin-right:5px;
-				width: 70px;
-				height: 70px;
+				/*width: 70px;
+				height: 70px;*/
 				cursor: pointer;
 			}
 			.circle_detail{
-				margin-left: 80px;
+				margin-left: 120px;
 			}
 		}
 	}
