@@ -1,3 +1,4 @@
+#encoding: utf-8
 class AskBuy < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
