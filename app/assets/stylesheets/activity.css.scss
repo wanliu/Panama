@@ -302,6 +302,15 @@
         }
       }
 
+
+    }
+
+    .address-info, .item-info{
+      .error{
+        input, select{
+          border: 1px solid #b94a48;
+        }
+      }
     }
   }
 }

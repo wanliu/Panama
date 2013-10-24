@@ -71,10 +71,14 @@ class root.ActivityBuyView extends Backbone.View
       url: @$form.attr("action"),
       data: @get_date(),
       type: "POST",
-      dateType: "html",
       error: (xhr) =>
-        @$el.html(xhr.responseText)
-        @load_binding()
+        try
+          message = JSON.parse(xhr.responseText).join("<br />")
+          pnotify(text: message, type: "error")
+        catch error
+          pnotify(
+            text: xhr.responseText,
+            type: "error")
     )
 
   get_date: () ->

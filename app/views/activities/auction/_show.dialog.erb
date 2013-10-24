@@ -86,13 +86,15 @@
             <a class="btn like-count active" href="#"><%= activity.like %></a>
             </div>
             <div class="btn-group">
-              <% if activity.start_sale? %>
-              <button class="btn btn-danger" type="submit" name="join">
-                <%= icon(:'shopping-cart', :white) + " 参与" %>
-              </button>
-              <a class="btn btn-danger partic-button" href="#">
-                <%= activity.participate %>
-              </a>
+              <% if activity.valid_expired? %>
+                <% if activity.start_sale? %>
+                <button class="btn btn-danger" type="submit" name="join">
+                  <%= icon(:'shopping-cart', :white) + " 购买" %>
+                </button>
+                <a class="btn btn-danger partic-button" href="#">
+                  <%= activity.participate %>
+                </a>
+                <% end %>
               <% end %>
             </div>
           </div>

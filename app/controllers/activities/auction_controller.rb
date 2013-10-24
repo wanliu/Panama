@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Activities::AuctionController < Activities::BaseController
 
   def new
@@ -12,7 +13,9 @@ class Activities::AuctionController < Activities::BaseController
   def join
     address = params[:address]
     @activity = activity_auction.find_by(:id => params[:id])
-    @transaction = current_user.transactions.build(seller_id: @activity.shop_id)
+    @transaction = @activity.transactions.build(
+      buyer_id: current_user.id,
+      seller_id: @activity.shop_id)
     @product_item = @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
       :amount => params[:product_item][:amount],
@@ -22,19 +25,23 @@ class Activities::AuctionController < Activities::BaseController
       :shop_id => @activity.shop_id,
       :user_id => current_user.id
     })
-    @transaction.pay_manner = PayManner.find(params[:pay_manner_id])
+    @transaction.pay_manner = PayManner.online_payment
     @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
     respond_to do |format|
-      if @transaction.save
-        @transaction.buyer_fire_event!("buy")
-        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
-        format.html{
-          redirect_to person_transactions_path(current_user.login),
-                    notice: 'Transaction was successfully created.'
-        }
+      if @activity.valid_expired?
+        if @transaction.save
+          @transaction.buyer_fire_event!("buy")
+          format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
+          format.html{
+            redirect_to person_transactions_path(current_user.login),
+                      notice: 'Transaction was successfully created.'
+          }
+        else
+          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
+        end
       else
-        format.html{ render :partial => "/activities/auction/buy.dialog", :status => 403 }
+        format.json{ render :json => ["活动过期,不能购买？"], :status => 403 }
       end
     end
   end

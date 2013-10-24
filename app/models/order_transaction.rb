@@ -67,7 +67,6 @@ class OrderTransaction < ActiveRecord::Base
 
   after_create  :notice_new_order, :state_change_detail, :notice_user
 
-
   def notice_url(current_user)
     url = if self.buyer == current_user
       "/people/#{ current_user.login}/transactions#order#{ self.id}"
@@ -83,7 +82,7 @@ class OrderTransaction < ActiveRecord::Base
       :url => "/shops/#{seller.name}/admins/pending",
       :body => "你有新的订单")
   end
-  after_destroy :notice_destroy, :destroy_operators
+  after_destroy :notice_destroy, :destroy_operators, :destroy_activity
 
   state_machine :initial => :order do
 
@@ -202,6 +201,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       order.buyer_payment
+      order.activity.participate if order.activity.present?
     end
 
     after_transition do |order, transaction|
@@ -411,6 +411,11 @@ class OrderTransaction < ActiveRecord::Base
 
   def get_delivery_price(delivery_id)
     delivery_type.try(:price) || 0
+  end
+
+  def activity
+    ActivitiesOrderTransaction.find_by(
+      :order_transaction_id => id)
   end
 
   #变更状态
@@ -665,5 +670,9 @@ class OrderTransaction < ActiveRecord::Base
 
   def destroy_operators
     operators.destroy_all
+  end
+
+  def destroy_activity
+    activity.destroy if activity.present?
   end
 end

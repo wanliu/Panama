@@ -24,6 +24,7 @@ class Activity < ActiveRecord::Base
   has_many :activities_likes
   has_many :likes, :through => :activities_likes, :source => :user
   has_and_belongs_to_many :attachments, class_name: "Attachment"
+  has_and_belongs_to_many :transactions, class_name: "OrderTransaction"
 
   has_many :activities_participates
   has_many :participates, :through => :activities_participates, :source => :user
@@ -151,6 +152,15 @@ class Activity < ActiveRecord::Base
     if Activity.statuses[:access] == self.status
       errors.add(:status, "已经审核了，不能删除！")
       return false
+    end
+  end
+
+  def valid_expired?
+    if end_time < DateTime.now
+      errors.add(:end_time, "活动已经过期!")
+      false
+    else
+      true
     end
   end
 

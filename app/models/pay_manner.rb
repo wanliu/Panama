@@ -23,4 +23,8 @@ class PayManner < ActiveRecord::Base
   def cash_on_delivery?
   	code == "cash_on_delivery"
   end
+
+  def self.online_payment
+    find_by(:code => :online_payment)
+  end
 end

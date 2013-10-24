@@ -266,7 +266,11 @@ class ActivityViewTemplate extends Backbone.View
   render: () ->
     str = @format_time()
     $time_left = @$el.find(".time-left").html(str)
-    $time_left.addClass("over") unless str != "已结束"
+
+    if str == "已结束"
+      $time_left.addClass("over")
+      $(".buttons>.launch-button", @$el).remove()
+
     @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @
 

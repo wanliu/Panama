@@ -64,11 +64,11 @@
           <div class='span2 title'>
             <abbr title="required">*</abbr>选择地址
           </div>
-          <div class='control-group span9 <%="error" if @transaction.errors[:address_id].size > 0 %>' >
+          <div class='span9 <%="error" if @transaction.errors[:address_id].size > 0 %>' >
             <select class='span12 address_id' name='address[id]'>
               <option></option>
               <% addresses = current_user.delivery_addresses %>
-              <% address_id = @transaction.address_id.nil? ? addresses.first.id : @transaction.address_id %>
+              <% address_id = @transaction.address_id.nil? ? addresses.first.try(:id) : @transaction.address_id %>
               <% addresses.each do |d| %>
 
               <option value="<%=d.id %>" selected="<%= d.id == address_id ? "selected" : "" %>">
@@ -157,20 +157,20 @@
         </div>
         <div class='row-fluid item-info'>
           <div class='span2 title'>
+            <abbr title="required">*</abbr>数量
+          </div>
+          <div class='span4 <%="error" if @transaction.errors["items.amount"].size > 0 %>'>
+            <input type='text' class='span12' name='product_item[amount]' value='1' />
+          </div>
+          <div class='span2 title hide'>
             支付方式
           </div>
-          <div class='span5 pay_manner'>
+          <div class='span4 pay_manner hide'>
             <% PayManner.all.each do |p| %>
             <span>
               <input type='radio' name='pay_manner_id' value='<%=p.id %>' <%="checked" if p.default_state %> /><%=p.name %>
             </span>
             <% end %>
-          </div>
-          <div class='span1 title'>
-            <abbr title="required">*</abbr>数量
-          </div>
-          <div class='control-group span4 <%="error" if @transaction.errors["items.amount"].size > 0 %>'>
-            <input type='text' class='span12' name='product_item[amount]' value='<%= @product_item.try(:amount) || 1 %>' />
           </div>
         </div>
         <% end %>
