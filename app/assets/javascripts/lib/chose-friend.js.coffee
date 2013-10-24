@@ -18,18 +18,15 @@ class ChoseDropDown
   constructor: (opts) ->
     $.extend(true, @, opts)
     @el.append(@ul_el)
-    @render_init_template()
+    @render_template()
 
-  render_init_template: () ->
+  render_template: () ->
     @ul_el.html(@init_template)
 
   render_line_li: (class_name) ->
     li = @line_li.clone()
     li.addClass(class_name).attr("index", @get_li_index())
     @ul_el.append(li)
-
-  render: () ->
-    @el
 
   show: () ->
     if @el.css("display") is "none"
@@ -64,7 +61,7 @@ class ChoseDropDown
     @circle_complete(data)
 
   add_circle_one: (val) ->
-    li = @render_li val, @circle.template
+    li = @render_data val, @circle.template
     li.addClass("circle")
     @ul_el.append(li)
     @load_data(li[0], $.extend(val, {_status: "circle"}))
@@ -77,7 +74,7 @@ class ChoseDropDown
     @followings_complete(data)
 
   add_following_one: (val) ->
-    li = @render_li val, @followings.template
+    li = @render_data val, @followings.template
     li.addClass("following")
     @ul_el.append(li)
     @load_data(li[0], $.extend(val, {_status: "shop"}))
@@ -85,7 +82,10 @@ class ChoseDropDown
   get_li_index: () ->
     @ul_el.find("li").length
 
-  render_li: (val, _template) ->
+  render: () ->
+    @el
+
+  render_data: (val, _template) ->
     attr = @match.exec _template
     while attr? && attr.length > 0
       value = val[attr[1]]
@@ -292,9 +292,12 @@ class ChoseFriend
   sort_item: () ->
     @each_ul_items (i, bli) =>
       @each_ul_items (i, ali) =>
-        bindex = parseInt($(bli).attr("index"))
-        aindex = parseInt($(ali).attr("index"))
+        bindex = @get_el_index($(bli))
+        aindex = @get_el_index($(ali))
         $(bli).before($(ali)) if bindex > aindex
+
+  get_el_index: (el) ->
+    parseInt el.attr("index")
 
   load_init_data: () ->
     @each_ul_items (i, li) =>
@@ -312,9 +315,12 @@ class ChoseFriend
 
   default_value: (data, li) ->
     if data?
-      if (@options.circle.value? && @options.circle.value != "" &&
-      data[@options.circle.value] == @options.circle.default_value) ||
-      data == @options.circle.default_value
+      circle_value = @options.circle.value
+      default_value = @options.circle.default_value
+
+      if (circle_value? && circle_value != "" &&
+      data[circle_value] == default_value) ||
+      data == default_value
         $(li).click()
         @drop_down.hide()
         @options.input.blur()
@@ -372,33 +378,28 @@ class ChoseFriend
     label
 
   confrim_circle: (data, li) ->
-    @confrim_message()
-
-    @options.el.find("input.replace").click () =>
+    @confrim_message () ->
       @close_all_selector_item()
       @_selector_circle data, li
-      @selector_panel.popover("hide")
-
-    @options.el.find("input.cancel").click () =>
-      @selector_panel.popover("hide")
 
   confrim_following: (data, li) ->
-    @confrim_message()
-
-    @options.el.find("input.replace").click () =>
+    @confrim_message () ->
       @_selector_following data, li
-      @selector_panel.popover("hide")
 
-    @options.el.find("input.cancel").click () =>
-      @selector_panel.popover("hide")
-
-  confrim_message: () ->
+  confrim_message: (replace_call) ->
     @selector_panel.popover(
         content: "<p>如果您要与某个商店分享，就无法同时以其他方式分享相应内容。<p/><p>
         <input type='botton' class='btn btn-mini btn-primary replace'value='替换' />
         <input type='botton' class='btn btn-mini cancel' value='取消' /></p>"
         html: true
       ).popover("show")
+
+    @options.el.find("input.replace").click () =>
+      replace_call.call(@)
+      @selector_panel.popover("hide")
+
+    @options.el.find("input.cancel").click () =>
+      @selector_panel.popover("hide")
 
   close_all_selector_item: () ->
     labels = @selector_panel.find(".chose-label>.close-label")
@@ -430,8 +431,7 @@ class ChoseFriend
     }
 
     followings: {
-      template: "
-        <a>
+      template: "<a>
           <img src='{{icon_url}}' class='avatar img-polaroid' />
           <span class='value'>{{name}}</span>
         </a>"

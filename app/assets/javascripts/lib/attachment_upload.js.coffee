@@ -6,6 +6,32 @@
 #= require backbone
 #= require ./fileuploader
 
+#
+# new AttachmentUpload({
+#   el: $("ul"),
+#   //初始化数据
+#   data: init_data,
+#   //是否有默认图片设置
+#   default_enabled: false,
+#   //限制最大只能上传多少张
+#   limit: 5,
+#   params: {
+#     //远程url
+#     url_upload: "/attachment",
+#     //空图的默认图片
+#     default_img_url: "/assets/default.jpg",
+#     //模板
+#     template: ""
+#     //预览图片大小
+#     version_name: "100x100",
+#     //提交到服务器的键值
+#     input_name: "attachment[ids]",
+#     //默认图片的键值，当default_enabled关闭的时候这个不用设置
+#     default_input_name: "default_img[id]"
+#   }
+# })
+
+
 root = (window || @)
 
 class Attachment extends Backbone.Model

@@ -71,6 +71,10 @@
       display: none;
     }
 
+    li.circle-line + li.followings-line{
+      display: none;
+    }
+
     li.divider{
       height: 1px;
       margin: 5px 0px;

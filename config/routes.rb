@@ -142,6 +142,7 @@ Panama::Application.routes.draw do
       collection do
         post "User/:user_id" => "people/followings#user"
         post "Shop/:shop_id" => "people/followings#shop"
+        get :shops
       end
     end
 
@@ -200,8 +201,8 @@ Panama::Application.routes.draw do
     end
   end
 
-  resources :city do 
-    collection do 
+  resources :city do
+    collection do
       get 'province'
     end
   end
