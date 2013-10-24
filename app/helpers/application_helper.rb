@@ -288,7 +288,9 @@ module ApplicationHelper
   end
 
   def upload_tip
-    '请选择小于1MB的jpg/png<br />gif格式的图片<br />'.html_safe
+    '<small>
+      请选择小于1MB的jpg/png<br />gif格式的图片<br />
+    </small>'.html_safe
   end
 
   def city_by_ip(client_ip)

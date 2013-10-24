@@ -132,8 +132,6 @@
         padding-left: 60px;
 
         .author {
-          width: 50px;
-          height: 50px;
           margin-left: -55px;
           float: left;
         }
@@ -186,17 +184,17 @@
           }
         }
       }
-    }
 
-    .buttons {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      display: none;
-    }
+      .buttons {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: none;
+      }
 
-    hr {
-      margin: 5px 0px;
+      hr {
+        margin: 5px 0px;
+      }
     }
 
     &:hover {
