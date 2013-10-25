@@ -270,29 +270,33 @@ class ActivityViewTemplate extends Backbone.View
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
-    str = @format_time()
-    $time_left = @$el.find(".time-left").html(str)
-
-    if str == "已结束"
-      $time_left.addClass("over")
-      $(".buttons>.launch-button", @$el).remove()
-
-    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
+    @show_status(@get_status())
     @
 
-  format_time: () ->
+  show_status: (status) ->
+    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
+    @$el.find(".time-left").html(status.text).addClass(status.name)
+    switch status.name
+      when 'over'  
+        $(".buttons>.launch-button", @$el).remove()
+      when 'waiting'
+        $(".buttons>.launch-button", @$el).remove()
+
+  get_status: () ->
+    time_wait = Date.parse(@model.start_time) - new Date()
+    return {name: 'waiting', text: "敬请期待"} unless time_wait < 0
     time_left =  Date.parse(@model.end_time) - new Date()
-    return "已结束" unless time_left > 0
+    return {name: 'over', text: "已结束"} unless time_left > 0
+
     leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数
     leave2 = leave1%(3600*1000)
     # leave3 = leave2%(60*1000)
-
     days = Math.floor(time_left/(24*3600*1000))
-    return "还剩#{days}天" if days > 0
+    return {name: 'started', text: "还剩#{days}天"} if days > 0
     hours = Math.floor(leave1/(3600*1000))
-    return "仅剩#{hours}小时" if hours > 0
+    return {name: 'started', text: "仅剩#{hours}小时"} if hours > 0
     minutes = Math.floor(leave2/(60*1000))
-    return "最后#{minutes}分钟" if minutes > 0
+    return {name: 'started', text: "最后#{minutes}分钟"} if minutes > 0
     # seconds = Math.round(leave3/1000)
 
 
