@@ -399,13 +399,13 @@ class OrderTransaction < ActiveRecord::Base
 
   #付款
   def buyer_payment
-    buyer.payment(stotal, self)
+    buyer.payment(stotal, self, "订单付款给#{seller.name}")
   end
 
   #卖家收款
   def seller_recharge
     unless pay_manner.cash_on_delivery?
-      seller.user.recharge(stotal, self)
+      seller.user.recharge(stotal, self, "#{buyer.login}购买商品款")
     end
   end
 

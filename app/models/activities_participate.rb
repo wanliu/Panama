@@ -13,6 +13,10 @@ class ActivitiesParticipate < ActiveRecord::Base
     activity_update_participate
   end
 
+  before_create do
+    focus_rebate
+  end
+
   after_destroy do
     activity_update_participate
   end
@@ -20,6 +24,19 @@ class ActivitiesParticipate < ActiveRecord::Base
   private
   def activity_update_participate
     activity.update_participate
+  end
+
+  def focus_rebate
+    if activity.foucs_type?
+      price = activity.focus_spread
+      if price > 0
+        activity.transactions.each do |t|
+          money = price * t.items[0].amount
+          t.seller.user.payment(money, t.buyer, "活动聚集返还金额给#{t.buyer.login}买家")
+          t.buyer.recharge(money, t.seller, "#{t.seller.name}商家，活动聚集返还金额")
+        end
+      end
+    end
   end
 
   def activity_one_user_exists?

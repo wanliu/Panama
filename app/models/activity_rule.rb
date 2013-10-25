@@ -8,4 +8,14 @@ class ActivityRule < ActiveRecord::Base
   def type_val
     self.send(value_type)
   end
+
+  def self.focus_price(participate)
+		rule = order("value desc").find_by("value<=#{participate}")
+		rule = min_level if rule.nil?
+		rule.type_val
+  end
+
+  def self.min_level
+  	order("value asc").limit(1)[0]
+  end
 end

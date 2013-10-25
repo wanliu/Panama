@@ -54,7 +54,6 @@ class Activities::AuctionController < Activities::BaseController
 
     @activity = current_user.activities.build(activity_params)
     @activity.activity_type = "auction"
-    # @activity.url = "http://lorempixel.com/#{200 + rand(200)}/#{400 + rand(400)}"
     unless activity_params[:attachment_ids].nil?
       @activity.attachments = activity_params[:attachment_ids].map do |k, v|
         Attachment.find_by(:id => v)
@@ -70,7 +69,6 @@ class Activities::AuctionController < Activities::BaseController
       if @activity.save
         format.js { render "activities/add_activity" }
       else
-        # @activity.extend(ScoreExtension)
         format.js{ render :partial => "activities/auction/form",
                           :locals  => { :activity => @activity },
                           :status  => 400 }
