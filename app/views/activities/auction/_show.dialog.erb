@@ -12,14 +12,19 @@
             <img class="preview" src="<%= activity.photos.default %>" />
           </div>
           <h4 class="right_bottom2 animate1 fadeInRight">
-            原价: <span><%= activity.price %></span>
+            原价: <span>￥<%= activity.price %></span>
           </h4>
           <h4 class="right_bottom1 animate2 fadeInRight">
-            现价: <span><%= activity.activity_price %></span>
+            现价: <span>￥<%= activity.activity_price %></span>
           </h4>
           <h4>商品描述：</h4>
           <span class='describe'>
             <%= activity.description %>
+          </span>
+          <h4>活动时间：</h4>
+          <span class='describe'>
+            <%= activity.start_time.strftime('%Y年%m月%d日') %> ——  
+            <%= activity.end_time.strftime('%Y年%m月%d日') %>
           </span>
         </div>
         <div class="modal-footer">

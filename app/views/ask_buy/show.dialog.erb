@@ -12,8 +12,11 @@
             <div class='picture'>
               <img class="preview" src="<%=@ask_buy.photos.default %>" />
             </div>
-            <h4 class="right_bottom2 animate1 fadeInRight">价格: <span><%=@ask_buy.price %></span>
-            数量：<span><%=@ask_buy.amount %></span>
+            <h4 class="right_bottom2 animate1 fadeInRight">
+              价格: <span>￥<%=@ask_buy.price %></span>
+            </h4>
+            <h4>
+              求购: <span><%=@ask_buy.amount.to_i %></span>件
             </h4>
             <h4>商品描述：</h4>
             <span style="word-wrap:break-word;margin-left:10px;">
