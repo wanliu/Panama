@@ -32,7 +32,7 @@ class ActivityView extends Backbone.View
     "click .auction .partic-button" : 'addToCard'
     "click .submit-comment"         : "addComment"
     "keyup textarea[name=message]"  : 'filter_state'
-    'submit form.new_product_item'  : 'validate_date'
+    'submit form.new_product_item'  : 'join'
     "click .focus .partic-button"   : "joinFocus"
     "click .focus .unpartic-button" : "unjoinFocus"
 
@@ -49,9 +49,8 @@ class ActivityView extends Backbone.View
     _.extend(@, @options)
 
     @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
-    if $("body>.model-popup-backdrop").length <= 0
-      @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
-
+    @back_drop = new BackDropView()
+    @back_drop.show()
     @loadTemplate () =>
       @$el = $(@render()).appendTo(@$dialog)
       #$(window).scroll()
@@ -108,7 +107,7 @@ class ActivityView extends Backbone.View
 
   close: () ->
     @$dialog.remove()
-    @$backdrop.remove()
+    @back_drop.hide()
     @unmodal()
 
   playAnimate: () ->
@@ -173,6 +172,11 @@ class ActivityView extends Backbone.View
     else
       comment.removeClass("disabled")
 
+  join: () ->
+    new ActivityBuyView({activity_id: @model.id})
+
+    false
+
   validate_date: () ->
     values = @$("form.new_product_item").serializeArray()
     data = {}
@@ -185,6 +189,8 @@ class ActivityView extends Backbone.View
     unless /^\d+(\.?\d+)?$/.test(data['product_item[amount]'])
       pnotify({text: "请输入正确的数量！"})
       return false
+
+    return data
 
 class ActivityPreview extends Backbone.View
 

@@ -164,8 +164,6 @@ class People::TransactionsController < People::BaseController
   def done
   end
 
-  # DELETE /people/transactions/1
-  # DELETE /people/transactions/1.json
   def destroy
     @transaction = current_order.find(params[:id])
     authorize! :destroy, @transaction
@@ -224,12 +222,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def mark_as_read
-    @transaction = Kernel.const_get(params[:owner_type]).find_by(:id => params[:id])
-    # if  == "OrderTransaction"
-    #   @transaction = current_user.transactions.find(params[:id])
-    # else if params[:owner_type] == "DirectTransaction"
-    #   @transaction = current_user.direct_transactions.find(params[:id])
-    # end
+    @transaction = Module.const_get(params[:owner_type]).find_by(:id => params[:id])
     @url = @transaction.notice_url(current_user)
 
     @messages = @transaction.messages.unread

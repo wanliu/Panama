@@ -29,6 +29,7 @@
 //= require lib/stroll
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
+//= require lib/backdrop
 //= require left_sidebar
 //= require topbar
 //= require social_networking/transaction_chat_remind

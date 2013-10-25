@@ -22,9 +22,8 @@ class root.ActivityBuyView extends Backbone.View
     $("#popup-layout").html(@el)
 
     @load_binding()
-    if $("body>.model-popup-backdrop").length <= 0
-      @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
-
+    @backdrop = new BackDropView()
+    @backdrop.show()
     @delegateEvents()
 
   load_binding: () ->
@@ -64,7 +63,7 @@ class root.ActivityBuyView extends Backbone.View
 
   close: () ->
     @remove()
-    @$backdrop.remove()
+    @backdrop.hide()
 
   buy: () ->
     $.ajax(

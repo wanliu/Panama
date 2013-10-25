@@ -40,6 +40,10 @@ class Activity < ActiveRecord::Base
 
   before_create :init_data
 
+  before_validation(:on => :create) do
+    valid_befor_init
+  end
+
   before_destroy do
     validate_destroy_access?
   end
@@ -77,6 +81,9 @@ class Activity < ActiveRecord::Base
     self.shop_id = author.shop.id
     self.like = like
     self.participate = participate
+  end
+
+  def valid_befor_init
     if self.activity_type == "focus"
       self.price = self.activity_rules.map{|a| a.dvalue}.min
     end

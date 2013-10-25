@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Activities::FocusController < Activities::BaseController
 
   def new
@@ -43,8 +44,7 @@ class Activities::FocusController < Activities::BaseController
   def join
     @activity = focus_activity.find_by(:id => params[:id])
     address = params[:address]
-    @transaction = @activity.transactions.build(
-      buyer_id: current_user.id
+    @transaction =current_user.transactions.build(
       seller_id: @activity.shop_id)
     @product_item = @transaction.items.build({
       :product_id => @activity.shop_product.product_id,
@@ -61,6 +61,7 @@ class Activities::FocusController < Activities::BaseController
     respond_to do |format|
       if @activity.valid_expired?
         if @transaction.save
+          @activity.transactions << @transaction
           @transaction.buyer_fire_event!("buy")
           format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
           format.html{

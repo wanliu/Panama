@@ -880,6 +880,14 @@ body>.model-popup-backdrop{
 	filter: alpha(opacity=70);
 }
 
+body>.model-popup-backdrop.in{
+	display: block;
+}
+
+body>.model-popup-backdrop.out{
+	display: none;
+}
+
 #popup-layout {
 	.container{
 		width: 100%;
