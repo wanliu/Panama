@@ -1,1 +1,18 @@
-<%= render "address" %>
+<div class="region offset1">
+    <div class="region_name">请输入区域名
+        <input type="text" name="region_name" class="region_name_input">
+    </div>
+	<%= render "address" %>
+	<%= render "upload_photo" %>
+	 <div class='region_create'>
+        <button class="btn">创建</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    new RegionView({
+        el : $(".region")
+    })
+  })
+</script>

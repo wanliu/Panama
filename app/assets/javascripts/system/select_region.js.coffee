@@ -51,7 +51,7 @@ class  root.SelectRegionView extends Backbone.View
 						<input type='checkbox' id='#{part["id"]}' value='#{part["name"]}'/>
 							#{part["name"]}
 					</li>" 
-				$(".address_part_list").html(strHtml)
+				$(".city_list").html(strHtml)
 		})
 
 

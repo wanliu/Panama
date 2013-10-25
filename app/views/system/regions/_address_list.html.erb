@@ -20,14 +20,17 @@
             <button class="btn">确定</button>
         </div>
         <ul class="address_part_list">
+            <% @region.region_cities.each do |city| %>
+                <li id="<%=city.city_id %>"><%=City.find(city.city_id).try(:name) %><i class="icon-remove"></i></li>
+            <% end %>
         </ul>
     </div>
 </div>
 
 <script type="text/javascript">
-  $(function(){
+$(function(){
     new SelectRegionView({
       el: $(".address_select")
     })
-  })
+})
 </script>

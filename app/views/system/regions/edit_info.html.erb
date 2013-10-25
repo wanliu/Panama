@@ -1,0 +1,47 @@
+<div class="edit_region offset1">
+    <div>
+      <input type="hidden" name="region" class="region_id" value="<%= @region.id %>">
+    </div>
+    <div class="region_name">请输入区域名
+        <input type="text" name="region_name" class="region_name_input" value="<%= @region.name %>">
+    </div>
+	<%= render "address_list" %>
+	<div class="reset_avatar main_panle">
+    <div id="image_bottom">
+        <div class="hidden_one" id="hidden_text">
+          <%#= upload_tip %>
+        </div>
+        <div class="update_photo_panle  upload_user_avatar file-box">
+        </div>
+    </div>
+	</div>
+	<div class='photo_upload'>
+	    <ul class='attachment-list'>
+	    </ul>
+	</div>
+
+	 <div class='region_create'>
+        <button class="btn">创建</button>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    new AttachmentUpload({
+      data: <%= @region.attachments.to_json.html_safe %>,
+      el: $(".attachment-list"),
+      limit: 5,
+      default_enabled: false,
+      params: {
+        url_upload: "/attachments",
+        default_img_url: "<%= default_img_url('100x100') %>",
+        version_name: "100x100",
+        template: "<%=j render 'upload_template' %>",
+        input_name: "address[attachment_ids]",
+      }
+    })
+
+    new RegionView({
+      el : $(".edit_region")
+    })
+})
+</script>
