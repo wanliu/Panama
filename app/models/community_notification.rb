@@ -1,3 +1,4 @@
+#encoding: utf-8
 class CommunityNotification < ActiveRecord::Base
   attr_accessible :body, :target, :send_user, :circle
 
@@ -11,5 +12,11 @@ class CommunityNotification < ActiveRecord::Base
       :targeable_type => "CommunityNotification")
     n.update_attribute(:read, true) if n.present?
     update_attribute(:state, true)
+  end
+
+  def apply_state_title
+    return "没有处理"  if apply_state.nil?
+    return "同意" if apply_state
+    return "拒绝" unless apply_state
   end
 end
