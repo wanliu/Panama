@@ -80,7 +80,7 @@ class FindUserView extends Backbone.View
             <span>没有找到符合要求的用户或商店</span>
           </div>")
 
-  events: 
+  events:
     "click .find_people" : "find_user"
 
   find_user: () ->
@@ -90,23 +90,24 @@ class FindUserView extends Backbone.View
       type: "get",
       data: {q: @$(".input_info").val() ,area_id: @options.area_id }
       success: (datas) =>
-        debugger
         @render(datas)
         new YellowInfoPreviewList({el : @el })
     })
 
   render: (datas) =>
-    debugger
     if datas.length == 0
       $(@notice).insertBefore(@$(".wrapper"))
     else
       @$(".alert").fadeOut()
-      @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
+      #@$(".wrapper > div").animate({
+      #  left: '20px'},'slow', () => @$(".wrapper > div").fadeOut());
+      @$(".wrapper").html ""
       _.each datas, (data) =>
         tpl = if data.service_id == 1
           @buyer_template
         else
           @seller_template
+
         @$(".wrapper").append(tpl.render(data))
 
 
