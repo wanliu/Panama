@@ -9,6 +9,7 @@
           <tr>
             <th>内容</th>
             <th>状态</th>
+            <th>申请状态</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -20,6 +21,9 @@
             </td>
             <td>
               <%= n.state ? '已读' : '未读' %>
+            </td>
+            <td>
+              <%=n.apply_state_title  %>
             </td>
             <td>
               <%= link_to "查看", "#{shop_admins_communities_path(current_shop)}/apply_join/#{n.id}" %>

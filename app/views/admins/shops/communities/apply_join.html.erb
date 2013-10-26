@@ -14,7 +14,7 @@
               </a>
               用户申请加入你的<%=@cnotification.circle.name %>圈子
             </div>
-            <% unless @cnotification.state %>
+            <% if @cnotification.apply_state.nil? %>
               <div class='toolbar'>
                 <input type='button' value='同意' class='btn btn-primary agree' />
                 <input type='button' value='拒绝' class='btn refuse' />

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131024070028) do
+ActiveRecord::Schema.define(:version => 20131026053721) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -273,6 +273,7 @@ ActiveRecord::Schema.define(:version => 20131024070028) do
     t.string   "target_type"
     t.integer  "send_user_id"
     t.integer  "circle_id"
+    t.boolean  "apply_state"
   end
 
   create_table "contact_friends", :force => true do |t|
