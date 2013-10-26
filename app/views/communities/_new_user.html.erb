@@ -1,11 +1,13 @@
 <div class='base_info newer widget'>
-	<h3>新入驻成员</h3>
-	<div class="hot_city newer">
+	<div class="title row-fluid">
+		<div class="span4"><span style="font-size:25px;font-weight:bold;">新入驻成员</span></div>
+		<div class="span8"><%= render "find_people" %></div>
+	</div>
+	<div class="hot_region newer row-fluid">
 		<strong>热门城市: </strong>
 		<span></span>
 	</div>
 	<%#= render "new_address" , locals: {:id => "new_user"} %>
-	<%= render "find_people" %>
 	<div class="wrapper row-fluid">
 		<% if  @new_users.length > 0 %>
 			<% @new_users.each do |new_user| %>

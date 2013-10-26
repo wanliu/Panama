@@ -2,7 +2,7 @@
 
 	<%= simple_form_for @address, :url => "/", :html => {:class => 'form-horizontal set_location_form'} do |address_form| %>
 		<label class="chosen optional control-label" for="circle_address">
-			<span>您所在的地区: <%= @city.try(:name) %> </span>&nbsp;&nbsp;
+			<span>您所在的地区: <%= @city.try(:name) %>(<%= @region.try(:name)%>) </span>&nbsp;&nbsp;
 			<span class="change_area">切换地区</span>
 		</label>
 		<div class="controls controls-row hide">

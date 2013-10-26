@@ -160,6 +160,13 @@ ActiveRecord::Schema.define(:version => 20131024070028) do
     t.datetime "updated_at",    :null => false
   end
 
+  create_table "attachments_region", :force => true do |t|
+    t.integer  "region_id"
+    t.integer  "attachment_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "banks", :force => true do |t|
     t.string   "name"
     t.string   "code"
@@ -681,13 +688,6 @@ ActiveRecord::Schema.define(:version => 20131024070028) do
     t.integer  "region_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "region_pictures", :force => true do |t|
-    t.integer  "region_id"
-    t.integer  "attachment_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
   end
 
   create_table "regions", :force => true do |t|
