@@ -18,12 +18,12 @@
           </div>
           <div  class="circle_detail">
             <div class ="circle_name">
-              <a href ="#"><%=circle.name %></a>
+              <a href ="/shops/<%=Shop.find(circle.owner_id).try(:name) %>/admins/circles/<%=circle.id %>"><%=circle.name %></a>
             </div>
             <div class="create_name">
               <span><i class="icon-user"></i></span>
-              <a href="/people/<%= circle.owner.try(:user).try(:login) %>">
-                <%= circle.owner.user.login %>
+              <a href="/shops/<%=Shop.find(circle.owner_id).try(:name) %>">
+                <%=Shop.find(circle.owner_id).try(:name) %>
               </a>
             </div>
             <div class="join">

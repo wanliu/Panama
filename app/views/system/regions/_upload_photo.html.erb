@@ -1,0 +1,29 @@
+<div class="reset_avatar main_panle">
+    <div id="image_bottom">
+        <div class="hidden_one" id="hidden_text">
+          <%#= upload_tip %>
+        </div>
+        <div class="update_photo_panle  upload_user_avatar file-box">
+        </div>
+    </div>
+</div>
+<div class='photo_upload'>
+    <ul class='attachment-list'></ul>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        new AttachmentUpload({
+          el: $(".attachment-list"),
+          limit: 5,
+          default_enabled: false,
+          params: {
+            url_upload: "/attachments",
+            default_img_url: "<%= default_img_url('100x100') %>",
+            version_name: "100x100",
+            template: "<%=j render 'upload_template' %>",
+            input_name: "address[attachment_ids]",
+          }
+        })
+    })
+</script>

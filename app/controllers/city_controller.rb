@@ -10,7 +10,7 @@ class CityController < ApplicationController
 
 
     def province
-        @province = City.where(:ancestry=>"1")
+        @province = City.where(:ancestry=>City.roots[0].id.to_s)
         respond_to do |format|
             format.html
             format.json { render json: @province}

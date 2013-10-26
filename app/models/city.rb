@@ -3,6 +3,5 @@ class City < ActiveRecord::Base
 
   has_one :address
   has_one :delivery_addresses
-  has_many :region_cities
   has_ancestry
 end
