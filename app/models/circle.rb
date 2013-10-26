@@ -60,11 +60,7 @@ class Circle < ActiveRecord::Base
   end
 
   def already_has?(user_id)
-    begin
-      friends.where(:user_id => user_id)
-    rescue
-      false
-    end
+    friends.exists?(["user_id=?", user_id])
   end
 
   def valid_name?

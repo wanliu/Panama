@@ -22,25 +22,27 @@
 				padding-top: 5px;
 			}
 			.popover{
-				top:-65px;
+				top:-100px;
 				color: black;
 			}
 
 			@include transparent(rgb(51,51,51),0.4);
 			.head_img{
+				position: relative;
+				height: 100px;
+				float: left;
+
 				a{
-					position: relative;
-					.label-important{
+					.circle_count{
 						background-color: #db4a37;
+						position: absolute;
+						bottom: 0px;
+						right: 0px;
 					}
 				}
 			}
 
 			.circle_icon {
-				float:left;
-				margin-right:5px;
-				/*width: 70px;
-				height: 70px;*/
 				cursor: pointer;
 			}
 			.circle_detail{

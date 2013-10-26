@@ -10,5 +10,6 @@ class CommunityNotification < ActiveRecord::Base
       :targeable_id => id,
       :targeable_type => "CommunityNotification")
     n.update_attribute(:read, true) if n.present?
+    update_attribute(:state, true)
   end
 end
