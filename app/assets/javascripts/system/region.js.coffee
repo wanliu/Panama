@@ -53,6 +53,9 @@ class RegionView extends Backbone.View
 			data: {region_name: $region_name, part_ids: $part_ids, attachment_ids: $attachment_ids, region_id :$region_id }
 			success: () ->
 				window.location.href = "/system/regions"
+			error: (rep) ->
+				m = JSON.parse(rep.responseText)
+				pnotify({text: m })
 		})
 
 root.RegionView = RegionView

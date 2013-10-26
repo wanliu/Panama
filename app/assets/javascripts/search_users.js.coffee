@@ -4,35 +4,35 @@ class SearchUserView extends Backbone.View
 
   events:
     "click .search_user" : "form_query_user"
-    "click .hot_city_search" : "hot_city_search"
+    "click .hot_region_search" : "hot_region_search"
 
   initialize: () ->
     _.extend(@, @options)
-    @get_hot_cities()
+    @get_hot_regions()
     @buyer_template = Hogan.compile($("#buyer_base_template").html())
     @seller_template = Hogan.compile($("#seller_base_template").html())
-    @hot_city_template = Hogan.compile("<a id='{{ area_id }}' href='#' class='hot_city_search'>{{ name }}</a>&nbsp;")
+    @hot_region_template = Hogan.compile("<a id='{{ id }}' href='#' class='hot_region_search'>{{ name }}</a>&nbsp;")
     @notice = $("<div class='alert'>
             <button type='button' class='close' data-dismiss='alert'>&times;</button>
             <span>您搜索的区域暂时没有成员～～～～</span>
           </div>")
 
-  get_hot_cities: () ->
+  get_hot_regions: () ->
     $.ajax({
       dataType: "json",
       type: "get",
-      url: "/communities/hot_city_name",
+      url: "/communities/hot_region_name",
       success: (datas) =>
         _.each datas, (data) =>
-          @$(".hot_city span").append(@hot_city_template.render(data))
+          @$(".hot_region span").append(@hot_region_template.render(data))
     })
 
-  hot_city_search: (event) ->
+  hot_region_search: (event) ->
     id = event.currentTarget.id
     $.ajax({
       dataType: "json",
       type: "get",
-      data:{address: {area_id: id}} ,
+      data:{region_id: id } ,
       url: "/communities/search",
       success: (datas) =>
         @render(datas)

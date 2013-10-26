@@ -4,7 +4,10 @@ class CommunitiesController < ApplicationController
 	before_filter :login_and_service_required
 
 	def location_region(city_id)
-		@region = RegionCity.find_by(:city_id => city_id).region
+		RegionCity.find_by(:city_id => city_id).region
+	end
+
+	def region_cities(region)
 		city_ids = []
 		@region.region_cities.each do |c|
 			city_ids << c.city_id
@@ -28,7 +31,8 @@ class CommunitiesController < ApplicationController
 	end
 
 	def city_index
-		city_ids = location_region(params[:city_id])
+		@region = location_region(params[:city_id])
+		city_ids = region_cities(@region)
 		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
 								 .where("user_checkings.checked = true and addr.area_id in (?)", city_ids)
 								 .group('user_checkings.id')
@@ -67,7 +71,8 @@ class CommunitiesController < ApplicationController
 										    :circles => @circles,
 										    :top_10_shops => @top_10_shops,
 										    :city => @city,
-										    :address => @address }}
+										    :address => @address,
+										    :region => @region }}
 		end
 	end
 
@@ -79,16 +84,12 @@ class CommunitiesController < ApplicationController
 		end
 	end
 
-	def hot_city_name
-		@hot_cities = Address.joins("left join cities as c on c.id=addresses.area_id")
-							 .select("count(addresses.area_id) as count,c.name,addresses.area_id")
-							 .group("addresses.area_id")
-							 .order("count desc")
-							 .limit(8)
+	def hot_region_name
+		@hot_cities = Region.joins("left join region_cities as rc on regions.id=rc.region_id left join addresses as ad on rc.city_id=ad.area_id left join user_checkings as uc on uc.address_id=ad.id")
+							.select("regions.*, count(uc.id) as count")
+							.order("count desc")
+							.group("rc.region_id")
 
-
-
-					# Region.joins("right join region_cities as rg on rg.region_id=regions.id left join cities ")
 		respond_to do |format|
 			format.html # show.html.erb
 			format.json { render json: @hot_cities }
@@ -96,10 +97,13 @@ class CommunitiesController < ApplicationController
 	end
 
 	def search
+		@region = Region.find(params[:region_id])
+		city_ids = region_cities(@region)
 		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
-							 .where("addr.area_id=?",params[:address][:area_id])
+							 .where("addr.area_id in (?)",city_ids)
 							 .group("user_checkings.id")
 							 .order("user_checkings.created_at desc")
+							 
 		respond_to do |format|
 			format.html
 			format.json{ render json: @users}

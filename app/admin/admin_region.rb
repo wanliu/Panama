@@ -35,15 +35,27 @@ ActiveAdmin.register Region do
 
   collection_action :create_region,:method => :post do
     unless params[:region_id ].nil?
-      Region.find(params[:region_id]).delete
+      Region.find(params[:region_id]).destroy
     end
-    @region = Region.create!(:name => params[:region_name])
-    params[:part_ids].map { |city_id| RegionCity.create!(:region_id => @region.id, :city_id => city_id) }  unless  params[:part_ids].nil?
-
-    unless params[:attachment_ids].nil?
-      @region.attachments = params[:attachment_ids].map do |k, v|
-        Attachment.find_by(:id => k)
-      end.compact
+    begin
+      @region = Region.create(:name => params[:region_name])
+      unless params[:attachment_ids].nil?
+        @region.attachments = params[:attachment_ids].map do |k, v|
+          Attachment.find_by(:id => k)
+        end.compact
+      end
+      unless  params[:part_ids].nil?
+        params[:part_ids].map do |city_id| 
+          RegionCity.create(
+            :region_id => @region.id, 
+            :city_id => city_id) 
+          # raise ""  unless region_city.valid?
+        end
+      end
+    rescue Exception => e
+      respond_to do |format|
+        format.json{ render json: e }
+      end
     end
     redirect_to action: :index
   end
