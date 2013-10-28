@@ -228,10 +228,15 @@
 			}
 		}
 	}
+	.find_circles_panel{
+		margin-bottom: 20px;
+	}
 	.find_people_panel{
+		margin-bottom: 10px;
+	}
+	.find_people_panel, .find_circles_panel{
 		margin-left: 0px;
 		margin-top: 10px;
-		margin-bottom: 10px;
 		.tips{
 			font-size:16px;
 			margin-left:20px;

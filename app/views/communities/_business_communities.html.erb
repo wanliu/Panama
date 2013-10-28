@@ -1,5 +1,11 @@
 <div class=' widget circles'>
-  <h3><%= @city.try(:name) %>商圈</h3>
+  <div class="title row-fluid">
+    <div class="span4">
+      <span style="font-size:25px;font-weight:bold;"><%= @city.try(:name) %>商圈</span>
+    </div>
+    <div class="span8"> <%= render "find_circles" %></div>
+  </div>
+ 
   <div class ="wrapper row-fluid circles-list">
     <% if @circles.length > 0 %>
       <% @circles.each do |circle| %>

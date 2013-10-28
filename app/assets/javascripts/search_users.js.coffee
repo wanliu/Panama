@@ -107,6 +107,20 @@ class FindUserView extends Backbone.View
           @seller_template
         @$(".wrapper").append(tpl.render(data))
 
+class FindCircleView extends Backbone.View
 
+  initialize: () ->
+    _.extend(@, @options)
+    @circle_template = Hogan.compile()
+    @notice = $("<div class='alert'>
+            <button type='button' class='close' data-dismiss='alert'>&times;</button>
+            <span>没有找到符合要求的本地商圈</span>
+          </div>")
+    
+  find_circle: () ->
+
+
+
+# root FindCircleView = FindCircleView
 root.FindUserView = FindUserView
 root.SearchUserView = SearchUserView

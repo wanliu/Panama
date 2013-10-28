@@ -5,10 +5,22 @@ class SearchController < ApplicationController
 
   def user_checkings
     query_val = "%#{params[:q]}%"
-    @user_checkings = UserChecking.users_checking_query.where("(sh.name like ? or (us.login like ? or us.email like ?)) and ad.area_id=?",query_val,query_val,query_val,params[:area_id]).limit(9)
+    @region = location_region(params[:area_id])
+    city_ids = region_cities(@region)
+    @user_checkings = UserChecking.users_checking_query.where("(sh.name like ? or (us.login like ? or us.email like ?)) and ad.area_id in (?)",query_val,query_val,query_val,city_ids).limit(9)
     respond_to do |format|
       format.json{ render json: @user_checkings }
     end
+  end
+
+  def circles
+    query_val = "%#{params[:q]}%"
+    @region  = location_region(params[:area_id])
+    my_circles_ids = current_user.circles.pluck("id")
+    my_friends = CircleFriends.where(:circle_id => my_circles_ids).select("distinct user_id").pluck("user_id")
+    city_ids = region_cities(@region)
+    @circles = Circle.joins("").where("circles.name like ? and ad.area_id in (?)",query_val,city_ids)
+    @friends = User.joins("right join circle_friends as cf on cf.user_id = users.id ").select("users.*, cf.circle_id as circle_id").where("cf.circle_id in (?) and users.id in (?)",@circles.pluck("circles.id"), my_friends).limit(3)
   end
 
   def users

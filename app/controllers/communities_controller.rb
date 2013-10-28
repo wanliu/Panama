@@ -1,19 +1,8 @@
 class CommunitiesController < ApplicationController
+	include
 	layout "communities"
 
 	before_filter :login_and_service_required
-
-	def location_region(city_id)
-		RegionCity.find_by(:city_id => city_id).region
-	end
-
-	def region_cities(region)
-		city_ids = []
-		@region.region_cities.each do |c|
-			city_ids << c.city_id
-		end 
-		city_ids
-	end
 
 	def index
 		if !cookies[:city_id].blank?
@@ -31,17 +20,15 @@ class CommunitiesController < ApplicationController
 	end
 
 	def city_index
-		@region = location_region(params[:city_id])
-		city_ids = region_cities(@region)
+		@region = RegionCity.location_region(params[:city_id])
+		city_ids = @region.region_cities_ids()
 		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
 								 .where("user_checkings.checked = true and addr.area_id in (?)", city_ids)
 								 .group('user_checkings.id')
 								 .order('created_at DESC')
 								 .limit(15)
 
-		my_circles_ids = current_user.circles.pluck("id")
-		my_friends = CircleFriends.where(:circle_id => my_circles_ids).select("distinct user_id").pluck("user_id")
-
+		my_friends = current_user.circle_all_friends.pluck("id")
 
 		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.circle_id left join addresses as addr on addr.area_id = circles.city_id")
 						.where("created_type = 'advance' and circles.city_id in (?) ", city_ids)
@@ -97,8 +84,8 @@ class CommunitiesController < ApplicationController
 	end
 
 	def search
-		@region = Region.find(params[:region_id])
-		city_ids = region_cities(@region)
+		@region = RegionCity.location_region(params[:city_id])
+		city_ids = @region.region_cities
 		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
 							 .where("addr.area_id in (?)",city_ids)
 							 .group("user_checkings.id")
