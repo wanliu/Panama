@@ -1,6 +1,3 @@
-#describe: 圈子视图
-#= require twitter/bootstrap/modal
-
 root = (window || @)
 
 class Circle extends Backbone.Model
@@ -33,7 +30,6 @@ class Circle extends Backbone.Model
       success: callback
     )
 
-
 class CircleList extends Backbone.Collection
   model: Circle
 
@@ -63,13 +59,12 @@ class CircleList extends Backbone.Collection
   followers: () ->
     @fetch( url: "#{@url}/followers" )
 
-
 class CircleUser extends Backbone.View
   tagName: "span"
   className: "label user"
-  events: 
+  events:
     "click .remove_user" : "cloes_user"
-  
+
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -131,10 +126,10 @@ class CircleUserList extends Backbone.View
 class CircleView extends Backbone.View
   className: "alert alert-info circle"
 
-  events: 
+  events:
     "click .remove_circle": "delete_circle"
     "click .update-circle": "update_circle"
-  
+
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -193,11 +188,11 @@ class CircleView extends Backbone.View
 
 
 class CircleViewList extends Backbone.View
-  events: 
+  events:
     "click .add-circle"         : "show_add_circle"
     "click .save-circle"        : "create_circle"
     "keypress input#circle_name": "key_up"
-  
+
   initialize: (options) ->
     _.extend(@, options)
 
@@ -252,7 +247,6 @@ class CircleViewList extends Backbone.View
   remove_all_circle_user: (user_id) ->
     @circles.each (model) =>
       model.trigger("remove_user", user_id)
-
 
 root.Circle = Circle
 root.CircleList = CircleList

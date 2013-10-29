@@ -16,7 +16,7 @@ class Admins::Shops::CommunitiesController < Admins::Shops::SectionController
     @friend = @cnotification.circle.join_friend(@cnotification.send_user)
     respond_to do |format|
       if @friend.valid?
-        @cnotification.update_attribute(:apply_state, true)
+        @cnotification.agree(current_user)
         format.json{ head :no_content }
       else
         format.json{ render :json => draw_errors_message(@friend), :status => 403 }
@@ -26,9 +26,8 @@ class Admins::Shops::CommunitiesController < Admins::Shops::SectionController
 
   def refuse_join
     @cnotification = current_shop_notification.find(params[:cn_id])
-    @cnotification.apply_state = false
     respond_to do |format|
-      if @cnotification.save
+      if @cnotification.refuse(current_user)
         format.json{ head :no_content }
       else
         format.json{ render :json => draw_errors_message(@cnotification), :status => 403 }

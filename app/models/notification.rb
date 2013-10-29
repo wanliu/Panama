@@ -5,7 +5,7 @@ class Notification < ActiveRecord::Base
   scope :unreads, where(:read => false)
   scope :reads, where(:read => true)
 
-  attr_accessible :url, :body, :mentionable_user_id, :user_id, :targeable_type, :targeable_id
+  attr_accessible :url, :body, :mentionable_user_id, :user_id, :targeable_type, :targeable_id, :targeable, :mentionable_user, :user
 
   belongs_to :user
   belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"

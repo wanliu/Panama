@@ -1,26 +1,33 @@
-<% circle_active :all %>
-<% content_for :topic_right do %>
-<div>
-  <div class='title'>最近加入好友</div>
-  <div class='content'>
-    <ul class='friend-list'>
-      <% friends = user_recently_friends %>
-      <% if friends.count > 0 %>
-        <% friends.each do |f| %>
-        <li class='friend'>
-          <img class='img-polaroid' src="<%=f.icon %>" /><%=f.login %>
-        </li>
-        <% end %>
-      <% else %>
-        <li>暂时没有好友...</li>
-      <% end %>
-    </ul>
+<% active_section :communities %>
+
+<div class='row-fluid communty'>
+  <div class='span9'>
+    <div class='row-fluid title'>
+      <div class='span8'>
+        <h4>你的商圈</h4>
+      </div>
+      <div class='span4'>
+        <input type='button' class='btn btn-primary' value='创建商圈' />
+        <input type="text" class="search-query" placeholder="搜索商圈...">
+      </div>
+    </div>
+    <div class='row-fluid body'>
+      <div class='span12 widget circles'>
+      </div>
+    </div>
+  </div>
+  <div class='span3'>
   </div>
 </div>
-<div>
-  <div class='title'>我可能认识的人</div>
-</div>
-<% end %>
-<%=render partial: "people/topics/info", locals: {
-  circles: @circles,
-  circle: :all} %>
+
+<script type="text/template" id='you-template-circle'>
+  <%= render :partial => "circles/circle", :locals => {:path => person_communities_path(current_user)}  %>
+</script>
+
+<script type='text/javascript'>
+  var community = new CommunityView({
+    el: $(".communty")
+  })
+
+  community.fetch_circles("<%= person_circles_path(current_user) %>")
+</script>

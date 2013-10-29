@@ -121,9 +121,6 @@ Panama::Application.routes.draw do
     end
 
     resources :communities, :controller => "people/communities" do
-      collection do
-        get "people"
-      end
     end
 
     resources :circles, :controller => "people/circles" do

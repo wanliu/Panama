@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
+<%= html_tag :class => "no-js" %>
+<%= render "head", :styles => ["community"], :javascripts => [:community] %>
+<body class="<%= controller.controller_name %>" style="zoom: 1">
+  <%= render "chromeframe" %>
+  <%= render "logo" %>
+  <%= render "circle_sidebar" %>
+  <div class="wrap">
+    <%= render "header" %>
+    <div class='content container-fluid'>
+      <%= yield %>
+    </div>
+  </div>
+  <div id="popup-layout"></div>
+  <%= render "right_sidebar" %>
+  <%= render "footer" %>
+  <%= render "baidu_analyzer" %>
+</body>
+</html>

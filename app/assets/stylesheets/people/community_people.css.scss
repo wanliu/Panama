@@ -1,3 +1,4 @@
+@import "lib/transparent";
 .user-community-people{
 
   .close-label{
@@ -94,6 +95,53 @@
           }
         }
       }
+    }
+  }
+}
+
+.communty{
+  .title{
+
+    input.search-query{
+      width: 121px;
+    }
+  }
+
+  .body{
+    .circle{
+      @include transparent(rgb(51, 51, 51), 0.4);
+      margin-bottom: 10px;
+      margin-right: 10px;
+      width: 230px;
+      display: inline-block;
+
+      .photo{
+        display: inline-block;
+        width: 80px;
+
+        img{
+          height: 80px;
+          width: 80px;
+        }
+      }
+
+      .info{
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 10px;
+      }
+
+      a{
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+      }
+
+    }
+
+    .circles{
+      padding: 15px 0px 15px 13px;
     }
   }
 }

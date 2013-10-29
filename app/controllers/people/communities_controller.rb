@@ -1,9 +1,12 @@
 class People::CommunitiesController < People::BaseController
 
   def index
-    @circles = @people.circles
   end
 
-  def people
+  def show
+    @circle = Circle.find_by(:id => params[:id])
+    respond_to do |format|
+      format.html{ render :layout => "circles" }
+    end
   end
 end

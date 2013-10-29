@@ -13,6 +13,7 @@
 #= require people/followers
 #= require following
 #= require people/cart
+#= require people/community
 #= require people/community_people
 #= require people/order_refund_card
 #= require people/people_side

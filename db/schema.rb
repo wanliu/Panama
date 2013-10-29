@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131026060427) do
+ActiveRecord::Schema.define(:version => 20131029015742) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -226,6 +226,7 @@ ActiveRecord::Schema.define(:version => 20131026060427) do
     t.integer  "circle_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "identity"
   end
 
   create_table "circle_settings", :force => true do |t|
@@ -239,12 +240,12 @@ ActiveRecord::Schema.define(:version => 20131026060427) do
     t.string   "name"
     t.integer  "owner_id"
     t.string   "owner_type"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.string   "description"
     t.integer  "city_id"
     t.integer  "setting_id"
-    t.string   "created_type", :default => "basic"
+    t.integer  "attachment_id"
   end
 
   create_table "cities", :force => true do |t|
