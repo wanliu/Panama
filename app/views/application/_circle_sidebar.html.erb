@@ -46,7 +46,12 @@
       <ul class='member'>
         <% @circle.friends.each do |f| %>
           <li>
-            <img src="<%=f.photos.icon %>" />
+            <img class='photo' src="<%=f.photos.icon %>" />
+            <% if f.manage? %>
+            <a href='javascript:void(0)' data-toggle="tooltip" data-placement="bottom" title="" data-original-title="管理员" class='tag'>
+              <img src="/assets/tag.png" />
+            </a>
+            <% end %>
           </li>
         <% end %>
       </ul>

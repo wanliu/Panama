@@ -69,7 +69,7 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user
     uid = user.id if user.is_a?(User)
-    friends.create(user_id: uid)
+    friends.create_member(user_id: uid)
   end
 
   def remove_friend(user)

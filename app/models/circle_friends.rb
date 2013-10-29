@@ -40,6 +40,10 @@ class CircleFriends < ActiveRecord::Base
     create(options)
   end
 
+  def manage?
+    self.identity == :manage
+  end
+
   def self.create_member(user_id, circle_id = nil)
     options = {user_id: user_id, identity: :member}
     options[:circle_id] = circle_id if circle_id.present?
