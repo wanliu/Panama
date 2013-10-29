@@ -60,6 +60,8 @@ Panama::Application.routes.draw do
       get "hot_region_name", :to => "communities#hot_region_name"
       get "search", :to => "communities#search"
     end
+
+    resources :circles, :only => [:index], :controller => "communities/circles"
   end
 
   resources :people do
@@ -446,6 +448,7 @@ Panama::Application.routes.draw do
       get "join_friend/:friend_id", :to => "contact_friends#join_friend"
     end
   end
+
   match "attachments", :to => "attachments#index"
   match "attachments/upload", :to => "attachments#upload", :via => :post
   match "attachments/:id", :to => "attachments#destroy", :via => :delete

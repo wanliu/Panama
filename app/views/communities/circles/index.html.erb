@@ -8,6 +8,11 @@
         </div>
         <div class='span10'>
           <select class='span12'>
+            <% @circle.categories.each do |c| %>
+            <option value="<%=c.id %>">
+              <%=c.name %>
+            </option>
+            <% end %>
           </select>
         </div>
       </div>
