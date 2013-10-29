@@ -1,10 +1,13 @@
 <div class="edit_region offset1">
-    <div>
-      <input type="hidden" name="region" class="region_id" value="<%= @region.id %>">
-    </div>
-    <div class="region_name">请输入区域名
-        <input type="text" name="region_name" class="region_name_input" value="<%= @region.name %>">
-    </div>
+  <div>
+    <input type="hidden" name="region" class="region_id" value="<%= @region.id %>">
+  </div>
+  <div class="region_name">请输入区域名
+      <input type="text" name="region_name" class="region_name_input" value="<%= @region.name %>">
+  </div>
+  <div class="advertisement">请输入广告词
+    <textarea class="ad" value="<%= @region.advertisement %>"> <%= @region.advertisement %></textarea>
+  </div>
 	<%= render "address_list" %>
 	<div class="reset_avatar main_panle">
     <div id="image_bottom">
