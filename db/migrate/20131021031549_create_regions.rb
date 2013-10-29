@@ -11,10 +11,10 @@ class CreateRegions < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_table :attachments_regions do |t|
-    	t.integer :region_id
-    	t.integer :attachment_id
-    	t.timestamps
-    end
+    # create_table :attachments_regions do |t|
+    # 	t.integer :region_id
+    # 	t.integer :attachment_id
+    # 	t.timestamps
+    # end
   end
 end

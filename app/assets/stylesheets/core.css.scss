@@ -934,9 +934,14 @@ body>.model-popup-backdrop.out{
 					}
 				}
 
-				.main-show{
+				.main-show {
 					height: auto;
 					max-height: 525px;
+
+					.focus_progress {
+						width: 80%;
+						margin-top: 15px;
+					}
 				}
 
 				.big_comments_and_reply {

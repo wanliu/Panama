@@ -103,12 +103,15 @@ class FindUserView extends Backbone.View
       $(@notice).insertBefore(@$(".wrapper"))
     else
       @$(".alert").fadeOut()
-      @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
+      #@$(".wrapper > div").animate({
+      #  left: '20px'},'slow', () => @$(".wrapper > div").fadeOut());
+      @$(".wrapper").html ""
       _.each datas, (data) =>
         tpl = if data.service_id == 1
           @buyer_template
         else
           @seller_template
+
         @$(".wrapper").append(tpl.render(data))
 
 class FindCircleView extends Backbone.View
