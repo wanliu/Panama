@@ -45,14 +45,14 @@ module CategoryHelper
   		"<li class='accordion-group'>
 	      <a class='accordion-toggle collapsed' data-toggle='collapse' data-parent='#forms-collapse-#{ category.parent.id }' href='#forms-collapse-#{ category.id }'>
 	        <i class='icon-caret-right'></i>
-	        <span class='name'> #{ category.name } </span>
+	        <span>#{ category.name }</span>
 	      </a>"
   end
 
   def descendant_categories_html(category)
   	html = ""
   	if category.children.size > 0
-	      html << "<ul id='forms-collapse-#{ category.id }' class='accordion-body collapse lv2_categories'>"
+	      html << "<ul id='forms-collapse-#{ category.id }' class='collapse lv2_categories'>"
 	        category.children.each do |child|
 	        	html << second_class_category_tree_of(child)
 	        end

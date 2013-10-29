@@ -32,19 +32,15 @@ class LeftSideBar extends Backbone.View
 		@apply_states()
 
 	toggleAuto: (event) ->
-		# $(".logo").removeClass(ICON_CLASS)
 		$(@$el).removeClass(ICON_CLASS)
 		@$(".side-nav").removeClass(ICON_CLASS)
-		@$("#category-sidebar").show()
 		@$(".attention").show()
 		$(".wrap").removeClass(ICON_CLASS)
 		$(window).trigger('resize')
 
 	toggleIcons: (event) ->
-		# $(".logo").addClass(ICON_CLASS)
 		$(@$el).addClass(ICON_CLASS)
 		@$(".side-nav").addClass(ICON_CLASS)
-		@$("#category-sidebar").hide()
 		@$(".attention").hide()
 		$(".wrap").addClass(ICON_CLASS)
 		$(window).trigger('resize')
@@ -59,8 +55,8 @@ class CategoryTree extends Backbone.View
 
 	initialize: () ->
 		@$(".icon-caret-right").remove()
-		@$("#forms-collapse").children().css("color","rgba(217, 255, 205, 0.77)")
-		@$(".accordion-group >ul").css("color","white")
+		# @$("#forms-collapse").children().css("color","rgba(217, 255, 205, 0.77)")
+		# @$(".accordion-group >ul").css("color","white")
 
 	toggle_tree: (event) ->
 		@$("#forms-collapse").toggle()
