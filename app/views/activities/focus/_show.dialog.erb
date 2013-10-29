@@ -9,17 +9,23 @@
         </div>
         <div class="modal-body main-show">
           <div class='picture'>
-            <img class="preview" src="<%=activity.photos.default %>" />
+           <img class="preview" src="<%=activity.photos.default %>" />
           </div>
           <h4 class="right_bottom2 animate1 fadeInRight">
             原价: <span><%=activity.price %></span>
           </h4>
           <h4>现价:</h4>
           <span class="right_bottom1 animate2 fadeInRight">
-            <% activity.activity_rules.each do |ar| %>
-              人数<%= ar.value %>时，价格为<%= number_to_currency(ar.dvalue) %>;
+            <% ars = activity.activity_rules.order("value") %>
+            <% current_ar = ars.first %>
+            <% ars.each do |ar| %>
+              <% if(activity.participate <= ar.value.to_i) %>
+                <% current_ar = ar %>
+              <% end %>
+              人数<%= ar.value %>/价格<%= number_to_currency(ar.dvalue) %>;
             <% end %>
           </span>
+          <div class="focus_progress"></div>
           <h4>商品描述：</h4>
           <span class='describe'>
             <%= activity.description %>
@@ -120,4 +126,23 @@
       <%%= content %>
     </div>
   </div>
+</script>
+
+<script type="text/javascript">
+  $(function(){
+    bar = $('.focus_progress');
+    bar.bind('positionChanged', function(event) {
+      event.bar.changedLabel = '当前' + event.bar.position/event.bar.zoom_percent + '人';
+    })
+    bar.bind('labelLoaded', function(event) {
+      i = event.labelIndex;
+      event.bar.loadedLabel = Math.ceil(event.bar.markers[i]/event.bar.zoom_percent) + 
+        '人/￥' + event.bar.markerLabels[i];
+    })
+    bar.progressbar({
+      markers: <%= ars.pluck(:value).map do |ar| ar = ar.to_i end %>, 
+      markerLabels: <%= ars.pluck(:dvalue).map do |ar| ar = ar.to_f end %>,
+      minimum: <%= Rails.env.development? ? (activity.participate+40) : activity.participate %>
+    })
+  })
 </script>
