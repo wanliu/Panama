@@ -3,56 +3,48 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .yellow_page{
-	hr {
-		margin: 10px 0;
-		border: 0;
-		border-top: 1px solid #eeeeee;
-		border-bottom: 1px solid white;
-	}
 
 	.circles{
-
 		.businiess_community{
-			margin-left: 20px;
 			margin-bottom: 20px;
-			position: relative;
-			.friends_icons{
-				height: 30px;
-				width: 30px;
-				padding-top: 5px;
-			}
-			.popover{
-				top:-100px;
-				color: black;
-			}
-
+			margin-left: 20px;
 			@include transparent(rgb(51,51,51),0.4);
-			.head_img{
-				position: relative;
-				height: 100px;
-				float: left;
-
-				a{
-					.circle_count{
-						background-color: #db4a37;
-						position: absolute;
-						bottom: 0px;
-						right: 0px;
-					}
-				}
-			}
-
-			.circle_icon {
-				cursor: pointer;
+			-webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
+			box-shadow: 1px 2px 0 rgba(0,0,0,.05);
+			width: 30%;
+			background-color: "";
+			height: 310px;
+			.circle_icon{
+				height: 200px;
+				width: 240px;
 			}
 			.circle_detail{
-				margin-left: 120px;
+				margin-left: 10px;
+				.circle_name{
+					color: #FFFFFF;
+					font-size: 16px;
+					margin-bottom: 5px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					margin-top: 5px;
+				}
+				.circle_count{
+					color: #FFFFFF;
+					font-size: 13px;
+				}
+				.friends_icons{
+					img{
+						height: 30px;
+						width: 30px;
+						padding-top: 5px;
+					}
+				}
 			}
 		}
 	}
 
-
-	.new_user, .seller_user, .buyer_user, .businiess_community{
+	.new_user, .seller_user, .buyer_user{
 		@include transparent(rgb(51,51,51),0.4);
 		margin-bottom: 20px;
 		margin-left: 20px;
@@ -60,8 +52,93 @@
 		box-shadow: 1px 2px 0 rgba(0,0,0,.05);
 		width: 30%;
 		background-color: "";
+		.hover_place{
+			top: 0px;
+			left: 0px;
+		}
+		.user_base_info {
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			background-color: #fff;
+			overflow: hidden;
+			text-align: center;
+			display: none;
+			width: 240px;
+			height: 300;
+			z-index:1;
+
+			.userinfo {
+				margin-top: 110px;
+				.contact {
+					line-height: 30px;
+					padding-top: 20px;
+					background-color: rgba(231, 192, 192, 0.09);
+					.icon-leaf {
+						color: green;
+					}
+				}
+			}
+
+			.login, .shop_name {
+				-webkit-transition: color .218s;
+				transition: color .218s;
+				a {
+					color: #338DCE;
+				}
+				font-weight: bold;
+				margin-bottom: -40px;
+			}
+
+			.industry_type {
+				color: #160f0f;
+				font-size: 13px;
+				line-height: 20px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				margin-top: 40px;
+			}
+
+			.tel{
+				color: #160f0f;
+			}
+
+			.entry, .add_friend {
+				text-align: center;
+				a{
+					color: #338DCE;
+				}
+			}
+
+			.bg_nature {
+				opacity: .80;
+				background-color: #000;
+				height: 135px;
+				left: 0;
+				position: absolute;
+				right: 0;
+				top: 0;
+				padding-top: 0px;
+				width: 240px;
+				height: 150px;
+			}
+
+			div {
+				padding-top: 6px;
+			}
+
+			.circle_avatar {
+				position: relative;
+				img{
+					height: 50px;
+					width: 50px;
+				}
+			}
+		}
 	}
-	/*.newer{ margin-left: -15px;}*/
 	.base_info{
 		.alert{
 			margin-right: 20px;
@@ -85,93 +162,23 @@
 		}
 
 		.user_info{
-			.title {
+			.content {
+				margin-top: 5px;
 				float:left;
-				padding-top:15px;
-			}
-
-			.tel {
-				color: #9bd0f6;
-				font-size: 13px;
+				margin-left: 2px;
 			}
 
 			.name {
 				color: #404040;
 				font-size: 13px;
 				font-weight: bold;
-			}
-		}
-	}
-
-	.yellow_base_info {
-		-webkit-border-radius: 3px;
-		border-radius: 3px;
-		background-color: #fff;
-		overflow: hidden;
-		position: absolute;
-		text-align: center;
-		display: none;
-		top:70px;
-		left:0px;
-		width: 240px;
-		height: 300;
-		z-index:1;
-
-		.userinfo {
-			margin-top: 110px;
-			.contact {
-				line-height: 30px;
-				padding-top: 20px;
-				background-color: rgba(231, 192, 192, 0.09);
-				.icon-leaf {
-					color: green;
+				.title{
+					color: rgb(210, 224, 50);
+					font-size: 16px; 
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 				}
-			}
-		}
-
-		.login, .shop_name {
-			-webkit-transition: color .218s;
-			transition: color .218s;
-			color: #427fed;
-			font-weight: bold;
-			margin-bottom: -40px;
-		}
-
-		.industry_type {
-			color: #737373;
-			font-size: 13px;
-			line-height: 20px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			margin-top: 40px;
-		}
-
-		.entry, .add_friend {
-			text-align: center;
-		}
-
-		.bg_nature {
-			opacity: .80;
-			background-color: #000;
-			height: 135px;
-			left: 0;
-			position: absolute;
-			right: 0;
-			top: 0;
-			padding-top: 0px;
-			width: 240px;
-			height: 150px;
-		}
-
-		div {
-			padding-top: 6px;
-		}
-
-		.circle_avatar {
-			position: relative;
-			img{
-				height: 50px;
-				width: 50px;
 			}
 		}
 	}
@@ -226,6 +233,9 @@
 				padding-top: 8px;
 				padding-left: 20px;
 			}
+			.follow, .unfollow{
+				cursor: pointer;
+			}
 		}
 	}
 	.find_circles_panel{
@@ -241,7 +251,7 @@
 			font-size:16px;
 			margin-left:20px;
 		}
-		.input_info{
+		.people_input_info, .circle_input_info{
 			margin-bottom: 0px!important;
 		}
 	}

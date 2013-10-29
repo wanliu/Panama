@@ -1,6 +1,6 @@
 root = window || @
 
-class SearchUserView extends Backbone.View
+class SearchUsersView extends Backbone.View
 
   events:
     "click .search_user" : "form_query_user"
@@ -71,6 +71,10 @@ class SearchUserView extends Backbone.View
 
 class FindUserView extends Backbone.View
 
+  events: 
+    "click .find_people" : "find_user"
+    "keypress input.people_input_info" : "key_up"
+
   initialize: () ->
     _.extend(@, @options)
     @buyer_template = Hogan.compile($("#buyer_base_template").html())
@@ -80,15 +84,15 @@ class FindUserView extends Backbone.View
             <span>没有找到符合要求的用户或商店</span>
           </div>")
 
-  events: 
-    "click .find_people" : "find_user"
+  key_up: (e) =>
+    @find_user() if e.keyCode == 13
 
   find_user: () ->
     $.ajax({
       dataType: "json",
       url: "/search/user_checkings",
       type: "get",
-      data: {q: @$(".input_info").val() ,area_id: @options.area_id }
+      data: {q: @$(".people_input_info").val() ,area_id: @options.area_id }
       success: (datas) =>
         @render(datas)
         new YellowInfoPreviewList({el : @el })
@@ -109,18 +113,32 @@ class FindUserView extends Backbone.View
 
 class FindCircleView extends Backbone.View
 
+  events: 
+    "click .find_circle" : "find_circle"
+    "keypress input.circle_input_info": "key_up"
+
   initialize: () ->
     _.extend(@, @options)
-    @circle_template = Hogan.compile()
     @notice = $("<div class='alert'>
             <button type='button' class='close' data-dismiss='alert'>&times;</button>
             <span>没有找到符合要求的本地商圈</span>
           </div>")
-    
+
+  key_up: (e) =>
+    @find_circle() if e.keyCode == 13
+
   find_circle: () ->
+    $.ajax({
+      url: "/search/circles.dialog",
+      type: "get",
+      data: {q: @$(".circle_input_info").val() ,area_id: @options.area_id }
+      success: (datas) =>
+        if datas == ""
+          $(@notice).insertBefore(@$(".wrapper"))
+        else
+          @$(".wrapper").html(datas)
+    })
 
-
-
-# root FindCircleView = FindCircleView
 root.FindUserView = FindUserView
-root.SearchUserView = SearchUserView
+root.SearchUsersView = SearchUsersView
+root.FindCircleView = FindCircleView

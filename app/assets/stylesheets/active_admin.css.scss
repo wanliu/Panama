@@ -202,10 +202,19 @@ table.index_table th{ text-align: center !important; }
     min-height: 100px;
   }
 
+  .advertisement{
+    font-size: 16px;
+    textarea{
+      width: 400px;
+      margin-left: 10px;
+      margin-bottom: 20px;
+    }
+  }
+
   .region_name{
     font-size: 16px;
     padding-right: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     .region_name_input{
       margin-left: 10px;
     }

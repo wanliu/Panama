@@ -63,14 +63,6 @@ class CommunitiesController < ApplicationController
 		end
 	end
 
-	def show
-		@user = UserChecking.find(params[:id])
-		respond_to do |format|
-		  format.html # show.html.erb
-		  format.json{ render json: @user }
-		end
-	end
-
 	def hot_region_name
 		@hot_cities = Region.joins("left join region_cities as rc on regions.id=rc.region_id left join addresses as ad on rc.city_id=ad.area_id left join user_checkings as uc on uc.address_id=ad.id")
 							.select("regions.*, count(uc.id) as count")
@@ -85,7 +77,7 @@ class CommunitiesController < ApplicationController
 
 	def search
 		@region = RegionCity.location_region(params[:city_id])
-		city_ids = @region.region_cities
+		city_ids = @region.region_cities_ids()
 		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
 							 .where("addr.area_id in (?)",city_ids)
 							 .group("user_checkings.id")
