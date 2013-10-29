@@ -1054,7 +1054,7 @@ h2 small {
 
 .sidebar-icons {
 	#sidebar-settings {
-		padding-left: 15px;
+		// padding-left: 15px;
 	}
 
 	#category-sidebar {
@@ -1063,7 +1063,7 @@ h2 small {
 		}
 
 		.lv2_categories {
-			left: 80px;
+			// left: 126px;
 		}
 	}
 }
@@ -1094,7 +1094,7 @@ h2 small {
 		padding-bottom: 20px;
 		@include transparent(rgb(62, 112, 108), 0.91);
 
-		.second_class_category_tree {
+		.lv2_category_tree {
 			width: 240px;
 			display: inline-block;
 			vertical-align: top;
@@ -1110,7 +1110,7 @@ h2 small {
 				padding: 4px 10px 4px 0;
 			}
 
-			li.third_class_category_node {
+			li.lv3_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
 				a {
