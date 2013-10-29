@@ -30,11 +30,11 @@ class Activity < ActiveRecord::Base
   has_many :participates, :through => :activities_participates, :source => :user
 
   # validates_associated :product
-  validates :price, :activity_price, :numericality => { :greater_than => 0 }, :presence => true
-  validates :author, :title, :activity_price, :start_time, :end_time, :shop_product_id, :presence => true
+  validates :price, :numericality => { :greater_than => 0 }, :presence => true
+  validates :author, :title, :start_time, :end_time, :shop_product_id, :presence => true
 
   validate :validate_update_access?, :on => :update, :except => :update_like
-  validate :validate_focus?
+  validate :validate_focus?, :validate_auction?
 
   define_graphical_attr :photos, :handler => :default_photo
 
@@ -69,14 +69,6 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def focus_price
-    if activity_type == "focus"
-      activity_rules.order(:value).find_by("value>#{participate}").type_val
-    else
-      0
-    end
-  end
-
   def init_data
     self.shop_id = author.shop.id
     self.like = like
@@ -84,8 +76,8 @@ class Activity < ActiveRecord::Base
   end
 
   def valid_befor_init
-    if self.activity_type == "focus"
-      self.price = self.activity_rules.map{|a| a.dvalue}.min
+    if foucs_type?
+      self.price = activity_rules.map{|r| r.type_val}.min
     end
   end
 
@@ -114,11 +106,13 @@ class Activity < ActiveRecord::Base
   end
 
   def activity_price
-    rule = activity_rules.find { |rule| rule.name == 'activity_price' }
-    if rule.blank?
-      ""
+    case activity_type
+    when "auction"
+      auction_price
+    when "focus"
+      current_focus_price
     else
-      rule[rule.value_type]
+      0
     end
   end
 
@@ -145,6 +139,10 @@ class Activity < ActiveRecord::Base
       end
     end
     return false
+  end
+
+  def foucs_type?
+    activity_type == "focus"
   end
 
   def send_checked_mail
@@ -225,13 +223,53 @@ class Activity < ActiveRecord::Base
     }.to_json
   end
 
+  def auction_type?
+    activity_type == "auction"
+  end
+
+  def focus_price
+    _focus_price(participate + 1)
+  end
+
+  def focus_spread
+    activity_price - focus_price
+  end
+
   private
   def validate_focus?
-    if activity_type == "focus"
+    if foucs_type?
       if activity_rules.length <= 0
         errors.add(:people_number, "不能为空！")
         errors.add(:activity_price, "不能为空！")
       end
+    end
+  end
+
+  def validate_auction?
+    if auction_type?
+      if activity_rules.length <= 0
+        errors.add(:activity_price, "不能为空！")
+      end
+    end
+  end
+
+  def current_focus_price
+    _focus_price(participate)
+  end
+
+  def _focus_price(value)
+    if foucs_type?
+      activity_rules.focus_price(value)
+    else
+      0
+    end
+  end
+
+  def auction_price
+    if auction_type?
+      activity_rules[0].type_val
+    else
+      0
     end
   end
 

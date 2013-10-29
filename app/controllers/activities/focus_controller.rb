@@ -77,14 +77,14 @@ class Activities::FocusController < Activities::BaseController
     end
   end
 
-  def unjoin
-    @activity = Activity.find(params[:id])
-    begin
-      @activity.participates.delete(current_user)
-    rescue ActiveRecord::RecordNotFound
-    end
-    render :text => :OK
-  end
+  # def unjoin
+  #   @activity = Activity.find(params[:id])
+  #   begin
+  #     @activity.participates.delete(current_user)
+  #   rescue ActiveRecord::RecordNotFound
+  #   end
+  #   render :text => :OK
+  # end
 
   private
   def parse_time!(activity_params)

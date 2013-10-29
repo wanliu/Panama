@@ -1,77 +1,77 @@
 <% active_section :person_info %>
 
 <div class='row-fluid'>
-	<div class='span7'>
-		<div class='widget people_info'>
-			<section>
-				<header>
-					<h4><i class="icon-user"></i>个人账户</h4>
-				<header>
-				<div class='body'>
-					<div class='row-fluid'>
-						<div class='span8'>
-							<dl class="dl-horizontal">
-								<dt>用户名</dt>
-								<dd><%= @people.login %></dd>
-							</dl>
-							<dl class="dl-horizontal">
-								<dt>E-mail</dt>
-								<dd><%= @people.email %></dd>
-							</dl>
-							<% if can?(:manage, User) %>
-								<dl class="dl-horizontal">
-									<dt>余 额</dt>
-									<dd><%=@people.money %></dd>
-								</dl>
-							<% end %>
-						</div>
-					</div>
-					<% if can?(:manage, User) %>
-					<div class='row-fluid'>
-						<div class='span12' style='text-align:right;'>
-							<a href="<%= edit_person_path(@people) %>">修改资料</a>
-						</div>
-					</div>
-					<% end %>
-				</div>
-			</section>
-		</div>
-		<% if can?(:manage, User) %>
-			<div class='widget'>
-				<section>
-					<header>
-						<h4><i class="icon-list-ol"></i>进出帐</h4>
-					<header>
-				</section>
-				<div class='body'>
-					<table class='table table-striped table-images'>
-						<thead>
-							<tr>
-								<th>流水号</th>
-								<th>金额</th>
-								<th>支付类型</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<% if !@people.money_bills.present? %>
-								<tr>
-									<td colspan="4">您还没有交易记录</td>
-								</tr>
-							<% else %>
-								<% @people.money_bills.each do |bill| %>
-									<tr>
-										<td><%= bill.serial_number %></td>
-										<td><%= bill.money %></td>
-										<td><%= bill.owner_name %></td>
-										<td><%= bill.owner_value %></td>
-									</tr>
-								<% end %>
-							<% end %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		<% end %>
-	</div>
+  <div class='span7'>
+    <div class='widget people_info'>
+      <section>
+        <header>
+          <h4><i class="icon-user"></i>个人账户</h4>
+        <header>
+        <div class='body'>
+          <div class='row-fluid'>
+            <div class='span8'>
+              <dl class="dl-horizontal">
+                <dt>用户名</dt>
+                <dd><%= @people.login %></dd>
+              </dl>
+              <dl class="dl-horizontal">
+                <dt>E-mail</dt>
+                <dd><%= @people.email %></dd>
+              </dl>
+              <% if can?(:manage, User) %>
+                <dl class="dl-horizontal">
+                  <dt>余 额</dt>
+                  <dd><%=@people.money %></dd>
+                </dl>
+              <% end %>
+            </div>
+          </div>
+          <% if can?(:manage, User) %>
+          <div class='row-fluid'>
+            <div class='span12' style='text-align:right;'>
+              <a href="<%= edit_person_path(@people) %>">修改资料</a>
+            </div>
+          </div>
+          <% end %>
+        </div>
+      </section>
+    </div>
+    <% if can?(:manage, User) %>
+      <div class='widget'>
+        <section>
+          <header>
+            <h4><i class="icon-list-ol"></i>进出帐</h4>
+          <header>
+        </section>
+        <div class='body'>
+          <table class='table table-striped table-images'>
+            <thead>
+              <tr>
+                <th>流水号</th>
+                <th>金额</th>
+                <th>支付类型</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if !@people.money_bills.present? %>
+                <tr>
+                  <td colspan="4">您还没有交易记录</td>
+                </tr>
+              <% else %>
+                <% @people.money_bills.each do |bill| %>
+                  <tr>
+                    <td><%= bill.serial_number %></td>
+                    <td><%= bill.money %></td>
+                    <td><%= bill.owner_name %></td>
+                    <td><%= bill.decription %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
