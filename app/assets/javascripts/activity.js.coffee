@@ -247,6 +247,7 @@ class ActivityPreview extends Backbone.View
     @load_view(event.currentTarget)
     new ActivityBuyView({activity_id: @model.id})
 
+
 class ProductViewTemplate extends Backbone.View
   initialize: () ->
     @template = Hogan.compile($("#product-preview-template").html())
@@ -256,6 +257,7 @@ class ProductViewTemplate extends Backbone.View
     @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @
 
+
 class ShopProductViewTemplate extends Backbone.View
 
   initialize: () ->
@@ -263,7 +265,9 @@ class ShopProductViewTemplate extends Backbone.View
     @$el = $(@template.render(@model)) if @template
 
   render: () ->
+    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @
+
 
 class ActivityViewTemplate extends Backbone.View
   initialize: () ->
@@ -444,6 +448,7 @@ class LoadActivities extends InfiniteScrollView
         # $(event.currentTarget)
         # .find(".preview")
         # .removeClass("animate0 " + "flipInY")
+    # $('[data-toggle="tooltip"]', @sp_el).tooltip({placement: 'bottom'})
 
 
 root.ActivityModel = ActivityModel

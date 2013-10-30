@@ -108,6 +108,11 @@
           font-size: 16px;
         }
 
+        .amount {
+          float: right;
+          margin-right: 15px;
+        }
+
         .title {
           margin-top: 0px;
           margin-bottom: 5px;
@@ -119,6 +124,18 @@
 
           span:first-child{
             margin-right: 10px;
+          }
+        }
+
+        .time-left {
+          opacity: 1;
+          float: right;
+          color: yellow;
+          font-size: 1.1em;
+          margin-right: 15px;
+
+          &.over {
+            opacity: 0.5;
           }
         }
       }
@@ -144,18 +161,6 @@
 
         .title{
           margin-right: 5px;
-        }
-
-        .time-left {
-          opacity: 1;
-          float: right;
-          color: yellow;
-          font-size: 1.1em;
-          margin-right: 5px;
-        }
-
-        .time-left.over {
-          opacity: 0.5;
         }
       }
 
