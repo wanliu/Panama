@@ -19,6 +19,7 @@ class Topic < ActiveRecord::Base
 
   has_many :comments, as: :targeable, dependent: :destroy
   has_many :attachments, class_name: "TopicAttachment", dependent: :destroy
+  has_many :participates, class_name: "TopicParticipate", dependent: :destroy
 
   validates :content, :presence => true
 
@@ -31,6 +32,10 @@ class Topic < ActiveRecord::Base
 
   def content_format_html
     self.content_html = text_format_html(self.content)
+  end
+
+  def update_participate
+    update_attribute(:participate, participates.count)
   end
 
   def as_json(*args)

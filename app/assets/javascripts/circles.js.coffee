@@ -10,7 +10,8 @@ class root.CircleListView extends Backbone.View
     @$left = @$(".left")
     @$right = @$(".right")
 
-    @topic = new TopicViewList(
+    @topics = new TopicViewList(
+      sp_el: @el,
       add_topic: _.bind(@add_topic, @),
       fetch_url: "/communities/#{@circle_id}/topics")
 
@@ -19,24 +20,16 @@ class root.CircleListView extends Backbone.View
       create_topic: _.bind(@create_topic, @),
       el: @$(".left>.toolbar"))
 
-    @load_template()
+  add_topic: (template) ->
+    @short_elem().append(template)
 
-  add_topic: (data) ->
-    @short_elem().append(@template.render(data))
-    $("abbr.timeago").timeago();
-
-  create_topic: (data) ->
-    @short_elem().prepend(@template.render(data))
-    $("abbr.timeago").timeago();
+  create_topic: (template) ->
+    @short_elem().prepend(template)
 
   short_elem: () ->
     ltopic = $(".topics", @$left)
     rtopic = $(".topics", @$right)
     if ltopic.height() > rtopic.height() then rtopic else ltopic
-
-  load_template: () ->
-    template = $("#create-topic-template").remove().html()
-    @template = Hogan.compile(template)
 
 
 

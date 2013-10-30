@@ -45,7 +45,8 @@ class CreateTopicView extends Backbone.View
       data: {topic: data},
       success: (data) =>
         @$content.val('')
-        @create_topic(data)
+        view = new TopicView(data: data)
+        @create_topic(view.render())
     )
     false
 
@@ -57,6 +58,8 @@ class CreateTopicView extends Backbone.View
     data
 
 class LoadTopicList extends InfiniteScrollView
+  msg_el: "#load_message_notifiy"
+
   initialize: (options) ->
     @fetch_url = options.fetch_url
     @add_one = options.add_one
@@ -65,15 +68,50 @@ class LoadTopicList extends InfiniteScrollView
 class TopicViewList extends Backbone.View
 
   initialize: (options) ->
-    _.extend(@, options)
+    @add_topic = options.add_topic
+    @sp_el = options.sp_el
+
     new LoadTopicList(
+      sp_el: @sp_el,
       add_one: _.bind(@add_one, @),
-      fetch_url: @fetch_url)
+      fetch_url: options.fetch_url)
 
   add_one: (data) ->
-    @add_topic(data)
+    view = new TopicView(data: data)
+    @add_topic(view.render())
 
+class TopicView extends Backbone.View
+  className: "row-fluid topic-panel"
+  events: {
+    "click .send_comment" : "show_commnet"
+    "click .comment_form .cancel" : "hide_comment"
+    "submit form.comment_form" : "comment"
+  }
+  initialize: (options) ->
+    @model = new Topic(options.data)
+    @load_template()
+    @$el = $(@el)
 
+  render: () ->
+    @$el.html(@template.render(@model.toJSON()))
+    @$("abbr.timeago").timeago()
+    @$el
+
+  load_template: () ->
+    template = $("#create-topic-template").html()
+    @template = Hogan.compile(template)
+
+  show_commnet: () ->
+    @$(".send_comment").hide()
+    @$(".comment_panel").show()
+
+  hide_comment: () ->
+    @$(".send_comment").show()
+    @$(".comment_panel").hide()
+
+  comment: () ->
+
+    return false
 
 root.CreateTopicView = CreateTopicView
 root.TopicViewList = TopicViewList

@@ -1,61 +1,66 @@
-<div class='row-fluid topic-panel'>
-  <div class='span12 widget'>
-    <div class='topic'>
-      <div class="row-fluid">
-        <div class="span2">
-          <div class='user-info'>
-            <div>
-              <img src="{{user.icon_url}}" class="avatar img-circle" />
-            </div>
+<div class='span12 widget'>
+  <div class='topic'>
+    <div class="row-fluid info">
+      <div class="span12">
+        <div class='user-info'>
+          <div>
+            <img src="{{user.icon_url}}" class="avatar img-circle" />
           </div>
         </div>
-        <div class="span10">
+        <div>
           <div class='send_user'>
           <a href='/people/{{user_id}}'>
             {{user.login}}
           </a>
           </div>
           <div>
-            {{category.name}} -
+            <a href='/communities/{{circle_id}}/circles/{{category_id}}/category'>{{category.name}}</a> -
             <abbr class='timeago topic_date' title='{{created_at}}'>
             </abbr>
           </div>
         </div>
       </div>
-      <div>
-        {{{content_html}}}
+    </div>
+    <div>
+      {{{content_html}}}
+    </div>
+    <hr class='line' />
+    <div class='attachments'>
+    </div>
+    <div class='topic-comments'>
+      <div class="row-fluid comment_bar">
+        <a href='javascript:void(0)' data-toggle="tooltip" data-placement="top" data-original-title="赞一个">
+          <i class='icon-thumbs-up'></i>
+        </a>
+        <a href='javascript:void(0)' class='more_comment pull-right display'>
+          更多评论
+          <i class="icon-chevron-down"></i>
+        </a>
       </div>
-      <hr class='line' />
-      <div class='attachments'>
+      <div class='comments_panel'></div>
+      <div class='send_comment' tabindex='-1'>
+        发表评论...
       </div>
-      <div class='topic-comments'>
-        <div class="pull-left row-fluid">
-          <a href='javascript:void(0)' class='more_comment'></a>
-          <a href='javascript:void(0)' class='hide_more_comment'>隐藏评论  <i class=" icon-chevron-up" style="text-decoration: none;"></i></a>
-        </div>
-        <div class='comments_panel'></div>
-        <hr class='line' />
-        <div class='topic_nav'>
-          <input type="text" class="show_comment span12" placeholder="发表评论...">
-        </div>
-
-        <div class="comment_panel">
-          <div class='row-fluid'>
-            <div class='span1'>
-              <div class='user_avatar'></div>
-              <div class='user_login'></div>
+      <div class="comment_panel">
+        <div class='row-fluid'>
+          <div class='span1'>
+            <div class='user_avatar'>
+              <img src="<%=current_user.photos.icon %>" />
             </div>
-            <div class='span11'>
-              <form class='comment_form'>
-                <div>
-                  <textarea name='content'></textarea>
-                </div>
-                <div style="margin-left:10px;">
-                  <input type='submit' value='发布评论' class='btn btn-primary disabled' />
-                  <input type='button' value='取消' class='btn cancel' />
-                </div>
-              </form>
+            <div class='user_login'>
+              <%=current_user.login %>
             </div>
+          </div>
+          <div class='span11'>
+            <form class='comment_form'>
+              <div>
+                <textarea class='span12' name='content'></textarea>
+              </div>
+              <div>
+                <input type='submit' value='发布评论' class='btn btn-primary disabled' />
+                <input type='button' value='取消' class='btn cancel' />
+              </div>
+            </form>
           </div>
         </div>
       </div>
