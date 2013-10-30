@@ -74,7 +74,7 @@ body.communities{
   }
 }
 
-.topics{
+.community{
   .right{
 
     .setting{
@@ -96,6 +96,10 @@ body.communities{
         float: right;
       }
     }
+
+    .invite{
+      margin-right: 20px;
+    }
   }
 
   .left{
@@ -107,6 +111,41 @@ body.communities{
       .title{
         line-height: 30px;
       }
+    }
+
+
+  }
+
+  .left, .right{
+
+    .widget{
+      margin-bottom: 15px;
+    }
+
+    .topic-panel{
+
+      .topic{
+        .user-info{
+          text-align: center;
+
+          .avatar{
+            width: 40px;
+            height: 40px;
+          }
+        }
+
+        .line{
+          margin: 10px 0;
+        }
+
+        .topic-comments{
+
+          .comment_panel{
+            display: none;
+          }
+        }
+      }
+
     }
   }
 }

@@ -1,43 +1,33 @@
 <div class='row-fluid topic-panel'>
-
-  <div class='span12'>
-    <div class='well topic'>
-      <a class="{{status}} status">{{status_name}}</a>
-
-      <span class='user_panel'></span>
-      {{#receive_shop_name}}
-      <span clas='middle-line'>-</span>
-      <a href='/shops/{{receive_shop_name}}'>{{receive_shop_name}}</a>
-      {{/receive_shop_name}}
-
-      {{#topic_category_name}}
-      ({{topic_category_name}})
-      {{/topic_category_name}}
-      <hr class='line' />
-
-      <div class="container-fluid">
-        <div class="row-fluid">
-          <div class="span1">
-            <div class='user-info'>
-              <div>
-                <img class="avatar img-circle" />
-              </div>
+  <div class='span12 widget'>
+    <div class='topic'>
+      <div class="row-fluid">
+        <div class="span2">
+          <div class='user-info'>
+            <div>
+              <img src="{{user.icon_url}}" class="avatar img-circle" />
             </div>
           </div>
-          <div class="span11">
-            <div class='send_user'>
-            </div>
-             <abbr class='timeago topic_date' title='{{created_at}}'></abbr>
+        </div>
+        <div class="span10">
+          <div class='send_user'>
+          <a href='/people/{{user_id}}'>
+            {{user.login}}
+          </a>
+          </div>
+          <div>
+            {{category.name}} -
+            <abbr class='timeago topic_date' title='{{created_at}}'>
+            </abbr>
           </div>
         </div>
       </div>
-
-      <p>
+      <div>
         {{{content_html}}}
-      <p>
+      </div>
       <hr class='line' />
-    <div class='attachments'>
-    </div>
+      <div class='attachments'>
+      </div>
       <div class='topic-comments'>
         <div class="pull-left row-fluid">
           <a href='javascript:void(0)' class='more_comment'></a>

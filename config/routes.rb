@@ -61,7 +61,14 @@ Panama::Application.routes.draw do
       get "search", :to => "communities#search"
     end
 
-    resources :circles, :only => [:index], :controller => "communities/circles"
+    resources :circles, :only => [:index], :controller => "communities/circles" do
+      collection do
+        get :member, :to => "communities/circles#member"
+        get ":category_id/category", :to => "communities/circles#category"
+      end
+    end
+
+    resources :topics, :controller => "communities/topics"
   end
 
   resources :people do

@@ -95,4 +95,5 @@ $(function(){
     placement: tip.attr("data-placement"),
     title: tip.attr("data-original-title")
   })
+
 })

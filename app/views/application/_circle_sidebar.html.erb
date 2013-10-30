@@ -13,7 +13,7 @@
     </li>
     <li>
       <% @circle.categories.each do |c| %>
-      <a class="circle-category-<%=c.id %>" href="#">
+      <a class="circle-category-<%=c.id %>" href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
         <%=c.name %>
       </a>
       <% end %>
@@ -26,7 +26,7 @@
         成员 (<%=@circle.friend_count %> 人)
       </span>
       <span class='all_member'>
-        <a href='#'>所有成员</a>
+        <a href="<%= member_community_circles_path(@circle)%>">所有成员</a>
       </span>
     </div>
     <div class='top_member'>

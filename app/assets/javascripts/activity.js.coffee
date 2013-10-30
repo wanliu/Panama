@@ -277,7 +277,7 @@ class ActivityViewTemplate extends Backbone.View
     @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
     @$el.find(".time-left").html(status.text).addClass(status.name)
     switch status.name
-      when 'over'  
+      when 'over'
         $(".buttons>.launch-button", @$el).remove()
       when 'waiting'
         $(".buttons>.launch-button", @$el).remove()
