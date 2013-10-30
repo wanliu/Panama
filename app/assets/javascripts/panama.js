@@ -90,9 +90,9 @@ $.ajaxSetup({
 
 $(function(){
 
-  tip = $("[data-toggle=tooltip]")
-  tip.tooltip({
-    placement: tip.attr("data-placement"),
-    title: tip.attr("data-original-title")
+  $("body").on("hover", "[data-toggle=tooltip]", function(event){
+    tip = $(event.currentTarget)
+    tip.tooltip("show")
   })
+
 })

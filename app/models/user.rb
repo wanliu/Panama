@@ -103,12 +103,6 @@ class User < ActiveRecord::Base
       :owner_id => user_ids)
   end
 
-  def following_shop_topics
-    shop_ids = followings.shops.includes(:follow).map{|u| u.follow.id }
-    topic_ids = TopicReceive.shop_related(shop_ids).map{|t| t.topic_id }
-    Topic.community.where(:id => topic_ids)
-  end
-
   def as_json(*args)
     attribute = super *args
     attribute["icon_url"] = icon

@@ -1,55 +1,53 @@
-<div class='row-fluid topics'>
-  <div class='span5 left'>
-    <div class='widget toolbar'>
-      <textarea class='span12' placeholder='分享新鲜事'></textarea>
-      <div class='row-fluid'>
-        <div class='span2 title'>
-          分享对象
-        </div>
-        <div class='span10'>
-          <select class='span12'>
-            <% @circle.categories.each do |c| %>
-            <option value="<%=c.id %>">
-              <%=c.name %>
-            </option>
-            <% end %>
-          </select>
-        </div>
+<div class='row-fluid community'>
+  <div class='span7'>
+    <div class='left'>
+      <div class='widget toolbar'>
+        <form class='create_topic'>
+          <textarea class='span12' name='content' placeholder='分享新鲜事'></textarea>
+          <div class='row-fluid'>
+            <div class='span2 title'>
+              分享对象
+            </div>
+            <div class='span10'>
+              <select class='span12' name='category_id'>
+                <% @circle.categories.each do |c| %>
+                <option value="<%=c.id %>">
+                  <%=c.name %>
+                </option>
+                <% end %>
+              </select>
+            </div>
+          </div>
+          <div class='row-fluid'>
+            <div class='span12'>
+              <input type='submit' value='分 享' class='btn btn-primary disabled' />
+            </div>
+          </div>
+        </form>
       </div>
-      <div class='row-fluid'>
-        <div class='span12'>
-          <input type='button' value='分 享' class='btn btn-primary' />
-        </div>
+      <div class='topics'>
       </div>
     </div>
   </div>
-  <div class='span7 right'>
-    <div class='widget'>
-      <h4>
-        所属者
-        <a href='javascript:void(0)' data-toggle="tooltip" data-placement="top" title="" data-original-title="设置" class='setting'>
-          <span class='icon-cog'></span>
-        </a>
-      </h4>
-      <div class='owner'>
-        <span class='user'>
-          <img src="<%=@circle.owner.photos.icon %>" />
-          <%=@circle.owner.login %>
-        </span>
-        <span class='following'>
-          <input type='button' class='btn btn-primary' value='关注' />
-        </span>
-      </div>
-      <h4>商圈简介</h4>
-      <div class='description'>
-        <p>
-          <% if @circle.description.blank? %>
-            暂无描述
-          <% else %>
-            <%=@circle.description %>
-          <% end %>
-        </p>
+  <div class='span5'>
+    <div class='right'>
+      <%= render :partial => "description" %>
+      <div class='topics'>
       </div>
     </div>
   </div>
 </div>
+<div id="load_message_notifiy"></div>
+
+<script type='text/template' id='create-topic-template'>
+  <%= render :partial => "topics/topic" %>
+</script>
+
+<script type='text/javascript'>
+  $(function(){
+    new CircleListView({
+      el: $(".community"),
+      circle_id: <%=@circle.id %>
+    })
+  })
+</script>

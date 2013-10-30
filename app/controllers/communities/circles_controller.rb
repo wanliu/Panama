@@ -3,7 +3,7 @@ class Communities::CirclesController < Communities::BaseController
   def index
   end
 
-    def category
+  def category
 	  @circle = Circle.find(params[:community_id])
 	  @circle_category = @circle.categories.create(:name => params[:name])
 	  respond_to do |format|

@@ -6,3 +6,5 @@
 #= require backbone
 #= require people/circle_sidebar
 #= require following
+#= require circles
+

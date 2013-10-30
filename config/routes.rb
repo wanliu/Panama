@@ -66,8 +66,11 @@ Panama::Application.routes.draw do
         post :category
         delete :del_category
         get :members
+        get ":category_id/category", :to => "communities/circles#category"
       end
     end
+
+    resources :topics, :controller => "communities/topics"
   end
 
   resources :people do

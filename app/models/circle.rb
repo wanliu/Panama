@@ -18,6 +18,8 @@ class Circle < ActiveRecord::Base
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
+  has_many :topics, dependent: :destroy
+
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
   belongs_to :attachment
@@ -53,6 +55,10 @@ class Circle < ActiveRecord::Base
     unless friends.exists?(:user_id => user_id)
       friends.create_manage(user_id)
     end
+  end
+
+  def owner_title
+    owner.is_a?(Shop) ? "商家" : "个人"
   end
 
   def friend_count

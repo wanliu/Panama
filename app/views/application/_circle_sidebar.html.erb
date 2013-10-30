@@ -13,7 +13,7 @@
     </li>
     <li>
       <% @circle.categories.each do |c| %>
-      <a data-value-id='<%=c.id %>' class="circle-category-<%=c.id %>" href="#">
+      <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
         <%=c.name %>
         <i class="icon-remove remove_category"></i>
       </a>
