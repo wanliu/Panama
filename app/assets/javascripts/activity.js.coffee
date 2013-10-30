@@ -448,7 +448,6 @@ class LoadActivities extends InfiniteScrollView
         # $(event.currentTarget)
         # .find(".preview")
         # .removeClass("animate0 " + "flipInY")
-    # $('[data-toggle="tooltip"]', @sp_el).tooltip({placement: 'bottom'})
 
 
 root.ActivityModel = ActivityModel
