@@ -39,6 +39,7 @@ class RegionView extends Backbone.View
 		$attachment_ids = []
 		$region_id = @$(".region_id").attr("value")
 		$region_name = @$(".region_name_input").val()
+		$ad = @$(".ad").val()
 		_.each @$(".address_part_list > li"), (item) ->
 			$part_ids.push($(item).attr("id"))
 
@@ -50,7 +51,7 @@ class RegionView extends Backbone.View
 			type : "post",
 			dataType: "json",
 			url: "/system/regions/create_region",
-			data: {region_name: $region_name, part_ids: $part_ids, attachment_ids: $attachment_ids, region_id :$region_id }
+			data: {region_name: $region_name, part_ids: $part_ids, attachment_ids: $attachment_ids, region_id :$region_id, ad: $ad }
 			success: () ->
 				window.location.href = "/system/regions"
 			error: (rep) ->

@@ -2,6 +2,7 @@
 
 class CircleCategory < ActiveRecord::Base
   attr_accessible :circle_id, :name
+  acts_as_paranoid
 
   validate :valid_unqi_name?
 

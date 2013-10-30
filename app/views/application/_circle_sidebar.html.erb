@@ -5,7 +5,7 @@
     </a>
   </div>
   <h4 class='title'><%= @circle.name %></h4>
-  <ul id="community-side-nav" class="side-nav">
+  <ul id="community-side-nav" class="side-nav community_category">
     <li class='accordion-group active'>
       <a class="accordion-toggle" href="#">
         所有信息
@@ -13,10 +13,12 @@
     </li>
     <li>
       <% @circle.categories.each do |c| %>
-      <a class="circle-category-<%=c.id %>" href="#">
+      <a data-value-id='<%=c.id %>' class="circle-category-<%=c.id %>" href="#">
         <%=c.name %>
+        <i class="icon-remove remove_category"></i>
       </a>
       <% end %>
+      <a class="add_category" href="#"><i class="icon-share-alt" style="float:left;"></i>添加分类</a>
     </li>
   </ul>
   <hr />
@@ -26,7 +28,7 @@
         成员 (<%=@circle.friend_count %> 人)
       </span>
       <span class='all_member'>
-        <a href='#'>所有成员</a>
+        <a href='/communities/<%=@circle.id %>/circles/members'>所有成员</a>
       </span>
     </div>
     <div class='top_member'>
@@ -45,3 +47,11 @@
     </div>
   </div>
 </nav>
+<script type="text/javascript">
+  $(function() {
+    new CircleCategory({
+      el: $(".community_category"),
+      circle_id: "<%=@circle.id %>"
+    })
+  })
+</script>

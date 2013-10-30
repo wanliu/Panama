@@ -61,7 +61,13 @@ Panama::Application.routes.draw do
       get "search", :to => "communities#search"
     end
 
-    resources :circles, :only => [:index], :controller => "communities/circles"
+    resources :circles, :only => [:index], :controller => "communities/circles" do
+      collection do 
+        post :category
+        delete :del_category
+        get :members
+      end
+    end
   end
 
   resources :people do
@@ -474,6 +480,7 @@ Panama::Application.routes.draw do
   match "search/products", :to => "search#products"
   match "search", :to => "search#index"
   match "search/shop_products", :to => "search#shop_products", :via => :get
+  match "search/circles", :to => "search#circles", :via => :get
 
 
   # omniauth

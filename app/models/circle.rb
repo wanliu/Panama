@@ -7,7 +7,7 @@
 class Circle < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :created_type
+  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id
 
   belongs_to :owner, :polymorphic => true
 

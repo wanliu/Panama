@@ -4,3 +4,5 @@
 #= require jquery_ujs
 #= require jquery-ui
 #= require backbone
+#= require people/circle_sidebar
+#= require following

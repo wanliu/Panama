@@ -1,0 +1,22 @@
+<div class="controls ">
+    <div class="address_select">
+        <span class="m_r">地区</span>
+        <select class="address_province_id span3">
+            <option>--请选择省--</option>
+        </select>
+        <select class="address_city_id span3">
+            <option>--请选择市--</option>
+        </select>
+        <select class="address_area_id span3" >
+            <option>--请选择市--</option>
+        </select>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    new CircleAddressView({
+      el: $(".address_select")
+    })
+  })
+</script>

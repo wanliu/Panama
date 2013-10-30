@@ -1,5 +1,6 @@
 @import "core";
 @import "widget";
+@import "lib/transparent";
 
 body.communities{
   >.wrap{
@@ -72,6 +73,12 @@ body.communities{
       }
     }
   }
+  .community_category{
+    .new_category{
+      margin-left: 20px;
+      width: 140px;
+    }
+  }
 }
 
 .topics{
@@ -107,6 +114,32 @@ body.communities{
       .title{
         line-height: 30px;
       }
+    }
+  }
+}
+
+.members{
+  width: 80%;
+  .member_count{
+    margin-left: 15px;
+  }
+  .head_content{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .member{
+    @include transparent(rgb(51,51,51), 0.55);
+    .follow, .unfollow{ 
+      cursor: pointer 
+    }
+    margin-bottom: 10px;
+    width: 23%;
+    .member_header{ 
+      height: 70px; 
+      width: 70px;
+    }
+    .member_login{ 
+      margin-top: 15px;
     }
   }
 }

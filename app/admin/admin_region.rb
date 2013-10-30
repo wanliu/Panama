@@ -38,7 +38,7 @@ ActiveAdmin.register Region do
       Region.find(params[:region_id]).destroy
     end
     begin
-      @region = Region.create(:name => params[:region_name])
+      @region = Region.create(:name => params[:region_name],:advertisement => params[:ad])
       unless params[:attachment_ids].nil?
         @region.attachments = params[:attachment_ids].map do |k, v|
           Attachment.find_by(:id => k)
