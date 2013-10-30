@@ -63,6 +63,7 @@ class CategoryTree extends Backbone.View
 	toggle_tree: (event) ->
 		@$("#forms-collapse").toggle()
 		@$(".lv2_categories").css('left', @$el.width())
+		$("#left_sidebar").toggleClass('category-expanded')
 
 	show_children: (event) ->
 		@$($(event.target).attr('href')).show()

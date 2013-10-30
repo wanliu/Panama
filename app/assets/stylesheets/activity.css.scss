@@ -21,6 +21,12 @@
         margin: 0px;
       }
 
+      .href_name {
+        overflow:hidden; 
+        white-space: nowrap; 
+        text-overflow:ellipsis;
+      }
+
       .activity_tag {
         top: 0;
         right: 0;

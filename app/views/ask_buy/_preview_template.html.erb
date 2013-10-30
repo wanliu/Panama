@@ -8,7 +8,7 @@
         {{/photos}}
       </div>
       <div class='summary'>
-        <h5 class="title">{{title}} 求购</h5>
+        <h5 class="title href_name">{{title}} 求购</h5>
         <p class='describe'>
           单价 <span class='price'>￥{{price}}</span>
           <span class='amount'>求购 {{amount}}件</span>
@@ -20,8 +20,8 @@
         {{/user.photos}}
         <p>
           {{#user}}
-          <a href="/people/{{login}}">
-              {{login}}
+          <a href="/people/{{login}}" class="href_name">
+            {{login}}
           </a><br />
           {{/user}}
           <span class='notify'>
