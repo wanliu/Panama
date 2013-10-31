@@ -36,6 +36,7 @@ class LeftSideBar extends Backbone.View
 		@$(".side-nav").removeClass(ICON_CLASS)
 		@$(".attention").show()
 		$(".wrap").removeClass(ICON_CLASS)
+		@$(".lv2_categories").css('left', @$("#category-sidebar").width())
 		$(window).trigger('resize')
 
 	toggleIcons: (event) ->
@@ -43,6 +44,7 @@ class LeftSideBar extends Backbone.View
 		@$(".side-nav").addClass(ICON_CLASS)
 		@$(".attention").hide()
 		$(".wrap").addClass(ICON_CLASS)
+		@$(".lv2_categories").css('left', @$("#category-sidebar").width())
 		$(window).trigger('resize')
 
 
@@ -60,6 +62,8 @@ class CategoryTree extends Backbone.View
 
 	toggle_tree: (event) ->
 		@$("#forms-collapse").toggle()
+		@$(".lv2_categories").css('left', @$el.width())
+		$("#left_sidebar").toggleClass('category-expanded')
 
 	show_children: (event) ->
 		@$($(event.target).attr('href')).show()

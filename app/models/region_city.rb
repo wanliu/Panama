@@ -17,6 +17,6 @@ class RegionCity < ActiveRecord::Base
   end
 
   def self.location_region(city_id)
-    find_by(:city_id => city_id).region
+    find_by(:city_id => city_id).try(:region)
   end
 end

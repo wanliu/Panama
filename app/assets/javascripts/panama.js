@@ -45,8 +45,8 @@
 //= require search_users
 //= require notification
 //= require upload_photo
-//= require people/circle_address
-//= require people/circle
+//= require lib/circle_address
+//= require lib/circle
 
 root = window || this;
 

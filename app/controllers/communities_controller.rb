@@ -19,9 +19,17 @@ class CommunitiesController < ApplicationController
 		end
 	end
 
-	def city_index
+	def city_ids(city_id)
 		@region = RegionCity.location_region(params[:city_id])
-		city_ids = @region.region_cities_ids()
+		unless @region.blank?
+			@region.region_cities_ids()
+		else
+			params[:city_id]
+		end
+	end
+
+	def city_index
+		city_ids = city_ids(params[:city_id])
 		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
 								 .where("user_checkings.checked = true and addr.area_id in (?)", city_ids)
 								 .group('user_checkings.id')
@@ -76,8 +84,7 @@ class CommunitiesController < ApplicationController
 	end
 
 	def search
-		@region = RegionCity.location_region(params[:city_id])
-		city_ids = @region.region_cities_ids()
+		city_ids = city_ids(params[:city_id])
 		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
 							 .where("addr.area_id in (?)",city_ids)
 							 .group("user_checkings.id")

@@ -11,7 +11,7 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
 
   def create
     @setting = CircleSetting.create(params[:setting])
-    params[:circles].merge!(:setting_id => @setting.id)
+    params[:circle].merge!(:setting_id => @setting.id)
     @circle = current_shop.circles.create(params[:circle])
 
     respond_to do |format|
