@@ -29,6 +29,7 @@ class Circle < ActiveRecord::Base
   validate :valid_name?
 
   after_create do
+    generate_manage
   end
 
   def apply_join_notice(sender)

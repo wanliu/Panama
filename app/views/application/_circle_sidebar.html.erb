@@ -4,22 +4,25 @@
     <%= image_tag @circle.photos.avatar %>
     </a>
   </div>
-  <h4 class='title'><%= @circle.name %></h4>
+  <h4 class='title'>
+    <a href="<%= community_circles_path(@circle) %>"><%= @circle.name %></a>
+  </h4>
   <ul id="community-side-nav" class="side-nav community_category">
     <li class='accordion-group active'>
       <a class="accordion-toggle" href="#">
         所有信息
       </a>
     </li>
+    <% @circle.categories.each do |c| %>
     <li>
-      <% @circle.categories.each do |c| %>
-      <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
-        <%=c.name %>
-        <i class="icon-remove remove_category"></i>
-      </a>
-      <% end %>
-      <a class="add_category" href="#"><i class="icon-share-alt" style="float:left;"></i>添加分类</a>
+    <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
+      <%=c.name %>
+      <i class="icon-remove remove_category"></i>
+    </a>
     </li>
+    <% end %>
+    <a class="add_category" href="#"><i class="icon-share-alt" style="float:left;"></i>添加分类</a>
+
   </ul>
   <hr />
   <div class='friends'>

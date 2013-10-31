@@ -457,6 +457,11 @@ zh-CN:
     puliceity: "公开"
     community: "商家"
 
+  community:
+    circle:
+      members: '成员'
+      category: '分类'
+
   activity:
     type:
       auction: 竞价

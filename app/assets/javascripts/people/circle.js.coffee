@@ -31,9 +31,12 @@ class CircleCreate extends Backbone.View
 					    limit_join: limit_join
 					}
 				},
-			url:"/people/#{@current_user}/communities",
+			url: @remote_url,
 			success: () =>
-				window.location.href = "/people/#{ @current_user }/communities"
+				if @current_user
+					window.location.href = @remote_url
+				else
+					window.location.href = "/shops/#{ @current_shop }/admins/communities"
 		})
 
 root.CircleCreate = CircleCreate
