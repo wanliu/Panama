@@ -12,7 +12,8 @@ class People::CommunitiesController < People::BaseController
 
   def create
   	@setting = CircleSetting.create(params[:setting])
-  	@people.circles.create(params[:circle],:setting_id => @setting.id)
+    params[:circle].merge!(:setting_id => @setting.id)
+  	@people.circles.create(params[:circle])
 
   	respond_to do |format|
   		format.html { redirect_to person_circles_path(@people) }

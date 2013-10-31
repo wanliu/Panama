@@ -35,7 +35,7 @@ class CircleCategory extends Backbone.View
 				type: "post",
 				dataType: "json",
 				data: { name: $category_name },
-				url: "/communities/#{ @circle_id }/circles/category",
+				url: "/communities/#{ @circle_id }/circles/add_category",
 				success: (data) =>
 					$("<a data-value-id='#{ data.id}' href='#' class='circle-category-#{data.id}'>#{ data.name}  <i class='icon-remove remove_category'></i> </a>").insertBefore(".add_category")	
 			})

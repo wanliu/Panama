@@ -5,7 +5,14 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def category
-    @circle = Circle.find(params[:community_id])
+    @topics = @circle.topics
+    respond_to do |format|
+      format.html
+      format.json{ render json: @topics }
+    end
+  end
+
+  def add_category
     @category = @circle.categories.only_deleted.find_by(:name => "反馈")
     if @category.nil?
       @category = @circle.categories.create(:name => params[:name])
@@ -13,25 +20,23 @@ class Communities::CirclesController < Communities::BaseController
       @category.recover
     end
     respond_to do |format|
-      if @category.valid?
+      if @category.valid
         format.html
         format.json{ render json: @category }
       else
-        format.json{ render json: draw_errors_message(@category), :status => 403 }
+        format.json{ render json: draw_errors_message(@category), status: 403 }
       end
     end
   end
 
   def del_category
-    @circle = Circle.find(params[:community_id])
-    @circle.categories.find(params[:category_id]).delete
+    @circle.categories.find(params[:category_id]).destroy
     respond_to do |format|
       format.json { head :no_content }
     end
   end
 
   def members
-    @circle = Circle.find(params[:community_id])
     @members = @circle.friend_users
     respond_to do |format|
       format.html

@@ -856,11 +856,11 @@ ActiveRecord::Schema.define(:version => 20131030072522) do
     t.integer  "user_id"
     t.string   "content"
     t.string   "content_html"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.integer  "category_id"
     t.integer  "circle_id"
-    t.integer  "participate"
+    t.integer  "participate",  :default => 0
   end
 
   create_table "transaction_operators", :force => true do |t|
