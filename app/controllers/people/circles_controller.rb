@@ -2,9 +2,10 @@
 class People::CirclesController < People::BaseController
 
   def index
-    @circles = @people.circles
+    @circles = @people.circle_all
     respond_to do |format|
-      format.json{ render json: @circles.as_json(methods: :friend_count) }
+      format.json{ render json: @circles.as_json(
+        methods: [:friend_count, :header_url]) }
     end
   end
 
@@ -20,8 +21,7 @@ class People::CirclesController < People::BaseController
   end
 
   def show
-    @circles = @people.circles
-    @circle = @people.circles.find(params[:id])
+    @circle = @people.circle_all.find_by(:id => params[:id])
     respond_to do |format|
       format.html
     end

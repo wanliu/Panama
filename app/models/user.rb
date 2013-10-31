@@ -103,12 +103,6 @@ class User < ActiveRecord::Base
       :owner_id => user_ids)
   end
 
-  def following_shop_topics
-    shop_ids = followings.shops.includes(:follow).map{|u| u.follow.id }
-    topic_ids = TopicReceive.shop_related(shop_ids).map{|t| t.topic_id }
-    Topic.community.where(:id => topic_ids)
-  end
-
   def as_json(*args)
     attribute = super *args
     attribute["icon_url"] = icon
@@ -157,7 +151,6 @@ class User < ActiveRecord::Base
   end
 
   def load_initialize_data
-    load_circle
     load_friend_group
   end
 
@@ -174,6 +167,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def circle_all
+    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
+    Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+  end
 
   def init_user_info
     if new_record?
@@ -212,12 +209,6 @@ class User < ActiveRecord::Base
   end
 
   private
-  def load_circle
-    _config = YAML.load_file("#{Rails.root}/config/data/user_circle.yml")
-    _config["circle"].each do |circle|
-      self.circles.create(circle) if self.circles.find_by(circle).nil?
-    end
-  end
 
   def load_friend_group
     _config = YAML.load_file("#{Rails.root}/config/data/friend_group.yml")

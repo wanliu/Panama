@@ -1,0 +1,222 @@
+@import "core";
+@import "widget";
+@import "lib/transparent";
+
+body.communities{
+  >.wrap{
+    margin-left: 210px;
+  }
+}
+
+#community-sidebar{
+  width: 190px;
+  padding-top: 2px;
+
+  .title{
+    margin-top: 0px;
+    margin-left: 10px;
+  }
+
+  .avatar{
+    text-align: center;
+    margin-bottom: 10px;
+
+    img{
+      width: 182px;
+      height: 233px;
+    }
+  }
+
+  hr{
+    border: 1px solid rgba(0, 122, 255, 0.34);
+    margin: 0px 0px 10px 0px;
+  }
+
+  .friends{
+    margin-left: 5px;
+
+    .all_member{
+      float: right;
+      margin-right: 5px;
+    }
+
+    .top_member{
+
+      .member{
+        list-style: none;
+
+        li:first-child{
+          margin-left: 0px;
+        }
+
+        li{
+          margin-left: 5px;
+          float: left;
+          position: relative;
+
+          img.photo{
+            width: 30px;
+            height: 30px;
+          }
+
+          .tag{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+
+            img{
+              height: 10px;
+              width: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .community_category{
+    .new_category{
+      margin-left: 20px;
+      width: 140px;
+    }
+  }
+}
+
+.community{
+  .right{
+
+    .setting{
+      float: right;
+      margin-right: 20px;
+    }
+
+    .owner{
+      margin-bottom: 20px;
+
+      .user{
+        img{
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      .following{
+        float: right;
+      }
+    }
+
+    .invite{
+      margin-right: 20px;
+    }
+  }
+
+  .left{
+    .toolbar{
+      textarea{
+        height: 91px;
+      }
+
+      .title{
+        line-height: 30px;
+      }
+    }
+
+
+  }
+
+  .left, .right{
+
+    .widget{
+      margin-bottom: 15px;
+    }
+
+    .topic-panel{
+
+      .topic{
+        .info{
+          margin-bottom: 5px;
+        }
+
+        .user-info{
+          width: 40px;
+          height: 40px;
+          float: left;
+          margin-right: 12px;
+        }
+
+        .line{
+          margin: 10px 0;
+        }
+
+        .topic-comments{
+
+          .comment_panel{
+            display: none;
+          }
+
+          .send_comment{
+            background-color: white;
+            color: #B8B8B8;
+            font-size: 13px;
+            line-height: 30px;
+            padding-left: 10px;
+          }
+
+          .comment_bar{
+
+            .display-comment{
+              font-size: 13px;
+              display: none;
+            }
+
+            .hide_comment, .more_comment{
+              display: block;
+            }
+          }
+
+          .comments_panel{
+            margin: 10px 0;
+            padding-left: 10px;
+
+            .comment{
+              display: none;
+            }
+
+            .user_info{
+              width: 40px;
+              height: 40px;
+              float: left;
+              margin-right: 10px
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+
+.members{
+  width: 80%;
+  .member_count{
+    margin-left: 15px;
+  }
+  .head_content{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .member{
+    @include transparent(rgb(51,51,51), 0.55);
+    .follow, .unfollow{ 
+      cursor: pointer 
+    }
+    margin-bottom: 10px;
+    width: 23%;
+    .member_header{ 
+      height: 70px; 
+      width: 70px;
+    }
+    .member_login{ 
+      margin-top: 15px;
+    }
+  }
+}

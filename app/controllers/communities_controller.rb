@@ -1,5 +1,5 @@
 class CommunitiesController < ApplicationController
-	include
+
 	layout "communities"
 
 	before_filter :login_and_service_required
@@ -31,7 +31,7 @@ class CommunitiesController < ApplicationController
 		my_friends = current_user.circle_all_friends.pluck("id")
 
 		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.circle_id left join addresses as addr on addr.area_id = circles.city_id")
-						.where("created_type = 'advance' and circles.city_id in (?) ", city_ids)
+						.where("owner_type = 'Shop' and circles.city_id in (?) ", city_ids)
 						.select("circles.*, count(cf.id) as count")
 						.group("circles.id")
 						.order("count desc")

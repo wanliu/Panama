@@ -16,7 +16,6 @@ class root.CommunityApplyJoin extends Backbone.View
       error: (rep) ->
         m = JSON.parse(rep.responseText)
         pnotify({text: m, type: "error"})
-        window.location.href = @options.remote_url
     )
 
   refuse: () ->

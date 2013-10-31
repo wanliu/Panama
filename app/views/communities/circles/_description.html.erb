@@ -1,0 +1,37 @@
+<div class='widget circle-description'>
+  <h4>
+    所属者<%=@circle.owner_title %>
+    <a href='javascript:void(0)' data-toggle="tooltip" data-placement="top" title="" data-original-title="设置" class='setting'>
+      <span class='icon-cog'></span>
+    </a>
+  </h4>
+  <div class='owner'>
+    <span class='user'>
+      <a href="<%=owner_url(@circle.owner) %>" >
+        <img src="<%=@circle.owner.photos.icon %>" />
+        <% if @circle.owner.is_a?(Shop) %>
+          <%=@circle.owner.name %>
+        <% else %>
+          <%=@circle.owner.login %>
+        <% end %>
+      </a>
+    </span>
+    <span class='following'>
+      <input type='button' class='btn btn-primary' value='关注' />
+    </span>
+  </div>
+  <h4>商圈简介</h4>
+  <div class='description'>
+    <p>
+      <% if @circle.description.blank? %>
+        暂无描述
+      <% else %>
+        <%=@circle.description %>
+      <% end %>
+    </p>
+  </div>
+  <div>
+    <input type='button' value="邀请更多人" class='btn invite' />
+    <input type='button' value="分享此圈" class='btn shared' />
+  </div>
+</div>

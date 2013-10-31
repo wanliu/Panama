@@ -1,133 +1,37 @@
 #describe: 社交帖子
 #= require lib/timeago
 #= require topic_comment
-#= require twitter/bootstrap/tooltip
-#= require twitter/bootstrap/popover
-
+#= require lib/infinite_scroll
 
 root = window || @
 
 class Topic extends Backbone.Model
   seturl: (url) ->
     @urlRoot = url
-  receives: (callback) ->
-    @fetch({
-      url: "#{@urlRoot}/receives/#{@id}",
-      success: callback
-    })
 
 class TopicList extends Backbone.Collection
   model: Topic
   seturl: (url) ->
     @url = url
 
-class TopicView extends Backbone.View
-  avatar_img: $("<img class='img-circle user-avatar' />")
+class Comments extends Backbone.Collection
+  seturl: (url) ->
+    @url = url
+
+class CreateTopicView extends Backbone.View
 
   events: {
-    "click .external" : "external_receive",
-    "click .circle" : "circle_receive",
-    "click .puliceity" : "puliceity_receive",
-    "click .close-label" : "hide_receive"
-  }
-
-  initialize: (options) ->
-    _.extend(@, options)
-
-    @$el = $(@el)
-    @$el.html(@template.render(@model.toJSON()))
-    @show_attachments()
-
-    new TopicCommentView(
-      el: @$(".topic-comments"),
-      topic: @model,
-      current_user: @current_user
-    )
-
-    @$(".user-info img.avatar").attr("src", @model.get("avatar_url"))
-    @$("abbr.timeago").timeago()
-    @$(".send_user").html(@find_owner())
-
-    @puliceity_hide_status()
-    @switch_style()
-
-  render: () ->
-    @$el
-
-  switch_style: () ->
-    if @model.get("owner_type") == "Shop"
-      @$(".user_panel").html("由 #{@model.get("send_login")}发布")
-
-  puliceity_hide_status: () ->
-    if @model.get("status") is "community"
-      @$(".community").hide();
-
-  puliceity_receive: () ->
-    @popover_basis("所有人多可以看到。")
-
-  external_receive: () ->
-    @popover_basis("显示给#{@find_owner()}圈子中的所有成员，以及这些成员的圈子中的所有人。")
-
-  find_owner: () ->
-    if @model.get("owner_type") == "User"
-      @model.get("owner").login
-    else
-      @model.get("owner").name
-
-  show_attachments: () ->
-    _.each @model.get("attachments"), (atta) =>
-      @$(".attachments").append("<img src='#{atta}' class='attachment' />")
-
-  circle_receive: () ->
-    @popover_basis('<h6 class="title-popover-topic">此信息目前的分享对象：</h6><div class="circle_users"></div>')
-    @$circle_users_el = @$(".circle_users")
-    @$circle_users_el.html("正在加载...")
-    @model.receives (model, data) =>
-      if data.length <= 0
-        @$circle_users_el.html("暂时没有分享用户")
-      else
-        @show_user(data)
-
-  show_user: (data) ->
-    @$circle_users_el.html("")
-    _.each data, (user) =>
-      img_el = @avatar_img.clone().attr("src", user.icon)
-      @$circle_users_el.append(img_el)
-      img_el.tooltip(title: user.login)
-
-  hide_receive: () ->
-    @$(".status").popover("hide")
-
-  popover_basis: (content) ->
-    @$(".status").popover({
-      content: content + "<a class='close-label'></a>",
-      placement: "bottom",
-      html: true
-    }).popover("show")
-
-class TopicViewList extends Backbone.View
-  notice_el: $("<div class='alert alert-info alert-block'>暂时没有信息!</div>")
-
-  events: {
-    "click input:button.send_topic": "create",
+    "submit form.create_topic": "create",
     "keyup textarea[name=content]": "textarea_status"
   }
 
   initialize: (options) ->
     _.extend(@, options)
 
-    @topic_list = new TopicList()
-    @topic_list.seturl @remote_url
-    @topic_list.bind("reset", @all_topic, @)
-    #@topic_list.bind("add", @add_topic, @)
-
-    @topic_list.fetch(data: {circle_id: @circle_id})
-
-    @$form = @$("form.topic-form")
-    @$button = $("input:button.send_topic", @$form)
-    @$content = $("textarea[name=content]", @$form)
-
     @$el = $(@el)
+    @$form = @$("form.create_topic")
+    @$content = @$("textarea[name=content]")
+    @$button = @$("input:submit")
 
   textarea_status: () ->
     content = @$content.val().trim()
@@ -138,27 +42,17 @@ class TopicViewList extends Backbone.View
 
   create: () ->
     data = @form_serialize()
-    return if data.content is ""
-
-    data.friends = @get_friends()
-    if data.friends.length <= 0
-      @$(".friend-context input:text").focus()
-      return
-
-    @topic = new Topic(data)
-    @topic.seturl @remote_url
-    @topic.save({}, {
-      data: $.param({topic: data})
-      success: (model) =>
+    return false if data.content is ""
+    $.ajax(
+      type: "POST",
+      url: "/communities/#{@circle_id}/topics",
+      data: {topic: data},
+      success: (data) =>
         @$content.val('')
-        @textarea_status()
-        topic = @topic_list.add(model).last()
-        @before_append(@add_topic(topic))
-        @$(".topic_upload").html('')
-
-      error: (model, data) =>
-        @show_error(JSON.parse(data.responseText))
-    })
+        view = new TopicView(data: data)
+        @create_topic(view.render())
+    )
+    false
 
   form_serialize: () ->
     forms = @$form.serializeArray()
@@ -167,51 +61,183 @@ class TopicViewList extends Backbone.View
       data[v.name] = v.value
     data
 
-  before_append: (view) ->
-    topics = @$(".topics>:first")
-    if topics.length <= 0
-      @$(".topics").append view
-    else
-      topics.before view
+class LoadTopicList extends InfiniteScrollView
+  msg_el: "#load_message_notifiy"
 
-  all_topic: (collection) ->
-    collection.each (model) =>
-      @$(".topics").append @add_topic(model)
+  initialize: (options) ->
+    @fetch_url = options.fetch_url
+    @add_one = options.add_one
+    super options
 
-    @notice_msg()
+class TopicViewList extends Backbone.View
 
-  add_topic: (model) ->
-    @notice_msg()
-    model.seturl @remote_url
-    topic_view = new TopicView(
-      model: model,
-      template: @template,
-      current_user: @current_user
+  initialize: (options) ->
+    @add_topic = options.add_topic
+    @sp_el = options.sp_el
+
+    new LoadTopicList(
+      sp_el: @sp_el,
+      add_one: _.bind(@add_one, @),
+      fetch_url: options.fetch_url)
+
+  add_one: (data) ->
+    view = new TopicView(data: data)
+    @add_topic(view.render())
+
+class CommentView extends Backbone.View
+  className: "comment"
+  initialize: () ->
+    @$el = $(@el)
+    @model.bind("show", @show, @)
+    @model.bind("hide", @hide, @)
+
+  render: () ->
+    @template = Hogan.compile $("#create-comment-template").html()
+    @$el.html(@template.render(@model.toJSON()))
+    @$("abbr.timeago").timeago()
+    @$el
+
+  show: () ->
+    @$el.slideDown()
+
+  hide: () ->
+    @$el.slideUp()
+
+
+class TopicView extends Backbone.View
+  className: "row-fluid topic-panel"
+  events: {
+    "click .send_comment" : "show_create_commnet"
+    "click .comment_form .cancel" : "hide_create_comment"
+    "submit form.comment_form" : "comment"
+    "keyup .comment_form textarea" : "textarea_status"
+    "click .more_comment" : 'more_comment'
+    "click .hide_comment" : 'hide_comment'
+  }
+  initialize: (options) ->
+    @model = new Topic(options.data)
+    @model.set(comments_count: 0)
+
+    @model.bind("change:comments_count", @change_count, @)
+
+    @comments = new Comments()
+    @comments.bind("add", @add_comment, @)
+
+    @load_template()
+    @$el = $(@el)
+
+  render: () ->
+    @$el.html(@template.render(@model.toJSON()))
+    @$("abbr.timeago").timeago()
+    @$textarea = @$(".comment_form textarea")
+    @$btn_comment = @$(".comment_form input:submit")
+    @$display_comment = @$(".display-comment")
+    @fetch_comment_init()
+    @$el
+
+  add_comment: (model) ->
+    view = new CommentView(model: model)
+    @$(".comments_panel").append(view.render())
+    view.show()
+
+  load_template: () ->
+    template = $("#create-topic-template").html()
+    @template = Hogan.compile(template)
+
+  show_create_commnet: () ->
+    @$(".send_comment").hide()
+    @$(".comment_panel").show()
+    @$textarea.focus()
+
+  hide_create_comment: () ->
+    @$(".send_comment").show()
+    @$(".comment_panel").hide()
+
+  comment: () ->
+    return false if @$btn_comment.hasClass("disabled")
+    $.ajax(
+      url: "#{@root_url()}/create_comment",
+      type: 'POST',
+      data: {comment: { content: @$textarea.val() }},
+      success: (data) =>
+        @$textarea.val('')
+        @inc_comment_count()
+        @comments.add(data)
     )
-    topic_view.render()
+    return false
 
-  notice_msg: () ->
-    if @topic_list.length <= 0
-      @$(".topics").append(@notice_el)
+  fetch_comment_init: () ->
+    $.ajax(
+      url: "#{@root_url()}/init_comment"
+      success: (data) =>
+        @model.set(comments_count: data.count)
+        @display_comment_bar()
+        @init_data(data.comments)
+    )
+
+  init_data: (data) ->
+    @$(".comments_panel").html('')
+    @comments.reset()
+    _.each data, (d) => @comments.add(d)
+
+  change_count: () ->
+    @$(".display-comment.more_comment>.describe").html("#{@model.get('comments_count')}评论")
+
+  display_comment_bar: () ->
+    if @model.get('comments_count') > 3
+      $(".describe", @$display_comment).html("#{@model.get('comments_count')}评论")
+      @$display_comment.addClass("more_comment")
+
+  root_url: () ->
+    "/communities/#{@model.get('circle_id')}/topics/#{@model.id}"
+
+  inc_comment_count: () ->
+    count = @model.get("comments_count")
+    @model.set(comments_count: ++count)
+
+  more_comment: () ->
+    count = @comments.length
+    if count > 0 and count is @model.get("comments_count")
+      @change_comments(i, "show") for i in [0..count-1]
+      @change_display("top")
     else
-      @notice_el.remove()
+      $.ajax(
+        url: "#{@root_url()}/comments"
+        success: (data) =>
+          @model.set(comments_count: data.length)
+          @change_display("top")
+          @init_data(data)
+      )
 
-  show_error: (messages) ->
-    $.each messages, (i, m) =>
-      @$(".errors").append("#{m}")
+  hide_comment: () ->
+    count = @comments.length
+    if count > 3
+      @change_comments(i, "hide") for i in [0..count-4]
+      @change_display("down")
 
-    @$(".errors").show()
+  change_display: (state) ->
+    describe = $(".describe", @$display_comment)
+    icon = $("i", @$display_comment)
 
-  get_friends: () ->
-    items = @$(".chose-item-selector>.chose-label")
-    data = []
-    items.each (i, item) =>
-      val = $.data(item, "data").value
-      if typeof val is "string"
-        data.push {id: val, status: "scope"}
-      else
-        data.push {id: val.id, status: val._status}
+    if state == "top"
+      @$display_comment.removeClass("more_comment").addClass("hide_comment")
+      describe.html("隐藏评论")
+      icon.addClass("icon-chevron-top").removeClass("icon-chevron-down")
+    else
+      @$display_comment.removeClass("hide_comment").addClass("more_comment")
+      describe.html("#{@model.get('comments_count')}评论")
+      icon.addClass("icon-chevron-down").removeClass("icon-chevron-top")
 
-    data
+  textarea_status: () ->
+    value = @$textarea.val().trim()
+    if _.isEmpty(value)
+      @$btn_comment.addClass("disabled")
+    else
+      @$btn_comment.removeClass("disabled")
 
+  change_comments: (i, call_name) ->
+    @comments.models[i].trigger(call_name)
+
+
+root.CreateTopicView = CreateTopicView
 root.TopicViewList = TopicViewList

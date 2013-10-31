@@ -87,3 +87,12 @@ $.ajaxSetup({
     xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
   }
 })
+
+$(function(){
+
+  $("body").on("hover", "[data-toggle=tooltip]", function(event){
+    tip = $(event.currentTarget)
+    tip.tooltip("show")
+  })
+
+})

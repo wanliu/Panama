@@ -19,4 +19,22 @@ class CommunityNotification < ActiveRecord::Base
     return "同意" if apply_state
     return "拒绝" unless apply_state
   end
+
+  def refuse(user)
+    Notification.create!(
+      :user_id => user.id,
+      :mentionable_user => send_user,
+      :body => "#{user.login}拒绝你的加入#{circle.name}圈子",
+      :targeable => self)
+    self.update_attribute(:apply_state, false)
+  end
+
+  def agree(user)
+    Notification.create!(
+      :user_id => user.id,
+      :mentionable_user => send_user,
+      :body => "#{user.login}接受你的加入#{circle.name}圈子",
+      :targeable => self)
+    self.update_attribute(:apply_state, true)
+  end
 end

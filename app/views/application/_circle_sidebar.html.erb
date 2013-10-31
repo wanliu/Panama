@@ -1,0 +1,57 @@
+<nav id='community-sidebar' class="sidebar nav nav-collapse collapse affix-top" >
+  <div class='avatar'>
+    <a href="<%= community_circles_path(@circle) %>">
+    <%= image_tag @circle.photos.avatar %>
+    </a>
+  </div>
+  <h4 class='title'><%= @circle.name %></h4>
+  <ul id="community-side-nav" class="side-nav community_category">
+    <li class='accordion-group active'>
+      <a class="accordion-toggle" href="#">
+        所有信息
+      </a>
+    </li>
+    <li>
+      <% @circle.categories.each do |c| %>
+      <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
+        <%=c.name %>
+        <i class="icon-remove remove_category"></i>
+      </a>
+      <% end %>
+      <a class="add_category" href="#"><i class="icon-share-alt" style="float:left;"></i>添加分类</a>
+    </li>
+  </ul>
+  <hr />
+  <div class='friends'>
+    <div>
+      <span class='member'>
+        成员 (<%=@circle.friend_count %> 人)
+      </span>
+      <span class='all_member'>
+        <a href='/communities/<%=@circle.id %>/circles/members'>所有成员</a>
+      </span>
+    </div>
+    <div class='top_member'>
+      <ul class='member'>
+        <% @circle.friends.each do |f| %>
+          <li>
+            <img class='photo' src="<%=f.photos.icon %>" />
+            <% if f.manage? %>
+            <a href='javascript:void(0)' data-toggle="tooltip" data-placement="bottom" title="" data-original-title="管理员" class='tag'>
+              <img src="/assets/tag.png" />
+            </a>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
+<script type="text/javascript">
+  $(function() {
+    new CircleCategory({
+      el: $(".community_category"),
+      circle_id: "<%=@circle.id %>"
+    })
+  })
+</script>

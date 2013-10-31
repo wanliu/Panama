@@ -4,12 +4,10 @@
 # attributes:
 #   name: 名称
 #   owner: 所属者(商店与用户)
-#   user_id: 操作员
 class Circle < ActiveRecord::Base
-  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :created_type
+  include Graphical::Display
 
-  scope :basic, lambda{ where(:created_type => :basic) }
-  scope :advance, lambda{ where(:created_type => :advance) }
+  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id
 
   belongs_to :owner, :polymorphic => true
 
@@ -19,10 +17,19 @@ class Circle < ActiveRecord::Base
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
   has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
+  has_many :categories, dependent: :destroy, class_name: "CircleCategory"
+  has_many :topics, dependent: :destroy
+
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
+  belongs_to :attachment
+
+  define_graphical_attr :photos, :handler => :grapical_handler
 
   validate :valid_name?
+
+  after_create do
+  end
 
   def apply_join_notice(sender)
     c = CommunityNotification.create({
@@ -39,8 +46,27 @@ class Circle < ActiveRecord::Base
       :body => c.body)
   end
 
+  def grapical_handler
+    (attachment.nil? ? Attachment.new : attachment).file
+  end
+
+  def generate_manage
+    user_id = owner.is_a?(Shop) ? owner.user_id : owner.id
+    unless friends.exists?(:user_id => user_id)
+      friends.create_manage(user_id)
+    end
+  end
+
+  def owner_title
+    owner.is_a?(Shop) ? "商家" : "个人"
+  end
+
   def friend_count
     friends.count
+  end
+
+  def header_url
+    photos.header
   end
 
   def friend_users
@@ -50,7 +76,7 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user
     uid = user.id if user.is_a?(User)
-    friends.create(user_id: uid)
+    friends.create_member(user_id: uid)
   end
 
   def remove_friend(user)
@@ -64,8 +90,8 @@ class Circle < ActiveRecord::Base
   end
 
   def valid_name?
-    if Circle.where("name=? and id<>? and owner_id=? and owner_type=?",
-     name, id.to_s, owner_id, owner_type).count > 0
+    if Circle.exists?(["name=? and id<>? and owner_id=? and owner_type=?",
+     name, id.to_s, owner_id, owner_type])
       errors.add(:name, "名称已经存在了！")
     end
   end
