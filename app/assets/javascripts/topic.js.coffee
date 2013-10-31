@@ -113,6 +113,7 @@ class TopicView extends Backbone.View
     "keyup .comment_form textarea" : "textarea_status"
     "click .more_comment" : 'more_comment'
     "click .hide_comment" : 'hide_comment'
+    'click .add_participate' : 'create_participate'
   }
   initialize: (options) ->
     @model = new Topic(options.data)
@@ -133,6 +134,7 @@ class TopicView extends Backbone.View
     @$btn_comment = @$(".comment_form input:submit")
     @$display_comment = @$(".display-comment")
     @fetch_comment_init()
+    @load_participates()
     @$el
 
   add_comment: (model) ->
@@ -237,6 +239,30 @@ class TopicView extends Backbone.View
 
   change_comments: (i, call_name) ->
     @comments.models[i].trigger(call_name)
+
+  load_participates: () ->
+    $.ajax(
+      url: "#{@root_url()}/participates",
+      success: (data) =>
+        _.each data, (d) => @add_participate(d)
+    )
+
+  create_participate: () ->
+    $.ajax(
+      url: "#{@root_url()}/participate",
+      type: 'POST',
+      success: (data) =>
+        el = @$(".participates .count")
+        count = if _.isEmpty(el.text().trim()) then 0 else parseInt(el.text())
+        el.html(++count)
+        @add_participate(data)
+    )
+
+  add_participate: (data) ->
+    @$(".participates").append(
+      "<a data-toggle='tooltip' data-placement='top' data-original-title='#{data.login}' href='javascript:void(0)' class='participate'>
+        <img src='#{data.icon_url}' />
+      </a>")
 
 
 root.CreateTopicView = CreateTopicView

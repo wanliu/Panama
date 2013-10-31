@@ -76,6 +76,8 @@ Panama::Application.routes.draw do
         get :init_comment
         get :comments
         post :create_comment
+        get :participates
+        post :participate
       end
     end
   end

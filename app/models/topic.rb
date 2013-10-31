@@ -30,6 +30,10 @@ class Topic < ActiveRecord::Base
 
   before_save :content_format_html
 
+  def participate_users
+    participates.joins(:user).map{|p| p.user }
+  end
+
   def content_format_html
     self.content_html = text_format_html(self.content)
   end

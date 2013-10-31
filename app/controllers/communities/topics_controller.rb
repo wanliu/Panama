@@ -49,4 +49,25 @@ class Communities::TopicsController < Communities::BaseController
     end
   end
 
+  def participate
+    @topic = @circle.topics.find_by(:id => params[:id])
+    @participate = @topic.participates.create(user_id: current_user.id)
+    respond_to do |format|
+      if @participate.valid?
+        format.json{ render :json => @participate.user }
+      else
+        format.json{ render :json => draw_errors_message(@participate) , :status => 403 }
+      end
+    end
+  end
+
+  def participates
+    @topic = @circle.topics.find_by(:id => params[:id])
+    @users = @topic.participates.joins(:user).order("created_at desc")
+    .limit(10).map{|p| p.user}
+    respond_to do |format|
+      format.json{ render :json => @users }
+    end
+  end
+
 end

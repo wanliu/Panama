@@ -29,13 +29,18 @@
     </div>
     <div class='topic-comments'>
       <div class="row-fluid comment_bar">
-        <a href='javascript:void(0)' data-toggle="tooltip" data-placement="top" data-original-title="赞一个">
-          {{participate}}<i class='icon-thumbs-up'></i>
-        </a>
-        <a href='javascript:void(0)' class='pull-right display-comment'>
-          <span class='describe'>{{}}</span>
-          <i class="icon-chevron-down"></i>
-        </a>
+        <div class='span10 participates'>
+          <a href='javascript:void(0)' data-toggle="tooltip" data-placement="top" data-original-title="赞一个" class='add_participate'>
+            <span class='count'>{{participate}}</span>
+            <i class='icon-thumbs-up'></i>
+          </a>
+        </div>
+        <div class='span2'>
+          <a href='javascript:void(0)' class='display-comment pull-right'>
+            <span class='describe'>{{}}</span>
+            <i class="icon-chevron-down"></i>
+          </a>
+        </div>
       </div>
       <div class='comments_panel'></div>
       <div class='send_comment' tabindex='-1'>
