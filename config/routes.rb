@@ -68,7 +68,13 @@ Panama::Application.routes.draw do
       end
     end
 
-    resources :topics, :controller => "communities/topics"
+    resources :topics, :controller => "communities/topics" do
+      member do
+        get :init_comment
+        get :comments
+        post :create_comment
+      end
+    end
   end
 
   resources :people do

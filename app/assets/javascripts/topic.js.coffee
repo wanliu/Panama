@@ -14,6 +14,10 @@ class TopicList extends Backbone.Collection
   seturl: (url) ->
     @url = url
 
+class Comments extends Backbone.Collection
+  seturl: (url) ->
+    @url = url
+
 class CreateTopicView extends Backbone.View
 
   events: {
@@ -80,38 +84,160 @@ class TopicViewList extends Backbone.View
     view = new TopicView(data: data)
     @add_topic(view.render())
 
+class CommentView extends Backbone.View
+  className: "comment"
+  initialize: () ->
+    @$el = $(@el)
+    @model.bind("show", @show, @)
+    @model.bind("hide", @hide, @)
+
+  render: () ->
+    @template = Hogan.compile $("#create-comment-template").html()
+    @$el.html(@template.render(@model.toJSON()))
+    @$("abbr.timeago").timeago()
+    @$el
+
+  show: () ->
+    @$el.slideDown()
+
+  hide: () ->
+    @$el.slideUp()
+
+
 class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
   events: {
-    "click .send_comment" : "show_commnet"
-    "click .comment_form .cancel" : "hide_comment"
+    "click .send_comment" : "show_create_commnet"
+    "click .comment_form .cancel" : "hide_create_comment"
     "submit form.comment_form" : "comment"
+    "keyup .comment_form textarea" : "textarea_status"
+    "click .more_comment" : 'more_comment'
+    "click .hide_comment" : 'hide_comment'
   }
   initialize: (options) ->
     @model = new Topic(options.data)
+    @model.set(comments_count: 0)
+
+    @model.bind("change:comments_count", @change_count, @)
+
+    @comments = new Comments()
+    @comments.bind("add", @add_comment, @)
+
     @load_template()
     @$el = $(@el)
 
   render: () ->
     @$el.html(@template.render(@model.toJSON()))
     @$("abbr.timeago").timeago()
+    @$textarea = @$(".comment_form textarea")
+    @$btn_comment = @$(".comment_form input:submit")
+    @$display_comment = @$(".display-comment")
+    @fetch_comment_init()
     @$el
+
+  add_comment: (model) ->
+    view = new CommentView(model: model)
+    @$(".comments_panel").append(view.render())
+    view.show()
 
   load_template: () ->
     template = $("#create-topic-template").html()
     @template = Hogan.compile(template)
 
-  show_commnet: () ->
+  show_create_commnet: () ->
     @$(".send_comment").hide()
     @$(".comment_panel").show()
+    @$textarea.focus()
 
-  hide_comment: () ->
+  hide_create_comment: () ->
     @$(".send_comment").show()
     @$(".comment_panel").hide()
 
   comment: () ->
-
+    return false if @$btn_comment.hasClass("disabled")
+    $.ajax(
+      url: "#{@root_url()}/create_comment",
+      type: 'POST',
+      data: {comment: { content: @$textarea.val() }},
+      success: (data) =>
+        @$textarea.val('')
+        @inc_comment_count()
+        @comments.add(data)
+    )
     return false
+
+  fetch_comment_init: () ->
+    $.ajax(
+      url: "#{@root_url()}/init_comment"
+      success: (data) =>
+        @model.set(comments_count: data.count)
+        @display_comment_bar()
+        @init_data(data.comments)
+    )
+
+  init_data: (data) ->
+    @$(".comments_panel").html('')
+    @comments.reset()
+    _.each data, (d) => @comments.add(d)
+
+  change_count: () ->
+    @$(".display-comment.more_comment>.describe").html("#{@model.get('comments_count')}评论")
+
+  display_comment_bar: () ->
+    if @model.get('comments_count') > 3
+      $(".describe", @$display_comment).html("#{@model.get('comments_count')}评论")
+      @$display_comment.addClass("more_comment")
+
+  root_url: () ->
+    "/communities/#{@model.get('circle_id')}/topics/#{@model.id}"
+
+  inc_comment_count: () ->
+    count = @model.get("comments_count")
+    @model.set(comments_count: ++count)
+
+  more_comment: () ->
+    count = @comments.length
+    if count > 0 and count is @model.get("comments_count")
+      @change_comments(i, "show") for i in [0..count-1]
+      @change_display("top")
+    else
+      $.ajax(
+        url: "#{@root_url()}/comments"
+        success: (data) =>
+          @model.set(comments_count: data.length)
+          @change_display("top")
+          @init_data(data)
+      )
+
+  hide_comment: () ->
+    count = @comments.length
+    if count > 3
+      @change_comments(i, "hide") for i in [0..count-4]
+      @change_display("down")
+
+  change_display: (state) ->
+    describe = $(".describe", @$display_comment)
+    icon = $("i", @$display_comment)
+
+    if state == "top"
+      @$display_comment.removeClass("more_comment").addClass("hide_comment")
+      describe.html("隐藏评论")
+      icon.addClass("icon-chevron-top").removeClass("icon-chevron-down")
+    else
+      @$display_comment.removeClass("hide_comment").addClass("more_comment")
+      describe.html("#{@model.get('comments_count')}评论")
+      icon.addClass("icon-chevron-down").removeClass("icon-chevron-top")
+
+  textarea_status: () ->
+    value = @$textarea.val().trim()
+    if _.isEmpty(value)
+      @$btn_comment.addClass("disabled")
+    else
+      @$btn_comment.removeClass("disabled")
+
+  change_comments: (i, call_name) ->
+    @comments.models[i].trigger(call_name)
+
 
 root.CreateTopicView = CreateTopicView
 root.TopicViewList = TopicViewList
