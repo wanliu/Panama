@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
-
+  
   attr_accessible :uid, :login, :first_name, :last_name, :email
   attr_protected :money
 

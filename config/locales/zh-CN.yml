@@ -224,7 +224,16 @@ zh-CN:
       admin_user: 管理员
       user_checking: 用户审核
       order_refund: 退货
+      setting: 设置
     attributes:
+      setting:
+        id: 编号
+        var: 参数名
+        value: 参数值
+        target_id: 关联ID
+        target_type: 关联类型
+        created_at: 创建时间
+        updated_at: 更新时间
       activity:
         id: 编号
         shop: 商店
