@@ -62,7 +62,7 @@ Panama::Application.routes.draw do
     end
 
     resources :circles, :only => [:index], :controller => "communities/circles" do
-      collection do 
+      collection do
         post :category
         delete :del_category
         get :members
