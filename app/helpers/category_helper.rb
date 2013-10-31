@@ -16,23 +16,23 @@ module CategoryHelper
   	html = ""
     root = (Category.root.children.size == 1 ? Category.root.children[0] : Category.root)
   	root.children.each do |category|
-  		html << first_class_category_tree_of(category)
+  		html << lv1_category_tree_of(category)
   	end
   	html.html_safe
   end
 
-  def first_class_category_tree_of(category)
+  def lv1_category_tree_of(category)
   	li_begin_of(category) << descendant_categories_html(category) << li_end_of(category)
   end
 
-  def second_class_category_tree_of(category)
-    html = "<li class='second_class_category_tree'>
+  def lv2_category_tree_of(category)
+    html = "<li class='lv2_category_tree'>
               <a href='/category/#{ category.id }' data-category_id='#{ category.id }'>
                 <span>#{ category.name }</span>
               </a>
               <ul>"
     category.children.each do |child|
-      html << "<li class='third_class_category_node'>
+      html << "<li class='lv3_category_node'>
           <a href='/category/#{ child.id }' data-category_id='#{ category.id }'>
             #{ child.name }
           </a>
@@ -54,7 +54,7 @@ module CategoryHelper
   	if category.children.size > 0
 	      html << "<ul id='forms-collapse-#{ category.id }' class='collapse lv2_categories'>"
 	        category.children.each do |child|
-	        	html << second_class_category_tree_of(child)
+	        	html << lv2_category_tree_of(child)
 	        end
 	      html << "</ul>"
 	  	HTML

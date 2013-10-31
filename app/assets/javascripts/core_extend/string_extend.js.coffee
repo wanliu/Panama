@@ -12,6 +12,6 @@ String.prototype.trimRight = () ->
 
 #转换为固定小数位的货币格式
 String.prototype.toMoney = (scale = 2) ->
-	value = parseFloat(this.trim()).toFixed(scale)
-	value = 0 unless parseFloat(value) > 0
-	return "￥#{value}"
+	value = parseFloat(this.trim())
+	value = 0.0 unless value >= 0
+	return "￥#{value.toFixed(scale)}"
