@@ -80,6 +80,15 @@ class Circle < ActiveRecord::Base
     friends.create_member(user_id: uid)
   end
 
+  def is_manage?(user_id)
+    status = CircleFriends._get_state_val(:manage)
+    friends.exists?(:user_id => user_id, :identity => status)
+  end
+
+  def is_member?(user_id)
+    friends.exists?(:user_id => user_id)
+  end
+
   def remove_friend(user)
     uid = user
     uid = user.id if user.is_a?(User)

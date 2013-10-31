@@ -27,6 +27,14 @@ body.communities{
     }
   }
 
+  .create_category{
+    text-align: center;
+
+    .add_category{
+      margin-right: 10px;
+    }
+  }
+
   hr{
     border: 1px solid rgba(0, 122, 255, 0.34);
     margin: 0px 0px 10px 0px;
@@ -82,6 +90,10 @@ body.communities{
 }
 
 .community{
+  .following{
+    margin-bottom: 10px;
+  }
+
   .right{
 
     .setting{
@@ -141,6 +153,10 @@ body.communities{
           height: 40px;
           float: left;
           margin-right: 12px;
+        }
+
+        .content{
+          margin-left: 48px;
         }
 
         .line{
@@ -206,16 +222,16 @@ body.communities{
   }
   .member{
     @include transparent(rgb(51,51,51), 0.55);
-    .follow, .unfollow{ 
-      cursor: pointer 
+    .follow, .unfollow{
+      cursor: pointer
     }
     margin-bottom: 10px;
     width: 23%;
-    .member_header{ 
-      height: 70px; 
+    .member_header{
+      height: 70px;
       width: 70px;
     }
-    .member_login{ 
+    .member_login{
       margin-top: 15px;
     }
   }

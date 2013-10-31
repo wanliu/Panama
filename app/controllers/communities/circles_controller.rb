@@ -13,14 +13,14 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def add_category
-    @category = @circle.categories.only_deleted.find_by(:name => "反馈")
+    @category = @circle.categories.only_deleted.find_by(:name => params[:name])
     if @category.nil?
       @category = @circle.categories.create(:name => params[:name])
     else
       @category.recover
     end
     respond_to do |format|
-      if @category.valid
+      if @category.valid?
         format.html
         format.json{ render json: @category }
       else

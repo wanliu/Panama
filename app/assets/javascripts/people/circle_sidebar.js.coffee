@@ -4,8 +4,8 @@ class CircleCategory extends Backbone.View
 
 	initialize: () ->
 		_.extend(@, @options)
-	
-	events: 
+
+	events:
 		"click .add_category" : "edit"
 		"blur .new_category" : "submit"
 		"click .remove_category" : "remove"
@@ -21,11 +21,12 @@ class CircleCategory extends Backbone.View
 			success: () =>
 				a.remove();
 		})
-	
+
 	edit: () ->
 		@$(".add_category").hide()
-		$("<input type='text' placeholder='新类别' class='new_category'/>").insertBefore(".add_category")
-	
+		input = $("<input type='text' placeholder='新类别' class='new_category span11'/>").insertBefore(".add_category")
+		input.focus()
+
 	submit: () ->
 		$category_name = $(".new_category").val()
 		@$(".new_category").remove()
@@ -37,7 +38,7 @@ class CircleCategory extends Backbone.View
 				data: { name: $category_name },
 				url: "/communities/#{ @circle_id }/circles/add_category",
 				success: (data) =>
-					$("<a data-value-id='#{ data.id}' href='#' class='circle-category-#{data.id}'>#{ data.name}  <i class='icon-remove remove_category'></i> </a>").insertBefore(".add_category")	
+					$("<a data-value-id='#{ data.id}' href='#' class='circle-category-#{data.id}'>#{ data.name}  <i class='icon-remove remove_category'></i> </a>").insertBefore(".add_category")
 			})
 
 root.CircleCategory = CircleCategory
