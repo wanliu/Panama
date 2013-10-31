@@ -157,14 +157,35 @@ body.communities{
             background-color: white;
             color: #B8B8B8;
             font-size: 13px;
-            line-height: 27px;
+            line-height: 30px;
             padding-left: 10px;
           }
 
           .comment_bar{
 
-            .display{
+            .display-comment{
               font-size: 13px;
+              display: none;
+            }
+
+            .hide_comment, .more_comment{
+              display: block;
+            }
+          }
+
+          .comments_panel{
+            margin: 10px 0;
+            padding-left: 10px;
+
+            .comment{
+              display: none;
+            }
+
+            .user_info{
+              width: 40px;
+              height: 40px;
+              float: left;
+              margin-right: 10px
             }
           }
         }

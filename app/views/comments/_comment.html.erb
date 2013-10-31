@@ -2,35 +2,35 @@
 <% login = comment.user.login %>
 <div class='row-fluid'>
     <div class='span2 user-inof' >
-        <div>
-            <img src="<%=comment.user.icon %>" class='img-polaroid avatar' />
-        </div>
-        <div>
-            <%=login.length > 5 ? "#{login[0..5]}.." : login %>
-        </div>
+      <div>
+        <img src="<%=comment.user.icon %>" class='img-polaroid avatar' />
+      </div>
+      <div>
+        <%=login.length > 5 ? "#{login[0..5]}.." : login %>
+      </div>
     </div>
     <div class='span10'>
         <div class='well well-msg'>
-            <%=comment.content %>
-            <% if comment.replies.count > 0 %>
-            <div style='text-align:right;'>
-                回复:
+          <%=comment.content %>
+          <% if comment.replies.count > 0 %>
+          <div style='text-align:right;'>
+              回复:
+          </div>
+          <%end%>
+          <% comment.replies.each do |r| %>
+          <hr style='margin: 5px' />
+          <div class='row-fluid'>
+            <div class='span3'>
+              <div>
+                <img class='img-circle' src="<%=r.user.icon %>" />
+              </div>
+              <div>
+                <%=r.user.login %>
+              </div>
             </div>
-            <%end%>
-            <% comment.replies.each do |r| %>
-            <hr style='margin: 5px' />
-            <div class='row-fluid'>
-                <div class='span3'>
-                    <div>
-                        <img class='img-circle' src="<%=r.user.icon %>" />
-                    </div>
-                    <div>
-                        <%=r.user.login %>
-                    </div>
-                </div>
-                <div class='span9'><%=r.content %></div>
-            </div>
-            <%end%>
+            <div class='span9'><%=r.content %></div>
+          </div>
+          <%end%>
         </div>
     </div>
 </div>
