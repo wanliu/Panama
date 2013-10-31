@@ -99,7 +99,7 @@
   }
 }
 
-.communty{
+.community{
   .title{
 
     input.search-query{
@@ -142,6 +142,17 @@
 
     .circles{
       padding: 15px 0px 15px 13px;
+    }
+  }
+  .create_circle{
+    input[type="checkbox"] {
+      margin: 0 0 0 0;
+    }
+    .m_r {
+      margin-right: 20px;
+    }
+    .setting{
+      margin-bottom: 20px;
     }
   }
 }

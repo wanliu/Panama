@@ -1,48 +1,45 @@
 <div class=' widget circles'>
-  <h3><%= @city.try(:name) %>商圈</h3>
+  <div class="title row-fluid">
+    <div class="span4">
+      <span style="font-size:25px;font-weight:bold;"><%= @city.try(:name) %>商圈</span>
+    </div>
+    <div class="span8"> <%= render "find_circles" %></div>
+  </div>
+ 
   <div class ="wrapper row-fluid circles-list">
     <% if @circles.length > 0 %>
       <% @circles.each do |circle| %>
         <div class='businiess_community span3' id="<%= circle.id %>">
-          <div class="popover top">
-            <div class="arrow"></div>
-            <h3 class="popover-title"><%=circle.name %></h3>
-            <div class="popover-content"><%=circle.description %></div>
-          </div>
-
           <div class="head_img">
             <a href="/shops/<%= circle.owner.name %>">
-              <span class="label label-important circle_count"><%=circle.friend_count %></span>
-              <img src="<%= circle.owner.photos.header %>" class="circle_icon"/>
+              <img src="<%= circle.owner.photos.avatar %>" class="circle_icon"/>
             </a>
           </div>
           <div  class="circle_detail">
             <div class ="circle_name">
-              <a href ="/shops/<%=Shop.find(circle.owner_id).try(:name) %>/admins/circles/<%=circle.id %>"><%=circle.name %></a>
+              <%=circle.name %>
             </div>
-            <div class="create_name">
-              <span><i class="icon-user"></i></span>
-              <a href="/shops/<%=Shop.find(circle.owner_id).try(:name) %>">
-                <%=Shop.find(circle.owner_id).try(:name) %>
-              </a>
+
+            <div class="row-fluid">
+              <div class="friends_count span8">
+                <span class="circle_count"><%=circle.friend_count %> 个成员</span>
+              </div>
+
+              <div class="create_name span4">
+                <span><i class="icon-user"></i></span>
+                <a href="/shops/<%=Shop.find(circle.owner_id).try(:name) %>">
+                  <%=Shop.find(circle.owner_id).try(:name) %>
+                </a>
+              </div>
             </div>
-            <div class="join">
-              <% if current_user.shop != circle.owner  %>
-                <% if circle.already_has?(current_user.id) %>
-                  <span data-value-id="<%=circle.id %>" class="label label-warning">已加入</span>
-                <% else %>
-                    <a href="javascript:void(0)" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入商圈</a>
-                <% end %>
-              <% else %>
-                <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
+            
+
+            <% @friends.each do |friend| %>
+              <% if friend.circle_id == circle.id %>
+                <div class="friends_icons"><img src="<%=friend.photos.icon %>"/></div>
               <% end %>
-            </div>
-          </div>
-          <% @friends.each do |friend| %>
-            <% if friend.circle_id == circle.id %>
-              <img src="<%=friend.photos.icon %>" class="friends_icons"/>
             <% end %>
-          <% end %>
+          </div>
         </div>
       <% end %>
     <% else %>
@@ -56,11 +53,19 @@
       el: $(".circles-list"),
       current_user_login: '<%= current_user.login %>'
     })
-    $(".businiess_community").bind("mouseenter",function(){
-      $(this).find(".popover").css("display","block");
-    })
-    $(".businiess_community").bind("mouseleave",function(){
-      $(this).find(".popover").css("display","none");
-    })
+
+    // $(".businiess_community").bind("mouseenter",function(){
+    //   $(this).find(".popover").css("display","block");
+    // })
+    // $(".businiess_community").bind("mouseleave",function(){
+    //   $(this).find(".popover").css("display","none");
+
+    // $(".circle_description").each(function(i){
+    //   var divH = $(this).height();
+    //   var $p = $("p", $(this)).eq(0);
+    //   while ($p.outerHeight() > divH) {
+    //       $p.text($p.text().replace(/(\s)*([a-zA-Z0-9]+|\W)(\.\.\.)?$/, "..."));
+    //   };
+    // })
   })
 </script>

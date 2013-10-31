@@ -15,4 +15,8 @@ class RegionCity < ActiveRecord::Base
       errors.add(:city_id, "该城市已经被划分为其他区域了!")
     end
   end
+
+  def self.location_region(city_id)
+    find_by(:city_id => city_id).region
+  end
 end

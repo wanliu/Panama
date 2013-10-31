@@ -34,3 +34,5 @@
 #= require people/product_comment
 #= require people/direct_transaction
 #= require upload_photo
+#= require people/circle_address
+#= require people/circle

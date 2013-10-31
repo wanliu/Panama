@@ -8,6 +8,7 @@
 #= require lib/infinite_scroll
 #= require_tree ./activities
 #= require activity_buy
+#= require lib/bootstrap-progressbar
 
 root = window || @
 

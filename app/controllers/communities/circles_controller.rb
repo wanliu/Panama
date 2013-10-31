@@ -4,9 +4,28 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def category
+	  @circle = Circle.find(params[:community_id])
+	  @circle_category = @circle.categories.create(:name => params[:name])
+	  respond_to do |format|
+	    format.html
+	    format.json{ render json: @circle_category }
+	  end
   end
 
-  def member
+  def del_category
+    @circle = Circle.find(params[:community_id])
+    @circle.categories.find(params[:category_id]).delete
+    respond_to do |format|
+      format.json { head :no_content }
+    end
   end
 
+  def members
+    @circle = Circle.find(params[:community_id])
+    @members = @circle.friend_users
+    respond_to do |format|
+      format.html
+      format.json{ render json: @members }
+    end
+  end
 end
