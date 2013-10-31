@@ -21,7 +21,11 @@ class CommunitiesController < ApplicationController
 
 	def city_index
 		@region = RegionCity.location_region(params[:city_id])
-		city_ids = @region.region_cities_ids()
+		if @region
+			city_ids = @region.region_cities_ids()
+		else
+			city_ids = params[:city_id]
+		end
 		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
 								 .where("user_checkings.checked = true and addr.area_id in (?)", city_ids)
 								 .group('user_checkings.id')
@@ -77,7 +81,11 @@ class CommunitiesController < ApplicationController
 
 	def search
 		@region = RegionCity.location_region(params[:city_id])
-		city_ids = @region.region_cities_ids()
+		if @region
+			city_ids = @region.region_cities_ids()
+		else
+			city_ids = params[:city_id]
+		end
 		@users = UserChecking.joins("left join addresses as addr on user_checkings.address_id=addr.id")
 							 .where("addr.area_id in (?)",city_ids)
 							 .group("user_checkings.id")
