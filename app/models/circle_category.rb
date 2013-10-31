@@ -4,6 +4,7 @@ class CircleCategory < ActiveRecord::Base
   attr_accessible :circle_id, :name
   acts_as_paranoid
 
+  validate :name, :presence => true
   validate :valid_unqi_name?
 
   def valid_unqi_name?

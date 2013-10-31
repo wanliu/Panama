@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Communities::CirclesController < Communities::BaseController
 
   def index
@@ -28,4 +29,11 @@ class Communities::CirclesController < Communities::BaseController
       format.json{ render json: @members }
     end
   end
+
+  def title
+    actions, key = t("community.circle"), params[:action].to_sym
+    name = "-#{actions[key]}" if actions.key?(key)
+    "#{@circle.name}#{name}-商圈"
+  end
+
 end
