@@ -1,10 +1,10 @@
-#encoding: utf-8
+# coding: utf-8
 
 ActiveAdmin.register Region do
   config.clear_action_items!
 
   action_item do
-    link_to "划分区域", new_plus_system_regions_path
+    link_to "添加区域", new_plus_system_regions_path
   end
 
   index do
@@ -22,29 +22,29 @@ ActiveAdmin.register Region do
       end.join("&nbsp;&nbsp;").html_safe
     end
 
-    column "操作" do |c|
-      link_1 = link_to "编辑", edit_info_system_region_path(c), :class =>"member_link"
-      link_2 = link_to "删除", system_region_path(c), :method => :delete, :confirm => "确定删除吗？", :class =>"member_link"
-      link_1 + (link_2 || "")
+    column "操作" do |region|
+      link_edit = link_to "编辑", edit_info_system_region_path(region), :class =>"member_link"
+      link_delete = link_to "删除", system_region_path(region), :method => :delete, :confirm => "确定删除区域\"#{region.name}\"吗？", :class =>"member_link"
+      (link_edit << " " << link_delete).html_safe
     end
   end
 
-  member_action :edit_info, :method => :get do
+  member_action :edit_info, :method => :get, :title => "编辑" do
     @region = Region.find(params[:id])
   end
 
-  collection_action :create_region,:method => :post do
-    unless params[:region_id ].nil?
-      Region.find(params[:region_id]).destroy
-    end
+  collection_action :create_region, :method => :post do
     begin
+      unless params[:region_id ].nil?
+        Region.find(params[:region_id]).destroy
+      end
       @region = Region.create(:name => params[:region_name],:advertisement => params[:ad])
       unless params[:attachment_ids].nil?
         @region.attachments = params[:attachment_ids].map do |k, v|
           Attachment.find_by(:id => k)
         end.compact
       end
-      unless  params[:part_ids].nil?
+      unless params[:part_ids].nil?
         params[:part_ids].map do |city_id| 
           RegionCity.create(
             :region_id => @region.id, 
@@ -75,7 +75,7 @@ ActiveAdmin.register Region do
     end
   end
 
-  collection_action :new_plus, :title => "划分区域" do
+  collection_action :new_plus, :title => "添加区域" do
     @region = Region.new
     @address = Address.new
   end

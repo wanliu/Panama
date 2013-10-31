@@ -224,7 +224,14 @@ zh-CN:
       admin_user: 管理员
       user_checking: 用户审核
       order_refund: 退货
+      region: 区域
     attributes:
+      region:
+        id: 编号
+        name: 名称
+        created_at: 创建时间
+        updated_at: 更新时间
+        advertisement: 广告词
       activity:
         id: 编号
         shop: 商店
