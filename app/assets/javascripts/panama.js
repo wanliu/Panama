@@ -44,6 +44,9 @@
 //= require addresses
 //= require search_users
 //= require notification
+//= require upload_photo
+//= require people/circle_address
+//= require people/circle
 
 root = window || this;
 

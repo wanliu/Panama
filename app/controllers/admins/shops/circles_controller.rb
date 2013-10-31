@@ -4,29 +4,19 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
   def index
     @circles = current_shop.circles
     respond_to do |format|
-      format.json{ render json: @circles.as_json(methods: :friend_count) }
+      format.json{ render json: @circles.as_json(
+        methods: [:friend_count, :header_url]) }
     end
   end
 
   def create
-    begin
-      Circle.transaction do
-        @circle = current_shop.circles.create(
-          params[:circle].merge({ 
-            created_type: "advance", 
-            city_id: params[:address][:area_id], 
-            setting_id: CircleSetting.create(params[:circle][:setting]).id 
-        }))
-      end
-    rescue Exception => ex
-    end
+    @setting = CircleSetting.create(params[:setting])
+    params[:circles].merge!(:setting_id => @setting.id)
+    @circle = current_shop.circles.create(params[:circle])
 
     respond_to do |format|
-      if @circle.valid?
-        format.json{ render json: @circle }
-      else
-        format.json{ render json: draw_errors_message(@circle), status: 403 }
-      end
+      format.html { redirect_to shop_admins_circles_path(current_shop) }
+      format.json { head :no_content }
     end
   end
 

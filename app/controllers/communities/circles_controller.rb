@@ -4,6 +4,14 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def category
+    @topics = Topic.where(:circle_id => params[:community_id],:category_id => params[:category_id])
+    respond_to do |format|
+      format.html
+      format.json{ render json: @topics }
+    end
+  end
+
+  def add_category
 	  @circle = Circle.find(params[:community_id])
 	  @circle_category = @circle.categories.create(:name => params[:name])
 	  respond_to do |format|
