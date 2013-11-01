@@ -70,22 +70,32 @@ class Circle < ActiveRecord::Base
     photos.header
   end
 
+  def limit_join?
+    setting.present? && (setting.limit_join || setting.limit_city)
+  end
+
+  def address
+    return "" if city.nil?
+    "#{city.parent.parent.try(:name)}#{city.parent.try(:name)}#{city.name}"
+  end
+
   def friend_users
     friends.joins(:user).map{|f| f.user.as_json }
   end
 
   def join_friend(user)
-    uid = user
-    uid = user.id if user.is_a?(User)
-    friends.create_member(user_id: uid)
+    uid = user.is_a?(User) ? user.id : user
+    friends.create_member(uid)
   end
 
-  def is_manage?(user_id)
+  def is_manage?(user)
+    user_id = user.is_a?(User) ? user.id : user
     status = CircleFriends._get_state_val(:manage)
     friends.exists?(:user_id => user_id, :identity => status)
   end
 
-  def is_member?(user_id)
+  def is_member?(user)
+    user_id = user.is_a?(User) ? user.id : user
     friends.exists?(:user_id => user_id)
   end
 

@@ -26,7 +26,7 @@ class Topic < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :category
 
-  validate :valid_category?
+  validate :valid_category?, :valid_member?
 
   before_save :content_format_html
 
@@ -62,6 +62,12 @@ class Topic < ActiveRecord::Base
   def valid_category?
     unless circle.categories.exists?(["id=?", category_id])
       errors.add(:category_id, "没有选择分类")
+    end
+  end
+
+  def valid_member?
+    unless circle.is_member?(user_id)
+      errors.add(:user_id, "用户没有权限分享内容！")
     end
   end
 end

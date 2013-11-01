@@ -50,4 +50,18 @@ class Communities::CirclesController < Communities::BaseController
     "#{@circle.name}#{name}-商圈"
   end
 
+  def access_denied
+  end
+
+  def join
+    @friend = @circle.join_friend(current_user)
+    respond_to do |format|
+      if @friend.valid?
+        format.js{ head :no_content }
+      else
+        format.js{ render :json => draw_errors_message(@friend), :status => 403  }
+      end
+    end
+  end
+
 end

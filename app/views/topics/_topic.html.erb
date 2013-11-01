@@ -43,9 +43,11 @@
         </div>
       </div>
       <div class='comments_panel'></div>
+      <% if @circle.is_member?(current_user) %>
       <div class='send_comment' tabindex='-1'>
         发表评论...
       </div>
+      <% end %>
       <div class="comment_panel">
         <div class='row-fluid'>
           <div class='span1'>

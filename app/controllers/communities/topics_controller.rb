@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Communities::TopicsController < Communities::BaseController
 
   def create
@@ -31,12 +32,16 @@ class Communities::TopicsController < Communities::BaseController
 
   def create_comment
     @topic = @circle.topics.find_by(:id => params[:id])
-    @comment = @topic.comments.create(params[:comment].merge(:user_id => current_user.id))
     respond_to do |format|
-      if @comment.valid?
-        format.json{ render :json => @comment }
+      if @circle.is_member?(current_user.id)
+        @comment = @topic.comments.create(params[:comment].merge(:user_id => current_user.id))
+        if @comment.valid?
+          format.json{ render :json => @comment }
+        else
+          format.json{ render :json => draw_errors_message(@comment), :status => 403 }
+        end
       else
-        format.json{ render :json => draw_errors_message(@comment), :status => 403 }
+        format.json{ render :json => ["你没有回复的权限, 加入商圈"], :status => 403 }
       end
     end
   end

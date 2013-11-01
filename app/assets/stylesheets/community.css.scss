@@ -87,6 +87,15 @@ body.communities{
       width: 140px;
     }
   }
+
+  .address{
+    margin-top: 10px;
+    margin-left: 5px;
+
+    i{
+      margin-right: 3px;
+    }
+  }
 }
 
 .community{
@@ -248,4 +257,8 @@ body.communities{
       margin-top: 15px;
     }
   }
+}
+
+.access_denied{
+
 }

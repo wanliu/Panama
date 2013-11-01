@@ -244,7 +244,8 @@ class TopicView extends Backbone.View
     $.ajax(
       url: "#{@root_url()}/participates",
       success: (data) =>
-        _.each data, (d) => @add_participate(d)
+        _.each data, (d) =>
+          @$(".participates").append(@render_participate(d))
     )
 
   create_participate: () ->
@@ -255,14 +256,13 @@ class TopicView extends Backbone.View
         el = @$(".participates .count")
         count = if _.isEmpty(el.text().trim()) then 0 else parseInt(el.text())
         el.html(++count)
-        @add_participate(data)
+        @$(".participates").prepend(@render_participate(data))
     )
 
-  add_participate: (data) ->
-    @$(".participates").append(
-      "<a data-toggle='tooltip' data-placement='top' data-original-title='#{data.login}' href='javascript:void(0)' class='participate'>
-        <img src='#{data.icon_url}' />
-      </a>")
+  render_participate: (data) ->
+    "<a data-toggle='tooltip' data-placement='top' data-original-title='#{data.login}' href='javascript:void(0)' class='participate'>
+      <img src='#{data.icon_url}' />
+    </a>"
 
 
 root.CreateTopicView = CreateTopicView

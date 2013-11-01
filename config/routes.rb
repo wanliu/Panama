@@ -61,6 +61,8 @@ Panama::Application.routes.draw do
       get "search", :to => "communities#search"
     end
 
+    match "access_denied", :to => "communities/circles#access_denied"
+
     resources :circles, :only => [:index], :controller => "communities/circles" do
 
       collection do
@@ -68,6 +70,7 @@ Panama::Application.routes.draw do
         delete :del_category
         get :members
         get ":category_id/category", :to => "communities/circles#category"
+        post :join
       end
     end
 

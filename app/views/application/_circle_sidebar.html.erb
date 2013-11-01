@@ -5,11 +5,13 @@
     </a>
   </div>
   <h4 class='title'>
-    <a href="<%= community_circles_path(@circle) %>"><%= @circle.name %></a>
+    <a href="<%= community_circles_path(@circle) %>">
+      <%= @circle.name %>
+    </a>
   </h4>
   <ul id="community-side-nav" class="side-nav community_category">
     <li class='accordion-group active'>
-      <a class="accordion-toggle" href="#">
+      <a class="accordion-toggle" href="javascript:void(0)">
         所有信息
       </a>
     </li>
@@ -29,10 +31,10 @@
   </div>
   <% end %>
   <hr />
-  <div class='friends'>
+  <div class='friends row-fluid'>
     <div>
       <span class='member'>
-        成员 (<%=@circle.friend_count %> 人)
+        成员 (<%=@circle.friend_count %>人)
       </span>
       <span class='all_member'>
         <a href='/communities/<%=@circle.id %>/circles/members'>所有成员</a>
@@ -53,6 +55,12 @@
       </ul>
     </div>
   </div>
+  <% if @circle.city.present?  %>
+    <div class='address'>
+      <i class='icon-map-marker'></i>
+      <%= @circle.address %>
+    </div>
+  <% end %>
 </nav>
 <script type="text/javascript">
   $(function() {
