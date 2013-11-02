@@ -14,15 +14,16 @@
       </a>
     </li>
     <% @circle.categories.each do |c| %>
-    <li>
-    <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
-      <%=c.name %>
-      <i class="icon-remove remove_category"></i>
-    </a>
-    </li>
+      <li>
+        <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
+          <%=c.name %>
+        </a>
+      </li>
     <% end %>
-    <a class="add_category" href="#"><i class="icon-share-alt" style="float:left;"></i>添加分类</a>
-
+    <li class="add_category">
+      <a href="#">
+        <i class="icon-share-alt" style="float:left;"></i>添加分类</a>
+      </li>
   </ul>
   <hr />
   <div class='friends'>

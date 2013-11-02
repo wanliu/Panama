@@ -31,7 +31,7 @@
   </div>
   <div class='span5'>
     <div class='right'>
-      <%= render :partial => "description" %>
+      <div><%= render :partial => "description" %></div>
       <div class='topics'>
       </div>
     </div>
@@ -51,7 +51,16 @@
   $(function(){
     new CircleListView({
       el: $(".community"),
-      circle_id: <%=@circle.id %>
+      circle_id: <%=@circle.id %>,
+    })
+
+    new FollowView({
+      data: {
+        follow_id:  $(".owner").attr("data-value-id"),
+        follow_type: "<%=@circle.owner_type %>"
+      },
+      login: "<%=current_user.login %>",
+      el: $(".owner")
     })
   })
 </script>

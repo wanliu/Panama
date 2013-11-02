@@ -30,7 +30,7 @@ class FollowView extends Backbone.View
     _.extend(@, opts)
     @model = new Follow(@data, @login);
 
-  unfollow: () ->
+  unfollow: () ->    
     unless @model.has("id")
       id = @$(".unfollow").attr("data-value-id");
       @model.set({id: id})
