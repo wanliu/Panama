@@ -256,7 +256,7 @@ class TopicView extends Backbone.View
         el = @$(".participates .count")
         count = if _.isEmpty(el.text().trim()) then 0 else parseInt(el.text())
         el.html(++count)
-        @$(".participates").prepend(@render_participate(data))
+        $(@render_participate(data)).insertAfter(@$(".participates>.add_participate"))
     )
 
   render_participate: (data) ->
