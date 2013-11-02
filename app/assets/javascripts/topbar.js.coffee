@@ -4,6 +4,7 @@ class TopBar extends Backbone.View
 
 	events:
 		"click .link.friends": "toggleFriends"
+		"click .search-btn"  : "enterSearch"
 		"submit form"        : "enterSearch"
 
 	initialize: (@options) ->
@@ -18,9 +19,8 @@ class TopBar extends Backbone.View
 		false
 
 	enterSearch: (e) ->
-		@$("[type=search]")
-		query = @$("[type=search]").val()
-		$(window).trigger('reset_search', {title: query})
+		query = @$("[type=search]").val().trim()
+		$(window).trigger('reset_search', {title: query}) if query
 		false
 
 

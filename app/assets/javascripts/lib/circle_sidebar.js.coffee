@@ -4,15 +4,16 @@ class CircleCategory extends Backbone.View
 
 	initialize: () ->
 		_.extend(@, @options)
-	
-	events: 
+
+	events:
 		"click .add_category" : "edit"
 		"blur .new_category" : "submit"
-	
+
 	edit: () ->
 		@$(".add_category").hide()
-		$("<input type='text' placeholder='新类别' class='new_category'/>").insertBefore(".add_category")
-	
+		input = $("<input type='text' placeholder='新类别' class='new_category span11'/>").insertBefore(".add_category")
+		input.focus()
+
 	submit: () ->
 		$category_name = $(".new_category").val()
 		@$(".new_category").remove()

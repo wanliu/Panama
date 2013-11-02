@@ -1,17 +1,17 @@
 <html>
 <head>
-  <title>Panama</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
+	<title>Panama</title>
+	<%= stylesheet_link_tag "application", :media => "all" %>
+	<%= javascript_include_tag "application" %>
+	<%= csrf_meta_tags %>
 </head>
 <body>
 	<%= render_cell :header, :show %>
 	<div class='second-nav-bar'></div>
 	<div class='main-slide'>
-        <style type="text/css" media="screen">
+				<style type="text/css" media="screen">
 
-        </style>		
+				</style>		
 		<div class='slide'>
 			
 		</div>
@@ -30,8 +30,8 @@
 				<script type="text/javascript">
 					$(".slide-box").slides({
 						play: 5000,
-				        pause: 2500,
-				        hoverPause: true						
+						pause: 2500,
+						hoverPause: true						
 					});
 				</script>
 				<%= yield %>

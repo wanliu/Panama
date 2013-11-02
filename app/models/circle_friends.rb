@@ -9,9 +9,8 @@ class CircleFriends < ActiveRecord::Base
   belongs_to :circle
   belongs_to :user
 
-  validates_presence_of :circle
-  validates_presence_of :user_id
-  validates_presence_of :user
+  validates :user, :presence => true
+  validates :circle, :presence => true
 
   acts_as_status :identity, [:manage, :member]
 

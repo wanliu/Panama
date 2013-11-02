@@ -3,7 +3,8 @@
 root = window || @
 
 class root.CircleListView extends Backbone.View
-
+  events:
+    "click .following .join" : "join_circle"
   initialize: (option) ->
     _.extend(@, option)
 
@@ -29,9 +30,12 @@ class root.CircleListView extends Backbone.View
   short_elem: () ->
     ltopic = $(".topics", @$left)
     rtopic = $(".topics", @$right)
-    if ltopic.height() > rtopic.height() then rtopic else ltopic
+    if @$left.height() > @$right.height() then rtopic else ltopic
 
-
-
-
-
+  join_circle: () ->
+    $.ajax(
+      url: "/communities/#{@circle_id}/circles/join"
+      type: "POST",
+      success: () =>
+        window.location.href = "/communities/#{@circle_id}/circles"
+    )

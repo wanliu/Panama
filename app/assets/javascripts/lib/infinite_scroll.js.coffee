@@ -6,10 +6,9 @@ class InfiniteScrollView extends Backbone.View
   offset: 0,
   limit: 40,
   init_size: 40,
+  search_options: {},
   msg_tip: '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
-  search_options: {
 
-  }
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -53,11 +52,13 @@ class InfiniteScrollView extends Backbone.View
 
   scroll_load: () ->
     if $(@msg_el).css("display") != "block"
-      sp_height = $(@sp_el).offset().top + $(@sp_el).height()
+      sp_height = $(document).height()
       w_height = $(window).height() + $(window).scrollTop()
-      if sp_height <= w_height
+      pre_height = $(window).height()
+      if sp_height - w_height <= pre_height
         clearTimeout(@timeout_id) if @timeout_id
-        @timeout_id = setTimeout _.bind(@fetch, @), 250
+        @timeout_id = setTimeout _.bind(@fetch, @), 100
+
   remove_columns: () ->
     $(@sp_el).find(".columns>.column").children().remove()
 

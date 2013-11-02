@@ -5,7 +5,7 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def category
-    @topics = Topic.where(:circle_id => params[:community_id],:category_id => params[:category_id])
+    @topics = @circle.topics
     respond_to do |format|
       format.html
       format.json{ render json: @topics }
@@ -13,12 +13,20 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def add_category
-	  @circle = Circle.find(params[:community_id])
-	  @circle_category = @circle.categories.create(:name => params[:name])
-	  respond_to do |format|
-	    format.html
-	    format.json{ render json: @circle_category }
-	  end
+    @category = @circle.categories.only_deleted.find_by(:name => params[:name])
+    if @category.nil?
+      @category = @circle.categories.create(:name => params[:name])
+    else
+      @category.recover
+    end
+    respond_to do |format|
+      if @category.valid?
+        format.html
+        format.json{ render json: @category }
+      else
+        format.json{ render json: draw_errors_message(@category), status: 403 }
+      end
+    end
   end
 
   def update_category
@@ -31,15 +39,13 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def del_category
-    @circle = Circle.find(params[:community_id])
-    @circle.categories.find(params[:category_id]).delete
+    @circle.categories.find(params[:category_id]).destroy
     respond_to do |format|
       format.json { head :no_content }
     end
   end
 
   def members
-    @circle = Circle.find(params[:community_id])
     @members = @circle.friend_users
     respond_to do |format|
       format.html
@@ -58,6 +64,20 @@ class Communities::CirclesController < Communities::BaseController
     @circle.setting.update_attributes(params[:setting])
     respond_to do |format|
       format.json { head :no_content }
+    end
+  end 
+
+  def access_denied
+  end
+
+  def join
+    @friend = @circle.join_friend(current_user)
+    respond_to do |format|
+      if @friend.valid?
+        format.js{ head :no_content }
+      else
+        format.js{ render :json => draw_errors_message(@friend), :status => 403  }
+      end
     end
   end
 

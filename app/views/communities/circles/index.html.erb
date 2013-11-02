@@ -1,43 +1,48 @@
-<div class='row-fluid community'>
-  <div class='span7'>
-    <div class='left'>
-      <div class='widget toolbar'>
-        <form class='create_topic'>
-          <textarea class='span12' name='content' placeholder='分享新鲜事'></textarea>
-          <div class='row-fluid'>
-            <div class='span2 title'>
-              分享对象
+<div class='community'>
+  <%= render :partial => "following" %>
+  <div class='row-fluid'>
+    <div class='span7'>
+      <div class='left'>
+        <% if @circle.is_member?(current_user) %>
+        <div class='widget toolbar'>
+          <form class='create_topic'>
+            <textarea class='span12' name='content' placeholder='分享新鲜事'></textarea>
+            <div class='row-fluid'>
+              <div class='span2 title'>
+                分享对象
+              </div>
+              <div class='span10'>
+                <select class='span12' name='category_id'>
+                  <% @circle.categories.each do |c| %>
+                  <option value="<%=c.id %>">
+                    <%=c.name %>
+                  </option>
+                  <% end %>
+                </select>
+              </div>
             </div>
-            <div class='span10'>
-              <select class='span12' name='category_id'>
-                <% @circle.categories.each do |c| %>
-                <option value="<%=c.id %>">
-                  <%=c.name %>
-                </option>
-                <% end %>
-              </select>
+            <div class='row-fluid'>
+              <div class='span12'>
+                <input type='submit' value='分 享' class='btn btn-primary disabled' />
+              </div>
             </div>
-          </div>
-          <div class='row-fluid'>
-            <div class='span12'>
-              <input type='submit' value='分 享' class='btn btn-primary disabled' />
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
+        <% end %>
+        <div class='topics'>
+        </div>
       </div>
-      <div class='topics'>
+    </div>
+    <div class='span5'>
+      <div class='right'>
+        <%= render :partial => "description" %>
+        <div class='topics'>
+        </div>
       </div>
     </div>
   </div>
-  <div class='span5'>
-    <div class='right'>
-      <div><%= render :partial => "description" %></div>
-      <div class='topics'>
-      </div>
-    </div>
-  </div>
+  <div id="load_message_notifiy"></div>
 </div>
-<div id="load_message_notifiy"></div>
 
 <script type='text/template' id='create-topic-template'>
   <%= render :partial => "topics/topic" %>

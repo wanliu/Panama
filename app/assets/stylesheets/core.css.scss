@@ -128,6 +128,10 @@ ul {
 
 	a {
 		color: white;
+
+		&:hover {
+			text-decoration: none;
+		}
 	}
 
 	&.affix {
@@ -208,7 +212,7 @@ ul {
 		}
 	}
 
-	.navbar-back.affix{
+	.navbar-back.affix {
 		@include transparent(rgb(0,0,0),0.55);
 		background: black;
 		opacity: 0.55;
@@ -224,28 +228,38 @@ ul {
 
 	}
 
+	.search-btn {
+		color: rgb(219, 194, 194);;
+		border: none;
+		text-shadow: none;
+		cursor: pointer;
+		line-height: 20px;
+		@include border-radius(1px);
+		@include transparent(rgb(51,51,51),0.4);
+		/*background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);*/
+	}
+
 	.search-query {
+		width: 150px;
 		border: none;
 		color: #f8f8f8;
-		background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);
-		@include transparent(rgb(51,51,51),0.4);
-
 		padding-left: 26px;
-		width: 150px;
 		line-height: 20px;
-		@include transition(width 0.2s);
 		@include border-radius(1px);
+		@include transition(width 0.2s);
+		@include transparent(rgb(51,51,51),0.4);
+		background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);
 
 		&:focus {
 			width: 250px;
 		}
 	}
 
-	.navbar.affix .search-query {
-		background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.9);
-		background: $white;
-		color: #333;
-	}
+	// .navbar.affix .search-query {
+	// 	color: #333;
+	// 	background: $white;
+	// 	background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.9);
+	// }
 
 	.nav>li.divider {
 		display: block;
@@ -317,6 +331,18 @@ ul {
 
 			.btn-icons {
 				display: none;
+			}
+		}
+
+		&.category-expanded {
+			.settings {
+				.btn-auto {
+					display: none;
+				}
+
+				.btn-icons {
+					display: inline;
+				}
 			}
 		}
 	}
@@ -1049,17 +1075,9 @@ h2 small {
 }
 
 .sidebar-icons {
-	#sidebar-settings {
-		padding-left: 15px;
-	}
-
 	#category-sidebar {
 		>ul#forms-collapse {
 			padding-left: 0px;
-		}
-
-		.lv2_categories {
-			left: 80px;
 		}
 	}
 }
@@ -1090,7 +1108,7 @@ h2 small {
 		padding-bottom: 20px;
 		@include transparent(rgb(62, 112, 108), 0.91);
 
-		.second_class_category_tree {
+		.lv2_category_tree {
 			width: 240px;
 			display: inline-block;
 			vertical-align: top;
@@ -1106,7 +1124,7 @@ h2 small {
 				padding: 4px 10px 4px 0;
 			}
 
-			li.third_class_category_node {
+			li.lv3_category_node {
 				display: inline-block;
 				padding: 4px 10px 4px 0;
 				a {

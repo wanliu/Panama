@@ -5,31 +5,36 @@
     </a>
   </div>
   <h4 class='title'>
-    <a href="<%= community_circles_path(@circle) %>"><%= @circle.name %></a>
+    <a href="<%= community_circles_path(@circle) %>">
+      <%= @circle.name %>
+    </a>
   </h4>
   <ul id="community-side-nav" class="side-nav community_category">
     <li class='accordion-group active'>
-      <a class="accordion-toggle" href="#">
+      <a class="accordion-toggle" href="javascript:void(0)">
         所有信息
       </a>
     </li>
     <% @circle.categories.each do |c| %>
-      <li>
-        <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
-          <%=c.name %>
-        </a>
-      </li>
+    <li>
+    <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
+      <%=c.name %>
+    </a>
+    </li>
     <% end %>
-    <li class="add_category">
-      <a href="#">
-        <i class="icon-share-alt" style="float:left;"></i>添加分类</a>
-      </li>
   </ul>
+  <% if @circle.is_manage?(current_user.id) %>
+  <div class='row-fluid create_category'>
+    <a class="add_category pull-right" href="javascript:void(0)" data-toggle="tooltip" data-placement="top" data-original-title="添加分类">
+      <i class=" icon-plus"></i>
+    </a>
+  </div>
+  <% end %>
   <hr />
-  <div class='friends'>
+  <div class='friends row-fluid'>
     <div>
       <span class='member'>
-        成员 (<%=@circle.friend_count %> 人)
+        成员 (<%=@circle.friend_count %>人)
       </span>
       <span class='all_member'>
         <a href='/communities/<%=@circle.id %>/circles/members'>所有成员</a>
@@ -50,11 +55,17 @@
       </ul>
     </div>
   </div>
+  <% if @circle.city.present?  %>
+    <div class='address'>
+      <i class='icon-map-marker'></i>
+      <%= @circle.address %>
+    </div>
+  <% end %>
 </nav>
 <script type="text/javascript">
   $(function() {
     new CircleCategory({
-      el: $(".community_category"),
+      el: $("#community-sidebar"),
       circle_id: "<%=@circle.id %>"
     })
   })

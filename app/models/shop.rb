@@ -25,6 +25,7 @@ class Shop < ActiveRecord::Base
   # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
   has_one :shops_category
+  has_one :user_checking, :as => :owner
   belongs_to :user
 
   before_create :create_shop
