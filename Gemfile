@@ -143,7 +143,7 @@ gem "nested_form"
 # 默认值
 gem "default_value_for"
 gem 'cancan'
-gem 'rails-setting',:github => "huxinghai1988/rails-setting"
+gem 'rails-setting',:github => "agilejzl/rails-setting"
 
 gem 'activemerchant'
 gem 'activemerchant_patch_for_china'
