@@ -42,6 +42,14 @@ class Topic < ActiveRecord::Base
     update_attribute(:participate, participates.count)
   end
 
+  def comments_count
+    comments.count
+  end
+
+  def top_comments
+    comments.order("created_at desc").limit(3)
+  end
+
   def as_json(*args)
     attribute = super *args
     attribute["user"] = {
