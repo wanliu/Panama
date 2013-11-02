@@ -47,7 +47,7 @@
               </div>
             </div>
           </div>
-          <% address = current_user.user_checking.address %>
+          <% address = current_shop.user_checking.address %>
           <div class="span7 input_locate">
             <%= f.input :company_name, label: '营业店名' %>
             <%#= f.input :address_id, label: '营业地址' %>
@@ -100,7 +100,7 @@
       </div>
     <% end %>
 
-    <% if !current_user.user_checking.checked %>
+    <% if !current_shop.user_checking.checked %>
       <button class="modify pull-right btn btn-primary">修改</button>
     <% else %>
       <script type="text/javascript">

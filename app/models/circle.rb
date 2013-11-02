@@ -19,6 +19,7 @@ class Circle < ActiveRecord::Base
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
+  has_many :notifications, dependent: :destroy, class_name: "CircleNotification"
 
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
