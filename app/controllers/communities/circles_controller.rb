@@ -29,6 +29,15 @@ class Communities::CirclesController < Communities::BaseController
     end
   end
 
+  def update_category
+    @circle_category = @circle.categories.find(params[:category_id])
+    @circle_category.update_attributes(:name => params[:name])
+    respond_to do |format|
+      format.html
+      format.json{ render json: @circle_category }
+    end
+  end
+
   def del_category
     @circle.categories.find(params[:category_id]).destroy
     respond_to do |format|
@@ -43,6 +52,20 @@ class Communities::CirclesController < Communities::BaseController
       format.json{ render json: @members }
     end
   end
+
+  def title
+    actions, key = t("community.circle"), params[:action].to_sym
+    name = "-#{actions[key]}" if actions.key?(key)
+    "#{@circle.name}#{name}-商圈"
+  end
+
+  def update_circle
+    @circle.update_attributes(params[:circle])
+    @circle.setting.update_attributes(params[:setting])
+    respond_to do |format|
+      format.json { head :no_content }
+    end
+  end 
 
   def access_denied
   end

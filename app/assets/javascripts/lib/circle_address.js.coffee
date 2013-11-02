@@ -2,8 +2,14 @@ root = window || @
 
 class CircleAddressView extends Backbone.View
 
+	province_call: () ->
+
+	city_call: () ->
+
+	area_call: () ->
+
 	initialize: () ->
-		_.extend(@, @option)
+		_.extend(@, @options)
 		@$el = $(@el)
 		@load_province()
 		@load_depend_chose()
@@ -19,6 +25,7 @@ class CircleAddressView extends Backbone.View
 				_.each data, (num) =>
 					strHtml += "<option value='#{num["id"]}'>#{num["name"]}</option>"
 				@$el.find(".address_province_id").html(strHtml)
+				@province_call() 
 		})
 
 	load_depend_chose: () ->    
@@ -30,19 +37,22 @@ class CircleAddressView extends Backbone.View
 		@depend_select(
 			@$(".address_city_id"),
 			@$(".address_area_id"), 
-			"/city/"
+			"/city/",
+			@city_call
 		)      
 		@depend_select(
 			@$(".address_area_id"), 
 			"", 
-			"/city/"
+			"/city/",
+			@area_call	
 		)    
 
-	depend_select: (el, children, url) ->     
+	depend_select: (el, children, url, call_back = () ->) ->     		
 		new DependSelectView({
 			el: el,
 			children: children,
 			url: url,
+			call_back: _.bind(call_back, @)
 		})
 		
 root.CircleAddressView = CircleAddressView

@@ -69,6 +69,8 @@ Panama::Application.routes.draw do
         post :add_category
         delete :del_category
         get :members
+        put :update_circle
+        put :update_category
         get ":category_id/category", :to => "communities/circles#category"
         post :join
         post :apply_join

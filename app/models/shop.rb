@@ -48,6 +48,10 @@ class Shop < ActiveRecord::Base
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
   end
 
+  def is_follower?(user_id)
+    followers.exists?(user_id: user_id)
+  end
+
   #所有好友的圈子
   def all_friend_circles
     user_ids = circle_all_friends.select(:user_id).map{|f| f.user_id}
