@@ -11,7 +11,7 @@ class Communities::BaseController < ApplicationController
       redirect_to root_url
     else
       if @circle.limit_join?
-        unless access_denied?
+        unless access_denied? || except_denied?([:apply_join])
           unless @circle.is_member?(current_user.id)
             redirect_to community_access_denied_path(@circle)
             return
