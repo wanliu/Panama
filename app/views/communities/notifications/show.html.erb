@@ -8,9 +8,14 @@
         </a>
         申请加入商圈
 
-        <input type='button' value="同意" class='btn btn-primary agree' />
-        <input type='button' value="拒绝" class='btn btn-warning refuse' />
-
+        <% if @notice.apply_state.nil? %>
+          <%=link_to "同意", agree_join_community_notification_path(@circle, @notice), :class => "btn btn-primary agree", :remote => true, :method => "POST" %>
+          <%=link_to "拒绝", refuse_join_community_notification_path(@circle, @notice), :class => "btn btn-warning refuse", :remote => true, :method => "POST" %>
+        <% elsif @notice.apply_state %>
+          ,已经同意加入
+        <% else %>
+          ,已经拒绝加入
+        <% end %>
       </p>
     </div>
   </div>

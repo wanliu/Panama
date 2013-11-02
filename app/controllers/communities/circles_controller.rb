@@ -66,8 +66,10 @@ class Communities::CirclesController < Communities::BaseController
     respond_to do |format|
       if @circle.limit_join?
         @circle.apply_join_notice(current_user)
+        format.js{ render :js => "window.location.href='#{community_access_denied_path(@circle)}'" }
         format.html{ redirect_to community_access_denied_path(@circle) }
       else
+        format.js{ render :js => "window.location.href='#{community_circles(@circle)}'" }
         format.html{ redirect_to community_circles(@circle) }
       end
     end
