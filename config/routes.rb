@@ -73,6 +73,14 @@ Panama::Application.routes.draw do
         put :update_category
         get ":category_id/category", :to => "communities/circles#category"
         post :join
+        post :apply_join
+      end
+    end
+
+    resources :notifications, :only => [:index, :show], :controller => "communities/notifications" do
+      member do
+        post :agree_join
+        post :refuse_join
       end
     end
 

@@ -71,14 +71,34 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def join
-    @friend = @circle.join_friend(current_user)
     respond_to do |format|
-      if @friend.valid?
-        format.js{ head :no_content }
+      unless @circle.limit_join?
+        @friend = @circle.join_friend(current_user)
+        if @friend.valid?
+          format.js{ head :no_content }
+        else
+          format.js{ render :json => draw_errors_message(@friend), :status => 403  }
+        end
       else
-        format.js{ render :json => draw_errors_message(@friend), :status => 403  }
+        format.js{ render :json => ["商圈需要通过对方同意加入!"], :status => 403  }
       end
     end
   end
 
+  def apply_join
+    respond_to do |format|
+      if @circle.limit_join?
+        @circle.apply_join_notice(current_user)
+        format.html{ redirect_to community_access_denied_path(@circle) }
+      else
+        format.html{ redirect_to community_circles(@circle) }
+      end
+    end
+  end
+
+  def title
+    actions, key = t("community.circle"), params[:action].to_sym
+    name = "-#{actions[key]}" if actions.key?(key)
+    "#{@circle.name}#{name}-商圈"
+  end
 end

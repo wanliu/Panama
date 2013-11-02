@@ -8,6 +8,10 @@ module CommunitiesHelper
     params[:action] == "access_denied"
   end
 
+  def except_denied?(actions)
+    actions.map(&:to_s).include?(params[:action])
+  end
+
   def circle_limit_city?(circle)
     @circle.setting.present? && @circle.setting.limit_city
   end

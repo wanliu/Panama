@@ -19,7 +19,7 @@ class Circle < ActiveRecord::Base
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
-  has_many :notifications, dependent: :destroy, class_name: "CircleNotification"
+  has_many :notice, dependent: :destroy, class_name: "CommunityNotification"
 
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
@@ -34,18 +34,20 @@ class Circle < ActiveRecord::Base
   end
 
   def apply_join_notice(sender)
-    c = CommunityNotification.create({
-      :circle => self,
+    notice.create(
       :send_user => sender,
-      :target => owner,
-      :body => "#{sender.login}申请加入圈子#{name}"})
-    url = "/shops/#{owner.name}/admins/communities/apply_join/#{c.id}"
-    notifications.create!(
-      :user_id => sender.id,
-      :mentionable_user_id => owner.user_id,
-      :url => url,
-      :targeable => c,
-      :body => c.body)
+      :target => owner
+    )
+  end
+
+  def notice_exists?(send_user)
+    user_id = sender_user.is_a?(User) ? sender_user.id : sender_user
+    notice.exists?(:send_user_id => user_id, :state => false)
+  end
+
+  def user_notice(sender_user)
+    user_id = sender_user.is_a?(User) ? sender_user.id : sender_user
+    notice.find_by(:send_user_id => user_id, :state => false)
   end
 
   def grapical_handler

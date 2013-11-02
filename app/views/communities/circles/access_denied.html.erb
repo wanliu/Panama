@@ -1,11 +1,18 @@
 <div class='row-fluid access_denied'>
   <div class='span12 widget'>
     <div>
-    <% if circle_limit_city?(@circle) && @circle.city != current_user.city %>
-      <%=@circle.name %>商圈设置限制地址加入
-    <% else %>
-      <input type="button" value="申请加入" class='btn btn-primary' />
-    <% end %>
+      <p>
+      <% if circle_limit_city?(@circle) && @circle.city != current_user.city %>
+        <%=@circle.name %>商圈设置限制地址加入
+      <% else %>
+        <% notice = @circle.user_notice(current_user) %>
+        <% if notice.nil? %>
+          <%= link_to "申请加入", apply_join_community_circles_path(@circle), :class => "btn btn-primary apply_join", :remote => true, :method => :POST %>
+        <% else %>
+          <input type="button" value="正在等待对方同意..." class='btn btn-primary disabled' />
+        <% end %>
+      <% end %>
+      </p>
     </div>
   </div>
 </div>
