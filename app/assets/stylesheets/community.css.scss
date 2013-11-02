@@ -165,7 +165,7 @@ body.communities{
         }
 
         .content{
-          margin-left: 48px;
+          word-wrap: break-word;
         }
 
         .line{
@@ -176,6 +176,7 @@ body.communities{
 
           .comment_panel{
             display: none;
+
           }
 
           .send_comment{
@@ -224,6 +225,11 @@ body.communities{
               height: 40px;
               float: left;
               margin-right: 10px
+            }
+
+            .content{
+              margin-left: 48px;
+              word-wrap: break-word;
             }
           }
         }

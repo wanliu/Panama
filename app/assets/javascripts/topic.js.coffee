@@ -139,9 +139,10 @@ class TopicView extends Backbone.View
     @$el
 
   add_comment: (model) ->
+    method = model.get("display_way") || 'show'
     view = new CommentView(model: model)
     @$(".comments_panel").append(view.render())
-    view[model.get("display_way")]()
+    view[method]()
 
   load_template: () ->
     template = $("#create-topic-template").html()
