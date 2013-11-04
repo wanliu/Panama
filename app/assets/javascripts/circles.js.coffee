@@ -14,7 +14,7 @@ class root.CircleListView extends Backbone.View
     @topics = new TopicViewList(
       sp_el: @el,
       add_topic: _.bind(@add_topic, @),
-      fetch_url: "/communities/#{@circle_id}/topics")
+      fetch_url: @topic_fetch_url)
 
     @view = new CreateTopicView(
       circle_id: @circle_id,

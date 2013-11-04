@@ -6,7 +6,6 @@ class Communities::CirclesController < Communities::BaseController
 
   def category
     @category = CircleCategory.find(params[:category_id])
-    @topics = @circle.topics.where(:category_id => @category.id)
     respond_to do |format|
       format.html
       format.json{ render json: @topics }
@@ -61,8 +60,13 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def update_circle
-    @circle.update_attributes(params[:circle])
-    @circle.setting.update_attributes(params[:setting])
+    options = params[:circle]
+    if @circle.setting.nil?
+      options[:setting] = CircleSetting.create(params[:setting].merge(:circle => @circle))
+    else
+      @circle.setting.update_attributes(params[:setting])
+    end
+    @circle.update_attributes(options)
     respond_to do |format|
       format.json { head :no_content }
     end

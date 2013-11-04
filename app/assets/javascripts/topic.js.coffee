@@ -109,7 +109,7 @@ class CommentView extends Backbone.View
 
 class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
-  events: 
+  events:
     "click .send_comment" : "show_create_commnet"
     "click .comment_form .cancel" : "hide_create_comment"
     "submit form.comment_form" : "comment"
@@ -117,7 +117,7 @@ class TopicView extends Backbone.View
     "click .more_comment" : 'more_comment'
     "click .hide_comment" : 'hide_comment'
     'click .add_participate' : 'create_participate'
-  
+
   initialize: (options) ->
     @model = new Topic(options.data)
     @model.bind("change:comments_count", @change_count, @)
