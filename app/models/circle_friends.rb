@@ -43,6 +43,10 @@ class CircleFriends < ActiveRecord::Base
     self.identity == :manage
   end
 
+  def identity_title
+    I18n.t("circle_friend.identity.#{identity.name}")
+  end
+
   def self.create_member(user_id, circle_id = nil)
     options = {user_id: user_id, identity: :member}
     options[:circle_id] = circle_id if circle_id.present?

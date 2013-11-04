@@ -479,6 +479,11 @@ zh-CN:
       direct: 直接购买
       guarantee: 担保交易
 
+  circle_friend:
+    identity:
+      member: 成员
+      manage: 管理员
+
   table:
     heads:
       name: "名称"

@@ -86,6 +86,14 @@ class Circle < ActiveRecord::Base
     friends.joins(:user).map{|f| f.user.as_json }
   end
 
+  def sort_friends
+    friends.joins(:user).order("identity asc, created_at desc")
+  end
+
+  def top_friends
+    sort_friends.limit(40)
+  end
+
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
