@@ -5,7 +5,7 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def category
-    @topics = @circle.topics
+    @category = CircleCategory.find(params[:category_id])
     respond_to do |format|
       format.html
       format.json{ render json: @topics }
@@ -46,7 +46,7 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def members
-    @members = @circle.friend_users
+    @members = @circle.sort_friends
     respond_to do |format|
       format.html
       format.json{ render json: @members }
@@ -60,12 +60,17 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def update_circle
-    @circle.update_attributes(params[:circle])
-    @circle.setting.update_attributes(params[:setting])
+    options = params[:circle]
+    if @circle.setting.nil?
+      options[:setting] = CircleSetting.create(params[:setting].merge(:circle => @circle))
+    else
+      @circle.setting.update_attributes(params[:setting])
+    end
+    @circle.update_attributes(options)
     respond_to do |format|
       format.json { head :no_content }
     end
-  end 
+  end
 
   def access_denied
   end
@@ -89,8 +94,10 @@ class Communities::CirclesController < Communities::BaseController
     respond_to do |format|
       if @circle.limit_join?
         @circle.apply_join_notice(current_user)
+        format.js{ render :js => "window.location.href='#{community_access_denied_path(@circle)}'" }
         format.html{ redirect_to community_access_denied_path(@circle) }
       else
+        format.js{ render :js => "window.location.href='#{community_circles(@circle)}'" }
         format.html{ redirect_to community_circles(@circle) }
       end
     end

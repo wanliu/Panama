@@ -39,13 +39,46 @@ class CircleCreate extends Backbone.View
 					window.location.href = "/shops/#{ @current_shop }/admins/communities"
 		})
 
+
+class CircleUpdate extends Backbone.View
+	
+	events: 
+		"click .update_circle" : "update_circle"
+
+	initialize: () ->
+		_.extend(@, @options)
+
+	data: () ->
+		{
+			setting:{
+				limit_join: @$(".limit_join").is(':checked'),
+				limit_city: @$(".limit_area").is(':checked')
+			},
+			circle:{
+				name:  @$(".circle_name").val(),
+				description: @$(".introduce").val(),
+				city_id: @$(".address_area_id").val(),
+				attachment_id: @$(".attachable > input:hidden").val()
+			}
+		}
+
+	update_circle: () ->
+		data = @data()
+		$.ajax({
+			data: data,
+			url: "/communities/#{ @circle_id }/circles/update_circle",
+			type: "put",
+			success: () =>
+				window.location.href = "/communities/#{ @circle_id }/circles"
+		})
+
+
 class CircleCategoryView extends Backbone.View
-	events: { 
+	events: 
 		"click .icon-remove": "remove"
 		"blur .circle_category_input": "update_category"
 		"click .icon-edit": "edit_view"	
 		"keyup .circle_category_input" : "enter"
-	}
 
 	initialize: () ->		
 		@circle_id = @options.circle_id
@@ -86,8 +119,8 @@ class CircleCategoryView extends Backbone.View
 		@$(".circle_category_input").show()
 		@$(".category_name").hide()
 
-class CircleCategoryList extends Backbone.View
 
+class CircleCategoryList extends Backbone.View
 	events: 
 		"click .new_input" : "new_input"
 		"blur .new_circle_category" : "add_category"
@@ -134,39 +167,65 @@ class CircleCategoryList extends Backbone.View
 					})
 					@$(".categories").append(view.el)
 			})
+			
 
-class CircleUpdate extends Backbone.View
-	
-	events: 
-		"click .update_circle" : "update_circle"
+class CircleAddressView extends Backbone.View
+
+	province_call: () ->
+
+	city_call: () ->
+
+	area_call: () ->
 
 	initialize: () ->
 		_.extend(@, @options)
+		@$el = $(@el)
+		@load_province()
+		@load_depend_chose()
 
-	data: () ->
-		{
-			setting:{
-				limit_join: @$(".limit_join").is(':checked'),
-				limit_city: @$(".limit_area").is(':checked')
-			},
-			circle:{
-				name:  @$(".circle_name").val(),
-				description: @$(".introduce").val(),
-				city_id: @$(".address_area_id").val(),
-				attachment_id: @$(".attachable > input:hidden").val()
-			}
-		}
-
-	update_circle: () ->
-		data = @data()
+	load_province: () ->
 		$.ajax({
-			data: data,
-			url: "/communities/#{ @circle_id }/circles/update_circle",
-			type: "put",
-			success: () =>
-				window.location.href = "/communities/#{ @circle_id }/circles"
+			type: "get"
+			url: "/city/province",
+			dataType: 'json',
+			data: {},
+			success: (data) =>
+				strHtml = "<option value=''>--请选择--</option>"
+				_.each data, (num) =>
+					strHtml += "<option value='#{num["id"]}'>#{num["name"]}</option>"
+				@$el.find(".address_province_id").html(strHtml)
+				@province_call() 
 		})
 
+	load_depend_chose: () ->    
+		@depend_select(
+			@$(".address_province_id"), 
+			@$(".address_city_id"), 
+			""
+		)     
+		@depend_select(
+			@$(".address_city_id"),
+			@$(".address_area_id"), 
+			"/city/",
+			@city_call
+		)      
+		@depend_select(
+			@$(".address_area_id"), 
+			"", 
+			"/city/",
+			@area_call	
+		)    
+
+	depend_select: (el, children, url, call_back = () ->) ->     		
+		new DependSelectView({
+			el: el,
+			children: children,
+			url: url,
+			call_back: _.bind(call_back, @)
+		})
+
+
+root.CircleCreate = CircleCreate
 root.CircleUpdate = CircleUpdate
 root.CircleCategoryList = CircleCategoryList
-root.CircleCreate = CircleCreate
+root.CircleAddressView = CircleAddressView

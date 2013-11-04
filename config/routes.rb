@@ -93,6 +93,12 @@ Panama::Application.routes.draw do
         post :participate
       end
     end
+
+    resources :categories, :controller => "communities/categories" do
+      member do
+        get :topics
+      end
+    end
   end
 
   resources :people do

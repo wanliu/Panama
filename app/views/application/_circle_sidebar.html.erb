@@ -10,16 +10,16 @@
     </a>
   </h4>
   <ul id="community-side-nav" class="side-nav community_category">
-    <li class='accordion-group active'>
-      <a class="accordion-toggle" href="javascript:void(0)">
+    <li class='category_ active'>
+      <a class="accordion-toggle" href="<%= community_circles_path(@circle) %>">
         所有信息
       </a>
     </li>
     <% @circle.categories.each do |c| %>
-    <li>
-    <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
+    <li class='category_<%=c.id %>'>
+      <a class="circle-category-<%=c.id %>"  href="<%=community_category_path(@circle, c) %>">
       <%=c.name %>
-    </a>
+      </a>
     </li>
     <% end %>
   </ul>
@@ -42,7 +42,7 @@
     </div>
     <div class='top_member'>
       <ul class='member'>
-        <% @circle.friends.each do |f| %>
+        <% @circle.top_friends.each do |f| %>
           <li>
             <img class='photo' src="<%=f.photos.icon %>" />
             <% if f.manage? %>
@@ -62,11 +62,15 @@
     </div>
   <% end %>
 </nav>
+
 <script type="text/javascript">
   $(function() {
     new CircleCategory({
       el: $("#community-sidebar"),
       circle_id: "<%=@circle.id %>"
     })
+
+    $("#community-side-nav>li").removeClass("active")
+    $("#community-side-nav>li.category_<%=  yield(:side_active) %>").addClass("active")
   })
 </script>

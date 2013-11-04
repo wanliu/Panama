@@ -468,6 +468,7 @@ zh-CN:
     circle:
       members: '成员'
       category: '分类'
+      notifications: '提醒'
 
   activity:
     type:
@@ -477,6 +478,11 @@ zh-CN:
     buy_state:
       direct: 直接购买
       guarantee: 担保交易
+
+  circle_friend:
+    identity:
+      member: 成员
+      manage: 管理员
 
   table:
     heads:

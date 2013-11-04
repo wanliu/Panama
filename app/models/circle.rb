@@ -7,7 +7,7 @@
 class Circle < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id
+  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id, :setting
 
   belongs_to :owner, :polymorphic => true
 
@@ -84,6 +84,14 @@ class Circle < ActiveRecord::Base
 
   def friend_users
     friends.joins(:user).map{|f| f.user.as_json }
+  end
+
+  def sort_friends
+    friends.joins(:user).order("identity asc, created_at desc")
+  end
+
+  def top_friends
+    sort_friends.limit(40)
   end
 
   def join_friend(user)

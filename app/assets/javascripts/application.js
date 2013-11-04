@@ -15,7 +15,6 @@
 //= require social_sidebar
 //= require lib/activity_base_info
 //= require catalog
-//= require communities
 //= require following
 //= require apply_join_circle
 //= require search_users

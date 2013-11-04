@@ -1,9 +1,8 @@
 root = window || @
 
-class SearchUsersView extends Backbone.View
+class NewUsersView extends Backbone.View
 
   events:
-    "click .search_user" : "form_query_user"
     "click .hot_region_search" : "hot_region_search"
 
   initialize: () ->
@@ -39,22 +38,6 @@ class SearchUsersView extends Backbone.View
     })
     return false
 
-  form_query_user: () ->
-    values = @$("form.address_from_post").serializeArray()
-    data = {}
-    _.each values, (v) -> data[v.name] = v.value
-
-    $.ajax({
-      type: "get",
-      dataType: "json",
-      data:  data,
-      url: "/communities/search"
-      success: (datas) =>
-        @render(datas)
-        # new YellowInfoPreviewList({el : @el })
-    })
-    return false
-
   render: (datas) =>
     if datas.length == 0
       $(@notice).insertBefore(@$(".wrapper"))
@@ -69,28 +52,29 @@ class SearchUsersView extends Backbone.View
         @$(".wrapper").append(tpl.render(data))
 
 class FindUserView extends Backbone.View
-
   events: 
-    "click .find_people" : "find_user"
-    "keypress input.people_input_info" : "key_up"
+    "click .find_people"              : "find_user"
+    "keypress input.people_input_info": "key_up"
+
+  notice:
+    "<div class='alert'>
+      <button type='button' class='close' data-dismiss='alert'>&times;</button>
+      <span>没有找到符合要求的用户或商店</span>
+    </div>"
 
   initialize: () ->
     _.extend(@, @options)
     @buyer_template = Hogan.compile($("#buyer_base_template").html())
     @seller_template = Hogan.compile($("#seller_base_template").html())
-    @notice = $("<div class='alert'>
-            <button type='button' class='close' data-dismiss='alert'>&times;</button>
-            <span>没有找到符合要求的用户或商店</span>
-          </div>")
 
   key_up: (e) =>
     @find_user() if e.keyCode == 13
 
   find_user: () ->
     $.ajax({
+      type: "get",
       dataType: "json",
       url: "/search/user_checkings",
-      type: "get",
       data: {q: @$(".people_input_info").val() ,area_id: @options.area_id }
       success: (datas) =>
         @render(datas)
@@ -109,18 +93,20 @@ class FindUserView extends Backbone.View
           @seller_template
         @$(".wrapper").append(tpl.render(data))
 
-class FindCircleView extends Backbone.View
 
+class FindCircleView extends Backbone.View
   events: 
     "click .find_circle" : "find_circle"
     "keypress input.circle_input_info": "key_up"
 
+  notice:
+    "<div class='alert'>
+      <button type='button' class='close' data-dismiss='alert'>&times;</button>
+      <span>没有找到符合要求的本地商圈</span>
+    </div>"
+
   initialize: () ->
     _.extend(@, @options)
-    @notice = $("<div class='alert'>
-            <button type='button' class='close' data-dismiss='alert'>&times;</button>
-            <span>没有找到符合要求的本地商圈</span>
-          </div>")
 
   key_up: (e) =>
     @find_circle() if e.keyCode == 13
@@ -129,14 +115,15 @@ class FindCircleView extends Backbone.View
     $.ajax({
       url: "/search/shop_circles.dialog",
       type: "get",
+      url: "/search/circles.dialog",
       data: {q: @$(".circle_input_info").val() ,area_id: @options.area_id }
-      success: (datas) =>
-        if datas == ""
+      success: (data) =>
+        if data == ""
           $(@notice).insertBefore(@$(".wrapper"))
         else
-          @$(".wrapper").html(datas)
+          @$(".wrapper").html(data)
     })
 
+root.NewUsersView = NewUsersView
 root.FindUserView = FindUserView
-root.SearchUsersView = SearchUsersView
 root.FindCircleView = FindCircleView
