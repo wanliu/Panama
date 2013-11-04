@@ -63,15 +63,16 @@
 		new SearchUsersView({
 			el: $(".base_info")
 		})
+		
 		new FindUserView({
 			el: $(".base_info"),
 			area_id: "<%=@city.id %>"
 		})
 
-	    new FindCircleView({
-	      el: $(".circles"),
-	      area_id: "<%=@city.id %>"
-	    })
+    new FindCircleView({
+      el: $(".circles"),
+      area_id: "<%=@city.id %>"
+    })
 	    
 		$(".depend_select>option[value=]").html("--请选择--")
 
