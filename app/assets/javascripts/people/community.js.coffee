@@ -48,3 +48,26 @@ class root.CommunityView extends Backbone.View
     new MyCircleView({
       url: url,
       el: @$(".circles")})
+
+class root.CommunitySearch extends Backbone.View
+
+  initialize: () ->
+    _.extend(@, @options)
+    @template = Hogan.compile($("#search-template-circle").html())
+
+  events:
+    "keyup .search_circles" : "search_circles" 
+
+  search_circles: (e) ->
+    if e.keyCode == 13
+      $.ajax({
+        url: "/search/circles",
+        data: {q: @$(".search_circles").val() },
+        success: (models) =>
+          @render(models)
+      })
+
+  render: (models) ->
+    @$(".circles").html("")
+    _.each models, (model) =>
+       @$(".circles").append(@template.render(model))

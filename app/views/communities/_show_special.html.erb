@@ -6,16 +6,16 @@
 	</ol>
 	<div class="carousel-inner">
 		<% unless @regin.nil? || @region.attachments.length < 1 %>
-			<div class="item">
-				<img src="http://lorempixel.com/870/250/nature" style="width:870px;height:250px;" alt="">
+			<div class="item" style="height:250px;">
+				<img src="http://lorempixel.com/870/250/nature" style="width:100%"  alt="广告图">
 				<div class="carousel-caption">
 					<p>欢迎来到万流商务平台商圈板块,如果想投放广告,请联系胡义先生.联系电话:0734-4358808</p>
 				</div>
 			</div>
 		<% else %>
 			<% @region.attachments.each do |picture| %>
-				<div class="item">
-					<img src="<%=picture.file %>" style="width:870px;height:250px;" alt="">
+				<div class="item" style="height:250px">
+					<img src="<%=picture.file %>" style="width:100%" alt="广告图">
 					<div class="carousel-caption">
 						<% unless @region.advertisement.nil? %>
 							<p><%= @region.advertisement %> </p>

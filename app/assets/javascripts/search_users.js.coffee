@@ -36,7 +36,6 @@ class SearchUsersView extends Backbone.View
       url: "/communities/search",
       success: (datas) =>
         @render(datas)
-        new YellowInfoPreviewList({el : @el })
     })
     return false
 
@@ -52,7 +51,7 @@ class SearchUsersView extends Backbone.View
       url: "/communities/search"
       success: (datas) =>
         @render(datas)
-        new YellowInfoPreviewList({el : @el })
+        # new YellowInfoPreviewList({el : @el })
     })
     return false
 
@@ -95,7 +94,6 @@ class FindUserView extends Backbone.View
       data: {q: @$(".people_input_info").val() ,area_id: @options.area_id }
       success: (datas) =>
         @render(datas)
-        new YellowInfoPreviewList({el : @el })
     })
 
   render: (datas) =>
@@ -103,15 +101,12 @@ class FindUserView extends Backbone.View
       $(@notice).insertBefore(@$(".wrapper"))
     else
       @$(".alert").fadeOut()
-      #@$(".wrapper > div").animate({
-      #  left: '20px'},'slow', () => @$(".wrapper > div").fadeOut());
       @$(".wrapper").html ""
       _.each datas, (data) =>
         tpl = if data.service_id == 1
           @buyer_template
         else
           @seller_template
-
         @$(".wrapper").append(tpl.render(data))
 
 class FindCircleView extends Backbone.View
@@ -132,7 +127,7 @@ class FindCircleView extends Backbone.View
 
   find_circle: () ->
     $.ajax({
-      url: "/search/circles.dialog",
+      url: "/search/shop_circles.dialog",
       type: "get",
       data: {q: @$(".circle_input_info").val() ,area_id: @options.area_id }
       success: (datas) =>

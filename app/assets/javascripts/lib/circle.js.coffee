@@ -44,6 +44,7 @@ class CircleCategoryView extends Backbone.View
 		"click .icon-remove": "remove"
 		"blur .circle_category_input": "update_category"
 		"click .icon-edit": "edit_view"	
+		"keyup .circle_category_input" : "enter"
 	}
 
 	initialize: () ->		
@@ -59,6 +60,9 @@ class CircleCategoryView extends Backbone.View
 			success: () =>
 				@$el.remove();
 		})
+
+	enter: (e) ->
+		@$(".circle_category_input").blur() if e.keyCode == 13
 
 	update_category: () ->
 		category_id = @$el.attr("data-value-id")
@@ -87,6 +91,7 @@ class CircleCategoryList extends Backbone.View
 	events: 
 		"click .new_input" : "new_input"
 		"blur .new_circle_category" : "add_category"
+		"keyup .new_circle_category" : "enter"
 
 	initialize: () ->
 		_.extend(@, @options)
@@ -106,7 +111,9 @@ class CircleCategoryList extends Backbone.View
 				el: el,
 				circle_id: @circle_id
 			})
-
+	enter: (e) ->
+		@$(".new_circle_category").blur() if e.keyCode == 13
+		
 	new_input: () ->
 		@$(".categories").append("<input type='text' class='new_circle_category'>")
 	

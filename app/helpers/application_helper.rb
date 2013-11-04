@@ -304,4 +304,13 @@ module ApplicationHelper
       City.find(province_id).children.find_by_name(address_detail["city"])
     end
   end
+
+  def city_ids(city_id)
+    @region = RegionCity.location_region(city_id)
+    unless @region.blank?
+      @region.region_cities_ids()
+    else
+      params[:city_id]
+    end
+  end
 end

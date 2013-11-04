@@ -1,12 +1,29 @@
-<div class='span3 user_info seller_user' id="{{ id }}">
-	<span class="label label-important pull-right">卖家</span>
-	<div>
-		<a href="/shops/{{ shop_name }}">
-			<img src="{{ shop_photos.icon }}" class="user_icon"/>
-		</a>
+<div class='span3 new_user user_info' id="{{ id }}">
+    <div class="hover_place">
+		<div class='user_base_info' user-id='{{ id }}' >
+			<div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
+		<div class='userinfo'>
+		    <div  class="circle_avatar"><img src='{{ shop_photos.icon }}', class="author img-circle" /></div>
+		    <div class="shop_name"><a href="/shops/{{ shop_name }}">{{ shop_name }}</a></div> 
+		    <div class="industry_type"><span>行业：{{ industry_type }} </span></div>
+		    <div class="tel"><span>联系方式：{{ phone }}</span></div>
+		    <div class="entry"><button><a href="/shops/{{ shop_name }}">进入商铺</a></button></div>
+		    <div class="contact"><a href="#"><i class="icon-leaf"></i></a></div>
+		</div>
 	</div>
-	<div  class="pull-right title">
-		<div class="name"><a herf="/shops/{{ shop_name }}">{{ shop_name }} </a></div>
-		<div class="tel"><i class="icon-phone-sign"></i> {{ phone }}</div>
+	<span class="label label-important pull-right">卖家</span>
+	<a href="/shops/{{ shop_name }}">
+		<img src="{{ shop_photos.icon }}" class="user_icon" />
+	</a>
+	<div  class="content">
+		<div class="name">
+			<i class="icon-user"></i>
+			<a href="/shops/{{ shop_name) }}" class="title">{{ shop_name }}</a>
+		</div>
+		<div class="industry"> 
+			<i class=" icon-star"></i>
+			<a href="#">{{ industry_type }}</a>
+		</div>
 	</div>
 </div>
+
