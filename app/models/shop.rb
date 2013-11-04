@@ -17,7 +17,7 @@ class Shop < ActiveRecord::Base
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
   has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
-  has_many :topic_categories, dependent: :destroy
+  # has_many :topic_categories, dependent: :destroy
   has_many :banks, :class_name => "ShopBank", :dependent => :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
   belongs_to :address
@@ -134,7 +134,7 @@ class Shop < ActiveRecord::Base
     load_group_permission
     load_admin_permission
     load_friend_circle
-    load_topic_category
+    # load_topic_category
   end
 
   def delete_shop

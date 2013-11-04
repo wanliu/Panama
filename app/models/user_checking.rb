@@ -6,7 +6,7 @@ class UserChecking < ActiveRecord::Base
                   :shop_name, :shop_photo, :shop_url, :shop_summary,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
-                  :rejected, :rejected_reason, :checked
+                  :rejected, :rejected_reason, :checked, :owner_id, :owner_type
   attr_accessor :uploader_secure_token
 
   belongs_to :user

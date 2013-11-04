@@ -36,7 +36,7 @@ class CompletingShopController < Wicked::WizardController
 
   def edit_address
     @address = current_user.user_checking.address || Address.new
-    render layout: false
+    render layout: false, partial: "completing_shop/edit_address"
   end
 
   def update_address
@@ -51,7 +51,7 @@ class CompletingShopController < Wicked::WizardController
     if @address.valid?
       render json: { id: @address.id, address: @address.address_only }
     else
-      render json: {}, :status => 403
+      render layout: false, status: 400, partial: "completing_shop/edit_address"
     end
   end
 
