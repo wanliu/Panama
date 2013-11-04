@@ -1,36 +1,52 @@
 <div class="row-fluid members widget">
-	<div class="row-fluid head_content" >
-	  <div class="span4" style="margin-left:15px;"><span>成员(共<%=@members.count %>人)</span></div>
-	</div>
-	<% @members.each do |member| %>
-		<div class='span2 member row-fluid' data-value-id="<%=member["id"] %>">
-			<div class="span5">
-				<img src="<%=member["photos"][:header] %>"  class="member_header"/>
-			</div>
-			<div  class="span7"> 
-				<div class="member_login"><%=member["login"] %></div>
-			</div>
-			<%if current_user.id != member["id"] %>
-	            <% if current_user.is_follow_user?(member["id"]) %>
-	            	<span data-value-id="<%= current_user.follow_user(member["id"]).id %>" class="label  btn-warning unfollow">取消关注</span>
-	            <% else %>
-	                <span class="label  btn-warning follow">+ 关注</span>
-	            <% end %>
-	        <% end %>
-		</div>
-	<% end %>
+  <div class="row-fluid head_content" >
+    <div class="span4" style="margin-left:15px;"><span>成员(共<%=@members.count %>人)</span></div>
+  </div>
+  <% @members.each do |member| %>
+    <div class='span2 member row-fluid' data-value-id="<%=member.user_id %>">
+      <div class="span5 photo">
+        <a href="<%= person_path(member.user) %>">
+        <img src="<%=member.photos.header %>"  class="member_header"/>
+        <% if member.manage? %>
+          <a href='javascript:void(0)' data-toggle="tooltip" data-placement="bottom" title="" data-original-title="管理员" class='tag'>
+            <img src="/assets/tag.png" />
+          </a>
+        <% end %>
+        </a>
+      </div>
+      <div class="span7 info">
+        <div class="member_login">
+          <a href="<%= person_path(member.user) %>">
+          <%=member.user.login %>
+          </a>
+        </div>
+        <div>
+           <%=member.identity_title %>
+        </div>
+        <div>
+          <%if current_user.id != member.user_id %>
+            <% if current_user.is_follow_user?(member.user_id) %>
+              <span data-value-id="<%= current_user.follow_user(member.user_id).id %>" class="label  btn-warning unfollow">取消关注</span>
+            <% else %>
+              <span class="label  btn-warning follow">+ 关注</span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>
 <script type="text/javascript">
-	$(function(){
-		$(".members .member").each(function(i, elem){
-			new FollowView({
-				data: {
-					follow_id:  $(elem).attr("data-value-id"),
-					follow_type: "User"
-				},
-				login: "<%=current_user.login %>",
-				el: $(elem)
-    		})
-		})
-	})
+  $(function(){
+    $(".members .member").each(function(i, elem){
+      new FollowView({
+        data: {
+          follow_id:  $(elem).attr("data-value-id"),
+          follow_type: "User"
+        },
+        login: "<%=current_user.login %>",
+        el: $(elem)
+      })
+    })
+  })
 </script>

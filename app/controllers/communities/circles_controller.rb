@@ -46,7 +46,7 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def members
-    @members = @circle.friend_users
+    @members = @circle.sort_friends
     respond_to do |format|
       format.html
       format.json{ render json: @members }
@@ -65,7 +65,7 @@ class Communities::CirclesController < Communities::BaseController
     respond_to do |format|
       format.json { head :no_content }
     end
-  end 
+  end
 
   def access_denied
   end

@@ -42,7 +42,7 @@
     </div>
     <div class='top_member'>
       <ul class='member'>
-        <% @circle.friends.each do |f| %>
+        <% @circle.top_friends.each do |f| %>
           <li>
             <img class='photo' src="<%=f.photos.icon %>" />
             <% if f.manage? %>
