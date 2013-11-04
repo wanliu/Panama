@@ -17,16 +17,22 @@
   $(function(){
     new CircleAddressView({
       el: $(".address_select"),
-      province_call: function(){               
-        $(".address_province_id").val(<%=circle.city.parent.parent.id %>).change();
+      province_call: function(){
+        <% if circle.city.present? %>
+          $(".address_province_id").val(<%=circle.city.parent.parent.id %>).change();
+        <% end %>
       },
-      city_call: function() {                
+      city_call: function() {
         this.call_back = null
-        $(".address_city_id").val(<%=circle.city.parent.id %>).change();
+        <% if circle.city.present? %>
+          $(".address_city_id").val(<%=circle.city.parent.id %>).change();
+        <% end %>
       },
-      area_call: function() {                  
-        this.call_back = null        
-        $(".address_area_id").val(<%=circle.city_id %>);
+      area_call: function() {
+        this.call_back = null
+        <% if circle.city.present? %>
+          $(".address_area_id").val(<%=circle.city_id %>);
+        <% end %>
       }
     })
   })

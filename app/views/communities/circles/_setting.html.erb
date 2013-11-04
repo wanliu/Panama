@@ -14,7 +14,7 @@
         <li><a href="#tab2" data-toggle="tab">更改配置</a></li>
       </ul>
       <div class="tab-content offset1 cirlce_info">
-        <div class="tab-pane active" id="tab1"> 
+        <div class="tab-pane active" id="tab1">
           <div><span class="m_r">商圈</span>
             <input type="text" class="circle_name" value="<%=circle.name %>"/>
           </div>
@@ -26,9 +26,9 @@
           <div class="settings">
             <span class="m_r">设置</span>
             <span>限制地区</span>
-            <input type="checkbox" <% if circle.setting.limit_city == true %> checked= 'checked' <% end %> class="limit_area m_r" />
+            <input type="checkbox" <% if circle.setting.try(:limit_city)  %> checked= 'checked' <% end %> class="limit_area m_r" />
             <span>申请加入</span>
-            <input type="checkbox" <% if circle.setting.limit_join == true %> checked= 'checked' <% end %> class="limit_join " />
+            <input type="checkbox" <% if circle.setting.try(:limit_join) %> checked= 'checked' <% end %> class="limit_join " />
           </div>
           <div><span class="m_r">简介</span>
             <textarea class="introduce"><%=circle.description %></textarea>
@@ -46,7 +46,7 @@
                 <% circle.categories.each do |category| %>
                   <li data-value-id="<%=category.id %>" class="category span11">
                     <div class="replace span6">
-                      <input type="text" class="circle_category_input" value="<%=category.name %>" /> 
+                      <input type="text" class="circle_category_input" value="<%=category.name %>" />
                       <span class="m_r category_name"><%=category.name %></span>
                     </div>
                     <div class="operation span5">
