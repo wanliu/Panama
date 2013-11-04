@@ -10,13 +10,13 @@
     </a>
   </h4>
   <ul id="community-side-nav" class="side-nav community_category">
-    <li class='accordion-group active'>
-      <a class="accordion-toggle" href="javascript:void(0)">
+    <li class='category_ active'>
+      <a class="accordion-toggle" href="<%= community_circles_path(@circle) %>">
         所有信息
       </a>
     </li>
     <% @circle.categories.each do |c| %>
-    <li>
+    <li class='category_<%=c.id %>'>
     <a class="circle-category-<%=c.id %>" data-value-id='<%=c.id %>' href="<%=community_circles_path(@circle) %>/<%=c.id %>/category">
       <%=c.name %>
     </a>
@@ -68,5 +68,8 @@
       el: $("#community-sidebar"),
       circle_id: "<%=@circle.id %>"
     })
+
+    $("#community-side-nav>li").removeClass("active")
+    $("#community-side-nav>li.category_<%=  yield(:side_active) %>").addClass("active")
   })
 </script>

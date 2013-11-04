@@ -5,7 +5,8 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def category
-    @topics = @circle.topics
+    @category = CircleCategory.find(params[:category_id])
+    @topics = @circle.topics.where(:category_id => @category.id)
     respond_to do |format|
       format.html
       format.json{ render json: @topics }

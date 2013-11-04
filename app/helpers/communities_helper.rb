@@ -19,4 +19,10 @@ module CommunitiesHelper
   def circle_limit_join?(circle)
     @circle.setting.present? && @circle.setting.limit_join
   end
+
+  def side_active_for(name)
+    content_for :side_active do
+      name.to_s
+    end
+  end
 end
