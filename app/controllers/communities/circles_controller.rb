@@ -1,48 +1,8 @@
 #encoding: utf-8
 class Communities::CirclesController < Communities::BaseController
-
+  before_filter :validate_manager, :only => :update_circle
+  
   def index
-  end
-
-  def category
-    @category = CircleCategory.find(params[:category_id])
-    respond_to do |format|
-      format.html
-      format.json{ render json: @topics }
-    end
-  end
-
-  def add_category
-    @category = @circle.categories.only_deleted.find_by(:name => params[:name])
-    if @category.nil?
-      @category = @circle.categories.create(:name => params[:name])
-    else
-      @category.recover
-    end
-    respond_to do |format|
-      if @category.valid?
-        format.html
-        format.json{ render json: @category }
-      else
-        format.json{ render json: draw_errors_message(@category), status: 403 }
-      end
-    end
-  end
-
-  def update_category
-    @circle_category = @circle.categories.find(params[:category_id])
-    @circle_category.update_attributes(:name => params[:name])
-    respond_to do |format|
-      format.html
-      format.json{ render json: @circle_category }
-    end
-  end
-
-  def del_category
-    @circle.categories.find(params[:category_id]).destroy
-    respond_to do |format|
-      format.json { head :no_content }
-    end
   end
 
   def members
@@ -107,5 +67,13 @@ class Communities::CirclesController < Communities::BaseController
     actions, key = t("community.circle"), params[:action].to_sym
     name = "-#{actions[key]}" if actions.key?(key)
     "#{@circle.name}#{name}-商圈"
+  end
+  private
+  def validate_manager
+    unless @circle.is_manage?(current_user.id)
+      respond_to do |format|
+        format.json{ render json: draw_errors_message(@category), status: 403 }
+      end
+    end
   end
 end

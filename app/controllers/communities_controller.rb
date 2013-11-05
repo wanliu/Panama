@@ -27,7 +27,7 @@ class CommunitiesController < ApplicationController
 								 .order('created_at DESC')
 								 .limit(15)
 
-		my_friends = current_user.circle_all_friends.pluck("id")
+		my_friends = current_user.circle_all_friends.pluck("user_id")
 
 		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.circle_id left join addresses as addr on addr.area_id = circles.city_id")
 						.where("owner_type = 'Shop' and circles.city_id in (?) ", city_ids)
@@ -36,7 +36,7 @@ class CommunitiesController < ApplicationController
 						.order("count desc")
 						.limit(9)
 
-		@friends = User.joins("right join circle_friends as cf on cf.user_id = users.id ").select("users.*, cf.circle_id as circle_id").where("cf.circle_id in (?) and users.id in (?)",@circles.pluck("circles.id"), my_friends).limit(3)
+		@friends = User.joins("right join circle_friends as cf on cf.user_id = users.id ").select("users.*, cf.circle_id as circle_id").where("cf.circle_id in (?) and users.id in (?)",@circles.pluck("circles.id"), my_friends).limit(5)
 
 		@top_10_shops = Shop.joins("left join followings as follow on follow.follow_id = shops.id left join addresses as addr on shops.address_id = addr.id")
 		 	.where("follow.follow_type='Shop' and addr.area_id in (?)", city_ids)

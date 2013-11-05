@@ -22,12 +22,14 @@
           </a>
         </div>
       </div>
-      
-      <% friends.each do |friend| %>
-        <% if friend.circle_id == circle.id %>
-          <div class="friends_icons"><img src="<%=friend.photos.icon %>"/></div>
+
+      <div class="friends_icons">
+        <% friends.each do |friend| %>
+          <% if friend.circle_id == circle.id %>
+           <img src="<%=friend.photos.icon %>"/>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 <% end %>

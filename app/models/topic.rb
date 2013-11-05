@@ -56,7 +56,7 @@ class Topic < ActiveRecord::Base
       login: user.login,
       icon_url: user.photos.icon}
     attribute["category"] = {
-      name: category.name
+      name: category_with_deleted.name
     }
     attribute["attachments"] = []
     attachments.each do |atta|
@@ -64,6 +64,10 @@ class Topic < ActiveRecord::Base
     end
 
     attribute
+  end
+
+  def category_with_deleted
+    circle.categories.with_deleted.find(category_id)
   end
 
   private
