@@ -65,6 +65,7 @@ class CircleUpdate extends Backbone.View
 	update_circle: () ->
 		data = @data()
 		$.ajax({
+			type: "put",
 			data: data,
 			url: "/communities/#{ @circle_id }/circles/update_circle",
 			type: "put",
@@ -88,8 +89,7 @@ class CircleCategoryView extends Backbone.View
 		$.ajax({
 			type: "delete",
 			dataType: "json",
-			data: { category_id: id }
-			url: "/communities/#{ @circle_id }/circles/del_category",
+			url: "/communities/#{ @circle_id }/categories/"+id,
 			success: () =>
 				@$el.remove();
 		})
@@ -103,8 +103,8 @@ class CircleCategoryView extends Backbone.View
 		$.ajax({
 			type: "put",
 			dataType: "json",
-			data: {category_id: category_id,name: name },
-			url: "/communities/#{ @circle_id }/circles/update_category",
+			data: { name: name },
+			url: "/communities/#{ @circle_id }/categories/"+category_id,
 			success: (data) =>
 				@render(data)
 		})
@@ -158,7 +158,7 @@ class CircleCategoryList extends Backbone.View
 				type: "post",
 				dataType: "json",
 				data: { name: $category_name },
-				url: "/communities/#{ @circle_id }/circles/add_category",
+				url: "/communities/#{ @circle_id }/categories",
 				success: (data) =>
 					el = $(@template.render(data))
 					view = new CircleCategoryView({
