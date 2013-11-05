@@ -6,6 +6,7 @@
 #= require backbone
 #= require following
 #= require topic
+#= require circles
 
 root = window || @
 
@@ -34,49 +35,11 @@ class CircleCategory extends Backbone.View
 				data: { name: $category_name },
 				url: "/communities/#{ @circle_id }/circles/add_category",
 				success: (data) =>
-					$("<li><a data-value-id='#{ data.id}' href='#' class='circle-category-#{data.id}'>#{ data.name} </a></li>").insertBefore(".add_category")
+					$("<li>
+            <a data-value-id='#{ data.id}' href='/communities/#{@circle_id}/category/#{data.id}' class='circle-category-#{data.id}'>
+              #{ data.name}
+            </a>
+          </li>").appendTo("#community-side-nav")
 			})
 
-
-class CircleListView extends Backbone.View
-  events:
-    "click .following .join" : "join_circle"
-
-  initialize: (option) ->
-    _.extend(@, option)
-
-    @$left = @$(".left")
-    @$right = @$(".right")
-
-    @topics = new TopicViewList(
-      sp_el: @el,
-      add_topic: _.bind(@add_topic, @),
-      fetch_url: "/communities/#{@circle_id}/topics")
-
-    @view = new CreateTopicView(
-      circle_id: @circle_id,
-      create_topic: _.bind(@create_topic, @),
-      el: @$(".left>.toolbar"))
-
-  add_topic: (template) ->
-    @short_elem().append(template)
-
-  create_topic: (template) ->
-    @short_elem().prepend(template)
-
-  short_elem: () ->
-    ltopic = $(".topics", @$left)
-    rtopic = $(".topics", @$right)
-    if @$left.height() > @$right.height() then rtopic else ltopic
-
-  join_circle: () ->
-    $.ajax(
-      url: "/communities/#{@circle_id}/circles/join"
-      type: "POST",
-      success: () =>
-        window.location.href = "/communities/#{@circle_id}/circles"
-    )
-
-
 root.CircleCategory = CircleCategory
-root.CircleListView = CircleListView

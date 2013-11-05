@@ -11,10 +11,6 @@ class Region < ActiveRecord::Base
   end
 
   def region_cities_ids
-	  city_ids = []
-	  self.region_cities.each do |c|
-	    city_ids << c.city_id
-	  end 
-	  city_ids
+    region_cities.pluck("city_id")
   end
 end

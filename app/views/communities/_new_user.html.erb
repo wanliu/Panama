@@ -51,13 +51,14 @@
 
 <script type="text/javascript">
 	$(function(){
-		$(".user_info").mouseenter(function(e){
+		$(".user_info").live("mouseenter",function(e){
 			$top = e.pageY - $(document).scrollTop();
 			$left = e.pageX - $(document).scrollLeft();
 			$(".user_base_info", this).css('top', $top - 5);
             $(".user_base_info", this).css('left', $left + 5);
 			$(".user_base_info", this).fadeIn();
-		}).mouseleave(function(e){
+		})
+		$(".user_info").live("mouseleave",function(e){
 			$(".user_base_info", this).fadeOut();
 		})
 	})

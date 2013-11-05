@@ -1,12 +1,29 @@
-<div class='span3 user_info buyer_user' id="{{ id }}">
-	<span class="label label-warning pull-right">买家</span>
-	<div>
-		<a href="#">
+<div class='span3 new_user user_info' id="{{ id }}">
+	<div class="hover_place">
+		<div class='user_base_info' user-id='{{ id }}' >
+		    <div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
+		    <div class='userinfo'>
+		        <div class="circle_avatar"><img src='{{ ower_photos.icon }}', class="author img-circle" /></div>
+		        <div class="login"><a href="/people/{{ user.login }} ">{{ user.login }}</a></div>  
+		        <div class="industry_type"><span>行业：{{ industry_type }}</span></div>        
+		        <div class="tel"><span>联系方式：{{ phone }}</span></div>
+		        <div class="add_friend"><button><a href="#">添加好友</a></button></div>
+		        <div class="contact"><a href="#"><i class="icon-leaf"></i></a></div>
+		    </div>
+		</div>
+		<span class="label label-warning pull-right">买家</span>
+		<a href="/people/{{ user.login }}">
 			<img src="{{ ower_photos.icon }}" class="user_icon"/>
 		</a>
 	</div>
-	<div  class="pull-right title"> 
-		<div class="name"><a herf="#">{{ company_name }} </a></div>
-		<div class="tel"><i class="icon-phone-sign"></i> {{ phone }}</div>
+	<div  class="content">
+		<div class="name">
+			<i class="icon-user"></i>
+			<a href="/people/{{ user.login }}" class="title">{{ user.login }}</a>
+		</div>
+		<div class="industry"> 
+			<i class=" icon-star"></i>
+			<a href="#">{{ industry_type }}</a>
+		</div>
 	</div>
 </div>

@@ -3,48 +3,46 @@
     <div class="row-fluid">	
     	<div class="span9">
 	    	<%= render "show_special" %> 		     
-				<%= render "new_user" %>
-				<%= render "business_communities" %>
-				<%#= render "seller_user" %>
-			</div>
-			<div class="span3">
-				<!--排行榜-->
-				<div class="top_10">
-					<h4>排行榜</h4>
-					<ul class="shops-list ">
-					<% if  @top_10_shops.length > 0  %>
-						<% @top_10_shops.each do |shop|%>
-							<li data-value-id="<%= shop.id %>" class="row top_shop">
-								<div class="top_image span4">
-									<a href="shops/<%=shop.name %>">
-										<img src= "<%=shop.photos.icon %>"/>
-									</a>
+			<%= render "new_user" %>
+			<%= render "business_communities" %>
+		</div>
+		<div class="span3">
+			<!--排行榜-->
+			<div class="top_10">
+				<h4>排行榜</h4>
+				<ul class="shops-list ">
+				<% if  @top_10_shops.length > 0  %>
+					<% @top_10_shops.each do |shop|%>
+						<li data-value-id="<%= shop.id %>" class="row top_shop">
+							<div class="top_image span4">
+								<a href="shops/<%=shop.name %>">
+									<img src= "<%=shop.photos.icon %>"/>
+								</a>
+							</div>
+							<div class="span7"> 
+								<div class="shop_name">
+									<a href="shops/<%=shop.name %>"><%=shop.name %></a>
 								</div>
-								<div class="span7"> 
-									<div class="shop_name">
-										<a href="shops/<%=shop.name %>"><%=shop.name %></a>
-									</div>
-									<div class="follows">
-										关注人数: 
-										<span class="follows_count">	
-											<%=shop.followers.count %>
-										</span>
-									</div>
-									<% if current_user != shop.user  %>
-							            <% if current_user.is_follow_shop?(shop.id) %>
-							            	<span data-value-id="<%= current_user.follow_shop(shop.id).id %>" class="label  btn-warning unfollow">取消关注</span>
-							            <% else %>
-							                <span class="label  btn-warning follow">+ 关注</span>
-							            <% end %>
-							        <% end %>
-								</div>     
-		                    </li>
-						<% end %>
-					<% else %>
-						<li style="text-align:center;">该地区暂时还没有卖家入驻</li>
+								<div class="follows">
+									关注人数: 
+									<span class="follows_count">	
+										<%=shop.followers.count %>
+									</span>
+								</div>
+								<% if current_user != shop.user  %>
+						            <% if current_user.is_follow_shop?(shop.id) %>
+						            	<span data-value-id="<%= current_user.follow_shop(shop.id).id %>" class="label  btn-warning unfollow">取消关注</span>
+						            <% else %>
+						                <span class="label  btn-warning follow">+ 关注</span>
+						            <% end %>
+						        <% end %>
+							</div>     
+	                    </li>
 					<% end %>
-					</ul>
-				</div>
+				<% else %>
+					<li style="text-align:center;">该地区暂时还没有卖家入驻</li>
+				<% end %>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -65,10 +63,14 @@
 			area_id: "<%=@city.id %>"
 		})
 
-    new FindCircleView({
-      el: $(".circles"),
-      area_id: "<%=@city.id %>"
-    })
+		new NewUsersView({
+			el: $(".newer_panel")
+		})
+
+	    new FindCircleView({
+	      el: $(".circles"),
+	      area_id: "<%=@city.id %>"
+	    })
 	    
 		$(".depend_select>option[value=]").html("--请选择--")
 
@@ -80,7 +82,7 @@
 					follow_type: "Shop",
 					follow_id:  $(elem).attr("data-value-id")
 				}
-    	})
+    		})
 		})
 	})
 </script>
