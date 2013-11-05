@@ -43,8 +43,10 @@
       <% end %>
     </p>
   </div>
+  <% if @circle.is_manage?(current_user.id) %>
   <div>
     <input type='button' value="邀请更多人" class='btn invite' />
     <input type='button' value="分享此圈" class='btn shared' />
   </div>
+  <% end %>
 </div>
