@@ -3,7 +3,7 @@ class CompletingPeopleController < Wicked::WizardController
   before_filter :login_required_without_service_choosen
   before_filter :validate_step_info, :only => :show
 
-  steps :pick_industry, :authenticate_license#, :waiting_audit
+  steps :pick_industry, :authenticate_license
 
   def show
     @user_auth = UserAuth.new(@user_checking.attributes)
@@ -80,7 +80,7 @@ class CompletingPeopleController < Wicked::WizardController
     end
 
     def validate_step_info
-      @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: Service.buyer.id)
+      @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: Service.buyer.id, user_id: current_user.id)
       case step
       when :pick_industry
         if @user_checking.industry_type.present?

@@ -37,7 +37,7 @@
         </li>
         <% end %>
         <% if can? :manage, User %>
-          <% unless @people.is_seller? %>
+          <% unless @people.is_seller? && @people.shop.actived == true %>
           <li>
             <a class='people-create_shop' href="/completing_shop/authenticate_license">
               我要开店

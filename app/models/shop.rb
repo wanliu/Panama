@@ -139,7 +139,6 @@ class Shop < ActiveRecord::Base
     load_group_permission
     load_admin_permission
     load_friend_circle
-    load_topic_category
   end
 
   def delete_shop
@@ -150,13 +149,6 @@ class Shop < ActiveRecord::Base
     _config = YAML.load_file("#{Rails.root}/config/data/shop_circle.yml")
     _config["circle"].each do |circle|
       self.circles.create(circle) if self.circles.find_by(circle).nil?
-    end
-  end
-
-  def load_topic_category
-    _config = YAML.load_file("#{Rails.root}/config/data/topic_category.yml")
-    _config["topic_categories"].each do |category|
-      self.topic_categories.create(category) if self.topic_categories.find_by(category).nil?
     end
   end
 
