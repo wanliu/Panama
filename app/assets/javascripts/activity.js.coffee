@@ -288,9 +288,9 @@ class ActivityViewTemplate extends Backbone.View
         $(".buttons>.launch-button", @$el).remove()
 
   get_status: () ->
-    time_wait = Date.parse(@model.start_time) - new Date()
+    time_wait = @model.start_time.toDate().getTime() - new Date().getTime()
     return {name: 'waiting', text: "敬请期待"} unless time_wait < 0
-    time_left =  Date.parse(@model.end_time) - new Date()
+    time_left = @model.end_time.toDate().getTime() - new Date().getTime()
     return {name: 'over', text: "已结束"} unless time_left > 0
 
     leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数

@@ -18,6 +18,6 @@ Date.prototype.format = (format) ->
     "S"    : this.getMilliseconds()                             #毫秒
   }
 
-  for key , val of m
+  for key, val of m
     format = format.replace(key,val)
   return format
