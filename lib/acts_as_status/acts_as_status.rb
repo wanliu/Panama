@@ -6,7 +6,7 @@ module ActsAsStatus
 
   module ClassMethods
     def acts_as_status(field, status)
-      _states = status.map{|s| s.to_sym}
+      _states = status.map(&:to_sym)
 
       self.instance_eval do
         attr = "#{field}".to_sym

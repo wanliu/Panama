@@ -103,21 +103,23 @@ class CommentView extends Backbone.View
   hide: () ->
     @$el.slideUp()
 
+  display: () ->
+    @$el.show()
+
 
 class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
-  events: {
+  events:
     "click .send_comment" : "show_create_commnet"
     "click .comment_form .cancel" : "hide_create_comment"
     "submit form.comment_form" : "comment"
     "keyup .comment_form textarea" : "textarea_status"
     "click .more_comment" : 'more_comment'
     "click .hide_comment" : 'hide_comment'
-  }
+    'click .add_participate' : 'create_participate'
+
   initialize: (options) ->
     @model = new Topic(options.data)
-    @model.set(comments_count: 0)
-
     @model.bind("change:comments_count", @change_count, @)
 
     @comments = new Comments()
@@ -132,13 +134,15 @@ class TopicView extends Backbone.View
     @$textarea = @$(".comment_form textarea")
     @$btn_comment = @$(".comment_form input:submit")
     @$display_comment = @$(".display-comment")
-    @fetch_comment_init()
+    @comment_init()
+    @load_participates()
     @$el
 
   add_comment: (model) ->
+    method = model.get("display_way") || 'show'
     view = new CommentView(model: model)
     @$(".comments_panel").append(view.render())
-    view.show()
+    view[method]()
 
   load_template: () ->
     template = $("#create-topic-template").html()
@@ -166,19 +170,15 @@ class TopicView extends Backbone.View
     )
     return false
 
-  fetch_comment_init: () ->
-    $.ajax(
-      url: "#{@root_url()}/init_comment"
-      success: (data) =>
-        @model.set(comments_count: data.count)
-        @display_comment_bar()
-        @init_data(data.comments)
-    )
+  comment_init: () ->
+    @display_comment_bar()
+    @init_data(@model.get("top_comments"), 'display')
 
-  init_data: (data) ->
+  init_data: (data, display_way = 'show') ->
     @$(".comments_panel").html('')
     @comments.reset()
-    _.each data, (d) => @comments.add(d)
+    _.each data, (d) => @comments.add(_.extend({
+      display_way: display_way}, d))
 
   change_count: () ->
     @$(".display-comment.more_comment>.describe").html("#{@model.get('comments_count')}评论")
@@ -237,6 +237,30 @@ class TopicView extends Backbone.View
 
   change_comments: (i, call_name) ->
     @comments.models[i].trigger(call_name)
+
+  load_participates: () ->
+    $.ajax(
+      url: "#{@root_url()}/participates",
+      success: (data) =>
+        _.each data, (d) =>
+          @$(".participates").append(@render_participate(d))
+    )
+
+  create_participate: () ->
+    $.ajax(
+      url: "#{@root_url()}/participate",
+      type: 'POST',
+      success: (data) =>
+        el = @$(".participates .count")
+        count = if _.isEmpty(el.text().trim()) then 0 else parseInt(el.text())
+        el.html(++count)
+        $(@render_participate(data)).insertAfter(@$(".participates>.add_participate"))
+    )
+
+  render_participate: (data) ->
+    "<a data-toggle='tooltip' data-placement='top' data-original-title='#{data.login}' href='javascript:void(0)' class='participate'>
+      <img src='#{data.icon_url}' />
+    </a>"
 
 
 root.CreateTopicView = CreateTopicView

@@ -9,9 +9,8 @@ class CircleFriends < ActiveRecord::Base
   belongs_to :circle
   belongs_to :user
 
-  validates_presence_of :circle
-  validates_presence_of :user_id
-  validates_presence_of :user
+  validates :user, :presence => true
+  validates :circle, :presence => true
 
   acts_as_status :identity, [:manage, :member]
 
@@ -42,6 +41,10 @@ class CircleFriends < ActiveRecord::Base
 
   def manage?
     self.identity == :manage
+  end
+
+  def identity_title
+    I18n.t("circle_friend.identity.#{identity.name}")
   end
 
   def self.create_member(user_id, circle_id = nil)

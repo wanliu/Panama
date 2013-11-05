@@ -23,6 +23,7 @@
 				.circle_name{
 					color: #FFFFFF;
 					font-size: 16px;
+					font-weight: bold;
 					margin-bottom: 5px;
 					overflow: hidden;
 					text-overflow: ellipsis;
@@ -38,6 +39,7 @@
 						height: 30px;
 						width: 30px;
 						padding-top: 5px;
+						margin-right: 5px;
 					}
 				}
 			}
@@ -139,7 +141,7 @@
 			}
 		}
 	}
-	.base_info{
+	.newer_panel{
 		.alert{
 			margin-right: 20px;
 			margin-left: 20px;

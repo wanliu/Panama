@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_one :shop
   has_one :shop_user
-  has_one :user_checking
+  has_one :user_checking, :as => :owner
 
   has_many :transactions,
            class_name: "OrderTransaction",
@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_initialize :init_user_info
+
+  def city
+    user_checking.try(:address).try(:city)
+  end
 
   def recharge(money, owner, decription = "")
     money_bills.create!(
@@ -136,6 +140,10 @@ class User < ActiveRecord::Base
 
   def follow_shop(shop_id)
     followings.find_by(follow_id: shop_id, follow_type: "Shop")
+  end
+
+  def follow_shop_or_user(id, type)
+    followings.find_by(follow_id: id, follow_type: type)
   end
 
   def is_follow_shop?(shop_id)
