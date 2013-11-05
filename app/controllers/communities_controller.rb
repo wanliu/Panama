@@ -27,7 +27,7 @@ class CommunitiesController < ApplicationController
 								 .order('created_at DESC')
 								 .limit(15)
 
-		my_friends = current_user.circle_all_friends.pluck("id")
+		my_friends = current_user.circle_all_friends.pluck("user_id")
 
 		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.circle_id left join addresses as addr on addr.area_id = circles.city_id")
 						.where("owner_type = 'Shop' and circles.city_id in (?) ", city_ids)
