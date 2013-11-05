@@ -1,11 +1,17 @@
 <div class='widget circle-description'>
-  <h4>
+  <div class="span11" style="font-size:18px;font-weight:bold;">
     所属者<%=@circle.owner_title %>
-    <a href='#mySetting' data-toggle="modal" data-placement="top" title="" data-original-title="设置" class='setting'>
-      <span class='icon-cog'></span>
-    </a>
-  </h4>
-  <div><%= render "setting", circle: @circle %></div>
+  </div>
+  <% if @circle.is_manage?(current_user.id) %>
+    <div class="span1">
+      <a href='#mySetting' data-toggle="modal" data-placement="top" title="" data-original-title="设置" class='setting'>
+        <h4><span class='icon-cog'></span></h4>
+      </a>
+    </div>
+    <div>
+      <%= render "setting", circle: @circle %>
+    </div>
+  <% end %>
   <div class='owner' data-value-id='<%=@circle.owner_id %>'>
     <span class='user'>
       <a href="<%=owner_url(@circle.owner) %>" >

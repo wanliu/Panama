@@ -115,7 +115,7 @@ class FindCircleView extends Backbone.View
     $.ajax({
       url: "/search/shop_circles.dialog",
       type: "get",
-      url: "/search/circles.dialog",
+      url: "/search/shop_circles.dialog",
       data: {q: @$(".circle_input_info").val() ,area_id: @options.area_id }
       success: (data) =>
         if data == ""
