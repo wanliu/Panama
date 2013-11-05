@@ -110,9 +110,8 @@ class SearchController < ApplicationController
               if q[:title].present?
                 val = conditions[:title].gsub(/ /,'')
                 filter :query, :query_string => {
-                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}*",
-                  :default_operator => "AND",
-                  :boost => 100
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
+                  :default_operator => "AND"
                 }
               end
               filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
