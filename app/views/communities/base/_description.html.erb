@@ -1,9 +1,11 @@
 <div class='widget circle-description'>
   <h4>
     所属者<%=@circle.owner_title %>
+    <% if @circle.is_manage?(current_user.id) %>
     <a href='#mySetting' data-toggle="modal" data-placement="top" title="" data-original-title="设置" class='setting'>
       <span class='icon-cog'></span>
     </a>
+    <% end %>
   </h4>
   <div><%= render "setting", circle: @circle %></div>
   <div class='owner' data-value-id='<%=@circle.owner_id %>'>
@@ -37,8 +39,10 @@
       <% end %>
     </p>
   </div>
+  <% if @circle.is_manage?(current_user.id) %>
   <div>
     <input type='button' value="邀请更多人" class='btn invite' />
     <input type='button' value="分享此圈" class='btn shared' />
   </div>
+  <% end %>
 </div>

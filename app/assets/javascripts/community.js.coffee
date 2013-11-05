@@ -34,7 +34,7 @@ class CircleCategory extends Backbone.View
 				data: { name: $category_name },
 				url: "/communities/#{ @circle_id }/circles/add_category",
 				success: (data) =>
-					$("<li><a data-value-id='#{ data.id}' href='#' class='circle-category-#{data.id}'>#{ data.name} </a></li>").insertBefore(".add_category")	
+					$("<li><a data-value-id='#{ data.id}' href='#' class='circle-category-#{data.id}'>#{ data.name} </a></li>").insertBefore(".add_category")
 			})
 
 
