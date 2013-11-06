@@ -27,7 +27,8 @@ String.prototype.toDate = (format = 'yyyy-MM-dd hh:mm:ss') ->
     "hh"  : '', "mm": '', "ss": '',
     "h"   : '', "m" : '', "s" : '' 
   }
-  for i, val of formatArray
+  for i in [0..formatArray.length-1]
+    val = formatArray[i]
     value = stringArray[i]
     throw "请指定正确的日期格式" unless value.split(/\W/).length == 1
     time[val] = value
