@@ -37,7 +37,7 @@ class DeliveryAddress < ActiveRecord::Base
       city_id=? and
       area_id=? and
       contact_name=? and
-      contact_phone=?", id, road, user_id, province_id,
+      contact_phone=?", id.to_s, road, user_id, province_id,
       city_id, area_id, contact_name, contact_phone])
       errors.add(:province_id, "地址已经存在了！")
     end

@@ -65,9 +65,9 @@
               required: true,
               :label   => '开始时间',
               id: "activity_focus_start_time",
-              input_html: { 
-                name: 'activity[start_time]', 
-                value: (DateTime.now + (Settings.Focus["start_time"] || 1).days).strftime('%m/%d/%Y') 
+              input_html: {
+                name: 'activity[start_time]',
+                value: (DateTime.now + (Settings.Focus["start_time"] || 1).days).strftime('%m/%d/%Y')
               } %>
 
   <%= f.input :end_time,
@@ -75,8 +75,8 @@
               required: true,
               :label   => '结束时间',
               id: "activity_focus_end_time",
-              input_html: { 
-                name: 'activity[end_time]', 
+              input_html: {
+                name: 'activity[end_time]',
                 value: (DateTime.now + (Settings.Focus["end_time"] || 8).days).strftime('%m/%d/%Y')
               } %>
   </div>
