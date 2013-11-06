@@ -15,7 +15,11 @@ class PeopleController < ApplicationController
   end
 
   def edit
-    @user_checking = current_user.user_checking
+    if current_user.shop.nil?
+      @user_checking = current_user.user_checking
+    else
+      @user_checking = current_user.shop.user_checking
+    end
     @user_auth = UserAuth.new(@user_checking.attributes)
     @people = User.find_by(:login => params[:id])
     current_ability(@people)
