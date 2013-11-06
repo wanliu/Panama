@@ -16,7 +16,9 @@
       </div>
       <div class='userinfo'>
         {{#user.photos}}
+        <a href="/people/{{user.login}}">
           <img src='{{icon}}', class="author img-circle" />
+        </a>
         {{/user.photos}}
         <p>
           {{#user}}
