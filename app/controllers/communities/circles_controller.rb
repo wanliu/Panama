@@ -1,31 +1,79 @@
+#encoding: utf-8
 class Communities::CirclesController < Communities::BaseController
-
+  before_filter :validate_manager, :only => :update_circle
+  
   def index
   end
 
-  def category
-	  @circle = Circle.find(params[:community_id])
-	  @circle_category = @circle.categories.create(:name => params[:name])
-	  respond_to do |format|
-	    format.html
-	    format.json{ render json: @circle_category }
-	  end
+  def members
+    @members = @circle.sort_friends
+    respond_to do |format|
+      format.html
+      format.json{ render json: @members }
+    end
   end
 
-  def del_category
-    @circle = Circle.find(params[:community_id])
-    @circle.categories.find(params[:category_id]).delete
+  def title
+    actions, key = t("community.circle"), params[:action].to_sym
+    name = "-#{actions[key]}" if actions.key?(key)
+    "#{@circle.name}#{name}-商圈"
+  end
+
+  def update_circle
+    options = params[:circle]
+    if @circle.setting.nil?
+      options[:setting] = CircleSetting.create(params[:setting].merge(:circle => @circle))
+    else
+      @circle.setting.update_attributes(params[:setting])
+    end
+    @circle.update_attributes(options)
     respond_to do |format|
       format.json { head :no_content }
     end
   end
 
-  def members
-    @circle = Circle.find(params[:community_id])
-    @members = @circle.friend_users
+  def access_denied
+  end
+
+  def join
     respond_to do |format|
-      format.html
-      format.json{ render json: @members }
+      unless @circle.limit_join?
+        @friend = @circle.join_friend(current_user)
+        if @friend.valid?
+          format.js{ head :no_content }
+        else
+          format.js{ render :json => draw_errors_message(@friend), :status => 403  }
+        end
+      else
+        format.js{ render :json => ["商圈需要通过对方同意加入!"], :status => 403  }
+      end
+    end
+  end
+
+  def apply_join
+    respond_to do |format|
+      if @circle.limit_join?
+        @circle.apply_join_notice(current_user)
+        format.js{ render :js => "window.location.href='#{community_access_denied_path(@circle)}'" }
+        format.html{ redirect_to community_access_denied_path(@circle) }
+      else
+        format.js{ render :js => "window.location.href='#{community_circles(@circle)}'" }
+        format.html{ redirect_to community_circles(@circle) }
+      end
+    end
+  end
+
+  def title
+    actions, key = t("community.circle"), params[:action].to_sym
+    name = "-#{actions[key]}" if actions.key?(key)
+    "#{@circle.name}#{name}-商圈"
+  end
+  private
+  def validate_manager
+    unless @circle.is_manage?(current_user.id)
+      respond_to do |format|
+        format.json{ render json: draw_errors_message(@category), status: 403 }
+      end
     end
   end
 end

@@ -61,12 +61,23 @@ Panama::Application.routes.draw do
       get "search", :to => "communities#search"
     end
 
+    match "access_denied", :to => "communities/circles#access_denied"
+
     resources :circles, :only => [:index], :controller => "communities/circles" do
-      collection do 
-        post :category
-        delete :del_category
+
+      collection do
         get :members
+        put :update_circle
         get ":category_id/category", :to => "communities/circles#category"
+        post :join
+        post :apply_join
+      end
+    end
+
+    resources :notifications, :only => [:index, :show], :controller => "communities/notifications" do
+      member do
+        post :agree_join
+        post :refuse_join
       end
     end
 
@@ -75,6 +86,14 @@ Panama::Application.routes.draw do
         get :init_comment
         get :comments
         post :create_comment
+        get :participates
+        post :participate
+      end
+    end
+
+    resources :categories, :controller => "communities/categories" do
+      member do
+        get :topics
       end
     end
   end
@@ -489,6 +508,7 @@ Panama::Application.routes.draw do
   match "search/products", :to => "search#products"
   match "search", :to => "search#index"
   match "search/shop_products", :to => "search#shop_products", :via => :get
+  match "search/shop_circles", :to => "search#shop_circles", :via => :get
   match "search/circles", :to => "search#circles", :via => :get
 
 

@@ -6,6 +6,20 @@ class CommunityNotification < ActiveRecord::Base
   belongs_to :target, :polymorphic => true
   belongs_to :circle
 
+  after_create do
+    url = "/communities/#{circle.id}/notifications/#{id}"
+    Notification.create!(
+      :user_id => send_user.id,
+      :mentionable_user_id => target_member_id,
+      :url => url,
+      :targeable => self,
+      :body => "#{send_user.login}申请加入圈子")
+  end
+
+  def target_member_id
+    target.is_a?(User) ? target.id : target.user_id
+  end
+
   def read_notify
     n = Notification.find_by(
       :targeable_id => id,

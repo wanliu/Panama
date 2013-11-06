@@ -25,6 +25,7 @@ class Shop < ActiveRecord::Base
   # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
   has_one :shops_category
+  has_one :user_checking, :as => :owner
   belongs_to :user
 
   before_create :create_shop
@@ -45,6 +46,10 @@ class Shop < ActiveRecord::Base
   #所有圈子好友
   def circle_all_friends
     CircleFriends.where(:circle_id => circles.map{|c| c.id})
+  end
+
+  def is_follower?(user_id)
+    followers.exists?(user_id: user_id)
   end
 
   #所有好友的圈子
@@ -134,7 +139,6 @@ class Shop < ActiveRecord::Base
     load_group_permission
     load_admin_permission
     load_friend_circle
-    # load_topic_category
   end
 
   def delete_shop
@@ -145,13 +149,6 @@ class Shop < ActiveRecord::Base
     _config = YAML.load_file("#{Rails.root}/config/data/shop_circle.yml")
     _config["circle"].each do |circle|
       self.circles.create(circle) if self.circles.find_by(circle).nil?
-    end
-  end
-
-  def load_topic_category
-    _config = YAML.load_file("#{Rails.root}/config/data/topic_category.yml")
-    _config["topic_categories"].each do |category|
-      self.topic_categories.create(category) if self.topic_categories.find_by(category).nil?
     end
   end
 

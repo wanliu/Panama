@@ -1,4 +1,4 @@
-<div class='base_info newer widget'>
+<div class='newer_panel newer widget'>
 	<div class="title row-fluid">
 		<div class="span4"><span style="font-size:25px;font-weight:bold;">新入驻成员</span></div>
 		<div class="span8"><%= render "find_people" %></div>
@@ -48,15 +48,17 @@
 		<% end %>
 	</div>
 </div>
+
 <script type="text/javascript">
 	$(function(){
-		$(".user_info").mouseenter(function(e){
+		$(".user_info").live("mouseenter",function(e){
 			$top = e.pageY - $(document).scrollTop();
 			$left = e.pageX - $(document).scrollLeft();
 			$(".user_base_info", this).css('top', $top - 5);
             $(".user_base_info", this).css('left', $left + 5);
 			$(".user_base_info", this).fadeIn();
-		}).mouseleave(function(e){
+		})
+		$(".user_info").live("mouseleave",function(e){
 			$(".user_base_info", this).fadeOut();
 		})
 	})

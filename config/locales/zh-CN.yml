@@ -234,6 +234,14 @@ zh-CN:
         target_type: 关联类型
         created_at: 创建时间
         updated_at: 更新时间
+      region: 区域
+    attributes:
+      region:
+        id: 编号
+        name: 名称
+        created_at: 创建时间
+        updated_at: 更新时间
+        advertisement: 广告词
       activity:
         id: 编号
         shop: 商店
@@ -466,6 +474,12 @@ zh-CN:
     puliceity: "公开"
     community: "商家"
 
+  community:
+    circle:
+      members: '成员'
+      category: '分类'
+      notifications: '提醒'
+
   activity:
     type:
       auction: 竞价
@@ -474,6 +488,11 @@ zh-CN:
     buy_state:
       direct: 直接购买
       guarantee: 担保交易
+
+  circle_friend:
+    identity:
+      member: 成员
+      manage: 管理员
 
   table:
     heads:

@@ -5,8 +5,10 @@ class TopicParticipate < ActiveRecord::Base
   belongs_to :topic
   belongs_to :user
 
-  validate :user, :presence => true
-  validate :topic, :presence => true
+  validates :user, :presence => true
+  validates :topic, :presence => true
+
+  validate :valid_unqi_user?
 
   after_create do
     update_topic_participate

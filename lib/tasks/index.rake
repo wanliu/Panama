@@ -8,32 +8,21 @@ namespace "index" do
 
       create({
         "index" => {
-            "analysis" => {
-              "analyzer" => {
-                "pinyin_analyzer" => {
-                  "tokenizer" => "my_pinyin",
-                  "filter" => ["standard", "nGram"]
-                },
-                "replace_blank" => {
-                  "tokenizer" => "keyword",
-                  "filter" => ["replace_blank"]
-                }
-              },
-              "tokenizer" => {
-                "my_pinyin" => {
-                  "type" => "pinyin",
-                  "first_letter" => "prefix",
-                  "padding_char" => ""
-                }
-              },
-              "filter" => {
-                "replace_blank" => {
-                  "type" => "pattern_replace",
-                  "pattern" => " ",
-                  "replacement" => ""
-                }
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
               }
             }
+          }
         }
       })
       sleep 1
@@ -66,55 +55,48 @@ namespace "index" do
 
       create({
         "index" => {
-            "analysis" => {
-                "analyzer" => {
-                    "pinyin_analyzer" => {
-                      "tokenizer" => "my_pinyin",
-                      "filter" => ["standard", "nGram"]
-                    },
-                    "replace_blank" => {
-                      "tokenizer" => "keyword",
-                      "filter" => ["replace_blank"]
-                    }
-                },
-                "tokenizer" => {
-                  "my_pinyin" => {
-                    "type" => "pinyin",
-                    "first_letter" => "prefix",
-                    "padding_char" => ""
-                  }
-                },
-                "filter" => {
-                  "replace_blank" => {
-                    "type" => "pattern_replace",
-                    "pattern" => " ",
-                    "replacement" => ""
-                  }
-                }
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
             }
+          }
         }
       })
       sleep 1
 
       mapping :shop_product, {
         "properties" => {
-            "name" => {
-                "type" => "multi_field",
-                "fields" => {
-                    "name" => {
-                      "type" => "string",
-                      "store" => "no",
-                      "term_vector" => "with_positions_offsets",
-                      "analyzer" => "pinyin_analyzer",
-                      "boost" => 10
-                    },
-                    "primitive" => {
-                      "type" => "string",
-                      "store" => "no",
-                      "analyzer" => "replace_blank"
-                    }
-                }
+          "name" => {
+            "type" => "multi_field",
+            "fields" => {
+              "name" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              }
             }
+          }
         }
       }
     end
@@ -129,10 +111,6 @@ namespace "index" do
               "pinyin_analyzer" => {
                 "tokenizer" => "my_pinyin",
                 "filter" => ["standard", "nGram"]
-              },
-              "replace_blank" => {
-                "tokenizer" => "keyword",
-                "filter" => ["replace_blank"]
               }
             },
             "tokenizer" => {
@@ -140,13 +118,6 @@ namespace "index" do
                 "type" => "pinyin",
                 "first_letter" => "prefix",
                 "padding_char" => ""
-              }
-            },
-            "filter" => {
-              "replace_blank" => {
-                "type" => "pattern_replace",
-                "pattern" => " ",
-                "replacement" => ""
               }
             }
           }
@@ -170,7 +141,11 @@ namespace "index" do
               "primitive" => {
                 "type" => "string",
                 "store" => "no",
-                "analyzer" => "replace_blank"
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
               }
             }
           }
@@ -188,25 +163,14 @@ namespace "index" do
               "pinyin_analyzer" => {
                 "tokenizer" => "my_pinyin",
                 "filter" => ["standard", "nGram"]
-              },
-              "replace_blank" => {
-                "tokenizer" => "keyword",
-                "filter" => ["replace_blank"]
               }
-            },
-            "tokenizer" => {
-                "my_pinyin" => {
-                    "type" => "pinyin",
-                    "first_letter" => "prefix",
-                    "padding_char" => ""
-                }
-            },
-            "filter" => {
-              "replace_blank" => {
-                "type" => "pattern_replace",
-                "pattern" => " ",
-                "replacement" => ""
-              }
+            }
+          },
+          "tokenizer" => {
+            "my_pinyin" => {
+              "type" => "pinyin",
+              "first_letter" => "prefix",
+              "padding_char" => ""
             }
           }
         }
@@ -229,7 +193,11 @@ namespace "index" do
               "primitive" => {
                 "type" => "string",
                 "store" => "no",
-                "analyzer" => "replace_blank"
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
               }
             }
           }

@@ -2,8 +2,8 @@
 root = window || @
 
 class DependSelectView extends Backbone.View
-	initialize: (options) ->
-		_.extend(@,options)
+	initialize: (options) ->		
+		_.extend(@, options)
 		@el = $(@el)
 		@el.bind("change", $.proxy(@select_change,@)) if @children != ""
 		@el.data("depend", @)
@@ -20,12 +20,12 @@ class DependSelectView extends Backbone.View
 			success: $.proxy(@callback,@)
 		})
 
-	callback: (data) =>
-		@call_back.call(@, data)  if @type =="direct_get"
+	callback: (data) =>		
 		strHtml = "<option value=''>--请选择--</option>"
 		_.each data, (num) =>
 			strHtml += "<option value='#{num["id"]}'>#{num["name"]}</option>"
 		@el.html(strHtml)
+		@call_back.call(@, data)  if _.isFunction(@call_back)
 
 	reset: () ->
 		$(@children).data().depend.el.html("") if this.children != ""

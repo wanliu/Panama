@@ -2,13 +2,13 @@ class CompletingShopController < Wicked::WizardController
   layout "wizard"
   before_filter :login_required_without_service_seller
 
-  steps :pick_industry, :authenticate_license, :pick_product#, :waiting_audit
+  steps :pick_industry, :authenticate_license, :pick_product
 
   def show
     service_id = Service.where(service_type: "seller").first.id
-    @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
+    @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id,user_id: current_user.id)
     @shop_auth = ShopAuth.new(@user_checking.attributes)
-    if @user_checking.checked
+    if @user_checking.checked && current_user.shop.actived == true
       redirect_to "/"
     else
       case step
@@ -65,7 +65,6 @@ class CompletingShopController < Wicked::WizardController
     @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
-
       if @user_checking.user.shop.blank?
         @shop = @user_checking.user.create_shop(name: @shop_auth.shop_name, address: @user_checking.address)
         @user_checking.owner = @shop
@@ -78,7 +77,7 @@ class CompletingShopController < Wicked::WizardController
   end
 
   def set_products_added
-    @user_checking.update_attributes(products_added: true)
+    current_user.shop.user_checking.update_attributes(products_added: true)
     # 添加服务（是否有服务是主页跳转到选择服务选择页的判断标记）
     current_user.services << Service.where(service_type: "seller")
 

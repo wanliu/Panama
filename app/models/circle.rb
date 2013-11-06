@@ -7,7 +7,7 @@
 class Circle < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id
+  attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id, :setting
 
   belongs_to :owner, :polymorphic => true
 
@@ -19,6 +19,7 @@ class Circle < ActiveRecord::Base
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
+  has_many :notice, dependent: :destroy, class_name: "CommunityNotification"
 
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
@@ -29,21 +30,24 @@ class Circle < ActiveRecord::Base
   validate :valid_name?
 
   after_create do
+    generate_manage
   end
 
   def apply_join_notice(sender)
-    c = CommunityNotification.create({
-      :circle => self,
+    notice.create(
       :send_user => sender,
-      :target => owner,
-      :body => "#{sender.login}申请加入圈子#{name}"})
-    url = "/shops/#{owner.name}/admins/communities/apply_join/#{c.id}"
-    notifications.create!(
-      :user_id => sender.id,
-      :mentionable_user_id => owner.user_id,
-      :url => url,
-      :targeable => c,
-      :body => c.body)
+      :target => owner
+    )
+  end
+
+  def notice_exists?(send_user)
+    user_id = sender_user.is_a?(User) ? sender_user.id : sender_user
+    notice.exists?(:send_user_id => user_id, :state => false)
+  end
+
+  def user_notice(sender_user)
+    user_id = sender_user.is_a?(User) ? sender_user.id : sender_user
+    notice.find_by(:send_user_id => user_id, :state => false)
   end
 
   def grapical_handler
@@ -69,14 +73,41 @@ class Circle < ActiveRecord::Base
     photos.header
   end
 
+  def limit_join?
+    setting.present? && (setting.limit_join || setting.limit_city)
+  end
+
+  def address
+    return "" if city.nil?
+    "#{city.parent.parent.try(:name)}#{city.parent.try(:name)}#{city.name}"
+  end
+
   def friend_users
     friends.joins(:user).map{|f| f.user.as_json }
   end
 
+  def sort_friends
+    friends.joins(:user).order("identity asc, created_at desc")
+  end
+
+  def top_friends
+    sort_friends.limit(40)
+  end
+
   def join_friend(user)
-    uid = user
-    uid = user.id if user.is_a?(User)
-    friends.create_member(user_id: uid)
+    uid = user.is_a?(User) ? user.id : user
+    friends.create_member(uid)
+  end
+
+  def is_manage?(user)
+    user_id = user.is_a?(User) ? user.id : user
+    status = CircleFriends._get_state_val(:manage)
+    friends.exists?(:user_id => user_id, :identity => status)
+  end
+
+  def is_member?(user)
+    user_id = user.is_a?(User) ? user.id : user
+    friends.exists?(:user_id => user_id)
   end
 
   def remove_friend(user)
