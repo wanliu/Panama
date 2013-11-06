@@ -166,8 +166,8 @@ class Product < ActiveRecord::Base
         :avatar    => photos.avatar
       },
       :category    => {
-        :id        => category.id,
-        :name      => category.name
+        :id        => category.try(:id),
+        :name      => category.try(:name)
       }
     }.to_json
   end

@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Communities::NotificationsController < Communities::BaseController
 
   def index

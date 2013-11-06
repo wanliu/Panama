@@ -215,8 +215,8 @@ class Activity < ActiveRecord::Base
         :avatar       => photos.avatar
       },
       :category    => {
-        :id        => shop_product.category.id,
-        :name      => shop_product.category.name
+        :id        => shop_product.try(:category).try(:id),
+        :name      => shop_product.try(:category).try(:name)
       },
       :participate_ids => participates.pluck("users.id"),
       :like_ids => likes.pluck("users.id")
