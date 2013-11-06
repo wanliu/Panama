@@ -21,11 +21,16 @@ class UserCheckingsController < ApplicationController
   end
 
   #上传头像
-  def upload_photo    
+  def upload_photo   
     field_name = params[:field_name]
     file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name] 
     unless file.nil?
-        @user_checking = User.find(params[:id]).user_checking
+        @user = User.find(params[:id])
+        if @user.shop.nil?
+          @user_checking = @user.user_checking
+        else
+          @user_checking = @user.shop.user_checking
+        end
         if @user_checking.send(field_name)
           @user_checking.send(field_name).remove! if  @user_checking.send(field_name)
         end
