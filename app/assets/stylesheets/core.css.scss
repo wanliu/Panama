@@ -1098,7 +1098,6 @@ h2 small {
 
 	.lv2_categories {
 		top: 0;
-		left: 160px;
 		height: auto;
 		display: none;
 		min-width: 752px;
@@ -1106,6 +1105,7 @@ h2 small {
 		position: absolute;
 		padding-right: 20px;
 		padding-bottom: 20px;
+		background: url('/assets/blank.png') no-repeat;
 		@include transparent(rgb(62, 112, 108), 0.91);
 
 		.lv2_category_tree {
@@ -1188,4 +1188,19 @@ h2 small {
 .navbar .pull-right > li > .dropdown-menu, .navbar .nav > li > .dropdown-menu.pull-right {
 	left: auto;
 	right: 25px;
+}
+
+#left_sidebar{
+
+	background: none;
+	filter: none;
+
+	.sidebar-bg{
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		top: 0px;
+		@include transparent(rgb(51,51,51), 0.4);
+		z-index: -1;
+	}
 }
