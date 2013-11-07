@@ -42,6 +42,34 @@ class SearchController < ApplicationController
     end
   end
 
+  def all
+    if params[:q].present?
+      val = filter_special_sym(params[:q].gsub(/ /,''))
+      @results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
+        query do
+          boolean do
+            must do
+              filtered do
+                filter :query, :query_string => {
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
+                  :default_operator => "AND"
+                }
+
+                filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
+              end
+            end
+          end
+        end
+        size 10
+
+        sort{ by :_score, :desc }
+      end.results
+    end
+    respond_to do |format|
+      format.json{ render :json => @results || [] }
+    end
+  end
+
   def shop_products
     if current_user.shop
       query = filter_special_sym(params[:q])

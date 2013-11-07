@@ -2,26 +2,39 @@ root = (window || @)
 
 class TopBar extends Backbone.View
 
-	events:
-		"click .link.friends": "toggleFriends"
-		"click .search-btn"  : "enterSearch"
-		"submit form"        : "enterSearch"
+  events:
+    "click .link.friends": "toggleFriends"
+    "click .search-btn"  : "enterSearch"
+    "submit form"        : "enterSearch"
 
-	initialize: (@options) ->
-		@resultTarget = $(@options['results'] || '#activities')
-		$('.link.friends').bind('click', $.proxy(@toggleFriends, @))
-		@toggleFriends()
+  initialize: (@options) ->
+    @resultTarget = $(@options['results'] || '#activities')
+    $('.link.friends').bind('click', $.proxy(@toggleFriends, @))
+    @toggleFriends()
 
-	toggleFriends: () ->
-		$("body").toggleClass("open_right_side")
-		# $('.right-sidebar').animate({ width: 'toggle'},callback)
-		$(window).trigger('resize')
-		false
+    new TypeaheadExtension({
+      el: @$("input.search-query"),
+      source: "/search/all",
+      highlighter: (item) ->
+        if _.include(["ask_buy", "activity"], item._type)
+          item.name = item.title
 
-	enterSearch: (e) ->
-		query = @$("[type=search]").val().trim()
-		$(window).trigger('reset_search', {title: query}) if query
-		false
+        return item.name
+
+      select: (item)  ->
+        return item.name
+    })
+
+  toggleFriends: () ->
+    $("body").toggleClass("open_right_side")
+    # $('.right-sidebar').animate({ width: 'toggle'},callback)
+    $(window).trigger('resize')
+    false
+
+  enterSearch: (e) ->
+    query = @$("[type=search]").val().trim()
+    $(window).trigger('reset_search', {title: query})
+    false
 
 
 root.TopBar = TopBar

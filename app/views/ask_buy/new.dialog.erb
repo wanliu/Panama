@@ -45,8 +45,9 @@
       el: $("input.ask_buy_title"),
       field: "name",
       source: "/product_search",
-      select: function(id){
-        ask_buy_view.fetch_product(id)
+      select: function(item){
+        ask_buy_view.fetch_product(item.id)
+        return item.name
       }
     })
   })

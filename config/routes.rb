@@ -510,6 +510,7 @@ Panama::Application.routes.draw do
   match "search/shop_products", :to => "search#shop_products", :via => :get
   match "search/shop_circles", :to => "search#shop_circles", :via => :get
   match "search/circles", :to => "search#circles", :via => :get
+  match "search/all", :to => "search#all", :via => :get
 
 
   # omniauth
