@@ -49,7 +49,7 @@ class SearchController < ApplicationController
       s = ShopProduct.search2 do
         query do
           boolean do
-            must { string "name:#{query} OR primitive:#{query}*", :default_operator => "AND" }
+            must { string "name:#{query} OR primitive:#{query}", :default_operator => "AND" }
             must { string "seller.id:#{shop_id}" }
           end
         end

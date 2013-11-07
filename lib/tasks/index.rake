@@ -42,7 +42,11 @@ namespace "index" do
               "primitive" => {
                 "type" => "string",
                 "store" => "no",
-                "analyzer" => "replace_blank"
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
               }
             }
           }
@@ -205,4 +209,17 @@ namespace "index" do
       }
     end
   end
+
+  desc "load index model data"
+  task :data_load => :environment do
+    [Product, ShopProduct, Activity, AskBuy].each do |klass|
+      total = klass.count
+      index = klass.tire.index
+      Tire::Tasks::Import.add_pagination_to_klass(klass)
+      Tire::Tasks::Import.progress_bar(klass, total) if total
+      Tire::Tasks::Import.create_index(index, klass)
+      Tire::Tasks::Import.import_model(index, klass, {})
+    end
+  end
 end
+
