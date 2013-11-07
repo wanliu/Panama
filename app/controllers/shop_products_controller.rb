@@ -77,15 +77,15 @@ class ShopProductsController < ApplicationController
 		@shop_product = ShopProduct.find(params[:id])
 		respond_to do |format|
 			@order = current_user.transactions.build(seller_id: @shop_product.shop_id)
-			@order.items.build({
+			@item = @order.items.build({
 				:product_id => @shop_product.product_id,
 				:amount => params[:amount],
 				:title => @shop_product.product.try(:name),
 				:price => @shop_product.price,
 				:user_id => current_user.id,
-				:shop_id => @shop_product.shop_id,
-				:buy_state => :guarantee
+				:shop_id => @shop_product.shop_id
 			})
+			@item.buy_state = :guarantee
 			if @order.save
 				format.json{ render :json => @order }
 			else
