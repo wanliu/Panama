@@ -105,6 +105,12 @@ module ApplicationHelper
     end
   end
 
+  def link_to_community
+    link_to person_communities_path(current_user)  do
+      icon(:group) + " 我的商圈"
+    end
+  end
+
   def link_to_admin
     if action_controller.respond_to?(:admin?)
       link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings", :title => "商店管理" do
