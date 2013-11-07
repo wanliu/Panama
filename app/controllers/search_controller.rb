@@ -43,8 +43,8 @@ class SearchController < ApplicationController
   end
 
   def all
-    if params[:q].present?
-      val = filter_special_sym(params[:q].gsub(/ /,''))
+    val = filter_special_sym(params[:q].gsub(/ /,''))
+    if val.present?
       @results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
         query do
           boolean do

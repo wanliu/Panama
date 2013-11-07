@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
   end
 
   # 只需要验证是否登录而不需要验证是否选择服务用这个
-  def login_required    
+  def login_required
     if !current_user
       respond_to do |format|
         format.js{
@@ -116,7 +116,7 @@ class ApplicationController < ActionController::Base
 
   def filter_special_sym(query)
     if query.present?
-      query.gsub(/[\+\-\*\.\,\/]/, "\\/")
+      query.gsub(/[\+\-\*\.\,\/\[\]\(\)]/, "")
     end
   end
 
