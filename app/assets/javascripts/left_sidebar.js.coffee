@@ -3,7 +3,7 @@ root = (window || @)
 class LeftSideBar extends Backbone.View
 	ICON_CLASS = "sidebar-icons"
 
-	events: 
+	events:
 		"click #sidebar-settings>[data-value=icons]": "toggle_sidebar"
 		"click #sidebar-settings>[data-value=auto]" : "toggle_sidebar"
 
@@ -72,10 +72,12 @@ class CategoryTree extends Backbone.View
 		@$($(event.target).attr('href')).hide()
 
 	hide_categories: (event) ->
-		setTimeout () =>
-			$(event.target).hide()
+		clearTimeout(@time_id) unless _.isEmpty(@time_id)
+		event_el = $(event.target)
+		@time_id = setTimeout () =>
+			event_el.hide()
 		, 300
 
-		
+
 root.LeftSideBar = LeftSideBar
 root.CategoryTree = CategoryTree

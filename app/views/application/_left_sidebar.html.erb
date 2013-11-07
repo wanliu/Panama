@@ -1,4 +1,5 @@
-<nav id="left_sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
+<nav id="left_sidebar" class="sidebar-activity sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
+  <div class='sidebar-bg'></div>
   <ul id="side-nav" class="side-nav">
     <li class="active">
       <a href="/" class='side-fiery'>
@@ -15,7 +16,7 @@
         <% cache do %>
           <%= root_category_tree %>
         <% end %>
-      </ul> 
+      </ul>
     </li>
     <li>
       <a class='side-tomorrow' href="<%=tomorrow_activities_path %>">
@@ -55,8 +56,8 @@
     new CategoryTree({el: "#category-sidebar"})
     new LeftSideBar({el: "#left_sidebar"})
 
-    // var side_class = "<%= yield :side_nav %>"
-    // $("#side-nav li.active").removeClass("active")
-    // $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in")
+    var side_class = "<%= yield :side_nav %>"
+    $("#side-nav li.active").removeClass("active")
+    $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in")
   })
 </script>

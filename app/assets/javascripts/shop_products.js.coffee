@@ -92,7 +92,7 @@ class ShopProductToolbar extends Backbone.View
     @$el = $(@el)
     @login = @options.login
     @shop_product_id = @$el.attr("data-value-id")
-    @amount = @$("input:text.amount")
+    @amount = @$("input.amount")
     @$cart_el = $(".toolbar .cart")
 
   buy: () ->
