@@ -63,7 +63,7 @@ class FindUserView extends Backbone.View
   find_user: () ->
     @$(".find_people_tip")
     keyword = @$(".people_input_info").val().trim()
-    return @$(".find_people_tip").show() unless keyword != ""
+    # return @$(".find_people_tip").show() unless keyword != ""
     $.ajax({
       type: "get",
       dataType: "json",
@@ -101,10 +101,9 @@ class FindCircleView extends Backbone.View
   find_circle: () ->
     @$(".find_circle_tip").hide()
     keyword = @$(".circle_input_info").val().trim()
-    return @$(".find_circle_tip").show() unless keyword != ""
+    # return @$(".find_circle_tip").show() unless keyword != ""
     $.ajax({
       type: "get",
-      url: "/search/shop_circles.dialog",
       url: "/search/shop_circles.dialog",
       data: {q: keyword ,area_id: @options.area_id }
       success: (data) =>

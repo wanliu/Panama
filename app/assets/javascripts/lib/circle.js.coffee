@@ -152,6 +152,7 @@ class CircleCategoryList extends Backbone.View
 			return
 		else
 			@$(".categories").append("<input type='text' class='new_circle_category'>")
+			@$(".new_circle_category").focus()
 			@$(".new_input").addClass("disabled")
 	
 	add_category: ()->
