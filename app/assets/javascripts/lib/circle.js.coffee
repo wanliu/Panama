@@ -148,7 +148,11 @@ class CircleCategoryList extends Backbone.View
 		@$(".new_circle_category").blur() if e.keyCode == 13
 		
 	new_input: () ->
-		@$(".categories").append("<input type='text' class='new_circle_category'>")
+		if @$(".new_input").hasClass("disabled")
+			return
+		else
+			@$(".categories").append("<input type='text' class='new_circle_category'>")
+			@$(".new_input").addClass("disabled")
 	
 	add_category: ()->
 		$category_name = $(".new_circle_category").val()
@@ -166,7 +170,9 @@ class CircleCategoryList extends Backbone.View
 						circle_id: @circle_id
 					})
 					@$(".categories").append(view.el)
+					# @$(".new_input").removeClass("disabled")
 			})
+		@$(".new_input").removeClass("disabled")
 			
 
 class CircleAddressView extends Backbone.View

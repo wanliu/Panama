@@ -40,6 +40,7 @@ class NewUsersView extends Backbone.View
 
   render: (datas) =>
     if datas.length == 0
+      @$(".alert").fadeOut()
       $(@notice).insertBefore(@$(".wrapper"))
     else
       @$(".alert").fadeOut()
@@ -82,6 +83,7 @@ class FindUserView extends Backbone.View
 
   render: (datas) =>
     if datas.length == 0
+      @$(".alert").fadeOut()
       $(@notice).insertBefore(@$(".wrapper"))
     else
       @$(".alert").fadeOut()
@@ -119,8 +121,10 @@ class FindCircleView extends Backbone.View
       data: {q: @$(".circle_input_info").val() ,area_id: @options.area_id }
       success: (data) =>
         if data == ""
+          @$(".alert").fadeOut()
           $(@notice).insertBefore(@$(".wrapper"))
         else
+          @$(".alert").fadeOut()
           @$(".wrapper").html(data)
     })
 

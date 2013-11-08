@@ -5,7 +5,7 @@ class Shop < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
 
-  attr_accessible :name, :user, :address
+  attr_accessible :name, :user, :address, :shop_summary, :address_id,:shop_url,:audit_count
   attr_accessor :uploader_secure_token
 
   has_many :products, :class_name => "ShopProduct", dependent: :destroy
@@ -25,15 +25,13 @@ class Shop < ActiveRecord::Base
   # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
   has_one :shops_category
-  has_one :user_checking, :as => :owner
   belongs_to :user
 
-  before_create :create_shop
-  after_create :initial_shop_data
   before_destroy :delete_shop
 
   scope :actived, where(actived: true)
 
+  validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }, if: :actived?
   validates :name, presence: true
   validates :name, uniqueness: true
 
@@ -42,6 +40,18 @@ class Shop < ActiveRecord::Base
   mount_uploader :photo, ImageUploader
   define_graphical_attr :photos, :handler => :photo
   friendly_id :name
+
+  def shutdown_shop
+    update_attribute(:actived, false)
+  end
+
+  def active_shop
+    update_attribute(:actived, true)
+    if audit_count = 0
+      create_shop
+      initial_shop_data
+    end
+  end
 
   #所有圈子好友
   def circle_all_friends
@@ -132,13 +142,13 @@ class Shop < ActiveRecord::Base
   end
 
   def initial_shop_data
-    @category = shops_category.blank? ? create_shops_category(:name => "#{name}_root") : shops_category
-    @category.load_default
+    # @category = shops_category.blank? ? create_shops_category(:name => "#{name}_root") : shops_category
+    # @category.load_default
 
     load_group
     load_group_permission
     load_admin_permission
-    load_friend_circle
+    # load_friend_circle
   end
 
   def delete_shop

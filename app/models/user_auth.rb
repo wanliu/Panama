@@ -15,6 +15,8 @@ class UserAuth
   validates :ower_shenfenzheng_number, format: { with: /^\d{17}[0-9xX]$/, message: "请填写真实有效的第二代身份证号码" }
   validates :phone, format: { with: /^\d{3,5}-?\d{6,}$/, message: "请确定号码真实有效，只能包含数字或‘-’" }
   validates :ower_name, presence: true
+  validates :ower_shenfenzheng_number, presence: true
+  validates :phone, presence: true
 
   def initialize(attributes = {})
     attributes = attributes.symbolize_keys
