@@ -37,12 +37,16 @@
         </li>
         <% end %>
         <% if can? :manage, User %>
-          <% unless @people.is_seller? && @people.shop.actived == true %>
-          <li>
-            <a class='people-create_shop' href="/completing_shop/authenticate_license">
-              我要开店
-            </a>
-          </li>
+          <% unless @people.is_seller? %>
+            <li>
+              <a class='people-create_shop' href="/completing_shop/authenticate_license">
+                我要开店
+              </a>
+            </li>
+          <% else %>
+            <% if @people.shop.actived == false %>
+              <li><a href="#">商店审核中..</a></li>
+            <% end %>
           <% end %>
         <% end %>
       </ul>

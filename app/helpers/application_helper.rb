@@ -301,7 +301,7 @@ module ApplicationHelper
 
   def city_by_ip(client_ip)
     client_ip = "124.228.76.190" unless Rails.env.production?
-    address = IPSearch.ip_query(client_ip)
+  address = IPSearch.ip_query(client_ip)
     if address.blank?
       City.find_by_name("衡阳市")
     else

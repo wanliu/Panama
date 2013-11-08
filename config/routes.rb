@@ -437,6 +437,7 @@ Panama::Application.routes.draw do
       get "edit_address", :to => "shops/acounts#edit_address"
       match "update_address", :to => "shops/acounts#update_address"
       match "bill_detail", :to => "shops/acounts#bill_detail"
+      match "apply_update", :to => "shops/acounts#apply_update"
 
       resources :order_refunds, :controller => "shops/order_refunds" do
         member do

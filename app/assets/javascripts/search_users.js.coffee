@@ -111,6 +111,7 @@ class FindCircleView extends Backbone.View
         if data == ""
           @$(".find_circle_tip").show()
         else
+          @$(".alert").fadeOut()
           @$(".wrapper").html(data)
     })
 

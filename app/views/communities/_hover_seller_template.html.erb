@@ -1,11 +1,11 @@
 <div class='user_base_info' user-id='<%= new_user.id %>' >
   <div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
   <div class='userinfo'>
-    <div  class="circle_avatar"><img src='<%= new_user.shop_photos.icon %>', class="author img-circle" /></div>
-    <div class="shop_name"><a href="/shops/<%= new_user.shop_name %>"><%= new_user.shop_name %></a></div> 
+    <div  class="circle_avatar"><img src='<%= new_user.user.shop.photos.icon %>', class="author img-circle" /></div>
+    <div class="shop_name"><a href="/shops/<%= new_user.user.shop.name %>"><%= new_user.user.shop.name %></a></div> 
     <div class="industry_type"><span>行业：<%= new_user.industry_type %></span></div>
     <div class="tel"><span>联系方式：<%=  new_user.phone %></span></div>
-    <div class="entry"><button><a href="/shops/<%= new_user.shop_name %>">进入商铺</a></button></div>
+    <div class="entry"><button><a href="/shops/<%= new_user.user.shop.name %>">进入商铺</a></button></div>
     <div class="contact"><a href="#"><i class="icon-leaf"></i></a></div>
   </div>
 </div>
