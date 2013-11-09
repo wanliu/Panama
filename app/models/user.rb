@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
-  
+
   attr_accessible :uid, :login, :first_name, :last_name, :email
   attr_protected :money
 
@@ -50,6 +50,10 @@ class User < ActiveRecord::Base
 
   def city
     user_checking.try(:address).try(:city)
+  end
+
+  def area
+    user_checking.try(:address).try(:area)
   end
 
   def recharge(money, owner, decription = "")

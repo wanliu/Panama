@@ -11,7 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131108031706) do
+
+ActiveRecord::Schema.define(:version => 20131108031709) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -436,6 +437,18 @@ ActiveRecord::Schema.define(:version => 20131108031706) do
   add_index "inventory_caches", ["options"], :name => "index_inventory_caches_on_styles"
   add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
   add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
+
+  create_table "invite_users", :force => true do |t|
+    t.text     "body"
+    t.integer  "user_id"
+    t.integer  "send_user_id"
+    t.string   "targeable_type"
+    t.integer  "targeable_id"
+    t.boolean  "read",           :default => false
+    t.integer  "behavior",       :default => 0
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
 
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"

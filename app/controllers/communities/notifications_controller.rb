@@ -1,11 +1,14 @@
 #encoding: utf-8
 class Communities::NotificationsController < Communities::BaseController
+  before_filter :validate_manager
+  before_filter :require_member
 
   def index
   end
 
   def show
     @notice = @circle.notice.find(params[:id])
+    @notice.read_notify
   end
 
   def agree_join
@@ -33,8 +36,6 @@ class Communities::NotificationsController < Communities::BaseController
   end
 
   def title
-    actions, key = t("community.notifications"), params[:action].to_sym
-    name = "-#{actions[key]}" if actions.key?(key)
-    "#{@circle.name}#{name}-商圈"
+    "#{@circle.name}-提醒-商圈"
   end
 end

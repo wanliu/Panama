@@ -15,7 +15,6 @@ class CircleFriends < ActiveRecord::Base
   acts_as_status :identity, [:manage, :member]
 
   validate :valid_some_user_and_circle?
-  validate :validate_setting?
 
   delegate :photos, :to => :user
 

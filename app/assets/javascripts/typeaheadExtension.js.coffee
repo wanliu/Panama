@@ -2,6 +2,7 @@
 
 root = (window || @)
 class TypeaheadExtension
+  limit: 10
 
   select: (item) ->
 
@@ -26,7 +27,7 @@ class TypeaheadExtension
   remote: (query, process) ->
     $.ajax(
       url: @url
-      data: {q: query}
+      data: {q: query, limit: @limit}
       success: (data) =>
         process(data)
     )
@@ -41,7 +42,8 @@ class TypeaheadExtension
 
   updater: (value) ->
     item = @typeh.$menu.find('.active').data("value")
-    return @select(item)
+    @select(item)
+    return item[@field]
 
   render: (items)->
     items = $(items).map((i, item) =>
