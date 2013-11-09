@@ -18,6 +18,10 @@ class CircleCategory extends Backbone.View
 	events:
 		"click .add_category" : "edit"
 		"blur .new_category" : "submit"
+		"keyup .new_category" : "enter"
+
+	enter: (e) ->
+		@$(".new_category").blur() if e.keyCode == 13
 
 	edit: () ->
 		@$(".add_category").hide()
