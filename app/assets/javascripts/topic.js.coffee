@@ -66,7 +66,7 @@ class CreateTopicView extends Backbone.View
     data
 
 class LoadTopicList extends InfiniteScrollView
-  msg_el: "#load_message_notifiy"
+  # msg_el: "#load_message_notifiy"
 
   initialize: (options) ->
     @fetch_url = options.fetch_url
