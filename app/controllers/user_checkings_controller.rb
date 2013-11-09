@@ -15,7 +15,8 @@ class UserCheckingsController < ApplicationController
     @shop = current_user.shop
     @shop.update_attributes(shop_auth_params[:shop])
     shop_auth_params.delete(:shop)
-  	@user_checking.update_attributes(shop_auth_params)
+    @user_checking.update_attributes(shop_auth_params)
+    @user_checking.unchecked
   	redirect_to "/shops/#{ @shop.name }/admins/shop_info"
   end
 

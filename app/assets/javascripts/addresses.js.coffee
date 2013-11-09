@@ -34,7 +34,6 @@ class AddressEditView extends Backbone.View
 				@$("#edit_address").modal('hide')
 				pnotify({text: "修改地址成功！"})
 			error: (xhr, status) =>
-				@$("form").html(xhr.responseText)
 				pnotify({text: "请确定完善地址信息！"})
 		)
 		false
