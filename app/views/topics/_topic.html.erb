@@ -9,14 +9,13 @@
         </div>
         <div>
           <div class='send_user'>
-          <a href='/people/{{user_id}}'>
-            {{user.login}}
-          </a>
+            <a href='/people/{{user_id}}'>
+              {{user.login}}
+            </a>
           </div>
           <div>
             <a href='/communities/{{circle_id}}/circles/{{category_id}}/category'>{{category.name}}</a> -
-            <abbr class='timeago topic_date' title='{{created_at}}'>
-            </abbr>
+            <abbr class='timeago topic_date' title='{{created_at}}'></abbr>
           </div>
         </div>
       </div>
@@ -24,8 +23,10 @@
     <div class='content'>
       {{{content_html}}}
     </div>
-    <hr class='line' />
-    <div class='attachments'>
+    <div class='attachments-avatar'>
+      {{#attachments}}
+        <img src="{{.}}" class="avatar" />
+      {{/attachments}}
     </div>
     <div class='topic-comments'>
       <div class="row-fluid comment_bar">

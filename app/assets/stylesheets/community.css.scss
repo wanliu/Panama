@@ -159,6 +159,13 @@ body.communities{
           margin-bottom: 5px;
         }
 
+        .attachments-avatar{
+          img{
+            max-width: 200px;
+            max-height: 200px;
+          }
+        }
+
         .user-info{
           width: 40px;
           height: 40px;
