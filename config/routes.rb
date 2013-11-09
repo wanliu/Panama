@@ -91,6 +91,13 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :invite, :controller => "communities/invite" do
+      member do
+        post :agree_join
+        post :refuse_join
+      end
+    end
+
     resources :categories, :controller => "communities/categories" do
       member do
         get :topics

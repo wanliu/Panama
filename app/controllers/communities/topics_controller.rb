@@ -1,5 +1,6 @@
 #encoding: utf-8
 class Communities::TopicsController < Communities::BaseController
+  before_filter :require_member
 
   def create
     @topic = @circle.topics.create(params[:topic].merge({

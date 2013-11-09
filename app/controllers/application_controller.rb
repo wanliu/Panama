@@ -74,11 +74,13 @@ class ApplicationController < ActionController::Base
       respond_to do |format|
         format.js{
           ajax_set_response_headers
-          render :text => :ok, :status => 403 }
-        format.html  {
+          render :text => :ok, :status => 403
+        }
+        format.html{
           configure_callback_url
-          redirect_to '/auth/wanliuid' }
-        format.json {
+          redirect_to '/auth/wanliuid'
+        }
+        format.json{
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
     end

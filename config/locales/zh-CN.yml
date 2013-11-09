@@ -477,7 +477,7 @@ zh-CN:
     circle:
       members: '成员'
       category: '分类'
-      notifications: '提醒'
+    notifications: '提醒'
 
   activity:
     type:
