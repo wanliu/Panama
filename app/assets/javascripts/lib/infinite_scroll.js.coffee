@@ -6,6 +6,7 @@ class InfiniteScrollView extends Backbone.View
   offset: 0,
   limit: 40,
   init_size: 40,
+  is_over: false,
   search_options: {},
   msg_tip: '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
 
@@ -25,6 +26,7 @@ class InfiniteScrollView extends Backbone.View
       success: (data) =>
         if data.length == 0
           $(@msg_el).html(@msg_tip)
+          @is_over = true
         else if data.length == @fetch_size
           $(@msg_el).hide()
           @add_columns(data)
@@ -33,6 +35,7 @@ class InfiniteScrollView extends Backbone.View
           @add_columns(data)
           @offset += @fetch_size
           $(@msg_el).html(@msg_tip)
+          @is_over = true
         @fetch_size = @limit
     )
 
@@ -51,13 +54,13 @@ class InfiniteScrollView extends Backbone.View
   after_add: () ->
 
   scroll_load: () ->
-    if $(@msg_el).css("display") != "block"
-      sp_height = $(document).height()
-      w_height = $(window).height() + $(window).scrollTop()
-      pre_height = $(window).height()
-      if sp_height - w_height <= pre_height
-        clearTimeout(@timeout_id) if @timeout_id
-        @timeout_id = setTimeout _.bind(@fetch, @), 100
+    return if @is_over
+    sp_height = $(document).height()
+    w_height = $(window).height() + $(window).scrollTop()
+    pre_height = $(window).height()
+    if sp_height - w_height <= pre_height
+      clearTimeout(@timeout_id) if @timeout_id
+      @timeout_id = setTimeout _.bind(@fetch, @), 100
 
   remove_columns: () ->
     $(@sp_el).find(".columns>.column").children().remove()
