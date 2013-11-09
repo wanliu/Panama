@@ -127,8 +127,36 @@ body.communities{
       }
     }
 
-    .invite{
-      margin-right: 20px;
+    .bottom_bar{
+      .invite{
+        margin-right: 20px;
+      }
+
+      .dialog-invite{
+        .modal-body{
+          overflow: visible;
+
+          ul.typeahead{
+            margin-top: 0px;
+            width: 220px;
+
+            li{
+              .photo{
+                width: 30px;
+                height: 30px;
+              }
+            }
+          }
+
+          .title{
+            text-align: center;
+          }
+
+          textarea.body{
+            height: 90px;
+          }
+        }
+      }
     }
   }
 
@@ -327,7 +355,7 @@ body.communities{
 
 }
 
-.notification{
+.notification, .invite-user{
   .agree{
     margin-left: 5px;
     margin-right: 15px;

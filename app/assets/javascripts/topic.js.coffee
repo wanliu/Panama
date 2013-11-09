@@ -112,7 +112,6 @@ class CommentView extends Backbone.View
   display: () ->
     @$el.show()
 
-
 class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
     
@@ -269,7 +268,6 @@ class TopicView extends Backbone.View
     "<a data-toggle='tooltip' data-placement='top' data-original-title='#{data.login}' href='javascript:void(0)' class='participate'>
       <img src='#{data.icon_url}' />
     </a>"
-
 
 root.CreateTopicView = CreateTopicView
 root.TopicViewList = TopicViewList

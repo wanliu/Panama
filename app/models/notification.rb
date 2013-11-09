@@ -25,6 +25,10 @@ class Notification < ActiveRecord::Base
     })
   end
 
+  def change_read
+    self.update_attribute(:read, true)
+  end
+
   def self.format_unreads(notifications = [])
     notifications.map do |notification|
       notification.format_unread

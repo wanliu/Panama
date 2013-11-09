@@ -10,25 +10,18 @@ class CircleCreate extends Backbone.View
 		"click .submit_cirlce" : "submit_data"
 			
 	submit_data: () -> 
-		name = @$(".circle_name").val()
-		introduce = @$(".introduce").val()
-		attachment_id = @$(".attachable > input").val()
-		city_id = @$(".address_area_id").val()
-		limit_city = true if @$(".limit_area").attr("checked") == "checked"
-		limit_join = true if @$(".apply_join").attr("checked") == "checked"
-
 		$.ajax({
 			type: "post",
 			dataType: "json",
 			data: { circle: { 
-						name: name, 
-						description: introduce, 
-						attachment_id: attachment_id,
-						city_id: city_id 
+						name: @$(".circle_name").val(), 
+						description: @$(".introduce").val(), 
+						attachment_id: @$(".attachable > input").val(),
+						city_id: @$(".address_area_id").val()
 					},
 					setting:{
-					    limit_city: limit_city, 
-					    limit_join: limit_join
+					    limit_city: @$(".limit_area").is(':checked'), 
+					    limit_join: @$(".limit_join").is(':checked')
 					}
 				},
 			url: @remote_url,
@@ -171,7 +164,6 @@ class CircleCategoryList extends Backbone.View
 						circle_id: @circle_id
 					})
 					@$(".categories").append(view.el)
-					# @$(".new_input").removeClass("disabled")
 			})
 		@$(".new_input").removeClass("disabled")
 			

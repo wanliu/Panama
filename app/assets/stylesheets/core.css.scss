@@ -1212,4 +1212,8 @@ h2 small {
 	}
 }
 
-
+.error{
+	input[type=text], textarea{
+		border: 1px solid #b94a48;
+	}
+}

@@ -20,6 +20,7 @@ class Circle < ActiveRecord::Base
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
   has_many :notice, dependent: :destroy, class_name: "CommunityNotification"
+  has_many :invite_users, as: :targeable, dependent: :destroy
 
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
@@ -74,7 +75,16 @@ class Circle < ActiveRecord::Base
   end
 
   def limit_join?
-    setting.present? && (setting.limit_join || setting.limit_city)
+    setting.present? && setting.limit_join
+  end
+
+  def limit_city?
+    setting.present? && setting.limit_city
+  end
+
+  def is_limit_city?(user)
+    user = user.is_a?(User) ? user : User.find(user)
+    city == user.area
   end
 
   def address

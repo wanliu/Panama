@@ -5,11 +5,13 @@
   <% if @circle.is_manage?(current_user.id) %>
     <div class="span1">
       <a href='#mySetting' data-toggle="modal" data-placement="top" title="" data-original-title="设置" class='setting'>
-        <h4><span class='icon-cog'></span></h4>
+        <h4>
+          <span class='icon-cog'></span>
+        </h4>
       </a>
     </div>
     <div>
-      <%= render "setting", circle: @circle %>
+      <%=render "setting", circle: @circle %>
     </div>
   <% end %>
   <div class='owner' data-value-id='<%=@circle.owner_id %>'>
@@ -44,9 +46,11 @@
     </p>
   </div>
   <% if @circle.is_manage?(current_user.id) %>
-  <div>
-    <input type='button' value="邀请更多人" class='btn invite' />
+  <div class='bottom_bar'>
+    <a href='#invite_dialog' data-toggle="modal" data-placement="top" title="" data-original-title="邀请更多人" class='btn invite'>
+      邀请更多人</a>
     <input type='button' value="分享此圈" class='btn shared' />
+    <%= render "/communities/invite/new" %>
   </div>
   <% end %>
 </div>

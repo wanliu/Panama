@@ -444,6 +444,18 @@ ActiveRecord::Schema.define(:version => 20131109091215) do
   add_index "inventory_caches", ["product_id"], :name => "index_inventory_caches_on_product_id"
   add_index "inventory_caches", ["warehouse_id"], :name => "index_inventory_caches_on_warhouse"
 
+  create_table "invite_users", :force => true do |t|
+    t.text     "body"
+    t.integer  "user_id"
+    t.integer  "send_user_id"
+    t.string   "targeable_type"
+    t.integer  "targeable_id"
+    t.boolean  "read",           :default => false
+    t.integer  "behavior",       :default => 0
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
   create_table "item_in_outs", :force => true do |t|
     t.integer  "product_id"
     t.integer  "product_item_id"

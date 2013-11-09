@@ -1,4 +1,5 @@
 #= require topic
+#= require lib/circle_info
 
 root = window || @
 
@@ -21,6 +22,11 @@ class root.CircleListView extends Backbone.View
       circle_id: @circle_id,
       create_topic: _.bind(@create_topic, @),
       el: @$(".left>.toolbar"))
+
+    new CircleInfoView(
+      el: @$(".circle-description"),
+      circle_id: @circle_id
+    )
 
   add_topic: (template) ->
     @short_elem().append(template)

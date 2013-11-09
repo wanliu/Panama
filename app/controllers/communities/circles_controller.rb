@@ -1,7 +1,8 @@
 #encoding: utf-8
 class Communities::CirclesController < Communities::BaseController
   before_filter :validate_manager, :only => :update_circle
-  
+  before_filter :require_member, :except => [:apply_join]
+
   def index
   end
 
@@ -11,12 +12,6 @@ class Communities::CirclesController < Communities::BaseController
       format.html
       format.json{ render json: @members }
     end
-  end
-
-  def title
-    actions, key = t("community.circle"), params[:action].to_sym
-    name = "-#{actions[key]}" if actions.key?(key)
-    "#{@circle.name}#{name}-商圈"
   end
 
   def update_circle
@@ -37,7 +32,7 @@ class Communities::CirclesController < Communities::BaseController
 
   def join
     respond_to do |format|
-      unless @circle.limit_join?
+      unless @circle.limit_join? || @circle.limit_city?
         @friend = @circle.join_friend(current_user)
         if @friend.valid?
           format.js{ head :no_content }
@@ -52,7 +47,8 @@ class Communities::CirclesController < Communities::BaseController
 
   def apply_join
     respond_to do |format|
-      if @circle.limit_join?
+      if (@circle.limit_city? && @circle.is_limit_city?(current_user)) ||
+        (!@circle.limit_city? && @circle.limit_join?)
         @circle.apply_join_notice(current_user)
         format.js{ render :js => "window.location.href='#{community_access_denied_path(@circle)}'" }
         format.html{ redirect_to community_access_denied_path(@circle) }
@@ -67,13 +63,5 @@ class Communities::CirclesController < Communities::BaseController
     actions, key = t("community.circle"), params[:action].to_sym
     name = "-#{actions[key]}" if actions.key?(key)
     "#{@circle.name}#{name}-商圈"
-  end
-  private
-  def validate_manager
-    unless @circle.is_manage?(current_user.id)
-      respond_to do |format|
-        format.json{ render json: draw_errors_message(@category), status: 403 }
-      end
-    end
   end
 end
