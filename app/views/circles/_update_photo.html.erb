@@ -1,20 +1,21 @@
 <div class="reset_avatar main_panle">
-    <div id="image_bottom">
-        <div class="hidden_one" id="hidden_text">
-        </div>
-        <div class="update_photo_panle  upload_user_avatar file-box">
-        </div>
-    </div>
+  <div id="image_bottom">
+      <div class="hidden_one" id="hidden_text">
+      </div>
+      <div class="update_photo_panle  upload_user_avatar file-box">
+      </div>
   </div>
-  <div class='photo_upload'>
-      <ul class='attachment-list'>
-      </ul>
-  </div>
+</div>
+<div class='photo_upload'>
+  <ul class='attachment-list circle-attachment'>
+  </ul>
+</div>
+
 <script type="text/javascript">
 $(function(){
   new AttachmentUpload({
     data: [<%= circle.attachment.to_json.html_safe %>],
-    el: $(".attachment-list"),
+    el: $(".attachment-list.circle-attachment"),
     limit: 1,
     default_enabled: false,
     params: {
