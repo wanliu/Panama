@@ -1,7 +1,6 @@
 root = window || @
 
 class NewUsersView extends Backbone.View
-
   events:
     "click .hot_region_search" : "hot_region_search"
 
@@ -11,10 +10,6 @@ class NewUsersView extends Backbone.View
     @buyer_template = Hogan.compile($("#buyer_base_template").html())
     @seller_template = Hogan.compile($("#seller_base_template").html())
     @hot_region_template = Hogan.compile("<a id='{{ id }}' href='#' class='hot_region_search'>{{ name }}</a>&nbsp;")
-    @notice = $("<div class='alert'>
-            <button type='button' class='close' data-dismiss='alert'>&times;</button>
-            <span>您搜索的区域暂时没有成员～～～～</span>
-          </div>")
 
   get_hot_regions: () ->
     $.ajax({
@@ -27,11 +22,12 @@ class NewUsersView extends Backbone.View
     })
 
   hot_region_search: (event) ->
+    @$(".find_people_tip").hide()
     id = event.currentTarget.id
     $.ajax({
-      dataType: "json",
       type: "get",
-      data:{region_id: id } ,
+      dataType: "json",
+      data:{region_id: id },
       url: "/communities/search",
       success: (datas) =>
         @render(datas)
@@ -40,9 +36,8 @@ class NewUsersView extends Backbone.View
 
   render: (datas) =>
     if datas.length == 0
-      $(@notice).insertBefore(@$(".wrapper"))
+      @$(".find_people_tip").show()
     else
-      @$(".alert").fadeOut()
       @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
       _.each datas, (data) =>
         tpl = if data.service_id == 1
@@ -51,16 +46,11 @@ class NewUsersView extends Backbone.View
           @seller_template
         @$(".wrapper").append(tpl.render(data))
 
+
 class FindUserView extends Backbone.View
   events: 
     "click .find_people"              : "find_user"
     "keypress input.people_input_info": "key_up"
-
-  notice:
-    "<div class='alert'>
-      <button type='button' class='close' data-dismiss='alert'>&times;</button>
-      <span>没有找到符合要求的用户或商店</span>
-    </div>"
 
   initialize: () ->
     _.extend(@, @options)
@@ -71,18 +61,21 @@ class FindUserView extends Backbone.View
     @find_user() if e.keyCode == 13
 
   find_user: () ->
+    @$(".find_people_tip")
+    keyword = @$(".people_input_info").val().trim()
+    # return @$(".find_people_tip").show() unless keyword != ""
     $.ajax({
       type: "get",
       dataType: "json",
       url: "/search/user_checkings",
-      data: {q: @$(".people_input_info").val() ,area_id: @options.area_id }
+      data: {q: keyword ,area_id: @options.area_id }
       success: (datas) =>
         @render(datas)
     })
 
   render: (datas) =>
     if datas.length == 0
-      $(@notice).insertBefore(@$(".wrapper"))
+      @$(".find_people_tip").show()
     else
       @$(".alert").fadeOut()
       @$(".wrapper").html ""
@@ -96,14 +89,8 @@ class FindUserView extends Backbone.View
 
 class FindCircleView extends Backbone.View
   events: 
-    "click .find_circle" : "find_circle"
+    "click .find_circle"              : "find_circle"
     "keypress input.circle_input_info": "key_up"
-
-  notice:
-    "<div class='alert'>
-      <button type='button' class='close' data-dismiss='alert'>&times;</button>
-      <span>没有找到符合要求的本地商圈</span>
-    </div>"
 
   initialize: () ->
     _.extend(@, @options)
@@ -112,17 +99,21 @@ class FindCircleView extends Backbone.View
     @find_circle() if e.keyCode == 13
 
   find_circle: () ->
+    @$(".find_circle_tip").hide()
+    keyword = @$(".circle_input_info").val().trim()
+    # return @$(".find_circle_tip").show() unless keyword != ""
     $.ajax({
-      url: "/search/shop_circles.dialog",
       type: "get",
       url: "/search/shop_circles.dialog",
-      data: {q: @$(".circle_input_info").val() ,area_id: @options.area_id }
+      data: {q: keyword ,area_id: @options.area_id }
       success: (data) =>
         if data == ""
-          $(@notice).insertBefore(@$(".wrapper"))
+          @$(".find_circle_tip").show()
         else
+          @$(".alert").fadeOut()
           @$(".wrapper").html(data)
     })
+
 
 root.NewUsersView = NewUsersView
 root.FindUserView = FindUserView

@@ -1,8 +1,7 @@
- <% admin_active_section :shop_info %>
+<% admin_active_section :shop_info %>
 
 <div class='row-fluid'>
   <div class='span8 widget shop_info'>
-    <a href="/shops/<%= @user_checking.shop.name %>/admins/apply_update" class="btn pull-right">申请审核</a>
     <%= simple_form_for @shop_auth,
     url: '/user_checkings/update_shop_auth',
     html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
@@ -88,14 +87,7 @@
           </div>
         </div>
       </div>
-      <% if !current_shop.user.user_checking.checked %>
-        <button class="modify pull-right btn btn-primary">修改</button>
-      <% else %>
-        <script type="text/javascript">
-          $(".shop_info input").attr("readonly","readonly");
-          $("[data-target=#edit_address]").hide();
-        </script>
-      <% end %>
+      <input type="submit" class="btn pull-right" value="提交">
     <% end %>
   </div>
 </div>

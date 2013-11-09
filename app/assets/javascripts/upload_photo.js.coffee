@@ -54,23 +54,12 @@ class root.Upload extends Backbone.View
 
         onProgress: (id, filename, loaded, total) ->
           element.find("div.qq-upload-button").hide()  
-          # @progress_panle = $(".progress-panle")
-          # bar = @progress_panle.find(">.progress>.bar")
-          # if bar.length > 0
-          #   bar.width("#{(loaded/total) * 100}%")
 
         messages : {
           typeError : "请选择正确的{file}图片，只支持{extensions}图片",
           sizeError : "{file}图片，超过{sizeLimit}了！"
         }
       })
-  
-    # progress_callback: (id, filename, loaded, total) ->
-    #   element.find("div.qq-uploader").hide() 
-    #   @progress_panle = $(".progress-panle")
-    #   bar = @progress_panle.find(">.progress>.bar")
-    #   if bar.length > 0
-    #     bar.width("#{(loaded/total) * 100}%")
 
     show_avatar: (file) ->
       @$avatar.attr("src", file)

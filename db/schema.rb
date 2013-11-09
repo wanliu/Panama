@@ -11,6 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+
 ActiveRecord::Schema.define(:version => 20131108031709) do
 
   create_table "active_admin_comments", :force => true do |t|
@@ -810,14 +811,17 @@ ActiveRecord::Schema.define(:version => 20131108031709) do
 
   create_table "shops", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.string   "photo"
     t.integer  "user_id"
     t.string   "tmp_token"
     t.string   "im_token"
-    t.boolean  "actived",    :default => false
+    t.boolean  "actived",      :default => false
     t.integer  "address_id"
+    t.string   "shop_url"
+    t.string   "shop_summary"
+    t.integer  "audit_count",  :default => 0
   end
 
   create_table "shops_categories", :force => true do |t|
@@ -924,10 +928,6 @@ ActiveRecord::Schema.define(:version => 20131108031709) do
     t.string   "industry_type"
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
-    t.string   "shop_name"
-    t.string   "shop_photo"
-    t.string   "shop_url"
-    t.string   "shop_summary"
     t.string   "company_name"
     t.string   "company_license"
     t.string   "company_license_photo"
@@ -941,8 +941,6 @@ ActiveRecord::Schema.define(:version => 20131108031709) do
     t.boolean  "checked",                  :default => false
     t.integer  "rejected_times",           :default => 0
     t.integer  "address_id"
-    t.integer  "owner_id"
-    t.string   "owner_type"
   end
 
   create_table "users", :force => true do |t|
