@@ -32,7 +32,7 @@ class Shop < ActiveRecord::Base
   scope :actived, where(actived: true)
 
   validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }, if: :actived?
-  validates :name, presence: true
+  validates :name, presence: true, if: :actived?
   validates :name, uniqueness: true
 
   validates_presence_of :user

@@ -46,3 +46,4 @@ class root.CircleListView extends Backbone.View
       success: () =>
         window.location.href = "/communities/#{@circle_id}/circles"
     )
+    

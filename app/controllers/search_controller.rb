@@ -10,7 +10,6 @@ class SearchController < ApplicationController
     else
       city_ids = @region.region_cities_ids()
     end
-
     @user_checkings = UserChecking.users_checking_query.where("(sh.name like ? or (us.login like ? or us.email like ?)) and checked= true and ad.area_id in (?)",query_val,query_val,query_val,city_ids).limit(9)
     respond_to do |format|
       format.json{ render json: @user_checkings.as_json(:methods => [:shop, :user]) }

@@ -14,7 +14,7 @@ class TopicAttachment < ActiveRecord::Base
   def self.creates(attachments, topic_id = nil)
     opt = topic_id.nil? ? {} : {topic_id: topic_id}
     attachments.each do |atta|
-      opt[:attachment_id] = atta.is_a?(Attachment) ? atta.id : atta
+      opt['attachment_id'] = atta.is_a?(Attachment) ? atta.id : atta
       create(opt)
     end
   end

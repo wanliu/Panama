@@ -11,14 +11,14 @@ class Topic < ActiveRecord::Base
   include Extract::Mention
   include TextFormatHtml::Configure
 
-  attr_accessible :content, :user, :category, :category_id
+  attr_accessible :content, :user, :category, :category_id, :attachment_ids
 
   belongs_to :user
   belongs_to :category, class_name: "CircleCategory", foreign_key: :category_id
   belongs_to :circle
 
   has_many :comments, as: :targeable, dependent: :destroy
-  has_many :attachments, class_name: "TopicAttachment", dependent: :destroy
+  has_and_belongs_to_many :attachments, class_name: "Attachment"
   has_many :participates, class_name: "TopicParticipate", dependent: :destroy
 
   validates :content, :presence => true
@@ -60,7 +60,7 @@ class Topic < ActiveRecord::Base
     }
     attribute["attachments"] = []
     attachments.each do |atta|
-      attribute["attachments"] << atta.attachment.file.url
+      attribute["attachments"] << atta.file.url
     end
 
     attribute

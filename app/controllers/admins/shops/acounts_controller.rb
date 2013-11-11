@@ -16,7 +16,6 @@ class Admins::Shops::AcountsController < Admins::Shops::SectionController
     @user_checking = current_shop.user.user_checking
     @shop = Shop.find_by(:name => params[:shop_id])
     @shop_auth = ShopAuth.new(@user_checking.attributes)
-    @user_checking.unchecked
     @shop.shutdown_shop
   end
 

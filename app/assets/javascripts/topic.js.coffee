@@ -19,11 +19,10 @@ class Comments extends Backbone.Collection
     @url = url
 
 class CreateTopicView extends Backbone.View
-
-  events: {
-    "submit form.create_topic": "create",
+  events: 
+    "submit form.create_topic"    : "create",
     "keyup textarea[name=content]": "textarea_status"
-  }
+    "click .add-attachments"      : "toggleAttachments"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -32,6 +31,9 @@ class CreateTopicView extends Backbone.View
     @$form = @$("form.create_topic")
     @$content = @$("textarea[name=content]")
     @$button = @$("input:submit")
+
+  toggleAttachments: () ->
+    @$(".attachments-panel").slideToggle()
 
   textarea_status: () ->
     content = @$content.val().trim()
@@ -48,9 +50,11 @@ class CreateTopicView extends Backbone.View
       url: "/communities/#{@circle_id}/topics",
       data: {topic: data},
       success: (data) =>
-        @$content.val('')
         view = new TopicView(data: data)
         @create_topic(view.render())
+        @$content.val('')
+        @$(".attachments-panel").hide()
+        @$(".attachable:first").remove()
     )
     false
 
@@ -62,7 +66,7 @@ class CreateTopicView extends Backbone.View
     data
 
 class LoadTopicList extends InfiniteScrollView
-  msg_el: "#load_message_notifiy"
+  # msg_el: "#load_message_notifiy"
 
   initialize: (options) ->
     @fetch_url = options.fetch_url
@@ -84,8 +88,10 @@ class TopicViewList extends Backbone.View
     view = new TopicView(data: data)
     @add_topic(view.render())
 
+
 class CommentView extends Backbone.View
   className: "comment"
+
   initialize: () ->
     @$el = $(@el)
     @model.bind("show", @show, @)
@@ -108,14 +114,16 @@ class CommentView extends Backbone.View
 
 class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
+    
   events:
-    "click .send_comment" : "show_create_commnet"
+    "click .send_comment"         : "show_create_commnet"
     "click .comment_form .cancel" : "hide_create_comment"
-    "submit form.comment_form" : "comment"
-    "keyup .comment_form textarea" : "textarea_status"
-    "click .more_comment" : 'more_comment'
-    "click .hide_comment" : 'hide_comment'
-    'click .add_participate' : 'create_participate'
+    "blur .comment_form textarea" : "hide_create_comment"
+    "submit form.comment_form"    : "comment"
+    "keyup .comment_form textarea": "textarea_status"
+    "click .more_comment"         : 'more_comment'
+    "click .hide_comment"         : 'hide_comment'
+    'click .add_participate'      : 'create_participate'
 
   initialize: (options) ->
     @model = new Topic(options.data)
