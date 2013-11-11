@@ -493,6 +493,7 @@ zh-CN:
     identity:
       member: 成员
       manage: 管理员
+      invalid: 成员
 
   table:
     heads:
