@@ -90,8 +90,8 @@ gem "bunny", "~> 0.9.0.pre9"
 gem 'kaminari', '~> 0.14.1'
 
 # Faye
-gem 'faye'
-gem 'faye-redis', '~> 0.1.1'
+# gem 'faye'
+# gem 'faye-redis', '~> 0.1.1'
 
 gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
 

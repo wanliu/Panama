@@ -6,6 +6,7 @@
     <%= render "head", :styles => ['application'], :javascripts => ['application'] %>
   <%# end %>
   <body class="<%= controller.controller_name %>" style="zoom: 1">
+    <script type="text/javascript"></script>
     <%= render "chromeframe" %>
     <%= render "logo" %>
     <%= render "left_sidebar" %>
@@ -14,6 +15,13 @@
       <%= yield %>
     </div>
     <div id="popup-layout"></div>
+    <script type="text/javascript">
+      if (typeof window.caramal_client === 'undefined'){
+        window.caramal_client = CaramalClient.connect({
+          url: '<%= realtime_uri %>',
+          token: '<%= current_user.im_token %>' });
+      }
+    </script>
     <%= render "right_sidebar" %>
     <%#= render 'header' %>
     <%= render "footer" %>

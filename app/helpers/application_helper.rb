@@ -73,6 +73,10 @@ module ApplicationHelper
     Settings.defaults["faye_server"]
   end
 
+  def realtime_uri
+    Settings.defaults["caramal_server"]
+  end
+
   def action_controller
     if controller.is_a?(ActionController::Base)
       controller

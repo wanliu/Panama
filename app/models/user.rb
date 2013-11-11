@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
-  
+
   attr_accessible :uid, :login, :first_name, :last_name, :email
   attr_protected :money
 
@@ -28,8 +28,6 @@ class User < ActiveRecord::Base
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
-  has_many :topics, as: :owner, dependent: :destroy
-  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   has_many :friend_groups, dependent: :destroy
   has_many :contact_friends, dependent: :destroy
   # has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
@@ -82,10 +80,6 @@ class User < ActiveRecord::Base
 
   def connect_state
     RedisClient.redis.exists(redis_key)
-  end
-
-  def generate_token
-    self.im_token = SecureRandom.hex
   end
 
   def redis_key

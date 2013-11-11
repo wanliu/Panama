@@ -4,8 +4,10 @@ root.clients = {}
 
 class RealtimeClient
 
-  constructor: (server_uri = null) ->
-    @client = new Faye.Client(server_uri) if server_uri?
+  constructor: (server_uri = null, token) ->
+    server_uri = server_uri + '?token=' + token if token?
+    @client = io.connect(server_uri) if server_uri?
+    # @client = new Faye.Client(server_uri) if server_uri?
     @events = {}
 
   monitor_people_notification: (im_token, callback = (data) -> ) ->
@@ -37,5 +39,5 @@ class RealtimeClient
         handles.push handle_str
         @client.subscribe(path, handle)
 
-root.client = (uri) ->
-  @clients[uri] ?= new RealtimeClient(uri)
+root.client = (uri, token = null) ->
+  @clients[uri] ?= new RealtimeClient(uri, token)

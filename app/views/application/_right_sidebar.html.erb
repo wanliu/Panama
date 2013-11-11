@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
   RealTimeContainerView.bind_runtime({
-    realtime_url: '<%= faye_server_uri %>',
+    realtime_url: '<%= realtime_uri %>',
     token: '<%= current_user.im_token %>',
     current_user_login: '<%= current_user.login %>'
   });

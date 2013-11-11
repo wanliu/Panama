@@ -46,6 +46,7 @@
 //= require notification
 //= require upload_photo
 //= require lib/circle
+//= require lib/caramal-client
 
 root = window || this;
 

@@ -1,6 +1,6 @@
 #= require core_extend/core
 #= require jquery
-#= require faye
+#= require lib/socket.io
 #= require lib/underscore
 #= require backbone
 #= require lib/hogan
