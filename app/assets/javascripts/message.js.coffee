@@ -1,7 +1,7 @@
 #describe: 交易聊天
 #= require jquery
 #= require backbone
-#= require lib/realtime_client
+#= require lib/caramal-client
 #= require lib/notify
 
 root = window || @

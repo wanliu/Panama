@@ -46,6 +46,10 @@ class User < ActiveRecord::Base
 
   after_initialize :init_user_info
 
+  def generate_token
+    self.im_token = SecureRandom.hex
+  end
+
   def city
     user_checking.try(:address).try(:city)
   end

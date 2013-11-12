@@ -1,7 +1,7 @@
 #处理订单
 #= require jquery
 #= require backbone
-#= require lib/realtime_client
+#= require lib/caramal-client
 
 exports = window || @
 

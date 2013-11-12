@@ -1,4 +1,4 @@
-#= require lib/realtime_client
+#= require lib/caramal-client
 
 root = (window || @)
 
