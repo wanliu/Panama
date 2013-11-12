@@ -11,12 +11,17 @@ class CaramalClient
     @url = @options.url
     if @options.token?
       @url = @url + '?token=' + @options.token
-
     @connect()
+
+    @on('connect', () =>
+      console.log("connected.")
+    )
+    @on('disconnect', (error) =>
+      alert("disconnect: " + error) if error      
+    )
 
   connect: () ->
     @socket = io.connect(@url, @options)
-
 
   on: (event, callback) ->
     @socket.on(event, callback)

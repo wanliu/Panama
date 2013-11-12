@@ -6,7 +6,6 @@
     <%= render "head", :styles => ['application'], :javascripts => ['application'] %>
   <%# end %>
   <body class="<%= controller.controller_name %>" style="zoom: 1">
-    <script type="text/javascript"></script>
     <%= render "chromeframe" %>
     <%= render "logo" %>
     <%= render "left_sidebar" %>
@@ -15,24 +14,10 @@
       <%= yield %>
     </div>
     <div id="popup-layout"></div>
-    <script type="text/javascript">
-      $(function(){
-        if (typeof window.caramal_client === 'undefined'){
-          window.caramal_client = CaramalClient.connect({
-            url: '<%= realtime_uri %>',
-            token: '<%= current_user.im_token %>'
-          })
-        }
-        caramal_client.subscribe('/transactions', function(data){
-          console.log(data);
-        })
-      })
-    </script>
     <%= render "right_sidebar" %>
     <%#= render 'header' %>
     <%= render "footer" %>
     <%# Javascript at the bottom for fast page loading %>
     <%= render "baidu_analyzer" %>
-
   </body>
 </html>

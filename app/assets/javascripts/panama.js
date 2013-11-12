@@ -92,10 +92,8 @@ $.ajaxSetup({
 })
 
 $(function(){
-
   $("body").on("hover", "[data-toggle=tooltip]", function(event){
     tip = $(event.currentTarget)
     tip.tooltip("show")
   })
-
 })
