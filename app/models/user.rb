@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_one :shop
   has_one :shop_user
-  has_one :user_checking, :as => :owner
+  has_one :user_checking
 
   has_many :transactions,
            class_name: "OrderTransaction",
@@ -52,6 +52,10 @@ class User < ActiveRecord::Base
 
   def city
     user_checking.try(:address).try(:city)
+  end
+
+  def area
+    user_checking.try(:address).try(:area)
   end
 
   def recharge(money, owner, decription = "")

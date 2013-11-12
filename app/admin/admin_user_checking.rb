@@ -19,7 +19,6 @@ ActiveAdmin.register UserChecking do
   index do
     column :user
     column :service
-    column :shop_name
     column :ower_name
     column :ower_shenfenzheng_number
     default_actions
@@ -31,12 +30,12 @@ ActiveAdmin.register UserChecking do
 
   member_action :check, method: :post do
     user_checking = UserChecking.find(params[:id])
-
     if user_checking.update_attributes(checked: true)
       if user_checking.user.try(:shop)
         shop = user_checking.user.shop
-        shop.actived = true
-        shop.photo = user_checking.shop_photo  if user_checking.shop_photo
+        shop_url = "http://#{request.env['HTTP_HOST']}/shops/"+shop.name
+        shop.update_attributes(:shop_url => shop_url,:audit_count => shop.audit_count+1)
+        shop.active_shop
         shop.save!
       end
     end

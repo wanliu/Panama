@@ -91,6 +91,13 @@ Panama::Application.routes.draw do
       end
     end
 
+    resources :invite, :controller => "communities/invite" do
+      member do
+        post :agree_join
+        post :refuse_join
+      end
+    end
+
     resources :categories, :controller => "communities/categories" do
       member do
         get :topics
@@ -437,6 +444,7 @@ Panama::Application.routes.draw do
       get "edit_address", :to => "shops/acounts#edit_address"
       match "update_address", :to => "shops/acounts#update_address"
       match "bill_detail", :to => "shops/acounts#bill_detail"
+      match "apply_update", :to => "shops/acounts#apply_update"
 
       resources :order_refunds, :controller => "shops/order_refunds" do
         member do
@@ -510,6 +518,7 @@ Panama::Application.routes.draw do
   match "search/shop_products", :to => "search#shop_products", :via => :get
   match "search/shop_circles", :to => "search#shop_circles", :via => :get
   match "search/circles", :to => "search#circles", :via => :get
+  match "search/all", :to => "search#all", :via => :get
 
 
   # omniauth

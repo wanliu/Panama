@@ -6,9 +6,9 @@ class CompletingShopController < Wicked::WizardController
 
   def show
     service_id = Service.where(service_type: "seller").first.id
-    @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id,user_id: current_user.id)
+    @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
     @shop_auth = ShopAuth.new(@user_checking.attributes)
-    if @user_checking.checked && current_user.shop.actived == true
+    if @user_checking.checked && current_user.try(:shop).try(:actived)
       redirect_to "/"
     else
       case step
@@ -62,14 +62,17 @@ class CompletingShopController < Wicked::WizardController
   end
 
   def save_license
-    @shop_auth = ShopAuth.new(params[:shop_auth].merge(user_id: @user_checking.user.id))
+    shop_auth_params = params[:shop_auth]
+    shop_params = shop_auth_params[:shop].merge(address_id: @user_checking.address.id)
+    if current_user.shop.blank?
+      @shop = @user_checking.user.create_shop(shop_params)
+    else
+      @user_checking.user.shop.update_attributes(shop_params)
+    end
+    shop_auth_params.delete(:shop)
+    @shop_auth = ShopAuth.new(shop_auth_params.merge(user_id: @user_checking.user.id))
     if @shop_auth.valid?
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
-      if @user_checking.user.shop.blank?
-        @shop = @user_checking.user.create_shop(name: @shop_auth.shop_name, address: @user_checking.address)
-        @user_checking.owner = @shop
-        @user_checking.save
-      end
       render_wizard(@user_checking)
     else
       render_wizard
@@ -77,10 +80,9 @@ class CompletingShopController < Wicked::WizardController
   end
 
   def set_products_added
-    current_user.shop.user_checking.update_attributes(products_added: true)
+    @user_checking.update_attributes(products_added: true)
     # 添加服务（是否有服务是主页跳转到选择服务选择页的判断标记）
     current_user.services << Service.where(service_type: "seller")
-
     redirect_to '/'
   end
 end

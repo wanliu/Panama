@@ -16,15 +16,15 @@
 		</tr>
 		<tr>
 			<td>商店名称</td>
-			<td><%= @user_checking.shop_name %></td>
+			<td><%= @user_checking.user.shop.try(:name) %></td>
 		</tr>
 		<tr>
 			<td>商店地址</td>
-			<td><%= @user_checking.shop_url %></td>
+			<td><%= @user_checking.user.shop.try(:shop_url) %></td>
 		</tr>
 		<tr>
 			<td>商店简介</td>
-			<td><%= @user_checking.shop_summary %></td>
+			<td><%= @user_checking.user.shop.try(:shop_summary) %></td>
 		</tr>
 		<tr>
 			<td>所选行业</td>

@@ -40,43 +40,41 @@
 
 <script type="text/javascript">
     $(function(){
-        new ActivitiesView({
-          el: '#activities'
-        })
+      new ActivityLayoutView({
+        el: '#activities'
+      })
 
-        var load_view = new LoadActivities({
-          el: $('.activities_panel')
-        })
+      var load_view = new LoadActivities({
+        el: $('.activities_panel')
+      })
 
-        new ActivityPreview({
-          el: $("#activities")
-        })
+      new ActivityPreview({
+        el: $("#activities")
+      })
 
-        new AskBuyPreview({
-          el: $("#activities")
-        })
+      new AskBuyPreview({
+        el: $("#activities")
+      })
 
-        new ShopProductPreview({
-          el: $("#activities")
-        })
+      new ShopProductPreview({
+        el: $("#activities")
+      })
 
-        new ProductPreview({
-          el: $("#activities")
-        })
+      new ProductPreview({
+        el: $("#activities")
+      })
 
-        new CatalogViewList({
-          el: $("#activity-category"),
-          search: function(data){
-            load_view.reset_fetch(data)
-          }
-        })
+      new CatalogViewList({
+        el: $("#activity-category"),
+        search: function(data){
+          load_view.reset_fetch(data)
+        }
+      })
 
-        $("#category-sidebar .lv2_categories a")
-          .attr("href", "javascript:void(0)")
-          .on("click", function(){
-            $(this).parents(".lv2_categories").hide()
-            category_id = $(this).attr("data-category_id")
-            load_view.reset_fetch({ category_id: category_id })
-          })
+      $("#category-sidebar .lv2_categories a").on("click", function(){
+        $(this).parents(".lv2_categories").hide()
+        category_id = $(this).attr("data-category_id")
+        load_view.reset_fetch({ category_id: category_id })
+      })
     })
 </script>

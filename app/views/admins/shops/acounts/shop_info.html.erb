@@ -1,7 +1,8 @@
-<% admin_active_section :shop_info %>
+ <% admin_active_section :shop_info %>
 
 <div class='row-fluid'>
   <div class='span8 widget shop_info'>
+    <a href="/shops/<%= @user_checking.shop.name %>/admins/apply_update" class="btn pull-right">申请审核</a>
     <%= simple_form_for @shop_auth,
     url: '/user_checkings/update_shop_auth',
     html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
@@ -23,9 +24,10 @@
             </div>
           </div>
           <div class="span7 input_locate">
-            <%= f.input :shop_name, label: '商店名称' %>
-            <%#= f.input :shop_url, label: '商店地址' %>
-            <%= f.input :shop_summary, label: '商店简介' %>
+            <%= f.simple_fields_for @user_checking.user.shop do |s| %>
+              <%= s.input :name, label: '商店名称' %>
+              <%= s.input :shop_summary, label: '商店简介' %>
+            <% end %>
           </div>
         </div>
       </div>
@@ -47,28 +49,16 @@
               </div>
             </div>
           </div>
-          <% address = current_shop.user_checking.address %>
+          <% address = current_shop.user.user_checking.address %>
           <div class="span7 input_locate">
             <%= f.input :company_name, label: '营业店名' %>
-            <%#= f.input :address_id, label: '营业地址' %>
-            <% if address.present? %>
-            <div data-id="<%= address.id %>" class="control-group string required address">
-              <%= f.label :address_id, wrapper: :inline_label %>
-              <div class="controls">
-                <input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
-                <a class="btn" data-toggle="modal" href="<%= shop_admins_edit_address_path %>" data-target="#edit_address">编辑</a>
-                <%= f.input_field :address_id, :class => :hide  %>
-              </div>
-            </div>
-            <% else %>
             <div class="control-group string required address">
               <%= f.label :address_id, wrapper: :inline_label %>
               <div class="controls">
-                暂时没有设置地址
+                <input class="string required address_input" style="width:240px;" size="50" type="text" value="<%= address.address_only %>" />
                 <a class="btn" data-toggle="modal" href="<%= shop_admins_edit_address_path %>" data-target="#edit_address">编辑</a>
               </div>
             </div>
-            <% end %>
             <%= f.input :company_license, label: '营业执照号' %>
           </div>
         </div>
@@ -98,18 +88,14 @@
           </div>
         </div>
       </div>
-    <% end %>
-
-    <% if !current_shop.user_checking.checked %>
-      <button class="modify pull-right btn btn-primary">修改</button>
-    <% else %>
-      <script type="text/javascript">
-        $(".shop_info input").attr("readonly","readonly");
-        // $(".shop_info #image_bottom").each(function(){
-        //   $(this).hide();
-        // });
-        $("[data-target=#edit_address]").hide();
-      </script>
+      <% if !current_shop.user.user_checking.checked %>
+        <button class="modify pull-right btn btn-primary">修改</button>
+      <% else %>
+        <script type="text/javascript">
+          $(".shop_info input").attr("readonly","readonly");
+          $("[data-target=#edit_address]").hide();
+        </script>
+      <% end %>
     <% end %>
   </div>
 </div>
@@ -136,7 +122,7 @@
         login: "<%= current_user.login %>",
       },
       targets: [
-        { el: $(".main_panle1"), input_name: "shop_photo", photo: "<%= @user_checking.try(:shop_photo) %>" },
+        { el: $(".main_panle1"), input_name: "photo", photo: "<%= @user_checking.user.shop.try(:photo) %>" },
         { el: $(".main_panle2"), input_name: "company_license_photo", photo: "<%= @user_checking.try(:company_license_photo) %>" },
         { el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>" }
       ]
@@ -149,6 +135,7 @@
   })
 
   new AddressEditView({
-    el: "div.address"
+    el: "div#edit_address"
   })
+
 </script>

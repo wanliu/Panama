@@ -15,15 +15,13 @@ class CircleFriends < ActiveRecord::Base
   acts_as_status :identity, [:manage, :member]
 
   validate :valid_some_user_and_circle?
-  validate :validate_setting?
 
   delegate :photos, :to => :user
 
   def validate_setting?
     if self.circle.setting.try(:limit_city)
 
-      uc = UserChecking.find_by(:owner_id => user_id,
-        :owner_type => "User")
+      uc = UserChecking.find_by(:user_id => user_id)
       if uc.present? && uc.address.try(:area_id) == circle.city_id
         return true
       else

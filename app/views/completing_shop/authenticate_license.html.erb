@@ -27,9 +27,11 @@
 						</div>
 					</div>
 					<div class="span7 input_locate" >
-						<%= f.input :shop_name, label: '商店名称' %>
-						<%#= f.input :shop_url, label: '商店地址' %>
-						<%= f.input :shop_summary, label: '商店简介' %>
+						<%= f.simple_fields_for (@user_checking.user.shop || Shop.new ) do |s| %>
+							<%= s.input :name, label: '商店名称' %>
+							<%#= f.input :shop_url, label: '商店地址' %>
+							<%= s.input :shop_summary, label: '商店简介' %>
+						<% end %>
 					</div>
 				</div>
 
@@ -103,7 +105,7 @@
 						<%= f.input :phone, label: '联系电话' %>
 					</div>
 				</div>
-
+				<div class='row-fluid notice_tip'>*表示必填项,请认真填写有效信息</div>
 				<div class="row-fluid">
 					<div class="pull-left">
 						<%#= button_to "跳过", { action: :skip }, class: "btn btn-primary" %>
@@ -129,8 +131,8 @@
 			targets: [
 				{
 					el: $(".main_panle1"),
-					input_name: "shop_photo",
-					photo: "<%= @user_checking.try(:shop_photo) %>"
+					input_name: "photo",
+					photo: "<%= current_user.try(:shop).try(:photo) || '/default_img/file_blank.gif' %>"
 				},{
 					el: $(".main_panle2"),
 					input_name: "company_license_photo",

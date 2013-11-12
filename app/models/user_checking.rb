@@ -3,16 +3,14 @@ class UserChecking < ActiveRecord::Base
   include Graphical::Display
 
   attr_accessible :user_id, :service_id, :industry_type,
-                  :shop_name, :shop_photo, :shop_url, :shop_summary,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
-                  :rejected, :rejected_reason, :checked, :owner_id, :owner_type
+                  :rejected, :rejected_reason, :checked
   attr_accessor :uploader_secure_token
 
   belongs_to :user
   belongs_to :service
   belongs_to :address
-  belongs_to :owner, :polymorphic => true
 
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true
@@ -22,10 +20,14 @@ class UserChecking < ActiveRecord::Base
 
   mount_uploader :company_license_photo, ImageUploader
   mount_uploader :ower_photo, ImageUploader
-  mount_uploader :shop_photo, ImageUploader
+  # mount_uploader :shop_photo, ImageUploader
 
   define_graphical_attr :ower_photos, :handler => :ower_photo
-  define_graphical_attr :shop_photos, :handler => :shop_photo
+  # define_graphical_attr :shop_photos, :handler => :shop_photo
+
+  def unchecked
+    update_attributes(checked: false)
+  end
 
   def current_step
     if service.service_type == "buyer"
@@ -38,12 +40,16 @@ class UserChecking < ActiveRecord::Base
   def as_json(*args)
     attas = super *args
     attas['ower_photos'] = ower_photos.attributes
-    attas['shop_photos'] = shop_photos.attributes
+    # attas['shop_photos'] = shop_photos.attributes
     attas
   end
 
   def grapical_handler
 
+  end
+
+  def shop
+    user.try(:shop)
   end
 
   def update_rejected_times
@@ -52,16 +58,16 @@ class UserChecking < ActiveRecord::Base
   end
 
   def send_checked_mail
-    UserMailer.delay.send_user_checked_notify(user.email, ower_name, shop_url)
+    UserMailer.delay.send_user_checked_notify(user.email, ower_name, user.shop.shop_url)
   end
 
   def send_rejected_mail
-    UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, shop_url)
+    UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, user.shop.shop_url)
   end
 
   def self.users_checking_query
-    joins("left join shops sh on user_checkings.owner_id = sh.id and user_checkings.owner_type = 'Shop'
-           left join users us on user_checkings.owner_id = us.id and user_checkings.owner_type = 'User'
+    joins("left join users us on user_checkings.user_id = us.id
+           right join shops sh on sh.user_id = us.id
            left join addresses ad on ad.id = user_checkings.address_id")
   end
 

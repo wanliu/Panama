@@ -225,6 +225,7 @@ zh-CN:
       user_checking: 用户审核
       order_refund: 退货
       setting: 设置
+      region: 区域
     attributes:
       setting:
         id: 编号
@@ -234,8 +235,6 @@ zh-CN:
         target_type: 关联类型
         created_at: 创建时间
         updated_at: 更新时间
-      region: 区域
-    attributes:
       region:
         id: 编号
         name: 名称
@@ -458,6 +457,7 @@ zh-CN:
   delivery_addresses: 地址
   cart: 购物车
   transactions: 交易
+  direct_transactions: 直接交易
   completed: 完成
   followings: 关注的人
   followers: 我关注的人
@@ -478,7 +478,7 @@ zh-CN:
     circle:
       members: '成员'
       category: '分类'
-      notifications: '提醒'
+    notifications: '提醒'
 
   activity:
     type:
@@ -493,6 +493,7 @@ zh-CN:
     identity:
       member: 成员
       manage: 管理员
+      invalid: 成员
 
   table:
     heads:
@@ -682,4 +683,5 @@ zh-CN:
 
   after_signup: 注册
   catalog: 分类
-  city_index: "商圈"
+  city_index: 商圈
+  tomorrow: 明日预告

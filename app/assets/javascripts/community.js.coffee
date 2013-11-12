@@ -18,6 +18,10 @@ class CircleCategory extends Backbone.View
 	events:
 		"click .add_category" : "edit"
 		"blur .new_category" : "submit"
+		"keyup .new_category" : "enter"
+
+	enter: (e) ->
+		@$(".new_category").blur() if e.keyCode == 13
 
 	edit: () ->
 		@$(".add_category").hide()
@@ -33,7 +37,8 @@ class CircleCategory extends Backbone.View
 				type: "post",
 				dataType: "json",
 				data: { name: $category_name },
-				url: "/communities/#{ @circle_id }/circles/add_category",
+				
+				url: "/communities/#{ @circle_id }/categories",
 				success: (data) =>
 					$("<li>
             <a data-value-id='#{ data.id}' href='/communities/#{@circle_id}/category/#{data.id}' class='circle-category-#{data.id}'>

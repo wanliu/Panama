@@ -1,10 +1,12 @@
 #= require topic
+#= require lib/circle_info
 
 root = window || @
 
 class root.CircleListView extends Backbone.View
   events:
     "click .following .join" : "join_circle"
+
   initialize: (option) ->
     _.extend(@, option)
 
@@ -20,6 +22,11 @@ class root.CircleListView extends Backbone.View
       circle_id: @circle_id,
       create_topic: _.bind(@create_topic, @),
       el: @$(".left>.toolbar"))
+
+    new CircleInfoView(
+      el: @$(".circle-description"),
+      circle_id: @circle_id
+    )
 
   add_topic: (template) ->
     @short_elem().append(template)
@@ -39,3 +46,4 @@ class root.CircleListView extends Backbone.View
       success: () =>
         window.location.href = "/communities/#{@circle_id}/circles"
     )
+    

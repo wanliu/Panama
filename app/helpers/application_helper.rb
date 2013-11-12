@@ -109,6 +109,12 @@ module ApplicationHelper
     end
   end
 
+  def link_to_community
+    link_to person_communities_path(current_user)  do
+      icon(:group) + " 我的商圈"
+    end
+  end
+
   def link_to_admin
     if action_controller.respond_to?(:admin?)
       link_to shop_admins_path(@shop.name), 'data-toggle' => "popover", 'data-placement' => "bottom", 'data-original-title' => "Settings", :title => "商店管理" do
@@ -300,7 +306,7 @@ module ApplicationHelper
   def city_by_ip(client_ip)
     client_ip = "124.228.76.190" unless Rails.env.production?
     address = IPSearch.ip_query(client_ip)
-    if address.blank?
+    if address.blank? || (address["status"] == 1)
       City.find_by_name("衡阳市")
     else
       address_detail = address["content"]["address_detail"]

@@ -19,7 +19,7 @@
 
 <script type="text/javascript">
 	$(function(){
-		new ActivitiesView({
+		new ActivityLayoutView({
 			el: '#category_products'
 		})
 		new LoadCategoryProducts({
@@ -27,8 +27,8 @@
 			fetch_url: "/category/shop_products?id=<%= @category.id %>"
 		})
 
-        new ShopProductPreview({
-            el: $("#category_products")
-        })
+    new ShopProductPreview({
+      el: $("#category_products")
+    })
 	})
 </script>
