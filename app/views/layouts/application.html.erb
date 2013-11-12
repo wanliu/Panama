@@ -19,11 +19,13 @@
       $(function(){
         if (typeof window.caramal_client === 'undefined'){
           window.caramal_client = CaramalClient.connect({
-            url: 'localhost',
-            token: '<%= current_user.im_token %>' 
-            // token: '04852f816d49f6ea9dcc647203e7d1a0'
+            url: '<%= realtime_uri %>',
+            token: '<%= current_user.im_token %>'
           })
         }
+        caramal_client.subscribe('/transactions', function(data){
+          console.log(data);
+        })
       })
     </script>
     <%= render "right_sidebar" %>
