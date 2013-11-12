@@ -184,6 +184,12 @@ class User < ActiveRecord::Base
     Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
   end
 
+  #加入的所有的圈子
+  def all_circles
+    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
+    Circle.where(:id => circle_ids)
+  end
+
   def init_user_info
     if new_record?
       build_photo if photo.nil?

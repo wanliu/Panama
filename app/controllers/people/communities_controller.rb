@@ -1,3 +1,4 @@
+#encoding: utf-8
 class People::CommunitiesController < People::BaseController
 
   def index
@@ -10,14 +11,24 @@ class People::CommunitiesController < People::BaseController
     end
   end
 
+  def all_circles
+    @circles = @people.all_circles
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
+  end
+
   def create
   	@setting = CircleSetting.create(params[:setting])
     params[:circle].merge!(:setting_id => @setting.id)
-  	@people.circles.create(params[:circle])
+  	@circle = @people.circles.create(params[:circle])
+    CircleCategory.create(:name => "分享", :circle_id => @circle.id)
 
   	respond_to do |format|
   		format.html { redirect_to person_circles_path(@people) }
       format.json { head :no_content }
   	end
   end
+
+
 end
