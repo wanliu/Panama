@@ -19,7 +19,7 @@ class Comments extends Backbone.Collection
     @url = url
 
 class CreateTopicView extends Backbone.View
-  events: 
+  events:
     "submit form.create_topic"    : "create",
     "keyup textarea[name=content]": "textarea_status"
     "click .add-attachments"      : "toggleAttachments"
@@ -114,11 +114,10 @@ class CommentView extends Backbone.View
 
 class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
-    
+
   events:
     "click .send_comment"         : "show_create_commnet"
     "click .comment_form .cancel" : "hide_create_comment"
-    "blur .comment_form textarea" : "hide_create_comment"
     "submit form.comment_form"    : "comment"
     "keyup .comment_form textarea": "textarea_status"
     "click .more_comment"         : 'more_comment'

@@ -329,7 +329,7 @@ class CycleIter
     @data[@pos++]
 
 
-class ActivitiesView extends Backbone.View
+class ActivityLayoutView extends Backbone.View
   initialize: (@options) ->
     _.extend(@, @options)
 
@@ -453,5 +453,5 @@ class LoadActivities extends InfiniteScrollView
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview
 root.ActivityView = ActivityView
-root.ActivitiesView = ActivitiesView
+root.ActivityLayoutView = ActivityLayoutView
 root.LoadActivities = LoadActivities

@@ -27,13 +27,13 @@ module CategoryHelper
 
   def lv2_category_tree_of(category)
     html = "<li class='lv2_category_tree'>
-              <a href='/category/#{ category.id }' data-category_id='#{ category.id }'>
+              <a href='javascript:void(0)' data-category_id='#{ category.id }'>
                 <span>#{ category.name }</span>
               </a>
               <ul>"
     category.children.each do |child|
       html << "<li class='lv3_category_node'>
-          <a href='/category/#{ child.id }' data-category_id='#{ category.id }'>
+          <a href='javascript:void(0)' data-category_id='#{ category.id }'>
             #{ child.name }
           </a>
         </li>"

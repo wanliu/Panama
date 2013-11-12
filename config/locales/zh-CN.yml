@@ -493,7 +493,7 @@ zh-CN:
     identity:
       member: 成员
       manage: 管理员
-      # invalid: 无效
+      invalid: 成员
 
   table:
     heads:
@@ -683,4 +683,5 @@ zh-CN:
 
   after_signup: 注册
   catalog: 分类
-  city_index: "商圈"
+  city_index: 商圈
+  tomorrow: 明日预告
