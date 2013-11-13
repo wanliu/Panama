@@ -1,4 +1,3 @@
-#= require lib/caramal-client
 
 root = (window || @)
 

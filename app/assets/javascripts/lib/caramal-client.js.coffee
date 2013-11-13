@@ -1,16 +1,16 @@
 #= require lib/socket.io
 
-root = (window || @)
+root = window || @
 
-class CaramalClient
+class root.CaramalClient
 
   @connect = (options) ->
     CaramalClient.globalClient ||= new CaramalClient(options)
 
-  constructor: (@options) ->
-    @url = @options.url
-    if @options.token?
-      @url = @url + '?token=' + @options.token
+  constructor: (options) ->
+    _.extend(@, options)
+    if @token?
+      @url = @uri + '?token=' + @token
     @connect()
 
     @on('connect', () =>
@@ -35,4 +35,3 @@ class CaramalClient
   emit: (event, data, callback) ->
     @socket.emit(event, data, callback)
 
-root.CaramalClient = CaramalClient

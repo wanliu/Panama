@@ -1,6 +1,5 @@
 #= require lib/state-view
 #= require lib/kkcountdown
-#= require lib/caramal-client
 #= require lib/notify
 
 exports = window || @

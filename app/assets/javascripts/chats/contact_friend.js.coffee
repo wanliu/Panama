@@ -1,6 +1,5 @@
 #describe: 最近联系人
 #= require chats/dialogue
-#= require lib/caramal-client
 
 root = window || @
 

@@ -18,10 +18,6 @@
   //   token: '<%= current_user.im_token %>',
   //   current_user_login: '<%= current_user.login %>'
   // });
-  window.caramal_client = window.caramal_client || CaramalClient.connect({
-    url: '<%= realtime_uri %>',
-    token: '<%= current_user.im_token %>'
-  })
   $("body").addClass('right-mini')
   window.right_sidebar = window.right_sidebar || new RightSideBar({el: $(".right-sidebar")});
   right_sidebar.register(FriendsContainerView);

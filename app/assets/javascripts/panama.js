@@ -13,7 +13,7 @@
 //= require lib/postmessage
 //= require lib/dnd
 //= require wanliu/ajax_auth_client
-//= require lib/caramal-client
+//= require lib/realtime_client
 //= require lib/image_natural_size
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
@@ -46,7 +46,6 @@
 //= require notification
 //= require upload_photo
 //= require lib/circle
-//= require lib/caramal-client
 
 root = window || this;
 

@@ -1,7 +1,6 @@
 #处理订单
 #= require jquery
 #= require backbone
-#= require lib/caramal-client
 
 exports = window || @
 
