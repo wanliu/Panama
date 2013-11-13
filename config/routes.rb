@@ -123,6 +123,8 @@ Panama::Application.routes.draw do
         post 'transfer', :to => "people/transactions#transfer"
         get 'print', :to => "people/transactions#print"
         post "mark_as_read", :to => "people/transactions#mark_as_read"
+        get :receive
+        get :kuaiqian_payment
       end
 
       collection do

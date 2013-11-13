@@ -1,7 +1,6 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
-  # GET /people/transactions
-  # GET /people/transactions.json
+
   def index
     authorize! :index, OrderTransaction
     @transactions = current_order.uncomplete.order("created_at desc").page(params[:page])
@@ -12,8 +11,6 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  # GET /people/transactions/1
-  # GET /people/transactions/1.json
   def show
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
@@ -80,6 +77,27 @@ class People::TransactionsController < People::BaseController
       redirect_to person_cart_index_path(@people.login),
                   notice: 'We are sorry, but the transaction was not successfully created.'
     end
+  end
+
+  def kuaiqian_payment
+    @transaction = current_order.find(params[:id])
+    pay_ment = KuaiQian::PayMent.request(
+      :bg_url => "#{prefix_path}#{receive_person_transaction_path(current_user, @transaction)}",
+      :payer_name => current_user.login,
+      :order_id => @transaction.number,
+      :order_amount => @transaction.stotal,
+      :product_name => @transaction.items[0].title,
+      :product_num => @transaction.items_count,
+      :payer_contact_type => "1",
+      :payer_contact => current_user.email
+    )
+    respond_to do |format|
+      format.html{ redirect_to pay_ment.url }
+    end
+  end
+
+  def receive
+    @transaction = current_order.find(params[:id])
   end
 
   def base_info
