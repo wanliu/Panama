@@ -11,7 +11,7 @@ class CaramalClient
   #     require 'caramal_client'
   #
   #     CaramalClient.publish('hysios', '/transcations', {:id => 1234 })
-  def self.publish(login, channel, msg)
+  def self.publish(login, channel, msg = {})
     info = {
       login: login,
       channel: channel,

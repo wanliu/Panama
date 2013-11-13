@@ -83,7 +83,8 @@ class User < ActiveRecord::Base
 
   def connect
     RedisClient.redis.set(redis_key, true)
-    FayeClient.send("/chat/friend/connect/#{id}", id)
+    # FayeClient.send("/chat/friend/connect/#{id}", id)
+    CaramalClient.publish(login, "/chat/friend/connect/#{id}", id)
   end
 
   def connect_state

@@ -23,7 +23,7 @@ class Notification < ActiveRecord::Base
     #   type: targeable_type,
     #   value: format_unread
     # })
-    CaramalClient.publish(mentionable_user, '/notification/#{mentionable_user.im_token}', {
+    CaramalClient.publish(mentionable_user.login, '/notification/#{mentionable_user.im_token}', {
       count: count,
       type: targeable_type,
       value: format_unread
