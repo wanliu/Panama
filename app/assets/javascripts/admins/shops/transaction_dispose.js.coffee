@@ -122,7 +122,8 @@ class exports.TransactionDispose extends Backbone.View
       @$tbody.find("tr.notice_message").remove()
 
   bind_realtime: () ->
-    @client = Realtime.client(@realtime_url)
+    # @client = Realtime.client(@realtime_url)
+    @client = window.clients
 
     @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
       @realtime_help(info, 'transactions')

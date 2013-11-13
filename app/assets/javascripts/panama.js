@@ -2,6 +2,7 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require core_extend/core
+//= require lib/realtime_client
 //= require lib/jquery.raty
 //= require lib/jquery.resize
 //= require lib/underscore
@@ -13,7 +14,6 @@
 //= require lib/postmessage
 //= require lib/dnd
 //= require wanliu/ajax_auth_client
-//= require lib/realtime_client
 //= require lib/image_natural_size
 //= require lib/JNMagnifier
 //= require lib/jquery.raty

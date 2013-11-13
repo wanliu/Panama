@@ -142,7 +142,8 @@ class ChatView extends Backbone.View
     @bind_pm()
 
   connect_faye_server: () ->
-    @client = Realtime.client(@faye_url, @user.token)
+    # @client = Realtime.client(@faye_url, @user.token)
+    @client = window.clients
     @client.receive_message @user.token, (message) =>
       model = @msgs_view.add(message)
       if @display_state

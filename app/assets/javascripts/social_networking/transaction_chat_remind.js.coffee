@@ -18,7 +18,8 @@ class TransactionsChatRemind extends Backbone.View
 		@collection.fetch(url: "/people/#{@current_user_login}/transactions/unread_messages")
 
 	bind_realtime: () ->
-		@client = Realtime.client @realtime_url
+		# @client = Realtime.client @realtime_url
+		@client = window.clients
 		@client.subscribe @receive_notice_url(), (message) =>
 			msg = _.extend({count: 1} , message)
 			model = @collection.where(owner_id: msg.owner_id, owner_type: msg.owner_type )[0]
