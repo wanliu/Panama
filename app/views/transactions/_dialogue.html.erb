@@ -20,25 +20,53 @@
   </div>
 </div>
 
-<script type="text/javascript">
-  var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
+<script type="text/template" id="message-template">
+  <div class="chat-message">
+    <div class="sender">
+      <div class="icon">
+        <img src="{{send_user.icon_url}}" class="img-circle" alt="">
+      </div>
+      <div class="time">
+      </div>
+    </div>
+    <div class="chat-message-body">
+      <span class="arrow"></span>
+      <div class="sender">
+        <a href="#">{{send_user.login}}</a>
+        {{created_at}}
+      </div>
+      </br>
+      <div class="text">
+        {{content}}
+      </div>
+    </div>
+  </div>
+</script>
 
-  new TransactionMessageView({
-    el: $(".transaction_dialog_panel"),
-    remote_url: "<%=transaction_message_url %>",
-    template: template,
-    current_user: {
-      id: <%=current_user.id %>,
-      token: "<%=current_user.im_token %>",
-      login: "<%=current_user.login %>"
-    },
-    faye_url: "<%=faye_server_uri %>",
-    tansaction_id: <%=transaction.id %>,
-    shop: {
-      id: "<%=transaction.seller.id %>",
-      name: "<%=transaction.seller.name %>",
-      token: "<%=transaction.seller.im_token%>"
-    },
-    realtime_key: 'OrderTransaction'
+<script type="text/javascript">
+  $(function(){
+    window.clients = Realtime.connect({
+      server_uri: '<%= realtime_uri %>',
+      token: '<%= current_user.im_token %>'
+    })
+    var template = Hogan.compile("<%=j render :partial => 'transactions/message' %>")
+    new TransactionMessageView({
+      el: $(".transaction_dialog_panel"),
+      remote_url: "<%=transaction_message_url %>",
+      template: template,
+      current_user: {
+        id: <%=current_user.id %>,
+        token: "<%=current_user.im_token %>",
+        login: "<%=current_user.login %>"
+      },
+      faye_url: "<%=faye_server_uri %>",
+      tansaction_id: <%=transaction.id %>,
+      shop: {
+        id: "<%=transaction.seller.id %>",
+        name: "<%=transaction.seller.name %>",
+        token: "<%=transaction.seller.im_token%>"
+      },
+      realtime_key: 'OrderTransaction'
+    })
   })
 </script>

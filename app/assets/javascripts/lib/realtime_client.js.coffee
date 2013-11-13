@@ -2,10 +2,10 @@
 
 root = (window || @)
 
-class root.RealtimeClient
+class root.Realtime
 
   @connect = (options) ->
-    RealtimeClient.globalClient ||= new RealtimeClient(options)
+    Realtime.globalClient ||= new Realtime(options)
 
   constructor: (options) ->
     _.extend(@, options)
@@ -17,6 +17,7 @@ class root.RealtimeClient
       console.log("connected.")
     )
     @on('disconnect', (error) =>
+      console.error("disconnect: " + error)
       alert("disconnect: " + error) if error      
     )
 
