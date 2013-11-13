@@ -42,13 +42,14 @@ class InviteUserView extends Backbone.View
     return false
 
   search_user: () ->
-    new TypeaheadExtension({
-      el: @$("input.login"),
-      source: "/search/users",
-      field: "login",
-      highlighter: (item) ->
-        "<img class='photo' src='#{item.icon_url}' />#{item.login}"
-    })
+    if @$("input.login").length  > 0
+      new TypeaheadExtension({
+        el: @$("input.login"),
+        source: "/search/users",
+        field: "login",
+        highlighter: (item) ->
+          "<img class='photo' src='#{item.icon_url}' />#{item.login}"
+      })
 
 class root.CircleInfoView extends Backbone.View
 

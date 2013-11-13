@@ -62,16 +62,16 @@
 	$(function(){
 		$(".user_info").live("mouseenter",function(e){
 			$(".user_base_info", this).each(function(){
-				$(this).fadeOut();
+				$(this).hide();
 			})
 			$top = e.pageY - $(document).scrollTop();
 			$left = e.pageX - $(document).scrollLeft();
 			$(".user_base_info", this).css('top', $top - 10);
             $(".user_base_info", this).css('left', $left + 10);
-			$(".user_base_info", this).fadeIn();
+			$(".user_base_info", this).show();
 		})
 		$(".user_info").live("mouseleave",function(e){
-			$(".user_base_info", this).fadeOut();
+			$(".user_base_info", this).hide();
 		})
 	})
 </script>
