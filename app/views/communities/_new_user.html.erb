@@ -61,10 +61,13 @@
 <script type="text/javascript">
 	$(function(){
 		$(".user_info").live("mouseenter",function(e){
+			$(".user_base_info", this).each(function(){
+				$(this).fadeOut();
+			})
 			$top = e.pageY - $(document).scrollTop();
 			$left = e.pageX - $(document).scrollLeft();
-			$(".user_base_info", this).css('top', $top - 5);
-            $(".user_base_info", this).css('left', $left + 5);
+			$(".user_base_info", this).css('top', $top - 10);
+            $(".user_base_info", this).css('left', $left + 10);
 			$(".user_base_info", this).fadeIn();
 		})
 		$(".user_info").live("mouseleave",function(e){
