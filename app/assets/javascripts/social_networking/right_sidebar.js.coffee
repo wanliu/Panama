@@ -1,4 +1,3 @@
-#= require lib/realtime_client
 
 root = (window || @)
 

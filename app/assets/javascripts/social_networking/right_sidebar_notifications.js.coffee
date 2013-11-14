@@ -32,7 +32,8 @@ class NotificationsContainerView extends RealTimeContainerView
 		@collection.fetch(url: "#{@urlRoot}/unreads")
 
 	bind_realtime: () ->
-		@client = Realtime.client(@realtime_url)
+		# @client = Realtime.client(@realtime_url)
+		@client = window.clients
 		@client.monitor_people_notification @token, (info) =>
 			if info.type == "Activity"
 				@activities_view.realtime_help(info)

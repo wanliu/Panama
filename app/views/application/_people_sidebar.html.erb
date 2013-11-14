@@ -142,11 +142,14 @@
   }
 
   $(function(){
-    new Followers({
-      login: "<%= current_user.login %>",
-      people_id: "<%= @people.id %>",
-      follow_type: "User",
-      el: $(".isfollowing") })
+    new FollowView({
+        data: {
+          follow_id:  "<%= @people.id %>",
+          follow_type: "User"
+        },
+        login: "<%=current_user.login %>",
+        el: $(".isfollowing"),
+      })
 
     new PeopleSideView({ el: $("#people-sidebar") })
   })

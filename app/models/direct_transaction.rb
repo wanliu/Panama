@@ -78,7 +78,8 @@ class DirectTransaction < ActiveRecord::Base
   end
 
   def faye_send(url, options)
-    FayeClient.send(url, options)
+    # FayeClient.send(url, options)
+    CaramalClient.publish(seller.login, url, options)
   end
 
   def number

@@ -18,7 +18,12 @@ class Notification < ActiveRecord::Base
 
   def realtime_push_to_client
     count = Notification.unreads.where(user_id: user_id).count
-    FayeClient.send("/notification/#{ mentionable_user.im_token }", {
+    # FayeClient.send("/notification/#{ mentionable_user.im_token }", {
+    #   count: count,
+    #   type: targeable_type,
+    #   value: format_unread
+    # })
+    CaramalClient.publish(mentionable_user.login, '/notification/#{mentionable_user.im_token}', {
       count: count,
       type: targeable_type,
       value: format_unread
