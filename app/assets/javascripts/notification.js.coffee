@@ -11,6 +11,9 @@ class  NotificationView extends Backbone.View
 		@activitys_contain_view = new ActivityContainer(parent_view: @)
 		@collection.bind('reset', @add_all, @)
 		@collection.fetch(url: "#{@urlRoot}/unreads")
+		window.clients.subscribe('/notifications', (data) =>
+			console.log('/notifications -->' + data)
+		)
 
 	add_all: () ->
 		$("#notification_count").text(@collection.length)

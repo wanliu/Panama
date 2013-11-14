@@ -9,7 +9,7 @@
       <%=transaction.pay_manner.name %>
     </div>
   </div>
-  <% if transaction.delivery_manner.express? %>
+  <% if transaction.delivery_manner.try(:express?) %>
   <div class="row-fluid">
     <div class="span2 title">
       配送方式

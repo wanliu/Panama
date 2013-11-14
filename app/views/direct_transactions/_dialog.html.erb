@@ -19,10 +19,11 @@
     </form>
   </div>
 </div>
+
 <script type="text/javascript">
+  window.clients = window.parent.clients
   $(function(){
     var template = Hogan.compile("<%=j render :partial => 'direct_transactions/message' %>")
-
     new TransactionMessageView({
       el: $(".direct_transaction_dialog_panel"),
       remote_url: "<%=dtm_url %>",

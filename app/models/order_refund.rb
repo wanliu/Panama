@@ -311,7 +311,8 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def faye_send(channel, options)
-    FayeClient.send(channel, options)
+    # FayeClient.send(channel, options)
+    CaramalClient.publish(seller.user.try(:login), channel, options)
   end
 
   def notify_shop_refund

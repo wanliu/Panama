@@ -1,7 +1,4 @@
 #describe: 交易聊天
-#= require jquery
-#= require backbone
-#= require lib/realtime_client
 #= require lib/notify
 
 root = window || @
@@ -174,8 +171,8 @@ class TransactionMessageView extends Backbone.View
     model.set_url @remote_url
 
   realtime_fetch: () ->
-    @client = Realtime.client @faye_url
-
+    # @client = Realtime.client @faye_url
+    @client = window.clients
     @client.subscribe @receive_notice_url(), (message) =>
       @notice_bubbing(message)
       @add_message(message)

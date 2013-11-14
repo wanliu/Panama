@@ -1,9 +1,2 @@
 <script type='text/javascript'>
-    <% unless current_user.nil? %>
-    	var client = Realtime.client("<%=faye_server_uri %>")
-        client.monitor_people_notification("<%= current_user.login %>", function(data){
-            	$("#my_notification").html(data.count)
-        	}
-        )
-    <% end %>
 </script>
