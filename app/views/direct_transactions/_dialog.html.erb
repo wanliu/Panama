@@ -19,12 +19,10 @@
     </form>
   </div>
 </div>
+
 <script type="text/javascript">
+  window.clients = window.parent.clients
   $(function(){
-    window.clients = Realtime.connect({
-      server_uri: '<%= realtime_uri %>',
-      token: '<%= current_user.im_token %>'
-    })
     var template = Hogan.compile("<%=j render :partial => 'direct_transactions/message' %>")
     new TransactionMessageView({
       el: $(".direct_transaction_dialog_panel"),

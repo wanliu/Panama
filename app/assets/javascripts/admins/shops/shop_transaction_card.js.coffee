@@ -49,7 +49,7 @@ class ShopTransactionCard extends TransactionCardBase
         console.log "event: #{event} from #{from} to #{to}"
 
   realtime_load: () ->
-    @realtime.subscribe "/OrderTransaction/#{@options.id}/#{@options.shop.token}/#{@rt_options.token}/destroy", () =>
+    window.clients.subscribe "/OrderTransaction/#{@options.id}/#{@options.shop.token}/#{@rt_options.token}/destroy", () =>
       @remove()
 
   getNotifyName: () ->
