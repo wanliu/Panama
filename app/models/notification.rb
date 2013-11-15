@@ -14,15 +14,18 @@ class Notification < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :mentionable_user
 
-  after_create :realtime_push_to_client
+  after_create :expired_unreads, :realtime_push_to_client
+
+  def expired_unreads
+    Notification.unreads.where({ 
+      mentionable_user_id: self.mentionable_user_id, 
+      targeable_type: self.targeable_type, 
+      targeable_id: self.targeable_id 
+    }).where('id <> '<<self.id.to_s).update_all(:read => true)
+  end
 
   def realtime_push_to_client
-    count = Notification.unreads.where(user_id: user_id).count
-    # FayeClient.send("/notification/#{ mentionable_user.im_token }", {
-    #   count: count,
-    #   type: targeable_type,
-    #   value: format_unread
-    # })
+    count = Notification.unreads.where(mentionable_user_id: mentionable_user_id).count
     CaramalClient.publish(mentionable_user.login, '/notification/#{mentionable_user.im_token}', {
       count: count,
       type: targeable_type,
