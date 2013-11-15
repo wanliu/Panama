@@ -14,11 +14,14 @@ class root.Realtime
     @events = {}
 
     @on('connect', () =>
+      window.$(".user_icon").removeClass("disconnect")
       console.log("connected.")
     )
     @on('disconnect', (error) =>
       console.error("disconnect: " + error)
-      alert("disconnect: " + error) if error      
+      window.$(".user_icon").addClass("disconnect")
+      $("<div class='disconnect_message'>此页面已经失效,如果是想激活本页面，请点击<a href='javascript:window.location.reload()'>刷新</a>页面</div>").insertBefore("body")
+      # alert("disconnect: " + error) if error      
     )
 
   connect: () ->

@@ -14,10 +14,12 @@ class root.CaramalClient
     @connect()
 
     @on('connect', () =>
+      window.$(".user_icon").removeClass("disconnect")
       console.log("connected.")
     )
     @on('disconnect', (error) =>
-      alert("disconnect: " + error) if error      
+      window.$(".user_icon").addClass("disconnect")
+      # alert("disconnect: " + error) if error      
     )
 
   connect: () ->

@@ -54,7 +54,7 @@ body.communities{
         list-style: none;
 
         li:first-child{
-          margin-left: 0px;
+          margin-left: 5px;
         }
 
         li{
@@ -257,7 +257,11 @@ body.communities{
 
           .comment_panel{
             display: none;
-
+            .user_login{
+              overflow:hidden; 
+              white-space: nowrap; 
+              text-overflow:ellipsis;
+            }
           }
 
           .send_comment{
