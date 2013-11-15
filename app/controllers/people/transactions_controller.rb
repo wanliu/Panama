@@ -15,7 +15,7 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
       format.json { render json: @transaction }
       format.csv{
         send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
@@ -82,14 +82,15 @@ class People::TransactionsController < People::BaseController
   def kuaiqian_payment
     @transaction = current_order.find(params[:id])
     pay_ment = KuaiQian::PayMent.request(
-      :bg_url => "#{prefix_path}#{receive_person_transaction_path(current_user, @transaction)}",
+      :bg_url => paid_send_url,
       :payer_name => current_user.login,
-      :order_id => @transaction.number,
+      :order_id => Time.now.strftime("%Y%m%d%H%M%S"),
       :order_amount => @transaction.stotal,
       :product_name => @transaction.items[0].title,
       :product_num => @transaction.items_count,
       :payer_contact_type => "1",
-      :payer_contact => current_user.email
+      :payer_contact => current_user.email,
+      :order_time => Time.now.strftime("%Y%m%d%H%M%S")
     )
     respond_to do |format|
       format.html{ redirect_to pay_ment.url }
@@ -98,6 +99,9 @@ class People::TransactionsController < People::BaseController
 
   def receive
     @transaction = current_order.find(params[:id])
+    # @transaction.buyer_fire_event!(:paid)
+    debugger
+    render :xml => {:result => "1", :redirecturl => paid_receive_url }
   end
 
   def base_info
@@ -310,5 +314,13 @@ class People::TransactionsController < People::BaseController
       :contact_name => a[:contact_name],
       :contact_phone => a[:contact_phone]
     }
+  end
+
+  def paid_receive_url
+    "#{prefix_path}#{person_transaction_path(@people, @transaction)}"
+  end
+
+  def paid_send_url
+    "#{prefix_path}#{receive_person_transaction_path(current_user, @transaction)}"
   end
 end

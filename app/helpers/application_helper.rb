@@ -66,7 +66,7 @@ module ApplicationHelper
   end
 
   def my_cart
-    current_user.cart
+    current_user.try(:cart)
   end
 
   def accounts_provider_url

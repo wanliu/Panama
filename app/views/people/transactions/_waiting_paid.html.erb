@@ -64,35 +64,7 @@
     </div>
     <div class='clearfix'></div>
     <div class="form-actions">
-      <%=form_tag "https://www.99bill.com/gateway/recvMerchantInfoAction.htm", {class: "demo"} do |f| %>
-        <input type="hidden" value="1" name='inputCharset' />
-        <input type="hidden" name="pageUrl" value="" />
-        <input type="hidden" value="<%=prefix_path %><%=receive_person_transaction_path(current_user, transaction)%>" name='bgUrl' />
-        <input type="hidden" value="v2.0" name='version' />
-        <input type="hidden" value="1" name='language' />
-        <input type="hidden" value="4" name='signType' />
-        <input type='hidden' value='VeRrdbDdOPrRKXklXkkPXBcNGjNPwJajqPnKOwzEGYwI0Xsv1DqJ3XC1jKbK\nv4uk6KL/m99GgziKdqUBA6Frbi/T8X2sVYj0Io6crEbJRmwSbg79bTHTS4M6\ni5qc9TVsTM1pFRqPtrA0MT9Uux3xwPnfIJZ8vbRFjnQ7cFe5e+I=\n' name='signMsg' />
-        <input type="hidden" value="1002300593701" name='merchantAcctId' />
-        <input type="hidden" value="<%=current_user.login %>" name='payerName' />
-        <input type="hidden" value="1" name='payerContactType' />
-        <input type="hidden" value="<%=current_user.email %>" name='payerContact' />
-        <input type="hidden" value="<%=transaction.
-        number %>" name='orderId' />
-        <input type="hidden" value="1" name='orderAmount' />
-        <input type="hidden" value="<%=DateTime.now.strftime('%Y%m%d%H%M%S') %>" name='orderTime' />
-        <input type="hidden" value="<%=transaction.items[0].title %>" name='productName' />
-        <input type="hidden" value="<%=transaction.items_count %>" name='productNum' />
-        <input type="hidden" value="<%=transaction
-        .items[0].id %>" name='productId' />
-        <input type="hidden" value="" name='productDesc' />
-        <input type="hidden" value="" name='ext1' />
-        <input type="hidden" value="" name='ext2' />
-        <input type="hidden" value="00" name='payType' />
-        <input type="hidden" value="" name='bankId' />
-        <input type="hidden" value="0" name='redoFlag' />
-        <input type="hidden" value="" name='pid' />
-        <input type='submit' value='提交' />
-      <% end %>
+      <%= link_to "payment", kuaiqian_payment_person_transaction_path(current_user, transaction)  %>
     </div>
   </div>
 </div>
