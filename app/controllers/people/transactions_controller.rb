@@ -85,11 +85,9 @@ class People::TransactionsController < People::BaseController
       :bg_url => paid_send_url,
       :payer_name => current_user.login,
       :order_id => Time.now.strftime("%Y%m%d%H%M%S"),
-      :order_amount => @transaction.stotal,
+      :order_amount => (@transaction.stotal * 100).to_i,
       :product_name => @transaction.items[0].title,
       :product_num => @transaction.items_count,
-      :payer_contact_type => "1",
-      :payer_contact => current_user.email,
       :order_time => Time.now.strftime("%Y%m%d%H%M%S")
     )
     respond_to do |format|
@@ -98,9 +96,13 @@ class People::TransactionsController < People::BaseController
   end
 
   def receive
+    _response = KuaiQian::PayMent.response(params)
     @transaction = current_order.find(params[:id])
-    # @transaction.buyer_fire_event!(:paid)
-    debugger
+    if _response.successfully?
+      @transaction.buyer_fire_event!(:paid)
+    else
+
+    end
     render :xml => {:result => "1", :redirecturl => paid_receive_url }
   end
 
