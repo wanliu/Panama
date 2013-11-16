@@ -1,10 +1,12 @@
 <ul id='topbar' class="nav pull-right">
-	<form id="search-form" class="navbar-search">
-		<div class="input-prepend input-append">
-			<input type="search" class="search-query" placeholder="关键词...">
-			<span class="add-on search-btn">搜索</span>
-		</div>
-	</form>
+	<li class="dropdown">
+		<form id="search-form" class="navbar-search">
+			<div class="input-prepend input-append">
+				<input type="search" class="search-query" placeholder="关键词...">
+				<span class="add-on search-btn">搜索</span>
+			</div>
+		</form>
+	</li>
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 		<i class="icon-plus"></i>&nbsp;发布</a>
@@ -42,7 +44,7 @@
 
 	<!--通知信息-->
 	<li class="dropdown notification">
-		<a href="#" title="消息提醒" id="cart" class="dropdown-toggle" data-toggle="dropdown">
+		<a href="#" title="消息提醒" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-comments"></i>
 			<span id="notification_count" class="badge badge-important">0</span>
 		</a>
@@ -56,7 +58,7 @@
 			<a href="javascript:void(0)" title="我的商店" class="dropdown-toggle" data-toggle="dropdown">
 				<i class="icon-building handle"></i>商店
 			</a>
-			<ul id="account-menu" class="dropdown-menu account" role="menu">
+			<ul id="shop-menu" class="dropdown-menu account" role="menu">
 				<li>
 
 					<a href="/shops/<%= current_user.shop.name %>">
