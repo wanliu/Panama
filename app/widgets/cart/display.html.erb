@@ -4,7 +4,7 @@
 				<!-- <input type='submit' class='btn' value="<%#=t(:clear_list) %>" /> -->
 			<%# end %>
 		<div class="cart_btns">
-			<input type='button' class='btn clear_list' value="清空列表" %>
+			<input type='button' class='btn clear_list' value="清空列表" />
 			<%= link_to_if @my_cart.items.count > 0,
 						t(:checkout),
 						person_cart_index_path(current_user.login),
@@ -24,7 +24,9 @@
 			<%= render :partial => "cart/product_item", :collection => @my_cart.items %>
 		</table>
 		<div class="cart_bottom">
-			<div class="product_total">总计：￥0</td>
+			<div class="product_total">总计：￥0</div>
 		</div>
+		<table class="like_list">
+		</table>
 	</div>
 <% end %>

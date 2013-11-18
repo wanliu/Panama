@@ -147,7 +147,7 @@ class ActivityView extends Backbone.View
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
-    @$('.like-count').text(s - n)
+    @$('.like-count').text(s - n) 
 
   addComment: (event) ->
     content = @$("textarea",".message").val()
@@ -448,6 +448,27 @@ class LoadActivities extends InfiniteScrollView
         # $(event.currentTarget)
         # .find(".preview")
         # .removeClass("animate0 " + "flipInY")
+
+class LikeList extends Backbone.View
+
+  item_row: 
+    '<tr id="product_item{{id}}" class="like_main">
+      <td><img src="{{icon}}" ></td>
+      <td>
+        <span class="title" data-toggle="tooltip" title="{{title}}">
+          {{title}}
+        </span>
+      </td>
+      <td>类型</td>
+      <td><div class="focus_progress"></div></td>
+    </tr>'
+
+  trHtml: (product_item) ->
+    row_tpl = Hogan.compile(@item_row)
+    row_tpl.render(product_item)
+    
+  add_to_cart: () ->
+    $(".like_list").append(@trHtml(item))
 
 
 root.ActivityModel = ActivityModel

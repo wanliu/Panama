@@ -75,7 +75,7 @@ class ShopTransactionCard extends TransactionCardBase
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
-    if !/back/.test(_event) && !/refresh_returned/.test(_event)
+    if !/back/.test(_event) && !/refresh_returned/.test(_event) && @filter_delivery_code()
       @save_delivery_code () =>
         @slideAfterEvent(_event)
 
@@ -83,10 +83,11 @@ class ShopTransactionCard extends TransactionCardBase
     if @delivery_manner_el().text().trim() == "快递运输"
       delivery_code = @$("input:text.delivery_code").val()
       button = @$(".delivered")
-      if delivery_code == ""
-        button.addClass("disabled")
+      if delivery_code.length < 1
+        button.addClass("disabled").removeAttr("event-name")
       else
-        button.removeClass("disabled")
+        button.removeClass("disabled").attr("event-name", "delivered")
+        true
 
 
   save_delivery_code: (cb) ->
@@ -156,7 +157,6 @@ class ShopTransactionCard extends TransactionCardBase
     else
       @$(".express-info").hide()
       @$(".delivered").removeClass("disabled")
-
 
   delivery_manner_el: () ->
     @$("select.delivery_manner_id>option:selected")

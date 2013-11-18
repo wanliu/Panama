@@ -93,8 +93,8 @@ class TransactionCard extends TransactionCardBase
     @$(".address-form>form").submit()
     StateMachine.ASYNC
 
-  #leaveWaitingDelivery: (event, from, to, msg) ->
-      #@slideAfterEvent(event) if /refresh_delivered/.test event
+  leaveWaitingDelivery: (event, from, to, msg) ->
+    @slideAfterEvent(event) if /refresh_delivered/.test event
 
   leaveWaitingPaid: (event, from, to, msg) ->
     @slideAfterEvent(event) unless /back/.test event
