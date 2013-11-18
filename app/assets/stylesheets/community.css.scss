@@ -22,8 +22,8 @@ body.communities{
     margin-bottom: 10px;
 
     img{
-      width: 182px;
-      height: 233px;
+      width: 180px;
+      height: 180px;
     }
   }
 
@@ -101,8 +101,52 @@ body.communities{
 }
 
 .community{
+  #SelectCircle{ 
+    left: 40%; 
+    width: 780px;
+  }
   .following{
     margin-bottom: 10px;
+  }
+  .circles{
+    margin:10px 10px 0px 15px; 
+    .selected{
+      background-color: #427fed!important;
+    }
+    .circle:hover{ cursor: pointer};
+    .circle{
+      /*@include transparent(rgb(51, 51, 51), 0.4);*/
+      margin-bottom: 10px;
+      margin-right: 10px;
+      width: 230px;
+      display: inline-block;
+      background-color: rgba(235, 235, 235, 0.97);
+      box-shadow: 1px 1px 1px 1px #888888;
+
+      .photo{
+        display: inline-block;
+        width: 80px;
+
+        img{
+          height: 80px;
+          width: 80px;
+        }
+      }
+
+      .info{
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 10px;
+      }
+
+      a{
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+      }
+
+    }
   }
 
   .right{

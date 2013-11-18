@@ -7,6 +7,7 @@
 #= require following
 #= require topic
 #= require circles
+#= require circle_member
 
 root = window || @
 

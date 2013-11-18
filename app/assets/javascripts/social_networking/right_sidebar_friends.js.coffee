@@ -18,7 +18,8 @@ class FriendsContainerView extends RealTimeContainerView
 		@default_view = view
 
 	bind_items: () ->
-		@client = Realtime.client(@realtime_url)
+		# @client = Realtime.client(@realtime_url)
+		@client = window.clients
 		@client.receive_message @token, (message) =>
 			@process_message message
 

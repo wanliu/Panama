@@ -1,6 +1,5 @@
 #describe: 最近联系人
 #= require chats/dialogue
-#= require lib/realtime_client
 
 root = window || @
 
@@ -110,7 +109,8 @@ class ContactFriendViewList extends Backbone.View
       current_user: @current_user
     )
 
-    @client = Realtime.client(@faye_url)
+    # @client = Realtime.client(@faye_url)
+    @client = window.clients
 
   all_contact_friend: (collection) ->
     @$el.html('')

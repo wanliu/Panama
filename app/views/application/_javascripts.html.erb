@@ -1,12 +1,16 @@
 <%# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet %>
 <%# Looks for google_account_id first in ENV['GOOGLE_ACCOUNT_ID'] then in config/html5_rails.yml %>
-<% if !google_account_id.blank? %>
-  <script>
+<script type="text/javascript">
+  <% if !google_account_id.blank? %>
     //<![CDATA[
       var _gaq=[['_setAccount','<%= google_account_id %>'],['_trackPageview']];
       (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
     //]]>
-  </script>
-<% end %>
+  <% end %>
+  window.clients = Realtime.connect({
+    server_uri: '<%= realtime_uri %>',
+    token: '<%= current_user.im_token %>'
+  })
+</script>

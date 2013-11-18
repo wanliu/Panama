@@ -102,7 +102,7 @@
       <%= button_tag icon(:comments), :class => "btn", :type => :button %>
     </div>
     <div class='row-fluid messages'>
-      <iframe frameborder="0" src="<%= dialog_person_direct_transaction_path(@people, direct_transaction) %>"></iframe>
+      <iframe src="<%= dialog_person_direct_transaction_path(@people, direct_transaction) %>" style="frameborder: 0;"></iframe>
     </div>
   </div>
 </div>

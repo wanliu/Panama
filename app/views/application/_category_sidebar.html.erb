@@ -1,22 +1,23 @@
 <div id="category-sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80" >
-	<ul id="forms-collapse" class="side-nav">
-		<% cache do %>
-			<%= root_category_tree %>
-		<% end %>
-	</ul>
-	<div id="sidebar-settings" class="settings">
-		<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图&nbsp;标</button>
-		<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
-	</div>
+  <ul id="forms-collapse" class="side-nav">
+    <%= root_category_tree %>
+  </ul>
+  <div id="sidebar-settings" class="settings">
+    <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图&nbsp;标</button>
+    <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
+  </div>
 </div>
 
 <script type="text/javascript">
-	$(function(){
-		$("#category-sidebar > ul > li").mouseenter(function(event){
-			$($(this).children('a').attr('href')).show();
-		});
-		$("#category-sidebar > ul > li").mouseleave(function(event){
-			$($(this).children('a').attr('href')).hide();
-		});
-	})
+  $(function(){
+    $("#category-sidebar > ul > li").mouseenter(function(event){
+      $($(this).children('a').attr('href')).show();
+    });
+    $("#category-sidebar > ul > li").mouseleave(function(event){
+      $($(this).children('a').attr('href')).hide();
+    });
+    $("#category-sidebar .lv2_categories a").on("click", function(){
+      document.location.href = "/category/" + $(this).attr("data-category_id");
+    })
+  })
 </script>

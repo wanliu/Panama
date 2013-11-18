@@ -19,6 +19,8 @@ module OmniAuth
                 :access_token_url => "#{server_addr}/auth/wanliu_admin_id/access_token"
             }
 
+            option :provider_ignores_state, true
+
             # These are called after authentication has succeeded. If
             # possible, you should try to set the UID without making
             # additional calls (if the user id is returned with the token

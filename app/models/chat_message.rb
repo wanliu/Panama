@@ -54,20 +54,25 @@ class ChatMessage < ActiveRecord::Base
   end
 
   def remind_receive_user
-    FayeClient.send(
-      "/transaction/chat/message/remind/#{receive_user.try(:im_token)}", as_json
-    ) if "%w(OrderTransaction DirectTransaction)".include?(owner_type)
+    # FayeClient.send(
+    #   "/transaction/chat/message/remind/#{receive_user.try(:im_token)}", as_json
+    # ) if "%w(OrderTransaction DirectTransaction)".include?(owner_type)
+    CaramalClient.publish(
+      receive_user.login, '/transaction/chat/message/remind/#{receive_user.try(:im_token)}', as_json
+    )  if "%w(OrderTransaction DirectTransaction)".include?(owner_type)
   end
 
   #通知接收人
   def notic_receive_user
     channel, data = routing_key
-    FayeClient.send(channel, data) if channel.present? && data.present?
+    # FayeClient.send(channel, data) if channel.present? && data.present?
+    CaramalClient.publish(receive_user.login, channel, data) if channel.present? && data.present?
   end
 
   #接收人已经读取信息(取消提醒)
   def self.notice_read_state(receive_user, send_user_id)
-    FayeClient.send("/chat/change/message/#{receive_user.try(:im_token)}", send_user_id)
+    # FayeClient.send("/chat/change/message/#{receive_user.try(:im_token)}", send_user_id)
+    CaramalClient.publish(receive_user.login, "/chat/change/message/#{receive_user.try(:im_token)}", send_user_id)
   end
 
   def routing_key

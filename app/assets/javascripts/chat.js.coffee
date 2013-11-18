@@ -1,8 +1,9 @@
 #= require core_extend/core
 #= require jquery
-#= require faye
 #= require lib/underscore
 #= require backbone
+#= require lib/realtime_client
+#= require lib/socket.io
 #= require lib/hogan
 #= require lib/postmessage
 #= require message

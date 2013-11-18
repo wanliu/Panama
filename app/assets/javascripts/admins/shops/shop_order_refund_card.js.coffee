@@ -1,7 +1,4 @@
-#= require jquery
-#= require backbone
 #= require lib/transaction_card_base
-
 
 exports = window || @
 

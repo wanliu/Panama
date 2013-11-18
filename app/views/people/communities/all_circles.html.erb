@@ -1,0 +1,17 @@
+<div class="row-fluid circles">
+  <% @circles.each do |circle| %>
+    <div class="circle" data-value-id='<%=circle.id %>'>
+      <div class="photo">
+        <img src="<%=circle.photos.header %>">
+      </div>
+      <div class="info">
+        <div>
+          <%= circle.name %>
+        </div>
+        <div>
+          <%= circle.friend_count%> 个成员
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

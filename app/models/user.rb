@@ -28,8 +28,6 @@ class User < ActiveRecord::Base
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
-  has_many :topics, as: :owner, dependent: :destroy
-  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   has_many :friend_groups, dependent: :destroy
   has_many :contact_friends, dependent: :destroy
   # has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
@@ -47,6 +45,10 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_initialize :init_user_info
+
+  def generate_token
+    self.im_token = SecureRandom.hex
+  end
 
   def city
     user_checking.try(:address).try(:city)
@@ -81,15 +83,12 @@ class User < ActiveRecord::Base
 
   def connect
     RedisClient.redis.set(redis_key, true)
-    FayeClient.send("/chat/friend/connect/#{id}", id)
+    # FayeClient.send("/chat/friend/connect/#{id}", id)
+    CaramalClient.publish(login, "/chat/friend/connect/#{id}", id)
   end
 
   def connect_state
     RedisClient.redis.exists(redis_key)
-  end
-
-  def generate_token
-    self.im_token = SecureRandom.hex
   end
 
   def redis_key
@@ -182,6 +181,12 @@ class User < ActiveRecord::Base
   def circle_all
     circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
     Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+  end
+
+  #加入的所有的圈子
+  def all_circles
+    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
+    Circle.where(:id => circle_ids)
   end
 
   def init_user_info
