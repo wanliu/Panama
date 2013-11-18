@@ -1,5 +1,6 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
+  before_filter :login_required, :except => [:kuaiqian_receive]
 
   def index
     authorize! :index, OrderTransaction
@@ -13,6 +14,7 @@ class People::TransactionsController < People::BaseController
 
   def show
     @transaction = current_order.find(params[:id])
+    @pay_msg = params[:pay_msg]
     authorize! :show, @transaction
     respond_to do |format|
       format.html
@@ -81,7 +83,7 @@ class People::TransactionsController < People::BaseController
 
   def kuaiqian_payment
     @transaction = current_order.find(params[:id])
-    pay_ment = KuaiQian::PayMent.request(
+    options = {
       :bg_url => paid_send_url,
       :payer_name => current_user.login,
       :order_id => Time.now.strftime("%Y%m%d%H%M%S"),
@@ -89,28 +91,33 @@ class People::TransactionsController < People::BaseController
       :product_name => @transaction.items[0].title,
       :product_num => @transaction.items_count,
       :order_time => Time.now.strftime("%Y%m%d%H%M%S")
-    )
+    }
+    options.merge!(:pay_type => "10",
+      :bank_id => params[:bank]) if params[:bank].present?
+    pay_ment = KuaiQian::PayMent.request(options)
     respond_to do |format|
       format.html{ redirect_to pay_ment.url }
     end
   end
 
-  def receive
+  def kuaiqian_receive
     _response = KuaiQian::PayMent.response(params)
     @transaction = current_order.find(params[:id])
-    if _response.successfully?
-      @transaction.buyer_fire_event!(:paid)
+    url = if _response.successfully?
+      @transaction.online_paid
+      "#{paid_receive_url}?pay_msg=success"
     else
-
+      "#{paid_receive_url}?pay_msg=error"
     end
-    render :xml => {:result => "1", :redirecturl => paid_receive_url }
+    render :xml => {:result => "1", :redirecturl => url }
   end
 
   def base_info
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
+      if @transaction.address.valid? &&
+       @transaction.update_attributes(generate_base_option)
         format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
       else
         format.html{ render error_back_address_html }
@@ -292,8 +299,10 @@ class People::TransactionsController < People::BaseController
     t = params[:order_transaction]
     options = {}
     options[:pay_manner] = get_pay_manner t[:pay_manner_id]
-    options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
-    options[:delivery_type_id] = t[:delivery_type_id]
+    if t[:delivery_manner_id].to_s != "0"
+      options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
+      options[:delivery_type_id] = t[:delivery_type_id]
+    end
     options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
     options
   end
@@ -323,6 +332,6 @@ class People::TransactionsController < People::BaseController
   end
 
   def paid_send_url
-    "#{prefix_path}#{receive_person_transaction_path(current_user, @transaction)}"
+    "#{prefix_path}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
   end
 end

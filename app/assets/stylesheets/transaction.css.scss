@@ -221,12 +221,6 @@
 		margin-right: 5px;
 		padding: 5px;
 		background: $white;
-		// background: $grayLighter;
-		/*display: none;*/
-		// @include transparent(rgb(51, 51, 51), 0.4);
-		// border-left: 1px solid $tableBorder;
-		// border-right: 1px solid $tableBorder;
-		// border-bottom: 1px solid $tableBorder;
 
 		iframe{
 			border: none;
@@ -285,4 +279,10 @@
 	margin-bottom: 40px;
 }
 
-
+.transaction{
+	.nav-tabls-wrapper{
+		.paid-next{
+			margin-top: 15px;
+		}
+	}
+}

@@ -866,7 +866,7 @@ ul {
 	@include border-radius(1px);
 }
 
-.modal-body {
+.modal-body, .nav-tabls-wrapper {
 	.nav-tabs {
 		li {
 			a {
@@ -1215,5 +1215,16 @@ h2 small {
 .error{
 	input[type=text], textarea{
 		border: 1px solid #b94a48;
+	}
+}
+
+.payments-plat{
+	list-style: none;
+
+	.payment{
+		float: left;
+		display: inline-block;
+		background: white;
+		padding: 8px;
 	}
 }

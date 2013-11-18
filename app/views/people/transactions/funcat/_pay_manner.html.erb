@@ -44,25 +44,20 @@
       </div>
       <div class='chose_delivery_manner_panel'>
         <ul>
-          <li>
+          <li data-value-code=''>
             <span class='title'>
-              <input type="radio" name='order_transaction[delivery_manner_id]' checked />
+              <input type="radio" name='order_transaction[delivery_manner_id]' checked value="0" />
               <span class='name'>
                 卖家选择
-              </span>
-              <span class='code'>
               </span>
             </span>
           </li>
           <% DeliveryManner.avaliable.each do |item| %>
-          <li>
+          <li data-value-code='<%=item.code %>'>
             <span class='title'>
               <input type="radio" name='order_transaction[delivery_manner_id]' value='<%=item.id %>' />
               <span class='name'>
                 <%=item.name %>
-              </span>
-              <span class='code'>
-                <%=item.code %>
               </span>
             </span>
           </li>

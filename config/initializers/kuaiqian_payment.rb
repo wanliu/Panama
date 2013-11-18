@@ -49,7 +49,7 @@ module KuaiQian
 
         def to_param
           attrs.map do |k|
-            "#{_camelcase(k)}=#{CGI.escape(get(k).to_s)}"
+            "#{_camelcase(k)}=#{CGI.escape(get(k).to_s.gsub(/\s/, ''))}"
           end.join("&")
         end
 

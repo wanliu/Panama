@@ -12,7 +12,7 @@ class DeliveryManner extends Backbone.View
 
     @$radio = @$("input:radio")
     @name = @$('.name').text().trim()
-    @code = @$(".code").text().trim()
+    @code = @$el.attr("data-value-code")
 
   chose_manner: () ->
     @$radio[0].checked = true
@@ -50,7 +50,7 @@ class root.TransactionDeliveryManner extends Backbone.View
 
   set_name: (delivery) ->
     @panel.find(".chose_name").html(delivery.name)
-    if delivery.code == "local_delivery"
-      @delivery_select_panel.slideUp()
-    else
+    if delivery.code == "express"
       @delivery_select_panel.slideDown()
+    else
+      @delivery_select_panel.slideUp()
