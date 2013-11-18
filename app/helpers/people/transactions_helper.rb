@@ -1,4 +1,5 @@
 module People::TransactionsHelper
+
   @@toolbars = []
 
   def transaction_path(people, record)

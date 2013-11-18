@@ -1,4 +1,5 @@
 <%= widget_div do %>
+<% if @my_cart.present? %>
 	<div id="cart_box">
 			<%#= form_tag cart_clear_list, :class => "clear_list" do %>
 				<!-- <input type='submit' class='btn' value="<%#=t(:clear_list) %>" /> -->
@@ -27,4 +28,5 @@
 			<div class="product_total">总计：￥0</div>
 		</div>
 	</div>
+<% end %>
 <% end %>

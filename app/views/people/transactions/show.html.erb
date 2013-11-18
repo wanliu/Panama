@@ -1,13 +1,23 @@
 <p id="notice"><%= notice %></p>
 <% active_section :transaction %>
 <div class="sidebar_panel">
+  <% if @pay_msg.present? %>
+    <% if @pay_msg == "success" && @transaction.state_name == :waiting_delivery  %>
+      <div class="alert alert-success">
+        支付成功, 等待对方发货!
+      </div>
+    <% elsif @pay_msg == "error" && @transaction.state_name == :waiting_paid  %>
+      <div class="alert alert-danger">
+        支付失败
+      </div>
+    <% end %>
+  <% end %>
   <div class="main-sidebar container-fluid">
-    <%= render partial: 'transaction',
-               object:  @transaction,
-               locals: {
-                 state:  @transaction.state,
-                 people: @people
-               } %>
-
+    <%= render  partial: 'transaction',
+                object:  @transaction,
+                locals: {
+                  state:  @transaction.state,
+                  people: @people
+    } %>
   </div>
 </div>
