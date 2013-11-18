@@ -26,9 +26,6 @@
 /public/category
 /public/attachment
 /public/assets
-/public/99bill-rsa.pem
-/public/99bill.cert.rsa.20140728.cer
-/public/bill-pub.pem
 /public/user_checking
 /config/email.yml
 /config/application.yml
