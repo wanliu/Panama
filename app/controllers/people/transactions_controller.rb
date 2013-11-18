@@ -302,8 +302,8 @@ class People::TransactionsController < People::BaseController
     if t[:delivery_manner_id].to_s != "0"
       options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
       options[:delivery_type_id] = t[:delivery_type_id]
+      options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
     end
-    options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
     options
   end
 

@@ -136,7 +136,7 @@ module KuaiQian
         end
 
         def openssl_sign
-          pri = OpenSSL::PKey::RSA.new(File.read(config[:rsa]["path"]), config[:rsa]["password"])
+          pri = OpenSSL::PKey::RSA.new(File.read(config[:rsa]["pem_path"]), config[:rsa]["password"])
           sign = pri.sign(OpenSSL::Digest::SHA1.new, sign_param)
           Base64.encode64(sign).gsub(/\n/, '')
         end
@@ -164,7 +164,7 @@ module KuaiQian
         end
 
         def openssl_sign
-          raw = File.read(config[:cer_path])
+          raw = File.read(config[:rsa]["cer_path"])
           sign_msg = Base64.decode64(attributes[:sign_msg])
           sign = OpenSSL::X509::Certificate.new(raw).public_key
           sign.verify(OpenSSL::Digest::SHA1.new, sign_msg, sign_param)

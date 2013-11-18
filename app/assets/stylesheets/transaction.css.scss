@@ -30,9 +30,8 @@
 
 			.bank_card{
 				float: left;
-				margin-right: 0px;
-				margin-bottom: 20px;
 				position: relative;
+				margin:0px 0px 20px 6px;
 
 				.cart {
 					width: 100px;
@@ -283,6 +282,10 @@
 	.nav-tabls-wrapper{
 		.paid-next{
 			margin-top: 15px;
+		}
+
+		.tab-content{
+			margin-bottom: 10px;
 		}
 	}
 }

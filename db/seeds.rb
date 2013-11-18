@@ -39,8 +39,7 @@ def load_categories
 end
 
 def load_banks
-  bank_file = Rails.root.join("config/bank.yml")
-  Bank.load_file(bank_file)
+  rake['bank:load'].invoke
 end
 
 def rake
