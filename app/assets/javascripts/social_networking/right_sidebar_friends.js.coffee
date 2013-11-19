@@ -29,7 +29,7 @@ class FriendsContainerView extends RealTimeContainerView
 
 class FollowersView extends Backbone.View
 	className: "followings-list"
-		
+
 	template:
     '<h5 class="tab-header followings">
 			<i class="icon-group"></i>
