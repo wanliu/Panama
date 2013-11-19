@@ -1,0 +1,14 @@
+remote: https://www.99bill.com/gateway/recvMerchantInfoAction.htm
+rsa:
+  pem_path: public/99bill-rsa.pem
+  password: asdfasdf
+  cer_path: public/99bill.cert.rsa.20140728.cer
+
+md5:
+  key: XZDW46UKBFJ6TUDT
+
+params:
+  merchant_acct_id: 1002300593701
+  version: v2.0
+  language: 1
+  sign_type: 4
