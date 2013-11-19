@@ -82,6 +82,10 @@ module ApplicationHelper
     current_user.try(:cart)
   end
 
+  def my_likes
+    current_user.liked_activities
+  end
+
   def accounts_provider_url
     OmniAuth::Wanliu.config["provider_url"]
   end

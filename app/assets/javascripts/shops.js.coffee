@@ -7,9 +7,14 @@
 root = window || @
 
 class LoadShopProducts extends InfiniteScrollView
-	msg_el: ".scroll-load-msg",
-	sp_el: "#shop_products",
-	fetch_url: "/shop_products"
+	params: {
+		msg_el: ".scroll-load-msg",
+		sp_el: "#shop_products",
+		fetch_url: "/shop_products"
+	}
+
+	initialize: (options) ->
+    super this.params
 
 	add_one: (c) ->
 		template = Hogan.compile($("#shop_products-preview-template").html())

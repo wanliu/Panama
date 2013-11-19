@@ -127,6 +127,8 @@ class ActivityView extends Backbone.View
 
   like: (event) ->
     $.post(@model.url() + "/like", (data) =>
+      @like_view = new LikeListView()
+      @like_view.add_to_cart(data)
       @$('.like-button').replaceWith(@unlike_template)
       @$('.like-count').addClass("active")
       @incLike()
@@ -135,6 +137,8 @@ class ActivityView extends Backbone.View
 
   unlike: (event) ->
     $.post(@model.url() + "/unlike", (data) =>
+      @like_view = new LikeListView()
+      @like_view.move_from_cart(data)
       @$('.unlike-button').replaceWith(@like_template)
       @$('.like-count').removeClass("active")
       @decLike()
@@ -147,7 +151,7 @@ class ActivityView extends Backbone.View
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
-    @$('.like-count').text(s - n)
+    @$('.like-count').text(s - n) 
 
   addComment: (event) ->
     content = @$("textarea",".message").val()
@@ -413,12 +417,14 @@ class ActivityLayoutView extends Backbone.View
 
 
 class LoadActivities extends InfiniteScrollView
-  msg_el: ".scroll-load-msg",
-  sp_el: "#activities",
-  fetch_url: "/search"
+  params: {
+    msg_el: ".scroll-load-msg"
+    sp_el: "#activities"
+    fetch_url: "/search"
+  }
 
   initialize: (options) ->
-    super options
+    super this.params
     $(window).bind "reset_search", (e, data) =>
       @reset_fetch(data)
 
@@ -449,6 +455,30 @@ class LoadActivities extends InfiniteScrollView
         # .find(".preview")
         # .removeClass("animate0 " + "flipInY")
 
+class LikeListView extends Backbone.View
+
+  item_row: 
+    '<tr id="liked_activity{{id}}" class="like_main activity" activity-id="{{ id }}">
+      <td><img src="{{ url }}" class="activity_icon" ></td>
+      <td class="title_td">
+        <span class="title" data-toggle="tooltip" title="{{title}}">
+          {{title}}
+        </span>
+      </td>
+      <td class="shop"> <a href="/shops/<%= activity.shop.name %>"> {{ shop_name }}</a></td>
+      <td><a class="preview" href="javascript:void(0)">查看</a></td>
+    </tr>'
+
+  trHtml: (activity) ->
+    row_tpl = Hogan.compile(@item_row)
+    row_tpl.render(activity)
+    
+  add_to_cart: (activity) ->
+    $(".like_list").append(@trHtml(activity))
+    new ActivityPreview({ el: $("#liked_activity#{ activity.id } ")})
+
+  move_from_cart: (data) ->
+    $("#liked_activity#{data.id}").remove()
 
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview

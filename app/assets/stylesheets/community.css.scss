@@ -54,7 +54,7 @@ body.communities{
         list-style: none;
 
         li:first-child{
-          margin-left: 0px;
+          margin-left: 5px;
         }
 
         li{
@@ -261,7 +261,11 @@ body.communities{
 
           .comment_panel{
             display: none;
-
+            .user_login{
+              overflow:hidden; 
+              white-space: nowrap; 
+              text-overflow:ellipsis;
+            }
           }
 
           .send_comment{
@@ -359,7 +363,7 @@ body.communities{
 
       .tag{
         position: absolute;
-        right: 3px;
+        left: 55px;
         bottom: 0px;
         line-height: 0px;
 
@@ -397,6 +401,7 @@ body.communities{
   }
   .circle_icon{
     margin-right: 12px;
+    width: 100%;
   }
 }
 .access_denied{
