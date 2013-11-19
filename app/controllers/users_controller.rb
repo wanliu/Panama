@@ -30,6 +30,14 @@ class UsersController < ApplicationController
     end
   end
 
+  def chat_authorization
+    debugger
+    auth = User.chat_authorization(params[:from], params[:invested])
+    respond_to do |format|
+      format.json { render :json => auth }
+    end
+  end
+
   #上传头像
   def upload_avatar
     field_name = params[:field_name]
