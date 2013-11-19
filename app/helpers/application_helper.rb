@@ -43,8 +43,21 @@ module ApplicationHelper
     end
   end
 
-  def prefix_path
-    YAML::load_file("config/prefix_path.yml")["url"]
+  def test_config
+    path = "config/test.yml"
+    (File.exists?(path) ? YAML::load_file(path) : {}).symbolize_keys
+  end
+
+  def payment_mode_test?
+    test_config[:payment_mode] == "test"
+  end
+
+  def payment_order_path(people, record)
+    if payment_mode_test?
+      test_payment_person_transaction_path(people, record)
+    else
+      kuaiqian_payment_person_transaction_path(people, record)
+    end
   end
 
   def current_shop
