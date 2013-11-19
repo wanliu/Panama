@@ -3,6 +3,7 @@ require 'openssl'
 require 'yaml'
 require 'cgi'
 require "base64"
+require 'digest'
 
 module KuaiQian
   module PayMent
@@ -18,7 +19,9 @@ module KuaiQian
       end
 
       def config
-        @config ||= YAML::load_file("config/kuaiqian_payment.yml")
+        path = "config/kuaiqian_payment.yml"
+        raise 'no exists kuaiqian.yml file!' unless File.exists?(path)
+        @config ||= YAML::load_file(path)
         @config
       end
 
@@ -29,6 +32,7 @@ module KuaiQian
         def initialize(opts = {})
           attrs.each{|name| set(name, opts[name]) }
           default
+          valid_config?
         end
 
         def set(name, value)
@@ -54,7 +58,8 @@ module KuaiQian
         end
 
         def default
-          config[:params].each{|k, v| set(k, v) }
+          default_opts = config[:params] || {}
+          default_opts.each{|k, v| set(k, v) }
 
           @order_time ||= DateTime.now.strftime("%Y%m%d%H%M%S")
           @input_charset ||= "1"
@@ -76,11 +81,6 @@ module KuaiQian
           value_hash(keys){|key| opts[key] }
         end
 
-        def value_hash(values, &block)
-          raise 'no block argument!' unless block_given?
-          values.inject({}){|o, k| o[k.to_sym] = yield(k); o }
-        end
-
         def sign_secret
           sign_type = get(:sign_type).to_s
           case sign_type
@@ -96,10 +96,15 @@ module KuaiQian
           data.delete("signMsg")
           data.map do |k, v|
             v.nil? || v.empty? ? nil : "#{k}=#{v}"
-          end.compact.join("&")
+          end.compact.join("&").gsub(/\s/, '')
+        end
+
+        def openssl_sign
         end
 
         def md5_sign
+          opts = config[:md5] || {}
+          set(:key, opts["key"])
           Digest::MD5.hexdigest(sign_param).upcase
         end
 
@@ -116,6 +121,27 @@ module KuaiQian
           values[0] = values[0].downcase if key == :lower
           values.join
         end
+
+        private
+        def value_hash(values, &block)
+          raise 'no block argument!' unless block_given?
+          values.inject({}){|o, k| o[k.to_sym] = yield(k); o }
+        end
+
+        def valid_config?
+          _sign_type = get(:sign_type).to_s
+          if _sign_type == "4"
+            opts = config[:rsa] || {}
+            raise 'no set rsa value!' if opts.empty?
+            raise 'no exists #{opts["pem_path"]} pem path!' unless File.exists?(opts["pem_path"])
+            raise 'no exists #{opts["cer_path"]} cer path!' unless File.exists?(opts["cer_path"])
+          elsif _sign_type == "1"
+            opts = config[:md5] || {}
+            raise 'no set md5 value!' if opts.empty?
+            raise 'no set key value!' if opts["key"].nil? || opts["key"].empty?
+          end
+        end
+
       end
 
       class Request < Options
@@ -132,17 +158,18 @@ module KuaiQian
             merchantAcctId payerName payerContactType payerContact
             orderId orderAmount orderTime productName productNum
             productId productDesc ext1 ext2 payType bankId redoFlag
-            pid signMsg).map {|key| _underscore(key).to_sym  }
+            pid key signMsg).map {|key| _underscore(key).to_sym  }
         end
 
         def openssl_sign
-          pri = OpenSSL::PKey::RSA.new(File.read(config[:rsa]["pem_path"]), config[:rsa]["password"])
+          opts = config[:rsa] || {}
+          pri = OpenSSL::PKey::RSA.new(File.read(opts["pem_path"]), opts["password"])
           sign = pri.sign(OpenSSL::Digest::SHA1.new, sign_param)
           Base64.encode64(sign).gsub(/\n/, '')
         end
 
-        def sign_param
-          super.gsub(/\s/, '')
+        def md5_sign
+          super
         end
 
         def url
@@ -160,11 +187,12 @@ module KuaiQian
           %w(merchantAcctId version language signType
             payType bankId orderId orderTime orderAmount
             dealId bankDealId dealTime payAmount fee ext1
-            ext2 payResult errCode signMsg).map {|key| _underscore(key).to_sym  }
+            ext2 payResult errCode key signMsg).map {|key| _underscore(key).to_sym  }
         end
 
         def openssl_sign
-          raw = File.read(config[:rsa]["cer_path"])
+          rsa = config[:rsa] || {}
+          raw = File.read(rsa["cer_path"])
           sign_msg = Base64.decode64(attributes[:sign_msg])
           sign = OpenSSL::X509::Certificate.new(raw).public_key
           sign.verify(OpenSSL::Digest::SHA1.new, sign_msg, sign_param)
@@ -177,7 +205,6 @@ module KuaiQian
         alias_method :sign_verify?, :sign_secret
 
         def successfully?
-          puts sign_verify?
           get(:pay_result) == "10" && sign_verify?
         end
 
