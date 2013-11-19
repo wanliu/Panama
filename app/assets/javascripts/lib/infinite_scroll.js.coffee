@@ -2,17 +2,16 @@
 root = window || @
 
 # 抽象出的无限滚动加载视图
-class InfiniteScrollView extends Backbone.View
-  offset: 0,
-  limit: 40,
-  init_size: 40,
-  is_over: false,
-  search_options: {},
-  msg_tip: '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
+class root.InfiniteScrollView extends Backbone.View
 
   initialize: (options) ->
+    @offset = 0
+    @limit = 40
+    @init_size = 40
+    @is_over = false
+    @search_options = {}
+    @msg_tip = '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
     _.extend(@, options)
-    @$el = $(@el)
     @fetch()
     $(window).scroll(_.bind(@scroll_load, @))
 
@@ -72,5 +71,3 @@ class InfiniteScrollView extends Backbone.View
     @fetch_size = @init_size
     @fetch()
 
-
-root.InfiniteScrollView = InfiniteScrollView
