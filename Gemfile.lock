@@ -551,7 +551,7 @@ DEPENDENCIES
   nested_form
   omniauth (~> 1.1.1)
   omniauth-oauth2 (~> 1.1.1)
-  omniauth-wanliu (~> 0.1.1)
+  omniauth-wanliu (~> 0.1.1)!
   passenger
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.8)
