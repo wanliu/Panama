@@ -5,6 +5,12 @@ GIT
     rails-setting (0.0.8)
 
 GIT
+  remote: git://github.com/huxinghai1988/kuaiqian.git
+  revision: 7326ec797dc101e8a34d41cb8c1152711782129d
+  specs:
+    kuaiqian (0.0.1)
+
+GIT
   remote: git://github.com/hysios/tire-settings.git
   revision: 15a502da3bb6bcd50205fe999036632b45fe0010
   specs:
@@ -537,6 +543,7 @@ DEPENDENCIES
   jasmine
   jquery-rails (= 2.1.4)
   kaminari (~> 0.14.1)
+  kuaiqian!
   mini_magick (~> 3.4)
   mongoid (~> 3.0.0)
   mongoid-tree (~> 1.0.1)
