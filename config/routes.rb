@@ -162,7 +162,7 @@ Panama::Application.routes.draw do
     end
 
     resources :communities, :controller => "people/communities" do
-      collection do 
+      collection do
         get :all_circles
       end
     end
@@ -202,6 +202,7 @@ Panama::Application.routes.draw do
       end
       collection do
         get :unreads, :to => "people/notifications#unreads"
+        get :unread_count, :to => "people/notifications#unread_count"
       end
     end
 
