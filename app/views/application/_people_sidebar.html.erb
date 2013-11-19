@@ -7,11 +7,13 @@
     <div class="isfollowing">
       <span class="label">Default</span>
       <span class="label">Default</span>
-      <% unless @people.id == current_user.id %>
-        <% unless current_user.is_follow_user?(@people.id) %>
-          <span class="label label-success lf follow" data-value="<%= @people.id %>">+关注</span>
-        <% else %>
-          <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+      <% if current_user.present? %>
+        <% unless @people.id == current_user.id %>
+          <% unless current_user.is_follow_user?(@people.id) %>
+            <span class="label label-success lf follow" data-value="<%= @people.id %>">+关注</span>
+          <% else %>
+            <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+          <% end %>
         <% end %>
       <% end %>
     </div>
@@ -112,7 +114,7 @@
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#soical-collapse"><i class="icon-group"></i> <span class="name">社区</span></a>
       <ul id="soical-collapse" class="accordion-body collapse">
         <li>
-          <a class='people-communities' href="<%=person_communities_path(@people.login) %>">万流吧
+          <a class='people-communities' href="<%=person_communities_path(@people.login) %>">个人商圈
           </a>
         </li>
         <li>
@@ -142,7 +144,9 @@
   }
 
   $(function(){
-    new FollowView({
+
+    <% if current_user.present? %>
+      new FollowView({
         data: {
           follow_id:  "<%= @people.id %>",
           follow_type: "User"
@@ -151,6 +155,13 @@
         el: $(".isfollowing"),
       })
 
-    new PeopleSideView({ el: $("#people-sidebar") })
+      new Followers({
+        login: "<%= current_user.login %>",
+        people_id: "<%= @people.id %>",
+        follow_type: "User",
+        el: $(".isfollowing") })
+
+      new PeopleSideView({ el: $("#people-sidebar") })
+    <% end %>
   })
 </script>

@@ -1,10 +1,11 @@
 <%= widget_div do %>
+<% if @my_cart.present? || @my_likes.present? %>
 	<div id="cart_box">
 			<%#= form_tag cart_clear_list, :class => "clear_list" do %>
 				<!-- <input type='submit' class='btn' value="<%#=t(:clear_list) %>" /> -->
 			<%# end %>
 		<div class="cart_btns">
-			<input type='button' class='btn clear_list' value="清空列表" %>
+			<input type='button' class='btn clear_list' value="清空列表" />
 			<%= link_to_if @my_cart.items.count > 0,
 						t(:checkout),
 						person_cart_index_path(current_user.login),
@@ -24,7 +25,25 @@
 			<%= render :partial => "cart/product_item", :collection => @my_cart.items %>
 		</table>
 		<div class="cart_bottom">
-			<div class="product_total">总计：￥0</td>
+			<div class="product_total">总计：￥0</div>
 		</div>
+		<table class="like_list">
+			<tr class="like_title"><td colspan='2'>喜欢的活动</td></tr>
+			<tr class="header">
+				<td>产品</td>
+				<td>标题</td>
+				<td>商家</td>
+				<td>操作</td>
+			</tr>
+			<%= render :partial => "cart/like_activities", :collection => @my_likes, :as => :activity %>
+		</table>
 	</div>
 <% end %>
+<% end %>
+<script type="text/javascript">
+	$(function(){
+		new ActivityPreview({
+		    el: $(".like_list")
+		})
+	})
+</script>

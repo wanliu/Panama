@@ -16,7 +16,7 @@
         <div class='businiess_community span3' id="<%= circle.id %>">
           <div class="head_img">
             <a href="/communities/<%=circle.id %>/circles">
-              <img src="<%= circle.photos.avatar %>" class="circle_icon"/>
+              <img src="<%= circle.photos.avatar %>" class="circle_icon" alt="头像"/>
             </a>
           </div>
           <div  class="circle_detail">
@@ -40,7 +40,7 @@
             <div class="friends_icons">
               <% @friends.each do |friend| %>
                   <% if friend.circle_id == circle.id %>
-                    <img src="<%=friend.photos.icon %>"/>
+                    <img src="<%=friend.photos.icon %>" alt="头像"/>
                   <% end %>
               <% end %>
             </div>

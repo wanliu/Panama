@@ -7,8 +7,13 @@
 root = window || @
 
 class LoadCategoryProducts extends InfiniteScrollView
-	msg_el: ".scroll-load-msg",
-	sp_el: "#category_products"
+	params: {
+		msg_el: ".scroll-load-msg",
+		sp_el: "#category_products"
+	}
+	
+	initialize: (options) ->
+    super this.params
 
 	add_one: (c) ->
 		template = Hogan.compile($("#category_product-preview-template").html())

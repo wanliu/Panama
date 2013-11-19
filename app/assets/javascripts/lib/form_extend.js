@@ -1,4 +1,6 @@
 
+//= require jquery
+
 (function($){
   $.fn.serializeHash = function() {
     var hash = {};

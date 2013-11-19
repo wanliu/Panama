@@ -26,6 +26,14 @@
       </a>
     </span>
 
+    <div class="btn-group pull-right">
+      <% if current_user.present? && !@circle.is_member?(current_user) %>
+        <button class="btn btn-primary join">申请加入</button>
+      <% else %>
+        <button class="btn btn-success">已经加入</button>
+      <% end %>
+    </div>
+    <br />
     <div class="btn-group following">
       <button class="btn btn-primary follows_count"><%=@circle.owner.followers.count %></button>
       <% if @circle.owner.is_follower?(current_user.id) %>
