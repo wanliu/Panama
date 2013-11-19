@@ -29,6 +29,7 @@
 /public/user_checking
 /config/email.yml
 /config/application.yml
+/config/kuaiqian.yml
 /assets/images/
 /faye_server/log/
 /public/test.html
