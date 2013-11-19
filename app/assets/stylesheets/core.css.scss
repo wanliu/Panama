@@ -866,7 +866,7 @@ ul {
 	@include border-radius(1px);
 }
 
-.modal-body {
+.modal-body, .nav-tabls-wrapper {
 	.nav-tabs {
 		li {
 			a {
@@ -1233,4 +1233,28 @@ h2 small {
 	text-align: center;
 	background: #C99C0D;
 	color: black;
+}
+.payments-plat{
+	list-style: none;
+
+	.payment{
+		float: left;
+		display: inline-block;
+		background: white;
+		padding: 8px;
+		position: relative;
+
+		a{
+			display: inline-block;
+
+			input[type=radio]{
+				position: absolute;
+				top: 8px;
+			}
+
+			img{
+				margin-left: 20px;
+			}
+		}
+	}
 }

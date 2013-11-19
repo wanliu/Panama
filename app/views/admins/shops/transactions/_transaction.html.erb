@@ -14,9 +14,10 @@
           </div>
           <div class="container-fluid info-header">
             <div class="page-header">
-              <h1><%= buyer.login %>
+              <div class="trasaction-title">
+                <div class="name"><%= buyer.login %></div>
                 <%= render "state_buttons", :transaction => transaction %>
-              </h1>
+              </div>
               <div class="transaction-number">
                 订单编号：<%= transaction.number %>
                 <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">

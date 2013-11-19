@@ -1,17 +1,16 @@
 #encoding: utf-8
 class ChatMessagesController < ApplicationController
+  layout 'chat_messages'
   before_filter :login_and_service_required
 
   def index
-    @messages = current_user.chat_messages.order("created_at desc").limit(30)
+    send_user_id = params[:friend_id]
+    @messages = ChatMessage.where(
+      "owner_type = 'User' and owner_id", [current_user.id, send_user_id]
+    ).order("created_at desc").limit(30)
+    @messages.where(:owner_id => current_user.id).update_all(read: true)
 
-    @messages.where(
-      :send_user_id => params[:friend_id],
-      :receive_user_id => current_user.id
-    ).update_all(read: true)
-
-    ChatMessage.notice_read_state(current_user, params[:friend_id])
-
+    ChatMessage.notice_read_state(current_user, send_user_id)
     respond_to do |format|
       format.json{ render :json => @messages.reverse }
     end

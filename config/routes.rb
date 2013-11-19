@@ -119,6 +119,8 @@ Panama::Application.routes.draw do
         post 'transfer', :to => "people/transactions#transfer"
         get 'print', :to => "people/transactions#print"
         post "mark_as_read", :to => "people/transactions#mark_as_read"
+        get :kuaiqian_receive
+        match 'kuaiqian_payment', :via => [:get, :post]
       end
 
       collection do
@@ -160,7 +162,7 @@ Panama::Application.routes.draw do
     end
 
     resources :communities, :controller => "people/communities" do
-      collection do 
+      collection do
         get :all_circles
       end
     end
@@ -200,6 +202,7 @@ Panama::Application.routes.draw do
       end
       collection do
         get :unreads, :to => "people/notifications#unreads"
+        get :unread_count, :to => "people/notifications#unread_count"
       end
     end
 

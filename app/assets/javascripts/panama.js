@@ -1,7 +1,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require core_extend/core
+//= require lib/core_extend
 //= require lib/realtime_client
 //= require lib/jquery.raty
 //= require lib/jquery.resize

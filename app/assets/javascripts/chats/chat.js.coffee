@@ -45,23 +45,22 @@ class MessageView extends Backbone.View
 
     @title_el.append("<img src='#{@send_user.icon_url}' class='img-polaroid' />")
     @title_el.append("<span class='login'>#{@send_user.login}</span>")
-    @title_el.append("<span class='date'>#{@format_date()}</span>")
+    @title_el.append("<span class='date'>#{@format_date(@model.attributes.created_at.toDate())}</span>")
 
-  format_date: () ->
-    d = new Date(@model.get('created_at'))
-    today = new Date()
-    if d.format("yyyy-MM-dd") == today.format("yyyy-MM-dd")
-      d.format("h:m")
+  format_date: (date) ->
+    time_ago = new Date().getTime() - date.getTime() 
+    if time_ago > 24*3600*1000
+      date.format('MM-dd hh:mm')
     else
-      d.format("yyyy-MM-dd h:m")
+      date.format('hh:mm:ss')
 
   render: () ->
     @$el
 
 class MessageViewList extends Backbone.View
-  events: {
-    "submit form" : "send_message"
-  }
+  events: 
+    "submit form"        : "send_message"
+    "keyup form textarea": "fastKey"
 
   initialize: (options) ->
     @set_options(options)
@@ -70,6 +69,10 @@ class MessageViewList extends Backbone.View
     @chat_messages = new ChatMessages()
     @chat_messages.bind("reset", @all_message, @)
     @chat_messages.bind("add", @add_message, @)
+    
+  fastKey: (event) ->
+    event = event ? event:window.event
+    @send_message() if event.ctrlKey && event.keyCode == 13
 
   fetch: () ->
     @chat_messages.fetch(data: {friend_id: @friend.id})
@@ -124,6 +127,7 @@ class ChatView extends Backbone.View
   on_class: "online",
   off_class: "offline",
   display_state: true,
+
   initialize: () ->
     @init_el()
     @form = @$("form")

@@ -1,4 +1,4 @@
-#= require lib/socket.io
+#= require lib/caramal_chat
 
 root = (window || @)
 
@@ -28,7 +28,7 @@ class root.Realtime
     $("<div class='disconnect_message'>此页面已经失效,如果是想激活本页面，请点击<a href='javascript:window.location.reload()'>刷新</a>页面</div>").insertBefore("body")
 
   connect: () ->
-    @socket = io.connect(@url, @options)
+    @socket = Caramal.connect(@url, @options)
 
   on: (event, callback) ->
     @socket.on(event, callback)

@@ -14,7 +14,9 @@
 <script type="text/javascript">
 $(function(){
   new AttachmentUpload({
+    <% if circle.attachment.present? %>
     data: [<%= circle.attachment.to_json.html_safe %>],
+    <% end %>
     el: $(".attachment-list.circle-attachment"),
     limit: 1,
     default_enabled: false,
