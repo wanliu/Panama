@@ -19,7 +19,7 @@ module KuaiQian
       end
 
       def config
-        path = "config/kuaiqian_payment.yml"
+        path = "config/kuaiqian.yml"
         raise 'no exists kuaiqian.yml file!' unless File.exists?(path)
         @config ||= YAML::load_file(path)
         @config
@@ -148,7 +148,6 @@ module KuaiQian
 
         def initialize(opts)
           super sym_keys_slice!(opts, attrs)
-          set(:order_amount, 1) unless config[:environment] == "production"
           set(:sign_msg, sign_secret)
         end
 

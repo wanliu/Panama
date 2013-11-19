@@ -92,6 +92,7 @@ class People::TransactionsController < People::BaseController
       :product_num => @transaction.items_count,
       :order_time => Time.now.strftime("%Y%m%d%H%M%S")
     }
+    options[:order_amount] = 1 if Rails.env == "development"
     options.merge!(:pay_type => "10",
       :bank_id => params[:bank]) if params[:bank].present?
     pay_ment = KuaiQian::PayMent.request(options)
