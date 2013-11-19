@@ -1,4 +1,4 @@
-#= require core_extend/core
+#= require lib/core_extend
 #= require jquery
 #= require lib/underscore
 #= require backbone
