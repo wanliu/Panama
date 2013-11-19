@@ -1,4 +1,4 @@
-#= require lib/socket.io
+#= require lib/caramal_chat
 
 root = (window || @)
 
@@ -18,11 +18,11 @@ class root.Realtime
     )
     @on('disconnect', (error) =>
       console.error("disconnect: " + error)
-      alert("disconnect: " + error) if error      
+      alert("disconnect: " + error) if error
     )
 
   connect: () ->
-    @socket = io.connect(@url, @options)
+    @socket = Caramal.connect(@url, @options)
 
   on: (event, callback) ->
     @socket.on(event, callback)
