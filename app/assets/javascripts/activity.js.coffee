@@ -127,6 +127,8 @@ class ActivityView extends Backbone.View
 
   like: (event) ->
     $.post(@model.url() + "/like", (data) =>
+      @like_view = new LikeListView()
+      @like_view.add_to_cart(data)
       @$('.like-button').replaceWith(@unlike_template)
       @$('.like-count').addClass("active")
       @incLike()
@@ -135,6 +137,8 @@ class ActivityView extends Backbone.View
 
   unlike: (event) ->
     $.post(@model.url() + "/unlike", (data) =>
+      @like_view = new LikeListView()
+      @like_view.move_from_cart(data)
       @$('.unlike-button').replaceWith(@like_template)
       @$('.like-count').removeClass("active")
       @decLike()
@@ -449,27 +453,30 @@ class LoadActivities extends InfiniteScrollView
         # .find(".preview")
         # .removeClass("animate0 " + "flipInY")
 
-class LikeList extends Backbone.View
+class LikeListView extends Backbone.View
 
   item_row: 
-    '<tr id="product_item{{id}}" class="like_main">
-      <td><img src="{{icon}}" ></td>
-      <td>
+    '<tr id="liked_activity{{id}}" class="like_main activity" activity-id="{{ id }}">
+      <td><img src="{{ url }}" class="activity_icon" ></td>
+      <td class="title_td">
         <span class="title" data-toggle="tooltip" title="{{title}}">
           {{title}}
         </span>
       </td>
-      <td>类型</td>
-      <td><div class="focus_progress"></div></td>
+      <td class="shop"> <a href="/shops/<%= activity.shop.name %>"> {{ shop_name }}</a></td>
+      <td><a class="preview" href="javascript:void(0)">查看</a></td>
     </tr>'
 
-  trHtml: (product_item) ->
+  trHtml: (activity) ->
     row_tpl = Hogan.compile(@item_row)
-    row_tpl.render(product_item)
+    row_tpl.render(activity)
     
-  add_to_cart: () ->
-    $(".like_list").append(@trHtml(item))
+  add_to_cart: (activity) ->
+    $(".like_list").append(@trHtml(activity))
+    new ActivityPreview({ el: $("#liked_activity#{ activity.id } ")})
 
+  move_from_cart: (data) ->
+    $("#liked_activity#{data.id}").remove()
 
 root.ActivityModel = ActivityModel
 root.ActivityPreview = ActivityPreview

@@ -50,6 +50,10 @@ class User < ActiveRecord::Base
     self.im_token = SecureRandom.hex
   end
 
+  def liked_activities
+    Activity.joins("left join activities_likes as al on activities.id = al.activity_id left join users on users.id = al.user_id").where("users.id = ?", id)
+  end
+
   def city
     user_checking.try(:address).try(:city)
   end

@@ -27,6 +27,22 @@
 			<div class="product_total">总计：￥0</div>
 		</div>
 		<table class="like_list">
+			<tr class="like_title"><td colspan='2'>喜欢的活动</td></tr>
+			<tr class="header">
+				<td>产品</td>
+				<td>标题</td>
+				<td>商家</td>
+				<td>操作</td>
+			</tr>
+			<%= render :partial => "cart/like_activities", :collection => @my_likes, :as => :activity %>
 		</table>
 	</div>
 <% end %>
+
+<script type="text/javascript">
+	$(function(){
+		new ActivityPreview({
+		    el: $(".like_list")
+		})
+	})
+</script>

@@ -29,8 +29,8 @@
 						<% else %>
 							<%= render :partial =>"hover_seller_template", :locals => { new_user: new_user} %>
 							<span class="label label-important pull-right">卖家</span>
-							<a href="/shops/<%= new_user.user.shop.name %>">
-								<img src="<%= new_user.user.shop.photos.icon %>" class="user_icon" alt="头像" />
+							<a href="/shops/<%= new_user.user.shop.try(:name) %>">
+								<img src="<%= new_user.user.shop.try(:photos).try(:icon) %>" class="user_icon" alt="头像" />
 							</a>
 						<% end %>
 					</div>
@@ -40,7 +40,7 @@
 							<% if new_user.service_id == 1 %>
 								<a href="/people/<%= new_user.try(:user).try(:login) %>" class="title"><%= new_user.try(:user).try(:login) %></a>
 							<% else %>
-								<a href="/shops/<%= new_user.user.shop.name %>" class="title"><%= new_user.user.shop.name %></a>
+								<a href="/shops/<%= new_user.user.shop.try(:name) %>" class="title"><%= new_user.user.shop.try(:name) %></a>
 							<% end %>
 						</div>
 						<div class="industry"> 

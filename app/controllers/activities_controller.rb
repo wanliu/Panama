@@ -54,7 +54,7 @@ class ActivitiesController < ApplicationController
     end
     # render :text => :OK
     respond_to do |format|
-      format.json{ render json: @activity }
+      format.json{ render json: @activity.as_json }
     end
   end
 

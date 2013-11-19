@@ -102,6 +102,7 @@ class Activity < ActiveRecord::Base
               :user => {
                 :include => :photos }}}})
     atts["url"] = photos.default
+    atts["shop_name"] = shop.name
     atts
   end
 
