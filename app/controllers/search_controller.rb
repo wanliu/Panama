@@ -5,10 +5,14 @@ class SearchController < ApplicationController
   def user_checkings
     query_val = "%#{params[:q]}%"
     @region = RegionCity.location_region(params[:area_id])
-    city_ids = @region.region_cities_ids()
+    if @region.nil?
+      city_ids = params[:area_id]
+    else
+      city_ids = @region.region_cities_ids()
+    end
     @user_checkings = UserChecking.users_checking_query.where("(sh.name like ? or (us.login like ? or us.email like ?)) and checked= true and ad.area_id in (?)",query_val,query_val,query_val,city_ids).limit(9)
     respond_to do |format|
-      format.json{ render json: @user_checkings.as_json(:methods => :user) }
+      format.json{ render json: @user_checkings.as_json(:methods => [:shop, :user]) }
     end
   end
 
@@ -42,6 +46,34 @@ class SearchController < ApplicationController
     end
   end
 
+  def all
+    val = filter_special_sym(params[:q].gsub(/ /,''))
+    if val.present?
+      @results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
+        query do
+          boolean do
+            must do
+              filtered do
+                filter :query, :query_string => {
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
+                  :default_operator => "AND"
+                }
+
+                filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
+              end
+            end
+          end
+        end
+        size 10
+
+        sort{ by :_score, :desc }
+      end.results
+    end
+    respond_to do |format|
+      format.json{ render :json => @results || [] }
+    end
+  end
+
   def shop_products
     if current_user.shop
       query = filter_special_sym(params[:q])
@@ -49,7 +81,7 @@ class SearchController < ApplicationController
       s = ShopProduct.search2 do
         query do
           boolean do
-            must { string "name:#{query} OR primitive:#{query}*", :default_operator => "AND" }
+            must { string "name:#{query} OR primitive:#{query}", :default_operator => "AND" }
             must { string "seller.id:#{shop_id}" }
           end
         end

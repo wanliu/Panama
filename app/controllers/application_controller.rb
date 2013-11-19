@@ -69,16 +69,18 @@ class ApplicationController < ActionController::Base
   end
 
   # 只需要验证是否登录而不需要验证是否选择服务用这个
-  def login_required    
+  def login_required
     if !current_user
       respond_to do |format|
         format.js{
           ajax_set_response_headers
-          render :text => :ok, :status => 403 }
-        format.html  {
+          render :text => :ok, :status => 403
+        }
+        format.html{
           configure_callback_url
-          redirect_to '/auth/wanliuid' }
-        format.json {
+          redirect_to '/auth/wanliuid'
+        }
+        format.json{
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
     end
@@ -116,7 +118,7 @@ class ApplicationController < ActionController::Base
 
   def filter_special_sym(query)
     if query.present?
-      query.gsub(/[\+\-\*\.\,\/]/, "\\/")
+      query.gsub(/[\+\-\*\.\,\/\[\]\(\)]/, "")
     end
   end
 

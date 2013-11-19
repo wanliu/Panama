@@ -1,5 +1,3 @@
-#= require 'jquery'
-#= require 'backbone'
 #= require 'lib/transaction_card_base'
 #= require 'lib/state-machine'
 #= require 'lib/order_export'
@@ -51,7 +49,7 @@ class ShopTransactionCard extends TransactionCardBase
         console.log "event: #{event} from #{from} to #{to}"
 
   realtime_load: () ->
-    @realtime.subscribe "/OrderTransaction/#{@options.id}/#{@options.shop.token}/#{@rt_options.token}/destroy", () =>
+    window.clients.subscribe "/OrderTransaction/#{@options.id}/#{@options.shop.token}/#{@rt_options.token}/destroy", () =>
       @remove()
 
   getNotifyName: () ->
@@ -77,7 +75,7 @@ class ShopTransactionCard extends TransactionCardBase
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
-    if !/back/.test(_event) && !/refresh_returned/.test(_event)
+    if !/back/.test(_event) && !/refresh_returned/.test(_event) && @filter_delivery_code()
       @save_delivery_code () =>
         @slideAfterEvent(_event)
 
@@ -85,10 +83,11 @@ class ShopTransactionCard extends TransactionCardBase
     if @delivery_manner_el().text().trim() == "快递运输"
       delivery_code = @$("input:text.delivery_code").val()
       button = @$(".delivered")
-      if delivery_code == ""
-        button.addClass("disabled")
+      if delivery_code.length < 1
+        button.addClass("disabled").removeAttr("event-name")
       else
-        button.removeClass("disabled")
+        button.removeClass("disabled").attr("event-name", "delivered")
+        true
 
 
   save_delivery_code: (cb) ->
@@ -158,7 +157,6 @@ class ShopTransactionCard extends TransactionCardBase
     else
       @$(".express-info").hide()
       @$(".delivered").removeClass("disabled")
-
 
   delivery_manner_el: () ->
     @$("select.delivery_manner_id>option:selected")

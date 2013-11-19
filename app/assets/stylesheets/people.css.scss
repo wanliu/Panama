@@ -22,7 +22,6 @@
 @import "lib/transparent";
 @import "order_refund";
 @import "bootstrap-datetimepicker.min";
-@import "lib/typeahead";
 @import "direct_transaction";
 
 
@@ -279,7 +278,7 @@
 
   .delivery-select{
     margin-top: 10px;
-    /*display: none;*/
+    display: none;
   }
 
   .transfer_sheet{
@@ -419,15 +418,15 @@
   }
 }
 .people_info{
-  .cell{ 
+  .cell{
     padding-top: 18px;
     img{
       height: 110px;
       width: 110px;
     }
   }
-  .dl-horizontal dt{ 
-    width: 80px; 
+  .dl-horizontal dt{
+    width: 80px;
     text-align: center;
   }
   .dl-horizontal dd{ margin-left: 10px;}

@@ -61,6 +61,9 @@ class OrderTransaction < ActiveRecord::Base
 
   accepts_nested_attributes_for :address
 
+  #在线支付类型 account: 帐户余额 kuaiqian: 快钱
+  acts_as_status :online_pay_type, [:account, :kuaiqian]
+
   before_validation(:on => :create) do
     update_total_count
   end
@@ -200,8 +203,10 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
-      order.buyer_payment
-      order.activity.participate if order.activity.present?
+      if order.online_pay_type == :account
+        order.buyer_payment
+        order.activity.participate if order.activity.present?
+      end
     end
 
     after_transition do |order, transaction|
@@ -229,7 +234,11 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
-      order.valid_payment?
+      unless order.online_pay_type == :kuaiqian
+        if order.valid_payment?
+          order.update_attribute(:online_pay_type, :account)
+        end
+      end
     end
 
     before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
@@ -244,7 +253,8 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_destroy
     if operator_state
-      FayeClient.send("/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
+      # FayeClient.send("/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
+      CaramalClient.publish(seller.user.try(:login), "/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
     else
       realtime_dispose({type: "destroy" ,values: as_json})
     end
@@ -357,7 +367,7 @@ class OrderTransaction < ActiveRecord::Base
       :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
   end
 
-#根据订单的状态决定跳转的页面
+  #根据订单的状态决定跳转的页面
   def location_url
      location_url = if self.operator_state == true
       "/shops/#{seller.name}/admins/transactions/#{id}"
@@ -386,7 +396,7 @@ class OrderTransaction < ActiveRecord::Base
     events = %w(back delivered)
     filter_fire_event!(events, event)
     notifications.create!(
-      :user_id => seller.user.id,
+      :user_id => seller.user.try(:id),
       :mentionable_user_id => buyer.id,
       :url => "/people/#{buyer.login}/transactions##{id}",
       :body => "您的订单#{number}卖家已经"+I18n.t("order_states.seller.#{state}"))
@@ -395,6 +405,11 @@ class OrderTransaction < ActiveRecord::Base
   def refund_items
     OrderRefundItem.where(
       :order_refund_id => refunds.map{|item| item.id})
+  end
+
+  def online_paid
+    self.update_attribute(:online_pay_type, :kuaiqian)
+    self.buyer_fire_event!(:paid)
   end
 
   #付款
@@ -656,7 +671,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def faye_send(channel, options)
-    FayeClient.send(channel, options)
+    # FayeClient.send(channel, options)
+    CaramalClient.publish(seller.user.try(:login), channel, options)
   end
 
   def filter_fire_event!(events = [], event)

@@ -5,11 +5,13 @@
   <% if @circle.is_manage?(current_user.id) %>
     <div class="span1">
       <a href='#mySetting' data-toggle="modal" data-placement="top" title="" data-original-title="设置" class='setting'>
-        <h4><span class='icon-cog'></span></h4>
+        <h4>
+          <span class='icon-cog'></span>
+        </h4>
       </a>
     </div>
     <div>
-      <%= render "setting", circle: @circle %>
+      <%=render "setting", circle: @circle %>
     </div>
   <% end %>
   <div class='owner' data-value-id='<%=@circle.owner_id %>'>
@@ -24,6 +26,14 @@
       </a>
     </span>
 
+    <div class="btn-group pull-right">
+      <% if current_user.present? && !@circle.is_member?(current_user) %>
+        <button class="btn btn-primary join">申请加入</button>
+      <% else %>
+        <button class="btn btn-success">已经加入</button>
+      <% end %>
+    </div>
+    <br />
     <div class="btn-group following">
       <button class="btn btn-primary follows_count"><%=@circle.owner.followers.count %></button>
       <% if @circle.owner.is_follower?(current_user.id) %>
@@ -44,9 +54,13 @@
     </p>
   </div>
   <% if @circle.is_manage?(current_user.id) %>
-  <div>
-    <input type='button' value="邀请更多人" class='btn invite' />
-    <input type='button' value="分享此圈" class='btn shared' />
+  <div class='bottom_bar'>
+    <a href='#invite_dialog' data-toggle="modal" data-placement="top" title="" data-original-title="邀请更多人" class='btn invite'>
+      邀请更多人</a>
+    <!-- <input type='button' value="分享此圈" class='btn shared' /> -->
+    <a href="<%= all_circles_person_communities_path(current_user) %>" data-toggle="modal" class="btn" data-target="#SelectCircle">分享此圈</a>
+    <%= render "/communities/invite/new" %>
+    <%= render "/communities/circles/select_circle_to_share"%>
   </div>
   <% end %>
 </div>

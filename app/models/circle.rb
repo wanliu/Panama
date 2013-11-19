@@ -20,6 +20,7 @@ class Circle < ActiveRecord::Base
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
   has_many :notice, dependent: :destroy, class_name: "CommunityNotification"
+  has_many :invite_users, as: :targeable, dependent: :destroy
 
   belongs_to :city
   belongs_to :setting, class_name: "CircleSetting"
@@ -31,6 +32,10 @@ class Circle < ActiveRecord::Base
 
   after_create do
     generate_manage
+  end
+
+  def all_detail
+    "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
   end
 
   def apply_join_notice(sender)
@@ -74,7 +79,16 @@ class Circle < ActiveRecord::Base
   end
 
   def limit_join?
-    setting.present? && (setting.limit_join || setting.limit_city)
+    setting.present? && setting.limit_join
+  end
+
+  def limit_city?
+    setting.present? && setting.limit_city
+  end
+
+  def is_limit_city?(user)
+    user = user.is_a?(User) ? user : User.find(user)
+    city == user.area
   end
 
   def address
@@ -97,6 +111,16 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
+  end
+
+  def is_owner_people?(user)
+    user_id = user.is_a?(User) ? user.id : user
+    owner_id = owner.is_a?(Shop) ? owner.user.id : owner.id 
+    if user_id == owner_id 
+      return true
+    else
+      return false
+    end  
   end
 
   def is_manage?(user)

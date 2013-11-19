@@ -17,7 +17,6 @@ class CompletingPeopleController < Wicked::WizardController
       save_industry_type
     when :authenticate_license
       save_license
-    # when :waiting_audit
     end
   end
 
@@ -62,7 +61,6 @@ class CompletingPeopleController < Wicked::WizardController
       @user_auth = UserAuth.new(params[:user_auth].merge(user_id: @user_checking.user.id))
       if @user_auth.valid?
         @user_checking.update_attributes(@user_auth.update_options)
-        @user_checking.owner = @user_checking.user
         @user_checking.save
         current_user.services << Service.buyer
 

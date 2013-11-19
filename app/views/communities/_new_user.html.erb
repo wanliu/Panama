@@ -1,13 +1,22 @@
 <div class='newer_panel newer widget'>
 	<div class="title row-fluid">
-		<div class="span4"><span style="font-size:25px;font-weight:bold;">新入驻成员</span></div>
-		<div class="span8"><%= render "find_people" %></div>
+		<span style="font-size:25px;font-weight:bold;">新入驻成员</span>
+	</div>
+	<div class="row-fluid">
+		<div class="find_people_panel pull-right">
+			<span class="tips">请输入用户名、商店名、email <span>
+			<input type="text" class="people_input_info"/>
+			<button id="find_people" class="btn find_people">找人</button>
+		</div>
 	</div>
 	<div class="hot_region newer row-fluid">
 		<strong>热门城市: </strong>
 		<span></span>
 	</div>
 	<%#= render "new_address" , locals: {:id => "new_user"} %>
+	<div class='alert hide find_people_tip'>
+    没有找到符合要求的用户或商店
+  </div>
 	<div class="wrapper row-fluid">
 		<% if  @new_users.length > 0 %>
 			<% @new_users.each do |new_user| %>
@@ -22,8 +31,8 @@
 						<% else %>
 							<%= render :partial =>"hover_seller_template", :locals => { new_user: new_user} %>
 							<span class="label label-important pull-right">卖家</span>
-							<a href="/shops/<%= new_user.try(:shop_name) %>">
-								<img src="<%= new_user.shop_photos.icon %>" class="user_icon" />
+							<a href="/shops/<%= new_user.user.shop.name %>">
+								<img src="<%= new_user.user.shop.photos.icon %>" class="user_icon" />
 							</a>
 						<% end %>
 					</div>
@@ -33,7 +42,7 @@
 							<% if new_user.service_id == 1 %>
 								<a href="/people/<%= new_user.try(:user).try(:login) %>" class="title"><%= new_user.try(:user).try(:login) %></a>
 							<% else %>
-								<a href="/shops/<%= new_user.try(:shop_name) %>" class="title"><%= new_user.try(:shop_name) %></a>
+								<a href="/shops/<%= new_user.user.shop.name %>" class="title"><%= new_user.user.shop.name %></a>
 							<% end %>
 						</div>
 						<div class="industry"> 
@@ -52,14 +61,17 @@
 <script type="text/javascript">
 	$(function(){
 		$(".user_info").live("mouseenter",function(e){
+			$(".user_base_info", this).each(function(){
+				$(this).hide();
+			})
 			$top = e.pageY - $(document).scrollTop();
 			$left = e.pageX - $(document).scrollLeft();
-			$(".user_base_info", this).css('top', $top - 5);
-            $(".user_base_info", this).css('left', $left + 5);
-			$(".user_base_info", this).fadeIn();
+			$(".user_base_info", this).css('top', $top - 10);
+            $(".user_base_info", this).css('left', $left + 10);
+			$(".user_base_info", this).show();
 		})
 		$(".user_info").live("mouseleave",function(e){
-			$(".user_base_info", this).fadeOut();
+			$(".user_base_info", this).hide();
 		})
 	})
 </script>

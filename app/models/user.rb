@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_one :photo, :as => :imageable, :class_name => "Image"
   has_one :shop
   has_one :shop_user
-  has_one :user_checking, :as => :owner
+  has_one :user_checking
 
   has_many :transactions,
            class_name: "OrderTransaction",
@@ -46,8 +46,16 @@ class User < ActiveRecord::Base
 
   after_initialize :init_user_info
 
+  def generate_token
+    self.im_token = SecureRandom.hex
+  end
+
   def city
     user_checking.try(:address).try(:city)
+  end
+
+  def area
+    user_checking.try(:address).try(:area)
   end
 
   def recharge(money, owner, decription = "")
@@ -75,7 +83,8 @@ class User < ActiveRecord::Base
 
   def connect
     RedisClient.redis.set(redis_key, true)
-    FayeClient.send("/chat/friend/connect/#{id}", id)
+    # FayeClient.send("/chat/friend/connect/#{id}", id)
+    CaramalClient.publish(login, "/chat/friend/connect/#{id}", id)
   end
 
   def connect_state
@@ -172,6 +181,12 @@ class User < ActiveRecord::Base
   def circle_all
     circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
     Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+  end
+
+  #加入的所有的圈子
+  def all_circles
+    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
+    Circle.where(:id => circle_ids)
   end
 
   def init_user_info

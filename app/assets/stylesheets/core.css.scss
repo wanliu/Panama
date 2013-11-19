@@ -112,11 +112,11 @@ ul {
 	margin-left: 150px;
 	margin-top: 20px;
 	.controls {
-		margin-left: 380px;
+		margin-left: 280px;
 	}
 	.control-label {
-		width: 300px;
-		margin-left: 65px;
+		width: 270px;
+		margin-left: 0px;
 	}
 }
 
@@ -237,6 +237,13 @@ ul {
 		@include border-radius(1px);
 		@include transparent(rgb(51,51,51),0.4);
 		/*background: url(search-white.png) 5px 5px no-repeat rgba(51,51,51,0.4);*/
+	}
+
+	.input-prepend.input-append{
+		.typeahead.dropdown-menu{
+			width: 100%;
+			margin-top: 1px;
+		}
 	}
 
 	.search-query {
@@ -859,7 +866,7 @@ ul {
 	@include border-radius(1px);
 }
 
-.modal-body {
+.modal-body, .nav-tabls-wrapper {
 	.nav-tabs {
 		li {
 			a {
@@ -1098,6 +1105,7 @@ h2 small {
 
 	.lv2_categories {
 		top: 0;
+		left: 164px;
 		height: auto;
 		display: none;
 		min-width: 752px;
@@ -1202,5 +1210,36 @@ h2 small {
 		top: 0px;
 		@include transparent(rgb(51,51,51), 0.4);
 		z-index: -1;
+	}
+}
+
+.error{
+	input[type=text], textarea{
+		border: 1px solid #b94a48;
+	}
+}
+
+.payments-plat{
+	list-style: none;
+
+	.payment{
+		float: left;
+		display: inline-block;
+		background: white;
+		padding: 8px;
+		position: relative;
+
+		a{
+			display: inline-block;
+
+			input[type=radio]{
+				position: absolute;
+				top: 8px;
+			}
+
+			img{
+				margin-left: 20px;
+			}
+		}
 	}
 }

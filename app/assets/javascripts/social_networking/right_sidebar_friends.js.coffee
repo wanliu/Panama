@@ -18,7 +18,8 @@ class FriendsContainerView extends RealTimeContainerView
 		@default_view = view
 
 	bind_items: () ->
-		@client = Realtime.client(@realtime_url)
+		# @client = Realtime.client(@realtime_url)
+		@client = window.clients
 		@client.receive_message @token, (message) =>
 			@process_message message
 
@@ -65,10 +66,11 @@ class FollowersView extends Backbone.View
 			@addOne(model)
 
 	addOne: (model) ->
-		@$("h5 .num").html(@collection.length)
-		friend_view = new FriendView({ model: model, parent_view: @ })
-		model.view  = friend_view
-		@$(".users-list").prepend(friend_view.render().el)
+		if model.attributes.follow_type == "User"
+			@$("h5 .num").html(@collection.length)
+			friend_view = new FriendView({ model: model, parent_view: @ })
+			model.view  = friend_view
+			@$(".users-list").prepend(friend_view.render().el)
 
 	process: (message) ->
 		exist_model = @find_exist(message)
@@ -171,7 +173,7 @@ class FriendView extends Backbone.View
 		$("body").append(@$iframe)
 
 		friend_id = @model.get('follow_id') || @model.get("id")
-		@$iframe.children("iframe").attr("src", "/chat_messages/dialogue/generate_and_display/#{ friend_id }")
+		@$iframe.children("iframe").attr("src", "/chat_messages/dialogue/generate_and_display/#{friend_id}")
 
 	template: _.template(
 		"<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />

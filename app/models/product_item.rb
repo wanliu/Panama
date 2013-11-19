@@ -74,7 +74,7 @@ class ProductItem < ActiveRecord::Base
 
   validate :valid_buyer_self_product?
 
-  before_save do
+  after_initialize do
     update_total
   end
 

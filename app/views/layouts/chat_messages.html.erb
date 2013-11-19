@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <%= html_tag :class => "no-js" %>
   <head>
-    <title></title>
+    <title> </title>
+    <script type="text/javascript">
+      this.clients = window.parent.clients;
+    </script>
     <%= stylesheet_link_tag :another_bootstrap, :chat %>
-    <%= javascript_include_tag faye_server_uri + "/client.js" %>
     <%= javascript_include_tag :chat %>
     <style>
       html,body{
@@ -16,7 +18,6 @@
   </head>
   <body>
     <%=yield %>
-  <%= render "baidu_analyzer" %>
-    
+    <%= render "baidu_analyzer" %>
   </body>
 </html>

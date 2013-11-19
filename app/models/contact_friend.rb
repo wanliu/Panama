@@ -26,7 +26,8 @@ class ContactFriend < ActiveRecord::Base
       cfriend.update_attribute(:last_contact_date, DateTime.now)
     end
     if cfriend.valid?
-      FayeClient.send("/chat/contact_friends/#{cfriend.user.im_token}",cfriend.as_json)
+      # FayeClient.send("/chat/contact_friends/#{cfriend.user.im_token}", cfriend.as_json)
+      CaramalClient.publish(cfriend.user.login, "/chat/contact_friends/#{cfriend.user.im_token}", cfriend.as_json)
     end
     cfriend
   end

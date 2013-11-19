@@ -1,5 +1,6 @@
 class Communities::CategoriesController < Communities::BaseController
   before_filter :validate_manager, :only => [:create, :update, :destroy]
+  before_filter :require_member
 
   def index
   end

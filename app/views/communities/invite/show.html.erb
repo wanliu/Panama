@@ -1,0 +1,20 @@
+<div class='row-fluid invite-user'>
+  <div class='span12 widget'>
+    <div>
+      <%=link_to person_path(@invite.send_user) do  %>
+      <img src="<%=@invite.send_user.photos.icon %>" />
+      <%=@invite.send_user.login %>
+      <% end %>
+      邀请你加入商圈!
+      <% if @invite.behavior == :invalid %>
+      <span>
+        <%= link_to "同意", agree_join_community_invite_path(@circle, @invite), :class => 'btn btn-primary agree', :remote => true, :method => :POST %>
+        <%= link_to "拒绝", refuse_join_community_invite_path(@circle, @invite), :class => 'btn refuse', :remote => true, :method => :POST %>
+      </span>
+      <% end %>
+    </div>
+    <p>
+      对方留言: <%=raw @invite.body %>
+    </p>
+  </div>
+</div>

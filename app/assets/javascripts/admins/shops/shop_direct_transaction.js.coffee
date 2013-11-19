@@ -25,6 +25,7 @@ class window.ShopDirectTransactionView extends Backbone.View
     @$messages.slideToggle()
 
   realtime_load: () ->
-    @client = Realtime.client(@realtime_url)
+    # @client = Realtime.client(@realtime_url)
+    @client = window.clients
     @client.subscribe "/DirectTransaction/#{@direct_transaction_id}/#{@shop.token}/#{@token}/destroy", () =>
       @remove()

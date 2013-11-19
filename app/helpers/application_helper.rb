@@ -43,6 +43,10 @@ module ApplicationHelper
     end
   end
 
+  def prefix_path
+    YAML::load_file("config/prefix_path.yml")["url"]
+  end
+
   def current_shop
     @current_shop = Shop.find_by(:name => params[:shop_id]) unless params[:shop_id].blank?
     if @current_shop.user != current_user &&
@@ -62,7 +66,7 @@ module ApplicationHelper
   end
 
   def my_cart
-    current_user.cart
+    current_user.try(:cart)
   end
 
   def accounts_provider_url
@@ -106,6 +110,12 @@ module ApplicationHelper
   def link_to_logout
     link_to logout_path, :method => :delete do
       icon(:signout) + ' 注销登录'
+    end
+  end
+
+  def link_to_community
+    link_to person_communities_path(current_user)  do
+      icon(:group) + " 我的商圈"
     end
   end
 
@@ -300,7 +310,7 @@ module ApplicationHelper
   def city_by_ip(client_ip)
     client_ip = "124.228.76.190" unless Rails.env.production?
     address = IPSearch.ip_query(client_ip)
-    if address.blank?
+    if address.blank? || (address["status"] == 1)
       City.find_by_name("衡阳市")
     else
       address_detail = address["content"]["address_detail"]

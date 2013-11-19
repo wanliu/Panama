@@ -1,9 +1,13 @@
 #encoding: utf-8
 class Communities::TopicsController < Communities::BaseController
+  before_filter :require_member
 
   def create
-    @topic = @circle.topics.create(params[:topic].merge({
-      :user => current_user}))
+    attachment_ids = params[:topic][:attachment_ids]
+    params[:topic].delete(:attachment_ids)
+    @topic = @circle.topics.create(params[:topic].merge({ :user => current_user }))
+    @topic.attachments = attachment_ids.map do |k, v| Attachment.find(v.to_i) end      
+    
     respond_to do |format|
       if @topic.valid?
         format.json{ render :json => @topic.as_json(

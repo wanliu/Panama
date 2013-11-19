@@ -17,7 +17,6 @@
 #= require admins/shops/shop_transaction_card
 #= require admins/shops/transaction_dispose
 #= require lib/transaction_bubbling
-#= require lib/chose-friend
 #= require lib/attachment_upload
 #= require lib/hogan
 #= require lib/state_progress

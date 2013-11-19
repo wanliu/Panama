@@ -1,6 +1,5 @@
 #= require lib/state-view
 #= require lib/kkcountdown
-#= require lib/realtime_client
 #= require lib/notify
 
 exports = window || @
@@ -23,8 +22,9 @@ class TransactionCardBase extends AbstructStateView
 
     @rt_options = @options['realtime']
     if @rt_options.url?
-      @realtime = Realtime.client(@rt_options.url)
-      @realtime.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
+      # @realtime = Realtime.client(@rt_options.url)
+      @client = window.clients
+      @client.monitor_event @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
     super
     # @$el.bind('click', @activeThis)
 

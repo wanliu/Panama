@@ -1,7 +1,8 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require core_extend/core
+//= require lib/core_extend
+//= require lib/realtime_client
 //= require lib/jquery.raty
 //= require lib/jquery.resize
 //= require lib/underscore
@@ -13,7 +14,6 @@
 //= require lib/postmessage
 //= require lib/dnd
 //= require wanliu/ajax_auth_client
-//= require lib/realtime_client
 //= require lib/image_natural_size
 //= require lib/JNMagnifier
 //= require lib/jquery.raty
@@ -46,7 +46,6 @@
 //= require notification
 //= require upload_photo
 //= require lib/circle
-//= require lib/caramal-client
 
 root = window || this;
 
@@ -92,10 +91,8 @@ $.ajaxSetup({
 })
 
 $(function(){
-
   $("body").on("hover", "[data-toggle=tooltip]", function(event){
     tip = $(event.currentTarget)
     tip.tooltip("show")
   })
-
 })

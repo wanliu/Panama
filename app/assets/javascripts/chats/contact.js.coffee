@@ -35,7 +35,8 @@ class ChatContact extends Backbone.View
     @connect()
 
   bind_relatime: () ->
-    @client = Realtime.client(@faye_url)
+    # @client = Realtime.client(@faye_url)
+    @client = window.clients
 
     @client.subscribe @contact_show_url(), (friend) =>
       @cfv_list.add(friend)

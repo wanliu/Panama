@@ -1,0 +1,32 @@
+<% if @circle.is_manage?(current_user) %>
+<div id="invite_dialog" class="dialog-invite modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>邀请用户加入</h3>
+  </div>
+  <form>
+  <div class="modal-body main-show">
+    <div class='row-fluid'>
+      <div class='span2 title'>
+        <img class='img-circle' src="<%=current_user.photos.icon %>" />
+        <%=current_user.login %>
+      </div>
+      <div class='span10'>
+        <textarea placeholder='留言对方' name='body' class='span12 body'></textarea>
+      </div>
+    </div>
+    <div class='row-fluid user'>
+      <div class='span2 title'>
+        用户
+      </div>
+      <div class='span10'>
+        <input type="text" name='login' class='login' />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <input type='submit' value="邀请" class='btn btn-primary' />
+  </div>
+  </form>
+</div>
+<% end %>

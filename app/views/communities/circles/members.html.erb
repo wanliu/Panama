@@ -17,11 +17,18 @@
       <div class="span7 info">
         <div class="member_login">
           <a href="<%= person_path(member.user) %>">
-          <%=member.user.login %>
+            <%=member.user.login %>
           </a>
+          <% if @circle.is_manage?(current_user) %>
+            <%=render :partial => "/communities/circles/circle_authority", :locals => {member: member, circle: @circle } %>
+          <% end %>
         </div>
         <div>
-           <%=member.identity_title %>
+          <% if @circle.is_owner_people?(member.user) %>
+            群主
+          <% else %>
+            <div class="identy_name"><%=member.identity_title %></div>
+          <% end %>
         </div>
         <div>
           <%if current_user.id != member.user_id %>
@@ -47,6 +54,10 @@
         login: "<%=current_user.login %>",
         el: $(elem)
       })
+    })
+    new MemberList({
+      el: $(".members"),
+      circle_id: "<%=@circle.id %>"
     })
   })
 </script>

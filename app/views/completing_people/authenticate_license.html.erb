@@ -32,17 +32,17 @@
 						<% address = @user_checking.address || Address.new %>
 						<div data-id="<%= address.id %>" class="control-group string required address">
 							<div class="hide">
-								<%= f.input :address_id, input_html: { value: address.id }  %>
+								<%#= f.input :address_id, input_html: { value: address.id }  %>
 							</div>
 							<%= f.label :address_id, wrapper: :inline_label %>
 							<div class="controls">
 								<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
 								<a class="btn" data-toggle="modal" href="<%= edit_address_completing_person_path %>" data-target="#edit_address">编辑</a>
 
-								<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editAddressLabel" aria-hidden="true">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										<h3 id="myModalLabel">编辑地址</h3>
+										<h3 id="editAddressLabel">编辑地址</h3>
 									</div>
 									<div class="modal-body">
 
@@ -56,10 +56,11 @@
 						</div>
 					</div>
 				</div>
+				<div class='pull-right'>*表示必填项,请认真填写有效信息</div>
 				<br>
 				<div class="row-fluid">
 					<div class="pull-left">
-						<%= button_to "跳过", { action: :skip }, class: "btn btn-primary" %>
+						<%= button_to "跳过", { action: :skip }, class: "btn-link btn-primary" %>
 					</div>
 					<div class="pull-right">
 						<%#= link_to "上一步", previous_wizard_path, class: 'btn btn-primary' %>
