@@ -5,7 +5,7 @@ root = window || @
 
 class root.CircleListView extends Backbone.View
   events:
-    "click .circle-description .join" : "join_circle"
+    "click .following .join" : "join_circle"
 
   initialize: (option) ->
     _.extend(@, option)
@@ -46,4 +46,4 @@ class root.CircleListView extends Backbone.View
       success: () =>
         window.location.href = "/communities/#{@circle_id}/circles"
     )
-    
+
