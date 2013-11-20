@@ -18,11 +18,10 @@ class TopBar extends Backbone.View
       highlighter: (item) ->
         if _.include(["ask_buy", "activity"], item._type)
           item.name = item.title
-
         return item.name
 
-      select: (item)  ->
-        return item.name
+      select: (item)  =>
+        @enterSearch()
     })
 
   toggleFriends: () ->
@@ -31,7 +30,7 @@ class TopBar extends Backbone.View
     $(window).trigger('resize')
     false
 
-  enterSearch: (e) ->
+  enterSearch: () ->
     query = @$("[type=search]").val().trim()
     $(window).trigger('reset_search', {title: query})
     false
