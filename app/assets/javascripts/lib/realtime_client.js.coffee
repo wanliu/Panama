@@ -20,6 +20,21 @@ class root.Realtime
       console.error("disconnect: " + error)
       alert("disconnect: " + error) if error      
     )
+    @on('connecting', () =>
+      console.log('connecting')
+    )
+    @on('connect_failed', () =>
+      console.log('connect_failed')
+    )
+    @on('error', (err) =>
+      console.log('error:' + err)
+    )
+    @on('reconnect', () ->
+      console.log('reconnect') 
+    )
+    @on('reconnecting', () ->
+      console.log('reconnecting')
+    )
 
   connect: () ->
     @socket = io.connect(@url, @options)
