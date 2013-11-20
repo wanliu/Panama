@@ -29,6 +29,7 @@ class root.Realtime
 
   connect: () ->
     @socket = Caramal.connect(@url, @options)
+    Caramal.MessageManager.setClient(@socket)
 
   on: (event, callback) ->
     @socket.on(event, callback)

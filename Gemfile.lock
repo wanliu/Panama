@@ -362,7 +362,7 @@ GEM
     onfire (0.2.0)
     origin (1.1.0)
     orm_adapter (0.5.0)
-    passenger (4.0.24)
+    passenger (4.0.25)
       daemon_controller (>= 1.1.0)
       rack
       rake (>= 0.8.1)
@@ -562,7 +562,7 @@ DEPENDENCIES
   nested_form
   omniauth (~> 1.1.1)
   omniauth-oauth2 (~> 1.1.1)
-  omniauth-wanliu (~> 0.1.1)!
+  omniauth-wanliu (= 0.1.1)!
   passenger
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.8)

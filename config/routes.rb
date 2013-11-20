@@ -121,6 +121,7 @@ Panama::Application.routes.draw do
         post "mark_as_read", :to => "people/transactions#mark_as_read"
         get :kuaiqian_receive
         match 'kuaiqian_payment', :via => [:get, :post]
+        match 'test_payment', :via => [:get, :post]
       end
 
       collection do
