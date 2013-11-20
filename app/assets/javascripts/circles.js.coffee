@@ -5,7 +5,7 @@ root = window || @
 
 class root.CircleListView extends Backbone.View
   events:
-    "click .following .join" : "join_circle"
+    "click .circle-description .join" : "join_circle"
 
   initialize: (option) ->
     _.extend(@, option)

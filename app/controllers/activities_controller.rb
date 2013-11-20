@@ -52,7 +52,10 @@ class ActivitiesController < ApplicationController
       @activity.likes << current_user
     rescue ActiveRecord::RecordInvalid
     end
-    render :text => :OK
+    # render :text => :OK
+    respond_to do |format|
+      format.json{ render json: @activity.as_json }
+    end
   end
 
   def unlike
@@ -61,7 +64,10 @@ class ActivitiesController < ApplicationController
       @activity.likes.delete(current_user)
     rescue ActiveRecord::RecordNotFound
     end
-    render :text => :OK
+    # render :text => :OK
+    respond_to do |format|
+      format.json{ render json: @activity }
+    end
   end
 
   def to_cart

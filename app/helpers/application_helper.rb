@@ -43,6 +43,10 @@ module ApplicationHelper
     end
   end
 
+  def prefix_path
+    YAML::load_file("config/prefix_path.yml")["url"]
+  end
+
   def current_shop
     @current_shop = Shop.find_by(:name => params[:shop_id]) unless params[:shop_id].blank?
     if @current_shop.user != current_user &&
@@ -62,7 +66,11 @@ module ApplicationHelper
   end
 
   def my_cart
-    current_user.cart
+    current_user.try(:cart)
+  end
+
+  def my_likes
+    current_user.liked_activities
   end
 
   def accounts_provider_url

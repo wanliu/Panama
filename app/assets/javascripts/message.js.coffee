@@ -53,10 +53,10 @@ class MessageView extends Backbone.View
     @$el
 
 class SendMessageView extends Backbone.View
-  events: {
-    "submit form" : "send_message",
-    "keyup textarea[name=content]" : 'fastKey'
-  }
+  events: 
+    "submit form"                  : "send_message"
+    "keyup textarea[name=content]" : "fastKey"
+  
   initialize: (options) ->
     @model = options.model
     @$form = @$(">form")

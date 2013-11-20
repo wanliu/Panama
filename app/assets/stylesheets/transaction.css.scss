@@ -30,9 +30,8 @@
 
 			.bank_card{
 				float: left;
-				margin-right: 0px;
-				margin-bottom: 20px;
 				position: relative;
+				margin:0px 0px 20px 6px;
 
 				.cart {
 					width: 100px;
@@ -80,6 +79,12 @@
 					font-size: 20px;
 					color: #999999;
 					float: right;
+				}
+
+				.name{
+					font-size: 30px;
+					width: 200px; 
+					display: inline;
 				}
 
 				.close{
@@ -221,12 +226,6 @@
 		margin-right: 5px;
 		padding: 5px;
 		background: $white;
-		// background: $grayLighter;
-		/*display: none;*/
-		// @include transparent(rgb(51, 51, 51), 0.4);
-		// border-left: 1px solid $tableBorder;
-		// border-right: 1px solid $tableBorder;
-		// border-bottom: 1px solid $tableBorder;
 
 		iframe{
 			border: none;
@@ -285,4 +284,14 @@
 	margin-bottom: 40px;
 }
 
+.transaction{
+	.nav-tabls-wrapper{
+		.paid-next{
+			margin-top: 15px;
+		}
 
+		.tab-content{
+			margin-bottom: 10px;
+		}
+	}
+}
