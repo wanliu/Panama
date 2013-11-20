@@ -10,7 +10,7 @@ class root.Realtime
   constructor: (options) ->
     _.extend(@, options)
     @url = @server_uri + '?token=' + @token
-    @client = @connect() if @server_uri?
+    @connect()
     @events = {}
 
     @on('connect', () =>
@@ -22,20 +22,19 @@ class root.Realtime
     )
 
   connect: () ->
-    @socket = Caramal.connect(@url, @options)
+    @client = Caramal.connect(@url, @options)
 
   on: (event, callback) ->
-    @socket.on(event, callback)
+    @client.on(event, callback)
 
   subscribe: (channel, callback) ->
     @on(channel, callback)
 
   unsubscribe: (channel) ->
-    @socket.removeListener(channel)
+    @client.removeListener(channel)
 
   emit: (event, data, callback) ->
-    @socket.emit(event, data, callback)
-
+    @client.emit(event, data, callback)
 
   monitor_people_notification: (im_token, callback = (data) -> ) ->
     @subscribe("/notification/#{im_token}", (data) ->
