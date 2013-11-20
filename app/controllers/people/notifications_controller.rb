@@ -39,10 +39,26 @@ class People::NotificationsController < People::BaseController
   def unreads
     @notifications = Notification.unreads
       .where(:mentionable_user_id => @people.id)
-      .order(updated_at: :asc)
+      .order(updated_at: :desc)
       .includes(:targeable)
+    if params[:offset].present?
+      @notifications = @notifications.offset(params[:offset])
+    end
+
+    if params[:limit].present?
+      @notifications = @notifications.limit(params[:limit])
+    end
+
     respond_to do |format|
       format.json { render json: @notifications.format_unreads(@notifications) }
+    end
+  end
+
+  def unread_count
+    @count = Notification.unreads
+      .where(:mentionable_user_id => @people.id).count
+    respond_to do |format|
+      format.json{ render json: {count: @count} }
     end
   end
 end

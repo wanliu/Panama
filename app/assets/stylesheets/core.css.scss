@@ -1219,6 +1219,21 @@ h2 small {
 	}
 }
 
+.disconnect { 
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);
+  filter: url(/assets/grayscale.svg#greyscale); /* Firefox 4+ */
+  filter: gray; /* IE 6-9 */
+}
+
+.disconnect_message{
+	text-align: center;
+	background: #C99C0D;
+	color: black;
+}
 .payments-plat{
 	list-style: none;
 

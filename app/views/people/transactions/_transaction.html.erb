@@ -28,11 +28,6 @@
                   <span class="display-state"></span>
                 </small>
               </div>
-              <div class="state-progress">
-                <% if state != "close" %>
-                  <%=render "people/transactions/funcat/progress", transaction: transaction %>
-                <% end %>
-              </div>
             </div>
           </div>
         </div>
@@ -40,7 +35,7 @@
           <%= render state, transaction: transaction, people: people %>
         </div>
       </div>
-      <div class='span5'>
+      <div class='span5 chat_wrapper'>
         <div class="transaction-footer">
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
           <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>" style="frameborder: 0;">

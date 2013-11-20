@@ -14,27 +14,34 @@ class root.Realtime
     @events = {}
 
     @on('connect', () =>
+      window.$(".user_icon").removeClass("disconnect")
       console.log("connected.")
     )
     @on('disconnect', (error) =>
       console.error("disconnect: " + error)
-      alert("disconnect: " + error) if error
+      @disconnect_tip()
+      @disconnect_state()
     )
 
+  disconnect_tip: () ->
+    window.$(".user_icon").addClass("disconnect")
+    $("<div class='disconnect_message'>此页面已经失效,如果是想激活本页面，请点击<a href='javascript:window.location.reload()'>刷新</a>页面</div>").insertBefore("body")
+
   connect: () ->
-    @client = Caramal.connect(@url, @options)
+    @socket = Caramal.connect(@url, @options)
+    Caramal.MessageManager.setClient(@socket)
 
   on: (event, callback) ->
-    @client.on(event, callback)
+    @socket.on(event, callback)
 
   subscribe: (channel, callback) ->
     @on(channel, callback)
 
   unsubscribe: (channel) ->
-    @client.removeListener(channel)
+    @socket.removeListener(channel)
 
   emit: (event, data, callback) ->
-    @client.emit(event, data, callback)
+    @socket.emit(event, data, callback)
 
   monitor_people_notification: (im_token, callback = (data) -> ) ->
     @subscribe("/notification/#{im_token}", (data) ->
@@ -54,4 +61,10 @@ class root.Realtime
     @subscribe("/events/#{token}/#{event_name}", (data) ->
       callback(data)
     )
+
+  disconnect_state: () ->
+    # 订单聊天窗口
+    $("iframe").contents().find("body [data-realtime-state]").each () ->
+      $(@).attr("data-realtime-state", "disconnect")
+      $(this).tooltip({'trigger':'focus', 'title': '此页面已经失效，请刷新'})
 

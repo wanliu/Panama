@@ -92,7 +92,6 @@ class People::TransactionsController < People::BaseController
       :product_num => @transaction.items_count,
       :order_time => Time.now.strftime("%Y%m%d%H%M%S")
     }
-    options[:order_amount] = 1 if Rails.env == "development"
     options.merge!(:pay_type => "10",
       :bank_id => params[:bank]) if params[:bank].present?
     pay_ment = KuaiQian::PayMent.request(options)
@@ -111,6 +110,14 @@ class People::TransactionsController < People::BaseController
       "#{paid_receive_url}?pay_msg=error"
     end
     render :xml => {:result => "1", :redirecturl => url }
+  end
+
+  def test_payment
+     @transaction = current_order.find(params[:id])
+    if payment_mode_test?
+      @transaction.online_paid
+    end
+    redirect_to "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
   end
 
   def base_info
@@ -239,9 +246,8 @@ class People::TransactionsController < People::BaseController
   def unread_messages
     authorize! :index, OrderTransaction
     @messages = ChatMessage.select("chat_messages.*, cm.count")
-               .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count
-                                      from chat_messages where `read`=0 group by owner_id, owner_type) as cm
-                                      on chat_messages.id=cm.id").where("chat_messages.receive_user_id=?", @people.id)
+                           .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count from chat_messages where `read`=0 group by owner_id, owner_type) as cm on chat_messages.id=cm.id")
+                           .where("chat_messages.receive_user_id=?", @people.id)
 
     _messages = @messages.map do |m|
       attrs = m.attributes
@@ -329,10 +335,10 @@ class People::TransactionsController < People::BaseController
   end
 
   def paid_receive_url
-    "#{prefix_path}#{person_transaction_path(@people, @transaction)}"
+    "#{test_config[:prefix_url]}#{person_transaction_path(@people, @transaction)}"
   end
 
   def paid_send_url
-    "#{prefix_path}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
+    "#{test_config[:prefix_url]}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
   end
 end

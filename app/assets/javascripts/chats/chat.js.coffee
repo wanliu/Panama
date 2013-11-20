@@ -147,10 +147,6 @@ class ChatView extends Backbone.View
 
   connect_faye_server: () ->
     @client = window.clients
-    # Caramal.MessageManager.setClient(window.clients.client)
-    # chat = Caramal.Chat.create(@friend.login)
-    # chat.open()
-    # chat.onMessage (data) =>
     @client.receive_message @user.token, (message) =>
       model = @msgs_view.add(data.msg)
       if @display_state

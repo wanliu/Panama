@@ -41,7 +41,7 @@ class DirectTransaction < ActiveRecord::Base
     url = if self.buyer == current_user
       "/people/#{current_user.login}/transactions#direct#{self.id}"
     else
-      "/shops/#{ self.seller.name }/admins/pending#direct#{self.id}"
+      "/shops/#{self.seller.name}/admins/pending#direct#{self.id}"
     end
   end
 
@@ -79,7 +79,7 @@ class DirectTransaction < ActiveRecord::Base
 
   def faye_send(url, options)
     # FayeClient.send(url, options)
-    CaramalClient.publish(seller.login, url, options)
+    CaramalClient.publish(seller.user.login, url, options)
   end
 
   def number
