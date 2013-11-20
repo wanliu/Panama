@@ -1,9 +1,8 @@
 <div class='community'>
-  <%#= render :partial => "following" %>
+  <%= render :partial => "following" %>
   <div class='row-fluid'>
     <div class='span7'>
       <div class='left'>
-        <% if @circle.is_member?(current_user) %>
         <div class='widget toolbar'>
           <form class='create_topic'>
             <textarea class='span12' name='content' placeholder='分享新鲜事'></textarea>
@@ -44,6 +43,8 @@
             </div>
           </form>
         </div>
+        <% unless @circle.is_member?(current_user) %>
+        <div data-toggle="tooltip" data-placement="top" title="" data-original-title="请先加入商圈" class='bgtoolbar'></div>
         <% end %>
         <div class='topics'>
         </div>
@@ -85,6 +86,7 @@
       el: $(".owner")
     })
 
+    <%if @circle.is_member?(current_user) %>
     new AttachmentUpload({
       el: $(".attachment-list.topic-attachment"),
       limit: 5,
@@ -97,5 +99,6 @@
         template: "<%=j render '/circles/upload_template' %>"
       }
     })
+    <% end %>
   })
 </script>

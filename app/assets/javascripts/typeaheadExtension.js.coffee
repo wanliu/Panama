@@ -43,7 +43,7 @@ class TypeaheadExtension
   updater: (value) ->
     item = @typeh.$menu.find('.active').data("value")
     @select(item)
-    return item[@field]
+    return item[@field] || item.name
 
   render: (items)->
     items = $(items).map((i, item) =>

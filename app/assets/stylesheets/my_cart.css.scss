@@ -23,7 +23,7 @@
 		display: inline-block;
 	}
 
-	.cart_table {
+	.like_list, .cart_table {
 		width: 280px;
 		line-height: 40px;
 	}
@@ -52,7 +52,39 @@
 	.cart_bottom {
 		height: 30px;
 		text-align: right;
-		margin-bottom: 20px;
+		/*margin-bottom: 20px;*/
 		padding-right: 30px;
+	}
+
+	.like_list{
+		margin-left: 8px;
+		.header{ 
+			line-height: 25px;
+		}
+		a{
+			color: white;
+		}
+		.like_title{ 
+			text-align: left; 
+			font-size: 14px; 
+		}
+		.like_main{
+			.preview{ cursor: pointer}
+			.activity_icon{ 
+				width: 40px; 
+				height: 40px;
+			}
+			font-size: 11px;
+			.title_td{ width: 120px;}
+			.title {
+				display: block;
+				word-wrap: break-word; 
+				word-break: normal; 
+				line-height: 20px;
+			}
+			.shop{
+				line-height: 20px;
+			}
+		}
 	}
 }

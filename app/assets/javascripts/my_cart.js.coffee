@@ -139,5 +139,8 @@ $ ->
 		myCart.addToCart($(selector), $form, urlAction)
 		false
 
+	# $("a.like-button").on "click", (event) =>
+		
+
 
 root.myCart = myCart
