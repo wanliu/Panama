@@ -6,7 +6,7 @@
 //= require system/simpledatepicker
 //= require lib/fullcalendar
 //= require twitter/bootstrap/modal
-//= require core_extend/core
+//= require lib/core_extend
 //= require lib/depend_select
 //= require system/select_region
 //= require system/region

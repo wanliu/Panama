@@ -34,6 +34,10 @@ class Circle < ActiveRecord::Base
     generate_manage
   end
 
+  def all_detail
+    "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
+  end
+
   def apply_join_notice(sender)
     notice.create(
       :send_user => sender,
@@ -107,6 +111,16 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
+  end
+
+  def is_owner_people?(user)
+    user_id = user.is_a?(User) ? user.id : user
+    owner_id = owner.is_a?(Shop) ? owner.user.id : owner.id 
+    if user_id == owner_id 
+      return true
+    else
+      return false
+    end  
   end
 
   def is_manage?(user)

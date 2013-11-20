@@ -7,6 +7,7 @@ exports = window || @
 class Transaction extends Backbone.Model
   set_url: (shop_name) ->
     @urlRoot = "/shops/#{shop_name}/admins/#{@get('_type')}"
+
   dispose: (callback) ->
     $.ajax(
       url: "#{@urlRoot}/#{@id}/dispose"
@@ -19,9 +20,8 @@ class TransactionList extends Backbone.Collection
 
 class TransactionEvent extends Backbone.View
   tagName: "tr"
-  events: {
+  events: 
     "click .dispose" : "dispose"
-  }
 
   initialize: (options) ->
     _.extend(@, options)
@@ -133,7 +133,6 @@ class exports.TransactionDispose extends Backbone.View
 
   realtime_help: (info, type) ->
     data = info.values
-
     switch info.type
       when "chat"
         @realtime_chat(data, type)
@@ -182,3 +181,4 @@ class exports.TransactionDispose extends Backbone.View
       @add_direct data
     else
       @add_order data
+

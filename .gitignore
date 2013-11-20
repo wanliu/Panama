@@ -29,9 +29,14 @@
 /public/user_checking
 /config/email.yml
 /config/application.yml
+/config/kuaiqian.yml
+/config/test.yml
 /assets/images/
 /faye_server/log/
 /public/test.html
 /public/image/
 /public/shop/
+/public/99bill-rsa.pem
+/public/99bill.cert.rsa.20140728.cer
+test.rb
 .DS_Store

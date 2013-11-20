@@ -50,6 +50,10 @@ class User < ActiveRecord::Base
     self.im_token = SecureRandom.hex
   end
 
+  def liked_activities
+    Activity.joins("left join activities_likes as al on activities.id = al.activity_id left join users on users.id = al.user_id").where("users.id = ?", id)
+  end
+
   def city
     user_checking.try(:address).try(:city)
   end
@@ -181,6 +185,12 @@ class User < ActiveRecord::Base
   def circle_all
     circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
     Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+  end
+
+  #加入的所有的圈子
+  def all_circles
+    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
+    Circle.where(:id => circle_ids)
   end
 
   def init_user_info

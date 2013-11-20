@@ -1,7 +1,7 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
-  # GET /people/transactions
-  # GET /people/transactions.json
+  before_filter :login_required, :except => [:kuaiqian_receive]
+
   def index
     authorize! :index, OrderTransaction
     @transactions = current_order.uncomplete.order("created_at desc").page(params[:page])
@@ -12,13 +12,12 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  # GET /people/transactions/1
-  # GET /people/transactions/1.json
   def show
     @transaction = current_order.find(params[:id])
+    @pay_msg = params[:pay_msg]
     authorize! :show, @transaction
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
       format.json { render json: @transaction }
       format.csv{
         send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
@@ -82,11 +81,51 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def kuaiqian_payment
+    @transaction = current_order.find(params[:id])
+    options = {
+      :bg_url => paid_send_url,
+      :payer_name => current_user.login,
+      :order_id => @transaction.number,
+      :order_amount => (@transaction.stotal * 100).to_i,
+      :product_name => @transaction.items[0].title,
+      :product_num => @transaction.items_count,
+      :order_time => Time.now.strftime("%Y%m%d%H%M%S")
+    }
+    options.merge!(:pay_type => "10",
+      :bank_id => params[:bank]) if params[:bank].present?
+    pay_ment = KuaiQian::PayMent.request(options)
+    respond_to do |format|
+      format.html{ redirect_to pay_ment.url }
+    end
+  end
+
+  def kuaiqian_receive
+    _response = KuaiQian::PayMent.response(params)
+    @transaction = current_order.find(params[:id])
+    url = if _response.successfully?
+      @transaction.online_paid
+      "#{paid_receive_url}?pay_msg=success"
+    else
+      "#{paid_receive_url}?pay_msg=error"
+    end
+    render :xml => {:result => "1", :redirecturl => url }
+  end
+
+  def test_payment
+     @transaction = current_order.find(params[:id])
+    if payment_mode_test?
+      @transaction.online_paid
+    end
+    redirect_to "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
+  end
+
   def base_info
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      if @transaction.address.valid? && @transaction.update_attributes(generate_base_option)
+      if @transaction.address.valid? &&
+       @transaction.update_attributes(generate_base_option)
         format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
       else
         format.html{ render error_back_address_html }
@@ -207,9 +246,8 @@ class People::TransactionsController < People::BaseController
   def unread_messages
     authorize! :index, OrderTransaction
     @messages = ChatMessage.select("chat_messages.*, cm.count")
-               .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count
-                                      from chat_messages where `read`=0 group by owner_id, owner_type) as cm
-                                      on chat_messages.id=cm.id").where("chat_messages.receive_user_id=?", @people.id)
+                           .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count from chat_messages where `read`=0 group by owner_id, owner_type) as cm on chat_messages.id=cm.id")
+                           .where("chat_messages.receive_user_id=?", @people.id)
 
     _messages = @messages.map do |m|
       attrs = m.attributes
@@ -268,9 +306,11 @@ class People::TransactionsController < People::BaseController
     t = params[:order_transaction]
     options = {}
     options[:pay_manner] = get_pay_manner t[:pay_manner_id]
-    options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
-    options[:delivery_type_id] = t[:delivery_type_id]
-    options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
+    if t[:delivery_manner_id].to_s != "0"
+      options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
+      options[:delivery_type_id] = t[:delivery_type_id]
+      options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
+    end
     options
   end
 
@@ -292,5 +332,13 @@ class People::TransactionsController < People::BaseController
       :contact_name => a[:contact_name],
       :contact_phone => a[:contact_phone]
     }
+  end
+
+  def paid_receive_url
+    "#{test_config[:prefix_url]}#{person_transaction_path(@people, @transaction)}"
+  end
+
+  def paid_send_url
+    "#{test_config[:prefix_url]}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
   end
 end

@@ -76,7 +76,7 @@ class ChatMessage < ActiveRecord::Base
   end
 
   def routing_key
-    if owner.nil?
+    if owner.is_a?(User)
       ["/chat/receive/#{receive_user.im_token}", as_json]
     elsif owner.is_a?(OrderTransaction) || owner.is_a?(DirectTransaction)
       channel = "/#{owner_type}/#{owner.seller.im_token}/"

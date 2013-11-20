@@ -13,6 +13,7 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
     @setting = CircleSetting.create(params[:setting])
     params[:circle].merge!(:setting_id => @setting.id)
     @circle = current_shop.circles.create(params[:circle])
+    CircleCategory.create(:name => "分享", :circle_id => @circle.id)
 
     respond_to do |format|
       format.html { redirect_to shop_admins_circles_path(current_shop) }

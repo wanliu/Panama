@@ -1,0 +1,13 @@
+<tr id="liked_activity<%= activity.id %>" activity-id="<%= activity.id %>" class="like_main activity">
+	<td>
+		<%= image_tag(activity.photos.icon, :class => "activity_icon") %>
+	</td>
+	<td class="title_td">
+		<span class='title' data-toggle="tooltip" title="<%= activity.title %>">
+			<%= activity.title %>
+		</span>
+	</td>
+	<td class="shop"><a href="/shops/<%= activity.shop.name %>"><%= activity.shop.name %></a></td>
+	<td><a class="preview" href="javascript:void(0)">查看</a></td>
+</tr>
+<!-- <tr><div  class="focus_progress"></div></tr> -->

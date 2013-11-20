@@ -19,13 +19,6 @@ Panama::Application.routes.draw do
     end
   end
 
-  # resources :yellow_page do
-  #   collection do
-  #     get :search, :to => "yellow_page#search"
-  #     get :hot_city_name, :to => "yellow_page#hot_city_name"
-  #   end
-  # end
-
   resources :catalog do
     member do
       get :products, :to => "catalog#products"
@@ -64,10 +57,13 @@ Panama::Application.routes.draw do
     match "access_denied", :to => "communities/circles#access_denied"
 
     resources :circles, :only => [:index], :controller => "communities/circles" do
-
       collection do
         get :members
         put :update_circle
+        post :share_circle
+        post :up_to_manager
+        post :low_to_member
+        delete :remove_member
         get ":category_id/category", :to => "communities/circles#category"
         post :join
         post :apply_join
@@ -123,6 +119,9 @@ Panama::Application.routes.draw do
         post 'transfer', :to => "people/transactions#transfer"
         get 'print', :to => "people/transactions#print"
         post "mark_as_read", :to => "people/transactions#mark_as_read"
+        get :kuaiqian_receive
+        match 'kuaiqian_payment', :via => [:get, :post]
+        match 'test_payment', :via => [:get, :post]
       end
 
       collection do
@@ -164,6 +163,9 @@ Panama::Application.routes.draw do
     end
 
     resources :communities, :controller => "people/communities" do
+      collection do
+        get :all_circles
+      end
     end
 
     resources :circles, :controller => "people/circles" do
@@ -201,6 +203,7 @@ Panama::Application.routes.draw do
       end
       collection do
         get :unreads, :to => "people/notifications#unreads"
+        get :unread_count, :to => "people/notifications#unread_count"
       end
     end
 

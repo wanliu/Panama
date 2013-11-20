@@ -14,9 +14,10 @@
           </div>
           <div class="container-fluid info-header">
             <div class="page-header">
-              <h1><%= buyer.login %>
+              <div class="trasaction-title">
+                <div class="name"><%= buyer.login %></div>
                 <%= render "state_buttons", :transaction => transaction %>
-              </h1>
+              </div>
               <div class="transaction-number">
                 订单编号：<%= transaction.number %>
                 <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
@@ -35,7 +36,7 @@
           <%= render state, transaction: transaction %>
         </div>
       </div>
-      <div class='span5'>
+      <div class='span5 chat_wrapper'>
         <div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
           <iframe frameborder='0' src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">

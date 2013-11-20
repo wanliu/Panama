@@ -93,8 +93,8 @@ class TransactionCard extends TransactionCardBase
     @$(".address-form>form").submit()
     StateMachine.ASYNC
 
-  #leaveWaitingDelivery: (event, from, to, msg) ->
-      #@slideAfterEvent(event) if /refresh_delivered/.test event
+  leaveWaitingDelivery: (event, from, to, msg) ->
+    @slideAfterEvent(event) if /refresh_delivered/.test event
 
   leaveWaitingPaid: (event, from, to, msg) ->
     @slideAfterEvent(event) unless /back/.test event
@@ -106,15 +106,20 @@ class TransactionCard extends TransactionCardBase
     form = @$(".address-form>form")
     params = form.serialize()
     url = form.attr("action")
-    $.post(url, params)
-        .success (data, xhr, status) =>
-            @transition()
-            @slideAfterEvent(data.event)
-        .error (xhr, status) =>
-            @$(".address-form").html(xhr.responseText)
-            @notify("错误信息", '请填写完整的信息！', "error")
-            @alarm()
-            @transition.cancel()
+    $.ajax(
+      url: url,
+      data: params,
+      type: "PUT",
+      success: (data, xhr, status) =>
+        @transition()
+        @slideAfterEvent(data.event)
+
+      error: (xhr, status) =>
+        @$(".address-form").html(xhr.responseText)
+        @notify("错误信息", '请填写完整的信息！', "error")
+        @alarm()
+        @transition.cancel()
+    )
     false
 
   selectDeliveryType: () ->

@@ -88,12 +88,12 @@ gem "bunny", "~> 0.9.0.pre9"
 #
 # Pagination
 gem 'kaminari', '~> 0.14.1'
+gem 'kuaiqian', :github => "huxinghai1988/kuaiqian"
 
 # Faye
 # gem 'faye'
 # gem 'faye-redis', '~> 0.1.1'
-
-gem 'omniauth-wanliu', "0.1.0", :github => "wanliu/omniauth-wanliu"
+gem 'omniauth-wanliu', "~> 0.1.1", :github => "wanliu/omniauth-wanliu"
 
 gem 'state_machine', '~> 1.1.2'
 
