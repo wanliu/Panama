@@ -32,7 +32,7 @@
 	<li class="dropdown shoppingcart">
 		<a href="#" title="我的购物车" id="cart" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-shopping-cart handle"></i>
-			<span id="shop_count" class="badge badge-important">0</span>
+			<span id="shop_count" class="badge badge-important"> </span>
 		</a>
 		 <ul id="shopping-cart" class="dropdown-menu support" role="menu">
 			<li role="presentation">
@@ -48,7 +48,7 @@
 	<li class="dropdown notification">
 		<a href="#" title="消息提醒" id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-comments"></i>
-			<span id="notification_count" class="badge badge-important">0</span>
+			<span id="notification_count" class="badge badge-important"></span>
 		</a>
 		 <ul id="notification" class="dropdown-menu notifications" role="menu">
 		</ul>
@@ -86,6 +86,9 @@
 	<li class="hidden-phone dropdown">
 		<a href="javascript:void(0)" title="我的头像" id="account" class="dropdown-toggle" data-toggle="dropdown">
 			<%= account_info %>
+			<div class="progress progress-striped active" style="display:none;">
+			  <div class="bar" style="width: 100%;"></div>
+			</div>
 		</a>
 		<ul id="account-menu" class="dropdown-menu account" role="menu">
 			<li role="presentation">

@@ -55,7 +55,7 @@ class MyCart extends Backbone.View
 	      url: "/mycart/clear_list",
 	      success: () =>
 	       $(".cart_main").remove()
-	       $("#shop_count").html($(".cart_main").size())
+	       $("#shop_count").html($(".cart_main").size()).hide()
 	       @totals_money()
     	})
 
@@ -109,7 +109,10 @@ class MyCart extends Backbone.View
 		s = 0
 		for e in trs
 			s += parseInt($(e).find("td:nth(2)").text())
-		$("#shop_count").html(s)
+		if s != 0
+			$("#shop_count").html(s).show()
+		else
+			$("#shop_count").html(s).hide()
 
 	totals_money: () ->
 		totals = 0
