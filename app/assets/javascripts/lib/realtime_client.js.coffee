@@ -10,7 +10,7 @@ class root.Realtime
   constructor: (options) ->
     _.extend(@, options)
     @url = @server_uri + '?token=' + @token
-    @client = @connect() if @server_uri?
+    @connect()
     @events = {}
 
     @on('connect', () =>
@@ -43,7 +43,6 @@ class root.Realtime
   emit: (event, data, callback) ->
     @socket.emit(event, data, callback)
 
-
   monitor_people_notification: (im_token, callback = (data) -> ) ->
     @subscribe("/notification/#{im_token}", (data) ->
       callback(data)
@@ -67,8 +66,5 @@ class root.Realtime
     # 订单聊天窗口
     $("iframe").contents().find("body [data-realtime-state]").each () ->
       $(@).attr("data-realtime-state", "disconnect")
-      $(this).tooltip({'trigger':'focus', 'title': '此页面已经失效，请刷新'});
-
-
-
+      $(this).tooltip({'trigger':'focus', 'title': '此页面已经失效，请刷新'})
 
