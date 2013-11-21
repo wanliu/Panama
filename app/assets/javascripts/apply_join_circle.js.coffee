@@ -14,7 +14,7 @@ class ApplyJoinCircle extends Backbone.View
 			success: (notice) =>
 				pnotify({text: notice.message })
 				if notice.type == "waiting"
-					$(@el).html("<span class='label label-warning waiting'>等待确认</span>")
+					$(@el).html("<span class='label-warning waiting'>等待确认</span>")
 				else
 					$(@el).html("<span class='label label-warning be_in'>已加入</span>")
 			error: (notice)=>
