@@ -31,7 +31,6 @@ class UsersController < ApplicationController
   end
 
   def chat_authorization
-    debugger
     auth = User.chat_authorization(params[:from], params[:invested])
     respond_to do |format|
       format.json { render :json => auth }
