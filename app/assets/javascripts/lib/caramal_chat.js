@@ -4423,7 +4423,8 @@ if (typeof define === "function" && define.amd) {
 }).call(this);
 
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('chat/command',['core', 'util'], function(Caramal, Util) {
@@ -4490,19 +4491,29 @@ if (typeof define === "function" && define.amd) {
 
       Command.prototype._doBeforeCallback = function(data) {
         if (Util.isFunc(this.before_callback)) {
-          return this.before_callback(data);
+          if (!Util.isArray(data)) {
+            data = [data];
+          }
+          return this.before_callback.apply(this, data);
         }
       };
 
       Command.prototype._doAfterCallback = function(data) {
         if (Util.isFunc(this.after_callback)) {
-          return this.after_callback(data);
+          if (!Util.isArray(data)) {
+            data = [data];
+          }
+          return this.after_callback.apply(this, data);
         }
       };
 
       Command.prototype._doReturnCallback = function(data) {
         if (Util.isFunc(this.return_callback)) {
-          return this.return_callback(data);
+          this.return_callback(data);
+          if (!Util.isArray(data)) {
+            data = [data];
+          }
+          return this.return_callback.apply(this, data);
         }
       };
 
@@ -4515,12 +4526,23 @@ if (typeof define === "function" && define.amd) {
         send_data = Util.merge({
           command_id: this.option.id
         }, data);
-        return this.socket.emit(cmd, JSON.stringify(send_data), function(ret) {
-          _this._doAfterCallback(ret);
-          if (Util.isFunc(callback)) {
-            return callback(ret);
+        return this.socket.emit(cmd, JSON.stringify(send_data), function() {
+          var args, first;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          first = args[0];
+          if (Util.isObject(first) && (first.error != null)) {
+            return _this.onError(first);
+          } else {
+            _this._doAfterCallback(args);
+            if (Util.isFunc(callback)) {
+              return callback.apply(_this, args);
+            }
           }
         });
+      };
+
+      Command.prototype.onError = function(msg) {
+        return this.channel.emit('error', msg);
       };
 
       return Command;
@@ -4743,7 +4765,7 @@ if (typeof define === "function" && define.amd) {
         _ref = this.channels;
         for (id in _ref) {
           chn = _ref[id];
-          if (chn.options && chn.options.room === room) {
+          if (chn.room === room) {
             return chn;
           }
         }
@@ -4860,8 +4882,6 @@ if (typeof define === "function" && define.amd) {
       Channel.prototype.commands = ['open', 'join', 'close'];
 
       Channel.nextId = 0;
-
-      Channel.hooks = {};
 
       /**
        * 管理器对象
@@ -4980,6 +5000,11 @@ if (typeof define === "function" && define.amd) {
         return this.on('event', this.event_callback);
       };
 
+      Channel.prototype.onError = function(error_callback) {
+        this.error_callback = error_callback;
+        return this.on('error', this.error_callback);
+      };
+
       /**
        * 更换消息管理器，会使得这个 Channel 完全处理于别一个消息处理机制中
        * @param {MessageManager} @manager 消息管理器对象
@@ -5053,7 +5078,7 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype._setupHooks = function(cmd, command) {
         var hook, hooks, name, _results;
-        hooks = this.constructor.hooks;
+        hooks = this.hooks;
         _results = [];
         for (name in hooks) {
           hook = hooks[name];
@@ -5082,7 +5107,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.beforeCommand = function(cmd, callback) {
-        return this.hooks["before_" + cmd] = {
+        return this.prototype.hooks["before_" + cmd] = {
           name: cmd,
           proc: callback,
           type: 'before'
@@ -5090,7 +5115,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.afterCommand = function(cmd, callback) {
-        return this.hooks["after_" + cmd] = {
+        return this.prototype.hooks["after_" + cmd] = {
           name: cmd,
           proc: callback,
           type: 'after'
@@ -5116,6 +5141,8 @@ if (typeof define === "function" && define.amd) {
 
       Chat.prototype.commands = ['open', 'join'];
 
+      Chat.prototype.hooks = {};
+
       Chat.prototype.type = Channel.TYPES['chat'];
 
       Chat.beforeCommand('open', function(options) {
@@ -5128,8 +5155,8 @@ if (typeof define === "function" && define.amd) {
         });
       });
 
-      Chat.afterCommand('open', function(ret) {
-        return this.channel.room = ret;
+      Chat.afterCommand('open', function(ret, room) {
+        return this.channel.room = room;
       });
 
       /**
@@ -5259,6 +5286,8 @@ if (typeof define === "function" && define.amd) {
 
       Group.prototype.commands = ['open', 'join'];
 
+      Group.prototype.hooks = {};
+
       Group.prototype.type = Channel.TYPES['group'];
 
       Group.beforeCommand('open', function(options) {
@@ -5271,8 +5300,8 @@ if (typeof define === "function" && define.amd) {
         });
       });
 
-      Group.afterCommand('open', function(ret) {
-        return this.channel.room = ret;
+      Group.afterCommand('open', function(ret, room) {
+        return this.channel.room = room;
       });
 
       function Group(group, options) {

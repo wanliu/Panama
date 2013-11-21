@@ -126,7 +126,6 @@ class StrangersView extends FollowersView
 			@collection.add(model)
 			@top(model)
 
-
 	find_exist: (model) ->
 		_.find @collection.models, (item) ->
 			item.id is model.id
@@ -138,43 +137,6 @@ class FriendView extends Backbone.View
 	events:
 		"click" : "talk_to_friend"
 
-	render: () ->
-		html = @template(model: @model)
-		$(@el).html(html)
-		# $(@el).append(@talking_message_modal)
-		@
-
-	talk_to_friend: () ->
-		@undo_active()
-		if @$iframe
-			@$iframe.show()
-		else
-			@init_and_show_iframe()
-
-	active: () ->
-		if !@$iframe || @$iframe.is(":hidden")
-			$(@el).addClass('active')
-
-	undo_active: () ->
-		$(@el).removeClass('active')
-
-	init_and_show_iframe: () ->
-		@$iframe= $(@make("div"))
-		@$iframe.addClass("chat_dialogue_panel")
-		@$iframe.css("left", "5px")
-
-		@$iframe.append(
-			"<iframe></iframe>
-			<a class='close_label' href='javascript:void(0)'></a>")
-
-		@$iframe.children("a.close_label").click (e) =>
-			@$iframe.hide()
-
-		$("body").append(@$iframe)
-
-		friend_id = @model.get('follow_id') || @model.get("id")
-		@$iframe.children("iframe").attr("src", "/chat_messages/dialogue/generate_and_display/#{friend_id}")
-
 	template: _.template(
 		"<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
 		<div class='user-info hide'>
@@ -183,6 +145,27 @@ class FriendView extends Backbone.View
 			</div>
 			<div class='type'><%= model.get('follow_type') || 'User' %></div>
 		</div>")
+
+	render: () ->
+		html = @template(model: @model)
+		$(@el).html(html)
+		# $(@el).append(@talking_message_modal)
+		@
+
+	talk_to_friend: () ->
+		@undo_active()
+		if @chat
+			$(@chat.el).show()
+		else
+			@chat = new ChatView(@model)
+			$("body").append(@chat.el)
+
+	active: () ->
+		if !@chat || $(@chat.el).is(":hidden")
+			$(@el).addClass('active')
+
+	undo_active: () ->
+		$(@el).removeClass('active')
 
 
 root.FriendsContainerView = FriendsContainerView
