@@ -166,6 +166,23 @@ ul {
 	}
 }
 
+.affix {
+	&.logo {
+		h4 {
+			margin: 8px 0px;
+		}
+	}
+  #topbar {
+		.navbar-search {
+			margin-top: 10px;
+		}
+	}
+
+	#account {
+		padding-top: 10px;
+	}
+}
+
 .page-header {
 	margin: 15px 0 0px;
 	border: none;
@@ -584,10 +601,16 @@ ul {
 	}
 }
 
-.account .user_icon {
-	width: 50px;
-	height: 50px;
-	margin: 0px 5px;
+#account {
+	padding-top: 5px;
+
+	.user_icon {
+		width: 30px;
+		height: 30px;
+		margin: 0px 5px;
+	}
+
+	font-size: 20px;
 }
 
 // widget
@@ -1219,7 +1242,7 @@ h2 small {
 	}
 }
 
-.disconnect { 
+.disconnect {
   -webkit-filter: grayscale(100%);
   -moz-filter: grayscale(100%);
   -ms-filter: grayscale(100%);
