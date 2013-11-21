@@ -94,6 +94,7 @@ class root.Realtime
     $(".hidden-phone .progress").show()
 
   connected: () ->
+    $("#account").attr("data-original-title","我的头像").attr("data-placement","bottom").tooltip('hide')
     $(".user_icon").removeClass("disconnect")
     $(".hidden-phone .progress").hide()
       
@@ -113,5 +114,4 @@ class root.Realtime
 
   tip_operate: (message) ->
     target = $("#account")
-    target.attr("title",message).attr("data-placement","bottom").tooltip('toggle')
-    $(@).tooltip({'trigger':'focus', 'title': '此页面已经失效，请刷新'})
+    target.attr("title",message).attr("data-original-title",message).attr("data-placement","bottom").tooltip('toggle')
