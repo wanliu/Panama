@@ -40,6 +40,8 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
+  after_commit :sync_create_to_redis, :on => :create
+  after_update :sync_change_to_redis
   before_create :generate_token
 
   delegate :groups, :jshop, :to => :shop_user
@@ -167,6 +169,26 @@ class User < ActiveRecord::Base
 
   def load_initialize_data
     load_friend_group
+  end
+
+  def sync_create_to_redis
+      redis_client = RedisClient.redis
+      redis_client.multi do
+        redis_client.hset("Panama:userId:userName", id, login)
+        redis_client.hset("Panama:userName:userId", login, id)
+      end
+  end
+
+  def sync_change_to_redis
+    if self.login_changed?
+      redis_client = RedisClient.redis
+      redis_client.multi do
+        old_name = redis_client.hget("Panama:userId:userName", id)
+        redis_client.hdel("Panama:userName:userId", old_name)
+        redis_client.hset("Panama:userId:userName", id, login)
+        redis_client.hset("Panama:userName:userId", login, id)
+      end
+    end
   end
 
   #暂时方法
