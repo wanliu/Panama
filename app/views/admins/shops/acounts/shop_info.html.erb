@@ -3,113 +3,105 @@
 <div class='row-fluid'>
   <div class='span8 widget shop_info'>
     <a href="/shops/<%= @user_checking.shop.name %>/admins/apply_update" class="btn pull-right">申请审核</a>
-    <%= simple_form_for @shop_auth,
-    url: '/user_checkings/update_shop_auth',
-    html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
-      <div class="section">
-        <h4>商店信息</h4>
-        <hr />
-        <div class="row-fluid">
-          <div class="span5 reset_avatar main_panle1">
-            <div class="photo_span cell" >
-              <span>商店图标</span>
-              <img class="bottom normal_picture img-polaroid"/>
-            </div>
-            <div id="image_bottom">
-              <div class="hidden_one offset2" id="hidden_text">
-                <%= upload_tip %>
-              </div>
-              <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
-              </div>
-            </div>
+    <h4>商店信息</h4>
+    <hr />
+    <div class="row-fluid section">
+      <div class="span5">
+        <div class="reset_avatar main_panle1">
+          <div class="photo_span cell" >
+            <span>商店图标</span>
+            <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <div class="span7 input_locate">
-            <%= f.simple_fields_for @user_checking.user.shop do |s| %>
-              <%= s.input :name, label: '商店名称' %>
-              <%= s.input :shop_summary, label: '商店简介' %>
-            <% end %>
+          <div id="image_bottom">
+            <div class="hidden_one offset2" id="hidden_text">
+              <%= upload_tip %>
+            </div>
+            <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="section paddings">
-        <h4>营业信息</h4>
-        <hr />
+      <div class="span7 input_locate">
         <div class="row-fluid">
-          <div class="span5 reset_avatar main_panle2">
-            <div class="photo_span cell" >
-              <span>营业执照</span>
-              <img class="bottom normal_picture img-polaroid"/>
-            </div>
-            <div id="image_bottom">
-              <div class="hidden_one offset2" id="hidden_text">
-                <%= upload_tip %>
-              </div>
-              <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
-              </div>
-            </div>
+          <% shop = @user_checking.user.shop  %>
+          <div class="span3 column_name"><span>商店名称</span></div>
+          <div class="span9"><%= shop.name %></div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 column_name"><span>商店简介</span> </div>
+          <div class="span9"><%=shop.shop_summary %></div>
+        </div>
+      </div>
+    </div>
+
+    <h4>营业信息</h4>
+    <hr />
+    <div class="row-fluid section">
+      <div class="span5">
+        <div class="reset_avatar main_panle2">
+          <div class="photo_span cell" >
+            <span>营业执照</span>
+            <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <% address = current_shop.user.user_checking.address %>
-          <div class="span7 input_locate">
-            <%= f.input :company_name, label: '营业店名' %>
-            <div class="control-group string required address">
-              <%= f.label :address_id, wrapper: :inline_label %>
-              <div class="controls">
-                <input class="string required address_input" style="width:240px;" size="50" type="text" value="<%= address.try(:address_only) %>" />
-                <a class="btn" data-toggle="modal" href="<%= shop_admins_edit_address_path %>" data-target="#edit_address">编辑</a>
-              </div>
+          <div id="image_bottom">
+            <div class="hidden_one offset2" id="hidden_text">
+              <%= upload_tip %>
             </div>
-            <%= f.input :company_license, label: '营业执照号' %>
+            <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="section">
-        <h4>个人信息</h4>
-        <hr />
+      <div class="span7 input_locate">
+        <% address = current_shop.user.user_checking.address %>
         <div class="row-fluid">
-          <div class="span5 reset_avatar main_panle3">
-            <div class="photo_span cell" >
-              <span>身份证照</span>
-              <img class="bottom normal_picture img-polaroid" />
-            </div>
-            <div id="image_bottom">
-              <div class="hidden_one offset2" id="hidden_text">
-                <%= upload_tip %>
-              </div>
-              <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
-              </div>
-            </div>
+          <div class="span3 column_name" ><span>实体店名</span></div>
+          <div class="span9"><%= @shop_auth.company_name %></div>
+        </div> 
+        <div class="row-fluid">
+          <div class="span3 column_name"><span>营业地址</span></div>
+          <div class="span9"><%=address.try(:address_only) %></div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 column_name"><span>营业执照号</span></div> 
+          <div class="span9"><%= @shop_auth.company_license %></div>
+        </div>
+      </div>
+    </div>
+
+    <h4>个人信息</h4>
+    <hr />
+    <div class="row-fluid section">
+      <div class="span5">
+        <div class="reset_avatar main_panle3">
+          <div class="photo_span cell" >
+            <span>身份证照</span>
+            <img class="bottom normal_picture img-polaroid" />
           </div>
-          <div class="span7 input_locate">
-            <%= f.input :ower_name, label: '法人姓名' %>
-            <%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
-            <%= f.input :phone, label: '联系电话' %>
+          <div id="image_bottom">
+            <div class="hidden_one offset2" id="hidden_text">
+              <%= upload_tip %>
+            </div>
+            <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
+            </div>
           </div>
         </div>
       </div>
-      <% if !current_shop.user.user_checking.checked %>
-        <button class="modify pull-right btn btn-primary">修改</button>
-      <% else %>
-        <script type="text/javascript">
-          $(".shop_info input").attr("readonly","readonly");
-          $("[data-target=#edit_address]").hide();
-        </script>
-      <% end %>
-    <% end %>
-  </div>
-</div>
-<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editAddressLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="editAddressLabel">编辑地址</h3>
-  </div>
-  <div class="modal-body">
-
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <button class="btn btn-primary edit-button">保存</button>
+      <div class="span7 input_locate">
+        <div class="row-fluid">
+          <div class="span3 column_name"><span>法人姓名</span></div>
+          <div class="span9"><%=@shop_auth.ower_name %></div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 column_name"><span>身份证号</span></div>
+          <div class="span9"><%=@shop_auth.ower_shenfenzheng_number %></div>
+        </div>
+        <div class="row-fluid">
+          <div class="span3 column_name"><span>联系电话</span></div>
+          <div class="span9"><%=@shop_auth.phone %></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -128,14 +120,4 @@
       ]
     })
   });
-
-  // 禁止回车提交表单
-  $(".shop_info .modify").bind("click", function(){
-    $(".shop_info .shop_auth").submit();
-  })
-
-  new AddressEditView({
-    el: "div#edit_address"
-  })
-
 </script>

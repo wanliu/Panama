@@ -256,6 +256,11 @@ $left-side-admin-width: 160px;
 }
 
 .shop_info {
+  .column_name{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+  }
   $margin-top: 20px;
   hr{
     margin: 0px;
