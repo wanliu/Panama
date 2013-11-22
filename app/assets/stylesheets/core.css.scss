@@ -1257,6 +1257,7 @@ h2 small {
 	background: #C99C0D;
 	color: black;
 }
+
 .payments-plat{
 	list-style: none;
 
@@ -1280,4 +1281,121 @@ h2 small {
 			}
 		}
 	}
+}
+.hidden-phone{
+	.progress{
+		height: 5px;
+		margin-bottom: 0px;
+	}
+}
+.global_chat_panel{
+	top: 55px;
+	right: 65px;
+	width: 300px;
+	height: 370px;
+	z-index: 9999;
+	position: fixed;
+	background: white;
+	font-size: 14px;
+	line-height: 20px;
+	color: #333333;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	@include box-shadow(1px 1px 3px $grayDarker);
+
+	.close_label{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 12px;
+    height: 11px;
+    font-size: 1px;
+    display: block;
+    background: url('/assets/chosen-sprite.png') right top no-repeat;
+  }
+
+  .head{
+    border-bottom: 1px solid #DDD;
+    padding: 3px 0px;
+    position: relative;
+
+    .state{
+      height: 15px;
+      width: 15px;
+      position: absolute;
+      top: 5px;
+      left: 8px;
+    }
+
+    .name{
+      margin-left: 25px;
+    }
+
+    .offline{
+      background: no-repeat url("/assets/chat_sprites.png") 0 -327px;
+    }
+
+    .online{
+      background: no-repeat url("/assets/chat_sprites.png");
+    }
+
+    .notice{
+      background: no-repeat url("/assets/chat_sprites.png") 0 -253px;
+    }
+  }
+
+  .content_panel{
+    .msg_content{
+      height: 248px;
+      overflow-y: auto;
+      list-style: none;
+      margin: 0px;
+
+      li{
+        padding: 0px 0px;
+
+        .title{
+          line-height: 28px;
+          margin-left: 3px;
+          color: green;
+
+          img{
+            height: 18px;
+            width: 18px;
+          }
+
+          .login{
+            margin-left: 5px
+          }
+
+          .date{
+            float: right;
+          }
+        }
+
+        .message{
+          padding: 2px 5px;
+          word-break: break-all;
+        }
+      }
+    }
+
+    .foot{
+      .send_content{
+        height: 60px;
+        padding: 0px 5px;
+
+        textarea{
+          resize: none;
+          width: 100%;
+          padding: 0px;
+          margin: 0px;
+          height: 100%;
+        }
+      }
+
+      .foot_nav{
+        padding: 5px 5px;
+      }
+    }
+  }
 }

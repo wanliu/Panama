@@ -239,11 +239,15 @@ $left-side-admin-width: 160px;
 }
 
 .attention{
+  .attention_detail{
+    display:inline-block;
+    margin-left:20px
+  }
   a:link{
     color: #2A3F49;
   }
   span{
-    color: #2A3F49;
+    color: white;
   }
 }
 

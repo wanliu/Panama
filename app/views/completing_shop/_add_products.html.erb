@@ -88,11 +88,8 @@
 			<li id="{{ id }}" class='product_item'>
 				<img src="{{ url }}" alt="{{name}}" class='product_img' />
 				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-
-				<!--<span>单价 <input name='price' type='number' value='{{ price }}'/></span>-->
-				<!--<span>库存 <input name='inventory' type='number' value='{{ inventory }}'/></span>-->
-				<section> 单价 <span class='label label-default editable-click price'>{{ price }} <i class='icon-edit'></i></span></section>
-				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }} <i class='icon-edit'></i></span></section>
+				<section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span></section>
+				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span></section>
 			</li>
 		</script>
 
@@ -125,6 +122,7 @@
 <script type="text/javascript">
 	var bind_editable = function(elem, class_name){
 		id = $(elem).attr("id")
+		$(elem).find("input").select()
 		$("."+ class_name , elem).editable({
 				pk   :    id,
 				type :  'text',
@@ -146,7 +144,7 @@
 
 	$(document).delegate( '.my_product_list>li', 'click',function(i, elem){
 		bind_editable($(this), "price");
-		bind_editable($(this), "inventory")
+		bind_editable($(this), "inventory");
 	});
 
 	var Filter = function(id_name,target){
