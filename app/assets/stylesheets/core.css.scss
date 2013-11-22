@@ -1282,7 +1282,12 @@ h2 small {
 		}
 	}
 }
-
+.hidden-phone{
+	.progress{
+		height: 5px;
+		margin-bottom: 0px;
+	}
+}
 .global_chat_panel{
 	top: 55px;
 	right: 65px;

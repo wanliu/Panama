@@ -14,18 +14,40 @@ class root.Realtime
     @events = {}
 
     @on('connect', () =>
-      window.$(".user_icon").removeClass("disconnect")
+      @connected()
       console.log("connected.")
     )
+
     @on('disconnect', (error) =>
-      console.error("disconnect: " + error)
-      @disconnect_tip()
+      @error_tip(error)
       @disconnect_state()
+      console.error("disconnect: " + error)
     )
 
-  disconnect_tip: () ->
-    window.$(".user_icon").addClass("disconnect")
-    $("<div class='disconnect_message'>此页面已经失效,如果是想激活本页面，请点击<a href='javascript:window.location.reload()'>刷新</a>页面</div>").insertBefore("body")
+    @on('connecting', () =>
+      @connecting()
+      console.log('connecting')
+    )
+
+    @on('connect_failed', () =>
+      @error_tip("connect_failed")
+      @disconnect_state()
+      console.log('connect_failed')
+    )
+    @on('error', (err) =>
+      @error_tip(err)
+      @disconnect_state()
+      console.log('error:' + err)
+    )
+    @on('reconnect', () =>
+      @connected()
+      console.log('reconnect') 
+    )
+    @on('reconnecting', () =>
+      @connecting()
+      console.log('reconnecting')
+    )
+
 
   connect: () ->
     @socket = Caramal.connect(@url, @options)
@@ -66,5 +88,30 @@ class root.Realtime
     # 订单聊天窗口
     $("iframe").contents().find("body [data-realtime-state]").each () ->
       $(@).attr("data-realtime-state", "disconnect")
-      $(this).tooltip({'trigger':'focus', 'title': '此页面已经失效，请刷新'})
+      $(@).tooltip({'trigger':'focus', 'title': '此窗口已经失效，请刷新'})
 
+  connecting: () ->
+    $(".hidden-phone .progress").show()
+
+  connected: () ->
+    $("#account").attr("data-original-title","我的头像").attr("data-placement","bottom").tooltip('hide')
+    $(".user_icon").removeClass("disconnect")
+    $(".hidden-phone .progress").hide()
+      
+  error_tip: (type) ->
+    $(".user_icon").addClass("disconnect")
+    target = $(".hidden-phone .progress")
+    unless type == "booted"
+      target.find(".bar").css("width","50%")
+      target.addClass("progress-danger").show()
+      message = if type == undefined
+        "链接错误，请稍后重试"
+      else
+        "连接失败, 请刷新重试"
+    else
+      message = "你被迫下线"
+    @tip_operate(message)
+
+  tip_operate: (message) ->
+    target = $("#account")
+    target.attr("title",message).attr("data-original-title",message).attr("data-placement","bottom").tooltip('toggle')
