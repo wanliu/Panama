@@ -78,15 +78,14 @@ class SearchController < ApplicationController
     if current_user.shop
       query = filter_special_sym(params[:q])
       shop_id = current_user.shop.id
-      s = ShopProduct.search2 do
+      products = ShopProduct.search2 do
         query do
           boolean do
             must { string "name:#{query} OR primitive:#{query}", :default_operator => "AND" }
             must { string "seller.id:#{shop_id}" }
           end
         end
-      end
-      products = s.results
+      end.results
     else
       products = []
     end
@@ -97,7 +96,6 @@ class SearchController < ApplicationController
 
   def index
     _size, _from, q = params[:limit], params[:offset], (params[:q] || {})
-    toDay = DateTime.now.midnight
     conditions = get_coditions(q)
     s = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
       from _from

@@ -55,6 +55,12 @@ class CreateTopicView extends Backbone.View
         @$content.val('')
         @$(".attachments-panel").hide()
         @$(".attachable:first").remove()
+      error: (data) =>
+        try
+          err = JSON.parse(data.responseText)
+          pnotify({title: "出错了！", type: "error", text: err.join("<br />")})
+        catch err
+          pnotify({title: "出错了！", type: "error", text: data.responseText})
     )
     false
 
