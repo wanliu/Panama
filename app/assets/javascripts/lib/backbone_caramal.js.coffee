@@ -34,7 +34,7 @@ class root.ChatView extends Caramal.BackboneView
   chat_template:  _.template('
     <div class="head">
       <span class="state online"></span>
-      <span class="name"><%= user.get("name") %></span>
+      <span class="name"><%= user %></span>
     </div>
     <div class="content_panel">
       <ul class="msg_content">
@@ -66,10 +66,14 @@ class root.ChatView extends Caramal.BackboneView
     'click .send_button'    : 'sendMeessage'
     "keyup textarea.content": "fastKey"
    
-  initialize: (@user) ->
+  initialize: (options) ->
     super
+    _.extend(@, options)
     $(@el).html(@chat_template(user: @user))
-    $(@el).draggable().resizable().css('position', 'fixed')
+    $(@el).resizable().draggable().css('position', 'fixed')
+    $(@el).on('resizestop', (event, ui) =>
+      $(@el).css('position', 'fixed')
+    )
     @state_el = @$(".head>.state")
     @init_chat()
 
@@ -77,7 +81,7 @@ class root.ChatView extends Caramal.BackboneView
     window.clients.on('disconnect', (error) =>
       @offline()
     )
-    @chat = Caramal.Chat.of(@user.get('name'))
+    @chat = Caramal.Chat.of(@user)
     @chat.open()
     @chat.onMessage (data) =>
       @receiveMessage(@msg_template(data: data))
@@ -86,7 +90,7 @@ class root.ChatView extends Caramal.BackboneView
     $(@el).hide()
 
   activeDialog: () ->
-    @user.trigger('unactive')
+    @trigger('unactive_avatar')
 
   online: () ->
     @state_el.addClass(@on_class).removeClass(@off_class)
@@ -95,7 +99,7 @@ class root.ChatView extends Caramal.BackboneView
     @state_el.addClass(@off_class).removeClass(@on_class)
 
   receiveMessage: (data) ->
-    @user.trigger('active')
+    @trigger('active_avatar')
     @$(".msg_content").append(data)
 
   fastKey: (event) ->

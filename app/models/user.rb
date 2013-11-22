@@ -211,26 +211,7 @@ class User < ActiveRecord::Base
     groups.map{| g | g.permissions}
   end
 
-  def format_followings
-    followings.map do |following|
-      case following.follow_type
-      when "User"
-        { name: User.find(following.follow_id).login,
-          follow_type: "User",
-          follow_id: following.follow_id }
-      when "Shop"
-        { name: Shop.find(following.follow_id).name,
-          follow_type: "Shop",
-          follow_id: following.follow_id }
-      end
-    end
-    # following_types = following.ground_by { |following| following.type }
-    # following_users = following_types["User"]
-    # following_shops = following_types["Shop"]
-  end
-
   private
-
   def load_friend_group
     _config = YAML.load_file("#{Rails.root}/config/data/friend_group.yml")
     _config["friend_group"].each do |name|

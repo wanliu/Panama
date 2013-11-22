@@ -141,10 +141,6 @@ class FriendView extends Backbone.View
 			<div class='type'><%= model.get('follow_type') || 'User' %></div>
 		</div>")
 
-	initialize: () ->
-		@model.bind("active", _.bind(@active, @))
-		@model.bind("unactive", _.bind(@unactive, @))
-
 	render: () ->
 		html = @template(model: @model)
 		$(@el).html(html)
@@ -158,7 +154,9 @@ class FriendView extends Backbone.View
 			@new_chat()
 
 	new_chat: () ->
-		@chat = new ChatView(@model)
+		@chat = new ChatView({user: @model.get('name')})
+		@chat.bind("active_avatar", _.bind(@active, @))
+		@chat.bind("unactive_avatar", _.bind(@unactive, @))
 		$("body").append(@chat.el)
 
 	active: () ->
