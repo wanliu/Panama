@@ -1,4 +1,4 @@
-<div id="main" class="content">
+<div id="main" class="content shop_wrap">
   <section class="widget shop_info">
     <div class='photo'>
       <img src="<%=@shop.photos.header %>">
@@ -50,24 +50,15 @@
     new ActivityLayoutView({
       el: '#shop_products'
     })
-    new LoadShopProducts({
-      search_options: {
-        shop_id: <%= @shop.id %>
-      },
-      el: $('.shop_products_panel')
-    })
 
-    new ShopProductPreview({
-      el: $("#shop_products")
-    })
-
-    new FollowView({
-      data: {
-        follow_id: <%=@shop.id %>,
-        follow_type: "Shop"
+    new ShopProductList({
+      el: $(".shop_wrap"),
+      shop: {
+        id: <%=@shop.id %>
       },
-      login: "<%=current_user.login %>",
-      el: $(".shop_info")
+      user: {
+        login: "<%=current_user.login %>"
+      }
     })
   })
 </script>

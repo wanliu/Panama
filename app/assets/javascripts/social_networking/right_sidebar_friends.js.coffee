@@ -1,16 +1,11 @@
 root = (window || @)
 
 class FriendsContainerView extends RealTimeContainerView
-	top_tip:
-		klass   : "icon-group"
-		tool_tip: "show messages"
-
 	initialize: () ->
 		super
 		$(@el).append('<div class="notices-list"></div>')
 		@followers_view = new FollowersView(parent_view: @)
 		@set_default_view(@followers_view)
-
 		@stranger_view  = new StrangersView(parent_view: @)
 
 	set_default_view: (view) ->
@@ -18,13 +13,13 @@ class FriendsContainerView extends RealTimeContainerView
 		@default_view = view
 
 	bind_items: () ->
-		# @client = Realtime.client(@realtime_url)
-		@client = window.clients
-		@client.receive_message @token, (message) =>
-			@process_message message
+		Caramal.MessageManager.on('channel:new', (channel) =>
+			console.log(channel)
+			# @process_message channel
+		)
 
-	process_message: (message) ->
-		@followers_view.process(message) || @stranger_view.process(message)
+	process_message: (channel) ->
+		@followers_view.process(channel) || @stranger_view.process(channel)
 
 
 class FollowersView extends Backbone.View
@@ -66,23 +61,23 @@ class FollowersView extends Backbone.View
 			@addOne(model)
 
 	addOne: (model) ->
-		if model.attributes.follow_type == "User"
-			@$("h5 .num").html(@collection.length)
-			friend_view = new FriendView({ model: model, parent_view: @ })
-			model.view  = friend_view
-			@$(".users-list").prepend(friend_view.render().el)
+		# if model.attributes.follow_type == "User"
+		@$("h5 .num").html(@collection.length)
+		friend_view = new FriendView({ model: model, parent_view: @ })
+		model.view  = friend_view
+		@$(".users-list").prepend(friend_view.render().el)
 
-	process: (message) ->
-		exist_model = @find_exist(message)
+	process: (channel) ->
+		exist_model = @find_exist(channel)
 		if exist_model
 			@top(exist_model)
 			true
 		else
 			false
 
-	find_exist: (model) ->
+	find_exist: (channel) ->
 		_.find @collection.models, (item) ->
-			item.get("follow_id") is model.send_user_id
+			item.get("name") is channel.user
 
 	top: (model) ->
 		@parent_view.active()
@@ -110,7 +105,7 @@ class StrangersView extends FollowersView
 			@parent_view.$('div.notices-list').append(@el)
 		super
 
-	process: (message) ->
+	process: (channel) ->
 		model = new Backbone.Model()
 		model.fetch
 			url: "/users/#{message.send_user_id}"
@@ -149,22 +144,26 @@ class FriendView extends Backbone.View
 	render: () ->
 		html = @template(model: @model)
 		$(@el).html(html)
-		# $(@el).append(@talking_message_modal)
 		@
 
 	talk_to_friend: () ->
-		@undo_active()
+		@unactive()
 		if @chat
 			$(@chat.el).show()
 		else
-			@chat = new ChatView(@model)
-			$("body").append(@chat.el)
+			@new_chat()
+
+	new_chat: () ->
+		@chat = new ChatView({user: @model.get('name')})
+		@chat.bind("active_avatar", _.bind(@active, @))
+		@chat.bind("unactive_avatar", _.bind(@unactive, @))
+		$("body").append(@chat.el)
 
 	active: () ->
-		if !@chat || $(@chat.el).is(":hidden")
-			$(@el).addClass('active')
+		# if !@chat || $(@chat.el).is(":hidden")
+		$(@el).addClass('active')
 
-	undo_active: () ->
+	unactive: () ->
 		$(@el).removeClass('active')
 
 

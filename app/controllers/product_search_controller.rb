@@ -3,12 +3,11 @@ class ProductSearchController < ApplicationController
 
   def index
     query = filter_special_sym(params[:q])
-    s = Product.search2 do
+    products = Product.search2 do
       query do
         string "name:#{query} OR primitive:#{query}", :default_operator => "AND"
       end
-    end
-    products = s.results
+    end.results
     respond_to do |format|
       format.json { render json: products }
     end

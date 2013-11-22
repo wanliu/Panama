@@ -35,4 +35,16 @@ class Following < ActiveRecord::Base
     end
   end
 
+  def as_json(*args)
+    attribute = super *args
+    case self.follow_type
+    when "User"
+      attribute["name"] = User.find(self.follow_id).login
+    when "Shop"
+      attribute["name"] = Shop.find(self.follow_id).name
+    end
+    attribute["follow_type"] = self.follow_type
+    attribute["follow_id"] = self.follow_id
+    attribute
+  end
 end
