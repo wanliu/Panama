@@ -13,18 +13,15 @@ class Caramal.BackboneView extends Backbone.View
     'send'
   ]
 
-  initialize: (@user) ->
-    @proxyMethods()
-
-  proxyMethods: () ->
+  initialize: (user) ->
     for name in @PROXY_METHODS
       if _.isFunction(@[name])
         throw new Error('always have this named method of ' + name);
       else
         @[name] = (args...) =>
           unless @channel?
-            @channel = Caramal.MessageManager.nameOfChannel(@user) or
-              @default_driver.create(@user)
+            @channel = Caramal.MessageManager.nameOfChannel(user) or
+              @default_driver.create(user)
           @channel[name].apply(@channel, args)
 
 
@@ -64,6 +61,7 @@ class root.ChatView extends Caramal.BackboneView
     </li>')
 
   events:
+    'mouseover '            : 'activeDialog'
     'click .close_label'    : 'hideDialog'
     'click .send_button'    : 'sendMeessage'
     "keyup textarea.content": "fastKey"
@@ -71,6 +69,7 @@ class root.ChatView extends Caramal.BackboneView
   initialize: (@user) ->
     super
     $(@el).html(@chat_template(user: @user))
+    $(@el).draggable().resizable().css('position', 'fixed')
     @state_el = @$(".head>.state")
     @init_chat()
 
@@ -78,13 +77,16 @@ class root.ChatView extends Caramal.BackboneView
     window.clients.on('disconnect', (error) =>
       @offline()
     )
-    @chat = Caramal.Chat.create(@user.get('name'))
+    @chat = Caramal.Chat.of(@user.get('name'))
     @chat.open()
     @chat.onMessage (data) =>
       @receiveMessage(@msg_template(data: data))
 
   hideDialog: () ->
     $(@el).hide()
+
+  activeDialog: () ->
+    @user.trigger('unactive')
 
   online: () ->
     @state_el.addClass(@on_class).removeClass(@off_class)
@@ -93,6 +95,7 @@ class root.ChatView extends Caramal.BackboneView
     @state_el.addClass(@off_class).removeClass(@on_class)
 
   receiveMessage: (data) ->
+    @user.trigger('active')
     @$(".msg_content").append(data)
 
   fastKey: (event) ->
