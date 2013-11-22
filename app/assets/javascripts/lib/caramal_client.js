@@ -4333,7 +4333,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Client.prototype.unsubscribe = function(channel, callback) {
-        return this.socket.removeListener(channel);
+        return this.socket.removeListener(channel, callback);
       };
 
       Client.prototype.emit = function(event, data, callback) {
@@ -4346,6 +4346,14 @@ if (typeof define === "function" && define.amd) {
 
       Client.prototype.get = function(name) {
         return this.values[name];
+      };
+
+      Client.prototype.reconnect = function() {
+        return this.socket.socket.reconnect();
+      };
+
+      Client.prototype.close = function() {
+        return this.socket.disconnect();
       };
 
       return Client;

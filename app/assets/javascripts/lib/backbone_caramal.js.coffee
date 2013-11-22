@@ -54,10 +54,10 @@ class root.ChatView extends Caramal.BackboneView
     <li>
       <div class="title">
         <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
-        <span class="login"><%= data.user %></span>
+        <span class="login"><%= user %></span>
         <span class="date"><%= new Date().format("hh:mm:ss") %></span>
       </div>
-      <div class="message"><%= data.msg %></div>
+      <div class="message"><%= msg %></div>
     </li>')
 
   events:
@@ -81,13 +81,26 @@ class root.ChatView extends Caramal.BackboneView
     window.clients.on('disconnect', (error) =>
       @offline()
     )
-    @chat = Caramal.Chat.of(@user)
-    @chat.open()
-    @chat.onMessage (data) =>
-      @receiveMessage(@msg_template(data: data))
+
+  bindMessage: () ->
+    @channel.onMessage($.proxy(@receiveMessage, @))
+
+  unbindMessage: () ->
+    @channel.removeEventListener('message', $.proxy(@receiveMessage, @))
 
   hideDialog: () ->
     $(@el).hide()
+    @channel.deactive()
+    @unbindMessage()
+
+  showDialog: () ->
+    $(@el).show()
+    @channel.active()
+    for msg in @channel.message_buffer
+      @receiveMessage(msg)
+
+    @channel.message_buffer.splice(0, @channel.message_buffer.length)
+    @bindMessage()
 
   activeDialog: () ->
     @trigger('unactive_avatar')
@@ -98,7 +111,8 @@ class root.ChatView extends Caramal.BackboneView
   offline: () ->
     @state_el.addClass(@off_class).removeClass(@on_class)
 
-  receiveMessage: (data) ->
+  receiveMessage: (msg) ->
+    data = @msg_template(msg)
     @trigger('active_avatar')
     @$(".msg_content").append(data)
 
@@ -108,6 +122,6 @@ class root.ChatView extends Caramal.BackboneView
 
   sendMeessage: () ->
     $msg = @$("textarea.content")
-    @chat.send($msg.val().trim())
+    @channel.send($msg.val().trim())
     $msg.val('')
     
