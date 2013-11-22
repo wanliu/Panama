@@ -2,7 +2,7 @@
 class Admins::Shops::CirclesController < Admins::Shops::SectionController
 
   def index
-    @circles = current_shop.circles
+    @circles = current_shop.circle_all
     respond_to do |format|
       format.json{ render json: @circles.as_json(
         methods: [:friend_count, :header_url]) }

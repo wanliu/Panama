@@ -48,7 +48,6 @@ class root.Realtime
       console.log('reconnecting')
     )
 
-
   connect: () ->
     @socket = Caramal.connect(@url, @options)
     Caramal.MessageManager.setClient(@socket)
@@ -87,20 +86,20 @@ class root.Realtime
   disconnect_state: () ->
     # 订单聊天窗口
     $("iframe").contents().find("body [data-realtime-state]").each () ->
-      $(@).attr("data-realtime-state", "disconnect")
+      $(@).attr("data-realtime-state", "disconnect").attr("readonly","readonly")
       $(@).tooltip({'trigger':'focus', 'title': '此窗口已经失效，请刷新'})
 
   connecting: () ->
-    $(".hidden-phone .progress").show()
+    $(".progress").show()
 
   connected: () ->
-    $("#account").attr("data-original-title","我的头像").attr("data-placement","bottom").tooltip('hide')
+    $(".realtime_state").popover('hide').removeData("popover")
     $(".user_icon").removeClass("disconnect")
-    $(".hidden-phone .progress").hide()
+    $(".progress").hide()
       
   error_tip: (type) ->
     $(".user_icon").addClass("disconnect")
-    target = $(".hidden-phone .progress")
+    target = $(".progress")
     unless type == "booted"
       target.find(".bar").css("width","50%")
       target.addClass("progress-danger").show()
@@ -109,9 +108,19 @@ class root.Realtime
       else
         "连接失败, 请刷新重试"
     else
-      message = "你被迫下线"
+      message = "你帐号在异地登录"
     @tip_operate(message)
 
   tip_operate: (message) ->
-    target = $("#account")
-    target.attr("title",message).attr("data-original-title",message).attr("data-placement","bottom").tooltip('toggle')
+    target = $(".realtime_state")
+    target.removeData("popover")
+    target.popover({
+        content: message+"点击<a href='#' class='connect_by_self pull-right'>链接</a>",
+        placement: "bottom",
+        html: true,
+        trigger: "hover"
+      })
+    target.popover("show")
+    setTimeout( () ->
+      target.popover("hide")
+    ,5000);
