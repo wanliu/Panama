@@ -87,7 +87,7 @@ class root.Realtime
   disconnect_state: () ->
     # 订单聊天窗口
     $("iframe").contents().find("body [data-realtime-state]").each () ->
-      $(@).attr("data-realtime-state", "disconnect")
+      $(@).attr("data-realtime-state", "disconnect").attr("readonly","readonly")
       $(@).tooltip({'trigger':'focus', 'title': '此窗口已经失效，请刷新'})
 
   connecting: () ->
@@ -109,9 +109,12 @@ class root.Realtime
       else
         "连接失败, 请刷新重试"
     else
-      message = "你被迫下线"
+      message = "你帐号在异地登录"
     @tip_operate(message)
 
   tip_operate: (message) ->
     target = $("#account")
     target.attr("title",message).attr("data-original-title",message).attr("data-placement","bottom").tooltip('toggle')
+    setTimeout( () =>
+      target.tooltip('toggle')
+    ,3000)

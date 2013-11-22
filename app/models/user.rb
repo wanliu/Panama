@@ -182,9 +182,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  #加入的所有的个人的圈子
   def circle_all
     circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
-    Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+    Circle.where("owner_type='User' and id in (?)", circle_ids)
   end
 
   #加入的所有的圈子
