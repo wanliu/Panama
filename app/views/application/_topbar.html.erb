@@ -84,12 +84,14 @@
 	<% end %>
 	<li class="divider"></li>
 	<li class="hidden-phone dropdown">
-		<a href="javascript:void(0)" title="我的头像" id="account" class="dropdown-toggle" data-toggle="dropdown">
+		<a href="javascript:void(0)" title="我的头像" id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
 			<%= account_info %>
 			<div class="progress progress-striped active" style="display:none;">
 			  <div class="bar" style="width: 100%;"></div>
 			</div>
 		</a>
+		<div class="realtime_state" data-toggle="popover">
+		</div>
 		<ul id="account-menu" class="dropdown-menu account" role="menu">
 			<li role="presentation">
 				<%= link_to_account %>
@@ -100,7 +102,7 @@
 			<li>
 				<%= link_to_logout %>
 			</li>
-		 </ul>
+		</ul>
 	</li>
 	<li class="visible-phone">
 		<a href="#" class="btn-navbar" data-toggle="collapse" data-target=".sidebar" title="">
@@ -115,5 +117,10 @@
 		el: $(".notification"),
 		current_user_login: '<%= current_user.login %>'
 	})
+
+	$(document).delegate( ".connect_by_self", "click", function(){
+		clients.socket.socket.socket.reconnect()
+	})
+
 </script>
 <%= javascript_include_tag "my_cart" %>

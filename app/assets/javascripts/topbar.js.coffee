@@ -6,6 +6,7 @@ class TopBar extends Backbone.View
     "click .link.friends": "toggleFriends"
     "click .search-btn"  : "enterSearch"
     "submit form"        : "enterSearch"
+    "mouseenter .user-avatar" : "show_notify"
 
   initialize: (@options) ->
     @resultTarget = $(@options['results'] || '#activities')
@@ -36,5 +37,7 @@ class TopBar extends Backbone.View
     $(window).trigger('reset_search', {title: query})
     false
 
+  show_notify: () ->
+    $(".realtime_state").popover('show')
 
 root.TopBar = TopBar

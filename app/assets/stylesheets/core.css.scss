@@ -609,7 +609,6 @@ ul {
 		height: 30px;
 		margin: 0px 5px;
 	}
-
 	font-size: 20px;
 }
 
@@ -1283,9 +1282,19 @@ h2 small {
 	}
 }
 .hidden-phone{
+	.realtime_state{
+		a{
+			color: #777777;
+		}
+	}
 	.progress{
 		height: 5px;
 		margin-bottom: 0px;
+	}
+	.popover{
+		color: black;
+		top: 40px!important;
+		width: 140px;
 	}
 }
 .global_chat_panel{

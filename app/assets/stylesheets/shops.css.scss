@@ -24,6 +24,10 @@
   .body, .photo{
     display: inline-block;
     vertical-align: top;
+    img{
+      height: 100px;
+      width: 100px;
+    }
 
     .page-title{
       margin-top: 0px;
