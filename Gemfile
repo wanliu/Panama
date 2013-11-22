@@ -98,7 +98,7 @@ group :development, :test do
   # gem 'debugger', '~> 1.2.2'
   gem "selenium-webdriver", "~> 2.27.0"
   gem 'hirb', '~> 0.7.0'
-  gem 'rb-readline', '~> 0.4.2'
+  # gem 'rb-readline', '~> 0.4.2'
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-cucumber'
