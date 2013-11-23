@@ -120,6 +120,7 @@
 
 	$(document).delegate( ".connect_by_self", "click", function(){
 		clients.socket.socket.socket.reconnect()
+		$(".popover-content").html("正在连接...")
 	})
 
 </script>

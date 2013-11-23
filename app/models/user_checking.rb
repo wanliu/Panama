@@ -52,6 +52,10 @@ class UserChecking < ActiveRecord::Base
     user.try(:shop)
   end
 
+  def login_name
+    user.login
+  end
+
   def update_rejected_times
     self.rejected_times = rejected_times + 1
     save

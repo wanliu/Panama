@@ -153,20 +153,20 @@ class FriendView extends Backbone.View
       unless @channel.isActive()
         @channel.message_buffer.push(msg)
         @active()
+    , @
 
   talk_to_friend: () ->
     @unactive()
+    $(".global_chat_panel").css('z-index', 9999)
     @setChannel() unless @channel?
     unless @chat_view 
       @chat_view = new ChatView({user: @model.get('name'), channel: @channel })
       @bind_chat()
-
     @chat_view.showDialog()
 
   bind_chat: () ->
     @chat_view.bind("active_avatar", _.bind(@active, @))
     @chat_view.bind("unactive_avatar", _.bind(@unactive, @))
-    $("body").append(@chat_view.el)
 
   active: () ->
     $(@el).addClass('active')
