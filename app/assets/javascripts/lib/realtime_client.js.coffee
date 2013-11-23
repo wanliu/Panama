@@ -122,7 +122,7 @@ class root.Realtime
     target = $(".progress")
     unless type == "booted"
       target.find(".bar").css("width","100%")
-      target.addClass("progress-danger").remove("active").show()
+      target.addClass("progress-danger").removeClass("active").show()
       message = if type == undefined
         "链接错误，请稍后重试"
       else
