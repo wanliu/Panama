@@ -31,8 +31,8 @@
 
               <div class="create_name span4">
                 <span><i class="icon-user"></i></span>
-                <a href="/shops/<%=Shop.find(circle.owner_id).try(:name) %>">
-                  <%=Shop.find(circle.owner_id).try(:name) %>
+                <a href="/shops/<%=circle.shop_name %>">
+                  <%=circle.shop_name %>
                 </a>
               </div>
             </div>
