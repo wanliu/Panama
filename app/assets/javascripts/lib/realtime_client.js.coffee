@@ -15,6 +15,7 @@ class root.Realtime
 
     @on('connect', () =>
       @connected()
+      @connected_state()
       console.log("connected.")
     )
 
@@ -41,6 +42,7 @@ class root.Realtime
     )
     @on('reconnect', () =>
       @connected()
+      @connected_state()
       console.log('reconnect') 
     )
     @on('reconnecting', () =>
@@ -89,20 +91,38 @@ class root.Realtime
       $(@).attr("data-realtime-state", "disconnect").attr("readonly","readonly")
       $(@).tooltip({'trigger':'focus', 'title': '此窗口已经失效，请刷新'})
 
+  connected_state: () ->
+    $("iframe").contents().find("body [data-realtime-state]").each () ->
+      $(@).removeAttr("readonly")
+      $(@).removeData("tooltip")
+
   connecting: () ->
-    $(".progress").show()
+    $(".bar").css("width","100%")
+    $(".progress").removeClass("progress-danger").addClass("active").show()
+    target = $(".realtime_state")
+    target.popover('hide')
+    target.removeData("popover")
+    target.popover({
+        content: "连接中...",
+        placement: "bottom",
+        trigger: "hover"
+      })
+    target.popover("show")
 
   connected: () ->
-    $(".realtime_state").popover('hide').removeData("popover")
+    $(".realtime_state").popover('hide')
+    $(".realtime_state").removeData("popover")
     $(".user_icon").removeClass("disconnect")
-    $(".progress").hide()
+    setTimeout( () ->
+      $(".progress").hide()
+    ,2000);
       
   error_tip: (type) ->
     $(".user_icon").addClass("disconnect")
     target = $(".progress")
     unless type == "booted"
-      target.find(".bar").css("width","50%")
-      target.addClass("progress-danger").show()
+      target.find(".bar").css("width","100%")
+      target.addClass("progress-danger").remove("active").show()
       message = if type == undefined
         "链接错误，请稍后重试"
       else
@@ -115,7 +135,7 @@ class root.Realtime
     target = $(".realtime_state")
     target.removeData("popover")
     target.popover({
-        content: message+"点击<a href='#' class='connect_by_self pull-right'>链接</a>",
+        content: message+"点击<a href='#' class='connect_by_self'>重连</a>",
         placement: "bottom",
         html: true,
         trigger: "hover"

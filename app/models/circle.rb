@@ -38,6 +38,11 @@ class Circle < ActiveRecord::Base
     "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
   end
 
+  #若是Shop类型的circle,就可以看出商店名
+  def shop_name
+    Shop.find(owner_id).try(:name) if owner_type == "Shop"  
+  end
+
   def apply_join_notice(sender)
     notice.create(
       :send_user => sender,
