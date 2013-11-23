@@ -4639,8 +4639,9 @@ if (typeof define === "function" && define.amd) {
         this._listeners = {};
       }
 
-      Event.prototype.addEventListener = function(event, callback) {
+      Event.prototype.addEventListener = function(event, callback, context) {
         var callbacks;
+        callback.context = context;
         if ((callbacks = this._listeners[event]) == null) {
           callbacks = this._listeners[event] = [];
         }
@@ -4675,7 +4676,7 @@ if (typeof define === "function" && define.amd) {
         }
       };
 
-      Event.prototype.on = function(event, callback) {
+      Event.prototype.on = function(event, callback, context) {
         return this.addEventListener(event, callback);
       };
 
@@ -4686,7 +4687,11 @@ if (typeof define === "function" && define.amd) {
         for (_i = 0, _len = callbacks.length; _i < _len; _i++) {
           callback = callbacks[_i];
           if (Util.isFunc(callback)) {
-            _results.push(callback(data));
+            if (callback.context != null) {
+              _results.push(callback.call(callback.context, data));
+            } else {
+              _results.push(callback(data));
+            }
           } else {
             _results.push(void 0);
           }
@@ -5014,9 +5019,9 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Channel.prototype.onMessage = function(message_callback) {
+      Channel.prototype.onMessage = function(message_callback, context) {
         this.message_callback = message_callback;
-        return this.on('message', this.message_callback);
+        return this.on('message', this.message_callback, context);
       };
 
       /**
@@ -5025,9 +5030,9 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Channel.prototype.onCommand = function(command_callback) {
+      Channel.prototype.onCommand = function(command_callback, context) {
         this.command_callback = command_callback;
-        return this.on('command', this.command_callback);
+        return this.on('command', this.command_callback, context);
       };
 
       /**
@@ -5036,9 +5041,9 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Channel.prototype.onEvent = function(event_callback) {
+      Channel.prototype.onEvent = function(event_callback, context) {
         this.event_callback = event_callback;
-        return this.on('event', this.event_callback);
+        return this.on('event', this.event_callback, context);
       };
 
       /**
