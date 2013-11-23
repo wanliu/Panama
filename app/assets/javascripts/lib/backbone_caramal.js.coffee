@@ -35,20 +35,20 @@ class root.ChatView extends Caramal.BackboneView
     <div class="head">
       <span class="state online"></span>
       <span class="name"><%= user %></span>
+      <a class="close_label" href="javascript:void(0)"></a>
     </div>
-    <div class="content_panel">
+    <div class="body">
       <ul class="msg_content">
       </ul>
-      <div class="foot">
-        <div class="send_content">
-          <textarea class="content"></textarea>
-        </div>
-        <div class="foot_nav">
-          <button class="send_button">发送</button>
-        </div>
-      </div>
     </div>
-    <a class="close_label" href="javascript:void(0)"></a>')
+    <div class="foot">
+      <div class="send_content">
+        <textarea class="content"></textarea>
+      </div>
+      <div class="foot_nav">
+        <button class="send_button">发送</button>
+      </div>
+    </div>')
 
   msg_template: _.template('
     <li>
@@ -69,24 +69,42 @@ class root.ChatView extends Caramal.BackboneView
   initialize: (options) ->
     super
     _.extend(@, options)
+    @initChannel() 
+    @initDialog()
+    @bindDialog()
+
+  initDialog: () ->
     $(@el).html(@chat_template(user: @user))
+    @state_el = @$(".head>.state")
+    $("body").append(@el)
+    $(@el).css('top', $(window).height() - $(@el).height() + "px")
+
+  bindDialog: () ->
     $(@el).resizable().draggable().css('position', 'fixed')
-    $(@el).on('resizestop', (event, ui) =>
+    $(@el).on('resize', (event, ui) =>
+      height = $(@el).outerHeight() - @$(".head").outerHeight() - @$(".foot").outerHeight()
+      @$(".body").css('height', height)
       $(@el).css('position', 'fixed')
     )
-    @state_el = @$(".head>.state")
-    @init_chat()
-
-  init_chat: () ->
     window.clients.on('disconnect', (error) =>
       @offline()
     )
 
+  initChannel: () ->
+    return if @channel?
+    @channel ||= Caramal.Chat.of(@user)
+    @channel.open()
+
   bindMessage: () ->
-    @channel.onMessage($.proxy(@receiveMessage, @))
+    @channel.onMessage(@receiveMessage, @)
 
   unbindMessage: () ->
-    @channel.removeEventListener('message', $.proxy(@receiveMessage, @))
+    @channel.removeEventListener('message', @receiveMessage)
+
+  receiveMessage: (msg, context) ->
+    data = @msg_template(msg)
+    @trigger('active_avatar')
+    @$(".msg_content").append(data)
 
   hideDialog: () ->
     $(@el).hide()
@@ -94,7 +112,7 @@ class root.ChatView extends Caramal.BackboneView
     @unbindMessage()
 
   showDialog: () ->
-    $(@el).show()
+    $(@el).css('z-index', 10000).show()
     @channel.active()
     for msg in @channel.message_buffer
       @receiveMessage(msg)
@@ -110,11 +128,6 @@ class root.ChatView extends Caramal.BackboneView
 
   offline: () ->
     @state_el.addClass(@off_class).removeClass(@on_class)
-
-  receiveMessage: (msg) ->
-    data = @msg_template(msg)
-    @trigger('active_avatar')
-    @$(".msg_content").append(data)
 
   fastKey: (event) ->
     event = event ? event:window.event
