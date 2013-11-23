@@ -1281,6 +1281,7 @@ h2 small {
 		}
 	}
 }
+
 .hidden-phone{
 	.realtime_state{
 		a{
@@ -1297,9 +1298,10 @@ h2 small {
 		width: 140px;
 	}
 }
+
 .global_chat_panel{
 	top: 55px;
-	right: 65px;
+	right: 60px;
 	width: 300px;
 	height: 370px;
 	z-index: 9999;
@@ -1352,9 +1354,11 @@ h2 small {
     }
   }
 
-  .content_panel{
+  .body{
+    height: 258px;
+    overflow-y: scroll; 
+
     .msg_content{
-      height: 248px;
       overflow-y: auto;
       list-style: none;
       margin: 0px;
@@ -1387,27 +1391,27 @@ h2 small {
         }
       }
     }
+  }
 
-    .foot{
-      .send_content{
-        height: 60px;
-        padding: 0px 5px;
+  .foot{
+    .send_content{
+      height: 50px;
+      padding: 0px 5px;
 
-        textarea{
-          resize: none;
-          width: 100%;
-          padding: 0px;
-          margin: 0px;
-          height: 100%;
-        }
+      textarea{
+        resize: none;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+        height: 100%;
       }
+    }
 
-      .foot_nav{
-        padding: 5px 5px;
+    .foot_nav{
+      padding: 5px 5px;
 
-        .send_button {
-        	float: right;
-        }
+      .send_button {
+      	// float: right;
       }
     }
   }
