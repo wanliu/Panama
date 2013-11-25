@@ -4375,6 +4375,11 @@ if (typeof define === "function" && define.amd) {
 
 (function() {
   define('util',['exports'], function(exports) {
+    if (Date.now == null) {
+      Date.now = function() {
+        return (new Date()).valueOf();
+      };
+    }
     exports.isFunc = function(object) {
       return typeof object === 'function';
     };
