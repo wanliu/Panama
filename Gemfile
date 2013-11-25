@@ -116,6 +116,7 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
+  gem 'byebug'
   # gem 'pry-rails'
   # gem 'zeus'
   # gem 'coffee-rails-source-maps'

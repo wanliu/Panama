@@ -129,6 +129,9 @@ GEM
     builder (3.0.4)
     bunny (0.9.8)
       amq-protocol (>= 1.6.0)
+    byebug (2.3.1)
+      columnize (~> 0.3.6)
+      debugger-linecache (~> 1.2.0)
     cache_digests (0.2.0)
       actionpack (>= 3.2)
     cancan (1.6.10)
@@ -171,6 +174,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.4.0)
+    columnize (0.3.6)
     compass (0.12.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -196,6 +200,7 @@ GEM
     daemons (1.1.9)
     database_cleaner (0.9.1)
     debug_inspector (0.0.2)
+    debugger-linecache (1.2.0)
     default_value_for (2.0.3)
     delayed_job (4.0.0)
       activesupport (>= 3.0, < 4.1)
@@ -503,6 +508,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bunny (~> 0.9.0.pre9)
+  byebug
   cache_digests (~> 0.2.0)
   cancan
   carrierwave (~> 0.8.0)
