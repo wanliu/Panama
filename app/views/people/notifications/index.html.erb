@@ -51,13 +51,13 @@
   $(function(){
     $(".mark_read").bind("click", function(){
       target = $(event.target),
-      current_user="<%= current_user.id %>",
+      current_user="<%= current_user.login %>",
       notification=target.attr("data-value-id"),
       $.ajax({
         type: "post",
         url: "/people/"+current_user+"/notifications/"+notification+"/mark_as_read",
         success: function(){
-          target.remove()
+          target.parents("li").remove()
         }
       })
     })

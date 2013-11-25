@@ -29,8 +29,8 @@ class People::NotificationsController < People::BaseController
 
   def mark_as_read
     @notification = Notification.find(params[:id])
-    authorize! :read, @notification
-    @notification.update_attribute(:read, true)
+    authorize! :read, @notification    
+    @notification.change_read
     respond_to do | format |
       format.json { head :no_content }
     end
