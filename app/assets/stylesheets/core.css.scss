@@ -1301,9 +1301,9 @@ h2 small {
 
 .global_chat_panel{
 	top: 55px;
-	right: 60px;
-	width: 300px;
-	height: 370px;
+	// right: 60px;
+	width: 280px;
+	height: 330px;
 	z-index: 9999;
 	position: fixed;
 	background: white;
@@ -1355,7 +1355,7 @@ h2 small {
   }
 
   .body{
-    height: 258px;
+    height: 218px;
     overflow-y: scroll; 
 
     .msg_content{
