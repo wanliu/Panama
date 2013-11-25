@@ -160,7 +160,7 @@ class FriendView extends Backbone.View
     $(".global_chat_panel").css('z-index', 9999)
     @setChannel() unless @channel?
     unless @chat_view 
-      @chat_view = new ChatView({user: @model.get('name'), channel: @channel })
+      @chat_view = new ChatView({ user: @model.get('name'), channel: @channel })
       @bind_chat()
     @chat_view.showDialog()
 

@@ -25,10 +25,43 @@ class Caramal.BackboneView extends Backbone.View
           @channel[name].apply(@channel, args)
 
 
+class root.ChatLayout
+  @rows = 1
+  @count = 0
+  @maxRows = 2
+
+  @getInstance = (options) ->
+    ChatLayout.instance ||= new ChatLayout(options)
+
+  constructor: (options) ->
+    _.extend(@, options)
+
+  setMaxRows: (rows) ->
+    ChatLayout.maxRows = rows if rows > 0
+
+  setRows: (rows) ->
+    rows = ChatLayout.maxRows if rows > ChatLayout.maxRows
+    ChatLayout.rows = rows
+
+  setPosition: ($el) ->
+    ChatLayout.count += 1
+    w_width = $(window).width()
+    w_height = $(window).height()
+    right = $(".right-sidebar").width() + (ChatLayout.count-1)*$el.width()
+
+    if right + $el.width() > w_width
+      count_x = ~~(w_width/$el.width())
+      @setRows(Math.ceil(ChatLayout.count/count_x))
+      right = $(".right-sidebar").width() + (ChatLayout.count-1)%count_x*$el.width()
+
+    top = w_height - ChatLayout.rows*$el.height()
+    $el.css('right', right + "px")
+    $el.css('top', top + "px")
+
+
 class root.ChatView extends Caramal.BackboneView
   on_class: "online"
   off_class: "offline"
-  display_state: true
   className: 'global_chat_panel'
 
   chat_template:  _.template('
@@ -77,7 +110,7 @@ class root.ChatView extends Caramal.BackboneView
     $(@el).html(@chat_template(user: @user))
     @state_el = @$(".head>.state")
     $("body").append(@el)
-    $(@el).css('top', $(window).height() - $(@el).height() + "px")
+    ChatLayout.getInstance().setPosition($(@el))
 
   bindDialog: () ->
     $(@el).resizable().draggable().css('position', 'fixed')
@@ -101,7 +134,7 @@ class root.ChatView extends Caramal.BackboneView
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)
 
-  receiveMessage: (msg, context) ->
+  receiveMessage: (msg) ->
     data = @msg_template(msg)
     @trigger('active_avatar')
     @$(".msg_content").append(data)
