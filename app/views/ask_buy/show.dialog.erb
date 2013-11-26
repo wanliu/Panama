@@ -10,8 +10,23 @@
           </div>
           <div class="modal-body main-show">
             <div class='picture'>
-              <img class="preview" src="<%=@ask_buy.photos.default %>" />
+              <% if @ask_buy.attachments.length > 1  %>
+                <div id="myCarousel" class="carousel slide">
+                  <div class="carousel-inner">
+                      <% @ask_buy.attachments.each do |picture| %>
+                        <div class="item">
+                          <img class="preview" src="<%=picture.file %>" alt="求购-图片">
+                        </div>
+                      <% end %>
+                  </div>
+                  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                </div>
+              <% else %>
+                <img class="preview" src="<%=@ask_buy.photos.default %>" />
+              <% end %>
             </div>
+
             <h4 class="right_bottom2 animate1 fadeInRight">
               价格: <span>￥<%=@ask_buy.price %></span>
             </h4>
@@ -112,4 +127,9 @@
 
 <script type="text/template" id="ask_buy-comment-template">
   <%= render "comment.html" %>
+</script>
+<script type="text/javascript">
+  $(function(){
+    $(".item").first().addClass("active")
+  })
 </script>

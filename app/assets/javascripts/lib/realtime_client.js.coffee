@@ -14,7 +14,7 @@ class root.Realtime
     @events = {}
 
     @on('connect', () =>
-      @connected()
+      @connected(500)
       @connected_state()
       console.log("connected.")
     )
@@ -41,7 +41,7 @@ class root.Realtime
       console.log('error:' + err)
     )
     @on('reconnect', () =>
-      @connected()
+      @connected(2000)
       @connected_state()
       console.log('reconnect') 
     )
@@ -97,8 +97,8 @@ class root.Realtime
       $(@).removeData("tooltip")
 
   connecting: () ->
-    $(".bar").css("width","100%")
-    $(".progress").removeClass("progress-danger").addClass("active").show()
+    $(".login_bar").css("width","100%")
+    $(".login_progress").removeClass("progress-danger").addClass("active").show()
     target = $(".realtime_state")
     target.popover('hide')
     target.removeData("popover")
@@ -109,19 +109,19 @@ class root.Realtime
       })
     target.popover("show")
 
-  connected: () ->
+  connected: (time) ->
     $(".realtime_state").popover('hide')
     $(".realtime_state").removeData("popover")
     $(".user_icon").removeClass("disconnect")
     setTimeout( () ->
-      $(".progress").hide()
-    ,2000);
+      $(".login_progress").hide()
+    ,time);
       
   error_tip: (type) ->
     $(".user_icon").addClass("disconnect")
-    target = $(".progress")
+    target = $(".login_progress")
     unless type == "booted"
-      target.find(".bar").css("width","100%")
+      target.find(".login_bar").css("width","100%")
       target.addClass("progress-danger").removeClass("active").show()
       message = if type == undefined
         "链接错误，请稍后重试"

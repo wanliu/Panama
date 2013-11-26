@@ -14,14 +14,14 @@ class Notification < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :mentionable_user
 
-  after_create :expired_unreads, :realtime_push_to_client
+  after_create :realtime_push_to_client, :expired_unreads 
 
   def expired_unreads
     Notification.unreads.where({ 
       mentionable_user_id: self.mentionable_user_id, 
       targeable_type: self.targeable_type, 
       targeable_id: self.targeable_id 
-    }).where('id <> '<<self.id.to_s).update_all(:read => true)
+    }).where('id <> ?', self.id).update_all(:read => true)
   end
 
   def realtime_push_to_client

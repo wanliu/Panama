@@ -9,7 +9,21 @@
         </div>
         <div class="modal-body main-show">
           <div class='picture'>
-           <img class="preview" src="<%=activity.photos.default %>" />
+            <% if activity.attachments.length > 1  %>
+              <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <% activity.attachments.each do |picture| %>
+                      <div class="item">
+                        <img class="preview" src="<%=picture.file %>" alt="聚集活动-图片">
+                      </div>
+                    <% end %>
+                </div>
+                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+              </div>
+            <% else %>
+              <img class="preview" src="<%=activity.photos.default %>" />
+            <% end %>
           </div>
           <h4 class="right_bottom2 animate1 fadeInRight">
             原价: <span><%=activity.price %></span>
@@ -129,6 +143,7 @@
 
 <script type="text/javascript">
   $(function(){
+    $(".item").first().addClass("active");
     bar = $('.focus_progress');
     bar.bind('positionChanged', function(event) {
       event.bar.changedLabel = '当前' + event.bar.position + '人';
