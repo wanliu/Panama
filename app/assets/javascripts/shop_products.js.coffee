@@ -5,7 +5,6 @@ class ShopProductModel extends Backbone.Model
 
   urlRoot: '/shop_products'
 
-
 class ShopProductView extends Backbone.View
 
   events:
@@ -40,7 +39,6 @@ class ShopProductView extends Backbone.View
     @$dialog.remove()
     @$backdrop.remove()
     @unmodal()
-
 
 class ShopProductPreview extends Backbone.View
 
@@ -81,7 +79,6 @@ class ShopProductPreview extends Backbone.View
     @$el = @el = $(target).parents(".shop_product")
     @model = new ShopProductModel({id: @el.attr('shop-product-id')})
     @delegateEvents()
-
 
 class ShopProductToolbar extends Backbone.View
   events:
@@ -141,8 +138,44 @@ class ShopProductToolbar extends Backbone.View
     form.append("<input type='hidden' value='#{@buy_manner()}' name='product_item[buy_state]' />")
     form
 
+class ShopProductList extends Backbone.View
 
-root.ShopProductModel = ShopProductModel
+  initialize: () ->
+    _.extend(@, @options)
+    @load_product_view()
+    @load_preview()
+    @bind_follow()
+    $(window).bind("reset_search", _.bind(@search, @))
+
+
+  load_product_view: () ->
+    @load_product = new LoadShopProducts({
+      params: {
+        fetch_url: "/shop_products/#{@shop.id}/search"
+      }
+      el: @$('.shop_products_panel')
+    })
+
+  load_preview: () ->
+    new ShopProductPreview({
+      el: @$("#shop_products")
+    })
+
+  bind_follow: () ->
+    new FollowView({
+      data: {
+        follow_id: @shop.id,
+        follow_type: "Shop"
+      },
+      login: @user.login,
+      el: @$(".shop_info")
+    })
+
+  search: (e, query) ->
+    @load_product.reset_fetch(query.title)
+
+
 root.ShopProductView = ShopProductView
 root.ShopProductPreview = ShopProductPreview
 root.ShopProductToolbar = ShopProductToolbar
+root.ShopProductList = ShopProductList
