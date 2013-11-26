@@ -1,6 +1,9 @@
 Panama::Application.routes.draw do
 
   resources :shop_products do
+    collection do
+      get ":shop_id/search", :to => "shop_products#search"
+    end
     member do
       post :buy, :to => "shop_products#buy"
       post :direct_buy, :to => "shop_products#direct_buy"
@@ -121,6 +124,7 @@ Panama::Application.routes.draw do
         post "mark_as_read", :to => "people/transactions#mark_as_read"
         get :kuaiqian_receive
         match 'kuaiqian_payment', :via => [:get, :post]
+        match 'test_payment', :via => [:get, :post]
       end
 
       collection do

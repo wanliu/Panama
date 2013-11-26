@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
 
   def filter_special_sym(query)
     if query.present?
-      query.gsub(/[\+\-\*\.\,\/\[\]\(\)]/, "")
+      query.gsub(/[\*\-\.\,\/\[\]\(\)]/, "")
     end
   end
 
