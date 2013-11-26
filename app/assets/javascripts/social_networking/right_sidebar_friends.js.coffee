@@ -151,7 +151,8 @@ class root.FriendView extends Backbone.View
     "click" : "talk_to_friend"
 
   template: _.template(
-    "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
+    "<span class='badge badge-important message_count'></span>
+    <img src='/default_img/t5050_default_avatar.jpg' class='img-circle' />
     <div class='user-info hide'>
       <div class='name'>
         <a href='#''><%= model.get('login') %></a>
@@ -159,10 +160,21 @@ class root.FriendView extends Backbone.View
       <div class='type'><%= model.get('follow_type') %></div>
     </div>")
 
+  initialize: () ->
+    @clearMsgCount()
+
   render: () ->
     html = @template(model: @model)
     $(@el).html(html)
     @
+
+  clearMsgCount: () ->
+    @msg_count = 0
+    @$('.message_count').hide()
+
+  incMsgCount: (count = 1) ->
+    @msg_count += count
+    @$('.message_count').html(@msg_count).show()
 
   setChannel: (@channel) ->
     @channel ||= Caramal.Chat.of(@model.get('login'))
@@ -170,6 +182,7 @@ class root.FriendView extends Backbone.View
     @channel.onMessage (msg) =>
       unless @channel.isActive()
         @channel.message_buffer.push(msg)
+        @incMsgCount()
         @active()
     , @
 
@@ -191,4 +204,5 @@ class root.FriendView extends Backbone.View
 
   unactive: () ->
     $(@el).removeClass('active')
+    @clearMsgCount()
 
