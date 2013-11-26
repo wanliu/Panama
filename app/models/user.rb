@@ -1,3 +1,5 @@
+require 'bunny'
+
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
@@ -41,7 +43,7 @@ class User < ActiveRecord::Base
 
   after_create :load_initialize_data
   after_commit :sync_create_to_redis, :on => :create
-  after_update :sync_change_to_redis
+  # after_update :sync_change_to_redis
   before_create :generate_token
 
   delegate :groups, :jshop, :to => :shop_user
@@ -172,14 +174,23 @@ class User < ActiveRecord::Base
   end
 
   def sync_create_to_redis
-    redis_client = RedisClient.redis
-    user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
-    user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+    # redis_client = RedisClient.redis
+    # user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+    # user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
 
-    redis_client.multi do
-      redis_client.hset(user_id_to_user_name, id, login)
-      redis_client.hset(user_name_to_user_id, login, id)
-    end
+    # redis_client.multi do
+    #   redis_client.hset(user_id_to_user_name, id, login)
+    #   redis_client.hset(user_name_to_user_id, login, id)
+    # end
+    conn = Bunny.new
+    conn.start
+    channel = conn.create_channel
+    config  = YAML::load_file("config/application.yml")[Rails.env]
+    queue_name = config["rabbitmq_queues"]["new_users"]
+    queue  = channel.queue(queue_name, :durable => true)
+
+    queue.publish({user_id: id, user_name: login}.to_json)
+    conn.close
   end
 
   def sync_change_to_redis
