@@ -3,20 +3,32 @@
 namespace :redis_user do
   desc "load user information to redis"
   task :load => :environment do
-    redis_client = RedisClient.redis
-    redis_client.del("Panama:userId:userName")# if redis_client.exists("Panama:userId:userName")
-    redis_client.del("Panama:userName:userId")# if redis_client.exists("Panama:userName:userId")
-    result = []
+    user_id_to_user_name = "Panama:info:userId:userName"
+    user_name_to_user_id = "Panama:info:userName:userId"
+
+    userId_userName = []
+    userName_userId = []
     User.all.each do |user|
       user_name = user.login
       user_id   = user.id
 
-      result.push redis_client.hset("Panama:userId:userName", user_id, user_name)
-      result.push redis_client.hset("Panama:userName:userId", user_name, user_id)
+      userId_userName.push(user_id, user_name)
+      userName_userId.push(user_name, user_id)
     end
 
-    if result.any? {|item| item == 0}
-      puts "错误：含有相同登陆名的用户，请检查后重新导入！！"
+    redis_client = RedisClient.redis
+    result = redis_client.multi do
+      redis_client.del(user_id_to_user_name)# if redis_client.exists("Panama:userId:userName")
+      redis_client.del(user_name_to_user_id)# if redis_client.exists("Panama:userName:userId")
+      redis_client.hmset(user_id_to_user_name, *userId_userName)
+      redis_client.hmset(user_name_to_user_id, *userName_userId)
+    end
+
+    if [1, 1, "OK", "OK"] == result || [0, 0, "OK", "OK"] == result
+      puts "congratulations!! import successed"
+    else
+      puts "result : #{result}"
+      puts "I am sorry, importing fails, pleace check an try again"
     end
   end
 end
