@@ -15,9 +15,7 @@ class FriendsContainerView extends RealTimeContainerView
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
       console.log(channel)
-      friend_view = @followers_view.find_exist(channel).view
-      friend_view.setChannel(channel) if friend_view?
-      # @process_message channel
+      @process_message channel
     )
 
   process_message: (channel) ->
@@ -71,6 +69,7 @@ class FollowersView extends Backbone.View
     exist_model = @find_exist(channel)
     if exist_model
       @top(exist_model)
+      exist_model.view.setChannel(channel)
       true
     else
       false
@@ -102,15 +101,17 @@ class StrangersView extends FollowersView
   addOne: (model) ->
     if @collection.length is 1 and @parent_view.$('.strangers').length is 0
       # @$parent_view.append(@el)
-      @parent_view.$('div.notices-list').append(@el)
+      @parent_view.$('div.notices-list').prepend(@el)
     super
 
   process: (channel) ->
+    @channel = channel
     model = new Backbone.Model()
     model.fetch
-      url: "/users/#{message.send_user_id}"
+      url: "/users/#{channel.user}"
       success: (model) =>
         @addStranger(model)
+        model.view.setChannel(@channel)
 
   addStranger: (model) ->
     exist_model = @find_exist(model)
@@ -136,9 +137,9 @@ class FriendView extends Backbone.View
     "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
     <div class='user-info hide'>
       <div class='name'>
-        <a href='#''><%= model.get('name') || model.get('login') %></a>
+        <a href='#''><%= model.get('login') || model.get('name') %></a>
       </div>
-      <div class='type'><%= model.get('follow_type') || 'User' %></div>
+      <div class='type'><%= model.get('follow_type') %></div>
     </div>")
 
   render: () ->
@@ -147,7 +148,7 @@ class FriendView extends Backbone.View
     @
 
   setChannel: (@channel) ->
-    @channel ||= Caramal.Chat.of(@model.get('name'))
+    @channel ||= Caramal.Chat.of(@model.get('login'))
     @channel.open()
     @channel.onMessage (msg) =>
       unless @channel.isActive()
@@ -160,7 +161,7 @@ class FriendView extends Backbone.View
     $(".global_chat_panel").css('z-index', 9999)
     @setChannel() unless @channel?
     unless @chat_view 
-      @chat_view = new ChatView({ user: @model.get('name'), channel: @channel })
+      @chat_view = new ChatView({ user: @model.get('login'), channel: @channel })
       @bind_chat()
     @chat_view.showDialog()
 

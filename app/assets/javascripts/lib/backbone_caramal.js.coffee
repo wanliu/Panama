@@ -107,6 +107,7 @@ class root.ChatView extends Caramal.BackboneView
     @bindDialog()
 
   initDialog: () ->
+    @display = false
     $(@el).html(@chat_template(user: @user))
     @state_el = @$(".head>.state")
     $("body").append(@el)
@@ -137,21 +138,22 @@ class root.ChatView extends Caramal.BackboneView
   receiveMessage: (msg) ->
     data = @msg_template(msg)
     @trigger('active_avatar')
-    @$(".msg_content").append(data)
+    @$('.msg_content').append(data)
+    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   hideDialog: () ->
     $(@el).hide()
     @channel.deactive()
-    @unbindMessage()
+    @unbindMessage() if @display
+    @display = false
 
   showDialog: () ->
     $(@el).css('z-index', 10000).show()
     @channel.active()
-    for msg in @channel.message_buffer
-      @receiveMessage(msg)
-
+    _.each @channel.message_buffer, (msg) => @receiveMessage(msg)
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
-    @bindMessage()
+    @bindMessage() unless @display
+    @display = true
 
   activeDialog: () ->
     @trigger('unactive_avatar')
