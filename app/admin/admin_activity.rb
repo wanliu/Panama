@@ -28,7 +28,7 @@ ActiveAdmin.register Activity do
       a.shop.try(:name)
     end
     column :author
-    
+
     column "操作" do |c|
       link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
       if c.status == Activity.statuses[:wait]
@@ -54,13 +54,13 @@ ActiveAdmin.register Activity do
   end
 
   action_item  do
-    link_to "排程日历", schedule_sort_system_activities_path                
+    link_to "排程日历", schedule_sort_system_activities_path
   end
 
-  collection_action :schedule_sort, :title => "活动日历", :method => :get do 
+  collection_action :schedule_sort, :title => "活动日历", :method => :get do
   end
 
-  collection_action :schedule_sort1, :method => :get do 
+  collection_action :schedule_sort1, :method => :get do
     start = Time.at(params[:start].to_i) unless params[:start].nil?
     _end = Time.at(params[:end].to_i) unless params[:end].nil?
     @activities = Activity.where("start_time >= ? AND end_time <= ?", start, _end)
@@ -93,7 +93,7 @@ ActiveAdmin.register Activity do
     activity = Activity.find(params[:id])
     activity.update_attributes(status: Activity.statuses[:access])
     activity.send_checked_mail
-    activity.notice_author(current_user, "您发布的活动已经通过审核")
+    activity.notice_author(activity.author, "您发布的活动已经通过审核")
     activity.notice_followers
     redirect_to action: :index
   end
@@ -102,7 +102,7 @@ ActiveAdmin.register Activity do
     activity = Activity.find(params[:id])
     activity.update_attributes(status: Activity.statuses[:rejected], rejected_reason: params[:reject_reason])
     activity.send_rejected_mail
-    activity.notice_author(current_user, "您发布的活动没有通过审核")
+    activity.notice_author(activity.author, "您发布的活动没有通过审核")
     redirect_to action: :index
   end
 end

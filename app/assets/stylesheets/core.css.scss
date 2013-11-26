@@ -1356,7 +1356,7 @@ h2 small {
 
   .body{
     height: 258px;
-    overflow-y: scroll; 
+    overflow-y: scroll;
 
     .msg_content{
       overflow-y: auto;
@@ -1416,3 +1416,27 @@ h2 small {
     }
   }
 }
+
+// @-webkit-keyframes bounce_circle{
+// 	0%{opacity:0.3;}
+// 	50%{opacity:1;background-color:#111}
+// 	100%{opacity:0.3;}
+// }
+
+// .circle {
+// 	background-color: #CCC;
+// 	float: left;
+// 	height: 10px;
+// 	margin-left: 8px;
+// 	width: 10px;
+// 	-webkit-animation-name: bounce_circle;
+// 	-webkit-border-radius: 10px;
+// 	-webkit-animation-duration: 1.5s;
+// 	-webkit-animation-iteration-count: infinite;
+// 	-webkit-animation-direction: linear;
+// 	opacity: 0.3;
+// }
+
+// .circle.active {
+// 	-webkit-animation-delay: .3s;
+// }
