@@ -169,6 +169,10 @@ class User < ActiveRecord::Base
     load_friend_group
   end
 
+  def persistence_channels
+    followings
+  end
+
   #暂时方法
   def grapical_handler
     photo.filename
