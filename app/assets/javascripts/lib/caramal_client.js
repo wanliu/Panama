@@ -8,7 +8,9 @@
     } else {
         //Browser globals case. Just assign the
         //result to a property on the global.
-        root.Caramal = factory();
+        f = factory()
+        root.Caramal = f['Caramal'];
+        root.io = f['io'];
     }
 }(this, function () {
 /**
@@ -4376,5 +4378,5 @@ if (typeof define === "function" && define.amd) {
   //this snippet. Ask almond to synchronously require the
   //module value for 'main' here and return it as the
   //value to use for the public API for the built file.
-  return require('caramal');
+  return { Caramal: require('caramal'), io: require('socket.io')};
 }));

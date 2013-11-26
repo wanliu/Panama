@@ -470,8 +470,8 @@ class OrderTransaction < ActiveRecord::Base
     # operator_connect_state
     if operator_state
       options[:receive_user] = current_operator
-    else
-      options.delete(:receive_user)
+    # else
+    #   options.delete(:receive_user)
     end
     chat_messages.create(options)
   end

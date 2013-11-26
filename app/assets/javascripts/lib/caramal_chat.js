@@ -8,7 +8,9 @@
     } else {
         //Browser globals case. Just assign the
         //result to a property on the global.
-        root.Caramal = factory();
+        f = factory()
+        root.Caramal = f['Caramal'];
+        root.io = f['io'];
     }
 }(this, function () {
 /**
@@ -5526,4 +5528,4 @@ if (typeof define === "function" && define.amd) {
   });
 
 }).call(this);
-  return require('chat');}));
+ return { Caramal: require('chat'), io: require('socket.io')};}));

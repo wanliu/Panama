@@ -165,7 +165,6 @@ class root.ChatView extends Caramal.BackboneView
     @state_el.addClass(@off_class).removeClass(@on_class)
 
   fastKey: (event) ->
-    event = event ? event:window.event
     @sendMeessage() if event.ctrlKey && event.keyCode == 13
 
   sendMeessage: () ->
