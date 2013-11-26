@@ -173,7 +173,6 @@ class User < ActiveRecord::Base
     load_friend_group
   end
 
-<<<<<<< HEAD
   def sync_create_to_redis
     # redis_client = RedisClient.redis
     # user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
