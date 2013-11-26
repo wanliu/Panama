@@ -172,21 +172,27 @@ class User < ActiveRecord::Base
   end
 
   def sync_create_to_redis
-      redis_client = RedisClient.redis
-      redis_client.multi do
-        redis_client.hset("Panama:userId:userName", id, login)
-        redis_client.hset("Panama:userName:userId", login, id)
-      end
+    redis_client = RedisClient.redis
+    user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+    user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+
+    redis_client.multi do
+      redis_client.hset(user_id_to_user_name, id, login)
+      redis_client.hset(user_name_to_user_id, login, id)
+    end
   end
 
   def sync_change_to_redis
     if self.login_changed?
       redis_client = RedisClient.redis
+      user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+      user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+
       redis_client.multi do
-        old_name = redis_client.hget("Panama:userId:userName", id)
-        redis_client.hdel("Panama:userName:userId", old_name)
-        redis_client.hset("Panama:userId:userName", id, login)
-        redis_client.hset("Panama:userName:userId", login, id)
+        old_name = redis_client.hget(user_id_to_user_name, id)
+        redis_client.hdel(user_name_to_user_id, old_name)
+        redis_client.hset(user_id_to_user_name, id, login)
+        redis_client.hset(user_name_to_user_id, login, id)
       end
     end
   end

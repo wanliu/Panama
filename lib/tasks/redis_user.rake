@@ -3,8 +3,8 @@
 namespace :redis_user do
   desc "load user information to redis"
   task :load => :environment do
-    user_id_to_user_name = "Panama:info:userId:userName"
-    user_name_to_user_id = "Panama:info:userName:userId"
+    user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+    user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
 
     userId_userName = []
     userName_userId = []
