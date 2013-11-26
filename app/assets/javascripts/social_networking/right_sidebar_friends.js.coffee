@@ -1,12 +1,18 @@
 root = (window || @)
 
-class FriendsContainerView extends RealTimeContainerView
+class root.FriendsContainerView extends RealTimeContainerView
+  events:
+    'keyup input.filter_key' : 'filter_users'
+
   initialize: () ->
     super
-    $(@el).append('<div class="notices-list"></div>')
     @followers_view = new FollowersView(parent_view: @)
-    @set_default_view(@followers_view)
     @stranger_view  = new StrangersView(parent_view: @)
+    @set_default_view(@followers_view)
+    $(@el).prepend('
+      <div class="fixed_head">
+        <input class="filter_key" type="text"/>
+      </div>')
 
   set_default_view: (view) ->
     view.seted_default()
@@ -14,21 +20,23 @@ class FriendsContainerView extends RealTimeContainerView
 
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
-      console.log(channel)
-      friend_view = @followers_view.find_exist(channel).view
-      friend_view.setChannel(channel) if friend_view?
-      # @process_message channel
+      @process_message(channel)
     )
 
   process_message: (channel) ->
     @followers_view.process(channel) || @stranger_view.process(channel)
+
+  filter_users: (event) ->
+    keyword = $(event.target).val().trim()
+    @followers_view.filter_users(keyword)
+    @stranger_view.filter_users(keyword)
 
 
 class FollowersView extends Backbone.View
   className: "followings-list"
 
   template:
-    '<h5 class="tab-header followings">
+    '<h5 class="tab-header">
       <i class="icon-group"></i>
        我关注的[<span class="num">0</span>]
     </h5>
@@ -49,8 +57,7 @@ class FollowersView extends Backbone.View
 
   seted_default: () ->
     @is_default_view = true
-    # @$parent_view.append(@el)
-    @parent_view.$('div.notices-list').append(@el)
+    @$parent_view.append(@el)
     @init_fetch()
 
   init_fetch: () ->
@@ -65,32 +72,42 @@ class FollowersView extends Backbone.View
     @$("h5 .num").html(@collection.length)
     friend_view = new FriendView({ model: model, parent_view: @ })
     model.view  = friend_view
-    @$(".users-list").prepend(friend_view.render().el)
+    @$(".users-list").append(friend_view.render().el)
 
   process: (channel) ->
     exist_model = @find_exist(channel)
     if exist_model
       @top(exist_model)
+      exist_model.view.setChannel(channel)
       true
     else
       false
 
+  filter_users: (keyword) ->
+    pattern = new RegExp(keyword)
+    _.each @collection.models, (model) ->
+      if keyword is ""
+        $(model.view.el).show()
+      else
+        $(model.view.el).hide() unless pattern.test(model.get('login'))
+
   find_exist: (channel) ->
-    _.find @collection.models, (item) ->
-      item.get("name") is channel.user
+    _.find @collection.models, (model) ->
+      model.get('login') is channel.user
 
   top: (model) ->
     @parent_view.active()
     friend_view = model.view
     friend_view.remove()
-    @$("ul").prepend(friend_view.el)
+    @$("ul").append(friend_view.el)
     friend_view.delegateEvents()
-    friend_view.active()
 
 
 class StrangersView extends FollowersView
+  className: "strangers-list"
+
   template:
-    '<h5 class="tab-header strangers">
+    '<h5 class="tab-header">
       <i class="icon-group"></i>
        陌生人[<span class="num">0</span>]
     </h5>
@@ -101,16 +118,17 @@ class StrangersView extends FollowersView
 
   addOne: (model) ->
     if @collection.length is 1 and @parent_view.$('.strangers').length is 0
-      # @$parent_view.append(@el)
-      @parent_view.$('div.notices-list').append(@el)
+      @$parent_view.find(".fixed_head").after(@el)
     super
 
   process: (channel) ->
+    @channel = channel
     model = new Backbone.Model()
     model.fetch
-      url: "/users/#{message.send_user_id}"
+      url: "/users/#{channel.user}"
       success: (model) =>
         @addStranger(model)
+        model.view.setChannel(@channel)
 
   addStranger: (model) ->
     exist_model = @find_exist(model)
@@ -126,7 +144,7 @@ class StrangersView extends FollowersView
       item.id is model.id
 
 
-class FriendView extends Backbone.View
+class root.FriendView extends Backbone.View
   tagName: 'li'
 
   events:
@@ -136,9 +154,9 @@ class FriendView extends Backbone.View
     "<img src='/default_img/t5050_default_avatar.jpg' class='pull-left img-circle' />
     <div class='user-info hide'>
       <div class='name'>
-        <a href='#''><%= model.get('name') || model.get('login') %></a>
+        <a href='#''><%= model.get('login') %></a>
       </div>
-      <div class='type'><%= model.get('follow_type') || 'User' %></div>
+      <div class='type'><%= model.get('follow_type') %></div>
     </div>")
 
   render: () ->
@@ -147,7 +165,7 @@ class FriendView extends Backbone.View
     @
 
   setChannel: (@channel) ->
-    @channel ||= Caramal.Chat.of(@model.get('name'))
+    @channel ||= Caramal.Chat.of(@model.get('login'))
     @channel.open()
     @channel.onMessage (msg) =>
       unless @channel.isActive()
@@ -160,7 +178,7 @@ class FriendView extends Backbone.View
     $(".global_chat_panel").css('z-index', 9999)
     @setChannel() unless @channel?
     unless @chat_view 
-      @chat_view = new ChatView({user: @model.get('name'), channel: @channel })
+      @chat_view = new ChatView({ user: @model.get('login'), channel: @channel })
       @bind_chat()
     @chat_view.showDialog()
 
@@ -174,6 +192,3 @@ class FriendView extends Backbone.View
   unactive: () ->
     $(@el).removeClass('active')
 
-
-root.FriendsContainerView = FriendsContainerView
-root.FriendView = FriendView

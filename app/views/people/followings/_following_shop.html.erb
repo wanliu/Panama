@@ -2,7 +2,7 @@
   <% followings.each do |f| %>
     <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%=f.follow_id %>">
     	<div class='avatar'>
-      	<img src="<%= f.follow.photo %>" class="img-rounded" />
+      	<img src="<%= f.follow.photos.icon %>" class="img-rounded" />
       </div>
       <div class='info'>
       	<div>

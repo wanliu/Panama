@@ -20,11 +20,11 @@ class Followers extends Backbone.View
 
   send_follow: (follow_id) ->
     if @follow_type == "User"
-      @ajax_url = "#{@url()}/user/#{follow_id}"
+      @ajax_url = "#{@url()}/User/#{follow_id}"
       @ajax_data = {user_id: follow_id}
 
     if @follow_type == "Shop"
-      @ajax_url = "#{@url()}/shop/#{follow_id}"
+      @ajax_url = "#{@url()}/Shop/#{follow_id}"
       @ajax_data = {shop_id: follow_id}
 
     $.ajax({

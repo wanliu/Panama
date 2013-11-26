@@ -12,7 +12,7 @@ class People::CommunitiesController < People::BaseController
   end
 
   def all_circles
-    @circles = @people.circle_all
+    @circles = @people.all_circles
     respond_to do |format|
       format.html{ render :layout => false }
     end

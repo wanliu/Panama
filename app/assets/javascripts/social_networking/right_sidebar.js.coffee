@@ -2,18 +2,13 @@
 root = (window || @)
 
 class RightSideBar extends Backbone.View
-	#template: () ->
-	#	$("#right-sidebar-templates .main").html()
-
 	events:
 		"click header>ul>li"    : "toggleTabs"
 		"click .settings>button": "toggleIcons"
 
 	initialize: () ->
-		#$(@el).html(@template())
-		@$('.body').slimScroll(
-			height: $(window).height())
 		@register_counter = 0
+		@$('.body').slimScroll(height: $(window).height())
 		$(window).resize($.proxy(@auto_resize, @))
 
 	register: (containers...) ->
