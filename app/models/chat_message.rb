@@ -28,7 +28,7 @@ class ChatMessage < ActiveRecord::Base
   validate :valid_receive_user_presence?
 
   after_create :notic_receive_user, :remind_receive_user
-  before_create :join_contact_friend
+  # before_create :join_contact_friend
 
   def self.all(user_id = nil, friend_id = nil)
     if user_id.present? && friend_id.present?

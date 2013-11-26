@@ -173,6 +173,7 @@ class User < ActiveRecord::Base
     load_friend_group
   end
 
+<<<<<<< HEAD
   def sync_create_to_redis
     # redis_client = RedisClient.redis
     # user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
@@ -208,6 +209,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def persistence_channels
+    followings
+  end
+
   #暂时方法
   def grapical_handler
     photo.filename
@@ -221,9 +226,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  #加入的所有的个人的圈子
   def circle_all
     circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
-    Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+    Circle.where("owner_type='User' and id in (?)", circle_ids)
   end
 
   #加入的所有的圈子
@@ -248,24 +254,6 @@ class User < ActiveRecord::Base
 
   def permissions
     groups.map{| g | g.permissions}
-  end
-
-  def format_followings
-    followings.map do |following|
-      case following.follow_type
-      when "User"
-        { name: User.find(following.follow_id).login,
-          follow_type: "User",
-          follow_id: following.follow_id }
-      when "Shop"
-        { name: Shop.find(following.follow_id).name,
-          follow_type: "Shop",
-          follow_id: following.follow_id }
-      end
-    end
-    # following_types = following.ground_by { |following| following.type }
-    # following_users = following_types["User"]
-    # following_shops = following_types["Shop"]
   end
 
   def self.chat_authorization(from, invested)
@@ -330,7 +318,6 @@ class User < ActiveRecord::Base
   end
 
   private
-
   def load_friend_group
     _config = YAML.load_file("#{Rails.root}/config/data/friend_group.yml")
     _config["friend_group"].each do |name|

@@ -89,21 +89,18 @@
 	</ul>
 
 	<div class="attention">
-		<div style='display:inline-block;margin-left:30px;'>
+		<div class="attention_detail">
 			<a href="<%= shop_admins_followings_path(current_shop) %>">
-			<span class='follow-number'>
-			<%=current_shop.followers.count %>
-			</span><br />
-			<span>被关注</span>
+				<span class="label follow-number">
+					<%=current_shop.followers.count %>被关注
+				</span>
 			</a>
 		</div>
-		<div style='display:inline-block;margin-left:20px'>
+		<div class="attention_detail">
 			<a href="<%= shop_admins_pending_path %>">
-			<span class='follow-number'>
-				<%= current_shop.transactions.count %>
+			<span class='follow-number label'>
+				<%= current_shop.transactions.count %>订单
 			</span>
-			<br />
-			<span>订单</span>
 			</a>
 		</div>
 	</div>

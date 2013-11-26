@@ -27,7 +27,6 @@ class Following < ActiveRecord::Base
     create(opts)
   end
 
-
   def valid_follow?
     if Following.exists?(["follow_id=? and follow_type=? and id<>? and user_id=?",
       follow_id, follow_type, id.to_s, user_id])
@@ -35,4 +34,16 @@ class Following < ActiveRecord::Base
     end
   end
 
+  def as_json(*args)
+    attribute = super *args
+    case self.follow_type
+    when "User"
+      attribute["login"] = User.find(self.follow_id).login
+    when "Shop"
+      attribute["name"] = Shop.find(self.follow_id).name
+    end
+    attribute["follow_type"] = self.follow_type
+    attribute["follow_id"] = self.follow_id
+    attribute
+  end
 end

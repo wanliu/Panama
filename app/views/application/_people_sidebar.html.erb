@@ -5,8 +5,8 @@
     </a>
     <h4><%= @people.login %></h4>
     <div class="isfollowing">
-      <span class="label">Default</span>
-      <span class="label">Default</span>
+      <!-- <span class="label">Default</span>
+      <span class="label">Default</span> -->
       <% if current_user.present? %>
         <% unless @people.id == current_user.id %>
           <% unless current_user.is_follow_user?(@people.id) %>
@@ -144,23 +144,12 @@
   }
 
   $(function(){
-
     <% if current_user.present? %>
-      new FollowView({
-        data: {
-          follow_id:  "<%= @people.id %>",
-          follow_type: "User"
-        },
-        login: "<%=current_user.login %>",
-        el: $(".isfollowing"),
-      })
-
       new Followers({
         login: "<%= current_user.login %>",
         people_id: "<%= @people.id %>",
         follow_type: "User",
         el: $(".isfollowing") })
-
       new PeopleSideView({ el: $("#people-sidebar") })
     <% end %>
   })

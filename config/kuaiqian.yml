@@ -1,8 +1,8 @@
 remote: https://www.99bill.com/gateway/recvMerchantInfoAction.htm
 rsa:
-  pem_path: public/99bill-rsa.pem
+  pem_path: lib/99bill-rsa.pem
   password: asdfasdf
-  cer_path: public/99bill.cert.rsa.20140728.cer
+  cer_path: lib/99bill.cert.rsa.20140728.cer
 
 params:
   merchant_acct_id: 1002300593701
