@@ -1,3 +1,4 @@
+#= require lib/handlebars-v1.1.2
 
 root = window || @
 
@@ -58,6 +59,15 @@ class root.ChatLayout
     $el.css('right', right + "px")
     $el.css('top', top + "px")
 
+Handlebars.registerHelper 'calender', (time) ->
+  date = if time?
+           new Date(parseInt(time))
+         else
+           new Date()
+
+  date.format('yyyy-MM-dd hh:mm:ss')
+
+
 
 class root.ChatView extends Caramal.BackboneView
   msgLoaded: false
@@ -86,14 +96,14 @@ class root.ChatView extends Caramal.BackboneView
       </div>
     </div>')
 
-  msg_template: _.template('
+  msg_template: Handlebars.compile('
     <li>
       <div class="title">
         <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
-        <span class="login"><%= user %></span>
-        <span class="date"><%= new Date(parseInt(time)).format("MM-dd hh:mm:ss") %></span>
+        <span class="login">{{ user }}</span>
+        <span class="date">{{calender time}}</span>
       </div>
-      <div class="message"><%= msg %></div>
+      <div class="message">{{ msg }}</div>
     </li>')
 
   events:
@@ -101,11 +111,12 @@ class root.ChatView extends Caramal.BackboneView
     'click .close_label'    : 'hideDialog'
     'click .send_button'    : 'sendMeessage'
     "keyup textarea.content": "fastKey"
-   
+
   initialize: (options) ->
     super
     _.extend(@, options)
-    @initChannel() 
+
+    @initChannel()
     @initDialog()
     @bindDialog()
 
@@ -127,8 +138,9 @@ class root.ChatView extends Caramal.BackboneView
       @offline()
     )
 
+
   fetchHistoryMsg: (force = false) ->
-    return if !force && @msgLoaded 
+    return if !force && @msgLoaded
     @channel.history({start: 1}, (chat, err, messages) =>
       $html = @parseMessages(messages)
       text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
@@ -194,4 +206,4 @@ class root.ChatView extends Caramal.BackboneView
     $msg = @$("textarea.content")
     @channel.send($msg.val().trim())
     $msg.val('')
-    
+

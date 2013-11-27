@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
   has_many :delivery_addresses
   has_many :followings, dependent: :destroy
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
+  has_many :persistent_channels
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
   has_many :friend_groups, dependent: :destroy
@@ -206,10 +207,6 @@ class User < ActiveRecord::Base
         redis_client.hset(user_name_to_user_id, login, id)
       end
     end
-  end
-
-  def persistence_channels
-    followings
   end
 
   #暂时方法
