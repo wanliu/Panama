@@ -12,18 +12,17 @@ Panama 是面向 B2B 下游链中的社区网站，目标受众群体是终端�
 
 启动项目
 1. 在命令控制台下输入
-   
-    
-   <tt>git clone git@github.com:wanliu/Panama.git Panama </tt>
-   
-   <tt>cd Panama</tt>
-   
-   <tt>rails s</tt>
-       
+
+<tt>git clone git@github.com:wanliu/Panama.git Panama</tt>
+
+<tt>cd Panama</tt>
+
+<tt>rails s</tt>
+
 2. 到浏览器地址栏输入 http://localhost:3000/ 你会看到我们的项目启动画面
-    
+
    如果一切准备完成，你会幸运的看到软件的画面，不过这一切都要设置完成
-   
+
 == 组成
 
 Panama 的完整网站是由几大应用服务层组成，其本身就比较复杂，为了保证在功能
@@ -34,14 +33,14 @@ Panama 的主要组成由 Panama + elasticsearch + caramal + accounts 组成，P
 包括了社区，交易系统，实时通信系统等，下列产品分别都是单独服务
 
 1. Elasticsearch实时搜索系统， 官方网址 http://www.elasticsearch.org/
-   你还要下载一个 elasticsearch plugin , 
+   你还要下载一个 elasticsearch plugin ,
 
 2. CaramalServer 万流内部的实时通信系统，https://github.com/wanliu/Caramel-Server
 
 3. Accounts 万流中心帐号服务器，https://github.com/wanliu/Accounts
 
 == 定位
-   
+
 Panama 是一个高度实时化的应用，能够满足快速的商业需求，也是一个交互性相当高的 web 应用
 提供用户便捷使用操作模式，所以我们选择基于 HTML5 的技术架构上，运行在现代型的浏览器，给
 用户提供最佳用户体验
@@ -53,3 +52,66 @@ Bug 报告 https://github.com/wanliu/Panama/issues
 重要更新说明文档 https://github.com/wanliu/Panama/wiki/%E6%9B%B4%E6%96%B0
 
 安装文档 https://github.com/wanliu/Panama/wiki/%E5%AE%89%E8%A3%85
+
+== 帮助文档
+
+1. 生成文档
+
+我们使用 Yard 做为文档支持工具. http://yardoc.org/
+
+首先安装 Yard 工具
+
+<tt>gem install yard</tt> or add  <tt>gem 'yard'</tt> to Gemfile
+
+成生 Yard 文档
+
+<tt>yard</tt> 有些时候你可能需要这样 <tt>bundle exec yard</tt>
+
+几分钟后，当 Yard 生成文档后，你可以打开 Yard Server 进行浏览
+
+启动 Yard Server
+
+<tt>yard server</tt>
+
+在浏览器中打 http://localhost:8808 你就可以浏览我们的文档了
+
+2. 在 sublime text 中快速产成文档
+
+请安装 sublime package install 浏览 https://sublime.wbond.net/installation
+
+如果安装了 package install
+
+打开 Command Palettle  (Command + Shift + P)
+
+输入 package install
+
+然后再输入 yardoc 回车，等一会，这个程序就会安装上去了。
+
+或者
+
+Go to your Sublime Text 2 Packages directory and clone the repository using the command below:
+
+<tt> git clone git@github.com:revathskumar/sublime-yardoc.git yardoc</tt>
+
+使用
+
+在 hello 方法行尾按下 ctrl+enter
+
+  def hello a, b
+
+  end
+
+
+结果
+
+
+  #
+  # [hello description]
+  # @param  a [type] [description]
+  # @param  b [type] [description]
+  #
+  # @return [type] [description]
+  def hello a, b
+
+  end
+

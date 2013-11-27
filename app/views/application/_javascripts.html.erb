@@ -9,6 +9,7 @@
       s.parentNode.insertBefore(g,s)}(document,'script'));
     //]]>
   <% end %>
+
   window.clients = Realtime.connect({
     server_uri: '<%= realtime_uri %>',
     token: '<%= current_user.im_token %>'
