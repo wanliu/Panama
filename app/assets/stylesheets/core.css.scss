@@ -738,6 +738,10 @@ ul {
 	.tab-content {
 		overflow: visible;
 
+		.message_count {
+			position: absolute;
+		}
+
 		.filter_key {
 			margin: 0px;
 			border: none;
@@ -1308,7 +1312,7 @@ h2 small {
   }
 
   .body{
-    height: 258px;
+    height: 218px;
     overflow-y: scroll;
 
     .msg_content{
