@@ -64,6 +64,12 @@ class root.ChatView extends Caramal.BackboneView
   on_class: "online"
   off_class: "offline"
   className: 'global_chat_panel'
+  EVENT_TYPE: {
+    'joined'  : 1,
+    'leaved'  : 2,
+    'inputing': 3,
+    'afk'     : 4
+  }
 
   history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
@@ -71,6 +77,7 @@ class root.ChatView extends Caramal.BackboneView
     <div class="head">
       <span class="state online"></span>
       <span class="name"><%= user %></span>
+      <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>
     <div class="body">
@@ -123,9 +130,38 @@ class root.ChatView extends Caramal.BackboneView
       @$(".body").css('height', height)
       $(@el).css('position', 'fixed')
     )
-    window.clients.on('disconnect', (error) =>
-      @offline()
-    )
+    @bindEvent()
+
+  bindEvent: () ->
+    @afkService()
+    window.clients.on 'connect', (error) => @online()
+    window.clients.on 'disconnect', (error) => @offline()
+    @channel.onEvent (data) =>
+      console.log('event -->' + data)
+      return unless data.type
+      switch parseInt(data.type)
+        when @EVENT_TYPE['inputing']
+          @showInputing()
+        when @EVENT_TYPE['afk']
+          @offline()
+        when @EVENT_TYPE['joined']
+          @online()
+        when @EVENT_TYPE['leaved']
+          @offline()
+        else
+          console.log('未处理的事件')
+
+  afkService: (time = 10000) ->
+    @activeTime = new Date().getTime()
+    setInterval(() => 
+      if new Date().getTime() - @activeTime > time then @offline() else @online()
+    , 1000)
+
+  showInputing: (time = 3000) ->
+    @$('.input_state').html('正在输入...')
+    setTimeout(() =>
+      @$('.input_state').html('')
+    , time)
 
   fetchHistoryMsg: (force = false) ->
     return if !force && @msgLoaded 
@@ -179,6 +215,7 @@ class root.ChatView extends Caramal.BackboneView
     @channel.removeEventListener('message', @receiveMessage)
 
   activeDialog: () ->
+    @activeTime = new Date().getTime()
     @trigger('unactive_avatar')
 
   online: () ->
@@ -188,6 +225,7 @@ class root.ChatView extends Caramal.BackboneView
     @state_el.addClass(@off_class).removeClass(@on_class)
 
   fastKey: (event) ->
+    @channel.being_input()
     @sendMeessage() if event.ctrlKey && event.keyCode == 13
 
   sendMeessage: () ->
