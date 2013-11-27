@@ -223,6 +223,7 @@ class ActivityPreview extends Backbone.View
     @load_view(event.currentTarget)
     $.post(@model.url() + "/like", (data) =>
       @$('.like-button').replaceWith(@unlike_template)
+      @incLike()
     )
     false
 

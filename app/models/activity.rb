@@ -64,10 +64,20 @@ class Activity < ActiveRecord::Base
         :user_id => author.id,
         :mentionable_user_id => follower.user_id,
         :url => "/activities/#{id}",
-        :body => "有新活动发布"
+        :body => "你关注的商家#{ shop.name}有新活动发布#{ title}"
       })
     end
   end
+
+  # def draw_topic
+  #   shop.circles.each do |c|
+  #     c.topics.create(
+  #       :name => "",
+  #       :content => ,
+  #       :category =>
+  #     )
+  #   end
+  # end
 
   def init_data
     self.shop_id = author.shop.id

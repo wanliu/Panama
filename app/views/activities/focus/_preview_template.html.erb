@@ -29,7 +29,7 @@
         </p>
         <span class='title'>参与</span>
         <span>{{ participate}} </span>
-        <span class='title'>支持</span>
+        <span class='title'>喜欢</span>
         <span class='like-count'>{{like}}</span>
       </div>
 
@@ -42,12 +42,12 @@
 
         {{#likes}}
           <%= link_to '#', class: 'btn unlike-button active' do %>
-            <%= "取消支持" %>
+            <%= "取消喜欢" %>
           <% end %>
         {{/likes}}
         {{^likes}}
           <%= link_to '#', class: 'btn like-button' do %>
-            <%= icon(:'thumbs-up') + " 支持" %>
+            <%= icon('heart') + " 喜欢" %>
           <% end %>
         {{/likes}}
       </div>
