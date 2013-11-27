@@ -60,9 +60,12 @@ class root.ChatLayout
 
 
 class root.ChatView extends Caramal.BackboneView
+  msgLoaded: false
   on_class: "online"
   off_class: "offline"
   className: 'global_chat_panel'
+
+  history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="head">
@@ -88,7 +91,7 @@ class root.ChatView extends Caramal.BackboneView
       <div class="title">
         <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
         <span class="login"><%= user %></span>
-        <span class="date"><%= new Date().format("hh:mm:ss") %></span>
+        <span class="date"><%= new Date(parseInt(time)).format("MM-dd hh:mm:ss") %></span>
       </div>
       <div class="message"><%= msg %></div>
     </li>')
@@ -124,21 +127,26 @@ class root.ChatView extends Caramal.BackboneView
       @offline()
     )
 
-  initChannel: () ->
-    return if @channel?
-    @channel ||= Caramal.Chat.of(@user)
-    @channel.open()
+  fetchHistoryMsg: (force = false) ->
+    return if !force && @msgLoaded 
+    @channel.history({start: 1}, (chat, err, messages) =>
+      $html = @parseMessages(messages)
+      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+      $html += @history_tip({text: text})
+      @$('.msg_content').prepend($html)
+    )
+    @msgLoaded = true
 
-  bindMessage: () ->
-    @channel.onMessage(@receiveMessage, @)
+  parseMessages: (messages) ->
+    $html = ''
+    messages = [messages] unless $.isArray(messages)
+    _.each messages, (message) =>
+      $html += @msg_template(message)
+    $html
 
-  unbindMessage: () ->
-    @channel.removeEventListener('message', @receiveMessage)
-
-  receiveMessage: (msg) ->
-    data = @msg_template(msg)
-    @trigger('active_avatar')
-    @$('.msg_content').append(data)
+  receiveMessage: (data) ->
+    @$('.msg_content').append(@parseMessages(data))
+    @trigger('active_avatar') if @user is data.user
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   hideDialog: () ->
@@ -154,6 +162,21 @@ class root.ChatView extends Caramal.BackboneView
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
     @bindMessage() unless @display
     @display = true
+
+  showWithMsg: () ->
+    @fetchHistoryMsg()
+    @showDialog()
+
+  initChannel: () ->
+    return if @channel?
+    @channel ||= Caramal.Chat.of(@user)
+    @channel.open()
+
+  bindMessage: () ->
+    @channel.onMessage(@receiveMessage, @)
+
+  unbindMessage: () ->
+    @channel.removeEventListener('message', @receiveMessage)
 
   activeDialog: () ->
     @trigger('unactive_avatar')
