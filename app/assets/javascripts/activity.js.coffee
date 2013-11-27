@@ -151,7 +151,7 @@ class ActivityView extends Backbone.View
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
-    @$('.like-count').text(s - n) 
+    @$('.like-count').text(s - n)
 
   addComment: (event) ->
     content = @$("textarea",".message").val()
@@ -205,6 +205,8 @@ class ActivityPreview extends Backbone.View
     "click .activity .activity_tag" : "launch"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
+    "click .activity .follow"       : "follow"
+    "click .activity .unfollow"     : "unfollow"
 
   like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
   unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
@@ -245,13 +247,36 @@ class ActivityPreview extends Backbone.View
 
   load_view: (target) ->
     @$el = @el = $(target).parents(".activity")
-    @model = new ActivityModel({ id: @el.attr("activity-id") })
+    @model = new ActivityModel({ id: @el.attr("activity-id"), shop_id: $(@el).find(".shopinfo").attr("data-value-id") })
     @delegateEvents()
 
   buy: (event) ->
     @load_view(event.currentTarget)
     new ActivityBuyView({activity_id: @model.id})
 
+  get_model: (event) ->
+    @load_view(event.currentTarget)
+    @_follow ||= new Follow({follow_type: 'Shop', follow_id: @model.get('shop_id')}, @login)
+
+  follow: (event) ->
+    @get_model(event)
+    @_follow.follow (model, data) =>
+      $(".shopinfo .follow").each (_i, elem) =>
+        if $(elem).attr("data-value-id") == @model.get('shop_id')
+          $(elem).addClass("unfollow").removeClass("follow")
+          $(elem).html("取消关注")
+
+  unfollow: (event) ->
+    @get_model(event)
+    unless @_follow.has("id")
+      id = @$(".unfollow").attr("data-follow-id");
+      @_follow.set({id: id})
+      
+    @_follow.destroy success: (model, data) =>
+      $(".shopinfo .unfollow").each (_i, elem) =>
+        if $(elem).attr("data-value-id") == @model.get('shop_id')
+          $(elem).addClass("follow").removeClass("unfollow")
+          $(elem).html("+ 关注")
 
 class ProductViewTemplate extends Backbone.View
   initialize: () ->
@@ -458,7 +483,7 @@ class LoadActivities extends InfiniteScrollView
 
 class LikeListView extends Backbone.View
 
-  item_row: 
+  item_row:
     '<tr id="liked_activity{{id}}" class="like_main activity" activity-id="{{ id }}">
       <td><img src="{{ url }}" class="activity_icon" ></td>
       <td class="title_td">
@@ -473,7 +498,7 @@ class LikeListView extends Backbone.View
   trHtml: (activity) ->
     row_tpl = Hogan.compile(@item_row)
     row_tpl.render(activity)
-    
+
   add_to_cart: (activity) ->
     $(".like_list").append(@trHtml(activity))
     new ActivityPreview({ el: $("#liked_activity#{ activity.id } ")})

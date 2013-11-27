@@ -43,7 +43,8 @@
 <script type="text/javascript">
 	$(function(){
 		new ActivityPreview({
-		    el: $(".like_list")
+		    el: $(".like_list"),
+		    login: '<%= current_user.login %>'
 		})
 	})
 </script>

@@ -11,14 +11,14 @@ class ActivitiesLike < ActiveRecord::Base
 
   after_create do
     update_activity_like
-    notice_user
+    notice_author
   end
 
   def notice_author
     Notification.create!(
       :user_id => user_id,
       :mentionable_user_id => author,
-      :url => url,
+      :url => "people/#{user.login}/notifications",
       :targeable => self,
       :body => "#{user.login}喜欢了你的#{ activity.title}活动")
   end

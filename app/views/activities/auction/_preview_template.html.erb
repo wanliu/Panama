@@ -16,7 +16,7 @@
         </p>
       </div>
 
-      <div class='userinfo'>
+      <div class='userinfo shopinfo' data-value-id="{{ shop.id }}">
         {{#shop.photos}}
           <a href="/shops/{{shop.name}}">
           <img src='{{icon}}' class="author img-circle" />
@@ -26,6 +26,14 @@
           <a href="/shops/{{shop.name}}" class="href_name">
             {{ shop.name }}
           </a>
+          {{^is_self}}
+            {{#followed}}
+              <a href="javascript:void(0)" data-follow-id='{{followed_id}}' data-value-id="{{ shop.id }}" class='btn btn-mini btn-primary pull-right unfollow'>取消关注</a>
+            {{/followed}}
+            {{^followed}}
+              <a href="javascript:void(0)" data-value-id="{{ shop.id }}" class='btn btn-mini btn-primary pull-right follow'>+关注</a>
+            {{/followed}}
+          {{/is_self}}
         </p>
         <span class='title'>参与</span>
         <span>{{ participate}} </span>
