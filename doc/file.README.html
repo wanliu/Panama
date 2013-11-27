@@ -75,13 +75,14 @@
 <p>启动项目</p>
 <ol><li>
 <p>在命令控制台下输入</p>
+</li></ol>
 
-<p><code>git clone git@github.com:wanliu/Panama.git Panama </code></p>
+<p><code>git clone git@github.com:wanliu/Panama.git Panama</code></p>
 
 <p><code>cd Panama</code></p>
 
 <p><code>rails s</code></p>
-</li><li>
+<ol><li>
 <p>到浏览器地址栏输入 <a href="http://localhost:3000">localhost:3000</a>/ 你会看到我们的项目启动画面</p>
 
 <p>如果一切准备完成，你会幸运的看到软件的画面，不过这一切都要设置完成</p>
@@ -121,10 +122,78 @@ href="https://github.com/wanliu/Panama/wiki/%E6%9B%B4%E6%96%B0">github.com/wanli
 
 <p>安装文档 <a
 href="https://github.com/wanliu/Panama/wiki/%E5%AE%89%E8%A3%85">github.com/wanliu/Panama/wiki/%E5%AE%89%E8%A3%85</a></p>
+
+<h2 id="label-%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3">帮助文档</h2>
+<ol><li>
+<p>生成文档</p>
+</li></ol>
+
+<p>我们使用 Yard 做为文档支持工具. <a href="http://yardoc.org">yardoc.org</a>/</p>
+
+<p>首先安装 Yard 工具</p>
+
+<p><code>gem install yard</code> or add  <code>gem &#39;yard&#39;</code> to
+Gemfile</p>
+
+<p>成生 Yard 文档</p>
+
+<p><code>yard</code> 有些时候你可能需要这样 <code>bundle exec yard</code></p>
+
+<p>几分钟后，当 Yard 生成文档后，你可以打开 Yard Server 进行浏览</p>
+
+<p>启动 Yard Server</p>
+
+<p><code>yard server</code></p>
+
+<p>在浏览器中打 <a href="http://localhost:8808">localhost:8808</a> 你就可以浏览我们的文档了</p>
+<ol><li>
+<p>在 sublime text 中快速产成文档</p>
+</li></ol>
+
+<p>请安装 sublime package install 浏览 <a
+href="https://sublime.wbond.net/installation">sublime.wbond.net/installation</a></p>
+
+<p>如果安装了 package install</p>
+
+<p>打开 Command Palettle  (Command + Shift + P)</p>
+
+<p>输入 package install</p>
+
+<p>然后再输入 yardoc 回车，等一会，这个程序就会安装上去了。</p>
+
+<p>或者</p>
+
+<p>Go to your Sublime Text 2 Packages directory and clone the repository using
+the command below:</p>
+
+<p><code> git clone git@github.com:revathskumar/sublime-yardoc.git
+yardoc</code></p>
+
+<p>使用</p>
+
+<p>在 hello 方法行尾按下 ctrl+enter</p>
+
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>
+
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>结果</p>
+
+<pre class="ruby"><span class="ruby-comment">#</span>
+<span class="ruby-comment"># [hello description]</span>
+<span class="ruby-comment"># @param  a [type] [description]</span>
+<span class="ruby-comment"># @param  b [type] [description]</span>
+<span class="ruby-comment">#</span>
+<span class="ruby-comment"># @return [type] [description]</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hello</span> <span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>
+
+<span class="ruby-keyword">end</span>
+</pre>
 </div></div>
 
     <div id="footer">
-  Generated on Wed Nov 27 13:58:17 2013 by
+  Generated on Wed Nov 27 16:12:28 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.3 (ruby-2.0.0).
 </div>
