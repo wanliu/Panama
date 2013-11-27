@@ -672,9 +672,7 @@ ul {
 	border-color: transparent;
 }
 
-
 // header navigration
-
 .open_right_side {
 
 	.navbar-back.affix, .navbar.affix {
@@ -697,7 +695,7 @@ ul {
 }
 
 .right-mini .right-sidebar {
-	width: auto;
+	width: 60px;
 
 	&>header>.nav {
 		display: none;
@@ -706,12 +704,6 @@ ul {
 	.user-info {
 		display: none;
 	}
-
-	// li:hover {
-	// 	.user-info {
-	// 		display: block;
-	// 	}
-	// }
 
 	.settings {
 		.btn-icons {
@@ -733,111 +725,76 @@ ul {
 	display: block;
 }
 
-.right-mini .right-sidebar {
-	width: 60px;
-
-	.notices-list{
-		li .transaction-info, li .activity-info{
-			display: none;
-		}
-	}
-}
-
 .right-sidebar {
-	display: none;
-	width: 200px;
-	margin-bottom: 0px;
-	position: fixed;
-	right: 0;
 	top: 0;
+	right: 0;
 	bottom: 0px;
-
-	&.right-sidebar {
-		@include transparent(rgb(51,51,51), 0);
-	}
-
-	header {
-		.nav {
-			float: left;
-		}
-	}
-
-	.settings {
-		padding: 5px;
-		.btn-auto {
-			display: none;
-		}
-		display: inline-block;
-	}
-
-	header ul {
-		margin: 0px;
-	}
+	width: 100px;
+	display: none;
+	position: fixed;
+	margin-bottom: 0px;
+	@include transparent(rgb(51,51,51), 0);
 
 	.tab-content {
 		overflow: visible;
-	}
 
-	.notices-list {
-		margin: 0px;
-		list-style: none;
-
-		&:first-child  {
-			margin-top: 20px;
+		.message_count {
+			position: absolute;
 		}
 
-		.name, .time, .position {
-			line-height: 16px;
+		.filter_key {
+			margin: 0px;
+			border: none;
+			color: #f8f8f8;
+			line-height: 20px;
+			@include border-radius(1px);
+			@include transition(width 0.2s);
+			@include transparent(rgb(51,51,51),0.4);
+			background: url(search-white.png) 18px 5px no-repeat rgba(51,51,51,0.4);
 		}
 
-		li img {
-			width: 50px;
-			height: 50px;
-			/*margin-right: 5px;*/
-		}
+		ul.users-list {
+			margin: 0px;
+			list-style: none;
 
-		li {
-			// border-top: 1px solid rgba(51,51,51,0.25);
-			padding: 5px 0px;
-			/*min-width: 60px;*/
-			margin: 0;
-			width: 50px;
-			height: 50px;
-			cursor: pointer;
-			overflow: hidden;
-			// @include transition(width 0.0s, margin 0.3s);
-		}
+			&:first-child  {
+				margin-top: 20px;
+			}
 
-		li.active {
-			background-color: #E5603B;
-			margin-top: 1px;
-		}
+			.name, .time, .position {
+				line-height: 16px;
+			}
 
-		li:hover {
-			@include transparent(rgb(51,51,51),0.25);
-			&.active {
+			li img {
+				width: 50px;
+				height: 50px;
+				/*margin-right: 5px;*/
+			}
+
+			li {
+				// border-top: 1px solid rgba(51,51,51,0.25);
+				padding: 2px 0px;
+				/*min-width: 60px;*/
+				margin: 0;
+				width: 50px;
+				height: 50px;
+				cursor: pointer;
+				overflow: hidden;
+				// @include transition(width 0.0s, margin 0.3s);
+			}
+
+			li.active {
 				background-color: #E5603B;
+				margin-top: 1px;
 			}
-			// width: 300px;
-			// margin-left: -120px;
 
-			.transaction-info, .activity-info{
-				display: block;
+			li:hover {
+				@include transparent(rgb(51,51,51),0.25);
+				&.active {
+					background-color: #E5603B;
+				}
 			}
 		}
-
-		// .user-info {
-		// 	margin-left: 62px;
-		// }
-
-		// .right-mini .users-list li:hover {
-		// 	width: 300px;
-		// 	margin-left: -240px;
-
-		// 	.user-info {
-		// 		display: block;
-		// 	}
-		// }
 	}
 }
 
@@ -1356,7 +1313,7 @@ h2 small {
 
   .body{
     height: 218px;
-    overflow-y: scroll; 
+    overflow-y: scroll;
 
     .msg_content{
       overflow-y: auto;
@@ -1416,3 +1373,27 @@ h2 small {
     }
   }
 }
+
+// @-webkit-keyframes bounce_circle{
+// 	0%{opacity:0.3;}
+// 	50%{opacity:1;background-color:#111}
+// 	100%{opacity:0.3;}
+// }
+
+// .circle {
+// 	background-color: #CCC;
+// 	float: left;
+// 	height: 10px;
+// 	margin-left: 8px;
+// 	width: 10px;
+// 	-webkit-animation-name: bounce_circle;
+// 	-webkit-border-radius: 10px;
+// 	-webkit-animation-duration: 1.5s;
+// 	-webkit-animation-iteration-count: infinite;
+// 	-webkit-animation-direction: linear;
+// 	opacity: 0.3;
+// }
+
+// .circle.active {
+// 	-webkit-animation-delay: .3s;
+// }

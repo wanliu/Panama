@@ -28,7 +28,7 @@ ActiveAdmin.register Activity do
       a.shop.try(:name)
     end
     column :author
-    
+
     column "操作" do |c|
       link_1 = link_to "查看", system_activity_path(c), :class =>"member_link"
       if c.status == Activity.statuses[:wait]
@@ -54,13 +54,13 @@ ActiveAdmin.register Activity do
   end
 
   action_item  do
-    link_to "排程日历", schedule_sort_system_activities_path                
+    link_to "排程日历", schedule_sort_system_activities_path
   end
 
-  collection_action :schedule_sort, :title => "活动日历", :method => :get do 
+  collection_action :schedule_sort, :title => "活动日历", :method => :get do
   end
 
-  collection_action :schedule_sort1, :method => :get do 
+  collection_action :schedule_sort1, :method => :get do
     start = Time.at(params[:start].to_i) unless params[:start].nil?
     _end = Time.at(params[:end].to_i) unless params[:end].nil?
     @activities = Activity.where("start_time >= ? AND end_time <= ?", start, _end)

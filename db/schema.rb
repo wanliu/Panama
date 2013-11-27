@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131116090436) do
+ActiveRecord::Schema.define(:version => 20131126054834) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -580,6 +580,13 @@ ActiveRecord::Schema.define(:version => 20131116090436) do
     t.string   "ability"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "persistent_channels", :force => true do |t|
+    t.string   "name",         :limit => 30
+    t.integer  "channel_type", :limit => 2
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
   end
 
   create_table "price_options", :force => true do |t|
