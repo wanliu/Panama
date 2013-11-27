@@ -86,10 +86,10 @@ class FollowersView extends Backbone.View
   filter_users: (keyword) ->
     pattern = new RegExp(keyword)
     _.each @collection.models, (model) ->
-      if keyword is ""
+      if pattern.test(model.get('login'))
         $(model.view.el).show()
       else
-        $(model.view.el).hide() unless pattern.test(model.get('login'))
+        $(model.view.el).hide()
 
   find_exist: (channel) ->
     _.find @collection.models, (model) ->
@@ -193,7 +193,7 @@ class root.FriendView extends Backbone.View
     unless @chat_view 
       @chat_view = new ChatView({ user: @model.get('login'), channel: @channel })
       @bind_chat()
-    @chat_view.showDialog()
+    @chat_view.showWithMsg()
 
   bind_chat: () ->
     @chat_view.bind("active_avatar", _.bind(@active, @))

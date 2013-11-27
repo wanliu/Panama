@@ -4422,6 +4422,12 @@ if (typeof define === "function" && define.amd) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
     };
+    String.prototype.toCamelCase = function() {
+      return this.replace(/(^\w|[-\_]\w)/g, function(match) {
+        match = match[0] === '_' || match[0] === '-' ? match[1] : match;
+        return match.toUpperCase();
+      });
+    };
     Array.prototype.contain = function(member) {
       var e, _i, _len;
       for (_i = 0, _len = this.length; _i < _len; _i++) {
@@ -4443,7 +4449,7 @@ if (typeof define === "function" && define.amd) {
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('chat/command',['core', 'util'], function(Caramal, Util) {
-    var CloseCommand, Command, CommandOption, JoinCommand, OpenCommand, _ref, _ref1, _ref2;
+    var CloseCommand, Command, CommandOption, HistoryCommand, JoinCommand, OpenCommand, RecordCommand, StopRecordCommand, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     CommandOption = (function() {
       CommandOption.prototype.default_options = {
         maximum_reply: 0,
@@ -4630,10 +4636,79 @@ if (typeof define === "function" && define.amd) {
       return CloseCommand;
 
     })(Command);
+    RecordCommand = (function(_super) {
+      __extends(RecordCommand, _super);
+
+      function RecordCommand() {
+        _ref3 = RecordCommand.__super__.constructor.apply(this, arguments);
+        return _ref3;
+      }
+
+      RecordCommand.prototype.doExecute = function(data, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        data = {
+          room: this.channel.room
+        };
+        return this.sendCommand('record', data, callback);
+      };
+
+      return RecordCommand;
+
+    })(Command);
+    StopRecordCommand = (function(_super) {
+      __extends(StopRecordCommand, _super);
+
+      function StopRecordCommand() {
+        _ref4 = StopRecordCommand.__super__.constructor.apply(this, arguments);
+        return _ref4;
+      }
+
+      StopRecordCommand.prototype.doExecute = function(data, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        data = {
+          room: this.channel.room
+        };
+        return this.sendCommand('stop_record', data, callback);
+      };
+
+      return StopRecordCommand;
+
+    })(Command);
+    HistoryCommand = (function(_super) {
+      __extends(HistoryCommand, _super);
+
+      function HistoryCommand() {
+        _ref5 = HistoryCommand.__super__.constructor.apply(this, arguments);
+        return _ref5;
+      }
+
+      HistoryCommand.prototype.doExecute = function(data, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        data = {
+          room: this.channel.room,
+          start: data.start,
+          step: data.step || 10,
+          type: 'index'
+        };
+        return this.sendCommand('history', data, callback);
+      };
+
+      return HistoryCommand;
+
+    })(Command);
     Caramal.Command = Command;
     Caramal.OpenCommand = OpenCommand;
     Caramal.JoinCommand = JoinCommand;
-    return Caramal.CloseCommand = CloseCommand;
+    Caramal.CloseCommand = CloseCommand;
+    Caramal.RecordCommand = RecordCommand;
+    Caramal.StopRecordCommand = StopRecordCommand;
+    return Caramal.HistoryCommand = HistoryCommand;
   });
 
 }).call(this);
@@ -5152,7 +5227,7 @@ if (typeof define === "function" && define.amd) {
         if (!this.commands.contain(cmd)) {
           return;
         }
-        class_name = "" + (cmd.toTitleCase()) + "Command";
+        class_name = "" + (cmd.toCamelCase()) + "Command";
         klass = Caramal[class_name];
         if (klass == null) {
           throw new Error("not have Caramal." + class_name + " class");
@@ -5255,7 +5330,7 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Chat.prototype.commands = ['open', 'join'];
+      Chat.prototype.commands = ['open', 'join', 'record', 'stop_record', 'history'];
 
       Chat.prototype.hooks = {};
 
