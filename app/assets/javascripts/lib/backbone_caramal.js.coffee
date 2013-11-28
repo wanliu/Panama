@@ -26,36 +26,43 @@ class Caramal.BackboneView extends Backbone.View
           @channel[name].apply(@channel, args)
 
 
-class root.ChatLayout
+class root.ChatService
   @rows = 1
   @count = 0
   @maxRows = 2
 
   @getInstance = (options) ->
-    ChatLayout.instance ||= new ChatLayout(options)
+    ChatService.instance ||= new ChatService(options)
 
   constructor: (options) ->
     _.extend(@, options)
+    @bindEvent()
+
+  bindEvent: () ->
+    ifvisible.idle () =>
+      $(window).trigger('idle')
+    ifvisible.wakeup () =>
+      $(window).trigger('active')
 
   setMaxRows: (rows) ->
-    ChatLayout.maxRows = rows if rows > 0
+    ChatService.maxRows = rows if rows > 0
 
   setRows: (rows) ->
-    rows = ChatLayout.maxRows if rows > ChatLayout.maxRows
-    ChatLayout.rows = rows
+    rows = ChatService.maxRows if rows > ChatService.maxRows
+    ChatService.rows = rows
 
   setPosition: ($el) ->
-    ChatLayout.count += 1
+    ChatService.count += 1
     w_width = $(window).width()
     w_height = $(window).height()
-    right = $(".right-sidebar").width() + (ChatLayout.count-1)*$el.width()
+    right = $(".right-sidebar").width() + (ChatService.count-1)*$el.width()
 
     if right + $el.width() > w_width
       count_x = ~~(w_width/$el.width())
-      @setRows(Math.ceil(ChatLayout.count/count_x))
-      right = $(".right-sidebar").width() + (ChatLayout.count-1)%count_x*$el.width()
+      @setRows(Math.ceil(ChatService.count/count_x))
+      right = $(".right-sidebar").width() + (ChatService.count-1)%count_x*$el.width()
 
-    top = w_height - ChatLayout.rows*$el.height()
+    top = w_height - ChatService.rows*$el.height()
     $el.css('right', right + "px")
     $el.css('top', top + "px")
 
@@ -132,7 +139,7 @@ class root.ChatView extends Caramal.BackboneView
     $(@el).html(@chat_template(user: @user))
     @state_el = @$(".head>.state")
     $("body").append(@el)
-    ChatLayout.getInstance().setPosition($(@el))
+    ChatService.getInstance().setPosition($(@el))
 
   bindDialog: () ->
     $(@el).resizable().draggable().css('position', 'fixed')
@@ -148,7 +155,6 @@ class root.ChatView extends Caramal.BackboneView
     window.clients.on 'connect', (error) => @online()
     window.clients.on 'disconnect', (error) => @offline()
     @channel.onEvent (data) =>
-      console.log('event -->' + data)
       return unless data.type
       switch parseInt(data.type)
         when @EVENT_TYPE['inputing']
@@ -162,18 +168,26 @@ class root.ChatView extends Caramal.BackboneView
         else
           console.log('未处理的事件')
 
-  afkService: (time = 10000) ->
-    @activeTime = new Date().getTime()
-    setInterval(() => 
-      if new Date().getTime() - @activeTime > time then @offline() else @online()
-    , 1000)
+  afkService: (time = 60) ->
+    ifvisible.setIdleDuration(time)
+    $(window).bind('idle', () =>
+      @offline()
+    )
+    $(window).bind('active', () =>
+      @online()
+    )
 
-  showInputing: (time = 3000) ->
+  showInputing: (time = 5000) ->
     @$('.input_state').html('正在输入...')
     setTimeout(() =>
       @$('.input_state').html('')
     , time)
 
+  sendInputing: (time = 30000) ->
+    @activeTime ||= new Date().getTime()
+    if new Date().getTime() - @activeTime > time
+      @channel.being_input()
+      @activeTime = new Date().getTime()
 
   fetchHistoryMsg: (force = false) ->
     return if !force && @msgLoaded
@@ -227,7 +241,6 @@ class root.ChatView extends Caramal.BackboneView
     @channel.removeEventListener('message', @receiveMessage)
 
   activeDialog: () ->
-    @activeTime = new Date().getTime()
     @trigger('unactive_avatar')
 
   online: () ->
@@ -237,7 +250,7 @@ class root.ChatView extends Caramal.BackboneView
     @state_el.addClass(@off_class).removeClass(@on_class)
 
   fastKey: (event) ->
-    @channel.being_input()
+    @sendInputing()
     @sendMeessage() if event.ctrlKey && event.keyCode == 13
 
   sendMeessage: () ->
