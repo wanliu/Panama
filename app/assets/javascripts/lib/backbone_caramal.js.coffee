@@ -70,7 +70,7 @@ class root.ChatView extends Caramal.BackboneView
   msgLoaded: false
   on_class: "online"
   off_class: "offline"
-  className: 'global_chat_panel'
+  className: 'global_chat'
   EVENT_TYPE: {
     'joined'  : 1,
     'leaved'  : 2,
