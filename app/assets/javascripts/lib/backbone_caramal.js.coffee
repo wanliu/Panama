@@ -67,7 +67,6 @@ class root.ChatService
 
 
 class root.ChatView extends Caramal.BackboneView
-  msgLoaded: false
   on_class: "online"
   off_class: "offline"
   className: 'global_chat'
@@ -178,8 +177,9 @@ class root.ChatView extends Caramal.BackboneView
       @channel.being_input()
       @activeTime = new Date().getTime()
 
-  fetchHistoryMsg: (force = false) ->
-    return if !force && @msgLoaded 
+  fetchHistoryMsg: () ->
+    @msgLoaded ||= false
+    return if @msgLoaded
     @channel.history({start: 1}, (chat, err, messages) =>
       $html = @parseMessages(messages)
       text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
@@ -215,8 +215,8 @@ class root.ChatView extends Caramal.BackboneView
     @display = true
 
   showWithMsg: () ->
-    @fetchHistoryMsg()
     @showDialog()
+    @fetchHistoryMsg()
 
   initChannel: () ->
     return if @channel?
@@ -247,3 +247,16 @@ class root.ChatView extends Caramal.BackboneView
     @channel.send($msg.val().trim())
     $msg.val('')
     
+
+class root.GroupChatView extends ChatView
+
+  initialize: () ->
+    super
+
+  initChannel: () ->
+    return if @channel?
+    @channel ||= Caramal.Group.of(@user)
+    @channel.open()
+
+  fetchHistoryMsg: () ->
+

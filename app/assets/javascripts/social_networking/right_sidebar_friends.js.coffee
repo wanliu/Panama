@@ -16,7 +16,7 @@ class root.ChatContainerView extends RealTimeContainerView
 
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
-      console.log('channel:new -->' + channel)
+      console.log(channel)
       @process_message(channel)
     )
 
@@ -201,8 +201,11 @@ class root.FriendView extends Backbone.View
     @msg_count += count
     @$('.message_count').html(@msg_count).show()
 
-  setChannel: (@channel) ->
+  getChannel: () ->
     @channel ||= Caramal.Chat.of(@model.get('login'))
+
+  setChannel: (@channel) ->
+    @getChannel()
     @channel.open()
     @channel.onMessage (msg) =>
       unless @channel.isActive()
@@ -215,10 +218,13 @@ class root.FriendView extends Backbone.View
     @unactive()
     $(".global_chat").css('z-index', 9999)
     @setChannel() unless @channel?
+    @newChat()
+    @chat_view.showWithMsg()
+
+  newChat: () ->
     unless @chat_view 
       @chat_view = new ChatView({ user: @model.get('login'), channel: @channel })
       @bind_chat()
-    @chat_view.showWithMsg()
 
   bind_chat: () ->
     @chat_view.bind("active_avatar", _.bind(@active, @))
@@ -237,4 +243,15 @@ class GroupView extends FriendView
 
   events:
     "click" : "showChat"
+
+  initialize: () ->
+    super
+
+  getChannel: () ->
+    @channel ||= Caramal.Group.of(@model.get('login'))
+
+  newChat: () ->
+    unless @chat_view 
+      @chat_view = new GroupChatView({ user: @model.get('login'), channel: @channel })
+      @bind_chat()
 
