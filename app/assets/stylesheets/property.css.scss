@@ -1,0 +1,75 @@
+.property_container{
+  .title{
+    text-align: right;
+
+    span{
+      color: #D1CDCD;
+    }
+  }
+
+  .values{
+    li{
+      float: left;
+      min-width: 70px;
+      text-align: center;
+      line-height: 25px;
+      margin: 0px 2px;
+      margin-bottom: 5px;
+
+      input[type="checkbox"]{
+        margin-top: 0px;
+      }
+    }
+
+    li.active{
+      background-color: rgb(150, 122, 122);
+    }
+  }
+
+  .property.odd{
+    .multi-bar{
+      display: none;
+      clear: both;
+    }
+
+    .chose-multi{
+      display: block;
+    }
+
+    input[type="checkbox"]{
+      display: none;
+    }
+  }
+
+  .property.even{
+    .multi-bar{
+      display: block;
+      clear: both;
+    }
+
+    .chose-multi{
+      display: none;
+    }
+
+    input[type="checkbox"]{
+      display: inline-block;
+    }
+  }
+
+  .property{
+    .multi-bar{
+
+      .cancel{
+        margin-left: 10px;
+      }
+    }
+  }
+
+  a{
+    color: white;
+  }
+
+  hr{
+    margin: 5px 0px 15px 0px;
+  }
+}

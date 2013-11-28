@@ -1,80 +1,37 @@
 <% side_nav_for 'fiery' %>
 <div id="main" class="content">
   <section class="widget">
-    <div class="body">
+    <div class="body-category">
       <ul id="activity-category" class="nav nav-tabs activity-category" >
         <li class='active'>
-          <a href='/' ><%=icon 'eye-open' %> </a>
+          <a href='/' >
+            <%=icon 'eye-open' %>
+          </a>
         </li>
       </ul>
     </div>
   </section>
-  <div class='activities_panel'>
-    <div id="activities">
-    </div>
-    <div class='scroll-load-msg'>
-      <img alt="正在加载..." src='/assets/loading_max.gif' />正在加载...
-    </div>
-  </div>
+  <%= render :partial => "activities/template" %>
 </div>
 
-<script type="text/template" id="product-preview-template">
-  <%= render "activities/products/preview_template" %>
-</script>
-
-<script type="text/template" id="shop-product-preview-template">
-  <%= render "shop_products/preview_template" %>
-</script>
-
-<script type="text/template" id="auction-preview-template">
-  <%= render "activities/auction/preview_template" %>
-</script>
-
-<script type="text/template" id="focus-preview-template">
-  <%= render "activities/focus/preview_template" %>
-</script>
-
-<script type="text/template" id="ask_buy-preview-template">
-  <%= render "ask_buy/preview_template" %>
-</script>
-
 <script type="text/javascript">
-    $(function(){
-      new ActivityLayoutView({
-        el: '#activities'
-      })
+  $(function(){
 
-      var load_view = new LoadActivities({
-        el: $('.activities_panel')
-      })
-
-      new ActivityPreview({
-        el: $("#activities")
-      })
-
-      new AskBuyPreview({
-        el: $("#activities")
-      })
-
-      new ShopProductPreview({
-        el: $("#activities")
-      })
-
-      new ProductPreview({
-        el: $("#activities")
-      })
-
-      new CatalogViewList({
-        el: $("#activity-category"),
-        search: function(data){
-          load_view.reset_fetch(data)
-        }
-      })
-
-      $("#category-sidebar .lv2_categories a").on("click", function(){
-        $(this).parents(".lv2_categories").hide()
-        category_id = $(this).attr("data-category_id")
-        load_view.reset_fetch({ category_id: category_id })
-      })
+    var load_view = new LoadActivities({
+      el: $('.activities_panel')
     })
+
+    new CatalogViewList({
+      el: $("#activity-category"),
+      search: function(data){
+        load_view.reset_fetch(data)
+      }
+    })
+
+    // $("#category-sidebar .lv2_categories a").on("click", function(){
+    //   $(this).parents(".lv2_categories").hide()
+    //   category_id = $(this).attr("data-category_id")
+    //   load_view.reset_fetch({ category_id: category_id })
+    // })
+  })
 </script>

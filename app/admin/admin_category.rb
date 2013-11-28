@@ -6,15 +6,15 @@ ActiveAdmin.register Category do
   # actions :index, :edit, :show, :update, :new, :create
   config.clear_action_items!
 
-  action_item do   
-    link_to("新增分类", new_plus_system_categories_path) 
+  action_item do
+    link_to("新增分类", new_plus_system_categories_path)
   end
 
-  action_item do   
-    link_to("栏目管理", catalog_index_system_categories_path) 
+  action_item do
+    link_to("栏目管理", catalog_index_system_categories_path)
   end
 
-  action_item :only => :show do   
+  action_item :only => :show do
     link_to("同步属性", all_attach_attributes_system_category_path(params[:id]))
   end
 
@@ -48,11 +48,15 @@ ActiveAdmin.register Category do
       @property = Property.new
 
       panel("类别 属性") do
-        table_for(category.properties, i18n: Property) do
-          column :title
-          column :name
-          column :property_type
-        end
+        # table_for(category.properties, i18n: Property) do
+        #   column :title
+        #   column :name
+        #   column :property_type
+        # end
+        render :partial => "form", :locals => {
+          :properties => category.properties,
+          :category => category
+        }
       end
 
       panel("类别 价格选项") do
@@ -147,7 +151,7 @@ ActiveAdmin.register Category do
     end
   end
 
-  collection_action :create_hot, :method => :post do 
+  collection_action :create_hot, :method => :post do
     @catalog = Catalog.new(:title => params["catalog"]["title"])
     category_ids = params[:category_ids].split(" ")
     category_ids.each do |category_id|
@@ -189,7 +193,11 @@ ActiveAdmin.register Category do
 
   member_action :relate_property, :method => :post do
     @category = Category.find(params[:id])
-    @category.properties << Property.find(params[:property][:id])
+    @property = Property.find(params[:property][:id])
+    @category.properties << @property if @category.find_property(@property).nil?
+    if params[:filter_state].present?
+      @category.find_property(@property).try(:join_filter_state)
+    end
     redirect_to properties_system_category_path(@category)
   end
 
@@ -242,13 +250,55 @@ ActiveAdmin.register Category do
     link_to '管理属性', properties_system_category_path(params[:id])
   end
 
-  member_action :all_attach_attributes do    
+  member_action :all_attach_attributes do
     @category = Category.find(params[:id])
     @category.products.each  do |product|
       product.attach_properties!
       product.save!
     end
     redirect_to system_category_path(params[:id])
+  end
+
+  member_action :property_values do
+    @category = Category.find(params[:id])
+    @category_property = @category.find_property(params[:property_id])
+  end
+
+  member_action :create_property_value, :method => :post do
+    @category = Category.find(params[:id])
+    @category_property = @category.find_property(params[:property_id])
+    @category_property.values.create(params[:category_property_value])
+    redirect_to "#{property_values_system_category_path(@category)}?property_id=#{@category_property.property.id}"
+  end
+
+  member_action :batch_property_values, :method => :post do
+    @category = Category.find(params[:id])
+    property_ids = params[:property_ids].blank? ? '' : params[:property_ids]
+    @category._properties.where(
+      :property_id => property_ids
+    ).update_all(filter_state: true)
+    @category._properties.where(
+      "property_id not in (?)", property_ids
+    ).update_all(filter_state: false)
+
+    respond_to do |format|
+      format.json{ render :json => @category._properties }
+    end
+  end
+
+  member_action :delete_property_value, :method => :delete do
+    @category = Category.find(params[:id])
+    @category_property = @category.find_property(params[:property_id])
+    @property_value = @category_property.values.find(params[:value_id])
+    @property_value.destroy
+    respond_to do |format|
+      url = "#{property_values_system_category_path(@category)}?property_id=#{@category_property.property.id}"
+      format.js{ render :js => "window.location.href='#{url}'" }
+      format.html{
+        redirect_to url
+      }
+
+    end
   end
 
 end

@@ -35,12 +35,18 @@ class User < ActiveRecord::Base
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
+  has_many :ask_buies
+
   has_and_belongs_to_many :services
 
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
   before_create :generate_token
+
+  after_update do
+    update_relation_index
+  end
 
   delegate :groups, :jshop, :to => :shop_user
 
@@ -227,6 +233,47 @@ class User < ActiveRecord::Base
     # following_types = following.ground_by { |following| following.type }
     # following_users = following_types["User"]
     # following_shops = following_types["Shop"]
+  end
+
+  def update_relation_index
+    update_activity_index
+    update_ask_buy_index
+  end
+
+  def update_ask_buy_index
+    AskBuy.index_update_by_query(
+      :query => {
+        :term => {
+          "user.id" => id
+        }
+      },
+      :update => {
+        :photos => {
+          :icon => photos.icon,
+          :header => photos.header,
+          :avatar => photos.avatar
+        }
+      }
+    )
+  end
+
+  def update_activity_index
+    Activity.index_update_by_query(
+      :query => {
+        :term => {
+          "author.id" => id
+        }
+      },
+      :update => {
+        :author => {
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
+        }
+      }
+    )
   end
 
   private

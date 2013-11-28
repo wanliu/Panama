@@ -3,6 +3,7 @@ class AskBuy < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
 
   attr_accessible :amount, :describe, :price, :product_id, :status, :title
 
@@ -67,6 +68,11 @@ class AskBuy < ActiveRecord::Base
         :icon         => photos.icon,
         :header       => photos.header,
         :avatar       => photos.avatar
+      },
+      :product => {
+        :id => product.try(:id),
+        :name => product.try(:name),
+        :properties => product.try(:properties_json)
       }
     }.to_json
   end

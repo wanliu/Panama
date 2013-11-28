@@ -10,3 +10,4 @@
 //= require lib/depend_select
 //= require system/select_region
 //= require system/region
+//= require system/category_property

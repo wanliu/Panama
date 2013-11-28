@@ -6,6 +6,7 @@ Apple:
     shop_id: 1001
     category_id: 73
     shops_category_id: 54
+    emc13: 1254694565465
 
 iPhone4s:
     id: 10002
@@ -14,3 +15,4 @@ iPhone4s:
     shop_id: 1001
     category_id: 74
     shops_category_id: 55
+    emc13: 1254646565465

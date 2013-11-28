@@ -151,7 +151,7 @@ class ActivityView extends Backbone.View
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
-    @$('.like-count').text(s - n) 
+    @$('.like-count').text(s - n)
 
   addComment: (event) ->
     content = @$("textarea",".message").val()
@@ -417,14 +417,16 @@ class ActivityLayoutView extends Backbone.View
 
 
 class LoadActivities extends InfiniteScrollView
-  params: {
+  default_params: {
     msg_el: ".scroll-load-msg"
     sp_el: "#activities"
     fetch_url: "/search"
   }
 
   initialize: (options) ->
-    super this.params
+    @params = {}
+    _.extend(@params, @default_params, options.params)
+    super @params
     $(window).bind "reset_search", (e, data) =>
       @reset_fetch(data)
 
@@ -457,7 +459,7 @@ class LoadActivities extends InfiniteScrollView
 
 class LikeListView extends Backbone.View
 
-  item_row: 
+  item_row:
     '<tr id="liked_activity{{id}}" class="like_main activity" activity-id="{{ id }}">
       <td><img src="{{ url }}" class="activity_icon" ></td>
       <td class="title_td">
@@ -472,7 +474,7 @@ class LikeListView extends Backbone.View
   trHtml: (activity) ->
     row_tpl = Hogan.compile(@item_row)
     row_tpl.render(activity)
-    
+
   add_to_cart: (activity) ->
     $(".like_list").append(@trHtml(activity))
     new ActivityPreview({ el: $("#liked_activity#{ activity.id } ")})

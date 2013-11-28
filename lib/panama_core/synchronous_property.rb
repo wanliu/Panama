@@ -45,7 +45,7 @@ module PanamaCore
     def attach_properties!
       unless category.nil?
         relation_properties.delete_if { true } if relation_properties.size > 0
-        relation_values.delete_if { true } if relation_values.size > 0
+        # relation_values.delete_if { true } if relation_values.size > 0
         relation_items.delete_if { true } if relation_items.size > 0
 
         category.properties.each do |prop|

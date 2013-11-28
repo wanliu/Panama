@@ -29,6 +29,10 @@ class Shop < ActiveRecord::Base
 
   before_destroy :delete_shop
 
+  after_update do
+    update_relation_index
+  end
+
   scope :actived, where(actived: true)
 
   validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }, if: :actived?
@@ -127,6 +131,45 @@ class Shop < ActiveRecord::Base
 
   def generate_im_token
     self.im_token = SecureRandom.hex
+  end
+
+  def update_relation_index
+    update_activity_index
+    update_shop_product_index
+  end
+
+  def update_activity_index
+    Activity.index_update_by_query(
+      :query => {
+        :term => {
+          "shop.id" => id
+        }
+      },
+      :update => {
+        :shop => {
+          :icon => photos.icon,
+          :header => photos.header,
+          :avatar => photos.avatar
+        }
+      }
+    )
+  end
+
+  def update_shop_product_index
+    ShopProduct.index_update_by_query(
+      :query => {
+        :term => {
+          "seller.id" => id
+        }
+      },
+      :update => {
+        :seller => {
+          :icon => photos.icon,
+          :header => photos.header,
+          :avatar => photos.avatar
+        }
+      }
+    )
   end
 
   private

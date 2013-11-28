@@ -239,3 +239,48 @@ table.index_table th{ text-align: center !important; }
     margin-top: 5px;
   }
 }
+
+.category-properties, .panel_contents{
+  position: relative;
+
+  .chose-all{
+    float: right;
+  }
+
+  .action-bar{
+    margin-left: 20px;
+  }
+
+  .join_filter{
+    input[type=submit]{
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+  }
+
+  .property{
+    li{
+      .label{
+        width: 10%;
+      }
+
+    }
+  }
+}
+
+.category_property_value_wrap{
+
+  .new{
+    form{
+
+      label{
+        width: 10%
+      }
+
+      input[type=text]{
+        width: 150px;
+      }
+    }
+  }
+}

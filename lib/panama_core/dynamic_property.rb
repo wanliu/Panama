@@ -17,11 +17,11 @@ module PanamaCore
 
       @@dynamic_configuration = default_dynamic_configuration
 
-      # after_initialize :setup_dynamic_properties
+      after_initialize :setup_dynamic_properties
 
-      # after_find do
-      #   delegate_property_setup
-      # end
+      after_find do
+        delegate_property_setup
+      end
     end
 
     module ClassMethods

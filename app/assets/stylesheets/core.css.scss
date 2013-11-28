@@ -5,7 +5,6 @@
 @import "lib/transparent";
 @import "lib/chosen";
 @import "my_cart";
-@import "contact_friend";
 @import "font-awesome";
 @import "lib/stroll";
 @import "attachments";
@@ -1219,7 +1218,7 @@ h2 small {
 	}
 }
 
-.disconnect { 
+.disconnect {
   -webkit-filter: grayscale(100%);
   -moz-filter: grayscale(100%);
   -ms-filter: grayscale(100%);
@@ -1256,5 +1255,31 @@ h2 small {
 				margin-left: 20px;
 			}
 		}
+	}
+}
+
+.min-line{
+	border-top:none
+}
+
+.breadcrumb{
+	.active{
+		color: #D1CDCD;
+	}
+
+	li.condition{
+		margin-left: 10px;
+	}
+
+	.close-label{
+		width: 12px;
+		height: 11px;
+		font-size: 1px;
+		background: url("/assets/chosen-sprite.png") right top no-repeat;
+		display: inline-block;
+	}
+
+	.close-label:hover{
+		background-position: right -11px;
 	}
 }
