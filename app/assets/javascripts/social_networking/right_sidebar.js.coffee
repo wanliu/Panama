@@ -38,7 +38,7 @@ class RightSideBar extends Backbone.View
 		# @states = local_storage('sidebar_state') || {
 		@states = {
 			'right_mini' : true,
-			'actived_tab': String(FriendsContainerView)
+			'actived_tab': String(ChatContainerView)
 		}
 		@apply_states()
 

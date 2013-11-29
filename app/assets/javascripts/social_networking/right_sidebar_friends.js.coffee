@@ -1,78 +1,57 @@
 root = (window || @)
 
-class root.FriendsContainerView extends RealTimeContainerView
+class root.ChatContainerView extends RealTimeContainerView
   events:
-    'keyup input.filter_key' : 'filter_users'
+    'keyup input.filter_key' : 'filter_list'
 
   initialize: () ->
     super
-    @followers_view = new FollowersView(parent_view: @)
+    @friends_view = new FriendsView(parent_view: @)
     @stranger_view  = new StrangersView(parent_view: @)
-    @set_default_view(@followers_view)
+    @groups_view = new GroupsView(parent_view: @)
     $(@el).prepend('
       <div class="fixed_head">
         <input class="filter_key" type="text"/>
       </div>')
 
-  set_default_view: (view) ->
-    view.seted_default()
-    @default_view = view
-
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
+      console.log(channel)
       @process_message(channel)
     )
 
   process_message: (channel) ->
-    @followers_view.process(channel) || @stranger_view.process(channel)
+    @friends_view.process(channel) || @stranger_view.process(channel) || @groups_view.process(channel)
 
-  filter_users: (event) ->
+  filter_list: (event) ->
     keyword = $(event.target).val().trim()
-    @followers_view.filter_users(keyword)
-    @stranger_view.filter_users(keyword)
+    @friends_view.filter_list(keyword)
+    @stranger_view.filter_list(keyword)
+    @groups_view.filter_list(keyword)
 
 
-class FollowersView extends Backbone.View
-  className: "followings-list"
+class BaseFriendsView extends Backbone.View
 
-  template:
-    '<h5 class="tab-header">
-      <i class="icon-group"></i>
-       我关注的[<span class="num">0</span>]
-    </h5>
-    <ul class="users-list followings">
-    </ul>'
+  init_fetch: () ->
+    console.log('unimplemented...')
+
+  addOne: (model) ->
+    console.log('unimplemented...')
 
   initialize: () ->
     @parent_view  = @options.parent_view
     @$parent_view = $(@options.parent_view.el)
-
+    @$parent_view.append(@el)
     @collection = new Backbone.Collection()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
-    @render()
-
-  render: () ->
-    $(@el).html(@template)
-
-  seted_default: () ->
-    @is_default_view = true
-    @$parent_view.append(@el)
     @init_fetch()
-
-  init_fetch: () ->
-    @collection.fetch(url: "/users/followings")
+    @render()
 
   addAll: () ->
     @$("ul").html('')
     @collection.each (model) =>
       @addOne(model)
-
-  addOne: (model) ->
-    @$("h5 .num").html(@collection.length)
-    friend_view = new FriendView({ model: model, parent_view: @ })
-    model.view  = friend_view
-    @$(".users-list").append(friend_view.render().el)
 
   process: (channel) ->
     exist_model = @find_exist(channel)
@@ -83,7 +62,7 @@ class FollowersView extends Backbone.View
     else
       false
 
-  filter_users: (keyword) ->
+  filter_list: (keyword) ->
     pattern = new RegExp(keyword)
     _.each @collection.models, (model) ->
       if pattern.test(model.get('login'))
@@ -103,7 +82,68 @@ class FollowersView extends Backbone.View
     friend_view.delegateEvents()
 
 
-class StrangersView extends FollowersView
+class FriendsView extends BaseFriendsView
+  className: "followings-list"
+
+  template:
+    '<h5 class="tab-header">
+      <i class="icon-group"></i>
+       我关注的[<span class="num">0</span>]
+    </h5>
+    <ul class="users-list followings">
+    </ul>'
+
+  initialize: () ->
+    super
+
+  render: () ->
+    $(@el).html(@template)
+    @
+
+  init_fetch: () ->
+    @collection.fetch(url: "/users/followings")
+
+  addOne: (model) ->
+    @$("h5 .num").html(@collection.length)
+    friend_view = new FriendView({ model: model, parent_view: @ })
+    model.view  = friend_view
+    @$(".users-list").append(friend_view.render().el)
+
+
+class GroupModel extends Backbone.Model
+  defaults: () ->
+    { name: 'group_' + _.uniqueId() }
+
+class GroupList extends Backbone.Collection
+  model: GroupModel
+
+class GroupsView extends BaseFriendsView
+  className: "groups-list"
+
+  template:
+    '<h5 class="tab-header">
+      <i class="icon-group"></i>
+       群组[<span class="num">0</span>]
+    </h5>
+    <ul class="users-list groups">
+    </ul>'
+
+  initialize: () ->
+    super
+    _.each [0..1], (i) =>
+      @collection.add(new GroupModel({name: 'group_' + i }))
+
+  render: () ->
+    $(@el).html(@template)
+    @
+
+  addOne: (model) ->
+    groupView = new GroupView({ model: model, parent_view: @ })
+    model.view  = groupView
+    @$(".users-list").append(groupView.render().el)
+
+
+class StrangersView extends BaseFriendsView
   className: "strangers-list"
 
   template:
@@ -114,7 +154,8 @@ class StrangersView extends FollowersView
     <ul class="users-list strangers">
     </ul>'
 
-  init_fetch: () ->
+  initialize: () ->
+    super
 
   addOne: (model) ->
     if @collection.length is 1 and @parent_view.$('.strangers').length is 0
@@ -144,11 +185,11 @@ class StrangersView extends FollowersView
       item.id is model.id
 
 
-class root.FriendView extends Backbone.View
+class BaseFriendView extends Backbone.View
   tagName: 'li'
 
   events:
-    "click" : "talk_to_friend"
+    "click" : "showChat"
 
   template: _.template(
     "<span class='badge badge-important message_count'></span>
@@ -177,7 +218,7 @@ class root.FriendView extends Backbone.View
     @$('.message_count').html(@msg_count).show()
 
   setChannel: (@channel) ->
-    @channel ||= Caramal.Chat.of(@model.get('login'))
+    @getChannel()
     @channel.open()
     @channel.onMessage (msg) =>
       unless @channel.isActive()
@@ -186,12 +227,12 @@ class root.FriendView extends Backbone.View
         @active()
     , @
 
-  talk_to_friend: () ->
+  showChat: () ->
     @unactive()
-    $(".global_chat_panel").css('z-index', 9999)
+    $(".global_chat").css('z-index', 9999)
     @setChannel() unless @channel?
     unless @chat_view 
-      @chat_view = new ChatView({ user: @model.get('login'), channel: @channel })
+      @chat_view = @newChat()
       @bind_chat()
     @chat_view.showWithMsg()
 
@@ -205,4 +246,28 @@ class root.FriendView extends Backbone.View
   unactive: () ->
     $(@el).removeClass('active')
     @clearMsgCount()
+
+
+class FriendView extends BaseFriendView
+
+  initialize: () ->
+    super
+
+  getChannel: () ->
+    @channel ||= Caramal.Chat.of(@model.get('login'))
+
+  newChat: () ->
+    new ChatView({ user: @model.get('login'), channel: @channel })
+
+
+class GroupView extends BaseFriendView
+
+  initialize: () ->
+    super
+
+  getChannel: () ->
+    @channel ||= Caramal.Group.of(@model.get('name'))
+
+  newChat: () ->
+    new GroupChatView({ user: @model.get('name'), channel: @channel })
 
