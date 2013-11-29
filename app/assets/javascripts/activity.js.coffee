@@ -36,9 +36,9 @@ class ActivityView extends Backbone.View
     'submit form.new_product_item'  : 'join'
     "click .focus .partic-button"   : "joinFocus"
     "click .focus .unpartic-button" : "unjoinFocus"
-    "click .load_modal" : "load_modal"
-    "click .circle" : "select_circle"
-    "click .share_activity" : "share_activity"
+    "click .load_modal"             : "load_modal"
+    "click .circle"                 : "select_circle"
+    "click .share_activity"         : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
   unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
@@ -134,7 +134,6 @@ class ActivityView extends Backbone.View
       keyboard: true,
       backdrop: false
     })
-    # $('#PickCircle').modal('show')
 
   state: () ->
     if @$(".selected").length > 0
@@ -231,7 +230,6 @@ class ActivityView extends Backbone.View
 
   join: () ->
     new ActivityBuyView({activity_id: @model.id})
-
     false
 
   validate_date: () ->
@@ -268,7 +266,7 @@ class ActivityPreview extends Backbone.View
 
   launch: (event) ->
     @load_view(event.currentTarget)
-    new ActivityView({
+    @activity_view = new ActivityView({
       model: @model,
       login: @login
     }).modal()
