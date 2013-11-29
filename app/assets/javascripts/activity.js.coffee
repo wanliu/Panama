@@ -36,6 +36,9 @@ class ActivityView extends Backbone.View
     'submit form.new_product_item'  : 'join'
     "click .focus .partic-button"   : "joinFocus"
     "click .focus .unpartic-button" : "unjoinFocus"
+    "click .load_modal" : "load_modal"
+    "click .circle" : "select_circle"
+    "click .share_activity" : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
   unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
@@ -48,7 +51,6 @@ class ActivityView extends Backbone.View
 
   initialize: (@options) ->
     _.extend(@, @options)
-
     @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @back_drop = new BackDropView()
     @back_drop.show()
@@ -124,6 +126,56 @@ class ActivityView extends Backbone.View
       setTimeout () ->
         $(elem).addClass(class_names)
       , 100
+
+  load_modal: () ->
+    @$dialog.find(".container").slideUp()
+    $('#PickCircle').modal({
+      remote: "/people/#{ @login}/communities/all_circles",
+      keyboard: true,
+      backdrop: false
+    })
+    # $('#PickCircle').modal('show')
+
+  state: () ->
+    if @$(".selected").length > 0
+      @$(".share_activity").removeClass("disabled")
+    else
+      @$(".share_activity").addClass("disabled")
+
+  select_circle: (e) ->
+    target = $(e.currentTarget)
+    if target.hasClass("selected")
+      target.removeClass("selected")
+    else
+      target.addClass("selected")
+    @state()
+
+  data: () ->
+    ids = []
+    if @$(".selected").length > 0
+      els = @$(".selected") 
+      _.each els, (el) =>
+        ids.push($(el).attr("data-value-id"))
+      return ids
+    else
+      return false
+
+  share_activity: () ->
+    return false if $(".share_activity .disabled").length == 1
+    @$(".share_activity").addClass('disabled')
+    ids = @data()
+    activity_id = @model.get('id')
+    $.ajax(
+      data: {ids: ids}
+      url: "/activities/"+activity_id+"/share_activity"
+      type: "post"
+      success: () =>
+        pnotify(text: '分享活动成功！!')
+        $("#PickCircle").modal('hide')
+        @$dialog.find('.container').slideDown()
+      error: (messages) ->
+        pnotify(text: messages.responseText, type: "error")
+    )
 
   like: (event) ->
     $.post(@model.url() + "/like", (data) =>
@@ -217,7 +269,8 @@ class ActivityPreview extends Backbone.View
   launch: (event) ->
     @load_view(event.currentTarget)
     new ActivityView({
-      model: @model
+      model: @model,
+      login: @login
     }).modal()
     false
 

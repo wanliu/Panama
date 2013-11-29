@@ -18,7 +18,7 @@ class ActivitiesLike < ActiveRecord::Base
     Notification.create!(
       :user_id => user_id,
       :mentionable_user_id => author,
-      :url => "people/#{user.login}/notifications",
+      :url => "/people/#{user.login}/notifications",
       :targeable => self,
       :body => "#{user.login}喜欢了你的#{ activity.title}活动")
   end
