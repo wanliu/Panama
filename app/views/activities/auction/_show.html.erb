@@ -1,13 +1,12 @@
 <div class="container activity-auction">
   <div class="row-fluid">
-    <div class="offset1 span7">
+    <div class="span7">
       <!-- 主展示框 -->
-      <div id="main-model" class="dialog">
+      <div id="main-model" class="widget">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h3><%= activity.title %></h3>
         </div>
-        <div class="modal-body main-show">
+        <div class=" main-show">
           <div class='picture'>
             <% if activity.attachments.length > 1  %>
               <div id="myCarousel" class="carousel slide">
@@ -41,7 +40,7 @@
             <%= activity.end_time.strftime('%Y年%m月%d日') %>
           </span>
         </div>
-        <div class="modal-footer">
+        <div class="modal-foot">
           <div class="big_comments_and_reply">
 
             <div class="comments">
@@ -75,7 +74,7 @@
     </div>
 
     <div class="span3">
-      <div class="dialog" id="activity-actions">
+      <div class="widget" id="activity-actions">
         <div class="modal-body">
           <img class="author_image" src="<%= activity.author.photos.header %>"  />
           <a href="javascript:void(0)" class="btn btn-primary pull-right load_modal">分享活动</a> 
@@ -83,11 +82,11 @@
           <p>关注 <%= activity.author.followings.count %></p>
           <p>粉丝 <%= activity.author.followers.count %></p>
         </div>
-        <div class="modal-footer">
+        <div class="modal-foot">
         </div>
       </div>
 
-      <div class="dialog" id="purchase-forms">
+      <div class="widget" id="purchase-forms">
         <%= simple_form_for product_item, :url => join_activities_auction_path(activity), :remote => true do |f| %>
           <div class="modal-body">
             <%= f.label :price %>
@@ -96,7 +95,7 @@
               :class => "amount span12"
             } %>
           </div>
-          <div class="modal-footer">
+          <div class="modal-foot">
             <div class="btn-group">
             <% if activity.user_liked?(current_user) %>
               <a class="btn unlike-button active" href="#">取消喜欢</a>
@@ -123,7 +122,7 @@
     </div>
   </div>
 </div>
-<%= render "/activities/share_activity_to_circles"%>
+<%#= render "/activities/share_activity_to_circles"%>
 <script type="text/template" id="comment-template">
   <div class="comment hide">
     <img class="people-image" src="<%= current_user.avatar %>">

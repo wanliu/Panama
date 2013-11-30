@@ -46,6 +46,23 @@ class ActivitiesController < ApplicationController
     end
   end
 
+  def share_activity
+    @activity = Activity.find(params[:id])
+    unless params[:ids].blank? 
+      ids = params[:ids]
+      Circle.where(:id => ids).map do |c|
+        catetory_id = c.categories.first && c.categories.first.id
+        topic = c.topics.create(:content => @activity.activity_detail_desription, 
+                                :user => current_user, 
+                                :category_id => catetory_id )
+        topic.attachments << @activity.attachments.limit(2)  if @activity.attachments.length > 0 
+      end
+    end
+    respond_to do |format|
+      format.json{ head :no_content }
+    end
+  end
+
   def like
     @activity = Activity.find(params[:id])
     begin

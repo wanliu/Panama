@@ -2,6 +2,7 @@
 class ActivitiesLike < ActiveRecord::Base
   belongs_to :activity
   belongs_to :user
+  belongs_to :target, :polymorphic => true
 
   validates :user, :presence => true
   validates :activity, :presence => true
@@ -10,6 +11,20 @@ class ActivitiesLike < ActiveRecord::Base
 
   after_create do
     update_activity_like
+    notice_author
+  end
+
+  def notice_author
+    Notification.create!(
+      :user_id => user_id,
+      :mentionable_user_id => author,
+      :url => "/people/#{user.login}/notifications",
+      :targeable => self,
+      :body => "#{user.login}喜欢了你的#{ activity.title}活动")
+  end
+
+  def author
+    activity.author.id
   end
 
   after_destroy do

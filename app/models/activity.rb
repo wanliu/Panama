@@ -64,8 +64,24 @@ class Activity < ActiveRecord::Base
         :user_id => author.id,
         :mentionable_user_id => follower.user_id,
         :url => "/activities/#{id}",
-        :body => "有新活动发布"
+        :body => "你关注的商家#{ shop.name}有新活动发布#{ title}"
       })
+    end
+  end
+
+  def activity_detail_desription
+    "<h4>发布活动: <a href='/activities/#{ id}'>#{ title} </a></h4><p>活动简介：#{ description || '暂无描述'}
+    原价： ￥ <span class='normal-price'>#{ price.to_f }  </span> &nbsp;  最低价： ￥<span class='red-price'> #{ activity_price.to_f }</span> </p>"
+  end
+
+  def draw_topic_in_yourself_circle
+    shop.circles.each do |c|
+      catetory_id = c.categories.first && c.categories.first.id
+      topic = c.topics.create(
+        :content => activity_detail_desription,
+        :user => shop.user,
+        :category_id => catetory_id )
+      topic.attachments <<  self.attachments.limit(2)  if self.attachments.length > 0 
     end
   end
 

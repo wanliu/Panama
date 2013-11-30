@@ -169,9 +169,13 @@ class SearchController < ApplicationController
     rs = results.map do |result|
       if result.type == "activity"
         activity = Activity.find(result.id)
+        followed_id = activity.shop.followers.where(:user_id => current_user.id).pluck("id").first
         result = result.to_hash.merge({
           is_start: activity.start_sale?,
-          likes: activity.likes.exists?(current_user)
+          likes: activity.likes.exists?(current_user),
+          followed: activity.shop.followers.exists?(:user_id => current_user.id),
+          is_self: activity.shop.user.eql?(current_user),
+          followed_id: followed_id
         })
       end
       result

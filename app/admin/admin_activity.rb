@@ -95,6 +95,7 @@ ActiveAdmin.register Activity do
     activity.send_checked_mail
     activity.notice_author(activity.author, "您发布的活动已经通过审核")
     activity.notice_followers
+    activity.draw_topic_in_yourself_circle
     redirect_to action: :index
   end
 

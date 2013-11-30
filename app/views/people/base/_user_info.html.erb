@@ -4,7 +4,6 @@
 	<%= simple_form_for @user_auth,
 	url: url,
 	html: { method: :put, class: "form-horizontal user_auth" } do |f| %>
-	<%#= f.input :ower_photo, label: '个人图片', as: 'file' %>
 		<div class="row-fluid">
 			<div class="span5 reset_avatar main_panle">
 				<div class="photo_span cell" >
@@ -20,9 +19,9 @@
 				</div>
 			</div>
 			<div class="span7 input_locate">
-				<%= f.input :ower_name, label: '真实姓名' %>
-				<%= f.input :ower_shenfenzheng_number, label: '身份证号' %>
-				<%= f.input :phone, label: '联系电话' %>
+				<%= f.input :ower_name, required: true, label: '真实姓名' %>
+				<%= f.input :ower_shenfenzheng_number, required: true, label: '身份证号' %>
+				<%= f.input :phone, required: true, label: '联系电话' %>
 			</div>
 		</div>
 	<% end %>

@@ -93,8 +93,9 @@ class Communities::CirclesController < Communities::BaseController
       ids = params[:ids]
       if @circle.is_member?(current_user)
         Circle.where(:id => ids).map do |c|
-          topic = c.topics.create(:content => @circle.all_detail, :user => current_user, 
-                          :category_id => c.categories.try(:first).try(:id))
+          topic = c.topics.create(:content => @circle.all_detail, 
+                                  :user => current_user, 
+                                  :category_id => c.categories.try(:first).try(:id))
           topic.attachments <<  @circle.attachment  unless @circle.attachment.nil? 
         end
       end
