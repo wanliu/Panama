@@ -4719,8 +4719,8 @@ if (typeof define === "function" && define.amd) {
     Caramal.JoinCommand = JoinCommand;
     Caramal.CloseCommand = CloseCommand;
     Caramal.RecordCommand = RecordCommand;
-    Caramal.StopRecordCommand = StopRecordCommand;
-    return Caramal.HistoryCommand = HistoryCommand;
+    Caramal.HistoryCommand = HistoryCommand;
+    return Caramal.StopRecordCommand = StopRecordCommand;
   });
 
 }).call(this);
@@ -5341,7 +5341,7 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Chat.prototype.commands = ['open', 'join', 'record', 'stop_record', 'history'];
+      Chat.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
 
       Chat.prototype.hooks = {};
 
@@ -5501,7 +5501,7 @@ if (typeof define === "function" && define.amd) {
     Group = (function(_super) {
       __extends(Group, _super);
 
-      Group.prototype.commands = ['open', 'join'];
+      Group.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
 
       Group.prototype.hooks = {};
 
