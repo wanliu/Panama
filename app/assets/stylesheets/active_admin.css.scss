@@ -16,6 +16,7 @@
 @import "system/simpledatepicker";
 @import "system/fullcalendar";
 @import "lib/notify/pnotify";
+@import "lib/chosen";
 // Overriding any nonvariable SASS must be done after the fact.
 // For example, to change the default statustag color:
 //
@@ -260,7 +261,12 @@ table.index_table th{ text-align: center !important; }
   }
 
   .property{
+    #property_id_input{
+      width: 20%
+    }
+
     li{
+
       .label{
         width: 10%;
       }

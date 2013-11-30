@@ -165,6 +165,7 @@ class Product < ActiveRecord::Base
       :created_at  => created_at,
       :price       => price,
       :shop_id     => shop_id,
+      :brand_name  => brand_name,
       :updated_at  => updated_at,
       :photos      => {
         :icon      => photos.icon,
@@ -327,4 +328,5 @@ class Product < ActiveRecord::Base
       }
     )
   end
+
 end

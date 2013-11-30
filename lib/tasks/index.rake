@@ -50,7 +50,16 @@ namespace "index" do
               }
             }
           }
-        }
+        },
+        "dynamic_templates" => [{
+          "property_template" => {
+            "mapping" => {
+              "type" => "string",
+              "index" => "not_analyzed"
+            },
+            "path_match" => "properties.*"
+          }
+        }]
       }
     end
 
@@ -101,7 +110,16 @@ namespace "index" do
               }
             }
           }
-        }
+        },
+        "dynamic_templates" => [{
+          "property_template" => {
+            "mapping" => {
+              "type" => "string",
+              "index" => "not_analyzed"
+            },
+            "path_match" => "properties.*"
+          }
+        }]
       }
     end
 
@@ -153,7 +171,16 @@ namespace "index" do
               }
             }
           }
-        }
+        },
+        "dynamic_templates" => [{
+          "property_template" => {
+            "mapping" => {
+              "type" => "string",
+              "index" => "not_analyzed"
+            },
+            "path_match" => "product.properties.*"
+          }
+        }]
       }
     end
 
@@ -168,13 +195,13 @@ namespace "index" do
                 "tokenizer" => "my_pinyin",
                 "filter" => ["standard", "nGram"]
               }
-            }
-          },
-          "tokenizer" => {
-            "my_pinyin" => {
-              "type" => "pinyin",
-              "first_letter" => "prefix",
-              "padding_char" => ""
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
             }
           }
         }
@@ -205,7 +232,120 @@ namespace "index" do
               }
             }
           }
+        },
+        "dynamic_templates" => [{
+          "property_template" => {
+            "mapping" => {
+              "type" => "string",
+              "index" => "not_analyzed"
+            },
+            "path_match" => "product.properties.*"
+          }
+        }]
+      }
+    end
+
+    Tire.index "properties" do
+      delete
+
+      create({
+        "index" => {
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
+            }
+          }
         }
+      })
+
+      sleep 1
+
+      mapping :property, {
+        "properties" => {
+          "title" => {
+            "type" => "multi_field",
+            "fields" => {
+              "title" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              }
+            }
+          }
+        },
+      }
+    end
+
+    Tire.index "category_property_values" do
+      delete
+
+      create({
+        "index" => {
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
+            }
+          }
+        }
+      })
+
+      sleep 1
+
+      mapping :category_property_value, {
+        "properties" => {
+          "value" => {
+            "type" => "multi_field",
+            "fields" => {
+              "value" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              }
+            }
+          }
+        },
       }
     end
   end

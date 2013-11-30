@@ -301,4 +301,28 @@ ActiveAdmin.register Category do
     end
   end
 
+  member_action :search_property_value do
+    val = filter_special_sym(params[:q])
+    category_id, property_id = params[:id], params[:property_id]
+    @items = CategoryPropertyValue.search2 do
+      query do
+        boolean do
+          must do
+            filtered do
+              filter :query, :query_string => {
+                :query => "value:#{val} OR primitive:#{val}",
+                :default_operator => "AND"
+              }
+              filter :term, "category.id" => category_id
+              filter :term, "property.id" => property_id
+            end
+          end
+        end
+      end
+    end.results
+    respond_to do |format|
+      format.json{ render :json => @items }
+    end
+  end
+
 end

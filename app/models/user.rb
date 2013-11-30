@@ -248,10 +248,12 @@ class User < ActiveRecord::Base
         }
       },
       :update => {
-        :photos => {
-          :icon => photos.icon,
-          :header => photos.header,
-          :avatar => photos.avatar
+        :user => {
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
         }
       }
     )

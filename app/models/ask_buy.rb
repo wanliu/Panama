@@ -31,7 +31,7 @@ class AskBuy < ActiveRecord::Base
   end
 
   def init_data
-    self.title = "#{self.title} 求购"
+    self.title = "#{self.title}求购"
   end
 
   def as_json(*args)

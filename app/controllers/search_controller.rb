@@ -118,26 +118,15 @@ class SearchController < ApplicationController
                 filter :terms, "category.id" => conditions[:category_id]
               end
 
-            end
-          end
-
-          must do
-            filtered do
               if q[:properties].present?
-                filter :terms, :_type => [:activity, :ask_buy]
                 conditions[:properties].each do |key, val|
-                  filter :terms, "product.properties.#{key}" => val
+                  filter :terms, "product.properties.#{val['name']}" => val["values"]
                 end
               end
-            end
-          end
 
-          must do
-            filtered do
               if q[:properties].present?
-                filter :terms, :_type => [:product, :shop_product]
                 conditions[:properties].each do |key, val|
-                  filter :terms, "properties.#{key}" => val
+                  filter :terms, "properties.#{val['name']}" => val["values"]
                 end
               end
             end

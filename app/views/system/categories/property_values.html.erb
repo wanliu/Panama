@@ -32,7 +32,7 @@
   <div class='new'>
     <%= semantic_form_for CategoryPropertyValue.new, :url => create_property_value_system_category_path(@category) do |f| %>
       <%= f.inputs do  %>
-        <%= f.input :value, :label => "值" %>
+        <%= f.input :value, :label => "值", :input_html => { :class => "property_value" } %>
       <% end %>
       <input type='hidden' value="<%=@category_property.property.id %>" name='property_id' />
       <%= f.actions %>
@@ -44,3 +44,12 @@
     <%= @category.name %>分类不存该属性
   </p>
 <% end %>
+<script type='text/javascript'>
+  $(function(){
+    new TypeaheadExtension({
+      el: $("input.property_value"),
+      field: "value",
+      source: "/system/categories/<%=@category_property.category.id %>/search_property_value?property_id=<%=@category_property.property.id %>"
+    })
+  })
+</script>

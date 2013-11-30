@@ -485,6 +485,7 @@ zh-CN:
   activity:
     type:
       auction: 竞价
+      focus: 聚焦
 
   product_item:
     buy_state:

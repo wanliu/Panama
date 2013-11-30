@@ -17,7 +17,7 @@
       <% if value.present?  %>
         <script type="text/javascript">
           $(function(){
-            $("select.<%=property.name %>").val(<%=value.id %>)
+            $("select.<%=property.name %>").val("<%=value.value %>")
           })
         </script>
       <% end %>

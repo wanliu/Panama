@@ -16,10 +16,8 @@
 
     filter_options.params.change = function(options){
       load_view.reset_fetch({
-        search_options: {
-          category_id: <%=@category.id %>,
-          properties: options
-        }
+        category_id: <%=@category.id %>,
+        properties: options
       })
     }
 

@@ -89,7 +89,7 @@ gem "bunny", "~> 0.9.0.pre9"
 # Pagination
 gem 'kaminari', '~> 0.14.1'
 gem 'kuaiqian', "~> 0.0.1", :github => "huxinghai1988/kuaiqian"
-gem 'tire_update_by_query', "~> 0.0.3", :github => "huxinghai1988/tire_update_by_query"
+gem 'tire_update_by_query', "~> 0.0.6", :github => "huxinghai1988/tire_update_by_query"
 
 # Faye
 # gem 'faye'

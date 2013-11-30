@@ -1,4 +1,8 @@
 class Property < ActiveRecord::Base
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
+
   attr_accessible :id, :name, :property_type, :title#, :items_attributes
 
   attr_accessor :value

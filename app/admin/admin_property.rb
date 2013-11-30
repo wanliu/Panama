@@ -31,6 +31,27 @@ ActiveAdmin.register Property do
     redirect_to items_system_property_path(@property)
   end
 
+  collection_action :search do
+    title = filter_special_sym(params[:q])
+    @items = Property.search2 do
+      query do
+        boolean do
+          must do
+            filtered do
+              filter :query, :query_string => {
+                :query => "title:#{title} OR primitive:#{title}",
+                :default_operator => "AND"
+              }
+            end
+          end
+        end
+      end
+    end.results
+    respond_to do |format|
+      format.json{ render :json => @items }
+    end
+  end
+
   form do |f|
     f.inputs do
       f.input :title
