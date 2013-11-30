@@ -4,3 +4,12 @@
 </p> -->
 <!-- <%#= link_to 'Edit', edit_activity_path(@activity) %> | -->
 <%= render "activities/#{@activity.activity_type}/show", activity: @activity, product_item: @product_item %>
+
+<script type="text/javascript">
+    $(function(){
+      new ActivityView({
+        el: $(".content"),
+        login: '<%= current_user.login %>'
+      })
+    })
+</script>
