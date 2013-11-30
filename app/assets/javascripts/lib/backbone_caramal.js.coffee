@@ -116,8 +116,13 @@ class BaseChatView extends Caramal.BackboneView
       <div class="message"><%= msg %></div>
     </li>')
 
-  fetchHistoryMsg: () ->
+  fetchHistory: () ->
     console.log('unimplemented...')
+
+  resetHistory: () ->
+    @msgLoaded = false
+    @$('.msg_content').html('')
+    @fetchHistory()
 
   initialize: (options) ->
     super
@@ -125,6 +130,7 @@ class BaseChatView extends Caramal.BackboneView
     @initChannel() 
     @initDialog()
     @bindDialog()
+    @bindEvent()
 
   initDialog: () ->
     @display = false
@@ -140,7 +146,6 @@ class BaseChatView extends Caramal.BackboneView
       @$(".body").css('height', height)
       $(@el).css('position', 'fixed')
     )
-    @bindEvent()
 
   bindEvent: () ->
     @afkService()
@@ -208,8 +213,8 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
 
   showWithMsg: () ->
+    @resetHistory()
     @showDialog()
-    @fetchHistoryMsg()
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
@@ -244,11 +249,11 @@ class root.ChatView extends BaseChatView
     super
 
   initChannel: () ->
-    return if @channel?
     @channel ||= Caramal.Chat.of(@user)
     @channel.open()
+    @channel.record()
     
-  fetchHistoryMsg: () ->
+  fetchHistory: () ->
     @msgLoaded ||= false
     return if @msgLoaded
     @channel.history({start: 1}, (chat, err, messages) =>
@@ -266,7 +271,7 @@ class root.GroupChatView extends BaseChatView
     super
 
   initChannel: () ->
-    return if @channel?
     @channel ||= Caramal.Group.of(@user)
     @channel.open()
+    # @channel.record()
 
