@@ -33,7 +33,7 @@ ActiveAdmin.register UserChecking do
     if user_checking.update_attributes(checked: true)
       if user_checking.user.try(:shop)
         shop = user_checking.user.shop
-        shop_url = "http://#{request.env['HTTP_HOST']}/shops/"+shop.name
+        shop_url = "/shops/"+shop.name
         shop.update_attributes(:shop_url => shop_url,:audit_count => shop.audit_count+1)
         shop.active_shop
         shop.save!
