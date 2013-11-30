@@ -1,7 +1,31 @@
-#author: huxinghai
-#describe: 提醒
+# author: huxinghai
+# describe: 提醒
+# 修订
 
 class Notification < ActiveRecord::Base
+  # Notification
+  #    user.notify(object, )
+  #
+  #            Notification.create!(
+  #               :user_id => @user.id,
+  #               :mentionable_user_id => current_user.id,
+  #               :url => notification_url(@user.login),
+  #               :body => "#{current_shop.name} 商店邀请你加入")
+  #
+  #    Notification()
+  #
+  #    @user.notify( channel, content, options )
+  #    @user.notify("#current_shop.name} 商店邀请你加入",
+  #                 :url => notification_url(@user.login),
+  #                 :persistent => true,
+  #                 :instant => true)
+  #
+  #     Notification.create!(
+  #       :user_id => u.id,
+  #       :mentionable_user_id => user.id,
+  #       :url => position_url,
+  #       :body => "在评论，提到你!")
+  #
   scope :unreads, where(:read => false)
   scope :reads, where(:read => true)
 
@@ -14,13 +38,13 @@ class Notification < ActiveRecord::Base
   validates_presence_of :user
   validates_presence_of :mentionable_user
 
-  after_create :realtime_push_to_client, :expired_unreads 
+  after_create :realtime_push_to_client, :expired_unreads
 
   def expired_unreads
-    Notification.unreads.where({ 
-      mentionable_user_id: self.mentionable_user_id, 
-      targeable_type: self.targeable_type, 
-      targeable_id: self.targeable_id 
+    Notification.unreads.where({
+      mentionable_user_id: self.mentionable_user_id,
+      targeable_type: self.targeable_type,
+      targeable_id: self.targeable_id
     }).where('id <> ?', self.id).update_all(:read => true)
   end
 

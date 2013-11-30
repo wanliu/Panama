@@ -31,7 +31,7 @@ class UsersController < ApplicationController
   end
 
   def channels
-    @channels = current_user.persistent_channels.map {|c| c.user }
+    @channels = current_user.persistent_channels.map {|c| {login: c.name, follow_type: c.channel_type }}
     respond_to do |format|
       format.json{ render :json => @channels }
     end
