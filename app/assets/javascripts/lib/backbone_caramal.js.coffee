@@ -26,7 +26,7 @@ class Caramal.BackboneView extends Backbone.View
           @channel[name].apply(@channel, args)
 
 
-class root.ChatService
+class ChatService
   @rows = 1
   @count = 0
   @maxRows = 2
@@ -76,17 +76,23 @@ Handlebars.registerHelper 'calender', (time) ->
 
 
 
-class root.ChatView extends Caramal.BackboneView
-  msgLoaded: false
+class BaseChatView extends Caramal.BackboneView
   on_class: "online"
   off_class: "offline"
-  className: 'global_chat_panel'
+  className: 'global_chat'
+
   EVENT_TYPE: {
     'joined'  : 1,
     'leaved'  : 2,
     'inputing': 3,
     'afk'     : 4
   }
+
+  events:
+    'mouseover '            : 'activeDialog'
+    'click .close_label'    : 'hideDialog'
+    'click .send_button'    : 'sendMeessage'
+    "keyup textarea.content": "fastKey"
 
   history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
@@ -120,11 +126,8 @@ class root.ChatView extends Caramal.BackboneView
       <div class="message">{{ msg }}</div>
     </li>')
 
-  events:
-    'mouseover '            : 'activeDialog'
-    'click .close_label'    : 'hideDialog'
-    'click .send_button'    : 'sendMeessage'
-    "keyup textarea.content": "fastKey"
+  fetchHistoryMsg: () ->
+    console.log('unimplemented...')
 
   initialize: (options) ->
     super
@@ -189,16 +192,6 @@ class root.ChatView extends Caramal.BackboneView
       @channel.being_input()
       @activeTime = new Date().getTime()
 
-  fetchHistoryMsg: (force = false) ->
-    return if !force && @msgLoaded
-    @channel.history({start: 1}, (chat, err, messages) =>
-      $html = @parseMessages(messages)
-      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-      $html += @history_tip({text: text})
-      @$('.msg_content').prepend($html)
-    )
-    @msgLoaded = true
-
   parseMessages: (messages) ->
     $html = ''
     messages = [messages] unless $.isArray(messages)
@@ -226,13 +219,8 @@ class root.ChatView extends Caramal.BackboneView
     @display = true
 
   showWithMsg: () ->
-    @fetchHistoryMsg()
     @showDialog()
-
-  initChannel: () ->
-    return if @channel?
-    @channel ||= Caramal.Chat.of(@user)
-    @channel.open()
+    @fetchHistoryMsg()
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
@@ -255,6 +243,42 @@ class root.ChatView extends Caramal.BackboneView
 
   sendMeessage: () ->
     $msg = @$("textarea.content")
-    @channel.send($msg.val().trim())
+    msg = $msg.val().trim()
+    return if msg is ''
+    @channel.send(msg)
     $msg.val('')
+
+
+class root.ChatView extends BaseChatView
+
+  initialize: () ->
+    super
+
+  initChannel: () ->
+    return if @channel?
+    @channel ||= Caramal.Chat.of(@user)
+    @channel.open()
+
+  fetchHistoryMsg: () ->
+    @msgLoaded ||= false
+    return if @msgLoaded
+    @channel.history({start: 1}, (chat, err, messages) =>
+      $html = @parseMessages(messages)
+      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+      $html += @history_tip({text: text})
+      @$('.msg_content').prepend($html)
+    )
+    @msgLoaded = true
+
+
+class root.GroupChatView extends BaseChatView
+
+  initialize: () ->
+    super
+
+  initChannel: () ->
+    return if @channel?
+    @channel ||= Caramal.Group.of(@user)
+    @channel.open()
+
 

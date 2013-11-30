@@ -256,6 +256,7 @@ Panama::Application.routes.draw do
 
   resources :activities do
     member do
+      post 'share_activity'
       post 'like'
       post 'unlike'
       post 'to_cart'
