@@ -71,7 +71,7 @@ class Activity < ActiveRecord::Base
   end
 
   def init_data
-    self.title = "#{self.title}#{I18n.t('activity.type.#{activity_type}')}"
+    self.title = self.title.to_s + I18n.t("activity.type.#{self.activity_type}")
     self.shop_id = author.shop.id
     self.like = like
     self.participate = participate

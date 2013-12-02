@@ -109,7 +109,7 @@ class SearchController < ApplicationController
                   :default_operator => "AND"
                 }
               end
-              filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
+
               if q[:catalog_id].present?
                 filter :terms, "category.id" => conditions[:catalog_id]
               end
@@ -142,6 +142,20 @@ class SearchController < ApplicationController
                 }]
               end if q[:properties].present?
 
+              filter :or, [{
+                :and => [{
+                  :term => {
+                    :_type => "activity",
+                    :status => Activity.statuses[:access]
+                  }
+                }]
+              },{
+                :and => [{
+                  :terms => {
+                    :_type => ["ask_buy", "shop_product", "product"]
+                  }
+                }]
+              }]
             end
           end
 
