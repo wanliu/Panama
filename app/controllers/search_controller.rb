@@ -118,17 +118,30 @@ class SearchController < ApplicationController
                 filter :terms, "category.id" => conditions[:category_id]
               end
 
-              if q[:properties].present?
-                conditions[:properties].each do |key, val|
-                  filter :terms, "product.properties.#{val['name']}" => val["values"]
-                end
-              end
+              conditions[:properties].each do |key, val|
+                filter :or, [{
+                  :and => [{
+                    :terms => {
+                      "product.properties.#{val['name']}" => val["values"]
+                    }
+                  },{
+                    :terms => {
+                      :_type => ["ask_buy", "activity"]
+                    }
+                  }]
+                },{
+                  :and => [{
+                    :terms => {
+                      "properties.#{val['name']}" => val["values"]
+                    }
+                  },{
+                    :terms => {
+                      :_type => ["shop_product", "product"]
+                    }
+                  }]
+                }]
+              end if q[:properties].present?
 
-              if q[:properties].present?
-                conditions[:properties].each do |key, val|
-                  filter :terms, "properties.#{val['name']}" => val["values"]
-                end
-              end
             end
           end
 
