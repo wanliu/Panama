@@ -295,7 +295,6 @@ Panama::Application.routes.draw do
   resources :users do
     collection do
       get "connect/:token", :to => "users#connect"
-      get "chat_authorization/:from/invest/:invested", :to => "users#chat_authorization"
       get "disconnect/:id", :to => "users#disconnect"
       get "followings"
       post "upload_avatar/:id", :to => "users#upload_avatar"
