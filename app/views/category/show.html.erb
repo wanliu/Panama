@@ -15,6 +15,7 @@
     })
 
     filter_options.params.change = function(options){
+      load_view.is_over = false
       load_view.reset_fetch({
         category_id: <%=@category.id %>,
         properties: options

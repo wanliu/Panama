@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
@@ -568,7 +568,6 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
-    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0

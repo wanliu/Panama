@@ -593,7 +593,6 @@ DEPENDENCIES
   tire!
   tire-settings!
   tire_update_by_query (~> 0.0.6)!
-  turbo-sprockets-rails3
   uglifier (>= 1.0.3)
   vfs (~> 0.4.8)
   whenever

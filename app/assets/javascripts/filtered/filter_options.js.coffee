@@ -60,6 +60,7 @@ class PropertyView extends Backbone.View
       unless _.isEmpty(model)
         model.trigger("active_chose")
         @add_condition(
+          title: @model.get("title"),
           name: @model.get("name"),
           values: [model.get('value')]
         )
@@ -113,6 +114,7 @@ class PropertyView extends Backbone.View
     return if _.isEmpty(@chose_value())
 
     @add_condition(
+      title: @model.get('title'),
       name: @model.get("name"),
       values: @find_values()
     )
@@ -135,11 +137,13 @@ class ConditionView extends Backbone.View
     title = span.find(".title")
     str_value = values
     str_value = values.join("、") if _.isArray(values)
-    span.attr("title", str_value)
-    if str_value.length > 5
-      str_value = "#{str_value.slice(0, 5)}..."
-    title.html(str_value)
+    span.attr("title", @get_title(str_value))
+    str_value = "#{str_value.slice(0, 5)}..." if str_value.length > 5
+    title.html(@get_title(str_value))
     @$el.html(span)
+
+  get_title: (str_value) ->
+    "#{@model.get('title')}: #{str_value}"
 
   close: () ->
     @trigger("remove", @model)
@@ -186,8 +190,10 @@ class FilterOptions extends Backbone.View
 
   load_properties: () ->
     @$(".properties>.property").each (i, el) =>
+      li = $(el).find(".name")
       @properties.add(
-        name: $(el).find(".name").attr("data-value-name"),
+        title: li.attr("data-value-title"),
+        name: li.attr("data-value-name"),
         el: $(el)
       )
 

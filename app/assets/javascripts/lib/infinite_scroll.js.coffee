@@ -34,7 +34,7 @@ class root.InfiniteScrollView extends Backbone.View
           @add_columns(data)
           @offset += @fetch_size
           $(@msg_el).html(@msg_tip)
-          @is_over = true
+          #@is_over = true
         @fetch_size = @limit
     )
 
