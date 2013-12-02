@@ -116,8 +116,21 @@ class BaseChatView extends Caramal.BackboneView
       <div class="message"><%= msg %></div>
     </li>')
 
-  fetchHistoryMsg: () ->
-    console.log('unimplemented...')
+  fetchHistory: () ->
+    @msgLoaded ||= false
+    return if @msgLoaded
+    @channel.history({start: 1}, (chat, err, messages) =>
+      $html = @parseMessages(messages)
+      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+      $html += @history_tip({text: text})
+      @$('.msg_content').prepend($html)
+    )
+    @msgLoaded = true
+
+  resetHistory: () ->
+    @msgLoaded = false
+    @$('.msg_content').html('')
+    @fetchHistory()
 
   initialize: (options) ->
     super
@@ -125,6 +138,12 @@ class BaseChatView extends Caramal.BackboneView
     @initChannel() 
     @initDialog()
     @bindDialog()
+    @bindEvent()
+
+  initChannel: () ->
+    @getChannel()
+    @channel.open()
+    @channel.record()
 
   initDialog: () ->
     @display = false
@@ -140,7 +159,6 @@ class BaseChatView extends Caramal.BackboneView
       @$(".body").css('height', height)
       $(@el).css('position', 'fixed')
     )
-    @bindEvent()
 
   bindEvent: () ->
     @afkService()
@@ -191,7 +209,7 @@ class BaseChatView extends Caramal.BackboneView
   receiveMessage: (data) ->
     @$('.msg_content').append(@parseMessages(data))
     @trigger('active_avatar') if @user is data.user
-    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
+    @scrollDialog()
 
   hideDialog: () ->
     $(@el).hide()
@@ -202,14 +220,21 @@ class BaseChatView extends Caramal.BackboneView
   showDialog: () ->
     $(@el).css('z-index', 10000).show()
     @channel.active()
-    _.each @channel.message_buffer, (msg) => @receiveMessage(msg)
-    @channel.message_buffer.splice(0, @channel.message_buffer.length)
+    @showUnread()
     @bindMessage() unless @display
     @display = true
 
+  scrollDialog: () ->
+    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
+
+  showUnread: () ->
+    _.each @channel.message_buffer, (msg) => 
+      @receiveMessage(msg)
+    @channel.message_buffer.splice(0, @channel.message_buffer.length)
+
   showWithMsg: () ->
+    @resetHistory()
     @showDialog()
-    @fetchHistoryMsg()
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
@@ -243,21 +268,8 @@ class root.ChatView extends BaseChatView
   initialize: () ->
     super
 
-  initChannel: () ->
-    return if @channel?
+  getChannel: () ->
     @channel ||= Caramal.Chat.of(@user)
-    @channel.open()
-    
-  fetchHistoryMsg: () ->
-    @msgLoaded ||= false
-    return if @msgLoaded
-    @channel.history({start: 1}, (chat, err, messages) =>
-      $html = @parseMessages(messages)
-      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-      $html += @history_tip({text: text})
-      @$('.msg_content').prepend($html)
-    )
-    @msgLoaded = true
 
 
 class root.GroupChatView extends BaseChatView
@@ -265,8 +277,9 @@ class root.GroupChatView extends BaseChatView
   initialize: () ->
     super
 
-  initChannel: () ->
-    return if @channel?
+  getChannel: () ->
     @channel ||= Caramal.Group.of(@user)
-    @channel.open()
+
+  fastKey: (event) ->
+    @sendMeessage() if event.ctrlKey && event.keyCode == 13
 
