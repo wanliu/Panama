@@ -43,17 +43,6 @@ class Following < ActiveRecord::Base
     end
   end
 
-  after_create do
-    member_id = follow.is_a?(User) ? follow_id : follow.user.id
-    body = follow.is_a?(User) ? "#{ user.login}关注了你" : "#{ user.login}关注了你的商店 #{ follow.name }"
-    Notification.create!(
-      :user_id => user_id,
-      :mentionable_user_id => member_id,
-      :url => "/people/#{user.login}/notifications",
-      :targeable => self,
-      :body => body )
-  end
-
   def self.user(user_id, uid = nil)
     opts = {follow_id: user_id, follow_type: "User"}
     opts[:follow_id] = user_id.id if user_id.is_a?(User)
