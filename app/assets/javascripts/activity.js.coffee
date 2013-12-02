@@ -226,7 +226,7 @@ class ActivityViewTemplate extends Backbone.View
 
   get_status: () ->
     time_wait = @model.start_time.toDate().getTime() - new Date().getTime()
-    return {name: 'waiting', text: "敬请期待"} unless time_wait < 0
+    return {name: 'waiting', text: "敬请期待"} unless time_wait < 0 && @model.status == 1
     time_left = @model.end_time.toDate().getTime() - new Date().getTime()
     return {name: 'over', text: "已结束"} unless time_left > 0
 
