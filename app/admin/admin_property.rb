@@ -31,7 +31,7 @@ ActiveAdmin.register Property do
     redirect_to items_system_property_path(@property)
   end
 
-  collection_action :search do
+  collection_action :search_title do
     title = filter_special_sym(params[:q])
     @items = Property.search2 do
       query do

@@ -32,7 +32,7 @@
   <div class='new'>
     <%= semantic_form_for CategoryPropertyValue.new, :url => create_property_value_system_category_path(@category) do |f| %>
       <%= f.inputs do  %>
-        <%= f.input :value, :label => "值", :input_html => { :class => "property_value" } %>
+        <%= f.input :value, :label => "值", :input_html => { :class => "property_value", :autocomplete =>"off"  } %>
       <% end %>
       <input type='hidden' value="<%=@category_property.property.id %>" name='property_id' />
       <%= f.actions %>

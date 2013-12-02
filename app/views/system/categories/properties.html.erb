@@ -22,8 +22,9 @@
       placeholder_text : "选择一个属性",
       no_results_text : "没有以该关键词开头的属性",
       remote: {
-        url: "/system/properties/search",
-        dataType: "json"
+        url: "/system/properties/search_title",
+        dataType: "json",
+        remote_key: 'title'
       }
     });
   })

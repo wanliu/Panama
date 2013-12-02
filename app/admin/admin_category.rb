@@ -310,16 +310,19 @@ ActiveAdmin.register Category do
           must do
             filtered do
               filter :query, :query_string => {
-                :query => "value:#{val} OR primitive:#{val}",
+                :query => "value:#{val} OR primitive:#{val}*",
                 :default_operator => "AND"
               }
-              filter :term, "category.id" => category_id
               filter :term, "property.id" => property_id
             end
           end
         end
       end
-    end.results
+      facet("value") do
+        terms :untouched
+      end
+    end.facets["value"]["terms"].map{|term| {:value => term["term"]} }
+
     respond_to do |format|
       format.json{ render :json => @items }
     end

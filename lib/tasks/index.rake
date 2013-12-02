@@ -47,6 +47,10 @@ namespace "index" do
                 "searchAnalyzer" => "mmseg",
                 "include_in_all" => "true",
                 "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
               }
             }
           }
@@ -107,6 +111,10 @@ namespace "index" do
                 "searchAnalyzer" => "mmseg",
                 "include_in_all" => "true",
                 "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
               }
             }
           }
@@ -168,6 +176,10 @@ namespace "index" do
                 "searchAnalyzer" => "mmseg",
                 "include_in_all" => "true",
                 "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
               }
             }
           }
@@ -229,6 +241,10 @@ namespace "index" do
                 "searchAnalyzer" => "mmseg",
                 "include_in_all" => "true",
                 "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
               }
             }
           }
@@ -290,6 +306,10 @@ namespace "index" do
                 "searchAnalyzer" => "mmseg",
                 "include_in_all" => "true",
                 "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
               }
             }
           }
@@ -342,6 +362,10 @@ namespace "index" do
                 "searchAnalyzer" => "mmseg",
                 "include_in_all" => "true",
                 "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
               }
             }
           }
@@ -352,7 +376,7 @@ namespace "index" do
 
   desc "load index model data"
   task :data_load => :environment do
-    [Product, ShopProduct, Activity, AskBuy].each do |klass|
+    [Product, ShopProduct, Activity, AskBuy, Property, CategoryPropertyValue].each do |klass|
       total = klass.count
       index = klass.tire.index
       Tire::Tasks::Import.add_pagination_to_klass(klass)

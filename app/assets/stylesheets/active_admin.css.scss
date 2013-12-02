@@ -290,3 +290,11 @@ table.index_table th{ text-align: center !important; }
     }
   }
 }
+
+.typeahead.dropdown-menu{
+  li{
+    a{
+      color: black;
+    }
+  }
+}
