@@ -6,6 +6,7 @@ class Caramal.BackboneView extends Backbone.View
   default_driver: Caramal.Chat
 
   PROXY_METHODS: [
+    'onCommand',
     'onMessage',
     'onEvent',
     'open',
@@ -72,10 +73,10 @@ class BaseChatView extends Caramal.BackboneView
   className: 'global_chat'
 
   EVENT_TYPE: {
-    'joined'  : 1,
-    'leaved'  : 2,
-    'inputing': 3,
-    'afk'     : 4
+    'joined'     : 1,
+    'leaved'     : 2,
+    'inputing'   : 3,
+    'onlineState': 4
   }
 
   events:
@@ -161,16 +162,16 @@ class BaseChatView extends Caramal.BackboneView
     )
 
   bindEvent: () ->
-    @afkService()
-    window.clients.on 'connect', (error) => @online()
-    window.clients.on 'disconnect', (error) => @offline()
+    @stateService()
+    window.clients.on 'connect', (error) => @channel.online_state('online')
+    window.clients.on 'disconnect', (error) => @channel.online_state('away')
     @channel.onEvent (data) =>
       return unless data.type
       switch parseInt(data.type)
         when @EVENT_TYPE['inputing']
           @showInputing()
-        when @EVENT_TYPE['afk']
-          @offline()
+        when @EVENT_TYPE['onlineState']
+          @onlineState(data.state)
         when @EVENT_TYPE['joined']
           @online()
         when @EVENT_TYPE['leaved']
@@ -178,14 +179,25 @@ class BaseChatView extends Caramal.BackboneView
         else
           console.log('未处理的事件')
 
-  afkService: (time = 60) ->
+  stateService: (time = 60) ->
     ifvisible.setIdleDuration(time)
     $(window).bind('idle', () =>
-      @offline()
+      # 通知对方自己已经离开
+      @channel.online_state('away')
     )
     $(window).bind('active', () =>
-      @online()
+      # 通知对方自己已经上线
+      @channel.online_state('online')
     )
+
+  onlineState: (state) ->
+    switch state
+      when 'online'
+        @online()
+      when 'away'
+        @offline()
+      else
+        console.log('未处理的在线状态')
 
   showInputing: (time = 5000) ->
     @$('.input_state').html('正在输入...')
