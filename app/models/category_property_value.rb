@@ -14,6 +14,10 @@ class CategoryPropertyValue < ActiveRecord::Base
   delegate :category, :to => :category_property
   delegate :property, :to => :category_property
 
+  after_save do
+    self.value.strip!
+  end
+
   def to_indexed_json
     {
       :value        => value,

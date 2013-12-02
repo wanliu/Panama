@@ -15,6 +15,11 @@ class Property < ActiveRecord::Base
   validates :name, uniqueness: true, presence: true
   validates :property_type, inclusion: { in: %w(string integer decimal datetime set float) }
 
+  after_save do
+    self.name.strip!
+    self.title.strip!
+  end
+
   def values_names
   	values.select("distinct #{type_field}, property_id")
   end
