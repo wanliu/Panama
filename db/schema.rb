@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131126054834) do
+ActiveRecord::Schema.define(:version => 20131202090108) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -281,15 +281,16 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
   end
 
   create_table "community_notifications", :force => true do |t|
-    t.boolean  "state",        :default => false
+    t.boolean  "state",           :default => false
     t.text     "body"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.integer  "target_id"
     t.string   "target_type"
     t.integer  "send_user_id"
     t.integer  "circle_id"
     t.boolean  "apply_state"
+    t.integer  "notification_id"
   end
 
   create_table "contact_friends", :force => true do |t|
@@ -560,7 +561,6 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
-    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0
@@ -588,6 +588,7 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
     t.integer  "channel_type", :limit => 2
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+    t.integer  "user_id"
   end
 
   create_table "price_options", :force => true do |t|

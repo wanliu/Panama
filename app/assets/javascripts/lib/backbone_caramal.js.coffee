@@ -1,3 +1,4 @@
+#= require lib/handlebars-v1.1.2
 
 root = window || @
 
@@ -66,6 +67,15 @@ class ChatService
     $el.css('right', right + "px")
     $el.css('top', top + "px")
 
+Handlebars.registerHelper 'calender', (time) ->
+  date = if time?
+           new Date(parseInt(time))
+         else
+           new Date()
+
+  date.format('yyyy-MM-dd hh:mm:ss')
+
+
 
 class BaseChatView extends Caramal.BackboneView
   on_class: "online"
@@ -107,14 +117,14 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </div>')
 
-  msg_template: _.template('
+  msg_template: Handlebars.compile('
     <li>
       <div class="title">
         <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
-        <span class="login"><%= user %></span>
-        <span class="date"><%= new Date(parseInt(time)).format("MM-dd hh:mm:ss") %></span>
+        <span class="login">{{ user }}</span>
+        <span class="date">{{calender time}}</span>
       </div>
-      <div class="message"><%= msg %></div>
+      <div class="message">{{ msg }}</div>
     </li>')
 
   fetchHistory: () ->
@@ -136,7 +146,8 @@ class BaseChatView extends Caramal.BackboneView
   initialize: (options) ->
     super
     _.extend(@, options)
-    @initChannel() 
+
+    @initChannel()
     @initDialog()
     @bindDialog()
     @bindEvent()
@@ -240,7 +251,7 @@ class BaseChatView extends Caramal.BackboneView
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   showUnread: () ->
-    _.each @channel.message_buffer, (msg) => 
+    _.each @channel.message_buffer, (msg) =>
       @receiveMessage(msg)
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
 
@@ -282,6 +293,18 @@ class root.ChatView extends BaseChatView
 
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@user)
+    @channel.open()
+
+  fetchHistoryMsg: () ->
+    @msgLoaded ||= false
+    return if @msgLoaded
+    @channel.history({start: 1}, (chat, err, messages) =>
+      $html = @parseMessages(messages)
+      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+      $html += @history_tip({text: text})
+      @$('.msg_content').prepend($html)
+    )
+    @msgLoaded = true
 
 
 class root.GroupChatView extends BaseChatView
@@ -294,4 +317,5 @@ class root.GroupChatView extends BaseChatView
 
   fastKey: (event) ->
     @sendMeessage() if event.ctrlKey && event.keyCode == 13
+
 

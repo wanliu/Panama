@@ -12,7 +12,7 @@ class CaramalClient
   def self.publish(login, channel, msg = {})
     info = {
       login: login,
-      channel: channel,
+      channel: "notify:#{channel}",
       msg: msg
     }
 

@@ -17,10 +17,10 @@ namespace :user do
     ch = conn.create_channel
 
     User.all.each do |user|
-      channels = user.persistence_channels.map do |channel|
+      channels = user.persistent_channels.map do |channel|
         {
-          name: channel.follow.login,
-          type: 1
+          name: channel.name,
+          type: channel.channel_type
         }
       end
 

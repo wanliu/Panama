@@ -5,6 +5,7 @@
 #  receive_user_id: 接收人
 #  content: 内容
 #  owner: 所属者
+# @deprecated [description]
 class ChatMessage < ActiveRecord::Base
   scope :read, where(:read => true)
   scope :unread, where(:read => false)

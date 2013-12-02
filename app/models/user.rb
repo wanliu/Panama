@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :delivery_addresses
   has_many :followings, dependent: :destroy
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
+  has_many :persistent_channels
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
   has_many :friend_groups, dependent: :destroy
@@ -85,16 +86,28 @@ class User < ActiveRecord::Base
     chat_messages.all(id, friend_id)
   end
 
+  #
+  # 连接用户
+  #
+  # @deprecated 逻辑已失效，服务端并不维护登陆状态
   def connect
     RedisClient.redis.set(redis_key, true)
     # FayeClient.send("/chat/friend/connect/#{id}", id)
     CaramalClient.publish(login, "/chat/friend/connect/#{id}", id)
   end
 
+  #
+  # 连接状态查询
+  #
+  # @deprecated 逻辑已失效，服务端并不维护登陆状态
   def connect_state
     RedisClient.redis.exists(redis_key)
   end
 
+  #
+  # redis key
+  #
+  # @deprecated 逻辑已失效，服务端并不维护登陆状态
   def redis_key
     "#{Settings.defaults['redis_key_prefix']}#{id}"
   end
@@ -169,6 +182,41 @@ class User < ActiveRecord::Base
     load_friend_group
   end
 
+  def sync_create_to_redis
+    # redis_client = RedisClient.redis
+    # user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+    # user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+
+    # redis_client.multi do
+    #   redis_client.hset(user_id_to_user_name, id, login)
+    #   redis_client.hset(user_name_to_user_id, login, id)
+    # end
+    conn = Bunny.new
+    conn.start
+    channel = conn.create_channel
+    config  = YAML::load_file("config/application.yml")[Rails.env]
+    queue_name = config["rabbitmq_queues"]["new_users"]
+    queue  = channel.queue(queue_name, :durable => true)
+
+    queue.publish({user_id: id, user_name: login}.to_json)
+    conn.close
+  end
+
+  def sync_change_to_redis
+    if self.login_changed?
+      redis_client = RedisClient.redis
+      user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+      user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+
+      redis_client.multi do
+        old_name = redis_client.hget(user_id_to_user_name, id)
+        redis_client.hdel(user_name_to_user_id, old_name)
+        redis_client.hset(user_id_to_user_name, id, login)
+        redis_client.hset(user_name_to_user_id, login, id)
+      end
+    end
+  end
+
   def persistence_channels
     followings
   end
@@ -210,6 +258,18 @@ class User < ActiveRecord::Base
 
   def has_group?(group)
     groups.include?(group)
+  end
+
+  #
+  # 给此用户发送通知
+  #
+  # @param  channel [String, ActiveRecord::Base] 频道名称，或模型对象
+  # @param  data [String] 发送数据类容
+  # @param  options [Hash] 通知选项
+  #
+  # @see http://localhost:8808/docs/Notification#create%21-class_method Notification::create!
+  def notify(channel, data, options = {})
+    Notification.create!(self, channel, data, options)
   end
 
   def permissions
