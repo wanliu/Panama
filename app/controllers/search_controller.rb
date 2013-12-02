@@ -80,10 +80,7 @@ class SearchController < ApplicationController
       shop_id = current_user.shop.id
       products = ShopProduct.search2 do
         query do
-          boolean do
-            must { string "name:#{query} OR primitive:#{query}", :default_operator => "AND" }
-            must { string "seller.id:#{shop_id}" }
-          end
+          string "name:#{query} OR primitive:#{query}", :default_operator => "AND"
         end
       end.results
     else
@@ -103,6 +100,65 @@ class SearchController < ApplicationController
 
       query do
         boolean do
+          must do
+            filtered do
+              if q[:title].present?
+                val = conditions[:title].gsub(/ /,'')
+                filter :query, :query_string => {
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
+                  :default_operator => "AND"
+                }
+              end
+
+              if q[:catalog_id].present?
+                filter :terms, "category.id" => conditions[:catalog_id]
+              end
+
+              if q[:category_id].present?
+                filter :terms, "category.id" => conditions[:category_id]
+              end
+
+              conditions[:properties].each do |key, val|
+                filter :or, [{
+                  :and => [{
+                    :terms => {
+                      "product.properties.#{val['name']}" => val["values"]
+                    }
+                  },{
+                    :terms => {
+                      :_type => ["ask_buy", "activity"]
+                    }
+                  }]
+                },{
+                  :and => [{
+                    :terms => {
+                      "properties.#{val['name']}" => val["values"]
+                    }
+                  },{
+                    :terms => {
+                      :_type => ["shop_product", "product"]
+                    }
+                  }]
+                }]
+              end if q[:properties].present?
+
+              filter :or, [{
+                :and => [{
+                  :term => {
+                    :_type => "activity",
+                    :status => Activity.statuses[:access]
+                  }
+                }]
+              },{
+                :and => [{
+                  :terms => {
+                    :_type => ["ask_buy", "shop_product", "product"]
+                  }
+                }]
+              }]
+            end
+          end
+
           should do
             custom_score :script => :activitySort, :lang => :native do
               filtered do
@@ -131,26 +187,6 @@ class SearchController < ApplicationController
             custom_score :script => :productSort, :lang => :native do
               filtered do
                 filter :term, :_type => :product
-              end
-            end
-          end
-
-          must do
-            filtered do
-              if q[:title].present?
-                val = conditions[:title].gsub(/ /,'')
-                filter :query, :query_string => {
-                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
-                  :default_operator => "AND"
-                }
-              end
-              filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
-              if q[:catalog_id].present?
-                filter :terms, "category.id" => conditions[:catalog_id]
-              end
-
-              if q[:category_id].present?
-                filter :terms, "category.id" => conditions[:category_id]
               end
             end
           end

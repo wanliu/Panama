@@ -1,69 +1,59 @@
 class CategoryController < ApplicationController
-	layout "category"
+  before_filter :login_and_service_required, except: :products
+  before_filter :login_required, only: :products
 
-	before_filter :login_and_service_required, except: :products
-	before_filter :login_required, only: :products
+  layout "application"
 
-	def index
-		@category = Category.root
-		# @products = Product.joins(:shop_products).where("shop_products.deleted_at is NULL")
 
-		# @products = @products.offset(params[:offset]) if params[:offset].present?
-		# @products = @products.limit(params[:limit]) if params[:limit].present?
+  def index
+    @category = Category.root
+    respond_to do |format|
+      format.html
+    end
+  end
 
-		respond_to do |format|
-			format.html
-			# format.json { render json: @products.as_json(
-			# 	:methods => :photo_avatar,
-			# 	:version_name => "240x240") }
-		end
-	end
+  def show
+    @category = Category.find(params[:id])
+    respond_to do |format|
+      format.html
+    end
+  end
 
-	def show
-		@category = Category.find(params[:id])
-		# @shop_products = ShopProduct.search2("category.id:#{@category.id}").results
-	end
+  def shop_products
+    @category = params[:id].blank? ? Category.root : Category.find(params[:id])
+    category_ids = @category.descendants.pluck(:id) + [@category.id]
+    @shop_products = ShopProduct.joins(:product).joins(:shop).where(
+      "products.category_id" => category_ids)
+    @shop_products = @shop_products.offset(params[:offset]) if params[:offset].present?
+    @shop_products = @shop_products.limit(params[:limit]) if params[:limit].present?
 
-	def shop_products
-		@category = if params[:id].blank?
-			Category.root
-		else
-			Category.find(params[:id])
-		end
-		category_ids = @category.descendants.pluck(:id)
-		category_ids << @category.id
-		@shop_products = ShopProduct.joins(:product).joins(:shop).where(
-			"products.category_id" => category_ids)
-		@shop_products = @shop_products.offset(params[:offset]) if params[:offset].present?
-		@shop_products = @shop_products.limit(params[:limit]) if params[:limit].present?
+    respond_to do |format|
+      format.html
+      format.json { render json: @shop_products.as_json(
+        :include => "photos") }
+    end
+  end
 
-		respond_to do |format|
-			format.html
-			format.json { render json: @shop_products.as_json(
-				:include => "photos") }
-		end
-	end
+  def products
+    @category = Category.find(params[:id])
+    @shop_products = Shop.find(params[:shop_id]).products
+    if @shop_products.present?
+      @products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
+    else
+      @products = Product.where("category_id =? ", @category.id )
+    end
 
-	def products
-		@category = Category.find(params[:id])
-		@shop_products = Shop.find(params[:shop_id]).products
-		if @shop_products.present?
-			@products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
-		else
-			@products = Product.where("category_id =? ", @category.id )
-		end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @products }
+    end
+  end
 
-		respond_to do |format|
-			format.html # index.html.erb
-			format.json { render json: @products }
-		end
-	end
-
-	def subtree_ids
-		@category_ids = Category.find(params[:id]).subtree_ids
-		respond_to do |format|
-			format.html
-			format.json { render json: @category_ids }
-		end
-	end
+  def subtree_ids
+    @category_ids = Category.find(params[:id]).subtree_ids
+    respond_to do |format|
+      format.html
+      format.json { render json: @category_ids }
+    end
+  end
 end

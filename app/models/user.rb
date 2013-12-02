@@ -37,6 +37,8 @@ class User < ActiveRecord::Base
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
+  has_many :ask_buies
+
   has_and_belongs_to_many :services
 
   delegate :groups, :jshop, :to => :shop_user
@@ -45,6 +47,10 @@ class User < ActiveRecord::Base
   after_commit :sync_create_to_redis, :on => :create
   # after_update :sync_change_to_redis
   before_create :generate_token
+
+  after_update do
+    update_relation_index
+  end
 
   delegate :groups, :jshop, :to => :shop_user
 
@@ -303,6 +309,51 @@ class User < ActiveRecord::Base
   def is_following(another_user)
     is_follow_user?(another_user.try(:id))
   end
+
+  def update_relation_index
+    update_activity_index
+    update_ask_buy_index
+  end
+
+  def update_ask_buy_index
+    AskBuy.index_update_by_query(
+      :query => {
+        :term => {
+          "user.id" => id
+        }
+      },
+      :update => {
+        :user => {
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
+        }
+      }
+    )
+  end
+
+  def update_activity_index
+    Activity.index_update_by_query(
+      :query => {
+        :term => {
+          "author.id" => id
+        }
+      },
+      :update => {
+        :author => {
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
+        }
+      }
+    )
+  end
+
+  private
 
   def is_follower(another_user)
     is_follower?(another_user.try(:id))

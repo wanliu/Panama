@@ -13,27 +13,27 @@ module CategoryHelper
   end
 
   def root_category_tree
-  	html = ""
+    html = ""
     root = (Category.root.children.size == 1 ? Category.root.children[0] : Category.root)
-  	root.children.each do |category|
-  		html << lv1_category_tree_of(category)
-  	end
-  	html.html_safe
+    root.children.each do |category|
+      html << lv1_category_tree_of(category)
+    end
+    html.html_safe
   end
 
   def lv1_category_tree_of(category)
-  	li_begin_of(category) << descendant_categories_html(category) << li_end_of(category)
+    li_begin_of(category) << descendant_categories_html(category) << li_end_of(category)
   end
 
   def lv2_category_tree_of(category)
     html = "<li class='lv2_category_tree'>
-              <a href='javascript:void(0)' data-category_id='#{ category.id }'>
+              <a href='/category/#{category.id}' data-category_id='#{ category.id }'>
                 <span>#{ category.name }</span>
               </a>
               <ul>"
     category.children.each do |child|
       html << "<li class='lv3_category_node'>
-          <a href='javascript:void(0)' data-category_id='#{ category.id }'>
+          <a href='/category/#{category.id}' data-category_id='#{ category.id }'>
             #{ child.name }
           </a>
         </li>"
@@ -42,27 +42,27 @@ module CategoryHelper
   end
 
   def li_begin_of(category)
-  		"<li class='accordion-group'>
-	      <a class='accordion-toggle collapsed' data-toggle='collapse' data-parent='#forms-collapse-#{ category.parent.id }' href='#forms-collapse-#{ category.id }'>
-	        <i class='icon-caret-right'></i>
-	        <span>#{ category.name }</span>
-	      </a>"
+      "<li class='accordion-group'>
+        <a class='accordion-toggle collapsed' data-toggle='collapse' data-parent='#forms-collapse-#{ category.parent.id }' href='#forms-collapse-#{ category.id }'>
+          <i class='icon-caret-right'></i>
+          <span>#{ category.name }</span>
+        </a>"
   end
 
   def descendant_categories_html(category)
-  	html = ""
-  	if category.children.size > 0
-	      html << "<ul id='forms-collapse-#{ category.id }' class='collapse lv2_categories'>"
-	        category.children.each do |child|
-	        	html << lv2_category_tree_of(child)
-	        end
-	      html << "</ul>"
-	  	HTML
-	  end
-	  html
-	end
+    html = ""
+    if category.children.size > 0
+        html << "<ul id='forms-collapse-#{ category.id }' class='collapse lv2_categories'>"
+          category.children.each do |child|
+            html << lv2_category_tree_of(child)
+          end
+        html << "</ul>"
+      HTML
+    end
+    html
+  end
 
-	def li_end_of(category)
-		"</li>"
-	end
+  def li_end_of(category)
+    "</li>"
+  end
 end

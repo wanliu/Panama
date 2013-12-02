@@ -1,34 +1,25 @@
 <div id="main" class="content">
-	<section class="widget">
-		<%= breadcrumb_button(dom_id(@category), @category.ancestors + [@category], 'eye-open') do |c|  %>
-			<%c == @category ? c.name : link_to(c.name, category_path(c)) %>
-		<% end %>
-	</section>
-	<div class='category_products_panel'>
-		<div id="category_products">
-		</div>
-		<div class='scroll-load-msg'>
-			<img src='/assets/loading_max.gif' />正在加载...
-		</div>
-	</div>
+  <%= render :partial => "search/options", :locals => {:category => @category } %>
+  <%=render :partial => "activities/template" %>
 </div>
 
-<script type="text/template" id="category_product-preview-template">
-	<%= render "shop_products/preview_template" %>
-</script>
-
 <script type="text/javascript">
-	$(function(){
-		new ActivityLayoutView({
-			el: '#category_products'
-		})
-		new LoadCategoryProducts({
-			el: $('.category_products_panel'),
-			fetch_url: "/category/shop_products?id=<%= @category.id %>"
-		})
-
-    new ShopProductPreview({
-      el: $("#category_products")
+  $(function(){
+    var load_view = new LoadActivities({
+      el: $('.activities_panel'),
+      params: {
+        search_options: {
+          category_id: <%=@category.id %>
+        }
+      }
     })
-	})
+
+    filter_options.params.change = function(options){
+      load_view.reset_fetch({
+        category_id: <%=@category.id %>,
+        properties: options
+      })
+    }
+
+  })
 </script>

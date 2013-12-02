@@ -1,31 +1,56 @@
-<table class= 'index_table'>
-	<thead>
-		<tr>
-			<th>标题</th>
-			<th>名称</th>
-			<th>取值类型</th>
-			<th>操作</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% properties.each do |property| %>
-			<tr>
-				<td> <%= property.title %> </td>
-				<td> <%= property.name %> </td>
-				<td> <%= t("property.property_types.#{property.property_type}") %></td>
-				<td>
-					<span>
-						<%= link_to "详细", system_property_path(property) %>
-					</span>
-					<span style='margin-left:20px;'>
-						<%= link_to "属性项", items_system_property_path(property) %>
-					</span>
-					<span style='margin-left:20px;'>
-						<% url = "#{delete_relation_system_category_path(category)}?property_id=#{property.id}" %>
-						<%= link_to "删除", url, confirm: '确定删除?', :method =>:put %>
-					</span>
-				</td>
-			</tr>
-		<% end %>
-	</tbody>
-</table>
+<div class='properties'>
+  <table class='index_table'>
+    <thead>
+      <tr>
+        <th>标题</th>
+        <th>名称</th>
+        <th>取值类型</th>
+        <th>
+          操作
+          <span class='chose-all'>
+            <input type='checkbox' value='all' /> 全选
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% properties.each do |property| %>
+        <% property_value = category.find_property(property) %>
+        <tr>
+          <td> <%= property.title %> </td>
+          <td> <%= property.name %> </td>
+          <td> <%= t("property.property_types.#{property.property_type}") %></td>
+          <td>
+            <span>
+              <%= link_to "详细", system_property_path(property) %>
+            </span>
+            <span class='action-bar'>
+              <%= link_to "属性#{property_value.values.count}项", "#{property_values_system_category_path(@category)}?property_id=#{property.id}" %>
+            </span>
+            <span class='action-bar'>
+              <% url = "#{delete_relation_system_category_path(category)}?property_id=#{property.id}" %>
+              <%= link_to "删除", url, confirm: '确定删除?', :method =>:put %>
+            </span>
+            <span class='action-bar'>
+              <input type='checkbox' value="<%=property.id %>" <%='checked' if property_value.filter_state %> />
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <form class='join_filter'>
+    <input type="submit" value="加入过滤">
+  </form>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    new CategoryProperty({
+      el: $(".properties"),
+      params: {
+        category_id: "<%=@category.id %>"
+      }
+    })
+  })
+</script>

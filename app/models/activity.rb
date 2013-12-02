@@ -3,6 +3,7 @@ class Activity < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
   include MessageQueue::Activity
 
   attr_accessor :people_number
@@ -86,6 +87,7 @@ class Activity < ActiveRecord::Base
   end
 
   def init_data
+    self.title = self.title.to_s + I18n.t("activity.type.#{self.activity_type}")
     self.shop_id = author.shop.id
     self.like = like
     self.participate = participate
@@ -236,7 +238,12 @@ class Activity < ActiveRecord::Base
         :name      => shop_product.try(:category).try(:name)
       },
       :participate_ids => participates.pluck("users.id"),
-      :like_ids => likes.pluck("users.id")
+      :like_ids => likes.pluck("users.id"),
+      :product => {
+        :id => shop_product.try(:product_id),
+        :name => shop_product.try(:name),
+        :properties => shop_product.try(:properties_json)
+      }
     }.to_json
   end
 

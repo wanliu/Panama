@@ -8,6 +8,7 @@ class Product < ActiveRecord::Base
   include PanamaCore::InventoryCache
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
 
   validates :emc13, format: { with: /^\d{13,}$/, message: "请输入真实有效emc13码，只能是13位数字" }, :unless => Proc.new{|d| d.emc13.blank? }
   validates :emc13, :uniqueness => true, :unless => Proc.new{|d| d.emc13.blank? }
@@ -39,7 +40,8 @@ class Product < ActiveRecord::Base
   has_many   :comments, :as => :targeable, :dependent => :destroy                                         # 评论
   has_many   :contents, :as => :contentable, :dependent => :destroy                                       # 商品内容配置组
   has_many   :price_options, :as => :optionable, :autosave => true, :dependent => :destroy
-  has_many   :shop_products
+  has_many   :shop_products, :dependent => :destroy
+  has_many   :ask_buys, :dependent => :destroy
   has_and_belongs_to_many :properties, :uniq => true do
     def [](name)
       if name.is_a?(String) || name.is_a?(Symbol)
@@ -151,6 +153,10 @@ class Product < ActiveRecord::Base
     replace_relations price_options
   end
 
+  after_update do
+    update_relation_index
+  end
+
   # Tire 索引结构的 json
   def to_indexed_json
     {
@@ -159,6 +165,7 @@ class Product < ActiveRecord::Base
       :created_at  => created_at,
       :price       => price,
       :shop_id     => shop_id,
+      :brand_name  => brand_name,
       :updated_at  => updated_at,
       :photos      => {
         :icon      => photos.icon,
@@ -168,8 +175,16 @@ class Product < ActiveRecord::Base
       :category    => {
         :id        => category.try(:id),
         :name      => category.try(:name)
-      }
+      },
+      :properties => properties_json
     }.to_json
+  end
+
+  def properties_json
+    properties_values.inject({}) do |j, p|
+      j[p.property.name] = p.value
+      j
+    end
   end
 
   def default_photo
@@ -229,6 +244,11 @@ class Product < ActiveRecord::Base
     save!
   end
 
+  def update_relation_index
+    update_shop_product_index
+    update_ask_buy_index
+    update_activity_index
+  end
 
   def additional_items(items, names)
     names.reject { |name| items.select { |it| it.value == name }.first }
@@ -245,4 +265,68 @@ class Product < ActiveRecord::Base
       category.ancestors + [category]
     end
   end
+
+  def update_shop_product_index
+    ShopProduct.index_update_by_query(
+      :query => {
+        :term => {
+          :product_id => id
+        }
+      },
+      :update => {
+        :name => name,
+        :properties => properties_json,
+        :category => {
+          :id => category.try(:id),
+          :name => category.try(:name)
+        },
+        :photos => {
+          :icon      => photos.icon,
+          :header    => photos.header,
+          :avatar    => photos.avatar
+        }
+      }
+    )
+  end
+
+  def update_ask_buy_index
+    AskBuy.index_update_by_query(
+      :query =>{
+        :term => {
+          :product_id => id
+        }
+      },
+      :update => {
+        :product => {
+          :name => name,
+          :properties => properties_json
+        },
+        :category => {
+          :id => category.try(:id),
+          :name => category.try(:name)
+        }
+      }
+    )
+  end
+
+  def update_activity_index
+    Activity.index_update_by_query(
+      :query => {
+        :term => {
+          "product.id" => id
+        }
+      },
+      :update => {
+        :category => {
+          :id => category.try(:id),
+          :name => category.try(:name)
+        },
+        :product => {
+          :name => name,
+          :properties => properties_json
+        }
+      }
+    )
+  end
+
 end

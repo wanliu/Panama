@@ -7,35 +7,18 @@ class PropertyValue < ActiveRecord::Base
   # belongs_to :item, :class_name => "PropertyItem", :foreign_key => "svalue"
 
   def value
-    case property.property_type
-    when /string/
-      svalue
-    when /integer/
-      nvalue
-    when /float/, /decimal/
-      dvalue
-    when /datetime/
-      dtvalue
-    when /set/
-      svalue
-    end
+    send property.type_field
   end
 
   def value=(other)
-    case property.property_type
-    when /string/
-      send(:svalue=, other)
-    when /integer/
-      send(:nvalue=, other)
-    when /float/, /decimal/
-      send(:dvalue=, other)
-    when /datetime/
-      send(:dtvalue=, other)
-    when /set/
-      item = valuable.property_items.select{|item| item.id.to_s == other}.first
-      if item.present?
-        send(:svalue=, item.value) #if valuable.property_items.select { |item| item.value == other }.size > 0
-      end
-    end
+    field = property.type_field
+    # if field == :svalue
+    #   item = valuable.property_items.select{|item| item.id.to_s == other}.first
+    #   if item.present?
+    #     send(:svalue=, item.value) #if valuable.property_items.select { |item| item.value == other }.size > 0
+    #   end
+    # else
+      send("#{field}=", other)
+    # end
   end
 end

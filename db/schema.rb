@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like"
-    t.integer  "participate"
+    t.integer  "like",                                                         :default => 0
+    t.integer  "participate",                                                  :default => 0
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
@@ -213,8 +213,16 @@ ActiveRecord::Schema.define(:version => 20131126054834) do
   create_table "categories_properties", :force => true do |t|
     t.integer  "category_id"
     t.integer  "property_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.boolean  "filter_state", :default => false
+  end
+
+  create_table "category_property_values", :force => true do |t|
+    t.integer  "category_property_id"
+    t.string   "value"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "chat_messages", :force => true do |t|

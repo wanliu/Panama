@@ -13,14 +13,14 @@ class root.ActivityAuctionView extends ActivityBaseInfoView
 
   fill_info: (data) ->
     product = data.product
-    @$('[name="activity[title]"]').val(product.name + ' 竞价')
+    @$('[name="activity[title]"]').val(product.name)
     @$('[name="activity[shop_product_id]"]').val(product.id)
     @$('[name="activity[price]"]').val(product.price)
     @$('[name="activity[activity_price]"]').val(product.price)
 
     @$('ul.product_selector').hide();
     @load_attachments(product.attachments)
-    
+
 
 class root.AuctionBuyView extends Backbone.View
   events: {

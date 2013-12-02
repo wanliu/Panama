@@ -1,0 +1,72 @@
+<% properties = category.filter_properties  %>
+<div class='property_container widget'>
+  <div class='row-fluid'>
+    <%= breadcrumb_button(dom_id(category), category.ancestors + [category], 'eye-open') do |c|  %>
+      <% if c == Category.root %>
+        <% '全部分类' %>
+      <% else %>
+        <% c == category ? c.name : link_to(c.name, category_path(c)) %>
+      <% end %>
+    <% end %>
+  </div>
+  <% if properties.present? || category.try(:children).present? %>
+  <hr class='min-line' />
+  <% end %>
+  <% if category.present? && category.children.present? %>
+  <div class='row-fluid categories'>
+    <div class='span1 title'>
+      <span>分类</span>
+    </div>
+    <div class='span11 values'>
+      <ul>
+        <% category.children.each do |c| %>
+        <li>
+          <a href='/category/<%=c.id %>'>
+            <%=c.name %>
+          </a>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <% end %>
+  <div class='properties'>
+    <% properties.each do |p| %>
+    <div class='row-fluid property odd'>
+      <div class='span1 title'>
+        <span class='name' data-value-name="<%=p.property.name %>" >
+          <%=p.property.title %>
+        </span>
+      </div>
+      <div class='span9 values'>
+        <ul>
+          <% p.values.each do | pv | %>
+          <li class='value' data-value="<%=pv.value %>">
+            <a href='javascript:void(0)'>
+              <input type='checkbox' />
+              <%=pv.value %>
+            </a>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+      <div class='span2'>
+        <a href='javascript:void(0)' class='chose-multi'>
+          多选
+        </a>
+        <div class='multi-bar'>
+          <input type='button' class='btn btn-mini btn-primary confirm disabled' value='确认' />
+          <input type='button' class='btn btn-mini cancel' value='取消' />
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+<script type='text/javascript' >
+  $(function(){
+    window.filter_options = new FilterOptions({
+      el: $(".property_container")
+    })
+  })
+</script>

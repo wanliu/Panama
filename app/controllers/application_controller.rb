@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     root << widget(:chat)
   end
 
-  helper_method :current_user, :current_admin, :my_cart, :get_city, :draw_errors_message
+  helper_method :current_user, :current_admin, :my_cart, :get_city, :draw_errors_message, :filter_special_sym
 
   before_filter :set_locale
 

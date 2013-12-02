@@ -1,0 +1,28 @@
+<% if product.category.present? %>
+  <% properties = product.category._properties %>
+  <% properties.each do |pc| %>
+    <% property = pc.property %>
+    <li class="text input optional" id="product_description_input">
+      <label class="label">
+        <%=property.title %>
+      </label>
+      <select name='product[<%=property.name %>]' class='<%=property.name %>'>
+        <% pc.values.each do |v| %>
+        <option value="<%=v.value %>" >
+          <%=v.value %>
+        </option>
+        <% end %>
+      </select>
+      <% value = pc.find_by_value(product.send(property.name)) %>
+      <% if value.present?  %>
+        <script type="text/javascript">
+          $(function(){
+            $("select.<%=property.name %>").val("<%=value.value %>")
+          })
+        </script>
+      <% end %>
+    </li>
+  <% end %>
+<% else %>
+  <span>暂无属性</span>
+<% end %>

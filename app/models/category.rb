@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
   #
   attr_accessible :name
 
-  has_and_belongs_to_many  :catalogs
+  has_and_belongs_to_many :catalogs
   has_many    :products
   has_and_belongs_to_many :properties, :autosave => true
   has_many    :contents, :as => :contentable
@@ -14,14 +14,10 @@ class Category < ActiveRecord::Base
 
   validates :name, presence: true
 
-  # field :name, type: String
-  # field :styles, type: Array
-
   attr_accessor :indent
   mount_uploader :cover, ImageUploader
 
   def load_category(config_root)
-    # clear all category children
     create_node(config_root, root)
     root.save
   end
@@ -30,6 +26,20 @@ class Category < ActiveRecord::Base
     price_options.map do |po|
       po.property
     end
+  end
+
+  def find_property(property)
+    property_id = property.is_a?(Property) ? property.id : property
+    CategoriesProperty.find_by(:category_id => id, :property_id => property_id)
+  end
+
+  def _properties
+    CategoriesProperty.where(:category_id => id)
+    .includes(:category).includes(:property).includes(:values)
+  end
+
+  def filter_properties
+    _properties.filters
   end
 
   def clear_categories
