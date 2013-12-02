@@ -4719,8 +4719,8 @@ if (typeof define === "function" && define.amd) {
     Caramal.JoinCommand = JoinCommand;
     Caramal.CloseCommand = CloseCommand;
     Caramal.RecordCommand = RecordCommand;
-    Caramal.StopRecordCommand = StopRecordCommand;
-    return Caramal.HistoryCommand = HistoryCommand;
+    Caramal.HistoryCommand = HistoryCommand;
+    return Caramal.StopRecordCommand = StopRecordCommand;
   });
 
 }).call(this);
@@ -4920,15 +4920,7 @@ if (typeof define === "function" && define.amd) {
         dispatch = this.message_dispatchs[name];
         if (dispatch != null) {
           try {
-            info = (function() {
-              if (typeof data === 'string') {
-                return JSON.parse(data);
-              } else if (typeof data === 'object') {
-                return data;
-              } else {
-                throw new Error('invalid data type');
-              }
-            })();
+            info = this.parseJSON(data);
             return dispatch.process(info);
           } catch (_error) {
             e = _error;
@@ -4937,7 +4929,19 @@ if (typeof define === "function" && define.amd) {
         }
       };
 
-      ClientMessageManager.prototype.isEventMessage = function(info) {
+      ClientMessageManager.prototype.parseJSON = function(data) {
+        if (typeof data === 'string') {
+          return JSON.parse(data);
+        } else if (typeof data === 'object') {
+          return data;
+        } else {
+          throw new Error('invalid data type');
+        }
+      };
+
+      ClientMessageManager.prototype.isEventMessage = function(data) {
+        var info;
+        info = this.parseJSON(data);
         return info.action === 'notice';
       };
 
@@ -5341,7 +5345,7 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Chat.prototype.commands = ['open', 'join', 'record', 'stop_record', 'history'];
+      Chat.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
 
       Chat.prototype.hooks = {};
 
@@ -5399,13 +5403,17 @@ if (typeof define === "function" && define.amd) {
       };
 
       /**
-       * 暂时离开的通知
+       * 切换在线状态的通知
       */
 
 
-      Chat.prototype.afk = function() {
-        return this.socket.emit('afk', {
-          room: this.room
+      Chat.prototype.online_state = function(state) {
+        if (state == null) {
+          state = 'online';
+        }
+        return this.socket.emit('online-state', {
+          room: this.room,
+          state: state
         });
       };
 
@@ -5501,7 +5509,7 @@ if (typeof define === "function" && define.amd) {
     Group = (function(_super) {
       __extends(Group, _super);
 
-      Group.prototype.commands = ['open', 'join'];
+      Group.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
 
       Group.prototype.hooks = {};
 

@@ -1,5 +1,3 @@
-require 'bunny'
-
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
@@ -43,8 +41,6 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
-  after_commit :sync_create_to_redis, :on => :create
-  # after_update :sync_change_to_redis
   before_create :generate_token
 
   delegate :groups, :jshop, :to => :shop_user
@@ -221,6 +217,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def persistence_channels
+    followings
+  end
+
   #暂时方法
   def grapical_handler
     photo.filename
@@ -274,67 +274,6 @@ class User < ActiveRecord::Base
 
   def permissions
     groups.map{| g | g.permissions}
-  end
-
-  def self.chat_authorization(from, invested)
-    from_user = User.where(login: from).first
-    invested_user = User.where(login: invested).first
-
-    if from_user.blank? || invested_user.blank?
-      { authorizen: false, denied_reason: "user does't exists!" }
-    elsif from_user.in_black_list_of(invested_user)
-      { authorizen: false, denied_reason: "investing denied" }
-    else
-      author_options = system_default_author.merge(invested_user.author_setting)
-      white_check_methods = author_options.select do |key, value|
-        value == true
-      end.keys
-
-      if white_check_methods.any? { |item| invested_user.send(item.to_sym, from_user) }
-        { authorizen: true }
-      else
-        { authorizen: false, denied_reason: "investing denied" }
-      end
-    end
-  end
-
-  def self.group_anthorization(user, group)
-  end
-
-  # %w(is_friend is_circle_friend is_following is_follower is_follower_and_is_following)
-  def self.system_default_author
-    { is_friend: true,
-      is_following: true,
-      is_circle_friend: true,
-      is_follower_and_is_following: true }
-  end
-
-  def author_setting
-    { is_follower_and_is_following: false }
-  end
-
-  def in_black_list_of(another_user)
-    false
-  end
-
-  def is_friend(another_user)
-    true
-  end
-
-  def is_following(another_user)
-    is_follow_user?(another_user.try(:id))
-  end
-
-  def is_follower(another_user)
-    is_follower?(another_user.try(:id))
-  end
-
-  def is_circle_friend(another_user)
-    true
-  end
-
-  def is_follower_and_is_following(another_user)
-    true
   end
 
   private

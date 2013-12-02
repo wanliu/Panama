@@ -6,8 +6,8 @@ class root.ChatContainerView extends RealTimeContainerView
 
   initialize: () ->
     super
-    @friends_view = new FriendsView(parent_view: @)
     @stranger_view  = new StrangersView(parent_view: @)
+    @friends_view = new FriendsView(parent_view: @)
     @groups_view = new GroupsView(parent_view: @)
     $(@el).prepend('
       <div class="fixed_head">
@@ -107,7 +107,6 @@ class FriendsView extends BaseFriendsView
     @collection.fetch(url: "/users/followings")
 
   addOne: (model) ->
-    @$("h5 .num").html(@collection.length)
     friend_view = new FriendView({ model: model, parent_view: @ })
     model.view  = friend_view
     @$(".users-list").append(friend_view.render().el)
@@ -160,10 +159,16 @@ class StrangersView extends BaseFriendsView
   initialize: () ->
     super
 
+  render: () ->
+    $(@el).html(@template)
+    @
+
   addOne: (model) ->
     if @collection.length is 1 and @parent_view.$('.strangers').length is 0
       @$parent_view.find(".fixed_head").after(@el)
-    super
+    stanger_view = new StrangerView({ model: model, parent_view: @ })
+    model.view  = stanger_view
+    @$(".users-list").append(stanger_view.render().el)
 
   process: (channel) ->
     @channel = channel
@@ -249,6 +254,17 @@ class BaseFriendView extends Backbone.View
   unactive: () ->
     $(@el).removeClass('active')
     @clearMsgCount()
+
+
+class StrangerView extends BaseFriendView
+  initialize: () ->
+    super
+
+  getChannel: () ->
+    @channel ||= Caramal.Chat.of(@model.get('login'))
+
+  newChat: () ->
+    new ChatView({ user: @model.get('login'), channel: @channel })
 
 
 class FriendView extends BaseFriendView

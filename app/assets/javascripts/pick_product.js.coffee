@@ -47,7 +47,7 @@ class root.WizardView extends Backbone.View
 		$(".checked_product").each () ->
 			product_ids.push($(this).attr("id"))
 			$(this).remove()
-		@render_product_infor(product_ids)
+		@render_product_infor(product_ids) if product_ids.length > 0
 		$(".select_all").text("全选")
 
 	select_many : (event) ->
