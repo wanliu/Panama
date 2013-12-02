@@ -19,7 +19,7 @@ namespace :user do
     User.all.each do |user|
       channels = user.persistence_channels.map do |channel|
         {
-          name: channel.user.login,
+          name: channel.follow.login,
           type: 1
         }
       end
