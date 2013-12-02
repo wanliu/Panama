@@ -8,7 +8,9 @@
     } else {
         //Browser globals case. Just assign the
         //result to a property on the global.
-        root.Caramal = factory();
+        f = factory()
+        root.Caramal = f['Caramal'];
+        root.io = f['io'];
     }
 }(this, function () {
 /**
@@ -4333,7 +4335,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Client.prototype.unsubscribe = function(channel, callback) {
-        return this.socket.removeListener(channel);
+        return this.socket.removeListener(channel, callback);
       };
 
       Client.prototype.emit = function(event, data, callback) {
@@ -4346,6 +4348,14 @@ if (typeof define === "function" && define.amd) {
 
       Client.prototype.get = function(name) {
         return this.values[name];
+      };
+
+      Client.prototype.reconnect = function() {
+        return this.socket.socket.reconnect();
+      };
+
+      Client.prototype.close = function() {
+        return this.socket.disconnect();
       };
 
       return Client;
@@ -4367,6 +4377,11 @@ if (typeof define === "function" && define.amd) {
 
 (function() {
   define('util',['exports'], function(exports) {
+    if (Date.now == null) {
+      Date.now = function() {
+        return (new Date()).valueOf();
+      };
+    }
     exports.isFunc = function(object) {
       return typeof object === 'function';
     };
@@ -4393,8 +4408,8 @@ if (typeof define === "function" && define.amd) {
       for (k in other) {
         value = other[k];
         if (exports.isObject(value)) {
-          target[v] = {};
-          target[v] = exports.merge(target[v], value);
+          target[k] = {};
+          target[k] = exports.merge(target[k], value);
         } else {
           target[k] = value;
         }
@@ -4405,6 +4420,12 @@ if (typeof define === "function" && define.amd) {
     String.prototype.toTitleCase = function() {
       return this.replace(/\w\S*/g, function(txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
+    };
+    String.prototype.toCamelCase = function() {
+      return this.replace(/(^\w|[-\_]\w)/g, function(match) {
+        match = match[0] === '_' || match[0] === '-' ? match[1] : match;
+        return match.toUpperCase();
       });
     };
     Array.prototype.contain = function(member) {
@@ -4423,11 +4444,12 @@ if (typeof define === "function" && define.amd) {
 }).call(this);
 
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('chat/command',['core', 'util'], function(Caramal, Util) {
-    var CloseCommand, Command, CommandOption, JoinCommand, OpenCommand, _ref, _ref1, _ref2;
+    var CloseCommand, Command, CommandOption, HistoryCommand, JoinCommand, OpenCommand, RecordCommand, StopRecordCommand, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     CommandOption = (function() {
       CommandOption.prototype.default_options = {
         maximum_reply: 0,
@@ -4470,7 +4492,10 @@ if (typeof define === "function" && define.amd) {
       }
 
       Command.prototype.execute = function(data, callback) {
-        data = this._doBeforeCallback(data);
+        var value;
+        if (value = this._doBeforeCallback(data)) {
+          data = value;
+        }
         return this.doExecute(data, callback);
       };
 
@@ -4488,21 +4513,31 @@ if (typeof define === "function" && define.amd) {
         this.return_callback = return_callback;
       };
 
-      Command.prototype._doBeforeCallback = function(data) {
+      Command.prototype._doBeforeCallback = function(args) {
         if (Util.isFunc(this.before_callback)) {
-          return this.before_callback(data);
+          if (!Util.isArray(args)) {
+            args = [args];
+          }
+          return this.before_callback.apply(this, args);
         }
       };
 
-      Command.prototype._doAfterCallback = function(data) {
+      Command.prototype._doAfterCallback = function(args) {
         if (Util.isFunc(this.after_callback)) {
-          return this.after_callback(data);
+          if (!Util.isArray(args)) {
+            args = [args];
+          }
+          return this.after_callback.apply(this, args);
         }
       };
 
-      Command.prototype._doReturnCallback = function(data) {
+      Command.prototype._doReturnCallback = function(args) {
         if (Util.isFunc(this.return_callback)) {
-          return this.return_callback(data);
+          this.return_callback(args);
+          if (!Util.isArray(args)) {
+            args = [args];
+          }
+          return this.return_callback.apply(this, args);
         }
       };
 
@@ -4515,12 +4550,24 @@ if (typeof define === "function" && define.amd) {
         send_data = Util.merge({
           command_id: this.option.id
         }, data);
-        return this.socket.emit(cmd, JSON.stringify(send_data), function(ret) {
-          _this._doAfterCallback(ret);
-          if (Util.isFunc(callback)) {
-            return callback(ret);
+        return this.socket.emit(cmd, send_data, function() {
+          var args, first;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          first = args[0];
+          if (Util.isObject(first) && (first.error != null)) {
+            return _this.onError(first);
+          } else {
+            _this._doAfterCallback(args);
+            args.unshift(_this.channel);
+            if (Util.isFunc(callback)) {
+              return callback.apply(_this, args);
+            }
           }
         });
+      };
+
+      Command.prototype.onError = function(msg) {
+        return this.channel.emit('error', msg);
       };
 
       return Command;
@@ -4558,7 +4605,11 @@ if (typeof define === "function" && define.amd) {
         }
         if (data == null) {
           data = {
-            room: this.channel.options.room
+            room: this.channel.room
+          };
+        } else {
+          data = {
+            room: data
           };
         }
         return this.sendCommand('join', data, callback);
@@ -4585,16 +4636,192 @@ if (typeof define === "function" && define.amd) {
       return CloseCommand;
 
     })(Command);
+    RecordCommand = (function(_super) {
+      __extends(RecordCommand, _super);
+
+      function RecordCommand() {
+        _ref3 = RecordCommand.__super__.constructor.apply(this, arguments);
+        return _ref3;
+      }
+
+      RecordCommand.prototype.doExecute = function(data, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        data = {
+          room: this.channel.room
+        };
+        return this.sendCommand('record', data, callback);
+      };
+
+      return RecordCommand;
+
+    })(Command);
+    StopRecordCommand = (function(_super) {
+      __extends(StopRecordCommand, _super);
+
+      function StopRecordCommand() {
+        _ref4 = StopRecordCommand.__super__.constructor.apply(this, arguments);
+        return _ref4;
+      }
+
+      StopRecordCommand.prototype.doExecute = function(data, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        data = {
+          room: this.channel.room
+        };
+        return this.sendCommand('stop_record', data, callback);
+      };
+
+      return StopRecordCommand;
+
+    })(Command);
+    HistoryCommand = (function(_super) {
+      __extends(HistoryCommand, _super);
+
+      function HistoryCommand() {
+        _ref5 = HistoryCommand.__super__.constructor.apply(this, arguments);
+        return _ref5;
+      }
+
+      HistoryCommand.prototype.doExecute = function(data, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        data = {
+          room: this.channel.room,
+          start: data.start,
+          step: data.step || 10,
+          type: 'index'
+        };
+        return this.sendCommand('history', data, callback);
+      };
+
+      return HistoryCommand;
+
+    })(Command);
     Caramal.Command = Command;
     Caramal.OpenCommand = OpenCommand;
     Caramal.JoinCommand = JoinCommand;
-    return Caramal.CloseCommand = CloseCommand;
+    Caramal.CloseCommand = CloseCommand;
+    Caramal.RecordCommand = RecordCommand;
+    Caramal.StopRecordCommand = StopRecordCommand;
+    return Caramal.HistoryCommand = HistoryCommand;
   });
 
 }).call(this);
 
 (function() {
-  define('chat/manager',['core', 'exports'], function(Caramal, exports) {
+  var __slice = [].slice;
+
+  define('event',['util'], function(Util) {
+    var Event;
+    return Event = (function() {
+      function Event() {
+        this._listeners = {};
+        this._contexts = {};
+      }
+
+      Event.prototype.addEventListener = function(event, callback, context) {
+        var callbacks, contexts;
+        if ((callbacks = this._listeners[event]) == null) {
+          callbacks = this._listeners[event] = [];
+        }
+        if ((contexts = this._contexts[event]) == null) {
+          contexts = this._contexts[event] = [];
+        }
+        if (Util.isArray(callbacks)) {
+          callbacks.push(callback);
+          return contexts.push(context);
+        }
+      };
+
+      Event.prototype.removeEventListener = function(event, callback) {
+        var callbacks, cb, contexts, i, _i, _len;
+        callbacks = this._listeners[event];
+        contexts = this._contexts[event];
+        if ((callbacks != null) && Util.isArray(callbacks)) {
+          for (i = _i = 0, _len = callbacks.length; _i < _len; i = ++_i) {
+            cb = callbacks[i];
+            if (Util.isFunc(cb) && callback === cb) {
+              contexts.splice(i, 1);
+              return callbacks.splice(i, 1)[0];
+            }
+          }
+        }
+      };
+
+      Event.prototype.once = function(event, callback) {
+        var cb, i, _i, _len;
+        if ((typeof callbacks !== "undefined" && callbacks !== null) && Util.isArray(callbacks)) {
+          for (i = _i = 0, _len = callbacks.length; _i < _len; i = ++_i) {
+            cb = callbacks[i];
+            if (Util.isFunc(cb) && callback === cb) {
+              return;
+            }
+          }
+          return this.on(event, callback);
+        }
+      };
+
+      Event.prototype.on = function(event, callback, context) {
+        return this.addEventListener(event, callback, context);
+      };
+
+      Event.prototype.emit = function() {
+        var args, callback, callbacks, context, contexts, event, i, _i, _len, _results;
+        event = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+        callbacks = this._listeners[event] || [];
+        contexts = this._contexts[event] || [];
+        _results = [];
+        for (i = _i = 0, _len = callbacks.length; _i < _len; i = ++_i) {
+          callback = callbacks[i];
+          if (Util.isFunc(callback)) {
+            context = contexts[i];
+            if (context != null) {
+              _results.push(callback.apply(context, args));
+            } else {
+              _results.push(this.call_mulit_args(callback, args));
+            }
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      };
+
+      Event.prototype.call_mulit_args = function(callback, args) {
+        if (args.length > 4) {
+          return callback(args[0], args[1], args[2], args[3], args[4]);
+        } else if (args.length > 3) {
+          return callback(args[0], args[1], args[2], args[3]);
+        } else if (args.length > 2) {
+          return callback(args[0], args[1], args[2]);
+        } else if (args.length > 1) {
+          return callback(args[0], args[1]);
+        } else if (args.length > 0) {
+          return callback(args[0]);
+        } else {
+          return callback();
+        }
+      };
+
+      Event.prototype.send = function(event, data) {};
+
+      return Event;
+
+    })();
+  });
+
+}).call(this);
+
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('chat/manager',['core', 'event', 'exports'], function(Caramal, Event, exports) {
     var ClientMessageManager, Dispatchers;
     Dispatchers = (function() {
       function Dispatchers(name) {
@@ -4633,9 +4860,12 @@ if (typeof define === "function" && define.amd) {
       return Dispatchers;
 
     })();
-    ClientMessageManager = (function() {
+    ClientMessageManager = (function(_super) {
+      __extends(ClientMessageManager, _super);
+
       function ClientMessageManager(client) {
         this.client = client;
+        ClientMessageManager.__super__.constructor.apply(this, arguments);
         this.message_dispatchs = {};
         this.return_commands = {};
         this.channels = {};
@@ -4655,10 +4885,9 @@ if (typeof define === "function" && define.amd) {
       ClientMessageManager.prototype.bind = function() {
         var _this = this;
         this.unBind();
-        this.client.on('message', function(data) {
-          var e, info;
+        this.client.on('message', function(info) {
+          var e;
           try {
-            info = JSON.parse(data);
             if (_this.isEventMessage(info)) {
               return _this.dispatch_process('event', info);
             } else {
@@ -4743,7 +4972,7 @@ if (typeof define === "function" && define.amd) {
         _ref = this.channels;
         for (id in _ref) {
           chn = _ref[id];
-          if (chn.options && chn.options.room === room) {
+          if (chn.room === room) {
             return chn;
           }
         }
@@ -4752,7 +4981,7 @@ if (typeof define === "function" && define.amd) {
 
       return ClientMessageManager;
 
-    })();
+    })(Event);
     Caramal.MessageManager || (Caramal.MessageManager = new ClientMessageManager(window.client));
     return exports.ClientMessageManager = ClientMessageManager;
   });
@@ -4760,81 +4989,8 @@ if (typeof define === "function" && define.amd) {
 }).call(this);
 
 (function() {
-  define('event',['util'], function(Util) {
-    var Event;
-    return Event = (function() {
-      function Event() {}
-
-      Event.prototype._listeners = {};
-
-      Event.prototype.addEventListener = function(event, callback) {
-        var callbacks;
-        if ((callbacks = this._listeners[event]) == null) {
-          callbacks = this._listeners[event] = [];
-        }
-        if (Util.isArray(callbacks)) {
-          return callbacks.push(callback);
-        }
-      };
-
-      Event.prototype.removeEventListener = function(event, callback) {
-        var callbacks, cb, i, _i, _len;
-        callbacks = this._listeners[event];
-        if ((callbacks != null) && Util.isArray(callbacks)) {
-          for (i = _i = 0, _len = callbacks.length; _i < _len; i = ++_i) {
-            cb = callbacks[i];
-            if (Util.isFunc(cb) && callback === cb) {
-              return callbacks.splice(i, 1)[0];
-            }
-          }
-        }
-      };
-
-      Event.prototype.once = function(event, callback) {
-        var cb, i, _i, _len;
-        if ((typeof callbacks !== "undefined" && callbacks !== null) && Util.isArray(callbacks)) {
-          for (i = _i = 0, _len = callbacks.length; _i < _len; i = ++_i) {
-            cb = callbacks[i];
-            if (Util.isFunc(cb) && callback === cb) {
-              return;
-            }
-          }
-          return this.on(event, callback);
-        }
-      };
-
-      Event.prototype.on = function(event, callback) {
-        return this.addEventListener(event, callback);
-      };
-
-      Event.prototype.emit = function(event, data) {
-        var callback, callbacks, _i, _len, _results;
-        callbacks = this._listeners[event] || [];
-        _results = [];
-        for (_i = 0, _len = callbacks.length; _i < _len; _i++) {
-          callback = callbacks[_i];
-          if (Util.isFunc(callback)) {
-            _results.push(callback(data));
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
-      };
-
-      Event.prototype.send = function(event, data) {};
-
-      return Event;
-
-    })();
-  });
-
-}).call(this);
-
-(function() {
   var __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __slice = [].slice;
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('chat/channel',['core', 'chat/manager', 'util', 'event', 'exports'], function(Caramal, Manager, Util, Event, exports) {
     var Channel;
@@ -4861,11 +5017,9 @@ if (typeof define === "function" && define.amd) {
 
       Channel.nextId = 0;
 
-      Channel.hooks = {};
-
       /**
        * 管理器对象
-       * @type {[type]}
+       * @type {Caramal.ClientMessageManager}
       */
 
 
@@ -4880,6 +5034,7 @@ if (typeof define === "function" && define.amd) {
       function Channel(options) {
         var manager;
         this.options = options != null ? options : {};
+        Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
         /**
          * 消息缓存区
@@ -4889,16 +5044,17 @@ if (typeof define === "function" && define.amd) {
         this.message_buffer = [];
         /**
          * 频道状态
-         * @type {[String]}
+         * @type {String}
         */
 
-        this.state = 'open';
+        this._state = 'inactive';
+        this._active = false;
         manager = this.options.manager || this.constructor.default_manager;
         this.setOptions(this.options);
         this.setManager(manager);
         /**
          * socket.io 的 Socket 对象
-         * @type {[Socket]}
+         * @type {Socket}
         */
 
         this.bindSocket(this.manager.client);
@@ -4913,6 +5069,14 @@ if (typeof define === "function" && define.amd) {
           _results.push(this[name] = opt);
         }
         return _results;
+      };
+
+      Channel.prototype.setState = function(_state) {
+        this._state = _state;
+      };
+
+      Channel.prototype.getState = function() {
+        return this._state;
       };
 
       Channel.prototype.bindSocket = function(socket) {
@@ -4935,49 +5099,71 @@ if (typeof define === "function" && define.amd) {
         if (this.hasOwnProperty(method)) {
           throw new Error("always has " + method + " property or function");
         }
-        return this[method] = function() {
-          var args, callback, data, last, options;
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          last = args.splice(-1)[0];
-          if (Util.isFunc(last)) {
-            callback = last;
+        return this[method] = function(data, options, callback) {
+          if (data == null) {
+            data = null;
           }
-          data = args[0], options = args[1];
+          if (options == null) {
+            options = {};
+          }
+          if (callback == null) {
+            callback = null;
+          }
+          if (Util.isFunc(data)) {
+            callback = data;
+            data = null;
+            options = {};
+          } else if (Util.isFunc(options)) {
+            callback = options;
+            options = {};
+          }
           return _this.command(method, data, options, callback);
         };
       };
 
       /**
        * 接受到消息数据的回调
-       * @param  {[hash]} msg 消息数据
+       * @param  {Function} message_callback 消息回调
       */
 
 
-      Channel.prototype.onMessage = function(message_callback) {
+      Channel.prototype.onMessage = function(message_callback, context) {
         this.message_callback = message_callback;
-        return this.on('message', this.message_callback);
+        return this.on('message', this.message_callback, context);
       };
 
       /**
        * 来至服务端的命令回调
-       * @param  {hash} command 命令对象
+       * @param  {Function} command 命令对象
       */
 
 
-      Channel.prototype.onCommand = function(command_callback) {
+      Channel.prototype.onCommand = function(command_callback, context) {
         this.command_callback = command_callback;
-        return this.on('command', this.command_callback);
+        return this.on('command', this.command_callback, context);
       };
 
       /**
        * 处发事件的回调
-       * @param  {hash} event 事件对象
+       * @param  {Function} event 事件对象
       */
 
 
-      Channel.prototype.onEvent = function(event_callback) {
+      Channel.prototype.onEvent = function(event_callback, context) {
         this.event_callback = event_callback;
-        return this.on('event', this.event_callback);
+        return this.on('event', this.event_callback, context);
+      };
+
+      /**
+       * 错误回调
+       * @param  {Function} @error_callback 错误回调
+      */
+
+
+      Channel.prototype.onError = function(error_callback) {
+        this.error_callback = error_callback;
+        this.setState('faild');
+        return this.on('error', this.error_callback);
       };
 
       /**
@@ -4992,38 +5178,40 @@ if (typeof define === "function" && define.amd) {
 
       /**
        * 激活频道，为了处理用户空闲，离开与消息通知等功能， 在用户进入输入时，实际上会自动调用
-       * @return {[type]} [description]
       */
 
 
-      Channel.prototype.active = function() {};
+      Channel.prototype.active = function() {
+        return this._active = true;
+      };
 
       /**
        * 反激活频道，使频道进入无人状态，消息会到来，会由 OnMessage 处发变成 OnDeactiveMessage 处发
-       * @return {[type]} [description]
       */
 
 
-      Channel.prototype.deactive = function() {};
+      Channel.prototype.deactive = function() {
+        return this._active = false;
+      };
 
-      Channel.prototype.isActive = function() {};
+      Channel.prototype.isActive = function() {
+        return this._active;
+      };
 
       /**
        * 发送消息
-       * @param  {Hash} msg 消息结构
-       * @return {[type]}     [description]
+       * @param  {Object} msg 消息结构
       */
 
 
       Channel.prototype.send = function(channel, msg) {
-        return this.socket.emit(channel, JSON.stringify(msg));
+        return this.socket.emit(channel, msg);
       };
 
       /**
        * 执行命令
        * @param  {String} cmd     命令名称, 像是 commands 中的名称
-       * @param  {[Hash]} options 参数结构
-       * @return {[type]}         [description]
+       * @param  {Object} options 参数结构
       */
 
 
@@ -5038,7 +5226,7 @@ if (typeof define === "function" && define.amd) {
         if (!this.commands.contain(cmd)) {
           return;
         }
-        class_name = "" + (cmd.toTitleCase()) + "Command";
+        class_name = "" + (cmd.toCamelCase()) + "Command";
         klass = Caramal[class_name];
         if (klass == null) {
           throw new Error("not have Caramal." + class_name + " class");
@@ -5053,7 +5241,7 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype._setupHooks = function(cmd, command) {
         var hook, hooks, name, _results;
-        hooks = this.constructor.hooks;
+        hooks = this.hooks;
         _results = [];
         for (name in hooks) {
           hook = hooks[name];
@@ -5081,8 +5269,14 @@ if (typeof define === "function" && define.amd) {
         return manager.addChannel(Channel.nextId, new Channel(options));
       };
 
+      Channel.of = function(id) {
+        var manager;
+        manager = options.manager || this.default_manager;
+        return manager.ofChannel(id);
+      };
+
       Channel.beforeCommand = function(cmd, callback) {
-        return this.hooks["before_" + cmd] = {
+        return this.prototype.hooks["before_" + cmd] = {
           name: cmd,
           proc: callback,
           type: 'before'
@@ -5090,7 +5284,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.afterCommand = function(cmd, callback) {
-        return this.hooks["after_" + cmd] = {
+        return this.prototype.hooks["after_" + cmd] = {
           name: cmd,
           proc: callback,
           type: 'after'
@@ -5114,7 +5308,30 @@ if (typeof define === "function" && define.amd) {
     Chat = (function(_super) {
       __extends(Chat, _super);
 
-      Chat.prototype.commands = ['open', 'join'];
+      /*
+      Example
+        Caramal.MessageManager.setClient(clients.client);
+        # => SocketNamespace {socket: Socket, name: "", flags: Object, json: Flag, ackPackets: 0…}
+        chat = Caramal.Chat.create('hysios')
+        # => Chat {user: "hysios", options: Object, id: 0, message_buffer: Array[0], state: "open"…}
+        chat.onMessage(function(msg){
+           console.log(msg);
+        });
+        # => 1
+        chat.send('hi')
+        # => SocketNamespace {socket: Socket, name: "", flags: Object, json: Flag, ackPackets: 0…}
+        channel
+        # => Chat {user: "hysios", options: Object, id: 0, message_buffer: Array[0], state: "open"…}
+        # => Object {msg: "hi", user: "hyysios", action: "chat"} VM4331:3
+        chat.send('everybody')
+        # => SocketNamespace {socket: Socket, name: "", flags: Object, json: Flag, ackPackets: 0…}
+        # => Object {msg: "everybody", user: "hyysios", action: "chat"} VM4331:3
+      */
+
+
+      Chat.prototype.commands = ['open', 'join', 'record', 'stop_record', 'history'];
+
+      Chat.prototype.hooks = {};
 
       Chat.prototype.type = Channel.TYPES['chat'];
 
@@ -5122,14 +5339,16 @@ if (typeof define === "function" && define.amd) {
         if (options == null) {
           options = {};
         }
+        this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
           user: this.channel.user
         });
       });
 
-      Chat.afterCommand('open', function(ret) {
-        return this.channel.room = ret;
+      Chat.afterCommand('open', function(ret, room) {
+        this.channel.setState('open');
+        return this.channel.room = room;
       });
 
       /**
@@ -5148,7 +5367,6 @@ if (typeof define === "function" && define.amd) {
       /**
        * 发送消息
        * @param  {Hash} msg 消息结构
-       * @return {[type]}     [description]
       */
 
 
@@ -5165,7 +5383,7 @@ if (typeof define === "function" && define.amd) {
           }
         })();
         msg.room = this.room;
-        return this.socket.emit('chat', JSON.stringify(msg));
+        return this.socket.emit('chat', msg);
       };
 
       /**
@@ -5174,9 +5392,9 @@ if (typeof define === "function" && define.amd) {
 
 
       Chat.prototype.afk = function() {
-        return this.socket.emit('afk', JSON.stringify({
+        return this.socket.emit('afk', {
           room: this.room
-        }));
+        });
       };
 
       /**
@@ -5185,9 +5403,9 @@ if (typeof define === "function" && define.amd) {
 
 
       Chat.prototype.being_input = function() {
-        return this.socket.emit('inputing', JSON.stringify({
+        return this.socket.emit('inputing', {
           room: this.room
-        }));
+        });
       };
 
       Chat.create = function(user, options) {
@@ -5197,6 +5415,16 @@ if (typeof define === "function" && define.amd) {
         }
         manager = options.manager || this.default_manager;
         return manager.addNamedChannel(user, new Chat(user, options));
+      };
+
+      Chat.of = function(user, options) {
+        var chat, manager;
+        if (options == null) {
+          options = {};
+        }
+        manager = options.manager || this.default_manager;
+        chat = manager.nameOfChannel(user);
+        return chat || this.create(user, options);
       };
 
       return Chat;
@@ -5210,11 +5438,15 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['chat']) {
-            channel = Caramal.MessageManager.roomOfChannel(info.room);
-            channel = channel != null ? channel : Chat.create(info.from, {
-              room: info.room
-            });
-            return channel.command('join');
+            channel = Caramal.MessageManager.nameOfChannel(info.from);
+            if (channel == null) {
+              channel = Chat.create(info.from, {
+                room: info.room
+              });
+              channel.command('join', info.room);
+              channel.setState('open');
+              return Caramal.MessageManager.emit('channel:new', channel);
+            }
           } else {
             return next();
           }
@@ -5259,20 +5491,24 @@ if (typeof define === "function" && define.amd) {
 
       Group.prototype.commands = ['open', 'join'];
 
+      Group.prototype.hooks = {};
+
       Group.prototype.type = Channel.TYPES['group'];
 
       Group.beforeCommand('open', function(options) {
         if (options == null) {
           options = {};
         }
+        this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
           group: this.channel.group
         });
       });
 
-      Group.afterCommand('open', function(ret) {
-        return this.channel.room = ret;
+      Group.afterCommand('open', function(ret, room) {
+        this.channel.setState('open');
+        return this.channel.room = room;
       });
 
       function Group(group, options) {
@@ -5301,7 +5537,7 @@ if (typeof define === "function" && define.amd) {
           }
         })();
         msg.room = this.room;
-        return this.socket.emit('chat', JSON.stringify(msg));
+        return this.socket.emit('chat', msg);
       };
 
       Group.create = function(group, options) {
@@ -5311,6 +5547,16 @@ if (typeof define === "function" && define.amd) {
         }
         manager = options.manager || this.default_manager;
         return manager.addNamedChannel(group, new Group(group, options));
+      };
+
+      Group.of = function(group, options) {
+        var manager;
+        if (options == null) {
+          options = {};
+        }
+        manager = options.manager || this.default_manager;
+        group = manager.nameOfChannel(group);
+        return group || this.create(group, options);
       };
 
       return Group;
@@ -5324,14 +5570,14 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['group']) {
-            channel = Caramal.MessageManager.roomOfChannel(info.room);
-            if (info.group != null) {
-              channel = channel != null ? channel : Group.create(info.group, {
+            channel = Caramal.MessageManager.nameOfChannel(info.group);
+            if (channel == null) {
+              channel = Group.create(info.group, {
                 room: info.room
               });
-              return channel.command('join');
-            } else {
-              return next();
+              channel.command('join', info.room);
+              channel.setState('open');
+              return Caramal.MessageManager.emit('channel:new', channel);
             }
           } else {
             return next();
@@ -5356,4 +5602,4 @@ if (typeof define === "function" && define.amd) {
   });
 
 }).call(this);
-  return require('chat');}));
+ return { Caramal: require('chat'), io: require('socket.io')};}));

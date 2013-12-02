@@ -1,6 +1,5 @@
 defaults: &defaults
-  faye_token: "panama_e891dbec62c031f1754b3324530ae095"
-  faye_server: "http://192.168.2.32:9292/realtime"
+  caramal_server: http://localhost:5000
   redis_port: 6379
   redis_server: "192.168.2.32"
   redis_key_prefix: "online_user_"
@@ -13,6 +12,11 @@ defaults: &defaults
     pass: "guest"
     heartbeat: "server"
     frame_max: 131072
+  rabbitmq_queues:
+    new_users: "wanliu_new_users"
+  redis_keys:
+    user_id_to_user_name: "Panama:info:userId:userName"
+    user_name_to_user_id: "Panama:info:userName:userId"
 
 development:
   <<: *defaults

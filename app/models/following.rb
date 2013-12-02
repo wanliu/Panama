@@ -7,11 +7,23 @@ class Following < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :follow, :polymorphic => true
+  belongs_to :target, :polymorphic => true
 
   validates :user_id, :presence => true
   validates_presence_of :user
   validates_presence_of :follow
   validate :valid_follow?
+
+  after_create do
+    member_id = follow.is_a?(User) ? follow_id : follow.user.id  
+    body = follow.is_a?(User) ? "#{ user.login}关注了你" : "#{ user.login}关注了你的商店 #{ follow.name }"
+    Notification.create!(
+      :user_id => user_id,
+      :mentionable_user_id => member_id,
+      :url => "/people/#{user.login}/notifications",
+      :targeable => self,
+      :body => body )
+  end
 
   def self.user(user_id, uid = nil)
     opts = {follow_id: user_id, follow_type: "User"}
@@ -27,7 +39,6 @@ class Following < ActiveRecord::Base
     create(opts)
   end
 
-
   def valid_follow?
     if Following.exists?(["follow_id=? and follow_type=? and id<>? and user_id=?",
       follow_id, follow_type, id.to_s, user_id])
@@ -35,4 +46,16 @@ class Following < ActiveRecord::Base
     end
   end
 
+  def as_json(*args)
+    attribute = super *args
+    case self.follow_type
+    when "User"
+      attribute["login"] = User.find(self.follow_id).login
+    when "Shop"
+      attribute["name"] = Shop.find(self.follow_id).name
+    end
+    attribute["follow_type"] = self.follow_type
+    attribute["follow_id"] = self.follow_id
+    attribute
+  end
 end

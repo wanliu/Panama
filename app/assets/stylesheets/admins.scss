@@ -239,18 +239,16 @@ $left-side-admin-width: 160px;
 }
 
 .attention{
+  .attention_detail{
+    display:inline-block;
+    margin-left:20px
+  }
   a:link{
     color: #2A3F49;
   }
   span{
-    color: #2A3F49;
+    color: white;
   }
-}
-
-.nav .user_icon {
-  width: 30px;
-  height: 30px;
-  /*margin-top: -20px;*/
 }
 
 .delete_bank{
@@ -258,6 +256,11 @@ $left-side-admin-width: 160px;
 }
 
 .shop_info {
+  .column_name{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+  }
   $margin-top: 20px;
   hr{
     margin: 0px;

@@ -31,19 +31,33 @@
 
               <div class="create_name span4">
                 <span><i class="icon-user"></i></span>
-                <a href="/shops/<%=Shop.find(circle.owner_id).try(:name) %>">
-                  <%=Shop.find(circle.owner_id).try(:name) %>
+                <a href="/shops/<%=circle.shop_name %>">
+                  <%=circle.shop_name %>
                 </a>
               </div>
             </div>
             
-            <div class="friends_icons">
-              <% @friends.each do |friend| %>
-                  <% if friend.circle_id == circle.id %>
-                    <img src="<%=friend.photos.icon %>" alt="头像"/>
+            <div class="row-fluid">
+              <div class="friends_icons span9">
+                <% @friends.each do |friend| %>
+                    <% if friend.circle_id == circle.id %>
+                      <img src="<%=friend.photos.icon %>" alt="头像"/>
+                    <% end %>
+                <% end %>
+              </div>
+              <div class="join span3 pull-right">
+                <% if current_user.shop != circle.owner  %>
+                  <% if circle.already_has?(current_user.id) %>
+                    <span data-value-id="<%=circle.id %>" class="label label-warning">已加入</span>
+                  <% else %>
+                      <a href="javascript:void(0)" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入</a>
                   <% end %>
-              <% end %>
+                <% else %>
+                  <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
+                <% end %>
+              </div>
             </div>
+
           </div>
         </div>
       <% end %>

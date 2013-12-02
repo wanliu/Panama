@@ -6,7 +6,7 @@ class PeopleAbility
     def initialize(current_user, people)
       current_user ||= User.new
       if current_user == people
-        can :read, Notification do |notice|
+        can :read, Notification do |notice|          
           notice.mentionable_user_id == current_user.id
         end
         can :show_bill, People
@@ -32,7 +32,7 @@ class PeopleAbility
           following.user_id = current_user.id
         end
         basic_ability
-      elsif current_user.persisted?
+      elsif current_user.persisted?   
         can :index, Cart
         can :create, Cart
         can :destroy, Cart

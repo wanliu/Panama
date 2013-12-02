@@ -1,11 +1,9 @@
 <section class="right-sidebar widget widget-tabs">
-  <div class="main">
-    <div class="body tab-content"></div>
-  </div>
+  <div class="body tab-content"></div>
 </section>
 
 <script type="text/javascript">
   $("body").addClass('right-mini')
   window.right_sidebar = window.right_sidebar || new RightSideBar({el: $(".right-sidebar")});
-  right_sidebar.register(FriendsContainerView);
+  right_sidebar.register(ChatContainerView);
 </script>

@@ -1,4 +1,6 @@
 require 'panama_core'
+require 'yaml'
+require 'fileutils'
 
 namespace "panama" do
   namespace :vfs do
@@ -50,7 +52,7 @@ namespace "panama" do
       mysql_db = Mysql2::Client.new(MYSQL_OPTION)
       mongo_db = Moped::Session.new([MONGO_OPTION[:host]+":27017"]).use(MONGO_OPTION[:database])
       products = mongo_db["products"].find
-      
+
       if products.count > 0
         sql_insert = ""
         products.each do |slice|
@@ -61,6 +63,96 @@ namespace "panama" do
         end
       end
       puts "----------------end--------------------"
+    end
+  end
+
+  def database_config
+    @config ||= YAML.load_file(File.expand_path("../../../config/database.yml", __FILE__))
+  end
+
+  def mysql_export(table)
+
+    env = ENV['RAILS_ENV'] || 'development'
+
+
+    adapter = database_config[env]['adapter']
+    throw 'database.yml must use mysql adapter' unless adapter =~ /mysql/
+
+    database = database_config[env]['database']
+    user = database_config[env]['username']
+    pass = database_config[env]['password']
+    out_path = File.expand_path('../../../tmp/sql', __FILE__)
+    out_file = File.join(out_path, table + '.sql')
+
+    pass_arg = pass.nil? || pass.empty? ? '' : pass
+
+    FileUtils.mkdir_p out_path
+    `mysqldump -u #{user} #{pass_arg} #{database} #{table} > #{out_file}`
+    print '.'
+  end
+
+  def mysql_import(table)
+
+    env = ENV['RAILS_ENV'] || 'development'
+
+
+    adapter = database_config[env]['adapter']
+    throw 'database.yml must use mysql adapter' unless adapter =~ /mysql/
+
+    database = database_config[env]['database']
+    user = database_config[env]['username']
+    pass = database_config[env]['password']
+    in_path = File.expand_path('../../../tmp/sql', __FILE__)
+    in_file = File.join(in_path, table + '.sql')
+
+    puts in_file
+    pass_arg = pass.nil? || pass.empty? ? '' : pass
+
+    `mysql -u #{user} #{pass_arg} #{database} < #{in_file}`
+    print '.'
+  end
+
+  namespace "export" do
+
+
+    task "products" do
+      env = ENV['RAILS_ENV'] || 'development'
+      puts "exporting #{env} environment data."
+
+      mysql_export('categories')
+      mysql_export('categories_properties')
+      mysql_export('products')
+      mysql_export('properties')
+      mysql_export('property_items')
+      mysql_export('property_values')
+      mysql_export('products_properties')
+      mysql_export('products_property_items')
+      mysql_export('product_prices')
+      mysql_export('product_prices_property_items')
+      mysql_export('price_options')
+      mysql_export('attachments')
+    end
+
+  end
+
+  namespace "import" do
+
+    task "products" do
+      env = ENV['RAILS_ENV'] || 'development'
+      puts "importing #{env} environment data."
+
+      mysql_import('categories')
+      mysql_import('categories_properties')
+      mysql_import('products')
+      mysql_import('properties')
+      mysql_import('property_items')
+      mysql_import('property_values')
+      mysql_import('products_properties')
+      mysql_import('products_property_items')
+      mysql_import('product_prices')
+      mysql_import('product_prices_property_items')
+      mysql_import('price_options')
+      mysql_import('attachments')
     end
   end
 end

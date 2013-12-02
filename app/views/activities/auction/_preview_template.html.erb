@@ -16,7 +16,7 @@
         </p>
       </div>
 
-      <div class='userinfo'>
+      <div class='userinfo shopinfo' data-value-id="{{ shop.id }}">
         {{#shop.photos}}
           <a href="/shops/{{shop.name}}">
           <img src='{{icon}}' class="author img-circle" />
@@ -26,14 +26,22 @@
           <a href="/shops/{{shop.name}}" class="href_name">
             {{ shop.name }}
           </a>
+          {{^is_self}}
+            {{#followed}}
+              <a href="javascript:void(0)" data-follow-id='{{followed_id}}' data-value-id="{{ shop.id }}" class='btn btn-mini btn-primary pull-right unfollow'>取消关注</a>
+            {{/followed}}
+            {{^followed}}
+              <a href="javascript:void(0)" data-value-id="{{ shop.id }}" class='btn btn-mini btn-primary pull-right follow'>+关注</a>
+            {{/followed}}
+          {{/is_self}}
         </p>
         <span class='title'>参与</span>
         <span>{{ participate}} </span>
-        <span class='title'>支持</span>
+        <span class='title'>喜欢</span>
         <span class='like-count'>{{like}}</span>
       </div>
 
-      <div class="buttons">
+      <div class="buttons" style='z-index:9999;'>
         {{#is_start}}
           <%= link_to 'javascript:void(0)', class: 'btn btn-danger launch-button' do %>
             <%= icon('shopping-cart') + " 购买" %>
@@ -42,12 +50,12 @@
 
         {{#likes}}
           <%= link_to '#', class: 'btn unlike-button active' do %>
-            <%= "取消支持" %>
+            <%= "取消喜欢" %>
           <% end %>
         {{/likes}}
         {{^likes}}
           <%= link_to '#', class: 'btn like-button' do %>
-            <%= icon(:'thumbs-up') + " 支持" %>
+            <%= icon('heart') + " 喜欢" %>
           <% end %>
         {{/likes}}
       </div>

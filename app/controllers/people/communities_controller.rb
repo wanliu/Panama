@@ -15,6 +15,7 @@ class People::CommunitiesController < People::BaseController
     @circles = @people.all_circles
     respond_to do |format|
       format.html{ render :layout => false }
+      format.dialog{ render :layout => false }
     end
   end
 

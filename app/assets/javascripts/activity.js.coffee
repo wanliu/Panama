@@ -36,6 +36,9 @@ class ActivityView extends Backbone.View
     'submit form.new_product_item'  : 'join'
     "click .focus .partic-button"   : "joinFocus"
     "click .focus .unpartic-button" : "unjoinFocus"
+    "click .load_modal"             : "load_modal"
+    "click .circle"                 : "select_circle"
+    "click .share_activity"         : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
   unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
@@ -48,7 +51,6 @@ class ActivityView extends Backbone.View
 
   initialize: (@options) ->
     _.extend(@, @options)
-
     @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @back_drop = new BackDropView()
     @back_drop.show()
@@ -125,6 +127,55 @@ class ActivityView extends Backbone.View
         $(elem).addClass(class_names)
       , 100
 
+  load_modal: () ->
+    @$dialog.find(".container").slideUp()
+    $('#PickCircle').modal({
+      remote: "/people/#{ @login}/communities/all_circles",
+      keyboard: true,
+      backdrop: false
+    })
+
+  state: () ->
+    if @$(".selected").length > 0
+      @$(".share_activity").removeClass("disabled")
+    else
+      @$(".share_activity").addClass("disabled")
+
+  select_circle: (e) ->
+    target = $(e.currentTarget)
+    if target.hasClass("selected")
+      target.removeClass("selected")
+    else
+      target.addClass("selected")
+    @state()
+
+  data: () ->
+    ids = []
+    if @$(".selected").length > 0
+      els = @$(".selected") 
+      _.each els, (el) =>
+        ids.push($(el).attr("data-value-id"))
+      return ids
+    else
+      return false
+
+  share_activity: () ->
+    return false if $(".share_activity .disabled").length == 1
+    @$(".share_activity").addClass('disabled')
+    ids = @data()
+    activity_id = @model.get('id')
+    $.ajax(
+      data: {ids: ids}
+      url: "/activities/"+activity_id+"/share_activity"
+      type: "post"
+      success: () =>
+        pnotify(text: '分享活动成功！!')
+        $("#PickCircle").modal('hide')
+        @$dialog.find('.container').slideDown()
+      error: (messages) ->
+        pnotify(text: messages.responseText, type: "error")
+    )
+
   like: (event) ->
     $.post(@model.url() + "/like", (data) =>
       @like_view = new LikeListView()
@@ -151,7 +202,7 @@ class ActivityView extends Backbone.View
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
-    @$('.like-count').text(s - n) 
+    @$('.like-count').text(s - n)
 
   addComment: (event) ->
     content = @$("textarea",".message").val()
@@ -179,7 +230,6 @@ class ActivityView extends Backbone.View
 
   join: () ->
     new ActivityBuyView({activity_id: @model.id})
-
     false
 
   validate_date: () ->
@@ -205,6 +255,8 @@ class ActivityPreview extends Backbone.View
     "click .activity .activity_tag" : "launch"
     "click .activity .like-button"  : "like"
     "click .activity .unlike-button": "unlike"
+    "click .activity .follow"       : "follow"
+    "click .activity .unfollow"     : "unfollow"
 
   like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
   unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
@@ -214,8 +266,9 @@ class ActivityPreview extends Backbone.View
 
   launch: (event) ->
     @load_view(event.currentTarget)
-    new ActivityView({
-      model: @model
+    @activity_view = new ActivityView({
+      model: @model,
+      login: @login
     }).modal()
     false
 
@@ -223,6 +276,7 @@ class ActivityPreview extends Backbone.View
     @load_view(event.currentTarget)
     $.post(@model.url() + "/like", (data) =>
       @$('.like-button').replaceWith(@unlike_template)
+      @incLike()
     )
     false
 
@@ -244,13 +298,36 @@ class ActivityPreview extends Backbone.View
 
   load_view: (target) ->
     @$el = @el = $(target).parents(".activity")
-    @model = new ActivityModel({ id: @el.attr("activity-id") })
+    @model = new ActivityModel({ id: @el.attr("activity-id"), shop_id: $(@el).find(".shopinfo").attr("data-value-id") })
     @delegateEvents()
 
   buy: (event) ->
     @load_view(event.currentTarget)
     new ActivityBuyView({activity_id: @model.id})
 
+  get_model: (event) ->
+    @load_view(event.currentTarget)
+    @_follow ||= new Follow({follow_type: 'Shop', follow_id: @model.get('shop_id')}, @login)
+
+  follow: (event) ->
+    @get_model(event)
+    @_follow.follow (model, data) =>
+      $(".shopinfo .follow").each (_i, elem) =>
+        if $(elem).attr("data-value-id") == @model.get('shop_id')
+          $(elem).addClass("unfollow").removeClass("follow")
+          $(elem).html("取消关注")
+
+  unfollow: (event) ->
+    @get_model(event)
+    unless @_follow.has("id")
+      id = @$(".unfollow").attr("data-follow-id");
+      @_follow.set({id: id})
+      
+    @_follow.destroy success: (model, data) =>
+      $(".shopinfo .unfollow").each (_i, elem) =>
+        if $(elem).attr("data-value-id") == @model.get('shop_id')
+          $(elem).addClass("follow").removeClass("unfollow")
+          $(elem).html("+ 关注")
 
 class ProductViewTemplate extends Backbone.View
   initialize: () ->
@@ -457,7 +534,7 @@ class LoadActivities extends InfiniteScrollView
 
 class LikeListView extends Backbone.View
 
-  item_row: 
+  item_row:
     '<tr id="liked_activity{{id}}" class="like_main activity" activity-id="{{ id }}">
       <td><img src="{{ url }}" class="activity_icon" ></td>
       <td class="title_td">
@@ -472,7 +549,7 @@ class LikeListView extends Backbone.View
   trHtml: (activity) ->
     row_tpl = Hogan.compile(@item_row)
     row_tpl.render(activity)
-    
+
   add_to_cart: (activity) ->
     $(".like_list").append(@trHtml(activity))
     new ActivityPreview({ el: $("#liked_activity#{ activity.id } ")})

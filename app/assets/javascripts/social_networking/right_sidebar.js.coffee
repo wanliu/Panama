@@ -2,18 +2,13 @@
 root = (window || @)
 
 class RightSideBar extends Backbone.View
-	#template: () ->
-	#	$("#right-sidebar-templates .main").html()
-
 	events:
 		"click header>ul>li"    : "toggleTabs"
 		"click .settings>button": "toggleIcons"
 
 	initialize: () ->
-		#$(@el).html(@template())
-		@$('.body').slimScroll(
-			height: $(window).height())
 		@register_counter = 0
+		@$('.body').slimScroll(height: $(window).height())
 		$(window).resize($.proxy(@auto_resize, @))
 
 	register: (containers...) ->
@@ -43,7 +38,7 @@ class RightSideBar extends Backbone.View
 		# @states = local_storage('sidebar_state') || {
 		@states = {
 			'right_mini' : true,
-			'actived_tab': String(FriendsContainerView)
+			'actived_tab': String(ChatContainerView)
 		}
 		@apply_states()
 

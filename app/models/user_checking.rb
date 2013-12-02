@@ -12,6 +12,7 @@ class UserChecking < ActiveRecord::Base
   belongs_to :service
   belongs_to :address
 
+  validates :ower_shenfenzheng_number, presence: true
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true
   validates :industry_type, presence: true, if: :service_choosen?
@@ -50,6 +51,10 @@ class UserChecking < ActiveRecord::Base
 
   def shop
     user.try(:shop)
+  end
+
+  def login_name
+    user.login
   end
 
   def update_rejected_times

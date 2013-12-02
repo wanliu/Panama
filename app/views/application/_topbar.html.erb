@@ -2,7 +2,7 @@
 	<li class="dropdown">
 		<form id="search-form" class="navbar-search">
 			<div class="input-prepend input-append">
-				<input type="search" class="search-query" placeholder="关键词...">
+				<input type="search" class="search-query" placeholder="搜索商品，种类...">
 				<span class="add-on search-btn">搜索</span>
 			</div>
 		</form>
@@ -32,7 +32,7 @@
 	<li class="dropdown shoppingcart">
 		<a href="#" title="我的购物车" id="cart" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-shopping-cart handle"></i>
-			<span id="shop_count" class="badge badge-important">0</span>
+			<span id="shop_count" class="badge badge-important"> </span>
 		</a>
 		 <ul id="shopping-cart" class="dropdown-menu support" role="menu">
 			<li role="presentation">
@@ -48,14 +48,14 @@
 	<li class="dropdown notification">
 		<a href="#" title="消息提醒" id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-comments"></i>
-			<span id="notification_count" class="badge badge-important">0</span>
+			<span id="notification_count" class="badge badge-important"></span>
 		</a>
 		 <ul id="notification" class="dropdown-menu notifications" role="menu">
 		</ul>
 	</li>
 
 	<!--商店入口-->
-	<% if current_user.is_seller? && current_user.shop.try(:name) && current_user.shop.actived? %>
+	<% if current_user.is_seller? && current_user.shop.try(:name) %>
 		<li class="dropdown">
 			<a href="javascript:void(0)" title="我的商店" class="dropdown-toggle" data-toggle="dropdown">
 				<i class="icon-building handle"></i>商店
@@ -84,9 +84,14 @@
 	<% end %>
 	<li class="divider"></li>
 	<li class="hidden-phone dropdown">
-		<a href="javascript:void(0)" title="我的头像" id="account" class="dropdown-toggle" data-toggle="dropdown">
+		<a href="javascript:void(0)" title="我的头像" id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
 			<%= account_info %>
+			<div class="progress login_progress progress-striped active" style="display:none;">
+			  <div class="bar login_bar" style="width: 100%;"></div>
+			</div>
 		</a>
+		<div class="realtime_state" data-toggle="popover">
+		</div>
 		<ul id="account-menu" class="dropdown-menu account" role="menu">
 			<li role="presentation">
 				<%= link_to_account %>
@@ -97,7 +102,7 @@
 			<li>
 				<%= link_to_logout %>
 			</li>
-		 </ul>
+		</ul>
 	</li>
 	<li class="visible-phone">
 		<a href="#" class="btn-navbar" data-toggle="collapse" data-target=".sidebar" title="">
@@ -112,5 +117,11 @@
 		el: $(".notification"),
 		current_user_login: '<%= current_user.login %>'
 	})
+
+	$(document).delegate( ".connect_by_self", "click", function(){
+		clients.socket.socket.socket.reconnect()
+		$(".popover-content").html("正在连接...")
+	})
+
 </script>
 <%= javascript_include_tag "my_cart" %>

@@ -9,7 +9,7 @@ class  NotificationView extends Backbone.View
     @urlRoot = "/people/#{@current_user_login}/notifications"
     @collection = new Backbone.Collection()
     @transactions_contain_view = new TransactionContainer(parent_view: @)
-    @activitys_contain_view = new ActivityContainer(parent_view: @)
+    @activitys_contain_view = new ActivityContainer(parent_view: @, login: @current_user_login)
     @collection.bind('reset', @add_all, @)
     @fetch()
 
@@ -97,7 +97,8 @@ class ActivityContainer extends Backbone.View
   add_one: (model) ->
     @transactions_view = new ActivityViews({
       model: model.attributes,
-      parent_view: @
+      parent_view: @,
+      login: @login
     })
     $(@el).find(".notifications").append(@transactions_view.render(model.toJSON()))
 
@@ -132,7 +133,8 @@ class ActivityViews extends Backbone.View
     activity_model.fetch success: (model) =>
       new ActivityView({
         model: model,
-        el: $("#popup-layout")
+        el: $("#popup-layout"),
+        login: @login
       }).modal()
     @remove()
     false

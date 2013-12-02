@@ -4,7 +4,6 @@
 #= require jquery_ujs
 #= require jquery-ui
 #= require backbone
-#= require follow
 #= require models/element_model
 #= require people/people_side
 #= require lib/chosen.jquery

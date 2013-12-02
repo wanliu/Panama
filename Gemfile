@@ -4,7 +4,7 @@
 
 source 'http://ruby.taobao.org'
 
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.15'
 # database orm adapter
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
@@ -30,7 +30,6 @@ group :assets do
   gem 'compass-rails', '~> 1.0.3'
   gem 'compass-h5bp', '~> 0.1.0'
   gem 'ejs', '~> 1.1.1'
-  gem 'turbo-sprockets-rails3'
   gem 'font-awesome-sass-rails'
 end
 
@@ -90,19 +89,16 @@ gem "bunny", "~> 0.9.0.pre9"
 gem 'kaminari', '~> 0.14.1'
 gem 'kuaiqian', :github => "huxinghai1988/kuaiqian"
 
-# Faye
-# gem 'faye'
-# gem 'faye-redis', '~> 0.1.1'
-gem 'omniauth-wanliu', "~> 0.1.1", :github => "wanliu/omniauth-wanliu"
+
+gem 'omniauth-wanliu', "0.1.1", :github => "wanliu/omniauth-wanliu"
 
 gem 'state_machine', '~> 1.1.2'
 
 group :development, :test do
-  gem 'debugger', '~> 1.2.2'
+  # gem 'debugger', '~> 1.2.2'
   gem "selenium-webdriver", "~> 2.27.0"
-  gem 'thin', '~> 1.5.0'
   gem 'hirb', '~> 0.7.0'
-  gem 'rb-readline', '~> 0.4.2'
+  # gem 'rb-readline', '~> 0.4.2'
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-cucumber'
@@ -120,11 +116,14 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
+  gem 'byebug'
   # gem 'pry-rails'
   # gem 'zeus'
   # gem 'coffee-rails-source-maps'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'yard'
+  # gem 'yard-pygmentsrb'
 end
 
 group :test do
@@ -167,3 +166,4 @@ gem 'yajl-ruby'
 gem "delayed_job_active_record"
 gem "daemons"
 gem 'rubyzip', '< 1.0.0'
+gem "puma"

@@ -1,3 +1,5 @@
+require 'bunny'
+
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
@@ -40,6 +42,8 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
+  after_commit :sync_create_to_redis, :on => :create
+  # after_update :sync_change_to_redis
   before_create :generate_token
 
   delegate :groups, :jshop, :to => :shop_user
@@ -169,6 +173,45 @@ class User < ActiveRecord::Base
     load_friend_group
   end
 
+  def sync_create_to_redis
+    # redis_client = RedisClient.redis
+    # user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+    # user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+
+    # redis_client.multi do
+    #   redis_client.hset(user_id_to_user_name, id, login)
+    #   redis_client.hset(user_name_to_user_id, login, id)
+    # end
+    conn = Bunny.new
+    conn.start
+    channel = conn.create_channel
+    config  = YAML::load_file("config/application.yml")[Rails.env]
+    queue_name = config["rabbitmq_queues"]["new_users"]
+    queue  = channel.queue(queue_name, :durable => true)
+
+    queue.publish({user_id: id, user_name: login}.to_json)
+    conn.close
+  end
+
+  def sync_change_to_redis
+    if self.login_changed?
+      redis_client = RedisClient.redis
+      user_id_to_user_name = RedisClient.redis_keys["user_id_to_user_name"]
+      user_name_to_user_id = RedisClient.redis_keys["user_name_to_user_id"]
+
+      redis_client.multi do
+        old_name = redis_client.hget(user_id_to_user_name, id)
+        redis_client.hdel(user_name_to_user_id, old_name)
+        redis_client.hset(user_id_to_user_name, id, login)
+        redis_client.hset(user_name_to_user_id, login, id)
+      end
+    end
+  end
+
+  def persistence_channels
+    followings
+  end
+
   #暂时方法
   def grapical_handler
     photo.filename
@@ -182,9 +225,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  #加入的所有的个人的圈子
   def circle_all
     circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
-    Circle.where("(owner_id=? and owner_type='User') or id in (?)", id, circle_ids)
+    Circle.where("owner_type='User' and id in (?)", circle_ids)
   end
 
   #加入的所有的圈子
@@ -211,26 +255,68 @@ class User < ActiveRecord::Base
     groups.map{| g | g.permissions}
   end
 
-  def format_followings
-    followings.map do |following|
-      case following.follow_type
-      when "User"
-        { name: User.find(following.follow_id).login,
-          follow_type: "User",
-          follow_id: following.follow_id }
-      when "Shop"
-        { name: Shop.find(following.follow_id).name,
-          follow_type: "Shop",
-          follow_id: following.follow_id }
+  def self.chat_authorization(from, invested)
+    from_user = User.where(login: from).first
+    invested_user = User.where(login: invested).first
+
+    if from_user.blank? || invested_user.blank?
+      { authorizen: false, denied_reason: "user does't exists!" }
+    elsif from_user.in_black_list_of(invested_user)
+      { authorizen: false, denied_reason: "investing denied" }
+    else
+      author_options = system_default_author.merge(invested_user.author_setting)
+      white_check_methods = author_options.select do |key, value|
+        value == true
+      end.keys
+
+      if white_check_methods.any? { |item| invested_user.send(item.to_sym, from_user) }
+        { authorizen: true }
+      else
+        { authorizen: false, denied_reason: "investing denied" }
       end
     end
-    # following_types = following.ground_by { |following| following.type }
-    # following_users = following_types["User"]
-    # following_shops = following_types["Shop"]
+  end
+
+  def self.group_anthorization(user, group)
+  end
+
+  # %w(is_friend is_circle_friend is_following is_follower is_follower_and_is_following)
+  def self.system_default_author
+    { is_friend: true,
+      is_following: true,
+      is_circle_friend: true,
+      is_follower_and_is_following: true }
+  end
+
+  def author_setting
+    { is_follower_and_is_following: false }
+  end
+
+  def in_black_list_of(another_user)
+    false
+  end
+
+  def is_friend(another_user)
+    true
+  end
+
+  def is_following(another_user)
+    is_follow_user?(another_user.try(:id))
+  end
+
+  def is_follower(another_user)
+    is_follower?(another_user.try(:id))
+  end
+
+  def is_circle_friend(another_user)
+    true
+  end
+
+  def is_follower_and_is_following(another_user)
+    true
   end
 
   private
-
   def load_friend_group
     _config = YAML.load_file("#{Rails.root}/config/data/friend_group.yml")
     _config["friend_group"].each do |name|

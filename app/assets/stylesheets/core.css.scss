@@ -166,6 +166,23 @@ ul {
 	}
 }
 
+.affix {
+	&.logo {
+		h4 {
+			margin: 8px 0px;
+		}
+	}
+  #topbar {
+		.navbar-search {
+			margin-top: 10px;
+		}
+	}
+
+	#account {
+		padding-top: 10px;
+	}
+}
+
 .page-header {
 	margin: 15px 0 0px;
 	border: none;
@@ -584,10 +601,15 @@ ul {
 	}
 }
 
-.account .user_icon {
-	width: 50px;
-	height: 50px;
-	margin: 0px 5px;
+#account {
+	padding-top: 5px;
+
+	.user_icon {
+		width: 30px;
+		height: 30px;
+		margin: 0px 5px;
+	}
+	font-size: 20px;
 }
 
 // widget
@@ -650,9 +672,7 @@ ul {
 	border-color: transparent;
 }
 
-
 // header navigration
-
 .open_right_side {
 
 	.navbar-back.affix, .navbar.affix {
@@ -675,7 +695,7 @@ ul {
 }
 
 .right-mini .right-sidebar {
-	width: auto;
+	width: 60px;
 
 	&>header>.nav {
 		display: none;
@@ -684,12 +704,6 @@ ul {
 	.user-info {
 		display: none;
 	}
-
-	// li:hover {
-	// 	.user-info {
-	// 		display: block;
-	// 	}
-	// }
 
 	.settings {
 		.btn-icons {
@@ -711,111 +725,76 @@ ul {
 	display: block;
 }
 
-.right-mini .right-sidebar {
-	width: 60px;
-
-	.notices-list{
-		li .transaction-info, li .activity-info{
-			display: none;
-		}
-	}
-}
-
 .right-sidebar {
-	display: none;
-	width: 200px;
-	margin-bottom: 0px;
-	position: fixed;
-	right: 0;
 	top: 0;
+	right: 0;
 	bottom: 0px;
-
-	&.right-sidebar {
-		@include transparent(rgb(51,51,51), 0);
-	}
-
-	header {
-		.nav {
-			float: left;
-		}
-	}
-
-	.settings {
-		padding: 5px;
-		.btn-auto {
-			display: none;
-		}
-		display: inline-block;
-	}
-
-	header ul {
-		margin: 0px;
-	}
+	width: 100px;
+	display: none;
+	position: fixed;
+	margin-bottom: 0px;
+	@include transparent(rgb(51,51,51), 0);
 
 	.tab-content {
 		overflow: visible;
-	}
 
-	.notices-list {
-		margin: 0px;
-		list-style: none;
-
-		&:first-child  {
-			margin-top: 20px;
+		.message_count {
+			position: absolute;
 		}
 
-		.name, .time, .position {
-			line-height: 16px;
+		.filter_key {
+			margin: 0px;
+			border: none;
+			color: #f8f8f8;
+			line-height: 20px;
+			@include border-radius(1px);
+			@include transition(width 0.2s);
+			@include transparent(rgb(51,51,51),0.4);
+			background: url(search-white.png) 18px 5px no-repeat rgba(51,51,51,0.4);
 		}
 
-		li img {
-			width: 50px;
-			height: 50px;
-			/*margin-right: 5px;*/
-		}
+		ul.users-list {
+			margin: 0px;
+			list-style: none;
 
-		li {
-			// border-top: 1px solid rgba(51,51,51,0.25);
-			padding: 5px 0px;
-			/*min-width: 60px;*/
-			margin: 0;
-			width: 50px;
-			height: 50px;
-			cursor: pointer;
-			overflow: hidden;
-			// @include transition(width 0.0s, margin 0.3s);
-		}
+			&:first-child  {
+				margin-top: 20px;
+			}
 
-		li.active {
-			background-color: #E5603B;
-			margin-top: 1px;
-		}
+			.name, .time, .position {
+				line-height: 16px;
+			}
 
-		li:hover {
-			@include transparent(rgb(51,51,51),0.25);
-			&.active {
+			li img {
+				width: 50px;
+				height: 50px;
+				/*margin-right: 5px;*/
+			}
+
+			li {
+				// border-top: 1px solid rgba(51,51,51,0.25);
+				padding: 2px 0px;
+				/*min-width: 60px;*/
+				margin: 0;
+				width: 50px;
+				height: 50px;
+				cursor: pointer;
+				overflow: hidden;
+				// @include transition(width 0.0s, margin 0.3s);
+			}
+
+			li.active {
 				background-color: #E5603B;
+				margin-top: 1px;
 			}
-			// width: 300px;
-			// margin-left: -120px;
 
-			.transaction-info, .activity-info{
-				display: block;
+			li:hover {
+				@include transparent(rgb(51,51,51),0.25);
+				&.active {
+					background-color: #E5603B;
+				}
 			}
 		}
-
-		// .user-info {
-		// 	margin-left: 62px;
-		// }
-
-		// .right-mini .users-list li:hover {
-		// 	width: 300px;
-		// 	margin-left: -240px;
-
-		// 	.user-info {
-		// 		display: block;
-		// 	}
-		// }
 	}
 }
 
@@ -1219,7 +1198,7 @@ h2 small {
 	}
 }
 
-.disconnect { 
+.disconnect {
   -webkit-filter: grayscale(100%);
   -moz-filter: grayscale(100%);
   -ms-filter: grayscale(100%);
@@ -1234,6 +1213,7 @@ h2 small {
 	background: #C99C0D;
 	color: black;
 }
+
 .payments-plat{
 	list-style: none;
 
@@ -1257,4 +1237,206 @@ h2 small {
 			}
 		}
 	}
+}
+
+.hidden-phone{
+	.realtime_state{
+		a{
+			color: #777777;
+		}
+	}
+	.login_progress{
+		height: 5px;
+		margin-bottom: 0px;
+		margin-left: 5px;
+	}
+	.popover{
+		color: black;
+		top: 40px!important;
+		width: 140px;
+	}
+}
+
+.global_chat{
+	top: 55px;
+	// right: 60px;
+	width: 280px;
+	height: 330px;
+	z-index: 9999;
+	position: fixed;
+	background: white;
+	font-size: 14px;
+	line-height: 20px;
+	color: #333333;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	@include box-shadow(1px 1px 3px $grayDarker);
+
+	.close_label{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 12px;
+    height: 11px;
+    font-size: 1px;
+    display: block;
+    background: url('/assets/chosen-sprite.png') right top no-repeat;
+  }
+
+  .head{
+    border-bottom: 1px solid #DDD;
+    padding: 3px 0px;
+    position: relative;
+
+    .state{
+      height: 15px;
+      width: 15px;
+      position: absolute;
+      top: 5px;
+      left: 8px;
+    }
+
+    .name{
+      margin-left: 25px;
+    }
+
+    .offline{
+      background: no-repeat url("/assets/chat_sprites.png") 0 -327px;
+    }
+
+    .online{
+      background: no-repeat url("/assets/chat_sprites.png");
+    }
+
+    .notice{
+      background: no-repeat url("/assets/chat_sprites.png") 0 -253px;
+    }
+  }
+
+  .body{
+    height: 218px;
+    overflow-y: scroll;
+
+    .msg_content{
+      overflow-y: auto;
+      list-style: none;
+      margin: 0px;
+
+      li{
+        padding: 0px 0px;
+
+        .title{
+          line-height: 28px;
+          margin-left: 3px;
+          color: green;
+
+          img{
+            height: 18px;
+            width: 18px;
+          }
+
+          .login{
+            margin-left: 5px
+          }
+
+          .date{
+            float: right;
+          }
+        }
+
+        .message{
+          padding: 2px 5px;
+          word-break: break-all;
+        }
+      }
+    }
+  }
+
+  .foot{
+    .send_content{
+      height: 50px;
+      padding: 0px 5px;
+
+      textarea{
+        resize: none;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+        height: 100%;
+      }
+    }
+
+    .foot_nav{
+      padding: 5px 5px;
+
+      .send_button {
+      	// float: right;
+      }
+    }
+  }
+}
+
+// @-webkit-keyframes bounce_circle{
+// 	0%{opacity:0.3;}
+// 	50%{opacity:1;background-color:#111}
+// 	100%{opacity:0.3;}
+// }
+
+// .circle {
+// 	background-color: #CCC;
+// 	float: left;
+// 	height: 10px;
+// 	margin-left: 8px;
+// 	width: 10px;
+// 	-webkit-animation-name: bounce_circle;
+// 	-webkit-border-radius: 10px;
+// 	-webkit-animation-duration: 1.5s;
+// 	-webkit-animation-iteration-count: infinite;
+// 	-webkit-animation-direction: linear;
+// 	opacity: 0.3;
+// }
+
+// .circle.active {
+// 	-webkit-animation-delay: .3s;
+// }
+#SelectCircle, #PickCircle{
+  left: 40%;
+  width: 780px;
+}
+.circles{
+  margin:10px 10px 0px 15px;
+  .selected{
+    background-color: #427fed!important;
+  }
+  .circle:hover{ cursor: pointer};
+  .circle{
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 230px;
+    display: inline-block;
+    @include transparent(rgb(235, 235, 235), 0.97);
+    /*background-color: rgba(235, 235, 235, 0.97);*/
+    box-shadow: 1px 1px 1px 1px #888888;
+
+    .photo{
+      display: inline-block;
+      width: 80px;
+      img{
+        height: 80px;
+        width: 80px;
+      }
+    }
+
+    .info{
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 10px;
+    }
+
+    a{
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+    }
+  }
 }

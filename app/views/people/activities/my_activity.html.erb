@@ -43,7 +43,8 @@
 <script type='text/javascript'>
   $(function(){
     new ActivityPreview({
-      el: $("tbody")
+      el: $("tbody"),
+      login: '<%= current_user.login %>'
     })
   })
 </script>

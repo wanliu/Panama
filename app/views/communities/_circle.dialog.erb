@@ -17,8 +17,8 @@
 
         <div class="create_name span4">
           <span><i class="icon-user"></i></span>
-          <a href="/shops/<%=Shop.find(circle.owner_id).try(:name) %>">
-            <%=Shop.find(circle.owner_id).try(:name) %>
+          <a href="/shops/<%=circle.shop_name %>">
+            <%=circle.shop_name %>
           </a>
         </div>
       </div>
@@ -30,6 +30,25 @@
           <% end %>
         <% end %>
       </div>
+      <div class="join span3 pull-right">
+        <% if current_user.shop != circle.owner  %>
+          <% if circle.already_has?(current_user.id) %>
+            <span data-value-id="<%=circle.id %>" class="label label-warning">已加入</span>
+          <% else %>
+              <a href="javascript:void(0)" data-value-id="<%=circle.id %>" class="label label-warning add_circle">加入</a>
+          <% end %>
+        <% else %>
+          <span data-value-id="<%=circle.id %>" class="label label-warning">群主</span>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>
+<script type="text/javascript">
+  $(function() {
+    new ApplyJoinCircleList({
+      el: $(".circles-list"),
+      current_user_login: '<%= current_user.login %>'
+    })
+  })
+</script>

@@ -4,6 +4,7 @@ class People::FollowingsController < People::BaseController
   # before_filter :login_and_service_required, :except => [:index]
 
   def index
+
     @u_followings = @people.followings.users
     @s_followings = @people.followings.shops
     respond_to do |format|
@@ -48,7 +49,7 @@ class People::FollowingsController < People::BaseController
     end
   end
 
-  def destroy      
+  def destroy
     @follow = current_user.followings.find_by(id: params[:id])
     authorize! :destroy, @follow
     @follow.destroy
