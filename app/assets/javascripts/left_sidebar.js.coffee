@@ -51,8 +51,8 @@ class LeftSideBar extends Backbone.View
 class CategoryTree extends Backbone.View
 	events:
 		"click >a"                  : "toggle_tree"
-		"mouseenter >ul>li"         : "show_children"
-		"mouseleave >ul>li"         : "hide_children"
+		"mouseenter #forms-collapse>li"         : "show_children"
+		"mouseleave #forms-collapse>li"         : "hide_children"
 		"mouseleave .lv2_categories": "hide_categories"
 
 	initialize: () ->
