@@ -57,11 +57,17 @@ class root.Realtime
   on: (event, callback) ->
     @socket.on(event, callback)
 
-  give_up_monitor_notification: () ->
-    @socket.unNofify(channel,callback)  
+  subscribe: (channel, callback) ->
+    @on(channel, callback)
+
+  unsubscribe: (channel) ->
+    @socket.removeListener(channel)
+
+  unmonitor_notification: () ->
+    @socket.unNotify(channel,callback)  
 
   monitor_notification: (channel,callback) ->
-    @socket.onNofify(channel,callback)  
+    @socket.onNotify(channel,callback)  
 
   disconnect_state: () ->
     # 订单聊天窗口

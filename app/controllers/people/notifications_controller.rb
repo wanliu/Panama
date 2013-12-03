@@ -38,7 +38,7 @@ class People::NotificationsController < People::BaseController
 
   def unreads
     @notifications = Notification.unreads
-      .where(:mentionable_user_id => @people.id)
+      .where(:user_id => @people.id)
       .order(updated_at: :desc)
       .includes(:targeable)
     if params[:offset].present?
@@ -56,7 +56,7 @@ class People::NotificationsController < People::BaseController
 
   def unread_count
     @count = Notification.unreads
-      .where(:mentionable_user_id => @people.id).count
+      .where(:user_id => @people.id).count
     respond_to do |format|
       format.json{ render json: {count: @count} }
     end
