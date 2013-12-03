@@ -40,7 +40,7 @@
   <%= f.input :start_time,
               :as         => :date_picker,
               required: true,
-              input_html: { 
+              input_html: {
                 name: 'activity[start_time]',
                 value: (DateTime.now + (Settings.Auction["start_time"] || 1).days).strftime('%m/%d/%Y')
               } %>
@@ -48,8 +48,8 @@
   <%= f.input :end_time,
               :as         => :date_picker,
               required: true,
-              input_html: { 
-                name: 'activity[end_time]', 
+              input_html: {
+                name: 'activity[end_time]',
                 value: (DateTime.now + (Settings.Auction["end_time"] || 8).days).strftime('%m/%d/%Y')
               } %>
   </div>
@@ -69,7 +69,6 @@
     sp_elem.chosenEx({
       allow_single_deselect : true,
       placeholder_text : "选择一个商品",
-      no_results_text : "没有以该关键词开头的商品",
       <% if @activity.shop_product.present? %>
       data: [{
         id: <%= @activity.shop_product_id %>,
@@ -78,7 +77,8 @@
       <% end %>
       remote: {
         url: "/search/shop_products",
-        dataType: "json"
+        dataType: "json",
+        no_results_text : "没有找到你的商品, 请到<a href='/shops/<%=current_user.shop.name %>/admins/shop_products'>商品管理</a>中添加"
       },
       select: function(id){
         activity_view.fetch_product(id)
