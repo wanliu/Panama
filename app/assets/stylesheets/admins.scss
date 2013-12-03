@@ -30,9 +30,8 @@ $left-side-admin-width: 160px;
       margin-left: 20px;
     }
     img {
-      margin: 15px;
-      width: 120px;
-      margin-bottom: 5px;
+      margin: 0px 10px 5px;
+      width: 130px;
     }
 }
 }
@@ -349,6 +348,22 @@ $left-side-admin-width: 160px;
 
     .toolbar{
       margin-top: 20px;
+    }
+  }
+}
+
+#left_sidebar{
+  .followings, .orders{
+    text-align: center;
+
+    a{
+      color: white;
+      text-decoration: none;
+    }
+
+    .count{
+      font-size: 17px;
+      font-weight: bold;
     }
   }
 }
