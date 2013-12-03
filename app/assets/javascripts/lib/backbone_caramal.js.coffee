@@ -1,3 +1,4 @@
+#= require lib/handlebars-v1.1.2
 
 root = window || @
 
@@ -100,6 +101,15 @@ class root.ChatService
     $el.css('right', right + "px")
     $el.css('top', top + "px")
 
+Handlebars.registerHelper 'calender', (time) ->
+  date = if time?
+           new Date(parseInt(time))
+         else
+           new Date()
+
+  date.format('yyyy-MM-dd hh:mm:ss')
+
+
 
 class BaseChatView extends Caramal.BackboneView
   on_class: "online"
@@ -141,14 +151,14 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </div>')
 
-  msg_template: _.template('
+  msg_template: Handlebars.compile('
     <li>
       <div class="title">
         <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
-        <span class="login"><%= name %></span>
-        <span class="date"><%= new Date(parseInt(time)).format("MM-dd hh:mm:ss") %></span>
+        <span class="login">{{ name }}</span>
+        <span class="date">{{calender time}}</span>
       </div>
-      <div class="message"><%= msg %></div>
+      <div class="message">{{ msg }}</div>
     </li>')
 
   fetchHistory: () ->
@@ -261,7 +271,7 @@ class BaseChatView extends Caramal.BackboneView
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   showUnread: () ->
-    _.each @channel.message_buffer, (msg) => 
+    _.each @channel.message_buffer, (msg) =>
       @receiveMessage(msg)
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
 
@@ -344,4 +354,5 @@ class root.TemporaryChatView extends BaseChatView
   initChannel: () ->
     @channel ||= Caramal.Group.of(@name)
     @channel.open()
+
 

@@ -14,15 +14,33 @@ class Following < ActiveRecord::Base
   validates_presence_of :follow
   validate :valid_follow?
 
+  # 当相互关注后，才能添加持久化的通道
   after_create do
-    member_id = follow.is_a?(User) ? follow_id : follow.user.id  
-    body = follow.is_a?(User) ? "#{ user.login}关注了你" : "#{ user.login}关注了你的商店 #{ follow.name }"
-    Notification.create!(
-      :user_id => user_id,
-      :mentionable_user_id => member_id,
-      :url => "/people/#{user.login}/notifications",
-      :targeable => self,
-      :body => body )
+    if follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
+      PersistentChannel.where(:user_id => user.id,
+                              :name => follow.login,
+                              :channel_type => 1)
+                       .first_or_create
+
+      PersistentChannel.where(:user_id => follow.id,
+                              :name => user.login,
+                              :channel_type => 1)
+                       .first_or_create
+    end
+  end
+
+  after_destroy do
+    if follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
+      PersistentChannel.where(:user_id => user.id,
+                              :name => follow.login,
+                              :channel_type => 1)
+                       .destroy_all
+
+      PersistentChannel.where(:user_id => follow.id,
+                              :name => user.login,
+                              :channel_type => 1)
+                       .destroy_all
+    end
   end
 
   def self.user(user_id, uid = nil)

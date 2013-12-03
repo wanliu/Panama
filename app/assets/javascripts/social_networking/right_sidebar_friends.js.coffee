@@ -48,6 +48,9 @@ class BaseFriendsView extends Backbone.View
     @init_fetch()
     @render()
 
+  init_fetch: () ->
+    @collection.fetch(url: "/users/channels")
+
   addAll: () ->
     @$("ul").html('')
     @collection.each (model) =>
@@ -229,7 +232,7 @@ class BaseFriendView extends Backbone.View
     @unactive()
     $(".global_chat").css('z-index', 9999)
     @setChannel() unless @channel?
-    unless @chat_view 
+    unless @chat_view
       @chat_view = @newChat()
       @bind_chat()
     @chat_view.showWithMsg()

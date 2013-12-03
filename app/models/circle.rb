@@ -40,7 +40,7 @@ class Circle < ActiveRecord::Base
 
   #若是Shop类型的circle,就可以看出商店名
   def shop_name
-    Shop.find(owner_id).try(:name) if owner_type == "Shop"  
+    Shop.find(owner_id).try(:name) if owner_type == "Shop"
   end
 
   def apply_join_notice(sender)
@@ -116,16 +116,28 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
+    PersistentChannel.where(:user_id => user.id,
+                            :name => name,
+                            :channel_type => 2)
+                     .first_or_create
+
+    user.notify('/joined', "恭喜你成功加入圈子 #{name}")
+    if owner.is_a?(Shop)
+      owner.notify("/joined",
+                   "#{user.login} 加入了圈子 #{name}",
+                   :target => self,
+                   :user_id => user.id)
+    end
   end
 
   def is_owner_people?(user)
     user_id = user.is_a?(User) ? user.id : user
-    owner_id = owner.is_a?(Shop) ? owner.user.id : owner.id 
-    if user_id == owner_id 
+    owner_id = owner.is_a?(Shop) ? owner.user.id : owner.id
+    if user_id == owner_id
       return true
     else
       return false
-    end  
+    end
   end
 
   def is_manage?(user)
@@ -143,6 +155,19 @@ class Circle < ActiveRecord::Base
     uid = user
     uid = user.id if user.is_a?(User)
     friends.find_by(user_id: uid).destroy
+
+    PersistentChannel.where(:user_id => user.id,
+                            :name => name,
+                            :channel_type => 2)
+                     .destroy_all
+
+    user.notify('/leaved', "你成功的离开了圈子 #{name}")
+    if owner.is_a?(Shop)
+      owner.notify("/joined",
+                   "#{user.login} 离开了圈子 #{name}",
+                   :target => self,
+                   :user_id => user.id)
+    end
   end
 
   def already_has?(user_id)
