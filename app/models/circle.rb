@@ -116,6 +116,11 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
+    PersistentChannel.where(:user_id => user.id,
+                            :name => name,
+                            :channel_type => 2)
+                     .first_or_create
+
     user.notify('/joined', "恭喜你成功加入圈子 #{name}")
     if owner.is_a?(Shop)
       owner.notify("/joined",
@@ -150,6 +155,19 @@ class Circle < ActiveRecord::Base
     uid = user
     uid = user.id if user.is_a?(User)
     friends.find_by(user_id: uid).destroy
+
+    PersistentChannel.where(:user_id => user.id,
+                            :name => name,
+                            :channel_type => 2)
+                     .destroy_all
+
+    user.notify('/leaved', "你成功的离开了圈子 #{name}")
+    if owner.is_a?(Shop)
+      owner.notify("/joined",
+                   "#{user.login} 离开了圈子 #{name}",
+                   :target => self,
+                   :user_id => user.id)
+    end
   end
 
   def already_has?(user_id)

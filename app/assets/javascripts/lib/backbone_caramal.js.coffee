@@ -27,7 +27,19 @@ class Caramal.BackboneView extends Backbone.View
           @channel[name].apply(@channel, args)
 
 
-class ChatService
+class root.ChatModel extends Backbone.Model
+  defaults: () ->
+    { 
+      type: 0,
+      title: '',
+      channel: null,
+      name: 'random_' + _.uniqueId()
+    }
+
+class root.ChatList extends Backbone.Collection
+  model: ChatModel
+
+class root.ChatService
   @rows = 1
   @count = 0
   @maxRows = 2
@@ -37,9 +49,12 @@ class ChatService
 
   constructor: (options) ->
     _.extend(@, options)
+    @collection = new ChatList()
+    @collection.bind('add', @addOne, @)
     @bindEvent()
 
   bindEvent: () ->
+    ifvisible.setIdleDuration(60)
     ifvisible.idle () =>
       $(window).trigger('idle')
     ifvisible.wakeup () =>
@@ -52,16 +67,35 @@ class ChatService
     rows = ChatService.maxRows if rows > ChatService.maxRows
     ChatService.rows = rows
 
-  setPosition: ($el) ->
-    ChatService.count += 1
+  newChat: (model) ->
+    exist_model = @findExist(model)
+    if exist_model
+      return exist_model.view
+    else
+      switch model.get('type')
+        when 1
+          new ChatView({model: model})
+        when 2
+          new GroupChatView({model: model})
+        when 3
+          new TemporaryChatView({model: model})
+        else
+          console.error('undefined type...') 
+
+  findExist: (model) ->
+    _.find @collection.models, (item) =>
+      item.get('name') is model.get('name')
+
+  addOne: (model) ->
+    $el = $(model.view.el)
     w_width = $(window).width()
     w_height = $(window).height()
-    right = $(".right-sidebar").width() + (ChatService.count-1)*$el.width()
+    right = $(".right-sidebar").width() + (@collection.length-1)*$el.width()
 
     if right + $el.width() > w_width
       count_x = ~~(w_width/$el.width())
-      @setRows(Math.ceil(ChatService.count/count_x))
-      right = $(".right-sidebar").width() + (ChatService.count-1)%count_x*$el.width()
+      @setRows(Math.ceil(@collection.length/count_x))
+      right = $(".right-sidebar").width() + (@collection.length-1)%count_x*$el.width()
 
     top = w_height - ChatService.rows*$el.height()
     $el.css('right', right + "px")
@@ -100,7 +134,7 @@ class BaseChatView extends Caramal.BackboneView
   chat_template:  _.template('
     <div class="head">
       <span class="state online"></span>
-      <span class="name"><%= user %></span>
+      <span class="name"><%= model.get("title") || model.get("name") %></span>
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>
@@ -121,7 +155,7 @@ class BaseChatView extends Caramal.BackboneView
     <li>
       <div class="title">
         <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
-        <span class="login">{{ user }}</span>
+        <span class="login">{{ name }}</span>
         <span class="date">{{calender time}}</span>
       </div>
       <div class="message">{{ msg }}</div>
@@ -145,24 +179,24 @@ class BaseChatView extends Caramal.BackboneView
 
   initialize: (options) ->
     super
-    _.extend(@, options)
-
-    @initChannel()
+    @name = @model.get('name')
+    @title = @name unless @title
+    @channel = @model.get('channel')
+    @initChannel() 
     @initDialog()
     @bindDialog()
     @bindEvent()
 
   initChannel: () ->
-    @getChannel()
-    @channel.open()
-    @channel.record()
+    console.log('unimplemented...')
 
   initDialog: () ->
     @display = false
-    $(@el).html(@chat_template(user: @user))
+    $(@el).html(@chat_template({model: @model}))
     @state_el = @$(".head>.state")
     $("body").append(@el)
-    ChatService.getInstance().setPosition($(@el))
+    @model.view = @
+    ChatService.getInstance().collection.add(@model)
 
   bindDialog: () ->
     $(@el).resizable().draggable().css('position', 'fixed')
@@ -174,8 +208,6 @@ class BaseChatView extends Caramal.BackboneView
 
   bindEvent: () ->
     @stateService()
-    window.clients.on 'connect', (error) => @channel.online_state('online')
-    window.clients.on 'disconnect', (error) => @channel.online_state('away')
     @channel.onEvent (data) =>
       return unless data.type
       switch parseInt(data.type)
@@ -190,16 +222,8 @@ class BaseChatView extends Caramal.BackboneView
         else
           console.log('未处理的事件')
 
-  stateService: (time = 60) ->
-    ifvisible.setIdleDuration(time)
-    $(window).bind('idle', () =>
-      # 通知对方自己已经离开
-      @channel.online_state('away')
-    )
-    $(window).bind('active', () =>
-      # 通知对方自己已经上线
-      @channel.online_state('online')
-    )
+  stateService: () ->
+    console.log('unimplemented...')
 
   onlineState: (state) ->
     switch state
@@ -216,11 +240,7 @@ class BaseChatView extends Caramal.BackboneView
       @$('.input_state').html('')
     , time)
 
-  sendInputing: (time = 30000) ->
-    @activeTime ||= new Date().getTime()
-    if new Date().getTime() - @activeTime > time
-      @channel.being_input()
-      @activeTime = new Date().getTime()
+  sendInputing: (time) ->
 
   parseMessages: (messages) ->
     $html = ''
@@ -231,7 +251,7 @@ class BaseChatView extends Caramal.BackboneView
 
   receiveMessage: (data) ->
     @$('.msg_content').append(@parseMessages(data))
-    @trigger('active_avatar') if @user is data.user
+    @trigger('active_avatar') if @name is data.user
     @scrollDialog()
 
   hideDialog: () ->
@@ -291,20 +311,28 @@ class root.ChatView extends BaseChatView
   initialize: () ->
     super
 
-  getChannel: () ->
-    @channel ||= Caramal.Chat.of(@user)
+  initChannel: () ->
+    @channel ||= Caramal.Chat.of(@name)
     @channel.open()
+    @channel.record()
 
-  fetchHistoryMsg: () ->
-    @msgLoaded ||= false
-    return if @msgLoaded
-    @channel.history({start: 1}, (chat, err, messages) =>
-      $html = @parseMessages(messages)
-      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-      $html += @history_tip({text: text})
-      @$('.msg_content').prepend($html)
+  stateService: () ->
+    $(window).bind('idle', () =>
+      # 通知对方自己已经离开
+      @channel.online_state('away')
     )
-    @msgLoaded = true
+    $(window).bind('active', () =>
+      # 通知对方自己已经上线
+      @channel.online_state('online')
+    )
+    window.clients.on 'connect', (error) => @channel.online_state('online')
+    window.clients.on 'disconnect', (error) => @channel.online_state('away')
+
+  sendInputing: (time = 30000) ->
+    @activeTime ||= new Date().getTime()
+    if new Date().getTime() - @activeTime > time
+      @channel.being_input()
+      @activeTime = new Date().getTime()
 
 
 class root.GroupChatView extends BaseChatView
@@ -312,10 +340,19 @@ class root.GroupChatView extends BaseChatView
   initialize: () ->
     super
 
-  getChannel: () ->
-    @channel ||= Caramal.Group.of(@user)
+  initChannel: () ->
+    @channel ||= Caramal.Group.of(@name)
+    @channel.open()
+    @channel.record()
 
-  fastKey: (event) ->
-    @sendMeessage() if event.ctrlKey && event.keyCode == 13
+
+class root.TemporaryChatView extends BaseChatView
+
+  initialize: () ->
+    super
+
+  initChannel: () ->
+    @channel ||= Caramal.Group.of(@name)
+    @channel.open()
 
 
