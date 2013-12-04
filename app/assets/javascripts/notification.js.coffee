@@ -223,10 +223,23 @@ class NotificationView extends Backbone.View
 
   render_already: () ->
     li = $(@el).append(Hogan.compile(@template_already).render(@model.attributes))
-    @parent_view.find('ul').append(li)
+    @parent_view.find('ul').prepend(li)
+
 
   render_realtime: () ->
     li = $(@el).append(Hogan.compile(@template_realtime).render(@model.attributes))
-    @parent_view.find('ul').append(li)
+    @parent_view.find('ul').prepend(li)
+    @bubble_notice()
+
+  bubble_notice: () ->
+    target = $(".bumbble_notice")
+    target.removeData("popover")
+    target.popover({
+      title: "你有新的消息"
+      content: @model.attributes.content,
+      container: '.bumbble_notice'
+    })
+    target.popover('show')
+    target.find(".popover")
 
 root.NotificationViewList = NotificationViewList
