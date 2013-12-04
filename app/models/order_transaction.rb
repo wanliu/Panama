@@ -273,6 +273,26 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def delivery_express?
+    delivery_manner && delivery_manner.express?
+  end
+
+  def delivery_local?
+    delivery_manner && delivery_manner.local_delivery?
+  end
+
+  def delivery_name
+    if delivery_manner.nil?
+      '卖家选择'
+    else
+      delivery_manner.name
+    end
+  end
+
+  def delivery_type_name
+    delivery_type.nil? ? "暂无" : delivery_type.name
+  end
+
   def get_refund_items(product_ids)
     items.where(:product_id => product_ids)
   end

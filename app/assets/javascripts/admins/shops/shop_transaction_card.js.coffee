@@ -78,17 +78,19 @@ class ShopTransactionCard extends TransactionCardBase
     if !/back/.test(_event) && !/refresh_returned/.test(_event) && @filter_delivery_code()
       @save_delivery_code () =>
         @slideAfterEvent(_event)
+    else
+      @alarm()
+      @transition.cancel()
 
   filter_delivery_code: () ->
-    if @delivery_manner_el().text().trim() == "快递运输"
+    button = @$(".delivered")
+    if @is_express_info()
       delivery_code = @$("input:text.delivery_code").val()
-      button = @$(".delivered")
       if delivery_code.length < 1
         button.addClass("disabled").removeAttr("event-name")
       else
         button.removeClass("disabled").attr("event-name", "delivered")
         true
-
 
   save_delivery_code: (cb) ->
     delivery = @$("input:text.delivery_code")
@@ -151,15 +153,22 @@ class ShopTransactionCard extends TransactionCardBase
       @$dprice_edit_panel.hide()
 
   change_delivery_manner: () ->
-    if @delivery_manner_el().text().trim() == "快递运输"
+    if @is_delivery_express()
       @$(".express-info").show()
       @filter_delivery_code()
     else
       @$(".express-info").hide()
-      @$(".delivered").removeClass("disabled")
+      @$(".delivered").removeClass("disabled").attr("event-name", "delivered")
 
   delivery_manner_el: () ->
     @$("select.delivery_manner_id>option:selected")
+
+  is_delivery_express: () ->
+    @delivery_manner_el().text().trim() == "快递运输"
+
+  is_express_info: () ->
+    @is_delivery_express() || (
+      @$(".express-info").length > 0 && @$(".express-info").css("display") == "block" )
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports
