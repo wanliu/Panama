@@ -37,11 +37,6 @@ class CategoryController < ApplicationController
   def products
     @category = Category.find(params[:id])
     @shop_products = current_user.shop.products
-    # if @shop_products.present?
-    #   @products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
-    # else
-    #   @products = Product.where("category_id =? ", @category.id )
-    # end
     category_id, product_ids  = @category.id , @shop_products.pluck(:product_id)
     _offset, _limit = params[:offset], params[:limit]
     @products = Product.search2 do

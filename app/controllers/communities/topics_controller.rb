@@ -21,7 +21,7 @@ class Communities::TopicsController < Communities::BaseController
   end
 
   def index
-    @topics = @circle.topics.order("created_at desc")
+    @topics = @circle.topics.order("created_at desc").offset(params[:offset]).limit(params[:limit])
     respond_to do |format|
       format.json{ render :json => @topics.as_json(
         :methods => [:comments_count, :top_comments]) }

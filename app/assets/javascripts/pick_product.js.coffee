@@ -3,20 +3,22 @@ root = window || @
 class root.LoadCategoryProduct extends Backbone.View
 
   initialize: () ->
+    @remote_state = true
     @remote_options = {offset: 0, limit: 40}
     _.extend(@, @options)
 
   fetch: (data = {}, callback = () -> ) ->
 
   scroll: (post) ->
-    _top = parseInt(@$(".slimScrollBar").css("top"))
-    _bar = @$(".slimScrollBar").outerHeight()
+    return unless @remote_state
+    max_height = @$(".category_product_list")[0].scrollHeight
     _rail = @$(".slimScrollRail").outerHeight()
 
-    if _top + _bar >= _rail - 50
+    if post + _rail >= max_height - 50
       clearTimeout(@time_out_id) if @time_out_id
       @time_out_id = setTimeout () =>
         @fetch @remote_options, (data) =>
+          @remote_state = false if data.length <= 0
           opt = @remote_options
           opt.offset = opt.offset + opt.limit
       , 100
