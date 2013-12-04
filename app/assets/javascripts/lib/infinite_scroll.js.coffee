@@ -18,7 +18,9 @@ class root.InfiniteScrollView extends Backbone.View
   fetch: () ->
     $(@msg_el).show()
     @fetch_size ||= @init_size
-    $.ajax(
+    return if @promise && @promise.state() == "pending"
+
+    @promise = $.ajax(
       url: @fetch_url,
       dataType: "json",
       data: _.extend({}, {q: @search_options}, offset: @offset,limit: @fetch_size),

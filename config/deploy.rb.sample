@@ -44,8 +44,8 @@ task :init_configure_path, :roles => :app do
   run "ln -sf #{deploy_to}/shared/config/switch_carrierwave.yml #{deploy_to}/current/config/switch_carrierwave.yml"
   run "ln -sf #{deploy_to}/shared/config/database.yml #{deploy_to}/current/config/database.yml"
   run "ln -sf #{deploy_to}/shared/config/kuaiqian.yml #{deploy_to}/current/config/kuaiqian.yml"
-  run "ln -sf #{deploy_to}/shared/public/99bill-rsa.pem #{deploy_to}/current/public/99bill-rsa.pem"
-  run "ln -sf #{deploy_to}/shared/public/99bill.cert.rsa.20140728.cer #{deploy_to}/current/public/99bill.cert.rsa.20140728.cer"
+  run "ln -sf #{deploy_to}/shared/lib/99bill-rsa.pem #{deploy_to}/current/lib/99bill-rsa.pem"
+  run "ln -sf #{deploy_to}/shared/lib/99bill.cert.rsa.20140728.cer #{deploy_to}/current/lib/99bill.cert.rsa.20140728.cer"
 end
 
 namespace :db do

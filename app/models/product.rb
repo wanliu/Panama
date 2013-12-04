@@ -182,7 +182,7 @@ class Product < ActiveRecord::Base
 
   def properties_json
     properties_values.inject({}) do |j, p|
-      j[p.property.name] = p.value
+      j[p.property.name] = p.value if p.property.present?
       j
     end
   end

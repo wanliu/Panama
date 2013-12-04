@@ -57,18 +57,13 @@
 
 		<script type="text/template" id="category_product_show" >
 			<li id="{{ id }}" class='product_item'>
-				<img src="{{ url }}" alt="{{name}}" class='product_img' />
+				{{#photos}}
+				<img src="{{ icon }}" alt="{{name}}" class='product_img' />
+				{{/photos}}
 				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
 				<span>单价:<i class='icon-jpy'></i> {{ price }}</span>
 				<span>库存: {{ inventory }}</span>
 			</li>
-		</script>
-
-		<script type="text/javascript">
-			$('.category_product_list').slimScroll({
-				height     : 500,
-				railVisible: true
-			});
 		</script>
 	</div>
 	<div class="span4">
@@ -94,27 +89,47 @@
 		</script>
 
 		<script type="text/javascript">
-			var product_view = new ProductView({
-				el      : $(".my_product_list"),
-				models  : <%= raw @products.to_json %>,
-				template: $("#product_show").html()
-			});
+			$(function(){
+				var product_view = new ProductView({
+					el      : $(".my_product_list"),
+					models  : <%= raw @products.to_json %>,
+					template: $("#product_show").html()
+				});
 
-			new WizardView({
-				el: $(".dialog_product"),
-				category_product_template: $("#category_product_show").html(),
-				shop_id: <%= current_user.shop.try(:id) %>,
-				select_handle: function(models){
-					_.each(models, function(model){
-						product_view.render(model);
-					})
-				}
-			});
-			var scroll = $('.my_product_list').slimScroll({
-				height: 500,
-				railVisible: true
-			});
-			// $(".slimScrollDiv").css("overflow","")
+				var wizard = new WizardView({
+					el: $(".dialog_product"),
+					category_product_template: $("#category_product_show").html(),
+					remote_options: {
+						shop_id: <%= current_user.shop.try(:id) %>
+					},
+					select_handle: function(models){
+						_.each(models, function(model){
+							product_view.render(model);
+						})
+					}
+				});
+
+				var scroll = $('.my_product_list').slimScroll({
+					height: 500,
+					railVisible: true
+				});
+
+				var wrap_class = "wrapper_category_product"
+				var slim = $('.category_product_list').slimScroll({
+					height     : 500,
+					railVisible: true,
+					wrapperClass: wrap_class
+				});
+
+				var load = new LoadCategoryProduct({
+					fetch: $.proxy(wizard.fetch, wizard),
+					el: $("."+ wrap_class)
+				})
+
+				slim.bind("slimscrolling", function(e, post){
+					load.scroll(post)
+				})
+			})
 		</script>
 	</div>
 </div>

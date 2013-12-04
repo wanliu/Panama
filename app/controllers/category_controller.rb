@@ -36,12 +36,32 @@ class CategoryController < ApplicationController
 
   def products
     @category = Category.find(params[:id])
-    @shop_products = Shop.find(params[:shop_id]).products
-    if @shop_products.present?
-      @products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
-    else
-      @products = Product.where("category_id =? ", @category.id )
-    end
+    @shop_products = current_user.shop.products
+    # if @shop_products.present?
+    #   @products = Product.where("category_id =? and id not in (?)", @category.id ,@shop_products.map{|s| s.product_id})
+    # else
+    #   @products = Product.where("category_id =? ", @category.id )
+    # end
+    category_id, product_ids  = @category.id , @shop_products.pluck(:product_id)
+    _offset, _limit = params[:offset], params[:limit]
+    @products = Product.search2 do
+      size _limit
+      from _offset
+      query do
+        boolean do
+          must do
+            filtered do
+              filter :term, :category_id => category_id
+            end
+          end
+          must_not do
+            filtered do
+              filter :terms, :id => product_ids
+            end
+          end
+        end
+      end
+    end.results
 
     respond_to do |format|
       format.html # index.html.erb
