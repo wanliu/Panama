@@ -44,9 +44,9 @@ ActiveRecord::Schema.define(:version => 20131202090108) do
     t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -558,6 +558,7 @@ ActiveRecord::Schema.define(:version => 20131202090108) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0
@@ -586,14 +587,6 @@ ActiveRecord::Schema.define(:version => 20131202090108) do
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
-  end
-
-  create_table "price_lists", :force => true do |t|
-    t.integer  "people_number"
-    t.decimal  "price",         :precision => 10, :scale => 0
-    t.integer  "activity_id"
-    t.datetime "created_at",                                   :null => false
-    t.datetime "updated_at",                                   :null => false
   end
 
   create_table "price_options", :force => true do |t|
