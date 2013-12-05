@@ -90,8 +90,8 @@
 			  <div class="bar login_bar" style="width: 100%;"></div>
 			</div>
 		</a>
-		<div class="realtime_state" data-toggle="popover">
-		</div>
+		<div class="realtime_state" data-toggle="popover"></div>
+		<div class="bumbble_notice" data-toggle="popover"></div>
 		<ul id="account-menu" class="dropdown-menu account" role="menu">
 			<li role="presentation">
 				<%= link_to_account %>
@@ -113,7 +113,7 @@
 
 <script type="text/javascript">
 	var topbar = new TopBar({ el: "#topbar" });
-	new NotificationView({
+	new NotificationViewList({
 		el: $(".notification"),
 		current_user_login: '<%= current_user.login %>'
 	})

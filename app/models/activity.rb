@@ -49,23 +49,19 @@ class Activity < ActiveRecord::Base
   end
 
   def notice_author(sender, message)
-    notifications.create({
-      :user_id => sender.id,
-      :mentionable_user_id => author.id,
-      :url => "/activities/#{id}",
-      :body => message
-    })
+    author.notify("/activity/add",
+                  message,
+                  {:url => "/activities/#{id}",
+                  :target => self })
   end
 
   def notice_followers
-    followers = author.followers.where({:follow_type => User})
-    followers.each do |follower|
-      notifications.create({
-        :user_id => author.id,
-        :mentionable_user_id => follower.user_id,
-        :url => "/activities/#{id}",
-        :body => "你关注的商家#{ shop.name}有新活动发布#{ title}"
-      })
+    unless shop.followers.blank?
+      shop.followers.each do |follower|
+        follower.user.notify('/activity/add', 
+                             "你关注的商家#{ shop.name}有新活动发布#{ title}",
+                             { :target => self, :url => "/activities/#{id}" } )
+      end
     end
   end
 

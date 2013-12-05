@@ -94,6 +94,7 @@ class Notification < ActiveRecord::Base
       data = {
         content: content,
         url: url,
+        id: id,
       }.merge!(additional)
 
       target = unless targeable_type.nil?

@@ -43,6 +43,24 @@ class Following < ActiveRecord::Base
     end
   end
 
+  after_create do 
+    body = follow.is_a?(User) ? "#{ user.login}关注了你" : "#{ user.login}关注了你的商店 #{ follow.name }"
+    _user = follow.is_a?(User) ? user : follow.user
+    _user.notify('/follow', 
+                  body,
+                  { :target => self,
+                    :url => "/people/#{user.login}/notifications" } )
+  end
+
+  after_destroy do 
+    body = follow.is_a?(User) ? "#{ user.login}取消关注了你" : "#{ user.login}取消关注了你的商店 #{ follow.name }"
+    _user = follow.is_a?(User) ? user : follow.user
+    _user.notify('/unfollow', 
+                  body,
+                  { :target => self,
+                    :url => "/people/#{user.login}/notifications" } )
+  end
+
   def self.user(user_id, uid = nil)
     opts = {follow_id: user_id, follow_type: "User"}
     opts[:follow_id] = user_id.id if user_id.is_a?(User)

@@ -113,12 +113,23 @@ class ActivityPreview extends Backbone.View
     "click .activity .unlike-button": "unlike"
     "click .activity .follow"       : "follow"
     "click .activity .unfollow"     : "unfollow"
+    "click .activity .join-chat"    : "joinChat"
 
   like_template: '<a href="#" class="btn like-button"><i class="icon-heart"></i>&nbsp;喜欢</a>'
   unlike_template: '<a href="#" class="btn unlike-button active">取消喜欢</a>'
 
   initialize: (options) ->
     _.extend(@, options)
+
+  joinChat: (event) ->
+    @load_view(event.currentTarget)
+    model = new ChatModel({
+      type: 3,
+      name: $(@el).attr('id'),
+      title: @$(".summary .title").text()
+    })
+    chat_view = ChatService.getInstance().newChat(model)
+    chat_view.showDialog()
 
   launch: (event) ->
     @load_view(event.currentTarget)
@@ -226,7 +237,7 @@ class ActivityViewTemplate extends Backbone.View
 
   get_status: () ->
     time_wait = @model.start_time.toDate().getTime() - new Date().getTime()
-    return {name: 'waiting', text: "敬请期待"} unless time_wait < 0
+    return {name: 'waiting', text: "敬请期待"} unless time_wait < 0 && @model.status == 1
     time_left = @model.end_time.toDate().getTime() - new Date().getTime()
     return {name: 'over', text: "已结束"} unless time_left > 0
 
