@@ -19,4 +19,12 @@ module People::TransactionsHelper
       toolbar.call
     end
   end
+
+  def render_base_template(template, options = {})
+    render :partial => "people/transactions/base/#{template}", locals: options
+  end
+
+  def render_funcat(template, options = {})
+    render :partial => "people/transactions/funcat/#{template}", locals: options
+  end
 end

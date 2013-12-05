@@ -3,295 +3,309 @@
 @import "lib/transparent";
 
 .transaction:first-child{
-	padding-top: 50px;
+  padding-top: 50px;
 }
 
 .transaction {
-	padding-top: 80px !important;
-	margin-top: -80px;
-	margin-bottom: 40px;
+  padding-top: 80px !important;
+  margin-top: -80px;
+  margin-bottom: 40px;
 
-	.container-fluid {
-		padding-left: 20px;
-		padding-right: 20px;
-	}
+  .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
-	.wrapper-box {
-		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-		@include transparent(rgb(51, 51, 51), 0.4);
-	}
+  .wrapper-box {
+    // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+    @include transparent(rgb(51, 51, 51), 0.4);
+  }
 
-	hr {
-		margin: 20px 20px;
-	}
+  hr {
+    margin: 20px 20px;
+  }
 
-	.paid_bank{
-		.bank-wrapper {
+  .paid_bank{
+    .bank-wrapper {
 
-			.bank_card{
-				float: left;
-				position: relative;
-				margin:0px 0px 20px 6px;
+      .bank_card{
+        float: left;
+        position: relative;
+        margin:0px 0px 20px 6px;
 
-				.cart {
-					width: 100px;
-					// height: 62px;
-					@include box-shadow(0 1px 2px $gray);
-				}
+        .cart {
+          width: 100px;
+          // height: 62px;
+          @include box-shadow(0 1px 2px $gray);
+        }
 
-				input[type='radio']{
-					position: absolute;
-					top: 8px;
-					left: 5px;
-				}
+        input[type='radio']{
+          position: absolute;
+          top: 8px;
+          left: 5px;
+        }
 
-				label {
-					display: inline-block;
-					line-height: 36px;
-					margin-bottom: 0px;
-					margin-left: 25px;
-				}
+        label {
+          display: inline-block;
+          line-height: 36px;
+          margin-bottom: 0px;
+          margin-left: 25px;
+        }
 
-			}
-		}
-	}
+      }
+    }
+  }
 
-	.transaction-header {
+  .transaction-header {
 
-		.avatar {
-			margin-left: 20px;
-			margin-top: 20px;
-			// margin-top: -40px;
-			position: absolute;
-			width: 65px;
-			z-index: 1030
-		}
+    .avatar {
+      margin-left: 20px;
+      margin-top: 20px;
+      // margin-top: -40px;
+      position: absolute;
+      width: 65px;
+      z-index: 1030
+    }
 
-		.info-header {
-			margin-left: 90px;
-			position: relative;
+    .info-header {
+      margin-left: 90px;
+      position: relative;
 
-			.page-header {
-				border-bottom:none;
-				margin-bottom: 20px;
+      .page-header {
+        border-bottom:none;
+        margin-bottom: 20px;
 
-				small{
-					font-size: 20px;
-					color: #999999;
-					float: right;
-				}
+        small{
+          font-size: 20px;
+          color: #999999;
+          float: right;
+        }
 
-				.name{
-					font-size: 30px;
-					width: 200px; 
-					display: inline;
-				}
+        .name{
+          font-size: 30px;
+          width: 200px;
+          display: inline;
+        }
 
-				.close{
-					margin-left: 15px;
-				}
+        .close{
+          margin-left: 15px;
+        }
 
-				.transaction-number{
-					line-height: 30px;
-				}
+        .transaction-number{
+          line-height: 30px;
+        }
 
-				.state-display{
-					font-size:20px;
-					font-weight:none;
-					/*margin-right: 20px;*/
-				}
-				.progress {
-					margin-top: 15px;
-					margin-bottom: 0px;
-				}
+        .state-display{
+          font-size:20px;
+          font-weight:none;
+          /*margin-right: 20px;*/
+        }
+        .progress {
+          margin-top: 15px;
+          margin-bottom: 0px;
+        }
 
-				.state-progress {
-					position: relative;
-					margin-right: 10px;
-				}
+        .state-progress {
+          position: relative;
+          margin-right: 10px;
+        }
 
-				.state-position {
-					position: absolute;
-					top: -5px;
+        .state-position {
+          position: absolute;
+          top: -5px;
 
-					.state-title {
-						position: absolute;
-						bottom: -15px;
-						left: -12px;
-						color: $gray;
-					}
-				}
-			}
-		}
+          .state-title {
+            position: absolute;
+            bottom: -15px;
+            left: -12px;
+            color: $gray;
+          }
+        }
+      }
+    }
 
-		// border: 1px solid $tableBorder;
-		// border-bottom: none;
-	}
+    // border: 1px solid $tableBorder;
+    // border-bottom: none;
+  }
 
-	$headerHeight: 100px;
+  $headerHeight: 100px;
 
-	.products {
-		/*padding: 10px 20px 10px 20px;*/
-	}
+  .products {
+    /*padding: 10px 20px 10px 20px;*/
+  }
 
-	.total {
-		text-align: right;
-		font-size: 30px;
-		padding:0 20px;
-	}
+  .total {
+    text-align: right;
+    font-size: 30px;
+    padding:0 20px;
+  }
 
-	.transaction-body {
-		// @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+  .transaction-body {
+    // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
 
-		// border-left: 1px solid $tableBorder;
-		// border-right: 1px solid $tableBorder;
-		// border-bottom: 1px solid $tableBorder;
-		// padding: 0 20px 20px 20px;
-		.print_display{
-			height: 0px;
-			width: 0px;
-			overflow: hidden;
-		}
+    // border-left: 1px solid $tableBorder;
+    // border-right: 1px solid $tableBorder;
+    // border-bottom: 1px solid $tableBorder;
+    // padding: 0 20px 20px 20px;
+    .print_display{
+      height: 0px;
+      width: 0px;
+      overflow: hidden;
+    }
 
-		td {
-			vertical-align: middle;
-		}
+    td {
+      vertical-align: middle;
+    }
 
-		td.stotal{
-			text-align: right;
-			font-size: 18px;
-		}
+    td.stotal{
+      text-align: right;
+      font-size: 18px;
+    }
 
-		.returned_panel{
-			display: none;
-		}
+    .returned_panel{
+      display: none;
+    }
 
-		.refuse-panel{
-			display: none;
-		}
+    .refuse-panel{
+      display: none;
+    }
 
-		.control-group.error {
-			.control-label  {
-				color: black;
-			}
-		}
+    .control-group.error {
+      .control-label  {
+        color: black;
+      }
+    }
 
-		.clock{
-			text-align:right;
-			color:red;
-			font-size: 20px;
-		}
+    .clock{
+      text-align:right;
+      color:red;
+      font-size: 20px;
+    }
 
-		.control-label {
-			// width: 100px;
-			text-align: left;
-		}
+    .control-label {
+      // width: 100px;
+      text-align: left;
+    }
 
-		.controls {
-			// margin-left: 120px;
+    .controls {
+      // margin-left: 120px;
 
-		}
+    }
 
-		.address_input {
-			padding-right: 60px;
-			position: relative;
+    .address_input {
+      padding-right: 60px;
+      position: relative;
 
-			.control-group{
-				margin-bottom: 10px;
-			}
-		}
+      .control-group{
+        margin-bottom: 10px;
+      }
+    }
 
-		.address-add {
-			position: absolute;
-			top: 0px;
-			right: 0px;
-		}
+    .address-add {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
 
-		.address-panel {
-			display: none;
-		}
+    .address-panel {
+      display: none;
+    }
 
-		input[type='text'].delivery_code{
-			margin-bottom:0px;
-		}
+    input[type='text'].delivery_code{
+      margin-bottom:0px;
+    }
 
-		.already-refund {
-			color: #a2d9f3;
-		}
+    .already-refund {
+      color: #a2d9f3;
+    }
 
-	}
+  }
 
-	.transaction-footer {
-		margin-left: 5px;
-		margin-right: 5px;
-		padding: 5px;
-		background: $white;
+  .transaction-footer {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 5px;
+    background: $white;
 
-		iframe{
-			border: none;
-			width: 100%;
-			height: 390px;
-			overflow: hidden;
-			display: none;
-		}
-	}
+    iframe{
+      border: none;
+      width: 100%;
+      height: 390px;
+      overflow: hidden;
+      display: none;
+    }
+  }
 }
 
 .slide-box {
-	// border: 1px solid red;
-	overflow: hidden;
-	position: relative;
+  // border: 1px solid red;
+  overflow: hidden;
+  position: relative;
 }
 
 .info {
-	.control-label {
-		text-align: right;
-		font-weight: bold;
-	}
+  .control-label {
+    text-align: right;
+    font-weight: bold;
+  }
 }
 
 #creditcard {
-	margin-top: 20px;
-	.form-horizontal .control-group {
-		.control-label {
-			width: 80px;
-		}
+  margin-top: 20px;
+  .form-horizontal .control-group {
+    .control-label {
+      width: 80px;
+    }
 
-		.controls {
-			margin-left: 100px;
-		}
+    .controls {
+      margin-left: 100px;
+    }
 
 
 
-	}
-		.actions {
-			margin-top: 130px;
-		}
+  }
+    .actions {
+      margin-top: 130px;
+    }
 }
 
 .creditcard-preview {
-	// height: 180px;
+  // height: 180px;
 }
 
 .connect {
-	font-size:16px;
-	display:none;
-	margin-left:200px;
+  font-size:16px;
+  display:none;
+  margin-left:200px;
 }
 .direct{
-	padding-top: 0px !important;
-	margin-top: 0px;
-	margin-bottom: 40px;
+  padding-top: 0px !important;
+  margin-top: 0px;
+  margin-bottom: 40px;
 }
 
 .transaction{
-	.nav-tabls-wrapper{
-		.paid-next{
-			margin-top: 15px;
-		}
+  .nav-tabls-wrapper{
+    .paid-next{
+      margin-top: 15px;
+    }
 
-		.tab-content{
-			margin-bottom: 10px;
-		}
-	}
+    .tab-content{
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.transaction-list{
+
+  table{
+    tbody{
+
+      .products{
+        .delivery_price{
+          color: rgb(155, 152, 152);
+        }
+      }
+    }
+  }
 }

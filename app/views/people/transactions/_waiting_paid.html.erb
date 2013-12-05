@@ -91,11 +91,13 @@
   </div>
 </div>
 <script type="text/javascript">
-  new TransactionPayment({
-    el: $("#order<%=transaction.id %>"),
-    model: {
-      total: <%= transaction.total %>,
-      money: <%= current_user.money || 0 %>
-    }
+  $(function(){
+    new TransactionPayment({
+      el: $("#order<%=transaction.id %>"),
+      model: {
+        total: <%= transaction.total %>,
+        money: <%= current_user.money || 0 %>
+      }
+    })
   })
 </script>

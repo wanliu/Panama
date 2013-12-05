@@ -528,10 +528,14 @@ class OrderTransaction < ActiveRecord::Base
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:address_only)
     attra["unmessages_count"] = unmessages.count
-    attra["state_title"] = I18n.t("order_states.seller.#{state}")
+    attra["state_title"] = state_title
     attra["stotal"] = stotal
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
+  end
+
+  def state_title
+    I18n.t("order_states.seller.#{state}")
   end
 
   def notice_change_buyer(event_name = nil)
