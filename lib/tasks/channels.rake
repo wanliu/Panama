@@ -18,8 +18,9 @@ namespace :user do
 
     User.all.each do |user|
       channels = user.persistence_channels.map do |channel|
+        name = channel.follow.is_a?(User) ? channel.follow.login : channel.follow.name
         {
-          name: channel.follow.login,
+          name: name,
           type: 1
         }
       end

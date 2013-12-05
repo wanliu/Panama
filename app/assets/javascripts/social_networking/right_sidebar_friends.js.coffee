@@ -42,11 +42,14 @@ class BaseFriendsView extends Backbone.View
     @parent_view  = @options.parent_view
     @$parent_view = $(@options.parent_view.el)
     @$parent_view.append(@el)
-    @collection = new Backbone.Collection()
+    @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
     @init_fetch()
     @render()
+
+  init_fetch: () ->
+    @collection.fetch(url: "/users/channels")
 
   addAll: () ->
     @$("ul").html('')
@@ -71,7 +74,7 @@ class BaseFriendsView extends Backbone.View
         $(model.view.el).hide()
 
   find_exist: (channel) ->
-    _.find @collection.models, (model) ->
+    _.find @collection.models, (model) =>
       model.get('login') is channel.user
 
   top: (model) ->
@@ -109,13 +112,6 @@ class FriendsView extends BaseFriendsView
     @$(".users-list").append(friend_view.render().el)
 
 
-class GroupModel extends Backbone.Model
-  defaults: () ->
-    { name: 'group_' + _.uniqueId() }
-
-class GroupList extends Backbone.Collection
-  model: GroupModel
-
 class GroupsView extends BaseFriendsView
   className: "groups-list"
 
@@ -130,7 +126,7 @@ class GroupsView extends BaseFriendsView
   initialize: () ->
     super
     _.each [0..1], (i) =>
-      @collection.add(new GroupModel({name: 'group_' + i }))
+      @collection.add(new ChatModel({name: 'random_' + i }))
 
   render: () ->
     $(@el).html(@template)
@@ -169,7 +165,7 @@ class StrangersView extends BaseFriendsView
 
   process: (channel) ->
     @channel = channel
-    model = new Backbone.Model()
+    model = new ChatModel()
     model.fetch
       url: "/users/#{channel.user}"
       success: (model) =>
@@ -186,7 +182,7 @@ class StrangersView extends BaseFriendsView
       @top(model)
 
   find_exist: (model) ->
-    _.find @collection.models, (item) ->
+    _.find @collection.models, (item) =>
       item.id is model.id
 
 
@@ -236,7 +232,7 @@ class BaseFriendView extends Backbone.View
     @unactive()
     $(".global_chat").css('z-index', 9999)
     @setChannel() unless @channel?
-    unless @chat_view 
+    unless @chat_view
       @chat_view = @newChat()
       @bind_chat()
     @chat_view.showWithMsg()
@@ -261,7 +257,13 @@ class StrangerView extends BaseFriendView
     @channel ||= Caramal.Chat.of(@model.get('login'))
 
   newChat: () ->
-    new ChatView({ user: @model.get('login'), channel: @channel })
+    model = new ChatModel({
+      type: 1,
+      channel: @channel, 
+      name: @model.get('login'), 
+      title: "陌生人 #{@model.get('login')}" 
+    })
+    ChatService.getInstance().newChat(model)
 
 
 class FriendView extends BaseFriendView
@@ -273,7 +275,13 @@ class FriendView extends BaseFriendView
     @channel ||= Caramal.Chat.of(@model.get('login'))
 
   newChat: () ->
-    new ChatView({ user: @model.get('login'), channel: @channel })
+    model = new ChatModel({
+      type: 1,
+      channel: @channel, 
+      name: @model.get('login'), 
+      title: "好友 #{@model.get('login')}" 
+    })
+    ChatService.getInstance().newChat(model)
 
 
 class GroupView extends BaseFriendView
@@ -285,5 +293,11 @@ class GroupView extends BaseFriendView
     @channel ||= Caramal.Group.of(@model.get('name'))
 
   newChat: () ->
-    new GroupChatView({ user: @model.get('name'), channel: @channel })
+    model = new ChatModel({
+      type: 2,
+      channel: @channel, 
+      name: @model.get('name'), 
+      title: "群组 #{@model.get('name')}"
+    })
+    ChatService.getInstance().newChat(model)
 

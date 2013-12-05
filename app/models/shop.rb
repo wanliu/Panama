@@ -27,6 +27,8 @@ class Shop < ActiveRecord::Base
   has_one :shops_category
   belongs_to :user
 
+  alias_method :owner, :user
+
   before_destroy :delete_shop
 
   scope :actived, where(actived: true)
@@ -135,6 +137,13 @@ class Shop < ActiveRecord::Base
   def generate_im_token
     self.im_token = SecureRandom.hex
   end
+
+  def notify(channel, data, options = {})
+    (employees - [owner]).each do |member|
+      member.notify("/shops/#{channel}", data, options)
+    end
+  end
+
 
   private
 

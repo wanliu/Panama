@@ -1440,3 +1440,14 @@ h2 small {
     }
   }
 }
+.bumbble_notice{
+	.popover-title{
+		background-color: gba(255, 248, 220);
+		font-size: 16px;
+	}
+	.popover{
+		left: -100px;
+		width: 200px;
+		background-color: gba(255, 248, 220);
+	}
+}
