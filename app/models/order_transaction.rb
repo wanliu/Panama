@@ -57,15 +57,17 @@ class OrderTransaction < ActiveRecord::Base
   validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total
+  validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
 
   accepts_nested_attributes_for :address
 
-  #在线支付类型 account: 帐户余额 kuaiqian: 快钱
+  #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :online_pay_type, [:account, :kuaiqian]
 
   before_validation(:on => :create) do
     update_total_count
+    generate_number
   end
 
   after_create  :notice_new_order, :state_change_detail, :notice_user
@@ -271,6 +273,12 @@ class OrderTransaction < ActiveRecord::Base
     if !pay_manner.cash_on_delivery? && save
       refund.buyer_recharge
     end
+  end
+
+  def generate_number
+    _number = (OrderTransaction.max_id + 1).to_s
+    _number = "#{'0' * (9-_number.length)}#{_number}" if _number.length < 9
+    self.number = _number
   end
 
   def delivery_express?
@@ -622,6 +630,10 @@ class OrderTransaction < ActiveRecord::Base
     undelayed_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
   end
 
+  def self.max_id
+    select("max(id) as id").pluck(:id)[0] || 0
+  end
+
   def self.state_expired
     transactions = find(:all,
       :joins => "left join transaction_state_details as details
@@ -632,14 +644,6 @@ class OrderTransaction < ActiveRecord::Base
     transactions.each{|t| t.fire_events!(:expired) }
     puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
-  end
-
-  def number
-    if id > 99999999
-      id
-    else
-      "#{ '0' * (9 - id.to_s.length) }#{ id }"
-    end
   end
 
   def self.export_column

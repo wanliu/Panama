@@ -1,12 +1,12 @@
-<% active_section :transaction %>
-
+<% active_section :direct_transaction %>
 <div class='row-fluid'>
   <h4 class="page-title">
-    担保交易订单
+    直接交易订单
     <small>交易的清单</small>
   </h4>
 </div>
-<div class='row-fluid transaction-list'>
+
+<div class='row-fluid direct_transaction-list'>
   <div class='widget span8'>
     <div class='row-fluid'>
       <div class='span7'>
@@ -30,7 +30,7 @@
         操作
       </div>
     </div>
-    <% @transactions.each do |t| %>
+    <% @direct_transactions.each do |t| %>
     <table class='table table-striped'>
       <tbody>
         <tr>
@@ -53,12 +53,7 @@
                 <% end %>
               </div>
               <div class='span2'>
-                <div>
-                  <%=number_to_currency t.stotal %>
-                </div>
-                <div class='delivery_price'>
-                  (含<%=t.delivery_price || 0 %>运费)
-                </div>
+                <%=number_to_currency t.total %>
               </div>
               <div class='span2'>
                 <%=t.state_title %>
@@ -74,4 +69,3 @@
     <% end %>
   </div>
 </div>
-<%= paginate @transactions %>

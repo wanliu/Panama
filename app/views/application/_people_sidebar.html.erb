@@ -83,7 +83,12 @@
         <ul id="purchaser-collapse" class="accordion-body collapse">
           <li>
             <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>">
-              未完成
+              担保交易
+            </a>
+          </li>
+          <li>
+            <a class="people-direct_transaction" href="<%= person_direct_transactions_path(@people.login) %>">
+              直接交易
             </a>
           </li>
           <li>

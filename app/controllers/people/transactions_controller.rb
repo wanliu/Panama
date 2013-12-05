@@ -5,7 +5,6 @@ class People::TransactionsController < People::BaseController
   def index
     authorize! :index, OrderTransaction
     @transactions = current_order.uncomplete.order("created_at desc").page(params[:page])
-    @direct_transactions = current_user.direct_transactions.uncomplete.order("created_at desc")
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }

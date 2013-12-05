@@ -296,7 +296,7 @@
   }
 }
 
-.transaction-list{
+.transaction-list, .direct_transaction-list{
 
   table{
     tbody{
@@ -304,6 +304,10 @@
       .products{
         .delivery_price{
           color: rgb(155, 152, 152);
+        }
+
+        .product{
+          margin-bottom: 5px;
         }
       }
     }
