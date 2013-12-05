@@ -4350,6 +4350,14 @@ if (typeof define === "function" && define.amd) {
         return this.socket.removeListener(channel, callback);
       };
 
+      Client.prototype.onNotify = function(channel, callback) {
+        return this.subscribe("notify:" + channel, callback);
+      };
+
+      Client.prototype.unNotify = function(channel, callback) {
+        return this.unsubscribe("notify:" + channel, callback);
+      };
+
       Client.prototype.emit = function(event, data, callback) {
         return this.socket.emit(event, data, callback);
       };

@@ -22,4 +22,76 @@ class CaramalClient
     ch.default_exchange.publish info.to_json, :routing_key => MQ_PREFIX + 'notification'
     conn.close
   end
+
+  def self.create_temporary_channel(name, owner, &block)
+    conn = Bunny.new(:hostname => ENV["rabbitmq"])
+    conn.start
+
+    data = {:name => name, :owner => owner}.to_json
+    ch  = conn.create_channel
+    x = ch.default_exchange
+
+    mq_prefix = 'wanliu_'
+
+    corrid = SecureRandom.hex
+
+    q = ch.queue("", { :exclusive => true })
+
+    consumer = Bunny::Consumer.new(ch, q)
+    over = false
+    msg = 'X'
+    consumer.on_delivery do |delivery_info, properties, payload|
+      if properties[:correlation_id] == corrid
+        puts payload
+        msg = payload
+
+        block.call(msg) if block_given?
+
+        ch.consumers[delivery_info.consumer_tag].cancel
+        conn.close
+      end
+    end
+
+    x.publish(data, :routing_key => mq_prefix + 'rpc_create_temporary_channel', correlation_id: corrid, reply_to: q.name)
+    # sleep 10
+    q.subscribe_with(consumer)
+
+  end
+
+
+  def self.remove_temporary_channel(name, owner, &block)
+    conn = Bunny.new(:hostname => ENV["rabbitmq"])
+    conn.start
+
+    data = {:name => name, :owner => owner}.to_json
+    ch  = conn.create_channel
+    x = ch.default_exchange
+
+    mq_prefix = 'wanliu_'
+
+    corrid = SecureRandom.hex
+
+    q = ch.queue("", { :exclusive => true })
+
+    consumer = Bunny::Consumer.new(ch, q)
+    over = false
+    msg = 'X'
+    consumer.on_delivery do |delivery_info, properties, payload|
+      if properties[:correlation_id] == corrid
+        puts payload
+        msg = payload
+
+        block.call(msg) if block_given?
+
+        ch.consumers[delivery_info.consumer_tag].cancel
+        conn.close
+      end
+    end
+
+    x.publish(data, :routing_key => mq_prefix + 'rpc_remove_temporary_channel', correlation_id: corrid, reply_to: q.name)
+    # sleep 10
+    q.subscribe_with(consumer)
+
+  end
 end
+
