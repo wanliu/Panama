@@ -9,21 +9,19 @@ class Transaction extends Backbone.Model
       success: callback
     )
 
-class TransactionBaseView extends Backbone.View
+class TransactionDialogView extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
     @$el = $(@el)
-    @$dialog = @$(".order_dialog")
-    @$dialog.on "hidden", _.bind(@hidden, @)
-    @$dialog.on "shown", _.bind(@shown, @)
+    @$el.on "hidden", _.bind(@hidden, @)
+    @$el.on "shown", _.bind(@shown, @)
+
+    @$el.modal()
 
   hidden: () ->
     $("body").removeClass(@bodyClass)
-    @$dialog.css(
-      "overflow": "visible",
-      "display": "block"
-    )
+    @remove()
 
   shown: () ->
     $("body").addClass(@bodyClass)
@@ -31,7 +29,7 @@ class TransactionBaseView extends Backbone.View
   render: () ->
     @$el
 
-class TransactionDialogView extends Backbone.View
+class DisplayDialogView extends Backbone.View
   bodyClass: "noScroll"
 
   events: {
@@ -40,8 +38,8 @@ class TransactionDialogView extends Backbone.View
 
   more: () ->
     @model.load_template (data) =>
-      @view = new TransactionBaseView(
-        el: $(data).appendTo("body"),
+      @view = new TransactionDialogView(
+        el: $(data).appendTo("body")[0],
         model: @model)
 
 
@@ -60,7 +58,7 @@ class root.TransactionListView extends Backbone.View
         id: $(el).attr('data-value-id')})
 
       model.urlRoot = @remote_url
-      view = new TransactionDialogView(
+      view = new DisplayDialogView(
         model: model
         el: $(el))
 

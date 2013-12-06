@@ -73,16 +73,14 @@
 
       .page-header {
         border-bottom:none;
-        margin-bottom: 20px;
 
         small{
           font-size: 20px;
           color: #999999;
-          float: right;
         }
 
         .name{
-          font-size: 30px;
+          font-size: 25px;
           width: 200px;
           display: inline;
         }
@@ -301,7 +299,7 @@
   .item{
     margin-bottom: 20px;
     padding: 8px;
-    @include transparent(rgb(51, 51, 51), 0.25);
+    cursor: pointer;
 
     .products{
       .delivery_price{
@@ -312,7 +310,10 @@
         margin-bottom: 5px;
       }
     }
+  }
 
+  .item:hover{
+    @include transparent(rgb(51, 51, 51), 0.25);
   }
 }
 

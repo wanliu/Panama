@@ -16,12 +16,8 @@
             <div class="page-header">
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
-                <% if transaction.close_state? && false %>
-                  <button type="button" class="close">&times;</button>
-                <% end %>
               </div>
               <div class="transaction-number">
-                订单编号：<%= transaction.number %>
                 <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
                   <%= time_ago_in_words transaction.created_at %>
                   <span class="display-state"></span>
