@@ -53,10 +53,11 @@ class ActivityView extends Backbone.View
     _.extend(@, @options)
     @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @back_drop = new BackDropView()
-    @back_drop.show()
+
     @loadTemplate () =>
+      @back_drop.show()
       @$el = $(@render()).appendTo(@$dialog)
-      #$(window).scroll()
+
     super
 
   loadTemplate: (handle) ->
@@ -109,8 +110,8 @@ class ActivityView extends Backbone.View
     false
 
   close: () ->
-    @$dialog.remove()
     @back_drop.hide()
+    @$dialog.remove()
     @unmodal()
 
   playAnimate: () ->
@@ -152,7 +153,7 @@ class ActivityView extends Backbone.View
   data: () ->
     ids = []
     if @$(".selected").length > 0
-      els = @$(".selected") 
+      els = @$(".selected")
       _.each els, (el) =>
         ids.push($(el).attr("data-value-id"))
       return ids
@@ -322,7 +323,7 @@ class ActivityPreview extends Backbone.View
     unless @_follow.has("id")
       id = @$(".unfollow").attr("data-follow-id");
       @_follow.set({id: id})
-      
+
     @_follow.destroy success: (model, data) =>
       $(".shopinfo .unfollow").each (_i, elem) =>
         if $(elem).attr("data-value-id") == @model.get('shop_id')

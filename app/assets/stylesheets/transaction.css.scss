@@ -298,16 +298,59 @@
 
 .transaction-list, .direct_transaction-list{
 
-  table{
-    tbody{
+  .item{
+    margin-bottom: 20px;
+    padding: 8px;
+    @include transparent(rgb(51, 51, 51), 0.25);
 
-      .products{
-        .delivery_price{
-          color: rgb(155, 152, 152);
+    .products{
+      .delivery_price{
+        color: rgb(155, 152, 152);
+      }
+
+      .product{
+        margin-bottom: 5px;
+      }
+    }
+
+  }
+}
+
+.order_dialog{
+  margin-left: -447px;
+  width: 900px;
+
+  >.modal-body{
+    overflow: visible;
+    max-height: none;
+    padding: 5px;
+
+    .transaction{
+      padding: 0px !important;
+      margin: 0px;
+
+      .wrapper-box{
+        background-color: white;
+
+        .container-fluid{
+          padding: 0px;
+        }
+      }
+
+      .transaction-header{
+        .avatar{
+          margin-left: 5px;
+          margin-top: 5px;
+
+          img{
+            width: 65px;
+          }
         }
 
-        .product{
-          margin-bottom: 5px;
+        .info-header{
+          .page-header{
+            margin-top: 0px;
+          }
         }
       }
     }
