@@ -68,16 +68,12 @@
     <% end %>
   </div>
 </div>
-<%=render_funcat "dialog" %>
 <%= paginate @transactions %>
 <script type='text/javascript'>
   $(function(){
     var view = new TransactionListView({
       el: $(".transaction-list"),
-      remote_url: "<%= person_transactions_path(@people) %>",
-      bindView: function(view){
-        debugger
-      }
+      remote_url: "<%= person_transactions_path(@people) %>"
     })
 
   })

@@ -631,7 +631,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def self.max_id
-    select("max(id) as id").pluck(:id)[0] || 0
+    select("max(id) as id")[0].try(:id) || 0
   end
 
   def self.state_expired

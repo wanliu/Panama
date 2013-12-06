@@ -125,6 +125,7 @@ Panama::Application.routes.draw do
         get :kuaiqian_receive
         match 'kuaiqian_payment', :via => [:get, :post]
         match 'test_payment', :via => [:get, :post]
+        get 'dialog'
       end
 
       collection do

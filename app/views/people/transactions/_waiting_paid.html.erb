@@ -65,7 +65,7 @@
               <% end %>
               <% end %>
             </div>
-            <input type='submit' value='下一步' class='btn btn-primary' />
+            <input type='submit' value='支付' class='btn btn-primary' />
           <% end %>
         </div>
         <div class='tab-pane' id="payment">
@@ -78,7 +78,7 @@
             </li>
           </ul>
 
-          <%= link_to "下一步", payment_order_path(current_user, transaction), :class => "btn btn-primary paid-next"  %>
+          <%= link_to "支付", payment_order_path(current_user, transaction), :class => "btn btn-primary paid-next"  %>
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-<%= render_funcat "refund_display", :transaction => transaction, :people => people %>
 <div class='container-fluid'>
   <div class='row-fluid'>
     <div class="offset8">
@@ -10,8 +9,8 @@
       </a>
     </div>
   </div>
+  <%= render_funcat "refund_display", :transaction => transaction, :people => people %>
   <%=render_base_template "delivery_price", :transaction => transaction %>
-  <% end %>
   <%=render_base_template "manner_and_address", :transaction => transaction %>
 </div>
 <div class='container-fluid'>

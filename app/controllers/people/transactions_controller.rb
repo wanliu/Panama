@@ -30,15 +30,10 @@ class People::TransactionsController < People::BaseController
     render :layout => "print"
   end
 
-  # def create
-  #   product = ShopProduct.where(params[:product_item][:product_id])
-  #   @transaction = @people.transactions.build(seller_id: product.shop_id)
-  #   @transaction.items.build(params[:product_item])
-  #   @transaction.items.each {|item| item.update_total}
-  #   @transaction.save
-  #   redirect_to person_transactions_path(@people.login),
-  #                 notice: 'Transaction was successfully created.'
-  # end
+  def dialog
+    @transaction = current_order.find(params[:id])
+    render :layout => false
+  end
 
   def page
     @transaction = current_order.find(params[:id])

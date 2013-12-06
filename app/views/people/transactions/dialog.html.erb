@@ -1,0 +1,19 @@
+<div id="order_dialog" class="order_dialog modal fade" tabindex="-1" role="dialog" aria-labelledby="orderLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 class='title'>
+      编号 <%=@transaction.number %>订单
+    </h3>
+  </div>
+  <div class="modal-body">
+    <%= render partial: 'transaction',
+        object:  @transaction,
+        locals: {
+          state:  @transaction.state,
+          people: @people
+      } %>
+  </div>
+  <div class="modal-footer">
+    <%= render "state_buttons", :transaction => @transaction %>
+  </div>
+</div>

@@ -16,10 +16,9 @@
             <div class="page-header">
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
-                <% if transaction.close_state? %>
+                <% if transaction.close_state? && false %>
                   <button type="button" class="close">&times;</button>
                 <% end %>
-                <%= render "state_buttons", :transaction => transaction %>
               </div>
               <div class="transaction-number">
                 订单编号：<%= transaction.number %>

@@ -333,8 +333,22 @@
         background-color: white;
 
         .container-fluid{
-          padding: 0px;
+          padding: 5px;
         }
+
+        .transaction-footer{
+          height: 100%;
+          padding: 0px;
+
+          .message-toggle{
+            height: 10%;
+          }
+
+          iframe{
+            height: 90%
+          }
+        }
+
       }
 
       .transaction-header{

@@ -71,8 +71,9 @@ class TransactionCard extends TransactionCardBase
 
   setMessagePanel: () ->
     @message_panel = @$("iframe", ".transaction-footer")
-    height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
-    @message_panel.height(height)
+    #height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
+    #@message_panel.height(height)
+    @$(".chat_wrapper").height(@$(".wrapper-box>>.left").innerHeight())
 
   initMessagePanel: () ->
     @setMessagePanel()
