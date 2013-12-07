@@ -226,6 +226,8 @@ zh-CN:
       order_refund: 退货
       setting: 设置
       region: 区域
+      category_property_value: 分类属性值
+      property_value: 属性
     attributes:
       setting:
         id: 编号
@@ -483,6 +485,7 @@ zh-CN:
   activity:
     type:
       auction: 竞价
+      focus: 聚焦
 
   product_item:
     buy_state:
@@ -682,6 +685,6 @@ zh-CN:
   topics: 主题
 
   after_signup: 注册
-  catalog: 分类
+  catalog: 推荐分类
   city_index: 商圈
   tomorrow: 明日预告

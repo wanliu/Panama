@@ -4,18 +4,31 @@
     <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
     </a>
     <h4><%= @people.login %></h4>
-    <div class="isfollowing">
-      <!-- <span class="label">Default</span>
-      <span class="label">Default</span> -->
-      <% if current_user.present? %>
-        <% unless @people.id == current_user.id %>
-          <% unless current_user.is_follow_user?(@people.id) %>
-            <span class="label label-success lf follow" data-value="<%= @people.id %>">+关注</span>
-          <% else %>
-            <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
-          <% end %>
-        <% end %>
-      <% end %>
+    <div class='row-fluid'>
+      <div class='span6 followers'>
+        <div class='count'>
+          <a href='/people/<%=@people.login %>/followers'>
+            <%= @people.followers.length %>
+          </a>
+        </div>
+        <div class='title'>
+          <a href='/people/<%=@people.login %>/followers'>
+            关注我
+          </a>
+        </div>
+      </div>
+      <div class='span6 followings'>
+        <div class='count'>
+          <a href='/people/<%=@people.login %>/followings'>
+          <%= @people.followings.length %>
+          </a>
+        </div>
+        <div class='title'>
+          <a href='/people/<%=@people.login %>/followings'>
+          我关注
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -136,21 +149,12 @@
 </nav>
 
 <script type="text/javascript">
-  var section = "<%= yield :people_siderbar %>"
-  if (section != "") {
-    $(".people-" + section)
-      .parents("li").addClass("active")
-      .parents(".accordion-body").addClass("in")
-  }
-
-  $(function(){
-    <% if current_user.present? %>
-      new Followers({
-        login: "<%= current_user.login %>",
-        people_id: "<%= @people.id %>",
-        follow_type: "User",
-        el: $(".isfollowing") })
-      new PeopleSideView({ el: $("#people-sidebar") })
-    <% end %>
+  $(function(argument) {
+    var section = "<%= yield :people_siderbar %>"
+    if (section != "") {
+      $(".people-" + section)
+        .parents("li").addClass("active")
+        .parents(".accordion-body").addClass("in")
+    }
   })
 </script>

@@ -4,66 +4,66 @@
 root  =  window || @
 
 class CatalogView extends Backbone.View
-	tagName: "li"
-	events:
-		"click" : "search"
+  tagName: "li"
+  events:
+    "click" : "search"
 
-	initialize: (options) ->
-		_.extend(@, options)
-		$(@el).html(@template())
+  initialize: (options) ->
+    _.extend(@, options)
+    $(@el).html(@template())
 
-	template: () ->
-		_.template("<a href='javascript:void(0)'><%=title %></a>")(@model.toJSON())
+  template: () ->
+    _.template("<a href='javascript:void(0)'><%=title %></a>")(@model.toJSON())
 
-	render: () ->
-		$(@el)
+  render: () ->
+    $(@el)
 
-	search: () ->
-		$(@el).parent().find("li").removeClass("active")
-		$(@el).addClass("active")
-		@trigger("search", {catalog_id: @model.id})
+  search: () ->
+    $(@el).parent().find("li").removeClass("active")
+    $(@el).addClass("active")
+    @trigger("search", {catalog_id: @model.id})
 
 class CatalogViewList extends Backbone.View
 
-	initialize: (options) ->
-		_.extend(@, options)
-		@$el = $(@el)
-		@get_catalog()
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    @get_catalog()
 
-	get_catalog: () ->
-		@collection = new Backbone.Collection()
-		@collection.bind("reset", @add_all, @)
-		@collection.fetch(url: "/catalog")
+  get_catalog: () ->
+    @collection = new Backbone.Collection()
+    @collection.bind("reset", @add_all, @)
+    @collection.fetch(url: "/catalog")
 
-	add_all: (models)->
-		models.each (model) =>
-			view = new CatalogView(model: model)
-			view.bind("search", _.bind(@search), @)
-			@$el.append(view.render())
+  add_all: (models)->
+    models.each (model) =>
+      view = new CatalogView(model: model)
+      view.bind("search", _.bind(@search), @)
+      @$el.append(view.render())
 
-	search: (data) ->
+  search: (data) ->
 
 
 
 class CatalogChildrenView extends Backbone.View
 
-	initialize: (options) ->
-		_.extend(@, options)
-		@$el = $(@el)
-		catalog_id = @catalog_id
-		@get_catalog_children(catalog_id)
+  initialize: (options) ->
+    _.extend(@, options)
+    @$el = $(@el)
+    catalog_id = @catalog_id
+    @get_catalog_children(catalog_id)
 
-	template: (model) ->
-		_.template("<li><a href='/category/<%= model.get('id') %>'><%=model.get('name') %></a></li>")(model)
+  template: (model) ->
+    _.template("<li><a href='/category/<%= model.get('id') %>'><%=model.get('name') %></a></li>")(model)
 
-	get_catalog_children: (catalog_id) ->
-		@collection = new Backbone.Collection()
-		@collection.bind("reset", @add_all, @)
-		@collection.fetch(url: "/catalog/#{ catalog_id}/children_categories")
+  get_catalog_children: (catalog_id) ->
+    @collection = new Backbone.Collection()
+    @collection.bind("reset", @add_all, @)
+    @collection.fetch(url: "/catalog/#{ catalog_id}/children_categories")
 
-	add_all: (models)->
-		models.each (model) =>
-			@$el.append(@template(model: model))
+  add_all: (models)->
+    models.each (model) =>
+      @$el.append(@template(model: model))
 
 
 root.CatalogChildrenView = CatalogChildrenView

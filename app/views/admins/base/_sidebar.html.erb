@@ -88,20 +88,30 @@
 		</li>
 	</ul>
 
-	<div class="attention">
-		<div class="attention_detail">
-			<a href="<%= shop_admins_followings_path(current_shop) %>">
-				<span class="label follow-number">
-					<%=current_shop.followers.count %>  被关注
-				</span>
-			</a>
+	<div class="row-fluid">
+		<div class="span6 followings">
+			<div class='count'>
+				<a href="<%= shop_admins_followings_path(current_shop) %>">
+					<%=current_shop.followers.count %>
+				</a>
+			</div>
+			<div>
+				<a href="<%= shop_admins_followings_path(current_shop) %>">
+				被关注
+				</a>
+			</div>
 		</div>
-		<div class="attention_detail">
-			<a href="<%= shop_admins_pending_path %>">
-			<span class='follow-number label'>
-				<%= current_shop.transactions.count %>  订单
-			</span>
-			</a>
+		<div class="span6 orders">
+			<div class='count'>
+				<a href="<%= shop_admins_pending_path %>">
+					<%= current_shop.transactions.count %>
+				</a>
+			</div>
+			<div>
+				<a href="<%= shop_admins_pending_path %>">
+				订单
+				</a>
+			</div>
 		</div>
 	</div>
 
@@ -119,7 +129,7 @@
 			.parents(".accordion-body")
 			.addClass("in");
 	}
-	
+
 	// $(function(){
 	// 	new LeftSideBar({ el: "#left_sidebar" })
 	// })

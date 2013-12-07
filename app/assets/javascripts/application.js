@@ -18,4 +18,5 @@
 //= require following
 //= require apply_join_circle
 //= require search_users
+//= require filtered/filter_options
 

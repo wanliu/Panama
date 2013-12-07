@@ -36,12 +36,18 @@ class User < ActiveRecord::Base
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
+  has_many :ask_buies
+
   has_and_belongs_to_many :services
 
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
   before_create :generate_token
+
+  after_update do
+    update_relation_index
+  end
 
   delegate :groups, :jshop, :to => :shop_user
 
@@ -274,6 +280,87 @@ class User < ActiveRecord::Base
 
   def permissions
     groups.map{| g | g.permissions}
+  end
+
+  # %w(is_friend is_circle_friend is_following is_follower is_follower_and_is_following)
+  def self.system_default_author
+    { is_friend: true,
+      is_following: true,
+      is_circle_friend: true,
+      is_follower_and_is_following: true }
+  end
+
+  def author_setting
+    { is_follower_and_is_following: false }
+  end
+
+  def in_black_list_of(another_user)
+    false
+  end
+
+  def is_friend(another_user)
+    true
+  end
+
+  def is_following(another_user)
+    is_follow_user?(another_user.try(:id))
+  end
+
+  def update_relation_index
+    update_activity_index
+    update_ask_buy_index
+  end
+
+  def update_ask_buy_index
+    AskBuy.index_update_by_query(
+      :query => {
+        :term => {
+          "user.id" => id
+        }
+      },
+      :update => {
+        :user => {
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
+        }
+      }
+    )
+  end
+
+  def update_activity_index
+    Activity.index_update_by_query(
+      :query => {
+        :term => {
+          "author.id" => id
+        }
+      },
+      :update => {
+        :author => {
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
+        }
+      }
+    )
+  end
+
+  private
+
+  def is_follower(another_user)
+    is_follower?(another_user.try(:id))
+  end
+
+  def is_circle_friend(another_user)
+    true
+  end
+
+  def is_follower_and_is_following(another_user)
+    true
   end
 
   private

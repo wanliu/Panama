@@ -1,0 +1,55 @@
+<% if @category_property.present? %>
+<div class='category_property_value_wrap'>
+  <div class='list'>
+    <h3>
+      分类/属性:
+      <a href="/system/categories/<%=@category_property.category.id %>">
+        <%=@category_property.category.name %>
+      </a>/<%=@category_property.property.title %>
+    </h3>
+
+    <table class='index_table'>
+      <thead>
+        <tr>
+          <th>值</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @category_property.values.each do |v| %>
+        <tr>
+          <td><%=v.value %></td>
+          <td>
+            <span>
+              <%= link_to "删除", "#{delete_property_value_system_category_path(@category)}?property_id=#{@category_property.property.id}&value_id=#{v.id}", :method => :delete, :confirm => "是否确定删除？", :remote => true %>
+            </span>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class='new'>
+    <%= semantic_form_for CategoryPropertyValue.new, :url => create_property_value_system_category_path(@category) do |f| %>
+      <%= f.inputs do  %>
+        <%= f.input :value, :label => "值", :input_html => { :class => "property_value", :autocomplete =>"off"  } %>
+      <% end %>
+      <input type='hidden' value="<%=@category_property.property.id %>" name='property_id' />
+      <%= f.actions %>
+    <% end %>
+  </div>
+</div>
+<% else %>
+  <p>
+    <%= @category.name %>分类不存该属性
+  </p>
+<% end %>
+<script type='text/javascript'>
+  $(function(){
+    new TypeaheadExtension({
+      el: $("input.property_value"),
+      field: "value",
+      source: "/system/categories/<%=@category_property.category.id %>/search_property_value?property_id=<%=@category_property.property.id %>"
+    })
+  })
+</script>

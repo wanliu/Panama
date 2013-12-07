@@ -1,9 +1,31 @@
-<%= render partial: 'form', :locals => { properties: @category.properties, category: @category } %>
+<div class='category-properties'>
 
-<% @property = Property.new %>
-<%= semantic_form_for @property, url: relate_property_system_category_path(@category) do |f| %>
-	<%= f.inputs "属性" do %>
-		<%= f.input :id, label: "属性名", as: :select, :collection => Hash[Property.all.map{|p| [p.title,p.id]}] %>
-	<% end %>
-	<%= f.actions %>
-<% end %>
+  <%= render partial: 'form', :locals => { properties: @category.properties, category: @category } %>
+
+  <% @property = Property.new %>
+  <%= semantic_form_for @property, url: relate_property_system_category_path(@category) do |f| %>
+    <%= f.inputs "属性" do %>
+      <%= f.input :id, label: "属性名", as: :select, :input_html => { :class => "property" }, :collection => [] %>
+      <li class='select input optional'>
+        <label class="label" for="property_id">是否添加条件</label>
+        <input type='checkbox' value='1' name='filter_state'  />
+      </li>
+
+    <% end %>
+    <%= f.actions %>
+  <% end %>
+</div>
+<script type='text/javascript'>
+  $(function(){
+    $("select.property").chosenEx({
+      allow_single_deselect : true,
+      placeholder_text : "选择一个属性",
+      no_results_text : "没有以该关键词开头的属性",
+      remote: {
+        url: "/system/properties/search_title",
+        dataType: "json",
+        remote_key: 'title'
+      }
+    });
+  })
+</script>

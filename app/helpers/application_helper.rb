@@ -293,12 +293,12 @@ module ApplicationHelper
     #output = link_to '#',  'data-toggle' => 'modal' do
     content_tag :ul, :class => [:breadcrumb, name] do
       if icon_name.present?
-        output << content_tag(:li, :class => 'icon'){ link_to icon(icon_name), "#" }
+        output << content_tag(:li, :class => 'icon'){ link_to icon(icon_name), "/" }
       end
       array.each do |e|
         output << content_tag(:li) do
           url = yield e if block_given?
-          url + content_tag(:span, '|', :class => "divider")
+          url + content_tag(:span, '>', :class => "divider")
         end
       end
 

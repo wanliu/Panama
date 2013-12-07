@@ -44,7 +44,8 @@ class ShopProductPreview extends Backbone.View
 
   events:
     "click .shop_product .preview"    : "launchShopProduct",
-    "click .shop_product .buy"        : "buy"
+    "click .shop_product .buy"        : "launchShopProduct",
+    #"click .shop_product .buy"        : "buy"
 
   initialize: (options) ->
     _.extend(@, options)

@@ -3,11 +3,13 @@ class ShopProduct < ActiveRecord::Base
   acts_as_paranoid
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
 
   attr_accessible :shop_id, :product_id, :price, :inventory,:photos,:name
 
   validates :shop_id, :product_id, presence: true
 
+  has_many :activities, :dependent => :destroy, :foreign_key => :shop_product_id
   belongs_to :shop
   belongs_to :product
 
@@ -15,6 +17,10 @@ class ShopProduct < ActiveRecord::Base
 
   after_destroy do
     self.index.remove self
+  end
+
+  after_update do
+    update_relation_index
   end
 
   # Tire 索引结构的 json
@@ -43,7 +49,8 @@ class ShopProduct < ActiveRecord::Base
         :icon         => product.photos.icon,
         :header       => product.photos.header,
         :avatar       => product.photos.avatar
-      }
+      },
+      :properties => properties_json
     }.to_json
   end
 
@@ -60,6 +67,14 @@ class ShopProduct < ActiveRecord::Base
     attra["product"] = product.as_json(options["version_name"])
     attra["product"]["photo_avatar"] = product.photos.avatar
     attra
+  end
+
+  def properties_json
+    product.try(:properties_json)
+  end
+
+  def update_relation_index
+    # activities.each { |a| a.update_index  }
   end
 
   mapping do

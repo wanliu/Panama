@@ -11,8 +11,8 @@ class DirectTransaction < ActiveRecord::Base
   belongs_to :seller, :class_name => "Shop"
   belongs_to :operator, :class_name => "User"
 
-  has_many :items, :class_name => "ProductItem", :as => :owner
-  has_many :messages, :class_name => "ChatMessage", :as => :owner
+  has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
+  has_many :messages, :class_name => "ChatMessage", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
 
   before_create :init_data

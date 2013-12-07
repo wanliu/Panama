@@ -361,14 +361,16 @@ class ActivityLayoutView extends Backbone.View
 
 
 class LoadActivities extends InfiniteScrollView
-  params: {
+  default_params: {
     msg_el: ".scroll-load-msg"
     sp_el: "#activities"
     fetch_url: "/search"
   }
 
   initialize: (options) ->
-    super this.params
+    @params = {}
+    _.extend(@params, @default_params, options.params)
+    super @params
     $(window).bind "reset_search", (e, data) =>
       @reset_fetch(data)
 

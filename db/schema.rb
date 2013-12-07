@@ -220,8 +220,16 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   create_table "categories_properties", :force => true do |t|
     t.integer  "category_id"
     t.integer  "property_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.boolean  "filter_state", :default => false
+  end
+
+  create_table "category_property_values", :force => true do |t|
+    t.integer  "category_property_id"
+    t.string   "value"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "chat_messages", :force => true do |t|
