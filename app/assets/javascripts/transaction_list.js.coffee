@@ -30,12 +30,14 @@ class DisplayDialogView extends Backbone.View
   initialize: () ->
     @$summar = @$(".summarize")
     @$detail = @$(".detail")
+    @$el = $(@el)
     @model.bind("change:summar_display", _.bind(@detail_display, @))
 
   more: () ->
     @model.set(summar_display: false)
 
   load_template: () ->
+    @$el.addClass("active")
     @view.remove() unless _.isEmpty(@view)
     @model.load_template (data) =>
       @$summar.hide()
@@ -51,6 +53,7 @@ class DisplayDialogView extends Backbone.View
 
   detail_display: () ->
     if @model.get("summar_display")
+      @$el.removeClass("active")
       @$detail.hide()
       @$summar.show()
     else

@@ -4,7 +4,7 @@
 
 
 .transaction {
-  margin-bottom: 30px;
+  /*margin-bottom: 30px;*/
 
   .container-fluid {
     padding-left: 20px;
@@ -13,7 +13,7 @@
 
   .wrapper-box {
     // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-    @include transparent(rgb(51, 51, 51), 0.4);
+    /*@include transparent(rgb(51, 51, 51), 0.4);*/
   }
 
   hr {
@@ -301,10 +301,10 @@
 .transaction-list, .direct_transaction-list{
 
   .item{
+    margin: 0px -12px;
+    padding: 10px 12px;
 
     .summarize{
-      margin-bottom: 20px;
-      padding: 8px;
       cursor: pointer;
 
       .products{
@@ -329,6 +329,10 @@
   }
 
   .item:hover{
+    @include transparent(rgb(51, 51, 51), 0.25);
+  }
+
+  .item.active{
     @include transparent(rgb(51, 51, 51), 0.25);
   }
 }
