@@ -5,26 +5,17 @@ class Transaction extends Backbone.Model
 
   load_template: (callback = () ->) ->
     $.ajax(
-      url: "#{@url()}/dialog",
+      url: "#{@url()}/page",
       success: callback
     )
+class Transactions extends Backbone.Collection
+  model: Transaction
 
 class TransactionDialogView extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
     @$el = $(@el)
-    @$el.on "hidden", _.bind(@hidden, @)
-    @$el.on "shown", _.bind(@shown, @)
-
-    @$el.modal()
-
-  hidden: () ->
-    $("body").removeClass(@bodyClass)
-    @remove()
-
-  shown: () ->
-    $("body").addClass(@bodyClass)
 
   render: () ->
     @$el
@@ -33,35 +24,69 @@ class DisplayDialogView extends Backbone.View
   bodyClass: "noScroll"
 
   events: {
-    "click .more" : "more"
+    "click .summarize" : "more"
   }
 
+  initialize: () ->
+    @$summar = @$(".summarize")
+    @$detail = @$(".detail")
+    @model.bind("change:summar_display", _.bind(@detail_display, @))
+
   more: () ->
+    @model.set(summar_display: false)
+
+  load_template: () ->
+    @view.remove() unless _.isEmpty(@view)
     @model.load_template (data) =>
+      @$summar.hide()
+      @$detail.html(data)
       @view = new TransactionDialogView(
-        el: $(data).appendTo("body")[0],
+        el: @$(".detail>.transaction"),
         model: @model)
 
+      @trigger("off_details", @model)
+      @$detail.slideDown () =>
+        @trigger("bind_view", @view)
+
+
+  detail_display: () ->
+    if @model.get("summar_display")
+      @$detail.hide()
+      @$summar.show()
+    else
+      @load_template()
 
 class root.TransactionListView extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
+    @transactions = new Transactions()
+    @transactions.url = @remote_url
+    @transactions.bind("add", @addView, @)
     @load_view()
 
-  render: () ->
+  addView: (model) ->
+    elem = model.get("elem")
+    delete model.attributes.elem
+    view = new DisplayDialogView(
+      model: model,
+      el: elem)
+    view.bind("bind_view", _.bind(@bindView, @))
+    view.bind("off_details", _.bind(@off_details, @))
 
   load_view: () ->
     _.each @$(".item"), (el) =>
-      model = new Transaction({
-        number: $(el).attr("data-value-number"),
-        id: $(el).attr('data-value-id')})
+      @transactions.add(
+        summar_display: true,
+        elem: $(el),
+        id: $(el).attr('data-value-id'))
 
-      model.urlRoot = @remote_url
-      view = new DisplayDialogView(
-        model: model
-        el: $(el))
+  off_details: (model) ->
+    for m in @transactions.models
+      m.set(summar_display: true) unless m.id == model.id
+
 
   bindView: (view) ->
+
 
 

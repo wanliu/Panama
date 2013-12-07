@@ -12,7 +12,7 @@ class TransactionCard extends TransactionCardBase
     @countdown()
 
   events:
-    "click .page-header .btn"        : "clickAction"
+    "click .page-header .btn_event"  : "clickAction"
     "click button.close"             : "closeThis"
     "click .address-add>button"      : "addAddress"
     "click .item-detail"             : "toggleItemDetail"
