@@ -39,6 +39,63 @@ class root.ChatModel extends Backbone.Model
 class root.ChatList extends Backbone.Collection
   model: ChatModel
 
+class ImageUpload extends Backbone.View
+  input_name: "attachment_ids"
+  action: "/attachments/upload"
+  messages: {
+    sizeError: "{file}图片，超过{sizeLimit}了！",
+    typeError: "请选择正确的{file}图片，只支持{extensions}图片"
+  }
+
+  template: '
+    <div class="qq-uploader">
+      <pre class="qq-upload-drop-area">
+        <span>{dragText}</span>
+      </pre>
+      <div class="qq-upload-button btn" style="width: auto;">
+        <i class="icon-picture icon-white"></i>
+        {uploadButtonText}
+      </div>
+      <ul class="qq-upload-list" style="margin-top: 10px; text-align: center;">
+      </ul>
+    </div>'
+
+  initialize: (options) ->
+    @newFileUploader()
+
+  onProgress: (id, filename, loaded, total) =>
+    @$("div.qq-upload-button").hide()
+
+  onSubmit: (id, filename) =>
+    @fileupload.setParams({ authenticity_token: window.clients.form_token })
+
+  onComplete: (id, filename, data) =>
+    if data.success
+      $msg = @$("textarea.content")
+      $msg.val("#{$msg.val()}![Alt text](#{data.attachment.file.t3030.url})")
+
+  newFileUploader: () ->
+    @fileupload = new qq.FileUploader({
+      element: @$(".upload-panel")[0],
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+      sizeLimit: 1048576, 
+      minSizeLimit: 0, 
+      debug : true,
+      multiple: false,
+      action: @action,
+      inputName: @input_name,
+      template: @template,
+      failUploadText: '',
+      uploadButtonText: '',
+      cancelButtonText: '取消',
+      dragText: '拖放到这里发送图片',
+      onSubmit: @onSubmit,
+      messages: @messages,
+      onProgress: @onProgress,
+      onComplete: @onComplete
+    })
+
+
 class root.ChatService
   @rows = 1
   @count = 0
@@ -101,6 +158,7 @@ class root.ChatService
     $el.css('right', right + "px")
     $el.css('top', top + "px")
 
+
 Handlebars.registerHelper 'calender', (time) ->
   date = if time?
            new Date(parseInt(time))
@@ -108,7 +166,6 @@ Handlebars.registerHelper 'calender', (time) ->
            new Date()
 
   date.format('yyyy-MM-dd hh:mm:ss')
-
 
 
 class BaseChatView extends Caramal.BackboneView
@@ -127,7 +184,7 @@ class BaseChatView extends Caramal.BackboneView
     'mouseover '            : 'activeDialog'
     'click .close_label'    : 'hideDialog'
     'click .send_button'    : 'sendMeessage'
-    "keyup textarea.content": "fastKey"
+    'keyup textarea.content': 'fastKey'
 
   history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
@@ -147,6 +204,9 @@ class BaseChatView extends Caramal.BackboneView
         <textarea class="content"></textarea>
       </div>
       <div class="foot_nav">
+        <span class="upload-panel">
+          <i class="icon-picture upload-image"></i>
+        </span>
         <button class="send_button">发送</button>
       </div>
     </div>')
@@ -197,6 +257,7 @@ class BaseChatView extends Caramal.BackboneView
     $("body").append(@el)
     @model.view = @
     ChatService.getInstance().collection.add(@model)
+    upload_view = new ImageUpload({ el: @el })
 
   bindDialog: () ->
     $(@el).resizable().draggable().css('position', 'fixed')
@@ -354,5 +415,4 @@ class root.TemporaryChatView extends BaseChatView
   initChannel: () ->
     @channel ||= Caramal.Group.of(@name)
     @channel.open()
-
 

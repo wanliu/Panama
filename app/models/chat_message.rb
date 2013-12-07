@@ -17,6 +17,7 @@ class ChatMessage < ActiveRecord::Base
   belongs_to :receive_user, class_name: "User"
   belongs_to :send_user, class_name: "User"
   belongs_to :owner, :polymorphic => true
+  has_and_belongs_to_many :attachments, class_name: "Attachment"
 
   # validates :receive_user_id, :presence => true
   validates :send_user_id, :presence => true
@@ -96,6 +97,10 @@ class ChatMessage < ActiveRecord::Base
     attra["send_user"] = send_user.as_json
     # attra["created_at"] = created_at.localtime().strftime("%Y-%m-%d %H:%M:%S")
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
+    attribute["attachments"] = []
+    attachments.each do |atta|
+      attribute["attachments"] << atta.file.url
+    end
     attra
   end
 

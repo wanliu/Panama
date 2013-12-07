@@ -1352,6 +1352,17 @@ h2 small {
   }
 
   .foot{
+  	.upload-panel {
+  		max-height: 25px;
+  		display: inline-block;
+
+  		.qq-upload-drop-area {
+				top: 30px;
+				width: auto;
+  			position: absolute;
+  		}
+  	}
+
     .send_content{
       height: 50px;
       padding: 0px 5px;
@@ -1362,11 +1373,13 @@ h2 small {
         padding: 0px;
         margin: 0px;
         height: 100%;
+        word-break: break-all;
       }
     }
 
     .foot_nav{
       padding: 5px 5px;
+      display: inline-block;
 
       .send_button {
       	// float: right;
