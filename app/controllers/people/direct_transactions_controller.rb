@@ -14,6 +14,11 @@ class People::DirectTransactionsController < People::BaseController
     }
   end
 
+  def page
+    @direct_transaction = current_direct_transaction
+    render :layout => false
+  end
+
   def messages
     @direct_transaction = current_direct_transaction
     @messages = @direct_transaction.messages.order("created_at desc").limit(30)

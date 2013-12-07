@@ -4,7 +4,7 @@
     padding:0px;
 
     .direct-info{
-      padding: 15px 0px 5px 15px;
+      padding: 10px 0px;
 
       .close{
         margin-left: 10px;
@@ -34,14 +34,23 @@
     .direct-message{
       background: white;
       padding: 5px;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+      box-sizing: border-box;
+
+      .toolbar{
+        height: 10%;
+      }
 
       .messages{
         background: white;
+        height: 90%;
 
         iframe{
           width: 100%;
           border: none;
-          height: 220px;
+          height: 100%;
         }
       }
     }

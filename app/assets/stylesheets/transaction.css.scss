@@ -7,8 +7,8 @@
   /*margin-bottom: 30px;*/
 
   .container-fluid {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .wrapper-box {
@@ -52,14 +52,20 @@
   }
 
   .transaction-header {
+    height: 75px;
+    margin-bottom: 10px;
 
     .avatar {
-      margin-left: 20px;
-      margin-top: 20px;
-      // margin-top: -40px;
+      /*margin-left: 20px;*/
+      /*margin-top: 20px;      */
       position: absolute;
-      width: 65px;
-      z-index: 1030
+      width: 80px;
+      z-index: 1030;
+
+      img{
+        width: 65px;
+        height: 65px;
+      }
     }
 
     .info-header {
@@ -68,6 +74,8 @@
 
       .page-header {
         border-bottom:none;
+        padding: 0px;
+        margin: 0px;
 
         small{
           font-size: 20px;
@@ -280,10 +288,10 @@
   display:none;
   margin-left:200px;
 }
+
 .direct{
   padding-top: 0px !important;
   margin-top: 0px;
-  margin-bottom: 40px;
 }
 
 .transaction{
@@ -325,6 +333,11 @@
 
     .detail{
       display: none;
+
+      .direct{
+        background-color: transparent;
+        margin-bottom: 0px;
+      }
     }
   }
 

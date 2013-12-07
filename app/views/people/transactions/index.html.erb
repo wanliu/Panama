@@ -31,7 +31,7 @@
       </div>
     </div>
     <% @transactions.each do |t| %>
-    <div class='item' data-value-id="<%=t.id %>">
+    <div class='item' id="order_transaction<%=t.id %>" data-value-id="<%=t.id %>">
       <div class='summarize'>
         <div class='row-fluid head'>
           <div class='span3'>
@@ -87,6 +87,5 @@
         });
       }
     })
-
   })
 </script>

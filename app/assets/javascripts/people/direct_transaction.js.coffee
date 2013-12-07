@@ -18,7 +18,7 @@ class window.DirectTransactionView extends Backbone.View
     @load_style()
 
   load_style: () ->
-    @$iframe.height(@$info.height() - @$toolbar.height())
+    @$message.height(@$info.innerHeight())
 
   toggle_message: () ->
     @$messages.slideToggle()

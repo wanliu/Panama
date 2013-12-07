@@ -41,9 +41,9 @@ class DisplayDialogView extends Backbone.View
     @view.remove() unless _.isEmpty(@view)
     @model.load_template (data) =>
       @$summar.hide()
-      @$detail.html(data)
+      elem = $(data).appendTo(@$detail)
       @view = new TransactionDialogView(
-        el: @$(".detail>.transaction"),
+        el: $(elem[0]),
         model: @model)
 
       @trigger("off_details", @model)
