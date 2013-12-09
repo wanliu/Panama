@@ -30,11 +30,6 @@ class People::TransactionsController < People::BaseController
     render :layout => "print"
   end
 
-  def dialog
-    @transaction = current_order.find(params[:id])
-    render :layout => false
-  end
-
   def page
     @transaction = current_order.find(params[:id])
     authorize! :show, @transaction

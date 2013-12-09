@@ -1,7 +1,7 @@
 #= require jquery
-#= require lib/core_extend
 #= require lib/underscore
 #= require backbone
+#= require lib/core_extend
 #= require lib/realtime_client
 #= require lib/socket.io
 #= require lib/hogan

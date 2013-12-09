@@ -345,6 +345,16 @@
     max-height: none;
     padding: 5px;
 
+    #notice{
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .container-fluid{
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+
     .transaction{
       padding: 0px !important;
       margin: 0px;
@@ -420,15 +430,6 @@
 
       .order_dialog{
         display: none;
-        /*margin: auto;
-        margin: auto;
-        left: 0;
-        position: static;
-        top: 0;
-
-        .modal-header, .modal-body, .modal-footer{
-          display: none;
-        }*/
       }
     }
   }

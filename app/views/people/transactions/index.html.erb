@@ -31,7 +31,7 @@
       </div>
     </div>
     <% @transactions.each do |t| %>
-    <div class='item' data-value-id="<%=t.id %>">
+    <div class='item' data-value-id="<%=t.id %>" data-value-number="<%=t.number %>">
       <div class='row-fluid head'>
         <div class='span3'>
           编号: <%=t.number %>
@@ -69,6 +69,7 @@
   </div>
 </div>
 <%= paginate @transactions %>
+<%=render_funcat "dialog" %>
 <script type='text/javascript'>
   $(function(){
     var view = new TransactionListView({
