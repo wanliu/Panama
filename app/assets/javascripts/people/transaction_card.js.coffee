@@ -12,8 +12,8 @@ class TransactionCard extends TransactionCardBase
     @countdown()
 
   events:
-    "click .page-header .btn"        : "clickAction"
-    "click button.close"             : "closeThis"
+    "click .page-header .btn_event"  : "clickAction"
+    "click .btn_delete"              : "closeThis"
     "click .address-add>button"      : "addAddress"
     "click .item-detail"             : "toggleItemDetail"
     "click .message-toggle>button"   : "toggleMessage"

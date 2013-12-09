@@ -16,6 +16,7 @@
             <div class="page-header">
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
+                <%= render "state_buttons", :transaction => transaction %>
               </div>
               <div class="transaction-number">
                 <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">

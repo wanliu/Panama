@@ -10,27 +10,40 @@ class Transaction extends Backbone.Model
     )
 
 class TransactionDialogView extends Backbone.View
-
+  events: {
+    "click .modal-header .close" : "close"
+  }
   initialize: () ->
     _.extend(@, @options)
     @$el = $(@el)
-    @$el.on "hidden", _.bind(@hidden, @)
-    @$el.on "shown", _.bind(@shown, @)
+    style = @el_css()
+    @$el.wrap("<div class='wrap_transaction' />")
+    @$el.wrap("<div class='panel' />").parent().css(style)
+    $load_info = $(@load_elem()).prependTo(@$el.wrap("<div class='dialog modal' />").parent())
+    $load_info.css(
+      width: style.width / 3,
+      height: style.height / 3
+    )
+    @$el.removeClass("hidden")
+    $load_info.animate style, () =>
+      $load_info.remove()
+      @$el.unwrap().unwrap().unwrap()
 
-    @$el.modal()
-
-  hidden: () ->
-    $("body").removeClass(@bodyClass)
+  close: () ->
     @remove()
-
-  shown: () ->
-    $("body").addClass(@bodyClass)
 
   render: () ->
     @$el
 
+  load_elem: (elem) ->
+    "<div class='load_info'>
+      <img src='/assets/loading_max.gif'/>正在加载...
+    </div>"
+
+  el_css: () ->
+    {width: @$el.outerWidth(), height: @$el.outerHeight()}
+
 class DisplayDialogView extends Backbone.View
-  bodyClass: "noScroll"
 
   events: {
     "click .more" : "more"
@@ -54,7 +67,6 @@ class root.TransactionListView extends Backbone.View
   load_view: () ->
     _.each @$(".item"), (el) =>
       model = new Transaction({
-        number: $(el).attr("data-value-number"),
         id: $(el).attr('data-value-id')})
 
       model.urlRoot = @remote_url

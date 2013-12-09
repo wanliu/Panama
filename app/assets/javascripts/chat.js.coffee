@@ -1,5 +1,5 @@
-#= require lib/core_extend
 #= require jquery
+#= require lib/core_extend
 #= require lib/underscore
 #= require backbone
 #= require lib/realtime_client
