@@ -71,40 +71,53 @@ class DisplayDialogView extends Backbone.View
     @view = new TransactionDialogView(el: @$el)
     @$previous = @$(".modal-header .previous")
     @$next = @$(".modal-header .next")
+    @$body = @$(">.modal-body")
 
   show: (model) ->
     @set_current_model(model)
     @load_template (data) =>
+      @set_current_template @render(data).children()
       @view.animate()
 
   load_template: (callback = (data) ->) ->
     @current_model.load_template (data) =>
       @paging()
       @$el.removeClass("hide")
-      @render(data)
       callback.call(@, data)
 
   render: (data) ->
-    @$(">.modal-body").html(data)
     @$(">.modal-header .title").html("编号: #{@current_model.get('number')}订单")
+    @$body.html(data)
 
   next: () ->
     index = @find_index()
     if index < @transactions.length - 1
       @set_current_model @transactions.models[++index]
-      @load_template()
+      @load_template (data) =>
+        @render(data)
 
   previous: () ->
     index = @find_index()
     if index > 0
       @set_current_model @transactions.models[--index]
-      @load_template()
+      @load_template (data) =>
+        @render(data)
+
+  animate: (elem, number) ->
+    @current_template.animate {top: number}, () =>
+      @$body.removeClass("hidden")
+      @$body.css(height: "auto")
+      @current_template.remove()
+      @set_current_template elem
 
   add: (data) ->
     @transactions.add data
 
   set_current_model: (model) ->
     @current_model = model
+
+  set_current_template: (elem) ->
+    @current_template = elem
 
   close: () ->
     @$el.addClass("hide")

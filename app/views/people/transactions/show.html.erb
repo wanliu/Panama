@@ -1,6 +1,6 @@
-<p id="notice"><%= notice %></p>
 <% active_section :transaction %>
 <div class="sidebar_panel">
+  <p id="notice"><%= notice %></p>
   <% if @pay_msg.present? %>
     <% if @pay_msg == "success" && @transaction.state_name == :waiting_delivery  %>
       <div class="alert alert-success">

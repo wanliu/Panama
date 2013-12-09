@@ -399,6 +399,10 @@
       }
     }
   }
+
+  >.modal-body.hidden{
+    overflow: hidden;
+  }
 }
 
 .wrap_transaction{
