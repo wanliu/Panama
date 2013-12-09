@@ -13,6 +13,7 @@ class root.ChatContainerView extends RealTimeContainerView
       <div class="fixed_head">
         <input class="filter_key" type="text"/>
       </div>')
+    @bind_items()
 
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>

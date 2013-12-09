@@ -31,6 +31,13 @@ GIT
       rest-client (~> 1.6)
 
 GIT
+  remote: git://github.com/jsw0528/rails_emoji.git
+  revision: 15ac3c959976d34fb01050bfa0b89973398050b9
+  specs:
+    rails_emoji (1.7.1)
+      rails (>= 3.1.0)
+
+GIT
   remote: git://github.com/mrichie/geocoder.git
   revision: b3e5c31d39729166cb55291247a82a3747eec15e
   specs:
@@ -560,6 +567,7 @@ DEPENDENCIES
   rails (= 3.2.15)
   rails-setting!
   rails_autolink
+  rails_emoji (~> 1.7.1)!
   rb-fchange
   rb-fsevent
   rb-inotify

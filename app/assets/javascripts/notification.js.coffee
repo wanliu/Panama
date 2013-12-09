@@ -236,8 +236,8 @@ class NotificationView extends Backbone.View
     target.removeData("popover")
     target.popover({
       title: "你有新的消息"
-      content: @model.attributes.content,
-      container: '.bumbble_notice'
+      container: '.bumbble_notice',
+      content: @model.attributes.content
     })
     target.popover('show')
     target.find(".popover")

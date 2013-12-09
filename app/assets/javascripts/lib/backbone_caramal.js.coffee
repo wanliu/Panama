@@ -56,7 +56,7 @@ class ImageUpload extends Backbone.View
         <i class="icon-picture icon-white"></i>
         {uploadButtonText}
       </div>
-      <ul class="qq-upload-list" style="margin-top: 10px; text-align: center;">
+      <ul class="qq-upload-list hide" style="margin-top: 10px; text-align: center;">
       </ul>
     </div>'
 
@@ -71,8 +71,9 @@ class ImageUpload extends Backbone.View
 
   onComplete: (id, filename, data) =>
     if data.success
+      @$("div.qq-upload-button").show()
       $msg = @$("textarea.content")
-      $msg.val("#{$msg.val()}![Alt text](#{data.attachment.file.t3030.url})")
+      $msg.insertAtCursor("![Alt text](#{data.attachment.file.t3030.url})")
 
   newFileUploader: () ->
     @fileupload = new qq.FileUploader({
@@ -181,10 +182,11 @@ class BaseChatView extends Caramal.BackboneView
   }
 
   events:
-    'mouseover '            : 'activeDialog'
-    'click .close_label'    : 'hideDialog'
-    'click .send_button'    : 'sendMeessage'
-    'keyup textarea.content': 'fastKey'
+    'mouseover '                : 'activeDialog'
+    'click .close_label'        : 'hideDialog'
+    'click .send_button'        : 'sendMeessage'
+    'click .emojify-chooser img': 'chooseEmojify'
+    'keyup textarea.content'    : 'fastKey'
 
   history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
@@ -204,6 +206,11 @@ class BaseChatView extends Caramal.BackboneView
         <textarea class="content"></textarea>
       </div>
       <div class="foot_nav">
+        <span class="face-panel">
+          <a href="#" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-original-title="">
+            <i class="icon-glass"></i>
+          </a>
+        </span>
         <span class="upload-panel">
           <i class="icon-picture upload-image"></i>
         </span>
@@ -239,6 +246,7 @@ class BaseChatView extends Caramal.BackboneView
 
   initialize: (options) ->
     super
+
     @name = @model.get('name')
     @title = @name unless @title
     @channel = @model.get('channel')
@@ -253,11 +261,16 @@ class BaseChatView extends Caramal.BackboneView
   initDialog: () ->
     @display = false
     $(@el).html(@chat_template({model: @model}))
+    @msg_el = @$("textarea.content")
     @state_el = @$(".head>.state")
     $("body").append(@el)
     @model.view = @
     ChatService.getInstance().collection.add(@model)
     upload_view = new ImageUpload({ el: @el })
+    @$('.choose-face').popover({ 
+      html: true, 
+      content: () => EmojifyChooser.getInstance().el
+    })
 
   bindDialog: () ->
     $(@el).resizable().draggable().css('position', 'fixed')
@@ -303,11 +316,17 @@ class BaseChatView extends Caramal.BackboneView
 
   sendInputing: (time) ->
 
+  chooseEmojify: (event) ->
+    @$('.choose-face').popover('hide')
+    @msg_el.insertAtCursor(":#{$(event.target).data('name')}:")
+
   parseMessages: (messages) ->
     $html = ''
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
-      $html += @msg_template(message)
+      $html += @msg_template(message).replace(/:([a-z]|_)+:/g, (word) =>
+        '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
+      )
     $html
 
   receiveMessage: (data) ->
@@ -360,11 +379,10 @@ class BaseChatView extends Caramal.BackboneView
     @sendMeessage() if event.ctrlKey && event.keyCode == 13
 
   sendMeessage: () ->
-    $msg = @$("textarea.content")
-    msg = $msg.val().trim()
+    msg = @msg_el.val().trim()
     return if msg is ''
     @channel.send(msg)
-    $msg.val('')
+    @msg_el.val('')
 
 
 class root.ChatView extends BaseChatView

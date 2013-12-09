@@ -14,6 +14,7 @@
 //= require wanliu/ajax_auth_client
 //= require lib/core_extend
 //= require lib/ifvisible
+//= require lib/emojify_chooser
 //= require lib/realtime_client
 //= require lib/backbone_caramal
 //= require lib/image_natural_size

@@ -167,3 +167,5 @@ gem "delayed_job_active_record"
 gem "daemons"
 gem 'rubyzip', '< 1.0.0'
 gem "puma"
+
+gem 'rails_emoji', '~> 1.7.1', :github => "jsw0528/rails_emoji"
