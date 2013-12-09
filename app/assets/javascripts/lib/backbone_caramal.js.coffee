@@ -367,6 +367,8 @@ class BaseChatView extends Caramal.BackboneView
 
   activeDialog: () ->
     @trigger('unactive_avatar')
+    @$el.css('z-index', 10000)
+    @$el.siblings('.global_chat').css('z-index', 9999)
 
   online: () ->
     @state_el.addClass(@on_class).removeClass(@off_class)

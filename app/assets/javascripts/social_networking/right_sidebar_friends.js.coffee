@@ -193,17 +193,17 @@ class BaseFriendView extends Backbone.View
   events:
     "click" : "showChat"
 
-  template: Handlebars.compile("""
-    <a href='#' data-toggle='tooltip' title="{{ login }}{{ name }}">
-      <span class='badge badge-important message_count'></span>
-      <img src='/default_img/t5050_default_avatar.jpg' class='img-circle' />
-    </a>""")
+  template: _.template('
+    <a href="#" data-toggle="tooltip" title="<%= model.get("login")||model.get("name") %>">
+      <span class="badge badge-important message_count"></span>
+      <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" />
+    </a>')
 
   initialize: () ->
     @clearMsgCount()
 
   render: () ->
-    html = @template(@model.attributes)
+    html = @template({model: @model})
     $(@el).html(html)
     @
 
