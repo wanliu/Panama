@@ -97,7 +97,7 @@ class ChatMessage < ActiveRecord::Base
     attra["send_user"] = send_user.as_json
     # attra["created_at"] = created_at.localtime().strftime("%Y-%m-%d %H:%M:%S")
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
-    attribute["attachments"] = []
+    attributes["attachments"] = []
     attachments.each do |atta|
       attribute["attachments"] << atta.file.url
     end

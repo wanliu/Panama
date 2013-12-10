@@ -49,9 +49,6 @@ class BaseFriendsView extends Backbone.View
     @init_fetch()
     @render()
 
-  init_fetch: () ->
-    @collection.fetch(url: "/users/channels")
-
   addAll: () ->
     @$("ul").html('')
     @collection.each (model) =>
@@ -105,7 +102,7 @@ class FriendsView extends BaseFriendsView
     @
 
   init_fetch: () ->
-    @collection.fetch(url: "/users/followings")
+    @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
     friend_view = new FriendView({ model: model, parent_view: @ })

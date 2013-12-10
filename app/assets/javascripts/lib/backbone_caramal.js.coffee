@@ -214,7 +214,7 @@ class BaseChatView extends Caramal.BackboneView
         <span class="upload-panel">
           <i class="icon-picture upload-image"></i>
         </span>
-        <button class="send_button">发送</button>
+        <button class="btn btn-primary send_button">发送</button>
       </div>
     </div>')
 

@@ -3,7 +3,6 @@
 @import "compass/css3";
 @import "lib/transparent";
 
-
 body {
   // background: transparent;
   color: #333;
@@ -18,7 +17,6 @@ body {
   right: 0px;
   bottom: 0px;
 
-
   .message_panel{
     // height: 300px;
     overflow-y: auto;
@@ -28,8 +26,6 @@ body {
     right: 0px;
     bottom: 80px;
     padding: 5px;
-
-
 
     .messages {
       position: relative;
@@ -72,35 +68,30 @@ body {
   }
 
   .foot{
-    position: absolute;
     bottom: 0px;
+    position: absolute;
 
     form{
       margin: 0px;
 
-
       .me {
-        position: absolute;
         left: 5px;
+        position: absolute;
 
         p {
           margin:0px;
         }
       }
 
-      .input-msg {
-        margin-left: 70px;
-        margin-right: 70px;
-
-        textarea{
-          resize: none;
-        }
+      textarea{
+        resize: vertical;
+        max-height: 120px;
       }
 
       .message_send{
-        position: absolute;
         top: 5px;
         right: 5px;
+        position: absolute;
       }
     }
   }
@@ -153,6 +144,7 @@ a {
   @include border-radius(1px);
   position: relative;
   border-left: 2px solid rgb(162, 217, 243);
+
   .text{
     word-break:break-all;
   }

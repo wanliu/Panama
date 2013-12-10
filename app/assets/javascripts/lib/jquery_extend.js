@@ -1,3 +1,4 @@
+//= require jquery
 
 jQuery.fn.extend({
     insertAtCursor: function(myValue) {
