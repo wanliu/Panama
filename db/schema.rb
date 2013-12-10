@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131206030226) do
+ActiveRecord::Schema.define(:version => 20131210040310) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -50,12 +50,10 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   end
 
   create_table "activities_attachments", :force => true do |t|
-    t.integer  "attachment_id"
-    t.string   "activity_id"
-    t.string   "integer"
-    t.integer  "number"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.integer "attachment_id"
+    t.string  "activity_id"
+    t.string  "integer"
+    t.integer "number"
   end
 
   create_table "activities_likes", :force => true do |t|
@@ -64,11 +62,9 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   end
 
   create_table "activities_order_transactions", :force => true do |t|
-    t.integer  "activity_id"
-    t.integer  "order_transaction_id"
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
-    t.boolean  "state",                :default => false
+    t.integer "activity_id"
+    t.integer "order_transaction_id"
+    t.boolean "state",                :default => false
   end
 
   create_table "activities_participates", :force => true do |t|
@@ -138,10 +134,8 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   end
 
   create_table "ask_buys_attachments", :force => true do |t|
-    t.integer  "ask_buy_id"
-    t.integer  "attachment_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.integer "ask_buy_id"
+    t.integer "attachment_id"
   end
 
   create_table "attachments", :force => true do |t|
@@ -154,31 +148,23 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   end
 
   create_table "attachments_chat_messages", :force => true do |t|
-    t.integer  "chat_message_id"
-    t.integer  "attachment_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.integer "chat_message_id"
+    t.integer "attachment_id"
   end
 
   create_table "attachments_products", :force => true do |t|
-    t.integer  "attachment_id"
-    t.integer  "product_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.integer "attachment_id"
+    t.integer "product_id"
   end
 
   create_table "attachments_regions", :force => true do |t|
-    t.integer  "region_id"
-    t.integer  "attachment_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.integer "region_id"
+    t.integer "attachment_id"
   end
 
   create_table "attachments_topics", :force => true do |t|
-    t.integer  "topic_id"
-    t.integer  "attachment_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.integer "topic_id"
+    t.integer "attachment_id"
   end
 
   create_table "banks", :force => true do |t|
@@ -218,11 +204,9 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
 
   create_table "categories_properties", :force => true do |t|
-    t.integer  "category_id"
-    t.integer  "property_id"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.boolean  "filter_state", :default => false
+    t.integer "category_id"
+    t.integer "property_id"
+    t.boolean "filter_state", :default => false
   end
 
   create_table "category_property_values", :force => true do |t|
@@ -656,18 +640,14 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   add_index "product_items", ["options"], :name => "index_product_items_on_options"
 
   create_table "product_items_properties", :force => true do |t|
-    t.integer  "product_item_id"
-    t.integer  "property_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.integer "product_item_id"
+    t.integer "property_id"
   end
 
   create_table "product_items_property_items", :force => true do |t|
-    t.integer  "product_item_id"
-    t.integer  "property_item_id"
-    t.string   "title"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.integer "product_item_id"
+    t.integer "property_item_id"
+    t.string  "title"
   end
 
   create_table "product_prices", :force => true do |t|
@@ -698,10 +678,8 @@ ActiveRecord::Schema.define(:version => 20131206030226) do
   end
 
   create_table "products_properties", :force => true do |t|
-    t.integer  "product_id"
-    t.integer  "property_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer "product_id"
+    t.integer "property_id"
   end
 
   create_table "products_property_items", :force => true do |t|

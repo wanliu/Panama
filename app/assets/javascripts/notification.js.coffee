@@ -22,31 +22,31 @@ class  NotificationViewList extends Backbone.View
     #用户关系
     @client.monitor_notification("/friends/add_quan", @add_to_circle)
     @client.monitor_notification("/friends/add_user", @add_user)
-    @client.monitor_notification("/friends/remove_user", @remove_user) 
+    @client.monitor_notification("/friends/remove_user", @remove_user)
     @client.monitor_notification("/friends/remove_quan", @remove_from_circle)
     #个人社交部分
     @client.monitor_notification("/follow", @follow_user)
     @client.monitor_notification("/unfollow", @unfollow_user)
-    @client.monitor_notification("/request", @request_join_circle) 
+    @client.monitor_notification("/request", @request_join_circle)
     @client.monitor_notification("/invite", @invite_join_circle)
     @client.monitor_notification("/refuse", @refuse_join_circle)
     @client.monitor_notification("/joined", @joined_success)
-    @client.monitor_notification("/leaved", @leaved_circle) 
+    @client.monitor_notification("/leaved", @leaved_circle)
     @client.monitor_notification("/like", @like_your)
     @client.monitor_notification("/unlike", @unlike_your)
     # 商店社交部分
     @client.monitor_notification("/shops/follow", @follow_shop)
     @client.monitor_notification("/shops/unfollow", @unfollow_shop)
-    @client.monitor_notification("/shops/like", @like_shops_activity) 
+    @client.monitor_notification("/shops/like", @like_shops_activity)
     @client.monitor_notification("/shops/unlike", @unlike_shops_activity)
     @client.monitor_notification("/shops/joined", @joined_shop_circle)
     @client.monitor_notification("/shops/leaved", @leaved_shop_circle)
-    @client.monitor_notification("/shops/refuse", @refuse_join_shop_circle) 
+    @client.monitor_notification("/shops/refuse", @refuse_join_shop_circle)
     @client.monitor_notification("/shops/request", @request_join_shop_circle)
     #评论
     @client.monitor_notification("/comments/add", @add_comment)
     @client.monitor_notification("/comments/update", @update_comment)
-    @client.monitor_notification("/comments/remove", @remove_comment) 
+    @client.monitor_notification("/comments/remove", @remove_comment)
 
   #活动通知绑定
   arrived: (data) =>
@@ -160,6 +160,8 @@ class  NotificationViewList extends Backbone.View
     @collection.add(data)
     @change_notifications_count()
 
+  addNotif: (notif) ->
+
   change_notifications_count: () ->
     @$count = $("#notification_count")
     @$count.text(parseInt(@$count.text()) + 1)
@@ -198,7 +200,7 @@ class  NotificationViewList extends Backbone.View
         @fetch_data(data.count)
     )
 
-class NotificationView extends Backbone.View
+class NotificationViewBase extends Backbone.View
   tagName: "li"
 
   template_realtime: "<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>{{ content }}</a>"
@@ -206,11 +208,22 @@ class NotificationView extends Backbone.View
 
   template_already: "<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>{{ body }}</a></li>"
 
-  events: 
+  events:
     "click" : "mark_as_read"
+
+  notify_target: "#notification_message i"
+
+  defaultTemplate: Handlebars.compile(
+        "<div class='noty_message'>" +
+            "<img class='avatar noty_avatar' src='{{avatar}}' />" +
+            "<span class='noty_text'></span>" +
+            "<div class='noty_close'></div>" +
+        "</div>")
+
 
   initialize: () ->
     _.extend(@, @options)
+    @$notify_target = $(@notify_target)
 
   mark_as_read: () ->
     $.ajax(
@@ -229,7 +242,61 @@ class NotificationView extends Backbone.View
   render_realtime: () ->
     li = $(@el).append(Hogan.compile(@template_realtime).render(@model.attributes))
     @parent_view.find('ul').prepend(li)
-    @bubble_notice()
+
+    @notify({
+      title: '有人关注了你',
+      text: @model.attributes.content,
+      theme: 'notifyTheme',
+      sticky: true,
+      avatar: @model.get('avatar')})
+    # @bubble_notice()
+
+  notify: (options) ->
+
+    self = @
+    options.template = @defaultTemplate(options)
+    options.animation = {
+            easing:'swing',
+            speed:500
+          }
+
+    options.onClose = () ->
+      pos = @$bar.offset()
+      target_pos = self.$notify_target.offset()
+      scrollTop = $(window).scrollTop()
+      scrollLeft = $(window).scrollLeft()
+
+      @options.animation.close = {
+        opacity: 0,
+        top: target_pos.top - scrollTop,
+        left: target_pos.left - scrollLeft,
+        width: '5px',
+        height: '5px'
+      }
+
+      @$bar.css('position', 'fixed')
+           .css('top', pos.top - scrollTop)
+           .css('left', pos.left - scrollLeft)
+
+
+    options.animation.open = {
+      opacity: 1,
+      # height: 'toggle'
+    }
+
+    # options.after_close = (e) ->
+    #   target = e.clone()
+    #   target
+    #     .css('position', 'fixed')
+    #     .animate({
+    #       top: pos.top,
+    #       left: pos.left,
+    #       width: 5,
+    #       hieght: 5
+    #     })
+
+
+    pnotify(options)
 
   bubble_notice: () ->
     target = $(".bumbble_notice")
@@ -237,9 +304,12 @@ class NotificationView extends Backbone.View
     target.popover({
       title: "你有新的消息"
       content: @model.attributes.content,
-      container: '.bumbble_notice'
+      container: '.bumbble_notice',
     })
     target.popover('show')
     target.find(".popover")
+
+class NotificationView extends NotificationViewBase
+
 
 root.NotificationViewList = NotificationViewList

@@ -2,6 +2,7 @@
 @import "compass/css3";
 @import "caret";
 @import "lib/notify/pnotify";
+@import "jquery.gritter";
 @import "lib/transparent";
 @import "lib/chosen";
 @import "my_cart";
@@ -348,6 +349,10 @@ ul {
 		margin: 80px 0 0 1.6%;
 
 		.settings {
+			button {
+				margin: auto;
+			}
+
 			.btn-auto {
 				display: block;
 			}
@@ -609,6 +614,11 @@ ul {
 		margin: 0px 5px;
 	}
 	font-size: 20px;
+}
+
+.avatar {
+	width:45px;
+
 }
 
 // widget

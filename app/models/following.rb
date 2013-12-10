@@ -16,7 +16,7 @@ class Following < ActiveRecord::Base
 
   # 当相互关注后，才能添加持久化的通道
   after_create do
-    if follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
+    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
                               :channel_type => 1)
@@ -30,7 +30,7 @@ class Following < ActiveRecord::Base
   end
 
   after_destroy do
-    if follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
+    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
                               :channel_type => 1)
@@ -43,22 +43,24 @@ class Following < ActiveRecord::Base
     end
   end
 
-  after_create do 
-    body = follow.is_a?(User) ? "#{ user.login}关注了你" : "#{ user.login}关注了你的商店 #{ follow.name }"
+  after_create do
+    text = follow.is_a?(User) ? "#{user.login} 关注了你" : "#{user.login} 关注了你的商店 #{ follow.name }"
     _user = follow.is_a?(User) ? user : follow.user
-    _user.notify('/follow', 
-                  body,
+    _user.notify('/follow',
+                  text,
                   { :target => self,
-                    :url => "/people/#{user.login}/notifications" } )
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar });
   end
 
-  after_destroy do 
-    body = follow.is_a?(User) ? "#{ user.login}取消关注了你" : "#{ user.login}取消关注了你的商店 #{ follow.name }"
+  after_destroy do
+    text = follow.is_a?(User) ? "#{ user.login} 取消关注了你" : "#{ user.login} 取消关注了你的商店 #{ follow.name }"
     _user = follow.is_a?(User) ? user : follow.user
-    _user.notify('/unfollow', 
-                  body,
+    _user.notify('/unfollow',
+                  text,
                   { :target => self,
-                    :url => "/people/#{user.login}/notifications" } )
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar });
   end
 
   def self.user(user_id, uid = nil)
