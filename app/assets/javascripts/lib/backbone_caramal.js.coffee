@@ -218,14 +218,38 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </div>')
 
-  msg_template: Handlebars.compile('
-    <li>
-      <div class="title">
-        <img src="/default_img/t5050_default_avatar.jpg" class="img-polaroid">
-        <span class="login">{{ name }}</span>
-        <span class="date">{{calender time}}</span>
+  receiver_template: Handlebars.compile('
+    <li clas="row-receive">
+      <div class="pull-left">
+        <div class="icon">
+          <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" alt="">
+        </div>
       </div>
-      <div class="message">{{ msg }}</div>
+      <div class="message-body">
+        <span class="arrow"></span>
+        <div class="pull-left">
+          <a href="#" class="login">{{ user }}</a>
+          {{calender time}}
+        </div>
+        <div class="message">{{ msg }}</div>
+      </div>
+    </li>')
+
+  sender_template: Handlebars.compile('
+    <li class="row-send">
+      <div class="pull-right">
+        <div class="icon">
+          <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" alt="">
+        </div>
+      </div>
+      <div class="message-body on-left">
+        <span class="arrow"></span>
+        <div class="pull-right">
+          <a href="#" class="login">{{ user }}</a>
+          {{calender time}}
+        </div>
+        <div class="message">{{ msg }}</div>
+      </div>
     </li>')
 
   fetchHistory: () ->
@@ -324,7 +348,12 @@ class BaseChatView extends Caramal.BackboneView
     $html = ''
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
-      $html += @msg_template(message).replace(/:([a-z]|_)+:/g, (word) =>
+      if message.user is clients.current_user
+        template = @sender_template(message)
+      else
+        template = @receiver_template(message)
+        
+      $html += template.replace(/:([a-z]|_)+:/g, (word) =>
         '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
       )
     $html
