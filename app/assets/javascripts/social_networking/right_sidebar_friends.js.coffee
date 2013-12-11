@@ -13,6 +13,7 @@ class root.ChatContainerView extends RealTimeContainerView
       <div class="fixed_head">
         <input class="filter_key" type="text"/>
       </div>')
+    @bind_items()
 
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
@@ -47,9 +48,6 @@ class BaseFriendsView extends Backbone.View
     @collection.bind('add', @addOne, @)
     @init_fetch()
     @render()
-
-  init_fetch: () ->
-    @collection.fetch(url: "/users/channels")
 
   addAll: () ->
     @$("ul").html('')
@@ -104,7 +102,7 @@ class FriendsView extends BaseFriendsView
     @
 
   init_fetch: () ->
-    @collection.fetch(url: "/users/followings")
+    @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
     friend_view = new FriendView({ model: model, parent_view: @ })
@@ -192,17 +190,17 @@ class BaseFriendView extends Backbone.View
   events:
     "click" : "showChat"
 
-  template: Handlebars.compile("""
-    <a href='#' data-toggle='tooltip' title="{{ login }}{{ name }}">
-      <span class='badge badge-important message_count'></span>
-      <img src='/default_img/t5050_default_avatar.jpg' class='img-circle' />
-    </a>""")
+  template: _.template('
+    <a href="#" data-toggle="tooltip" title="<%= model.get("login")||model.get("name") %>">
+      <span class="badge badge-important message_count"></span>
+      <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" />
+    </a>')
 
   initialize: () ->
     @clearMsgCount()
 
   render: () ->
-    html = @template(@model.attributes)
+    html = @template({model: @model})
     $(@el).html(html)
     @
 

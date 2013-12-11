@@ -335,5 +335,4 @@ class NotificationViewBase extends Backbone.View
 
 class NotificationView extends NotificationViewBase
 
-
 root.NotificationViewList = NotificationViewList
