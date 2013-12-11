@@ -106,6 +106,11 @@ Panama::Application.routes.draw do
 
   resources :people do
 
+    member do
+      get 'follow'
+      get 'unfollow'
+    end
+
     resources :transactions, :controller => "people/transactions" do
       member do
         get "page", :to => "people/transactions#page"

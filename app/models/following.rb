@@ -22,7 +22,6 @@ class Following < ActiveRecord::Base
                     :url => "/people/#{user.login}/notifications",
                     :avatar => user.avatar)
     elsif follow.is_a?(Shop)
-      byebug
       follow.notify("/follow",
                     "#{user.login} 关注我们的商店",
                     :target => self,
@@ -88,6 +87,11 @@ class Following < ActiveRecord::Base
     opts[:follow_id] = shop_id.id if shop_id.is_a?(Shop)
     opts.merge!(user_id: uid) unless uid.nil?
     create(opts)
+  end
+
+  def self.is_exist?(follow)
+    params = follow.attributes.delete_if { |key, value| value.nil? }
+    Following.exists?(params)
   end
 
   def valid_follow?
