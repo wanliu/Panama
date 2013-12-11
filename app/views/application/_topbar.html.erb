@@ -7,7 +7,8 @@
 			</div>
 		</form>
 	</li>
-	<li class="dropdown">
+	<li class="dropdown"  title="活动发布与购物需求" data-toggle='tooltip' data-placement='bottom' data-trigger='click hover'
+	>
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 		<i class="icon-plus"></i>&nbsp;发布</a>
 		<ul class="dropdown-menu publish">
@@ -29,10 +30,10 @@
 	</li>
 
 	<!--购物车信息-->
-	<li class="dropdown shoppingcart">
-		<a href="#" title="我的购物车" id="cart" class="dropdown-toggle" data-toggle="dropdown">
+	<li class="dropdown shoppingcart" title="我的购物车" data-toggle='tooltip' data-placement='bottom'>
+		<a href="#"  id="cart" class="dropdown-toggle" data-toggle="dropdown" >
 			<i class="icon-shopping-cart handle"></i>
-			<span id="shop_count" class="badge badge-important"> </span>
+			<span id="shop_count" class="count badge badge-important"> </span>
 		</a>
 		 <ul id="shopping-cart" class="dropdown-menu support" role="menu">
 			<li role="presentation">
@@ -43,12 +44,23 @@
 		</ul>
 	</li>
 
+	<!--交易信息-->
+	<li class="dropdown transaction_list" title="我的交易" data-toggle='tooltip' data-placement='bottom' >
+		<a href="#"  id="transcations-button" class="dropdown-toggle" data-toggle="dropdown">
+			<i class="icon-tasks handle"></i>
+			<span id="transaction_count" class="count badge badge-important"> </span>
+		</a>
+		 <ul id="transcations-box" class="dropdown-menu support" role="menu">
+
+		</ul>
+	</li>
+
 
 	<!--通知信息-->
-	<li class="dropdown notification">
-		<a href="#" title="消息提醒" id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
+	<li class="dropdown notification" title="消息提醒" data-toggle='tooltip' data-placement='bottom' >
+		<a href="#"  id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-comments"></i>
-			<span id="notification_count" class="badge badge-important"></span>
+			<span id="notification_count" class="count badge badge-important"></span>
 		</a>
 		 <ul id="notification" class="dropdown-menu notifications" role="menu">
 		</ul>
@@ -56,8 +68,8 @@
 
 	<!--商店入口-->
 	<% if current_user.is_seller? && current_user.shop.try(:name) %>
-		<li class="dropdown">
-			<a href="javascript:void(0)" title="我的商店" class="dropdown-toggle" data-toggle="dropdown">
+		<li class="dropdown" title="我的商店"  data-toggle='tooltip' data-placement='bottom' >
+			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
 				<i class="icon-building handle"></i>商店
 			</a>
 			<ul id="shop-menu" class="dropdown-menu account" role="menu">
@@ -83,8 +95,8 @@
 		</li>
 	<% end %>
 	<li class="divider"></li>
-	<li class="hidden-phone dropdown">
-		<a href="javascript:void(0)" title="我的头像" id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
+	<li class="hidden-phone dropdown" title="在线状态与个人设置"  data-toggle='tooltip' data-placement='bottom'>
+		<a href="javascript:void(0)"  id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
 			<%= account_info %>
 			<div class="progress login_progress progress-striped active" style="display:none;">
 			  <div class="bar login_bar" style="width: 100%;"></div>
@@ -113,10 +125,16 @@
 
 <script type="text/javascript">
 	var topbar = new TopBar({ el: "#topbar" });
-	new NotificationViewList({
+	// new NotificationViewList({
+	// 	el: $(".notification"),
+	// 	current_user_login: '<%= current_user.login %>'
+	// })
+	// NotificationViewList.setElement(".notification");
+	// NotificationViewList.setOption("current_user_login", '<%= current_user.login %>');
+	NotificationViewList.startup({
 		el: $(".notification"),
 		current_user_login: '<%= current_user.login %>'
-	})
+	});
 
 	$(document).delegate( ".connect_by_self", "click", function(){
 		clients.socket.socket.socket.reconnect()

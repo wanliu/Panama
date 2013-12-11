@@ -275,6 +275,12 @@ class User < ActiveRecord::Base
   #
   # @see http://localhost:8808/docs/Notification#create%21-class_method Notification::create!
   def notify(channel, data, options = {})
+    options.symbolize_keys!
+
+    # if options[:avatar].blank?
+    #   options[:avatar] = self.avatar
+    # end
+
     Notification.create!(self, channel, data, options)
   end
 

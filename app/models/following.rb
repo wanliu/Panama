@@ -14,6 +14,31 @@ class Following < ActiveRecord::Base
   validates_presence_of :follow
   validate :valid_follow?
 
+
+
+  after_create do
+    if follow.is_a?(User)
+      text = "#{user.login} 关注了你"
+      follow.notify('/follow',
+                    text,
+                    { :target => self,
+                      :url => "/people/#{user.login}/notifications",
+                      :avatar => user.avatar })
+    end
+  end
+
+  after_destroy do
+    puts follow
+    if follow.is_a?(User)
+      text = "#{user.login} 取消关注了你"
+      follow.notify('/unfollow',
+                    text,
+                    { :target => self,
+                      :url => "/people/#{follow.login}/notifications",
+                      :avatar => user.avatar })
+    end
+  end
+
   # 当相互关注后，才能添加持久化的通道
   after_create do
     if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
@@ -41,26 +66,6 @@ class Following < ActiveRecord::Base
                               :channel_type => 1)
                        .destroy_all
     end
-  end
-
-  after_create do
-    text = follow.is_a?(User) ? "#{user.login} 关注了你" : "#{user.login} 关注了你的商店 #{ follow.name }"
-    _user = follow.is_a?(User) ? user : follow.user
-    _user.notify('/follow',
-                  text,
-                  { :target => self,
-                    :url => "/people/#{user.login}/notifications",
-                    :avatar => user.avatar });
-  end
-
-  after_destroy do
-    text = follow.is_a?(User) ? "#{ user.login} 取消关注了你" : "#{ user.login} 取消关注了你的商店 #{ follow.name }"
-    _user = follow.is_a?(User) ? user : follow.user
-    _user.notify('/unfollow',
-                  text,
-                  { :target => self,
-                    :url => "/people/#{user.login}/notifications",
-                    :avatar => user.avatar });
   end
 
   def self.user(user_id, uid = nil)

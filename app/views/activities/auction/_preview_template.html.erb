@@ -50,12 +50,12 @@
         {{/is_start}}
 
         {{#likes}}
-          <%= link_to '#', class: 'btn unlike-button active' do %>
+          <%= link_to '#', title: '取消支持会影响排名喔', 'data-toggle' => 'tooltip' , class: 'btn unlike-button active' do %>
             <%= "取消喜欢" %>
           <% end %>
         {{/likes}}
         {{^likes}}
-          <%= link_to '#', class: 'btn like-button' do %>
+          <%= link_to '#', title: '喜欢就支持一下', 'data-toggle' => 'tooltip', class: 'btn like-button' do %>
             <%= icon('heart') + " 喜欢" %>
           <% end %>
         {{/likes}}

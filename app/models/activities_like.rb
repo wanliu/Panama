@@ -21,16 +21,18 @@ class ActivitiesLike < ActiveRecord::Base
 
   def like_notice_author
     author.notify("/like",
-                  "#{user.login}喜欢了你的#{ activity.title}活动",
-                  {:target => self,
+                  "#{user.login} 支持了你的 #{ activity.title} 活动",
+                  { :target => self,
+                    :avatar => user.avatar,
                     :url => "/people/#{user.login}/notifications"})
   end
 
   def unlike_notice_author
     author.notify("/unlike",
-                  "#{user.login}不再喜欢你的#{ activity.title}活动",
-                  {:target => self,
-                   :url => "/people/#{user.login}/notifications"})
+                  "#{user.login} 不再支持你的 #{ activity.title} 活动",
+                  { :target => self,
+                    :avatar => user.avatar,
+                    :url => "/people/#{user.login}/notifications"})
   end
 
   def author
