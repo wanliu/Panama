@@ -13,149 +13,195 @@ class Transactions extends Backbone.Collection
 
   model: Transaction
 
-class TransactionDialogView extends Backbone.View
+class TransactionPanelView extends Backbone.View
+  className: "item"
+  events: {
+    "click .close_panel" : "close"
+  }
 
   initialize: () ->
-    _.extend(@, @options)
     @$el = $(@el)
+    @$el.html(@close_elem())
 
-  animate: () ->
-    style = @el_css()
-    @$el.wrap("<div class='wrap_transaction' />")
-    @$el.wrap("<div class='panel' />").parent().css(style)
-    $load_info = $(@load_elem()).prependTo(@$el.wrap("<div class='dialog modal' />").parent())
-    $load_info.css(
-      width: style.width / 3,
-      height: style.height / 3
-    )
-    $load_info.animate style, () =>
-      $load_info.remove()
-      @$el.unwrap().unwrap().unwrap()
+  show: (callback = () ->) ->
+    @load_template () =>
+      callback @$el
+      @$el.addClass("active")
 
-  hide: () ->
-    @$el.addClass("hide")
+  hide: (callback = () ->) ->
+    callback @$el
+    @$el.removeClass("active")
+
+  load_template: (callback = () ->) ->
+    if _.isEmpty(@template)
+      @model.load_template (template) =>
+        @template = template
+        @$el.append(@template)
+        callback.call(@)
+    else
+      callback.call(@)
 
   render: () ->
     @$el
 
-  load_elem: (elem) ->
-    "<div class='load_info'>
-      <img src='/assets/loading_max.gif'/>正在加载...
-    </div>"
+  close_elem: () ->
+    "<button type='button' class='close_panel'>×</button>"
 
-  el_css: () ->
-    {width: @$el.outerWidth(), height: @$el.outerHeight()}
+  close: () ->
+    @model.set(panel_state: false)
+
 
 class TransactionView extends Backbone.View
   events: {
     "click" : "show_detail"
   }
 
+  initialize: () ->
+    @$el = $(@el)
+    @model.bind("change:panel_state", @toggle, @)
+    @view = new TransactionPanelView( model: @model )
+
   show_detail: () ->
-    @trigger("dialog_show", @model)
+    if $(".panel_items>.animate").length <= 0
+      @model.set(panel_state: true)
+
+  toggle: () ->
+    if @model.get("panel_state")
+      @$el.addClass("active")
+      @view.show (elem) =>
+        @animate {
+          elem: elem,
+          direction: "right",
+          model:  @model
+        }
+    else
+      @$el.removeClass("active")
+      @view.hide (elem) =>
+        @animate {
+          elem: elem,
+          direction: "left"}
+
+  animate: (opts) ->
+    @trigger("animate", opts)
 
 
-class DisplayDialogView extends Backbone.View
-
-  events: {
-    "click .modal-header .next" : "next",
-    "click .modal-header .previous" : "previous",
-    "click .modal-header .close" : "close"
-  }
-
+class root.TransactionListView extends Backbone.View
+  left_width: 165
   initialize: () ->
     _.extend(@, @options)
     @$el = $(@el)
-    @transactions = new Transactions()
-    @transactions.url = @remote_url
-    @view = new TransactionDialogView(el: @$el)
-    @$previous = @$(".modal-header .previous")
-    @$next = @$(".modal-header .next")
-    @$body = @$(">.modal-body")
-
-  show: (model) ->
-    @set_current_model(model)
-    @load_template (data) =>
-      @set_current_template @render(data).children()
-      @view.animate()
-
-  load_template: (callback = (data) ->) ->
-    @current_model.load_template (data) =>
-      @paging()
-      @$el.removeClass("hide")
-      callback.call(@, data)
-
-  render: (data) ->
-    @$(">.modal-header .title").html("编号: #{@current_model.get('number')}订单")
-    @$body.html(data)
-
-  next: () ->
-    index = @find_index()
-    if index < @transactions.length - 1
-      @set_current_model @transactions.models[++index]
-      @load_template (data) =>
-        @render(data)
-
-  previous: () ->
-    index = @find_index()
-    if index > 0
-      @set_current_model @transactions.models[--index]
-      @load_template (data) =>
-        @render(data)
-
-  animate: (elem, number) ->
-    @current_template.animate {top: number}, () =>
-      @$body.removeClass("hidden")
-      @$body.css(height: "auto")
-      @current_template.remove()
-      @set_current_template elem
-
-  add: (data) ->
-    @transactions.add data
-
-  set_current_model: (model) ->
-    @current_model = model
-
-  set_current_template: (elem) ->
-    @current_template = elem
-
-  close: () ->
-    @$el.addClass("hide")
-
-  find_index: () ->
-    _.indexOf(@transactions.models, @current_model)
-
-  paging: () ->
-    index = @find_index()
-    @paging_active(index <= 0, @$previous)
-    @paging_active(index >= @transactions.length - 1, @$next)
-
-  paging_active: (state, elem) ->
-    if state
-      elem.addClass("disabled")
-    else
-      elem.removeClass("disabled")
-
-class root.TransactionListView extends Backbone.View
-
-  initialize: () ->
-    _.extend(@, @options)
-    @dialog_view = new DisplayDialogView(
-      el: $(".order_dialog"),
-      remote_url: @remote_url)
+    @time_ids = []
+    @$wrap_items = @$(".wrap_items")
+    @$panel_items = @$(".panel_items")
+    @collection = new Transactions()
+    @collection.url = @remote_url
+    @collection.bind("add", @add_view, @)
     @load_view()
+    @panel_affix()
 
   load_view: () ->
     _.each @$(".item"), (el) =>
-      @dialog_view.add({
-        number: $(el).attr('data-value-number'),
-        id: $(el).attr('data-value-id')
-      })
-      view = new TransactionView(
-        el: $(el),
-        model: @dialog_view.transactions.last()
-      )
-      view.bind("dialog_show", _.bind(@dialog_show, @))
+      @collection.add(
+        panel_state: false,
+        id: $(el).attr("data-value-id"),
+        elem: $(el))
 
-  dialog_show: (model) ->
-    @dialog_view.show(model)
+  add_view: (model) ->
+    elem = model.get("elem")
+    delete model.attributes.elem
+    order = new TransactionView(
+      el: elem,
+      model: model
+    )
+    order.bind("animate", _.bind(@animate, @))
+    @$panel_items.prepend(order.view.render())
+
+  clear_active: (model = null) ->
+    unless _.isEmpty(model)
+      for m in @collection.models
+        m.set(panel_state: false) unless m.id == model.id
+
+  change_mini: () ->
+    models = @find_active_item()
+    if models.length < 1
+      @$el.removeClass("left-mini")
+
+  wrap_animate: () ->
+    unless @$el.hasClass("left-mini")
+      @$wrap_items.animate {left: -(@$el.outerWidth() - @left_width)}, () =>
+        @$wrap_items.css(left: 0)
+
+      @panel_animate()
+
+  panel_animate: () ->
+    @$panel_items.css(
+      height: @$wrap_items.height(),
+      width: @$el.outerWidth() - @left_width,
+      left: @$el.outerWidth())
+    @$panel_items.addClass("animate")
+    @$panel_items.animate {left: @left_width}, () =>
+      active = $(".item.active", @$panel_items)
+      @$el.addClass("left-mini")
+      @$panel_items.removeClass("animate")
+      @$panel_items.css(
+        height: active.height()
+        width: "",
+        left: 0)
+      @affix()
+
+  animate: (opts) ->
+    @clear_active(opts.model)
+    if @$el.hasClass("left-mini")
+      #@_animate(opts)
+    else
+      #@wrap_animate()
+
+    @$el.addClass("left-mini")
+
+  _animate: (opts) ->
+    @change_mini()
+    @$panel_items.css(
+      overflow: "hidden")
+    opts.elem.addClass('animate')
+    left = @item_position(opts.elem, opts.direction)
+    opts.elem.animate {left: left}, () =>
+      opts.elem.removeClass('animate')
+      opts.elem.css(left: 0)
+      active = $(".item.active", @$panel_items)
+      @$panel_items.css(
+        height: active.height,
+        overflow: "visible")
+
+
+  item_position: (elem, direction) ->
+    left = elem.outerWidth()
+    if direction == "right"
+      elem.css(left: left)
+      0
+    else
+      -left
+
+  close: () ->
+    @change_mini()
+
+  find_active_item: () ->
+    models = @collection.where(panel_state: true)
+
+  panel_affix: () ->
+    $(window).on 'scroll.order.affix', () => @affix()
+
+  affix: () ->
+    affix = @$panel_items.data("affix")
+    affix.checkPosition()
+    unless affix.affixed
+      width = @$el.outerWidth() - @left_width
+      @$panel_items.width(width)
+    else
+      @$panel_items.width("")
+
+
+
+
+
+
+

@@ -23,11 +23,11 @@
 </div>
 <script type='text/javascript'>
   $(function(){
-    var card = new TransactionCard({
-      el: $(".transaction-<%=@transaction.id %>-<%=@transaction.state %>"),
-      realtime: {
-        url: '<%= faye_server_uri %>',
-        token: '<%= token %>' }
-    });
+    // var card = new TransactionCard({
+    //   el: $(".transaction-<%=@transaction.id %>-<%=@transaction.state %>"),
+    //   realtime: {
+    //     url: '<%= faye_server_uri %>',
+    //     token: '<%= token %>' }
+    // });
   })
 </script>

@@ -61,10 +61,8 @@
     .avatar {
       margin-left: 20px;
       margin-top: 20px;
-      // margin-top: -40px;
       position: absolute;
       width: 65px;
-      z-index: 1030
     }
 
     .info-header {
@@ -295,76 +293,155 @@
 }
 
 .transaction-list, .direct_transaction-list{
-
-  .item{
-    margin: 0px -12px;
-    padding: 12px 8px;
-    cursor: pointer;
-
-    .products{
-      .delivery_price{
-        color: rgb(155, 152, 152);
-      }
-
-      .product{
-        margin-bottom: 5px;
-
-        .preview{
-          width: 70px;
-          height: 70px;
-        }
-      }
-    }
-  }
-
-  .item:hover{
-    @include transparent(rgb(51, 51, 51), 0.25);
-  }
-}
-
-.order_dialog{
-  width: 900px;
-  left: 15%;
-  margin-left: 0px;
-}
-
-.order_dialog.hidden{
+  position: relative;
   overflow: hidden;
-}
 
-.order_dialog{
-  >.modal-header{
-    .page{
-      float: right;
-      margin-right: 30px;
+  .wrap_items{
+    position: relative;
+
+    .item{
+      margin: 0px -12px;
+      padding: 12px 8px;
+      cursor: pointer;
+
+      .products{
+        .delivery_price{
+          color: rgb(155, 152, 152);
+        }
+
+        .product{
+          margin-bottom: 5px;
+
+          .mini-title{
+            display: none;
+          }
+
+          .preview{
+            width: 70px;
+            height: 70px;
+          }
+        }
+      }
+    }
+
+    .item:hover{
+      @include transparent(rgb(51, 51, 51), 0.25);
     }
   }
 
-  >.modal-body{
+  .panel_items{
+    overflow: hidden;
+    position: relative;
+    top: 0;
+
+    .item{
+      display: none;
+
+      #notice{
+        display: none;
+      }
+    }
+
+    .item.active{
+      position: absolute;
+      width: 100%;
+      display: block;
+    }
+
+    .close_panel{
+      position: absolute;
+      right: -3px;
+      z-index: 1;
+      top: -5px;
+      border-radius: 12px;
+      border: none;
+      background: rgb(179, 173, 173);
+      display: none;
+    }
+  }
+
+  .wrap_items, .panel_items{
+    &.animate{
+      position: absolute;
+    }
+  }
+}
+
+.transaction-list, .direct_transaction-list{
+
+  &.left-mini{
     overflow: visible;
-    max-height: none;
-    padding: 5px;
 
-    #notice{
-      margin: 0px;
-      padding: 0px;
+    .zoom{
+      width: 100%
     }
 
-    .container-fluid{
-      padding-left: 0px;
-      padding-right: 0px;
-    }
+    .wrap_items{
+      width: 17%;
+      float: left;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+      box-sizing: border-box;
 
-    .transaction{
-      padding: 0px !important;
-      margin: 0px;
 
-      .wrapper-box{
-        background-color: white;
-
-        .container-fluid{
-          padding: 5px;
+      .header{
+        .title{
+          width: 100%;
         }
+
+        .price, .amount, .total, .state, .operator{
+          display: none;
+        }
+      }
+
+      .item{
+        .created_at, .seller_name{
+          display: none;
+        }
+
+        .products{
+
+          .total, .state, .operator{
+            display: none;
+          }
+
+          .items{
+            .mini-title{
+              display: block;
+            }
+            .title, .price, .amount{
+              display: none;
+            }
+          }
+        }
+      }
+
+      .item.active{
+        @include transparent(rgb(51, 51, 51), 0.25)
+      }
+    }
+
+    .panel_items{
+      width: 83%;
+      overflow: visible;
+      display: inline-block;
+
+      &.affix{
+        position: fixed;
+        top: 52px;
+        left: auto !important;
+      }
+
+      .item{
+
+        .main-sidebar{
+          padding-right: 0px;
+          padding-left: 2px;
+        }
+      }
+
+      .item.active{
 
         .transaction-footer{
           height: 100%;
@@ -378,63 +455,21 @@
             height: 90%
           }
         }
-
       }
 
-      .transaction-header{
-        .avatar{
-          margin-left: 5px;
-          margin-top: 5px;
+      .item.animate{
+        display: block;
+        position: absolute;
+        width: 100%;
+      }
 
-          img{
-            width: 65px;
-          }
-        }
-
-        .info-header{
-          .page-header{
-            margin-top: 0px;
-          }
-        }
+      .close_panel{
+        display: block;
       }
     }
-  }
-
-  >.modal-body.hidden{
-    overflow: hidden;
   }
 }
 
-.wrap_transaction{
-  position: fixed;
-  top: 10%;
-  left: 15%;
-
-  .panel{
-    vertical-align: middle;
-    text-align: center;
-    display: table-cell;
-
-    .dialog{
-      display: inline-block;
-      position: static;
-      margin-left: 0px;
-      width: auto;
-      height: auto;
-
-      .load_info{
-        vertical-align: middle;
-        display: table-cell;
-
-        img{
-          width: 60px;
-          height: 60px;
-        }
-      }
-
-      .order_dialog{
-        display: none;
-      }
-    }
-  }
+.pagination{
+  clear: both;
 }

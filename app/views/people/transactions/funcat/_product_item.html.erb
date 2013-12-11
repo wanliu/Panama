@@ -1,14 +1,19 @@
 <div class='row-fluid product'>
-  <div class='span3'>
-    <img src="<%=item.photos.header %>" alt="<%=item.title %>" class='preview' />
+  <div class='span3 zoom'>
+    <div>
+      <img src="<%=item.photos.header %>" alt="<%=item.title %>" class='preview' />
+    </div>
+    <div class='mini-title'>
+      <%=item.title %>
+    </div>
   </div>
-  <div class='span4'>
+  <div class='span4 title'>
     <%=item.title %>
   </div>
-  <div class='span3'>
+  <div class='span3 price'>
     <%=number_to_currency(item.price) %>
   </div>
-  <div class='span2'>
+  <div class='span2 amount'>
     <%=item.amount %>
   </div>
 </div>
