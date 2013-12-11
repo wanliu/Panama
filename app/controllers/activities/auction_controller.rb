@@ -49,7 +49,6 @@ class Activities::AuctionController < Activities::BaseController
   def create
     slice_options = [:shop_product_id, :price, :start_time, :end_time, :description, :attachment_ids,:title]
     activity_params = params[:activity].slice(*slice_options)
-
     parse_time!(activity_params)
 
     @activity = current_user.activities.build(activity_params)
@@ -67,11 +66,9 @@ class Activities::AuctionController < Activities::BaseController
 
     respond_to do |format|
       if @activity.save
-        format.js { render "activities/add_activity" }
+        format.json { render :json => { text: 'ok' } }
       else
-        format.js{ render :partial => "activities/auction/form",
-                          :locals  => { :activity => @activity },
-                          :status  => 400 }
+        format.json { render :json => draw_errors_message(@activity), :status => 403 }
       end
     end
   end
