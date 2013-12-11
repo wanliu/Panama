@@ -143,7 +143,8 @@ class Shop < ActiveRecord::Base
   end
 
   def notify(channel, data, options = {})
-    (employees - [owner]).each do |member|
+    employees.each do |member|
+      # byebug
       member.notify("/shops/#{channel}", data, options)
     end
   end

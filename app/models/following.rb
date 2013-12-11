@@ -1,7 +1,7 @@
 #encoding: utf-8
 #describe: 关注
 class Following < ActiveRecord::Base
-  attr_accessible :follow_id, :follow_type, :user_id
+  attr_accessible :follow_id, :follow_type, :user_id, :user, :follow
   scope :shops, where(follow_type: "Shop")
   scope :users, where(follow_type: "User")
 
@@ -14,28 +14,36 @@ class Following < ActiveRecord::Base
   validates_presence_of :follow
   validate :valid_follow?
 
-
-
   after_create do
     if follow.is_a?(User)
-      text = "#{user.login} 关注了你"
-      follow.notify('/follow',
-                    text,
-                    { :target => self,
-                      :url => "/people/#{user.login}/notifications",
-                      :avatar => user.avatar })
+      follow.notify("/follow",
+                    "#{user.login} 关注了你",
+                    :target => self,
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar)
+    elsif follow.is_a?(Shop)
+      byebug
+      follow.notify("/follow",
+                    "#{user.login} 关注我们的商店",
+                    :target => self,
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar)
     end
   end
 
   after_destroy do
-    puts follow
     if follow.is_a?(User)
-      text = "#{user.login} 取消关注了你"
-      follow.notify('/unfollow',
-                    text,
-                    { :target => self,
-                      :url => "/people/#{follow.login}/notifications",
-                      :avatar => user.avatar })
+      follow.notify("/unfollow",
+                    "#{user.login} 取消关注了你",
+                    :target => self,
+                    :url => "/people/#{follow.login}/notifications",
+                    :avatar => user.avatar)
+    elsif follow.is_a?(Shop)
+      follow.notify("/unfollow",
+                    "#{user.login} 不再关注我们的商店了",
+                    :target => self,
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar)
     end
   end
 

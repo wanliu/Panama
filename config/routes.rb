@@ -356,6 +356,11 @@ Panama::Application.routes.draw do
       get "topic_categories/:id", :to => "shops#topic_categories"
     end
 
+    member do
+      get "follow"
+      get "unfollow"
+    end
+
     namespace :admins do
 
       resources :dashboard, :controller => "shops/dashboard"
