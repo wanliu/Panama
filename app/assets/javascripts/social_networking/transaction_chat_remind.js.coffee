@@ -36,8 +36,8 @@ class TransactionsChatRemind extends Backbone.View
 			@add_one(model)
 
 	add_one: (model) ->
-		remind_view = new TransactionChatRemindView({ 
-			model: model, 
+		remind_view = new TransactionChatRemindView({
+			model: model,
 			parent_view: @ })
 		model.view  = remind_view
 		$(".right-sidebar .transactions").prepend(remind_view.render().el)
@@ -62,7 +62,7 @@ class TransactionChatRemindView extends Backbone.View
 		$(@el).attr("id", @model.get('owner_id'))
 
 	template: (options) ->
-		_.template("<img src='<%= model.get('send_user').avatar_url %>' class='pull-left img-circle'/>
+		_.template("<img src='<%= model.get('send_user').avatar_url %>' class='pull-left '/>
 						<div class='user-info'>
 							<span class='badge badge-important count'>
 								<%=model.get('count') %>
@@ -82,7 +82,7 @@ class TransactionChatRemindView extends Backbone.View
 		$(@el).html(@template(model: @model))
 		@
 
-	
+
 
 	message_handle: () ->
 		@trigger("remove_model", @model.id)

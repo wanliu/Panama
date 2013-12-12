@@ -29,7 +29,7 @@ class Caramal.BackboneView extends Backbone.View
 
 class root.ChatModel extends Backbone.Model
   defaults: () ->
-    { 
+    {
       type: 0,
       title: '',
       channel: null,
@@ -79,8 +79,8 @@ class ImageUpload extends Backbone.View
     @fileupload = new qq.FileUploader({
       element: @$(".upload-panel")[0],
       allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-      sizeLimit: 1048576, 
-      minSizeLimit: 0, 
+      sizeLimit: 1048576,
+      minSizeLimit: 0,
       debug : true,
       multiple: false,
       action: @action,
@@ -138,7 +138,7 @@ class root.ChatService
         when 3
           new TemporaryChatView({model: model})
         else
-          console.error('undefined type...') 
+          console.error('undefined type...')
 
   findExist: (model) ->
     _.find @collection.models, (item) =>
@@ -222,7 +222,7 @@ class BaseChatView extends Caramal.BackboneView
     <li clas="row-receive">
       <div class="pull-left">
         <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" alt="">
+          <img src="/default_img/t5050_default_avatar.jpg" class="" alt="">
         </div>
       </div>
       <div class="message-body">
@@ -239,7 +239,7 @@ class BaseChatView extends Caramal.BackboneView
     <li class="row-send">
       <div class="pull-right">
         <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" alt="">
+          <img src="/default_img/t5050_default_avatar.jpg" class="" alt="">
         </div>
       </div>
       <div class="message-body on-left">
@@ -274,7 +274,7 @@ class BaseChatView extends Caramal.BackboneView
     @name = @model.get('name')
     @title = @name unless @title
     @channel = @model.get('channel')
-    @initChannel() 
+    @initChannel()
     @initDialog()
     @bindDialog()
     @bindEvent()
@@ -291,8 +291,8 @@ class BaseChatView extends Caramal.BackboneView
     @model.view = @
     ChatService.getInstance().collection.add(@model)
     upload_view = new ImageUpload({ el: @el })
-    @$('.choose-face').popover({ 
-      html: true, 
+    @$('.choose-face').popover({
+      html: true,
       content: () => EmojifyChooser.getInstance().el
     })
 
@@ -352,7 +352,7 @@ class BaseChatView extends Caramal.BackboneView
         template = @sender_template(message)
       else
         template = @receiver_template(message)
-        
+
       $html += template.replace(/:([a-z]|_)+:/g, (word) =>
         '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
       )

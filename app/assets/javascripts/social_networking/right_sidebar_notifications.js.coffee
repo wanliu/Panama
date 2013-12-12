@@ -77,8 +77,8 @@ class TransactionsContainerView extends NotificationsContainerView
 
 	add_one: (model) ->
 		model.url = "#{@parent_view.urlRoot}/#{model.id}"
-		message_view = new TransactionMessageView({ 
-			model: model, 
+		message_view = new TransactionMessageView({
+			model: model,
 			parent_view: @ })
 		model.view = message_view
 		$("ul", @el).prepend(message_view.render().el)
@@ -105,7 +105,7 @@ class TransactionMessageView extends Backbone.View
 
 	template: (options) ->
 		_.template("
-			<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+			<img src='<%= model.get('targeable').img_url %>' class='pull-left ' />
 			<div class='transaction-info'>
 				<i class=' icon-volume-up'></i>
 				<%= model.get('body') %>,点击查看详情
@@ -128,7 +128,7 @@ class TransactionMessageView extends Backbone.View
 
 
 class ActivitiesContainerView extends NotificationsContainerView
-	className: "activities-list" 
+	className: "activities-list"
 
 	bind_items: () ->
 		@parent_view  = @options.parent_view
@@ -150,8 +150,8 @@ class ActivitiesContainerView extends NotificationsContainerView
 
 	add_one: (model) ->
 		model.url = "#{@parent_view.urlRoot}/#{model.id}"
-		activity_view = new ActivityMessageView({ 
-			model: model, 
+		activity_view = new ActivityMessageView({
+			model: model,
 			parent_view: @ })
 		model.view = activity_view
 		$("ul", @el).prepend(activity_view.render().el)
@@ -169,7 +169,7 @@ class ActivityMessageView extends Backbone.View
 	tagName: 'li'
 
 	template: _.template("
-		<img src='<%= model.get('targeable').img_url %>' class='pull-left img-circle' />
+		<img src='<%= model.get('targeable').img_url %>' class='pull-left ' />
 		<div class='activity-info'>
 			<div class='name'>
 				<a href='#''><%= model.get('body') %></a>
@@ -181,8 +181,8 @@ class ActivityMessageView extends Backbone.View
 		"click" : "show_modal"
 
 	show_modal: () ->
-		activity_model = new ActivityModel({ 
-			id: @model.get('targeable_id') 
+		activity_model = new ActivityModel({
+			id: @model.get('targeable_id')
 		})
 		activity_model.fetch success: (model) =>
 			new ActivityView({model: model}).modal()
@@ -207,4 +207,4 @@ class ActivityMessageView extends Backbone.View
 		super
 
 
-root.NotificationsContainerView = NotificationsContainerView 
+root.NotificationsContainerView = NotificationsContainerView
