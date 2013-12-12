@@ -197,7 +197,7 @@ class BaseFriendView extends Backbone.View
   template: _.template('
     <a href="#" data-toggle="tooltip" title="<%= model.get("login")||model.get("name") %>">
       <span class="badge badge-important message_count"></span>
-      <img src="/default_img/t5050_default_avatar.jpg" class="img-circle" />
+      <img src="/default_img/t5050_default_avatar.jpg" class="" />
     </a>')
 
   initialize: () ->
@@ -257,9 +257,9 @@ class StrangerView extends BaseFriendView
   newChat: () ->
     model = new ChatModel({
       type: 1,
-      channel: @channel, 
-      name: @model.get('login'), 
-      title: "陌生人 #{@model.get('login')}" 
+      channel: @channel,
+      name: @model.get('login'),
+      title: "陌生人 #{@model.get('login')}"
     })
     ChatService.getInstance().newChat(model)
 
@@ -275,9 +275,9 @@ class FriendView extends BaseFriendView
   newChat: () ->
     model = new ChatModel({
       type: 1,
-      channel: @channel, 
-      name: @model.get('login'), 
-      title: "好友 #{@model.get('login')}" 
+      channel: @channel,
+      name: @model.get('login'),
+      title: "好友 #{@model.get('login')}"
     })
     ChatService.getInstance().newChat(model)
 
@@ -293,8 +293,8 @@ class GroupView extends BaseFriendView
   newChat: () ->
     model = new ChatModel({
       type: 2,
-      channel: @channel, 
-      name: @model.get('name'), 
+      channel: @channel,
+      name: @model.get('name'),
       title: "群组 #{@model.get('name')}"
     })
     ChatService.getInstance().newChat(model)

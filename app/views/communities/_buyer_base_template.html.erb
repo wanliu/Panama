@@ -3,9 +3,9 @@
 		<div class='user_base_info' user-id='{{ id }}' >
 		    <div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
 		    <div class='userinfo'>
-		        <div class="circle_avatar"><img src='{{ ower_photos.icon }}' class="author img-circle" /></div>
-		        <div class="login"><a href="/people/{{ user.login }} ">{{ user.login }}</a></div>  
-		        <div class="industry_type"><span>行业：{{ industry_type }}</span></div>        
+		        <div class="circle_avatar"><img src='{{ ower_photos.icon }}' class="author " /></div>
+		        <div class="login"><a href="/people/{{ user.login }} ">{{ user.login }}</a></div>
+		        <div class="industry_type"><span>行业：{{ industry_type }}</span></div>
 		        <div class="tel"><span>联系方式：{{ phone }}</span></div>
 		        <div class="add_friend"><button><a href="#">添加好友</a></button></div>
 		        <div class="contact"><a href="#"><i class="icon-leaf"></i></a></div>
@@ -21,7 +21,7 @@
 			<i class="icon-user"></i>
 			<a href="/people/{{ user.login }}" class="title">{{ user.login }}</a>
 		</div>
-		<div class="industry"> 
+		<div class="industry">
 			<i class=" icon-star"></i>
 			<a href="#">{{ industry_type }}</a>
 		</div>

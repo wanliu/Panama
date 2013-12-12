@@ -9,7 +9,7 @@
       <p>价格 <%= activity.price %> </p>
       </div>
     <div class='userinfo'>
-      <%= image_tag activity.seller.photos.icon, :class => [:author, :'img-circle'] %>
+      <%= image_tag activity.seller.photos.icon, :class => [:author, :''] %>
       <p><%= activity.seller.name %></p>
       <span>参与 <%= activity.participate || 0%> </span>
       <span class='like-count'>支持 <%= activity.like || 0 %></span>
