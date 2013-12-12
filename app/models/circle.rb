@@ -15,7 +15,7 @@ class Circle < ActiveRecord::Base
   validates :city_id, :presence => true
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
-  has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
+  # has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
@@ -128,6 +128,7 @@ class Circle < ActiveRecord::Base
                    :target => self,
                    :user_id => user.id)
     end
+    user
   end
 
   def is_owner_people?(user)

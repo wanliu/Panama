@@ -67,6 +67,7 @@ Panama::Application.routes.draw do
         post :up_to_manager
         post :low_to_member
         delete :remove_member
+        delete :quit_circle
         get ":category_id/category", :to => "communities/circles#category"
         post :join
         post :apply_join

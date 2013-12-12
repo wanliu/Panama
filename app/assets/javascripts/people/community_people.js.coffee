@@ -7,6 +7,7 @@ root = window || @
 class AddedYouUserView extends Backbone.View
   className: "add_you_circle_panel circle_friend"
   notice_el: "<div class='notice_el'>暂时没有...</div>"
+    
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -75,11 +76,13 @@ class AddedYouUserView extends Backbone.View
       zIndex: 1
     })
 
+
 class YouCircleUserView extends Backbone.View
   className: "you_circle_user_panel circle_friend"
   events: {
     "click .remove_you_user" : "delete_related"
   }
+
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
@@ -145,6 +148,7 @@ class YouCircleUserView extends Backbone.View
         @circle_list.remove(model)
         span.remove()
 
+
 class FriendView extends Backbone.View
   events: {
     "click input.add_you_circle" : "othe_circle_user"
@@ -200,6 +204,7 @@ class FriendView extends Backbone.View
 
   remove_user: (user_id) ->
     @trigger("remove_user", user_id)
+
 
 class CommunityPeopleView extends Backbone.View
 

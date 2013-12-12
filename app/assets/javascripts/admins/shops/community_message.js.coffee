@@ -2,10 +2,9 @@
 root = window || @
 
 class root.CommunityApplyJoin extends Backbone.View
-  events: {
-    "click input.agree" : "agree",
-    "click input.refuse" : "refuse"
-  }
+  events: 
+    "click input.agree" : "agree"
+    "click input.refuse": "refuse"
 
   agree: () ->
     $.ajax(
@@ -13,8 +12,8 @@ class root.CommunityApplyJoin extends Backbone.View
       type: "POST",
       success: () ->
         pnotify({text: "加入成功！"})
-      error: (rep) ->
-        m = JSON.parse(rep.responseText)
+      error: (xhr) ->
+        m = JSON.parse(xhr.responseText)
         pnotify({text: m, type: "error"})
     )
 
@@ -25,5 +24,6 @@ class root.CommunityApplyJoin extends Backbone.View
       success: () =>
         window.location.href = @options.remote_url
     )
+    
   fetch_url: (method_name) ->
     "#{@options.remote_url}/#{method_name}/#{@options.cn_id}"
