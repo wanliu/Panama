@@ -6,8 +6,14 @@ ActiveAdmin.register Property do
     column :name
     column :property_type
     column :items do |property|
-      link_to("#{property.items.size} 项", items_system_property_path(property)) +
-      link_to("删除", delete_system_property_path(property),:style=>"margin-left:20px;")
+      if property.property_type != 'set'
+        link_count = "#{property.items.size} 项"
+      else
+        link_count = link_to("#{property.items.size} 项", items_system_property_path(property))
+      end
+      link_detail = link_to("详细", system_property_path(property))
+      link_delete = link_to("删除", delete_system_property_path(property))
+      "#{link_count} #{link_detail} #{link_delete}".html_safe
     end
     # column :user
     # default_actions
