@@ -62,6 +62,13 @@ class People::DirectTransactionsController < People::BaseController
     @direct_transaction = current_direct_transaction
   end
 
+  def page
+    @direct_transaction = current_direct_transaction
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
+  end
+
   private
   def current_direct_transaction
     @people.direct_transactions.find(params[:id])

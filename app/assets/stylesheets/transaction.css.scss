@@ -1,24 +1,19 @@
 @import "variables";
 @import "compass/css3";
 @import "lib/transparent";
-
-.transaction:first-child{
-  padding-top: 50px;
-}
+@import "lib/helper";
 
 .transaction {
-  padding-top: 80px !important;
-  margin-top: -80px;
-  margin-bottom: 40px;
+  /*margin-bottom: 30px;*/
 
   .container-fluid {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .wrapper-box {
     // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-    @include transparent(rgb(51, 51, 51), 0.4);
+    /*@include transparent(rgb(51, 51, 51), 0.4);*/
   }
 
   hr {
@@ -57,12 +52,20 @@
   }
 
   .transaction-header {
+    height: 75px;
+    margin-bottom: 10px;
 
     .avatar {
-      margin-left: 20px;
-      margin-top: 20px;
+      /*margin-left: 20px;*/
+      /*margin-top: 20px;      */
       position: absolute;
-      width: 65px;
+      width: 80px;
+      z-index: 1030;
+
+      img{
+        width: 65px;
+        height: 65px;
+      }
     }
 
     .info-header {
@@ -71,10 +74,13 @@
 
       .page-header {
         border-bottom:none;
+        padding: 0px;
+        margin: 0px;
 
         small{
           font-size: 20px;
           color: #999999;
+          float: right;
         }
 
         .name{
@@ -219,14 +225,19 @@
 
   .transaction-footer {
     margin-left: 5px;
-    margin-right: 5px;
     padding: 5px;
+    height: 100%;
+    @include box_sizing(border-box);
     background: $white;
+
+    .message-toggle{
+      height: 10%;
+    }
 
     iframe{
       border: none;
       width: 100%;
-      height: 390px;
+      height: 90%;
       overflow: hidden;
       display: none;
     }
@@ -274,10 +285,10 @@
   display:none;
   margin-left:200px;
 }
+
 .direct{
   padding-top: 0px !important;
   margin-top: 0px;
-  margin-bottom: 40px;
 }
 
 .transaction{
@@ -292,17 +303,18 @@
   }
 }
 
-.transaction-list, .direct_transaction-list{
-  position: relative;
-  overflow: hidden;
+.transaction-list, .direct_transactions{
 
-  .wrap_items{
-    position: relative;
+  .item{
+    margin: 0px -12px 5px;
+    padding: 10px 12px;
 
-    .item{
-      margin: 0px -12px;
-      padding: 12px 8px;
+    .summarize{
       cursor: pointer;
+
+      .head{
+        position: relative;
+      }
 
       .products{
         .delivery_price{
@@ -312,164 +324,41 @@
         .product{
           margin-bottom: 5px;
 
-          .mini-title{
-            display: none;
+          .preview{
+            width: 50px;
+            height: 50px;
+            float: left;
           }
 
-          .preview{
-            width: 70px;
-            height: 70px;
+          .title{
+            float: left;
+            margin-left: 5px;
           }
         }
       }
     }
 
-    .item:hover{
-      @include transparent(rgb(51, 51, 51), 0.25);
-    }
-  }
-
-  .panel_items{
-    overflow: hidden;
-    position: relative;
-    top: 0;
-
-    .item{
-      display: none;
-
-      #notice{
+    .summarize.mini{
+      .products{
         display: none;
       }
     }
 
-    .item.active{
-      position: absolute;
-      width: 100%;
-      display: block;
-    }
-
-    .close_panel{
-      position: absolute;
-      right: -3px;
-      z-index: 1;
-      top: -5px;
-      border-radius: 12px;
-      border: none;
-      background: rgb(179, 173, 173);
+    .detail{
       display: none;
-    }
-  }
 
-  .wrap_items, .panel_items{
-    &.animate{
-      position: absolute;
-    }
-  }
-}
-
-.transaction-list, .direct_transaction-list{
-
-  &.left-mini{
-    overflow: visible;
-
-    .zoom{
-      width: 100%
-    }
-
-    .wrap_items{
-      width: 17%;
-      float: left;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      -ms-box-sizing: border-box;
-      box-sizing: border-box;
-
-
-      .header{
-        .title{
-          width: 100%;
-        }
-
-        .price, .amount, .total, .state, .operator{
-          display: none;
-        }
-      }
-
-      .item{
-        .created_at, .seller_name{
-          display: none;
-        }
-
-        .products{
-
-          .total, .state, .operator{
-            display: none;
-          }
-
-          .items{
-            .mini-title{
-              display: block;
-            }
-            .title, .price, .amount{
-              display: none;
-            }
-          }
-        }
-      }
-
-      .item.active{
-        @include transparent(rgb(51, 51, 51), 0.25)
-      }
-    }
-
-    .panel_items{
-      width: 83%;
-      overflow: visible;
-      display: inline-block;
-
-      &.affix{
-        position: fixed;
-        top: 52px;
-        left: auto !important;
-      }
-
-      .item{
-
-        .main-sidebar{
-          padding-right: 0px;
-          padding-left: 2px;
-        }
-      }
-
-      .item.active{
-
-        .transaction-footer{
-          height: 100%;
-          padding: 0px;
-
-          .message-toggle{
-            height: 10%;
-          }
-
-          iframe{
-            height: 90%
-          }
-        }
-      }
-
-      .item.animate{
-        display: block;
-        position: absolute;
-        width: 100%;
-      }
-
-      .close_panel{
-        display: block;
+      .direct{
+        background-color: transparent;
+        margin-bottom: 0px;
       }
     }
   }
-}
 
-.pagination{
-  clear: both;
+  .item:hover{
+    @include transparent(rgb(51, 51, 51), 0.25);
+  }
+
+  .item.active{
+    @include transparent(rgb(51, 51, 51), 0.25);
+  }
 }

@@ -152,6 +152,7 @@ Panama::Application.routes.draw do
         get :messages, :to => "people/direct_transactions#messages"
         post :send_message, :to => "people/direct_transactions#send_message"
         post :completed, :to => "people/direct_transactions#completed"
+        get :page
       end
     end
 

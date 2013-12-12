@@ -7,78 +7,87 @@
   </h4>
 </div>
 <div class='row-fluid transaction-list'>
-  <div class='widget wrap_items'>
-    <div class='row-fluid header'>
-      <div class='span7'>
-        <div class='span7 title zoom'>
-          宝贝
-        </div>
-        <div class='span3 price'>
-          单价
-        </div>
-        <div class='span2 amount'>
-          数量
-        </div>
-      </div>
-      <div class='span2 total'>
-        合计
-      </div>
-      <div class='span2 state'>
-        状态
-      </div>
-      <div class='span1 operator'>
-        操作
-      </div>
-    </div>
-    <% @transactions.each do |t| %>
-    <div class='item' data-value-id="<%=t.id %>" data-value-number="<%=t.number %>">
-      <div class='row-fluid head'>
-        <div class='span3 number zoom'>
-          编号: <%=t.number %>
-        </div>
-        <div class='span4 created_at'>
-          成交时间 <%=t.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
-        </div>
-        <div class='span2 seller_name'>
-          <%= link_to t.seller.name, shop_path(t.seller)  %>
-        </div>
-      </div>
-      <div class='row-fluid products'>
-        <div class='span7 items zoom'>
-          <% t.items.each do |item| %>
-          <%=render_funcat "product_item", :item => item %>
-          <% end %>
-        </div>
-        <div class='span2 total'>
-          <div>
-            <%=number_to_currency t.stotal %>
+  <div class='span12'>
+    <div class='widget'>
+      <div class='row-fluid'>
+        <div class='span7'>
+          <div class='span7'>
+            宝贝
           </div>
-          <div class='delivery_price'>
-            (含<%=t.delivery_price || 0 %>运费)
+          <div class='span3'>
+            单价
+          </div>
+          <div class='span2'>
+            数量
           </div>
         </div>
-        <div class='span2 state'>
-          <%=t.state_title %>
+       <div class='span2'>
+          合计
         </div>
-        <div class='span1 operator'>
-          <a href='javascript:void(0)' class='more'>详细</a>
+        <div class='span2'>
+          状态
+        </div>
+        <div class='span1'>
+          操作
         </div>
       </div>
+      <% @transactions.each do |t| %>
+      <div class='item' id="order_transaction<%=t.id %>" data-value-id="<%=t.id %>">
+        <div class='summarize'>
+          <div class='row-fluid head'>
+            <div class='span3'>
+              编号: <%=t.number %>
+            </div>
+            <div class='span4'>
+              成交时间 <%=t.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
+            </div>
+            <div class='span2'>
+              <%= link_to t.seller.name, shop_path(t.seller)  %>
+            </div>
+          </div>
+          <div class='row-fluid products'>
+            <div class='span7'>
+              <% t.items.each do |item| %>
+              <%=render_funcat "product_item", :item => item %>
+              <% end %>
+            </div>
+            <div class='span2'>
+              <div>
+                <%=number_to_currency t.stotal %>
+              </div>
+              <div class='delivery_price'>
+                (含<%=t.delivery_price || 0 %>运费)
+              </div>
+            </div>
+            <div class='span2'>
+              <%=t.state_title %>
+            </div>
+            <div class='span1'>
+              <a href='javascript:void(0)' class='more'>详细</a>
+            </div>
+          </div>
+        </div>
+        <div class='detail'>
+        </div>
+      </div>
+      <% end %>
     </div>
-    <% end %>
-  </div>
-  <div class='panel_items' data-spy="affix" data-offset-top="53">
   </div>
 </div>
-<div class='row-fluid'>
-  <%= paginate @transactions %>
-</div>
+<%= paginate @transactions %>
 <script type='text/javascript'>
   $(function(){
     var view = new TransactionListView({
       el: $(".transaction-list"),
-      remote_url: "<%= person_transactions_path(@people) %>"
+      remote_url: "<%= person_transactions_path(@people) %>",
+      bindView: function(view){
+        var card = new TransactionCard({
+          el: view.$el,
+          realtime: {
+          url: '<%= faye_server_uri %>',
+          token: '<%= token %>' }
+        });
+      }
     })
-
   })
 </script>
