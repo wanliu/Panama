@@ -38,7 +38,7 @@ class CategoryController < ApplicationController
     @category = Category.find(params[:id])
     @shop_products = current_user.shop.products
     category_id, product_ids  = @category.id , @shop_products.pluck(:product_id)
-    _offset, _limit = params[:offset], params[:limit]
+    _offset, _limit = params[:offset] || 0, params[:limit] || 10
     @products = Product.search2 do
       size _limit
       from _offset

@@ -3,7 +3,6 @@
 </section>
 
 <script type="text/javascript">
-  $("body").addClass('right-mini')
-  window.right_sidebar = window.right_sidebar || new RightSideBar({el: $(".right-sidebar")});
-  right_sidebar.register(ChatContainerView);
+  $("body").addClass('right-mini');
+  ChatListView.getInstance({ el: $(".right-sidebar .body") });
 </script>
