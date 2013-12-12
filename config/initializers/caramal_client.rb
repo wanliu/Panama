@@ -9,6 +9,16 @@ class CaramalClient
   # 例子:
   #     require 'caramal_client'
   #     CaramalClient.publish('hysios', '/transcations', {:id => 1234 })
+
+  cattr_accessor :conn
+
+  @@conn =
+
+  def self.start
+    @@conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
+    conn.start
+  end
+
   def self.publish(login, channel, msg = {})
     info = {
       login: login,
@@ -16,17 +26,13 @@ class CaramalClient
       msg: msg
     }
 
-    conn = Bunny.new(:hostname => "localhost")
-    conn.start
+
     ch = conn.create_channel
     ch.default_exchange.publish info.to_json, :routing_key => MQ_PREFIX + 'notification'
-    conn.close
+    ch.close
   end
 
   def self.create_temporary_channel(name, owner, &block)
-    conn = Bunny.new(:hostname => ENV["rabbitmq"])
-    conn.start
-
     data = {:name => name, :owner => owner}.to_json
     ch  = conn.create_channel
     x = ch.default_exchange
@@ -48,7 +54,7 @@ class CaramalClient
         block.call(msg) if block_given?
 
         ch.consumers[delivery_info.consumer_tag].cancel
-        conn.close
+        ch.close
       end
     end
 
@@ -60,9 +66,6 @@ class CaramalClient
 
 
   def self.remove_temporary_channel(name, owner, &block)
-    conn = Bunny.new(:hostname => ENV["rabbitmq"])
-    conn.start
-
     data = {:name => name, :owner => owner}.to_json
     ch  = conn.create_channel
     x = ch.default_exchange
@@ -84,7 +87,7 @@ class CaramalClient
         block.call(msg) if block_given?
 
         ch.consumers[delivery_info.consumer_tag].cancel
-        conn.close
+        ch.close
       end
     end
 
@@ -94,4 +97,6 @@ class CaramalClient
 
   end
 end
+
+CaramalClient.start
 

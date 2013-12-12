@@ -8,17 +8,17 @@
                     var selector = this.options.layout.container.selector + ' ' + this.options.layout.parent.selector;
                     switch (this.options.layout.name) {
                         case 'top':
-                            $(selector).css({borderRadius: '0px 0px 0px 0px'});
-                            $(selector).last().css({borderRadius: '0px 0px 5px 5px'}); break;
+                            // $(selector).css({borderRadius: '0px 0px 0px 0px'});
+                            // $(selector).last().css({borderRadius: '0px 0px 5px 5px'}); break;
                         case 'topCenter': case 'topLeft': case 'topRight':
                         case 'bottomCenter': case 'bottomLeft': case 'bottomRight':
                         case 'center': case 'centerLeft': case 'centerRight': case 'inline':
-                            $(selector).css({borderRadius: '0px 0px 0px 0px'});
-                            $(selector).first().css({'border-top-left-radius': '5px', 'border-top-right-radius': '5px'});
-                            $(selector).last().css({'border-bottom-left-radius': '5px', 'border-bottom-right-radius': '5px'}); break;
+                            // $(selector).css({borderRadius: '0px 0px 0px 0px'});
+                            // $(selector).first().css({'border-top-left-radius': '5px', 'border-top-right-radius': '5px'});
+                            // $(selector).last().css({'border-bottom-left-radius': '5px', 'border-bottom-right-radius': '5px'}); break;
                         case 'bottom':
-                            $(selector).css({borderRadius: '0px 0px 0px 0px'});
-                            $(selector).first().css({borderRadius: '5px 5px 0px 0px'}); break;
+                            // $(selector).css({borderRadius: '0px 0px 0px 0px'});
+                            // $(selector).first().css({borderRadius: '5px 5px 0px 0px'}); break;
                         default: break;
                     }
                 }
@@ -42,6 +42,8 @@
             this.$bar.css({
                 overflow: 'hidden',
                 backgroundColor: "rgba(49, 81, 133, 0.921569)",
+                boxShadow: 'rgba(50, 50, 50, 0.498039) 0px 2px 10px',
+                marginBottom: '20px'
                 // background: "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAoCAYAAAAPOoFWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAPZJREFUeNq81tsOgjAMANB2ov7/7ypaN7IlIwi9rGuT8QSc9EIDAsAznxvY4pXPKr05RUE5MEVB+TyWfCEl9LZApYopCmo9C4FKSMtYoI8Bwv79aQJU4l6hXXCZrQbokJEksxHo9KMOgc6w1atHXM8K9DVC7FQnJ0i8iK3QooGgbnyKgMDygBWyYFZoqx4qS27KqLZJjA1D0jK6QJcYEQEiWv9PGkTsbqxQ8oT+ZtZB6AkdsJnQDnMoHXHLGKOgDYuCWmYhEERCI5gaamW0bnHdA3k2ltlIN+2qKRyCND0bhqSYCyTB3CAOc4WusBEIpkeBuPgJMAAX8Hs1NfqHRgAAAABJRU5ErkJggg==') repeat-x scroll left top #fff"
             });
 
@@ -113,11 +115,11 @@
                 case 'topLeft': case 'topRight':
                 case 'bottomLeft': case 'bottomRight':
                 case 'centerLeft': case 'centerRight':
-                    this.$bar.css({
-                        borderRadius: '0px',
-                        border: '1px solid #eee',
-                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
-                    });
+                    // this.$bar.css({
+                    //     borderRadius: '0px',
+                    //     border: '1px solid #eee',
+                    //     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+                    // });
                     this.$message.css({fontSize: '13px', textAlign: 'left'});
                 break;
                 case 'bottom':
@@ -139,7 +141,7 @@
 
             switch (this.options.type) {
                 case 'alert': case 'notification':
-                    this.$bar.css({backgroundColor: '#FFF', borderColor: '#CCC', color: '#444'}); break;
+                    this.$bar.css({backgroundColor: 'rgba(49, 81, 133, 0.921569)', borderColor: '#CCC', color: '#eee'}); break;
                 case 'warning':
                     this.$bar.css({backgroundColor: '#FFEAA8', borderColor: '#FFC237', color: '#826200'});
                     this.$buttons.css({borderTop: '1px solid #FFC237'}); break;

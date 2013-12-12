@@ -1036,6 +1036,11 @@ h2 small {
   }
 }
 
+.big-avatar {
+  margin: 0px 10px 5px;
+  width: 130px;
+}
+
 .breadcrumb {
   margin: 0px;
   /*@include transparent(rgb(0, 0, 0), 0);*/
@@ -1580,3 +1585,12 @@ h2 small {
 		background-position: right -11px;
 	}
 }
+
+.noty_message {
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+}
+

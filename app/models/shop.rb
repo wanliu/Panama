@@ -145,7 +145,7 @@ class Shop < ActiveRecord::Base
   def notify(channel, data, options = {})
     employees.each do |member|
       # byebug
-      member.notify("/shops/#{channel}", data, options)
+      member.notify(File.join("/shops", channel), data, options)
     end
   end
 

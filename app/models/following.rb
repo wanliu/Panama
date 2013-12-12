@@ -22,7 +22,6 @@ class Following < ActiveRecord::Base
                     :url => "/people/#{user.login}/notifications",
                     :avatar => user.avatar)
     elsif follow.is_a?(Shop)
-      byebug
       follow.notify("/follow",
                     "#{user.login} 关注我们的商店",
                     :target => self,
