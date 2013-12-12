@@ -100,6 +100,7 @@ class FriendsView extends BaseFriendsView
 
   initialize: () ->
     super
+    @collection.bind('remove', @removeOne, @)
 
   render: () ->
     $(@el).html(@template)
@@ -113,6 +114,17 @@ class FriendsView extends BaseFriendsView
     model.view  = friend_view
     @$(".users-list").append(friend_view.render().el)
 
+  removeOne: (model) ->
+    if model.view?
+      $(model.view.el).remove();
+
+  addFriend: (attributes) ->
+    chat = new ChatModel(attributes)
+    @collection.add(chat)
+
+  removeFriend: (attributes) ->
+    delete attributes['icon']
+    @collection.remove(@collection.where(attributes)[0])
 
 class GroupsView extends BaseFriendsView
   className: "groups-list"
@@ -194,17 +206,22 @@ class BaseFriendView extends Backbone.View
   events:
     "click" : "showChat"
 
-  template: _.template('
-    <a href="#" data-toggle="tooltip" title="<%= model.get("login")||model.get("name") %>">
+  template: Handlebars.compile("""
+    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="{{login}}">
       <span class="badge badge-important message_count"></span>
-      <img src="/default_img/t5050_default_avatar.jpg" class="" />
-    </a>')
+      {{#if icon}}
+        <img src='{{icon}}' alt='{{login}}' />
+      {{else}}
+        <img src="/default_img/t5050_default_avatar.jpg" class="" />
+      {{/if}}
+    </a>""")
 
   initialize: () ->
     @clearMsgCount()
+    @model.view = @
 
   render: () ->
-    html = @template({model: @model})
+    html = @template(@model.attributes)
     $(@el).html(html)
     @
 
@@ -283,6 +300,16 @@ class FriendView extends BaseFriendView
 
 
 class GroupView extends BaseFriendView
+
+  template: Handlebars.compile("""
+    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="商圈: {{name}}">
+      <span class="badge badge-important message_count"></span>
+      {{#if icon}}
+        <img src='{{icon}}' alt='{{name}}' />
+      {{else}}
+        <img src="/default_img/t5050_default_avatar.jpg" alt={{name}} class="" />
+      {{/if}}
+    </a>""")
 
   initialize: () ->
     super

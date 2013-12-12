@@ -51,11 +51,13 @@ class Following < ActiveRecord::Base
     if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
+                              :icon => follow.avatar,
                               :channel_type => 1)
                        .first_or_create
 
       PersistentChannel.where(:user_id => follow.id,
                               :name => user.login,
+                              :icon => user.avatar,
                               :channel_type => 1)
                        .first_or_create
     end
