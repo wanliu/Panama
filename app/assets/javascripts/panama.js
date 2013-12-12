@@ -36,9 +36,7 @@
 //= require left_sidebar
 //= require topbar
 //= require social_networking/transaction_chat_remind
-//= require social_networking/right_sidebar
 //= require social_networking/right_sidebar_friends
-//= require social_networking/right_sidebar_notifications
 //= require pick_product
 //= require typeaheadExtension
 //= require ask_buy

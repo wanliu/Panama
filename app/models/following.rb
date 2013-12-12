@@ -89,6 +89,11 @@ class Following < ActiveRecord::Base
     create(opts)
   end
 
+  def self.is_exist?(follow)
+    params = follow.attributes.delete_if { |key, value| value.nil? }
+    Following.exists?(params)
+  end
+
   def valid_follow?
     if Following.exists?(["follow_id=? and follow_type=? and id<>? and user_id=?",
       follow_id, follow_type, id.to_s, user_id])

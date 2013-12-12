@@ -1,11 +1,10 @@
 root = (window || @)
 
-class root.ChatContainerView extends RealTimeContainerView
+class root.ChatListView extends Backbone.View
   events:
     'keyup input.filter_key' : 'filter_list'
 
   initialize: () ->
-    super
     @stranger_view  = new StrangersView(parent_view: @)
     @friends_view = new FriendsView(parent_view: @)
     @groups_view = new GroupsView(parent_view: @)
@@ -14,6 +13,7 @@ class root.ChatContainerView extends RealTimeContainerView
         <input class="filter_key" type="text"/>
       </div>')
     @bind_items()
+    @$el.slimScroll(height: $(window).height())
 
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
@@ -29,6 +29,10 @@ class root.ChatContainerView extends RealTimeContainerView
     @friends_view.filter_list(keyword)
     @stranger_view.filter_list(keyword)
     @groups_view.filter_list(keyword)
+
+
+ChatListView.getInstance = (options) ->
+  @instance ||= new ChatListView(options)
 
 
 class BaseFriendsView extends Backbone.View

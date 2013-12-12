@@ -62,6 +62,23 @@ class PeopleController < ApplicationController
     end
   end
 
+  # 关注
+  def follow
+    this_person = User.find_by(:login => params[:id])
+    follow = Following.new(:user => current_user, :follow => this_person)
+    unless Following.is_exist?(follow)
+      follow.save
+    end
+    redirect_to :action => 'show'
+  end
+
+  # 取消关注
+  def unfollow
+    this_person = User.find_by(:login => params[:id])
+    Following.delete_all(["user_id = ? and follow_id = ? and follow_type = 'User'", current_user.id, this_person.id])
+    redirect_to :action => 'show'
+  end
+
   private
   def current_ability(people = nil)
     @current_ability ||= PeopleAbility.new(current_user, people)
