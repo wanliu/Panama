@@ -74,6 +74,6 @@ class Communities::InviteController < Communities::BaseController
 
   private
   def current_invite
-    @circle.invite_users.find_by(:user_id => current_user.id, :id => params[:id])
+    @circle.invite_users.find(params[:id])
   end
 end
