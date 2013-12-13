@@ -63,7 +63,8 @@ class CompletingShopController < Wicked::WizardController
 
   def save_license
     shop_auth_params = params[:shop_auth]
-    shop_params = shop_auth_params[:shop].merge(address_id: @user_checking.address.id)
+    shop_params = shop_auth_params[:shop].merge(
+      address_id: @user_checking.address.try(:id))
     if current_user.shop.blank?
       @shop = @user_checking.user.create_shop(shop_params)
     else

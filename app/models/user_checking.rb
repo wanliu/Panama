@@ -12,7 +12,7 @@ class UserChecking < ActiveRecord::Base
   belongs_to :service
   belongs_to :address
 
-  validates :ower_shenfenzheng_number, presence: true
+  validates :ower_shenfenzheng_number, presence: true, if: :industry_choosen?
   validates :user_id, presence: true, uniqueness: true
   validates :service_id, presence: true
   validates :industry_type, presence: true, if: :service_choosen?
@@ -78,15 +78,15 @@ class UserChecking < ActiveRecord::Base
 
   protected
     def service_choosen?
-      persisted? && !service.blank?
+      persisted? && service.present?
     end
 
     def industry_choosen?
-      persisted? && !industry_type.blank?
+      persisted? && industry_type.present? && changed_attributes["industry_type"].present?
     end
 
     def company_information_finished?
-      persisted? && !company_name.blank?
+      persisted? && company_name.present?
     end
 
     def products_added?

@@ -55,28 +55,33 @@
 					<div class="span7 input_locate">
 						<%= f.input :company_name, label: '营业店名' %>
 						<% address = current_user.user_checking.address || Address.new %>
-						<div data-id="<%= address.id %>" class="control-group string required address">
+						<% address_error = @shop_auth.errors[:address_id] %>
+						<div data-id="<%= address.id %>" class="control-group string required address <%= 'error' if address_error.present? %>">
 							<div class="hide">
 								<%= f.input :address_id, input_html: { value: address.id }  %>
 							</div>
 							<%= f.label :address_id, wrapper: :inline_label %>
 							<div class="controls">
-								<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
-								<a class="btn" data-toggle="modal" href="<%= edit_address_completing_shop_path %>" data-target="#edit_address">编辑</a>
+								<div>
+									<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
+									<a class="btn" data-toggle="modal" href="<%= edit_address_completing_shop_path %>" data-target="#edit_address">编辑</a>
+									<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editAddressLabel" aria-hidden="true">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<h3 id="editAddressLabel">编辑地址</h3>
+										</div>
+										<div class="modal-body">
 
-								<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editAddressLabel" aria-hidden="true">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										<h3 id="editAddressLabel">编辑地址</h3>
-									</div>
-									<div class="modal-body">
-
-									</div>
-									<div class="modal-footer">
-										<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-										<button class="btn btn-primary edit-button">保存</button>
+										</div>
+										<div class="modal-footer">
+											<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+											<button class="btn btn-primary edit-button">保存</button>
+										</div>
 									</div>
 								</div>
+								<% if address_error.present? %>
+									<div><%=address_error.join(",") %></div>
+								<% end %>
 							</div>
 						</div>
 						<%= f.input :company_license, label: '营业执照号' %>
