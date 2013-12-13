@@ -45,7 +45,7 @@
     <div class='row-fluid notification_panel'>
       <ul>
         <% @notifications.each do |n| %>
-          <li class='notification_one'>
+          <li class='notification_one' data-id="<%= n.id %>">
             <ul class='notification-actions'>
               <li class='read'>
                 <%= checked_button(n) %>
@@ -83,6 +83,12 @@
 
 <script type="text/javascript">
   $(function(){
+    id = ~~paramsFromUrl().id;
+    if (id > 0) {
+      $target = $('.notification_panel').find('[data-id="'+id+'"]');
+      $target.css('background-color', 'rgb(29, 107, 126)');
+    }
+    
     $(".mark_read").bind("click", function(){
       target = $(event.target),
       current_user="<%= current_user.login %>",
