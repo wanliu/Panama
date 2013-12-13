@@ -10,14 +10,6 @@ class Transaction extends Backbone.Model
 class Transactions extends Backbone.Collection
   model: Transaction
 
-class TransactionDialogView extends Backbone.View
-
-  initialize: () ->
-    _.extend(@, @options)
-    @$el = $(@el)
-
-  render: () ->
-    @$el
 
 class DisplayDialogView extends Backbone.View
   bodyClass: "noScroll"
@@ -37,18 +29,13 @@ class DisplayDialogView extends Backbone.View
 
   load_template: () ->
     @$el.addClass("active")
-    @view.remove() unless _.isEmpty(@view)
     @model.load_template (data) =>
       @$summar.addClass "mini"
-      elem = $(data).appendTo(@$detail)
-      @view = new TransactionDialogView(
-        el: $(elem[0]),
-        model: @model)
-
+      @$detail.html(data)
       @trigger("off_details", @model)
 
       @$detail.slideDown "fast", () =>
-        @trigger("bind_view", @view)
+        @trigger("bind_view", @)
 
 
   detail_display: () ->
@@ -59,7 +46,7 @@ class DisplayDialogView extends Backbone.View
     else
       @load_template()
 
-class root.TransactionListView extends Backbone.View
+class root.TableListView extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)

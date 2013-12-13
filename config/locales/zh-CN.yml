@@ -658,7 +658,7 @@ zh-CN:
     uncomplete: 未完成
     complete: 完成
 
-  order_refund_state:
+  refund_state:
     apply_refund: 申请退货
     apply_expired: 申请超时
     apply_failure: 拒绝

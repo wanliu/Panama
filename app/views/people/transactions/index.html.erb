@@ -12,7 +12,7 @@
       <div class='row-fluid'>
         <div class='span7'>
           <div class='span7'>
-            宝贝
+            商品
           </div>
           <div class='span3'>
             单价
@@ -39,10 +39,11 @@
               编号: <%=t.number %>
             </div>
             <div class='span4'>
+              在
               <small rel='tooltip' title="<%=I18n.l t.created_at, :format => :long %>">
                 <%= time_ago_in_words t.created_at %>
               </small>
-              成交
+              之前交易
             </div>
             <div class='span2'>
               <%= link_to t.seller.name, shop_path(t.seller)  %>
@@ -66,7 +67,11 @@
               <%=t.state_title %>
             </div>
             <div class='span1'>
-              <a href='javascript:void(0)' class='more'>详细</a>
+              <% if t.close_state? %>
+              <a href='javascript:void(0)' class='btn_delete'>
+                删除
+              </a>
+              <% end %>
             </div>
           </div>
         </div>
@@ -80,12 +85,12 @@
 <%= paginate @transactions %>
 <script type='text/javascript'>
   $(function(){
-    var view = new TransactionListView({
+    var view = new TableListView({
       el: $(".transaction-list"),
       remote_url: "<%= person_transactions_path(@people) %>",
       bindView: function(view){
         var card = new TransactionCard({
-          el: view.$el,
+          el: view.$(".detail .transaction"),
           realtime: {
           url: '<%= faye_server_uri %>',
           token: '<%= token %>' }

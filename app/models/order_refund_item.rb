@@ -9,6 +9,8 @@ class OrderRefundItem < ActiveRecord::Base
   validates :order_refund, :presence => true
   validates :product, :presence => true
 
+  delegate :photos, :to => :product
+
   before_validation(:on => :create) do
     update_total
   end

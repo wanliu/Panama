@@ -17,3 +17,13 @@ namespace "direct_order" do
     end
   end
 end
+
+namespace "order_refund" do
+  desc "generate order refund number"
+  task :generate_number => :environment do |t, args|
+    OrderRefund.all.each do |dt|
+      dt.number = "#{'0' * (9-dt.id.to_s.length)}#{dt.id}"
+      dt.save
+    end
+  end
+end

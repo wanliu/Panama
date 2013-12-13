@@ -13,7 +13,8 @@
 
   .wrapper-box {
     // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-    /*@include transparent(rgb(51, 51, 51), 0.4);*/
+    @include transparent(rgb(51, 51, 51), 0.4);
+    padding: 10px;
   }
 
   hr {
@@ -98,7 +99,7 @@
         }
 
         .state-display{
-          font-size:20px;
+          font-size: 18px;
           font-weight:none;
           /*margin-right: 20px;*/
         }
@@ -328,8 +329,7 @@
           }
 
           .title{
-            float: left;
-            margin-left: 5px;
+            margin-left: 55px;
           }
         }
       }
@@ -348,6 +348,12 @@
         background-color: transparent;
         margin-bottom: 0px;
       }
+
+      .wrapper-box{
+        background-color: transparent;
+        padding: 0px;
+      }
+
     }
   }
 
