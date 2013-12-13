@@ -17,11 +17,8 @@ namespace :user do
     ch = conn.create_channel
 
     User.all.each do |user|
-      channels = user.persistence_channels.map do |channel|
-        {
-          name: channel.user.login,
-          type: 1
-        }
+      channels = user.persistent_channels.map do |channel|
+        { name: channel.name, type: channel.channel_type }
       end
 
       info = {

@@ -2,7 +2,7 @@
 class Communities::CirclesController < Communities::BaseController
   before_filter :validate_manager, :only => [:update_circle,:up_to_manager,:low_to_member,:remove_member]
   before_filter :require_member, :except => [:apply_join]
-  before_filter :member, :only => [:up_to_manager,:low_to_member,:remove_member]
+  before_filter :member, :only => [:up_to_manager, :low_to_member, :remove_member]
 
   def index
   end
@@ -24,6 +24,14 @@ class Communities::CirclesController < Communities::BaseController
 
   def low_to_member
     @member.update_attributes(identity: :member)
+    respond_to do |format|
+      format.json{ head :no_content}
+    end
+  end
+
+  def quit_circle
+    @member = @circle.friends.find_by(:user_id => current_user.id)
+    @member.destroy
     respond_to do |format|
       format.json{ head :no_content}
     end

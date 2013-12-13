@@ -67,6 +67,7 @@ Panama::Application.routes.draw do
         post :up_to_manager
         post :low_to_member
         delete :remove_member
+        delete :quit_circle
         get ":category_id/category", :to => "communities/circles#category"
         post :join
         post :apply_join
@@ -105,6 +106,11 @@ Panama::Application.routes.draw do
   end
 
   resources :people do
+
+    member do
+      get 'follow'
+      get 'unfollow'
+    end
 
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -295,9 +301,9 @@ Panama::Application.routes.draw do
   resources :users do
     collection do
       get "connect/:token", :to => "users#connect"
-      get "chat_authorization/:from/invest/:invested", :to => "users#chat_authorization"
       get "disconnect/:id", :to => "users#disconnect"
       get "followings"
+      get "channels"
       post "upload_avatar/:id", :to => "users#upload_avatar"
     end
   end
@@ -354,6 +360,11 @@ Panama::Application.routes.draw do
   resources :shops, :except => :index do
     collection do
       get "topic_categories/:id", :to => "shops#topic_categories"
+    end
+
+    member do
+      get "follow"
+      get "unfollow"
     end
 
     namespace :admins do

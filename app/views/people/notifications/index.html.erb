@@ -12,41 +12,42 @@
       <ul>
         <% @notifications.each do |n| %>
           <li class="notification_one">
-            <div class='people-info span2'>
-            <div>
-                <img class="img-circle" src="<%=n.mentionable_user.photos.icon %>" />
+           <!--  <div class='people-info'>
+              <div>
+                <img class="avatar" src="<%=n.additional[:avatar] %>" />
               </div>
               <div>
-                <a href="javascript:void(0)"><%=n.mentionable_user.login %></a>
+                <a href="javascript:void(0)"><%=n.user.login %></a>
               </div>
-            </div>
-            <div class='content'>
-              <p>
-                <%=raw n.body %>
-              </p>
-              <p>
-                <span class="label <%= n.read ? "" : "label-important" %>" style='position: absolute;top: 0px;right: 0px;'>
+            </div> -->
+            <div class='body'>
+              <div class='content'>
+                <%=raw n.content %>
+              </div>
+              <div class='tag'>
+                <span class="label <%= n.read ? "" : "label-important" %>">
                   <%= n.read ? "已读取" : "未读取" %>
                 </span>
-                <span>
-                  <a href="<%=person_notification_path(current_user.login, n.id) %>/enter">
-                    查看&nbsp;&nbsp;
-                  </a>
-                  <a href="javascript:void(0)" class="mark_read" data-value-id='<%=n.id %>'>标为已读</a>
-                </span>
-              </p>
+              </div>
+            </div>
+            <div class='foot'>
+              <a href="<%=person_notification_path(current_user.login, n.id) %>/enter">
+                查看&nbsp;&nbsp;
+              </a>
+              <a href="javascript:void(0)" class="mark_read" data-value-id='<%=n.id %>'>标为已读</a>
             </div>
           </li>
         <% end %>
       </ul>
       <% unless params[:all] == "1" %>
-        <div>
+        <div class='batch-btns'>
           <a href="<%= person_notifications_path(current_user.login) %>?all=1">查看所有提醒</a>
         </div>
       <% end %>
     </div>
   </div>
 </div>
+
 <script type="text/javascript">
   $(function(){
     $(".mark_read").bind("click", function(){

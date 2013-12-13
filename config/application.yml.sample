@@ -12,11 +12,6 @@ defaults: &defaults
     pass: "guest"
     heartbeat: "server"
     frame_max: 131072
-  rabbitmq_queues:
-    new_users: "wanliu_new_users"
-  redis_keys:
-    user_id_to_user_name: "Panama:info:userId:userName"
-    user_name_to_user_id: "Panama:info:userName:userId"
 
 development:
   <<: *defaults

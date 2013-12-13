@@ -97,6 +97,23 @@ class ShopsController < ApplicationController
     end
   end
 
+  # 关注
+  def follow
+    this_shop = Shop.find_by(:name => params[:id])
+    follow = Following.new(:user => current_user, :follow => this_shop)
+    unless Following.is_exist?(follow)
+      follow.save
+    end
+    redirect_to this_shop
+  end
+
+  # 取消关注
+  def unfollow
+    this_shop = Shop.find_by(:name => params[:id])
+    Following.delete_all(["user_id = ? and follow_id = ? and follow_type = 'Shop'", current_user.id, this_shop.id])
+    redirect_to this_shop
+  end
+
   protected
   def content_tpl_path
     Rails.root.join "tmp/templates"

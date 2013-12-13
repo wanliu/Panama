@@ -9,7 +9,7 @@
 			<div class='body'>
 				<div class='row-fluid'>
 					<div class='span4 text-center cell'>
-						<img src="<%= @people.photos.header %>" class='img-circle' alt='头像' />
+						<img src="<%= @people.photos.header %>" class='' alt='头像' />
 					</div>
 					<div class='span8'>
 						<dl class="dl-horizontal">
@@ -30,7 +30,7 @@
 				</div>
 			</div>
 		</section>
-		
+
 		<div class='body'>
 			<% if can?(:manage, User) %>
 				<section>

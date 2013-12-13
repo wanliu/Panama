@@ -6,6 +6,7 @@ class CompletingPeopleController < Wicked::WizardController
   steps :pick_industry, :authenticate_license
 
   def show
+    @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: service_id)
     @user_auth = UserAuth.new(@user_checking.attributes)
     render_wizard
   end

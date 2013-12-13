@@ -3,8 +3,8 @@
 		<div class='user_base_info' user-id='{{ id }}' >
 			<div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
 		<div class='userinfo'>
-		    <div  class="circle_avatar"><img src='{{ shop.photos.icon }}', class="author img-circle" /></div>
-		    <div class="shop_name"><a href="/shops/{{ shop.name }}">{{ shop.name }}</a></div> 
+		    <div  class="circle_avatar"><img src='{{ shop.photos.icon }}', class="author " /></div>
+		    <div class="shop_name"><a href="/shops/{{ shop.name }}">{{ shop.name }}</a></div>
 		    <div class="industry_type"><span>行业：{{ industry_type }} </span></div>
 		    <div class="tel"><span>联系方式：{{ phone }}</span></div>
 		    <div class="entry"><button><a href="/shops/{{ shop.name }}">进入商铺</a></button></div>
@@ -20,7 +20,7 @@
 			<i class="icon-user"></i>
 			<a href="/shops/{{ shop.name }}" class="title">{{ shop.name }}</a>
 		</div>
-		<div class="industry"> 
+		<div class="industry">
 			<i class=" icon-star"></i>
 			<a href="#">{{ industry_type }}</a>
 		</div>

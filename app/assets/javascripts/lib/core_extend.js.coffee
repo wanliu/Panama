@@ -1,4 +1,4 @@
-
+#= require lib/jquery_extend
 #= require lib/form_extend
 
 root = window || @

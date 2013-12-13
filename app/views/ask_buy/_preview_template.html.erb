@@ -14,10 +14,10 @@
           <span class='amount'>求购 {{amount}}件</span>
         </p>
       </div>
-      <div class='userinfo'>
+      <div class='userinfo shopinfo'>
         {{#user.photos}}
         <a href="/people/{{user.login}}">
-          <img src='{{icon}}', class="author img-circle" />
+          <img src='{{icon}}', class="author " />
         </a>
         {{/user.photos}}
         <p>
@@ -29,6 +29,7 @@
           <span class='notify'>
           </span>
         </p>
+        <i class='icon-bullhorn join-chat'>聊天</i>
       </div>
       <div class="buttons">
       </div>

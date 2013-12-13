@@ -1,5 +1,3 @@
-require 'bunny'
-
 class User < ActiveRecord::Base
   include Graphical::Display
   extend FriendlyId
@@ -28,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :delivery_addresses
   has_many :followings, dependent: :destroy
   has_many :followers, :as => :follow, :class_name => "Following", dependent: :destroy
+  has_many :persistent_channels
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
   has_many :friend_groups, dependent: :destroy
@@ -44,8 +43,6 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
-  after_commit :sync_create_to_redis, :on => :create
-  # after_update :sync_change_to_redis
   before_create :generate_token
 
   after_update do
@@ -95,16 +92,28 @@ class User < ActiveRecord::Base
     chat_messages.all(id, friend_id)
   end
 
+  #
+  # 连接用户
+  #
+  # @deprecated 逻辑已失效，服务端并不维护登陆状态
   def connect
     RedisClient.redis.set(redis_key, true)
     # FayeClient.send("/chat/friend/connect/#{id}", id)
     CaramalClient.publish(login, "/chat/friend/connect/#{id}", id)
   end
 
+  #
+  # 连接状态查询
+  #
+  # @deprecated 逻辑已失效，服务端并不维护登陆状态
   def connect_state
     RedisClient.redis.exists(redis_key)
   end
 
+  #
+  # redis key
+  #
+  # @deprecated 逻辑已失效，服务端并不维护登陆状态
   def redis_key
     "#{Settings.defaults['redis_key_prefix']}#{id}"
   end
@@ -214,10 +223,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def persistence_channels
-    followings
-  end
-
   #暂时方法
   def grapical_handler
     photo.filename
@@ -257,33 +262,26 @@ class User < ActiveRecord::Base
     groups.include?(group)
   end
 
+  #
+  # 给此用户发送通知
+  #
+  # @param  channel [String, ActiveRecord::Base] 频道名称，或模型对象
+  # @param  data [String] 发送数据类容
+  # @param  options [Hash] 通知选项
+  #
+  # @see http://localhost:8808/docs/Notification#create%21-class_method Notification::create!
+  def notify(channel, data, options = {})
+    options.symbolize_keys!
+
+    # if options[:avatar].blank?
+    #   options[:avatar] = self.avatar
+    # end
+
+    Notification.create!(self, channel, data, options)
+  end
+
   def permissions
     groups.map{| g | g.permissions}
-  end
-
-  def self.chat_authorization(from, invested)
-    from_user = User.where(login: from).first
-    invested_user = User.where(login: invested).first
-
-    if from_user.blank? || invested_user.blank?
-      { authorizen: false, denied_reason: "user does't exists!" }
-    elsif from_user.in_black_list_of(invested_user)
-      { authorizen: false, denied_reason: "investing denied" }
-    else
-      author_options = system_default_author.merge(invested_user.author_setting)
-      white_check_methods = author_options.select do |key, value|
-        value == true
-      end.keys
-
-      if white_check_methods.any? { |item| invested_user.send(item.to_sym, from_user) }
-        { authorizen: true }
-      else
-        { authorizen: false, denied_reason: "investing denied" }
-      end
-    end
-  end
-
-  def self.group_anthorization(user, group)
   end
 
   # %w(is_friend is_circle_friend is_following is_follower is_follower_and_is_following)

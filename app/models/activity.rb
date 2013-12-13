@@ -29,7 +29,7 @@ class Activity < ActiveRecord::Base
 
   has_many :activities_participates
   has_many :participates, :through => :activities_participates, :source => :user
-
+  has_one :temporary_channel, :as => :targeable
   # validates_associated :product
   validates :price, :numericality => { :greater_than => 0 }, :presence => true
   validates :author, :title, :start_time, :end_time, :shop_product_id, :presence => true
@@ -50,23 +50,19 @@ class Activity < ActiveRecord::Base
   end
 
   def notice_author(sender, message)
-    notifications.create({
-      :user_id => sender.id,
-      :mentionable_user_id => author.id,
-      :url => "/activities/#{id}",
-      :body => message
-    })
+    author.notify("/activity/add",
+                  message,
+                  {:url => "/activities/#{id}",
+                  :target => self })
   end
 
   def notice_followers
-    followers = author.followers.where({:follow_type => User})
-    followers.each do |follower|
-      notifications.create({
-        :user_id => author.id,
-        :mentionable_user_id => follower.user_id,
-        :url => "/activities/#{id}",
-        :body => "你关注的商家#{ shop.name}有新活动发布#{ title}"
-      })
+    unless shop.followers.blank?
+      shop.followers.each do |follower|
+        follower.user.notify('/activity/add', 
+                             "你关注的商家#{ shop.name}有新活动发布#{ title}",
+                             { :target => self, :url => "/activities/#{id}" } )
+      end
     end
   end
 
@@ -82,7 +78,7 @@ class Activity < ActiveRecord::Base
         :content => activity_detail_desription,
         :user => shop.user,
         :category_id => catetory_id )
-      topic.attachments <<  self.attachments.limit(2)  if self.attachments.length > 0 
+      topic.attachments <<  self.attachments.limit(2)  if self.attachments.length > 0
     end
   end
 

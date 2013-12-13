@@ -1,7 +1,7 @@
 #encoding: utf-8
 #describe: 关注
 class Following < ActiveRecord::Base
-  attr_accessible :follow_id, :follow_type, :user_id
+  attr_accessible :follow_id, :follow_type, :user_id, :user, :follow
   scope :shops, where(follow_type: "Shop")
   scope :users, where(follow_type: "User")
 
@@ -15,14 +15,66 @@ class Following < ActiveRecord::Base
   validate :valid_follow?
 
   after_create do
-    member_id = follow.is_a?(User) ? follow_id : follow.user.id  
-    body = follow.is_a?(User) ? "#{ user.login}关注了你" : "#{ user.login}关注了你的商店 #{ follow.name }"
-    Notification.create!(
-      :user_id => user_id,
-      :mentionable_user_id => member_id,
-      :url => "/people/#{user.login}/notifications",
-      :targeable => self,
-      :body => body )
+    if follow.is_a?(User)
+      follow.notify("/follow",
+                    "#{user.login} 关注了你",
+                    :target => self,
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar)
+    elsif follow.is_a?(Shop)
+      follow.notify("/follow",
+                    "#{user.login} 关注我们的商店",
+                    :target => self,
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar)
+    end
+  end
+
+  after_destroy do
+    if follow.is_a?(User)
+      follow.notify("/unfollow",
+                    "#{user.login} 取消关注了你",
+                    :target => self,
+                    :url => "/people/#{follow.login}/notifications",
+                    :avatar => user.avatar)
+    elsif follow.is_a?(Shop)
+      follow.notify("/unfollow",
+                    "#{user.login} 不再关注我们的商店了",
+                    :target => self,
+                    :url => "/people/#{user.login}/notifications",
+                    :avatar => user.avatar)
+    end
+  end
+
+  # 当相互关注后，才能添加持久化的通道
+  after_create do
+    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id).count > 0
+      PersistentChannel.where(:user_id => user.id,
+                              :name => follow.login,
+                              :icon => follow.avatar,
+                              :channel_type => 1)
+                       .first_or_create
+
+      PersistentChannel.where(:user_id => follow.id,
+                              :name => user.login,
+                              :icon => user.avatar,
+                              :channel_type => 1)
+                       .first_or_create
+    end
+  end
+
+  after_destroy do
+    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id).count > 0
+      PersistentChannel.where(:user_id => user.id,
+                              :name => follow.login,
+                              :channel_type => 1)
+                       .destroy_all
+
+      PersistentChannel.where(:user_id => follow.id,
+                              :name => user.login,
+                              :channel_type => 1)
+                       .destroy_all
+    end
   end
 
   def self.user(user_id, uid = nil)
@@ -37,6 +89,11 @@ class Following < ActiveRecord::Base
     opts[:follow_id] = shop_id.id if shop_id.is_a?(Shop)
     opts.merge!(user_id: uid) unless uid.nil?
     create(opts)
+  end
+
+  def self.is_exist?(follow)
+    params = follow.attributes.delete_if { |key, value| value.nil? }
+    Following.exists?(params)
   end
 
   def valid_follow?

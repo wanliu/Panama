@@ -435,7 +435,19 @@ define("almond", function(){});
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (exports.Caramal.debug != null) {
-        return console.log.apply(this, args);
+        if (args.length > 5) {
+          return console.log(args[0], args[1], args[2], args[3], args[4], args[5]);
+        } else if (args.length > 4) {
+          return console.log(args[0], args[1], args[2], args[3], args[4]);
+        } else if (args.length > 3) {
+          return console.log(args[0], args[1], args[2], args[3]);
+        } else if (args.length > 2) {
+          return console.log(args[0], args[1], args[2]);
+        } else if (args.length > 1) {
+          return console.log(args[0], args[1]);
+        } else {
+          return console.log(args[0]);
+        }
       }
     };
     return exports.Caramal;
@@ -4338,6 +4350,14 @@ if (typeof define === "function" && define.amd) {
         return this.socket.removeListener(channel, callback);
       };
 
+      Client.prototype.onNotify = function(channel, callback) {
+        return this.subscribe("notify:" + channel, callback);
+      };
+
+      Client.prototype.unNotify = function(channel, callback) {
+        return this.unsubscribe("notify:" + channel, callback);
+      };
+
       Client.prototype.emit = function(event, data, callback) {
         return this.socket.emit(event, data, callback);
       };
@@ -4707,8 +4727,8 @@ if (typeof define === "function" && define.amd) {
     Caramal.JoinCommand = JoinCommand;
     Caramal.CloseCommand = CloseCommand;
     Caramal.RecordCommand = RecordCommand;
-    Caramal.StopRecordCommand = StopRecordCommand;
-    return Caramal.HistoryCommand = HistoryCommand;
+    Caramal.HistoryCommand = HistoryCommand;
+    return Caramal.StopRecordCommand = StopRecordCommand;
   });
 
 }).call(this);
@@ -4908,15 +4928,7 @@ if (typeof define === "function" && define.amd) {
         dispatch = this.message_dispatchs[name];
         if (dispatch != null) {
           try {
-            info = (function() {
-              if (typeof data === 'string') {
-                return JSON.parse(data);
-              } else if (typeof data === 'object') {
-                return data;
-              } else {
-                throw new Error('invalid data type');
-              }
-            })();
+            info = this.parseJSON(data);
             return dispatch.process(info);
           } catch (_error) {
             e = _error;
@@ -4925,7 +4937,19 @@ if (typeof define === "function" && define.amd) {
         }
       };
 
-      ClientMessageManager.prototype.isEventMessage = function(info) {
+      ClientMessageManager.prototype.parseJSON = function(data) {
+        if (typeof data === 'string') {
+          return JSON.parse(data);
+        } else if (typeof data === 'object') {
+          return data;
+        } else {
+          throw new Error('invalid data type');
+        }
+      };
+
+      ClientMessageManager.prototype.isEventMessage = function(data) {
+        var info;
+        info = this.parseJSON(data);
         return info.action === 'notice';
       };
 
@@ -5329,7 +5353,7 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Chat.prototype.commands = ['open', 'join', 'record', 'stop_record', 'history'];
+      Chat.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
 
       Chat.prototype.hooks = {};
 
@@ -5387,13 +5411,17 @@ if (typeof define === "function" && define.amd) {
       };
 
       /**
-       * 暂时离开的通知
+       * 切换在线状态的通知
       */
 
 
-      Chat.prototype.afk = function() {
-        return this.socket.emit('afk', {
-          room: this.room
+      Chat.prototype.online_state = function(state) {
+        if (state == null) {
+          state = 'online';
+        }
+        return this.socket.emit('online-state', {
+          room: this.room,
+          state: state
         });
       };
 
@@ -5489,7 +5517,7 @@ if (typeof define === "function" && define.amd) {
     Group = (function(_super) {
       __extends(Group, _super);
 
-      Group.prototype.commands = ['open', 'join'];
+      Group.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
 
       Group.prototype.hooks = {};
 
@@ -5550,13 +5578,13 @@ if (typeof define === "function" && define.amd) {
       };
 
       Group.of = function(group, options) {
-        var manager;
+        var channel, manager;
         if (options == null) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        group = manager.nameOfChannel(group);
-        return group || this.create(group, options);
+        channel = manager.nameOfChannel(group);
+        return channel || this.create(group, options);
       };
 
       return Group;

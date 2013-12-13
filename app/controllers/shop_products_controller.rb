@@ -17,7 +17,7 @@ class ShopProductsController < ApplicationController
 
   def create
     if current_user.shop.present?
-      product_ids   = params[:product_ids]
+      product_ids   = params[:product_ids] || []
       shop_products = product_ids.map do |product_id|
         current_user.shop.products.create(
           product_id: product_id,
