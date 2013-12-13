@@ -6,18 +6,18 @@ class PersistentChannel < ActiveRecord::Base
     # TODO： system avatar
     system_avatar = AvatarUploader.new.url
     if channel_type == 1
-      user.notify('/friends/add_user', "用户 #{name} 加你为好友", :avatar => system_avatar)
+      user.notify('/friends/add_user', "用户 #{name} 加你为好友", :avatar => icon, :friend_name => name)
     elsif channel_type == 2
-      user.notify('/friends/add_quan', "商圈 #{name} 加你为友", :avatar => system_avatar)
+      user.notify('/friends/add_quan', "商圈 #{name} 加你为友", :avatar => icon, :group_name => name)
     end
   end
 
   after_destroy do
     system_avatar = AvatarUploader.new.url
     if channel_type == 1
-      user.notify('/friends/remove_user', "用户 #{name} 不再是你的好友了", :avatar => system_avatar)
+      user.notify('/friends/remove_user', "用户 #{name} 不再是你的好友了", :avatar => icon, :friend_name => name)
     elsif channel_type == 2
-      user.notify('/friends/remove_quan', "商圈 #{name} 不再是你的好友了", :avatar => system_avatar)
+      user.notify('/friends/remove_quan', "商圈 #{name} 不再是你的好友了", :avatar => icon, :group_name => name)
     end
   end
 end

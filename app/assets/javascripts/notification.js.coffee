@@ -6,11 +6,14 @@ class InstantlyNotificationManager
   notify_target: "#notification_message i"
 
   defaultTemplate: Handlebars.compile(
-        "<div class='noty_message'>" +
-            "<img class='avatar noty_avatar' src='{{avatar}}' />" +
-            "<span class='noty_text'></span>" +
-            "<div class='noty_close'></div>" +
-        "</div>")
+     """<div class='noty_message'>
+          <img class='avatar noty_avatar' src='{{avatar}}' />
+          {{#if title}}
+            <p>{{title}}</p>
+          {{/if}}
+          <span class='noty_text'></span>
+          <div class='noty_close'></div>
+      </div>""")
 
 
   constructor: () ->
@@ -25,34 +28,37 @@ class InstantlyNotificationManager
     @client.monitor_notification("/activity/remove", @remove_activity)
     #用户关系
     @client.monitor_notification("/friends/add_quan", @add_to_circle)
-    @client.monitor_notification("/friends/add_user", @add_user)
-    @client.monitor_notification("/friends/remove_user", @remove_user)
+    @client.monitor_notification("/friends/add_user", @add_user) # √
+    @client.monitor_notification("/friends/remove_user", @remove_user) # √
     @client.monitor_notification("/friends/remove_quan", @remove_from_circle)
     #个人社交部分
-    @client.monitor_notification("/follow", @follow_user)
-    @client.monitor_notification("/unfollow", @unfollow_user)
+    @client.monitor_notification("/follow", @follow_user) # √
+    @client.monitor_notification("/unfollow", @unfollow_user) # √
     @client.monitor_notification("/request", @request_join_circle)
     @client.monitor_notification("/invite", @invite_join_circle)
     @client.monitor_notification("/refuse", @refuse_join_circle)
     @client.monitor_notification("/joined", @joined_success)
     @client.monitor_notification("/leaved", @leaved_circle)
-    @client.monitor_notification("/like", @like_your)
-    @client.monitor_notification("/unlike", @unlike_your)
+    @client.monitor_notification("/like", @like_your) # √
+    @client.monitor_notification("/unlike", @unlike_your) # √
     # 商店社交部分
-    @client.monitor_notification("/shops/follow", @follow_shop)
-    @client.monitor_notification("/shops/unfollow", @unfollow_shop)
-    @client.monitor_notification("/shops/like", @like_shops_activity)
-    @client.monitor_notification("/shops/unlike", @unlike_shops_activity)
+    @client.monitor_notification("/shops/follow", @follow_shop) # √
+    @client.monitor_notification("/shops/unfollow", @unfollow_shop) # √
+    @client.monitor_notification("/shops/like", @like_shops_activity) # √
+    @client.monitor_notification("/shops/unlike", @unlike_shops_activity) # √
     @client.monitor_notification("/shops/joined", @joined_shop_circle)
     @client.monitor_notification("/shops/leaved", @leaved_shop_circle)
     @client.monitor_notification("/shops/refuse", @refuse_join_shop_circle)
     @client.monitor_notification("/shops/request", @request_join_shop_circle)
     #评论
-    @client.monitor_notification("/comments/add", @add_comment)
-    @client.monitor_notification("/comments/update", @update_comment)
-    @client.monitor_notification("/comments/remove", @remove_comment)
+    # @client.monitor_notification("/comments/add", @add_comment)
+    @client.monitor_notification("/comments/mention", @mention_comment) # √
+    # @client.monitor_notification("/comments/update", @update_comment)
+    # @client.monitor_notification("/comments/remove", @remove_comment)
 
     @notificationsList = NotificationViewList.getNotifiicationList()
+
+    @playId = setInterval(@playNotify, 3000)
 
   #活动通知绑定
   arrived: (data) =>
@@ -60,7 +66,6 @@ class InstantlyNotificationManager
 
   change_activity: (data) =>
     @addCommonNotif(data)
-
 
   remove_activity: (data) =>
     @addCommonNotif(data)
@@ -72,6 +77,18 @@ class InstantlyNotificationManager
   add_user: (data) =>
     @addCommonNotif(data)
 
+    chatList = ChatListView.getInstance()
+
+    if chatList?
+      friendsView = chatList.friends_view
+
+      friendsView.addFriend(
+        follow_type: 1,
+        login: data.friend_name,
+        icon: data.avatar
+      )
+
+
   add_to_circle: (data) =>
     @addCommonNotif(data)
 
@@ -81,6 +98,17 @@ class InstantlyNotificationManager
 
   remove_user: (data) =>
     @addCommonNotif(data)
+
+    chatList = ChatListView.getInstance()
+
+    if chatList?
+      friendsView = chatList.friends_view
+
+      friendsView.removeFriend(
+        follow_type: 1,
+        login: data.friend_name,
+        icon: data.avatar
+      )
 
 
   #个人社交部分
@@ -121,16 +149,14 @@ class InstantlyNotificationManager
 
 
   # 商店社交部分
-  follow_shop: (data) ->
+  follow_shop: (data) =>
     @addCommonNotif(data)
-
 
   unfollow_shop: (data) =>
     @addCommonNotif(data)
 
   like_shops_activity: (data) =>
     @addCommonNotif(data)
-
 
   unlike_shops_activity: (data) =>
     @addCommonNotif(data)
@@ -152,51 +178,40 @@ class InstantlyNotificationManager
     @addCommonNotif(data)
 
   #評論
-  add_comment: (data) =>
+  mention_comment: (data) =>
     @addCommonNotif(data)
 
+  # add_comment: (data) =>
+  #   @addCommonNotif(data)
 
-  update_comment: (data) =>
-    @addCommonNotif(data)
+
+  # update_comment: (data) =>
+  #   @addCommonNotif(data)
 
 
-  remove_comment: (data) =>
-    @addCommonNotif(data)
+  # remove_comment: (data) =>
+  #   @addCommonNotif(data)
 
   addCommonNotif: (data) ->
-
-    @addToPlays (callback) ->
-      @notificationsList.collection.add(data)
+    @addToPlays data, (info) =>
+      console.log(info)
+      @notificationsList.collection.add(info)
       @notify({
-        title: '有人关注了你',
-        text: data.content,
-        theme: 'notifyTheme',
-        timeout: 5000,
-        avatar: data.avatar,
-        onClose: () ->
-          callback()
-        })
+        title: info.title,
+        text: info.content,
+        avatar: info.avatar
+      })
       # @collection_views.push(new NotificationView(parent_view: @el, model: data, url: @urlRoot))
-      @change_notifications_count()
 
-  addToPlays: (callback, delay = 3000) ->
+  addToPlays: (data, callback, delay = 3000) ->
 
-    index = @plays.push [$.proxy(callback, this), delay]
-    @playNotify()
+    index = @plays.push [callback, delay, data]
 
-  playNotify: () ->
-    [callback, delay] = @plays[0]
+  playNotify: () =>
+    if @plays.length > 0
+      [animation, delay, info] = @plays.shift()
 
-    if @plays.length == 1
-      callback () =>
-        @plays.shift();
-    else
-      @playTimeoutId = setTimeout(()=>
-        callback () =>
-          @plays.shift();
-          if @plays.length > 0
-            @playNotify()
-      , delay)
+      animation(info) if animation && _.isFunction(animation)
 
   change_notifications_count: () ->
     @$count = $("#notification_count")
@@ -205,13 +220,25 @@ class InstantlyNotificationManager
   notify: (options) ->
 
     self = @
-    options.template = @defaultTemplate(options)
-    options.animation = {
-            easing:'swing',
-            speed:500
-          }
 
-    options.onClose = () ->
+    unless options.hasOwnProperty('theme')
+      options.theme = 'notifyTheme'
+
+    unless options.hasOwnProperty('timeout')
+      options.timeout = 5000
+
+    unless options.hasOwnProperty('template')
+      options.template = @defaultTemplate(options)
+
+    unless options.hasOwnProperty('animation')
+      options.animation = {
+              easing:'swing',
+              speed:500
+            }
+
+    options.callback || = {}
+
+    options.callback.onClose = () ->
       pos = @$bar.offset()
       target_pos = self.$notify_target.offset()
       scrollTop = $(window).scrollTop()
@@ -308,9 +335,9 @@ class NotificationViewList extends Backbone.View
 class NotificationViewBase extends Backbone.View
   tagName: "li"
 
-  template_realtime: "<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>{{ content }}</a>"
+  template_realtime: Handlebars.compile("<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>&nbsp;{{ content }}</a>")
 
-  template_already: "<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>{{ body }}</a></li>"
+  template_already: Handlebars.compile("<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>&nbsp;{{ content }}</a></li>")
 
   events:
     "click" : "mark_as_read"
@@ -320,6 +347,8 @@ class NotificationViewBase extends Backbone.View
     _.extend(@, @options)
 
   mark_as_read: () ->
+    console.log(@url)
+
     $.ajax(
       type: "post",
       url: "#{ @url}/#{ @model.id }/mark_as_read",
@@ -329,7 +358,7 @@ class NotificationViewBase extends Backbone.View
     )
 
   render: () ->
-    li = $(@el).append(Hogan.compile(@template_already).render(@model.attributes))
+    li = $(@el).append(@template_already(@model.attributes))
     @parent_view.find('ul').prepend(li)
 
 

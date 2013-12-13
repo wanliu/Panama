@@ -31,7 +31,11 @@ class UsersController < ApplicationController
   end
 
   def channels
-    @channels = current_user.persistent_channels.map {|c| {login: c.name, follow_type: c.channel_type }}
+    @channels = current_user.persistent_channels.map do |c| {
+      login: c.name,
+      icon: c.icon,
+      follow_type: c.channel_type }
+    end
     respond_to do |format|
       format.json{ render :json => @channels }
     end
@@ -49,7 +53,7 @@ class UsersController < ApplicationController
   def upload_avatar
     field_name = params[:field_name]
     file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name]
-    
+
     unless file.nil?
       @user_photo = User.find(params[:id]).photo
       if @user_photo.send(field_name)

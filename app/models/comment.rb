@@ -34,9 +34,12 @@ class Comment < ActiveRecord::Base
   def notification_user
     users = content_extract_users
     (users - [user]).each do | u |
-      u.notify("/comment/add",
-              "在评论，提到你!",
-              {:url => position_url, :target => self })
+      u.notify("/comments/mention",
+              content,
+              :url => position_url,
+              :target => self,
+              :title => "#{user.login} 在评论中提到你!",
+              :avatar => user.avatar)
     end
   end
 

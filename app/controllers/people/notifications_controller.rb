@@ -5,7 +5,7 @@ class People::NotificationsController < People::BaseController
   def index
     authorize! :index, Notification
     @notifications = Notification.unreads
-        .where(:mentionable_user_id => @people.id)
+        .where(:user_id => @people.id)
         .order(updated_at: :asc)
     respond_to do | format |
       format.html
@@ -29,7 +29,7 @@ class People::NotificationsController < People::BaseController
 
   def mark_as_read
     @notification = Notification.find(params[:id])
-    authorize! :read, @notification    
+    authorize! :read, @notification
     @notification.change_read
     respond_to do | format |
       format.json { head :no_content }

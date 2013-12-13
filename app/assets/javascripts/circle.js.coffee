@@ -59,6 +59,7 @@ class CircleList extends Backbone.Collection
   followers: () ->
     @fetch( url: "#{@url}/followers" )
 
+
 class CircleUser extends Backbone.View
   tagName: "span"
   className: "label user"

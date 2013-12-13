@@ -86,6 +86,9 @@ class Notification < ActiveRecord::Base
         :img_url => user.photos.avatar
       }
     end
+    attra[:content] = content
+
+    attra.delete("body")
     attra
   end
 

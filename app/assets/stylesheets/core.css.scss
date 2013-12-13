@@ -616,11 +616,6 @@ ul {
   font-size: 20px;
 }
 
-.avatar {
-	width:45px;
-
-}
-
 // widget
 .widget {
   @include border-radius(1px);
@@ -1034,6 +1029,11 @@ h2 small {
   .modal-body{
     max-height: 470px;
   }
+}
+
+.big-avatar {
+  margin: 0px 10px 5px;
+  width: 130px;
 }
 
 .breadcrumb {
@@ -1580,3 +1580,12 @@ h2 small {
 		background-position: right -11px;
 	}
 }
+
+.noty_message {
+  p {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+}
+

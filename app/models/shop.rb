@@ -16,7 +16,7 @@ class Shop < ActiveRecord::Base
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
-  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
+  # has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   # has_many :topic_categories, dependent: :destroy
   has_many :banks, :class_name => "ShopBank", :dependent => :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
@@ -145,7 +145,7 @@ class Shop < ActiveRecord::Base
   def notify(channel, data, options = {})
     employees.each do |member|
       # byebug
-      member.notify("/shops/#{channel}", data, options)
+      member.notify(File.join("/shops", channel), data, options)
     end
   end
 
