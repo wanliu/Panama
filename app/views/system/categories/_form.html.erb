@@ -21,11 +21,11 @@
           <td> <%= property.name %> </td>
           <td> <%= t("property.property_types.#{property.property_type}") %></td>
           <td>
-            <span>
-              <%= link_to "详细", system_property_path(property) %>
+            <span class='action-bar' style="<%= property.property_type == 'set' ? '' : 'visibility: hidden;' %>">
+              <%= link_to "属性#{property_value.values.count}项", "#{property_values_system_category_path(@category)}?property_id=#{property.id}" %>
             </span>
             <span class='action-bar'>
-              <%= link_to "属性#{property_value.values.count}项", "#{property_values_system_category_path(@category)}?property_id=#{property.id}" %>
+              <%= link_to "详细", system_property_path(property) %>
             </span>
             <span class='action-bar'>
               <% url = "#{delete_relation_system_category_path(category)}?property_id=#{property.id}" %>
