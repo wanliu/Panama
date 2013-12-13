@@ -223,10 +223,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def persistence_channels
-    followings
-  end
-
   #暂时方法
   def grapical_handler
     photo.filename

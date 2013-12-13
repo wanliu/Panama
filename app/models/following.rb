@@ -48,7 +48,7 @@ class Following < ActiveRecord::Base
 
   # 当相互关注后，才能添加持久化的通道
   after_create do
-    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
+    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id).count > 0
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
                               :channel_type => 1)
@@ -62,7 +62,7 @@ class Following < ActiveRecord::Base
   end
 
   after_destroy do
-    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id)
+    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id).count > 0
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
                               :channel_type => 1)
