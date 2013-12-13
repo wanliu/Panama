@@ -3,7 +3,6 @@ class window.DirectTransactionView extends Backbone.View
   events: {
     "click .direct-message button"  : "toggle_message"
     "click .direct-info .completed" : "completed"
-    "click .direct-info .close"     : "close"
   }
 
   initialize: () ->
@@ -18,7 +17,7 @@ class window.DirectTransactionView extends Backbone.View
     @load_style()
 
   load_style: () ->
-    @$iframe.height(@$info.height() - @$toolbar.height())
+    @$message.height(@$info.innerHeight())
 
   toggle_message: () ->
     @$messages.slideToggle()
@@ -28,18 +27,8 @@ class window.DirectTransactionView extends Backbone.View
       url: "/people/#{@login}/direct_transactions/#{@direct_transaction_id}/completed",
       type: 'POST',
       success: () =>
-        @$el.remove()
+        @$(".wrap_event").html("<h4 class='pull-right'>交易成功</h4>")
     )
-
-  close: () ->
-    if confirm("是否确认删除交易?")
-      $.ajax(
-        url: "/people/#{@login}/direct_transactions/#{@direct_transaction_id}",
-        type: "DELETE",
-        success: () =>
-          @$el.remove()
-      )
-
 
 
 

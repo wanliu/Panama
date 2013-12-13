@@ -46,6 +46,7 @@ class DisplayDialogView extends Backbone.View
         model: @model)
 
       @trigger("off_details", @model)
+
       @$detail.slideDown "fast", () =>
         @trigger("bind_view", @view)
 
@@ -89,5 +90,6 @@ class root.TransactionListView extends Backbone.View
 
 
   bindView: (view) ->
+
 
 

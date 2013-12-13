@@ -16,13 +16,13 @@
             <div class="page-header">
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
+                <% if transaction.close_state? %>
+                  <button type="button" class="btn_delete">&times;</button>
+                <% end %>
                 <%= render "state_buttons", :transaction => transaction %>
               </div>
               <div class="transaction-number">
-                <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-                  <%= time_ago_in_words transaction.created_at %>
-                  <span class="display-state"></span>
-                </small>
+                <span class='pull-right'><%=transaction.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
               </div>
             </div>
           </div>

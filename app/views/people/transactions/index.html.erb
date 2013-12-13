@@ -21,7 +21,7 @@
             数量
           </div>
         </div>
-       <div class='span2'>
+        <div class='span2'>
           合计
         </div>
         <div class='span2'>
@@ -39,7 +39,10 @@
               编号: <%=t.number %>
             </div>
             <div class='span4'>
-              成交时间 <%=t.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
+              <small rel='tooltip' title="<%=I18n.l t.created_at, :format => :long %>">
+                <%= time_ago_in_words t.created_at %>
+              </small>
+              成交
             </div>
             <div class='span2'>
               <%= link_to t.seller.name, shop_path(t.seller)  %>

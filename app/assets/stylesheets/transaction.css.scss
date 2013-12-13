@@ -228,6 +228,7 @@
     padding: 5px;
     height: 100%;
     @include box_sizing(border-box);
+
     background: $white;
 
     .message-toggle{
@@ -311,10 +312,6 @@
 
     .summarize{
       cursor: pointer;
-
-      .head{
-        position: relative;
-      }
 
       .products{
         .delivery_price{
