@@ -76,16 +76,17 @@ class InstantlyNotificationManager
   #用户关系
   add_user: (data) =>
     @addCommonNotif(data)
-    if ChatList?
-      collection = ChatList.friends_view.collection
 
-      model = new Backbone.Model({
+    chatList = ChatListView.getInstance()
+
+    if chatList?
+      friendsView = chatList.friends_view
+
+      friendsView.addFriend(
         follow_type: 1,
-        login: data.login,
-        avatar: data.avatar
-      })
-
-      collection.add( model )
+        login: data.friend_name,
+        icon: data.avatar
+      )
 
 
   add_to_circle: (data) =>
@@ -97,6 +98,17 @@ class InstantlyNotificationManager
 
   remove_user: (data) =>
     @addCommonNotif(data)
+
+    chatList = ChatListView.getInstance()
+
+    if chatList?
+      friendsView = chatList.friends_view
+
+      friendsView.removeFriend(
+        follow_type: 1,
+        login: data.friend_name,
+        icon: data.avatar
+      )
 
 
   #个人社交部分
@@ -335,6 +347,8 @@ class NotificationViewBase extends Backbone.View
     _.extend(@, @options)
 
   mark_as_read: () ->
+    console.log(@url)
+
     $.ajax(
       type: "post",
       url: "#{ @url}/#{ @model.id }/mark_as_read",

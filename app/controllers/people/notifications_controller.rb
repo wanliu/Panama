@@ -5,7 +5,7 @@ class People::NotificationsController < People::BaseController
   def index
     authorize! :index, Notification
     @notifications = Notification.unreads
-        .where(:mentionable_user_id => @people.id)
+        .where(:user_id => @people.id)
         .order(updated_at: :asc)
     respond_to do | format |
       format.html
