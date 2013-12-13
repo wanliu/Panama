@@ -565,6 +565,12 @@ ul {
   }
 }
 
+.avatar{
+  &.avatar-icon {
+    width: 45px;
+  }
+}
+
 .navbar .nav>li>.account:after {
   // border-bottom-color: rgba(51,51,51,0.85);
 }

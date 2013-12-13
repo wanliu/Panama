@@ -7,7 +7,7 @@ class InstantlyNotificationManager
 
   defaultTemplate: Handlebars.compile(
      """<div class='noty_message'>
-          <img class='avatar noty_avatar' src='{{avatar}}' />
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
           {{#if title}}
             <p>{{title}}</p>
           {{/if}}

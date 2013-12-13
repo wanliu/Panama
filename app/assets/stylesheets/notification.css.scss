@@ -1,8 +1,34 @@
+
+#notification-category {
+
+	.activity {
+		i {
+			color: rgb(49, 81, 133);
+		}
+	}
+}
+
 .notification_panel{
+
 	ul{
 		list-style: none;
 
-		li{
+		li.notification_one{
+			ul.notification-actions {
+				float: right;
+				list-style: none;
+				margin: 10px;
+				li {
+					float: right;
+					margin-left: 10px;
+					font-size: 16px;
+					line-height: 20px;
+				}
+
+				.avatar {
+					width: 20px;
+				}
+			}
 			margin-top: 10px;
 			margin-bottom: 10px;
 
@@ -19,6 +45,10 @@
 /*				display: inline-block;
 				position: absolute;
 				padding: 10px;*/
+
+				.pull-right {
+					margin-right: 60px;
+				}
 			}
 		}
 	}
