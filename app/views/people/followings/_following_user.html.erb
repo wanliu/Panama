@@ -1,15 +1,23 @@
 <% if followings.count > 0 %>
   <% followings.each do |f| %>
     <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%= f.follow_id %>" >
-      <img src="<%= f.follow.icon %>" class="img-rounded avatar" />
-      <%= f.follow.login %>
-      <% if can? :destroy, Following %>
-        <input type='button' class='btn btn-small btn-primary unfollow' value='取消关注' />
-      <% else %>
-        <% unless current_user.nil? || f.follow == current_user %>
-          <input type='button' class='btn btn-small btn-primary follow' value='关注' />
+      <div class='avatar'>
+        <img src="<%= f.follow.icon %>" class="img-rounded" />
+      </div>
+      <div class='info'>
+        <div>
+          <%= f.follow.login %>
+        </div>
+        <div>
+        <% if can? :destroy, Following %>
+          <label class='label label-success unfollow'>取消关注</label>
+        <% else %>
+          <% unless current_user.nil? || f.follow == current_user %>
+            <label class='label label-success follow'>关注</label>
+          <% end %>
         <% end %>
-      <% end %>
+        </div>
+      </div>
     </div>
   <% end %>
 <% else %>

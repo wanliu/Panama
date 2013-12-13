@@ -1,18 +1,18 @@
 <% if followings.count > 0 %>
   <% followings.each do |f| %>
     <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%=f.follow_id %>">
-    	<div class='avatar'>
-      	<img src="<%= f.follow.photos.icon %>" class="img-rounded" />
+      <div class='avatar'>
+        <img src="<%= f.follow.photos.icon %>" class="img-rounded" />
       </div>
       <div class='info'>
-      	<div>
-      		<%= f.follow.name %>
-      	</div>
-      	<div>
-      		<label class='label label-success unfollow'>
-      			取消关注
-      		</label>
-      	</div>
+        <div>
+          <%= f.follow.name %>
+        </div>
+        <div>
+          <label class='label label-success unfollow'>
+            取消关注
+          </label>
+        </div>
       </div>
     </div>
   <% end %>
