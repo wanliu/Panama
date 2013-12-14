@@ -8,11 +8,13 @@ class CompletingShopController < Wicked::WizardController
     service_id = Service.where(service_type: "seller").first.id
     # @user_checking = current_user.user_checking.where(service_id: service_id).first_or_create
 
-    @user_checking = current_user.user_checking
-    unless @user_checking.update_attributes(service_id: service_id) 
-      @user_checking = current_user.create_user_checking(service_id: service_id)
-    end
-    
+    @user_checking = current_user.user_checking.where(service_id: service_id).first_or_create
+
+    # @user_checking = current_user.user_checking
+    # unless @user_checking.update_attributes(service_id: service_id)
+    #   @user_checking = current_user.create_user_checking(service_id: service_id)
+    # end
+
     @shop_auth = ShopAuth.new(@user_checking.attributes)
     if @user_checking.checked && current_user.try(:shop).try(:actived)
       redirect_to "/"
