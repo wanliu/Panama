@@ -1,11 +1,11 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
   before_filter :login_required, :except => [:kuaiqian_receive]
+  helper_method :base_template_path
 
   def index
     authorize! :index, OrderTransaction
     @transactions = current_order.uncomplete.order("created_at desc").page(params[:page])
-    @direct_transactions = current_user.direct_transactions.uncomplete.order("created_at desc")
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @transactions }
@@ -30,16 +30,6 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     render :layout => "print"
   end
-
-  # def create
-  #   product = ShopProduct.where(params[:product_item][:product_id])
-  #   @transaction = @people.transactions.build(seller_id: product.shop_id)
-  #   @transaction.items.build(params[:product_item])
-  #   @transaction.items.each {|item| item.update_total}
-  #   @transaction.save
-  #   redirect_to person_transactions_path(@people.login),
-  #                 notice: 'Transaction was successfully created.'
-  # end
 
   def page
     @transaction = current_order.find(params[:id])
@@ -145,8 +135,8 @@ class People::TransactionsController < People::BaseController
   end
 
   def completed
-    @transactions = OrderTransaction.buyer(@people).completed
-    @direct_transactions = @people.direct_transactions.completed
+    @transactions = OrderTransaction.buyer(@people).completed.order("created_at desc").page(params[:page])
+    @direct_transactions = @people.direct_transactions.completed.order("created_at desc").page(params[:page])
   end
 
   def get_delivery_price
@@ -340,5 +330,9 @@ class People::TransactionsController < People::BaseController
 
   def paid_send_url
     "#{test_config[:prefix_url]}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
+  end
+
+  def base_template_path
+    "people/transactions/base"
   end
 end

@@ -1,148 +1,144 @@
 <% product = @shop_product.product %>
 <% shop = @shop_product.shop %>
 <div class="container shop_product_<%=@shop_product.id %> shop_product_dialog" data-value-id="<%=@shop_product.id %>">
-  <div class="row-fluid ">
-    <div class="offset2 span8">
-      <!-- 主展示框 -->
-      <div id="main-modal" class="dialog">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3><%= product.name %></h3>
+  <!-- 主展示框 -->
+  <div id="main-modal" class="dialog modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3><%= product.name %></h3>
+    </div>
+    <div class="modal-body main-show">
+      <div class='row-fluid'>
+        <div class="span5 preview">
+          <%= image_tag product.photos.preview, :id => 'zoom_01', "data-zoom-image" => "http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg" %>
         </div>
-        <div class="modal-body main-show">
-          <div class='row-fluid'>
-            <div class="span5 preview">
-              <%= image_tag product.photos.preview, :id => 'zoom_01', "data-zoom-image" => "http://www.elevateweb.co.uk/wp-content/themes/radial/zoom/images/large/image3.jpg" %>
+        <div class="span6 property">
+          <%= simple_form_for ProductItem.new,
+            :url => person_transactions_path(current_user),
+            :html => {:class =>'form-horizontal product' } do |f| %>
+            <input type='hidden' value="<%=@shop_product.id %>" name="shop_product_id" />
+            <div class="control-group">
+              <label class="control-label" for="inputEmail">
+                价格
+              </label>
+              <div class="controls">
+                <p class="text">
+                  <%= @shop_product.price %>
+                </p>
+              </div>
+              <label class="control-label" for="inputEmail">
+                配送
+              </label>
+              <div class="controls">
+                <p class="text">
+                  10
+                </p>
+              </div>
+              <label class="control-label" for="inputEmail">
+                商品评分
+              </label>
+              <div class="controls">
+                <p class="star"></p>
+                <script type="text/javascript">
+                  $(".star").raty({
+                    readOnly : true,
+                    score    : 4,
+                    path     : "/assets/raty"
+                  })
+                </script>
+              </div>
+              <label class='control-label'>数量</label>
+              <div class='controls'>
+                <p class='text'>
+                  <input type='number' value='1' class='amount' name='product_item[amount]' />
+                </p>
+              </div>
             </div>
-            <div class="span6 property">
-              <%= simple_form_for ProductItem.new,
-                :url => person_transactions_path(current_user),
-                :html => {:class =>'form-horizontal product' } do |f| %>
-                <input type='hidden' value="<%=@shop_product.id %>" name="shop_product_id" />
-                <div class="control-group">
-                  <label class="control-label" for="inputEmail">
-                    价格
-                  </label>
-                  <div class="controls">
-                    <p class="text">
-                      <%= @shop_product.price %>
-                    </p>
+          <% end %>
+        </div>
+        <div class='span1'>
+          <div>
+            <img src="<%=shop.photos.icon %>" />
+          </div>
+          <div>
+            <% if shop.present? %>
+              <%= link_to shop.try(:name),shop_path(shop.try(:name)) %>
+            <% end %>
+          </div>
+          <div>
+            关注 <span><%=shop.followers.count %></span>
+          </div>
+        </div>
+      </div>
+      <div class='row-fluid' style='margin-top: 20px'>
+        <div class='span12'>
+          <ul class="nav nav-tabs">
+            <li class="active">
+              <a href="#details" data-toggle="tab">
+                详细信息
+              </a>
+            </li>
+            <li>
+              <a href="#comment" data-toggle="tab">
+                商品评价
+              </a>
+            </li>
+            <li>
+              <a href="#message" data-toggle="tab">
+                Messages
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="details">
+              <p>I'm in Section 1.</p>
+            </div>
+            <div class="tab-pane" id="comment">
+              <% if @product_comments.present? %>
+                <% @product_comments.each do |c| %>
+                  <div class='row-fluid'>
+                    <div class='span6'>
+                      <p>
+                        <%=c.comment.content %>
+                      </p>
+                      <p>
+                      <small rel='tooltip' title="<%= I18n.l c.comment.created_at, :format => :long %>">
+                      <%= time_ago_in_words c.comment.created_at %>
+                      <span class="display-state"></span>
+                      </small>
+                      </p>
+                    </div>
+                    <div class='span4'>
+                      <div>服务：<%=c.star_service %></div>
+                      <div>物流：<%=c.star_logistics %></div>
+                      <div>商品：<%=c.star_product %></div>
+                    </div>
+                    <div class='span2'>
+                      <img src="<%=c.user.photos.icon %>" />
+                      <%=c.user.login %>
+                    </div>
                   </div>
-                  <label class="control-label" for="inputEmail">
-                    配送
-                  </label>
-                  <div class="controls">
-                    <p class="text">
-                      10
-                    </p>
-                  </div>
-                  <label class="control-label" for="inputEmail">
-                    商品评分
-                  </label>
-                  <div class="controls">
-                    <p class="star"></p>
-                    <script type="text/javascript">
-                      $(".star").raty({
-                        readOnly : true,
-                        score    : 4,
-                        path     : "/assets/raty"
-                      })
-                    </script>
-                  </div>
-                  <label class='control-label'>数量</label>
-                  <div class='controls'>
-                    <p class='text'>
-                      <input type='number' value='1' class='amount' name='product_item[amount]' />
-                    </p>
-                  </div>
-                </div>
+                <% end %>
+              <% else %>
+                暂时没有评论
               <% end %>
             </div>
-            <div class='span1'>
-              <div>
-                <img src="<%=shop.photos.icon %>" />
-              </div>
-              <div>
-                <% if shop.present? %>
-                  <%= link_to shop.try(:name),shop_path(shop.try(:name)) %>
-                <% end %>
-              </div>
-              <div>
-                关注 <span><%=shop.followers.count %></span>
-              </div>
-            </div>
-          </div>
-          <div class='row-fluid' style='margin-top: 20px'>
-            <div class='span12'>
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a href="#details" data-toggle="tab">
-                    详细信息
-                  </a>
-                </li>
-                <li>
-                  <a href="#comment" data-toggle="tab">
-                    商品评价
-                  </a>
-                </li>
-                <li>
-                  <a href="#message" data-toggle="tab">
-                    Messages
-                  </a>
-                </li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane active" id="details">
-                  <p>I'm in Section 1.</p>
-                </div>
-                <div class="tab-pane" id="comment">
-                  <% if @product_comments.present? %>
-                    <% @product_comments.each do |c| %>
-                      <div class='row-fluid'>
-                        <div class='span6'>
-                          <p>
-                            <%=c.comment.content %>
-                          </p>
-                          <p>
-                          <small rel='tooltip' title="<%= I18n.l c.comment.created_at, :format => :long %>">
-                          <%= time_ago_in_words c.comment.created_at %>
-                          <span class="display-state"></span>
-                          </small>
-                          </p>
-                        </div>
-                        <div class='span4'>
-                          <div>服务：<%=c.star_service %></div>
-                          <div>物流：<%=c.star_logistics %></div>
-                          <div>商品：<%=c.star_product %></div>
-                        </div>
-                        <div class='span2'>
-                          <img src="<%=c.user.photos.icon %>" />
-                          <%=c.user.login %>
-                        </div>
-                      </div>
-                    <% end %>
-                  <% else %>
-                    暂时没有评论
-                  <% end %>
-                </div>
-                <div class="tab-pane" id="message">
-                  <p>H3254453.</p>
-                </div>
-              </div>
+            <div class="tab-pane" id="message">
+              <p>H3254453.</p>
             </div>
           </div>
         </div>
-        <div class="modal-footer toolbar">
-          <div class="control-group">
-            <div class="control pull-right">
-              <span class='buy_manner'>
-                <input type='radio' checked name='buy_manner' value='direct' />直接购买
-                <input type='radio' name='buy_manner' value='guarantee' />担保交易
-              </span>
-              <button type="button" class="btn btn-primary btn-large buy">购买</button>
-              <%= add_to_my_cart("加入购物车", ".shop_product_#{@shop_product.id} .preview") %>
-            </div>
-          </div>
+      </div>
+    </div>
+    <div class="modal-footer toolbar">
+      <div class="control-group">
+        <div class="control pull-right">
+          <span class='buy_manner'>
+            <input type='radio' checked name='buy_manner' value='direct' />直接购买
+            <input type='radio' name='buy_manner' value='guarantee' />担保交易
+          </span>
+          <button type="button" class="btn btn-primary btn-large buy">购买</button>
+          <%= add_to_my_cart("加入购物车", ".shop_product_#{@shop_product.id} .preview") %>
         </div>
       </div>
     </div>

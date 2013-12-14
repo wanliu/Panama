@@ -33,9 +33,11 @@ class OrderRefund < ActiveRecord::Base
 
   validates :order_reason, :presence => true
   validates :order, :presence => true
+  validates :number, :presence => true, :uniqueness => true
 
   before_validation(:on => :create) do
     update_buyer_and_seller_and_operate
+    generate_number
   end
 
   after_create :change_order_state, :notify_shop_refund, :create_state_detail
@@ -284,12 +286,27 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
+  def state_title
+    I18n.t("refund_state.#{state}")
+  end
+
   # 检查本次被退货的商品是否已经在退货中
   # def product_been_refunded?(product_item)
   #   order.refunds.any? do |refund|
   #     refund.items.any? { |item| item.product_id == product_item.product_id }
   #   end
   # end
+
+  def generate_number
+    _number = (OrderRefund.max_id + 1).to_s
+    _number = "#{'0' * (9-_number.length)}#{_number}" if _number.length < 9
+    self.number = _number
+  end
+
+  def self.max_id
+    select("max(id) as id")[0].try(:id) || 0
+  end
+
 
   private
   def valid_shipped_order_state?

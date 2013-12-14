@@ -1,10 +1,10 @@
 <div class="pull-right">
-	<div class="btn-group">
-		<% event_name = PayManner.default.try(:code) %>
-		<%= link_to '#',
-				:class => 'btn btn-large btn-primary',
-				'event-name' => event_name do %>
-			<%=raw "确认订单&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
-		<% end %>
-	</div>
+  <div class="btn-group">
+    <% event_name = PayManner.default.try(:code) %>
+    <%= link_to '#',
+        :class => 'btn btn-large btn_event btn-primary',
+        'event-name' => event_name do %>
+      <%=raw "确认订单&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
+    <% end %>
+  </div>
 </div>

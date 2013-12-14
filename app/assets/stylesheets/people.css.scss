@@ -39,24 +39,25 @@
       width: 130px;
     }
 
-    .followers, .followings{
-      text-align: center;
+  }
 
-      a{
-        color: white;
-      }
+  .followers, .followings{
+    text-align: center;
 
-      a:hover{
-        text-decoration: none;
-      }
-
-      .count{
-        font-size: 17px;
-        font-weight: bold;
-      }
+    a{
+      color: white;
     }
 
+    a:hover{
+      text-decoration: none;
+    }
+
+    .count{
+      font-size: 17px;
+      font-weight: bold;
+    }
   }
+
   .icon-chevron-right {
     float: right;
     margin-top: 2px;
@@ -87,6 +88,10 @@
 
 .sidebar_panel {
   position: relative;
+
+  #notice{
+    margin: 0px;
+  }
 }
 
 // .right-sidebar {

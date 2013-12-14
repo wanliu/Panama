@@ -57,15 +57,17 @@ class OrderTransaction < ActiveRecord::Base
   validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total
+  validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
 
   accepts_nested_attributes_for :address
 
-  #在线支付类型 account: 帐户余额 kuaiqian: 快钱
+  #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :online_pay_type, [:account, :kuaiqian]
 
   before_validation(:on => :create) do
     update_total_count
+    generate_number
   end
 
   after_create  :notice_new_order, :state_change_detail, :notice_user
@@ -273,6 +275,32 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def generate_number
+    _number = (OrderTransaction.max_id + 1).to_s
+    _number = "#{'0' * (9-_number.length)}#{_number}" if _number.length < 9
+    self.number = _number
+  end
+
+  def delivery_express?
+    delivery_manner && delivery_manner.express?
+  end
+
+  def delivery_local?
+    delivery_manner && delivery_manner.local_delivery?
+  end
+
+  def delivery_name
+    if delivery_manner.nil?
+      '卖家选择'
+    else
+      delivery_manner.name
+    end
+  end
+
+  def delivery_type_name
+    delivery_type.nil? ? "暂无" : delivery_type.name
+  end
+
   def get_refund_items(product_ids)
     items.where(:product_id => product_ids)
   end
@@ -453,7 +481,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def operator_create(toperator_id)
-    unless current_operator.try(:id) == toperator_id
+    unless current_operator.try(:id) == toperator_id || operator_state
       _operator = operators.create(operator_id: toperator_id)
       self.update_attribute(:operator_id, _operator.id) if _operator.valid?
     end
@@ -508,10 +536,14 @@ class OrderTransaction < ActiveRecord::Base
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:address_only)
     attra["unmessages_count"] = unmessages.count
-    attra["state_title"] = I18n.t("order_states.seller.#{state}")
+    attra["state_title"] = state_title
     attra["stotal"] = stotal
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
+  end
+
+  def state_title
+    I18n.t("order_states.seller.#{state}")
   end
 
   def notice_change_buyer(event_name = nil)
@@ -598,6 +630,10 @@ class OrderTransaction < ActiveRecord::Base
     undelayed_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
   end
 
+  def self.max_id
+    select("max(id) as id")[0].try(:id) || 0
+  end
+
   def self.state_expired
     transactions = find(:all,
       :joins => "left join transaction_state_details as details
@@ -608,14 +644,6 @@ class OrderTransaction < ActiveRecord::Base
     transactions.each{|t| t.fire_events!(:expired) }
     puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
-  end
-
-  def number
-    if id > 99999999
-      id
-    else
-      "#{ '0' * (9 - id.to_s.length) }#{ id }"
-    end
   end
 
   def self.export_column

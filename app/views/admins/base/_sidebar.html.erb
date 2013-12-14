@@ -1,136 +1,136 @@
 <nav id="left_sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
-	<ul id="admin-side-nav" class="side-nav">
-		 <%= image_tag current_shop.photos.avatar, :class => "img-polaroid" %>
-		 	<h4 class="cell"><%= current_shop.name %></h4>
-			 <div class="isfollowing cell">
-			<!--     <span class="label">Default</span>
-			    <span class="label">Default</span> -->
-			    <% unless current_shop.user.id == current_user.id %>
-			        <% unless current_user.is_follow_user?(current_shop.id) %>
-			            <span class="label label-success lf follow" data-value="<%= current_shop.id %>">+关注</span>
-			        <% else %>
-			            <span class="label label-important lf unfollow" data-value="<%= current_shop.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
-			        <% end %>
-			     <% end %>
-		    </div>
+  <ul id="admin-side-nav" class="side-nav">
+     <%= image_tag current_shop.photos.avatar, :class => "img-polaroid" %>
+      <h4 class="cell"><%= current_shop.name %></h4>
+       <div class="isfollowing cell">
+      <!--     <span class="label">Default</span>
+          <span class="label">Default</span> -->
+          <% unless current_shop.user.id == current_user.id %>
+              <% unless current_user.is_follow_user?(current_shop.id) %>
+                  <span class="label label-success lf follow" data-value="<%= current_shop.id %>">+关注</span>
+              <% else %>
+                  <span class="label label-important lf unfollow" data-value="<%= current_shop.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+              <% end %>
+           <% end %>
+        </div>
 
-		<% sections(:top).each do |section| %>
-			<%= render :partial => "section", :locals => section %>
-		<% end %>
-		<li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#acount-collapse">
-				<i class="icon-user"></i>
-				<span class="name">店铺</span>
-			</a>
-			<ul id="acount-collapse" class="accordion-body collapse">
-			<% sections(:shop).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li>
+    <% sections(:top).each do |section| %>
+      <%= render :partial => "section", :locals => section %>
+    <% end %>
+    <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#acount-collapse">
+        <i class="icon-user"></i>
+        <span class="name">店铺</span>
+      </a>
+      <ul id="acount-collapse" class="accordion-body collapse">
+      <% sections(:shop).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li>
 
-		<li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#orders-collapse">
-				<i class="icon-edit"></i>
-				<span class="name">订单</span>
-			</a>
-			<ul id="orders-collapse" class="accordion-body collapse">
-			<% sections(:transactions).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li>
-	<!--     <li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#logistics-collapse"><i class="icon-truck"></i> <span class="name">物流</span></a>
-			<ul id="logistics-collapse" class="accordion-body collapse">
-			<% sections(:transportation).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li> -->
-	<!--     <li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#services-collapse"><i class="icon-user-md"></i> <span class="name">售后</span></a>
-			<ul id="services-collapse" class="accordion-body collapse">
-			<% sections(:service).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li> -->
-		<li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#products-collapse">
-				<i class="icon-th-large"></i>
-				<span class="name">商品</span>
-			</a>
-			<ul id="products-collapse" class="accordion-body collapse">
-			<% sections(:products).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li>
-	<!--     <li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#design-collapse"><i class="icon-edit"></i> <span class="name">设计</span></a>
-			<ul id="design-collapse" class="accordion-body collapse">
-			<% sections(:design).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li> -->
-		<li class="accordion-group">
-			<a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#administrator-collapse">
-				<i class="icon-cog"></i>
-				<span class="name">管理</span>
-			</a>
-			<ul id="administrator-collapse" class="accordion-body collapse">
-			<% sections(:admins).each do |section| %>
-				<%= render :partial => "section", :locals => section %>
-			<% end %>
-			</ul>
-		</li>
-	</ul>
+    <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#orders-collapse">
+        <i class="icon-edit"></i>
+        <span class="name">订单</span>
+      </a>
+      <ul id="orders-collapse" class="accordion-body collapse">
+      <% sections(:transactions).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li>
+  <!--     <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#logistics-collapse"><i class="icon-truck"></i> <span class="name">物流</span></a>
+      <ul id="logistics-collapse" class="accordion-body collapse">
+      <% sections(:transportation).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li> -->
+  <!--     <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#services-collapse"><i class="icon-user-md"></i> <span class="name">售后</span></a>
+      <ul id="services-collapse" class="accordion-body collapse">
+      <% sections(:service).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li> -->
+    <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#products-collapse">
+        <i class="icon-th-large"></i>
+        <span class="name">商品</span>
+      </a>
+      <ul id="products-collapse" class="accordion-body collapse">
+      <% sections(:products).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li>
+  <!--     <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#design-collapse"><i class="icon-edit"></i> <span class="name">设计</span></a>
+      <ul id="design-collapse" class="accordion-body collapse">
+      <% sections(:design).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li> -->
+    <li class="accordion-group">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#side-nav" href="#administrator-collapse">
+        <i class="icon-cog"></i>
+        <span class="name">管理</span>
+      </a>
+      <ul id="administrator-collapse" class="accordion-body collapse">
+      <% sections(:admins).each do |section| %>
+        <%= render :partial => "section", :locals => section %>
+      <% end %>
+      </ul>
+    </li>
+  </ul>
 
-	<div class="row-fluid">
-		<div class="span6 followings">
-			<div class='count'>
-				<a href="<%= shop_admins_followings_path(current_shop) %>">
-					<%=current_shop.followers.count %>
-				</a>
-			</div>
-			<div>
-				<a href="<%= shop_admins_followings_path(current_shop) %>">
-				被关注
-				</a>
-			</div>
-		</div>
-		<div class="span6 orders">
-			<div class='count'>
-				<a href="<%= shop_admins_pending_path %>">
-					<%= current_shop.transactions.count %>
-				</a>
-			</div>
-			<div>
-				<a href="<%= shop_admins_pending_path %>">
-				订单
-				</a>
-			</div>
-		</div>
-	</div>
+  <div class="row-fluid">
+    <div class="span6 followings">
+      <div class='count'>
+        <a href="<%= shop_admins_followings_path(current_shop) %>">
+          <%=current_shop.followers.count %>
+        </a>
+      </div>
+      <div>
+        <a href="<%= shop_admins_followings_path(current_shop) %>">
+        被关注
+        </a>
+      </div>
+    </div>
+    <div class="span6 orders">
+      <div class='count'>
+        <a href="<%= shop_admins_pending_path %>">
+          <%= current_shop.transactions.count %>
+        </a>
+      </div>
+      <div>
+        <a href="<%= shop_admins_pending_path %>">
+        订单
+        </a>
+      </div>
+    </div>
+  </div>
 
-	<!-- <div id="sidebar-settings" class="settings">
-		<button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
-		<button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
-	</div> -->
+  <!-- <div id="sidebar-settings" class="settings">
+    <button type="button" data-value="icons" class="btn-icons btn btn-transparent btn-small">图标</button>
+    <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
+  </div> -->
 </nav>
 
 <script type="text/javascript">
-	var section = "<%= yield :admin_siderbar %>";
-	if(section != ""){
-		$("#left_sidebar ul li #" + section).parents("li")
-			.addClass("active")
-			.parents(".accordion-body")
-			.addClass("in");
-	}
+  var section = "<%= yield :admin_siderbar %>";
+  if(section != ""){
+    $("#left_sidebar ul li #" + section).parents("li")
+      .addClass("active")
+      .parents(".accordion-body")
+      .addClass("in");
+  }
 
-	// $(function(){
-	// 	new LeftSideBar({ el: "#left_sidebar" })
-	// })
+  // $(function(){
+  //  new LeftSideBar({ el: "#left_sidebar" })
+  // })
 </script>

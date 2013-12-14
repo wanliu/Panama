@@ -1,2 +1,13 @@
-<% admin_active_section :complete %>
+<% admin_active_section :direct_transactions %>
 <%= render :partial => "show", :locals => { direct_transaction: @direct_transaction } %>
+<script type='text/javascript'>
+  $(function(){
+    new ShopDirectTransactionView({
+      shop: {
+        token: "<%=current_shop.im_token %>"
+      },
+      realtime_url: '<%= faye_server_uri %>',
+      token: "<%= token %>",
+      el: $(".direct")})
+  })
+</script>

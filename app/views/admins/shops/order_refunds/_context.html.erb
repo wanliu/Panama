@@ -1,6 +1,6 @@
 <% buyer = refund.order.buyer %>
 <div id="refund<%=refund.id %>"
-  class="transaction refund-<%=refund.id %>-<%=refund.state %>"
+  class="transaction order_refund refund-<%=refund.id %>-<%=refund.state %>"
   state-id='<%=refund.id %>'
   state-url="<%=page_shop_admins_order_refund_path(current_shop, refund) %>"
   state-initial="<%=refund.state %>"
@@ -22,15 +22,13 @@
             <%=render "state_button", :refund => refund %>
           </div>
           <div class="transaction-number">
-            订单编号：<%= refund.order.number %>
-            <small rel='tooltip' title="<%=I18n.l refund.created_at, :format => :long %>">
-              <%= time_ago_in_words refund.created_at %>
-              <span class="display-state"></span>
-            </small>
+            <span class='number'>编号: <%=refund.number %></span>
+            <span class='order_number'>订单编号：<%=refund.order.number %></span>
+            <span class='pull-right'><%=refund.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
           </div>
           <div class="state-progress">
             <% unless refund.state == "failure" %>
-              <%=render "progress", :refund => refund %>
+              <%#=render "progress", :refund => refund %>
             <% end %>
           </div>
         </div>

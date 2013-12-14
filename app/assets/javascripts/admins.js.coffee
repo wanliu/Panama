@@ -29,3 +29,4 @@
 #= require admins/shops/shop_direct_transaction
 #= require admins/shops/community_message
 #= require people/community
+#= require table_list

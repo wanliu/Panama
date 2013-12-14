@@ -1,10 +1,16 @@
+@import "lib/helper";
 
 .direct_transactions{
   .direct{
-    padding:0px;
+    padding: 8px;
 
     .direct-info{
-      padding: 15px 0px 5px 15px;
+      /*padding: 10px 0px;*/
+
+      .create_time{
+        clear: both;
+        float: right;
+      }
 
       .close{
         margin-left: 10px;
@@ -14,10 +20,17 @@
         img{
           width:70px;
           height:70px;
+          vertical-align: top;
+          float: left;
         }
 
-        h1{
-          display:inline-block;
+        .header-title{
+          margin-left: 85px;
+        }
+
+        .owner_name{
+          display: inline-block;
+          margin: 0px
         }
       }
 
@@ -28,12 +41,22 @@
             font-size:20px;
           }
         }
+
+        tbody{
+          tr{
+            line-height: 66px;
+          }
+        }
       }
     }
 
     .direct-message{
       background: white;
       padding: 5px;
+      @include box_sizing(border-box);
+
+      .toolbar{
+      }
 
       .messages{
         background: white;
@@ -41,7 +64,7 @@
         iframe{
           width: 100%;
           border: none;
-          height: 220px;
+          height: 100%;
         }
       }
     }

@@ -31,3 +31,4 @@
 #= require topic
 #= require people/product_comment
 #= require people/direct_transaction
+#= require table_list

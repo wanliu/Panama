@@ -16,7 +16,7 @@ class TransactionRefund extends Backbone.Model
 
 class TransactionRefundView extends Backbone.View
   events: {
-    "click .returned-event"        : "toggle_panel",
+    "click .toolbar>.returned_event"        : "toggle_panel",
     "submit .returned_panel form"  : "create"
   }
 

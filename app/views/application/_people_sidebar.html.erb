@@ -4,18 +4,6 @@
     <%= image_tag @people.photos.avatar, :class => "img-polaroid" %>
     </a>
     <h4><%= @people.login %></h4>
-    <div class='row-fluid'>
-      <div class='span6 followers'>
-        <a href='/people/<%=@people.login %>/followers' class='label label-success'>
-          <%= @people.followers.length %> 关注我
-        </a>
-      </div>
-      <div class='span6 followings'>
-        <a href='/people/<%=@people.login %>/followings'  class='label label-success'>
-          <%= @people.followings.length %> 我关注
-        </a>
-      </div>
-    </div>
   </div>
 
   <ul id="people-side-nav" class="side-nav">
@@ -69,7 +57,12 @@
         <ul id="purchaser-collapse" class="accordion-body collapse">
           <li>
             <a class="people-transaction" href="<%= person_transactions_path(@people.login) %>">
-              未完成
+              担保交易
+            </a>
+          </li>
+          <li>
+            <a class="people-direct_transaction" href="<%= person_direct_transactions_path(@people.login) %>">
+              直接交易
             </a>
           </li>
           <li>
@@ -132,6 +125,32 @@
       </ul>
     </li>
   </ul>
+  <div class='row-fluid'>
+    <div class='span6 followers'>
+      <div class='count'>
+        <a href='/people/<%=@people.login %>/followers'>
+          <%= @people.followers.length %>
+        </a>
+      </div>
+      <div class='title'>
+        <a href='/people/<%=@people.login %>/followers'>
+          关注我
+        </a>
+      </div>
+    </div>
+    <div class='span6 followings'>
+      <div class='count'>
+        <a href='/people/<%=@people.login %>/followings'>
+        <%= @people.followings.length %>
+        </a>
+      </div>
+      <div class='title'>
+        <a href='/people/<%=@people.login %>/followings'>
+        我关注
+        </a>
+      </div>
+    </div>
+  </div>
 </nav>
 
 <script type="text/javascript">

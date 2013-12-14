@@ -7,8 +7,8 @@ class window.ShopDirectTransactionView extends Backbone.View
     _.extend(@, options)
     @init_elem()
     @direct_transaction_id = @$el.attr("data-value-id")
-    @load_style()
     @realtime_load()
+    @load_style()
 
   init_elem: () =>
     @$el = $(@el)
@@ -19,7 +19,10 @@ class window.ShopDirectTransactionView extends Backbone.View
     @$toolbar = @$message.find(".toolbar")
 
   load_style: () ->
-    @$iframe.height(@$info.height() - @$toolbar.height())
+    setTimeout () =>
+      padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
+      @$messages.height( @$info.outerHeight() - @$toolbar.outerHeight() - padding)
+    , 200
 
   toggle_message: () ->
     @$messages.slideToggle()

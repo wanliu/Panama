@@ -344,4 +344,8 @@ module ApplicationHelper
       params[:city_id]
     end
   end
+
+  def render_base_template(template, options = {})
+    render :partial => "#{base_template_path}/#{template}", locals: options
+  end
 end

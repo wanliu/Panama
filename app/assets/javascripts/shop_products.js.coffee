@@ -12,11 +12,13 @@ class ShopProductView extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
-    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
-    @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
+
     @loadTemplate () =>
-      @$el = $(@render()).appendTo(@$dialog)
-      # $(window).scroll()
+      @$el = $(@render()).appendTo("#popup-layout")
+      @$("#main-modal").modal()
+      @$("#main-modal").on "hidden", () =>
+        @close()
+
     super
 
   loadTemplate: (handle) ->
@@ -36,8 +38,6 @@ class ShopProductView extends Backbone.View
     $("body").removeClass("noScroll")
 
   close: () ->
-    @$dialog.remove()
-    @$backdrop.remove()
     @unmodal()
 
 class ShopProductPreview extends Backbone.View

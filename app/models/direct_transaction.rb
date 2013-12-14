@@ -15,6 +15,14 @@ class DirectTransaction < ActiveRecord::Base
   has_many :messages, :class_name => "ChatMessage", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
 
+  validates :buyer, :presence => true
+  validates :seller, :presence => true
+  validates :number, :presence => true, :uniqueness => true
+
+  before_validation(:on => :create) do
+    generate_number
+  end
+
   before_create :init_data
 
   after_create :notice_seller, :notice_new
@@ -32,9 +40,13 @@ class DirectTransaction < ActiveRecord::Base
     attra["buyer_login"] = buyer.try(:login)
     attra["items_count"] = items_count
     attra["unmessages_count"] = unmessages.count
-    attra["state_title"] = I18n.t("direct_transaction_state.#{state.name}")
+    attra["state_title"] = state_title
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
+  end
+
+  def state_title
+    I18n.t("direct_transaction_state.#{state.name}")
   end
 
   def notice_url(current_user)
@@ -82,12 +94,14 @@ class DirectTransaction < ActiveRecord::Base
     CaramalClient.publish(seller.user.login, url, options)
   end
 
-  def number
-    if id > 99999999
-      "WLD#{ id }"
-    else
-      "WLD#{ '0' * (9 - id.to_s.length) }#{ id }"
-    end
+  def generate_number
+    _number = (DirectTransaction.max_id + 1).to_s
+    _number = "D#{'0' * (9-_number.length)}#{_number}" if _number.length < 9
+    self.number = _number
+  end
+
+  def self.max_id
+    select("max(id) as id")[0].try(:id) || 0
   end
 
 end

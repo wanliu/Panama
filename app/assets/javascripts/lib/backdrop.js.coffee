@@ -1,6 +1,8 @@
 root = window || @
 class root.BackDropView extends Backbone.View
-
+  events: {
+  	"click" : "_close"
+  }
   initialize: () ->
     @$backdrop = $("body>.model-popup-backdrop")
     if @$backdrop.length <= 0
@@ -11,3 +13,9 @@ class root.BackDropView extends Backbone.View
 
   hide: () ->
     @$backdrop.removeClass("in").addClass("out")
+
+  close: () ->
+
+  _close: () ->
+  	@hide()
+  	@close()

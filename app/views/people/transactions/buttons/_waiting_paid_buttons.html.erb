@@ -1,14 +1,7 @@
 <span class="pull-right">
   <div class="btn-group">
-    <% if Rails.env.development? %>
-      <%= link_to '#',
-            :class => 'btn btn-large',
-            'event-name' => 'back' do %>
-        <%= raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
-      <% end %>
-    <% end %>
     <% if transaction.valid_payment?  %>
-      <%= link_to "javascript:void(0)", :class => 'btn btn-large btn-primary pay-button', 'event-name' => 'paid' do %>
+      <%= link_to "javascript:void(0)", :class => 'btn btn-large btn-primary btn_event pay-button', 'event-name' => 'paid' do %>
         <%=raw "确认付款&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
       <% end %>
     <% end %>

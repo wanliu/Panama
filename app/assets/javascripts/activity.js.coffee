@@ -36,11 +36,13 @@ class ActivityView extends Backbone.View
     _.extend(@, @options)
     @$dialog = $("<div class='dialog-panel' />").appendTo("#popup-layout")
     @back_drop = new BackDropView()
-    @back_drop.show()
+
     @loadTemplate () =>
+      @back_drop.show()
       @$el = $(@render()).appendTo(@$dialog)
       #$(window).scroll()
     @activity_bind_view = new ActivityBind({el: @$dialog, model: @model})
+
     super
 
   loadTemplate: (handle) ->
@@ -59,8 +61,8 @@ class ActivityView extends Backbone.View
     $("body").removeClass("noScroll")
 
   close: () ->
-    @$dialog.remove()
     @back_drop.hide()
+    @$dialog.remove()
     @unmodal()
 
   playAnimate: () ->
@@ -84,6 +86,30 @@ class ActivityView extends Backbone.View
       keyboard: true,
       backdrop: false
     })
+
+  state: () ->
+    if @$(".selected").length > 0
+      @$(".share_activity").removeClass("disabled")
+    else
+      @$(".share_activity").addClass("disabled")
+
+  select_circle: (e) ->
+    target = $(e.currentTarget)
+    if target.hasClass("selected")
+      target.removeClass("selected")
+    else
+      target.addClass("selected")
+    @state()
+
+  data: () ->
+    ids = []
+    if @$(".selected").length > 0
+      els = @$(".selected")
+      _.each els, (el) =>
+        ids.push($(el).attr("data-value-id"))
+      return ids
+    else
+      return false
 
   share_activity: () ->
     return false if $(".share_activity .disabled").length == 1
@@ -189,7 +215,7 @@ class ActivityPreview extends Backbone.View
     unless @_follow.has("id")
       id = @$(".unfollow").attr("data-follow-id");
       @_follow.set({id: id})
-      
+
     @_follow.destroy success: (model, data) =>
       $(".shopinfo .unfollow").each (_i, elem) =>
         if $(elem).attr("data-value-id") == @model.get('shop_id')
