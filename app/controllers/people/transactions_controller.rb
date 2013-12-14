@@ -135,8 +135,8 @@ class People::TransactionsController < People::BaseController
   end
 
   def completed
-    @transactions = OrderTransaction.buyer(@people).completed
-    @direct_transactions = @people.direct_transactions.completed
+    @transactions = OrderTransaction.buyer(@people).completed.order("created_at desc").page(params[:page])
+    @direct_transactions = @people.direct_transactions.completed.order("created_at desc").page(params[:page])
   end
 
   def get_delivery_price

@@ -9,8 +9,8 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   end
 
   def complete
-    @transactions = current_shop_order.completed.order("created_at desc")
-    @direct_transactions = current_shop.direct_transactions.completed
+    @transactions = current_shop_order.completed.order("created_at desc").page(params[:page])
+    @direct_transactions = current_shop.direct_transactions.completed.order("created_at desc").page(params[:page])
   end
 
   def page
