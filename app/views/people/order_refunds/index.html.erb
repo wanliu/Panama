@@ -25,54 +25,62 @@
           操作
         </div>
       </div>
-      <% @refunds.each do |t| %>
-      <div class='item' id="order_refunds<%=t.id %>" data-value-id="<%=t.id %>">
-        <div class='summarize'>
-          <div class='row-fluid head'>
-            <div class='span3'>
-              编号: <%=t.number %>
-            </div>
-            <div class='span4'>
-               在
-              <small rel='tooltip' title="<%=I18n.l t.created_at, :format => :long %>">
-                <%= time_ago_in_words t.created_at %>
-              </small>
-              之前退货
-            </div>
-            <div class='span2'>
-              <%= link_to t.seller.name, shop_path(t.seller)  %>
-            </div>
-            <div class='span3'>
-              订单编号: <%=t.order.number %>
-            </div>
-          </div>
-          <div class='row-fluid products'>
-            <div class='span7'>
-              <% t.items.each do |item| %>
-              <%=render "product_item", :item => item %>
-              <% end %>
-            </div>
-            <div class='span2'>
-              <div>
-                <%=number_to_currency t.stotal %>
+      <% if @refunds.length > 0 %>
+        <% @refunds.each do |t| %>
+        <div class='item' id="order_refunds<%=t.id %>" data-value-id="<%=t.id %>">
+          <div class='summarize'>
+            <div class='row-fluid head'>
+              <div class='span3'>
+                编号: <%=t.number %>
               </div>
-              <div class='delivery_price'>
-                (含<%=t.delivery_price || 0 %>运费)
+              <div class='span4'>
+                 在
+                <small rel='tooltip' title="<%=I18n.l t.created_at, :format => :long %>">
+                  <%= time_ago_in_words t.created_at %>
+                </small>
+                之前退货
+              </div>
+              <div class='span2'>
+                <%= link_to t.seller.name, shop_path(t.seller)  %>
+              </div>
+              <div class='span3'>
+                订单编号: <%=t.order.number %>
               </div>
             </div>
-            <div class='span2'>
-              <%=t.state_title %>
-            </div>
-            <div class='span1'>
-              <a href='javascript:void(0)' class='btn_delete'>
-                删除
-              </a>
+            <div class='row-fluid products'>
+              <div class='span7'>
+                <% t.items.each do |item| %>
+                <%=render "product_item", :item => item %>
+                <% end %>
+              </div>
+              <div class='span2'>
+                <div>
+                  <%=number_to_currency t.stotal %>
+                </div>
+                <div class='delivery_price'>
+                  (含<%=t.delivery_price || 0 %>运费)
+                </div>
+              </div>
+              <div class='span2'>
+                <%=t.state_title %>
+              </div>
+              <div class='span1'>
+                <a href='javascript:void(0)' class='btn_delete'>
+                  删除
+                </a>
+              </div>
             </div>
           </div>
+          <div class='detail'>
+          </div>
         </div>
-        <div class='detail'>
+        <% end %>
+      <% else %>
+        <div class='row-fluid'>
+          <div class='span12 widget'>
+            暂时没有退货信息
+          </div>
         </div>
-      </div>
       <% end %>
     </div>
   </div>
