@@ -36,12 +36,19 @@ class People::NotificationsController < People::BaseController
     end
   end
 
+  def read_all
+    Notification.update_all(:read => true)
+    respond_to do |format|
+      format.html { redirect_to :action => 'index' }
+      format.json { head :no_content }
+    end
+  end
+
   def mark_as_read
-    @notification = Notification.find(params[:id])
     authorize! :read, @notification
+    @notification = Notification.find(params[:id])
     @notification.change_read
-    byebug
-    respond_to do | format |
+    respond_to do |format|
       format.json { head :no_content }
     end
   end
