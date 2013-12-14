@@ -95,9 +95,11 @@ class CaramalClient
 
   end
 
-  def self.create_persistent_channel(group, user)
-    puts '====================== create persistent channel ========================='
-    data = {:group => group, :user => user}.to_json
+  def self.create_persistent_channel(group, user, role='member')
+    data = {:group => group, :user => user}
+    data[:role] = "owner" if 'owner' == role
+    data = data.to_json
+
     ch  = conn.create_channel
     x = ch.default_exchange
 
@@ -108,7 +110,7 @@ class CaramalClient
     x.publish(data, :routing_key => mq_prefix + 'rpc_create_persistent_channel')
   end
 
-  def self.remove_persistent_channel(channel, user)
+  def self.remove_persistent_channel(group, user)
     data = {:group => group, :user => user}.to_json
     ch  = conn.create_channel
     x = ch.default_exchange
