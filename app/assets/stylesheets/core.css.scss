@@ -569,6 +569,11 @@ ul {
   &.avatar-icon {
     width: 45px;
   }
+
+  &.avatar-mini {
+    width: 20px;
+  }
+
 }
 
 .navbar .nav>li>.account:after {

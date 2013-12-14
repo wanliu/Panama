@@ -42,12 +42,13 @@ class InstantlyNotificationManager
     @client.monitor("/like", @like_your) # √
     @client.monitor("/unlike", @unlike_your) # √
     # 商店社交部分
+
     @client.monitor("/shops/follow", @follow_shop) # √
     @client.monitor("/shops/unfollow", @unfollow_shop) # √
     @client.monitor("/shops/like", @like_shops_activity) # √
     @client.monitor("/shops/unlike", @unlike_shops_activity) # √
-    @client.monitor("/shops/joined", @joined_shop_circle)
-    @client.monitor("/shops/leaved", @leaved_shop_circle)
+    @client.monitor("/shops/joined", @joined_shop_circle) # √
+    @client.monitor("/shops/leaved", @leaved_shop_circle) # √
     @client.monitor("/shops/refuse", @refuse_join_shop_circle)
     @client.monitor("/shops/request", @request_join_shop_circle)
     #评论

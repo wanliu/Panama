@@ -118,14 +118,22 @@ class Circle < ActiveRecord::Base
     friends.create_member(uid)
     PersistentChannel.where(:user_id => user.id,
                             :name => name,
+                            :icon => photos.icon,
                             :channel_type => 2)
                      .first_or_create
 
-    user.notify('/joined', "恭喜你成功加入圈子 #{name}")
+    # user.notify('/joined', "恭喜你成功加入圈子 #{name}")
     if owner.is_a?(Shop)
       owner.notify("/joined",
                    "#{user.login} 加入了圈子 #{name}",
                    :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id)
+    elsif owner.is_a?(User)
+      owner.notify("/joined",
+                   "#{user.login} 加入了圈子 #{name}",
+                   :target => self,
+                   :avatar => user.icon,
                    :user_id => user.id)
     end
     user
@@ -153,8 +161,7 @@ class Circle < ActiveRecord::Base
   end
 
   def remove_friend(user)
-    uid = user
-    uid = user.id if user.is_a?(User)
+    uid = user.id
     friends.find_by(user_id: uid).destroy
 
     PersistentChannel.where(:user_id => user.id,
@@ -162,12 +169,18 @@ class Circle < ActiveRecord::Base
                             :channel_type => 2)
                      .destroy_all
 
-    user.notify('/leaved', "你成功的离开了圈子 #{name}")
     if owner.is_a?(Shop)
-      owner.notify("/joined",
-                   "#{user.login} 离开了圈子 #{name}",
+      owner.notify("/leaved",
+                   "#{user.login}  已经离开了你们的商圈 #{name}",
                    :target => self,
+                   :avatar => user.icon,
                    :user_id => user.id)
+    elsif owner.is_a?(User)
+      owner.notify('/leaved', "#{user.login} 已经离开了您的商圈 #{name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id)
+
     end
   end
 
