@@ -27,10 +27,10 @@ class InstantlyNotificationManager
     @client.monitor("/activity/change", @change_activity)
     @client.monitor("/activity/remove", @remove_activity)
     #用户关系
-    @client.monitor("/friends/add_quan", @add_to_circle)
+    @client.monitor("/friends/add_quan", @add_to_circle) # √
     @client.monitor("/friends/add_user", @add_user) # √
     @client.monitor("/friends/remove_user", @remove_user) # √
-    @client.monitor("/friends/remove_quan", @remove_from_circle)
+    @client.monitor("/friends/remove_quan", @remove_from_circle) # √
     #个人社交部分
     @client.monitor("/follow", @follow_user) # √
     @client.monitor("/unfollow", @unfollow_user) # √
