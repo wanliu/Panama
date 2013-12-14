@@ -18,6 +18,60 @@ class CircleFriends < ActiveRecord::Base
 
   delegate :photos, :to => :user
 
+  after_create :add_to_persistent_channel
+
+
+  after_destroy :remove_from_persistent_channel
+
+  def add_to_persistent_channel
+    circle_name = circle.name
+    PersistentChannel.where(:user_id => user.id,
+                            :name => circle.name,
+                            :icon => circle.photos.icon,
+                            :channel_type => 2)
+                     .first_or_create
+
+    owner = circle.owner
+
+    # user.notify('/joined', "恭喜你成功加入圈子 #{name}")
+    if owner.is_a?(Shop)
+      owner.notify("/joined",
+                   "#{user.login} 加入了圈子 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id)
+    elsif owner.is_a?(User)
+      owner.notify("/joined",
+                   "#{user.login} 加入了圈子 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id)
+    end
+  end
+
+  def remove_from_persistent_channel
+    circle_name = circle.name
+    PersistentChannel.where(:user_id => user.id,
+                            :channel_type => 2)
+                     .destroy_all
+
+    owner = circle.owner
+
+    if owner.is_a?(Shop)
+      owner.notify("/leaved",
+                   "#{user.login}  已经离开了你们的商圈 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id)
+    elsif owner.is_a?(User)
+      owner.notify('/leaved', "#{user.login} 已经离开了您的商圈 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id)
+
+    end
+  end
+
   def validate_setting?
     if self.circle.setting.try(:limit_city)
 
