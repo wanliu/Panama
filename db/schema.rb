@@ -557,6 +557,7 @@ ActiveRecord::Schema.define(:version => 20131212071345) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0
@@ -586,14 +587,6 @@ ActiveRecord::Schema.define(:version => 20131212071345) do
     t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
     t.string   "icon"
-  end
-
-  create_table "price_lists", :force => true do |t|
-    t.integer  "people_number"
-    t.decimal  "price",         :precision => 10, :scale => 0
-    t.integer  "activity_id"
-    t.datetime "created_at",                                   :null => false
-    t.datetime "updated_at",                                   :null => false
   end
 
   create_table "price_options", :force => true do |t|

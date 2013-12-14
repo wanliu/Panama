@@ -12,8 +12,6 @@ class CaramalClient
 
   cattr_accessor :conn
 
-  @@conn =
-
   def self.start
     @@conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
     conn.start
@@ -95,6 +93,31 @@ class CaramalClient
     # sleep 10
     q.subscribe_with(consumer)
 
+  end
+
+  def self.create_persistent_channel(group, user)
+    puts '====================== create persistent channel ========================='
+    data = {:group => group, :user => user}.to_json
+    ch  = conn.create_channel
+    x = ch.default_exchange
+
+    mq_prefix = 'wanliu_'
+
+    q = ch.queue("", { :exclusive => true })
+
+    x.publish(data, :routing_key => mq_prefix + 'rpc_create_persistent_channel')
+  end
+
+  def self.remove_persistent_channel(channel, user)
+    data = {:group => group, :user => user}.to_json
+    ch  = conn.create_channel
+    x = ch.default_exchange
+
+    mq_prefix = 'wanliu_'
+
+    q = ch.queue("", { :exclusive => true })
+
+    x.publish(data, :routing_key => mq_prefix + 'rpc_remove_persistent_channel')
   end
 end
 
