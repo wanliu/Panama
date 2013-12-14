@@ -30,8 +30,15 @@ class Communities::CirclesController < Communities::BaseController
   end
 
   def quit_circle
-    @member = @circle.friends.find_by(:user_id => current_user.id)
-    @member.destroy
+    @circle.remove_friend(current_user)
+    # @member = @circle.friends.find_by(:user_id => current_user.id)
+    # if @circle.owner.is_a?(Shop)
+    #   @circle.owner.notify('/leaved', "#{@member.user.login} 已经离开了你们的商圈 #{@circle.name}", :target => @circle, :avatar => @member.user.icon)
+    # elsif @circle.owner.is_a?(User)
+    #   @circle.owner.notify('/leaved', "#{@member.user.login} 已经离开了您的商圈 #{@circle.name}", :target => @circle, :avatar => @member.user.icon)
+    # end
+    # @member.destroy
+
     respond_to do |format|
       format.json{ head :no_content}
     end
@@ -97,14 +104,14 @@ class Communities::CirclesController < Communities::BaseController
 
   def share_circle
     @circle = Circle.find(params[:community_id])
-    unless params[:ids].blank? 
+    unless params[:ids].blank?
       ids = params[:ids]
       if @circle.is_member?(current_user)
         Circle.where(:id => ids).map do |c|
-          topic = c.topics.create(:content => @circle.all_detail, 
-                                  :user => current_user, 
+          topic = c.topics.create(:content => @circle.all_detail,
+                                  :user => current_user,
                                   :category_id => c.categories.try(:first).try(:id))
-          topic.attachments <<  @circle.attachment  unless @circle.attachment.nil? 
+          topic.attachments <<  @circle.attachment  unless @circle.attachment.nil?
         end
       end
     end

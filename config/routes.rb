@@ -211,6 +211,7 @@ Panama::Application.routes.draw do
         post :mark_as_read, :to => "people/notifications#mark_as_read"
       end
       collection do
+        get :read_all, :to => "people/notifications"
         get :unreads, :to => "people/notifications#unreads"
         get :unread_count, :to => "people/notifications#unread_count"
       end
