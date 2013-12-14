@@ -1,5 +1,11 @@
+#encoding: utf-8
 
 class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionController
+
+  def index
+    @direct_transactions = current_shop.direct_transactions.order("created_at desc").page(params[:page])
+  end
+
   def dialog
     @direct_transaction = current_shop_direct_transaction
     render :partial => "direct_transactions/dialog",
@@ -7,6 +13,11 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
       :direct_transaction => @direct_transaction,
       :dtm_url => shop_admins_direct_transaction_path(current_shop, @direct_transaction)
     }
+  end
+
+  def page
+    @direct_transaction = current_shop_direct_transaction
+    render :partial => "show", :locals => { direct_transaction: @direct_transaction }
   end
 
   def messages

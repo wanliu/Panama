@@ -39,10 +39,11 @@
               编号: <%=t.number %>
             </div>
             <div class='span4'>
+              在
               <small rel='tooltip' title="<%=I18n.l t.created_at, :format => :long %>">
                 <%= time_ago_in_words t.created_at %>
               </small>
-              成交
+              之前成交
             </div>
             <div class='span2'>
               <%= link_to t.seller.name, shop_path(t.seller)  %>
@@ -74,6 +75,7 @@
     </div>
   </div>
 </div>
+<%= paginate @direct_transactions %>
 
 <script type='text/javascript'>
   $(function(){

@@ -2,7 +2,7 @@
 class People::DirectTransactionsController < People::BaseController
 
   def index
-    @direct_transactions = current_user.direct_transactions.uncomplete.order("created_at desc")
+    @direct_transactions = current_user.direct_transactions.uncomplete.order("created_at desc").page(params[:page])
   end
 
   def dialog

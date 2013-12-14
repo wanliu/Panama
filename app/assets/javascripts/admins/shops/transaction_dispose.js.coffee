@@ -20,7 +20,7 @@ class TransactionList extends Backbone.Collection
 
 class TransactionEvent extends Backbone.View
   tagName: "tr"
-  events: 
+  events:
     "click .dispose" : "dispose"
 
   initialize: (options) ->

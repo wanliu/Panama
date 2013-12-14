@@ -59,11 +59,6 @@ class ShopTransactionCard extends TransactionCardBase
     @$(".item-details").slideToggle()
     false
 
-  setMessagePanel: () ->
-    @message_panel = @$("iframe", ".transaction-footer")
-    height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
-    @message_panel.height(height)
-
   initMessagePanel: () ->
     @setMessagePanel()
     @message_panel.show()

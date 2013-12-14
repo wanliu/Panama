@@ -232,16 +232,11 @@
 
     background: $white;
 
-    .message-toggle{
-      height: 10%;
-    }
-
     iframe{
       border: none;
       width: 100%;
-      height: 90%;
+      height: 100%;
       overflow: hidden;
-      display: none;
     }
   }
 }
@@ -286,11 +281,6 @@
   font-size:16px;
   display:none;
   margin-left:200px;
-}
-
-.direct{
-  padding-top: 0px !important;
-  margin-top: 0px;
 }
 
 .transaction{
@@ -347,11 +337,35 @@
       .direct{
         background-color: transparent;
         margin-bottom: 0px;
+        padding: 0px;
+
+        .avatar{
+          .number{
+            display: none;
+          }
+        }
       }
 
       .wrapper-box{
         background-color: transparent;
         padding: 0px;
+      }
+
+      .page-header{
+
+
+        .trasaction-title{
+          .btn_delete{
+            display: none;
+          }
+
+        }
+
+        .transaction-number{
+          .number{
+            display: none;
+          }
+        }
       }
 
     }

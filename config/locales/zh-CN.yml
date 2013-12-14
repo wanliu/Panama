@@ -430,7 +430,7 @@ zh-CN:
   categories: 分类
   product: 商品
   category: 分类
-  pending: 未处理
+  pending: 担保交易
   complete: 完成的
   transport: 运输中
   complaint: 投诉
@@ -444,6 +444,7 @@ zh-CN:
   communities: 社区
   order_refunds: 退货
   shop_products: 商品管理
+  direct_transaction: 直接交易
   bill_detail: 账单明细
   shop_info: 店铺信息
   product_comments: 商品评论

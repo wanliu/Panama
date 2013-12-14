@@ -13,6 +13,12 @@
       display: none;
     }
   }
+
+  .transaction-header{
+    .transaction-number{
+      margin-top: 7px;
+    }
+  }
 }
 
 .order_refunds{
@@ -21,6 +27,7 @@
     padding: 10px 12px;
 
     .summarize{
+      cursor: pointer;
 
       .products{
 
@@ -52,6 +59,20 @@
       .wrapper-box{
         background-color: transparent;
         padding: 0px;
+      }
+
+      .page-header{
+        .number{
+          display: none;
+        }
+
+        .order_number{
+          display: none;
+        }
+
+        .close{
+          display: none;
+        }
       }
     }
   }
