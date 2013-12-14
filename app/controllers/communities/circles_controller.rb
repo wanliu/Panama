@@ -1,6 +1,6 @@
 #encoding: utf-8
 class Communities::CirclesController < Communities::BaseController
-  before_filter :validate_manager, :only => [:update_circle,:up_to_manager,:low_to_member,:remove_member]
+  before_filter :validate_manager, :only => [:update_circle, :up_to_manager, :low_to_member, :remove_member, :destroy_circle]
   before_filter :require_member, :except => [:apply_join]
   before_filter :member, :only => [:up_to_manager, :low_to_member, :remove_member]
 
@@ -48,6 +48,14 @@ class Communities::CirclesController < Communities::BaseController
     @member.destroy
     respond_to do |format|
       format.json{ head :no_content}
+    end
+  end
+
+  def destroy_circle
+    @circle = Circle.find(params[:community_id])
+    @circle.destroy
+    respond_to do |format|
+      format.html { redirect_to communities_path }
     end
   end
 
