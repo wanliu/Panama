@@ -30,9 +30,7 @@ class Circle < ActiveRecord::Base
 
   validate :valid_name?
 
-  after_create do
-    generate_manage
-  end
+  after_create :generate_manage, :sync_create_to_caramal
 
   def all_detail
     "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
@@ -116,18 +114,7 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
-    PersistentChannel.where(:user_id => user.id,
-                            :name => name,
-                            :channel_type => 2)
-                     .first_or_create
 
-    user.notify('/joined', "恭喜你成功加入圈子 #{name}")
-    if owner.is_a?(Shop)
-      owner.notify("/joined",
-                   "#{user.login} 加入了圈子 #{name}",
-                   :target => self,
-                   :user_id => user.id)
-    end
     user
   end
 
@@ -153,22 +140,9 @@ class Circle < ActiveRecord::Base
   end
 
   def remove_friend(user)
-    uid = user
-    uid = user.id if user.is_a?(User)
+    uid = user.id
     friends.find_by(user_id: uid).destroy
 
-    PersistentChannel.where(:user_id => user.id,
-                            :name => name,
-                            :channel_type => 2)
-                     .destroy_all
-
-    user.notify('/leaved', "你成功的离开了圈子 #{name}")
-    if owner.is_a?(Shop)
-      owner.notify("/joined",
-                   "#{user.login} 离开了圈子 #{name}",
-                   :target => self,
-                   :user_id => user.id)
-    end
   end
 
   def already_has?(user_id)
@@ -181,4 +155,10 @@ class Circle < ActiveRecord::Base
       errors.add(:name, "名称已经存在了！")
     end
   end
+
+  protected
+    def sync_create_to_caramal
+      owner_name = owner.is_a?(Shop) ? owner.user.login : owner.login
+      CaramalClient.create_persistent_channel(name, owner_name, 2, 'Owner')
+    end
 end

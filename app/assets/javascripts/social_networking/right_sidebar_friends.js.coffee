@@ -5,6 +5,10 @@ class root.ChatListView extends Backbone.View
     'keyup input.filter_key' : 'filter_list'
 
   initialize: () ->
+    @collection = new ChatList()
+    @collection.bind('reset', @addAll, @)
+    # @collection.bind('add', @addOne, @)
+
     @stranger_view  = new StrangersView(parent_view: @)
     @friends_view = new FriendsView(parent_view: @)
     @groups_view = new GroupsView(parent_view: @)
@@ -14,6 +18,23 @@ class root.ChatListView extends Backbone.View
       </div>')
     @bind_items()
     @$el.slimScroll(height: $(window).height())
+    @init_fetch()
+
+  addAll: () ->
+    @$("ul").html('')
+    @collection.each (model) =>
+      @addOne(model)
+
+  addOne: (model) ->
+    if model.get('follow_type') == 1
+      @friends_view.collection.add(model)
+    else if model.get('follow_type') == 2
+      @groups_view.collection.add(model)
+    else
+      @stranger_view.collection.add(model)
+
+  init_fetch: () ->
+    @collection.fetch(url: "/users/channels")
 
   bind_items: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
@@ -50,7 +71,7 @@ class BaseFriendsView extends Backbone.View
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
-    @init_fetch()
+    # @init_fetch()
     @render()
 
   addAll: () ->
@@ -106,8 +127,8 @@ class FriendsView extends BaseFriendsView
     $(@el).html(@template)
     @
 
-  init_fetch: () ->
-    @collection.fetch(url: "/users/channels")
+  # init_fetch: () ->
+  #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
     friend_view = new FriendView({ model: model, parent_view: @ })
@@ -139,8 +160,8 @@ class GroupsView extends BaseFriendsView
 
   initialize: () ->
     super
-    _.each [0..1], (i) =>
-      @collection.add(new ChatModel({name: 'random_' + i }))
+    # _.each [0..1], (i) =>
+    #   @collection.add(new ChatModel({name: 'random_' + i }))
 
   render: () ->
     $(@el).html(@template)
@@ -302,12 +323,12 @@ class FriendView extends BaseFriendView
 class GroupView extends BaseFriendView
 
   template: Handlebars.compile("""
-    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="商圈: {{name}}">
+    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="商圈: {{login}}">
       <span class="badge badge-important message_count"></span>
       {{#if icon}}
-        <img src='{{icon}}' alt='{{name}}' />
+        <img src='{{icon}}' alt='{{login}}' />
       {{else}}
-        <img src="/default_img/t5050_default_avatar.jpg" alt={{name}} class="" />
+        <img src="/default_img/t5050_default_avatar.jpg" alt={{login}} class="" />
       {{/if}}
     </a>""")
 
@@ -315,14 +336,14 @@ class GroupView extends BaseFriendView
     super
 
   getChannel: () ->
-    @channel ||= Caramal.Group.of(@model.get('name'))
+    @channel ||= Caramal.Group.of(@model.get('login'))
 
   newChat: () ->
     model = new ChatModel({
       type: 2,
       channel: @channel,
-      name: @model.get('name'),
-      title: "群组 #{@model.get('name')}"
+      name: @model.get('login'),
+      title: "群组 #{@model.get('login')}"
     })
     ChatService.getInstance().newChat(model)
 

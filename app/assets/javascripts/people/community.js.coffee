@@ -34,6 +34,7 @@ class MyCircleView extends Backbone.View
     @el.append(view.render())
 
   reset: (collections) ->
+    return @el.html('没有商圈，创建属于你自己的商圈吧。') if collections.length is 0
     collections.each (model) =>
       @add(model)
 

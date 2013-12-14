@@ -562,6 +562,7 @@ ActiveRecord::Schema.define(:version => 20131213064826) do
     t.integer  "operator_id"
     t.string   "delivery_code"
     t.integer  "pay_manner_id"
+    t.integer  "transfer_sheet_id"
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0
