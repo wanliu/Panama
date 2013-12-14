@@ -46,8 +46,8 @@ class InstantlyNotificationManager
     @client.monitor_notification("/shops/unfollow", @unfollow_shop) # √
     @client.monitor_notification("/shops/like", @like_shops_activity) # √
     @client.monitor_notification("/shops/unlike", @unlike_shops_activity) # √
-    @client.monitor_notification("/shops/joined", @joined_shop_circle)
-    @client.monitor_notification("/shops/leaved", @leaved_shop_circle)
+    @client.monitor_notification("/shops/joined", @joined_shop_circle) # √
+    @client.monitor_notification("/shops/leaved", @leaved_shop_circle) # √
     @client.monitor_notification("/shops/refuse", @refuse_join_shop_circle)
     @client.monitor_notification("/shops/request", @request_join_shop_circle)
     #评论

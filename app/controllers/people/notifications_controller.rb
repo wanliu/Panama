@@ -40,7 +40,6 @@ class People::NotificationsController < People::BaseController
     @notification = Notification.find(params[:id])
     authorize! :read, @notification
     @notification.change_read
-    byebug
     respond_to do | format |
       format.json { head :no_content }
     end
