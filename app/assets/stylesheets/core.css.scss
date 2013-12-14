@@ -565,6 +565,12 @@ ul {
   }
 }
 
+.avatar{
+  &.avatar-icon {
+    width: 45px;
+  }
+}
+
 .navbar .nav>li>.account:after {
   // border-bottom-color: rgba(51,51,51,0.85);
 }
@@ -1131,10 +1137,8 @@ h2 small {
   }
 }
 
-.controls {
-    .inline {
-      display: inline;
-    }
+.inline {
+  display: inline-block;
 }
 
 .depend_select {

@@ -6,7 +6,16 @@ class People::NotificationsController < People::BaseController
     authorize! :index, Notification
     @notifications = Notification.unreads
         .where(:user_id => @people.id)
-        .order(updated_at: :asc)
+        .order("updated_at desc")
+
+    # @activities = Notification.unreads
+    #   .where(:user_id => @people.id, :targeable_type => 'Activity')
+    #   .order(updated_at: :asc)
+
+    # @groups = Notification.unreads
+    #   .where(:user_id => @people.id, :targeable_type => ['Following', 'PersistentChannel'] )
+    #   .order(updated_at: :asc)
+
     respond_to do | format |
       format.html
       format.json{ render json: @notifications}
@@ -14,7 +23,7 @@ class People::NotificationsController < People::BaseController
   end
 
   def show
-    @notification = Notification.find_by(:mentionable_user_id => @people.id, :id => params[:id])
+    @notification = Notification.find_by(:user_id => current_user.id, :id => params[:id])
     respond_to do | format |
       unless @notification.nil?
         authorize! :read, @notification
@@ -31,6 +40,7 @@ class People::NotificationsController < People::BaseController
     @notification = Notification.find(params[:id])
     authorize! :read, @notification
     @notification.change_read
+    byebug
     respond_to do | format |
       format.json { head :no_content }
     end

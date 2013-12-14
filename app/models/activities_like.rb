@@ -23,7 +23,7 @@ class ActivitiesLike < ActiveRecord::Base
     author.notify("/like",
                   "#{user.login} 支持了你的 #{ activity.title} 活动",
                   { :target => self,
-                    :avatar => user.avatar,
+                    :avatar => user.icon,
                     :url => "/people/#{user.login}/notifications"})
   end
 
@@ -31,7 +31,7 @@ class ActivitiesLike < ActiveRecord::Base
     author.notify("/unlike",
                   "#{user.login} 不再支持你的 #{ activity.title} 活动",
                   { :target => self,
-                    :avatar => user.avatar,
+                    :avatar => user.icon,
                     :url => "/people/#{user.login}/notifications"})
   end
 

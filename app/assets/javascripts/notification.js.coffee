@@ -7,7 +7,7 @@ class InstantlyNotificationManager
 
   defaultTemplate: Handlebars.compile(
      """<div class='noty_message'>
-          <img class='avatar noty_avatar' src='{{avatar}}' />
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
           {{#if title}}
             <p>{{title}}</p>
           {{/if}}
@@ -22,39 +22,39 @@ class InstantlyNotificationManager
 
     @client = window.clients
     #活动通知绑定
-    @client.monitor_notification("/activities/arrived", @arrived)
-    @client.monitor_notification("/activity/add", @add_activity)
-    @client.monitor_notification("/activity/change", @change_activity)
-    @client.monitor_notification("/activity/remove", @remove_activity)
+    @client.monitor("/activities/arrived", @arrived)
+    @client.monitor("/activity/add", @add_activity)
+    @client.monitor("/activity/change", @change_activity)
+    @client.monitor("/activity/remove", @remove_activity)
     #用户关系
-    @client.monitor_notification("/friends/add_quan", @add_to_circle)
-    @client.monitor_notification("/friends/add_user", @add_user) # √
-    @client.monitor_notification("/friends/remove_user", @remove_user) # √
-    @client.monitor_notification("/friends/remove_quan", @remove_from_circle)
+    @client.monitor("/friends/add_quan", @add_to_circle)
+    @client.monitor("/friends/add_user", @add_user) # √
+    @client.monitor("/friends/remove_user", @remove_user) # √
+    @client.monitor("/friends/remove_quan", @remove_from_circle)
     #个人社交部分
-    @client.monitor_notification("/follow", @follow_user) # √
-    @client.monitor_notification("/unfollow", @unfollow_user) # √
-    @client.monitor_notification("/request", @request_join_circle)
-    @client.monitor_notification("/invite", @invite_join_circle)
-    @client.monitor_notification("/refuse", @refuse_join_circle)
-    @client.monitor_notification("/joined", @joined_success)
-    @client.monitor_notification("/leaved", @leaved_circle)
-    @client.monitor_notification("/like", @like_your) # √
-    @client.monitor_notification("/unlike", @unlike_your) # √
+    @client.monitor("/follow", @follow_user) # √
+    @client.monitor("/unfollow", @unfollow_user) # √
+    @client.monitor("/request", @request_join_circle)
+    @client.monitor("/invite", @invite_join_circle)
+    @client.monitor("/refuse", @refuse_join_circle)
+    @client.monitor("/joined", @joined_success)
+    @client.monitor("/leaved", @leaved_circle)
+    @client.monitor("/like", @like_your) # √
+    @client.monitor("/unlike", @unlike_your) # √
     # 商店社交部分
-    @client.monitor_notification("/shops/follow", @follow_shop) # √
-    @client.monitor_notification("/shops/unfollow", @unfollow_shop) # √
-    @client.monitor_notification("/shops/like", @like_shops_activity) # √
-    @client.monitor_notification("/shops/unlike", @unlike_shops_activity) # √
-    @client.monitor_notification("/shops/joined", @joined_shop_circle)
-    @client.monitor_notification("/shops/leaved", @leaved_shop_circle)
-    @client.monitor_notification("/shops/refuse", @refuse_join_shop_circle)
-    @client.monitor_notification("/shops/request", @request_join_shop_circle)
+    @client.monitor("/shops/follow", @follow_shop) # √
+    @client.monitor("/shops/unfollow", @unfollow_shop) # √
+    @client.monitor("/shops/like", @like_shops_activity) # √
+    @client.monitor("/shops/unlike", @unlike_shops_activity) # √
+    @client.monitor("/shops/joined", @joined_shop_circle)
+    @client.monitor("/shops/leaved", @leaved_shop_circle)
+    @client.monitor("/shops/refuse", @refuse_join_shop_circle)
+    @client.monitor("/shops/request", @request_join_shop_circle)
     #评论
-    # @client.monitor_notification("/comments/add", @add_comment)
-    @client.monitor_notification("/comments/mention", @mention_comment) # √
-    # @client.monitor_notification("/comments/update", @update_comment)
-    # @client.monitor_notification("/comments/remove", @remove_comment)
+    # @client.monitor("/comments/add", @add_comment)
+    @client.monitor("/comments/mention", @mention_comment) # √
+    # @client.monitor("/comments/update", @update_comment)
+    # @client.monitor("/comments/remove", @remove_comment)
 
     @notificationsList = NotificationViewList.getNotifiicationList()
 
@@ -147,7 +147,6 @@ class InstantlyNotificationManager
   unlike_your: (data) =>
     @addCommonNotif(data)
 
-
   # 商店社交部分
   follow_shop: (data) =>
     @addCommonNotif(data)
@@ -213,7 +212,7 @@ class InstantlyNotificationManager
 
       animation(info) if animation && _.isFunction(animation)
 
-  change_notifications_count: () ->
+  change_count: () ->
     @$count = $("#notification_count")
     @$count.text(parseInt(@$count.text()) + 1)
 
@@ -283,8 +282,6 @@ class NotificationViewList extends Backbone.View
   @getNotifiicationList = () ->
     @__notifications_list
 
-
-
   initialize: () ->
     _.extend(@, @options)
     @collection_count = 0
@@ -331,7 +328,6 @@ class NotificationViewList extends Backbone.View
     )
 
 
-
 class NotificationViewBase extends Backbone.View
   tagName: "li"
 
@@ -347,15 +343,15 @@ class NotificationViewBase extends Backbone.View
     _.extend(@, @options)
 
   mark_as_read: () ->
-    console.log(@url)
-
-    $.ajax(
-      type: "post",
-      url: "#{ @url}/#{ @model.id }/mark_as_read",
-      dataType: "json",
-      success: () =>
-        window.location.replace(@model.get('url'))
-    )
+    url = "/people/agilejzl/notifications?id=#{@model.id}"
+    window.location.href = url
+    # $.ajax(
+    #   type: "post",
+    #   url: "#{ @url}/#{ @model.id }/mark_as_read",
+    #   dataType: "json",
+    #   success: () =>
+    #     window.location.replace(@model.get('url'))
+    # )
 
   render: () ->
     li = $(@el).append(@template_already(@model.attributes))
