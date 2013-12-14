@@ -196,6 +196,6 @@ class Circle < ActiveRecord::Base
   protected
     def sync_create_to_caramal
       owner_name = owner.is_a?(Shop) ? owner.user.login : owner.login
-      CaramalClient.create_persistent_channel(name, owner_name, 'owner')
+      CaramalClient.create_persistent_channel(name, owner_name, 2, 'Owner')
     end
 end
