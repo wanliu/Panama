@@ -10,6 +10,8 @@ class PersistentChannel < ActiveRecord::Base
     elsif channel_type == 2
       user.notify('/friends/add_quan', "商圈 #{name} 加你为友", :avatar => icon, :group_name => name, :target => self)
     end
+
+    CaramalClient.create_persistent_channel(name, user.login)
   end
 
   after_destroy do
@@ -19,5 +21,7 @@ class PersistentChannel < ActiveRecord::Base
     elsif channel_type == 2
       user.notify('/friends/remove_quan', "商圈 #{name} 不再是你的好友了", :avatar => icon, :group_name => name, :target => self)
     end
+
+    CaramalClient.remove_persistent_channel(name, user.login)
   end
 end
