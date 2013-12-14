@@ -481,7 +481,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def operator_create(toperator_id)
-    unless current_operator.try(:id) == toperator_id
+    unless current_operator.try(:id) == toperator_id || operator_state
       _operator = operators.create(operator_id: toperator_id)
       self.update_attribute(:operator_id, _operator.id) if _operator.valid?
     end

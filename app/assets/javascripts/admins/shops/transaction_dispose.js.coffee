@@ -36,20 +36,16 @@ class TransactionEvent extends Backbone.View
       @show_tran template
 
   show_tran: (template) ->
-    first_tran_el = @first_transaction()
     if first_tran_el.length <= 0
       @tran_panel.append(template)
     else
-      first_tran_el.before(template)
+      @tran_panel.prepend(template)
 
     @tran_card @tran_panel.find("##{@elem_id()}")
     @remove_tran()
 
   remove_tran: () ->
     @trigger("remove_tran", @model)
-
-  first_transaction: () ->
-    @tran_panel.find(">.transaction:eq(0)")
 
   render: () ->
     @$el
