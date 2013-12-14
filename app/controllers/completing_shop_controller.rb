@@ -9,7 +9,7 @@ class CompletingShopController < Wicked::WizardController
     # @user_checking = current_user.user_checking.where(service_id: service_id).first_or_create
 
     @user_checking = current_user.user_checking
-    if @user_checking.update_attributes(service_id: service_id) 
+    unless @user_checking.update_attributes(service_id: service_id) 
       @user_checking = current_user.create_user_checking(service_id: service_id)
     end
     
