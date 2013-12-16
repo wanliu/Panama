@@ -33,7 +33,8 @@ class TransactionEvent extends Backbone.View
 
   dispose: () ->
     @model.dispose (template, xhr)  =>
-      @show_tran template
+      window.location.reload()
+      #@show_tran template
 
   show_tran: (template) ->
     if first_tran_el.length <= 0
