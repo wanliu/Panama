@@ -11,7 +11,14 @@ class PersistentChannel < ActiveRecord::Base
       user.notify('/friends/add_quan', "商圈 #{name} 加你为友", :avatar => icon, :group_name => name, :target => self)
     end
 
-    CaramalClient.create_persistent_channel(name, user.login, channel_type)
+    role = nil
+    if 2 == channel_type
+      circle = Circle.where(name: name).first
+      if circle && circle.is_owner_people?(user)
+        role = "Owner"
+      end
+    end
+    CaramalClient.create_persistent_channel(name, user.login, channel_type, role)
   end
 
   after_destroy do

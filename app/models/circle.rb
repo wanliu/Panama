@@ -30,7 +30,7 @@ class Circle < ActiveRecord::Base
 
   validate :valid_name?
 
-  after_create :generate_manage, :sync_create_to_caramal
+  after_create :generate_manage, :create_persistent_channel
 
   def all_detail
     "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
@@ -157,8 +157,8 @@ class Circle < ActiveRecord::Base
   end
 
   protected
-    def sync_create_to_caramal
-      owner_name = owner.is_a?(Shop) ? owner.user.login : owner.login
-      CaramalClient.create_persistent_channel(name, owner_name, 2, 'Owner')
+    def create_persistent_channel
+      ower_user = owner.is_a?(Shop) ? owner.user : owner
+      ower_user.persistent_channels.create(name: name, channel_type: 2)
     end
 end
