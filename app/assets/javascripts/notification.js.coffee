@@ -35,7 +35,7 @@ class InstantlyNotificationManager
     @client.monitor("/follow", @follow_user) # √
     @client.monitor("/unfollow", @unfollow_user) # √
     @client.monitor("/request", @request_join_circle)
-    @client.monitor("/invite", @invite_join_circle)
+    @client.monitor("/invite", @invite_join_circle) # √
     @client.monitor("/refuse", @refuse_join_circle)
     @client.monitor("/joined", @joined_success)
     @client.monitor("/leaved", @leaved_circle)
@@ -344,7 +344,7 @@ class NotificationViewBase extends Backbone.View
     _.extend(@, @options)
 
   mark_as_read: () ->
-    url = "/people/agilejzl/notifications?id=#{@model.id}"
+    url = "#{@url}?id=#{@model.id}"
     window.location.href = url
     # $.ajax(
     #   type: "post",

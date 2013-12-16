@@ -8,9 +8,7 @@ class InviteUser < ActiveRecord::Base
 
   acts_as_status :behavior, [:agree, :refuse]
 
-  after_create do
-    notify_receiver
-  end
+  after_create :notify_receiver
 
   def notif_url
     "/communities/#{targeable_id}/invite/#{id}"
