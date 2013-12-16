@@ -277,8 +277,12 @@ class OrderTransaction < ActiveRecord::Base
 
   def generate_number
     _number = (OrderTransaction.max_id + 1).to_s
-    _number = "#{'0' * (9-_number.length)}#{_number}" if _number.length < 9
-    self.number = _number
+    _number =
+    self.number = if _number.length < 9
+      "#{'0' * (9-_number.length)}#{_number}"
+    else
+      _number
+    end
   end
 
   def delivery_express?
@@ -346,15 +350,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def clear_uniq_states
-    states = state_details.map{|item| {state: item.state, created_at: item.created_at} }
-    index = states.find_index{|s| s[:state] == "waiting_refund"}
-    if index && states[index-1][:state] == (states[index+1] || {})[:state]
-      states.slice!(index-1..index)
-    end
-    states
-  end
-
   #是否成功
   def complete_state?
     state == "complete"
@@ -383,9 +378,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def buyer_fire_event!(event)
     events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
-    if event.to_s == "buy"
-      event = pay_manner.code
-    end
+    event = pay_manner.code if event.to_s == "buy"
     filter_fire_event!(events, event)
 
     notifications.create!(
