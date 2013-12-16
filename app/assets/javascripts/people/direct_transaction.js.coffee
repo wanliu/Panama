@@ -20,7 +20,7 @@ class window.DirectTransactionView extends Backbone.View
     setTimeout () =>
       padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
       @$messages.height(@$info.outerHeight() - @$toolbar.outerHeight() - padding)
-    , 200
+    , 60
 
   toggle_message: () ->
     @$messages.slideToggle()
