@@ -26,7 +26,6 @@ class DisplayDialogView extends Backbone.View
 
   more: () ->
     state = @model.get("summar_display")
-    console.log(state)
     @model.set(summar_display: !state)
 
   load_template: () ->
@@ -54,7 +53,6 @@ class DisplayDialogView extends Backbone.View
     else
       @load_template()
 
-    console.log("id:#{@model.id}, state: #{@model.get("summar_display")}")
 
 class root.TableListView extends Backbone.View
 
