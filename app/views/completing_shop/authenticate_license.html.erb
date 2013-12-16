@@ -55,7 +55,7 @@
 					<div class="span7 input_locate">
 						<%= f.input :company_name, label: '营业店名' %>
 						<% address = current_user.user_checking.address || Address.new %>
-						<div data-id="<%= address.id %>" class="control-group string required address">
+						<div data-id="<%= address.id %>" class="control-group string required address-panel">
 							<div class="hide">
 								<%= f.input :address_id, input_html: { value: address.id }  %>
 							</div>
@@ -146,7 +146,7 @@
 		})
 
 		new AddressEditView({
-			el: "div.address"
+			el: ".shop_info .address-panel"
 		})
 	})
 </script>

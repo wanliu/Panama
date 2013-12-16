@@ -9,7 +9,7 @@ class InviteUser < ActiveRecord::Base
   acts_as_status :behavior, [:agree, :refuse]
 
   after_create do
-    notification
+    notify_receiver
   end
 
   def notif_url
@@ -33,13 +33,17 @@ class InviteUser < ActiveRecord::Base
   end
 
   private
-  def notification
-    Notification.create(
-      :user_id => send_user.id,
-      :mentionable_user_id => user.id,
-      :url => notif_url,
-      :body => "#{send_user.login}邀请你加入#{targeable.name}商圈",
-      :targeable => targeable
-    )
+  def notify_receiver
+    # Notification.create!(
+    #   :user_id => send_user.id,
+    #   :mentionable_user_id => user.id,
+    #   :url => '/invite',
+    #   :body => "#{send_user.login}邀请你加入#{targeable.name}商圈",
+    #   :targeable => targeable
+    # )
+    user.notify("/invite",
+        "#{send_user.login}邀请你加入#{targeable.name}商圈",
+        :target => targeable,
+        :user_id => send_user.id)
   end
 end
