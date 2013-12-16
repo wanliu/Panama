@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131213064826) do
+ActiveRecord::Schema.define(:version => 20131216052711) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -566,6 +566,7 @@ ActiveRecord::Schema.define(:version => 20131213064826) do
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0
     t.string   "number"
+    t.datetime "dispose_date"
   end
 
   create_table "pay_manners", :force => true do |t|

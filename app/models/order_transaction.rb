@@ -475,18 +475,16 @@ class OrderTransaction < ActiveRecord::Base
     state_details.find_by(:state => state)
   end
 
-  def operator_connect_state
-    state = current_operator.nil? || !current_operator.connect_state ? false : true
-    self.update_attribute(:operator_state, state)
-  end
-
   def operator_create(toperator_id)
-    unless current_operator.try(:id) == toperator_id || operator_state
+    unless current_operator.try(:id) == toperator_id
       _operator = operators.create(operator_id: toperator_id)
-      self.update_attribute(:operator_id, _operator.id) if _operator.valid?
+      if _operator.valid?
+        self.update_attribute(:operator_id, _operator.id)
+      end
     end
     notice_order_dispose
     self.update_attribute(:operator_state, true)
+    self.update_attribute(:dispose_date, DateTime.now)
   end
 
   #买家发送信息
@@ -495,12 +493,8 @@ class OrderTransaction < ActiveRecord::Base
     unless seller.seller_group_employees.any?{|u| u.connect_state }
       not_service_online(id.to_s)
     end
-    # operator_connect_state
-    if operator_state
-      options[:receive_user] = current_operator
-    # else
-    #   options.delete(:receive_user)
-    end
+
+    options[:receive_user] = current_operator if operator_state
     chat_messages.create(options)
   end
 

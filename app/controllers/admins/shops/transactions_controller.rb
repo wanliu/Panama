@@ -3,9 +3,10 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   helper_method :base_template_path
 
   def pending
-    transactions = current_shop_order.uncomplete.order("created_at desc")
+    transactions = current_shop_order.uncomplete
     @untransactions = transactions.where(:operator_state => false)
-    @transactions = transactions.where(:operator_state => true).joins(:operator).page(params[:page])
+    @transactions = transactions.where(:operator_state => true)
+    .joins(:operator).order("dispose_date desc").page(params[:page])
   end
 
   def complete
