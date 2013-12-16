@@ -1,4 +1,6 @@
-class window.ShopDirectTransactionView extends Backbone.View
+root = (window || @)
+
+class root.ShopDirectTransactionView extends Backbone.View
   events: {
     "click .direct-message button" : "toggle_message"
   }

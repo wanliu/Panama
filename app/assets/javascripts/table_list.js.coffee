@@ -25,18 +25,26 @@ class DisplayDialogView extends Backbone.View
     @model.bind("change:summar_display", _.bind(@detail_display, @))
 
   more: () ->
-    @model.set(summar_display: !@model.get("summar_display"))
+    state = @model.get("summar_display")
+    console.log(state)
+    @model.set(summar_display: !state)
 
   load_template: () ->
     @$el.addClass("active")
-    @model.load_template (data) =>
-      @$summar.addClass "mini"
-      @$detail.html(data)
-      @trigger("off_details", @model)
+    if _.isEmpty(@template)
+      @model.load_template (data) =>
+        @template = data
+        @$detail.html(@template)
+        @mini_display () =>
+          @trigger("bind_view", @)
+    else
+      @mini_display()
 
-      @$detail.slideDown "fast", () =>
-        @trigger("bind_view", @)
-
+  mini_display: (callback = () ->) ->
+    @$summar.addClass "mini"
+    @trigger("off_details", @model)
+    @$detail.slideDown "fast", () =>
+      callback()
 
   detail_display: () ->
     if @model.get("summar_display")
@@ -45,6 +53,8 @@ class DisplayDialogView extends Backbone.View
         @$summar.removeClass "mini"
     else
       @load_template()
+
+    console.log("id:#{@model.id}, state: #{@model.get("summar_display")}")
 
 class root.TableListView extends Backbone.View
 

@@ -81,11 +81,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_user
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/pending",
-      :body => "你有新的订单")
+    seller.notify("#{seller.name}/transactions/new", "你有新的订单",
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}")
   end
   after_destroy :notice_destroy, :destroy_operators, :destroy_activity
 

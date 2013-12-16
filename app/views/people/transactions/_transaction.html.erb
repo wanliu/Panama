@@ -17,7 +17,7 @@
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
                 <% if transaction.close_state? %>
-                  <button type="button" class="btn_delete">&times;</button>
+                  <button type="button" class="btn_delete close">&times;</button>
                 <% end %>
                 <%= render "state_buttons", :transaction => transaction %>
               </div>
