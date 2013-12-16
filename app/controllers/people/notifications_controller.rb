@@ -45,11 +45,10 @@ class People::NotificationsController < People::BaseController
   end
 
   def mark_as_read
-    authorize! :read, @notification
     @notification = Notification.find(params[:id])
     @notification.change_read
     respond_to do |format|
-      format.json { head :no_content }
+      format.json { render json: @notification.as_json }
     end
   end
 

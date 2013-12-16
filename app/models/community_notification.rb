@@ -8,14 +8,16 @@ class CommunityNotification < ActiveRecord::Base
   belongs_to :notification
 
   after_create do
-    url = "/communities/#{circle.id}/notifications/#{id}"
-
-    target.notify("/request",
+    target.notify("/circles/request",
                   " #{send_user.login} 申请加入圈子",
                   :target => circle,
-                  :community_id => id)
+                  :community_id => id,
+                  :url => "communities/#{circle.id}/invite") # x
   end
 
+  def notify_url
+    "/communities/#{circle.id}/circles"
+  end
 
   #
   # target_member_id 成员 id
@@ -39,19 +41,21 @@ class CommunityNotification < ActiveRecord::Base
   end
 
   def refuse(user)
-    user.notify("/refuse",
-                "#{user.login}拒绝你的加入#{circle.name}圈子",
+    user.notify("/circles/refuse",
+                "#{user.login}拒绝加入您的圈子 #{circle.name}",
                 :target => circle,
-                :community_id => id)
+                :community_id => id,
+                :url => notify_url)
 
     self.update_attribute(:apply_state, false)
   end
 
   def agree(user)
-    user.notify("/joined",
-                "#{user.login}接受你的加入#{circle.name}圈子",
+    user.notify("/circ/joined",
+                "#{user.login}同意加入您的圈子 #{circle.name}",
                 :target => circle,
-                :community_id => id)
+                :community_id => id,
+                :url => notify_url)
     self.update_attribute(:apply_state, true)
   end
 end

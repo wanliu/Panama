@@ -15,7 +15,6 @@ class InstantlyNotificationManager
           <div class='noty_close'></div>
       </div>""")
 
-
   constructor: () ->
     @$notify_target = $(@notify_target)
     @plays = []
@@ -23,9 +22,9 @@ class InstantlyNotificationManager
     @client = window.clients
     #活动通知绑定
     @client.monitor("/activities/arrived", @arrived)
-    @client.monitor("/activity/add", @add_activity)
-    @client.monitor("/activity/change", @change_activity)
-    @client.monitor("/activity/remove", @remove_activity)
+    @client.monitor("/activities/add", @add_activity) # x
+    @client.monitor("/activities/change", @change_activity)
+    @client.monitor("/activities/remove", @remove_activity)
     #用户关系
     @client.monitor("/friends/add_quan", @add_to_circle) # √
     @client.monitor("/friends/add_user", @add_user) # √
@@ -34,26 +33,26 @@ class InstantlyNotificationManager
     #个人社交部分
     @client.monitor("/follow", @follow_user) # √
     @client.monitor("/unfollow", @unfollow_user) # √
-    @client.monitor("/request", @request_join_circle)
-    @client.monitor("/invite", @invite_join_circle) # √
-    @client.monitor("/refuse", @refuse_join_circle)
-    @client.monitor("/joined", @joined_success)
-    @client.monitor("/leaved", @leaved_circle)
-    @client.monitor("/like", @like_your) # √
-    @client.monitor("/unlike", @unlike_your) # √
+    @client.monitor("/circles/request", @request_join_circle) # x
+    @client.monitor("/circles/invite", @invite_join_circle) # √
+    @client.monitor("/circles/refuse", @refuse_join_circle)
+    @client.monitor("/circles/joined", @joined_success) # √
+    @client.monitor("/circles/leaved", @leaved_circle) # √
+    @client.monitor("/activities/like", @like_your) # √
+    @client.monitor("/activities/unlike", @unlike_your) # x
     # 商店社交部分
 
     @client.monitor("/shops/follow", @follow_shop) # √
     @client.monitor("/shops/unfollow", @unfollow_shop) # √
-    @client.monitor("/shops/like", @like_shops_activity) # √
-    @client.monitor("/shops/unlike", @unlike_shops_activity) # √
-    @client.monitor("/shops/joined", @joined_shop_circle) # √
-    @client.monitor("/shops/leaved", @leaved_shop_circle) # √
+    @client.monitor("/shops/like", @like_shops_activity)
+    @client.monitor("/shops/unlike", @unlike_shops_activity)
+    @client.monitor("/shops/joined", @joined_shop_circle)
+    @client.monitor("/shops/leaved", @leaved_shop_circle)
     @client.monitor("/shops/refuse", @refuse_join_shop_circle)
     @client.monitor("/shops/request", @request_join_shop_circle)
     #评论
     # @client.monitor("/comments/add", @add_comment)
-    @client.monitor("/comments/mention", @mention_comment) # √
+    @client.monitor("/comments/mention", @mention_comment)
     # @client.monitor("/comments/update", @update_comment)
     # @client.monitor("/comments/remove", @remove_comment)
 
@@ -337,22 +336,22 @@ class NotificationViewBase extends Backbone.View
   template_already: Handlebars.compile("<a href='javascript:void(0)'><span class='label label-warning'><i class='icon-info-sign'></i></span>&nbsp;{{ content }}</a></li>")
 
   events:
-    "click" : "mark_as_read"
+    "click" : "read_message"
 
 
   initialize: () ->
     _.extend(@, @options)
 
-  mark_as_read: () ->
-    url = "#{@url}?id=#{@model.id}"
-    window.location.href = url
-    # $.ajax(
-    #   type: "post",
-    #   url: "#{ @url}/#{ @model.id }/mark_as_read",
-    #   dataType: "json",
-    #   success: () =>
-    #     window.location.replace(@model.get('url'))
-    # )
+  read_message: () ->
+    $.ajax(
+      type: "post",
+      dataType: "json",
+      url: "#{ @url}/#{ @model.id }/mark_as_read",
+      success: (data, xhr, res) =>
+        url = data.url
+        return pnotify(text: '跳转地址为空', type: 'error') unless url 
+        window.location.href = url
+    )
 
   render: () ->
     li = $(@el).append(@template_already(@model.attributes))

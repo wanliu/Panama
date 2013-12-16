@@ -10,7 +10,7 @@ class InviteUser < ActiveRecord::Base
 
   after_create :notify_receiver
 
-  def notif_url
+  def notify_url
     "/communities/#{targeable_id}/invite/#{id}"
   end
 
@@ -32,16 +32,10 @@ class InviteUser < ActiveRecord::Base
 
   private
   def notify_receiver
-    # Notification.create!(
-    #   :user_id => send_user.id,
-    #   :mentionable_user_id => user.id,
-    #   :url => '/invite',
-    #   :body => "#{send_user.login}邀请你加入#{targeable.name}商圈",
-    #   :targeable => targeable
-    # )
-    user.notify("/invite",
-        "#{send_user.login}邀请你加入#{targeable.name}商圈",
+    user.notify("/circles/invite",
+        "#{send_user.login}邀请你加入商圈 #{targeable.name}",
         :target => targeable,
-        :user_id => send_user.id)
+        :user_id => send_user.id,
+        :url => notify_url)
   end
 end

@@ -36,7 +36,7 @@ class Activities::FocusController < Activities::BaseController
       else
         format.js{  render :partial => "activities/focus/form",
                    :locals  => { :activity => @activity },
-                   :status  => 400 }
+                   :status  => 403 }
       end
     end
   end
