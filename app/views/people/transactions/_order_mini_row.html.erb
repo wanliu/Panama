@@ -1,0 +1,68 @@
+<div class='order_item'>
+
+<div class='order_item_header'>
+  <ul class='order_header'>
+    <li class='actions'>
+      <ul>
+        <li class='state'>
+          <div class='state-label label label-success'>
+            <%= buyer_state(row.state) %>
+          </div>
+        </li>
+
+        <li class='time'>
+          <%= icon :time %><%=I18n.l row.created_at, :format => :short %>
+        </li>
+      </ul>
+    </li>
+    <li class='title'>
+      订单: <%= row.number %>
+    </li>
+  </ul>
+</div>
+
+<div class='order_item_row widget'>
+  <ul class='products'>
+    <li class='vertical'>
+      <ul>
+        <li class='actions'>
+          <ul>
+            <li class='price'>
+              单价
+            </li>
+            <li class='amount'>
+              数量
+            </li>
+            <li class='total'>
+              小计
+            </li>
+          </ul>
+        </li>
+        <li class='serial'>
+          <div class='title'>
+            商品
+          </div>
+        </li>
+      </ul>
+    </li>
+    <%= render_funcat "product_item_vertical", :collection => row.items, :as => :item %>
+    <li class='divider'></li>
+    <li class='vertical'>
+      <ul>
+        <li class='actions'>
+          <ul>
+
+            <li class='atotal'>
+              <%=number_to_currency row.total %>
+            </li>
+          </ul>
+        </li>
+        <li class='atotal'>
+          共计
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+</div>

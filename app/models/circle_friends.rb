@@ -52,6 +52,7 @@ class CircleFriends < ActiveRecord::Base
   def remove_from_persistent_channel
     circle_name = circle.name
     PersistentChannel.where(:user_id => user.id,
+                            :name => circle_name,
                             :channel_type => 2)
                      .destroy_all
 
