@@ -25,8 +25,9 @@ class DisplayDialogView extends Backbone.View
     @model.bind("change:summar_display", _.bind(@detail_display, @))
 
   more: () ->
-    state = @model.get("summar_display")
-    @model.set(summar_display: !state)
+    unless @$el.hasClass("waiting")
+      state = @model.get("summar_display")
+      @model.set(summar_display: !state)
 
   load_template: () ->
     @$el.addClass("active")
@@ -44,14 +45,20 @@ class DisplayDialogView extends Backbone.View
     @trigger("off_details", @model)
     @$detail.slideDown "fast", () =>
       callback()
+      @wait_tag()
 
   detail_display: () ->
+    @$el.addClass("waiting")
     if @model.get("summar_display")
       @$el.removeClass("active")
       @$detail.slideUp "fast", () =>
         @$summar.removeClass "mini"
+        @wait_tag()
     else
       @load_template()
+
+  wait_tag: () ->
+    @$el.removeClass("waiting")
 
 
 class root.TableListView extends Backbone.View
