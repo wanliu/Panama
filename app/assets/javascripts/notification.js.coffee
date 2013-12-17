@@ -51,7 +51,7 @@ class NotificationManager
     @client.monitor("/shops/leaved", @commonNotify)
     @client.monitor("/shops/refuse", @commonNotify)
     @client.monitor("/shops/request", @commonNotify)
-    #评论
+    # 评论
     # @client.monitor("/comments/add", @commonNotify)
     @client.monitor("/comments/mention", @commonNotify)
     # @client.monitor("/comments/update", @commonNotify)
@@ -59,20 +59,16 @@ class NotificationManager
 
   add_user: (data) =>
     @commonNotify(data)
-    chatList = ChatListView.getInstance()
-    if chatList?
-      friendsView = chatList.friends_view
-
-      friendsView.addFriend(
-        follow_type: 1,
-        login: data.friend_name,
-        icon: data.avatar
-      )
+    friendsView = ChatListView.getInstance().friends_view
+    friendsView.addFriend(
+      follow_type: 1,
+      login: data.friend_name,
+      icon: data.avatar
+    )
 
   remove_user: (data) =>
     @commonNotify(data)
-    chatList = ChatListView.getInstance()
-    friendsView = chatList.friends_view
+    friendsView = ChatListView.getInstance().friends_view
     friendsView.removeFriend(
       follow_type: 1,
       login: data.friend_name,
@@ -88,7 +84,6 @@ class NotificationManager
         text: info.content,
         avatar: info.avatar
       })
-      # @collection_views.push(new NotificationView(parent_view: @el, model: data, url: @urlRoot))
 
   addToPlays: (data, callback, delay = 3000) =>
     index = @plays.push [callback, delay, data]
@@ -98,12 +93,7 @@ class NotificationManager
       [animation, delay, info] = @plays.shift()
       animation(info) if animation && _.isFunction(animation)
 
-  change_count: () ->
-    @$count = $("#notification_count")
-    @$count.text(parseInt(@$count.text()) + 1)
-
   notify: (options) ->
-    self = @
     unless options.hasOwnProperty('theme')
       options.theme = 'notifyTheme'
 
@@ -118,7 +108,7 @@ class NotificationManager
               easing: 'swing',
               speed: 500
             }
-
+    self = @
     options.callback || = {}
     options.callback.onClose = () ->
       pos = @$bar.offset()
@@ -165,9 +155,8 @@ class root.NotificationViewList extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
-    @collection_count = 0
+    @$count = @$("#notification_count")
     @urlRoot = "/people/#{@current_user_login}/notifications"
-    @collection_views = []
     @collection = new Backbone.Collection()
     @collection.bind('add', @add_one, @)
     @collection.bind('remove', @remove_one, @)
@@ -175,20 +164,25 @@ class root.NotificationViewList extends Backbone.View
     @fetch()
 
   add_one: (model) ->
-    new NotificationView(parent_view: @el, model: model, url: @urlRoot)
+    model.view = new NotificationView(parent_view: @, model: model, url: @urlRoot)
+    @change_count()
+
+  remove_one: (model) ->
+    $(model.view.el).fadeOut()
+    @change_count()
 
   add_all: () ->
-    @$count = $("#notification_count")
-    if @collection_count <= 0
-      @$count.remove()
-    else
-      @$count.text(@collection_count)
-    @render_all(@collection)
-    @add_more()
-
-  render_all: (collection) ->
-    collection.each (model) =>
+    @collection.each (model) =>
       @add_one(model)
+    @add_more()
+    @change_count()
+
+  change_count: () ->
+    @$count.html(@collection.length)
+    if @collection.length <= 0
+      @$count.hide()
+    else
+      @$count.show()
 
   add_more: () ->
     @$(".notifications").append("
@@ -196,57 +190,48 @@ class root.NotificationViewList extends Backbone.View
         <a class='href_url' href='#{@urlRoot}'>查看所有>>></a>
       </li>")
 
-  fetch_data: (count) ->
-    @collection_count = count
-    @collection.fetch(data: {limit: 10, offset: 0}, url: "#{@urlRoot}/unreads")
-
   fetch: () ->
-    $.ajax(
-      url: "#{@urlRoot}/unread_count",
-      dataType: "json"
-      success: (data) =>
-        @fetch_data(data.count)
+    @collection.fetch(
+      url: "#{@urlRoot}/unreads",
+      data: { limit: 10, offset: 0 } 
     )
 
 
 class NotificationView extends Backbone.View
   tagName: "li"
 
-  template_realtime: Handlebars.compile("
-    <span class='label label-warning'>
-      <i class='icon-info-sign'></i>
-    </span>
-    <a href='javascript:void(0)' class='href_url'>
-      {{ content }}
-    </a>")
-
   template_already: Handlebars.compile("
-    <span class='label label-warning'>
-      <i class='icon-info-sign'></i>
-    </span>
-    <a href='javascript:void(0)' class='href_url'>
+    <label title='标为已读' class='href_url mark_read'>
+      <i class='icon-check'></i>
+    </label>
+    <a href='javascript:void(0)' class='href_url content'>
       {{ content }}
     </a>")
 
   events:
-    "click .href_url" : "read_message"
+    'click .mark_read': 'mark_as_read'
+    'click .content'  : 'read_message'
 
   initialize: () ->
     _.extend(@, @options)
+    @fetch_url = "#{@url}/#{@model.id}/mark_as_read"
     @render()
 
-  read_message: () ->
+  mark_as_read: (event) ->
+    event.stopPropagation() # Keep dropdown open on click
     $.ajax(
-      type: "post",
-      dataType: "json",
-      url: "#{@url}/#{@model.id}/mark_as_read",
+      type: 'post',
+      dataType: 'json',
+      url: @fetch_url,
       success: (data, xhr, res) =>
-        url = data.url
-        return pnotify(text: '跳转地址为空', type: 'error') unless url 
-        window.location.href = url
+        @parent_view.collection.remove(@model)
     )
+
+  read_message: () ->
+    return pnotify(text: '跳转地址为空', type: 'error') unless @fetch_url 
+    window.location.href = @fetch_url
 
   render: () ->
     li = $(@el).append(@template_already(@model.attributes))
-    @parent_view.find('ul').prepend(li)
+    $(@parent_view.el).find('ul').prepend(li)
 

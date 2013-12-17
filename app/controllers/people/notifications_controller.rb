@@ -37,7 +37,7 @@ class People::NotificationsController < People::BaseController
   end
 
   def read_all
-    Notification.update_all(:read => true)
+    Notification.where(user_id: current_user.id).update_all(read: true)
     respond_to do |format|
       format.html { redirect_to :action => 'index' }
       format.json { head :no_content }
@@ -48,6 +48,7 @@ class People::NotificationsController < People::BaseController
     @notification = Notification.find(params[:id])
     @notification.change_read
     respond_to do |format|
+      format.html { redirect_to @notification.url }
       format.json { render json: @notification.as_json }
     end
   end
