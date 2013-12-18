@@ -30,10 +30,10 @@ class Caramal.BackboneView extends Backbone.View
 class root.ChatModel extends Backbone.Model
   defaults: () ->
     {
-      type: 0,
-      title: '',
-      channel: null,
-      name: 'random_' + _.uniqueId()
+      type: null,
+      name: null,
+      title: null,
+      channel: null
     }
 
 class root.ChatList extends Backbone.Collection
@@ -193,7 +193,7 @@ class BaseChatView extends Caramal.BackboneView
   chat_template:  _.template('
     <div class="head">
       <span class="state online"></span>
-      <span class="name"><%= model.get("title") || model.get("name") %></span>
+      <span class="name"><%= model.get("title") %></span>
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>
@@ -218,7 +218,7 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </div>')
 
-  receiver_template: Handlebars.compile('
+  receive_template: Handlebars.compile('
     <li clas="row-receive">
       <div class="pull-left">
         <div class="icon">
@@ -235,7 +235,7 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </li>')
 
-  sender_template: Handlebars.compile('
+  send_template: Handlebars.compile('
     <li class="row-send">
       <div class="pull-right">
         <div class="icon">
@@ -270,7 +270,6 @@ class BaseChatView extends Caramal.BackboneView
 
   initialize: (options) ->
     super
-
     @name = @model.get('name')
     @title = @name unless @title
     @channel = @model.get('channel')
@@ -289,6 +288,7 @@ class BaseChatView extends Caramal.BackboneView
     @state_el = @$(".head>.state")
     $("body").append(@el)
     @model.view = @
+
     ChatService.getInstance().collection.add(@model)
     upload_view = new ImageUpload({ el: @el })
     @$('.choose-face').popover({
@@ -349,9 +349,9 @@ class BaseChatView extends Caramal.BackboneView
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
       if message.user is clients.current_user
-        template = @sender_template(message)
+        template = @send_template(message)
       else
-        template = @receiver_template(message)
+        template = @receive_template(message)
 
       $html += template.replace(/:([a-z]|_)+:/g, (word) =>
         '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
@@ -428,15 +428,19 @@ class root.ChatView extends BaseChatView
 
   stateService: () ->
     $(window).bind('idle', () =>
-      # 通知对方自己已经离开
-      @channel.online_state('away')
+      @sendState('away')
     )
     $(window).bind('active', () =>
-      # 通知对方自己已经上线
-      @channel.online_state('online')
+      @sendState('online')
     )
-    window.clients.on 'connect', (error) => @channel.online_state('online')
-    window.clients.on 'disconnect', (error) => @channel.online_state('away')
+    window.clients.on 'connect', (error) => 
+      @sendState('online')
+    window.clients.on 'disconnect', (error) => 
+      @sendState('away')
+
+  # 通知对方自己的在线状态
+  sendState: (state) ->
+    @channel.online_state(state)
 
   sendInputing: (time = 30000) ->
     @activeTime ||= new Date().getTime()
