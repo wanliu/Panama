@@ -140,7 +140,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find(params[:id])
     @messages = @transaction.messages.order("created_at desc").limit(30)
     respond_to do |format|
-      format.json{ render :json =>  @messages}
+      format.json{ render :json => @messages}
     end
   end
 

@@ -53,10 +53,10 @@ class MessageView extends Backbone.View
     @$el
 
 class SendMessageView extends Backbone.View
-  events: 
+  events:
     "submit form"                  : "send_message"
     "keyup textarea[name=content]" : "fastKey"
-  
+
   initialize: (options) ->
     @model = options.model
     @$form = @$(">form")
@@ -172,13 +172,13 @@ class TransactionMessageView extends Backbone.View
 
   realtime_fetch: () ->
     # @client = Realtime.client @faye_url
-    @client = window.clients
+    @client = window.clients.socket
     @client.subscribe @receive_notice_url(), (message) =>
       @notice_bubbing(message)
       @add_message(message)
 
   receive_notice_url: () ->
-    "/chat/receive/#{@realtime_key}/#{@shop.token}/#{@tansaction_id}_#{@current_user.token}"
+    "notify:/#{@shop.token}/#{@realtime_key}/#{@tansaction_id}/chat"
 
   max_scrollTop: () ->
     mheight = @$message_panel.find(">.message-list").height()

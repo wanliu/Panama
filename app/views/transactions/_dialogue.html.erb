@@ -20,29 +20,6 @@
   </div>
 </div>
 
-<script type="text/template" id="message-template">
-  <div class="chat-message">
-    <div class="sender">
-      <div class="icon">
-        <img src="{{send_user.icon_url}}" class="" alt="">
-      </div>
-      <div class="time">
-      </div>
-    </div>
-    <div class="chat-message-body">
-      <span class="arrow"></span>
-      <div class="sender">
-        <a href="#">{{send_user.login}}</a>
-        {{created_at}}
-      </div>
-      </br>
-      <div class="text">
-        {{content}}
-      </div>
-    </div>
-  </div>
-</script>
-
 <script type="text/javascript">
   window.clients = window.parent.clients
   $(function(){
@@ -53,17 +30,15 @@
       template: template,
       current_user: {
         id: <%=current_user.id %>,
-        token: "<%=current_user.im_token %>",
         login: "<%=current_user.login %>"
       },
-      faye_url: "<%=faye_server_uri %>",
       tansaction_id: <%=transaction.id %>,
       shop: {
         id: "<%=transaction.seller.id %>",
         name: "<%=transaction.seller.name %>",
         token: "<%=transaction.seller.im_token%>"
       },
-      realtime_key: 'OrderTransaction'
+      realtime_key: 'order_transactions'
     })
   })
 </script>

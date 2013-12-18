@@ -82,7 +82,11 @@ class ChatMessage < ActiveRecord::Base
     attra = super *args
     attra["receive_user"] = receive_user.nil? ? {} : receive_user.as_json
     attra["owner"] = owner.nil? ? {} : owner.as_json
-    attra["send_user"] = send_user.as_json
+    attra["send_user"] = {
+      :id => send_user.id,
+      :login => send_user.login,
+      :photos => send_user.photos.attributes
+    }
     # attra["created_at"] = created_at.localtime().strftime("%Y-%m-%d %H:%M:%S")
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attributes["attachments"] = []

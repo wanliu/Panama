@@ -518,21 +518,22 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def chat_notify(send_user, receive_user, content)
-    _content = "#{send_user.login}说: #{content}"
-
     if receive_user.present?
-      url, channel = if receive_user == buyer
-        ["/people/#{receive_user.login}/transactions/#{id}",
-        "/order_transactions/chat"]
+      url = if receive_user == buyer
+        "/people/#{receive_user.login}/transactions/#{id}"
       else
-        ["/shops/#{seller.name}/admins/transactions/#{id}",
-        "/#{seller.im_token}/order_transactions/#{receive_user.login}/chat"]
+        "/shops/#{seller.name}/admins/transactions/#{id}"
       end
       receive_user.notify(
-        channel,
-        _content,
+        "/#{seller.im_token}/order_transactions/#{id}/chat",
+        content,
         :order_id => id,
-        :avatar => send_user.photos.icon,
+        :send_user => {
+          :login => send_user.login,
+          :id => send_user.id,
+          :photos => send_user.photos.attributes
+        },
+        :created_at => DateTime.now,
         :url => url
       )
     else
