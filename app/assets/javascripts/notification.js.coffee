@@ -22,19 +22,19 @@ class NotificationManager
     @notificationsList = NotificationViewList.getInstance()
     @client = window.clients
 
-    #活动通知绑定
+    # 活动通知绑定
     @client.monitor("/activities/arrived", @commonNotify)
     @client.monitor("/activities/add", @commonNotify) # x
     @client.monitor("/activities/change", @commonNotify)
     @client.monitor("/activities/remove", @commonNotify)
     @client.monitor("/activities/like", @commonNotify) # √
     @client.monitor("/activities/unlike", @commonNotify) # x
-    #用户关系
+    # 用户关系
     @client.monitor("/friends/add_quan", @commonNotify) # √
     @client.monitor("/friends/add_user", @add_user) # √
     @client.monitor("/friends/remove_user", @remove_user) # √
     @client.monitor("/friends/remove_quan", @commonNotify) # √
-    #个人社交部分
+    # 个人社交部分
     @client.monitor("/follow", @commonNotify) # √
     @client.monitor("/unfollow", @commonNotify) # √
     @client.monitor("/circles/request", @commonNotify) # x
