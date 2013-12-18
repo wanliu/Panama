@@ -200,8 +200,8 @@ class BaseFriendView extends Backbone.View
     @msg_count = 0
     @$('.message_count').hide()
 
-  incMsgCount: (count) ->
-    @msg_count += count
+  incMsgCount: () ->
+    @msg_count += 1
     @$('.message_count').html(@msg_count).show()
 
   setChannel: (@channel) ->
