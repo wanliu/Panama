@@ -11,23 +11,26 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
     @user = User.find_by(:login => params[:login])
 
     respond_to do |form|
-        if @user
-            Notification.create!(
-                :user_id => @user.id,
-                :mentionable_user_id => current_user.id,
-                :url => notification_url(@user.login),
-                :body => "#{current_shop.name} 商店邀请你加入")
-            form.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
+      if @user
+        @user.notify(
+          "/employees/invite",
+          "#{current_shop.name} 商店邀请你加入",
+          :avatar => current_user.photos.icon,
+          :url => notification_url(@user.login))
+        form.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
+      else
+        #如果email发送信息给它
+        if params[:login] =~ email_match
+          UserMailer.invite_employee(
+            params[:login],
+            current_user,
+            current_shop,
+            email_invite_url(email_callback_url)).deliver
+          form.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
         else
-            #如果email发送信息给它
-            if params[:login] =~ email_match
-                UserMailer.invite_employee(params[:login], current_user,
-                    current_shop, email_invite_url(email_callback_url)).deliver
-                form.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
-            else
-                form.json{ render :json => {message: "用户不存在！"}, :status => 403 }
-            end
+          form.json{ render :json => {message: "用户不存在！"}, :status => 403 }
         end
+      end
     end
   end
 

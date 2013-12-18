@@ -45,6 +45,34 @@ class DirectTransaction < ActiveRecord::Base
     attra
   end
 
+  def chat_notify(send_user, receive_user, content)
+    _content = "#{send_user.login}说: #{content}"
+    if receive_user.present?
+      url, channel = if receive_user == buyer
+        ["/people/#{receive_user.login}/direct_transactions/#{id}",
+        "/direct_transactions/chat"]
+      else
+        ["/shops/#{seller.name}/admins/direct_transactions/#{id}",
+        "/#{seller.im_token}/direct_transactions/#{receive_user.login}/chat"]
+      end
+      receive_user.notify(
+        channel,
+        _content,
+        :order_id => id,
+        :avatar => send_user.photos.icon,
+        :url => url
+      )
+    else
+      seller.notify(
+        "/#{seller.im_token}/direct_transactions/chat",
+        _content,
+        :order_id => id,
+        :avatar => send_user.photos.icon,
+        :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}"
+      )
+    end
+  end
+
   def state_title
     I18n.t("direct_transaction_state.#{state.name}")
   end

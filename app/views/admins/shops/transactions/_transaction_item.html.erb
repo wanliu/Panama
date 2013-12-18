@@ -1,0 +1,46 @@
+<div class='item' id="order_transaction<%=transaction.id %>" data-value-id="<%=transaction.id %>">
+  <div class='summarize'>
+    <div class='row-fluid head'>
+      <div class='span3'>
+        编号: <%=transaction.number %>
+      </div>
+      <div class='span4'>
+        在
+        <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
+          <%= time_ago_in_words transaction.created_at %>
+        </small>
+        之前交易
+      </div>
+      <div class='span2'>
+        <%= link_to transaction.seller.name, shop_path(transaction.seller)  %>
+      </div>
+    </div>
+    <div class='row-fluid products'>
+      <div class='span7'>
+        <% transaction.items.each do |item| %>
+          <%=render_funcat "product_item", :item => item %>
+        <% end %>
+      </div>
+      <div class='span2'>
+        <div>
+          <%=number_to_currency transaction.stotal %>
+        </div>
+        <div class='delivery_price'>
+          (含<%=transaction.delivery_price || 0 %>运费)
+        </div>
+      </div>
+      <div class='span2'>
+        <%=transaction.seller_state_title %>
+      </div>
+      <div class='span1'>
+        <% if transaction.close_state? %>
+        <a href='javascript:void(0)' class='btn_delete'>
+          删除
+        </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class='detail'>
+  </div>
+</div>

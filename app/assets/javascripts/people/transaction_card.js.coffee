@@ -50,9 +50,6 @@ class TransactionCard extends TransactionCardBase
       { name: 'audit_failure',          from: 'waiting_audit',          to: 'waiting_audit_failure'}
     ]
 
-  getNotifyName: () ->
-    super + "-buyer"
-
   beforeBack: (event, from ,to ) ->
     @slideBeforeEvent('back')
     true

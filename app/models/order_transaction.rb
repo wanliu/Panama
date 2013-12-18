@@ -73,9 +73,10 @@ class OrderTransaction < ActiveRecord::Base
   after_create :state_change_detail, :notice_user
 
   def notice_user
-    seller.notify("/#{seller.name}/transactions/new", "你有编号(#{number})新的订单",
+    seller.notify("/#{seller.im_token}/order_transactions/create", "你有编号#{number}新的订单",
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-      :order_id => id)
+      :order_id => id,
+      :target => self)
   end
   after_destroy :notice_destroy, :destroy_activity
 
@@ -244,9 +245,11 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_destroy
-    seller.notify("/#{seller.name}/transactions/destroy",
+    seller.notify(
+      "/#{seller.im_token}/order_transactions/destroy",
       "订单#{number}被删除！",
-      :order_id => id, :url => "/shops/#{seller.name}/admins/pendding")
+      :order_id => id,
+      :url => "/shops/#{seller.name}/admins/pendding")
   end
 
   #如果卖家没有发货直接删除明细，返还买家的金额
@@ -381,7 +384,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_state_notify_seller
     seller.notify(
-      "/#{seller.name}/transactions/change_state",
+      "/#{seller.im_token}/order_transactions/change_state",
       "您的订单#{number}买家已经#{seller_state_title}",
       :order_id => id, :state => state_name,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}"
@@ -390,7 +393,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_state_notify_buyer
     buyer.notify(
-      "/#{buyer.login}/transactions/change_state",
+      "/#{buyer.login}/order_transactions/change_state",
       "您的订单#{number}卖家已经#{buyer_state_title}",
       :url => "/people/#{buyer.login}/transactions/#{id}"
     )
@@ -451,8 +454,10 @@ class OrderTransaction < ActiveRecord::Base
     self.update_attribute(:operator_state, true)
     self.update_attribute(:dispose_date, DateTime.now)
     seller.notify(
-      "/#{seller.name}/transactions/dispose",
-      "", :persistent => false
+      "/#{seller.im_token}/order_transactions/dispose",
+      "#{current_operator.login}处理 #{number}订单",
+      :persistent => false,
+      :order_id => id
     )
   end
 
@@ -512,28 +517,35 @@ class OrderTransaction < ActiveRecord::Base
     state_title("buyer")
   end
 
-  # def notice_change_buyer(event_name = nil)
-  #   ename = event_name.to_s
-  #   if %w(back delivered audit_transfer audit_failure returned).include?(ename)
-  #     token = buyer.try(:im_token)
-  #     faye_send("/events/#{token}/transaction-#{id}-buyer",
-  #                       :event => "refresh_#{ename}")
-  #   end
-  # end
+  def chat_notify(send_user, receive_user, content)
+    _content = "#{send_user.login}说: #{content}"
 
-  # def notice_change_seller(event_name = nil)
-  #   ename = event_name.to_s
-  #   if %w(online_payment cash_on_delivery bank_transfer
-  #     back paid sign transfer confirm_transfer audit_transfer audit_failure returned).include?(ename)
-  #     if current_operator.nil?
-  #       realtime_dispose({type: "change" ,values: self})
-  #     else
-  #       token = current_operator.try(:im_token)
-  #       faye_send("/events/#{token}/transaction-#{id}-seller",
-  #         :event => "refresh_#{ename}")
-  #     end
-  #   end
-  # end
+    if receive_user.present?
+      url, channel = if receive_user == buyer
+        ["/people/#{receive_user.login}/transactions/#{id}",
+        "/order_transactions/chat"]
+      else
+        ["/shops/#{seller.name}/admins/transactions/#{id}",
+        "/#{seller.im_token}/order_transactions/#{receive_user.login}/chat"]
+      end
+      receive_user.notify(
+        channel,
+        _content,
+        :order_id => id,
+        :avatar => send_user.photos.icon,
+        :url => url
+      )
+    else
+      seller.notify(
+        "/#{seller.im_token}/order_transactions/chat",
+        _content,
+        :order_id => id,
+        :avatar => send_user.photos.icon,
+        :unmessages_count => unmessages.count,
+        :url => "/shops/#{seller.name}/admins/transactions/#{id}"
+      )
+    end
+  end
 
   def valid_transfer_sheet?
     if transfer_sheet.nil?

@@ -317,12 +317,15 @@ $left-side-admin-width: 160px;
 }
 
 .form-search-user{
+  margin-top: 15px;
+
   input{
-    margin-left: 20px;
-    margin-top: 20px;
+    margin: 0px;
   }
+
   button{
-    margin-top: 10px;
+    margin: 0px;
+    margin-left: 5px;
   }
 }
 

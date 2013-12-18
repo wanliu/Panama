@@ -5,10 +5,8 @@ class ChatMessagesController < ApplicationController
 
   def index
     send_user_id = params[:friend_id]
-    @messages = ChatMessage.where(
-      "owner_type = 'User' and owner_id", [current_user.id, send_user_id]
-    ).order("created_at desc").limit(30)
-    @messages.where(:owner_id => current_user.id).update_all(read: true)
+    @messages = current_user.chat_messages.order("created_at desc").limit(30)
+    @messages.update_all(read: true)
 
     ChatMessage.notice_read_state(current_user, send_user_id)
     respond_to do |format|
@@ -18,8 +16,10 @@ class ChatMessagesController < ApplicationController
 
   def create
     receive_user = User.find(params[:chat_message].delete(:receive_user_id))
-    @message = current_user.chat_messages.create(
-      params[:chat_message].merge(:send_user => current_user, :receive_user => receive_user))
+    @message = receive_user.chat_messages.create(
+      params[:chat_message].merge(
+        :send_user => current_user,
+        :receive_user => receive_user))
 
     respond_to do |format|
       if @message.valid?

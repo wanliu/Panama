@@ -218,7 +218,10 @@ class People::TransactionsController < People::BaseController
 
   def send_message
     @transaction = current_user.transactions.find(params[:id])
-    @message = @transaction.message_create(params[:message].merge(send_user: current_user, receive_user: @transaction.seller.try(:user)))
+    @message = @transaction.message_create(
+      params[:message].merge(
+        send_user: current_user,
+        receive_user: @transaction.current_operator))
 
     respond_to do |format|
       format.json{ render :json => @message }

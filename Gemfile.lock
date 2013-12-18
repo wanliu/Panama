@@ -12,9 +12,9 @@ GIT
 
 GIT
   remote: git://github.com/huxinghai1988/tire_update_by_query.git
-  revision: c2f490c5ba945c7f8b49ac62afd0c7ea94ad8488
+  revision: a70a9f227b9c7f5972a2961ba9b199c6d4b7bb84
   specs:
-    tire_update_by_query (0.0.6)
+    tire_update_by_query (0.0.7)
       tire
 
 GIT
@@ -600,7 +600,7 @@ DEPENDENCIES
   therubyracer (~> 0.10.2)
   tire!
   tire-settings!
-  tire_update_by_query (~> 0.0.6)!
+  tire_update_by_query (~> 0.0.7)!
   uglifier (>= 1.0.3)
   vfs (~> 0.4.8)
   whenever

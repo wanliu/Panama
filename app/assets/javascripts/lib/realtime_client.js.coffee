@@ -43,7 +43,7 @@ class root.Realtime
     @on('reconnect', () =>
       @connected(2000)
       @connected_state()
-      console.log('reconnect') 
+      console.log('reconnect')
     )
     @on('reconnecting', () =>
       @connecting()
@@ -64,10 +64,10 @@ class root.Realtime
     @socket.removeListener(channel)
 
   unmonitor_notification: () ->
-    @socket.unNotify(channel,callback)  
+    @socket.unNotify(channel,callback)
 
   monitor_notification: (channel,callback) ->
-    @socket.onNotify(channel,callback)  
+    @socket.onNotify(channel,callback)
 
   disconnect_state: () ->
     # 订单聊天窗口
@@ -100,7 +100,7 @@ class root.Realtime
     setTimeout( () ->
       $(".login_progress").hide()
     ,time);
-      
+
   error_tip: (type) ->
     $(".user_icon").addClass("disconnect")
     target = $(".login_progress")

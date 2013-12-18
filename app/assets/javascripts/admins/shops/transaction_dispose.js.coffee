@@ -1,6 +1,7 @@
 #处理订单
 #= require jquery
 #= require backbone
+#= require admins/shops/transaction_realtime
 
 exports = window || @
 
@@ -32,8 +33,7 @@ class TransactionEvent extends Backbone.View
     @model.bind("remove", @remove, @)
 
   dispose: () ->
-    @model.dispose (template, xhr)  =>
-      window.location.reload()
+    @model.dispose (data, xhr)  =>
       #@show_tran template
 
   show_tran: (template) ->
@@ -113,51 +113,39 @@ class exports.TransactionDispose extends Backbone.View
       @$tbody.html('')
       @$tbody.append("
       <tr class='notice_message'>
-        <td colspan='8' style='text-align:center;'>暂时没未处理单</td>
+        <td colspan='8'>暂时没未处理单</td>
       </tr>")
     else
       @$tbody.find("tr.notice_message").remove()
 
   bind_realtime: () ->
-    # @client = Realtime.client(@realtime_url)
-    @client = window.clients
+    @realtime = new TransactionRealTime @shop_key()
+    @realtime.create (data) =>
+      @fetch_data(data.order_id, "transactions")
 
-    @client.subscribe "/OrderTransaction/#{@shop_key()}/un_dispose", (info) =>
-      @realtime_help(info, 'transactions')
+    @realtime.dispose (data) =>
+      pnotify(text: data.content, avatar: data.avatar)
+      @realtime_destroy data.order_id, "transactions"
 
-    @client.subscribe "/DirectTransaction/#{@shop_key()}/un_dispose", (info) =>
-      @realtime_help(info, 'direct_transactions')
+    @realtime.destroy (data) =>
+      @realtime_destroy data.order_id, "transactions"
 
-  realtime_help: (info, type) ->
-    data = info.values
-    switch info.type
-      when "chat"
-        @realtime_chat(data, type)
-      when "new"
-        @add(data, type)
-      when "change"
-        @realtime_change(data, type)
-      when "dispose"
-        @realtime_dispose(data, type)
-      when "destroy"
-        @realtime_destroy(data, type)
+    @realtime.chat (data) =>
+      @realtime_chat data, "transactions"
 
-  realtime_destroy: (data, type) ->
-    model = @where_transaction(data.id, type)
-    if model?
-      @remove_tran model
+  fetch_data: (id, type) ->
+    model = new Transaction(_type: type, id: id)
+    model.set_url(@shop.name)
+    model.fetch success: (model, data) => @add(data, type)
 
-  realtime_dispose: (data, type) ->
-    model = @where_transaction(data.id, type)
-    if model?
-      @remove_tran model
+  realtime_destroy: (id, type) ->
+    model = @where_transaction(id, type)
+    @remove_tran model if model?
 
   realtime_chat: (data, type) ->
-    model = @where_transaction(data.owner.id, type)
+    model = @where_transaction(data.order_id, type)
     if model?
-      model.set("unmessages_count", data.owner.unmessages_count)
-    else
-      @add data.owner, type
+      model.set("unmessages_count", data.unmessages_count)
 
   realtime_change: (data, type) ->
     model = @where_transaction(data.id, type)

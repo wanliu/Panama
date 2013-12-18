@@ -40,8 +40,6 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :services
 
-  delegate :groups, :jshop, :to => :shop_user
-
   after_create :load_initialize_data
   before_create :generate_token
 
@@ -155,6 +153,13 @@ class User < ActiveRecord::Base
 
   def is_seller?
     !services.empty? && services.any? { |service| service.service_type == "seller" }
+  end
+
+  def chat_notify(send_user, receive_user, content)
+    notify("/chat",
+      "#{send_user.login}说: #{content}",
+      :send_user_id => send_user.id,
+      :persistent => false)
   end
 
   def load_initialize_data

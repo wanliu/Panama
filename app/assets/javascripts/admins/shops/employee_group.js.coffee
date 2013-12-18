@@ -222,7 +222,7 @@ class GroupEmployeeListView extends Backbone.View
 
   render_group: () ->
     li = $("<li data-value-id=#{@group.id} />")
-    # li.html("<span class='close-group icon-remove'></span>")   
+    # li.html("<span class='close-group icon-remove'></span>")
     li.append($("<a href='#group-#{@group.id}' data-toggle='tab'>#{@group.get('name')}</a>"))
     li
 
@@ -487,7 +487,14 @@ class EmployeeGroup
     @load_permission_group()
 
   bind_user_typeahead: () ->
-    new UserTypeahead(@invite_employee.find("form>input:text"))
+    new TypeaheadExtension({
+      el: $("form>input:text", @invite_employee),
+      source: "/search/users",
+      field: 'login',
+      select: (item)  =>
+        $("form>input:text", @invite_employee).val(item.login)
+        @invite_employee.find("form.form-search-user").submit()
+    })
 
   bind_invite_employee: () ->
     form = @invite_employee.find("form.form-search-user")
@@ -498,10 +505,10 @@ class EmployeeGroup
         employee = new Employee({}, @default_params.shop)
         employee.invite(login,
             (model, data) =>
-                @invite_notice("success", data.message)
+              @invite_notice("success", data.message)
 
             (model, data) =>
-                @invite_notice("error", data.message)
+              @invite_notice("error", data.message)
         )
         false
     )
@@ -515,17 +522,17 @@ class EmployeeGroup
 
   load_group: () ->
     @group_view_list = new GroupViewList({
-        el : @group_panle,
-        shop: @default_params.shop,
-        group_user_template: @default_params.group_user_template
+      el : @group_panle,
+      shop: @default_params.shop,
+      group_user_template: @default_params.group_user_template
     })
 
   load_permission_group: () ->
     @permission_group_list = new PermissionGroupList({
-        el: @permission_group_panle,
-        shop: @default_params.shop,
-        permission_template: @permission_template,
-        groups: @group_view_list.groups
+      el: @permission_group_panle,
+      shop: @default_params.shop,
+      permission_template: @permission_template,
+      groups: @group_view_list.groups
     })
 
 exports.EmployeeGroup = EmployeeGroup

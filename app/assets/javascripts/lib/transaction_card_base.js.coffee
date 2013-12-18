@@ -20,13 +20,7 @@ class TransactionCardBase extends AbstructStateView
     @transaction = new Transaction()
     @transaction.set_url(@options['url_root'])
 
-    @rt_options = @options['realtime']
-    if @rt_options.url?
-      # @realtime = Realtime.client(@rt_options.url)
-      @client = window.clients
-      @client.monitor_notification @getNotifyName(), @rt_options.token, _.bind(@stateChange, @)
     super
-    # @$el.bind('click', @activeThis)
 
   countdown: () ->
     @$(".clock").kkcountdown({
@@ -89,15 +83,6 @@ class TransactionCardBase extends AbstructStateView
         success: (model, data) =>
           $(@el).remove()
       })
-      ###
-      if Modernizr.cssanimations?
-        $(@el).addClass("animated fadeOutUp")
-        setTimeout () =>
-          @$el.hide()
-        , 1300
-      else
-        $(@el).fadeOut()
-      ###
 
   eventUrl: (event) ->
     @options['event_url'] + "/#{event}"
