@@ -18,7 +18,14 @@ namespace :user do
 
     User.all.each do |user|
       channels = user.persistent_channels.map do |channel|
-        { name: channel.name, type: channel.channel_type }
+        role = ""
+        if 2 == channel.channel_type
+          circle = Circle.where(name: channel.name).first
+          if circle && circle.is_owner_people?(user)
+            role = "Owner"
+          end
+        end
+        { name: channel.name, type: channel.channel_type, role: role}
       end
 
       info = {

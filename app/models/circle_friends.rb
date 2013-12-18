@@ -18,6 +18,66 @@ class CircleFriends < ActiveRecord::Base
 
   delegate :photos, :to => :user
 
+  after_create :add_to_persistent_channel
+
+
+  after_destroy :remove_from_persistent_channel
+
+  def notify_url
+    "/communities/#{circle.id}/circles"
+  end
+
+  def add_to_persistent_channel
+    circle_name = circle.name
+    PersistentChannel.where(:user_id => user.id,
+                            :name => circle.name,
+                            :icon => circle.photos.icon,
+                            :channel_type => 2)
+                     .first_or_create
+
+    owner = circle.owner
+    if owner.is_a?(Shop)
+      owner.owner.notify("/circles/joined",
+                   "#{user.login} 加入了商圈 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id,
+                   :url => notify_url)
+    elsif owner.is_a?(User)
+      owner.notify("/circles/joined",
+                   "#{user.login} 加入了个人圈 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id,
+                   :url => notify_url)
+    end
+  end
+
+  def remove_from_persistent_channel
+    circle_name = circle.name
+    PersistentChannel.where(:user_id => user.id,
+                            :channel_type => 2)
+                     .destroy_all
+
+    owner = circle.owner
+
+    if owner.is_a?(Shop)
+      owner.owner.notify("/circles/leaved",
+                   "#{user.login} 离开了你们的商圈 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id,
+                   :url => notify_url)
+    elsif owner.is_a?(User)
+      owner.notify('/circles/leaved', "#{user.login} 离开了个人圈 #{circle_name}",
+                   :target => self,
+                   :avatar => user.icon,
+                   :user_id => user.id,
+                   :url => notify_url)
+
+    end
+  end
+
   def validate_setting?
     if self.circle.setting.try(:limit_city)
 

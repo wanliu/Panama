@@ -57,12 +57,12 @@
 
 
 	<!--通知信息-->
-	<li class="dropdown notification" title="消息通知" data-toggle='tooltip' data-placement='bottom' >
+	<li class="dropdown notification-menu" title="消息通知" data-toggle='tooltip' data-placement='bottom' >
 		<a href="#"  id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
 			<i class="icon-comments"></i>
 			<span id="notification_count" class="count badge badge-important"></span>
 		</a>
-		 <ul id="notification" class="dropdown-menu notifications" role="menu">
+		 <ul id="notification-list" class="dropdown-menu notifications" role="menu">
 		</ul>
 	</li>
 
@@ -125,14 +125,8 @@
 
 <script type="text/javascript">
 	var topbar = new TopBar({ el: "#topbar" });
-	// new NotificationViewList({
-	// 	el: $(".notification"),
-	// 	current_user_login: '<%= current_user.login %>'
-	// })
-	// NotificationViewList.setElement(".notification");
-	// NotificationViewList.setOption("current_user_login", '<%= current_user.login %>');
 	NotificationViewList.startup({
-		el: $(".notification"),
+		el: $(".notification-menu"),
 		current_user_login: '<%= current_user.login %>'
 	});
 

@@ -6,7 +6,7 @@ class Activity < ActiveRecord::Base
   include Tire::Model::UpdateByQuery
   include MessageQueue::Activity
 
-  attr_accessor :people_number
+  attr_accessor :people_number, :activity_price, :attachment_ids
 
   scope :wait, lambda{ where(:status => statuses[:wait]) }
   scope :access, lambda{ where(:status => statuses[:access]) }
@@ -49,19 +49,23 @@ class Activity < ActiveRecord::Base
     validate_destroy_access?
   end
 
+  def notify_url
+    "/activities/#{id}"
+  end
+
   def notice_author(sender, message)
-    author.notify("/activity/add",
+    author.notify("/activities/add",
                   message,
-                  {:url => "/activities/#{id}",
+                  {:url => notify_url,
                   :target => self })
   end
 
   def notice_followers
     unless shop.followers.blank?
       shop.followers.each do |follower|
-        follower.user.notify('/activity/add', 
-                             "你关注的商家#{ shop.name}有新活动发布#{ title}",
-                             { :target => self, :url => "/activities/#{id}" } )
+        follower.user.notify('/activities/add', 
+                             "您关注的商家#{shop.name}发布新活动 #{title}",
+                             { :target => self, :url => notify_url } )
       end
     end
   end

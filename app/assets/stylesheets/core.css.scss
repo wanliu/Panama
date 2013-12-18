@@ -11,6 +11,12 @@
 @import "lib/stroll";
 @import "attachments";
 
+@mixin title-fixed {
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+
 body, html {
   // $bgcolor1: #69D2E7;
   // $bgcolor2: #A7DBD8;
@@ -185,6 +191,23 @@ ul {
 
   #account {
     padding-top: 10px;
+  }
+}
+
+#topbar {
+  .notification-menu {
+    #notification-list {
+      >li {
+        padding: 4px 5px;
+        margin: 0px 0px;
+        @include title-fixed;
+
+        .href_url {
+          padding: 2px;
+          display: inline;
+        }
+      }
+    }
   }
 }
 
@@ -567,6 +590,17 @@ ul {
     font-size: 11.05px;
     color: #ddd;
   }
+}
+
+.avatar{
+  &.avatar-icon {
+    width: 45px;
+  }
+
+  &.avatar-mini {
+    width: 20px;
+  }
+
 }
 
 .navbar .nav>li>.account:after {
@@ -1406,7 +1440,7 @@ h2 small {
             border-left: none;
             border-right: 2px solid #A2B1B0;
             text-align: right;
-            background-color: rgba(162, 177, 176, 0.55);
+            background-color: rgba(203, 211, 210, 0.55);
           }
         }
 

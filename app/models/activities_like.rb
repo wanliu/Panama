@@ -19,26 +19,29 @@ class ActivitiesLike < ActiveRecord::Base
     unlike_notice_author
   end
 
+  def notify_url
+    "/activities/#{activity.id}"
+  end
+
   def like_notice_author
-    author.notify("/like",
-                  "#{user.login} 支持了你的 #{ activity.title} 活动",
+    author.notify("/activities/like",
+                  "#{user.login} 支持了您的活动 #{activity.title}",
                   { :target => self,
-                    :avatar => user.avatar,
-                    :url => "/people/#{user.login}/notifications"})
+                    :avatar => user.icon,
+                    :url => notify_url})
   end
 
   def unlike_notice_author
-    author.notify("/unlike",
-                  "#{user.login} 不再支持你的 #{ activity.title} 活动",
+    author.notify("/activities/unlike",
+                  "#{user.login} 不再支持您的活动 #{activity.title}",
                   { :target => self,
-                    :avatar => user.avatar,
-                    :url => "/people/#{user.login}/notifications"})
+                    :avatar => user.icon,
+                    :url => notify_url})
   end
 
   def author
     activity.author
   end
-
 
   private
   def update_activity_like

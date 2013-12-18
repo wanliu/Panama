@@ -34,6 +34,7 @@ class Notification < ActiveRecord::Base
 
   belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"
   belongs_to :targeable, :polymorphic => true
+  # has_many :community_notifications, :dependent => :destroy
 
   validates_presence_of :user
   # validates_presence_of :mentionable_user
@@ -44,7 +45,7 @@ class Notification < ActiveRecord::Base
 
   def expired_unreads
     Notification.unreads.where({
-      mentionable_user_id: self.mentionable_user_id,
+      # mentionable_user_id: self.mentionable_user_id,
       targeable_type: self.targeable_type,
       targeable_id: self.targeable_id
     }).where('id <> ?', self.id).update_all(:read => true)

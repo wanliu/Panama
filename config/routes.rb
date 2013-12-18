@@ -68,6 +68,7 @@ Panama::Application.routes.draw do
         post :low_to_member
         delete :remove_member
         delete :quit_circle
+        delete :destroy_circle
         get ":category_id/category", :to => "communities/circles#category"
         post :join
         post :apply_join
@@ -209,9 +210,10 @@ Panama::Application.routes.draw do
     resources :notifications,:except => :show, :controller => "people/notifications" do
       member do
         get :enter, :to => "people/notifications#show"
-        post :mark_as_read, :to => "people/notifications#mark_as_read"
+        match :mark_as_read, :to => "people/notifications#mark_as_read"
       end
       collection do
+        get :read_all, :to => "people/notifications"
         get :unreads, :to => "people/notifications#unreads"
         get :unread_count, :to => "people/notifications#unread_count"
       end
