@@ -56,7 +56,7 @@ class People::NotificationsController < People::BaseController
   def unreads
     @notifications = Notification.unreads
       .where(:user_id => @people.id)
-      .order(updated_at: :desc)
+      .order("updated_at asc")
       .includes(:targeable)
     if params[:offset].present?
       @notifications = @notifications.offset(params[:offset])

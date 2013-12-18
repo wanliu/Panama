@@ -86,7 +86,7 @@
       el: $(".owner")
     })
 
-    <%if @circle.is_member?(current_user) %>
+    <% if @circle.is_member?(current_user) %>
     new AttachmentUpload({
       el: $(".attachment-list.topic-attachment"),
       limit: 5,

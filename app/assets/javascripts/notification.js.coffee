@@ -27,6 +27,8 @@ class NotificationManager
     @client.monitor("/activities/add", @commonNotify) # x
     @client.monitor("/activities/change", @commonNotify)
     @client.monitor("/activities/remove", @commonNotify)
+    @client.monitor("/activities/like", @commonNotify) # √
+    @client.monitor("/activities/unlike", @commonNotify) # x
     #用户关系
     @client.monitor("/friends/add_quan", @commonNotify) # √
     @client.monitor("/friends/add_user", @add_user) # √
@@ -37,11 +39,9 @@ class NotificationManager
     @client.monitor("/unfollow", @commonNotify) # √
     @client.monitor("/circles/request", @commonNotify) # x
     @client.monitor("/circles/invite", @commonNotify) # √
-    @client.monitor("/circles/refuse", @commonNotify)
+    @client.monitor("/circles/refuse", @commonNotify) # √
     @client.monitor("/circles/joined", @commonNotify) # √
     @client.monitor("/circles/leaved", @commonNotify) # √
-    @client.monitor("/activities/like", @commonNotify) # √
-    @client.monitor("/activities/unlike", @commonNotify) # x
     # 商店社交部分
     @client.monitor("/shops/follow", @commonNotify) # √
     @client.monitor("/shops/unfollow", @commonNotify) # √
@@ -148,7 +148,7 @@ class root.NotificationViewList extends Backbone.View
 
   @startup = (options) ->
     @instance ||= new NotificationViewList(options)
-    @InstantlyManager = new NotificationManager
+    @instanceManager = new NotificationManager
 
   @getInstance = () ->
     @instance
@@ -164,16 +164,22 @@ class root.NotificationViewList extends Backbone.View
     @fetch()
 
   add_one: (model) ->
-    model.view = new NotificationView(parent_view: @, model: model, url: @urlRoot)
+    _.sortBy(this.collection.models)
+    view = new NotificationView(parent_view: @, model: model, url: @urlRoot)
+    @$('ul').prepend(view.render().el)
+    model.view = view
     @change_count()
 
   remove_one: (model) ->
     $(model.view.el).fadeOut()
-    @change_count()
+    @add_all()
 
   add_all: () ->
-    @collection.each (model) =>
-      @add_one(model)
+    @$('ul').html('')
+    _.each @collection.models, (model, index, list) =>
+      # 显示最近的通知
+      if @collection.length - index <= 10
+        @add_one(model)
     @add_more()
     @change_count()
 
@@ -193,7 +199,7 @@ class root.NotificationViewList extends Backbone.View
   fetch: () ->
     @collection.fetch(
       url: "#{@urlRoot}/unreads",
-      data: { limit: 10, offset: 0 } 
+      data: { offset: 0 } 
     )
 
 
@@ -232,6 +238,6 @@ class NotificationView extends Backbone.View
     window.location.href = @fetch_url
 
   render: () ->
-    li = $(@el).append(@template_already(@model.attributes))
-    $(@parent_view.el).find('ul').prepend(li)
+    $(@el).html(@template_already(@model.attributes))
+    @
 
