@@ -71,7 +71,7 @@ class Activities::AuctionController < Activities::BaseController
       else
         format.js{ render :partial => "activities/auction/form",
                           :locals  => { :activity => @activity },
-                          :status  => 400 }
+                          :status  => 403 }
       end
     end
   end

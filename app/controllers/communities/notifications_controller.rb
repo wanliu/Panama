@@ -16,7 +16,7 @@ class Communities::NotificationsController < Communities::BaseController
     respond_to do |format|
       @friend = @notice.circle.join_friend(@notice.send_user)
       if @friend.valid?
-        @notice.agree(current_user)
+        @notice.agree(@notice.send_user)
         format.html{ redirect_to community_circles_path(@circle) }
         format.js{ render :js => "window.location.href='#{community_circles_path(@circle)}'"  }
       else
@@ -28,7 +28,7 @@ class Communities::NotificationsController < Communities::BaseController
   def refuse_join
     @notice = @circle.notice.find(params[:id])
     respond_to do |format|
-      if @notice.refuse(current_user)
+      if @notice.refuse(@notice.send_user)
         format.html{ redirect_to community_circles_path(@circle) }
         format.js{ render :js => "window.location.href='#{community_circles_path(@circle)}'"  }
       end

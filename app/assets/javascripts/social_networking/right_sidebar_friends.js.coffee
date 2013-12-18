@@ -7,7 +7,7 @@ class root.ChatListView extends Backbone.View
   initialize: () ->
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
-    # @collection.bind('add', @addOne, @)
+    @collection.bind('add', @addOne, @)
 
     @stranger_view  = new StrangersView(parent_view: @)
     @friends_view = new FriendsView(parent_view: @)

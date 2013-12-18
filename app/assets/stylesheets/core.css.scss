@@ -11,6 +11,12 @@
 @import "lib/stroll";
 @import "attachments";
 
+@mixin title-fixed {
+  overflow: hidden; 
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+}
+
 body, html {
   // $bgcolor1: #69D2E7;
   // $bgcolor2: #A7DBD8;
@@ -181,6 +187,23 @@ ul {
 
   #account {
     padding-top: 10px;
+  }
+}
+
+#topbar {
+  .notification-menu {
+    #notification-list {
+      >li {
+        padding: 4px 5px;
+        margin: 0px 0px;
+        @include title-fixed;
+
+        .href_url {
+          padding: 2px;
+          display: inline;
+        }
+      }
+    }
   }
 }
 
