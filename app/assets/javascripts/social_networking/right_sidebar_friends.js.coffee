@@ -4,12 +4,23 @@ class root.ChatListView extends Backbone.View
   events:
     'keyup input.filter_key' : 'filter_list'
 
+  bind_items: () ->
+    Caramal.MessageManager.on('channel:new', (channel) =>
+      console.log('channel:new ', channel)
+      switch channel.type
+        when 1
+          @friends_view.process(channel)
+        when 2
+          @groups_view.process(channel)
+        else
+          console.error('unprocess channel:new ', channel)
+    )
+
   initialize: () ->
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
 
-    @stranger_view  = new StrangersView(parent_view: @)
     @friends_view = new FriendsView(parent_view: @)
     @groups_view = new GroupsView(parent_view: @)
     $(@el).prepend('
@@ -31,24 +42,13 @@ class root.ChatListView extends Backbone.View
     else if model.get('follow_type') == 2
       @groups_view.collection.add(model)
     else
-      @stranger_view.collection.add(model)
 
   init_fetch: () ->
     @collection.fetch(url: "/users/channels")
 
-  bind_items: () ->
-    Caramal.MessageManager.on('channel:new', (channel) =>
-      console.log(channel)
-      @process_message(channel)
-    )
-
-  process_message: (channel) ->
-    @friends_view.process(channel) || @stranger_view.process(channel) || @groups_view.process(channel)
-
   filter_list: (event) ->
     keyword = $(event.target).val().trim()
     @friends_view.filter_list(keyword)
-    @stranger_view.filter_list(keyword)
     @groups_view.filter_list(keyword)
 
 
@@ -84,9 +84,6 @@ class BaseFriendsView extends Backbone.View
     if exist_model
       @top(exist_model)
       exist_model.view.setChannel(channel)
-      true
-    else
-      false
 
   filter_list: (keyword) ->
     pattern = new RegExp(keyword)
@@ -101,7 +98,7 @@ class BaseFriendsView extends Backbone.View
       model.get('login') is channel.user
 
   top: (model) ->
-    @parent_view.active()
+    # @parent_view.active()
     friend_view = model.view
     friend_view.remove()
     @$("ul").append(friend_view.el)
@@ -173,54 +170,6 @@ class GroupsView extends BaseFriendsView
     @$(".users-list").append(groupView.render().el)
 
 
-class StrangersView extends BaseFriendsView
-  className: "strangers-list"
-
-  template:
-    '<h5 class="tab-header">
-      <i class="icon-group"></i>
-       陌生人[<span class="num">0</span>]
-    </h5>
-    <ul class="users-list strangers">
-    </ul>'
-
-  initialize: () ->
-    super
-
-  render: () ->
-    $(@el).html(@template)
-    @
-
-  addOne: (model) ->
-    if @collection.length is 1 and @parent_view.$('.strangers').length is 0
-      @$parent_view.find(".fixed_head").after(@el)
-    stanger_view = new StrangerView({ model: model, parent_view: @ })
-    model.view  = stanger_view
-    @$(".users-list").append(stanger_view.render().el)
-
-  process: (channel) ->
-    @channel = channel
-    model = new ChatModel()
-    model.fetch
-      url: "/users/#{channel.user}"
-      success: (model) =>
-        @addStranger(model)
-        model.view.setChannel(@channel)
-
-  addStranger: (model) ->
-    exist_model = @find_exist(model)
-    if exist_model
-      @top(exist_model)
-      true
-    else
-      @collection.add(model)
-      @top(model)
-
-  find_exist: (model) ->
-    _.find @collection.models, (item) =>
-      item.id is model.id
-
-
 class BaseFriendView extends Backbone.View
   tagName: 'li'
 
@@ -283,23 +232,6 @@ class BaseFriendView extends Backbone.View
   unactive: () ->
     $(@el).removeClass('active')
     @clearMsgCount()
-
-
-class StrangerView extends BaseFriendView
-  initialize: () ->
-    super
-
-  getChannel: () ->
-    @channel ||= Caramal.Chat.of(@model.get('login'))
-
-  newChat: () ->
-    model = new ChatModel({
-      type: 1,
-      channel: @channel,
-      name: @model.get('login'),
-      title: "陌生人 #{@model.get('login')}"
-    })
-    ChatService.getInstance().newChat(model)
 
 
 class FriendView extends BaseFriendView
