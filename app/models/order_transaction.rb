@@ -396,7 +396,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_state_notify_buyer(event = nil)
     buyer.notify(
-      "/#{buyer.login}/order_transactions/change_state",
+      "/order_transactions/change_state",
       "您的订单#{number}卖家已经#{buyer_state_title}",
       :order_id => id,
       :state => state_name,

@@ -6,10 +6,12 @@ root = (window || @)
 class Transactions extends Backbone.Collection
 
 class TransactionView extends Backbone.View
-
+  events: {
+    "click .btn_delete" : "destroy"
+  }
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("destroy", @remove, @)
+    @model.bind("remove", @remove, @)
     @model.bind("change:state", @change_state, @)
     @model.bind("change:register", @register_view, @)
     @register_view()
@@ -45,6 +47,15 @@ class TransactionView extends Backbone.View
   change_table_state: () ->
     @$(".state_title").html(@model.get("state_title"))
 
+  destroy: (event) ->
+    if confirm("要取消这笔交易吗?")
+      @model.destroy({
+        success: (model, data) =>
+          @remove()
+      })
+
+    false
+
 class root.OrderTransactions extends Backbone.View
 
   initialize: (options) ->
@@ -52,6 +63,7 @@ class root.OrderTransactions extends Backbone.View
     @remote_url = options.remote_url
 
     @collection = new Transactions
+    @collection.url = @remote_url
     @collection.bind("add", @add_one, @)
     @load_table_list()
     @reset()
@@ -81,10 +93,6 @@ class root.OrderTransactions extends Backbone.View
 
     @client.subscribe "notify:/order_transactions/change_state", (data) =>
       @change_state data
-
-  destroy: (data) ->
-    model = @collection.get(data.order_id)
-    model.destroy() unless _.isEmpty(model)
 
   change_state: (data) ->
     model = @collection.get(data.order_id)

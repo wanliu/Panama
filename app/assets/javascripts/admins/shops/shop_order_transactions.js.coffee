@@ -9,7 +9,7 @@ class TransactionView extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("destroy", @remove, @)
+    @model.bind("remove", @remove, @)
     @model.bind("change:state", @change_state, @)
     @model.bind("change:register", @register_view, @)
     @register_view()
@@ -90,7 +90,7 @@ class root.ShopOrderTransactions extends Backbone.View
 
   destroy: (data) ->
     model = @collection.get(data.order_id)
-    model.destroy() unless _.isEmpty(model)
+    model.trigger("remove") unless _.isEmpty(model)
 
   change_state: (data) ->
     model = @collection.get(data.order_id)

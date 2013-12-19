@@ -52,7 +52,7 @@ class People::TransactionsController < People::BaseController
                      people: @people
                    }
     else
-      render :json => {message: "#{event_name}不属性你的!"}, :status => 403
+      render :json => {message: "#{event_name}不属于你的!"}, :status => 403
       # render :partial => 'transaction', :transaction => @transaction, :layout => false
       # redirect_to person_transaction_path(@people.login, @transaction)
     end
