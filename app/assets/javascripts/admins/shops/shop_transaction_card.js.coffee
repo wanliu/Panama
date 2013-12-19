@@ -78,6 +78,8 @@ class ShopTransactionCard extends TransactionCardBase
       else
         button.removeClass("disabled").attr("event-name", "delivered")
         true
+    else
+      true
 
   save_delivery_code: (cb) ->
     delivery = @$("input:text.delivery_code")

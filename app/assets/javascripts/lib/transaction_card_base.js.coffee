@@ -11,14 +11,16 @@ class Transaction extends Backbone.Model
 class TransactionCardBase extends AbstructStateView
 
   initialize:(@option) ->
-    @options['initial']   ?= @$el.attr('state-initial')
+    @options['initial'] ?= @current_state().state
     @options['id']        ?= @$el.attr('state-id')
     @options['url']       ?= @$el.attr('state-url')
     @options['event_url'] ?= @$el.attr('state-event-url')
     @options['url_root'] ?= @$el.attr('url-root')
 
-    @transaction = new Transaction()
+    @transaction = new Transaction(
+      _.extend({id: @options['id']}, @current_state()))
     @transaction.set_url(@options['url_root'])
+    @transaction.bind("change:state", @change_state, @)
 
     super
 
@@ -33,9 +35,6 @@ class TransactionCardBase extends AbstructStateView
       # callback      : test,
       oneDayClass     : 'one-day'
     })
-
-  getNotifyName: () ->
-    "transaction-#{@options['id']}"
 
   clickAction: (event) ->
     btn = $(event.target)
@@ -66,14 +65,13 @@ class TransactionCardBase extends AbstructStateView
         html = $(data)
         @$el.replaceWith(html)
         @$el = html
-
         @delegateEvents()
         @countdown()
+        @transaction.set(@current_state())
         # .html(data).unwrap()
       , 300
 
       # @$el.addClass("animated flipInY")
-
 
   closeThis: (event) ->
     if confirm("要取消这笔交易吗?")
@@ -143,7 +141,8 @@ class TransactionCardBase extends AbstructStateView
       .unwrap()
       .unwrap()
       .unwrap()
-      @$el.find(".transaction-footer").append(iframe)
+      @$(".transaction-footer .message_wrap").append(iframe)
+      @transaction.set(@current_state())
 
     if direction == 'right'
       $side1.css('float', 'left')
@@ -188,6 +187,15 @@ class TransactionCardBase extends AbstructStateView
     wrap = @$('.transaction-footer')
     padding = parseInt(wrap.css("padding-top")) + parseInt(wrap.css("padding-bottom"))
     @message_panel.height(total - tm - padding)
+
+  current_state: () ->
+    {
+      state: @$el.attr('state-initial'),
+      state_title: @$el.attr('state-title')
+    }
+
+  change_state: () ->
+    @setMessagePanel()
 
 exports.TransactionCardBase = TransactionCardBase
 exports

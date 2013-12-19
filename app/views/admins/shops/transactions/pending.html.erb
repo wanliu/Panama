@@ -75,33 +75,24 @@
 <script type="text/javascript">
   $(function(){
 
-    var transactionCard = function(elem){
-      var card = new ShopTransactionCard({
-        el: elem,
-        shop: {
-          token: "<%=current_shop.im_token %>"
-        }
-      })
+    var shop = {
+      name: "<%= current_shop.name %>",
+      id: "<%= current_shop.id %>",
+      token: "<%= current_shop.im_token %>"
     }
 
-    var view = new TableListView({
+    var orders = new OrderTransactions({
       el: $(".transaction-list"),
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
-      bindView: function(view){
-        transactionCard(view.$(".detail .transaction"))
-      }
-    })
+      shop: shop})
 
     var dispose_view = new TransactionDispose({
       el: $("table.untransactions"),
-      shop: {
-        name: "<%= current_shop.name %>",
-        id: "<%= current_shop.id %>",
-        token: "<%= current_shop.im_token %>"},
+      shop: shop,
       tranOpts: {
         transactions: {
-          tran_panel: $(".transaction_list"),
-          tran_card: transactionCard
+          // tran_panel: $(".transaction_list"),
+          // tran_card: transactionCard
         }
       },
       template: Hogan.compile("<%= j render :partial => 'untransaction' %>")

@@ -133,6 +133,9 @@ class exports.TransactionDispose extends Backbone.View
     @realtime.chat (data) =>
       @realtime_chat data, "transactions"
 
+    @realtime.change_state (data) =>
+      @realtime_change data, "transactions"
+
   fetch_data: (id, type) ->
     model = new Transaction(_type: type, id: id)
     model.set_url(@shop.name)
@@ -148,7 +151,7 @@ class exports.TransactionDispose extends Backbone.View
       model.set("unmessages_count", data.unmessages_count)
 
   realtime_change: (data, type) ->
-    model = @where_transaction(data.id, type)
+    model = @where_transaction(data.order_id, type)
     if model?
       model.set("state_title", data.state_title)
 

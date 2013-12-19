@@ -187,13 +187,13 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     ## only for development
-    if Rails.env.development?
-      after_transition :waiting_paid      => :order,
-                       :waiting_delivery  => :waiting_paid,
-                       :waiting_sign      => :waiting_delivery do |order, transition|
-        order.notice_change_seller(transition.to_name, :back)
-      end
-    end
+    # if Rails.env.development?
+    #   after_transition :waiting_paid      => :order,
+    #                    :waiting_delivery  => :waiting_paid,
+    #                    :waiting_sign      => :waiting_delivery do |order, transition|
+    #     order.notice_change_seller(transition.to_name, :back)
+    #   end
+    # end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       if order.online_pay_type == :account
@@ -363,38 +363,45 @@ class OrderTransaction < ActiveRecord::Base
     events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
     event = pay_manner.code if event.to_s == "buy"
     if filter_fire_event!(events, event)
-      change_state_notify_seller
+      change_state_notify_seller(event)
     end
   end
 
   def system_fire_event!(event)
     events = %w(expired audit_transfer audit_failure)
     if filter_fire_event!(events, event)
-      change_state_notify_seller
-      change_state_notify_buyer
+      change_state_notify_seller(event)
+      change_state_notify_buyer(event)
     end
   end
 
   def seller_fire_event!(event)
     events = %w(back delivered)
     if filter_fire_event!(events, event)
-      change_state_notify_buyer
+      change_state_notify_buyer(event)
     end
   end
 
-  def change_state_notify_seller
+  def change_state_notify_seller(event = nil)
     seller.notify(
       "/#{seller.im_token}/order_transactions/change_state",
       "您的订单#{number}买家已经#{seller_state_title}",
-      :order_id => id, :state => state_name,
+      :order_id => id,
+      :state => state_name,
+      :event => "refresh_#{event}",
+      :state_title => seller_state_title,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}"
     )
   end
 
-  def change_state_notify_buyer
+  def change_state_notify_buyer(event = nil)
     buyer.notify(
       "/#{buyer.login}/order_transactions/change_state",
       "您的订单#{number}卖家已经#{buyer_state_title}",
+      :order_id => id,
+      :state => state_name,
+      :state_title => buyer_state_title,
+      :event => "refresh_#{event}",
       :url => "/people/#{buyer.login}/transactions/#{id}"
     )
   end
@@ -656,11 +663,6 @@ class OrderTransaction < ActiveRecord::Base
       errors.add(:pay_manner_id, "请选择付款方式!") if pay_manner.nil?
       errors.add(:address, "地址不存在！") if address.nil?
     end
-  end
-
-  def faye_send(channel, options)
-    # FayeClient.send(channel, options)
-    CaramalClient.publish(seller.user.try(:login), channel, options)
   end
 
   def filter_fire_event!(events = [], event)
