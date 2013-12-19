@@ -5,7 +5,8 @@ root = window || @
 
 class root.CircleListView extends Backbone.View
   events:
-    "click .following .join" : "join_circle"
+    'click .following .join': 'join_circle'
+    'click .quit_circle'    : 'quit_circle'
 
   initialize: (option) ->
     _.extend(@, option)
@@ -46,4 +47,13 @@ class root.CircleListView extends Backbone.View
       success: () =>
         window.location.href = "/communities/#{@circle_id}/circles"
     )
+
+  quit_circle: (event) ->
+    return unless confirm('确定退出商圈吗？')
+    $.ajax({
+      type: "delete",
+      url: "/communities/#{@circle_id}/circles/quit_circle",
+      success: (data, xhr, res) =>
+        window.location.href = "/communities/#{@circle_id}/circles"
+    })
 

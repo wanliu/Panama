@@ -5,6 +5,7 @@ class AttachmentsController < ApplicationController
     file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[:attachable]
     @attachment = Attachment.new
     @attachment.file = file
+    
     begin
       @attachment.save!
       render :text => {

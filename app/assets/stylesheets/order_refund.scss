@@ -1,15 +1,87 @@
+@import "lib/transparent";
 
 .order_refund{
 
-	.transaction-body{
+  .transaction-body{
 
-		.edit_rdprice{
-			margin-left: 10px;
-			color: white;
-		}
+    .edit_rdprice{
+      margin-left: 10px;
+      color: white;
+    }
 
-		.edit_rdp_panel{
-			display: none;
-		}
-	}
+    .edit_rdp_panel{
+      display: none;
+    }
+  }
+
+  .transaction-header{
+    .transaction-number{
+      margin-top: 7px;
+    }
+  }
+}
+
+.order_refunds{
+  .item{
+    margin: 0 -12px;
+    padding: 10px 12px;
+
+    .summarize{
+      cursor: pointer;
+
+      .products{
+
+        .product{
+
+          .preview{
+            width: 50px;
+            height: 50px;
+            float: left;
+            vertical-align: top;
+          }
+
+          .title{
+            margin-left: 55px;
+          }
+        }
+      }
+    }
+
+    .summarize.mini{
+      .products{
+        display: none;
+      }
+    }
+
+    .detail{
+      display: none;
+
+      .wrapper-box{
+        background-color: transparent;
+        padding: 0px;
+      }
+
+      .page-header{
+        .number{
+          display: none;
+        }
+
+        .order_number{
+          display: none;
+        }
+
+        .close{
+          display: none;
+        }
+      }
+    }
+  }
+
+  .item:hover{
+    @include transparent(rgb(51, 51, 51), 0.25);
+  }
+
+  .item.active{
+    @include transparent(rgb(51, 51, 51), 0.25);
+  }
 }

@@ -5,6 +5,12 @@ class Image < ActiveRecord::Base
   attr_accessor :uploader_secure_token
   mount_uploader :filename, AvatarUploader
 
+  after_update do
+    if imageable.is_a?(User)
+      imageable.update_attributes(:updated_at => DateTime.now)
+    end
+  end
+
   def default_url
     "http://panama-img.b0.upaiyun.com/product_blank.gif"
   end

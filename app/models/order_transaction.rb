@@ -57,15 +57,17 @@ class OrderTransaction < ActiveRecord::Base
   validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total
+  validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
 
   accepts_nested_attributes_for :address
 
-  #在线支付类型 account: 帐户余额 kuaiqian: 快钱
+  #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :online_pay_type, [:account, :kuaiqian]
 
   before_validation(:on => :create) do
     update_total_count
+    generate_number
   end
 
   after_create  :notice_new_order, :state_change_detail, :notice_user
@@ -79,11 +81,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_user
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/pending",
-      :body => "你有新的订单")
+    seller.notify("#{seller.name}/transactions/new", "你有新的订单",
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}")
   end
   after_destroy :notice_destroy, :destroy_operators, :destroy_activity
 
@@ -273,6 +272,36 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def generate_number
+    _number = (OrderTransaction.max_id + 1).to_s
+    _number =
+    self.number = if _number.length < 9
+      "#{'0' * (9-_number.length)}#{_number}"
+    else
+      _number
+    end
+  end
+
+  def delivery_express?
+    delivery_manner && delivery_manner.express?
+  end
+
+  def delivery_local?
+    delivery_manner && delivery_manner.local_delivery?
+  end
+
+  def delivery_name
+    if delivery_manner.nil?
+      '卖家选择'
+    else
+      delivery_manner.name
+    end
+  end
+
+  def delivery_type_name
+    delivery_type.nil? ? "暂无" : delivery_type.name
+  end
+
   def get_refund_items(product_ids)
     items.where(:product_id => product_ids)
   end
@@ -318,15 +347,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def clear_uniq_states
-    states = state_details.map{|item| {state: item.state, created_at: item.created_at} }
-    index = states.find_index{|s| s[:state] == "waiting_refund"}
-    if index && states[index-1][:state] == (states[index+1] || {})[:state]
-      states.slice!(index-1..index)
-    end
-    states
-  end
-
   #是否成功
   def complete_state?
     state == "complete"
@@ -355,9 +375,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def buyer_fire_event!(event)
     events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
-    if event.to_s == "buy"
-      event = pay_manner.code
-    end
+    event = pay_manner.code if event.to_s == "buy"
     filter_fire_event!(events, event)
 
     notifications.create!(
@@ -447,18 +465,16 @@ class OrderTransaction < ActiveRecord::Base
     state_details.find_by(:state => state)
   end
 
-  def operator_connect_state
-    state = current_operator.nil? || !current_operator.connect_state ? false : true
-    self.update_attribute(:operator_state, state)
-  end
-
   def operator_create(toperator_id)
     unless current_operator.try(:id) == toperator_id
       _operator = operators.create(operator_id: toperator_id)
-      self.update_attribute(:operator_id, _operator.id) if _operator.valid?
+      if _operator.valid?
+        self.update_attribute(:operator_id, _operator.id)
+      end
     end
     notice_order_dispose
     self.update_attribute(:operator_state, true)
+    self.update_attribute(:dispose_date, DateTime.now)
   end
 
   #买家发送信息
@@ -467,12 +483,8 @@ class OrderTransaction < ActiveRecord::Base
     unless seller.seller_group_employees.any?{|u| u.connect_state }
       not_service_online(id.to_s)
     end
-    # operator_connect_state
-    if operator_state
-      options[:receive_user] = current_operator
-    # else
-    #   options.delete(:receive_user)
-    end
+
+    options[:receive_user] = current_operator if operator_state
     chat_messages.create(options)
   end
 
@@ -508,10 +520,14 @@ class OrderTransaction < ActiveRecord::Base
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:address_only)
     attra["unmessages_count"] = unmessages.count
-    attra["state_title"] = I18n.t("order_states.seller.#{state}")
+    attra["state_title"] = state_title
     attra["stotal"] = stotal
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
+  end
+
+  def state_title
+    I18n.t("order_states.seller.#{state}")
   end
 
   def notice_change_buyer(event_name = nil)
@@ -598,6 +614,10 @@ class OrderTransaction < ActiveRecord::Base
     undelayed_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
   end
 
+  def self.max_id
+    select("max(id) as id")[0].try(:id) || 0
+  end
+
   def self.state_expired
     transactions = find(:all,
       :joins => "left join transaction_state_details as details
@@ -608,14 +628,6 @@ class OrderTransaction < ActiveRecord::Base
     transactions.each{|t| t.fire_events!(:expired) }
     puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
-  end
-
-  def number
-    if id > 99999999
-      id
-    else
-      "#{ '0' * (9 - id.to_s.length) }#{ id }"
-    end
   end
 
   def self.export_column

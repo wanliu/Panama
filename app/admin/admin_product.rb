@@ -72,6 +72,7 @@ ActiveAdmin.register Product, :title => "商品" do
     div do
       panel("商品属性") do
         attributes_table_for(product) do
+          product.attach_properties!
           product.properties.each do |prop|
             row(prop.title) do
               product.send(prop.name)
@@ -103,6 +104,7 @@ ActiveAdmin.register Product, :title => "商品" do
 
   member_action :edit_plus, :title => "编辑" do
     @product = Product.find(params[:id])
+    @product.attach_properties!
     category_id = @product[:category_id]
     @product.category_id = category_id unless category_id.nil?
     register_value :form do
@@ -153,13 +155,14 @@ ActiveAdmin.register Product, :title => "商品" do
     @category = Category.find(params[:category_id])
     @product.category = @category
     @product.attach_properties!
-    @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
+    # @content = PanamaCore::Contents.fetch_for(@category, :additional_properties_admins)
 
-    if @content.nil?
-      render :text => '<h1>暂时没有</h1>'
-    else
-      render_content(@content, locals: { category: @category })
-    end
+    # if @content.nil?
+    #   render :text => '<h1>暂时没有</h1>'
+    # else
+    #   render_content(@content, locals: { category: @category })
+    # end
+    render :layout => false
   end
 
   def additional_properties_content(category = nil)

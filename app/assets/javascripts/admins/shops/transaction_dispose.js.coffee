@@ -20,7 +20,7 @@ class TransactionList extends Backbone.Collection
 
 class TransactionEvent extends Backbone.View
   tagName: "tr"
-  events: 
+  events:
     "click .dispose" : "dispose"
 
   initialize: (options) ->
@@ -33,23 +33,20 @@ class TransactionEvent extends Backbone.View
 
   dispose: () ->
     @model.dispose (template, xhr)  =>
-      @show_tran template
+      window.location.reload()
+      #@show_tran template
 
   show_tran: (template) ->
-    first_tran_el = @first_transaction()
     if first_tran_el.length <= 0
       @tran_panel.append(template)
     else
-      first_tran_el.before(template)
+      @tran_panel.prepend(template)
 
     @tran_card @tran_panel.find("##{@elem_id()}")
     @remove_tran()
 
   remove_tran: () ->
     @trigger("remove_tran", @model)
-
-  first_transaction: () ->
-    @tran_panel.find(">.transaction:eq(0)")
 
   render: () ->
     @$el

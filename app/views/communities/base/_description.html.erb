@@ -1,9 +1,9 @@
 <div class='widget circle-description'>
-  <div class="span11" style="font-size:18px;font-weight:bold;">
+  <div class="span10" style="font-size:18px;font-weight:bold;">
     所属<%=@circle.owner_title %>
   </div>
   <% if @circle.is_manage?(current_user.id) %>
-    <div class="span1">
+    <div class="span2">
       <a href='#mySetting' data-toggle="modal" data-placement="top" title="" data-original-title="设置" class='setting'>
         <h4>
           <span class='icon-cog'></span>
@@ -13,6 +13,8 @@
     <div>
       <%=render "setting", circle: @circle %>
     </div>
+  <% else %>
+    <div class='span2'></div>
   <% end %>
   <div class='owner' data-value-id='<%=@circle.owner_id %>'>
     <span class='user'>
@@ -29,7 +31,7 @@
     <div class="btn-group following">
       <button class="btn btn-primary follows_count"><%=@circle.owner.followers.count %></button>
       <% if @circle.owner.is_follower?(current_user.id) %>
-        <button data-value-id="<%=current_user.follow_shop_or_user(@circle.owner_id,@circle.owner_type).id  %>" class='btn btn-primary unfollow' />取消关注</button>
+        <button data-value-id="<%=current_user.follow_shop_or_user(@circle.owner_id, @circle.owner_type).id  %>" class='btn btn-primary unfollow' />取消关注</button>
       <% else %>
         <button class='btn btn-primary follow' />关注</button>
       <% end %>
@@ -55,6 +57,9 @@
     <% if @circle.is_member?(current_user.id) %>
       <a href="<%= all_circles_person_communities_path(current_user) %>" data-toggle="modal" class="btn" data-target="#SelectCircle">分享此圈</a>
       <%= render "/communities/circles/select_circle_to_share"%>
+      <% unless @circle.is_manage?(current_user.id) %>
+        <btn class='btn pull-right quit_circle'>退出</btn>
+      <% end %>
     <% end %>
   </div>
 </div>

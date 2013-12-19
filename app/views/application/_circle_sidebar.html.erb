@@ -1,7 +1,7 @@
 <nav id='community-sidebar' class="sidebar nav nav-collapse collapse affix-top" >
-  <div class='avatar'>
+  <div class='head-avatar'>
     <a href="<%= community_circles_path(@circle) %>">
-    <%= image_tag @circle.photos.avatar %>
+    <%= image_tag @circle.photos.avatar, :class => 'img-polaroid' %>
     </a>
   </div>
   <h4 class='title'>

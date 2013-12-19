@@ -14,7 +14,6 @@
 @import "product_comment";
 @import "people/following";
 @import "communities";
-@import "lib/chose-friend";
 @import "people/community_people";
 @import "attachment_uploader";
 @import "lib/notify/pnotify";
@@ -32,15 +31,33 @@
   width: 160px;
   top: 0px;
 
-  .avatar {
-    margin: 15px;
-    width: 120px;
+  .head-avatar {
+    margin: 0px 10px;
+    margin-bottom: 10px;
 
     img {
-      /*width: 60px;*/
+      width: 130px;
     }
 
   }
+
+  .followers, .followings{
+    text-align: center;
+
+    a{
+      color: white;
+    }
+
+    a:hover{
+      text-decoration: none;
+    }
+
+    .count{
+      font-size: 17px;
+      font-weight: bold;
+    }
+  }
+
   .icon-chevron-right {
     float: right;
     margin-top: 2px;
@@ -71,6 +88,10 @@
 
 .sidebar_panel {
   position: relative;
+
+  #notice{
+    margin: 0px;
+  }
 }
 
 // .right-sidebar {
@@ -429,4 +450,10 @@
     text-align: center;
   }
   .dl-horizontal dd{ margin-left: 10px;}
+
+  .isfollowing{
+    span{
+      margin: 10px 0;
+    }
+  }
 }

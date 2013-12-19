@@ -5,8 +5,17 @@ class People::NotificationsController < People::BaseController
   def index
     authorize! :index, Notification
     @notifications = Notification.unreads
-        .where(:mentionable_user_id => @people.id)
-        .order(updated_at: :asc)
+        .where(:user_id => @people.id)
+        .order("updated_at desc")
+
+    # @activities = Notification.unreads
+    #   .where(:user_id => @people.id, :targeable_type => 'Activity')
+    #   .order(updated_at: :asc)
+
+    # @groups = Notification.unreads
+    #   .where(:user_id => @people.id, :targeable_type => ['Following', 'PersistentChannel'] )
+    #   .order(updated_at: :asc)
+
     respond_to do | format |
       format.html
       format.json{ render json: @notifications}
@@ -14,7 +23,7 @@ class People::NotificationsController < People::BaseController
   end
 
   def show
-    @notification = Notification.find_by(:mentionable_user_id => @people.id, :id => params[:id])
+    @notification = Notification.find_by(:user_id => current_user.id, :id => params[:id])
     respond_to do | format |
       unless @notification.nil?
         authorize! :read, @notification
@@ -27,19 +36,27 @@ class People::NotificationsController < People::BaseController
     end
   end
 
+  def read_all
+    Notification.where(user_id: current_user.id).update_all(read: true)
+    respond_to do |format|
+      format.html { redirect_to :action => 'index' }
+      format.json { head :no_content }
+    end
+  end
+
   def mark_as_read
     @notification = Notification.find(params[:id])
-    authorize! :read, @notification    
     @notification.change_read
-    respond_to do | format |
-      format.json { head :no_content }
+    respond_to do |format|
+      format.html { redirect_to @notification.url }
+      format.json { render json: @notification.as_json }
     end
   end
 
   def unreads
     @notifications = Notification.unreads
-      .where(:mentionable_user_id => @people.id)
-      .order(updated_at: :desc)
+      .where(:user_id => @people.id)
+      .order("updated_at asc")
       .includes(:targeable)
     if params[:offset].present?
       @notifications = @notifications.offset(params[:offset])
@@ -56,7 +73,7 @@ class People::NotificationsController < People::BaseController
 
   def unread_count
     @count = Notification.unreads
-      .where(:mentionable_user_id => @people.id).count
+      .where(:user_id => @people.id).count
     respond_to do |format|
       format.json{ render json: {count: @count} }
     end

@@ -12,8 +12,8 @@ class TransactionCard extends TransactionCardBase
     @countdown()
 
   events:
-    "click .page-header .btn"        : "clickAction"
-    "click button.close"             : "closeThis"
+    "click .page-header .btn_event"  : "clickAction"
+    "click .btn_delete"              : "closeThis"
     "click .address-add>button"      : "addAddress"
     "click .item-detail"             : "toggleItemDetail"
     "click .message-toggle>button"   : "toggleMessage"
@@ -68,11 +68,6 @@ class TransactionCard extends TransactionCardBase
 
   hideAddress: () ->
     @$(".address-panel").slideUp()
-
-  setMessagePanel: () ->
-    @message_panel = @$("iframe", ".transaction-footer")
-    height = @$(".transaction-header").parents(".left").innerHeight() - @$(".message-toggle").height()
-    @message_panel.height(height)
 
   initMessagePanel: () ->
     @setMessagePanel()

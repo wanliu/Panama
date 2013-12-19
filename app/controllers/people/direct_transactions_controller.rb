@@ -1,6 +1,10 @@
 #encoding: utf-8
 class People::DirectTransactionsController < People::BaseController
 
+  def index
+    @direct_transactions = current_user.direct_transactions.uncomplete.order("created_at desc").page(params[:page])
+  end
+
   def dialog
     @direct_transaction = current_direct_transaction
     render :partial => "direct_transactions/dialog",
@@ -8,6 +12,11 @@ class People::DirectTransactionsController < People::BaseController
       :direct_transaction => @direct_transaction,
       :dtm_url => person_direct_transaction_path(@people, @direct_transaction)
     }
+  end
+
+  def page
+    @direct_transaction = current_direct_transaction
+    render :layout => false
   end
 
   def messages
@@ -56,6 +65,13 @@ class People::DirectTransactionsController < People::BaseController
 
   def show
     @direct_transaction = current_direct_transaction
+  end
+
+  def page
+    @direct_transaction = current_direct_transaction
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
   end
 
   private

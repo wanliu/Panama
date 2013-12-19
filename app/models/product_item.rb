@@ -3,7 +3,7 @@ class ProductItem < ActiveRecord::Base
   include PanamaCore::DynamicProperty
   include PanamaCore::MemoryAssociation
 
-  attr_accessible :amount, :price, :title, :total, :owner, :cart, :product_id, :product, :shop_id, :user_id
+  attr_accessible :amount, :price, :title, :total, :owner, :cart, :product_id, :product, :shop_id, :user_id, :buy_state
 
   attr_accessor :options
 

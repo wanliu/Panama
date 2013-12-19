@@ -1,17 +1,17 @@
 #encoding: utf-8
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
+  helper_method :base_template_path
 
   def pending
-    transactions = current_shop_order.uncomplete.order("created_at desc")
+    transactions = current_shop_order.uncomplete
     @untransactions = transactions.where(:operator_state => false)
-    @transactions = transactions.where(:operator_state => true).joins(:operator)
-    @direct_tansactions = current_shop.direct_transactions.uncomplete.where(:operator_id => current_user.id).order("created_at desc")
-    @undirect_tansactions = current_shop.direct_transactions.where(:operator_id => nil)
+    @transactions = transactions.where(:operator_state => true)
+    .joins(:operator).order("dispose_date desc").page(params[:page])
   end
 
   def complete
-    @transactions = current_shop_order.completed.order("created_at desc")
-    @direct_transactions = current_shop.direct_transactions.completed
+    @transactions = current_shop_order.completed.order("created_at desc").page(params[:page])
+    @direct_transactions = current_shop.direct_transactions.completed.order("created_at desc").page(params[:page])
   end
 
   def page
@@ -144,5 +144,9 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def current_shop_order
     OrderTransaction.seller(current_shop)
+  end
+
+  def base_template_path
+    "admins/shops/transactions/base"
   end
 end

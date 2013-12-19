@@ -3,9 +3,10 @@ class Activity < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
   include MessageQueue::Activity
 
-  attr_accessor :people_number
+  attr_accessor :people_number, :activity_price, :attachment_ids
 
   scope :wait, lambda{ where(:status => statuses[:wait]) }
   scope :access, lambda{ where(:status => statuses[:access]) }
@@ -28,7 +29,7 @@ class Activity < ActiveRecord::Base
 
   has_many :activities_participates
   has_many :participates, :through => :activities_participates, :source => :user
-
+  has_one :temporary_channel, :as => :targeable
   # validates_associated :product
   validates :price, :numericality => { :greater_than => 0 }, :presence => true
   validates :author, :title, :start_time, :end_time, :shop_product_id, :presence => true
@@ -48,24 +49,24 @@ class Activity < ActiveRecord::Base
     validate_destroy_access?
   end
 
+  def notify_url
+    "/activities/#{id}"
+  end
+
   def notice_author(sender, message)
-    notifications.create({
-      :user_id => sender.id,
-      :mentionable_user_id => author.id,
-      :url => "/activities/#{id}",
-      :body => message
-    })
+    author.notify("/activities/add",
+                  message,
+                  {:url => notify_url,
+                  :target => self })
   end
 
   def notice_followers
-    followers = author.followers.where({:follow_type => User})
-    followers.each do |follower|
-      notifications.create({
-        :user_id => author.id,
-        :mentionable_user_id => follower.user_id,
-        :url => "/activities/#{id}",
-        :body => "你关注的商家#{ shop.name}有新活动发布#{ title}"
-      })
+    unless shop.followers.blank?
+      shop.followers.each do |follower|
+        follower.user.notify('/activities/add', 
+                             "您关注的商家#{shop.name}发布新活动 #{title}",
+                             { :target => self, :url => notify_url } )
+      end
     end
   end
 
@@ -81,11 +82,12 @@ class Activity < ActiveRecord::Base
         :content => activity_detail_desription,
         :user => shop.user,
         :category_id => catetory_id )
-      topic.attachments <<  self.attachments.limit(2)  if self.attachments.length > 0 
+      topic.attachments <<  self.attachments.limit(2)  if self.attachments.length > 0
     end
   end
 
   def init_data
+    self.title = self.title.to_s + I18n.t("activity.type.#{self.activity_type}")
     self.shop_id = author.shop.id
     self.like = like
     self.participate = participate
@@ -236,7 +238,12 @@ class Activity < ActiveRecord::Base
         :name      => shop_product.try(:category).try(:name)
       },
       :participate_ids => participates.pluck("users.id"),
-      :like_ids => likes.pluck("users.id")
+      :like_ids => likes.pluck("users.id"),
+      :product => {
+        :id => shop_product.try(:product_id),
+        :name => shop_product.try(:name),
+        :properties => shop_product.try(:properties_json)
+      }
     }.to_json
   end
 

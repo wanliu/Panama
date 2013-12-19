@@ -11,6 +11,7 @@ class Admins::Shops::SectionController < Admins::BaseController
   section :bill_detail,  :shop
 
   section :pending, :transactions
+  section :direct_transactions, :transactions
   section :complete, :transactions
   # section :transport, :transportation
   # section :products, :products
@@ -43,7 +44,7 @@ class Admins::Shops::SectionController < Admins::BaseController
       options[:layout] = false
       args.push options
     end
-    super
+    super *args
   end
 
   def current_section

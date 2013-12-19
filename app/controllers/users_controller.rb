@@ -30,6 +30,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def channels
+    @channels = current_user.persistent_channels.map do |c| {
+      login: c.name,
+      icon: c.icon,
+      follow_type: c.channel_type }
+    end
+    respond_to do |format|
+      format.json{ render :json => @channels }
+    end
+
+  end
+
   def chat_authorization
     auth = User.chat_authorization(params[:from], params[:invested])
     respond_to do |format|
@@ -40,13 +52,14 @@ class UsersController < ApplicationController
   #上传头像
   def upload_avatar
     field_name = params[:field_name]
-      file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name]
+    file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name]
+
     unless file.nil?
       @user_photo = User.find(params[:id]).photo
       if @user_photo.send(field_name)
         @user_photo.send(field_name).remove!
       end
-      @user_photo.send("#{field_name}=",file)
+      @user_photo.send("#{field_name}=", file)
       if @user_photo.save
         render :text => "{success: true, avatar_filename: '#{@user_photo.send(field_name)}'}"
       else

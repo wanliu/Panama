@@ -8,14 +8,21 @@ class CommunityNotification < ActiveRecord::Base
 
   after_create do
     url = "/communities/#{circle.id}/notifications/#{id}"
-    Notification.create!(
-      :user_id => send_user.id,
-      :mentionable_user_id => target_member_id,
-      :url => url,
-      :targeable => self,
-      :body => "#{send_user.login}申请加入圈子")
+    target.notify("/circles/request",
+                  " #{send_user.login} 申请加入圈子",
+                  :target => self,
+                  :url => url) # x
   end
 
+  def notify_url
+    "/communities/#{circle.id}/circles"
+  end
+
+  #
+  # target_member_id 成员 id
+  #
+  # @deprecated 废弃，直接使用 target 就可以了
+  # @return [Fixnum] ID
   def target_member_id
     target.is_a?(User) ? target.id : target.user_id
   end
@@ -24,7 +31,7 @@ class CommunityNotification < ActiveRecord::Base
     n = Notification.find_by(
       :targeable_id => id,
       :targeable_type => "CommunityNotification")
-    n.change_read if n.present?
+    n.update_attribute(:read, true) if n.present?
     update_attribute(:state, true)
   end
 
@@ -35,20 +42,21 @@ class CommunityNotification < ActiveRecord::Base
   end
 
   def refuse(user)
-    Notification.create!(
-      :user_id => user.id,
-      :mentionable_user => send_user,
-      :body => "#{user.login}拒绝你的加入#{circle.name}圈子",
-      :targeable => self)
+    user.notify("/circles/refuse",
+                "#{user.login}拒绝您加入圈子 #{circle.name}",
+                :target => circle,
+                :community_id => id,
+                :url => notify_url)
+
     self.update_attribute(:apply_state, false)
   end
 
   def agree(user)
-    Notification.create!(
-      :user_id => user.id,
-      :mentionable_user => send_user,
-      :body => "#{user.login}接受你的加入#{circle.name}圈子",
-      :targeable => self)
+    user.notify("/circ/joined",
+                "#{user.login}同意您加入圈子 #{circle.name}",
+                :target => circle,
+                :community_id => id,
+                :url => notify_url)
     self.update_attribute(:apply_state, true)
   end
 end

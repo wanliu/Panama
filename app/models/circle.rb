@@ -15,7 +15,7 @@ class Circle < ActiveRecord::Base
   validates :city_id, :presence => true
 
   has_many :friends, dependent: :destroy, class_name: "CircleFriends"
-  has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
+  # has_many :receives, dependent: :destroy, class_name: "TopicReceive", as: :receive
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
   has_many :categories, dependent: :destroy, class_name: "CircleCategory"
   has_many :topics, dependent: :destroy
@@ -30,9 +30,7 @@ class Circle < ActiveRecord::Base
 
   validate :valid_name?
 
-  after_create do
-    generate_manage
-  end
+  after_create :generate_manage
 
   def all_detail
     "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
@@ -40,7 +38,7 @@ class Circle < ActiveRecord::Base
 
   #若是Shop类型的circle,就可以看出商店名
   def shop_name
-    Shop.find(owner_id).try(:name) if owner_type == "Shop"  
+    Shop.find(owner_id).try(:name) if owner_type == "Shop"
   end
 
   def apply_join_notice(sender)
@@ -116,16 +114,18 @@ class Circle < ActiveRecord::Base
   def join_friend(user)
     uid = user.is_a?(User) ? user.id : user
     friends.create_member(uid)
+
+    user
   end
 
   def is_owner_people?(user)
     user_id = user.is_a?(User) ? user.id : user
-    owner_id = owner.is_a?(Shop) ? owner.user.id : owner.id 
-    if user_id == owner_id 
+    owner_id = owner.is_a?(Shop) ? owner.user.id : owner.id
+    if user_id == owner_id
       return true
     else
       return false
-    end  
+    end
   end
 
   def is_manage?(user)
@@ -140,9 +140,9 @@ class Circle < ActiveRecord::Base
   end
 
   def remove_friend(user)
-    uid = user
-    uid = user.id if user.is_a?(User)
+    uid = user.id
     friends.find_by(user_id: uid).destroy
+
   end
 
   def already_has?(user_id)

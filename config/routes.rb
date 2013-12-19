@@ -67,6 +67,8 @@ Panama::Application.routes.draw do
         post :up_to_manager
         post :low_to_member
         delete :remove_member
+        delete :quit_circle
+        delete :destroy_circle
         get ":category_id/category", :to => "communities/circles#category"
         post :join
         post :apply_join
@@ -105,6 +107,11 @@ Panama::Application.routes.draw do
   end
 
   resources :people do
+
+    member do
+      get 'follow'
+      get 'unfollow'
+    end
 
     resources :transactions, :controller => "people/transactions" do
       member do
@@ -152,6 +159,7 @@ Panama::Application.routes.draw do
         get :messages, :to => "people/direct_transactions#messages"
         post :send_message, :to => "people/direct_transactions#send_message"
         post :completed, :to => "people/direct_transactions#completed"
+        get :page
       end
     end
 
@@ -202,9 +210,10 @@ Panama::Application.routes.draw do
     resources :notifications,:except => :show, :controller => "people/notifications" do
       member do
         get :enter, :to => "people/notifications#show"
-        post :mark_as_read, :to => "people/notifications#mark_as_read"
+        match :mark_as_read, :to => "people/notifications#mark_as_read"
       end
       collection do
+        get :read_all, :to => "people/notifications"
         get :unreads, :to => "people/notifications#unreads"
         get :unread_count, :to => "people/notifications#unread_count"
       end
@@ -295,9 +304,9 @@ Panama::Application.routes.draw do
   resources :users do
     collection do
       get "connect/:token", :to => "users#connect"
-      get "chat_authorization/:from/invest/:invested", :to => "users#chat_authorization"
       get "disconnect/:id", :to => "users#disconnect"
       get "followings"
+      get "channels"
       post "upload_avatar/:id", :to => "users#upload_avatar"
     end
   end
@@ -356,6 +365,11 @@ Panama::Application.routes.draw do
       get "topic_categories/:id", :to => "shops#topic_categories"
     end
 
+    member do
+      get "follow"
+      get "unfollow"
+    end
+
     namespace :admins do
 
       resources :dashboard, :controller => "shops/dashboard"
@@ -376,6 +390,7 @@ Panama::Application.routes.draw do
           get :messages, :to => "shops/direct_transactions#messages"
           post :send_message, :to => "shops/direct_transactions#send_message"
           post :dispose, :to => "shops/direct_transactions#dispose"
+          get :page
         end
       end
 

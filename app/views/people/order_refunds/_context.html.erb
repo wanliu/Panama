@@ -18,19 +18,19 @@
         <div class="page-header">
           <div class="trasaction-title">
             <div class="name"><%= seller.name %></div>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
             <%=render "state_button", :refund => refund %>
           </div>
           <div class="transaction-number">
-            订单编号：<%= refund.order.number %>
-            <small rel='tooltip' title="<%=I18n.l refund.created_at, :format => :long %>">
-              <%= time_ago_in_words refund.created_at %>
-              <span class="display-state"></span>
-            </small>
+            <span class='number'>
+              编号: <%= refund.number %>
+            </span>
+            <div class='pull-right'>
+            <%=refund.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
+            </div>
           </div>
           <div class="state-progress">
             <% unless refund.state == "failure" %>
-              <%=render "progress", :refund => refund %>
+              <%#=render "progress", :refund => refund %>
             <% end %>
           </div>
         </div>

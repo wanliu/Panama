@@ -32,11 +32,12 @@ class Activities::FocusController < Activities::BaseController
 
     respond_to do |format|
       if @activity.save
-        format.js { render "activities/add_activity" }
+        format.json { render :json => { text: 'ok' } }
       else
+        format.json { render :json => draw_errors_message(@activity), :status => 403 }
         format.js{  render :partial => "activities/focus/form",
                    :locals  => { :activity => @activity },
-                   :status  => 400 }
+                   :status  => 403 }
       end
     end
   end
@@ -69,7 +70,7 @@ class Activities::FocusController < Activities::BaseController
                       notice: 'Transaction was successfully created.'
           }
         else
-          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
+          format.json { render :json => draw_errors_message(@transaction), :status => 403 }
         end
       else
         format.json{ render :json => ["活动过期,不能购买？"], :status => 403 }

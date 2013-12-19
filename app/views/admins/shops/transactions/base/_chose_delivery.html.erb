@@ -1,0 +1,18 @@
+<div class='row-fluid express-info'>
+  <div class='span2 title'>
+    配送公司
+  </div>
+  <div class='span4'>
+    <select name='logistics_company_id' class='span12 logistics_company_id'>
+    <% LogisticsCompany.all.each do |log| %>
+    <option value="<%=log.id %>"><%=log.name %></option>
+    <% end %>
+    </select>
+  </div>
+  <div class='span2 title'>
+    运送单号
+  </div>
+  <div class='span4'>
+    <input type='text' value='<%=transaction.delivery_code %>' class='delivery_code span12' />
+  </div>
+</div>

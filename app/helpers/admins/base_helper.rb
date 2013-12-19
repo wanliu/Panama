@@ -18,7 +18,7 @@ module Admins
         shop_admins_templates_path params[:shop_id]
       else
         shop_admins_template_path params[:shop_id], record.name
-      end      
+      end
     end
 
     def admins_categories(record)
@@ -26,7 +26,7 @@ module Admins
         shop_admins_categories_path params[:shop_id]
       else
         shop_admins_category_path params[:shop_id], record
-      end 
+      end
     end
 
     def admins_products(record)
@@ -34,13 +34,13 @@ module Admins
         shop_admins_products_path params[:shop_id]
       else
         shop_admins_product_path params[:shop_id], record
-      end 
+      end
     end
 
     def admin_active_section(name)
-      content_for(:admin_siderbar) do 
+      content_for(:admin_siderbar) do
         name.to_s
       end
-    end    
+    end
   end
 end

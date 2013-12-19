@@ -6,7 +6,7 @@
         <div class="modal-header">
           <h3><%=activity.title %></h3>
         </div>
-        <div class="modal-body main-show">
+        <div class="modal-body">
           <div class='picture'>
             <% if activity.attachments.length > 1  %>
               <div id="myCarousel" class="carousel slide">
@@ -85,7 +85,7 @@
       <div class="widget" id="activity-actions">
         <div class="modal-body">
           <img class="author_image" src="<%=activity.author.photos.header %>"  />
-          <a href="javascript:void(0)" class="btn btn-primary pull-right load_modal">分享活动</a> 
+          <a href="<%= all_circles_person_communities_path(current_user) %>" data-toggle="modal" class="btn btn-primary pull-right" data-target="#PickCircle">分享活动</a> 
           <h4><%= activity.author.login %></h4>
           <p>关注 <%= activity.author.followings.count %></p>
           <p>粉丝 <%= activity.author.followers.count %></p>
@@ -127,8 +127,8 @@
       </div>
     </div>
   </div>
+  <%= render "/activities/share_activity_to_circles" %>
 </div>
-<%#= render "/activities/share_activity_to_circles" %>
 <script type="text/template" id="comment-template">
   <div class="comment hide">
     <img class="people-image" src="<%= current_user.avatar %>">

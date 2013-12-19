@@ -1,7 +1,7 @@
 
 root = window || @
 
-class AddressesView extends Backbone.View
+class root.AddressesView extends Backbone.View
 	initialize: (options) ->
 		_.extend(@, options)
 		@$el = $(@el)
@@ -17,7 +17,7 @@ class AddressesView extends Backbone.View
 		@$el.find("form#edit_address_form").submit()
 
 
-class AddressEditView extends Backbone.View
+class root.AddressEditView extends Backbone.View
 	events:
 		"click .edit-button" : "update_address"
 
@@ -28,9 +28,8 @@ class AddressEditView extends Backbone.View
 			data: @$("form").serialize(),
 			url: @$("form").attr("action"),
 			success: (data) =>
-				$(".address_input").val(data.address)
-				# @$("#shop_auth_address_id").val(data.id)
-				@$el.modal('hide')
+				@$(".address_input").val(data.address)
+				@$('[name="shop_auth[address_id]"]').val(data.id)
 				@$("#edit_address").modal('hide')
 				pnotify({text: "修改地址成功！"})
 			error: (xhr, status) =>
@@ -38,6 +37,3 @@ class AddressEditView extends Backbone.View
 		)
 		false
 
-
-root.AddressesView = AddressesView
-root.AddressEditView = AddressEditView

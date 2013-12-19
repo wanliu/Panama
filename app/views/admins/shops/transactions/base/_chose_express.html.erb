@@ -1,0 +1,15 @@
+<div class='row-fluid'>
+  <div class='span2 title'>
+    运输方式
+  </div>
+  <div class='span4'>
+    <select name='delivery_manner_id' class='span12 delivery_manner_id'>
+      <% DeliveryManner.avaliable.each do |item| %>
+      <option value="<%=item.id %>">
+        <%=item.name %>
+      </option>
+      <% end %>
+    </select>
+  </div>
+</div>
+<%=render_base_template "chose_delivery", transaction: transaction %>

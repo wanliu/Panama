@@ -17,16 +17,15 @@
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
                 <% if transaction.close_state? %>
-                  <button type="button" class="close">&times;</button>
+                  <button type="button" class="btn_delete close">&times;</button>
                 <% end %>
                 <%= render "state_buttons", :transaction => transaction %>
               </div>
               <div class="transaction-number">
-                订单编号：<%= transaction.number %>
-                <small rel='tooltip' title="<%=I18n.l transaction.created_at, :format => :long %>">
-                  <%= time_ago_in_words transaction.created_at %>
-                  <span class="display-state"></span>
-                </small>
+                <span class='number'>
+                  订单编号: <%=transaction.number %>
+                </span>
+                <span class='pull-right'><%=transaction.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
               </div>
             </div>
           </div>
@@ -37,9 +36,12 @@
       </div>
       <div class='span5 chat_wrapper'>
         <div class="transaction-footer">
-          <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
-          <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>" style="frameborder: 0;">
-          </iframe>
+          <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %>
+          </div>
+          <div class='message_wrap'>
+            <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>" style="frameborder: 0;">
+            </iframe>
+          </div>
         </div>
       </div>
     </div>

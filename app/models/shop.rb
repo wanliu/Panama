@@ -16,7 +16,7 @@ class Shop < ActiveRecord::Base
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
-  has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
+  # has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   # has_many :topic_categories, dependent: :destroy
   has_many :banks, :class_name => "ShopBank", :dependent => :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
@@ -27,7 +27,13 @@ class Shop < ActiveRecord::Base
   has_one :shops_category
   belongs_to :user
 
+  alias_method :owner, :user
+
   before_destroy :delete_shop
+
+  after_update do
+    update_relation_index
+  end
 
   scope :actived, where(actived: true)
 
@@ -134,6 +140,52 @@ class Shop < ActiveRecord::Base
 
   def generate_im_token
     self.im_token = SecureRandom.hex
+  end
+
+  def notify(channel, data, options = {})
+    employees.each do |member|
+      # byebug
+      member.notify(File.join("/shops", channel), data, options)
+    end
+  end
+
+  def update_relation_index
+    update_activity_index
+    update_shop_product_index
+  end
+
+  def update_activity_index
+    Activity.index_update_by_query(
+      :query => {
+        :term => {
+          "shop.id" => id
+        }
+      },
+      :update => {
+        :shop => {
+          :icon => photos.icon,
+          :header => photos.header,
+          :avatar => photos.avatar
+        }
+      }
+    )
+  end
+
+  def update_shop_product_index
+    ShopProduct.index_update_by_query(
+      :query => {
+        :term => {
+          "seller.id" => id
+        }
+      },
+      :update => {
+        :seller => {
+          :icon => photos.icon,
+          :header => photos.header,
+          :avatar => photos.avatar
+        }
+      }
+    )
   end
 
   private

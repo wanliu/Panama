@@ -3,9 +3,14 @@
     <div class='row-fluid'>
       <div class='span7 avatar'>
         <img src="<%=direct_transaction.buyer.photos.header %>" class='img-polaroid' />
-        <h1>
-          <%=direct_transaction.buyer.login %>
-        </h1>
+        <div class='header-title'>
+          <h3 class='owner_name'>
+            <%=direct_transaction.buyer.login %>
+          </h3>
+          <div class='number'>
+            编号: <%=direct_transaction.number %>
+          </div>
+        </div>
       </div>
       <div class='span5'>
         <h4 class='pull-right'>

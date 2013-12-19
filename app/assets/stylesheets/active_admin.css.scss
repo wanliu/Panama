@@ -16,6 +16,7 @@
 @import "system/simpledatepicker";
 @import "system/fullcalendar";
 @import "lib/notify/pnotify";
+@import "lib/chosen";
 // Overriding any nonvariable SASS must be done after the fact.
 // For example, to change the default statustag color:
 //
@@ -124,6 +125,9 @@ body.system_categories{
     td{ border: 1px #ddd solid; }
     .fc-button{
       padding: 4px 6px 4px 6px;
+    }
+    .fc-event {
+      margin: 0px 1px 1px 1px;
     }
   }
 }
@@ -237,5 +241,63 @@ table.index_table th{ text-align: center !important; }
   .region_create{
     clear: both;
     margin-top: 5px;
+  }
+}
+
+.category-properties, .panel_contents{
+  position: relative;
+
+  .chose-all{
+    float: right;
+  }
+
+  .action-bar{
+    margin-left: 20px;
+  }
+
+  .join_filter{
+    input[type=submit]{
+      position: absolute;
+      top: 0px;
+      right: 0px;
+    }
+  }
+
+  .property{
+    #property_id_input{
+      width: 20%
+    }
+
+    li{
+
+      .label{
+        width: 10%;
+      }
+
+    }
+  }
+}
+
+.category_property_value_wrap{
+
+  .new{
+    form{
+
+      label{
+        width: 10%
+      }
+
+      input[type=text]{
+        width: 150px;
+      }
+    }
+  }
+}
+
+.typeahead.dropdown-menu{
+  li{
+    a{
+      color: black;
+    }
   }
 }

@@ -3,8 +3,8 @@ namespace :order_reason do
   task :load => :environment do
     reasons = YAML::load_file("#{Rails.root}/config/data/order_reason.yml")["order_reason"]
     reasons.each do |reason|
-    	puts reason
-    	OrderReason.create(reason)
+      puts reason
+      OrderReason.create(reason)
     end
   end
 end

@@ -1,3 +1,4 @@
+require 'yaml'
 # Use this file to easily define all of your cron jobs.
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
@@ -18,8 +19,9 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-
+config = YAML::load_file("config/whenever.yml")
 set :output, "~/whenever.log"
+set :environment, config["environment"]
 
 every 2.minutes do
   runner "OrderTransaction.state_expired"

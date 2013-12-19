@@ -257,8 +257,8 @@ class root.AttachmentUpload extends Backbone.View
       temp = @attachment_list.models[0]
       @attachment_list.each (model) ->
         temp = model if model.get("default_state")?
-
       temp
+      
     destroy_all: () ->
       @attachment_list.each (model) ->
         model.trigger("remove_view")

@@ -1,41 +1,50 @@
+<% side_nav_for 'fiery' %>
 <div id="main" class="content">
-	<section class="widget">
-		<ul id="activity-category" class="nav nav-tabs activity-category" >
-			<li class="active">
-					<a href='#' ><%=icon 'eye-open' %> </a>
-			</li>
-		</ul>
-	</section>
-	<div class='category_products_panel'>
-		<div id="category_products"></div>
-		<div class='scroll-load-msg'>
-			<img src='/assets/loading_max.gif' />正在加载...
-		</div>
-	</div>
+  <section class="widget catalog-header">
+    <div class="body-category">
+      <ul id="activity-catalog" class="breadcrumb activity-catalog" >
+        <li>
+          <a href='/' >
+            <%=icon 'eye-open' %>
+          </a>
+        </li>
+        <li>
+          <a href='#'>
+            推荐分类
+            <span class="divider">&gt;</span>
+          </a>
+        </li>
+        <li class='active'>
+          <%=@catalog.title %>
+        </li>
+      </ul>
+    </div>
+    <hr class="min-line">
+    <div class='row-fluid'>
+      <div class='span1 title'>
+        分类
+      </div>
+      <div class='span11 values'>
+        <ul>
+          <% @catalog.categories.each do |c| %>
+          <li>
+            <a href="<%=category_path(c) %>"><%=c.name %></a>
+          </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <%= render :partial => "activities/template" %>
 </div>
 
-<script type="text/template" id="category_product-preview-template">
-	<%= render "shop_products/preview_template" %>
-</script>
-
 <script type="text/javascript">
-	$(function(){
-		new ActivityLayoutView({
-			el: '#category_products',
-			wrap_id: 'category_products'
-		})
-		new LoadCategoryProducts({
-			el: $('.category_products_panel'),
-			fetch_url: "/catalog/<%= @catalog.id %>/products"
-		})
+  $(function(){
 
-		new ShopProductPreview({
-				el: $("#category_products")
-		})
+    var load_view = new LoadActivities({
+      el: $('.activities_panel')
+    })
 
-		new CatalogChildrenView({
-			el: $("#activity-category"),
-			catalog_id: "<%= @catalog.id %>"
-		})
-	})
+    load_view.reset_fetch({catalog_id: <%=@catalog.id %>})
+  })
 </script>

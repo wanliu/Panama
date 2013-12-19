@@ -19,7 +19,7 @@
       <div class='userinfo shopinfo' data-value-id="{{ shop.id }}">
         {{#shop.photos}}
           <a href="/shops/{{shop.name}}">
-          <img src='{{icon}}' class="author img-circle" />
+          <img src='{{icon}}' class="author " />
           </a>
         {{/shop.photos}}
         <p>
@@ -39,9 +39,10 @@
         <span>{{ participate}} </span>
         <span class='title'>喜欢</span>
         <span class='like-count'>{{like}}</span>
+        <i class='icon-bullhorn join-chat'>聊天</i>
       </div>
 
-      <div class="buttons" style='z-index:9999;'>
+      <div class="buttons" style='z-index:8889;'>
         {{#is_start}}
           <%= link_to 'javascript:void(0)', class: 'btn btn-danger launch-button' do %>
             <%= icon('shopping-cart') + " 购买" %>
@@ -49,12 +50,12 @@
         {{/is_start}}
 
         {{#likes}}
-          <%= link_to '#', class: 'btn unlike-button active' do %>
+          <%= link_to '#', title: '取消支持会影响排名喔', 'data-toggle' => 'tooltip' , class: 'btn unlike-button active' do %>
             <%= "取消喜欢" %>
           <% end %>
         {{/likes}}
         {{^likes}}
-          <%= link_to '#', class: 'btn like-button' do %>
+          <%= link_to '#', title: '喜欢就支持一下', 'data-toggle' => 'tooltip', class: 'btn like-button' do %>
             <%= icon('heart') + " 喜欢" %>
           <% end %>
         {{/likes}}

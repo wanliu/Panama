@@ -1,13 +1,6 @@
 <span class="pull-right">
   <div class="btn-group">
-    <% if Rails.env.development? %>
-      <%= link_to '#',
-            :class => 'btn btn-large',
-            'event-name' => 'back' do %>
-        <%= raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
-      <% end %>
-    <% end %>
-    <%= link_to '#', :class => 'btn btn-large btn-primary', 'event-name' => 'sign' do %>
+    <%= link_to '#', :class => 'btn btn-large btn-primary btn_event', 'event-name' => 'sign' do %>
       <%=raw "确认收货&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
     <% end %>
   </div>

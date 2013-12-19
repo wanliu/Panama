@@ -1,0 +1,8 @@
+<div class='row-fluid'>
+  <div class='span2 title'>
+    送货地址
+  </div>
+  <div class='span10'>
+    <%= transaction.address.nil? ? "暂无" : transaction.address.location %>
+  </div>
+</div>

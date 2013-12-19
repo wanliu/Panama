@@ -1,0 +1,14 @@
+<% if transaction.logistics_company.present? %>
+<div class='row-fluid'>
+  <div class='span2 title'>物流公司</div>
+  <div class='span4'>
+    <a href='javascript:void(0)'>
+      <%=transaction.logistics_company.try(:name) %>
+    </a>
+  </div>
+  <div class='span2 title'>运单号</div>
+  <div class='span4'>
+    <%=transaction.delivery_code %>
+  </div>
+</div>
+<% end %>

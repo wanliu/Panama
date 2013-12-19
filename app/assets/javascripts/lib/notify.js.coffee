@@ -1,4 +1,10 @@
-#= require lib/jquery.pnotify
+#!= require lib/jquery.pnotify
+#!= require lib/jquery.gritter
+#= require noty/jquery.noty
+#= require noty/layouts/top
+#= require noty/layouts/topRight
+#= require noty/themes/default
+#= require noty/themes/notify
 # 系统提醒
 #
 # $.notifier({
@@ -7,6 +13,8 @@
 #  text: "某某给你留言"}) 桌面通知
 #
 # pnotify 站点通知
+
+$.noty.defaults.layout = 'topRight';
 
 
 class Notifier
@@ -108,13 +116,16 @@ class Notifier
     @pnotify(_options)
 
   pnotify: (options) ->
-    if options.hasOwnProperty("stack")
-      options["stack"] = @stack_options[options.stack]
-    if options.hasOwnProperty("avatar")
-      options["text"] = "<img class='img-circle' src='#{options["avatar"]}' alt='头像'/>#{options["text"]}"
+    # if options.hasOwnProperty("stack")
+    #   options["stack"] = @stack_options[options.stack]
+    # if options.hasOwnProperty("avatar")
+      # options["text"] = "<img class='avatar' src='#{options["avatar"]}' alt='头像'/>#{options["text"]}"
+      # options['text_escape'] = false
 
-    options.styling = "bootstrap"
-    $.pnotify options
+    # options.styling = "bootstrap"
+    # $.gritter.add options
+    noty(options)
+    # $.pnotify options
 
 window.notifier = new Notifier()
 window.pnotify = notifier.pnotify

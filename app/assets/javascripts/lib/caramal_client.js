@@ -435,7 +435,19 @@ define("almond", function(){});
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (exports.Caramal.debug != null) {
-        return console.log.apply(this, args);
+        if (args.length > 5) {
+          return console.log(args[0], args[1], args[2], args[3], args[4], args[5]);
+        } else if (args.length > 4) {
+          return console.log(args[0], args[1], args[2], args[3], args[4]);
+        } else if (args.length > 3) {
+          return console.log(args[0], args[1], args[2], args[3]);
+        } else if (args.length > 2) {
+          return console.log(args[0], args[1], args[2]);
+        } else if (args.length > 1) {
+          return console.log(args[0], args[1]);
+        } else {
+          return console.log(args[0]);
+        }
       }
     };
     return exports.Caramal;
@@ -4336,6 +4348,14 @@ if (typeof define === "function" && define.amd) {
 
       Client.prototype.unsubscribe = function(channel, callback) {
         return this.socket.removeListener(channel, callback);
+      };
+
+      Client.prototype.onNotify = function(channel, callback) {
+        return this.subscribe("notify:" + channel, callback);
+      };
+
+      Client.prototype.unNotify = function(channel, callback) {
+        return this.unsubscribe("notify:" + channel, callback);
       };
 
       Client.prototype.emit = function(event, data, callback) {

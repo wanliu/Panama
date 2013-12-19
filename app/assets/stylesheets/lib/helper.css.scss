@@ -1,0 +1,13 @@
+@mixin rounded_borders($round){
+  border-radius: $round;
+  -moz-border-radius: $round;
+  -webkit-border-radius: $round;
+  -ms-border-radius: $round;
+}
+
+@mixin box_sizing($border){
+  -moz-box-sizing: $border;
+  -webkit-box-sizing: $border;
+  -ms-box-sizing: $border;
+  box-sizing: $border;
+}
