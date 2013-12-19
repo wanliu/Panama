@@ -1,4 +1,5 @@
-#= require admins/shops/shop_transaction_card
+#= require lib/table_list
+#= require people/transaction_card
 
 root = (window || @)
 
@@ -25,9 +26,8 @@ class TransactionView extends Backbone.View
 
   register_view: () ->
     if @model.get("register")
-      @card = new ShopTransactionCard({
-        el: @$(".detail .transaction"),
-        shop: @shop
+      @card = new TransactionCard({
+        el: @$(".detail .transaction")
       })
       @card.transaction.bind("change:state", @card_change_state, @)
 
@@ -45,11 +45,9 @@ class TransactionView extends Backbone.View
   change_table_state: () ->
     @$(".state_title").html(@model.get("state_title"))
 
-
 class root.OrderTransactions extends Backbone.View
 
   initialize: (options) ->
-    @shop = options.shop
     @$el = $(@el)
     @remote_url = options.remote_url
 
@@ -64,8 +62,7 @@ class root.OrderTransactions extends Backbone.View
     delete model.attributes.elem
     new TransactionView(
       model: model,
-      el: elem,
-      shop: @shop
+      el: elem
     )
 
   reset: () ->
@@ -82,10 +79,7 @@ class root.OrderTransactions extends Backbone.View
   realtime_load: () ->
     @client = window.clients.socket
 
-    @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/destroy", (data) =>
-      @destroy data
-
-    @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/change_state", (data) =>
+    @client.subscribe "notify:/order_transactions/change_state", (data) =>
       @change_state data
 
   destroy: (data) ->

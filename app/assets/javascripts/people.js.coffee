@@ -10,6 +10,7 @@
 #= require lib/modify_number
 #= require people/followers
 #= require following
+#= require lib/table_list
 #= require people/cart
 #= require people/community
 #= require people/community_people
@@ -31,4 +32,4 @@
 #= require topic
 #= require people/product_comment
 #= require people/direct_transaction
-#= require lib/table_list
+#= require people/order_transactions

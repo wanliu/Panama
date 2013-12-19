@@ -6,6 +6,7 @@
 #= require models/form_model
 #= require nested_form
 #= require topic
+#= require lib/table_list
 #= require models/attribute_model
 #= require models/element_model
 #= require lib/attachment_upload
@@ -15,7 +16,7 @@
 #= require admins/shops/employee_group
 #= require admins/shops/shop_order_refund_card
 #= require admins/shops/shop_transaction_card
-#= require admins/shops/order_transactions
+#= require admins/shops/shop_order_transactions
 #= require admins/shops/transaction_dispose
 #= require lib/transaction_bubbling
 #= require lib/attachment_upload
@@ -30,4 +31,3 @@
 #= require admins/shops/shop_direct_transaction
 #= require admins/shops/community_message
 #= require people/community
-#= require lib/table_list

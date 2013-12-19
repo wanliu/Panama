@@ -81,7 +81,7 @@
       token: "<%= current_shop.im_token %>"
     }
 
-    var orders = new OrderTransactions({
+    var orders = new ShopOrderTransactions({
       el: $(".transaction-list"),
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
       shop: shop})
