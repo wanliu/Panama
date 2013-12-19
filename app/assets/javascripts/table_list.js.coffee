@@ -2,81 +2,111 @@ root = (window || @)
 
 class Transaction extends Backbone.Model
 
-  load_template: (callback = () ->) ->
+  loadTemplate: (callback = () ->) ->
     $.ajax(
       url: "#{@url()}/page",
       success: callback
     )
+
 class Transactions extends Backbone.Collection
   model: Transaction
 
 
-class DisplayDialogView extends Backbone.View
+class FullOrMiniView extends Backbone.View
   bodyClass: "noScroll"
 
-  events: {
-    "click .summarize" : "more"
-  }
+  detail: ".full-mode"
+  open: ".open"
+
+  events: 
+    "click": "show"
+
 
   initialize: () ->
-    @$summar = @$(".summarize")
-    @$detail = @$(".detail")
+    @$summar = @$(@open)
+    @$detail = @$(@detail)
     @$el = $(@el)
-    @model.bind("change:summar_display", _.bind(@detail_display, @))
+    @$(@open).bind("click", @more)
+    @model.bind("change:full_mode", @toggleDisplay)
+    @$parentList = @model.get('listView')
 
-  more: () ->
-    @model.set(summar_display: !@model.get("summar_display"))
+  show: () =>
+    unless @$el.hasClass('active')
+      @$el.addClass("active")
 
-  load_template: () ->
-    @$el.addClass("active")
-    @model.load_template (data) =>
-      @$summar.addClass "mini"
-      @$detail.html(data)
-      @trigger("off_details", @model)
+      setTimeout () =>
+        @more()
+      , 300
 
-      @$detail.slideDown "fast", () =>
-        @trigger("bind_view", @)
+  more: () =>
+    @model.set('full_mode': !@model.get("full_mode"))
+
+  loadTemplate: () ->
+    if @$detail.children() > 0
+      @$detail.slideDown "fast"
+    else
+      @model.loadTemplate (data) =>
+        # @$summar.addClass "mini"
+        @$detail.html(data)
+        @trigger("minimum", @model)
+        @$detail.slideDown "fast", () =>
+          @trigger("bind_view", @)
 
 
-  detail_display: () ->
-    if @model.get("summar_display")
+
+  toggleDisplay: () =>
+    @$el.toggleClass("opened")
+
+    if @model.get("full_mode")
       @$el.removeClass("active")
       @$detail.slideUp "fast", () =>
         @$summar.removeClass "mini"
     else
-      @load_template()
+      @loadTemplate()
 
 class root.TableListView extends Backbone.View
+
+  child: ".item"
+
+  events: 
+    "enter_3d": "enter3D"
+    "leave_3d": "leave3D"
 
   initialize: () ->
     _.extend(@, @options)
     @transactions = new Transactions()
     @transactions.url = @remote_url
     @transactions.bind("add", @addView, @)
-    @load_view()
+    @loadView()
 
   addView: (model) ->
     elem = model.get("elem")
     delete model.attributes.elem
-    view = new DisplayDialogView(
+    view = new FullOrMiniView(
       model: model,
       el: elem)
     view.bind("bind_view", _.bind(@bindView, @))
-    view.bind("off_details", _.bind(@off_details, @))
+    view.bind("minimum", _.bind(@minimum, @))
 
-  load_view: () ->
-    _.each @$(".item"), (el) =>
+  loadView: () ->
+    _.each @$(@child), (el) =>
       @transactions.add(
-        summar_display: true,
+        full_mode: true,
         elem: $(el),
+        listView: @,
         id: $(el).attr('data-value-id'))
 
-  off_details: (model) ->
+  minimum: (model) ->
     for m in @transactions.models
-      m.set(summar_display: true) unless m.id == model.id
+      m.set(full_mode: true) unless m.id == model.id
 
 
   bindView: (view) ->
 
+  enter3D: () ->
+    @$(@el3d).addClass("_3d")
+
+  leave3D: () ->
+    @$(@el3d).removeClass("_3d")
 
 

@@ -176,6 +176,9 @@ ul {
   #topbar {
     .navbar-search {
       margin-top: 10px;
+      .search-query {
+        border: 1px solid $white;
+      }
     }
   }
 

@@ -27,8 +27,8 @@ group :assets do
   gem 'therubyracer', '~> 0.10.2', :platforms => :ruby
   gem 'anjlab-bootstrap-rails', '2.3.1.2', :require => 'bootstrap-rails'
   gem 'uglifier', '>= 1.0.3'
-  gem 'compass-rails', '~> 1.0.3'
-  gem 'compass-h5bp', '~> 0.1.0'
+  gem 'compass-rails', '~> 1.1.2'
+  gem 'compass-h5bp', '~> 0.1.2'
   gem 'ejs', '~> 1.1.1'
   gem 'font-awesome-sass-rails'
 end

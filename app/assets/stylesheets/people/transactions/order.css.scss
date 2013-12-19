@@ -1,7 +1,10 @@
 @import "lib/transparent";
 @import "compass/css3/transform";
+@import "people/transactions/3d";
 
 .people-groups {
+  // -webkit-perspective: 1000px;
+
   .seller {
     margin: 5px 0px;
 
@@ -24,6 +27,8 @@
   }
 
   .orders {
+
+
     // margin-left: 35px;
   }
 
@@ -31,12 +36,44 @@
 
 .order_item {
 
-  @include transform(perspective(1000px) rotateX(-45deg));
-  &:hover {
-    @include transparent(rgb(51,51,51), 0.2);
+  width: 100%;
+  
+  &.up {
 
-    .order_item_row.widget {
-      @include transparent(rgb(51,51,51), 0.6);
+  }
+
+  &.up2 {
+
+  }
+
+  &.up1 {
+
+  }
+
+  &.current {
+
+  }
+
+  &.down1 {
+
+  }
+
+  &.down2 {
+
+  }
+
+
+  &.down {
+
+  }
+
+  &:hover {
+
+  }
+
+  &.opened {
+    .order_item_row {
+      display: none;
     }
   }
 
@@ -84,10 +121,12 @@
           }
         }
       }
-
     }
   }
 
+  .full-mode {
+    margin-bottom: 20px;
+  }
 }
 
 
