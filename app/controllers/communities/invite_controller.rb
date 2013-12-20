@@ -29,10 +29,10 @@ class Communities::InviteController < Communities::BaseController
             format.json{ render :json => draw_errors_message(@invite), :status => 403 }
           end
         else
-          format.json{ render :json => ["用户已经加入!"], :status => 403 }
+          format.json{ render :json => ["该用户已经加入!"], :status => 403 }
         end
       else
-        format.json{ render :json => ["用户不存！"], :status => 403 }
+        format.json{ render :json => ["该用户不存在！"], :status => 403 }
       end
     end
   end

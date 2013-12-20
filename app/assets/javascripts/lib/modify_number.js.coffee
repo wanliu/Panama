@@ -17,7 +17,7 @@ class ChangeNumberView extends Backbone.View
     @amount = @el.find(".spinner-input").val()
     $.ajax({
       type: "post",
-      url: "/people/#{@login}/cart/#{@item_id }/change_number",
+      url: "/people/#{@login}/cart/#{@item_id}/change_number",
       data : { amount: @amount }
       dataType: "json"
     }).success((model, status, xhr) =>

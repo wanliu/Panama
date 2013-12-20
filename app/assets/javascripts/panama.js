@@ -1,7 +1,6 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require lib/jquery.raty
 //= require lib/jquery.resize
 //= require lib/underscore
 //= require backbone
