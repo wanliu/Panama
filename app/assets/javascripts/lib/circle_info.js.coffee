@@ -8,7 +8,7 @@ class InviteUserView extends Backbone.View
   initialize: () ->
     @circle_id = @options.circle_id
     @$form = @$("form")
-    @$dialog = @$("dialog-invite")
+    @$dialog = @$(".dialog-invite")
     @search_user()
 
   render: () ->
@@ -16,7 +16,6 @@ class InviteUserView extends Backbone.View
 
   invite: () ->
     data = @$form.serializeHash()
-
     if _.isEmpty(data.login)
       @$(".user").addClass("error")
       return false
@@ -92,7 +91,7 @@ class root.CircleInfoView extends Backbone.View
     ids = @data()
     $.ajax(
       data: {ids: ids}
-      url: "/communities/#{ @circle_id}/circles/share_circle"
+      url: "/communities/#{@circle_id}/circles/share_circle"
       type: "post"
       success: () ->
         pnotify(text: '分享该圈子成功！!')
@@ -100,9 +99,4 @@ class root.CircleInfoView extends Backbone.View
       error: (messages) ->
         pnotify(text: messages.responseText, type: "error")
     )
-
-  render: () ->
-
-
-
 

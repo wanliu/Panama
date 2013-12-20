@@ -1199,9 +1199,10 @@ h2 small {
 }
 
 .dropdown .count {
-  top: 20px;
-	left: 22px;
+  top: 22px;
+	left: 30px;
 	position: absolute;
+  text-align: center;
 	@include transparent(rgb(51,51,51), 0.5);
 }
 
