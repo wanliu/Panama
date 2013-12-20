@@ -22,7 +22,9 @@
       }
 
       .href_name {
-        @include title-fixed;
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis;
       }
 
       .activity_tag {

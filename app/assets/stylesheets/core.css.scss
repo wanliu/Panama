@@ -3,19 +3,12 @@
 @import "compass/css3";
 @import "caret";
 @import "lib/notify/pnotify";
-@import "jquery.gritter";
 @import "lib/transparent";
 @import "lib/chosen";
 @import "my_cart";
 @import "font-awesome";
 @import "lib/stroll";
 @import "attachments";
-
-@mixin title-fixed {
-  overflow: hidden; 
-  white-space: nowrap; 
-  text-overflow: ellipsis;
-}
 
 body, html {
   // $bgcolor1: #69D2E7;
@@ -200,7 +193,9 @@ ul {
       >li {
         padding: 4px 5px;
         margin: 0px 0px;
-        @include title-fixed;
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis;
 
         .href_url {
           padding: 2px;
