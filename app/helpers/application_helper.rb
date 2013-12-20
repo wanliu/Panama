@@ -145,7 +145,7 @@ module ApplicationHelper
   end
 
   def link_to_account
-    link_to person_path(current_user) do
+    link_to person_notifications_path(current_user) do
       icon(:user) + ' 我的账户'
     end
   end

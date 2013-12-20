@@ -58,7 +58,7 @@
                   </a>
                 </li>
                 <li class='avatar'>
-                  <%= image_tag n.additional[:avatar], :class => ['avatar', 'avatar-icon', 'pull-right'] %>
+                  <%#= image_tag n.additional[:avatar], :class => 'avatar avatar-icon pull-right' %>
                 </li>
                 <li class='age'>
                   <%= distance_of_time_in_words n.created_at, Time.now %>
