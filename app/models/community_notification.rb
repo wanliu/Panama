@@ -9,9 +9,9 @@ class CommunityNotification < ActiveRecord::Base
   after_create do
     url = "/communities/#{circle.id}/notifications/#{id}"
     target.notify("/circles/request",
-                  " #{send_user.login} 申请加入圈子",
+                  "#{send_user.login} 申请加入圈子#{circle.name}",
                   :target => self,
-                  :url => url) # x
+                  :url => url) # v
   end
 
   def notify_url

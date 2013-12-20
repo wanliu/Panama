@@ -23,12 +23,12 @@ class NotificationManager
     @client = window.clients
 
     # 活动通知绑定
-    @client.monitor("/activities/arrived", @commonNotify)
-    @client.monitor("/activities/add", @commonNotify) # x
-    @client.monitor("/activities/change", @commonNotify)
-    @client.monitor("/activities/remove", @commonNotify)
+    # @client.monitor("/activities/arrived", @commonNotify)
+    @client.monitor("/activities/add", @commonNotify) # √
+    #@client.monitor("/activities/change", @commonNotify)
+    #@client.monitor("/activities/remove", @commonNotify)
     @client.monitor("/activities/like", @commonNotify) # √
-    @client.monitor("/activities/unlike", @commonNotify) # x
+    @client.monitor("/activities/unlike", @commonNotify) # √
     # 用户关系
     @client.monitor("/friends/add_quan", @commonNotify) # √
     @client.monitor("/friends/add_user", @add_user) # √
@@ -37,7 +37,7 @@ class NotificationManager
     # 个人社交部分
     @client.monitor("/follow", @commonNotify) # √
     @client.monitor("/unfollow", @commonNotify) # √
-    @client.monitor("/circles/request", @commonNotify) # x
+    @client.monitor("/circles/request", @commonNotify) # √
     @client.monitor("/circles/invite", @commonNotify) # √
     @client.monitor("/circles/refuse", @commonNotify) # √
     @client.monitor("/circles/joined", @commonNotify) # √
@@ -45,15 +45,15 @@ class NotificationManager
     # 商店社交部分
     @client.monitor("/shops/follow", @commonNotify) # √
     @client.monitor("/shops/unfollow", @commonNotify) # √
-    @client.monitor("/shops/like", @commonNotify)
-    @client.monitor("/shops/unlike", @commonNotify)
-    @client.monitor("/shops/joined", @commonNotify)
-    @client.monitor("/shops/leaved", @commonNotify)
+    @client.monitor("/shops/like", @commonNotify) #暂时不需要实现
+    @client.monitor("/shops/unlike", @commonNotify) #暂时不需要实现
+    @client.monitor("/shops/joined", @commonNotify) 
+    @client.monitor("/shops/leaved", @commonNotify) # 未测
     @client.monitor("/shops/refuse", @commonNotify)
-    @client.monitor("/shops/request", @commonNotify)
+    @client.monitor("/shops/request", @commonNotify) # 未测
     # 评论
     # @client.monitor("/comments/add", @commonNotify)
-    @client.monitor("/comments/mention", @commonNotify)
+    @client.monitor("/comments/mention", @commonNotify) # √
     # @client.monitor("/comments/update", @commonNotify)
     # @client.monitor("/comments/remove", @commonNotify)
 
@@ -132,17 +132,6 @@ class NotificationManager
       opacity: 1,
     }
     pnotify(options)
-
-  # bubble_notice: () ->
-  #   target = $(".bumbble_notice")
-  #   target.removeData("popover")
-  #   target.popover({
-  #     title: "你有新的消息"
-  #     content: @model.attributes.content,
-  #     container: '.bumbble_notice',
-  #   })
-  #   target.popover('show')
-  #   target.find(".popover")
 
 class root.NotificationViewList extends Backbone.View
 

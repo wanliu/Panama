@@ -9,10 +9,13 @@
     margin: 0px 0px 10px 0px;
     padding: 0px;
     height: 348px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: relative;
     z-index: 0;
 
+    .join-chat{
+      cursor: pointer;
+    }
     .out-box {
       color: white;
       @include transparent(rgb(51,51,51), 0.4);
@@ -161,7 +164,7 @@
 
         span {
           font-size: 0.8em;
-          margin-right: 20px;
+          margin-right: 5px;
           opacity: 0.5
         }
 
@@ -225,6 +228,9 @@
       .activity_tag {
         background: url('/assets/tags/auction_tag.png') no-repeat;
       }
+    }
+    .tooltip{
+      width: 100px;
     }
   }
 

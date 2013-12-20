@@ -15,6 +15,7 @@ class ActivitiesLike < ActiveRecord::Base
   end
 
   after_destroy do
+    # byebug
     update_activity_like
     unlike_notice_author
   end
