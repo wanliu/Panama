@@ -12,7 +12,7 @@
         之前交易
       </div>
       <div class='span2'>
-        <%= link_to transaction.seller.name, shop_path(transaction.seller)  %>
+        <%= link_to transaction.buyer.login, person_path(transaction.buyer.login)  %>
       </div>
     </div>
     <div class='row-fluid products'>

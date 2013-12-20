@@ -171,7 +171,6 @@ class TransactionMessageView extends Backbone.View
     model.set_url @remote_url
 
   realtime_fetch: () ->
-    # @client = Realtime.client @faye_url
     @client = window.clients.socket
     @client.subscribe @receive_notice_url(), (message) =>
       @notice_bubbing(message)

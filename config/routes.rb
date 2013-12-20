@@ -389,6 +389,7 @@ Panama::Application.routes.draw do
           post :send_message, :to => "shops/direct_transactions#send_message"
           post :dispose, :to => "shops/direct_transactions#dispose"
           get :page
+          get :item
         end
       end
 

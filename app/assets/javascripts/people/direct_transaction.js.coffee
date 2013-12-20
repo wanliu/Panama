@@ -1,5 +1,9 @@
+root = (window || @)
 
-class window.DirectTransactionView extends Backbone.View
+class Direct extends Backbone.Model
+
+
+class root.DirectTransactionView extends Backbone.View
   events: {
     "click .direct-message button"  : "toggle_message"
     "click .direct-info .completed" : "completed"
@@ -13,7 +17,8 @@ class window.DirectTransactionView extends Backbone.View
     @$iframe = @$message.find("iframe")
     @$messages = @$message.find(".messages")
     @$toolbar = @$message.find(".toolbar")
-    @direct_transaction_id = @$el.attr("data-value-id")
+    @model = new Direct(id: @$el.attr("data-value-id"))
+
     @load_style()
 
   load_style: () ->
@@ -27,11 +32,8 @@ class window.DirectTransactionView extends Backbone.View
 
   completed: () ->
     $.ajax(
-      url: "/people/#{@login}/direct_transactions/#{@direct_transaction_id}/completed",
+      url: "/people/#{@login}/direct_transactions/#{@model.id}/completed",
       type: 'POST',
       success: () =>
         @$(".wrap_event").html("<h4 class='pull-right'>交易成功</h4>")
     )
-
-
-

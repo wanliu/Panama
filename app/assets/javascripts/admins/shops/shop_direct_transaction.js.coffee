@@ -9,7 +9,6 @@ class root.ShopDirectTransactionView extends Backbone.View
     _.extend(@, options)
     @init_elem()
     @direct_transaction_id = @$el.attr("data-value-id")
-    @realtime_load()
     @load_style()
 
   init_elem: () =>
@@ -28,9 +27,3 @@ class root.ShopDirectTransactionView extends Backbone.View
 
   toggle_message: () ->
     @$messages.slideToggle()
-
-  realtime_load: () ->
-    # @client = Realtime.client(@realtime_url)
-    @client = window.clients
-    @client.subscribe "/DirectTransaction/#{@direct_transaction_id}/#{@shop.token}/#{@token}/destroy", () =>
-      @remove()

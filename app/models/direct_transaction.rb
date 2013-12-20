@@ -25,7 +25,7 @@ class DirectTransaction < ActiveRecord::Base
 
   before_create :init_data
 
-  after_create :notice_seller, :notice_new
+  after_create :notice_seller
 
   after_destroy :notice_destroy
 
@@ -46,27 +46,31 @@ class DirectTransaction < ActiveRecord::Base
   end
 
   def chat_notify(send_user, receive_user, content)
-    _content = "#{send_user.login}说: #{content}"
     if receive_user.present?
-      url, channel = if receive_user == buyer
-        ["/people/#{receive_user.login}/direct_transactions/#{id}",
-        "/direct_transactions/chat"]
+      url = if receive_user == buyer
+        "/people/#{receive_user.login}/direct_transactions/#{id}"
       else
-        ["/shops/#{seller.name}/admins/direct_transactions/#{id}",
-        "/#{seller.im_token}/direct_transactions/#{receive_user.login}/chat"]
+        "/shops/#{seller.name}/admins/direct_transactions/#{id}"
       end
+
       receive_user.notify(
-        channel,
-        _content,
-        :order_id => id,
+        "/#{seller.im_token}/direct_transactions/#{id}/chat",
+        content,
+        :direct_id => id,
+        :send_user => {
+          :login => send_user.login,
+          :id => send_user.id,
+          :photos => send_user.photos.attributes
+        },
+        :created_at => DateTime.now,
         :avatar => send_user.photos.icon,
         :url => url
       )
     else
       seller.notify(
-        "/#{seller.im_token}/direct_transactions/chat",
-        _content,
-        :order_id => id,
+        "/#{seller.im_token}/direct_transactions/#{id}/chat",
+        content,
+        :direct_id => id,
         :avatar => send_user.photos.icon,
         :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}"
       )
@@ -86,23 +90,24 @@ class DirectTransaction < ActiveRecord::Base
   end
 
   def notice_seller
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user_id,
+    seller.notify(
+      "/#{seller.im_token}/direct_transactions/create",
+      "你有新的直接交易订单#{number}",
       :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
-      :body => "你有新的订单")
-  end
-
-  def notice_new
-    faye_undispose({type: "new" ,values: as_json})
+      :avatar => buyer.photos.icon,
+      :target => self,
+      :direct_id => id
+    )
   end
 
   def notice_destroy
-    if operator.nil?
-      faye_undispose({type: "destroy" ,values: as_json})
-    else
-      faye_send("/DirectTransaction/#{id}/#{seller.im_token}/#{operator.im_token}/destroy", {})
-    end
+    seller.notify(
+      "/#{seller.im_token}/direct_transactions/destroy",
+      "直接交易订单#{number}被删除",
+      :avatar => buyer.photos.icon,
+      :direct_id => id,
+      :persistent => false
+    )
   end
 
   def items_count
@@ -111,15 +116,6 @@ class DirectTransaction < ActiveRecord::Base
 
   def unmessages
     messages.where(:receive_user_id => nil)
-  end
-
-  def faye_undispose(options)
-    faye_send("/DirectTransaction/#{seller.im_token}/un_dispose", options)
-  end
-
-  def faye_send(url, options)
-    # FayeClient.send(url, options)
-    CaramalClient.publish(seller.user.login, url, options)
   end
 
   def generate_number

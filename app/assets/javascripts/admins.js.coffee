@@ -29,5 +29,6 @@
 #= require twitter/bootstrap/modal
 #= require admins/shops/product_comment
 #= require admins/shops/shop_direct_transaction
+#= require admins/shops/shop_direct_transactions
 #= require admins/shops/community_message
 #= require people/community

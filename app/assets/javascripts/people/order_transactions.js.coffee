@@ -106,5 +106,5 @@ class root.OrderTransactions extends Backbone.View
     @table = new TableListView(
       el: @$el,
       remote_url: @remote_url,
-      bindView: (view) =>  @register(view.model.id)
+      bindView: (view) => @register(view.model.id)
     )

@@ -117,7 +117,7 @@ class ShopProductToolbar extends Backbone.View
       type: "POST",
       data: {amount: @amount.val()}
       success: () =>
-        window.location.href = "/people/#{@login}/transactions"
+        window.location.href = "/people/#{@login}/direct_transactions"
       error: (data) ->
         pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
     )

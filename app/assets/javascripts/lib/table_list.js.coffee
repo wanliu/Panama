@@ -78,12 +78,14 @@ class root.TableListView extends Backbone.View
     view.bind("bind_view", _.bind(@bindView, @))
     view.bind("off_details", _.bind(@off_details, @))
 
+  add: (item) ->
+    @transactions.add(
+      summar_display: true,
+      elem: $(item),
+      id: $(item).attr('data-value-id'))
+
   load_view: () ->
-    _.each @$(".item"), (el) =>
-      @transactions.add(
-        summar_display: true,
-        elem: $(el),
-        id: $(el).attr('data-value-id'))
+    _.each @$(".item"), (el) => @add(el)
 
   off_details: (model) ->
     for m in @transactions.models

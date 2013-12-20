@@ -1,0 +1,36 @@
+<div class="item" data-value-id="<%=direct_transaction.id %>">
+  <div class='summarize'>
+    <div class='row-fluid head'>
+      <div class='span3'>
+        编号: <%=direct_transaction.number %>
+      </div>
+      <div class='span4'>
+        在
+        <small rel='tooltip' title="<%=I18n.l direct_transaction.created_at, :format => :long %>">
+          <%= time_ago_in_words direct_transaction.created_at %>
+        </small>
+        之前成交
+      </div>
+      <div class='span2'>
+        <%= link_to direct_transaction.buyer.login, person_path(direct_transaction.buyer.login)  %>
+      </div>
+    </div>
+    <div class='row-fluid products'>
+      <div class='span7'>
+        <% direct_transaction.items.each do |item| %>
+          <%=render_funcat "product_item", :item => item %>
+        <% end %>
+      </div>
+      <div class='span2'>
+        <%=number_to_currency direct_transaction.total %>
+      </div>
+      <div class='span2'>
+        <%=direct_transaction.state_title %>
+      </div>
+      <div class='span1'>
+      </div>
+    </div>
+  </div>
+  <div class='detail'>
+  </div>
+</div>

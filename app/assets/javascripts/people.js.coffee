@@ -32,4 +32,5 @@
 #= require topic
 #= require people/product_comment
 #= require people/direct_transaction
+#= require people/direct_transaction_list
 #= require people/order_transactions
