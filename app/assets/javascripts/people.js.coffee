@@ -32,4 +32,5 @@
 #= require people/product_comment
 #= require people/direct_transaction
 #= require table_list
-#= require transactions/3d_viewport
+#= require transactions/2columns_viewport
+#= require transactions/mini_left_side

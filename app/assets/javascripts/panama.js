@@ -29,7 +29,6 @@
 //= require lib/spinner
 //= require lib/notify
 //= require lib/at_who
-//= require lib/stroll
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
 //= require lib/backdrop
