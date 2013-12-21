@@ -1,7 +1,7 @@
 class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
 
   def index
-    @refunds = current_shop_refunds.order("created_at desc").page(params[:page])
+    @refunds = current_shop_refunds.uncomplete.order("created_at desc").page(params[:page])
   end
 
   def show
@@ -15,7 +15,6 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
   def event
     @refund = current_shop_refunds.find_by(:id => params[:id])
     if @refund.seller_fire_events!(params[:event])
-      @refund.notice_change_buyer(params[:event])
       render :partial => "context", :locals => {refund: @refund}
     end
   end
@@ -30,6 +29,11 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
         format.json{ render :json =>draw_errors_message(@refund), :status => 403 }
       end
     end
+  end
+
+  def item
+    @refund = current_shop_refunds.find_by(:id => params[:id])
+    render :layout => false
   end
 
   private

@@ -473,6 +473,7 @@ Panama::Application.routes.draw do
           post "event(/:event)", :to => "shops/order_refunds#event", :as => :trigger_event
           post 'refuse_reason', :to => "shops/order_refunds#refuse_reason"
           get 'page', :to => "shops/order_refunds#page"
+          get 'item'
         end
       end
 

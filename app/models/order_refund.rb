@@ -16,8 +16,10 @@ class OrderRefund < ActiveRecord::Base
   include MessageQueue::OrderRefund
 
   scope :avaliable, where("state not in ('apply_refund', 'failure')")
+  scope :completed, -> { where("state in ('complete', 'close')") }
+  scope :uncomplete, -> { where("state not in ('complete', 'close')") }
 
-  attr_accessible :decription, :order_reason_id, :delivery_price, :delivery_manner
+  attr_accessible :decription, :order_reason_id, :delivery_price, :delivery_manner, :operator
 
   belongs_to :order_reason
   belongs_to :order, :foreign_key => "order_transaction_id", :class_name => "OrderTransaction"
@@ -43,6 +45,11 @@ class OrderRefund < ActiveRecord::Base
   after_create :change_order_state, :notify_shop_refund, :create_state_detail
 
   validate :valid_shipped_order_state?, :valid_order_already_exists?, :valid_delivery_manner?, :on => :create
+
+  validate :valid_destroy?, :on => :destroy
+
+  after_destroy :notify_shop_destroy
+
   state_machine :state, :initial => :apply_refund do
 
     event :shipped_agree do
@@ -126,8 +133,8 @@ class OrderRefund < ActiveRecord::Base
 
   def change_order_state
     order.fire_events!(:returned)
-    order.notice_change_buyer(:returned)
-    order.notice_change_seller(:returned)
+    order.change_state_notify_seller(:returned)
+    order.change_state_notify_buyer(:returned)
   end
 
   def current_state_detail
@@ -143,18 +150,32 @@ class OrderRefund < ActiveRecord::Base
   def notice_change_buyer(event_name)
     ename = event_name.to_s
     if %w(shipped_agree unshipped_agree refuse sign).include?(ename)
-      token = buyer.try(:im_token)
-      faye_send("/events/#{token}/order-refund-#{id}-buyer",
-        :event => "refresh_#{ename}")
+      buyer.notify(
+        "/order_refunds/change_state",
+        "退货单#{number} 状态变更为#{state_title}",
+        :url => "/people/#{buyer.login}/order_refunds/#{id}",
+        :target => self,
+        :state => state_name,
+        :state_title => state_title,
+        :refund_id => id
+      )
     end
   end
 
   def notice_change_seller(event_name)
     ename = event_name.to_s
     if %w(delivered).include?(ename)
-      token = operator.try(:im_token)
-      faye_send("/events/#{token}/order-refund-#{id}-seller",
-        :event => "refresh_#{ename}")
+      target = operator.nil? ? seller : operator
+      target.notify(
+        "/#{seller.im_token}/order_refunds/change_state",
+        "退货单#{number} 状态变更为#{state_title}",
+        :url => "/shops/#{seller.name}/order_refunds/#{id}",
+        :target => self,
+        :event => "refresh_#{ename}",
+        :state => state_name,
+        :state_title => state_title,
+        :refund_id => id
+      )
     end
   end
 
@@ -167,21 +188,15 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def seller_fire_events!(event)
-    type_fire_events!(%w(shipped_agree unshipped_agree  refuse sign), event)
-    notifications.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
-      :url => "/people/#{buyer.login}/order_refunds#refund#{id}",
-      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货")
+    if type_fire_events!(%w(shipped_agree unshipped_agree  refuse sign), event)
+      notice_change_buyer(event)
+    end
   end
 
   def buyer_fire_events!(event)
-    type_fire_events!(%w(delivered), event)
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id =>seller.user.id,
-      :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
-      :body => "您的交易由于#{order_reason.name}已经"+I18n.t("order_refund_state.#{state}")+"退货")
+    if type_fire_events!(%w(delivered), event)
+      notice_change_seller(event)
+    end
   end
 
   def update_buyer_and_seller_and_operate
@@ -243,6 +258,15 @@ class OrderRefund < ActiveRecord::Base
       end
     elsif order_waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
       buyer_recharge
+    end
+  end
+
+  def valid_destroy?
+    unless state_name == :apply_refund
+      errors.add(:state, "退货单删除失败!")
+      false
+    else
+      true
     end
   end
 
@@ -327,17 +351,28 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
-  def faye_send(channel, options)
-    # FayeClient.send(channel, options)
-    CaramalClient.publish(seller.user.try(:login), channel, options)
+  def notify_shop_destroy
+    target = operator.nil? ? seller : operator
+    target.notify(
+      "/#{seller.im_token}/order_refunds/destroy",
+      "退货单#{number}已经删除了!",
+      :url => "/shops/#{seller.name}/admins/order_refunds",
+      :avatar => buyer.photos.icon,
+      :refund_id => id,
+      :target => self
+    )
   end
 
   def notify_shop_refund
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
+    target = operator.nil? ? seller : operator
+    target.notify(
+      "/#{seller.im_token}/order_refunds/create",
+      "订单#{order.number}申请退货",
       :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
-      :body => "有人申请退货了")
+      :avatar => buyer.photos.icon,
+      :refund_id => id,
+      :target => self
+    )
   end
 
   def type_fire_events!(states, event)

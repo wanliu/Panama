@@ -34,3 +34,4 @@
 #= require people/direct_transaction
 #= require people/direct_transaction_list
 #= require people/order_transactions
+#= require people/order_refund_list

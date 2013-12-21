@@ -1,6 +1,6 @@
 <% active_section :refunds %>
 
-<div class='row-fluid order_refunds'>
+<div class='row-fluid order_refund_list'>
   <div class='span8'>
     <div class='widget'>
       <div class='row-fluid'>
@@ -61,13 +61,15 @@
                   (含<%=t.delivery_price || 0 %>运费)
                 </div>
               </div>
-              <div class='span2'>
+              <div class='span2 state_title'>
                 <%=t.state_title %>
               </div>
               <div class='span1'>
-                <a href='javascript:void(0)' class='btn_delete'>
-                  删除
-                </a>
+                <% if t.valid_destroy? %>
+                  <a href='javascript:void(0)' class='btn_delete'>
+                    删除
+                  </a>
+                <% end %>
               </div>
             </div>
           </div>
@@ -90,18 +92,10 @@
 
 <script type='text/javascript'>
   $(function(){
-    var view = new TableListView({
-      el: $(".order_refunds"),
-      remote_url: "<%= person_order_refunds_path(@people) %>",
-      bindView: function(view){
-        new OrderRefundCard({
-          el: view.$(".detail .order_refund"),
-          realtime: {
-            url: '<%= faye_server_uri %>',
-            token: '<%= token %>'
-          }
-        })
-      }
+
+    new OrderRefundList({
+      el: $(".order_refund_list"),
+      remote_url: "<%= person_order_refunds_path(@people) %>"
     })
   })
 </script>

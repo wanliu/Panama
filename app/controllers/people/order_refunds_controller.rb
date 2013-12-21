@@ -4,7 +4,7 @@ class People::OrderRefundsController < People::BaseController
   before_filter :login_and_service_required
 
   def index
-    @refunds = current_user_refunds.order("created_at desc").page(params[:page])
+    @refunds = current_user_refunds.uncomplete.order("created_at desc").page(params[:page])
   end
 
   def show
@@ -18,7 +18,6 @@ class People::OrderRefundsController < People::BaseController
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
     if @refund.buyer_fire_events!(params[:event])
-      @refund.notice_change_seller(params[:event])
       render :partial => "context", :locals => {
         :refund => @refund
       }
@@ -50,6 +49,14 @@ class People::OrderRefundsController < People::BaseController
       else
         format.json{ render :json => draw_errors_message(@refund), :status => 403}
       end
+    end
+  end
+
+  def destroy
+    @refund = current_user_refunds.find_by(:id => params[:id])
+    @refund.destroy
+    respond_to do |format|
+      format.json{ head :no_content }
     end
   end
 
