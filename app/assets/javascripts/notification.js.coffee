@@ -25,8 +25,8 @@ class NotificationManager
     # 活动通知绑定
     # @client.monitor("/activities/arrived", @commonNotify)
     @client.monitor("/activities/add", @commonNotify) # √
-    #@client.monitor("/activities/change", @commonNotify)
-    #@client.monitor("/activities/remove", @commonNotify)
+    # @client.monitor("/activities/change", @commonNotify)
+    # @client.monitor("/activities/remove", @commonNotify)
     @client.monitor("/activities/like", @commonNotify) # √
     @client.monitor("/activities/unlike", @commonNotify) # √
     # 用户关系

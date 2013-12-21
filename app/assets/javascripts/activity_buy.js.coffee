@@ -17,6 +17,9 @@ class root.ActivityBuyView extends Backbone.View
         callback.call(@, html)
     )
 
+  modal: () ->
+    $("body").addClass("noScroll")
+
   render: (html) ->
     @$el.html(html)
     $("#popup-layout").html(@el)

@@ -23,9 +23,9 @@ class Following < ActiveRecord::Base
                     :avatar => user.avatar)
     elsif follow.is_a?(Shop)
       follow.notify("/follow",
-                    "商家#{user.login} 关注了您的商店",
+                    "用户#{user.login} 关注了您的商店",
                     :target => self,
-                    :url => "/shops/#{user.shop.try(:name)}",
+                    :url => "/people/#{user.login}",
                     :avatar => user.avatar)
     end
   end
@@ -41,7 +41,7 @@ class Following < ActiveRecord::Base
       follow.notify("/unfollow",
                     "商家#{user.login} 不再关注您的商店了",
                     :target => self,
-                    :url => "/shops/#{user.shop.try(:name)}",
+                    :url => "/people/#{user.login}",
                     :avatar => user.avatar)
     end
   end
