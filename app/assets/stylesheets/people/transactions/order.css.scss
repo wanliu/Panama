@@ -1,0 +1,144 @@
+@import "lib/transparent";
+@import "compass/css3/transform";
+// @import "people/transactions/3d";
+@import "people/transactions/2columns";
+
+
+.people-groups {
+  // -webkit-perspective: 1000px;
+
+  .seller {
+    margin: 5px 0px;
+
+    padding-left: 50px;
+    height: 50px;
+
+    img {
+      margin-left: -50px;
+      width: 40px;
+      float: left;
+    }
+
+    .shop_info {
+
+      a {
+        color: $white;
+      }
+
+    }
+  }
+
+  .orders {
+
+
+    // margin-left: 35px;
+  }
+
+}
+
+.order_item {
+
+  width: 100%;
+  
+  &.up {
+
+  }
+
+  &.up2 {
+
+  }
+
+  &.up1 {
+
+  }
+
+  &.current {
+
+  }
+
+  &.down1 {
+
+  }
+
+  &.down2 {
+
+  }
+
+
+  &.down {
+
+  }
+
+  &:hover {
+
+  }
+
+  &.opened {
+    .order_item_row {
+      display: none;
+    }
+  }
+
+  .order_item_row {
+    &.widget {
+      margin-bottom: 20px;
+    }
+
+    li.divider {
+      margin-top: 5px;
+      border-bottom: 1px solid $grayLighter;
+    }
+  }
+
+
+  .order_item_header {
+    margin-bottom: 5px;
+    ul.order_header {
+      list-style: none;
+      margin: 0px;
+
+      li.actions {
+        float: right;
+
+        ul {
+          li {
+            float: left;
+            margin: 0 2.5px;
+          }
+
+          li.price {
+            min-width: 60px;
+            text-align: right;
+          }
+
+          li.amount {
+            width: 30px;
+            text-align: right;
+          }
+
+          li.total {
+            min-width: 60px;
+            margin-right: 20px;
+            text-align: right;
+          }
+        }
+      }
+    }
+  }
+
+  .full-mode {
+    margin-bottom: 20px;
+  }
+}
+
+
+.people-chat {
+  background-color: $white;
+  min-height: 400px;
+
+  &.affix {
+    position: fixed;
+    top: 80px;
+    width: 41.0526%;
+  }
+}

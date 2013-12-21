@@ -1,0 +1,19 @@
+<li class='horizontal'>
+  <ul>
+    <li>
+      <img src="<%=item.photos.header %>" alt="<%=item.title %>" class='preview' />
+      <div class='title'>
+        <%=item.title %>
+      </div>
+    </li>
+    <li class='price'>
+      <%= number_to_currency(item.price) %>
+    </li>
+    <li class='amount'>
+      <%= item.amount %>
+    </li>
+    <li class='total'>
+      <%= number_to_currency(item.total) %>
+    </li>
+  </ul>
+</li>

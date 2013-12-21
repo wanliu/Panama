@@ -30,9 +30,14 @@
           <div><span class="m_r">简介</span>
             <textarea class="introduce"><%=circle.description %></textarea>
           </div>
-          <div class="pull-right save">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-            <button class="btn btn-primary update_circle">保存</button>
+          <div class="foot">
+            <div class="pull-left">
+              <%= button_to '删除商圈', { action: :destroy_circle }, class: 'btn btn-danger', confirm: '确定删除商圈吗？', method: :delete %>
+            </div>
+            <div class="pull-right save">
+              <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+              <button class="btn btn-primary update_circle">保存</button>
+            </div>
           </div>
         </div>
         <div class="tab-pane" id="tab2">

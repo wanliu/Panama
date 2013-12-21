@@ -1,2 +1,4 @@
-module Activities::AuctionHelper
+module Activities
+  module AuctionHelper
+  end
 end

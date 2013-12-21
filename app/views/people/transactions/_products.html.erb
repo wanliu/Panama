@@ -23,7 +23,7 @@
       <% transaction.items.each do |item| %>
         <tr data-value-id="<%=item.id %>">
           <td><%= item.id %></td>
-          <td><%= image_tag item.product.photos.icon %></td>
+          <td><%= image_tag item.product.photos.icon, :class => 'avatar avatar-icon' %></td>
           <td><%= item.title %>
           </td>
           <td>

@@ -53,7 +53,7 @@
             <div class='row-fluid products'>
               <div class='span7'>
                 <% t.items.each do |item| %>
-                <%=render_funcat "product_item", :item => item %>
+                <%=render_funcat "product_item", locals => {:item => item} %>
                 <% end %>
               </div>
               <div class='span2'>

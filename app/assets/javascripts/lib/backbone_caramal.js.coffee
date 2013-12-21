@@ -222,7 +222,7 @@ class BaseChatView extends Caramal.BackboneView
     <li clas="row-receive">
       <div class="pull-left">
         <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg" class="" alt="">
+          <img src="/default_img/t5050_default_avatar.jpg">
         </div>
       </div>
       <div class="message-body">
@@ -239,7 +239,7 @@ class BaseChatView extends Caramal.BackboneView
     <li class="row-send">
       <div class="pull-right">
         <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg" class="" alt="">
+          <img src="/default_img/t5050_default_avatar.jpg">
         </div>
       </div>
       <div class="message-body on-left">

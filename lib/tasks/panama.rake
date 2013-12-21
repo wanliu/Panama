@@ -114,7 +114,7 @@ namespace "panama" do
 
   namespace "export" do
 
-
+    desc "exports product tables to sql files"
     task "products" do
       env = ENV['RAILS_ENV'] || 'development'
       puts "exporting #{env} environment data."
@@ -137,6 +137,7 @@ namespace "panama" do
 
   namespace "import" do
 
+    desc "import from sql files to product tables"
     task "products" do
       env = ENV['RAILS_ENV'] || 'development'
       puts "importing #{env} environment data."
