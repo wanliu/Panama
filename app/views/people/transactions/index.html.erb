@@ -22,7 +22,7 @@
       <div class='currentbox'></div>
       <div class='downbox'></div>
     </div>
-     <%= paginate @transactions %>
+    <%= paginate @transactions %>
   </div>
   <div class='order-detail'>
 
@@ -48,8 +48,11 @@
       child: ".order_item",
       secondContainer: ".order-detail",
       remote_url: "<%= person_transactions_path(@people) %>",
-      faye_url: '<%= faye_server_uri %>',
-      token: '<%= token %>'
+      registerView: function(view){
+        new TransactionCard({
+          el: $(".transaction", view.$detail)
+        })
+      }
     });
   })
 </script>

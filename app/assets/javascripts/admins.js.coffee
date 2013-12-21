@@ -33,3 +33,5 @@
 #= require admins/shops/shop_direct_transaction_list
 #= require admins/shops/community_message
 #= require people/community
+#= require transactions/2columns_viewport
+#= require transactions/mini_left_side

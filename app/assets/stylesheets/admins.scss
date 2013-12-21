@@ -20,6 +20,8 @@
 @import "admins/shops/community_people";
 @import "people/community_people";
 @import "order_refund";
+@import 'transactions/order';
+@import 'transactions/product_item';
 
 
 $left-side-admin-width: 160px;

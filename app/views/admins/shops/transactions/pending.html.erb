@@ -33,45 +33,26 @@
   </div>
 </div>
 <div class='row-fluid transaction-list'>
-  <div class='span12'>
-    <div class='widget'>
-      <div class='row-fluid'>
-        <div class='span7'>
-          <div class='span7'>
-            商品
-          </div>
-          <div class='span3'>
-            单价
-          </div>
-          <div class='span2'>
-            数量
-          </div>
-        </div>
-        <div class='span2'>
-          合计
-        </div>
-        <div class='span2'>
-          状态
-        </div>
-        <div class='span1'>
-          操作
-        </div>
-      </div>
-      <% if @transactions.length > 0 %>
-        <% @transactions.each do |t| %>
-          <%=render :partial => "transaction_item", :locals => {:transaction => t} %>
-        <% end %>
-      <% else %>
-        <div class='row-fluid'>
-          <div class='span12 widget'>
-            暂时没有订单
-          </div>
-        </div>
-      <% end %>
+  <div class='span12 left'>
+    <div class='people-groups'>
     </div>
+
+    <div class='threeD-viewport'>
+      <div class='orders'>
+        <%= render :partial => "order_mini_row", :collection => @transactions * 20, :as => :row %>
+      </div>
+    </div>
+
+    <div class='boxes'>
+      <div class='upbox'></div>
+      <div class='currentbox'></div>
+      <div class='downbox'></div>
+    </div>
+    <%= paginate @transactions %>
   </div>
+  <div class='order-detail'></div>
 </div>
-<%= paginate @transactions %>
+
 <script type="text/javascript">
   $(function(){
 
@@ -81,19 +62,29 @@
       token: "<%= current_shop.im_token %>"
     }
 
-    var orders = new ShopOrderTransactions({
+    new TransactionTwoColumnsViewport({
       el: $(".transaction-list"),
+      child: ".order_item",
+      secondContainer: ".order-detail",
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
-      shop: shop})
+      leftSide: "#left_sidebar",
+      registerView: function(view){
+        new ShopTransactionCard({
+          el: $(".transaction", view.$detail)
+        })
+      }
+    })
+
+    // var orders = new ShopOrderTransactions({
+    //   el: $(".transaction-list"),
+    //   remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
+    //   shop: shop})
 
     var dispose_view = new TransactionDispose({
       el: $("table.untransactions"),
       shop: shop,
       tranOpts: {
-        transactions: {
-          // tran_panel: $(".transaction_list"),
-          // tran_card: transactionCard
-        }
+        transactions: { }
       },
       template: Hogan.compile("<%= j render :partial => 'untransaction' %>")
     })

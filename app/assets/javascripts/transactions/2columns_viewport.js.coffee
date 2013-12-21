@@ -20,7 +20,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   leftSide: "#people-sidebar"
   secondContainer: ".order-detail"
   leftClass: "float"
-  rightClass: "span12"
+  rightClass: ""
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -43,7 +43,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
         full_mode: true,
         elem: $(ele),
         listView: @,
-        id: $(ele).attr('data-value-id')        
+        id: $(ele).attr('data-value-id')
       )
 
       @models.add(model)
@@ -53,10 +53,11 @@ class TransactionTwoColumnsViewport extends Backbone.View
     delete model.attributes.elem
 
     rowView = new MiniRow2ColView({
-      el: elem, 
+      el: elem,
       parentView: @,
       model: model
-    })  
+    })
+    rowView.bind("registerView", _.bind(@registerView, @))
 
     @rows.push rowView
 
@@ -88,7 +89,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @$orderList.css({
       'left': 0
     })
-    
+
   moveToDetail: (view, callback) =>
     @currentView = view
     el = view.$el
@@ -122,8 +123,10 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
   enterColumnsLayout: (callback) =>
     unless @inLayout
-      @inLayout = true  
-      @$sidebar ||= new MiniLeftSideView({el: "#people-sidebar", exitCallback: @exitLayout})
+      @inLayout = true
+      @$sidebar ||= new MiniLeftSideView({
+        el: @leftSide,
+        exitCallback: @exitLayout})
       @$sidebar.buildMenu()
       @$sidebar.mini()
 
@@ -172,6 +175,8 @@ class TransactionTwoColumnsViewport extends Backbone.View
   exceptView: (view) ->
     @except = view
 
+  registerView: (view) ->
+
 
 class MiniRow2ColView  extends Backbone.View
 
@@ -195,13 +200,7 @@ class MiniRow2ColView  extends Backbone.View
         if @$detail.is(":empty")
           @model.loadTemplate (data) =>
             @$detail.html(data)
-            @card = new TransactionCard({
-              el: @$detail,
-              realtime: {
-                url: @parentView.faye_url,
-                token: @parentView.token
-              }
-            });
+            @trigger("registerView", @)
             @fullMode()
         else
           @fullMode()
@@ -214,7 +213,7 @@ class MiniRow2ColView  extends Backbone.View
       .css
         'margin-left': 0
         'opacity': 1
-      
+
 
   miniMode: () ->
     @$detail.hide()
@@ -237,7 +236,7 @@ class MiniRow2ColView  extends Backbone.View
       # .css({
       #   "-webkit-transform": "translate3d(0px, 0px, 0px) rotateX(0deg)",
       #   "-moz-transform": "translate3d(0px,0px, 0px) rotateX(0deg)",
-      #   "transform": "translate3d(0px, 0px, 0px) rotateX(0deg)"         
+      #   "transform": "translate3d(0px, 0px, 0px) rotateX(0deg)"
       #   })
 
   normal: () =>
@@ -246,7 +245,7 @@ class MiniRow2ColView  extends Backbone.View
       .css({
         "-webkit-transform": "translate3d(0px, 0px, 0px) rotateX(0deg)",
         "-moz-transform": "translate3d(0px,0px, 0px) rotateX(0deg)",
-        "transform": "translate3d(0px, 0px, 0px) rotateX(0deg)"         
+        "transform": "translate3d(0px, 0px, 0px) rotateX(0deg)"
       })
 
 
@@ -255,6 +254,6 @@ class MiniRow2ColView  extends Backbone.View
     @$el
       .addClass("threeD")
       .removeClass("active")
- 
 
-root.TransactionTwoColumnsViewport = TransactionTwoColumnsViewport      
+
+root.TransactionTwoColumnsViewport = TransactionTwoColumnsViewport
