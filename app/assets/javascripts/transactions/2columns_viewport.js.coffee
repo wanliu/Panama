@@ -97,25 +97,15 @@ class TransactionTwoColumnsViewport extends Backbone.View
     posTarget = @$secondContainer.position()
     widthTarget = @$secondContainer.width()
 
-    @placeHolder el, (cargo, holder) =>
+    el
+      .attr('style', '')
+      .appendTo(@$secondContainer)
+      .css
+        'margin-left': 200
+        'opacity': 0
 
-      cargo
-        .addClass("animation-play1")
-        .css({
-          top: posTarget.top,
-          left: posTarget.left,
-          width: widthTarget
-        })
 
-      setTimeout () =>
-          el
-            .appendTo(@$secondContainer)
-            .attr('style', '')
-          $(holder).remove()
-          cargo.remove()
-          callback()
-
-        , 500
+    callback()
 
 
   restoreFromDetail: () =>
@@ -127,25 +117,8 @@ class TransactionTwoColumnsViewport extends Backbone.View
       posTarget = $target.position()
       widthTarget = $target.width()
 
-      @placeHolder el, (cargo, holder) =>
-
-        cargo
-          .addClass("animation-play1")
-          .css({
-            top: posTarget.top,
-            left: posTarget.left,
-            width: widthTarget
-          })
-
-        setTimeout () =>
-            el.insertBefore($target)
-            el.attr('style', '')
-
-            $(holder).remove()
-            cargo.remove()
-            # callback()
-            @currentView.delegateEvents()
-          , 500      
+      el.insertBefore($target)
+      el.attr('style', '')
 
   enterColumnsLayout: (callback) =>
     unless @inLayout
@@ -199,43 +172,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   exceptView: (view) ->
     @except = view
 
-  # 工具方法
-  placeHolder: (el, callback) ->
-    width = $(el).width()
-    height = $(el).width()
-    pos = $(el).offset()
 
-    @$cargo = $("<div class='cargo' >").appendTo("body")
-    @$holder = $("<div >")
-    @$holder
-      .width(width)
-      .height(height)
-      .insertBefore(el)
-
-    cargoElement = @$cargo[0];
-    cargoElement.appendChild(el[0])
-    # el.ap.appendTo(@$cargo)
-
-    @$cargo
-      .width(width)
-      .height(height)
-      .css({
-        position: 'absolute',
-        top:  pos.top,
-        left: pos.left
-      })
-
-    # console.log(@$cargo[0], pos)
-
-    callback(@$cargo, @$holder)
-    # @$cargo.remove()
-
-    # @$cargo.css({
-    #     'webkitTransition': '0.5s',
-    #     'mozTransition': '0.5s',
-    #     'msTransition': '0.5s',
-    #     'transition': '0.5s',
-    #   })
 class MiniRow2ColView  extends Backbone.View
 
   events:
@@ -270,8 +207,14 @@ class MiniRow2ColView  extends Backbone.View
           @fullMode()
 
   fullMode: () ->
-    @$detail.show()
     @$(".order_item_row").hide()
+    @$detail.show()
+
+    @$el
+      .css
+        'margin-left': 0
+        'opacity': 1
+      
 
   miniMode: () ->
     @$detail.hide()
