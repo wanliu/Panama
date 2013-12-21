@@ -135,7 +135,7 @@ Panama::Application.routes.draw do
       end
 
       collection do
-        post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
+        post "batch_create", :to => "people/transactions#batch_create"
         get "completed", :to => "people/transactions#completed"
         get "unread_messages", :to => "people/transactions#unread_messages"
       end
@@ -223,6 +223,10 @@ Panama::Application.routes.draw do
       member do
         post 'move_out_cart', :to => "people/cart#move_out_cart"
         post 'change_number', :to => "people/cart#change_number"
+      end
+
+      collection do
+        post 'move_out', :to => 'people/cart#move_out'
       end
     end
 

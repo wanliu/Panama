@@ -45,17 +45,20 @@ class Cart < ActiveRecord::Base
     end
   end
 
-  def create_transaction(people)
-    done = shop_items.map do |header, pro_items|
+  def create_transaction(people, item_ids)
+    done = cart_items(item_ids).map do |header, pro_items|
       if header[:buy_state] == :guarantee
         save_transcation(header[:shop], pro_items, people)
       else
         create_direct_transaction(header[:shop], pro_items, people)
       end
     end.all?
-
-    destroy if done # FIXME :should't be items.clear?
+    items.where("id in (?)", item_ids).update_all(cart_id: nil) if done # FIXME :should't be items.clear?
     done
+  end
+
+  def cart_items(item_ids = [])
+    items.where("id in (?)", item_ids).group_by { |item| {shop: item.shop, buy_state: item.buy_state.name} }
   end
 
   def shop_items
