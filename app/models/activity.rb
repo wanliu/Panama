@@ -20,14 +20,14 @@ class Activity < ActiveRecord::Base
   belongs_to :shop
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
 
-  has_many :activity_rules, autosave: true
-  has_many :comments, :as => :targeable
-  has_many :activities_likes
+  has_many :activity_rules, autosave: true, dependent: :destroy
+  has_many :comments, :as => :targeable, dependent: :destroy
+  has_many :activities_likes, dependent: :destroy
   has_many :likes, :through => :activities_likes, :source => :user
   has_and_belongs_to_many :attachments, class_name: "Attachment"
   has_and_belongs_to_many :transactions, class_name: "OrderTransaction"
 
-  has_many :activities_participates
+  has_many :activities_participates, dependent: :destroy
   has_many :participates, :through => :activities_participates, :source => :user
   has_one :temporary_channel, :as => :targeable
   # validates_associated :product
@@ -57,15 +57,17 @@ class Activity < ActiveRecord::Base
     author.notify("/activities/add",
                   message,
                   {:url => notify_url,
-                  :target => self })
+                   :target => self })
   end
 
   def notice_followers
     unless shop.followers.blank?
-      shop.followers.each do |follower|
+      (shop.followers - [ author ]).each do |follower|
         follower.user.notify('/activities/add', 
-                             "您关注的商家#{shop.name}发布新活动 #{title}",
-                             { :target => self, :url => notify_url } )
+                             "您关注的商家 #{shop.name} 发布新活动 #{title} 敬请期待",
+                             {:target => self, 
+                              :url => notify_url,
+                              :avatar => photos.avatar } )
       end
     end
   end

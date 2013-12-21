@@ -78,7 +78,7 @@ class ActivitiesController < ApplicationController
   def unlike
     @activity = Activity.find(params[:id])
     begin
-      @activity.likes.delete(current_user)
+      ActivitiesLike.where(:activity_id => @activity.id, :user_id => current_user.id).first.destroy
     rescue ActiveRecord::RecordNotFound
     end
     # render :text => :OK
