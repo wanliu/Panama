@@ -89,19 +89,19 @@ class root.TableListView extends Backbone.View
     view.bind("bind_view", _.bind(@bindView, @))
     view.bind("minimum", _.bind(@minimum, @))
 
+  loadView: () ->
+    _.each @$(@child), (el) => @add(el)
+
   add: (item) ->
     @transactions.add(
-      summar_display: true,
+      full_mode: true,
       elem: $(item),
+      listView: @,
       id: $(item).attr('data-value-id'))
-
-  load_view: () ->
-    _.each @$(".item"), (el) => @add(el)
 
   minimum: (model) ->
     for m in @transactions.models
       m.set(full_mode: true) unless m.id == model.id
-
 
   bindView: (view) ->
 
