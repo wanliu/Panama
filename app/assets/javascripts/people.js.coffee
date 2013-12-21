@@ -7,7 +7,6 @@
 #= require models/element_model
 #= require people/people_side
 #= require lib/chosen.jquery
-#= require lib/modify_number
 #= require people/followers
 #= require following
 #= require people/cart
