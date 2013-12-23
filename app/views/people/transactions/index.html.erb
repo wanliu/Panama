@@ -12,7 +12,7 @@
     </div>
 
     <div class='threeD-viewport'>
-       <div class='orders'>
+      <div class='orders card_list'>
         <%= render :partial => "order_mini_row", :collection => @transactions, :as => :row %>
       </div>
     </div>
@@ -24,28 +24,14 @@
     </div>
     <%= paginate @transactions %>
   </div>
-  <div class='order-detail'>
-
-  </div>
-
-<!--   <div class='span5'>
-    <div class='people-chat' data-spy="affix" data-offset-top="80">
-
-    </div>
-  </div> -->
+  <div class='order-detail'></div>
 
 </div>
 <script type='text/javascript'>
   $(function(){
 
-    // var orders = new OrderTransactions({
-    //   el: $(".transaction-list"),
-    //   remote_url: "<%= person_transactions_path(@people) %>"
-    // })
-
     var view = new TransactionTwoColumnsViewport({
       el: $(".transaction-list"),
-      child: ".order_item",
       secondContainer: ".order-detail",
       remote_url: "<%= person_transactions_path(@people) %>",
       registerView: function(view){

@@ -36,7 +36,7 @@
 
 }
 
-.order_item {
+.card_item {
 
   width: 100%;
 
@@ -79,7 +79,7 @@
     }
   }
 
-  .order_item_row {
+  .card_item_row {
     &.widget {
       margin-bottom: 20px;
     }
@@ -91,7 +91,7 @@
   }
 
 
-  .order_item_header {
+  .card_item_header {
     margin-bottom: 5px;
     ul.order_header {
       list-style: none;
@@ -130,7 +130,6 @@
     margin-bottom: 20px;
   }
 }
-
 
 .people-chat {
   background-color: $white;

@@ -14,13 +14,14 @@ class Transactions extends Backbone.Collection
 class TransactionTwoColumnsViewport extends Backbone.View
 
   el: ".transaction-list"
-  child: ".order_item"
+  child: ".card_item"
   orderList: ".left"
   contrainer: ".order-viewport"
   leftSide: "#people-sidebar"
   secondContainer: ".order-detail"
   leftClass: "float"
   rightClass: ""
+  warpClass: ".orders"
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -32,7 +33,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @$contrainer = @$(@contrainer)
     @$orderList = @$(@orderList)
     @$secondContainer = @$(@secondContainer)
-    @$orders = @$(".orders")
+    @$orders = @$(@warpClass)
     @loadView()
 
   getCurrentTransaction: () ->
@@ -206,7 +207,7 @@ class MiniRow2ColView  extends Backbone.View
           @fullMode()
 
   fullMode: () ->
-    @$(".order_item_row").hide()
+    @$(".card_item_row").hide()
     @$detail.show()
 
     @$el
@@ -217,7 +218,7 @@ class MiniRow2ColView  extends Backbone.View
 
   miniMode: () ->
     @$detail.hide()
-    @$(".order_item_row").show()
+    @$(".card_item_row").show()
 
   saveSize: () =>
     @width = @$el.width()
