@@ -30,15 +30,20 @@
 <script type='text/javascript'>
   $(function(){
 
-    var view = new TransactionTwoColumnsViewport({
+    // var view = new TransactionTwoColumnsViewport({
+    //   el: $(".transaction-list"),
+    //   secondContainer: ".order-detail",
+    //   remote_url: "<%= person_transactions_path(@people) %>",
+    //   registerView: function(view){
+    //     new TransactionCard({
+    //       el: $(".transaction", view.$detail)
+    //     })
+    //   }
+    // });
+
+    var orders = new OrderTransactions({
       el: $(".transaction-list"),
-      secondContainer: ".order-detail",
-      remote_url: "<%= person_transactions_path(@people) %>",
-      registerView: function(view){
-        new TransactionCard({
-          el: $(".transaction", view.$detail)
-        })
-      }
-    });
+      remote_url: "<%= person_transactions_path(@people) %>"
+    })
   })
 </script>

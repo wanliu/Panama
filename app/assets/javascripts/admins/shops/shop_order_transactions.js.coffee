@@ -1,4 +1,4 @@
-#= require lib/table_list
+#= require transactions/2columns_viewport
 #= require admins/shops/shop_transaction_card
 
 root = (window || @)
@@ -19,15 +19,15 @@ class TransactionView extends Backbone.View
     super
 
   change_state: () ->
-    unless _.isEmpty(@card)
-      @card.stateChange(event: @model.get("event"))
+    #unless _.isEmpty(@card)
+    #  @card.stateChange(event: @model.get("event"))
 
     @change_table_state()
 
   register_view: () ->
     if @model.get("register")
       @card = new ShopTransactionCard({
-        el: @$(".detail .transaction"),
+        el: @$(".full-mode .transaction"),
         shop: @shop
       })
       @card.transaction.bind("change:state", @card_change_state, @)
@@ -44,7 +44,8 @@ class TransactionView extends Backbone.View
     @model._currentAttributes.state = state
 
   change_table_state: () ->
-    @$(".state_title").html(@model.get("state_title"))
+    @$(".order_header .state-label").html(
+      @model.get("state_title"))
 
 class root.ShopOrderTransactions extends Backbone.View
 
@@ -56,12 +57,13 @@ class root.ShopOrderTransactions extends Backbone.View
     @collection = new Transactions
     @collection.bind("add", @add_one, @)
     @load_table_list()
-    @reset()
     @realtime_load()
+    @reset()
 
   add_one: (model) ->
     elem = model.get("elem")
     delete model.attributes.elem
+    @monitor_state model.id
     new TransactionView(
       model: model,
       el: elem,
@@ -69,7 +71,7 @@ class root.ShopOrderTransactions extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".item"), (el) =>
+    _.each @$(".orders>.card_item"), (el) =>
       @collection.add(
         elem: $(el),
         register: false,
@@ -85,7 +87,8 @@ class root.ShopOrderTransactions extends Backbone.View
     @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/destroy", (data) =>
       @destroy data
 
-    @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/change_state", (data) =>
+  monitor_state: (order_id) ->
+    @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/#{order_id}/change_state", (data) =>
       @change_state data
 
   destroy: (data) ->
@@ -101,8 +104,10 @@ class root.ShopOrderTransactions extends Backbone.View
         state_title: data.state_title})
 
   load_table_list: () ->
-    @table = new TableListView(
+    @table = new TransactionTwoColumnsViewport({
       el: @$el,
+      secondContainer: ".order-detail",
       remote_url: @remote_url,
-      bindView: (view) =>  @register(view.model.id)
-    )
+      leftSide: "#left_sidebar",
+      registerView: (view) => @register(view.model.id)
+    })
