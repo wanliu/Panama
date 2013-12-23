@@ -49,6 +49,8 @@ class Activity < ActiveRecord::Base
     validate_destroy_access?
   end
 
+  after_create :create_the_temporary_channel
+
   def notify_url
     "/activities/#{id}"
   end
@@ -303,5 +305,10 @@ class Activity < ActiveRecord::Base
     if Activity.statuses[:access] == Activity.find(self.id).status
       errors.add(:status, "已经审核了，不能修改！")
     end
+  end
+
+  def create_the_temporary_channel
+    name = self.class.to_s << "_" << title
+    self.create_temporary_channel(targeable_type: "Activity", user_id: shop.owner.id, name: name)
   end
 end

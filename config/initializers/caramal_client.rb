@@ -30,8 +30,11 @@ class CaramalClient
     ch.close
   end
 
-  def self.create_temporary_channel(name, owner, &block)
-    data = {:name => name, :owner => owner}.to_json
+  def self.create_temporary_channel(name, owner, options={}, &block)
+    data = {:name => name, :owner => owner}
+    data.merge!(options)
+    data = data.to_json
+
     ch  = conn.create_channel
     x = ch.default_exchange
 

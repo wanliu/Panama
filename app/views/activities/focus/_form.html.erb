@@ -77,7 +77,7 @@
               id: "activity_focus_end_time",
               input_html: {
                 name: 'activity[end_time]',
-                value: (DateTime.now + (Settings.Focus["end_time"] || 8).days).strftime('%m/%d/%Y')
+                value: (DateTime.now + (Settings.Focus["start_time"] || 8).days).strftime('%m/%d/%Y')
               } %>
   </div>
 
