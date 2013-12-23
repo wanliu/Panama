@@ -1,0 +1,25 @@
+<% buyer = transaction.buyer %>
+<div class='chat_dialog_panel'>
+  <div class='dialog_head'>
+    <span class='state offline'></span>
+    <span class='name'><%= buyer.login %></span>
+  </div>
+  <div class='dialog_content_panel'>
+    <div class='dialog_content'>
+      <ul>
+        <li>正在加载...</li>
+      </ul> 
+    </div>
+    <div class='dialog_foot'>
+      <form>
+        <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>" />
+        <div class='content'>
+          <textarea name='content'></textarea>
+        </div>
+        <div class='foot_nav'>
+          <input type='submit' value='发送' />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
