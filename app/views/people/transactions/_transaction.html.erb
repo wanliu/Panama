@@ -40,6 +40,7 @@
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %>
           </div>
           <div class='message_wrap'>
+            <%#= render 'chat_dialog', transaction: transaction, people: people %>
             <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>" style="frameborder: 0;">
             </iframe>
           </div>
