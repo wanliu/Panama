@@ -29,8 +29,7 @@ class OrderTransaction < ActiveRecord::Base
           foreign_key: "delivery_type_id"
 
   belongs_to :seller, class_name: "Shop"
-  belongs_to :buyer,
-             class_name: "User"
+  belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "TransactionOperator"
   belongs_to :pay_manner
   belongs_to :delivery_manner

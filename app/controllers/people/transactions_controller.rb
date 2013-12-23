@@ -47,11 +47,11 @@ class People::TransactionsController < People::BaseController
     if @transaction.buyer_fire_event!(event_name)
       @transaction.notice_change_seller(event_name)
       render partial: 'transaction',
-                   object:  @transaction,
-                   locals: {
-                     state:  @transaction.state,
-                     people: @people
-                   }
+             object:  @transaction,
+             locals: {
+                state:  @transaction.state,
+                people: @people
+              }
     else
       render :json => {message: "#{event_name}不属性你的!"}, :status => 403
       # render :partial => 'transaction', :transaction => @transaction, :layout => false
