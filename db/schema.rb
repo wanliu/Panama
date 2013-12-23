@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(:version => 20131221080042) do
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
     t.string   "title"
-    t.string   "group_name"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -562,7 +561,6 @@ ActiveRecord::Schema.define(:version => 20131221080042) do
     t.integer  "delivery_manner_id"
     t.integer  "logistics_company_id"
     t.integer  "online_pay_type",                                     :default => 0
-    t.string   "group_name"
   end
 
   create_table "pay_manners", :force => true do |t|
