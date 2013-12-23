@@ -15,7 +15,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
   el: ".transaction-list"
   child: ".order_item"
-  orderList: ".left"
+  orderList: ".left-column"
   contrainer: ".order-viewport"
   leftSide: "#people-sidebar"
   secondContainer: ".order-detail"

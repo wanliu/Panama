@@ -16,22 +16,29 @@
             <div class="page-header">
               <div class="trasaction-title">
                 <div class="name"><%= seller.name %></div>
+                <div class="address"><%= seller.address.location %></div>
+              </div>
+<!--               <div class="transaction-actions">
                 <% if transaction.close_state? %>
                   <button type="button" class="btn_delete">&times;</button>
                 <% end %>
-                <%= render "state_buttons", :transaction => transaction %>
+
               </div>
-              <div class="transaction-number">
+ -->
+<!--               <div class="transaction-number">
                 <span class='number'>
                   订单编号: <%=transaction.number %>
                 </span>
                 <span class='pull-right'><%=transaction.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
         <div class="transaction-body">
           <%= render state, transaction: transaction, people: people %>
+          <div class='transaction-actions'>
+            <%= render "state_buttons", :transaction => transaction %>
+          </div>
         </div>
       </div>
       <div class='span5 chat_wrapper'>

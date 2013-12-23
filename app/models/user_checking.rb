@@ -62,12 +62,23 @@ class UserChecking < ActiveRecord::Base
     save
   end
 
-  def send_checked_mail
-    UserMailer.delay.send_user_checked_notify(user.email, ower_name, user.shop.shop_url)
+  def default_url 
+    site_name = Settings.defaults["site_name"] || "万流电商平台"
+    site_url  = Settings.defaults["site_url"] || "http://panama.wanliu.biz"
+    url = if user.shop.blank?
+            File.join(site_url, "/people/#{user.login}")
+          else
+            File.join(site_url, user.shop.shop_url)
+          end
   end
 
-  def send_rejected_mail
-    UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, user.shop.shop_url)
+  def send_checked_mail
+
+    UserMailer.delay.send_user_checked_notify(user.email, ower_name, default_url)
+  end
+
+  def send_rejected_mail(url)
+    UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, default_url)
   end
 
   def self.users_checking_query

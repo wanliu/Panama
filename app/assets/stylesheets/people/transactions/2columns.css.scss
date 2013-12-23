@@ -1,4 +1,4 @@
-.left {
+.left-column {
 	&.float {
 		position: fixed;
 		top: 0px;
@@ -8,7 +8,8 @@
 		z-index: 1099;
 		background-color: $white;
 	}
-	@include transition(all 0.5s ease-in-out 0.0s);
+	@include transition(0.5s);
+
 	
     // @include transform-style(preserve-3d);
 
@@ -25,14 +26,3 @@
 	z-index: 2099;
 }
 
-.animation-play1 {
-	@include transition(all 0.5s ease-in-out 0.0s);	
-}
-
-.animation-play2 {
-	@include transition(all 0.5s ease-in-out 0.2s);	
-}
-
-.animation-play3 {
-	@include transition(all 0.5s ease-in-out 0.3s);	
-}
