@@ -6,7 +6,7 @@
     </div>
 
     <div class='threeD-viewport'>
-       <div class='directs'>
+       <div class='refunds'>
         <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
       </div>
     </div>
@@ -23,6 +23,19 @@
 
 <script type='text/javascript'>
   $(function(){
+
+    var view = new TransactionTwoColumnsViewport({
+      el: $(".order_refund_list"),
+      secondContainer: ".refund-detail",
+      warpClass: ".refunds",
+      remote_url: "<%= person_order_refunds_path(@people) %>",
+      registerView: function(view){
+        new OrderRefundCard({
+          el: $(".order_refund", view.$detail)
+        })
+      }
+    });
+
     // new OrderRefundList({
     //   el: $(".order_refund_list"),
     //   remote_url: "<%= person_order_refunds_path(@people) %>"
