@@ -32,65 +32,10 @@
   </div>
 </div>
 
-<div class='delivery_panel'>
-  <div class='delivery_manner'>
-    <label class="chosen control-label" for="transaction_delivery_type">运输方式</label>
-    <div class="controls controls-row">
-      <div class='delivery_manner_panel'>
-        <span class='chose_name'>
-          卖家选择
-        </span>
-        <a href='javascript:void(0)' class='mdify_show'>修改</a>
-      </div>
-      <div class='chose_delivery_manner_panel'>
-        <ul>
-          <li data-value-code=''>
-            <span class='title'>
-              <input type="radio" name='order_transaction[delivery_manner_id]' checked value="0" />
-              <span class='name'>
-                卖家选择
-              </span>
-            </span>
-          </li>
-          <% DeliveryManner.avaliable.each do |item| %>
-          <li data-value-code='<%=item.code %>'>
-            <span class='title'>
-              <input type="radio" name='order_transaction[delivery_manner_id]' value='<%=item.id %>' />
-              <span class='name'>
-                <%=item.name %>
-              </span>
-            </span>
-          </li>
-          <% end %>
-        </ul>
-        <input type='button' value='确认' class='mdify btn btn-large btn-primary btn-small' />
-      </div>
-    </div>
-  </div>
-  <div class="delivery-select">
-    <label class="chosen control-label">配送方式</label>
-    <div class="controls controls-row">
-      <div class="span7">
-        <select name='order_transaction[delivery_type_id]' class='order_delivery_type_id'>
-          <% DeliveryType.all.each do |dt| %>
-            <option value='<%=dt.id %>'>
-              <%=dt.name %>  <%= number_to_currency(dt.try(:price)) %>
-            </option>
-          <% end %>
-        </select>
-      </div>
-      <div class="span5 delivery_price hide">
-      </div>
-    </div>
-  </div>
-</div>
 
 <script type='text/javascript' >
     new TransactionPayManner({
       el: $(".transaction-<%=transaction.id %>-<%= transaction.state %>")
     })
-
-    new TransactionDeliveryManner({
-      el: $(".transaction-<%=transaction.id %>-<%= transaction.state %> .delivery_panel")
-    })
 </script>
+

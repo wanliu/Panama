@@ -81,7 +81,7 @@ gem "rest-client", '~> 1.6.7'
 # rmagick
 gem "mini_magick", '~> 3.4'
 
-gem "bunny", "~> 0.9.0.pre9"
+gem "bunny", "~> 1.0.4"
 
 # To use debugger
 #

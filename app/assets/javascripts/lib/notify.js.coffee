@@ -64,7 +64,7 @@ class Notifier
     }
 
   default_options: {
-    delay: 8000,
+    timeout: 8000,
     title: "系统提醒",
     text: "",
     type: "success",
