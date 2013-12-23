@@ -1,4 +1,6 @@
-class window.ShopDirectTransactionView extends Backbone.View
+root = (window || @)
+
+class root.ShopDirectTransactionView extends Backbone.View
   events: {
     "click .direct-message button" : "toggle_message"
   }
@@ -7,7 +9,6 @@ class window.ShopDirectTransactionView extends Backbone.View
     _.extend(@, options)
     @init_elem()
     @direct_transaction_id = @$el.attr("data-value-id")
-    @realtime_load()
     @load_style()
 
   init_elem: () =>
@@ -22,13 +23,7 @@ class window.ShopDirectTransactionView extends Backbone.View
     setTimeout () =>
       padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
       @$messages.height( @$info.outerHeight() - @$toolbar.outerHeight() - padding)
-    , 200
+    , 60
 
   toggle_message: () ->
     @$messages.slideToggle()
-
-  realtime_load: () ->
-    # @client = Realtime.client(@realtime_url)
-    @client = window.clients
-    @client.subscribe "/DirectTransaction/#{@direct_transaction_id}/#{@shop.token}/#{@token}/destroy", () =>
-      @remove()

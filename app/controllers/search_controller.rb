@@ -42,7 +42,7 @@ class SearchController < ApplicationController
     query_val = "%#{params[:q]}%"
     users = User.where("id<>#{current_user.id} and (login like ? or email like ?)", query_val, query_val).limit(params[:limit])
     respond_to do |format|
-      format.json{ render :json => users.as_json(:methods => :value) }
+      format.json{ render :json => users }
     end
   end
 

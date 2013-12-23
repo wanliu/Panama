@@ -30,17 +30,15 @@
       template: template,
       current_user: {
         id: <%=current_user.id %>,
-        token: "<%=current_user.im_token %>",
         login: "<%=current_user.login %>"
       },
-      faye_url: "<%=faye_server_uri %>",
       tansaction_id: <%=direct_transaction.id %>,
       shop: {
         id: "<%=direct_transaction.seller.id %>",
         name: "<%=direct_transaction.seller.name %>",
         token: "<%=direct_transaction.seller.im_token%>"
       },
-      realtime_key: 'DirectTransaction'
+      realtime_key: 'direct_transactions'
     })
   })
 </script>

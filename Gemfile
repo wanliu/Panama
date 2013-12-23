@@ -88,7 +88,7 @@ gem "bunny", "~> 0.9.0.pre9"
 # Pagination
 gem 'kaminari', '~> 0.14.1'
 gem 'kuaiqian', "~> 0.0.1", :github => "huxinghai1988/kuaiqian"
-gem 'tire_update_by_query', "~> 0.0.6", :github => "huxinghai1988/tire_update_by_query"
+gem 'tire_update_by_query', "~> 0.0.7", :github => "huxinghai1988/tire_update_by_query"
 
 
 gem 'omniauth-wanliu', "0.1.1", :github => "wanliu/omniauth-wanliu"

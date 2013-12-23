@@ -1,124 +1,129 @@
 <% admin_active_section :employees %>
 
-<div class='employee-groups widget span8'>
-	<div class='invite-employee span8'>
-		<form class="form-search-user">
-			<input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>" />
-			<div class="alert alert-message" style='display:none'>
-				<button type="button" class="close" data-dismiss="alert">x</button>
-				<p class='content'></p>
-			</div>
-			<span>
-				<strong>请输入邀请人的Email地址</strong>
-			</span>
-			<input type="text" name='login' />
-			<button type="submit" class="btn btn-primary">邀请</button>
-		</form>
-	</div>
+<div class='row-fluid'>
+  <div class='employee-groups widget span8'>
 
-	<div class='employees span8'>
-		<h4>成员</h4>
-		<% if @employees.count > 0 %>
-			<% @employees.each do |e| %>
-				<div class='span2 alert alert-info employee' data-value-id="<%= e.id %>" data-value-login="<%=e.login %>">
-					<div class='avatar inline'>
-						<img class='img-rounded' src="<%= e.photos.icon %>" />
-					</div>
-					<div class='info inline'>
-						<div>
-							<%= e.login %>
-						</div>
-						<div>
-							<label class='label label-important remove'>移除</label>
-						</div>
-					</div>
-				</div>
-			<% end %>
-		<% else %>
-			<div class='span3 alert alert-warning'>暂无雇员</div>
-		<% end %>
-	</div>
+    <div class='invite-employee'>
+      <form class="form-search-user">
+        <input type="hidden" name='authenticity_token' value="<%= form_authenticity_token %>" />
+        <div class="alert alert-message" style='display:none'>
+          <button type="button" class="close" data-dismiss="alert">x</button>
+          <p class='content'></p>
+        </div>
+        <span>
+          <strong>请输入邀请人的Email地址</strong>
+        </span>
+        <input type="text" name='login' />
+        <button type="submit" class="btn btn-primary">邀请</button>
+      </form>
+    </div>
 
-	<div class="user-groups span8">
-		<h4>用户组</h4>
-		<ul class="nav nav-tabs user-group-header">
-		</ul>
-		<div class="tab-content user-group-content">
-		</div>
-	</div>
-	<div class='permission-groups span8' style="display:none">
-		<div>
-			<h4 style='display:inline-block'>权限组</h4>
-			<button class='btn btn-primary pull-right add-group'>添加组</button>
-		</div>
-		<div class="tabbable tabs-left">
-			<ul class="nav nav-tabs permission-groups-header">
+    <div class='employees'>
+      <h4>成员</h4>
+      <div class='row-fluid'>
+      <% if @employees.count > 0 %>
+        <% @employees.each do |e| %>
+          <div class='span4 alert alert-info employee' data-value-id="<%= e.id %>" data-value-login="<%=e.login %>">
+            <div class='avatar inline'>
+              <img class='img-rounded' src="<%= e.photos.icon %>" />
+            </div>
+            <div class='info inline'>
+              <div>
+                <%= e.login %>
+              </div>
+              <div>
+                <label class='label label-important remove'>移除</label>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class='span3 alert alert-warning'>暂无雇员</div>
+      <% end %>
+      </div>
+    </div>
 
-			</ul>
-			<div class="tab-content permission-groups-content">
-			</div>
-		</div>
+    <div class="user-groups">
+      <h4>用户组</h4>
+      <ul class="nav nav-tabs user-group-header">
+      </ul>
+      <div class="tab-content user-group-content">
+      </div>
+    </div>
+    <div class='permission-groups' style="display:none">
+      <div>
+        <h4 style='display:inline-block'>权限组</h4>
+        <button class='btn btn-primary pull-right add-group'>添加组</button>
+      </div>
+      <div class="tabbable tabs-left">
+        <ul class="nav nav-tabs permission-groups-header">
 
-		<div class="modal hide fade group-panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>添加权限组</h3>
-			</div>
-			<div class="modal-body">
-			<form class="form-horizontal add-group-form">
-				<div class="control-group">
-				<label class="control-label" for="inputEmail">名称</label>
-				<div class="controls">
-					<input type="text" name="shop_group[name]" placeholder="名称">
-					<span class='error' style='color: red;'></span>
-				</div>
-				</div>
-			</form>
-			</div>
-			<div class="modal-footer">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-			<button class="btn btn-primary save-group">保存</button>
-			</div>
-		</div>
-	</div>
+        </ul>
+        <div class="tab-content permission-groups-content">
+        </div>
+      </div>
+
+      <div class="modal hide fade group-panel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>添加权限组</h3>
+        </div>
+        <div class="modal-body">
+        <form class="form-horizontal add-group-form">
+          <div class="control-group">
+          <label class="control-label" for="inputEmail">名称</label>
+          <div class="controls">
+            <input type="text" name="shop_group[name]" placeholder="名称">
+            <span class='error' style='color: red;'></span>
+          </div>
+          </div>
+        </form>
+        </div>
+        <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary save-group">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/template" class='permission-group-template'>
-	<% @resources.each do |r| %>
-		<div class="resource-panel well <%= r.id %>">
-			<label class="checkbox resource">
-				<input type="checkbox" /><%= r.resource %>
-			</label>
-			<div class="abilities">
-				<% find_resource_by(r.resource).each do | p | %>
-				<label class="checkbox inline ability ability-<%=p.id %>">
-					<input type="checkbox" data-value-id="<%=p.id %>" />
-					<%= p.ability %>
-				</label>
-				<% end %>
-			</div>
-		</div>
-	<% end %>
+  <% @resources.each do |r| %>
+    <div class="resource-panel well <%= r.id %>">
+      <label class="checkbox resource">
+        <input type="checkbox" /><%= r.resource %>
+      </label>
+      <div class="abilities">
+        <% find_resource_by(r.resource).each do | p | %>
+        <label class="checkbox inline ability ability-<%=p.id %>">
+          <input type="checkbox" data-value-id="<%=p.id %>" />
+          <%= p.ability %>
+        </label>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </script>
 
 <script type="text/template" class='group-user-template'>
-	<div class='span2 alert alert-info group-user'>
-		<img class='img-rounded avatar' />
-			{{login}}
-		<a href='javascript:void(0)' class='btn btn-danger remove-shop-user-group'>移除</a>
-	</div>
+  <div class='span2 alert alert-info group-user'>
+    <img class='img-rounded avatar' />
+      {{login}}
+    <a href='javascript:void(0)' class='btn btn-danger remove-shop-user-group'>移除</a>
+  </div>
 </script>
 
 <script type='text/javascript'>
-	$(function(){
-		template = Hogan.compile($(".group-user-template").html())
-		_permission_template = Hogan.compile($(".permission-group-template").html())
+  $(function(){
+    template = Hogan.compile($(".group-user-template").html())
+    _permission_template = Hogan.compile($(".permission-group-template").html())
 
-		new EmployeeGroup({
-			el: $(".employee-groups"),
-			shop: "<%=current_shop.name %>",
-			group_user_template: template,
-			permission_template: _permission_template
-		})
-	})
+    new EmployeeGroup({
+      el: $(".employee-groups"),
+      shop: "<%=current_shop.name %>",
+      group_user_template: template,
+      permission_template: _permission_template
+    })
+  })
 </script>

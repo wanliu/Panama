@@ -50,9 +50,6 @@ class TransactionCard extends TransactionCardBase
       { name: 'audit_failure',          from: 'waiting_audit',          to: 'waiting_audit_failure'}
     ]
 
-  getNotifyName: () ->
-    super + "-buyer"
-
   beforeBack: (event, from ,to ) ->
     @slideBeforeEvent('back')
     true
@@ -88,8 +85,8 @@ class TransactionCard extends TransactionCardBase
     @$(".address-form>form").submit()
     StateMachine.ASYNC
 
-  leaveWaitingDelivery: (event, from, to, msg) ->
-    @slideAfterEvent(event) if /refresh_delivered/.test event
+  #leaveWaitingDelivery: (event, from, to, msg) ->
+  #  @slideAfterEvent(event) if /refresh_delivered/.test event
 
   leaveWaitingPaid: (event, from, to, msg) ->
     @slideAfterEvent(event) unless /back/.test event

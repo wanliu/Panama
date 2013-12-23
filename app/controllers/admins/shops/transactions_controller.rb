@@ -3,9 +3,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   helper_method :base_template_path
 
   def pending
-    transactions = current_shop_order.uncomplete.order("created_at desc")
+    transactions = current_shop_order.uncomplete
     @untransactions = transactions.where(:operator_state => false)
-    @transactions = transactions.where(:operator_state => true).joins(:operator).page(params[:page])
+    @transactions = transactions.joins(:operator)
+    .where("operator_state=true and transaction_operators.operator_id=?", current_user.id)
+    .order("dispose_date desc").page(params[:page])
   end
 
   def complete
@@ -29,6 +31,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do | format |
       format.html
+      format.json{ render :json => @transaction.as_json(:methods => :seller_state_title) }
       format.csv do
         send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
           :filename => "order#{DateTime.now.strftime('%Y%m%d%H%M%S')}.csv")
@@ -39,7 +42,6 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def event
     @transaction = current_shop_order.find_by(:id => params[:id])
     if @transaction.seller_fire_event!(params[:event])
-      @transaction.notice_change_buyer(params[:event])
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {
@@ -90,18 +92,26 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   #处理订单
   def dispose
     @transaction = current_shop_order.find_by(:id => params[:id])
-    if @transaction.operator_create(current_user.id)
-      @transaction.unmessages.update_all(
-        :read => true,
-        :receive_user_id => current_user.id)
-      ChatMessage.notice_read_state(current_user, @transaction.buyer.id)
-      render partial: 'transaction',object:  @transaction,
-       locals: {
-         state:  @transaction.state,
-         people: current_user
-       }
-    else
-      render :json => draw_errors_message(@transaction), :status => 403
+    respond_to do |format|
+      if @transaction.operator_create(current_user.id)
+        @transaction.unmessages.update_all(
+          :read => true,
+          :receive_user_id => current_user.id)
+        ChatMessage.notice_read_state(current_user, @transaction.buyer.id)
+
+        format.js{
+          render :js => "window.location.href='#{shop_admins_transaction_path(current_shop, @transaction)}'" }
+        format.html{
+          render partial: 'transaction',object:  @transaction,
+           locals: {
+             state:  @transaction.state,
+             people: current_user
+           }
+        }
+      else
+        format.json{
+          render :json => draw_errors_message(@transaction), :status => 403 }
+      end
     end
   end
 
@@ -116,7 +126,9 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def send_message
     @transaction = current_shop_order.find_by(:id => params[:id])
     @message = @transaction.chat_messages.create(
-      params[:message].merge(send_user: current_user, receive_user: @transaction.buyer))
+      params[:message].merge(
+        send_user: current_user,
+        receive_user: @transaction.buyer))
 
     respond_to do |format|
       format.json{ render :json => @message }
@@ -127,7 +139,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find(params[:id])
     @messages = @transaction.messages.order("created_at desc").limit(30)
     respond_to do |format|
-      format.json{ render :json =>  @messages}
+      format.json{ render :json => @messages}
     end
   end
 

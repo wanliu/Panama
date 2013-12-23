@@ -9,37 +9,11 @@
 <div class='row-fluid transaction-list'>
   <div class='span12 left-column'>
     <div class='people-groups'>
-<!--       <% transaction = @transactions.first %>
-      <%#= render :partial => "transaction",
-                 :object => transaction,
-                 :locals => {
-                   :state => transaction.state,
-                   :people => @people} %>
-
-      <% @transactions.group_by { |tran| tran.seller }.each do |seller, trans| %>
-        <div class='seller'>
-          <%= shop_image_link seller %>
-          <div class='shop_info'>
-            <div class='name'>
-              <%= shop_link seller %>
-            </div>
-            <div class='address'>
-              <%= seller.address.location %>
-            </div>
-          </div>
-          <%#= image_tag seller.photos.icon, :class=> 'avatar avatar-icon' %>
-          <%#= seller.name %>
-        </div>
-        <div class='orders'>
-          <%= render :partial => "order_mini_row", :collection => @transactions, :as => :row %>
-        </div>
-      <% end %> -->
     </div>
-   
 
     <div class='threeD-viewport'>
        <div class='orders'>
-        <%= render :partial => "order_mini_row", :collection => @transactions * 20, :as => :row %>
+        <%= render :partial => "order_mini_row", :collection => @transactions, :as => :row %>
       </div>
     </div>
 
@@ -48,7 +22,7 @@
       <div class='currentbox'></div>
       <div class='downbox'></div>
     </div>
-     <%= paginate @transactions %>    
+    <%= paginate @transactions %>
   </div>
   <div class='order-detail'>
 
@@ -63,35 +37,22 @@
 </div>
 <script type='text/javascript'>
   $(function(){
-    // var view = new TableListView({
-    //   el: $(".transaction-list"),
-    //   child: ".order_item",
-    //   el3d: ".people-groups",
-    //   remote_url: "<%= person_transactions_path(@people) %>",
-    //   bindView: function(view){
-    //     this.enter3D();
-    //     var card = new TransactionCard({
-    //       el: view.$(".full-mode"),
-    //       realtime: {
-    //       url: '<%= faye_server_uri %>',
-    //       token: '<%= token %>' }
-    //     });
-    //   }
-    // });
 
-    // var view = new TransactionThreeViewport({
+    // var orders = new OrderTransactions({
     //   el: $(".transaction-list"),
-    //   child: ".order_item",
     //   remote_url: "<%= person_transactions_path(@people) %>"
-    // });
+    // })
 
     var view = new TransactionTwoColumnsViewport({
       el: $(".transaction-list"),
       child: ".order_item",
       secondContainer: ".order-detail",
       remote_url: "<%= person_transactions_path(@people) %>",
-      faye_url: '<%= faye_server_uri %>',
-      token: '<%= token %>'
+      registerView: function(view){
+        new TransactionCard({
+          el: $(".transaction", view.$detail)
+        })
+      }
     });
   })
 </script>

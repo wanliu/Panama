@@ -1,7 +1,7 @@
 @import "lib/transparent";
 @import "compass/css3/transform";
 // @import "people/transactions/3d";
-@import "people/transactions/2columns";
+@import "transactions/2columns";
 
 
 .people-groups {
@@ -39,7 +39,7 @@
 .order_item {
 
   width: 100%;
-  
+
   &.up {
 
   }

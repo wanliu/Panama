@@ -45,7 +45,6 @@ class People::TransactionsController < People::BaseController
     authorize! :event, @transaction
 
     if @transaction.buyer_fire_event!(event_name)
-      @transaction.notice_change_seller(event_name)
       render partial: 'transaction',
                    object:  @transaction,
                    locals: {
@@ -53,7 +52,7 @@ class People::TransactionsController < People::BaseController
                      people: @people
                    }
     else
-      render :json => {message: "#{event_name}不属性你的!"}, :status => 403
+      render :json => {message: "#{event_name}不属于你的!"}, :status => 403
       # render :partial => 'transaction', :transaction => @transaction, :layout => false
       # redirect_to person_transaction_path(@people.login, @transaction)
     end
@@ -151,12 +150,13 @@ class People::TransactionsController < People::BaseController
     order, options = current_order.find(params[:id]), params[:order_refund]
     delivery_manner_id = params[:order_refund].delete(:delivery_manner_id)
     if delivery_manner_id.present?
-      options.merge!(:delivery_manner =>  DeliveryManner.find(delivery_manner_id))
+      options.merge!(
+        :delivery_manner =>  DeliveryManner.find(delivery_manner_id))
     end
     respond_to do |format|
       refund = order.refunds.create(options)
       if refund.valid?
-        refund.create_items(order.items.map{|item| item.id})
+        refund.create_items(order.items.pluck("id"))
         if refund.items.count <= 0
           refund.destroy
           format.json{ render :json => ["申请退货失败：您选择退货的商品已经在退货之中，或者不能退货"],
@@ -218,7 +218,10 @@ class People::TransactionsController < People::BaseController
 
   def send_message
     @transaction = current_user.transactions.find(params[:id])
-    @message = @transaction.message_create(params[:message].merge(send_user: current_user, receive_user: @transaction.seller.try(:user)))
+    @message = @transaction.message_create(
+      params[:message].merge(
+        send_user: current_user,
+        receive_user: @transaction.current_operator))
 
     respond_to do |format|
       format.json{ render :json => @message }

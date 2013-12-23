@@ -3,7 +3,7 @@
 class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionController
 
   def index
-    @direct_transactions = current_shop.direct_transactions.order("created_at desc").page(params[:page])
+    @direct_transactions = current_shop.direct_transactions.uncomplete.order("created_at desc").page(params[:page])
   end
 
   def dialog
@@ -57,6 +57,11 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     respond_to do |format|
       format.html
     end
+  end
+
+  def item
+    @direct_transaction = current_shop_direct_transaction
+    render :layout => false
   end
 
   private

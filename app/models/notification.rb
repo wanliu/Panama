@@ -55,7 +55,7 @@ class Notification < ActiveRecord::Base
   #
   # @deprecated 建议使用 push_to_client
   def realtime_push_to_client
-    count = Notification.unreads.where(mentionable_user_id: mentionable_user_id).count
+    # count = Notification.unreads.where(mentionable_user_id: mentionable_user_id).count
     # CaramalClient.publish(mentionable_user.login, '/notification/#{mentionable_user.im_token}', {
     #   count: count,
     #   type: targeable_type,
@@ -133,8 +133,8 @@ class Notification < ActiveRecord::Base
   # @option options [String] :instant 实时知通目标用户，默认: true
   #
   # @return [Notification] 返回的 Notification 实体
-  def self.create!(user, channel_or_object, content, options)
-    options.symbolize_keys!
+  def self.create!(user, channel_or_object, content, opts)
+    options = opts.symbolize_keys
 
     user_id = if user.is_a?(User)
                 user.id

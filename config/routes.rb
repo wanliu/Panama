@@ -391,6 +391,7 @@ Panama::Application.routes.draw do
           post :send_message, :to => "shops/direct_transactions#send_message"
           post :dispose, :to => "shops/direct_transactions#dispose"
           get :page
+          get :item
         end
       end
 
@@ -474,6 +475,7 @@ Panama::Application.routes.draw do
           post "event(/:event)", :to => "shops/order_refunds#event", :as => :trigger_event
           post 'refuse_reason', :to => "shops/order_refunds#refuse_reason"
           get 'page', :to => "shops/order_refunds#page"
+          get 'item'
         end
       end
 

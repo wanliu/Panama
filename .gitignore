@@ -8,7 +8,6 @@
 /.bundle
 /.rvmrc
 /.yardoc
-.DS_Store
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
@@ -43,3 +42,4 @@
 /lib/99bill.cert.rsa.20140728.cer
 test.rb
 .DS_Store
+.ruby-version

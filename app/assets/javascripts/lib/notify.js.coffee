@@ -82,7 +82,7 @@ class Notifier
           title: "系统提示",
           text: "<a href='javascript:void(0)' id='agree_notifiction_desktop'>点击这里</a>开启桌面提醒功能！")
 
-        el.on "click", "#agree_notifiction_desktop", (e) ->
+        $(el.$message).on "click", "#agree_notifiction_desktop", (e) ->
           e.preventDefault()
           window.webkitNotifications.requestPermission()
 

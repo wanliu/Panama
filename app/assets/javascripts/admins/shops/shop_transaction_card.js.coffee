@@ -9,7 +9,6 @@ class ShopTransactionCard extends TransactionCardBase
     @filter_delivery_code()
     @initMessagePanel()
     @countdown()
-    @realtime_load()
 
   events:
     "click .page-header .btn" : "clickAction"
@@ -48,13 +47,6 @@ class ShopTransactionCard extends TransactionCardBase
       onenterstate: (event, from, to, msg) ->
         console.log "event: #{event} from #{from} to #{to}"
 
-  realtime_load: () ->
-    window.clients.subscribe "/OrderTransaction/#{@options.id}/#{@options.shop.token}/#{@rt_options.token}/destroy", () =>
-      @remove()
-
-  getNotifyName: () ->
-    super + "-seller"
-
   toggleItemDetail: (event) ->
     @$(".item-details").slideToggle()
     false
@@ -86,6 +78,8 @@ class ShopTransactionCard extends TransactionCardBase
       else
         button.removeClass("disabled").attr("event-name", "delivered")
         true
+    else
+      true
 
   save_delivery_code: (cb) ->
     delivery = @$("input:text.delivery_code")

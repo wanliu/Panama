@@ -29,9 +29,6 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
       { name: 'refresh_delivered',  from: 'waiting_delivery',  to: 'waiting_sign'}
     ]
 
-  getNotifyName: () ->
-    "order-refund-#{@options['id']}-seller"
-
   leaveApplyRefund: (event, from, to, msg) ->
     @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
 

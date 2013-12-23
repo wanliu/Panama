@@ -35,12 +35,10 @@ class User < ActiveRecord::Base
   # has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
-  has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
-  has_many :ask_buies
+  # has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
+  # has_many :ask_buies
 
   has_and_belongs_to_many :services
-
-  delegate :groups, :jshop, :to => :shop_user
 
   after_create :load_initialize_data
   before_create :generate_token
@@ -92,32 +90,6 @@ class User < ActiveRecord::Base
     chat_messages.all(id, friend_id)
   end
 
-  #
-  # 连接用户
-  #
-  # @deprecated 逻辑已失效，服务端并不维护登陆状态
-  def connect
-    RedisClient.redis.set(redis_key, true)
-    # FayeClient.send("/chat/friend/connect/#{id}", id)
-    CaramalClient.publish(login, "/chat/friend/connect/#{id}", id)
-  end
-
-  #
-  # 连接状态查询
-  #
-  # @deprecated 逻辑已失效，服务端并不维护登陆状态
-  def connect_state
-    RedisClient.redis.exists(redis_key)
-  end
-
-  #
-  # redis key
-  #
-  # @deprecated 逻辑已失效，服务端并不维护登陆状态
-  def redis_key
-    "#{Settings.defaults['redis_key_prefix']}#{id}"
-  end
-
   def join_circles
     circle_friends.joins(:circle).map{|c| c.circle }
   end
@@ -139,7 +111,6 @@ class User < ActiveRecord::Base
     attribute["avatar_url"] = avatar
     attribute["header_url"] = photos.header
     attribute["photos"] = photos.attributes
-    attribute["connect_state"] = connect_state
 
     attribute
   end
@@ -182,6 +153,13 @@ class User < ActiveRecord::Base
 
   def is_seller?
     !services.empty? && services.any? { |service| service.service_type == "seller" }
+  end
+
+  def chat_notify(send_user, receive_user, content)
+    notify("/chat",
+      "#{send_user.login}说: #{content}",
+      :send_user_id => send_user.id,
+      :persistent => false)
   end
 
   def load_initialize_data

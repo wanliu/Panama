@@ -59,7 +59,7 @@ class UsersController < ApplicationController
       if @user_photo.send(field_name)
         @user_photo.send(field_name).remove!
       end
-      @user_photo.send("#{field_name}=",file)
+      @user_photo.send("#{field_name}=", file)
       if @user_photo.save
         render :text => "{success: true, avatar_filename: '#{@user_photo.send(field_name)}'}"
       else

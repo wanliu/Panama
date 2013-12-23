@@ -2,7 +2,6 @@
 <%= simple_form_for @activity, :remote => true, :url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction'}, :type => :json do |f| %>
 
   <%= f.input :shop_product_id,
-              :collection => Shop.first.products.joins(:product).select(['shop_products.*', 'products.name']),
               :wrapper_html => {
                 :class => "shop_product_wrap"
               },
@@ -19,7 +18,7 @@
   <div class="control-group">
     <label class="control-label" for="inputPrice">图片</label>
     <div class="controls">
-      <img data-src="holder.js/140x140" class="img-rounded preview" alt="140x140" style="" src="<%= default_img_url('100x100') %>">
+      <img data-src="holder.js/140x140" class="img-rounded preview" alt="预览图" style="" src="<%= default_img_url('100x100') %>">
       <ul class='attachment-list'></ul>
     </div>
   </div>

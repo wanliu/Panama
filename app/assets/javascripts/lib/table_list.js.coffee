@@ -18,9 +18,8 @@ class FullOrMiniView extends Backbone.View
   detail: ".full-mode"
   open: ".open"
 
-  events: 
+  events:
     "click": "show"
-
 
   initialize: () ->
     @$summar = @$(@open)
@@ -52,8 +51,6 @@ class FullOrMiniView extends Backbone.View
         @$detail.slideDown "fast", () =>
           @trigger("bind_view", @)
 
-
-
   toggleDisplay: () =>
     @$el.toggleClass("opened")
 
@@ -61,14 +58,18 @@ class FullOrMiniView extends Backbone.View
       @$el.removeClass("active")
       @$detail.slideUp "fast", () =>
         @$summar.removeClass "mini"
+        @wait_tag()
     else
       @loadTemplate()
+
+  wait_tag: () ->
+    @$el.removeClass("waiting")
 
 class root.TableListView extends Backbone.View
 
   child: ".item"
 
-  events: 
+  events:
     "enter_3d": "enter3D"
     "leave_3d": "leave3D"
 
@@ -89,17 +90,18 @@ class root.TableListView extends Backbone.View
     view.bind("minimum", _.bind(@minimum, @))
 
   loadView: () ->
-    _.each @$(@child), (el) =>
-      @transactions.add(
-        full_mode: true,
-        elem: $(el),
-        listView: @,
-        id: $(el).attr('data-value-id'))
+    _.each @$(@child), (el) => @add(el)
+
+  add: (item) ->
+    @transactions.add(
+      full_mode: true,
+      elem: $(item),
+      listView: @,
+      id: $(item).attr('data-value-id'))
 
   minimum: (model) ->
     for m in @transactions.models
       m.set(full_mode: true) unless m.id == model.id
-
 
   bindView: (view) ->
 

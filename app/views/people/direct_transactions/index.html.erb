@@ -6,7 +6,7 @@
   </h4>
 </div>
 
-<div class='row-fluid direct_transactions'>
+<div class='row-fluid direct_transaction_list'>
   <div class='span12'>
     <div class='widget'>
       <div class='row-fluid'>
@@ -87,15 +87,11 @@
 
 <script type='text/javascript'>
   $(function(){
-    var view = new TableListView({
-      el: $(".direct_transactions"),
-      remote_url: "<%= person_direct_transactions_path(@people) %>",
-      bindView: function(view){
-        new DirectTransactionView({
-          login: "<%=current_user.login %>",
-          el: view.$(".detail .direct")
-        })
-      }
+
+    new DirectTransactionList({
+      el: $(".direct_transaction_list"),
+      login: "<%=current_user.login %>",
+      remote_url: "<%= person_direct_transactions_path(@people) %>"
     })
   })
 </script>

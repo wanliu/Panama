@@ -37,7 +37,7 @@ class OrderTransaction < ActiveRecord::Base
   belongs_to :logistics_company
 
   has_many :notifications, :as => :targeable, dependent: :destroy
-  has_many :operators, class_name: "TransactionOperator"
+  has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
 
   has_many  :items,
             class_name: "ProductItem",
@@ -70,24 +70,15 @@ class OrderTransaction < ActiveRecord::Base
     generate_number
   end
 
-  after_create  :notice_new_order, :state_change_detail, :notice_user
-
-  def notice_url(current_user)
-    url = if self.buyer == current_user
-      "/people/#{ current_user.login}/transactions#order#{ self.id}"
-    else
-      "/shops/#{ self.seller.name }/admins/pending#order#{ self.id}"
-    end
-  end
+  after_create :state_change_detail, :notice_user
 
   def notice_user
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
-      :url => "/shops/#{seller.name}/admins/pending",
-      :body => "你有新的订单")
+    seller.notify("/#{seller.im_token}/order_transactions/create", "你有编号#{number}新的订单",
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :order_id => id,
+      :target => self)
   end
-  after_destroy :notice_destroy, :destroy_operators, :destroy_activity
+  after_destroy :notice_destroy, :destroy_activity
 
   state_machine :initial => :order do
 
@@ -196,13 +187,13 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     ## only for development
-    if Rails.env.development?
-      after_transition :waiting_paid      => :order,
-                       :waiting_delivery  => :waiting_paid,
-                       :waiting_sign      => :waiting_delivery do |order, transition|
-        order.notice_change_seller(transition.to_name, :back)
-      end
-    end
+    # if Rails.env.development?
+    #   after_transition :waiting_paid      => :order,
+    #                    :waiting_delivery  => :waiting_paid,
+    #                    :waiting_sign      => :waiting_delivery do |order, transition|
+    #     order.notice_change_seller(transition.to_name, :back)
+    #   end
+    # end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       if order.online_pay_type == :account
@@ -254,12 +245,11 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_destroy
-    if operator_state
-      # FayeClient.send("/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
-      CaramalClient.publish(seller.user.try(:login), "/OrderTransaction/#{id}/#{seller.im_token}/#{current_operator.im_token}/destroy", {})
-    else
-      realtime_dispose({type: "destroy" ,values: as_json})
-    end
+    seller.notify(
+      "/#{seller.im_token}/order_transactions/destroy",
+      "订单#{number}被删除！",
+      :order_id => id,
+      :url => "/shops/#{seller.name}/admins/pendding")
   end
 
   #如果卖家没有发货直接删除明细，返还买家的金额
@@ -277,8 +267,11 @@ class OrderTransaction < ActiveRecord::Base
 
   def generate_number
     _number = (OrderTransaction.max_id + 1).to_s
-    _number = "#{'0' * (9-_number.length)}#{_number}" if _number.length < 9
-    self.number = _number
+    self.number = if _number.length < 9
+      "#{'0' * (9-_number.length)}#{_number}"
+    else
+      _number
+    end
   end
 
   def delivery_express?
@@ -290,11 +283,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def delivery_name
-    if delivery_manner.nil?
-      '卖家选择'
-    else
-      delivery_manner.name
-    end
+    delivery_manner.nil? ? '卖家选择' : delivery_manner.name
   end
 
   def delivery_type_name
@@ -346,15 +335,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def clear_uniq_states
-    states = state_details.map{|item| {state: item.state, created_at: item.created_at} }
-    index = states.find_index{|s| s[:state] == "waiting_refund"}
-    if index && states[index-1][:state] == (states[index+1] || {})[:state]
-      states.slice!(index-1..index)
-    end
-    states
-  end
-
   #是否成功
   def complete_state?
     state == "complete"
@@ -376,58 +356,55 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def close_state?
-    %w(close
-      order
-      waiting_paid).include?(state)
+    %w(close order waiting_paid).include?(state)
   end
 
   def buyer_fire_event!(event)
     events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
-    if event.to_s == "buy"
-      event = pay_manner.code
-    end
-    filter_fire_event!(events, event)
-
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
-      :url => location_url,
-      :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
-  end
-
-  #根据订单的状态决定跳转的页面
-  def location_url
-     location_url = if self.operator_state == true
-      "/shops/#{seller.name}/admins/transactions/#{id}"
-    else
-      "/shops/#{seller.name}/admins/pending"
+    event = pay_manner.code if event.to_s == "buy"
+    if filter_fire_event!(events, event)
+      change_state_notify_seller(event)
     end
   end
 
   def system_fire_event!(event)
     events = %w(expired audit_transfer audit_failure)
-    filter_fire_event!(events, event)
-    notifications.create!(
-      :user_id => buyer.id,
-      :mentionable_user_id => seller.user.id,
-      :url => location_url,
-      :body => "您的订单#{number}买家已经"+I18n.t("order_states.buyer.#{state}"))
-     notifications.create!(
-      :user_id => seller.user.id,
-      :mentionable_user_id => buyer.id,
-      :url => "/people/#{buyer.login}/transactions##{id}",
-      :body => "您的订单#{number} 卖家已经"+I18n.t("order_states.seller.#{state}"))
-
+    if filter_fire_event!(events, event)
+      change_state_notify_seller(event)
+      change_state_notify_buyer(event)
+    end
   end
 
   def seller_fire_event!(event)
     events = %w(back delivered)
-    filter_fire_event!(events, event)
-    notifications.create!(
-      :user_id => seller.user.try(:id),
-      :mentionable_user_id => buyer.id,
-      :url => "/people/#{buyer.login}/transactions##{id}",
-      :body => "您的订单#{number}卖家已经"+I18n.t("order_states.seller.#{state}"))
+    if filter_fire_event!(events, event)
+      change_state_notify_buyer(event)
+    end
+  end
+
+  def change_state_notify_seller(event = nil)
+    target = current_operator.nil? ? seller : current_operator
+    target.notify(
+      "/#{seller.im_token}/order_transactions/change_state",
+      "您的订单#{number}买家已经#{seller_state_title}",
+      :order_id => id,
+      :state => state_name,
+      :event => "refresh_#{event}",
+      :state_title => seller_state_title,
+      :url => "/shops/#{seller.name}/admins/transactions/#{id}"
+    )
+  end
+
+  def change_state_notify_buyer(event = nil)
+    buyer.notify(
+      "/order_transactions/change_state",
+      "您的订单#{number}卖家已经#{buyer_state_title}",
+      :order_id => id,
+      :state => state_name,
+      :state_title => buyer_state_title,
+      :event => "refresh_#{event}",
+      :url => "/people/#{buyer.login}/transactions/#{id}"
+    )
   end
 
   def refund_items
@@ -475,18 +452,22 @@ class OrderTransaction < ActiveRecord::Base
     state_details.find_by(:state => state)
   end
 
-  def operator_connect_state
-    state = current_operator.nil? || !current_operator.connect_state ? false : true
-    self.update_attribute(:operator_state, state)
-  end
-
   def operator_create(toperator_id)
-    unless current_operator.try(:id) == toperator_id || operator_state
+    unless current_operator.try(:id) == toperator_id
       _operator = operators.create(operator_id: toperator_id)
-      self.update_attribute(:operator_id, _operator.id) if _operator.valid?
+      if _operator.valid?
+        self.update_attribute(:operator_id, _operator.id)
+      end
     end
-    notice_order_dispose
     self.update_attribute(:operator_state, true)
+    self.update_attribute(:dispose_date, DateTime.now)
+    refunds.update_all(:operator_id, toperator_id)
+    seller.notify(
+      "/#{seller.im_token}/order_transactions/dispose",
+      "#{current_operator.login}处理 #{number}订单",
+      :persistent => false,
+      :order_id => id
+    )
   end
 
   #买家发送信息
@@ -495,12 +476,8 @@ class OrderTransaction < ActiveRecord::Base
     unless seller.seller_group_employees.any?{|u| u.connect_state }
       not_service_online(id.to_s)
     end
-    # operator_connect_state
-    if operator_state
-      options[:receive_user] = current_operator
-    # else
-    #   options.delete(:receive_user)
-    end
+
+    options[:receive_user] = current_operator if operator_state
     chat_messages.create(options)
   end
 
@@ -536,36 +513,47 @@ class OrderTransaction < ActiveRecord::Base
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:address_only)
     attra["unmessages_count"] = unmessages.count
-    attra["state_title"] = state_title
     attra["stotal"] = stotal
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
   end
 
-  def state_title
-    I18n.t("order_states.seller.#{state}")
+  def seller_state_title
+    state_title("seller")
   end
 
-  def notice_change_buyer(event_name = nil)
-    ename = event_name.to_s
-    if %w(back delivered audit_transfer audit_failure returned).include?(ename)
-      token = buyer.try(:im_token)
-      faye_send("/events/#{token}/transaction-#{id}-buyer",
-                        :event => "refresh_#{ename}")
-    end
+  def buyer_state_title
+    state_title("buyer")
   end
 
-  def notice_change_seller(event_name = nil)
-    ename = event_name.to_s
-    if %w(online_payment cash_on_delivery bank_transfer
-      back paid sign transfer confirm_transfer audit_transfer audit_failure returned).include?(ename)
-      if current_operator.nil?
-        realtime_dispose({type: "change" ,values: self})
+  def chat_notify(send_user, receive_user, content)
+    if receive_user.present?
+      url = if receive_user == buyer
+        "/people/#{receive_user.login}/transactions/#{id}"
       else
-        token = current_operator.try(:im_token)
-        faye_send("/events/#{token}/transaction-#{id}-seller",
-          :event => "refresh_#{ename}")
+        "/shops/#{seller.name}/admins/transactions/#{id}"
       end
+      receive_user.notify(
+        "/#{seller.im_token}/order_transactions/#{id}/chat",
+        content,
+        :order_id => id,
+        :send_user => {
+          :login => send_user.login,
+          :id => send_user.id,
+          :photos => send_user.photos.attributes
+        },
+        :created_at => DateTime.now,
+        :url => url
+      )
+    else
+      seller.notify(
+        "/#{seller.im_token}/order_transactions/chat",
+        _content,
+        :order_id => id,
+        :avatar => send_user.photos.icon,
+        :unmessages_count => unmessages.count,
+        :url => "/shops/#{seller.name}/admins/transactions/#{id}"
+      )
     end
   end
 
@@ -676,31 +664,7 @@ class OrderTransaction < ActiveRecord::Base
     unless %w(order close).include?(state)
       errors.add(:pay_manner_id, "请选择付款方式!") if pay_manner.nil?
       errors.add(:address, "地址不存在！") if address.nil?
-      # if delivery_manner.present?
-      #   if delivery_type.nil? && !delivery_manner.local_delivery?
-      #     errors.add(:delivery_type_id, "请选择运送类型!")
-      #   end
-      # else
-      #   errors.add(:delivery_manner_id, "请选择配送方式!")
-      # end
     end
-  end
-
-  def notice_new_order
-   realtime_dispose({type: "new" ,values: as_json})
-  end
-
-  def notice_order_dispose
-    realtime_dispose({type: "dispose" ,values: as_json})
-  end
-
-  def realtime_dispose(data = {})
-    faye_send("/OrderTransaction/#{seller.im_token}/un_dispose", data)
-  end
-
-  def faye_send(channel, options)
-    # FayeClient.send(channel, options)
-    CaramalClient.publish(seller.user.try(:login), channel, options)
   end
 
   def filter_fire_event!(events = [], event)
@@ -712,11 +676,12 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def destroy_operators
-    operators.destroy_all
-  end
-
   def destroy_activity
     activity.destroy if activity.present?
   end
+
+  def state_title(owner)
+    I18n.t("order_states.#{owner}.#{state}")
+  end
+
 end

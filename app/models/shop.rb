@@ -35,6 +35,10 @@ class Shop < ActiveRecord::Base
     update_relation_index
   end
 
+  before_create do
+    generate_im_token
+  end
+
   scope :actived, where(actived: true)
 
   validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }, if: :actived?
@@ -144,7 +148,6 @@ class Shop < ActiveRecord::Base
 
   def notify(channel, data, options = {})
     employees.each do |member|
-      # byebug
       member.notify(File.join("/shops", channel), data, options)
     end
   end
@@ -196,8 +199,6 @@ class Shop < ActiveRecord::Base
     load_default_contents
 
     write_default_options
-
-    generate_im_token
   end
 
   def initial_shop_data
