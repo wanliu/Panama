@@ -168,5 +168,8 @@ class TransactionCard extends TransactionCardBase
     if !event.ctrlKey && event.keyCode > 47 && event.keyCode < 106
       code_input.val(code_input.val().replace(/(\w{4})(?=\w)/g,"$1 "))
 
+  realtime_url: () ->
+    "notify:#{super}"
+
 
 root.TransactionCard = TransactionCard

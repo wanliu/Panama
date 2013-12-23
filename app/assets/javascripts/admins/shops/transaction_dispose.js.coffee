@@ -82,6 +82,10 @@ class exports.TransactionDispose extends Backbone.View
       model: model,
       template: @template
     ))
+
+    @realtime.change_state model.id, (data) =>
+      @realtime_change data, model.get("_type")
+
     view.bind("remove_tran", _.bind(@remove_tran, @))
     @$tbody.append view.render()
     @notice_msg()
@@ -132,9 +136,6 @@ class exports.TransactionDispose extends Backbone.View
 
     @realtime.chat (data) =>
       @realtime_chat data, "transactions"
-
-    @realtime.change_state (data) =>
-      @realtime_change data, "transactions"
 
   fetch_data: (id, type) ->
     model = new Transaction(_type: type, id: id)

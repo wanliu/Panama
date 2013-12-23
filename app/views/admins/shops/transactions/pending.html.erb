@@ -69,7 +69,8 @@
       leftSide: "#left_sidebar",
       registerView: function(view){
         new ShopTransactionCard({
-          el: $(".transaction", view.$detail)
+          el: $(".transaction", view.$detail),
+          shop: shop
         })
       }
     })

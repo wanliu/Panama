@@ -385,7 +385,7 @@ class OrderTransaction < ActiveRecord::Base
   def change_state_notify_seller(event = nil)
     target = current_operator.nil? ? seller : current_operator
     target.notify(
-      "/#{seller.im_token}/order_transactions/change_state",
+      "/#{seller.im_token}/order_transactions/#{id}/change_state",
       "您的订单#{number}买家已经#{seller_state_title}",
       :order_id => id,
       :state => state_name,
@@ -397,7 +397,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_state_notify_buyer(event = nil)
     buyer.notify(
-      "/order_transactions/change_state",
+      "/order_transactions/#{id}/change_state",
       "您的订单#{number}卖家已经#{buyer_state_title}",
       :order_id => id,
       :state => state_name,
@@ -461,7 +461,7 @@ class OrderTransaction < ActiveRecord::Base
     end
     self.update_attribute(:operator_state, true)
     self.update_attribute(:dispose_date, DateTime.now)
-    refunds.update_all(:operator_id, toperator_id)
+    refunds.update_all(:operator_id => toperator_id)
     seller.notify(
       "/#{seller.im_token}/order_transactions/dispose",
       "#{current_operator.login}处理 #{number}订单",

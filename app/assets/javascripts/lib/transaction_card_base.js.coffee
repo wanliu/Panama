@@ -18,9 +18,14 @@ class TransactionCardBase extends AbstructStateView
     @options['url_root'] ?= @$el.attr('url-root')
 
     @transaction = new Transaction(
-      _.extend({id: @options['id']}, @current_state()))
+      _.extend({
+        id: @options['id']
+      }, @current_state()))
+
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
+
+    @load_realtime()
 
     super
 
@@ -196,6 +201,14 @@ class TransactionCardBase extends AbstructStateView
 
   change_state: () ->
     @setMessagePanel()
+
+  load_realtime: () ->
+    @client = window.clients.socket
+    @client.subscribe "#{@realtime_url()}/change_state", (data) =>
+      @stateChange data
+
+  realtime_url: () ->
+    "/order_transactions/#{@transaction.id}"
 
 exports.TransactionCardBase = TransactionCardBase
 exports

@@ -5,6 +5,7 @@
 exports = window || @
 class ShopTransactionCard extends TransactionCardBase
   initialize:() ->
+    @shop = @options.shop
     super
     @filter_delivery_code()
     @initMessagePanel()
@@ -158,6 +159,9 @@ class ShopTransactionCard extends TransactionCardBase
   is_express_info: () ->
     @is_delivery_express() || (
       @$(".express-info").length > 0 && @$(".express-info").css("display") == "block" )
+
+  realtime_url: () ->
+    "notify:/#{@shop.token}#{super}"
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports
