@@ -67,13 +67,13 @@ class TransactionCard extends TransactionCardBase
     @$(".address-panel").slideUp()
 
   initMessagePanel: () ->
-    @setMessagePanel()
-    @message_panel.show()
+    # @setMessagePanel()
+    # @message_panel.show()
 
-  toggleMessage: () ->
-    @setMessagePanel()
-    @message_panel.slideToggle()
-    false
+  # toggleMessage: () ->
+  #   @setMessagePanel()
+  #   @message_panel.slideToggle()
+  #   false
 
   leaveWaitingTransfer: (event, from, to, msg) ->
     @create_transfer_info(event)

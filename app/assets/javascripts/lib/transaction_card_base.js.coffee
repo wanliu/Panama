@@ -16,17 +16,19 @@ class TransactionCardBase extends AbstructStateView
     @options['url']       ?= @$el.attr('state-url')
     @options['event_url'] ?= @$el.attr('state-event-url')
     @options['url_root'] ?= @$el.attr('url-root')
+    @options['token']    ?= @$el.data('token')
 
     @transaction = new Transaction(
       _.extend({
-        id: @options['id']
+        id: @options['id'],
+        token: @options['token']
       }, @current_state()))
 
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
 
     @load_realtime()
-
+    @loadChat()
     super
 
   countdown: () ->
@@ -193,6 +195,10 @@ class TransactionCardBase extends AbstructStateView
     padding = parseInt(wrap.css("padding-top")) + parseInt(wrap.css("padding-bottom"))
     @message_panel.height(total - tm - padding)
 
+  toggleMessage: () ->
+    $(@chat_view.el).toggle()
+    false
+
   current_state: () ->
     {
       state: @$el.attr('state-initial'),
@@ -201,6 +207,15 @@ class TransactionCardBase extends AbstructStateView
 
   change_state: () ->
     @setMessagePanel()
+
+  loadChat: () ->
+    model = new ChatModel({
+      type: 3,
+      name: @transaction.get('token'),
+      title: "订单 #{$(@el).attr('id')}"
+    })
+    @chat_view = ChatService.getInstance().newChat(model)
+    @chat_view.showDialog()
 
   load_realtime: () ->
     @client = window.clients.socket

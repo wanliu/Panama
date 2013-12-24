@@ -14,6 +14,8 @@ class root.ChatListView extends Backbone.View
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
+
+    @temporarys_view = new TemporaryIconsView(parent_view: @)
     @friends_view = new FriendIconsView(parent_view: @)
     @groups_view = new GroupIconsView(parent_view: @)
 
@@ -40,6 +42,8 @@ class root.ChatListView extends Backbone.View
         @friends_view
       when 2
         @groups_view
+      when 3
+        @temporarys_view
       else
         console.error('unprocess type: ', type)
 
@@ -48,6 +52,7 @@ class root.ChatListView extends Backbone.View
 
   filter_list: (event) ->
     keyword = $(event.target).val().trim()
+    @temporarys_view.filter_list(keyword)
     @friends_view.filter_list(keyword)
     @groups_view.filter_list(keyword)
 
@@ -84,6 +89,10 @@ class BaseIconsView extends Backbone.View
     if exist_model
       @top(exist_model)
       exist_model.view.setChannel(channel)
+    else
+      # just for test
+      model = new ChatModel({type: 3, name: 'wl2016', title: '临时 wl2016'})
+      @parent_view.temporarys_view.collection.add(model)
 
   filter_list: (keyword) ->
     pattern = new RegExp(keyword)
@@ -171,6 +180,31 @@ class GroupIconsView extends BaseIconsView
     groupView = new GroupIconView({ model: model, parent_view: @ })
     model.view  = groupView
     @$(".users-list").append(groupView.render().el)
+
+
+class TemporaryIconsView extends BaseIconsView
+  className: 'temporarys-list'
+
+  template: '
+    <ul class="users-list temporarys">
+    </ul>'
+
+  initialize: () ->
+    super
+
+  render: () ->
+    $(@el).html(@template)
+    @
+
+  addOne: (model) ->
+    model.set({ 
+      type: 3, 
+      name: model.get('name'), 
+      title: "临时 #{model.get('name')}" 
+    })
+    temporaryView = new TemporaryIconView({ model: model, parent_view: @ })
+    model.view  = temporaryView
+    @$(".users-list").append(temporaryView.render().el)
 
 
 class BaseIconView extends Backbone.View
