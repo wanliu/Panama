@@ -47,10 +47,11 @@ class NotificationManager
     @client.monitor("/shops/unfollow", @commonNotify) # √
     @client.monitor("/shops/like", @commonNotify) #暂时不需要实现
     @client.monitor("/shops/unlike", @commonNotify) #暂时不需要实现
-    @client.monitor("/shops/joined", @commonNotify) 
-    @client.monitor("/shops/leaved", @commonNotify) # 未测
-    @client.monitor("/shops/refuse", @commonNotify)
-    @client.monitor("/shops/request", @commonNotify) # 未测
+    @client.monitor("/shops/joined", @commonNotify) # √
+    @client.monitor("/shops/leaved", @commonNotify) # √
+    @client.monitor("/shops/refuse", @commonNotify) 
+    @client.monitor("/shops/request", @commonNotify) #暂时不需要实现
+    @client.monitor("/employees/invite", @commonNotify) # √ 
     # 评论
     # @client.monitor("/comments/add", @commonNotify)
     @client.monitor("/comments/mention", @commonNotify) # √

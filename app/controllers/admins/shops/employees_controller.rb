@@ -13,10 +13,9 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
     respond_to do |form|
         if @user
           @user.notify("/employees/invite",
-                      "#{current_shop.name} 商店邀请你加入",
-                      { :target => self,
-                        :avatar => @user.icon,
-                        :url => notification_url(@user.login) })
+                       "商店 #{current_shop.name} 邀请你加入",
+                       { :avatar => @user.icon,
+                         :url => notification_url(@user.login) })
             form.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
         else
           #如果email发送信息给它
@@ -36,11 +35,10 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
     respond_to do | format |
       if employee
         employee.destroy
-        employee.notify("/shops/leaved",
+        employee.user.notify("/shops/leaved",
                         "你已经离开#{current_shop.name} 商店",
-                       {:target => self,
-                        :avatar => current_shop.photos.icon,
-                        :url => notification_url(employee.login) })
+                       {:avatar => current_shop.photos.icon,
+                        :url => notification_url(employee.user.login) })
         format.json{ render :json => {} }
       else
         format.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
