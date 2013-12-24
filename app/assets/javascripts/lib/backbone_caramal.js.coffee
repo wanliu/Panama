@@ -380,7 +380,7 @@ class BaseChatView extends Caramal.BackboneView
     if @display
       @hideDialog()
     else
-      @showDialog()
+      @showWithMsg()
 
   hideDialog: () ->
     $(@el).hide()

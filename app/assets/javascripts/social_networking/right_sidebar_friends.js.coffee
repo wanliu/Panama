@@ -223,7 +223,7 @@ class BaseIconView extends Backbone.View
   tagName: 'li'
 
   events:
-    "click" : "showChat"
+    "click " : "toggleChat"
 
   template: Handlebars.compile("""
     <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
@@ -272,11 +272,6 @@ class BaseIconView extends Backbone.View
 
   toggleChat: () ->
     @getChat().toggleDialog()
-
-  showChat: () ->
-    @unactive()
-    $(".global_chat").css('z-index', 9999)
-    @getChat().showWithMsg()
 
   bind_chat: () ->
     @chat_view.bind("active_avatar", _.bind(@active, @))

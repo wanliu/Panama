@@ -17,11 +17,13 @@ class TransactionCardBase extends AbstructStateView
     @options['event_url'] ?= @$el.attr('state-event-url')
     @options['url_root'] ?= @$el.attr('url-root')
     @options['token']    ?= @$el.data('token')
+    @options['number']   ?= @$el.data('number')
 
     @transaction = new Transaction(
       _.extend({
         id: @options['id'],
-        token: @options['token']
+        token: @options['token'],
+        number: @options['number']
       }, @current_state()))
 
     @transaction.set_url(@options['url_root'])
@@ -199,7 +201,7 @@ class TransactionCardBase extends AbstructStateView
       @model = new ChatModel({
         type: 3,
         name: @transaction.get('token'),
-        title: "订单 #{$(@el).attr('id')}"
+        title: "订单 #{@transaction.get('number')}"
       })
       @model = ChatListView.getInstance().temporarys_view.addModel(@model)
     @model.icon_view.toggleChat()
