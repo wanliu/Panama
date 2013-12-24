@@ -35,6 +35,12 @@ class People::CartController < People::BaseController
     end
   end
 
+  def move_out
+    item_ids = params[:item_ids]
+    my_cart.items.where("id in (?)", item_ids).destroy_all
+    render :json => { text: 'ok' }
+  end
+
   def move_out_cart
     @item = my_cart.items.find(params[:id])
     @item.destroy

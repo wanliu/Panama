@@ -30,7 +30,7 @@ class Circle < ActiveRecord::Base
 
   validate :valid_name?
 
-  after_create :generate_manage, :sync_create_to_caramal
+  after_create :generate_manage
 
   def all_detail
     "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
@@ -155,10 +155,4 @@ class Circle < ActiveRecord::Base
       errors.add(:name, "名称已经存在了！")
     end
   end
-
-  protected
-    def sync_create_to_caramal
-      owner_name = owner.is_a?(Shop) ? owner.user.login : owner.login
-      CaramalClient.create_persistent_channel(name, owner_name, 2, 'Owner')
-    end
 end

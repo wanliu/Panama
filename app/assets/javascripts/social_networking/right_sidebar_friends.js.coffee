@@ -14,9 +14,9 @@ class root.ChatListView extends Backbone.View
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
-
     @friends_view = new FriendIconsView(parent_view: @)
     @groups_view = new GroupIconsView(parent_view: @)
+
     $(@el).prepend('
       <div class="fixed_head">
         <input class="filter_key" type="text"/>
@@ -129,6 +129,7 @@ class FriendIconsView extends BaseIconsView
       name: model.get('login'), 
       title: "好友 #{model.get('login')}" 
     })
+
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.view  = friend_view
     @$(".users-list").append(friend_view.render().el)
@@ -166,12 +167,14 @@ class GroupIconsView extends BaseIconsView
       name: model.get('login'), 
       title: "商圈 #{model.get('login')}" 
     })
+
     groupView = new GroupIconView({ model: model, parent_view: @ })
     model.view  = groupView
     @$(".users-list").append(groupView.render().el)
 
 
 class BaseIconView extends Backbone.View
+
   tagName: 'li'
 
   events:
@@ -261,5 +264,4 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
-    
-    
+

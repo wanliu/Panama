@@ -23,7 +23,7 @@
 						<% if can?(:manage, User) %>
 							<dl class="dl-horizontal">
 								<dt>余 额</dt>
-								<dd><%=@people.money %></dd>
+								<dd><%= number_to_currency(@people.money) %></dd>
 							</dl>
 						<% end %>
 					</div>

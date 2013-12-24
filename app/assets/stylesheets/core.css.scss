@@ -3,7 +3,6 @@
 @import "compass/css3";
 @import "caret";
 @import "lib/notify/pnotify";
-@import "jquery.gritter";
 @import "lib/transparent";
 @import "lib/chosen";
 @import "my_cart";
@@ -191,6 +190,25 @@ ul {
   }
 }
 
+#topbar {
+  .notification-menu {
+    #notification-list {
+      >li {
+        padding: 4px 5px;
+        margin: 0px 0px;
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis;
+
+        .href_url {
+          padding: 2px;
+          display: inline;
+        }
+      }
+    }
+  }
+}
+
 .page-header {
 
 	margin: 15px 0 0px;
@@ -209,7 +227,7 @@ ul {
 			.nav>li .count {
 				position: absolute;
 				bottom: 2px;
-				right: 2px;
+				/*right: 2px;*/
 				font-size: 9.1px;
 				font-weight: normal;
 				// background: rgba(51,51,51,0.55);
@@ -1184,9 +1202,10 @@ h2 small {
 }
 
 .dropdown .count {
-  top: 20px;
-	left: 22px;
+  top: 22px;
+	left: 30px;
 	position: absolute;
+  text-align: center;
 	@include transparent(rgb(51,51,51), 0.5);
 }
 

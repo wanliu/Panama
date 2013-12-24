@@ -51,13 +51,13 @@ class MyCart extends Backbone.View
 
 	clear_list: () ->
 		$.ajax({
-	      type: "post",
-	      url: "/mycart/clear_list",
-	      success: () =>
-	       $(".cart_main").remove()
-	       $("#shop_count").html($(".cart_main").size()).hide()
-	       @totals_money()
-    	})
+      type: "post",
+      url: "/mycart/clear_list",
+      success: () =>
+       $(".cart_main").remove()
+       $("#shop_count").html($(".cart_main").size()).hide()
+       @totals_money()
+  	})
 
 	hoverProcess: (event) ->
 		$("#cart_box")
@@ -141,9 +141,5 @@ $ ->
 		urlAction = $(@).attr('add-to-action')
 		myCart.addToCart($(selector), $form, urlAction)
 		false
-
-	# $("a.like-button").on "click", (event) =>
-		
-
 
 root.myCart = myCart

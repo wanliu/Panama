@@ -10,8 +10,8 @@
   $(document).ready(function(){
   	$(".comment-list .comment").each(function(i, el){
   		new ProductCommentReply({
-  			reply_url: "<%=shop_admins_product_comments_path(current_shop) %>",
-  			raty_url: "<%= asset_path 'raty' %>",
+  			reply_url: "<%= shop_admins_product_comments_path(current_shop) %>",
+  			raty_url: "<%#= asset_path 'lib/jquery.raty' %>",
   			el: $(el)})
   	})
   })

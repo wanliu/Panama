@@ -64,7 +64,6 @@ class Shop < ActiveRecord::Base
   end
 
   #加入的商店商圈
-
   def circle_all
     circle_ids = CircleFriends.where(:user_id => user.id).pluck(:circle_id)
     Circle.where("owner_type='Shop' and id in (?)", circle_ids)
@@ -148,7 +147,8 @@ class Shop < ActiveRecord::Base
 
   def notify(channel, data, options = {})
     employees.each do |member|
-      member.notify(File.join("/shops", channel), data, options)
+      # member.notify(File.join("/shops", channel), data, options)
+      member.notify(channel, data, options)
     end
   end
 

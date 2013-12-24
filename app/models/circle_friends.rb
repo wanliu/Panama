@@ -23,6 +23,10 @@ class CircleFriends < ActiveRecord::Base
 
   after_destroy :remove_from_persistent_channel
 
+  def notify_url
+    "/communities/#{circle.id}/circles"
+  end
+
   def add_to_persistent_channel
     circle_name = circle.name
     PersistentChannel.where(:user_id => user.id,
@@ -32,20 +36,20 @@ class CircleFriends < ActiveRecord::Base
                      .first_or_create
 
     owner = circle.owner
-
-    # user.notify('/joined', "恭喜你成功加入圈子 #{name}")
     if owner.is_a?(Shop)
-      owner.notify("/joined",
-                   "#{user.login} 加入了圈子 #{circle_name}",
+      owner.owner.notify("/circles/joined",
+                   "#{user.login} 加入了商圈 #{circle_name}",
                    :target => self,
                    :avatar => user.icon,
-                   :user_id => user.id)
+                   :user_id => user.id,
+                   :url => notify_url)
     elsif owner.is_a?(User)
-      owner.notify("/joined",
-                   "#{user.login} 加入了圈子 #{circle_name}",
+      owner.notify("/circles/joined",
+                   "#{user.login} 加入了个人圈 #{circle_name}",
                    :target => self,
                    :avatar => user.icon,
-                   :user_id => user.id)
+                   :user_id => user.id,
+                   :url => notify_url)
     end
   end
 
@@ -59,16 +63,18 @@ class CircleFriends < ActiveRecord::Base
     owner = circle.owner
 
     if owner.is_a?(Shop)
-      owner.notify("/leaved",
-                   "#{user.login}  已经离开了你们的商圈 #{circle_name}",
+      owner.owner.notify("/circles/leaved",
+                   "#{user.login} 离开了你们的商圈 #{circle_name}",
                    :target => self,
                    :avatar => user.icon,
-                   :user_id => user.id)
+                   :user_id => user.id,
+                   :url => notify_url)
     elsif owner.is_a?(User)
-      owner.notify('/leaved', "#{user.login} 已经离开了您的商圈 #{circle_name}",
+      owner.notify('/circles/leaved', "#{user.login} 离开了个人圈 #{circle_name}",
                    :target => self,
                    :avatar => user.icon,
-                   :user_id => user.id)
+                   :user_id => user.id,
+                   :url => notify_url)
 
     end
   end
