@@ -6,13 +6,13 @@
     people: current_user } %>
 <script type="text/javascript">
   var card = new ShopTransactionCard({
-    el: $("#order<%=@transaction.id %>"),
+    el: $("#order<%= @transaction.id %>"),
     realtime: {
       url: '<%= faye_server_uri %>',
       token: '<%= token %>'
     },
     shop: {
-      token: "<%=current_shop.im_token %>"
+      token: "<%= current_shop.im_token %>"
     }
   })
 </script>

@@ -28,7 +28,6 @@ class TransactionCardBase extends AbstructStateView
     @transaction.bind("change:state", @change_state, @)
 
     @load_realtime()
-    @loadChat()
     super
 
   countdown: () ->
@@ -196,7 +195,14 @@ class TransactionCardBase extends AbstructStateView
     @message_panel.height(total - tm - padding)
 
   toggleMessage: () ->
-    $(@chat_view.el).toggle()
+    unless @model?
+      @model = new ChatModel({
+        type: 3,
+        name: @transaction.get('token'),
+        title: "订单 #{$(@el).attr('id')}"
+      })
+      @model = ChatListView.getInstance().temporarys_view.addModel(@model)
+    @model.icon_view.toggleChat()
     false
 
   current_state: () ->
@@ -207,15 +213,6 @@ class TransactionCardBase extends AbstructStateView
 
   change_state: () ->
     @setMessagePanel()
-
-  loadChat: () ->
-    model = new ChatModel({
-      type: 3,
-      name: @transaction.get('token'),
-      title: "订单 #{$(@el).attr('id')}"
-    })
-    @chat_view = ChatService.getInstance().newChat(model)
-    @chat_view.showDialog()
 
   load_realtime: () ->
     @client = window.clients.socket
