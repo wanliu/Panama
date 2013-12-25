@@ -1,7 +1,7 @@
 <% active_section :delivery_addresses %>
 
 <div class='row-fluid'>
-	<div class="span8 widget">
+	<div class="span9 widget">
 		<div class='row-fluid'>
 			<h2 class="page-title">地址管理 <small>收货地址的清单</small></h2>      
 		</div>
@@ -23,13 +23,27 @@
 							</div>
 						<% end %>
 					<% end %>
-					<% @addresses.each do |address| %>
-						<%= render "show", :address => address %>
-					<% end %>
+					<table class="table table-striped address_table address">
+						<tr>
+							<th style="width:10%">收货人</th>
+							<th style="width:28%">所在地区</th>
+							<th style="width:35%">街道地址</th>
+							<th style="width:10%">邮编</th>
+							<th style="width:10%">联系方式</th>
+							<th style="width:7%">操作</th>
+						</tr>
+						<tbody class="table-striped">
+							<% @addresses.each do |address| %>
+								<tr class ="address<%=address.id%> address_line">
+									<%= render "show", :address => address %>
+								</tr>
+							<% end %>
+						</tbody>
+					</table>
 				</div>
 
 				<%= render :partial => "people/delivery_addresses/new", 
-								:locals => {:address => @people.delivery_addresses.build} %>
+						   :locals => {:address => @people.delivery_addresses.build} %>
 			</div>
 		</div>
 	</div>
