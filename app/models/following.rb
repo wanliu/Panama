@@ -17,15 +17,15 @@ class Following < ActiveRecord::Base
   after_create do
     if follow.is_a?(User)
       follow.notify("/follow",
-                    "#{user.login} 关注了你",
+                    "用户#{user.login} 关注了您",
                     :target => self,
-                    :url => "/people/#{user.login}/notifications",
+                    :url => "/people/#{user.login}",
                     :avatar => user.avatar)
     elsif follow.is_a?(Shop)
       follow.notify("/follow",
-                    "#{user.login} 关注我们的商店",
+                    "用户#{user.login} 关注了您的商店",
                     :target => self,
-                    :url => "/people/#{user.login}/notifications",
+                    :url => "/people/#{user.login}",
                     :avatar => user.avatar)
     end
   end
@@ -33,15 +33,15 @@ class Following < ActiveRecord::Base
   after_destroy do
     if follow.is_a?(User)
       follow.notify("/unfollow",
-                    "#{user.login} 取消关注了你",
+                    "用户#{user.login} 取消关注了您",
                     :target => self,
-                    :url => "/people/#{follow.login}/notifications",
+                    :url => "/people/#{user.login}",
                     :avatar => user.avatar)
     elsif follow.is_a?(Shop)
       follow.notify("/unfollow",
-                    "#{user.login} 不再关注我们的商店了",
+                    "商家#{user.login} 不再关注您的商店了",
                     :target => self,
-                    :url => "/people/#{user.login}/notifications",
+                    :url => "/people/#{user.login}",
                     :avatar => user.avatar)
     end
   end

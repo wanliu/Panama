@@ -31,6 +31,10 @@ class PeopleController < ApplicationController
       shop_user = @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
         if shop_user.valid?
+          shop_user.user.notify("/shops/joined",
+                           "你已经成功加入商店 #{@shop.name}",
+                           { :avatar => shop_user.user.icon,
+                             :url => "/shops/#{@shop.name}" })    
           format.html{ redirect_to person_path(current_user.login) }
         else
           @error_messages = draw_errors_message(shop_user)
@@ -46,6 +50,10 @@ class PeopleController < ApplicationController
       shop_user = @shop.shop_users.create(:user_id => current_user.id)
       respond_to do | format |
         if shop_user.valid?
+          shop_user.notify("/shops/joined",
+                           "你已经成功加入商店 #{@shop.name}",
+                           { :avatar => shop_user.user.icon,
+                             :url => "/shops/#{@shop.name}" })  
           format.html{ redirect_to person_path(current_user.login) }
         else
           @error_messages = draw_errors_message(shop_user)

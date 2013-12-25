@@ -13,7 +13,9 @@
         <span class="name">商品分类</span>
       </a>
       <ul id="forms-collapse" class="" style="display:none;">
-        <%= root_category_tree %>
+        <% cache do %>
+          <%= root_category_tree %>
+        <% end %>
       </ul>
     </li>
     <li>

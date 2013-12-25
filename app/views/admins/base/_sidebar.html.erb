@@ -21,9 +21,12 @@
         <span class="name">店铺</span>
       </a>
       <ul id="acount-collapse" class="accordion-body collapse">
-      <% sections(:shop).each do |section| %>
-        <%= render :partial => "section", :locals => section %>
-      <% end %>
+        <% sections(:shop).each do |section| %>
+          <%= render :partial => "section", :locals => section %>
+        <% end %>
+        <% if current_shop.actived == false %>
+          <li><a href="#">商店审核中..</a></li>
+        <% end %>
       </ul>
     </li>
 

@@ -128,7 +128,7 @@ class root.ChatService
   newChat: (model) ->
     exist_model = @findExist(model)
     if exist_model
-      return exist_model.view
+      return exist_model.chat_view
     else
       switch model.get('type')
         when 1
@@ -145,7 +145,7 @@ class root.ChatService
       item.get('name') is model.get('name')
 
   addOne: (model) ->
-    $el = $(model.view.el)
+    $el = $(model.chat_view.el)
     w_width = $(window).width()
     w_height = $(window).height()
     right = $(".right-sidebar").width() + (@collection.length-1)*$el.width()
@@ -297,7 +297,7 @@ class BaseChatView extends Caramal.BackboneView
     @msg_el = @$("textarea.content")
     @state_el = @$(".head>.state")
     $("body").append(@el)
-    @model.view = @
+    @model.chat_view = @
 
     ChatService.getInstance().collection.add(@model)
     upload_view = new ImageUpload({ el: @el, parent_view: @ })
@@ -375,6 +375,12 @@ class BaseChatView extends Caramal.BackboneView
     @$('.msg_content').append(@parseMessages(data))
     @trigger('active_avatar') if @name is data.user
     @scrollDialog()
+
+  toggleDialog: () ->
+    if @display
+      @hideDialog()
+    else
+      @showWithMsg()
 
   hideDialog: () ->
     $(@el).hide()
@@ -485,5 +491,5 @@ class root.TemporaryChatView extends BaseChatView
   initChannel: () ->
     @channel ||= Caramal.Group.of(@name)
     @channel.open()
-
+    @channel.record()
     

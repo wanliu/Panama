@@ -5,7 +5,9 @@
    state-url="<%= page_person_transaction_path(@people, transaction) %>"
    state-title="<%=transaction.buyer_state_title %>"
    state-event-url= "<%=trigger_event_person_transaction_path(@people, transaction) %>"
-   url-root="<%= person_transaction_path(@people, transaction) %>">
+   url-root="<%= person_transaction_path(@people, transaction) %>"
+   data-token="<%= @transaction.temporary_channel.token %>"
+   data-number="<%= @transaction.number %>" >
   <div class="wrapper-box">
     <div class='row-fluid'>
       <div class='left span7'>
@@ -40,9 +42,8 @@
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %>
           </div>
           <div class='message_wrap'>
-            <%#= render 'chat_dialog', transaction: transaction, people: people %>
-            <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>" style="frameborder: 0;">
-            </iframe>
+            <!-- <iframe name="transaction_<%=transaction.id %>" src="<%= dialogue_person_transaction_path(people, transaction) %>" style="frameborder: 0;">
+            </iframe> -->
           </div>
         </div>
       </div>

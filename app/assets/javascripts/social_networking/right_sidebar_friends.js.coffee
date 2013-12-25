@@ -15,8 +15,10 @@ class root.ChatListView extends Backbone.View
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
 
+    @temporarys_view = new TemporaryIconsView(parent_view: @)
     @friends_view = new FriendIconsView(parent_view: @)
     @groups_view = new GroupIconsView(parent_view: @)
+
     $(@el).prepend('
       <div class="fixed_head">
         <input class="filter_key" type="text"/>
@@ -40,6 +42,8 @@ class root.ChatListView extends Backbone.View
         @friends_view
       when 2
         @groups_view
+      when 3
+        @temporarys_view
       else
         console.error('unprocess type: ', type)
 
@@ -48,6 +52,7 @@ class root.ChatListView extends Backbone.View
 
   filter_list: (event) ->
     keyword = $(event.target).val().trim()
+    @temporarys_view.filter_list(keyword)
     @friends_view.filter_list(keyword)
     @groups_view.filter_list(keyword)
 
@@ -80,26 +85,34 @@ class BaseIconsView extends Backbone.View
       @addOne(model)
 
   process: (channel) ->
-    exist_model = @find_exist(channel)
+    exist_model = @findExist(channel)
     if exist_model
       @top(exist_model)
-      exist_model.view.setChannel(channel)
+      exist_model.icon_view.setChannel(channel)
+    else
+      model = new ChatModel({
+        type: 3, 
+        name: channel.group, 
+        title: "订单 #{channel.id}",
+        channel: channel
+      })
+      @parent_view.temporarys_view.addModel(model)
 
   filter_list: (keyword) ->
     pattern = new RegExp(keyword)
     _.each @collection.models, (model) ->
       if pattern.test(model.get('login'))
-        $(model.view.el).show()
+        $(model.icon_view.el).show()
       else
-        $(model.view.el).hide()
+        $(model.icon_view.el).hide()
 
-  find_exist: (channel) ->
+  findExist: (channel) ->
     _.find @collection.models, (model) =>
-      model.get('login') is channel.user
+      model.get('name') is channel.user
 
   top: (model) ->
     # @parent_view.active()
-    friend_view = model.view
+    friend_view = model.icon_view
     friend_view.remove()
     @$("ul").append(friend_view.el)
     friend_view.delegateEvents()
@@ -129,13 +142,14 @@ class FriendIconsView extends BaseIconsView
       name: model.get('login'), 
       title: "好友 #{model.get('login')}" 
     })
+
     friend_view = new FriendIconView({ model: model, parent_view: @ })
-    model.view  = friend_view
+    model.icon_view  = friend_view
     @$(".users-list").append(friend_view.render().el)
 
   removeOne: (model) ->
-    if model.view?
-      $(model.view.el).remove();
+    if model.icon_view?
+      $(model.icon_view.el).remove();
 
   addFriend: (attributes) ->
     chat = new ChatModel(attributes)
@@ -166,16 +180,50 @@ class GroupIconsView extends BaseIconsView
       name: model.get('login'), 
       title: "商圈 #{model.get('login')}" 
     })
+
     groupView = new GroupIconView({ model: model, parent_view: @ })
-    model.view  = groupView
+    model.icon_view  = groupView
     @$(".users-list").append(groupView.render().el)
 
 
+class TemporaryIconsView extends BaseIconsView
+  className: 'temporarys-list'
+
+  template: '
+    <ul class="users-list temporarys">
+    </ul>'
+
+  initialize: () ->
+    super
+
+  render: () ->
+    $(@el).html(@template)
+    @
+
+  addModel: (model) ->
+    exist_model = @findExist(model)
+    if exist_model
+      return exist_model
+    else
+      @collection.add(model)
+      return model
+
+  addOne: (model) ->
+    temporaryView = new TemporaryIconView({ model: model, parent_view: @ })
+    model.icon_view  = temporaryView
+    @$(".users-list").append(temporaryView.render().el)
+
+  findExist: (model) ->
+    _.find @collection.models, (item) =>
+      item.get('name') is model.get('name')
+
+
 class BaseIconView extends Backbone.View
+
   tagName: 'li'
 
   events:
-    "click" : "showChat"
+    "click " : "toggleChat"
 
   template: Handlebars.compile("""
     <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
@@ -189,7 +237,8 @@ class BaseIconView extends Backbone.View
 
   initialize: () ->
     @clearMsgCount()
-    @model.view = @
+    @model.icon_view = @
+    @setChannel() unless @channel?
 
   render: () ->
     html = @template(@model.attributes)
@@ -215,14 +264,14 @@ class BaseIconView extends Backbone.View
         @active()
     , @
 
-  showChat: () ->
-    @unactive()
-    $(".global_chat").css('z-index', 9999)
-    @setChannel() unless @channel?
+  getChat: () ->
     unless @chat_view
       @chat_view = ChatService.getInstance().newChat(@model)
       @bind_chat()
-    @chat_view.showWithMsg()
+    @chat_view
+
+  toggleChat: () ->
+    @getChat().toggleDialog()
 
   bind_chat: () ->
     @chat_view.bind("active_avatar", _.bind(@active, @))
@@ -261,5 +310,4 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
-    
-    
+

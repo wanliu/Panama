@@ -3,13 +3,13 @@
     <h4 class='title'>被关注</h4>
     <% if @followings.count > 0 %>
       <% @followings.each do |following| %>
-        <div class='span3 alert alert-info follow'>
+        <div class='span2 alert alert-info follow'>
           <img src="<%= following.user.icon %>" class='img-polaroid' />
           <%=following.user.login %>
         </div>
       <% end %>
     <% else %>
-      <div class='span3 alert alert-warning'>
+      <div class='span2 alert alert-warning'>
         暂时没有被关注
       </div>
     <% end %>

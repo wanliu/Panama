@@ -61,6 +61,7 @@ class People::FollowingsController < People::BaseController
 
   def followers
     @followers = @people.followers
+    # @shop_followers = @people.shop.followers unless @people.shop.nil?  #商店关注者
     respond_to do |format|
       format.html
       format.json{ render :json => @followers }

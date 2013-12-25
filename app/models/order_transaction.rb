@@ -29,8 +29,7 @@ class OrderTransaction < ActiveRecord::Base
           foreign_key: "delivery_type_id"
 
   belongs_to :seller, class_name: "Shop"
-  belongs_to :buyer,
-             class_name: "User"
+  belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "TransactionOperator"
   belongs_to :pay_manner
   belongs_to :delivery_manner
@@ -49,6 +48,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
   has_many :refunds, class_name: "OrderRefund", dependent: :destroy
   has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy, inverse_of: :order_transaction
+  has_one :temporary_channel, :as => :targeable
 
   validates :state, :presence => true
 
@@ -70,7 +70,16 @@ class OrderTransaction < ActiveRecord::Base
     generate_number
   end
 
-  after_create :state_change_detail, :notice_user
+  after_create  :notice_new_order, :state_change_detail, :notice_user
+  after_commit :create_the_temporary_channel, on: :create
+
+  def notice_url(current_user)
+    url = if self.buyer == current_user
+      "/people/#{ current_user.login}/transactions#order#{ self.id}"
+    else
+      "/shops/#{ self.seller.name }/admins/pending#order#{ self.id}"
+    end
+  end
 
   def notice_user
     seller.notify("/#{seller.im_token}/transactions/create", "你有编号#{number}新的订单",
@@ -683,4 +692,8 @@ class OrderTransaction < ActiveRecord::Base
     I18n.t("order_states.#{owner}.#{state}")
   end
 
+  def create_the_temporary_channel
+    name = self.class.to_s << "_" << number
+    self.create_temporary_channel(targeable_type: "OrderTransaction", user_id: seller.owner.id, name: name)
+  end
 end

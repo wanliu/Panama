@@ -68,7 +68,6 @@ class Shop < ActiveRecord::Base
   end
 
   #加入的商店商圈
-
   def circle_all
     circle_ids = CircleFriends.where(:user_id => user.id).pluck(:circle_id)
     Circle.where("owner_type='Shop' and id in (?)", circle_ids)

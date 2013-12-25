@@ -69,6 +69,9 @@ class Activities::AuctionController < Activities::BaseController
         format.json { render :json => { text: 'ok' } }
       else
         format.json { render :json => draw_errors_message(@activity), :status => 403 }
+        format.js{ render :partial => "activities/auction/form",
+                          :locals  => { :activity => @activity },
+                          :status  => 403 }
       end
     end
   end
