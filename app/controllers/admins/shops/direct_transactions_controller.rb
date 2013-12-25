@@ -3,7 +3,9 @@
 class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionController
 
   def index
-    @direct_transactions = current_shop.direct_transactions.uncomplete.order("created_at desc").page(params[:page])
+    directs = current_shop.direct_transactions.order("created_at desc")
+    @undirects = directs.where(:operator_id => nil)
+    @directs = directs.uncomplete.where(:operator_id => current_user.id).page(params[:page])
   end
 
   def dialog
@@ -41,14 +43,19 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
 
   def dispose
     @direct_transaction = current_shop_direct_transaction
-    @direct_transaction.operator = current_user
-    if @direct_transaction.save
-      @direct_transaction.unmessages.update_all(:receive_user_id => current_user.id)
-      render :partial => "admins/shops/direct_transactions/show", :locals => {
-        :direct_transaction => @direct_transaction
-      }
-    else
-      render :json => draw_errors_message(@direct_transaction), :status => 403
+    respond_to do |format|
+      if @direct_transaction.update_operator(current_user)
+        @direct_transaction.unmessages.update_all(:receive_user_id => current_user.id)
+        format.html{
+          render :partial => "admins/shops/direct_transactions/show", :locals => {
+            :direct_transaction => @direct_transaction
+          }
+        }
+      else
+        format.json{
+          render :json => draw_errors_message(@direct_transaction), :status => 403
+        }
+      end
     end
   end
 
@@ -56,6 +63,7 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     @direct_transaction = current_shop_direct_transaction
     respond_to do |format|
       format.html
+      format.json{ render :json => @direct_transaction }
     end
   end
 

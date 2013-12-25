@@ -1,51 +1,31 @@
 #= require transactions/2columns_viewport
 #= require admins/shops/shop_transaction_card
+#= require transactions/card_item
 
 root = (window || @)
 
 class Transactions extends Backbone.Collection
 
-class TransactionView extends Backbone.View
+class TransactionView extends CardItemView
 
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("remove", @remove, @)
-    @model.bind("change:state", @change_state, @)
-    @model.bind("change:register", @register_view, @)
-    @register_view()
-
-  remove: () ->
-    @card.remove() unless _.isEmpty(@card)
     super
 
-  change_state: () ->
-    #unless _.isEmpty(@card)
-    #  @card.stateChange(event: @model.get("event"))
-
-    @change_table_state()
-
-  register_view: () ->
-    if @model.get("register")
-      @card = new ShopTransactionCard({
-        el: @$(".full-mode .transaction"),
-        shop: @shop
-      })
-      @card.transaction.bind("change:state", @card_change_state, @)
+  get_register_view: () ->
+    view = new ShopTransactionCard({
+      el: @$(".full-mode .transaction"),
+      shop: @shop
+    })
+    view.transaction.bind("change:state", @card_change_state, @)
+    view
 
   card_change_state: () ->
     unless _.isEmpty(@card)
       @set_state(@card.transaction.get("state"))
       @model.set(state_title: @card.transaction.get("state_title"))
 
-    @change_table_state()
-
-  set_state: (state) ->
-    @model.attributes.state = state
-    @model._currentAttributes.state = state
-
-  change_table_state: () ->
-    @$(".order_header .state-label").html(
-      @model.get("state_title"))
+    super
 
 class root.ShopOrderTransactions extends Backbone.View
 
@@ -84,11 +64,11 @@ class root.ShopOrderTransactions extends Backbone.View
   realtime_load: () ->
     @client = window.clients.socket
 
-    @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/destroy", (data) =>
+    @client.subscribe "notify:/#{@shop.token}/transactions/destroy", (data) =>
       @destroy data
 
   monitor_state: (order_id) ->
-    @client.subscribe "notify:/shops/#{@shop.token}/order_transactions/#{order_id}/change_state", (data) =>
+    @client.subscribe "notify:/#{@shop.token}/transactions/#{order_id}/change_state", (data) =>
       @change_state data
 
   destroy: (data) ->

@@ -3,12 +3,13 @@ root = (window || @)
 
 class root.TransactionRealTime
 
-  constructor: (shop_key) ->
+  constructor: (shop_key, type) ->
+    @type = type
     @shop_key = shop_key
     @client = window.clients.socket
 
   url_root: () ->
-    "notify:/shops/#{@shop_key}/order_transactions"
+    "notify:/shops/#{@shop_key}/#{@type}"
 
   create: (callback) ->
     @client.subscribe "#{@url_root()}/create", (data) =>

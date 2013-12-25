@@ -161,7 +161,7 @@ class ShopTransactionCard extends TransactionCardBase
       @$(".express-info").length > 0 && @$(".express-info").css("display") == "block" )
 
   realtime_url: () ->
-    "notify:/#{@shop.token}#{super}"
+    "notify:/#{@shop.token}/transactions#{super}"
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

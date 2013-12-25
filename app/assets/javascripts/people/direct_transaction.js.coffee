@@ -2,7 +2,6 @@ root = (window || @)
 
 class Direct extends Backbone.Model
 
-
 class root.DirectTransactionView extends Backbone.View
   events: {
     "click .direct-message button"  : "toggle_message"
@@ -17,8 +16,12 @@ class root.DirectTransactionView extends Backbone.View
     @$iframe = @$message.find("iframe")
     @$messages = @$message.find(".messages")
     @$toolbar = @$message.find(".toolbar")
-    @model = new Direct(id: @$el.attr("data-value-id"))
+    @model = new Direct(
+      state: @$el.attr("state-name"),
+      id: @$el.attr("data-value-id"))
 
+    @model.bind("change:state", @change_state, @)
+    @load_realtime()
     @load_style()
 
   load_style: () ->
@@ -34,6 +37,20 @@ class root.DirectTransactionView extends Backbone.View
     $.ajax(
       url: "/people/#{@login}/direct_transactions/#{@model.id}/completed",
       type: 'POST',
-      success: () =>
-        @$(".wrap_event").html("<h4 class='pull-right'>交易成功</h4>")
+      success: (data) =>
+        @model.set(
+          state: data.state_name,
+          state_title: data.state_title
+        )
     )
+
+  change_state: () ->
+    $(".state_title", @$info).html(@model.get("state_title"))
+
+  load_realtime: () ->
+    @client = window.clients.socket
+    @client.subscribe "notify:/direct_transactions/#{@model.id}/change_state", (data) =>
+      @model.set(
+        state: data.state,
+        state_title: data.state_title
+      )

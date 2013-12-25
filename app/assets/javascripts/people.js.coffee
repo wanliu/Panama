@@ -11,6 +11,9 @@
 #= require people/followers
 #= require following
 #= require lib/table_list
+#= require transactions/2columns_viewport
+#= require transactions/mini_left_side
+#= require transactions/card_item
 #= require people/cart
 #= require people/community
 #= require people/community_people
@@ -35,5 +38,3 @@
 #= require people/direct_transaction_list
 #= require people/order_transactions
 #= require people/order_refund_list
-#= require transactions/2columns_viewport
-#= require transactions/mini_left_side

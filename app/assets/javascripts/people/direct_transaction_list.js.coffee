@@ -5,23 +5,27 @@ root = (window || @)
 
 class Transactions extends Backbone.Collection
 
-class DirectTransaction extends Backbone.View
+class DirectTransaction extends CardItemView
   events: {
     "click .summarize .btn_delete" : "destroy"
   }
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("change:register", @register_view, @)
-    @model.bind("remove", @remove, @)
+    super
 
-  register_view: () ->
-    @view = new DirectTransactionView(
-      el: @$(".detail .direct"),
+  get_register_view: () ->
+    view = new DirectTransactionView(
+      el: @$(".full-mode .direct"),
       login: @login
     )
+    view.model.bind("change:state", @card_change_state, @)
+    view
 
-  remove: () ->
-    @view.remove() unless _.isEmpty(@view)
+  card_change_state: () ->
+    unless _.isEmpty(@card)
+      @set_state(@card.model.get("state"))
+      @model.set(state_title: @card.model.get("state_title"))
+
     super
 
   destroy: () ->
@@ -53,7 +57,7 @@ class root.DirectTransactionList extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".item"), (el) => @add el
+    _.each @$(".directs>.card_item"), (el) => @add el
 
   add: (item) ->
     @collection.add(
@@ -66,11 +70,13 @@ class root.DirectTransactionList extends Backbone.View
     model.set(register: true) unless _.isEmpty(model)
 
   load_table_list: () ->
-    @table = new TableListView(
+    @table = new TransactionTwoColumnsViewport({
       el: @$el,
+      secondContainer: ".direct-detail",
+      warpClass: ".directs",
       remote_url: @remote_url,
-      bindView: (view) => @register(view.model.id)
-    )
+      registerView: (view) => @register(view.model.id)
+    });
 
   load_realtime: () ->
     @client = window.clients.socket

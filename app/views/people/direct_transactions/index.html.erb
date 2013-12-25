@@ -30,23 +30,10 @@
 <script type='text/javascript'>
   $(function(){
 
-    var view = new TransactionTwoColumnsViewport({
+    new DirectTransactionList({
       el: $(".direct_transaction_list"),
-      secondContainer: ".direct-detail",
-      warpClass: ".directs",
-      remote_url: "<%= person_direct_transactions_path(@people) %>",
-      registerView: function(view){
-        new DirectTransactionView({
-          el: $(".direct", view.$detail),
-          login: "<%=current_user.login %>"
-        })
-      }
-    });
-
-    // new DirectTransactionList({
-    //   el: $(".direct_transaction_list"),
-    //   login: "<%=current_user.login %>",
-    //   remote_url: "<%= person_direct_transactions_path(@people) %>"
-    // })
+      login: "<%=current_user.login %>",
+      remote_url: "<%= person_direct_transactions_path(@people) %>"
+    })
   })
 </script>

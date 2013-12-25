@@ -8,7 +8,13 @@ class root.ShopDirectTransactionView extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @init_elem()
-    @direct_transaction_id = @$el.attr("data-value-id")
+
+    @model = new Backbone.Model(
+      state: @$el.attr("state-name"),
+      id: @$el.attr("data-value-id"))
+
+    @model.bind("change:state", @change_state, @)
+    @load_realtime()
     @load_style()
 
   init_elem: () =>
@@ -27,3 +33,15 @@ class root.ShopDirectTransactionView extends Backbone.View
 
   toggle_message: () ->
     @$messages.slideToggle()
+
+  change_state: () ->
+    $(".state_title", @$info).html(@model.get("state_title"))
+
+  load_realtime: () ->
+    @client = window.clients.socket
+
+    @client.subscribe "notify:/#{@shop.token}/direct_transactions/#{@model.id}/change_state", (data) =>
+      @model.set(
+        state: data.state,
+        state_title: data.state_title
+      )

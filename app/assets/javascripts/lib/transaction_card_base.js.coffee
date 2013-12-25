@@ -208,7 +208,7 @@ class TransactionCardBase extends AbstructStateView
       @stateChange data
 
   realtime_url: () ->
-    "/order_transactions/#{@transaction.id}"
+    "/#{@transaction.id}"
 
 exports.TransactionCardBase = TransactionCardBase
 exports
