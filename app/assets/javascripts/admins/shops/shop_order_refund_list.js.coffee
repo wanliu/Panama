@@ -80,15 +80,16 @@ class root.ShopOrderRefundList extends Backbone.View
 
   load_realtime: () ->
     @client = window.clients.socket
+    @root = "notify:/#{@shop.token}/order_refunds"
 
-    @client.subscribe "notify:/#{@shop.token}/order_refunds/create", (data) =>
+    @client.subscribe "#{@root}/create", (data) =>
       @realtime_create(data)
 
-    @client.subscribe "notify:/#{@shop.token}/order_refunds/destroy", (data) =>
+    @client.subscribe "#{@root}/destroy", (data) =>
       @destroy data.refund_id
 
   monitor_state: (id) ->
-    @client.subscribe "notify:/#{@shop.token}/order_refunds/#{id}/change_state", (data) =>
+    @client.subscribe "#{@root}/#{id}/change_state", (data) =>
       @change_state(data)
 
   destroy: (id) ->

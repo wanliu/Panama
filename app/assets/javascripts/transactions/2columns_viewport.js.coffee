@@ -116,12 +116,16 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
     if @currentView?
       el = @currentView.$el
-      target = @$(@child).get(@insertIndex)
-      $target = $(target)
-      posTarget = $target.position()
-      widthTarget = $target.width()
+      target = @rows[@insertIndex - 1]
+      #$target = row.$el
+      #posTarget = $target.position()
+      #widthTarget = $target.width()
 
-      el.insertBefore($target)
+      if _.isEmpty(target)
+        @$orders.prepend(el)
+      else
+        el.insertAfter(target.$el)
+
       el.attr('style', '')
 
   enterColumnsLayout: (callback) =>
