@@ -197,9 +197,11 @@ class TransactionCardBase extends AbstructStateView
     @message_panel.height(total - tm - padding)
 
   toggleMessage: () ->
+    # @$(".message_wrap", ".transaction-footer").slideToggle()
     unless @model?
       @model = new ChatModel({
         type: 3,
+        target_el: @$('.message_wrap'),
         name: @transaction.get('token'),
         title: "订单 #{@transaction.get('number')}"
       })

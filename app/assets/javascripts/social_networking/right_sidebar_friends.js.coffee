@@ -93,6 +93,7 @@ class BaseIconsView extends Backbone.View
       model = new ChatModel({
         type: 3, 
         name: channel.group, 
+        target_el: $("[data-token='" + channel.group + "']").find('.message_wrap')
         title: "订单 #{channel.id}",
         channel: channel
       })
