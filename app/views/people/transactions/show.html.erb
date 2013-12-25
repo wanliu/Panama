@@ -1,7 +1,9 @@
 <% active_section :transaction %>
 <div class="sidebar_panel">
   <p id="notice"><%= notice %></p>
-  <%= render_funcat 'pay_notify', :transaction => @transaction, :pay_msg => @pay_msg %>
+  <%= render_funcat 'pay_notify', :locals => {
+    :transaction => @transaction,
+    :pay_msg => @pay_msg } %>
   <div class="main-sidebar">
     <%= render  partial: 'transaction',
                 object:  @transaction,
