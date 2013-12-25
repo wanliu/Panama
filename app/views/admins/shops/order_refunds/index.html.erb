@@ -7,7 +7,7 @@
       </div>
 
       <div class='threeD-viewport'>
-         <div class='refunds'>
+         <div class='refunds card_list'>
           <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
         </div>
       </div>
@@ -26,28 +26,15 @@
 <script type='text/javascript'>
   $(function(){
 
-    var view = new TransactionTwoColumnsViewport({
+    new ShopOrderRefundList({
       el: $(".order_refund_list"),
-      secondContainer: ".refund-detail",
-      warpClass: ".refunds",
-      remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>",
-      leftSide: "#left_sidebar",
-      registerView: function(view){
-        new ShopOrderRefundCard({
-          el: $(".order_refund", view.$detail)
-        })
-      }
-    });
-
-    // new ShopOrderRefundList({
-    //   el: $(".order_refund_list"),
-    //   shop: {
-    //     id: <%=current_shop.id %>,
-    //     name: "<%=current_shop.name %>",
-    //     token: "<%=current_shop.im_token %>"
-    //   },
-    //   remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
-    // })
+      shop: {
+        id: <%=current_shop.id %>,
+        name: "<%=current_shop.name %>",
+        token: "<%=current_shop.im_token %>"
+      },
+      remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
+    })
 
   })
 </script>

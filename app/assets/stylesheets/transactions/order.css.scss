@@ -36,6 +36,17 @@
 
 }
 
+.left{
+  &.float{
+    .card_item_header{
+
+      .title, .time{
+        color: rgb(179, 150, 150);
+      }
+    }
+  }
+}
+
 .card_item {
 
   width: 100%;

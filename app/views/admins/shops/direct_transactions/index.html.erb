@@ -36,7 +36,7 @@
     </div>
 
     <div class='threeD-viewport'>
-      <div class='directs'>
+      <div class='directs card_list'>
         <% if @directs.length > 0 %>
           <%= render :partial => "direct_transactions/mini_row", :collection => @directs, :as => :row %>
         <% else %>

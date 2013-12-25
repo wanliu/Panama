@@ -3,7 +3,8 @@
 exports = window || @
 
 class exports.ShopOrderRefundCard extends TransactionCardBase
-  initialize: () ->
+  initialize: (options) ->
+    @shop = options.shop
     super
 
   events: {
@@ -60,3 +61,6 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
       button.addClass("disabled")
     else
       button.removeClass("disabled")
+
+  realtime_url: () ->
+    "notify:/#{@shop.token}/order_refunds#{super}"
