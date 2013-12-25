@@ -70,7 +70,11 @@ class OrderTransaction < ActiveRecord::Base
     generate_number
   end
 
-  after_create  :notice_new_order, :state_change_detail, :notice_user
+  after_create do
+    state_change_detail
+    notice_user
+  end
+
   after_commit :create_the_temporary_channel, on: :create
 
   def notice_url(current_user)
@@ -478,6 +482,11 @@ class OrderTransaction < ActiveRecord::Base
     )
   end
 
+  def create_the_temporary_channel
+    name = self.class.to_s << "_" << number
+    self.create_temporary_channel(targeable_type: "OrderTransaction", user_id: seller.owner.id, name: name)
+  end
+
   #买家发送信息
   def message_create(options)
     #是否有销售组成员在线
@@ -692,8 +701,5 @@ class OrderTransaction < ActiveRecord::Base
     I18n.t("order_states.#{owner}.#{state}")
   end
 
-  def create_the_temporary_channel
-    name = self.class.to_s << "_" << number
-    self.create_temporary_channel(targeable_type: "OrderTransaction", user_id: seller.owner.id, name: name)
-  end
+
 end

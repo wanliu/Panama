@@ -25,22 +25,9 @@
 
 <script type='text/javascript'>
   $(function(){
-
-    var view = new TransactionTwoColumnsViewport({
+    new OrderRefundList({
       el: $(".order_refund_list"),
-      secondContainer: ".refund-detail",
-      warpClass: ".refunds",
-      remote_url: "<%= person_order_refunds_path(@people) %>",
-      registerView: function(view){
-        new OrderRefundCard({
-          el: $(".order_refund", view.$detail)
-        })
-      }
-    });
-
-    // new OrderRefundList({
-    //   el: $(".order_refund_list"),
-    //   remote_url: "<%= person_order_refunds_path(@people) %>"
-    // })
+      remote_url: "<%= person_order_refunds_path(@people) %>"
+    })
   })
 </script>

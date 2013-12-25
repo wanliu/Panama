@@ -5,41 +5,29 @@ root = (window || @)
 
 class Refunds extends Backbone.Collection
 
-class OrderRefund extends Backbone.View
+class OrderRefund extends CardItemView
   events: {
     "click .summarize .btn_delete" : "destroy"
   }
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("change:register", @register_view, @)
-    @model.bind("change:state", @change_state, @)
-
-  register_view: () ->
-    @view = new OrderRefundCard(
-      el: @$(".detail .order_refund")
-    )
-    @transaction = @view.transaction
-    @transaction.bind("change:state", @view_change_state, @)
-    @set_state(@transaction.get("state"))
-    @model.set(state_title: @transaction.get("state_title"))
-
-  remove: () ->
-    @view.remove() unless _.isEmpty(@view)
     super
 
-  change_state: () ->
-    @view.stateChange(event: @model.get("event")) unless _.isEmpty(@view)
-    @change_table_state()
+  get_register_view: () ->
+    view = new OrderRefundCard(
+      el: @$(".full-mode .order_refund")
+    )
+    view.transaction.bind("change:state", @card_change_state, @)
+    data = view.transaction.toJSON()
+    @syn_state(data.state, data.state_title)
+    view
 
-  change_table_state: () ->
-    @$(".state_title").html(@model.get("state_title"))
+  card_change_state: () ->
+    unless _.isEmpty @card
+      data = @card.transaction.toJSON()
+      @syn_state(data.state, data.state_title)
 
-  set_state: (state) ->
-    @model.attributes.state = state
-    @model._currentAttributes.state = state
-
-  view_change_state: () ->
-    @set_state()
+    super
 
   destroy: () ->
     if confirm "是否确定删除退货单?"
@@ -62,13 +50,14 @@ class root.OrderRefundList extends Backbone.View
   add_one: (model) ->
     elem = model.get("elem")
     delete model.attributes.elem
+    @monitor_state(model.id)
     new OrderRefund(
       model: model,
       el: elem
     )
 
   reset: () ->
-    _.each @$(".item"), (el) => @add el
+    _.each @$(".refunds>.card_item"), (el) => @add el
 
   add: (item) ->
     @collection.add(
@@ -81,16 +70,19 @@ class root.OrderRefundList extends Backbone.View
     model.set(register: true) unless _.isEmpty(model)
 
   load_table_list: () ->
-    @table = new TableListView(
+    @table = new TransactionTwoColumnsViewport({
       el: @$el,
+      secondContainer: ".refund-detail",
+      warpClass: ".refunds",
       remote_url: @remote_url,
-      bindView: (view) => @register(view.model.id)
-    )
+      registerView: (view) => @register(view.model.id)
+    });
 
   load_realtime: () ->
     @client = window.clients.socket
 
-    @client.subscribe "notify:/order_refunds/change_state", (data) =>
+  monitor_state: (id) ->
+    @client.subscribe "notify:/order_refunds/#{id}/change_state", (data) =>
       @change_state(data)
 
   change_state: (data) ->

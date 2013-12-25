@@ -31,6 +31,10 @@ class root.CardItemView extends Backbone.View
     @model.attributes.state = state
     @model._currentAttributes.state = state
 
+  syn_state: (state, state_title) ->
+    @set_state(state)
+    @model.set(state_title: state_title)
+
   change_table_state: () ->
     @$(".card_item_header .state-label").html(
       @model.get("state_title"))

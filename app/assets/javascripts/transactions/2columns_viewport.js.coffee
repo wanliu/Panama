@@ -39,15 +39,17 @@ class TransactionTwoColumnsViewport extends Backbone.View
   getCurrentTransaction: () ->
 
   loadView: () ->
-    @$(@child).each (i, ele) =>
-      model = new Transaction(
-        full_mode: true,
-        elem: $(ele),
-        listView: @,
-        id: $(ele).attr('data-value-id')
-      )
+    @$(@child).each (i, ele) => @add ele
 
-      @models.add(model)
+  add: (elem) ->
+    model = new Transaction(
+      full_mode: true,
+      elem: $(elem),
+      listView: @,
+      id: $(elem).attr('data-value-id')
+    )
+
+    @models.add(model)
 
   addView: (model) ->
     elem = model.get("elem")
