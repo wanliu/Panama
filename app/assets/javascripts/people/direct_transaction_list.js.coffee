@@ -73,7 +73,6 @@ class root.DirectTransactionList extends Backbone.View
     @table = new TransactionTwoColumnsViewport({
       el: @$el,
       secondContainer: ".direct-detail",
-      warpClass: ".directs",
       remote_url: @remote_url,
       registerView: (view) => @register(view.model.id)
     });

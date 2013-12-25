@@ -72,7 +72,6 @@ class root.ShopOrderRefundList extends Backbone.View
     @table = new TransactionTwoColumnsViewport({
       el: @$el,
       secondContainer: ".refund-detail",
-      warpClass: ".refunds",
       remote_url: @remote_url,
       leftSide: "#left_sidebar",
       registerView: (view) => @register view.model.id

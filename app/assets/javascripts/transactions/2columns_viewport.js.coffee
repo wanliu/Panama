@@ -21,7 +21,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   secondContainer: ".order-detail"
   leftClass: "float"
   rightClass: ""
-  warpClass: ".orders"
+  warpClass: ".card_list"
 
   initialize: (@options) ->
     _.extend(@, @options)

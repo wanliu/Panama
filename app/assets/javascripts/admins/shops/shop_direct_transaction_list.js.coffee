@@ -66,7 +66,6 @@ class root.ShopDirectTransactionList extends Backbone.View
     @table = new TransactionTwoColumnsViewport(
       el: @$el,
       secondContainer: ".direct-detail",
-      warpClass: ".directs",
       remote_url: @remote_url,
       leftSide: "#left_sidebar",
       registerView: (view) => @register(view.model.id)
