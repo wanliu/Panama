@@ -83,8 +83,13 @@
 			<li id="{{ id }}" class='product_item'>
 				<img src="{{ url }}" alt="{{name}}" class='product_img' />
 				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-				<section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span></section>
-				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span></section>
+				<section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span>
+				</section>
+				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span>
+				</section>
+				{{#join_state}}
+					<span class="label label-warning pull-right">已添加</span>
+				{{/join_state}}
 			</li>
 		</script>
 

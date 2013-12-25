@@ -51,6 +51,7 @@ Panama::Application.routes.draw do
 
   match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
   match "cities/:city_id/communities", :to => "communities#city_index", :via => :get
+
   resources :communities do
     collection do
       get "hot_region_name", :to => "communities#hot_region_name"
