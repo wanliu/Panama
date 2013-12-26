@@ -43,6 +43,14 @@ module ApplicationHelper
     end
   end
 
+  def product_join_state(products, shop_id)
+    product_ids = Shop.find(shop_id).products.pluck("product_id")
+    products.map do |product|
+      product[:join_state] = product_ids.include?(product.id)
+      product
+    end
+  end
+
   def test_config
     path = "config/test.yml"
     (File.exists?(path) ? YAML::load_file(path) : {}).symbolize_keys

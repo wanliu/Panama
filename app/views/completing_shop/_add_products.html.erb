@@ -1,185 +1,167 @@
 <div class='row-fluid dialog_product'>
-	<div class="span4">
-		<header>
-			<ul class="nav nav-tabs">
-				<li class="active" id ="sort">
-					<a href="#categories" data-toggle="tab">分类</a>
-				</li>
-				<li>
-					<a href="#brands" data-toggle="tab">品牌</a>
-				</li>
-			</ul>
-		</header>
-		<div class="body tab-content">
-			<div id="categories" class="tab-pane active clearfix">
-				<div class='search-header'>
-					<div class="input-append controls-row">
-						<input class="span8" type="search" id="search-input3">
-						<button type="button" class="btn btn-transparent span4">搜索</button>
-					</div>
-				</div>
-				<div>
-					<%= render "category_selector"%>
-				</div>
-			</div>
-			<div id="brands" class="tab-pane">
-			</div>
-		</div>
-	</div>
-	<div class="span4">
-		<div class='panel' style="margin-right:13px;">
-			<h4><i class='icon-th-large'></i>分类商品
-				<!-- <i class="icon-foursquare"></i> -->
-				<button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
-			</h4>
-			<div class='search-header'>
-				<div class="input-append controls-row">
-					<input class="span8" type="search" id="search-input1">
-					<button type="button" class="btn btn-transparent span4">搜索</button>
-				</div>
-			</div>
-			<ul class='category_product_list product_list'>
-				<p class='info'><i class="icon-arrow-left"></i>请从左边选择分类添加...</p>
-			</ul>
-			<div class="btn-group btn-group-vertical pull-right position">
-				<div class='buttons'>
-					<%= link_to '#', :class => 'btn add_to_shop' do %>
-					<%= icon 'arrow-right' %>
-					<% end %>
-				</div>
-				<div class='buttons'>
-					<%= link_to '#', :class => 'btn remove_from_shop pull-right' do %>
-					<%= icon 'arrow-left' %>
-					<% end %>
-				</div>
-			</div>
-		</div>
+  <div class="span4">
+    <header>
+      <ul class="nav nav-tabs">
+        <li class="active" id ="sort">
+          <a href="#categories" data-toggle="tab">分类</a>
+        </li>
+        <li>
+          <a href="#brands" data-toggle="tab">品牌</a>
+        </li>
+      </ul>
+    </header>
+    <div class="body tab-content">
+      <div id="categories" class="tab-pane active clearfix">
+        <div class='search-header'>
+          <div class="input-append controls-row">
+            <input class="span8" type="search" id="search-input3">
+            <button type="button" class="btn btn-transparent span4">搜索</button>
+          </div>
+        </div>
+        <div>
+          <%= render "category_selector"%>
+        </div>
+      </div>
+      <div id="brands" class="tab-pane">
+      </div>
+    </div>
+  </div>
+  <div class="span4">
+    <div class='panel' style="margin-right:13px;">
+      <h4><i class='icon-th-large'></i>分类商品
+        <!-- <i class="icon-foursquare"></i> -->
+        <button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
+      </h4>
+      <div class='search-header'>
+        <div class="input-append controls-row">
+          <form class='product'>
+            <input class="span8 search" type="search" id="search-input1">
+            <button type="submit" class="btn btn-transparent span4">搜索</button>
+          </form>
+        </div>
+      </div>
+      <ul class='category_product_list product_list'>
+        <p class='info'><i class="icon-arrow-left"></i>请从左边选择分类添加...</p>
+      </ul>
+      <div class="btn-group btn-group-vertical pull-right position">
+        <div class='buttons'>
+          <%= link_to '#', :class => 'btn add_to_shop' do %>
+          <%= icon 'arrow-right' %>
+          <% end %>
+        </div>
+        <div class='buttons'>
+          <%= link_to '#', :class => 'btn remove_from_shop pull-right' do %>
+          <%= icon 'arrow-left' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-		<script type="text/template" id="category_product_show" >
-			<li id="{{ id }}" class='product_item'>
-				{{#photos}}
-				<img src="{{ icon }}" alt="{{name}}" class='product_img' />
-				{{/photos}}
-				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-				<span>单价:<i class='icon-jpy'></i> {{ price }}</span>
-				<span>库存: {{ inventory }}</span>
-			</li>
-		</script>
-	</div>
-	<div class="span4">
-		<div class='panel diffrent'>
-			<h4><i class='icon-th-large'></i>库存商品</h4>
-			<div class='search-header'>
-				<div class="input-append controls-row">
-					<input class="span8" type="search" id="search-input2">
-					<button type="button" class="btn btn-transparent span4">搜索</button>
-				</div>
-			</div>
-			<ul class='my_product_list product_list'>
-			</ul>
-		</div>
+    <script type="text/template" id="category_product_show" >
+      <li id="{{ id }}" class='product_item'>
+        {{#photos}}
+        <img src="{{ icon }}" alt="{{name}}" class='product_img' />
+        {{/photos}}
+        <h5>{{ name }} <b>{{ brand_name }}</b></h5>
+        <span>单价:<i class='icon-jpy'></i> {{ price }}</span>
+        <span>库存: {{ inventory }}</span>
+      </li>
+    </script>
+  </div>
+  <div class="span4">
+    <div class='panel diffrent'>
+      <h4><i class='icon-th-large'></i>库存商品</h4>
+      <div class='search-header'>
+        <div class="input-append controls-row">
+          <input class="span8" type="search" id="search-input2">
+          <button type="button" class="btn btn-transparent span4">搜索</button>
+        </div>
+      </div>
+      <ul class='my_product_list product_list'>
+      </ul>
+    </div>
 
-		<script type="text/template" id="product_show" >
-			<li id="{{ id }}" class='product_item'>
-				<img src="{{ url }}" alt="{{name}}" class='product_img' />
-				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-				<section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span></section>
-				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span></section>
-			</li>
-		</script>
+    <script type="text/template" id="product_show" >
+      <li id="{{ id }}" class='product_item'>
+        <img src="{{ url }}" alt="{{name}}" class='product_img' />
+        <h5>{{ name }} <b>{{ brand_name }}</b></h5>
+        <section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span></section>
+        <section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span></section>
+      </li>
+    </script>
 
-		<script type="text/javascript">
-			$(function(){
-				var product_view = new ProductView({
-					el      : $(".my_product_list"),
-					models  : <%= raw @products.to_json %>,
-					template: $("#product_show").html()
-				});
+    <script type="text/javascript">
+      $(function(){
+        var product_view = new ProductView({
+          el      : $(".my_product_list"),
+          models  : <%= raw @products.to_json %>,
+          template: $("#product_show").html()
+        });
 
-				var wizard = new WizardView({
-					el: $(".dialog_product"),
-					category_product_template: $("#category_product_show").html(),
-					remote_options: {
-						shop_id: <%= current_user.shop.try(:id) %>
-					},
-					select_handle: function(models){
-						_.each(models, function(model){
-							product_view.render(model);
-						})
-					}
-				});
+        var wizard = new WizardView({
+          el: $(".dialog_product"),
+          category_product_template: $("#category_product_show").html(),
+          remote_options: {
+            shop_id: <%= current_user.shop.try(:id) %>
+          },
+          select_handle: function(models){
+            _.each(models, function(model){
+              product_view.render(model);
+            })
+          }
+        });
 
-				var scroll = $('.my_product_list').slimScroll({
-					height: 500,
-					railVisible: true
-				});
+        var scroll = $('.my_product_list').slimScroll({
+          height: 500,
+          railVisible: true
+        });
 
-				var wrap_class = "wrapper_category_product"
-				var slim = $('.category_product_list').slimScroll({
-					height     : 500,
-					railVisible: true,
-					wrapperClass: wrap_class
-				});
+        var wrap_class = "wrapper_category_product"
+        var slim = $('.category_product_list').slimScroll({
+          height     : 500,
+          railVisible: true,
+          wrapperClass: wrap_class
+        });
 
-				var load = new LoadCategoryProduct({
-					fetch: $.proxy(wizard.fetch, wizard),
-					el: $("."+ wrap_class)
-				})
+        var load = new LoadCategoryProduct({
+          fetch: $.proxy(wizard.fetch, wizard),
+          el: $("."+ wrap_class)
+        })
 
-				slim.bind("slimscrolling", function(e, post){
-					load.scroll(post)
-				})
-			})
-		</script>
-	</div>
+        slim.bind("slimscrolling", function(e, post){
+          load.scroll(post)
+        })
+      })
+    </script>
+  </div>
 </div>
 
 <script type="text/javascript">
-	var bind_editable = function(elem, class_name){
-		id = $(elem).attr("id")
-		$(elem).find("input").select()
-		$("."+ class_name , elem).editable({
-				pk   :    id,
-				type :  'text',
-				name :  class_name,
-				title: 'change your '+ class_name,
-				url  :   "/shop_products/"+ id +"/update_attribute",
-				ajaxOptions: {
-					type: 'put',
-					dataType: 'json'
-			},
-			validate: function(value) {
-				if(isNaN($.trim(value))) {
-						return 'This must be a number';
-						value = 0.0
-				}
-			}
-		})
-	};
+  var bind_editable = function(elem, class_name){
+    id = $(elem).attr("id")
+    $(elem).find("input").select()
+    $("."+ class_name , elem).editable({
+        pk   :    id,
+        type :  'text',
+        name :  class_name,
+        title: 'change your '+ class_name,
+        url  :   "/shop_products/"+ id +"/update_attribute",
+        ajaxOptions: {
+          type: 'put',
+          dataType: 'json'
+      },
+      validate: function(value) {
+        if(isNaN($.trim(value))) {
+            return 'This must be a number';
+            value = 0.0
+        }
+      }
+    })
+  };
 
-	$(document).delegate( '.my_product_list>li', 'click',function(i, elem){
-		bind_editable($(this), "price");
-		bind_editable($(this), "inventory");
-	});
+  $(document).delegate( '.my_product_list>li', 'click',function(i, elem){
+    bind_editable($(this), "price");
+    bind_editable($(this), "inventory");
+  });
 
-	var Filter = function(id_name,target){
-		$(id_name).keyup(function(){
-			var filter = $(this).val(), count = 0;
-			$("."+target+" li").each(function(){
-				if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-					$(this).fadeOut();
-				} else {
-					$(this).show();
-					count++;
-				}
-			});
-			$("#filter-count").text("Number of Comments = "+ count);
-		})
-		false
-	};
-
-	$(function(){
-		Filter("#search-input1","category_product_list")
-		Filter("#search-input2","my_product_list")
-	})
 </script>

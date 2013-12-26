@@ -4,6 +4,8 @@ root = (window || @)
 class TypeaheadExtension
   limit: 10
 
+  field: "name"
+
   select: (item) ->
 
   constructor: (options) ->
@@ -42,8 +44,10 @@ class TypeaheadExtension
 
   updater: (value) ->
     item = @typeh.$menu.find('.active').data("value")
+    value = item[@field]
+    @$el.val(value)
     @select(item)
-    return item[@field] || item.name
+    return value
 
   render: (items)->
     items = $(items).map((i, item) =>
