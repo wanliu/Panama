@@ -3,25 +3,28 @@ root = window || @
 class root.LoadCategoryProduct extends Backbone.View
 
   initialize: () ->
-    @remote_state = true
-    @remote_options = {offset: 0, limit: 40}
+    @default_options()
     _.extend(@, @options)
 
   fetch: (data = {}, callback = () -> ) ->
 
   scroll: (post) ->
     return unless @remote_state
-    max_height = @$(".category_product_list")[0].scrollHeight
+    max_height = @$("ul.product_list")[0].scrollHeight
     _rail = @$(".slimScrollRail").outerHeight()
 
     if post + _rail >= max_height - 50
-      clearTimeout(@time_out_id) if @time_out_id
-      @time_out_id = setTimeout () =>
-        @fetch @remote_options, (data) =>
-          @remote_state = false if data.length <= 0
-          opt = @remote_options
-          opt.offset = opt.offset + opt.limit
-      , 100
+      @remote()
+
+  remote: () ->
+    @fetch @remote_options, (data) =>
+      @remote_state = false if data.length <= 0
+      opt = @remote_options
+      opt.offset = opt.offset + opt.limit
+
+  default_options: () ->
+    @remote_state = true
+    @remote_options = {offset: 0, limit: 40}
 
 
 class root.WizardView extends Backbone.View
@@ -47,10 +50,14 @@ class root.WizardView extends Backbone.View
     @url = $(event.target).attr("href") + "/products"
     category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
     @default_options()
-    @fetch {}, (data) ->
-     $(".category_product_list").empty()
+    @fetch {}, (data) =>
+      @$(".category_product_list").empty()
+      @load_default_fetch()
 
     false
+
+  load_default_fetch: () ->
+
 
   fetch: (data = {}, callback = (data) -> ) ->
     _data = _.extend({}, @remote_options, data)
@@ -143,16 +150,20 @@ class root.WizardView extends Backbone.View
     $.ajax({
       url: "/product_search",
       data: {shop_id: @remote_options.shop_id, q: query},
-      success: (data) => @reset(data)
+      success: (data) =>
+        @$(".category_product_list").empty()
+        @reset(data)
     })
     false
 
   reset: (data) ->
-    @$(".category_product_list").html('')
     _.each data, (product) => @add_one(product)
 
 
 class root.ProductView extends Backbone.View
+  events: {
+    "submit form.search" : "search"
+  }
   tr_template: "
     <tr id='{{id}}>
       <td><input type='checkbox'></td>
@@ -163,13 +174,47 @@ class root.ProductView extends Backbone.View
     </tr>"
 
   initialize: (@options) ->
-    @products = @options['models']
     template = @options['template'] || @tr_template
     @template = Hogan.compile(template)
+    @shop = @options.shop
+    @list = @$(".my_product_list")
+    @$search = @$("form.search>input.query")
+    @bind_typeahead()
 
-    _.each @products, (model) =>
-      @render(model)
+  fetch: (data = {}, callback = () ->) ->
+    $.ajax(
+      url: "/shop_products",
+      data: _.extend(q: {shop_id: @shop.id}, data),
+      success: (data) =>
+        callback(data)
+        @reset(data)
+    )
+
+  reset: (data) ->
+    _.each data, (model) => @add_one model
+
+  add_one: (model) ->
+    @render(model)
 
   render: (product) ->
     pr = @template.render(product) # product_result
-    $(@el).append(pr)
+    @list.append(pr)
+
+  bind_typeahead: () ->
+    new TypeaheadExtension({
+      el: @$search,
+      source: "/shop_products/#{@shop.id}/search",
+      select: (item)  =>
+        @search()
+    })
+
+  search: () ->
+    query = @$search.val().trim()
+    $.ajax(
+      url: "/shop_products/#{@shop.id}/search",
+      data: {q: query},
+      success: (data) =>
+        @list.empty()
+        @reset(data)
+    )
+    false

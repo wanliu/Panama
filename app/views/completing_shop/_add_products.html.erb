@@ -35,7 +35,7 @@
       <div class='search-header'>
         <div class="input-append controls-row">
           <form class='product'>
-            <input class="span8 search" type="search" id="search-input1">
+            <input class="span8 search" type="search" id="search-input1" autocomplete=off>
             <button type="submit" class="btn btn-transparent span4">搜索</button>
           </form>
         </div>
@@ -68,13 +68,15 @@
       </li>
     </script>
   </div>
-  <div class="span4">
+  <div class="span4 my_products" >
     <div class='panel diffrent'>
       <h4><i class='icon-th-large'></i>库存商品</h4>
       <div class='search-header'>
         <div class="input-append controls-row">
-          <input class="span8" type="search" id="search-input2">
-          <button type="button" class="btn btn-transparent span4">搜索</button>
+          <form class='search'>
+            <input class="span8 query" type="search" id="search-input2" autocomplete=off>
+            <button type="submit" class="btn btn-transparent span4">搜索</button>
+          </form>
         </div>
       </div>
       <ul class='my_product_list product_list'>
@@ -83,7 +85,7 @@
 
     <script type="text/template" id="product_show" >
       <li id="{{ id }}" class='product_item'>
-        <img src="{{ url }}" alt="{{name}}" class='product_img' />
+        <img src="{{ photos.icon }}" alt="{{name}}" class='product_img' />
         <h5>{{ name }} <b>{{ brand_name }}</b></h5>
         <section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span></section>
         <section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span></section>
@@ -93,8 +95,10 @@
     <script type="text/javascript">
       $(function(){
         var product_view = new ProductView({
-          el      : $(".my_product_list"),
-          models  : <%= raw @products.to_json %>,
+          el      : $(".my_products"),
+          shop    : {
+            id: <%= current_shop.id %>
+          },
           template: $("#product_show").html()
         });
 
@@ -102,7 +106,7 @@
           el: $(".dialog_product"),
           category_product_template: $("#category_product_show").html(),
           remote_options: {
-            shop_id: <%= current_user.shop.try(:id) %>
+            shop_id: <%= current_shop.id %>
           },
           select_handle: function(models){
             _.each(models, function(model){
@@ -111,26 +115,43 @@
           }
         });
 
-        var scroll = $('.my_product_list').slimScroll({
-          height: 500,
-          railVisible: true
-        });
+        var scrollLoad = function(elem, options){
+          var scroll = elem.slimScroll($.extend({
+            height: 500,
+            railVisible: true
+          }, options.slim));
 
-        var wrap_class = "wrapper_category_product"
-        var slim = $('.category_product_list').slimScroll({
-          height     : 500,
-          railVisible: true,
-          wrapperClass: wrap_class
-        });
+          var load = new LoadCategoryProduct({
+            fetch: options.fetch,
+            el: $("."+ options.slim.wrapperClass)
+          })
 
-        var load = new LoadCategoryProduct({
-          fetch: $.proxy(wizard.fetch, wizard),
-          el: $("."+ wrap_class)
+          scroll.bind("slimscrolling", function(e, post){
+            load.scroll(post)
+          })
+          return load
+        }
+
+        var my_product = scrollLoad($('.my_product_list'), {
+          slim: {
+            wrapperClass: "wrap_my_product"
+          },
+          fetch: $.proxy(product_view.fetch, product_view)
         })
 
-        slim.bind("slimscrolling", function(e, post){
-          load.scroll(post)
+        var product = scrollLoad($('.category_product_list'), {
+          slim: {
+            wrapperClass: "wrapper_category_product"
+          },
+          fetch: $.proxy(wizard.fetch, wizard)
         })
+
+        my_product.remote()
+
+        wizard.load_default_fetch = function(){
+          product.default_options()
+        }
+
       })
     </script>
   </div>
