@@ -63,8 +63,6 @@ class UserChecking < ActiveRecord::Base
   end
 
   def default_url 
-    site_name = Settings.defaults["site_name"] || "万流电商平台"
-    site_url  = Settings.defaults["site_url"] || "http://panama.wanliu.biz"
     url = if user.shop.blank?
             File.join(site_url, "/people/#{user.login}")
           else

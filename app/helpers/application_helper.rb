@@ -91,11 +91,11 @@ module ApplicationHelper
   end
 
   def faye_server_uri
-    Settings.defaults["faye_server"]
+    Settings.faye_server
   end
 
   def realtime_uri
-    Settings.defaults["caramal_server"]
+    Settings.caramal_server
   end
 
   def action_controller
@@ -108,12 +108,16 @@ module ApplicationHelper
     end
   end
 
+  def site_name
+    Settings.site_name "万流平台"
+  end
+
   def default_title
-    "#{t(controller_name)} #{t(action_name, :default => action_name)} - 万流平台"
+    "#{t(controller_name)} #{t(action_name, :default => action_name)} - #{site_name}"
   end
 
   def controller_title
-    "#{controller.title} - 万流平台" if controller.respond_to?(:title)
+    "#{controller.title} - #{site_name}" if controller.respond_to?(:title)
   end
 
   def display_title

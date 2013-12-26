@@ -1,100 +1,44 @@
 <% active_section :refunds %>
 
 <div class='row-fluid order_refund_list'>
-  <div class='span8'>
-    <div class='widget'>
-      <div class='row-fluid'>
-        <div class='span7'>
-          <div class='span7'>
-            商品
-          </div>
-          <div class='span3'>
-            单价
-          </div>
-          <div class='span2'>
-            数量
-          </div>
-        </div>
-        <div class='span2'>
-          合计
-        </div>
-        <div class='span2'>
-          状态
-        </div>
-        <div class='span1'>
-          操作
-        </div>
-      </div>
-      <% if @refunds.length > 0 %>
-        <% @refunds.each do |t| %>
-        <div class='item' id="order_refunds<%=t.id %>" data-value-id="<%=t.id %>">
-          <div class='summarize'>
-            <div class='row-fluid head'>
-              <div class='span3'>
-                编号: <%=t.number %>
-              </div>
-              <div class='span4'>
-                 在
-                <small rel='tooltip' title="<%=I18n.l t.created_at, :format => :long %>">
-                  <%= time_ago_in_words t.created_at %>
-                </small>
-                之前退货
-              </div>
-              <div class='span2'>
-                <%= link_to t.seller.name, shop_path(t.seller)  %>
-              </div>
-              <div class='span3'>
-                订单编号: <%=t.order.number %>
-              </div>
-            </div>
-            <div class='row-fluid products'>
-              <div class='span7'>
-                <% t.items.each do |item| %>
-                <%=render "product_item", :item => item %>
-                <% end %>
-              </div>
-              <div class='span2'>
-                <div>
-                  <%=number_to_currency t.stotal %>
-                </div>
-                <div class='delivery_price'>
-                  (含<%=t.delivery_price || 0 %>运费)
-                </div>
-              </div>
-              <div class='span2 state_title'>
-                <%=t.state_title %>
-              </div>
-              <div class='span1'>
-                <% if t.valid_destroy? %>
-                  <a href='javascript:void(0)' class='btn_delete'>
-                    删除
-                  </a>
-                <% end %>
-              </div>
-            </div>
-          </div>
-          <div class='detail'>
-          </div>
-        </div>
-        <% end %>
-      <% else %>
-        <div class='row-fluid'>
-          <div class='span12 widget'>
-            暂时没有退货信息
-          </div>
-        </div>
-      <% end %>
+  <div class='span12 left'>
+    <div class='people-groups'>
     </div>
-  </div>
-</div>
 
-<%= paginate @refunds %>
+    <div class='threeD-viewport'>
+       <div class='refunds'>
+        <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
+      </div>
+    </div>
+
+    <div class='boxes'>
+      <div class='upbox'></div>
+      <div class='currentbox'></div>
+      <div class='downbox'></div>
+    </div>
+    <%= paginate @refunds %>
+  </div>
+  <div class='refund-detail'></div>
+</div>
 
 <script type='text/javascript'>
   $(function(){
-    new OrderRefundList({
+
+    var view = new TransactionTwoColumnsViewport({
       el: $(".order_refund_list"),
-      remote_url: "<%= person_order_refunds_path(@people) %>"
-    })
+      secondContainer: ".refund-detail",
+      warpClass: ".refunds",
+      remote_url: "<%= person_order_refunds_path(@people) %>",
+      registerView: function(view){
+        new OrderRefundCard({
+          el: $(".order_refund", view.$detail)
+        })
+      }
+    });
+
+    // new OrderRefundList({
+    //   el: $(".order_refund_list"),
+    //   remote_url: "<%= person_order_refunds_path(@people) %>"
+    // })
   })
 </script>

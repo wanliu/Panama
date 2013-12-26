@@ -1,55 +1,49 @@
 <% admin_active_section :direct_transactions %>
 <div class='row-fluid direct_transaction_list'>
-  <div class='span12'>
-    <div class='widget'>
-      <div class='row-fluid header'>
-        <div class='span7'>
-          <div class='span7'>
-            商品
-          </div>
-          <div class='span3'>
-            单价
-          </div>
-          <div class='span2'>
-            数量
-          </div>
-        </div>
-       <div class='span2'>
-          合计
-        </div>
-        <div class='span2'>
-          状态
-        </div>
-        <div class='span1'>
-          操作
-        </div>
-      </div>
-      <% if @direct_transactions.length > 0 %>
-        <% @direct_transactions.each do |t| %>
-          <%=render :partial => "item", :locals => { :direct_transaction => t } %>
-        <% end %>
-      <% else %>
-        <div class='row-fluid'>
-          <div class='span12 widget'>
-            暂时没有直接交易
-          </div>
-        </div>
-      <% end %>
+  <div class='span12 left'>
+    <div class='people-groups'>
     </div>
+
+    <div class='threeD-viewport'>
+       <div class='directs'>
+        <%= render :partial => "direct_transactions/mini_row", :collection => @direct_transactions, :as => :row %>
+      </div>
+    </div>
+
+    <div class='boxes'>
+      <div class='upbox'></div>
+      <div class='currentbox'></div>
+      <div class='downbox'></div>
+    </div>
+    <%= paginate @direct_transactions %>
   </div>
+  <div class='direct-detail'></div>
 </div>
-<%= paginate @direct_transactions %>
+
 <script type="text/javascript">
   $(function(){
 
-    new ShopDirectTransactionList({
+    var view = new TransactionTwoColumnsViewport({
       el: $(".direct_transaction_list"),
-      shop: {
-        id: "<%=current_shop.id %>",
-        name: "<%=current_shop.name %>",
-        token: "<%=current_shop.im_token %>"
-      },
-      remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>"
-    })
+      secondContainer: ".direct-detail",
+      warpClass: ".directs",
+      remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>",
+      leftSide: "#left_sidebar",
+      registerView: function(view){
+        new ShopDirectTransactionView({
+          el: $(".direct", view.$detail)
+        })
+      }
+    });
+
+    // new ShopDirectTransactionList({
+    //   el: $(".direct_transaction_list"),
+    //   shop: {
+    //     id: "<%=current_shop.id %>",
+    //     name: "<%=current_shop.name %>",
+    //     token: "<%=current_shop.im_token %>"
+    //   },
+    //   remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>"
+    // })
   })
 </script>

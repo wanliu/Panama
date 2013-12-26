@@ -1,6 +1,6 @@
-<div class='order_item' data-value-id='<%= row.id %>'>
+<div class='card_item' data-value-id='<%= row.id %>'>
 
-<div class='order_item_header'>
+<div class='card_item_header'>
   <ul class='order_header'>
     <li class='actions'>
       <ul>
@@ -25,7 +25,7 @@
   </ul>
 </div>
 
-<div class='order_item_row widget'>
+<div class='card_item_row widget'>
   <ul class='products'>
     <li class='vertical'>
       <ul>
@@ -49,7 +49,7 @@
         </li>
       </ul>
     </li>
-    <%= render_funcat "product_item_vertical", :collection => row.items, :as => :item %>
+    <%= render :partial => "transactions/product_item_vertical", :collection => row.items, :as => :item %>
     <li class='divider'></li>
     <li class='vertical'>
       <ul>
@@ -57,7 +57,7 @@
           <ul>
 
             <li class='atotal'>
-              <%=number_to_currency row.total %>
+              <%=number_to_currency row.stotal %>
             </li>
           </ul>
         </li>

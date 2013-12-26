@@ -123,7 +123,7 @@ class MessageViewList extends Backbone.View
 
     @content_el.scrollTop(mheight-pheight)
 
-class ChatView extends Backbone.View
+class root.TransactionChatView extends Backbone.View
   on_class: "online",
   off_class: "offline",
   display_state: true,
@@ -189,4 +189,3 @@ class ChatView extends Backbone.View
     token = data.authenticity_token
     @msg_view.read(@friend.id, token)
 
-root.ChatView = ChatView

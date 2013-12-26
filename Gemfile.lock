@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/agilejzl/rails-setting.git
-  revision: 308e70363177cd7268402fefcfd24a31860dbd9b
-  specs:
-    rails-setting (0.0.8)
-
-GIT
   remote: git://github.com/huxinghai1988/kuaiqian.git
   revision: 7326ec797dc101e8a34d41cb8c1152711782129d
   specs:
@@ -16,6 +10,13 @@ GIT
   specs:
     tire_update_by_query (0.0.7)
       tire
+
+GIT
+  remote: git://github.com/hysios/settings.git
+  revision: 05217794073cf55cb590aec568a34989faed52b1
+  specs:
+    settings (0.0.7)
+      listen
 
 GIT
   remote: git://github.com/hysios/tire-settings.git
@@ -314,7 +315,7 @@ GEM
     libwebsocket (0.1.8)
       addressable
       websocket
-    listen (2.2.0)
+    listen (2.4.0)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -414,7 +415,7 @@ GEM
     rb-fchange (0.0.6)
       ffi
     rb-fsevent (0.9.3)
-    rb-inotify (0.9.2)
+    rb-inotify (0.9.3)
       ffi (>= 0.5.0)
     rdoc (3.12.2)
       json (~> 1.4)
@@ -572,7 +573,6 @@ DEPENDENCIES
   puma
   rack-raw-upload (~> 1.1.1)
   rails (= 3.2.15)
-  rails-setting!
   rails_autolink
   rails_emoji (~> 1.7.1)!
   rb-fchange
@@ -592,6 +592,7 @@ DEPENDENCIES
   rvm-capistrano
   sass-rails (~> 3.2.3)
   selenium-webdriver (~> 2.27.0)
+  settings!
   shoulda-matchers
   simple_form (~> 2.0.4)
   simplecov (~> 0.7.1)

@@ -143,7 +143,6 @@ gem "nested_form"
 # 默认值
 gem "default_value_for"
 gem 'cancan'
-gem 'rails-setting',:github => "agilejzl/rails-setting"
 
 gem 'activemerchant'
 gem 'activemerchant_patch_for_china'
@@ -170,3 +169,4 @@ gem 'rubyzip', '< 1.0.0'
 gem "puma"
 
 gem 'rails_emoji', '~> 1.7.1', :github => "jsw0528/rails_emoji"
+gem "settings", :github => "hysios/settings"

@@ -2,60 +2,52 @@
 
 <div class='row-fluid order_refund_list'>
   <div class='span8'>
-    <div class='widget'>
-      <div class='row-fluid header'>
-        <div class='span7'>
-          <div class='span7'>
-            商品
-          </div>
-          <div class='span3'>
-            单价
-          </div>
-          <div class='span2'>
-            数量
-          </div>
-        </div>
-        <div class='span2'>
-          合计
-        </div>
-        <div class='span2'>
-          状态
-        </div>
-        <div class='span1'>
-          操作
+    <div class='left'>
+      <div class='people-groups'>
+      </div>
+
+      <div class='threeD-viewport'>
+         <div class='refunds'>
+          <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
         </div>
       </div>
-      <% if @refunds.length > 0 %>
-        <% @refunds.each do |t| %>
-        <%=render :partial => "item", :locals => {
-          :refund => t
-        } %>
-        <% end %>
-      <% else %>
-        <div class='row-fluid'>
-          <span class='span12 widget'>
-            暂时还没有退货信息
-          </span>
-        </div>
-      <% end %>
+
+      <div class='boxes'>
+        <div class='upbox'></div>
+        <div class='currentbox'></div>
+        <div class='downbox'></div>
+      </div>
+      <%= paginate @refunds %>
     </div>
+    <div class='refund-detail'></div>
   </div>
 </div>
-
-<%= paginate @refunds %>
 
 <script type='text/javascript'>
   $(function(){
 
-    new ShopOrderRefundList({
+    var view = new TransactionTwoColumnsViewport({
       el: $(".order_refund_list"),
-      shop: {
-        id: <%=current_shop.id %>,
-        name: "<%=current_shop.name %>",
-        token: "<%=current_shop.im_token %>"
-      },
-      remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
-    })
+      secondContainer: ".refund-detail",
+      warpClass: ".refunds",
+      remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>",
+      leftSide: "#left_sidebar",
+      registerView: function(view){
+        new ShopOrderRefundCard({
+          el: $(".order_refund", view.$detail)
+        })
+      }
+    });
+
+    // new ShopOrderRefundList({
+    //   el: $(".order_refund_list"),
+    //   shop: {
+    //     id: <%=current_shop.id %>,
+    //     name: "<%=current_shop.name %>",
+    //     token: "<%=current_shop.im_token %>"
+    //   },
+    //   remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
+    // })
 
   })
 </script>
