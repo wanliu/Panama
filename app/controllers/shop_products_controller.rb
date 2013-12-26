@@ -149,7 +149,7 @@ class ShopProductsController < ApplicationController
             filtered do
               if value.present?
               filter :query, :query_string =>{
-                  :query => "name:#{value} OR primitive:#{value} OR untouched:#{q}*",
+                  :query => "name:#{value} OR primitive:#{value} OR untouched:#{value}*",
                   :default_operator => "AND"
                 }
               end
