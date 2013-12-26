@@ -66,9 +66,9 @@ class Employee extends Backbone.Model
 
   destroy:(callback) ->
     this.fetch(
-      url: "#{@url}/destroy",
+      url: "#{@url}/destroy/#{ @get('id')}",
       type: "delete"
-      data: {user_id: @get("id")},
+      # data: {user_id: @get("id")},
       success: callback
     )
 

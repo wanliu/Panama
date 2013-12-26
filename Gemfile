@@ -9,7 +9,7 @@ gem 'rails', '3.2.15'
 gem 'mysql2', '~> 0.3.11'
 gem 'mongoid', '~> 3.0.0'
 
-#user this soft delete
+#use this soft delete
 gem "acts_as_paranoid", "~>0.4.0"
 
 # acts_as_tree

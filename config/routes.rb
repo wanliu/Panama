@@ -51,6 +51,7 @@ Panama::Application.routes.draw do
 
   match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
   match "cities/:city_id/communities", :to => "communities#city_index", :via => :get
+
   resources :communities do
     collection do
       get "hot_region_name", :to => "communities#hot_region_name"
@@ -135,7 +136,7 @@ Panama::Application.routes.draw do
       end
 
       collection do
-        post "batch_create", :to => "people/transactions#batch_create", :as => :batch_create
+        post "batch_create", :to => "people/transactions#batch_create"
         get "completed", :to => "people/transactions#completed"
         get "unread_messages", :to => "people/transactions#unread_messages"
       end
@@ -210,7 +211,7 @@ Panama::Application.routes.draw do
     resources :notifications,:except => :show, :controller => "people/notifications" do
       member do
         get :enter, :to => "people/notifications#show"
-        post :mark_as_read, :to => "people/notifications#mark_as_read"
+        match :mark_as_read, :to => "people/notifications#mark_as_read"
       end
       collection do
         get :read_all, :to => "people/notifications"
@@ -223,6 +224,10 @@ Panama::Application.routes.draw do
       member do
         post 'move_out_cart', :to => "people/cart#move_out_cart"
         post 'change_number', :to => "people/cart#change_number"
+      end
+
+      collection do
+        post 'move_out', :to => 'people/cart#move_out'
       end
     end
 

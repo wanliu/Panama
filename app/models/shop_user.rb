@@ -20,8 +20,8 @@ class ShopUser < ActiveRecord::Base
 
   def valid_user_join_multi_shop?
     if ShopUser.where("user_id=? and id<>?",
-      user_id, id).count>0
-      errors.add(:user_id, "用户已经加入其它商店!")
+      user_id, id).count > 0
+      errors.add(:user_id, "该用户已经加入其它商店!")
     end
   end
 end

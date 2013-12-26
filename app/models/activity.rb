@@ -6,7 +6,7 @@ class Activity < ActiveRecord::Base
   include Tire::Model::UpdateByQuery
   include MessageQueue::Activity
 
-  attr_accessor :people_number
+  attr_accessor :people_number, :activity_price, :attachment_ids
 
   scope :wait, lambda{ where(:status => statuses[:wait]) }
   scope :access, lambda{ where(:status => statuses[:access]) }
@@ -20,14 +20,14 @@ class Activity < ActiveRecord::Base
   belongs_to :shop
   has_many :notifications, as: :targeable, class_name: "Notification", dependent: :destroy
 
-  has_many :activity_rules, autosave: true
-  has_many :comments, :as => :targeable
-  has_many :activities_likes
+  has_many :activity_rules, autosave: true, dependent: :destroy
+  has_many :comments, :as => :targeable, dependent: :destroy
+  has_many :activities_likes, dependent: :destroy
   has_many :likes, :through => :activities_likes, :source => :user
   has_and_belongs_to_many :attachments, class_name: "Attachment"
   has_and_belongs_to_many :transactions, class_name: "OrderTransaction"
 
-  has_many :activities_participates
+  has_many :activities_participates, dependent: :destroy
   has_many :participates, :through => :activities_participates, :source => :user
   has_one :temporary_channel, :as => :targeable
   # validates_associated :product
@@ -49,19 +49,27 @@ class Activity < ActiveRecord::Base
     validate_destroy_access?
   end
 
+  after_create :create_the_temporary_channel
+
+  def notify_url
+    "/activities/#{id}"
+  end
+
   def notice_author(sender, message)
-    author.notify("/activity/add",
+    author.notify("/activities/add",
                   message,
-                  {:url => "/activities/#{id}",
-                  :target => self })
+                  {:url => notify_url,
+                   :target => self })
   end
 
   def notice_followers
     unless shop.followers.blank?
-      shop.followers.each do |follower|
-        follower.user.notify('/activity/add', 
-                             "你关注的商家#{ shop.name}有新活动发布#{ title}",
-                             { :target => self, :url => "/activities/#{id}" } )
+      (shop.followers - [ author ]).each do |follower|
+        follower.user.notify('/activities/add', 
+                             "您关注的商家 #{shop.name} 发布新活动 #{title} 敬请期待",
+                             {:target => self, 
+                              :url => notify_url,
+                              :avatar => photos.avatar } )
       end
     end
   end
@@ -297,5 +305,10 @@ class Activity < ActiveRecord::Base
     if Activity.statuses[:access] == Activity.find(self.id).status
       errors.add(:status, "已经审核了，不能修改！")
     end
+  end
+
+  def create_the_temporary_channel
+    name = self.class.to_s << "_" << title
+    self.create_temporary_channel(targeable_type: "Activity", user_id: shop.owner.id, name: name)
   end
 end

@@ -46,11 +46,11 @@ class People::TransactionsController < People::BaseController
 
     if @transaction.buyer_fire_event!(event_name)
       render partial: 'transaction',
-                   object:  @transaction,
-                   locals: {
-                     state:  @transaction.state,
-                     people: @people
-                   }
+             object:  @transaction,
+             locals: {
+                state:  @transaction.state,
+                people: @people
+              }
     else
       render :json => {message: "#{event_name}不属于你的!"}, :status => 403
       # render :partial => 'transaction', :transaction => @transaction, :layout => false
@@ -60,7 +60,14 @@ class People::TransactionsController < People::BaseController
 
   def batch_create
     authorize! :batch_create, OrderTransaction
-    if my_cart.create_transaction(@people)
+    item_ids = []
+    params[:items].map{ |k, v| 
+      if v[:checked] == 'on'
+        item_ids.push(v[:id].to_i)
+      end
+    }
+    
+    if my_cart.create_transaction(@people, item_ids)
       redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'
     else

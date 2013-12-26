@@ -336,11 +336,17 @@
   }
 
   .address-list{
+    .address_table{
+      width: 100%;
+      .address_line{
+        line-height: 30px;
+      }
+    }
     .address {
-      @include panel-background;
+      /*@include panel-background;*/
       background-color: rgba(51, 51, 51, 0.25);
       border-width: medium;
-      border-style: dashed;
+      /*border-style: dashed;*/
       border-color: rgb(188, 194, 115);
       .in-box {
         position: relative;

@@ -145,7 +145,6 @@ class FriendIconsView extends BaseIconsView
     delete attributes['icon']
     @collection.remove(@collection.where(attributes)[0])
 
-
 class GroupIconsView extends BaseIconsView
   className: "groups-list"
 
@@ -261,5 +260,3 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
-    
-    

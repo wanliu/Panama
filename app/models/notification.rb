@@ -34,6 +34,7 @@ class Notification < ActiveRecord::Base
 
   belongs_to :mentionable_user, :class_name => "User", :foreign_key => "mentionable_user_id"
   belongs_to :targeable, :polymorphic => true
+  # has_many :community_notifications, :dependent => :destroy
 
   validates_presence_of :user
   # validates_presence_of :mentionable_user

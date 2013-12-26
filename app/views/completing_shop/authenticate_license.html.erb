@@ -56,7 +56,7 @@
 						<%= f.input :company_name, label: '营业店名' %>
 						<% address = current_user.user_checking.address || Address.new %>
 						<% address_error = @shop_auth.errors[:address_id] %>
-						<div data-id="<%= address.id %>" class="control-group string required address <%= 'error' if address_error.present? %>">
+						<div data-id="<%= address.id %>" class="control-group string required address-panel <%= 'error' if address_error.present? %>">
 							<div class="hide">
 								<%= f.input :address_id, input_html: { value: address.id }  %>
 							</div>
@@ -151,7 +151,7 @@
 		})
 
 		new AddressEditView({
-			el: "div.address"
+			el: ".shop_info .address-panel"
 		})
 	})
 </script>

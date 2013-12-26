@@ -46,6 +46,9 @@ class AskBuyView extends Backbone.View
   render: () ->
     @template
 
+  modal:() ->
+    $("body").addClass("noScroll")
+    
   hide: () ->
     @$dialog.remove()
     @$backdrop.remove()
@@ -95,7 +98,7 @@ class AskBuyPreview extends Backbone.View
 
   launch: (event) ->
     id = $(event.currentTarget).parents(".ask_buy").attr("ask-buy-id")
-    new AskBuyView( ask_buy_id: id )
+    new AskBuyView( ask_buy_id: id ).modal()
 
 
 root.AskBuyPreview = AskBuyPreview

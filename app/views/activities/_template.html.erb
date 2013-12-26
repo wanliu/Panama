@@ -32,7 +32,8 @@
   })
 
   new ActivityPreview({
-    el: $("#activities")
+    el: $("#activities"),
+    login: '<%= current_user.login %>'
   })
 
   new AskBuyPreview({

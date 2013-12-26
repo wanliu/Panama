@@ -10,6 +10,10 @@ class DeliveryAddress < ActiveRecord::Base
   belongs_to :city, :inverse_of => :address , class_name: "City"      # 市
   belongs_to :area, :inverse_of => :address , class_name: "City"      # 县
 
+  def location_area
+    "#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}"
+  end
+
   def address_only
     "#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}#{road}"
   end

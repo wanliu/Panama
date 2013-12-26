@@ -18,7 +18,7 @@ class TopicParticipate < ActiveRecord::Base
   def valid_unqi_user?
     if TopicParticipate.exists?(["topic_id=? and user_id=? and id<>?",
       topic_id, user_id, id.to_s])
-      errors.add(:user_id, "用户已经加入!")
+      errors.add(:user_id, "该用户已经加入!")
     end
   end
 

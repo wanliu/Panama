@@ -39,6 +39,10 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
     respond_to do | format |
       if employee
         employee.destroy
+        employee.user.notify("/shops/leaved",
+                        "你已经离开#{current_shop.name} 商店",
+                       {:avatar => current_shop.photos.icon,
+                        :url => notification_url(employee.user.login) })
         format.json{ render :json => {} }
       else
         format.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
