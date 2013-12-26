@@ -26,7 +26,7 @@ class TransactionOperator < ActiveRecord::Base
 
   def valid_operator?
     unless order.seller.is_employees?(operator_id)
-      errors.add(:operator_id, "不是#{seller.name}的雇员!")
+      errors.add(:operator_id, "不是#{order.seller.name}的雇员!")
     end
     if order.current_operator.try(:id) == operator_id && new_record?
       errors.add(:operator_id, "#{operator.login}已经是操作员!")
