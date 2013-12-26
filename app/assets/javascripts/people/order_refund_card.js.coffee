@@ -31,7 +31,6 @@ class OrderRefundCard extends TransactionCardBase
       { name: 'delivered',                from: 'waiting_delivery',  to: 'waiting_sign' }
     ]
 
-
   change_delivery_code: () ->
 
     code = @$("input:text.delivery_code").val()
@@ -96,5 +95,8 @@ class OrderRefundCard extends TransactionCardBase
     @$edit_rdp_panel = @$(".edit_rdp_panel")
     @$edit_rdp_panel.show();
     @$input.focus();
+
+  realtime_url: () ->
+    "notify:/order_refunds#{super}"
 
 root.OrderRefundCard = OrderRefundCard

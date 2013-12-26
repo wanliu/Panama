@@ -10,7 +10,9 @@
       </a>
     </div>
   </div>
-  <%= render_funcat "refund_display", :transaction => transaction, :people => people %>
+  <%= render_funcat "refund_display", :locals => {
+    :transaction => transaction,
+    :people => people } %>
   <div class='row-fluid'>
     <div class='span12'>
       还有

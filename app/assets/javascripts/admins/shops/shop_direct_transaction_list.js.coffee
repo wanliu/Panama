@@ -5,20 +5,25 @@ root = (window || @)
 
 class Transactions extends Backbone.Collection
 
-class DirectTransaction extends Backbone.View
+class DirectTransaction extends CardItemView
 
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("change:register", @register_view, @)
-    @model.bind("remove", @remove, @)
+    super
 
-  register_view: () ->
-    @view = new ShopDirectTransactionView(
-      el: @$(".detail .direct")
+  get_register_view: () ->
+    view = new ShopDirectTransactionView(
+      el: @$(".full-mode .direct")
+      shop: @shop
     )
+    view.model.bind("change:state", @card_change_state, @)
+    view
 
-  remove: () ->
-    @view.remove() unless _.isEmpty(@view)
+  card_change_state: () ->
+    unless _.isEmpty(@card)
+      @set_state(@card.model.get("state"))
+      @model.set(state_title: @card.model.get("state_title"))
+
     super
 
 class root.ShopDirectTransactionList extends Backbone.View
@@ -37,6 +42,7 @@ class root.ShopDirectTransactionList extends Backbone.View
   add_one: (model) ->
     elem = model.get("elem")
     delete model.attributes.elem
+    @monitor_state model.id
     new DirectTransaction(
       model: model,
       shop: @shop,
@@ -44,7 +50,7 @@ class root.ShopDirectTransactionList extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".item"), (el) => @add el
+    _.each @$(".directs>.card_item"), (el) => @add el
 
   add: (item) ->
     @collection.add(
@@ -57,30 +63,30 @@ class root.ShopDirectTransactionList extends Backbone.View
     model.set(register: true) unless _.isEmpty(model)
 
   load_table_list: () ->
-    @table = new TableListView(
+    @table = new TransactionTwoColumnsViewport(
       el: @$el,
+      secondContainer: ".direct-detail",
       remote_url: @remote_url,
-      bindView: (view) => @register(view.model.id)
+      leftSide: "#left_sidebar",
+      registerView: (view) => @register(view.model.id)
     )
 
   load_realtime: () ->
     @client = window.clients.socket
 
-    @client.subscribe "notify:/shops/#{@shop.token}/direct_transactions/create", (data) =>
-      @realtime_create(data)
-
-    @client.subscribe "notify:/shops/#{@shop.token}/direct_transactions/destroy", (data) =>
+    @client.subscribe "notify:/#{@shop.token}/direct_transactions/destroy", (data) =>
       @destroy data.direct_id
 
-  realtime_create: (data) ->
-    $.ajax(
-      url: "#{@remote_url}/#{data.direct_id}/item",
-      success: (html) =>
-        $(".header", @$el).after(html)
-        item = @$(".item:eq(0)")
-        @add(item)
-        @table.add(item)
-    )
+  monitor_state: (direct_id) ->
+    @client.subscribe "notify:/#{@shop.token}/direct_transactions/#{direct_id}/change_state", (data) =>
+      @change_state(data)
+
+  change_state: (data) ->
+    model = @collection.get(data.direct_id)
+    model.set(
+      state: data.state,
+      state_title: data.state_title
+    )  unless _(model).isEmpty()
 
   destroy: (id) ->
     model = @collection.get(id)

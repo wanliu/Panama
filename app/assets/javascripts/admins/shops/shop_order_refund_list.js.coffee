@@ -1,44 +1,36 @@
-#= require 'lib/table_list'
+#= require transactions/2columns_viewport
+#= require transactions/card_item
 #= require 'admins/shops/shop_order_refund_card'
 
 root = (window || @)
 
 class Refunds extends Backbone.Collection
 
-class OrderRefund extends Backbone.View
+class OrderRefund extends CardItemView
 
   initialize: (options) ->
     _.extend(@, options)
-    @model.bind("change:register", @register_view, @)
-    @model.bind("change:state", @change_state, @)
-    @model.bind("remove", @remove, @)
-
-  register_view: () ->
-    @view = new ShopOrderRefundCard(
-      el: @$(".detail .order_refund")
-    )
-    @transaction = @view.transaction
-    @transaction.bind("change:state", @view_change_state, @)
-    @set_state(@transaction.get("state"))
-    @model.set(state_title: @transaction.get("state_title"))
-
-  remove: () ->
-    @view.remove() unless _.isEmpty(@view)
     super
 
-  change_state: () ->
-    @view.stateChange(event: @model.get("event")) unless _.isEmpty(@view)
-    @change_table_state()
+  get_register_view: () ->
+    view = new ShopOrderRefundCard(
+      el: @$(".full-mode .order_refund"),
+      shop: @shop
+    )
+    transaction = view.transaction
+    transaction.bind("change:state", @card_change_state, @)
+    data = transaction.toJSON()
+    @syn_state(data.state, data.state_title)
+    view
 
-  change_table_state: () ->
-    @$(".state_title").html(@model.get("state_title"))
+  card_change_state: () ->
+    unless _.isEmpty(@card)
+      @syn_state(
+        @card.transaction.get('state'),
+        @card.transaction.get('state_title'))
 
-  set_state: (state) ->
-    @model.attributes.state = state
-    @model._currentAttributes.state = state
+    super
 
-  view_change_state: () ->
-    @set_state()
 
 class root.ShopOrderRefundList extends Backbone.View
 
@@ -56,6 +48,7 @@ class root.ShopOrderRefundList extends Backbone.View
   add_one: (model) ->
     elem = model.get("elem")
     delete model.attributes.elem
+    @monitor_state(model.id)
     new OrderRefund(
       model: model,
       shop: @shop,
@@ -63,7 +56,7 @@ class root.ShopOrderRefundList extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".item"), (el) => @add el
+    _.each @$(".refunds>.card_item"), (el) => @add el
 
   add: (item) ->
     @collection.add(
@@ -76,22 +69,26 @@ class root.ShopOrderRefundList extends Backbone.View
     model.set(register: true) unless _.isEmpty(model)
 
   load_table_list: () ->
-    @table = new TableListView(
+    @table = new TransactionTwoColumnsViewport({
       el: @$el,
+      secondContainer: ".refund-detail",
       remote_url: @remote_url,
-      bindView: (view) => @register(view.model.id)
-    )
+      leftSide: "#left_sidebar",
+      registerView: (view) => @register view.model.id
+    })
 
   load_realtime: () ->
     @client = window.clients.socket
+    @root = "notify:/#{@shop.token}/order_refunds"
 
-    @client.subscribe "notify:/#{@shop.token}/order_refunds/create", (data) =>
+    @client.subscribe "#{@root}/create", (data) =>
       @realtime_create(data)
 
-    @client.subscribe "notify:/#{@shop.token}/order_refunds/destroy", (data) =>
+    @client.subscribe "#{@root}/destroy", (data) =>
       @destroy data.refund_id
 
-    @client.subscribe "notify:/#{@shop.token}/order_refunds/change_state", (data) =>
+  monitor_state: (id) ->
+    @client.subscribe "#{@root}/#{id}/change_state", (data) =>
       @change_state(data)
 
   destroy: (id) ->
@@ -102,8 +99,8 @@ class root.ShopOrderRefundList extends Backbone.View
     $.ajax(
       url: "#{@remote_url}/#{data.refund_id}/item",
       success: (html) =>
-        $(".header", @$el).after(html)
-        item = @$(".item:eq(0)")
+        @$(".refunds").prepend(html)
+        item = @$(".card_item:eq(0)")
         @add(item)
         @table.add(item)
     )

@@ -1,6 +1,6 @@
 #encoding: utf-8
 class DirectTransaction < ActiveRecord::Base
-  attr_accessible :buyer_id, :seller_id
+  attr_accessible :buyer_id, :seller_id, :operator
 
   acts_as_status :state, [:uncomplete, :complete]
 
@@ -29,6 +29,8 @@ class DirectTransaction < ActiveRecord::Base
 
   after_destroy :notice_destroy
 
+  after_update :notice_change_state
+
   def init_data
     self.total = items.inject(0){|s, v|  s = s + (v.amount * v.price) }
     self.state = :uncomplete
@@ -41,6 +43,7 @@ class DirectTransaction < ActiveRecord::Base
     attra["items_count"] = items_count
     attra["unmessages_count"] = unmessages.count
     attra["state_title"] = state_title
+    attra["state_name"] = state.name
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
   end
@@ -81,12 +84,20 @@ class DirectTransaction < ActiveRecord::Base
     I18n.t("direct_transaction_state.#{state.name}")
   end
 
-  def notice_url(current_user)
-    url = if self.buyer == current_user
-      "/people/#{current_user.login}/transactions#direct#{self.id}"
-    else
-      "/shops/#{self.seller.name}/admins/pending#direct#{self.id}"
+  def update_operator(user)
+    results = if operator.nil? && seller.is_employees?(user)
+      update_attributes(:operator => user)
     end
+    seller.notify(
+      "/#{seller.im_token}/direct_transactions/dispose",
+      "直接交易订单#{number}被#{user.login}处理了",
+      :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
+      :avatar => user.photos.icon,
+      :target => self,
+      :direct_id => id,
+      :exclude => user
+    ) if results
+    results
   end
 
   def notice_seller
@@ -100,8 +111,25 @@ class DirectTransaction < ActiveRecord::Base
     )
   end
 
+  def notice_change_state
+    if changed.include?("state")
+      target = operator.nil? ? seller : operator
+      target.notify(
+        "/#{seller.im_token}/direct_transactions/#{id}/change_state",
+        "直接交易订单#{number}状态变更#{state_title}",
+        :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
+        :avatar => buyer.photos.icon,
+        :target => self,
+        :state => state.name,
+        :state_title => state_title,
+        :direct_id => id
+      )
+    end
+  end
+
   def notice_destroy
-    seller.notify(
+    target = operator.nil? ? seller : operator
+    target.notify(
       "/#{seller.im_token}/direct_transactions/destroy",
       "直接交易订单#{number}被删除",
       :avatar => buyer.photos.icon,

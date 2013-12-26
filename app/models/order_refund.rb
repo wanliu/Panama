@@ -151,11 +151,12 @@ class OrderRefund < ActiveRecord::Base
     ename = event_name.to_s
     if %w(shipped_agree unshipped_agree refuse sign).include?(ename)
       buyer.notify(
-        "/order_refunds/change_state",
+        "/order_refunds/#{id}/change_state",
         "退货单#{number} 状态变更为#{state_title}",
         :url => "/people/#{buyer.login}/order_refunds/#{id}",
         :target => self,
         :state => state_name,
+        :event => "refresh_#{ename}",
         :state_title => state_title,
         :refund_id => id
       )
@@ -167,7 +168,7 @@ class OrderRefund < ActiveRecord::Base
     if %w(delivered).include?(ename)
       target = operator.nil? ? seller : operator
       target.notify(
-        "/#{seller.im_token}/order_refunds/change_state",
+        "/#{seller.im_token}/order_refunds/#{id}/change_state",
         "退货单#{number} 状态变更为#{state_title}",
         :url => "/shops/#{seller.name}/order_refunds/#{id}",
         :target => self,

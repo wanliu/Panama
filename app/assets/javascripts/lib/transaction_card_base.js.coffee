@@ -16,12 +16,20 @@ class TransactionCardBase extends AbstructStateView
     @options['url']       ?= @$el.attr('state-url')
     @options['event_url'] ?= @$el.attr('state-event-url')
     @options['url_root'] ?= @$el.attr('url-root')
+    @options['token']    ?= @$el.data('token')
+    @options['number']   ?= @$el.data('number')
 
     @transaction = new Transaction(
-      _.extend({id: @options['id']}, @current_state()))
+      _.extend({
+        id: @options['id'],
+        token: @options['token'],
+        number: @options['number']
+      }, @current_state()))
+
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
 
+    @load_realtime()
     super
 
   countdown: () ->
@@ -188,6 +196,19 @@ class TransactionCardBase extends AbstructStateView
     padding = parseInt(wrap.css("padding-top")) + parseInt(wrap.css("padding-bottom"))
     @message_panel.height(total - tm - padding)
 
+  toggleMessage: () ->
+    # @$(".message_wrap", ".transaction-footer").slideToggle()
+    unless @model?
+      @model = new ChatModel({
+        type: 3,
+        target_el: @$('.message_wrap'),
+        name: @transaction.get('token'),
+        title: "订单 #{@transaction.get('number')}"
+      })
+      @model = ChatListView.getInstance().temporarys_view.addModel(@model)
+    @model.icon_view.toggleChat()
+    false
+
   current_state: () ->
     {
       state: @$el.attr('state-initial'),
@@ -196,6 +217,14 @@ class TransactionCardBase extends AbstructStateView
 
   change_state: () ->
     @setMessagePanel()
+
+  load_realtime: () ->
+    @client = window.clients.socket
+    @client.subscribe "#{@realtime_url()}/change_state", (data) =>
+      @stateChange data
+
+  realtime_url: () ->
+    "/#{@transaction.id}"
 
 exports.TransactionCardBase = TransactionCardBase
 exports

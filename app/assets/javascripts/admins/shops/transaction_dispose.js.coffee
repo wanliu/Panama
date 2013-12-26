@@ -6,12 +6,10 @@
 exports = window || @
 
 class Transaction extends Backbone.Model
-  set_url: (shop_name) ->
-    @urlRoot = "/shops/#{shop_name}/admins/#{@get('_type')}"
 
   dispose: (callback) ->
     $.ajax(
-      url: "#{@urlRoot}/#{@id}/dispose"
+      url: "#{@url()}/dispose"
       type: "POST",
       success: callback
     )
@@ -34,19 +32,7 @@ class TransactionEvent extends Backbone.View
 
   dispose: () ->
     @model.dispose (data, xhr)  =>
-      #@show_tran template
-
-  show_tran: (template) ->
-    if first_tran_el.length <= 0
-      @tran_panel.append(template)
-    else
-      @tran_panel.prepend(template)
-
-    @tran_card @tran_panel.find("##{@elem_id()}")
-    @remove_tran()
-
-  remove_tran: () ->
-    @trigger("remove_tran", @model)
+      window.location.reload();
 
   render: () ->
     @$el
@@ -57,51 +43,37 @@ class TransactionEvent extends Backbone.View
   change_state: () ->
     @$(".state").html(@model.get("state_title"))
 
-  elem_id: () ->
-    if @model.get("_type") == "direct_transactions"
-      "direct#{@model.id}"
-    else
-      "order#{@model.id}"
-
 class exports.TransactionDispose extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
     @transactions = new TransactionList()
+    @transactions.url = "/shops/#{@shop.name}/admins/#{@_type}"
     @transactions.bind("add", @add_data, @)
-    @direct_transactions = new TransactionList()
-    @direct_transactions.bind("add", @add_data, @)
 
     @init_el()
     @bind_realtime()
     @notice_msg()
 
   add_data: (model) ->
-    model.set_url(@shop.name)
-    view = new TransactionEvent(_.extend({}, @tranOpts[model.get('_type')],
+    view = new TransactionEvent(
       model: model,
       template: @template
-    ))
+    )
+
+    @realtime.change_state model.id, (data) =>
+      @realtime_change data
+
     view.bind("remove_tran", _.bind(@remove_tran, @))
-    @$tbody.append view.render()
+    @$tbody.prepend view.render()
     @notice_msg()
 
-  add_order: (data) ->
-    @transactions.add(_.extend({}, data, {_type: "transactions"}))
-
-  add_direct: (data) ->
-    @direct_transactions.add(_.extend({}, data, {_type: "direct_transactions"}))
-
-  add_orders: (items) ->
-    _.each items, (item) =>
-      @add_order(item)
-
-  add_directs: (items) ->
-    _.each items, (item) =>
-      @add_direct(item)
+  add_one: (data) ->
+    @transactions.add(data)
 
   init_el: () ->
     @$tbody = @$("tbody")
+    @$thead = @$("thead")
 
   remove_tran: (model) ->
     @transactions.remove model
@@ -109,64 +81,63 @@ class exports.TransactionDispose extends Backbone.View
     @notice_msg()
 
   notice_msg: () ->
-    if @transactions.length <= 0 && @direct_transactions.length <= 0
+    if @transactions.length <= 0
       @$tbody.html('')
       @$tbody.append("
       <tr class='notice_message'>
-        <td colspan='8'>暂时没未处理单</td>
+        <td colspan='#{$("th", @$thead).length}'>暂时没未处理单</td>
       </tr>")
     else
       @$tbody.find("tr.notice_message").remove()
 
   bind_realtime: () ->
-    @realtime = new TransactionRealTime @shop_key()
+    @realtime = new TransactionRealTime @shop_key(), @_type
     @realtime.create (data) =>
-      @fetch_data(data.order_id, "transactions")
+      @fetch_data data[@type_key()]
 
     @realtime.dispose (data) =>
       pnotify(text: data.content, avatar: data.avatar)
-      @realtime_destroy data.order_id, "transactions"
+      @realtime_destroy data[@type_key()]
 
     @realtime.destroy (data) =>
-      @realtime_destroy data.order_id, "transactions"
+      @realtime_destroy data[@type_key()]
 
     @realtime.chat (data) =>
-      @realtime_chat data, "transactions"
+      @realtime_chat data
 
-    @realtime.change_state (data) =>
-      @realtime_change data, "transactions"
+  fetch_data: (id) ->
+    model = new Transaction(id: id)
+    url = "#{@transactions.url}/#{id}"
+    model.fetch url: url, success: (model, data) => @add_one(data)
 
-  fetch_data: (id, type) ->
-    model = new Transaction(_type: type, id: id)
-    model.set_url(@shop.name)
-    model.fetch success: (model, data) => @add(data, type)
-
-  realtime_destroy: (id, type) ->
-    model = @where_transaction(id, type)
+  realtime_destroy: (id) ->
+    model = @transactions.get(id)
     @remove_tran model if model?
 
-  realtime_chat: (data, type) ->
-    model = @where_transaction(data.order_id, type)
+  realtime_chat: (data) ->
+    model = @transactions.get(data[@type_key()])
     if model?
       model.set("unmessages_count", data.unmessages_count)
 
-  realtime_change: (data, type) ->
-    model = @where_transaction(data.order_id, type)
+  realtime_change: (data) ->
+    model = @transactions.get(data[@type_key()])
     if model?
       model.set("state_title", data.state_title)
-
-  where_transaction: (id, type) ->
-    if type == "direct_transactions"
-      @direct_transactions.get(id)
-    else
-      @transactions.get(id)
 
   shop_key: () ->
     @shop.token
 
-  add: (data, type) ->
-    if type == "direct_transactions"
-      @add_direct data
-    else
-      @add_order data
+  add: (items) ->
+    `for(var i=items.length-1; i>=0; i--){
+      this.add_one(items[i])
+    }`
+    return
+
+  type_key: () ->
+    switch @_type
+      when "direct_transactions" then "direct_id"
+      when "transactions" then "order_id"
+      else "id"
+
+
 

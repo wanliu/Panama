@@ -3,12 +3,13 @@ root = (window || @)
 
 class root.TransactionRealTime
 
-  constructor: (shop_key) ->
+  constructor: (shop_key, type) ->
+    @type = type
     @shop_key = shop_key
     @client = window.clients.socket
 
   url_root: () ->
-    "notify:/shops/#{@shop_key}/order_transactions"
+    "notify:/shops/#{@shop_key}/#{@type}"
 
   create: (callback) ->
     @client.subscribe "#{@url_root()}/create", (data) =>
@@ -26,8 +27,8 @@ class root.TransactionRealTime
     @client.subscribe "#{@url_root()}/chat", (data) =>
       callback(data) if $.isFunction(callback)
 
-  change_state: (callback) ->
-    @client.subscribe "#{@url_root()}/change_state", (data) =>
+  change_state: (id, callback) ->
+    @client.subscribe "#{@url_root()}/#{id}/change_state", (data) =>
       callback(data) if $.isFunction(callback)
 
 

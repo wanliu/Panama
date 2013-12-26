@@ -70,10 +70,15 @@ class OrderTransaction < ActiveRecord::Base
     generate_number
   end
 
-  after_create :state_change_detail, :notice_user
+  after_create do
+    state_change_detail
+    notice_user
+  end
+
+  after_commit :create_the_temporary_channel, on: :create
 
   def notice_user
-    seller.notify("/#{seller.im_token}/order_transactions/create", "你有编号#{number}新的订单",
+    seller.notify("/#{seller.im_token}/transactions/create", "你有编号#{number}新的订单",
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :order_id => id,
       :target => self)
@@ -245,8 +250,9 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_destroy
-    seller.notify(
-      "/#{seller.im_token}/order_transactions/destroy",
+    target = current_operator.nil? ? seller : current_operator
+    target.notify(
+      "/#{seller.im_token}/transactions/destroy",
       "订单#{number}被删除！",
       :order_id => id,
       :url => "/shops/#{seller.name}/admins/pendding")
@@ -385,7 +391,7 @@ class OrderTransaction < ActiveRecord::Base
   def change_state_notify_seller(event = nil)
     target = current_operator.nil? ? seller : current_operator
     target.notify(
-      "/#{seller.im_token}/order_transactions/change_state",
+      "/#{seller.im_token}/transactions/#{id}/change_state",
       "您的订单#{number}买家已经#{seller_state_title}",
       :order_id => id,
       :state => state_name,
@@ -397,7 +403,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_state_notify_buyer(event = nil)
     buyer.notify(
-      "/order_transactions/change_state",
+      "/transactions/#{id}/change_state",
       "您的订单#{number}卖家已经#{buyer_state_title}",
       :order_id => id,
       :state => state_name,
@@ -452,21 +458,19 @@ class OrderTransaction < ActiveRecord::Base
     state_details.find_by(:state => state)
   end
 
-  def operator_create(toperator_id)
-    unless current_operator.try(:id) == toperator_id
-      _operator = operators.create(operator_id: toperator_id)
-      if _operator.valid?
-        self.update_attribute(:operator_id, _operator.id)
-      end
-    end
-    self.update_attribute(:operator_state, true)
-    self.update_attribute(:dispose_date, DateTime.now)
-    refunds.update_all(:operator_id, toperator_id)
+  def operator_create(user_id)
+    _operator = operators.create(operator_id: user_id)
+    notice_change_operator(_operator.operator) if _operator.valid?
+    _operator
+  end
+
+  def notice_change_operator(user)
     seller.notify(
-      "/#{seller.im_token}/order_transactions/dispose",
-      "#{current_operator.login}处理 #{number}订单",
+      "/#{seller.im_token}/transactions/dispose",
+      "#{user.login}处理 #{number}订单",
       :persistent => false,
-      :order_id => id
+      :order_id => id,
+      :exclude => user
     )
   end
 
@@ -534,7 +538,7 @@ class OrderTransaction < ActiveRecord::Base
         "/shops/#{seller.name}/admins/transactions/#{id}"
       end
       receive_user.notify(
-        "/#{seller.im_token}/order_transactions/#{id}/chat",
+        "/#{seller.im_token}/transactions/#{id}/chat",
         content,
         :order_id => id,
         :send_user => {
@@ -547,7 +551,7 @@ class OrderTransaction < ActiveRecord::Base
       )
     else
       seller.notify(
-        "/#{seller.im_token}/order_transactions/chat",
+        "/#{seller.im_token}/transactions/chat",
         _content,
         :order_id => id,
         :avatar => send_user.photos.icon,
@@ -688,4 +692,5 @@ class OrderTransaction < ActiveRecord::Base
     name = self.class.to_s << "_" << number
     self.create_temporary_channel(targeable_type: "OrderTransaction", user_id: seller.owner.id, name: name)
   end
+
 end

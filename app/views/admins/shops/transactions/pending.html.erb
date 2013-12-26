@@ -62,33 +62,19 @@
       token: "<%= current_shop.im_token %>"
     }
 
-    new TransactionTwoColumnsViewport({
+    var orders = new ShopOrderTransactions({
       el: $(".transaction-list"),
-      secondContainer: ".order-detail",
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
-      leftSide: "#left_sidebar",
-      registerView: function(view){
-        new ShopTransactionCard({
-          el: $(".transaction", view.$detail)
-        })
-      }
-    })
-
-    // var orders = new ShopOrderTransactions({
-    //   el: $(".transaction-list"),
-    //   remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
-    //   shop: shop})
+      shop: shop})
 
     var dispose_view = new TransactionDispose({
       el: $("table.untransactions"),
       shop: shop,
-      tranOpts: {
-        transactions: { }
-      },
+      _type: "transactions",
       template: Hogan.compile("<%= j render :partial => 'untransaction' %>")
     })
 
-    dispose_view.add_orders(<%= @untransactions.as_json(:methods => "seller_state_title").to_json.html_safe %>)
+    dispose_view.add(<%= @untransactions.as_json(:methods => "seller_state_title").to_json.html_safe %>)
 
     new TransactionBubbling({
       url: "http://<%= request.env['HTTP_HOST'] %>/shops/<%= current_shop.name %>/admins/pending#order"

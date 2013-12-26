@@ -199,6 +199,7 @@ class Product < ActiveRecord::Base
     attrs = super *args
     options = args.extract_options!
     attrs["url"] = photos.icon
+    attrs["photos"] = photos.attributes
     attrs["attachments"] = format_attachment(options[:version_name]) unless options[:only]
     attrs
   end

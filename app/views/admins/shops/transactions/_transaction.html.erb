@@ -5,7 +5,9 @@
    state-title="<%= transaction.seller_state_title %>"
    state-url="<%= page_shop_admins_transaction_path(current_shop, transaction) %>"
    state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
-   url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>">
+   url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>"
+   data-token="<%= @transaction.temporary_channel.token %>"
+   data-number="<%= @transaction.number %>" >
   <div class='wrapper-box'>
     <div class='row-fluid'>
       <div class='left span7'>
@@ -43,9 +45,8 @@
         <div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
           <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
           <div class='message_wrap'>
-            <%#= render 'chat_dialog', transaction: transaction, people: people %>
-            <iframe frameborder='0' src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
-            </iframe>
+            <!-- <iframe frameborder='0' src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
+            </iframe> -->
           </div>
         </div>
       </div>
