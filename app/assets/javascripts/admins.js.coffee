@@ -10,6 +10,9 @@
 #= require models/attribute_model
 #= require models/element_model
 #= require lib/attachment_upload
+#= require transactions/2columns_viewport
+#= require transactions/mini_left_side
+#= require transactions/card_item
 #= require admins/shops/products
 #= require admins/shops/categories
 #= require admins/shops/community_people
@@ -33,5 +36,3 @@
 #= require admins/shops/shop_direct_transaction_list
 #= require admins/shops/community_message
 #= require people/community
-#= require transactions/2columns_viewport
-#= require transactions/mini_left_side

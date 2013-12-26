@@ -66,6 +66,7 @@ class ShopProduct < ActiveRecord::Base
     attra["url"] = product.photos.icon
     attra["product"] = product.as_json(options["version_name"])
     attra["product"]["photo_avatar"] = product.photos.avatar
+    attra["photos"] = product.photos.attributes
     attra
   end
 

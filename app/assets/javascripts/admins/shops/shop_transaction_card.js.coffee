@@ -5,6 +5,7 @@
 exports = window || @
 class ShopTransactionCard extends TransactionCardBase
   initialize:() ->
+    @shop = @options.shop
     super
     @filter_delivery_code()
     @initMessagePanel()
@@ -52,13 +53,13 @@ class ShopTransactionCard extends TransactionCardBase
     false
 
   initMessagePanel: () ->
-    @setMessagePanel()
-    @message_panel.show()
+  #   @setMessagePanel()
+  #   @message_panel.show()
 
-  toggleMessage: () ->
-    @setMessagePanel()
-    @message_panel.slideToggle()
-    false
+  # toggleMessage: () ->
+  #   @setMessagePanel()
+  #   @message_panel.slideToggle()
+  #   false
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
@@ -158,6 +159,9 @@ class ShopTransactionCard extends TransactionCardBase
   is_express_info: () ->
     @is_delivery_express() || (
       @$(".express-info").length > 0 && @$(".express-info").css("display") == "block" )
+
+  realtime_url: () ->
+    "notify:/#{@shop.token}/transactions#{super}"
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

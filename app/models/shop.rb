@@ -39,6 +39,10 @@ class Shop < ActiveRecord::Base
     generate_im_token
   end
 
+  after_create do
+    generate_employee
+  end
+
   scope :actived, where(actived: true)
 
   validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }, if: :actived?
@@ -104,7 +108,16 @@ class Shop < ActiveRecord::Base
 
   #所有商店的雇员
   def employees
-    shop_users.includes(:user).map{| su | su.user } + [user]
+    User.where(:id => shop_users.pluck("user_id"))
+  end
+
+  def is_employees?(user)
+    user_id = user.is_a?(User) ? user.id : user
+    shop_users.exists?(["user_id=?", user_id])
+  end
+
+  def generate_employee
+    shop_users.create(:user_id => user_id)
   end
 
   def seller_group_employees
@@ -146,7 +159,9 @@ class Shop < ActiveRecord::Base
   end
 
   def notify(channel, data, options = {})
-    employees.each do |member|
+    exclude = options.key?(:exclude) ? options.delete(:exclude) : []
+    exclude = [exclude] unless exclude.is_a?(Array)
+    (employees - exclude).each do |member|
       member.notify(File.join("/shops", channel), data, options)
     end
   end

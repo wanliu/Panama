@@ -10,25 +10,22 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
   def invite
     @user = User.find_by(:login => params[:login])
 
-    respond_to do |form|
+    respond_to do |format|
       if @user
-        @user.notify(
-          "/employees/invite",
-          "#{current_shop.name} 商店邀请你加入",
-          :avatar => current_user.photos.icon,
-          :url => notification_url(@user.login))
-        form.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
+        @user.notify("/employees/invite",
+                     "商店 #{current_shop.name} 邀请你加入",
+                     { :avatar => @user.icon,
+                       :url => notification_url(@user.login) })
+          format.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
       else
-        #如果email发送信息给它
+        # 如果email发送信息给它
         if params[:login] =~ email_match
-          UserMailer.invite_employee(
-            params[:login],
-            current_user,
-            current_shop,
-            email_invite_url(email_callback_url)).deliver
-          form.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
+          UserMailer.invite_employee(params[:login], current_user,
+              current_shop, email_invite_url(email_callback_url)).deliver
+          format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
         else
-          form.json{ render :json => {message: "用户不存在！"}, :status => 403 }
+          format.json{ render :json => {message: "用户不存在！"}, :status => 403 }
+
         end
       end
     end
@@ -36,16 +33,16 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
   def destroy
     employee = current_shop.find_employee(params[:user_id])
-    respond_to do | format |
+    respond_to do | formatat |
       if employee
         employee.destroy
         employee.user.notify("/shops/leaved",
                         "你已经离开#{current_shop.name} 商店",
                        {:avatar => current_shop.photos.icon,
                         :url => notification_url(employee.user.login) })
-        format.json{ render :json => {} }
+        formatat.json{ render :json => {} }
       else
-        format.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
+        formatat.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
       end
     end
   end
@@ -53,9 +50,9 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
   def find_by_group
     @employees = current_shop.groups.find_by(:id => params[:group_id]).users
 
-    respond_to do |format|
-      format.json{ render :json => @employees.as_json(root: false, methods: :icon) }
-      format.html
+    respond_to do |formatat|
+      formatat.json{ render :json => @employees.as_json(root: false, methods: :icon) }
+      formatat.html
     end
   end
 
@@ -128,8 +125,8 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
   end
 
   def respond_block(_json, _status)
-    respond_to do |format|
-      format.json{ render json: _json, status: _status }
+    respond_to do |formatat|
+      formatat.json{ render json: _json, status: _status }
     end
   end
 end

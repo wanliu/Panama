@@ -3,9 +3,8 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   helper_method :base_template_path
 
   def pending
-    transactions = current_shop_order.uncomplete
-    @untransactions = transactions.where(:operator_state => false)
-    @transactions = transactions.joins(:operator)
+    @untransactions = current_shop_order.where(:operator_state => false)
+    @transactions = current_shop_order.uncomplete.joins(:operator)
     .where("operator_state=true and transaction_operators.operator_id=?", current_user.id)
     .order("dispose_date desc").page(params[:page])
   end
@@ -93,14 +92,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def dispose
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do |format|
-      if @transaction.operator_create(current_user.id)
+      if @transaction.operator_create(current_user.id).valid?
         @transaction.unmessages.update_all(
           :read => true,
           :receive_user_id => current_user.id)
         ChatMessage.notice_read_state(current_user, @transaction.buyer.id)
-
-        format.js{
-          render :js => "window.location.href='#{shop_admins_transaction_path(current_shop, @transaction)}'" }
         format.html{
           render partial: 'transaction',object:  @transaction,
            locals: {

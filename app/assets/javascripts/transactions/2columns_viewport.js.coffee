@@ -21,7 +21,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   secondContainer: ".order-detail"
   leftClass: "float"
   rightClass: ""
-  warpClass: ".orders"
+  warpClass: ".card_list"
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -39,15 +39,17 @@ class TransactionTwoColumnsViewport extends Backbone.View
   getCurrentTransaction: () ->
 
   loadView: () ->
-    @$(@child).each (i, ele) =>
-      model = new Transaction(
-        full_mode: true,
-        elem: $(ele),
-        listView: @,
-        id: $(ele).attr('data-value-id')
-      )
+    @$(@child).each (i, ele) => @add ele
 
-      @models.add(model)
+  add: (elem) ->
+    model = new Transaction(
+      full_mode: true,
+      elem: $(elem),
+      listView: @,
+      id: $(elem).attr('data-value-id')
+    )
+
+    @models.add(model)
 
   addView: (model) ->
     elem = model.get("elem")
@@ -114,12 +116,16 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
     if @currentView?
       el = @currentView.$el
-      target = @$(@child).get(@insertIndex)
-      $target = $(target)
-      posTarget = $target.position()
-      widthTarget = $target.width()
+      target = @rows[@insertIndex - 1]
+      #$target = row.$el
+      #posTarget = $target.position()
+      #widthTarget = $target.width()
 
-      el.insertBefore($target)
+      if _.isEmpty(target)
+        @$orders.prepend(el)
+      else
+        el.insertAfter(target.$el)
+
       el.attr('style', '')
 
   enterColumnsLayout: (callback) =>

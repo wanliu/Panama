@@ -67,13 +67,13 @@ class TransactionCard extends TransactionCardBase
     @$(".address-panel").slideUp()
 
   initMessagePanel: () ->
-    @setMessagePanel()
-    @message_panel.show()
+    # @setMessagePanel()
+    # @message_panel.show()
 
-  toggleMessage: () ->
-    @setMessagePanel()
-    @message_panel.slideToggle()
-    false
+  # toggleMessage: () ->
+  #   @setMessagePanel()
+  #   @message_panel.slideToggle()
+  #   false
 
   leaveWaitingTransfer: (event, from, to, msg) ->
     @create_transfer_info(event)
@@ -167,6 +167,9 @@ class TransactionCard extends TransactionCardBase
     code_input = @$("input:text[name=code]")
     if !event.ctrlKey && event.keyCode > 47 && event.keyCode < 106
       code_input.val(code_input.val().replace(/(\w{4})(?=\w)/g,"$1 "))
+
+  realtime_url: () ->
+    "notify:/transactions#{super}"
 
 
 root.TransactionCard = TransactionCard

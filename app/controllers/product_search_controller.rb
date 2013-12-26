@@ -2,14 +2,26 @@ class ProductSearchController < ApplicationController
   before_filter :login_and_service_required
 
   def index
-    query = filter_special_sym(params[:q])
-    products = Product.search2 do
-      query do
-        string "name:#{query} OR primitive:#{query}", :default_operator => "AND"
-      end
-    end.results
+    products = product_search(params[:q])
+    if params[:shop_id].present?
+      products = product_join_state(products, params[:shop_id])
+    end
     respond_to do |format|
       format.json { render json: products }
+    end
+  end
+
+  private
+  def product_search(query)
+    q = filter_special_sym(query)
+    if q.present?
+      Product.search2 do
+        query do
+          string "name:#{q} OR primitive:#{q} OR untouched:#{q}*", :default_operator => "AND"
+        end
+      end.results
+    else
+      []
     end
   end
 end

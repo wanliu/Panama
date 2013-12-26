@@ -108,7 +108,7 @@ class root.ChatService
   constructor: (options) ->
     _.extend(@, options)
     @collection = new ChatList()
-    @collection.bind('add', @addOne, @)
+    # @collection.bind('add', @addOne, @)
     @bindEvent()
 
   bindEvent: () ->
@@ -128,7 +128,7 @@ class root.ChatService
   newChat: (model) ->
     exist_model = @findExist(model)
     if exist_model
-      return exist_model.view
+      return exist_model.chat_view
     else
       switch model.get('type')
         when 1
@@ -144,8 +144,25 @@ class root.ChatService
     _.find @collection.models, (item) =>
       item.get('name') is model.get('name')
 
+  addModel: (model) ->
+    target_el = model.get('target_el')
+    # 是否绑定聊天框
+    if $(target_el).length == 1
+      $(target_el).append($(model.chat_view.el))
+      $(target_el).find('.global_chat')
+          .css('position', 'static')
+          .css('width', '100%')
+          .css('height', '100%')
+          .find('.head').addClass('hide')
+      @collection.add(model)
+    else
+      $("body").append(model.chat_view.el)
+      @collection.add(model)
+      @addOne(model)
+      @addResizable(model)
+
   addOne: (model) ->
-    $el = $(model.view.el)
+    $el = $(model.chat_view.el)
     w_width = $(window).width()
     w_height = $(window).height()
     right = $(".right-sidebar").width() + (@collection.length-1)*$el.width()
@@ -158,6 +175,15 @@ class root.ChatService
     top = w_height - ChatService.rows*$el.height()
     $el.css('right', right + "px")
     $el.css('top', top + "px")
+
+  addResizable: (model) ->
+    $el = $(model.chat_view.el)
+    $el.resizable().draggable().css('position', 'fixed')
+    $el.on('resize', (event, ui) =>
+      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
+      $el.find(".body").css('height', height)
+      $el.css('position', 'fixed')
+    )
 
 
 Handlebars.registerHelper 'calender', (time) ->
@@ -285,7 +311,6 @@ class BaseChatView extends Caramal.BackboneView
     @channel = @model.get('channel')
     @initChannel()
     @initDialog()
-    @bindDialog()
     @bindEvent()
 
   initChannel: () ->
@@ -296,23 +321,15 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).html(@chat_template({model: @model}))
     @msg_el = @$("textarea.content")
     @state_el = @$(".head>.state")
-    $("body").append(@el)
-    @model.view = @
+    @model.chat_view = @
 
-    ChatService.getInstance().collection.add(@model)
+    # ChatService.getInstance().collection.add(@model)
+    ChatService.getInstance().addModel(@model)
     upload_view = new ImageUpload({ el: @el, parent_view: @ })
     @$('.choose-face').popover({
       html: true,
       content: () => EmojifyChooser.getInstance().el
     })
-
-  bindDialog: () ->
-    $(@el).resizable().draggable().css('position', 'fixed')
-    $(@el).on('resize', (event, ui) =>
-      height = $(@el).outerHeight() - @$(".head").outerHeight() - @$(".foot").outerHeight()
-      @$(".body").css('height', height)
-      $(@el).css('position', 'fixed')
-    )
 
   bindEvent: () ->
     @stateService()
@@ -375,6 +392,12 @@ class BaseChatView extends Caramal.BackboneView
     @$('.msg_content').append(@parseMessages(data))
     @trigger('active_avatar') if @name is data.user
     @scrollDialog()
+
+  toggleDialog: () ->
+    if @display
+      @hideDialog()
+    else
+      @showWithMsg()
 
   hideDialog: () ->
     $(@el).hide()
@@ -485,5 +508,5 @@ class root.TemporaryChatView extends BaseChatView
   initChannel: () ->
     @channel ||= Caramal.Group.of(@name)
     @channel.open()
+    @channel.record()
 
-    

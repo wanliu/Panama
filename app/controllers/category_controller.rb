@@ -36,8 +36,7 @@ class CategoryController < ApplicationController
 
   def products
     @category = Category.find(params[:id])
-    @shop_products = current_user.shop.products
-    category_id, product_ids  = @category.id , @shop_products.pluck(:product_id)
+    category_id  = @category.id
     _offset, _limit = params[:offset] || 0, params[:limit] || 10
     @products = Product.search2 do
       size _limit
@@ -49,14 +48,11 @@ class CategoryController < ApplicationController
               filter :term, :category_id => category_id
             end
           end
-          must_not do
-            filtered do
-              filter :terms, :id => product_ids
-            end
-          end
         end
       end
     end.results
+
+    @products = product_join_state(@products, current_user.shop.id)
 
     respond_to do |format|
       format.html # index.html.erb
