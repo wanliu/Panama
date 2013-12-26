@@ -55,7 +55,7 @@ class SearchController < ApplicationController
             must do
               filtered do
                 filter :query, :query_string => {
-                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{q}*",
                   :default_operator => "AND"
                 }
 
@@ -80,7 +80,7 @@ class SearchController < ApplicationController
       shop_id = current_user.shop.id
       products = ShopProduct.search2 do
         query do
-          string "name:#{query} OR primitive:#{query}", :default_operator => "AND"
+          string "name:#{query} OR primitive:#{query} OR untouched:#{q}*", :default_operator => "AND"
         end
       end.results
     else
@@ -105,7 +105,7 @@ class SearchController < ApplicationController
               if q[:title].present?
                 val = conditions[:title].gsub(/ /,'')
                 filter :query, :query_string => {
-                  :query => "title:#{val} OR name:#{val} OR primitive:#{val}",
+                  :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{q}*",
                   :default_operator => "AND"
                 }
               end

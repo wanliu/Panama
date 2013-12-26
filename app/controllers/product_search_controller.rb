@@ -17,7 +17,7 @@ class ProductSearchController < ApplicationController
     if q.present?
       Product.search2 do
         query do
-          string "name:#{q} OR primitive:#{q}", :default_operator => "AND"
+          string "name:#{q} OR primitive:#{q} OR untouched:#{q}*", :default_operator => "AND"
         end
       end.results
     else
