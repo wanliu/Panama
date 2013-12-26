@@ -52,7 +52,7 @@ class CategoryController < ApplicationController
       end
     end.results
 
-    @products = product_join_state(@products, current_user.shop.id)
+    @products = product_join_state(@products, params[:shop_id])
 
     respond_to do |format|
       format.html # index.html.erb
