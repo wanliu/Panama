@@ -154,7 +154,7 @@ class ActivityPreview extends Backbone.View
       name: $(@el).attr('id'),
       title: @$(".summary .title").text()
     })
-    chat_view = ChatService.getInstance().newChat(model)
+    chat_view = ChatManager.getInstance().newChat(model)
     chat_view.showDialog()
 
   launch: (event) ->

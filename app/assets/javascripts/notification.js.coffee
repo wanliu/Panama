@@ -60,7 +60,7 @@ class NotificationManager
 
   add_user: (data) =>
     @commonNotify(data)
-    friendsView = ChatListView.getInstance().friends_view
+    friendsView = ChatManager.getInstance().friends_view
     friendsView.addFriend(
       follow_type: 1,
       login: data.friend_name,
@@ -69,7 +69,7 @@ class NotificationManager
 
   remove_user: (data) =>
     @commonNotify(data)
-    friendsView = ChatListView.getInstance().friends_view
+    friendsView = ChatManager.getInstance().friends_view
     friendsView.removeFriend(
       follow_type: 1,
       login: data.friend_name,

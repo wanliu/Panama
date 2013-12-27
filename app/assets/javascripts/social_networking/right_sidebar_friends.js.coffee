@@ -1,16 +1,32 @@
 root = (window || @)
 
-class root.ChatListView extends Backbone.View
-  events:
-    'keyup input.filter_key' : 'filter_list'
+class root.ChatModel extends Backbone.Model
 
-  bind_items: () ->
+class root.ChatList extends Backbone.Collection
+  model: ChatModel
+
+class root.ChatManager extends Backbone.View
+  @rows = 1
+  @count = 0
+  @maxRows = 2
+
+  @getInstance = (options) ->
+    ChatManager.instance ||= new ChatManager(options)
+
+  events:
+    'keyup input.filter_key' : 'filterList'
+
+  bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
       console.log('channel:new ', channel)
-      @targetView(channel.type).process(channel)
+      if @is_ready
+        @targetView(channel.type).process(channel)
+      else
+        @unprocessed_channels.push(channel)
     )
 
-  initialize: () ->
+  initialize: (options) ->
+    _.extend(@, options)
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
@@ -23,17 +39,26 @@ class root.ChatListView extends Backbone.View
       <div class="fixed_head">
         <input class="filter_key" type="text"/>
       </div>')
-    @bind_items()
+    @initFetch()
+    @bindItems()
+    @bindEvent()
     @$el.slimScroll(height: $(window).height())
-    @init_fetch()
 
   addAll: () ->
     @$("ul").html('')
     @collection.each (model) =>
       @addOne(model)
+    @showUnprocessed()
+
+  showUnprocessed: () ->
+    setTimeout( () =>
+      _.each @unprocessed_channels, (channel) =>
+        @targetView(channel.type).process(channel)
+      @is_ready = true
+    , 200) # fix me: setTimeout should be removed
 
   addOne: (model) ->
-    type = model.get('follow_type')
+    type = model.get('type') || model.get('follow_type')
     @targetView(type).collection.add(model)
 
   targetView: (type) ->
@@ -47,23 +72,96 @@ class root.ChatListView extends Backbone.View
       else
         console.error('unprocess type: ', type)
 
-  init_fetch: () ->
+  initFetch: () ->
+    @is_ready = false
+    @unprocessed_channels = []
     @collection.fetch(url: "/users/channels")
 
-  filter_list: (event) ->
+  filterList: (event) ->
     keyword = $(event.target).val().trim()
-    @temporarys_view.filter_list(keyword)
-    @friends_view.filter_list(keyword)
-    @groups_view.filter_list(keyword)
+    @temporarys_view.filterList(keyword)
+    @friends_view.filterList(keyword)
+    @groups_view.filterList(keyword)
 
+  bindEvent: () ->
+    ifvisible.setIdleDuration(60)
+    ifvisible.idle () =>
+      $(window).trigger('idle')
+    ifvisible.wakeup () =>
+      $(window).trigger('active')
 
-ChatListView.getInstance = (options) ->
-  @instance ||= new ChatListView(options)
+  setMaxRows: (rows) ->
+    ChatManager.maxRows = rows if rows > 0
+
+  setRows: (rows) ->
+    rows = ChatManager.maxRows if rows > ChatManager.maxRows
+    ChatManager.rows = rows
+
+  newChat: (model) ->
+    exist_model = @findExist(model)
+    if exist_model && exist_model.chat_view
+      return exist_model.chat_view
+    else
+      switch model.get('type')
+        when 1
+          new ChatView({model: model})
+        when 2
+          new GroupChatView({model: model})
+        when 3
+          new TemporaryChatView({model: model})
+        else
+          console.error('undefined type...')
+
+  findExist: (model) ->
+    _.find @collection.models, (item) =>
+      item.get('name') is model.get('name')
+
+  addModel: (model) ->
+    target_el = model.get('target_el')
+    # 是否绑定聊天框
+    if $(target_el).length == 1
+      $(target_el).append($(model.chat_view.el))
+      $(target_el).find('.global_chat')
+          .css('position', 'static')
+          .css('width', '100%')
+          .css('height', '100%')
+          .find('.head').addClass('hide')
+      @collection.add(model)
+    else
+      $("body").append(model.chat_view.el)
+      @collection.add(model)
+      @addChat(model)
+      @addResizable(model)
+
+  addChat: (model) ->
+    count = $('.global_chat:visible').length
+    $el = $(model.chat_view.el)
+    w_width = $(window).width()
+    w_height = $(window).height()
+    right = $(".right-sidebar").width() + (count-1)*$el.width()
+
+    if right + $el.width() > w_width
+      count_x = ~~(w_width/$el.width())
+      @setRows(Math.ceil(count/count_x))
+      right = $(".right-sidebar").width() + (count-1)%count_x*$el.width()
+
+    top = w_height - ChatManager.rows*$el.height()
+    $el.css('right', right + "px")
+    $el.css('top', top + "px")
+
+  addResizable: (model) ->
+    $el = $(model.chat_view.el)
+    $el.resizable().draggable().css('position', 'fixed')
+    $el.on('resize', (event, ui) =>
+      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
+      $el.find(".body").css('height', height)
+      $el.css('position', 'fixed')
+    )
 
 
 class BaseIconsView extends Backbone.View
 
-  init_fetch: () ->
+  initFetch: () ->
     console.log('unimplemented...')
 
   addOne: (model) ->
@@ -76,7 +174,7 @@ class BaseIconsView extends Backbone.View
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
-    # @init_fetch()
+    # @initFetch()
     @render()
 
   addAll: () ->
@@ -90,16 +188,18 @@ class BaseIconsView extends Backbone.View
       @top(exist_model)
       exist_model.icon_view.setChannel(channel)
     else
+      # 临时聊天类型
+      target_el = $("[data-token='" + channel.group + "']").find('.message_wrap')
       model = new ChatModel({
-        type: 3,
-        name: channel.group,
-        target_el: $("[data-token='" + channel.group + "']").find('.message_wrap')
+        type: 3, 
+        name: channel.group, 
+        target_el: target_el
         title: "订单 #{channel.id}",
         channel: channel
       })
-      @parent_view.temporarys_view.addModel(model)
+      @parent_view.targetView(3).addModel(model)
 
-  filter_list: (keyword) ->
+  filterList: (keyword) ->
     pattern = new RegExp(keyword)
     _.each @collection.models, (model) ->
       if pattern.test(model.get('login'))
@@ -134,7 +234,7 @@ class FriendIconsView extends BaseIconsView
     $(@el).html(@template)
     @
 
-  # init_fetch: () ->
+  # initFetch: () ->
   #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
@@ -160,6 +260,7 @@ class FriendIconsView extends BaseIconsView
   removeFriend: (attributes) ->
     delete attributes['icon']
     @collection.remove(@collection.where(attributes)[0])
+
 
 class GroupIconsView extends BaseIconsView
   className: "groups-list"
@@ -267,7 +368,8 @@ class BaseIconView extends Backbone.View
 
   getChat: () ->
     unless @chat_view
-      @chat_view = ChatService.getInstance().newChat(@model)
+      @chat_view = ChatManager.getInstance().newChat(@model)
+      @model.chat_view = @chat_view
       @bind_chat()
     @chat_view
 
@@ -311,3 +413,4 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
+

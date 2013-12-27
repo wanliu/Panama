@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
   $("body").addClass('right-mini');
-  ChatListView.getInstance({ el: $(".right-sidebar .body") });
+  ChatManager.getInstance({ el: $(".right-sidebar .body") });
   $( window ).resize(function() {
     $viewportHeight = $(window).height()
     $( ".right-sidebar .body" ).css("height", $viewportHeight);
