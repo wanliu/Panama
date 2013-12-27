@@ -27,18 +27,6 @@ class Caramal.BackboneView extends Backbone.View
           @channel[name].apply(@channel, args)
 
 
-class root.ChatModel extends Backbone.Model
-  defaults: () ->
-    {
-      type: null,
-      name: null,
-      title: null,
-      channel: null
-    }
-
-class root.ChatList extends Backbone.Collection
-  model: ChatModel
-
 class ImageUpload extends Backbone.View
   input_name: "attachment_ids"
   action: "/attachments/upload"
@@ -95,95 +83,6 @@ class ImageUpload extends Backbone.View
       onProgress: @onProgress,
       onComplete: @onComplete
     })
-
-
-class root.ChatService
-  @rows = 1
-  @count = 0
-  @maxRows = 2
-
-  @getInstance = (options) ->
-    ChatService.instance ||= new ChatService(options)
-
-  constructor: (options) ->
-    _.extend(@, options)
-    @collection = new ChatList()
-    # @collection.bind('add', @addOne, @)
-    @bindEvent()
-
-  bindEvent: () ->
-    ifvisible.setIdleDuration(60)
-    ifvisible.idle () =>
-      $(window).trigger('idle')
-    ifvisible.wakeup () =>
-      $(window).trigger('active')
-
-  setMaxRows: (rows) ->
-    ChatService.maxRows = rows if rows > 0
-
-  setRows: (rows) ->
-    rows = ChatService.maxRows if rows > ChatService.maxRows
-    ChatService.rows = rows
-
-  newChat: (model) ->
-    exist_model = @findExist(model)
-    if exist_model
-      return exist_model.chat_view
-    else
-      switch model.get('type')
-        when 1
-          new ChatView({model: model})
-        when 2
-          new GroupChatView({model: model})
-        when 3
-          new TemporaryChatView({model: model})
-        else
-          console.error('undefined type...')
-
-  findExist: (model) ->
-    _.find @collection.models, (item) =>
-      item.get('name') is model.get('name')
-
-  addModel: (model) ->
-    target_el = model.get('target_el')
-    # 是否绑定聊天框
-    if $(target_el).length == 1
-      $(target_el).append($(model.chat_view.el))
-      $(target_el).find('.global_chat')
-          .css('position', 'static')
-          .css('width', '100%')
-          .css('height', '100%')
-          .find('.head').addClass('hide')
-      @collection.add(model)
-    else
-      $("body").append(model.chat_view.el)
-      @collection.add(model)
-      @addOne(model)
-      @addResizable(model)
-
-  addOne: (model) ->
-    $el = $(model.chat_view.el)
-    w_width = $(window).width()
-    w_height = $(window).height()
-    right = $(".right-sidebar").width() + (@collection.length-1)*$el.width()
-
-    if right + $el.width() > w_width
-      count_x = ~~(w_width/$el.width())
-      @setRows(Math.ceil(@collection.length/count_x))
-      right = $(".right-sidebar").width() + (@collection.length-1)%count_x*$el.width()
-
-    top = w_height - ChatService.rows*$el.height()
-    $el.css('right', right + "px")
-    $el.css('top', top + "px")
-
-  addResizable: (model) ->
-    $el = $(model.chat_view.el)
-    $el.resizable().draggable().css('position', 'fixed')
-    $el.on('resize', (event, ui) =>
-      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
-      $el.find(".body").css('height', height)
-      $el.css('position', 'fixed')
-    )
 
 
 Handlebars.registerHelper 'calender', (time) ->
@@ -323,8 +222,7 @@ class BaseChatView extends Caramal.BackboneView
     @state_el = @$(".head>.state")
     @model.chat_view = @
 
-    # ChatService.getInstance().collection.add(@model)
-    ChatService.getInstance().addModel(@model)
+    ChatManager.getInstance().addModel(@model)
     upload_view = new ImageUpload({ el: @el, parent_view: @ })
     @$('.choose-face').popover({
       html: true,
