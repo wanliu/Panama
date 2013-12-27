@@ -38,7 +38,7 @@ development:
       price: 8
     e邮宝: 
       title: e邮宝
-      price: 8
+      price: 7
 test:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
