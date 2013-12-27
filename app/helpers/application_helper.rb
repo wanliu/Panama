@@ -44,9 +44,13 @@ module ApplicationHelper
   end
 
   def product_join_state(products, shop_id)
-    product_ids = Shop.find(shop_id).products.pluck("product_id")
-    products.map do |product|
-      product[:join_state] = product_ids.include?(product.id)
+    product_ids = []
+    if shop_id.present?
+      product_ids = Shop.find(shop_id).products.pluck("product_id")
+    end
+    products.map do |p|
+      product = p.as_json
+      product[:join_state] = product_ids.include?(p.id.to_i)
       product
     end
   end

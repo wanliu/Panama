@@ -38,6 +38,7 @@ class root.WizardView extends Backbone.View
     "submit form.product"    : "search_product"
 
   initialize: () ->
+    @remote_options = {}
     @default_options()
     _.extend(@remote_options, @options.remote_options)
     @$search = @$("form.product input.search")
@@ -88,7 +89,7 @@ class root.WizardView extends Backbone.View
     false
 
   default_options: () ->
-    @remote_options = {offset: 0, limit: 40}
+    _.extend @remote_options, {offset: 0, limit: 40}
 
   add_to_shop: () ->
     product_ids = []
