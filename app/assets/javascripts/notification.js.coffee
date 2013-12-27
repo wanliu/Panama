@@ -205,6 +205,7 @@ class NotificationView extends Backbone.View
     </a>")
 
   events:
+    'click .noty_message' : 'read_message' 
     'click .mark_read': 'mark_as_read'
     'click .content'  : 'read_message'
 
