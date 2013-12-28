@@ -2,6 +2,7 @@
 <%= simple_form_for @activity, :remote => true, :url => activities_auction_index_path, :html => { class: 'form-horizontal form_activity_auction'}, :type => :json do |f| %>
 
   <%= f.input :shop_product_id,
+              :collection => [],
               :wrapper_html => {
                 :class => "shop_product_wrap"
               },
