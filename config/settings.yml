@@ -1,11 +1,11 @@
 ---
 development:
   site_name: 万流电商平台
-  site_url: http://124.228.208.136
+  site_url: http://panama.wanliu.biz
   caramal_server: http://localhost:5000
   redis_port: 6379
   redis_server: localhost
-  pay_mode: production
+  pay_mode: test
   redis_key_prefix: online_user_
   rabbitmq: &1
     host: localhost
