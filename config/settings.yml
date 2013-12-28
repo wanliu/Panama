@@ -1,10 +1,11 @@
 ---
 development:
   site_name: 万流电商平台
-  site_url: http://panama.wanliu.biz
+  site_url: http://124.228.208.136
   caramal_server: http://localhost:5000
   redis_port: 6379
   redis_server: localhost
+  pay_mode: production
   redis_key_prefix: online_user_
   rabbitmq: &1
     host: localhost
@@ -53,6 +54,7 @@ test:
   caramal_server: http://localhost:5000
   redis_port: 6379
   redis_server: localhost
+  pay_mode: test
   redis_key_prefix: online_user_
   rabbitmq: &1
     host: localhost
@@ -87,12 +89,20 @@ test:
     e邮宝:
       title: e邮宝
       price: 8
+  order_pay_types:
+    在线支付:
+      name: online_payment
+      title: 在线支付
+    银行汇款:
+      name: bank_transfer
+      title: 银行汇款
 
 production:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
   caramal_server: http://localhost:5000
   redis_port: 6379
+  pay_mode: production
   redis_server: localhost
   redis_key_prefix: online_user_
   rabbitmq: &1
@@ -128,3 +138,10 @@ production:
     e邮宝:
       title: e邮宝
       price: 7
+  order_pay_types:
+    在线支付:
+      name: online_payment
+      title: 在线支付
+    银行汇款:
+      name: bank_transfer
+      title: 银行汇款

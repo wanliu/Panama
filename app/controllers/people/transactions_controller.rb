@@ -311,11 +311,11 @@ class People::TransactionsController < People::BaseController
   end
 
   def paid_receive_url
-    "#{test_config[:prefix_url]}#{person_transaction_path(@people, @transaction)}"
+    "#{Settings.site_url}#{person_transaction_path(@people, @transaction)}"
   end
 
   def paid_send_url
-    "#{test_config[:prefix_url]}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
+    "#{Settings.site_url}#{kuaiqian_receive_person_transaction_path(current_user, @transaction)}"
   end
 
   def base_template_path

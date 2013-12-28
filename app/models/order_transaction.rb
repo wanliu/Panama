@@ -603,7 +603,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     if %w(waiting_paid waiting_delivery).include?(state) && activity.present?
-      unless activity.valid_expired?
+      unless activity.activity.valid_expired?
         errors.add(:state, "活动过期不能付款了?")
       end
     end

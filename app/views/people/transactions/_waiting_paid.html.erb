@@ -84,7 +84,7 @@
     </div>
     <div class='clearfix'></div>
     <div>
-      <% if payment_mode_test? %>
+      <% if Settings.pay_mode == "test" %>
         支付开启测试模式
       <% end %>
     </div>
