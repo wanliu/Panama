@@ -40,13 +40,13 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like"
-    t.integer  "participate"
+    t.integer  "like",                                                         :default => 0
+    t.integer  "participate",                                                  :default => 0
     t.integer  "shop_product_id"
     t.integer  "shop_id"
+    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
-    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -124,12 +124,12 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0
-    t.float    "amount"
+    t.decimal  "price",      :precision => 10, :scale => 0, :default => 0
+    t.float    "amount",                                    :default => 0.0
     t.text     "describe"
-    t.integer  "status"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.integer  "status",                                    :default => 0
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.integer  "user_id"
   end
 
@@ -493,10 +493,9 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
-    t.integer  "shop_product_id"
-    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -523,7 +522,6 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
-    t.string   "shipped_state"
     t.string   "order_state"
     t.string   "number"
     t.string   "transport_type"
@@ -603,9 +601,9 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "created_at",                                                 :null => false
     t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
+    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
-    t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "buy_state"
     t.integer  "owner_id"
@@ -799,7 +797,6 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "updated_at",                      :null => false
     t.string   "photo"
     t.integer  "user_id"
-    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",      :default => false
     t.integer  "address_id"
@@ -851,7 +848,7 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.string   "name",           :limit => 30
     t.integer  "channel_type",   :limit => 2
     t.integer  "user_id"
-    t.string   "token",          :limit => 45
+    t.string   "token",          :limit => 36
     t.integer  "targeable_id"
     t.string   "targeable_type"
     t.datetime "created_at",                   :null => false
@@ -869,11 +866,11 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.integer  "user_id"
     t.string   "content"
     t.string   "content_html"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.integer  "category_id"
     t.integer  "circle_id"
-    t.integer  "participate"
+    t.integer  "participate",  :default => 0
   end
 
   create_table "transaction_operators", :force => true do |t|

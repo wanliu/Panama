@@ -5,6 +5,7 @@
 	    <div class="page-header">
 	      <h2 class="page-title">请选择你经营的商品</h2>
 	    </div>
+	  	<%#= render "add_products", :locals => { :shop => current_user.try(:shop)} %>
 	  	<%= render "add_products" %>
 		<div class='row-fluid'>
 			<%= form_for @user_checking, :url => wizard_path, :method => :put, class: "form-horizontal" do |f| %>

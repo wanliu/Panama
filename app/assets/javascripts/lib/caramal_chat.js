@@ -5052,7 +5052,8 @@ if (typeof define === "function" && define.amd) {
       Channel.TYPES = {
         normal: 0,
         chat: 1,
-        group: 2
+        group: 2,
+        temporary: 3
       };
 
       function Channel(options) {
@@ -5591,13 +5592,14 @@ if (typeof define === "function" && define.amd) {
 
     })(Channel);
     Caramal.MessageManager.registerDispatch('command', function(info, next) {
-      var channel;
-      if (info.type === Channel.TYPES['group']) {
+      var channel, types;
+      types = [Channel.TYPES['group'], Channel.TYPES['temporary']];
+      if (types.contain(info.type)) {
         Caramal.log('Receive Comamnd:', info);
       }
       switch (info.action) {
         case 'join':
-          if (info.type === Channel.TYPES['group']) {
+          if (types.contain(info.type)) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
               channel = Group.create(info.group, {

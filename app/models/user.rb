@@ -38,6 +38,7 @@ class User < ActiveRecord::Base
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
   has_many :ask_buies, :dependent => :destroy
 
+
   has_and_belongs_to_many :services
 
   after_create :load_initialize_data

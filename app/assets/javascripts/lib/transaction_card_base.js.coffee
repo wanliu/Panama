@@ -205,7 +205,7 @@ class TransactionCardBase extends AbstructStateView
         name: @transaction.get('token'),
         title: "订单 #{@transaction.get('number')}"
       })
-      @model = ChatListView.getInstance().temporarys_view.addModel(@model)
+      @model = ChatManager.getInstance().temporarys_view.addModel(@model)
     @model.icon_view.toggleChat()
     false
 

@@ -43,7 +43,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
   has_many :refunds, class_name: "OrderRefund", dependent: :destroy
   has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy, inverse_of: :order_transaction
-  has_one :temporary_channel, :as => :targeable
+  has_one :temporary_channel, as: :targeable, dependent: :destroy
 
   validates :state, :presence => true
 
