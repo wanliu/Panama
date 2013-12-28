@@ -35,8 +35,8 @@ class User < ActiveRecord::Base
   # has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
-  # has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
-  # has_many :ask_buies, :dependent => :destroy
+  has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
+  has_many :ask_buies, :dependent => :destroy
 
   has_and_belongs_to_many :services
 

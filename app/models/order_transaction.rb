@@ -601,6 +601,12 @@ class OrderTransaction < ActiveRecord::Base
         errors.add(:delivery_price, "这个状态不能修改运费！")
       end
     end
+
+    if %w(waiting_paid waiting_delivery).include?(state) && activity.present?
+      unless activity.valid_expired?
+        errors.add(:state, "活动过期不能付款了?")
+      end
+    end
   end
 
   def filter_fire_event!(events = [], event)
