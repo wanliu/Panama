@@ -1,16 +1,14 @@
 <div class="container-fluid">
-  <% if refund.delivery_manner.present? && refund.delivery_manner.express? %>
   <div class='row-fluid'>
-    <div class='span2'>物流公司</div>
+    <div class='span2'>运输方式</div>
     <div class='span4'>
-      <%=refund.logistics_company.try(:name) %>
+      <%=refund.transport_type %>
     </div>
     <div class='span2'>运单号</div>
     <div class='span4'>
       <%=refund.delivery_code %>
     </div>
   </div>
-  <% end %>
   <div class="row-fluid">
     <div class="span2">
       退货原因
@@ -22,7 +20,7 @@
       运输方式
     </div>
     <div class="span4">
-      <%= refund.delivery_manner.try(:name) %>
+      <%= refund.delivery_price %>
     </div>
     <div clas
   </div>

@@ -1,10 +1,10 @@
 <div class="container-fluid ">
   <div class="row-fluid">
     <div class="span2">
-      物流公司
+      运输方式
     </div>
     <div class="span4">
-      <%= refund.logistics_company.try(:name) %>
+      <%= refund.transport_type %>
     </div>
     <div class="span2">
       发货单号
@@ -21,10 +21,10 @@
       <%= refund.order_reason.name %>
     </div>
     <div class='span2'>
-      运输方式
+      运费
     </div>
     <div class='span4'>
-      <%= refund.delivery_manner.try(:name) %>
+      <%= refund.delivery_price %>
     </div>
   </div>
   <div class="row-fluid">

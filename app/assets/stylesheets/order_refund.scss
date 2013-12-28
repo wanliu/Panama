@@ -85,3 +85,12 @@
     @include transparent(rgb(51, 51, 51), 0.25);
   }
 }
+
+.full-mode>.order_refund{
+
+  .transaction-number{
+    .number{
+      display: none;
+    }
+  }
+}

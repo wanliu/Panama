@@ -25,14 +25,10 @@ class OrderTransaction < ActiveRecord::Base
 
   belongs_to :address,
           foreign_key: 'address_id', class_name: "DeliveryAddress"
-  # belongs_to :delivery_type, foreign_key: "delivery_type_id"
 
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "TransactionOperator"
-  # belongs_to :pay_manner
-  # belongs_to :delivery_manner
-  # belongs_to :logistics_company
 
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
@@ -212,8 +208,6 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
-      #order.valid_delivery?
-      #order.valid_delivery_manner?
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
@@ -250,9 +244,7 @@ class OrderTransaction < ActiveRecord::Base
       refund_items.destroy_all
       update_total_count
     end
-    if !pay_manner.cash_on_delivery? && save
-      refund.buyer_recharge
-    end
+    refund.buyer_recharge if save
   end
 
   def generate_number

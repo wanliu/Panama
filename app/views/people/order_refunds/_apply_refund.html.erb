@@ -1,12 +1,4 @@
 <div class="container-fluid">
-  <% if refund.shipped_state? %>
-  <div class="row-fluid">
-    <div class='span2'>运输方式</div>
-    <div class='span4'>
-      <%= refund.delivery_manner.try(:name) %>
-    </div>
-  </div>
-  <% end %>
   <div class='row-fluid'>
     <div class="span2">
       退货原因

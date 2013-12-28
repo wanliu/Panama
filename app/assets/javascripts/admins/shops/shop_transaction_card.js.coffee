@@ -19,7 +19,6 @@ class ShopTransactionCard extends TransactionCardBase
     "keyup input.delivery_code"    : "filter_delivery_code"
     "click .dprice_edit"      : "show_dprice_edit"
     "blur input:text[name=delivery_price]" : "update_dprice"
-    "change select.delivery_manner_id" : "change_delivery_manner"
 
   states:
     initial: 'none'
@@ -81,8 +80,6 @@ class ShopTransactionCard extends TransactionCardBase
 
   save_delivery_code: (cb) ->
     delivery = @$("input:text.delivery_code")
-    #logistics = @$("select[name=logistics_company_id]")
-    #delivery_manner = @delivery_manner_el()
 
     if delivery.length > 0
       delivery_code = delivery.val()
@@ -132,19 +129,6 @@ class ShopTransactionCard extends TransactionCardBase
     else
       @$dprice_panel.show()
       @$dprice_edit_panel.hide()
-
-  change_delivery_manner: () ->
-    if @is_delivery_express()
-      @$(".express-info").show()
-      @filter_delivery_code()
-    else
-      @$(".express-info").hide()
-      @$(".delivered").removeClass("disabled").attr("event-name", "delivered")
-
-  delivery_manner_el: () ->
-    @$("select.delivery_manner_id>option:selected")
-
-  is_delivery_express: () ->
 
   realtime_url: () ->
     "notify:/#{@shop.token}/transactions#{super}"

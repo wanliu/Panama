@@ -8,7 +8,7 @@
   state-event-url="<%=trigger_event_shop_admins_order_refund_path(current_shop, refund) %>"
   url-root="<%=shop_admins_order_refund_path(current_shop, refund) %>"
    >
-  <div class="wrapper-box">
+  <div class="wrapper-box row-fluid">
     <div class="transaction-header">
 
       <div class="avatar">
@@ -20,7 +20,6 @@
           <div class="trasaction-title">
             <div class="name"><%= buyer.login %></div>
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <%=render "state_button", :refund => refund %>
           </div>
           <div class="transaction-number">
             <span class='number'>编号: <%=refund.number %></span>
@@ -37,6 +36,9 @@
     </div>
     <div class="transaction-body">
       <%=render refund.state, :refund => refund %>
+      <div class='transaction-actions'>
+        <%=render "state_button", :refund => refund %>
+      </div>
     </div>
   </div>
 </div>

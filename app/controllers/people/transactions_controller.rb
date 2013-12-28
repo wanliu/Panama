@@ -145,21 +145,16 @@ class People::TransactionsController < People::BaseController
     @direct_transactions = @people.direct_transactions.completed.order("created_at desc").page(params[:page])
   end
 
-  def get_delivery_price
-    # @price = current_order.find(params[:id]).get_delivery_price(params[:delivery_type_id])
-    @price = DeliveryType.find(params[:delivery_type_id]).try(:price)
-    respond_to do |format|
-      format.json{ render :json => {delivery_price: @price} }
-    end
-  end
+  # def get_delivery_price
+  #   # @price = current_order.find(params[:id]).get_delivery_price(params[:delivery_type_id])
+  #   @price = DeliveryType.find(params[:delivery_type_id]).try(:price)
+  #   respond_to do |format|
+  #     format.json{ render :json => {delivery_price: @price} }
+  #   end
+  # end
 
   def refund
     order, options = current_order.find(params[:id]), params[:order_refund]
-    delivery_manner_id = params[:order_refund].delete(:delivery_manner_id)
-    if delivery_manner_id.present?
-      options.merge!(
-        :delivery_manner =>  DeliveryManner.find(delivery_manner_id))
-    end
     respond_to do |format|
       refund = order.refunds.create(options)
       if refund.valid?
