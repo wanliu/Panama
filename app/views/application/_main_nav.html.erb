@@ -57,7 +57,7 @@
         success: function(data, status, xhr) {
           $form[0].reset();
           $("#active_dialog").modal('hide');
-          pnotify({ text: '活动发布失成功' });
+          pnotify({ text: '活动发布成功，请耐心等待审核……' });
         },
         error: function(xhr, status, error) {
           pnotify({ type: 'error', title: '活动发布失败', text: JSON.parse(xhr.responseText).join('\n') })
