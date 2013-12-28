@@ -1,12 +1,19 @@
 <div class="container-fluid">
-  <% if transaction.delivery_manner.present? %>
-    <% if transaction.delivery_express? %>
-      <%= render_base_template "chose_delivery", :transaction => transaction %>
-    <% end %>
-  <% else %>
-    <%= render_base_template "chose_express", :transaction => transaction %>
-  <% end %>
-  <%=render_base_template "edit_delivery_price", :transaction => transaction %>
+  <div class="row-fluid">
+    <div class="span2 title">
+      配送费用
+    </div>
+    <div class="span4">
+      <%= number_to_currency(transaction.delivery_price) %>
+    </div>
+    <div class='span2 title'>
+      快递编号
+    </div>
+    <div class='span4'>
+      <input type='text' class='span12 delivery_code' />
+    </div>
+  </div>
+
   <%= render_base_template "manner_and_address", :transaction => transaction %>
   <div class='row-fluid'>
     <div class='span12'>

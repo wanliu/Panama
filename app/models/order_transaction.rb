@@ -21,19 +21,18 @@ class OrderTransaction < ActiveRecord::Base
   scope :buyer, ->(person){ where(:buyer_id => person.id) }
   scope :seller, ->(seller){ where(:seller_id => seller.id) }
 
-  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_type_id, :delivery_price, :pay_manner, :delivery_manner
+  attr_accessible :buyer_id, :items_count, :seller_id, :state, :total, :address, :delivery_price, :pay_type, :transport_type
 
   belongs_to :address,
           foreign_key: 'address_id', class_name: "DeliveryAddress"
-  belongs_to :delivery_type,
-          foreign_key: "delivery_type_id"
+  # belongs_to :delivery_type, foreign_key: "delivery_type_id"
 
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "TransactionOperator"
-  belongs_to :pay_manner
-  belongs_to :delivery_manner
-  belongs_to :logistics_company
+  # belongs_to :pay_manner
+  # belongs_to :delivery_manner
+  # belongs_to :logistics_company
 
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
@@ -95,11 +94,6 @@ class OrderTransaction < ActiveRecord::Base
     #银行汇款方式
     event :bank_transfer do
       transition :order => :waiting_transfer
-    end
-
-    #货到付款方式
-    event :cash_on_delivery do
-      transition :order => :waiting_delivery
     end
 
     #转帐
@@ -191,15 +185,6 @@ class OrderTransaction < ActiveRecord::Base
       end
     end
 
-    ## only for development
-    # if Rails.env.development?
-    #   after_transition :waiting_paid      => :order,
-    #                    :waiting_delivery  => :waiting_paid,
-    #                    :waiting_sign      => :waiting_delivery do |order, transition|
-    #     order.notice_change_seller(transition.to_name, :back)
-    #   end
-    # end
-
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       if order.online_pay_type == :account
         order.buyer_payment
@@ -227,8 +212,8 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
-      order.valid_delivery?
-      order.valid_delivery_manner?
+      #order.valid_delivery?
+      #order.valid_delivery_manner?
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
@@ -239,9 +224,8 @@ class OrderTransaction < ActiveRecord::Base
       end
     end
 
-    before_transition :order => [:waiting_paid, :waiting_transfer, :waiting_delivery] do |order, transition|
-      order.valid_pay_manner?
-      order.update_delivery
+    before_transition :order => [:waiting_paid, :waiting_transfer] do |order, transition|
+      order.update_transport
     end
 
     before_transition :waiting_transfer => :waiting_audit do |order, transition|
@@ -280,20 +264,8 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def delivery_express?
-    delivery_manner && delivery_manner.express?
-  end
-
-  def delivery_local?
-    delivery_manner && delivery_manner.local_delivery?
-  end
-
-  def delivery_name
-    delivery_manner.nil? ? '卖家选择' : delivery_manner.name
-  end
-
-  def delivery_type_name
-    delivery_type.nil? ? "暂无" : delivery_type.name
+  def transport_type_name
+    transport_type || "暂无"
   end
 
   def get_refund_items(product_ids)
@@ -329,18 +301,6 @@ class OrderTransaction < ActiveRecord::Base
     %w(delivery_failure waiting_delivery).include?(state)
   end
 
-  def edit_delivery_price?
-    if pay_manner.online_payment?
-      state_name == :waiting_paid
-    elsif pay_manner.bank_transfer?
-      state_name == :waiting_transfer
-    elsif pay_manner.cash_on_delivery?
-      state_name == :waiting_delivery
-    else
-      false
-    end
-  end
-
   #是否成功
   def complete_state?
     state == "complete"
@@ -366,8 +326,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_fire_event!(event)
-    events = %w(online_payment cash_on_delivery bank_transfer back paid sign transfer confirm_transfer)
-    event = pay_manner.code if event.to_s == "buy"
+    events = %w(online_payment bank_transfer back paid sign transfer confirm_transfer)
+    #event = pay_type if event.to_s == "buy"
     if filter_fire_event!(events, event)
       change_state_notify_seller(event)
     end
@@ -430,13 +390,15 @@ class OrderTransaction < ActiveRecord::Base
 
   #卖家收款
   def seller_recharge
-    unless pay_manner.cash_on_delivery?
-      seller.user.recharge(stotal, self, "#{buyer.login}购买商品款")
-    end
+    seller.user.recharge(stotal, self, "#{buyer.login}购买商品款")
   end
 
-  def get_delivery_price(delivery_id)
-    delivery_type.try(:price) || 0
+  def get_delivery_price
+    OrderTransportType.get(transport_type).price || 0
+  end
+
+  def pay_type_name
+    OrderPayType.get(pay_type).name
   end
 
   def activity
@@ -511,8 +473,6 @@ class OrderTransaction < ActiveRecord::Base
   def as_json(*args)
     attra = super *args
     attra["number"] = number
-    attra["pay_manner_name"] = pay_manner.try(:name)
-    attra["delivery_manner_name"] = delivery_manner.try(:name)
     attra["buyer_login"] = buyer.try(:login)
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:address_only)
@@ -567,29 +527,12 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def valid_delivery?
-    if delivery_manner.express?
-      if delivery_code.blank?
-        errors.add(:delivery_code, "发货运单号没有!")
-      end
-      if logistics_company.nil?
-        errors.add(:logistics_company_id, "物流公司不存在！")
-      end
-    end
-  end
-
   def valid_payment?
     if buyer.reload.money < stotal
       errors.add(:buyer, "您的金额不足!")
       false
     else
       true
-    end
-  end
-
-  def valid_pay_manner?
-    unless pay_manner.state
-      errors.add(:pay_manner_id, "付款方式无效！")
     end
   end
 
@@ -601,20 +544,9 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def update_delivery
-    if delivery_manner.present?
-      if delivery_manner.local_delivery?
-        self.delivery_type_id = nil
-        self.delivery_price = 0
-      else
-        self.delivery_price = get_delivery_price(self.delivery_type_id)
-      end
-    end
-  end
-
-  def valid_delivery_manner?
-    if delivery_manner.nil?
-      errors.add(:delivery_manner_id, "没有选择运输方式!")
+  def update_transport
+    if transport_type.present?
+      self.delivery_price = get_delivery_price
     end
   end
 
@@ -642,8 +574,8 @@ class OrderTransaction < ActiveRecord::Base
     {
       "number" => "编号",
       "state_title" => "状态",
-      "pay_manner_name" => "付款方式",
-      "delivery_manner_name" => "运送方式",
+      "pay_type" => "支付方式",
+      "transport_type" => "运输方式",
       "buyer_login" => "买家",
       "seller_name" => "商家",
       "title" => "商品",
@@ -666,8 +598,16 @@ class OrderTransaction < ActiveRecord::Base
   private
   def valid_base_info?
     unless %w(order close).include?(state)
-      errors.add(:pay_manner_id, "请选择付款方式!") if pay_manner.nil?
+      if pay_type.blank? || !OrderPayType.exists?(pay_type)
+        errors.add(:pay_type, "请选择支付方式!")
+      end
       errors.add(:address, "地址不存在！") if address.nil?
+    end
+
+    if changed.include?("delivery_price")
+      unless edit_delivery_price_valid?
+        errors.add(:delivery_price, "这个状态不能修改运费！")
+      end
     end
   end
 
@@ -691,6 +631,19 @@ class OrderTransaction < ActiveRecord::Base
   def create_the_temporary_channel
     name = self.class.to_s << "_" << number
     self.create_temporary_channel(targeable_type: "OrderTransaction", user_id: seller.owner.id, name: name)
+  end
+
+  def edit_delivery_price_valid?
+    name = OrderPayType.get(pay_type)["name"]
+    if name == "online_payment"
+      state_name == :waiting_paid
+    elsif name == "bank_transfer"
+      state_name == :waiting_transfer
+    elsif name.blank?
+      state_name == :order
+    else
+      false
+    end
   end
 
 end

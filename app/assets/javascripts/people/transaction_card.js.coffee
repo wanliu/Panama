@@ -19,7 +19,6 @@ class TransactionCard extends TransactionCardBase
     "click .message-toggle>button"   : "toggleMessage"
     "submit .address-form>form"      : "saveAddress"
     "click .chzn-results>li"         : "hideAddress"
-    "change .order_delivery_type_id" : "selectDeliveryType"
     "keyup .code>input:text"         : "show_transfer_code"
 
   states:
@@ -28,7 +27,6 @@ class TransactionCard extends TransactionCardBase
     events:  [
       { name: 'online_payment',         from: 'order',                  to: 'waiting_paid' },
       { name: 'bank_transfer',          from: 'order',                  to: 'waiting_transfer' },
-      { name: 'cash_on_delivery',       from: 'order',                  to: 'waiting_delivery' }
       { name: 'paid',                   from: 'waiting_paid',           to: 'waiting_delivery' },
       { name: 'refresh_delivered',      from: 'waiting_delivery',       to: 'waiting_sign' },
       { name: 'refresh_returned',       from: 'waiting_refund',         to: 'refund' },
@@ -96,10 +94,24 @@ class TransactionCard extends TransactionCardBase
 
   saveAddress: (event) ->
     form = @$(".address-form>form")
-    params = form.serialize()
-    url = form.attr("action")
+    params = form.serializeHash()
+    manner = @$(".manner_wrap").serializeHash()
+
+    if _.isEmpty(manner.pay_type)
+      pnotify(text: "请选择支付类型", type:"warning")
+      @back_state()
+      return false
+
+    if _.isEmpty(manner.transport_type)
+      pnotify(text: "请选择运输方式", type:"warning")
+      @back_state()
+      return false
+
+    params.order_transaction ||= {}
+    _.extend(params.order_transaction, manner)
+
     $.ajax(
-      url: url,
+      url: form.attr("action"),
       data: params,
       type: "PUT",
       success: (data, xhr, status) =>
@@ -109,24 +121,9 @@ class TransactionCard extends TransactionCardBase
       error: (xhr, status) =>
         @$(".address-form").html(xhr.responseText)
         @notify("错误信息", '请填写完整的信息！', "error")
-        @alarm()
-        @transition.cancel()
+        @back_state()
     )
     false
-
-  selectDeliveryType: () ->
-    url = @transaction.urlRoot
-    delivery_type_id = @$("select.order_delivery_type_id").val()
-    @transaction.fetch(
-      type: "POST",
-      url: "#{url}/get_delivery_price",
-      data: {
-        delivery_type_id: delivery_type_id
-      },
-      success: (model, data) ->
-        @$("input:hidden.price").val(data.delivery_price)
-        @$(".delivery_price").html(data.delivery_price.toMoney())
-    )
 
   validate_transfer: (transfers, form) ->
     state = true

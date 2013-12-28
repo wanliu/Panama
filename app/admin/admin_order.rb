@@ -10,7 +10,7 @@ ActiveAdmin.register OrderTransaction do
   end
 
   scope :已审核通过 do
-    OrderTransaction.joins(:pay_manner).joins(:state_details).where("transaction_state_details.state='waiting_delivery' and pay_manners.code = 'bank_transfer'")
+    OrderTransaction.joins(:state_details).where("transaction_state_details.state='waiting_delivery' and pay_type = '银行汇款'")
   end
 
   index do
@@ -18,9 +18,11 @@ ActiveAdmin.register OrderTransaction do
       I18n.t("order_states.buyer.#{order.state}")
     end
     column :pay_manner do |order|
-      order.pay_manner.name
+      order.pay_type
     end
-    column :total
+    column :total do |order|
+      order.stotal
+    end
     column :buyer do |order|
       order.buyer.login
     end
@@ -60,17 +62,13 @@ ActiveAdmin.register OrderTransaction do
 
   member_action :audit, :method => :post do
     order = OrderTransaction.find(params[:id])
-    order.fire_events!("audit_transfer")
-    order.notice_change_buyer("audit_transfer")
-    order.notice_change_seller("audit_transfer")
+    order.system_fire_event!("audit_transfer")
     redirect_to system_order_transaction_path
   end
 
   member_action :audit_failure, :method => :post do
     order = OrderTransaction.find(params[:id])
-    order.fire_events!("audit_failure")
-    order.notice_change_buyer("audit_failure")
-    order.notice_change_seller("audit_failure")
+    order.system_fire_event!("audit_failure")
     redirect_to system_order_transaction_path
   end
 end

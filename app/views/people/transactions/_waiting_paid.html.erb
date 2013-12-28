@@ -6,14 +6,14 @@
       <thead>
         <tr>
           <th>收货地址</th>
-          <th>配送方式</th>
+          <th>运输方式</th>
           <th>合计(含运费)</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><%= transaction.address.try(:location) %></td>
-          <td><%= transaction.delivery_type.try(:name) %></td>
+          <td><%= transaction.transport_type_name %></td>
           <td><%= number_to_currency(transaction.stotal) %></td>
         </tr>
       </tbody>

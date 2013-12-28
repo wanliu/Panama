@@ -13,13 +13,12 @@
       </div>
       <% if transaction.shipped_state? %>
       <div class='row-fluid' style='margin-bottom:10px'>
-        <div class='span2 title'>配送方式</div>
+        <div class='span2 title'>物流选择</div>
         <div class='span4'>
           <select class='span12' name='delivery_manner_id'>
-            <% DeliveryManner.avaliable.each do |delivery| %>
-            <% delivery_id = DeliveryManner.default.try(:id) %>
-            <option value="<%=delivery.id %>" <%= 'selected'  if delivery_id == delivery.id%>>
-              <%=delivery.name %>
+            <% OrderTransportType.all.each do |k, d| %>
+            <option value="<%=d.title %>">
+              <%=d.title %>
             </option>
             <% end %>
           </select>

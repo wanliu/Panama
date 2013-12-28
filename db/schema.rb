@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131224025054) do
+ActiveRecord::Schema.define(:version => 20131227064543) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -349,15 +349,6 @@ ActiveRecord::Schema.define(:version => 20131224025054) do
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "delivery_manners", :force => true do |t|
-    t.string   "code"
-    t.string   "name"
-    t.boolean  "state",         :default => true
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.boolean  "default_state", :default => false
-  end
-
   create_table "delivery_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -467,13 +458,6 @@ ActiveRecord::Schema.define(:version => 20131224025054) do
     t.datetime "updated_at",                                     :null => false
   end
 
-  create_table "logistics_companies", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
   create_table "money_bills", :force => true do |t|
     t.string   "serial_number"
     t.decimal  "money",         :precision => 10, :scale => 2
@@ -550,33 +534,21 @@ ActiveRecord::Schema.define(:version => 20131224025054) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",                :precision => 10, :scale => 2
+    t.decimal  "total",           :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                             :null => false
-    t.datetime "updated_at",                                                             :null => false
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                      :default => false
-    t.integer  "delivery_type_id"
-    t.decimal  "delivery_price",       :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                 :default => false
+    t.decimal  "delivery_price",  :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "pay_manner_id"
-    t.integer  "delivery_manner_id"
-    t.integer  "logistics_company_id"
-    t.integer  "online_pay_type",                                     :default => 0
+    t.integer  "online_pay_type",                                :default => 0
     t.string   "number"
     t.datetime "dispose_date"
-  end
-
-  create_table "pay_manners", :force => true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.boolean  "state",         :default => true
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.string   "code"
-    t.boolean  "default_state", :default => false
+    t.string   "transport_type"
+    t.string   "pay_type"
   end
 
   create_table "permissions", :force => true do |t|

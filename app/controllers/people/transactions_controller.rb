@@ -61,12 +61,12 @@ class People::TransactionsController < People::BaseController
   def batch_create
     authorize! :batch_create, OrderTransaction
     item_ids = []
-    params[:items].map{ |k, v| 
+    params[:items].map{ |k, v|
       if v[:checked] == 'on'
         item_ids.push(v[:id].to_i)
       end
     }
-    
+
     if my_cart.create_transaction(@people, item_ids)
       redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'
@@ -121,8 +121,8 @@ class People::TransactionsController < People::BaseController
     respond_to do |format|
       @transaction.address = generate_address
       if @transaction.address.valid? &&
-       @transaction.update_attributes(generate_base_option)
-        format.json { render :json => {:event => @transaction.pay_manner.try(:code)} }
+        @transaction.update_attributes(params[:order_transaction])
+        format.json { render :json => {:event => @transaction.pay_type_name} }
       else
         format.html{ render error_back_address_html }
       end
@@ -295,31 +295,12 @@ class People::TransactionsController < People::BaseController
 
   def generate_address
     args = params[:order_transaction]
-    if args[:address_id].present?
-      DeliveryAddress.find(args[:address_id])
+    address_id = args.delete(:address_id)
+    if address_id.present?
+      DeliveryAddress.find(address_id)
     else
       current_user.delivery_addresses.create(gener_address_arg(params[:address]))
     end
-  end
-
-  def generate_base_option
-    t = params[:order_transaction]
-    options = {}
-    options[:pay_manner] = get_pay_manner t[:pay_manner_id]
-    if t[:delivery_manner_id].to_s != "0"
-      options[:delivery_manner] = get_delivery_manner t[:delivery_manner_id]
-      options[:delivery_type_id] = t[:delivery_type_id]
-      options[:delivery_price] = DeliveryType.find(t[:delivery_type_id]).try(:price)
-    end
-    options
-  end
-
-  def get_pay_manner(pay_manner_id)
-    PayManner.find_by(:id => pay_manner_id) || PayManner.default
-  end
-
-  def get_delivery_manner(delivery_manner_id)
-    DeliveryManner.find_by(:id => delivery_manner_id)
   end
 
   def gener_address_arg(a)

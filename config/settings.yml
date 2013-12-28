@@ -21,7 +21,7 @@ development:
     user_id_to_user_name: Panama:info:userId:userName
     user_name_to_user_id: Panama:info:userName:userId
   order_transport_types:
-    EMS: 
+    EMS:
       title: EMS
       price: 10
     韵达:
@@ -36,9 +36,17 @@ development:
     宅急送:
       title: 宅急送
       price: 8
-    e邮宝: 
+    e邮宝:
       title: e邮宝
       price: 8
+  order_pay_types:
+    在线支付:
+      name: online_payment
+      title: 在线支付
+    银行汇款:
+      name: bank_transfer
+      title: 银行汇款
+
 test:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
@@ -61,7 +69,7 @@ test:
     user_id_to_user_name: Panama:info:userId:userName
     user_name_to_user_id: Panama:info:userName:userId
   order_transport_types:
-    EMS: 
+    EMS:
       title: EMS
       price: 10
     韵达:
@@ -76,7 +84,7 @@ test:
     宅急送:
       title: 宅急送
       price: 8
-    e邮宝: 
+    e邮宝:
       title: e邮宝
       price: 8
 
@@ -102,7 +110,7 @@ production:
     user_id_to_user_name: Panama:info:userId:userName
     user_name_to_user_id: Panama:info:userName:userId
   order_transport_types:
-    EMS: 
+    EMS:
       title: EMS
       price: 10
     韵达:
@@ -117,6 +125,6 @@ production:
     宅急送:
       title: 宅急送
       price: 8
-    e邮宝: 
+    e邮宝:
       title: e邮宝
-      price: 7      
+      price: 7

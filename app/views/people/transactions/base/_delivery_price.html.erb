@@ -1,17 +1,8 @@
-<% if transaction.delivery_express? %>
-  <div class="row-fluid">
-    <div class="span2 title">
-      配送方式
-    </div>
-    <div class="span4">
-      <%= transaction.delivery_type.try(:name) %>
-    </div>
-    <div class="span2 title">
-      配送费用
-    </div>
-    <div class="span4">
-      <%= number_to_currency(transaction.try(:delivery_price)) %>
-    </div>
+<div class="row-fluid">
+  <div class="span2 title">
+    配送费用
   </div>
-  <%=render_base_template "express_company", :transaction => transaction %>
-<% end %>
+  <div class="span4">
+    <%= number_to_currency(transaction.try(:delivery_price)) %>
+  </div>
+</div>
