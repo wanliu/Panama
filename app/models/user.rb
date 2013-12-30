@@ -68,18 +68,18 @@ class User < ActiveRecord::Base
     user_checking.try(:address).try(:area)
   end
 
-  def recharge(money, owner, decription = "")
+  def recharge(money, target, decription = "")
     money_bills.create!(
       :decription => decription,
-      :money =>money,
-      :owner => owner)
+      :money => money,
+      :owner => target)
   end
 
-  def payment(money, owner, decription = "")
+  def payment(money, target, decription = "")
     money_bills.create!(
       :decription => decription,
       :money => -money,
-      :owner => owner)
+      :owner => target)
   end
 
   def money

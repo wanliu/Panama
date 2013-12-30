@@ -182,10 +182,8 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
-      if order.online_pay_type == :account
-        order.buyer_payment
-        order.activity.participate if order.activity.present?
-      end
+      order.buyer_payment if order.online_pay_type == :account
+      order.activity_tran.participate if order.activity_tran.present?
     end
 
     after_transition do |order, transaction|
@@ -393,7 +391,7 @@ class OrderTransaction < ActiveRecord::Base
     OrderPayType.get(pay_type).name
   end
 
-  def activity
+  def activity_tran
     ActivitiesOrderTransaction.find_by(
       :order_transaction_id => id)
   end
@@ -602,8 +600,8 @@ class OrderTransaction < ActiveRecord::Base
       end
     end
 
-    if %w(waiting_paid waiting_delivery).include?(state) && activity.present?
-      unless activity.activity.valid_expired?
+    if %w(waiting_paid waiting_delivery).include?(state) && activity_tran.present?
+      unless activity_tran.activity.valid_expired?
         errors.add(:state, "活动过期不能付款了?")
       end
     end
@@ -619,7 +617,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def destroy_activity
-    activity.destroy if activity.present?
+    activity_tran.destroy if activity_tran.present?
   end
 
   def state_title(owner)

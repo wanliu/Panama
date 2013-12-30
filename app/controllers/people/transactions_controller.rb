@@ -110,7 +110,7 @@ class People::TransactionsController < People::BaseController
 
   def test_payment
      @transaction = current_order.find(params[:id])
-    if payment_mode_test?
+    if Settings.pay_mode == "test"
       @transaction.online_paid
     end
     redirect_to "#{person_transaction_path(@people, @transaction)}?pay_msg=success"

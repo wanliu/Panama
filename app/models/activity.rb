@@ -65,9 +65,9 @@ class Activity < ActiveRecord::Base
   def notice_followers
     unless shop.followers.blank?
       (shop.followers - [ author ]).each do |follower|
-        follower.user.notify('/activities/add', 
+        follower.user.notify('/activities/add',
                              "您关注的商家 #{shop.name} 发布新活动 #{title} 敬请期待",
-                             {:target => self, 
+                             {:target => self,
                               :url => notify_url,
                               :avatar => photos.avatar } )
       end

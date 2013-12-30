@@ -27,17 +27,13 @@ class MoneyBill < ActiveRecord::Base
   end
 
   def owner_value
-    if owner.present?
-      case owner_type
-      when "OrderTransaction"
-        owner.number
-      when "Bank"
-        owner.name
-      when "OrderRefund"
-        owner.id
-      else
-        "未知"
-      end
+    case owner_type
+    when "OrderTransaction"
+      owner.number
+    when "Bank"
+      owner.name
+    when "OrderRefund"
+      owner.id
     else
       "未知"
     end
