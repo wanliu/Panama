@@ -12,14 +12,13 @@ class ShopTransactionCard extends TransactionCardBase
     @countdown()
 
   events:
-    "click .page-header .btn" : "clickAction"
+    "click .transaction-actions .btn_event" : "clickAction"
     "click button.close"      : "closeThis"
     "click .detail"           : "toggleItemDetail"
     "click .message-toggle"   : "toggleMessage"
-    "keyup .delivery_code"    : "filter_delivery_code"
+    "keyup input.delivery_code"    : "filter_delivery_code"
     "click .dprice_edit"      : "show_dprice_edit"
     "blur input:text[name=delivery_price]" : "update_dprice"
-    "change select.delivery_manner_id" : "change_delivery_manner"
 
   states:
     initial: 'none'
@@ -72,42 +71,31 @@ class ShopTransactionCard extends TransactionCardBase
 
   filter_delivery_code: () ->
     button = @$(".delivered")
-    if @is_express_info()
-      delivery_code = @$("input:text.delivery_code").val()
-      if delivery_code.length < 1
-        button.addClass("disabled").removeAttr("event-name")
-      else
-        button.removeClass("disabled").attr("event-name", "delivered")
-        true
+    delivery_code = @$("input:text.delivery_code")
+    if delivery_code.length < 1
+      button.addClass("disabled").removeAttr("event-name")
     else
+      button.removeClass("disabled").attr("event-name", "delivered")
       true
 
   save_delivery_code: (cb) ->
     delivery = @$("input:text.delivery_code")
-    logistics = @$("select[name=logistics_company_id]")
-    delivery_manner = @delivery_manner_el()
 
-    if delivery.length > 0 && logistics.length > 0 &&
-     delivery_manner.length > 0
+    if delivery.length > 0
       delivery_code = delivery.val()
-      logistics_company_id = logistics.val()
-      delivery_manner_id = delivery_manner.val()
       urlRoot = @transaction.urlRoot
       @transaction.fetch(
         url: "#{urlRoot}/update_delivery",
         type: "PUT",
         data: {
-          delivery_manner_id: delivery_manner_id,
-          delivery_code: delivery_code,
-          logistics_company_id: logistics_company_id},
+          delivery_code: delivery_code}
         success: cb,
         error: () =>
           @notify("错误信息", '请填写发货单号!', "error")
-          @alarm()
-          @transition.cancel()
+          @back_state()
       )
     else
-     cb()
+      cb()
 
   show_dprice_edit: () ->
     @$dprice_panel = @$(".dprice_panel")
@@ -122,7 +110,7 @@ class ShopTransactionCard extends TransactionCardBase
     old_price = @$dprice_panel.attr("data-value")
     new_price = @$dprice_input.val()
 
-    unless /^\d+.?\d+$/.test(new_price)
+    unless /^\d+(.\d+)?$/.test(new_price)
       pnotify(title: "错误信息", text: "请输入正确运费！", type: "error")
       return
 
@@ -141,24 +129,6 @@ class ShopTransactionCard extends TransactionCardBase
     else
       @$dprice_panel.show()
       @$dprice_edit_panel.hide()
-
-  change_delivery_manner: () ->
-    if @is_delivery_express()
-      @$(".express-info").show()
-      @filter_delivery_code()
-    else
-      @$(".express-info").hide()
-      @$(".delivered").removeClass("disabled").attr("event-name", "delivered")
-
-  delivery_manner_el: () ->
-    @$("select.delivery_manner_id>option:selected")
-
-  is_delivery_express: () ->
-    @delivery_manner_el().text().trim() == "快递运输"
-
-  is_express_info: () ->
-    @is_delivery_express() || (
-      @$(".express-info").length > 0 && @$(".express-info").css("display") == "block" )
 
   realtime_url: () ->
     "notify:/#{@shop.token}/transactions#{super}"

@@ -1,28 +1,18 @@
 <div class="container-fluid">
-  <div class='row-fluid refuse-panel'>
-    <div class='span2'>拒绝理由:</div>
-    <div class='span9'>
-      <textarea class='span9' name='refuse_reason' style='height:81px'></textarea>
-    </div>
-    <div class='span1'>
-      <input type='button' event-name="refuse" class='btn btn-primary refuse-confirm disabled' value='确认' />
-    </div>
-  </div>
+  <%=render "admins/shops/order_refunds/base/reason" %>
   <div class='row-fluid'>
     <div class='span12'>
       有麻烦了，你已经延时处理人家的退货了
     </div>
   </div>
-  <% if refund.shipped_state? %>
   <div class="row-fluid">
     <div class="span2">
       运输方式
     </div>
     <div class="span4">
-      <%= refund.delivery_manner.try(:name) %>
+      <%= refund.transport_type %>
     </div>
   </div>
-  <% end %>
   <div class="row-fluid">
     <div class="span2">
       退货原因

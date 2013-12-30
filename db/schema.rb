@@ -40,13 +40,13 @@ ActiveRecord::Schema.define(:version => 20131227084309) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like"
-    t.integer  "participate"
+    t.integer  "like",                                                         :default => 0
+    t.integer  "participate",                                                  :default => 0
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -349,15 +349,6 @@ ActiveRecord::Schema.define(:version => 20131227084309) do
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "delivery_manners", :force => true do |t|
-    t.string   "code"
-    t.string   "name"
-    t.boolean  "state",         :default => true
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.boolean  "default_state", :default => false
-  end
-
   create_table "delivery_types", :force => true do |t|
     t.string   "name"
     t.string   "description"
@@ -467,13 +458,6 @@ ActiveRecord::Schema.define(:version => 20131227084309) do
     t.datetime "updated_at",                                     :null => false
   end
 
-  create_table "logistics_companies", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
   create_table "money_bills", :force => true do |t|
     t.string   "serial_number"
     t.decimal  "money",         :precision => 10, :scale => 2
@@ -539,41 +523,28 @@ ActiveRecord::Schema.define(:version => 20131227084309) do
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
     t.string   "order_state"
-    t.integer  "delivery_manner_id"
-    t.integer  "logistics_company_id"
     t.string   "number"
+    t.string   "transport_type"
   end
 
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",                :precision => 10, :scale => 2
+    t.decimal  "total",           :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                             :null => false
-    t.datetime "updated_at",                                                             :null => false
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                      :default => false
-    t.integer  "delivery_type_id"
-    t.decimal  "delivery_price",       :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                 :default => false
+    t.decimal  "delivery_price",  :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "pay_manner_id"
-    t.integer  "delivery_manner_id"
-    t.integer  "logistics_company_id"
-    t.integer  "online_pay_type",                                     :default => 0
+    t.integer  "online_pay_type",                                :default => 0
     t.string   "number"
     t.datetime "dispose_date"
-  end
-
-  create_table "pay_manners", :force => true do |t|
-    t.string   "name"
-    t.text     "description"
-    t.boolean  "state",         :default => true
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.string   "code"
-    t.boolean  "default_state", :default => false
+    t.string   "transport_type"
+    t.string   "pay_type"
   end
 
   create_table "permissions", :force => true do |t|
@@ -865,7 +836,7 @@ ActiveRecord::Schema.define(:version => 20131227084309) do
     t.string   "name",           :limit => 30
     t.integer  "channel_type",   :limit => 2
     t.integer  "user_id"
-    t.string   "token",          :limit => 36
+    t.string   "token",          :limit => 45
     t.integer  "targeable_id"
     t.string   "targeable_type"
     t.datetime "created_at",                   :null => false

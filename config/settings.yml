@@ -1,10 +1,11 @@
 ---
 development:
-  site_name: 万流电商平台
-  site_url: http://panama.wanliu.biz
+  site_name: 万流商业社区
+  site_url: http://www.wanliu.biz
   caramal_server: http://localhost:5000
   redis_port: 6379
   redis_server: localhost
+  pay_mode: test
   redis_key_prefix: online_user_
   rabbitmq: &1
     host: localhost
@@ -21,7 +22,7 @@ development:
     user_id_to_user_name: Panama:info:userId:userName
     user_name_to_user_id: Panama:info:userName:userId
   order_transport_types:
-    EMS: 
+    EMS:
       title: EMS
       price: 10
     韵达:
@@ -36,9 +37,9 @@ development:
     宅急送:
       title: 宅急送
       price: 8
-    e邮宝: 
+    e邮宝:
       title: e邮宝
-      price: 7
+      price: 8
   service_types: 
     buyer:
       name: 零售商
@@ -46,12 +47,21 @@ development:
     seller: 
       name: 批发商
       type: seller
+  order_pay_types:
+    在线支付:
+      name: online_payment
+      title: 在线支付
+    银行汇款:
+      name: bank_transfer
+      title: 银行汇款
+
 test:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
   caramal_server: http://localhost:5000
   redis_port: 6379
   redis_server: localhost
+  pay_mode: test
   redis_key_prefix: online_user_
   rabbitmq: &1
     host: localhost
@@ -68,7 +78,7 @@ test:
     user_id_to_user_name: Panama:info:userId:userName
     user_name_to_user_id: Panama:info:userName:userId
   order_transport_types:
-    EMS: 
+    EMS:
       title: EMS
       price: 10
     韵达:
@@ -83,15 +93,23 @@ test:
     宅急送:
       title: 宅急送
       price: 8
-    e邮宝: 
+    e邮宝:
       title: e邮宝
       price: 8
+  order_pay_types:
+    在线支付:
+      name: online_payment
+      title: 在线支付
+    银行汇款:
+      name: bank_transfer
+      title: 银行汇款
 
 production:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
   caramal_server: http://localhost:5000
   redis_port: 6379
+  pay_mode: production
   redis_server: localhost
   redis_key_prefix: online_user_
   rabbitmq: &1
@@ -109,7 +127,7 @@ production:
     user_id_to_user_name: Panama:info:userId:userName
     user_name_to_user_id: Panama:info:userName:userId
   order_transport_types:
-    EMS: 
+    EMS:
       title: EMS
       price: 10
     韵达:
@@ -124,6 +142,13 @@ production:
     宅急送:
       title: 宅急送
       price: 8
-    e邮宝: 
+    e邮宝:
       title: e邮宝
-      price: 7      
+      price: 7
+  order_pay_types:
+    在线支付:
+      name: online_payment
+      title: 在线支付
+    银行汇款:
+      name: bank_transfer
+      title: 银行汇款

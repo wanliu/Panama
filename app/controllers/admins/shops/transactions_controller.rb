@@ -55,19 +55,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def update_delivery
     @transaction = current_shop_order.find(params[:id])
     respond_to do |format|
-      if @transaction.state_name == :waiting_delivery
-        @transaction.delivery_manner_id = params[:delivery_manner_id]
-        if @transaction.delivery_manner.express?
-          @transaction.delivery_code = params[:delivery_code]
-          @transaction.logistics_company_id = params[:logistics_company_id]
-        end
-        if @transaction.save
-          format.json{ head :no_content }
-        else
-          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
-        end
+      @transaction.delivery_code = params[:delivery_code]
+      if @transaction.save
+        format.json{ head :no_content }
       else
-        format.json{ render :json =>['invalid state'], :status => 403 }
+        format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
       end
     end
   end
@@ -75,15 +67,11 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def update_delivery_price
     @transaction = current_shop_order.find(params[:id])
     respond_to do |format|
-      if @transaction.edit_delivery_price?
-        @transaction.delivery_price = params[:delivery_price] || 0
-        if @transaction.save
-          format.json{ head :no_content }
-        else
-          format.json{ render draw_errors_message(@transaction), :status => 403  }
-        end
+      @transaction.delivery_price = params[:delivery_price] || 0
+      if @transaction.save
+        format.json{ head :no_content }
       else
-        format.json{ render :json => ['该状态不能修改运费'], :status => 403 }
+        format.json{ render draw_errors_message(@transaction), :status => 403  }
       end
     end
   end

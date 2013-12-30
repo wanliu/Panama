@@ -433,7 +433,7 @@ if (typeof Object.create !== 'function') {
             easing:'swing',
             speed:500
         },
-        timeout:false,
+        timeout:5000,
         force:false,
         modal:false,
         maxVisible:5,

@@ -1,28 +1,10 @@
 <div class="container-fluid">
-  <div class='row-fluid refuse-panel'>
-    <div class='span2'>拒绝理由:</div>
-    <div class='span9'>
-      <textarea class='span10' name='refuse_reason' style='height:81px'></textarea>
-    </div>
-    <div class='span1' style="margin-left:-50px;">
-      <input type='button' event-name="refuse" class='btn btn-primary refuse-confirm disabled' value='确认' />
-    </div>
-  </div>
+  <%=render "admins/shops/order_refunds/base/reason" %>
   <div class='row-fluid'>
     <div class='span12'>
       你还有<span class='clock' time="<%= refund.current_state_detail.expired.to_i %>"></span>延时了，请及时答复!
     </div>
   </div>
-  <% if refund.shipped_state? %>
-  <div class="row-fluid">
-    <div class="span2">
-      运输方式
-    </div>
-    <div class="span4">
-      <%= refund.delivery_manner.try(:name) %>
-    </div>
-  </div>
-  <% end %>
   <div class="row-fluid">
     <div class="span2">
       退货原因
@@ -47,5 +29,3 @@
   </div>
   <%=render "products", :refund => refund %>
 </div>
-<script type="text/javascript">
-</script>

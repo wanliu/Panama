@@ -166,16 +166,6 @@
           <div class='span4 <%="error" if @transaction.errors["items.amount"].size > 0 %>'>
             <input type='text' class='span12' name='product_item[amount]' value="1" />
           </div>
-          <div class='span2 title hide'>
-            支付方式
-          </div>
-          <div class='span4 pay_manner hide'>
-            <% PayManner.all.each do |p| %>
-            <span>
-              <input type='radio' name='pay_manner_id' value='<%=p.id %>' <%="checked" if p.default_state %> /><%=p.name %>
-            </span>
-            <% end %>
-          </div>
         </div>
         <% end %>
       </div>

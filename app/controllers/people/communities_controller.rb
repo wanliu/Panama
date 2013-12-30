@@ -1,8 +1,8 @@
 #encoding: utf-8
 class People::CommunitiesController < People::BaseController
 
-  layout "people", :only => [:all_circles]
-
+  layout "people"
+  
   def index
   end
 

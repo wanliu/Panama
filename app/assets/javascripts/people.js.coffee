@@ -14,14 +14,12 @@
 #= require transactions/mini_left_side
 #= require transactions/card_item
 #= require people/cart
-#= require people/community
 #= require people/community_people
 #= require people/order_refund_card
 #= require people/people_side
 #= require people/processbar
 #= require people/transaction_card
-#= require people/transaction_deliverymanner
-#= require people/transaction_paymanner
+#= require people/transaction_manner
 #= require people/transaction_payment
 #= require people/transaction_refund
 #= require people/transaction_delay_sign
@@ -37,3 +35,4 @@
 #= require people/direct_transaction_list
 #= require people/order_transactions
 #= require people/order_refund_list
+#= require people/community

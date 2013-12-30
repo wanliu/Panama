@@ -55,17 +55,8 @@ module ApplicationHelper
     end
   end
 
-  def test_config
-    path = "config/test.yml"
-    (File.exists?(path) ? YAML::load_file(path) : {}).symbolize_keys
-  end
-
-  def payment_mode_test?
-    test_config[:payment_mode] == "test"
-  end
-
   def payment_order_path(people, record)
-    if payment_mode_test?
+    if Settings.pay_mode == "test"
       test_payment_person_transaction_path(people, record)
     else
       kuaiqian_payment_person_transaction_path(people, record)
