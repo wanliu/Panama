@@ -8,7 +8,7 @@
   state-event-url="<%=trigger_event_person_order_refund_path(@people, refund) %>"
   url-root="<%=person_order_refund_path(@people, refund) %>"
    >
-  <div class="wrapper-box">
+  <div class="wrapper-box row-fluid">
     <div class="transaction-header">
 
       <div class="avatar">
@@ -18,8 +18,9 @@
       <div class="container-fluid info-header">
         <div class="page-header">
           <div class="trasaction-title">
-            <div class="name"><%= seller.name %></div>
-            <%=render "state_button", :refund => refund %>
+            <div class="name">
+              <%= seller.name %>
+            </div>
           </div>
           <div class="transaction-number">
             <span class='number'>
@@ -39,6 +40,9 @@
     </div>
     <div class="transaction-body">
       <%=render refund.state, :refund => refund %>
+      <div class='transaction-actions'>
+        <%=render "state_button", :refund => refund %>
+      </div>
     </div>
   </div>
 </div>

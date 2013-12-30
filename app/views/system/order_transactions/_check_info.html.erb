@@ -4,11 +4,11 @@
 	<tbody>
 		<tr>
 			<td>编号</td>
-			<td><%= @order_transaction.id %></td>
+			<td><%= @order_transaction.number %></td>
 		</tr>
 		<tr>
 			<td>状态</td>
-			<td><%= @order_transaction.state %></td>
+			<td><%= @order_transaction.seller_state_title %></td>
 		</tr>
 		<tr>
 			<td>总计项</td>
@@ -44,11 +44,11 @@
 		</tr>
 		<tr>
 			<td>接单员</td>
-			<td><%= @order_transaction.operator.try(:login) || "无" %></td>
+			<td><%= @order_transaction.current_operator.try(:login) || "无" %></td>
 		</tr>
 		<tr>
-			<td>配送方式</td>
-			<td><%= @order_transaction.delivery_type.try(:name) %></td>
+			<td>运输方式</td>
+			<td><%= @order_transaction.transport_type_name %></td>
 		</tr>
 		<tr>
 			<td>配送费用</td>
@@ -60,15 +60,7 @@
 		</tr>
 		<tr>
 			<td>支付方式</td>
-			<td><%= @order_transaction.pay_manner.name %></td>
-		</tr>
-		<tr>
-			<td>配送类型</td>
-			<td><%= @order_transaction.delivery_manner.name %></td>
-		</tr>
-		<tr>
-			<td>物流公司</td>
-			<td><%= @order_transaction.logistics_company.try(:name) || "无" %></td>
+			<td><%= @order_transaction.pay_type %></td>
 		</tr>
 	</tbody>
 </table>

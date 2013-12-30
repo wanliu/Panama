@@ -95,11 +95,7 @@
           line-height: 30px;
         }
 
-        .state-display{
-          font-size: 18px;
-          font-weight:none;
-          /*margin-right: 20px;*/
-        }
+
         .progress {
           margin-top: 15px;
           margin-bottom: 0px;
@@ -126,6 +122,14 @@
 
     // border: 1px solid $tableBorder;
     // border-bottom: none;
+  }
+
+  .transaction-actions{
+    .state-display{
+      font-size: 18px;
+      font-weight:none;
+      /*margin-right: 20px;*/
+    }
   }
 
   $headerHeight: 100px;

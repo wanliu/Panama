@@ -20,8 +20,7 @@
 #= require people/people_side
 #= require people/processbar
 #= require people/transaction_card
-#= require people/transaction_deliverymanner
-#= require people/transaction_paymanner
+#= require people/transaction_manner
 #= require people/transaction_payment
 #= require people/transaction_refund
 #= require people/transaction_delay_sign

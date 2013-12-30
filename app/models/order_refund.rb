@@ -19,15 +19,13 @@ class OrderRefund < ActiveRecord::Base
   scope :completed, -> { where("state in ('complete', 'close')") }
   scope :uncomplete, -> { where("state not in ('complete', 'close')") }
 
-  attr_accessible :decription, :order_reason_id, :delivery_price, :delivery_manner, :operator
+  attr_accessible :decription, :order_reason_id, :delivery_price, :operator
 
   belongs_to :order_reason
   belongs_to :order, :foreign_key => "order_transaction_id", :class_name => "OrderTransaction"
   belongs_to :seller, class_name: "Shop"
   belongs_to :buyer, class_name: "User"
   belongs_to :operator, class_name: "User"
-  belongs_to :delivery_manner
-  belongs_to :logistics_company
 
   has_many :items, class_name: "OrderRefundItem", dependent: :destroy
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
@@ -44,9 +42,10 @@ class OrderRefund < ActiveRecord::Base
 
   after_create :change_order_state, :notify_shop_refund, :create_state_detail
 
-  validate :valid_shipped_order_state?, :valid_order_already_exists?, :valid_delivery_manner?, :on => :create
+  validate :valid_shipped_order_state?, :valid_order_already_exists?, :on => :create
 
   validate :valid_destroy?, :on => :destroy
+  validate :valid_base_info?
 
   after_destroy :notify_shop_destroy
 
@@ -105,7 +104,6 @@ class OrderRefund < ActiveRecord::Base
     end
 
     before_transition :waiting_delivery => :waiting_sign do |refund, transition|
-      refund.valid_delivery?
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
@@ -271,12 +269,6 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
-  def valid_delivery?
-    if delivery_manner.express? && (delivery_code.blank? || logistics_company.nil? )
-      errors.add(:delivery_code, "发货单号或者物流公司不能为空！")
-    end
-  end
-
   def valid_refuse_reason?
     if refuse_reason.blank?
       errors.add(:refuse_reason, "请填写拒绝理由!")
@@ -334,15 +326,18 @@ class OrderRefund < ActiveRecord::Base
 
 
   private
-  def valid_shipped_order_state?
-    unless order.order_refund_state?
-      errors.add(:order_transaction_id, "订单属于不能退货状态！")
+
+  def valid_base_info?
+    if changed.include?("delivery_price")
+      unless %w(apply_refund apply_expired apply_failure).include?(state_name.to_s)
+        errors.add(:delivery_price, "这状态不能修改运费！")
+      end
     end
   end
 
-  def valid_delivery_manner?
-    if shipped_state? && delivery_manner.nil?
-      errors.add(:delivery_manner_id, "请选择配送方式！")
+  def valid_shipped_order_state?
+    unless order.order_refund_state?
+      errors.add(:order_transaction_id, "订单属于不能退货状态！")
     end
   end
 

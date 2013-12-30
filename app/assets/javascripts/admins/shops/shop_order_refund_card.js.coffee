@@ -8,9 +8,8 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     super
 
   events: {
-    "click .page-header input:button.sign" : "clickAction",
-    "click .page-header input:button.refuse" : "toggle_refuse",
-    "click .page-header input:button.agree" : "clickAction",
+    "click .transaction-actions .btn_event" : "clickAction",
+    "click .transaction-actions input:button.refuse" : "toggle_refuse",
     "click .refuse-panel input:button.refuse-confirm" : "clickAction",
     "keyup .refuse-panel textarea" : "change_refuse_reason"
   }
@@ -38,6 +37,9 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
 
   leaveWaitingSign: (event, from, to, msg) ->
     @slideAfterEvent(event) if /^sign$/.test(event)
+
+  leaveApplyExpired: (event, from, to, msg) ->
+    @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
 
   afterRefuse: (event, from, to, msg) ->
     reason = @$('.refuse-panel textarea').val()

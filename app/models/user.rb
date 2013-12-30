@@ -36,7 +36,8 @@ class User < ActiveRecord::Base
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
-  # has_many :ask_buies
+  has_many :ask_buies, :dependent => :destroy
+
 
   has_and_belongs_to_many :services
 
@@ -67,18 +68,18 @@ class User < ActiveRecord::Base
     user_checking.try(:address).try(:area)
   end
 
-  def recharge(money, owner, decription = "")
+  def recharge(money, target, decription = "")
     money_bills.create!(
       :decription => decription,
-      :money =>money,
-      :owner => owner)
+      :money => money,
+      :owner => target)
   end
 
-  def payment(money, owner, decription = "")
+  def payment(money, target, decription = "")
     money_bills.create!(
       :decription => decription,
       :money => -money,
-      :owner => owner)
+      :owner => target)
   end
 
   def money

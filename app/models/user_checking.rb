@@ -30,6 +30,10 @@ class UserChecking < ActiveRecord::Base
     update_attributes(checked: false)
   end
 
+  def unreject
+    update_attributes(rejected: false)
+  end
+
   def current_step
     if service.service_type == "buyer"
       find_buyer_current_step
@@ -61,12 +65,12 @@ class UserChecking < ActiveRecord::Base
     self.rejected_times = rejected_times + 1
     save
   end
-  
+
   def default_url
     url = if user.shop.blank?
-      File.join(site_url, "/people/#{user.login}")
+      File.join(Settings.site_url, "/people/#{user.login}")
     else
-      File.join(site_url, user.shop.shop_url)
+      File.join(Settings.site_url, user.shop.shop_url)
     end
   end
 

@@ -226,5 +226,9 @@ class TransactionCardBase extends AbstructStateView
   realtime_url: () ->
     "/#{@transaction.id}"
 
+  back_state: () ->
+    @alarm()
+    @transition.cancel()
+
 exports.TransactionCardBase = TransactionCardBase
 exports

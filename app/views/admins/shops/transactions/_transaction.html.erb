@@ -18,8 +18,9 @@
           <div class="container-fluid info-header">
             <div class="page-header">
               <div class="trasaction-title">
-                <div class="name"><%= buyer.login %></div>
-                <%= render "state_buttons", :transaction => transaction %>
+                <div class="name">
+                  <%= buyer.login %>
+                </div>
               </div>
               <div class="transaction-number">
                 <span class='number'>
@@ -39,6 +40,9 @@
         </div>
         <div class="transaction-body">
           <%= render state, transaction: transaction %>
+          <div class='transaction-actions'>
+            <%= render "state_buttons", :transaction => transaction %>
+          </div>
         </div>
       </div>
       <div class='span5 chat_wrapper'>
