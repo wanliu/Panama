@@ -56,18 +56,18 @@ class UserChecking < ActiveRecord::Base
   def login_name
     user.login
   end
-
+  
   def update_rejected_times
     self.rejected_times = rejected_times + 1
     save
   end
-
-  def default_url 
+  
+  def default_url
     url = if user.shop.blank?
-            File.join(site_url, "/people/#{user.login}")
-          else
-            File.join(site_url, user.shop.shop_url)
-          end
+      File.join(site_url, "/people/#{user.login}")
+    else
+      File.join(site_url, user.shop.shop_url)
+    end
   end
 
   def send_checked_mail
