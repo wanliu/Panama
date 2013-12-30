@@ -10,7 +10,7 @@ class AfterSignupController < Wicked::WizardController
     	@user_checking = current_user.user_checking
     	@user_auth = UserAuth.new
 
-    	wizard_controller = if @user_checking.service.service_type == "buyer"
+    	wizard_controller = if @user_checking.service == "buyer"
     		[CompletingPeopleController, "people"]
     	else
     		[CompletingShopController, "shop"]

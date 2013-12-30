@@ -39,6 +39,13 @@ development:
     e邮宝: 
       title: e邮宝
       price: 7
+  service_types: 
+    buyer:
+      name: 零售商
+      type: buyer
+    seller: 
+      name: 批发商
+      type: seller
 test:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz

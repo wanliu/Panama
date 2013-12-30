@@ -19,7 +19,7 @@ def initialize_data
 
   load_cities
 
-  load_delivery_types
+  # load_delivery_types
 
   load_order_reason
 
@@ -27,9 +27,9 @@ def initialize_data
 
   load_delivery_manner
 
-  load_user_service
+  # load_user_service
 
-  load_logistics
+  # load_logistics
 end
 
 def load_categories
