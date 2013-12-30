@@ -38,7 +38,6 @@ class MyCircleView extends Backbone.View
     collections.each (model) =>
       @add(model)
 
-
 class root.CommunityView extends Backbone.View
 
   initialize: () ->
