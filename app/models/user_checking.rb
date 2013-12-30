@@ -5,7 +5,7 @@ class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :service_id, :industry_type,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
-                  :rejected, :rejected_reason, :checked
+                  :rejected, :rejected_reason, :checked, :address_id
   attr_accessor :uploader_secure_token
 
   belongs_to :user
@@ -28,6 +28,10 @@ class UserChecking < ActiveRecord::Base
 
   def unchecked
     update_attributes(checked: false)
+  end
+
+  def unreject
+    update_attributes(rejected: false)
   end
 
   def current_step
@@ -56,7 +60,7 @@ class UserChecking < ActiveRecord::Base
   def login_name
     user.login
   end
-
+  
   def update_rejected_times
     self.rejected_times = rejected_times + 1
     save
@@ -64,18 +68,17 @@ class UserChecking < ActiveRecord::Base
 
   def default_url
     url = if user.shop.blank?
-            File.join(Settings.site_url, "/people/#{user.login}")
-          else
-            File.join(Settings.site_url, user.shop.shop_url)
-          end
+      File.join(Settings.site_url, "/people/#{user.login}")
+    else
+      File.join(Settings.site_url, user.shop.shop_url)
+    end
   end
 
   def send_checked_mail
-
     UserMailer.delay.send_user_checked_notify(user.email, ower_name, default_url)
   end
 
-  def send_rejected_mail(url)
+  def send_rejected_mail
     UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, default_url)
   end
 

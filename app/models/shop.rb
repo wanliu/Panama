@@ -161,7 +161,7 @@ class Shop < ActiveRecord::Base
   def notify(channel, data, options = {})
     exclude = options.key?(:exclude) ? options.delete(:exclude) : []
     exclude = [exclude] unless exclude.is_a?(Array)
-    (employees + [owner] - exclude).each do |member|
+    (employees - exclude).each do |member|
       member.notify(File.join("/shops", channel), data, options)
     end
   end

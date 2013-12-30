@@ -14,7 +14,6 @@
 #= require transactions/mini_left_side
 #= require transactions/card_item
 #= require people/cart
-#= require people/community
 #= require people/community_people
 #= require people/order_refund_card
 #= require people/people_side
@@ -36,3 +35,4 @@
 #= require people/direct_transaction_list
 #= require people/order_transactions
 #= require people/order_refund_list
+#= require people/community

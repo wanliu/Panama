@@ -24,6 +24,14 @@
         margin: 0px;
       }
 
+      .like-button{
+        background-color: #C237AC;
+        background-image: linear-gradient(to bottom, #FF0000, #92368E);
+      }
+      .btn:hover{
+        background-position: 0 30px;
+      }
+
       .href_name {
         overflow: hidden; 
         white-space: nowrap; 

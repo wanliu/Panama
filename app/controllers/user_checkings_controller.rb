@@ -17,6 +17,7 @@ class UserCheckingsController < ApplicationController
     shop_auth_params.delete(:shop)
     @user_checking.update_attributes(shop_auth_params)
     @user_checking.unchecked
+    @user_checking.unreject
   	redirect_to URI::escape("/shops/#{ @shop.name }/admins/shop_info")
   end
 
