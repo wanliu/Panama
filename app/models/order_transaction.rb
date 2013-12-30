@@ -375,12 +375,16 @@ class OrderTransaction < ActiveRecord::Base
 
   #付款
   def buyer_payment
-    buyer.payment(stotal, self, "订单付款给#{seller.name}")
+    buyer.payment(stotal,{
+      :owner => self,
+      :target => seller.user,
+      :decription => "订单付款给#{seller.name}"
+    }, :state => false)
   end
 
   #卖家收款
   def seller_recharge
-    seller.user.recharge(stotal, self, "#{buyer.login}购买商品款")
+    # seller.user.recharge(stotal, self, "#{buyer.login}购买商品款")
   end
 
   def get_delivery_price

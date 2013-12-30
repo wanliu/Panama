@@ -1,14 +1,16 @@
 #encoding: utf-8
-#资金帐目
+# 余额帐单
+#
+# state: 是否可以使用(true 可用, false 不可用)
 class MoneyBill < ActiveRecord::Base
-  attr_accessible :decription, :money, :owner, :user
+  attr_accessible :money, :user, :state
 
-  belongs_to :owner, :polymorphic => true
   belongs_to :user
+  has_one :transfer, :class_name => "TransferMoney"
 
   validates :user, :presence => true
-  validates :owner, :presence => true
   validates :serial_number, :presence => true
+  validates :money, :presence => true, :numericality => true
 
   before_validation(:on => :create) do
     self.serial_number = Time.now.strftime("%Y%m%d%H%M%S%4N")
@@ -17,9 +19,8 @@ class MoneyBill < ActiveRecord::Base
   after_create :calculate_money
 
   def calculate_money
-    u = user.reload
-    u.money = u.money + money
-    u.save
+    user.money = user.money + money
+    user.save
   end
 
   def owner_name
@@ -37,5 +38,15 @@ class MoneyBill < ActiveRecord::Base
     else
       "未知"
     end
+  end
+
+  def self.create!(opts)
+    options = opts.symbolize_keys
+
+    money = options.delete(:state) || true
+    that = super(:money => options.money, :state => money)
+    that.save!
+    that.transfer.create options
+    that
   end
 end

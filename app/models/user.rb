@@ -68,18 +68,35 @@ class User < ActiveRecord::Base
     user_checking.try(:address).try(:area)
   end
 
-  def recharge(money, target, decription = "")
-    money_bills.create!(
-      :decription => decription,
-      :money => money,
-      :owner => target)
+  # 充值
+  def recharge(money, options = {})
+    money_bills.create!({:money => money}.merge(options))
   end
 
-  def payment(money, target, decription = "")
-    money_bills.create!(
-      :decription => decription,
-      :money => -money,
-      :owner => target)
+  # 支付
+  # optioins: {
+  #   target => '给谁',
+  #   desciption => '描述',
+  #   owner => '所属类型 (订单 退货 转帐 或者余额付款)',
+  #   state => '充值状态', #false 不可以用余额 true 可用余额
+  # }
+  def payment(money, opts = {})
+    options = opts.symbolize_keys
+
+    target = options.delete(:target)
+
+    raise "支付出错, 没有目标参数" if target.blank?
+    raise "支付出错, 没有所属类型" if options.key?(:owner)
+
+    if options[:owner] == MoneyBill
+      money_bills.create!(
+        options.merge{
+          :money => -money,
+          :state => true
+        })
+    end
+
+    target.recharge(money, options.merge(:state => state))
   end
 
   def money
