@@ -6,8 +6,8 @@
    state-url="<%= page_shop_admins_transaction_path(current_shop, transaction) %>"
    state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
    url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>"
-   data-token="<%= @transaction.temporary_channel.token %>"
-   data-number="<%= @transaction.number %>" >
+   data-token="<%= @transaction.temporary_channel.try(:token) %>"
+   data-number="<%= 'OrderTransaction_' + @transaction.number %>" >
   <div class='wrapper-box'>
     <div class='row-fluid'>
       <div class='left span7'>

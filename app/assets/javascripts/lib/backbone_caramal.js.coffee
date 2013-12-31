@@ -194,13 +194,13 @@ class BaseChatView extends Caramal.BackboneView
       $html = @parseMessages(messages)
       text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
       $html += @history_tip({text: text})
-      @$('.msg_content').prepend($html)
+      @msgContent().prepend($html)
     )
     @msgLoaded = true
 
   resetHistory: () ->
     @msgLoaded = false
-    @$('.msg_content').html('')
+    @msgContent().html('')
     @fetchHistory()
 
   initialize: (options) ->
@@ -286,8 +286,18 @@ class BaseChatView extends Caramal.BackboneView
       html += @parseOne(message)  
     html
 
+  msgContent: () ->
+    @targetEl(@el).find('.msg_content')
+
+  targetEl: (el) =>
+    target_el = $("[data-number='" + @model.get('name') + "'] .message_wrap")
+    if target_el.length is 0
+      $(el)
+    else
+      $([ target_el[0], el ])
+
   receiveMessage: (data) ->
-    @$('.msg_content').append(@parseMessages(data))
+    @msgContent().append(@parseMessages(data))
     @trigger('active_avatar') if @name is data.user
     @scrollDialog()
 
@@ -297,14 +307,39 @@ class BaseChatView extends Caramal.BackboneView
     else
       @showWithMsg()
 
+    target_el = $("[data-number='" + @model.get('name') + "'] .message_wrap")
+    if $(target_el).length is 1
+      if !@target_view
+        @target_view = $(@model.chat_view.el).clone(true)
+        @target_view
+            .removeAttr('style')
+            .css('position', 'static')
+            .css('width', '100%')
+            .css('height', '100%')
+            .find('.head').addClass('hide')
+        
+        @model.target_view = @target_view
+        $(target_el).html(@target_view)
+        $(target_el).slideDown()
+      else
+        $(target_el).slideToggle()
+
+      if $(target_el).find('.global_chat:visible').length is 0
+        $(@el).css('visibility', 'visible')
+      else
+        # $(@el).css('visibility', 'hidden')
+    else
+      # 显示全局对话框
+      $(@el).css('visibility', 'visible')
+
   hideDialog: () ->
-    $(@el).hide()
+    $(@el).slideUp()
     @channel.deactive()
     @unbindMessage() if @display
     @display = false
 
   showDialog: () ->
-    $(@el).css('z-index', 10000).show()
+    $(@el).css('z-index', 10000).slideDown()
     @channel.active()
     @showUnread()
     @bindMessage() unless @display

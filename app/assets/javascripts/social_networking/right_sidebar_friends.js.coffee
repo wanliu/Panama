@@ -1,6 +1,25 @@
 root = (window || @)
 
 class root.ChatModel extends Backbone.Model
+  setAttributes: () ->
+    switch @get('type')
+      when 1
+        @set({
+          name: @get('login'),
+          title: "好友 #{@get('login')}"
+        })
+      when 2
+        @set({
+          name: @get('login'),
+          title: "商圈 #{@get('login')}"
+        })
+      when 3
+        name = @get('group')
+        number = name.substring(name.indexOf('_')+1, name.length)
+        @set({
+          name: name, 
+          title: "订单 #{number}",
+        })
 
 class root.ChatList extends Backbone.Collection
   model: ChatModel
@@ -59,6 +78,7 @@ class root.ChatManager extends Backbone.View
 
   addOne: (model) ->
     type = model.get('type') || model.get('follow_type')
+    model.set({ type: type }) if type
     @targetView(type).collection.add(model)
 
   targetView: (type) ->
@@ -117,21 +137,11 @@ class root.ChatManager extends Backbone.View
       item.get('name') is model.get('name')
 
   addModel: (model) ->
-    target_el = model.get('target_el')
-    # 是否绑定聊天框
-    if $(target_el).length == 1
-      $(target_el).append($(model.chat_view.el))
-      $(target_el).find('.global_chat')
-          .css('position', 'static')
-          .css('width', '100%')
-          .css('height', '100%')
-          .find('.head').addClass('hide')
-      @collection.add(model)
-    else
-      $("body").append(model.chat_view.el)
-      @collection.add(model)
-      @addChat(model)
-      @addResizable(model)
+    # model.setAttributes()
+    $("body").append(model.chat_view.el)
+    @collection.add(model)
+    @addChat(model)
+    @addResizable(model)
 
   addChat: (model) ->
     count = $('.global_chat:visible').length
@@ -189,14 +199,12 @@ class BaseIconsView extends Backbone.View
       exist_model.icon_view.setChannel(channel)
     else
       # 临时聊天类型
-      target_el = $("[data-token='" + channel.group + "']").find('.message_wrap')
-      model = new ChatModel({
-        type: 3, 
-        name: channel.group, 
-        target_el: target_el
-        title: "订单 #{channel.id}",
-        channel: channel
+      model = new ChatModel({ 
+        type: 3,
+        group: channel.group,
+        channel: channel 
       })
+      model.setAttributes()
       @parent_view.targetView(3).addModel(model)
 
   filterList: (keyword) ->
@@ -238,12 +246,7 @@ class FriendIconsView extends BaseIconsView
   #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
-    model.set({
-      type: model.get('follow_type'),
-      name: model.get('login'),
-      title: "好友 #{model.get('login')}"
-    })
-
+    model.setAttributes()
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.icon_view  = friend_view
 
@@ -277,12 +280,7 @@ class GroupIconsView extends BaseIconsView
     @
 
   addOne: (model) ->
-    model.set({
-      type: model.get('follow_type'),
-      name: model.get('login'),
-      title: "商圈 #{model.get('login')}"
-    })
-
+    model.setAttributes()
     groupView = new GroupIconView({ model: model, parent_view: @ })
     model.icon_view  = groupView
     @$(".users-list").append(groupView.render().el)
