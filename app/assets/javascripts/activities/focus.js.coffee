@@ -4,15 +4,15 @@
 #= require ../lib/activity_base_info
 root = window || @
 class root.ActivityFocusView extends ActivityBaseInfoView
-  events: 
+  events:
     "click .add_range": "clone_elem"
-  
+
   initialize: () ->
     super
 
   fill_info: (data) ->
     product = data.product
-    @$('[name="activity[title]"]').val(product.name + ' 聚焦');
+    @$('[name="activity[title]"]').val(product.name);
     @$('[name="activity[shop_product_id]"]').val(product.id);
 
     @$('ul.product_selector').hide();

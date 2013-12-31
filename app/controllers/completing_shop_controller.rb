@@ -5,8 +5,10 @@ class CompletingShopController < Wicked::WizardController
   steps :pick_industry, :authenticate_license, :pick_product
 
   def show
-    service_id = Service.where(service_type: "seller").first.id
-    @user_checking = UserChecking.where(service_id: service_id, user_id: current_user.id).first_or_create
+
+    @user_checking = UserChecking.where(:service => "seller", 
+                                        :user_id => current_user.id).first_or_create
+
 
     @shop_auth = ShopAuth.new(@user_checking.attributes)
     if @user_checking.checked && current_user.try(:shop).try(:actived)
@@ -84,7 +86,8 @@ class CompletingShopController < Wicked::WizardController
   def set_products_added
     @user_checking.update_attributes(products_added: true)
     # 添加服务（是否有服务是主页跳转到选择服务选择页的判断标记）
-    current_user.services << Service.where(service_type: "seller")
+    current_user.add_service "seller"
+    current_user.save
     redirect_to '/'
   end
 end

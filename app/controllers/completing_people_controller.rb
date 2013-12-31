@@ -63,8 +63,8 @@ class CompletingPeopleController < Wicked::WizardController
       if @user_auth.valid?
         @user_checking.update_attributes(@user_auth.update_options)
         @user_checking.save
-        current_user.services << Service.buyer
-
+        current_user.add_service "buyer"
+        current_user.save
         # render_wizard(@user_checking)
         redirect_to '/'
       else
@@ -74,12 +74,17 @@ class CompletingPeopleController < Wicked::WizardController
 
     def skip_authenticate_license
       user_checking = current_user.user_checking
-      current_user.services << Service.where(service_type: user_checking.service.service_type)
+      # current_user.services << Service.where(service_type: user_checking.service.service_type)
+      current_user.add_service user_checking.service
       redirect_to '/'
     end
 
     def validate_step_info
-      @user_checking = current_user.user_checking || current_user.create_user_checking(service_id: Service.buyer.id, user_id: current_user.id)
+      @user_checking = UserChecking
+        .where(:user_id => current_user.id,
+               :service => "buyer")
+        .first_or_create
+
       case step
       when :pick_industry
         if @user_checking.industry_type.present?

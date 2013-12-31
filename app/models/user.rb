@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
   has_many :ask_buies, :dependent => :destroy
 
 
-  has_and_belongs_to_many :services
+  # has_and_belongs_to_many :services
 
   after_create :load_initialize_data
   before_create :generate_token
@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
   end
 
   def is_seller?
-    !services.empty? && services.any? { |service| service.service_type == "seller" }
+    services.include?("seller")
   end
 
   def chat_notify(send_user, receive_user, content)
@@ -330,6 +330,15 @@ class User < ActiveRecord::Base
     )
   end
 
+  def services
+    @services ||= (read_attribute(:services) || "").split(',')
+  end
+
+  def add_service(service)
+    services.push service unless services.include?(service)
+    write_attribute(:services, services.join(','))
+  end
+
   private
 
   def is_follower(another_user)
@@ -344,6 +353,7 @@ class User < ActiveRecord::Base
     true
   end
 
+
   private
   def load_friend_group
     _config = YAML.load_file("#{Rails.root}/config/data/friend_group.yml")
@@ -351,4 +361,6 @@ class User < ActiveRecord::Base
       self.friend_groups.create(name) if self.friend_groups.find_by(name).nil?
     end
   end
+
+
 end

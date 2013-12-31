@@ -40,13 +40,13 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
+    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
-    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -718,18 +718,6 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "services", :force => true do |t|
-    t.string   "name",         :null => false
-    t.string   "service_type"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
-  create_table "services_users", :force => true do |t|
-    t.integer "user_id"
-    t.integer "service_id"
-  end
-
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
@@ -848,7 +836,7 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.string   "name",           :limit => 30
     t.integer  "channel_type",   :limit => 2
     t.integer  "user_id"
-    t.string   "token",          :limit => 45
+    t.string   "token",          :limit => 36
     t.integer  "targeable_id"
     t.string   "targeable_type"
     t.datetime "created_at",                   :null => false
@@ -909,10 +897,9 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
 
   create_table "user_checkings", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "service_id"
     t.string   "industry_type"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
     t.string   "company_name"
     t.string   "company_license"
     t.string   "company_license_photo"
@@ -920,22 +907,24 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.string   "ower_photo"
     t.string   "ower_shenfenzheng_number"
     t.string   "phone"
-    t.boolean  "products_added",           :default => false
-    t.boolean  "rejected",                 :default => false
+    t.boolean  "products_added",                         :default => false
+    t.boolean  "rejected",                               :default => false
     t.string   "rejected_reason"
-    t.boolean  "checked",                  :default => false
-    t.integer  "rejected_times",           :default => 0
+    t.boolean  "checked",                                :default => false
+    t.integer  "rejected_times",                         :default => 0
     t.integer  "address_id"
+    t.string   "service",                  :limit => 20
   end
 
   create_table "users", :force => true do |t|
     t.string   "uid"
     t.string   "login"
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                                               :null => false
+    t.datetime "updated_at",                                                               :null => false
     t.string   "email"
-    t.decimal  "money",      :precision => 20, :scale => 4, :default => 0.0
+    t.decimal  "money",                    :precision => 20, :scale => 4, :default => 0.0
     t.string   "im_token"
+    t.string   "services",   :limit => 30
   end
 
   create_table "warehouses", :force => true do |t|

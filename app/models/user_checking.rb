@@ -2,19 +2,17 @@
 class UserChecking < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :user_id, :service_id, :industry_type,
+  attr_accessible :user_id, :industry_type,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
                   :rejected, :rejected_reason, :checked, :address_id
   attr_accessor :uploader_secure_token
 
   belongs_to :user
-  belongs_to :service
   belongs_to :address
 
   validates :ower_shenfenzheng_number, presence: true, if: :industry_choosen?
   validates :user_id, presence: true, uniqueness: true
-  validates :service_id, presence: true
   validates :industry_type, presence: true, if: :service_choosen?
 
   validate :validate_user_already_exists?
@@ -35,7 +33,7 @@ class UserChecking < ActiveRecord::Base
   end
 
   def current_step
-    if service.service_type == "buyer"
+    if service == "buyer"
       find_buyer_current_step
     else
       find_seller_current_step
@@ -51,6 +49,10 @@ class UserChecking < ActiveRecord::Base
 
   def grapical_handler
 
+  end
+
+  def site_url
+    Settings.site_url "http://panama.wanliu.biz"
   end
 
   def shop
