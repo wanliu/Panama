@@ -33,9 +33,15 @@
 							<th style="width:7%">操作</th>
 						</tr>
 						<tbody class="table-striped">
-							<% @addresses.each do |address| %>
-								<tr class ="address<%=address.id%> address_line">
-									<%= render "show", :address => address %>
+							<% unless @address.nil? %>
+								<% @addresses.each do |address| %>
+									<tr class ="address<%=address.id%> address_line">
+										<%= render "show", :address => address %>
+									</tr>
+								<% end %>
+							<% else %>
+								<tr class ="address_line">
+									<td colspan="6">暂时还没有收获地址，去添加一个吧....</td>
 								</tr>
 							<% end %>
 						</tbody>

@@ -81,9 +81,11 @@ class NotificationManager
       console.log(info)
       @notificationsList.collection.add(info)
       @notify({
+        id: info.id,
         title: info.title,
         text: info.content,
         avatar: info.avatar
+        url: info.url
       })
 
   addToPlays: (data, callback, delay = 3000) =>
@@ -94,7 +96,7 @@ class NotificationManager
       [animation, delay, info] = @plays.shift()
       animation(info) if animation && _.isFunction(animation)
 
-  notify: (options) ->
+  notify: (options) =>
     unless options.hasOwnProperty('theme')
       options.theme = 'notifyTheme'
 
@@ -132,6 +134,10 @@ class NotificationManager
     options.animation.open = {
       opacity: 1,
     }
+    options.callback.onCloseClick = (options) ->
+      $url = "#{ @options.url}/notifications/#{ @options.id}/mark_as_read"
+      window.location.href = $url
+
     pnotify(options)
 
 class root.NotificationViewList extends Backbone.View
@@ -205,7 +211,6 @@ class NotificationView extends Backbone.View
     </a>")
 
   events:
-    'click .noty_message' : 'read_message' 
     'click .mark_read': 'mark_as_read'
     'click .content'  : 'read_message'
 

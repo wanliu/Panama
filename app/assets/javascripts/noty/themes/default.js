@@ -9,16 +9,16 @@
 					switch (this.options.layout.name) {
 						case 'top':
 							$(selector).css({borderRadius: '0px 0px 0px 0px'});
-							$(selector).last().css({borderRadius: '0px 0px 5px 5px'}); break;
+							$(selector).last().css({borderRadius: '0px 0px 0px 0px'}); break;
 						case 'topCenter': case 'topLeft': case 'topRight':
 						case 'bottomCenter': case 'bottomLeft': case 'bottomRight':
 						case 'center': case 'centerLeft': case 'centerRight': case 'inline':
 							$(selector).css({borderRadius: '0px 0px 0px 0px'});
-							$(selector).first().css({'border-top-left-radius': '5px', 'border-top-right-radius': '5px'});
-							$(selector).last().css({'border-bottom-left-radius': '5px', 'border-bottom-right-radius': '5px'}); break;
+							$(selector).first().css({'border-top-left-radius': '0px', 'border-top-right-radius': '0px'});
+							$(selector).last().css({'border-bottom-left-radius': '0px', 'border-bottom-right-radius': '0px'}); break;
 						case 'bottom':
 							$(selector).css({borderRadius: '0px 0px 0px 0px'});
-							$(selector).first().css({borderRadius: '5px 5px 0px 0px'}); break;
+							$(selector).first().css({borderRadius: '0px 0px 0px 0px'}); break;
 						default: break;
 					}
 				}

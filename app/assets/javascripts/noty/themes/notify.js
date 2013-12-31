@@ -97,7 +97,7 @@
             switch (this.options.layout.name) {
                 case 'top':
                     this.$bar.css({
-                        borderRadius: '0px 0px 5px 5px',
+                        borderRadius: '0px 0px 0px 0px',
                         borderBottom: '2px solid #eee',
                         borderLeft: '2px solid #eee',
                         borderRight: '2px solid #eee',
@@ -106,7 +106,7 @@
                 break;
                 case 'topCenter': case 'center': case 'bottomCenter': case 'inline':
                     this.$bar.css({
-                        borderRadius: '5px',
+                        borderRadius: '0px',
                         border: '1px solid #eee',
                         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
                     });
@@ -124,7 +124,7 @@
                 break;
                 case 'bottom':
                     this.$bar.css({
-                        borderRadius: '5px 5px 0px 0px',
+                        borderRadius: '0px 0px 0px 0px',
                         borderTop: '2px solid #eee',
                         borderLeft: '2px solid #eee',
                         borderRight: '2px solid #eee',
