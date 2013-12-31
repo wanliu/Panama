@@ -202,7 +202,7 @@ class TransactionCardBase extends AbstructStateView
     unless @model?
       @model = new ChatModel({
         type: 3,
-        name: @transaction.get('number'),
+        name: @transaction.get('token'),
         group: @transaction.get('number')
       })
       @model.setAttributes()

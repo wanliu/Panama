@@ -14,12 +14,15 @@ class root.ChatModel extends Backbone.Model
           title: "商圈 #{@get('login')}"
         })
       when 3
-        name = @get('group')
-        number = name.substring(name.indexOf('_')+1, name.length)
+        name = @get('name')
+        group = @get('group')
+        number = group.substring(group.indexOf('_')+1, group.length)
         @set({
-          name: name, 
-          title: "订单 #{number}",
+          name: name,
+          group: group,
+          title: "订单 #{number}"
         })
+        @target_el = "[data-number='" + @get('group') + "'] .message_wrap"
 
 class root.ChatList extends Backbone.Collection
   model: ChatModel
@@ -134,10 +137,16 @@ class root.ChatManager extends Backbone.View
 
   findExist: (model) ->
     _.find @collection.models, (item) =>
-      item.get('name') is model.get('name')
+      switch model.get('type')
+        when 1
+          model.get('name') is item.get('name')
+        when 2
+          model.get('group') is item.get('group')
+        when 3
+          model.get('group') is item.get('group')
 
   addModel: (model) ->
-    # model.setAttributes()
+    model.setAttributes()
     $("body").append(model.chat_view.el)
     @collection.add(model)
     @addChat(model)
@@ -217,7 +226,13 @@ class BaseIconsView extends Backbone.View
 
   findExist: (channel) ->
     _.find @collection.models, (model) =>
-      model.get('name') is channel.user
+      switch model.get('type')
+        when 1
+          model.get('name') is channel.user
+        when 2
+          model.get('group') is channel.group
+        when 3
+          model.get('group') is channel.group
 
   top: (model) ->
     # @parent_view.active()
@@ -305,6 +320,7 @@ class TemporaryIconsView extends BaseIconsView
     if exist_model
       return exist_model
     else
+      model.setAttributes()
       @collection.add(model)
       return model
 
@@ -312,10 +328,6 @@ class TemporaryIconsView extends BaseIconsView
     temporaryView = new TemporaryIconView({ model: model, parent_view: @ })
     model.icon_view  = temporaryView
     @$(".users-list").append(temporaryView.render().el)
-
-  findExist: (model) ->
-    _.find @collection.models, (item) =>
-      item.get('name') is model.get('name')
 
 
 class BaseIconView extends Backbone.View
@@ -338,7 +350,8 @@ class BaseIconView extends Backbone.View
   initialize: () ->
     @clearMsgCount()
     @model.icon_view = @
-    @setChannel() unless @channel?
+    # @setChannel() unless @channel?
+    @setChannel()
 
   render: () ->
     html = @template(@model.attributes)

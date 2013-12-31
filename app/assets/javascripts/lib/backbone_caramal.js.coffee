@@ -190,13 +190,15 @@ class BaseChatView extends Caramal.BackboneView
   fetchHistory: () ->
     @msgLoaded ||= false
     return if @msgLoaded
-    @channel.history({start: 1}, (chat, err, messages) =>
-      $html = @parseMessages(messages)
-      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-      $html += @history_tip({text: text})
-      @msgContent().prepend($html)
-    )
-    @msgLoaded = true
+    setTimeout( () =>
+      @channel.history({start: 1}, (chat, err, messages) =>
+        @msgLoaded = true
+        $html = @parseMessages(messages)
+        text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+        $html += @history_tip({text: text})
+        @msgContent().prepend($html)
+      )
+    , 200)
 
   resetHistory: () ->
     @msgLoaded = false
@@ -290,11 +292,11 @@ class BaseChatView extends Caramal.BackboneView
     @targetEl(@el).find('.msg_content')
 
   targetEl: (el) =>
-    target_el = $("[data-number='" + @model.get('name') + "'] .message_wrap")
-    if target_el.length is 0
+    target_el = $("[data-number='" + @model.get('group') + "'] .message_wrap")
+    if $(target_el).length is 0
       $(el)
     else
-      $([ target_el[0], el ])
+      $([ $(target_el)[0], el ])
 
   receiveMessage: (data) ->
     @msgContent().append(@parseMessages(data))
@@ -307,7 +309,7 @@ class BaseChatView extends Caramal.BackboneView
     else
       @showWithMsg()
 
-    target_el = $("[data-number='" + @model.get('name') + "'] .message_wrap")
+    target_el = $("[data-number='" + @model.get('group') + "'] .message_wrap")
     if $(target_el).length is 1
       if !@target_view
         @target_view = $(@model.chat_view.el).clone(true)
