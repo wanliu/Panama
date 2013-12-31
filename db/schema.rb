@@ -40,13 +40,13 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like"
-    t.integer  "participate"
+    t.integer  "like",                                                         :default => 0
+    t.integer  "participate",                                                  :default => 0
     t.integer  "shop_product_id"
     t.integer  "shop_id"
-    t.string   "title"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
+    t.string   "title"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -836,7 +836,7 @@ ActiveRecord::Schema.define(:version => 20131228052025) do
     t.string   "name",           :limit => 30
     t.integer  "channel_type",   :limit => 2
     t.integer  "user_id"
-    t.string   "token",          :limit => 36
+    t.string   "token",          :limit => 45
     t.integer  "targeable_id"
     t.string   "targeable_type"
     t.datetime "created_at",                   :null => false

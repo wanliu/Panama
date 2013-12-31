@@ -348,7 +348,7 @@ module ApplicationHelper
     unless @region.blank?
       @region.region_cities_ids()
     else
-      params[:city_id]
+      city_id
     end
   end
 

@@ -16,7 +16,7 @@
 			<% @new_users.each do |new_user| %>
 				<div class='span3 new_user user_info' id="<%= new_user.id %>">
 				    <div class="hover_place">
-						<% if new_user.service_id == 1 %>
+						<% if new_user.service == "buyer" %>
 							<%= render :partial => "hover_buyer_template", :locals => { new_user: new_user} %>
 							<span class="label label-warning pull-right">买家</span>
 					    	<a href="/people/<%= new_user.login_name %>">
@@ -33,7 +33,7 @@
 					<div  class="content">
 						<div class="name">
 							<i class="icon-user"></i>
-							<% if new_user.service_id == 1 %>
+							<% if new_user.service == "buyer" %>
 								<a href="/people/<%= new_user.login_name %>" class="title"><%= new_user.login_name %></a>
 							<% else %>
 								<a href="/shops/<%= new_user.shop.try(:name) %>" class="title"><%= new_user.shop.try(:name) %></a>

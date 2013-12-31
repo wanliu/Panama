@@ -40,7 +40,7 @@ class NewUsersView extends Backbone.View
     else
       @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
       _.each datas, (data) =>
-        tpl = if data.service_id == 1
+        tpl = if data.service == "buyer"
           @buyer_template
         else
           @seller_template
@@ -80,7 +80,7 @@ class FindUserView extends Backbone.View
       @$(".alert").fadeOut()
       @$(".wrapper").html ""
       _.each datas, (data) =>
-        tpl = if data.service_id == 1
+        tpl = if data.service == "buyer"
           @buyer_template
         else
           @seller_template

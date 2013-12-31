@@ -20,6 +20,7 @@ class NotificationManager
     setInterval(@playNotify, 3000)
     @$notify_target = $(@notify_target)
     @notificationsList = NotificationViewList.getInstance()
+    @current_user_login = @notificationsList.current_user_login
     @client = window.clients
 
     # 活动通知绑定
@@ -85,7 +86,6 @@ class NotificationManager
         title: info.title,
         text: info.content,
         avatar: info.avatar
-        url: info.url
       })
 
   addToPlays: (data, callback, delay = 3000) =>
@@ -135,7 +135,7 @@ class NotificationManager
       opacity: 1,
     }
     options.callback.onCloseClick = (options) ->
-      $url = "#{ @options.url}/notifications/#{ @options.id}/mark_as_read"
+      $url = "/people/#{self.current_user_login}/notifications/#{ @options.id}/mark_as_read"
       window.location.href = $url
 
     pnotify(options)
@@ -144,7 +144,7 @@ class root.NotificationViewList extends Backbone.View
 
   @startup = (options) ->
     @instance ||= new NotificationViewList(options)
-    @instanceManager = new NotificationManager
+    @instanceManager = new NotificationManager()
 
   @getInstance = () ->
     @instance

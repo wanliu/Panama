@@ -24,12 +24,14 @@
         margin: 0px;
       }
 
-      .like-button{
+      .like-button, .unlike-button{
         background-color: #FF0000;
         background-image: linear-gradient(to bottom, #FF0000, #ff0000);
       }
+
       .btn:hover{
         background-position: 0 30px;
+        background-color: #FF0000;
       }
 
       .href_name {
