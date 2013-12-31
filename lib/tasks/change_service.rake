@@ -8,7 +8,7 @@ namespace :change_services do
     		u.user_checking.update_attribute("service","seller")
     	else
     		u.update_attribute("services","buyer")
-    		u.user_checking.update_attribute("service","seller")
+    		u.user_checking.update_attribute("service","buyer")
     	end
     end
   end
