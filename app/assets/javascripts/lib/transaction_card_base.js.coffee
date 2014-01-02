@@ -29,6 +29,7 @@ class TransactionCardBase extends AbstructStateView
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
 
+    @toggleMessage()
     @load_realtime()
     super
 
@@ -201,10 +202,10 @@ class TransactionCardBase extends AbstructStateView
     unless @model?
       @model = new ChatModel({
         type: 3,
-        target_el: @$('.message_wrap'),
         name: @transaction.get('token'),
-        title: "订单 #{@transaction.get('number')}"
+        group: @transaction.get('number')
       })
+      @model.setAttributes()
       @model = ChatManager.getInstance().temporarys_view.addModel(@model)
     @model.icon_view.toggleChat()
     false

@@ -5592,14 +5592,13 @@ if (typeof define === "function" && define.amd) {
 
     })(Channel);
     Caramal.MessageManager.registerDispatch('command', function(info, next) {
-      var channel, types;
-      types = [Channel.TYPES['group'], Channel.TYPES['temporary']];
-      if (types.contain(info.type)) {
+      var channel;
+      if (info.type === Channel.TYPES['group']) {
         Caramal.log('Receive Comamnd:', info);
       }
       switch (info.action) {
         case 'join':
-          if (types.contain(info.type)) {
+          if (info.type === Channel.TYPES['group']) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
               channel = Group.create(info.group, {
@@ -5623,10 +5622,123 @@ if (typeof define === "function" && define.amd) {
 }).call(this);
 
 (function() {
-  define('chat',['caramal', 'chat/command', 'chat/channel', 'chat/chat', 'chat/group', 'chat/manager', 'exports'], function(Caramal, Command, Channel, Chat, Group, ClientMessageManager, exports) {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  define('chat/temporary',['core', 'chat/channel', 'chat/chat', 'util', 'exports'], function(Caramal, Channel, Chat, Util, exports) {
+    var Temporary;
+    Temporary = (function(_super) {
+      __extends(Temporary, _super);
+
+      Temporary.prototype.commands = ['open', 'join', 'record', 'history', 'stop_record'];
+
+      Temporary.prototype.hooks = {};
+
+      Temporary.prototype.type = Channel.TYPES['temporary'];
+
+      Temporary.beforeCommand('open', function(options) {
+        if (options == null) {
+          options = {};
+        }
+        this.channel.setState('opening');
+        return Util.merge(options, {
+          type: this.channel.type,
+          group: this.channel.group
+        });
+      });
+
+      Temporary.afterCommand('open', function(ret, room) {
+        this.channel.setState('open');
+        return this.channel.room = room;
+      });
+
+      function Temporary(group, options) {
+        this.group = group;
+        this.options = options;
+        Temporary.__super__.constructor.call(this, this.options);
+      }
+
+      /**
+       * 发送消息
+       * @param  {Hash} msg 消息结构
+       * @return {[type]}     [description]
+      */
+
+
+      Temporary.prototype.send = function(msg) {
+        msg = (function() {
+          if (typeof msg === 'string') {
+            return {
+              msg: msg
+            };
+          } else if (Util.isObject(msg)) {
+            return msg;
+          } else {
+            throw new Error('invalid message type');
+          }
+        })();
+        msg.room = this.room;
+        return this.socket.emit('chat', msg);
+      };
+
+      Temporary.create = function(group, options) {
+        var manager;
+        if (options == null) {
+          options = {};
+        }
+        manager = options.manager || this.default_manager;
+        return manager.addNamedChannel(group, new Temporary(group, options));
+      };
+
+      Temporary.of = function(group, options) {
+        var channel, manager;
+        if (options == null) {
+          options = {};
+        }
+        manager = options.manager || this.default_manager;
+        channel = manager.nameOfChannel(group);
+        return channel || this.create(group, options);
+      };
+
+      return Temporary;
+
+    })(Channel);
+    Caramal.MessageManager.registerDispatch('command', function(info, next) {
+      var channel;
+      if (info.type === Channel.TYPES['temporary']) {
+        Caramal.log('Receive Comamnd:', info);
+      }
+      switch (info.action) {
+        case 'join':
+          if (info.type === Channel.TYPES['temporary']) {
+            channel = Caramal.MessageManager.nameOfChannel(info.group);
+            if (channel == null) {
+              channel = Temporary.create(info.group, {
+                room: info.room
+              });
+              channel.command('join', info.room);
+              channel.setState('open');
+              return Caramal.MessageManager.emit('channel:new', channel);
+            }
+          } else {
+            return next();
+          }
+          break;
+        default:
+          return next();
+      }
+    });
+    return exports.Temporary = Temporary;
+  });
+
+}).call(this);
+
+(function() {
+  define('chat',['caramal', 'chat/command', 'chat/channel', 'chat/chat', 'chat/group', 'chat/temporary', 'chat/manager', 'exports'], function(Caramal, Command, Channel, Chat, Group, Temporary, ClientMessageManager, exports) {
     Caramal.Channel = Channel;
     Caramal.Chat = Chat;
     Caramal.Group = Group;
+    Caramal.Temporary = Temporary;
     Caramal.ClientMessageManager = ClientMessageManager;
     return Caramal;
   });
