@@ -20,9 +20,9 @@ class root.ChatModel extends Backbone.Model
         @set({
           name: name,
           group: group,
-          title: "订单 #{number}"
+          title: "订单 #{number}",
+          attach_el: "[data-number='" + group + "'] .message_wrap"
         })
-        @target_el = "[data-number='" + @get('group') + "'] .message_wrap"
 
 class root.ChatList extends Backbone.Collection
   model: ChatModel
@@ -149,7 +149,7 @@ class root.ChatManager extends Backbone.View
 
   addModel: (model) ->
     # model.setAttributes()
-    $("body").append(model.chat_view.el)
+    $('body').append(model.chat_view.el)
     @collection.add(model)
     @addChat(model)
     @addResizable(model)
@@ -204,13 +204,11 @@ class BaseIconsView extends Backbone.View
       @addOne(model)
 
   process: (channel) ->
-    # exist_model = @findExist(channel)
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
       exist_model.icon_view.setChannel(channel)
     else
-      # 临时聊天类型
       model = new ChatModel({ 
         type: channel.type,
         name: channel.group,
@@ -229,25 +227,14 @@ class BaseIconsView extends Backbone.View
         $(model.icon_view.el).hide()
 
   addModel: (model) ->
-    exist_model = @findExist(model)
+    exist_model = @parent_view.findExist(model)
     if exist_model
       return exist_model
     else
       @collection.add(model)
       return model
 
-  findExist: (item) ->
-    _.find @collection.models, (model) =>
-      switch item.get('type')
-        when 1
-          model.get('name') is item.get('name')
-        when 2
-          model.get('group') is item.get('group')
-        when 3
-          model.get('group') is item.group || item.get('group')
-
   top: (model) ->
-    # @parent_view.active()
     friend_view = model.icon_view
     friend_view.remove()
     @$("ul").append(friend_view.el)
@@ -276,7 +263,6 @@ class FriendIconsView extends BaseIconsView
     model.setAttributes()
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.icon_view  = friend_view
-
     @$(".users-list").append(friend_view.render().el)
 
   removeOne: (model) ->
@@ -353,8 +339,7 @@ class BaseIconView extends Backbone.View
   initialize: () ->
     @clearMsgCount()
     @model.icon_view = @
-    # @setChannel() unless @channel?
-    @setChannel()
+    @setChannel() unless @channel?
 
   render: () ->
     html = @template(@model.attributes)

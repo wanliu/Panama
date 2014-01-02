@@ -132,7 +132,7 @@ class BaseChatView extends Caramal.BackboneView
       </div>
       <div class="foot_nav">
         <span class="face-panel">
-          <a href="#" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-original-title="">
+          <a href="#" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-html="true" data-original-title="">
             <i class="icon-glass"></i>
           </a>
         </span>
@@ -197,6 +197,7 @@ class BaseChatView extends Caramal.BackboneView
         text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
         $html += @history_tip({text: text})
         @msgContent().prepend($html)
+        @scrollDialog()
       )
     , 200)
 
@@ -224,13 +225,13 @@ class BaseChatView extends Caramal.BackboneView
     @model.chat_view = @
 
     ChatManager.getInstance().addModel(@model)
-    upload_view = new ImageUpload({ el: @el, parent_view: @ })
+    new ImageUpload({ el: @el, parent_view: @ })
     @$('.choose-face').popover({
-      html: true,
       content: () => EmojifyChooser.getInstance().el
     })
 
   bindEvent: () ->
+    @bindMessage()
     @stateService()
     @channel.onEvent (data) =>
       return unless data.type
@@ -294,11 +295,11 @@ class BaseChatView extends Caramal.BackboneView
     @targetEl(@el).find('.msg_content')
 
   targetEl: (el) =>
-    target_el = $("[data-number='" + @model.get('group') + "'] .message_wrap")
-    if $(target_el).length is 0
+    $attach_el = $(@model.get('attach_el'))
+    if $attach_el.length is 0
       $(el)
     else
-      $([ $(target_el)[0], el])
+      $([ $attach_el[0], el])
 
   receiveMessage: (data) ->
     @msgContent().append(@parseMessages(data))
@@ -311,24 +312,19 @@ class BaseChatView extends Caramal.BackboneView
     else
       @showWithMsg()
 
-    target_el = $("[data-number='" + @model.get('group') + "'] .message_wrap")
-    if $(target_el).length is 1
-      if !@target_view
-        @target_view = $(@model.chat_view.el).clone(true)
-        @target_view
-            .removeAttr('style')
-            .css('position', 'static')
-            .css('width', '100%')
-            .css('height', '100%')
-            .find('.head').addClass('hide')
-        
-        @model.target_view = @target_view
-        $(target_el).html(@target_view)
-        $(target_el).slideDown()
+    $attach_el = $(@model.get('attach_el'))
+    if $attach_el.length is 1
+      if !@attach_view
+        @attach_view = new AttachChatView({
+          model: @model,
+          channel: @channel,
+          el: $(@el).clone()
+        })
+        $(@attach_view.el).slideDown()
       else
-        $(target_el).slideToggle()
+        $(@attach_view.el).slideToggle()
 
-      if $(target_el).find('.global_chat:visible').length is 0
+      if $attach_el.find('.global_chat:visible').length is 0
         $(@el).css('visibility', 'visible')
       else
         $(@el).css('visibility', 'hidden')
@@ -339,18 +335,20 @@ class BaseChatView extends Caramal.BackboneView
   hideDialog: () ->
     $(@el).slideUp()
     @channel.deactive()
-    @unbindMessage() if @display
+    # @unbindMessage() if @display
     @display = false
 
   showDialog: () ->
     $(@el).css('z-index', 10000).slideDown()
     @channel.active()
     @showUnread()
-    @bindMessage() unless @display
+    # @bindMessage() unless @display
     @display = true
+    @scrollDialog()
 
   scrollDialog: () ->
-    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
+    $body = @targetEl(@el).find('.body')
+    $body.scrollTop($body[0].scrollHeight)
 
   showUnread: () ->
     _.each @channel.message_buffer, (msg) =>
@@ -448,4 +446,28 @@ class root.TemporaryChatView extends BaseChatView
     @channel ||= Caramal.Temporary.of(@name)
     @channel.open()
     @channel.record()
+
+
+class root.AttachChatView extends TemporaryChatView
+
+  events:
+    'mouseover '                : 'activeDialog'
+    'click .close_label'        : 'hideDialog'
+    'click .send_button'        : 'sendMeessage'
+    'click .emojify-chooser img': 'chooseEmojify'
+    'keyup textarea.content'    : 'fastKey'
+ 
+  initialize: (options) ->
+    _.extend(@, options)
+    $(@el).removeAttr('style')
+          .css('position', 'static')
+          .css('width', '100%')
+          .css('height', '100%')
+          .find('.head').addClass('hide')
+    $(@model.get('attach_el')).html(@el)
+
+    new ImageUpload({ el: @el, parent_view: @ })
+    @$('.choose-face').popover({
+      content: () => EmojifyChooser.getInstance().el
+    })
 
