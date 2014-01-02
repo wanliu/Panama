@@ -135,18 +135,20 @@ class root.ChatManager extends Backbone.View
         else
           console.error('undefined type...')
 
-  findExist: (model) ->
-    _.find @collection.models, (item) =>
-      switch model.get('type')
-        when 1
-          model.get('name') is item.get('name')
-        when 2
-          model.get('group') is item.get('group')
-        when 3
-          model.get('group') is item.get('group')
+  findExist: (item) ->
+    type = item.type || item.get('type')
+    _.find @collection.models, (model) =>
+      if  type is model.get('type')
+        switch type
+          when 1
+            model.get('name') is (item.user || item.get('name'))
+          when 2
+            model.get('group') is (item.group || item.get('group'))
+          when 3
+            model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
-    model.setAttributes()
+    # model.setAttributes()
     $("body").append(model.chat_view.el)
     @collection.add(model)
     @addChat(model)
@@ -202,37 +204,47 @@ class BaseIconsView extends Backbone.View
       @addOne(model)
 
   process: (channel) ->
-    exist_model = @findExist(channel)
+    # exist_model = @findExist(channel)
+    exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
       exist_model.icon_view.setChannel(channel)
     else
       # 临时聊天类型
       model = new ChatModel({ 
-        type: 3,
+        type: channel.type,
+        name: channel.group,
         group: channel.group,
         channel: channel 
       })
       model.setAttributes()
-      @parent_view.targetView(3).addModel(model)
+      @parent_view.targetView(channel.type).addModel(model)
 
   filterList: (keyword) ->
     pattern = new RegExp(keyword)
     _.each @collection.models, (model) ->
-      if pattern.test(model.get('login'))
+      if pattern.test(model.get('name'))
         $(model.icon_view.el).show()
       else
         $(model.icon_view.el).hide()
 
-  findExist: (channel) ->
+  addModel: (model) ->
+    exist_model = @findExist(model)
+    if exist_model
+      return exist_model
+    else
+      @collection.add(model)
+      return model
+
+  findExist: (item) ->
     _.find @collection.models, (model) =>
-      switch model.get('type')
+      switch item.get('type')
         when 1
-          model.get('name') is channel.user
+          model.get('name') is item.get('name')
         when 2
-          model.get('group') is channel.group
+          model.get('group') is item.get('group')
         when 3
-          model.get('group') is channel.group
+          model.get('group') is item.group || item.get('group')
 
   top: (model) ->
     # @parent_view.active()
@@ -314,15 +326,6 @@ class TemporaryIconsView extends BaseIconsView
   render: () ->
     $(@el).html(@template)
     @
-
-  addModel: (model) ->
-    exist_model = @findExist(model)
-    if exist_model
-      return exist_model
-    else
-      model.setAttributes()
-      @collection.add(model)
-      return model
 
   addOne: (model) ->
     temporaryView = new TemporaryIconView({ model: model, parent_view: @ })
@@ -423,5 +426,6 @@ class TemporaryIconView extends BaseIconView
     super
 
   getChannel: () ->
-    @channel ||= Caramal.Group.of(@model.get('name'))
+    @channel ||= Caramal.Temporary.of(@model.get('name'))
+    @channel.join()
 

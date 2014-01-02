@@ -220,7 +220,6 @@ class BaseChatView extends Caramal.BackboneView
   initDialog: () ->
     @display = false
     $(@el).html(@chat_template({model: @model}))
-    @msg_el = @$("textarea.content")
     @state_el = @$(".head>.state")
     @model.chat_view = @
 
@@ -269,7 +268,7 @@ class BaseChatView extends Caramal.BackboneView
 
   chooseEmojify: (event) ->
     @$('.choose-face').popover('hide')
-    @msg_el.insertAtCursor(":#{$(event.target).data('name')}:")
+    @sendContent().insertAtCursor(":#{$(event.target).data('name')}:")
 
   parseOne: (message) ->
     if message.user is clients.current_user
@@ -288,6 +287,9 @@ class BaseChatView extends Caramal.BackboneView
       html += @parseOne(message)  
     html
 
+  sendContent: () ->
+    @targetEl(@el).find('.content')
+
   msgContent: () ->
     @targetEl(@el).find('.msg_content')
 
@@ -296,7 +298,7 @@ class BaseChatView extends Caramal.BackboneView
     if $(target_el).length is 0
       $(el)
     else
-      $([ $(target_el)[0], el ])
+      $([ $(target_el)[0], el])
 
   receiveMessage: (data) ->
     @msgContent().append(@parseMessages(data))
@@ -329,7 +331,7 @@ class BaseChatView extends Caramal.BackboneView
       if $(target_el).find('.global_chat:visible').length is 0
         $(@el).css('visibility', 'visible')
       else
-        # $(@el).css('visibility', 'hidden')
+        $(@el).css('visibility', 'hidden')
     else
       # 显示全局对话框
       $(@el).css('visibility', 'visible')
@@ -378,17 +380,19 @@ class BaseChatView extends Caramal.BackboneView
 
   fastKey: (event) ->
     @sendInputing()
-    @sendMeessage() if event.ctrlKey && event.keyCode == 13
+    @sendMeessage(event) if event.ctrlKey && event.keyCode == 13
 
   sendImg: (url) ->
     return unless url
     @channel.send({ msg: '', attachments: [url] })
 
-  sendMeessage: () ->
-    msg = @msg_el.val().trim()
+  sendMeessage: (event) ->
+    # msg = @sendContent().val().trim()
+    $msg = $(event.target).parents('.foot').find('textarea.content')
+    msg = $msg.val().trim()
     return if msg is ''
     @channel.send(msg)
-    @msg_el.val('')
+    @sendContent().val('')
 
 
 class root.ChatView extends BaseChatView
@@ -441,7 +445,7 @@ class root.TemporaryChatView extends BaseChatView
     super
 
   initChannel: () ->
-    @channel ||= Caramal.Group.of(@name)
+    @channel ||= Caramal.Temporary.of(@name)
     @channel.open()
     @channel.record()
 
