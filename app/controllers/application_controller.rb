@@ -54,7 +54,6 @@ class ApplicationController < ActionController::Base
   def login_and_service_required
     if !current_user
       login_required
-      binding.pry
     elsif current_user.services.empty?
       respond_to do |format|
         format.js{
