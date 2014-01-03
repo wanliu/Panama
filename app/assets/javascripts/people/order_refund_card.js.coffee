@@ -32,30 +32,31 @@ class OrderRefundCard extends TransactionCardBase
     ]
 
   change_delivery_code: () ->
-
-    code = @$("input:text.delivery_code").val()
-    button = @$('.page-header input.delivered')
+    ###
+    code = @delivery_code_val()
+    button = @$('.transaction-actions .btn_event')
     if _.isEmpty(code)
       button.addClass("disabled")
     else
       button.removeClass("disabled")
+    ###
 
   toggle_panel: (option) ->
     @$(".connect").toggle("slow")
 
   afterDelivered: (event, from, to, msg) ->
-    code = @$("input:text.delivery_code").val()
-    logistics_company_id = @$("select[name=logistics_company_id]").val()
-    if _.isEmpty(code) && _.isEmpty(logistics_company_id)
+    code = @delivery_code_val()
+    transport_type = @$("select[name=transport_type]").val()
+    if _.isEmpty(code) && _.isEmpty(transport_type)
       @slideAfterEvent(event)
     else
+      data = {delivery_code: code, transport_type: transport_type}
       url = @transaction.urlRoot
       @transaction.fetch(
         url: "#{url}/update_delivery",
         type: 'POST',
-        data: {delivery_code: code, logistics_company_id: logistics_company_id},
-        success: () =>
-          @slideAfterEvent(event)
+        data: data,
+        success: () => @slideAfterEvent(event)
       )
 
   update_delivery_price: () ->
@@ -98,5 +99,8 @@ class OrderRefundCard extends TransactionCardBase
 
   realtime_url: () ->
     "notify:/order_refunds#{super}"
+
+  delivery_code_val: () ->
+    @$("input:text.delivery_code").val()
 
 root.OrderRefundCard = OrderRefundCard

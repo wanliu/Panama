@@ -100,7 +100,7 @@ class People::TransactionsController < People::BaseController
     _response = KuaiQian::PayMent.response(params)
     @transaction = current_order.find(params[:id])
     url = if _response.successfully?
-      @transaction.online_paid
+      @transaction.kuaiqian_paid
       "#{paid_receive_url}?pay_msg=success"
     else
       "#{paid_receive_url}?pay_msg=error"
@@ -111,7 +111,7 @@ class People::TransactionsController < People::BaseController
   def test_payment
      @transaction = current_order.find(params[:id])
     if Settings.pay_mode == "test"
-      @transaction.online_paid
+      @transaction.kuaiqian_paid
     end
     redirect_to "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
   end

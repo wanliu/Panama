@@ -36,7 +36,7 @@
               <% if can?(:manage, User) %>
                 <dl class="dl-horizontal">
                   <dt>余 额</dt>
-                  <dd><%= number_to_currency(@people.money) %></dd>
+                  <dd><%= number_to_currency(@people.money) %> (不可用<%= number_to_currency(@people.unavailable_money) %>)</dd>
                 </dl>
               <% end %>
             </div>
@@ -64,22 +64,24 @@
               <tr>
                 <th>流水号</th>
                 <th>金额</th>
+                <th>描述</th>
                 <th>支付类型</th>
-                <th></th>
+                <th>交易对象</th>                
               </tr>
             </thead>
             <tbody>
-              <% if !@people.money_bills.present? %>
+              <% if !@people.transfer_moneys.present? %>
                 <tr>
-                  <td colspan="4">您还没有交易记录</td>
+                  <td colspan="5">您还没有资金记录</td>
                 </tr>
               <% else %>
-                <% @people.money_bills.each do |bill| %>
+                <% @people.transfer_moneys.each do |bill| %>
                   <tr>
-                    <td><%= bill.serial_number %></td>
+                    <td><%= bill.number %></td>
                     <td><%= bill.money %></td>
-                    <td><%= bill.owner_name %></td>
                     <td><%= bill.decription %></td>
+                    <td><%= bill.pay_type_title %></td>
+                    <td><%= bill.source_value %></td>
                   </tr>
                 <% end %>
               <% end %>

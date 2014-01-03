@@ -54,9 +54,11 @@
         <div class="tab-pane active" id="bank">
           <%=form_tag payment_order_path(current_user, transaction) do |f| %>
             <div class='row-fluid'>
+              <% default = Bank.first %>
               <% Bank.all.each do |bank| %>
               <%= content_tag :div, :class => 'bank_card' do %>
-                <%= radio_button_tag :bank, bank.code %>
+                <% state = default == bank %>
+                <%= radio_button_tag :bank, bank.code, state %>
                 <%= label_tag "bank_#{bank.code.downcase}" do %>
                   <span class="banks bank-<%= bank.code.downcase %>">
                     <%= bank.name %>

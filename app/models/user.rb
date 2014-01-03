@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
   # has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
   has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
+  has_many :transfer_moneys, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
   has_many :ask_buies, :dependent => :destroy
 
@@ -68,40 +69,58 @@ class User < ActiveRecord::Base
     user_checking.try(:address).try(:area)
   end
 
-  # 充值
+  # 收入
+  # options: {
+  #   owner => '所属类型 (订单 退货 或者是用户)'
+  #   decription => '描述',
+  #   source => '来源',
+  #   state => '即时到帐状态', #false 不可以用余额 true 可用余额
+  # }
   def recharge(money, options = {})
-    money_bills.create!({:money => money}.merge(options))
+    transfer_moneys.income!(
+      options.merge(:money => money))
   end
 
   # 支付
   # optioins: {
-  #   target => '给谁',
-  #   desciption => '描述',
-  #   owner => '所属类型 (订单 退货 转帐 或者余额付款)',
-  #   state => '充值状态', #false 不可以用余额 true 可用余额
+  #   target => '目标',
+  #   decription => '描述',
+  #   owner => '所属类型 (订单 退货 或者是用户)',
+  #   state => '即时到帐状态', #false 不可以用余额 true 可用余额
+  #   pay_type => '支付类型(帐户 快钱 银行汇款)'
   # }
-  def payment(money, opts = {})
+  def payment(_money, opts = {})
     options = opts.symbolize_keys
 
     target = options.delete(:target)
+    state = options.delete(:state)
+    pay_type = options.delete(:pay_type) || :account
 
-    raise "支付出错, 没有目标参数" if target.blank?
-    raise "支付出错, 没有所属类型" if options.key?(:owner)
+    raise "支付出错, 没有目标参数" if target.blank? || !target.is_a?(User)      
+    raise "支付出错, 没有所属类型" unless options.key?(:owner)
 
-    if options[:owner] == MoneyBill
-      money_bills.create!(
-        options.merge{
-          :money => -money,
-          :state => true
-        })
-    end
+    transfer_moneys.pay_out!(options.merge(
+      :source => target,
+      :pay_type => pay_type,
+      :money => _money))
 
-    target.recharge(money, options.merge(:state => state))
+    target.recharge(_money, 
+      options.merge(
+        :source => self,
+        :state => state))
   end
 
   def money
     reload
     read_attribute("money") || 0
+  end
+
+  def valid_money?(_money)
+    money < _money
+  end
+
+  def unavailable_money
+    money_bills.unavailable
   end
 
   def messages(friend_id)

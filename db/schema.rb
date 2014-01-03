@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131230070022) do
+ActiveRecord::Schema.define(:version => 20140103052957) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -465,6 +465,7 @@ ActiveRecord::Schema.define(:version => 20131230070022) do
     t.datetime "created_at",                                                     :null => false
     t.datetime "updated_at",                                                     :null => false
     t.boolean  "state",                                        :default => true
+    t.integer  "transfer_id"
   end
 
   create_table "notifications", :force => true do |t|
@@ -530,17 +531,17 @@ ActiveRecord::Schema.define(:version => 20131230070022) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",           :precision => 10, :scale => 2
+    t.decimal  "total",          :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                        :null => false
-    t.datetime "updated_at",                                                        :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                 :default => false
-    t.decimal  "delivery_price",  :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                :default => false
+    t.decimal  "delivery_price", :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "online_pay_type",                                :default => 0
+    t.integer  "pay_status",                                    :default => 0
     t.string   "number"
     t.datetime "dispose_date"
     t.string   "transport_type"
@@ -900,15 +901,17 @@ ActiveRecord::Schema.define(:version => 20131230070022) do
   end
 
   create_table "transfer_moneys", :force => true do |t|
-    t.integer  "to_id"
-    t.integer  "from_id"
     t.string   "owner_type"
     t.integer  "owner_id"
     t.string   "decription"
-    t.decimal  "money",      :precision => 10, :scale => 0
+    t.decimal  "money",       :precision => 10, :scale => 0
     t.string   "number"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.integer  "user_id"
+    t.integer  "pay_type"
+    t.integer  "source_id"
+    t.string   "source_type"
   end
 
   create_table "transfer_sheets", :force => true do |t|

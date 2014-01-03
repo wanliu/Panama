@@ -3,10 +3,10 @@
 #
 # state: 是否可以使用(true 可用, false 不可用)
 class MoneyBill < ActiveRecord::Base
-  attr_accessible :money, :user, :state
+  attr_accessible :money, :user, :state, :transfer
 
   belongs_to :user
-  has_one :transfer, :class_name => "TransferMoney"
+  belongs_to :transfer, :class_name => "TransferMoney"
 
   validates :user, :presence => true
   validates :serial_number, :presence => true
@@ -14,39 +14,28 @@ class MoneyBill < ActiveRecord::Base
 
   before_validation(:on => :create) do
     self.serial_number = Time.now.strftime("%Y%m%d%H%M%S%4N")
+    self.state = true if state.nil?
   end
 
   after_create :calculate_money
 
+  after_update do 
+    calculate_money if changed.include?("state")
+  end
+
   def calculate_money
-    user.money = user.money + money
-    user.save
-  end
-
-  def owner_name
-    I18n.t("activerecord.models.#{owner_type.underscore}")
-  end
-
-  def owner_value
-    case owner_type
-    when "OrderTransaction"
-      owner.number
-    when "Bank"
-      owner.name
-    when "OrderRefund"
-      owner.id
-    else
-      "未知"
+    if state
+      user.money = user.money + money
+      user.save
     end
   end
 
-  def self.create!(opts)
-    options = opts.symbolize_keys
-
-    money = options.delete(:state) || true
-    that = super(:money => options.money, :state => money)
-    that.save!
-    that.transfer.create options
-    that
+  def active_money
+    self.update_attributes(:state => true)
   end
+
+  def self.unavailable
+    self.where(:state => false).sum(:money)
+  end
+
 end

@@ -241,22 +241,19 @@ class OrderRefund < ActiveRecord::Base
 
   #退款
   def buyer_recharge
-    order.buyer.recharge(stotal, self)
-  end
-
-  def seller_payment
-    order.seller.user.payment(stotal, self)
+    order.seller.user.payment(stotal, {
+      :owner => self,
+      :decription => "订单#{order.number}退货",
+      :target => order.buyer,
+      :pay_type => :account
+    })    
   end
 
   #卖家退款
   def seller_refund_money
-    if order_complete_state?
-      MoneyBill.transaction do
-        buyer_recharge
-        seller_payment
-      end
-    elsif order_waiting_sign_state? #&& !order.pay_manner.cash_on_delivery?
-      buyer_recharge
+    if order_waiting_sign_state? || order_complete_state?
+      order.seller_recharge
+      buyer_recharge   
     end
   end
 
