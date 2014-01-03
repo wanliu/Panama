@@ -22,19 +22,9 @@
                   <%= buyer.login %>
                 </div>
               </div>
-              <div class="transaction-number">
-                <span class='number'>
-                  订单编号：<%= transaction.number %>
-                </span>
-                <span class='pull-right'>
-                  <%=transaction.created_at.strftime("%Y-%m-%d %H:%M:%S") %>
-                </span>
-              </div>
-              <div class="state-progress">
-                <% if state != "close" %>
-                <%#=render "progress", transaction: transaction %>
-                <% end %>
-              </div>
+              <div class="transaction-address">
+                <%=render_base_template "address", :transaction => transaction  %>
+              </div>     
             </div>
           </div>
         </div>
