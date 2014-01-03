@@ -1,6 +1,28 @@
 root = (window || @)
 
 class root.ChatModel extends Backbone.Model
+  setAttributes: () ->
+    switch @get('type')
+      when 1
+        @set({
+          name: @get('login'),
+          title: "好友 #{@get('login')}"
+        })
+      when 2
+        @set({
+          name: @get('login'),
+          title: "商圈 #{@get('login')}"
+        })
+      when 3
+        name = @get('name')
+        group = @get('group')
+        number = group.substring(group.indexOf('_')+1, group.length)
+        @set({
+          name: name,
+          group: group,
+          title: "订单 #{number}",
+          attach_el: "[data-number='" + group + "'] .message_wrap"
+        })
 
 class root.ChatList extends Backbone.Collection
   model: ChatModel
@@ -59,6 +81,7 @@ class root.ChatManager extends Backbone.View
 
   addOne: (model) ->
     type = model.get('type') || model.get('follow_type')
+    model.set({ type: type }) if type
     @targetView(type).collection.add(model)
 
   targetView: (type) ->
@@ -112,26 +135,24 @@ class root.ChatManager extends Backbone.View
         else
           console.error('undefined type...')
 
-  findExist: (model) ->
-    _.find @collection.models, (item) =>
-      item.get('name') is model.get('name')
+  findExist: (item) ->
+    type = item.type || item.get('type')
+    _.find @collection.models, (model) =>
+      if  type is model.get('type')
+        switch type
+          when 1
+            model.get('name') is (item.user || item.get('name'))
+          when 2
+            model.get('group') is (item.group || item.get('group'))
+          when 3
+            model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
-    target_el = model.get('target_el')
-    # 是否绑定聊天框
-    if $(target_el).length == 1
-      $(target_el).append($(model.chat_view.el))
-      $(target_el).find('.global_chat')
-          .css('position', 'static')
-          .css('width', '100%')
-          .css('height', '100%')
-          .find('.head').addClass('hide')
-      @collection.add(model)
-    else
-      $("body").append(model.chat_view.el)
-      @collection.add(model)
-      @addChat(model)
-      @addResizable(model)
+    # model.setAttributes()
+    $('body').append(model.chat_view.el)
+    @collection.add(model)
+    @addChat(model)
+    @addResizable(model)
 
   addChat: (model) ->
     count = $('.global_chat:visible').length
@@ -183,36 +204,37 @@ class BaseIconsView extends Backbone.View
       @addOne(model)
 
   process: (channel) ->
-    exist_model = @findExist(channel)
+    exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
       exist_model.icon_view.setChannel(channel)
     else
-      # 临时聊天类型
-      target_el = $("[data-token='" + channel.group + "']").find('.message_wrap')
-      model = new ChatModel({
-        type: 3, 
-        name: channel.group, 
-        target_el: target_el
-        title: "订单 #{channel.id}",
-        channel: channel
+      model = new ChatModel({ 
+        type: channel.type,
+        name: channel.group,
+        group: channel.group,
+        channel: channel 
       })
-      @parent_view.targetView(3).addModel(model)
+      model.setAttributes()
+      @parent_view.targetView(channel.type).addModel(model)
 
   filterList: (keyword) ->
     pattern = new RegExp(keyword)
     _.each @collection.models, (model) ->
-      if pattern.test(model.get('login'))
+      if pattern.test(model.get('name'))
         $(model.icon_view.el).show()
       else
         $(model.icon_view.el).hide()
 
-  findExist: (channel) ->
-    _.find @collection.models, (model) =>
-      model.get('name') is channel.user
+  addModel: (model) ->
+    exist_model = @parent_view.findExist(model)
+    if exist_model
+      return exist_model
+    else
+      @collection.add(model)
+      return model
 
   top: (model) ->
-    # @parent_view.active()
     friend_view = model.icon_view
     friend_view.remove()
     @$("ul").append(friend_view.el)
@@ -238,15 +260,9 @@ class FriendIconsView extends BaseIconsView
   #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
-    model.set({
-      type: model.get('follow_type'),
-      name: model.get('login'),
-      title: "好友 #{model.get('login')}"
-    })
-
+    model.setAttributes()
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.icon_view  = friend_view
-
     @$(".users-list").append(friend_view.render().el)
 
   removeOne: (model) ->
@@ -277,12 +293,7 @@ class GroupIconsView extends BaseIconsView
     @
 
   addOne: (model) ->
-    model.set({
-      type: model.get('follow_type'),
-      name: model.get('login'),
-      title: "商圈 #{model.get('login')}"
-    })
-
+    model.setAttributes()
     groupView = new GroupIconView({ model: model, parent_view: @ })
     model.icon_view  = groupView
     @$(".users-list").append(groupView.render().el)
@@ -302,22 +313,10 @@ class TemporaryIconsView extends BaseIconsView
     $(@el).html(@template)
     @
 
-  addModel: (model) ->
-    exist_model = @findExist(model)
-    if exist_model
-      return exist_model
-    else
-      @collection.add(model)
-      return model
-
   addOne: (model) ->
     temporaryView = new TemporaryIconView({ model: model, parent_view: @ })
     model.icon_view  = temporaryView
     @$(".users-list").append(temporaryView.render().el)
-
-  findExist: (model) ->
-    _.find @collection.models, (item) =>
-      item.get('name') is model.get('name')
 
 
 class BaseIconView extends Backbone.View
@@ -412,5 +411,6 @@ class TemporaryIconView extends BaseIconView
     super
 
   getChannel: () ->
-    @channel ||= Caramal.Group.of(@model.get('name'))
+    @channel ||= Caramal.Temporary.of(@model.get('name'))
+    @channel.join()
 
