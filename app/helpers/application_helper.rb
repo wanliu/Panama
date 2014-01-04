@@ -68,7 +68,7 @@ module ApplicationHelper
   end
 
   def payment_order_path(people, record)
-    if Settings.pay_mode == "test"
+    if payment_mode?
       test_payment_person_transaction_path(people, record)
     else
       kuaiqian_payment_person_transaction_path(people, record)

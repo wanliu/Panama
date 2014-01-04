@@ -6,7 +6,7 @@ class CreateTransferMoneys < ActiveRecord::Migration
       t.string :owner_type
       t.integer :owner_id
       t.string :decription
-      t.decimal :money
+      t.decimal :money, :precision => 10, :scale => 2
       t.string :number
 
       t.timestamps

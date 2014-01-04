@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140104033557) do
+ActiveRecord::Schema.define(:version => 20140104085316) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -691,11 +691,11 @@ ActiveRecord::Schema.define(:version => 20140104033557) do
 
   create_table "recharges", :force => true do |t|
     t.integer  "user_id"
-    t.decimal  "money",      :precision => 10, :scale => 0
+    t.decimal  "money",      :precision => 10, :scale => 2
     t.integer  "payer"
-    t.boolean  "state"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.boolean  "state",                                     :default => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
   end
 
   create_table "region_cities", :force => true do |t|
@@ -913,7 +913,6 @@ ActiveRecord::Schema.define(:version => 20140104033557) do
     t.string   "owner_type"
     t.integer  "owner_id"
     t.string   "decription"
-    t.decimal  "money",       :precision => 10, :scale => 0
     t.string   "number"
     t.datetime "created_at",                                 :null => false
     t.datetime "updated_at",                                 :null => false
@@ -921,6 +920,7 @@ ActiveRecord::Schema.define(:version => 20140104033557) do
     t.integer  "pay_type"
     t.integer  "source_id"
     t.string   "source_type"
+    t.decimal  "money",       :precision => 10, :scale => 2
   end
 
   create_table "transfer_sheets", :force => true do |t|

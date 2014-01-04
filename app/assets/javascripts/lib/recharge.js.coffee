@@ -1,8 +1,9 @@
+#= require lib/payments
 # description: 充值
 
 root = (window || @)
 
-class root.RechargeView extends Backbone.View
+class root.RechargeView extends PayMentsView
   events: {
     "click .btn_paid" : "paid"
   }
@@ -13,27 +14,25 @@ class root.RechargeView extends Backbone.View
     @$input = @$("input:text[name='money']")
 
   paid: () ->
-    data = @$el.serializeHash()
-    names = @exclude_names()
-    _.each names, (name) -> delete data[name]
+    data = @serialize @$el.serializeHash()  
 
     unless /^\d+(:?\.\d+)?$/.test data.money
       pnotify(text: "请填写正确的金额!", type: "warning")
       @$input.focus()
       return 
+
+    if parseFloat(data.money) < 0.01
+      pnotify(text: "小数点不能超过三位", type: "warning")
+      @$input.focus()
+      return
     
     $.ajax(
       url: @remote_url,
       data: data,
-      success: () => console.log "aaaa"
+      dataType: "script",
+      error: (data) ->
+        ms = JSON.parse(data.responseText)
+        pnotify(text: ms.join("<br />"), type: "error")
     )
 
-  exclude_names: () ->
-    names = []
-    _.each @tab_pane(), (elem) => 
-      names.push($(elem).attr("id")) unless $(elem).hasClass("active")
 
-    names
-
-  tab_pane: () ->
-    @$(".tab-content>.tab-pane")

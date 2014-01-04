@@ -4,7 +4,7 @@ class Recharge < ActiveRecord::Base
 
   belongs_to :user
 
-  validates :money, :numericality => {:greater_than => 0}, :presence => true
+  validates :money, :numericality => {:greater_than_or_equal_to => 0.01}, :presence => true
   validates :user, :presence => true
 
   acts_as_status :payer, [:kuaiqian]

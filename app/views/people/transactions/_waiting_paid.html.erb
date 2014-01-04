@@ -36,70 +36,19 @@
       </div>
     </div>
   </div>
-  <div class="row-fluid paid_bank">
-    <div class="bank-wrapper nav-tabls-wrapper">
-      <ul class="nav nav-tabs">
-        <li class="active">
-          <a href="#bank" data-toggle="tab">
-            银行卡
-          </a>
-        </li>
-        <li>
-          <a href="#payment" data-toggle="tab">
-            支付平台
-          </a>
-        </li>
-      </ul>
-      <div class="tab-content">
-        <div class="tab-pane active" id="bank">
-          <%=form_tag payment_order_path(current_user, transaction) do |f| %>
-            <div class='row-fluid'>
-              <% default = Bank.first %>
-              <% Bank.all.each do |bank| %>
-              <%= content_tag :div, :class => 'bank_card' do %>
-                <% state = default == bank %>
-                <%= radio_button_tag :bank, bank.code, state %>
-                <%= label_tag "bank_#{bank.code.downcase}" do %>
-                  <span class="banks bank-<%= bank.code.downcase %>">
-                    <%= bank.name %>
-                  </span>
-                <% end %>
-              <% end %>
-              <% end %>
-            </div>
-            <input type='submit' value='支付' class='btn btn-primary' />
-          <% end %>
-        </div>
-        <div class='tab-pane' id="payment">
-          <ul class='payments-plat clearfix'>
-            <li class='payment 99bill'>
-              <a href='javascript:void(0)'>
-                <input type='radio' value='99bill' checked class='pull-left' />
-                <img src='/assets/payments/99bill.png' />
-              </a>
-            </li>
-          </ul>
-
-          <%= link_to "支付", payment_order_path(current_user, transaction), :class => "btn btn-primary paid-next"  %>
-        </div>
-      </div>
-    </div>
-    <div class='clearfix'></div>
-    <div>
-      <% if Settings.pay_mode == "test" %>
-        支付开启测试模式
-      <% end %>
-    </div>
-  </div>
+  <form class='payment'>
+    <%=render :partial => "recharges/payment" %>
+  </form>
 </div>
 <script type="text/javascript">
   $(function(){
     new TransactionPayment({
-      el: $("#order<%=transaction.id %>"),
+      el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
       model: {
         total: <%= transaction.total %>,
         money: <%= current_user.money || 0 %>
-      }
+      },
+      remote_url: "<%=payment_order_path(current_user, transaction) %>"
     })
   })
 </script>
