@@ -17,6 +17,13 @@ class CaramalClient
     conn.start
   end
 
+  def self.conn
+    if @@conn.closed?
+      @@conn.start
+    end
+    @@conn
+  end
+
   def self.publish(login, channel, msg = {})
     info = {
       login: login,

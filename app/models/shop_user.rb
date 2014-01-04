@@ -8,16 +8,17 @@ class ShopUser < ActiveRecord::Base
 
   has_many :shop_user_groups, :dependent => :destroy
 
+  validates :user, :presence => true
   validate :valid_user_join_multi_shop?
 
   def groups
-  	shop_user_groups.includes(:shop_group).map{|g| g.shop_group }
+    shop_user_groups.includes(:shop_group).map{|g| g.shop_group }
   end
 
   def jshop
-  	shop
+    shop
   end
-
+  
   def valid_user_join_multi_shop?
     if ShopUser.where("user_id=? and id<>?",
       user_id, id).count > 0

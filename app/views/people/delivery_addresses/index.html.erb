@@ -33,7 +33,7 @@
 							<th style="width:7%">操作</th>
 						</tr>
 						<tbody class="table-striped">
-							<% unless @address.nil? %>
+							<% unless @addresses.nil? %>
 								<% @addresses.each do |address| %>
 									<tr class ="address<%=address.id%> address_line">
 										<%= render "show", :address => address %>

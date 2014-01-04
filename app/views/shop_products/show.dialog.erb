@@ -120,7 +120,7 @@
                   </div>
                 <% end %>
               <% else %>
-                暂时没有评论
+                暂时没有评价
               <% end %>
             </div>
             <div class="tab-pane" id="message">
@@ -134,8 +134,8 @@
       <div class="control-group">
         <div class="control pull-right">
           <span class='buy_manner'>
-            <input type='radio' checked name='buy_manner' value='direct' />直接购买
-            <input type='radio' name='buy_manner' value='guarantee' />担保交易
+            <input type='radio' name='buy_manner' value='direct' />非担保交易
+            <input type='radio' checked name='buy_manner' value='guarantee' />担保交易
           </span>
           <button type="button" class="btn btn-primary btn-large buy">购买</button>
           <%= add_to_my_cart("加入购物车", ".shop_product_#{@shop_product.id} .preview") %>

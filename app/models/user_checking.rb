@@ -2,7 +2,7 @@
 class UserChecking < ActiveRecord::Base
   include Graphical::Display
 
-  attr_accessible :user_id, :industry_type,
+  attr_accessible :user_id, :industry_type, :service,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
                   :rejected, :rejected_reason, :checked, :address_id

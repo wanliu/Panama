@@ -33,6 +33,7 @@
 /config/kuaiqian.yml
 /config/whenever.yml
 /config/test.yml
+/config/settings.yml
 /assets/images/
 /faye_server/log/
 /public/test.html

@@ -2,7 +2,7 @@
   <div class="row-fluid">
     <div class='span2'>运输方式</div>
     <div class='span4'>
-      <select>
+      <select name='transport_type'>
       <% OrderTransportType.all.each do |k, v| %>
         <option value="<%=v.title %>"><%=v.title %></optin>
       <% end %>
