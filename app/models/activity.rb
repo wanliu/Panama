@@ -55,10 +55,11 @@ class Activity < ActiveRecord::Base
     "/activities/#{id}"
   end
 
-  def notice_author(sender, message)
+  def notice_author
     author.notify("/activities/add",
-                  message,
+                  "您发布的活动#{ title}已经通过审核",
                   {:url => notify_url,
+                   :avatar => photos.avatar,
                    :target => self })
   end
 

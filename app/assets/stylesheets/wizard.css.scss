@@ -24,7 +24,18 @@ h2 small {
 	@include background-clip(padding-box);
 	outline: none;
 	padding: 10px;
+  #new_shop_auth{
+    .file-box{
+      margin-left: 16%;
+    }
+  }
+  #new_user_auth{
+    .file-box{
+      margin-left: 3%;
+    }
+  }
 }
+
 
 .wrap {
 	margin-left: 0px;
@@ -131,10 +142,6 @@ h2 small {
 }
 .page-title{
 	color: black;
-}
-
-.file-box{
-  margin-left: 60px;
 }
 
 $margin-top: 20px;
