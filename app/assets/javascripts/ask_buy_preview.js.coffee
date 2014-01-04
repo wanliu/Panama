@@ -3,11 +3,12 @@
 root = (window || @)
 
 class AskBuyView extends Backbone.View
-  events:
-    "click .close"                  : "hide"
-    "click .submit-comment"         : 'comment'
-    "keyup textarea[name='content']": 'filter_status'
-    "click [name='join']"           : "join"
+  events: 
+    "click .close"                        : "hide"
+    "click .submit-comment"               : 'comment'
+    "keypress textarea[name='content']"   : "key_up"
+    "keyup textarea[name='content']"      : 'filter_status'
+    "click [name='join']"                 : "join"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -53,6 +54,9 @@ class AskBuyView extends Backbone.View
     @$dialog.remove()
     @$backdrop.remove()
     $("body").removeClass("noScroll")
+
+  key_up: (e) ->
+    @comment() if (e.keyCode == 10 || e.keyCode == 13) &&  e.ctrlKey == true
 
   comment: () ->
     content = @textarea.val()
