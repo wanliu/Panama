@@ -9,9 +9,11 @@ class root.ChatModel extends Backbone.Model
           title: "好友 #{@get('login')}"
         })
       when 2
+        name = @get('login') || @get('group')
         @set({
-          name: @get('login'),
-          title: "商圈 #{@get('login')}"
+          name: name,
+          group: name,
+          title: "商圈 #{name}"
         })
       when 3
         name = @get('name')
@@ -82,6 +84,7 @@ class root.ChatManager extends Backbone.View
   addOne: (model) ->
     type = model.get('type') || model.get('follow_type')
     model.set({ type: type }) if type
+    model.setAttributes()
     @targetView(type).collection.add(model)
 
   targetView: (type) ->
@@ -148,8 +151,8 @@ class root.ChatManager extends Backbone.View
             model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
-    # model.setAttributes()
     $('body').append(model.chat_view.el)
+    model.setAttributes()
     @collection.add(model)
     @addChat(model)
     @addResizable(model)
@@ -231,6 +234,8 @@ class BaseIconsView extends Backbone.View
     if exist_model
       return exist_model
     else
+      model.setAttributes()
+      @parent_view.collection.add(model)
       @collection.add(model)
       return model
 
@@ -337,9 +342,11 @@ class BaseIconView extends Backbone.View
     </a>""")
 
   initialize: () ->
+    # console.log('icon --> ', this.model.attributes)
     @clearMsgCount()
     @model.icon_view = @
-    @setChannel() unless @channel?
+    # @setChannel() unless @channel?
+    @setChannel()
 
   render: () ->
     html = @template(@model.attributes)
@@ -357,7 +364,6 @@ class BaseIconView extends Backbone.View
   setChannel: (@channel) ->
     @getChannel()
     @model.set({ channel: @channel })
-    @channel.open()
     @channel.onMessage (msg) =>
       unless @channel.isActive()
         @channel.message_buffer.push(msg)
@@ -394,6 +400,7 @@ class FriendIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@model.get('name'))
+    @channel.open()
 
 
 class GroupIconView extends BaseIconView
@@ -403,6 +410,7 @@ class GroupIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
+    @channel.open()
 
 
 class TemporaryIconView extends BaseIconView
@@ -412,5 +420,11 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('name'))
-    @channel.join()
+    clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
+      @channel.room = msg
+      clients.socket.emit('join', {room: @channel.room})
+      clients.socket.on('chat', (msg) => 
+        # console.log('msg --> ', msg)
+      )
+    )
 
