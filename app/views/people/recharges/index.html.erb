@@ -1,0 +1,24 @@
+<% active_section :person_info %>
+<div class='row-fluid'>
+  <div class='span7 widget'>
+    <form class='recharges'>
+      <div class='item'>
+        <span>充值金额</span>
+        <span><input type='text' name='money' /></span>
+      </div>
+      <div class='chose_wallet'>
+        <%=render :partial => "recharges/payment" %>
+      </div>
+    </form>
+  </div>
+  <div class='span5'>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function(){
+    new RechargeView({
+      el: $("form.recharges"),
+      remote_url: "<%= recharge_payment_url %>"
+    })
+  })
+</script>
