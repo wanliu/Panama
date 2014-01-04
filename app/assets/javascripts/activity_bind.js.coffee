@@ -45,7 +45,7 @@ class ActivityBind extends Backbone.View
     @$('.like-count').text(s + n)
 
   key_up: (e) ->
-    @addComment() if e.keyCode == 13 &&  e.ctrlKey == true
+    @addComment(e) if (e.keyCode == 10 || e.keyCode == 13) &&  e.ctrlKey == true
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
