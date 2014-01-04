@@ -29,7 +29,12 @@
         background-image: linear-gradient(to bottom, #FF0000, #ff0000);
       }
 
-      .btn:hover{
+      .like-button:hover{
+        background-position: 0 30px;
+        background-color: #FF0000;
+      }
+
+      .unlike-button:hover{
         background-position: 0 30px;
         background-color: #FF0000;
       }

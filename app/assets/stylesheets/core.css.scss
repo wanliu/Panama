@@ -199,16 +199,37 @@ ul {
 #topbar {
   .notification-menu {
     #notification-list {
+      width: 350px;
       >li {
-        padding: 4px 5px;
-        margin: 0px 0px;
-        overflow: hidden; 
-        white-space: nowrap; 
-        text-overflow: ellipsis;
+        margin: 0px 5px;
+        position: relative;
+        width: 340px;
+
+        .check_all{
+          width: 330px;
+          text-align: center;
+          margin-left: 2px;
+        }
 
         .href_url {
           padding: 2px;
           display: inline;
+        }
+
+        .mark_read{
+          position: absolute;
+          margin: 0px;
+          padding: 0px;
+          top: 5px;
+        }
+
+        a{
+          display: inline-block !important;
+          padding-top: 4px !important;
+          text-overflow: ellipsis;
+          overflow-x: hidden;
+          width: 310px;
+          margin-left: 20px;
         }
       }
     }
@@ -1318,7 +1339,7 @@ h2 small {
   font-size: 14px;
   line-height: 20px;
   color: #333333;
-  @include box-shadow(1px 1px 3px $grayDarker);
+  // @include box-shadow(1px 1px 3px $grayDarker);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   .head{

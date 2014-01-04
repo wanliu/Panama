@@ -189,7 +189,7 @@ class root.NotificationViewList extends Backbone.View
   add_more: () ->
     @$(".notifications").append("
       <li class='pull-right'>
-        <a class='href_url' href='#{@urlRoot}'>查看所有>>></a>
+        <a class='href_url check_all' href='#{@urlRoot}'>查看所有>>></a>
       </li>")
 
   fetch: () ->
