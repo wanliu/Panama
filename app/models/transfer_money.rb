@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 # 资金帐单
 class TransferMoney < ActiveRecord::Base
   attr_accessible :decription, :user, :money, :owner, :pay_type, :source
@@ -33,6 +33,8 @@ class TransferMoney < ActiveRecord::Base
       source.login
     when "Bank"        
       source.name
+    when "Recharge"
+      source.payer_title
     else
       "未知"
     end

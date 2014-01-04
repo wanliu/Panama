@@ -43,6 +43,18 @@ module ApplicationHelper
     end
   end
 
+  def recharge_payment_url
+    if payment_mode?
+      test_payment_person_recharges_path(current_user)
+    else
+      payment_person_recharges_path(current_user)
+    end
+  end
+
+  def payment_mode?
+    Settings.pay_mode == "test"
+  end
+
   def product_join_state(products, shop_id)
     product_ids = []
     if shop_id.present?

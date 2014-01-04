@@ -74,7 +74,8 @@ class User < ActiveRecord::Base
   #   owner => '所属类型 (订单 退货 或者是用户)'
   #   decription => '描述',
   #   source => '来源',
-  #   state => '即时到帐状态', #false 不可以用余额 true 可用余额
+  #   state => '即时到帐状态', #false 不可以用余额 true 可用余额 默认false
+  #   pay_type => '支付类型(帐户 快钱 银行汇款) 默认帐户'
   # }
   def recharge(money, options = {})
     transfer_moneys.income!(
@@ -86,8 +87,8 @@ class User < ActiveRecord::Base
   #   target => '目标',
   #   decription => '描述',
   #   owner => '所属类型 (订单 退货 或者是用户)',
-  #   state => '即时到帐状态', #false 不可以用余额 true 可用余额
-  #   pay_type => '支付类型(帐户 快钱 银行汇款)'
+  #   state => '即时到帐状态', #false 不可以用余额 true 可用余额 默认false
+  #   pay_type => '支付类型(帐户 快钱 银行汇款) 默认帐户'
   # }
   def payment(_money, opts = {})
     options = opts.symbolize_keys

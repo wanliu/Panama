@@ -504,6 +504,10 @@ zh-CN:
       account: 余额
       kuaiqian: 快钱
       bank_transfer: 银行汇款
+  recharge:
+    payer:
+      invalid: 无效
+      kuaiqian: 快钱
 
   table:
     heads:
