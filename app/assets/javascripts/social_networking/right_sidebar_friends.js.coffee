@@ -79,7 +79,7 @@ class root.ChatManager extends Backbone.View
       _.each @unprocessed_channels, (channel) =>
         @targetView(channel.type).process(channel)
       @is_ready = true
-    , 200) # fix me: setTimeout should be removed
+    , 300) # fix me: setTimeout should be removed
 
   addOne: (model) ->
     type = model.get('type') || model.get('follow_type')
@@ -141,7 +141,7 @@ class root.ChatManager extends Backbone.View
   findExist: (item) ->
     type = item.type || item.get('type')
     _.find @collection.models, (model) =>
-      if  type is model.get('type')
+      if type is model.get('type')
         switch type
           when 1
             model.get('name') is (item.user || item.get('name'))
@@ -342,11 +342,9 @@ class BaseIconView extends Backbone.View
     </a>""")
 
   initialize: () ->
-    # console.log('icon --> ', this.model.attributes)
     @clearMsgCount()
     @model.icon_view = @
-    # @setChannel() unless @channel?
-    @setChannel()
+    @setChannel() unless @channel?
 
   render: () ->
     html = @template(@model.attributes)
@@ -365,7 +363,8 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      unless @channel.isActive()
+      # unless @channel.isActive()
+      unless @getChat().displayState()
         @channel.message_buffer.push(msg)
         @incMsgCount()
         @active()
@@ -382,8 +381,8 @@ class BaseIconView extends Backbone.View
     @getChat().toggleDialog()
 
   bind_chat: () ->
-    @chat_view.bind("active_avatar", _.bind(@active, @))
-    @chat_view.bind("unactive_avatar", _.bind(@unactive, @))
+    @model.bind("active_avatar", _.bind(@active, @))
+    @model.bind("unactive_avatar", _.bind(@unactive, @))
 
   active: () ->
     $(@el).addClass('active')
@@ -420,11 +419,11 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('name'))
-    clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
-      @channel.room = msg
+    if @channel.room
       clients.socket.emit('join', {room: @channel.room})
-      clients.socket.on('chat', (msg) => 
-        # console.log('msg --> ', msg)
+    else
+      clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
+        @channel.room = msg
+        clients.socket.emit('join', {room: @channel.room})
       )
-    )
 
