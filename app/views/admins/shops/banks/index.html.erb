@@ -1,0 +1,5 @@
+<% admin_active_section :banks %>
+<%=render :partial => "people/banks/context", :locals => {
+  :remote_url => shop_admins_banks_path(current_shop),
+  :user => current_shop.user  
+} %>

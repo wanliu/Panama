@@ -1,0 +1,17 @@
+<tr id="<%= user_bank.id %>">
+  <td class='bank-wrapper'>
+    <div class="bank_card">
+      <label for="bank_<%=user_bank.bank_code %>">
+        <span class="banks bank-<%=user_bank.bank_code.downcase %>">
+          <%=user_bank.bank_name %>
+        </span>
+      </label>
+    </div>
+  </td>
+  <td><%=user_bank.name %></td>
+  <td><%=user_bank.code %></td>
+  <td>
+    <a><i class='icon-edit'></i></a>
+    <a><i class='icon-ban-circle'></i></a>
+  </td>
+</tr>
