@@ -71,6 +71,10 @@ class OrderTransaction < ActiveRecord::Base
     notice_user
   end
 
+  after_save do 
+    change_info_notify
+  end
+
   after_commit :create_the_temporary_channel, on: :create
 
   def notice_user
@@ -621,6 +625,18 @@ class OrderTransaction < ActiveRecord::Base
       unless activity_tran.activity.valid_expired?
         errors.add(:state, "活动过期不能付款了?")
       end
+    end
+  end
+
+  def change_info_notify
+    return unless persisted?
+    if edit_delivery_price_valid? && changed.include?("delivery_price")
+      buyer.notify(
+        "/transactions/#{id}/change_delivery_price",
+        "订单#{number}已经修改运费",
+        :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+        :stotal => stotal
+      )        
     end
   end
 

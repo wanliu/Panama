@@ -14,7 +14,7 @@
           <tr>
             <td><%= transaction.address.try(:location) %></td>
             <td><%= transaction.transport_type_name %></td>
-            <td><%= number_to_currency(transaction.stotal) %></td>
+            <td class='stotal'><%= number_to_currency(transaction.stotal) %></td>
           </tr>
         </tbody>
       </table>
