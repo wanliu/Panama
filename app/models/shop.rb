@@ -18,7 +18,6 @@ class Shop < ActiveRecord::Base
   has_many :topics, as: :owner, dependent: :destroy
   # has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
   # has_many :topic_categories, dependent: :destroy
-  has_many :banks, :class_name => "ShopBank", :dependent => :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
   belongs_to :address
   # has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
@@ -30,6 +29,8 @@ class Shop < ActiveRecord::Base
   alias_method :owner, :user
 
   before_destroy :delete_shop
+
+  delegate :banks, :to => :user
 
   after_update do
     update_relation_index
