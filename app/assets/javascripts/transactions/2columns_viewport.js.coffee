@@ -200,6 +200,7 @@ class MiniRow2ColView  extends Backbone.View
 
   openView: () ->
     @activeRowView()
+    $(window).trigger('enterAttachChat')
 
   activeRowView: () ->
     if @parentView?
