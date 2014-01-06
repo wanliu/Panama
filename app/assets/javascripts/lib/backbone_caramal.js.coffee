@@ -200,7 +200,7 @@ class BaseChatView extends Caramal.BackboneView
         @msgContent().prepend($html)
         @scrollDialog()
       )
-    , 200)
+    , 300)
 
   resetHistory: () ->
     @msgLoaded = false
@@ -248,10 +248,7 @@ class BaseChatView extends Caramal.BackboneView
         else
           console.log('未处理的事件')
     $(window).bind('enterAttachChat', () =>
-      # $(@el).hide()
-      # setTimeout( () =>
-      #   @showDialog()
-      # , 200)
+      $(@el).hide()
     )
 
   stateService: () ->

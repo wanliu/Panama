@@ -151,11 +151,12 @@ class ActivityPreview extends Backbone.View
     @load_view(event.currentTarget)
     model = new ChatModel({
       type: 3,
-      name: $(@el).attr('id'),
-      title: @$(".summary .title").text()
+      name: $(@el).data('token'),
+      group: $(@el).data('group')
+      # title: @$(".summary .title").text()
     })
-    chat_view = ChatManager.getInstance().newChat(model)
-    chat_view.showDialog()
+    model = ChatManager.getInstance().temporarys_view.addModel(model)
+    model.icon_view.toggleChat()
 
   launch: (event) ->
     @load_view(event.currentTarget)

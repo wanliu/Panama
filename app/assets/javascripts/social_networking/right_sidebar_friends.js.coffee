@@ -1,29 +1,42 @@
 root = (window || @)
 
 class root.ChatModel extends Backbone.Model
+  getPrefixTitle: (group) ->
+    prefix = group.substring(0, group.indexOf('_'))
+    switch prefix
+      when 'OrderTransaction'
+        @set({ attach_el: "[data-number='" + group + "'] .message_wrap" })
+        '订单'
+      when 'Activity'
+        '活动'
+      else
+        console.error('未处理的类型')
+
   setAttributes: () ->
     switch @get('type')
       when 1
+        title = @get('title') || "好友 #{@get('login')}"
         @set({
           name: @get('login'),
-          title: "好友 #{@get('login')}"
+          title: title
         })
       when 2
         name = @get('login') || @get('group')
+        title = @get('title') || "商圈 #{name}"
         @set({
           name: name,
           group: name,
-          title: "商圈 #{name}"
+          title: title
         })
       when 3
         name = @get('name')
         group = @get('group')
         number = group.substring(group.indexOf('_')+1, group.length)
+        title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
         @set({
           name: name,
           group: group,
-          title: "订单 #{number}",
-          attach_el: "[data-number='" + group + "'] .message_wrap"
+          title: title
         })
 
 class root.ChatList extends Backbone.Collection
@@ -152,7 +165,6 @@ class root.ChatManager extends Backbone.View
 
   addModel: (model) ->
     $('body').append(model.chat_view.el)
-    model.setAttributes()
     @collection.add(model)
     @addChat(model)
     @addResizable(model)
@@ -218,7 +230,6 @@ class BaseIconsView extends Backbone.View
         group: channel.group,
         channel: channel 
       })
-      model.setAttributes()
       @parent_view.targetView(channel.type).addModel(model)
 
   filterList: (keyword) ->
@@ -235,6 +246,7 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setAttributes()
+      return pnotify(type: 'error', text: '请求聊天失败，name为空') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
@@ -265,7 +277,6 @@ class FriendIconsView extends BaseIconsView
   #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
-    model.setAttributes()
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.icon_view  = friend_view
     @$(".users-list").append(friend_view.render().el)
@@ -298,7 +309,6 @@ class GroupIconsView extends BaseIconsView
     @
 
   addOne: (model) ->
-    model.setAttributes()
     groupView = new GroupIconView({ model: model, parent_view: @ })
     model.icon_view  = groupView
     @$(".users-list").append(groupView.render().el)
