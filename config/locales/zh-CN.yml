@@ -448,8 +448,9 @@ zh-CN:
   bill_detail: 账单明细
   shop_info: 店铺信息
   product_comments: 商品评论
-  shop_banks: 银行帐户
+  shop_banks: 银行卡
   ask_buy: 求购
+  banks: 银行卡
 
   completing_shop: 注册商店
   completing_people: 注册用户

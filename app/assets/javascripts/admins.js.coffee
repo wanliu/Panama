@@ -36,3 +36,4 @@
 #= require admins/shops/shop_direct_transaction_list
 #= require admins/shops/community_message
 #= require people/community
+#= require lib/banks

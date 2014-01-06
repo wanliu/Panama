@@ -37,3 +37,4 @@
 #= require people/order_refund_list
 #= require people/community
 #= require lib/recharge
+#= require lib/banks

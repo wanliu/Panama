@@ -390,7 +390,7 @@ class OrderTransaction < ActiveRecord::Base
       :owner => self,
       :pay_type => pay_status.name,
       :target => seller.user,
-      :decription => "#{number}订单付款",
+      :decription => "订单#{number}付款",
       :state => false })      
   end
 
