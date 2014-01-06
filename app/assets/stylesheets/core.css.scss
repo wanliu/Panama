@@ -1654,3 +1654,11 @@ h2 small {
 .btn-group > .btn + .dropdown-toggle {
   @include box-shadow(none);
 }
+
+.people_actions{
+  text-align: right;
+
+  .withdraw, .recharge{
+    margin-right: 10px
+  }
+}

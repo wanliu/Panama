@@ -1,0 +1,8 @@
+<% active_section :person_info %>
+<div class='row-fluid'>
+  <div class='span7 widget'>
+    <%=@recharge.user.login %>用户充值<%=number_to_currency @recharge.money %> <%=@recharge.state_title %>
+  </div>
+  <div class='span5'>
+  </div>
+</div>

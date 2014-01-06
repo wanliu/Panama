@@ -5,6 +5,9 @@
     :transaction => @transaction,
     :pay_msg => @pay_msg } %>
   <div class="main-sidebar">
+    <div class='card_item'>
+      <%=render_base_template "header", :row => @transaction %>
+    </div>
     <%= render  partial: 'transaction',
                 object:  @transaction,
                 locals: {

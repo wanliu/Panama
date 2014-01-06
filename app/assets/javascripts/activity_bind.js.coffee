@@ -3,16 +3,17 @@ root = window || @
 class ActivityBind extends Backbone.View
 
   events:
-    "click .like-button"            : "like"
-    "click .unlike-button"          : "unlike"
-    "click .auction .partic-button" : 'addToCard'
-    "click .submit-comment"         : "addComment"
-    "keyup textarea[name=message]"  : 'filter_state'
-    'submit form.new_product_item'  : 'join'
-    "click .focus .partic-button"   : "joinFocus"
-    "click .focus .unpartic-button" : "unjoinFocus"
-    "click .circle"                 : "select_circle"
-    "click .share_activity"         : "share_activity"
+    "click .like-button"                 : "like"
+    "click .unlike-button"               : "unlike"
+    "click .auction .partic-button"      : 'addToCard'
+    "click .submit-comment"              : "addComment"
+    "keypress textarea[name=message]"    : "key_up"
+    "keyup textarea[name=message]"       : 'filter_state'
+    'submit form.new_product_item'       : 'join'
+    "click .focus .partic-button"        : "joinFocus"
+    "click .focus .unpartic-button"      : "unjoinFocus"
+    "click .circle"                      : "select_circle"
+    "click .share_activity"              : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
   unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
@@ -42,6 +43,9 @@ class ActivityBind extends Backbone.View
   incLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0
     @$('.like-count').text(s + n)
+
+  key_up: (e) ->
+    @addComment(e) if (e.keyCode == 10 || e.keyCode == 13) &&  e.ctrlKey == true
 
   decLike: (n = 1) ->
     s = parseInt(@$('.like-count').text()) || 0

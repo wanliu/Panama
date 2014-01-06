@@ -32,6 +32,7 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
+  has_many :transfer_moneys, :as => :owner, dependent: :destroy
 
   has_many  :items,
             class_name: "ProductItem",
@@ -58,7 +59,7 @@ class OrderTransaction < ActiveRecord::Base
   accepts_nested_attributes_for :address
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
-  acts_as_status :online_pay_type, [:account, :kuaiqian]
+  acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
 
   before_validation(:on => :create) do
     update_total_count
@@ -68,6 +69,10 @@ class OrderTransaction < ActiveRecord::Base
   after_create do
     state_change_detail
     notice_user
+  end
+
+  after_save do 
+    change_info_notify
   end
 
   after_commit :create_the_temporary_channel, on: :create
@@ -182,7 +187,7 @@ class OrderTransaction < ActiveRecord::Base
     end
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
-      order.buyer_payment if order.online_pay_type == :account
+      order.buyer_payment      
       order.activity_tran.participate if order.activity_tran.present?
     end
 
@@ -205,14 +210,20 @@ class OrderTransaction < ActiveRecord::Base
       order.seller_recharge
     end
 
+    after_transition :waiting_audit => :waiting_delivery do |order, transition|
+      order.buyer_payment
+    end
+
+    after_transition :waiting_transfer => :waiting_audit do |order, transition|
+      order.update_pay_status(:bank_transfer)
+    end
+
     before_transition :waiting_delivery => :waiting_sign do |order, transition|
     end
 
     before_transition :waiting_paid => :waiting_delivery  do |order, transition|
-      unless order.online_pay_type == :kuaiqian
-        if order.valid_payment?
-          order.update_attribute(:online_pay_type, :account)
-        end
+      if order.pay_status == :invalid && order.valid_payment?
+        order.update_pay_status(:account)
       end
     end
 
@@ -365,22 +376,34 @@ class OrderTransaction < ActiveRecord::Base
 
   def refund_items
     OrderRefundItem.where(
-      :order_refund_id => refunds.map{|item| item.id})
+      :order_refund_id => refunds.pluck("id"))
   end
 
-  def online_paid
-    self.update_attribute(:online_pay_type, :kuaiqian)
-    self.buyer_fire_event!(:paid)
+  def kuaiqian_paid
+    update_pay_status(:kuaiqian)    
+    buyer_fire_event!(:paid)
   end
 
   #付款
   def buyer_payment
-    buyer.payment(stotal, self, "订单付款给#{seller.name}")
+    buyer.payment(stotal,{
+      :owner => self,
+      :pay_type => pay_status.name,
+      :target => seller.user,
+      :decription => "#{number}订单付款",
+      :state => false })      
   end
 
   #卖家收款
-  def seller_recharge
-    seller.user.recharge(stotal, self, "#{buyer.login}购买商品款")
+  def seller_recharge    
+    transfer_moneys.find_by( 
+      :user_id => seller.user.id,     
+      :source_type => "User",
+      :source_id => buyer.id).active_money
+  end
+
+  def update_pay_status(status)
+    self.update_attribute(:pay_status, status)
   end
 
   def get_delivery_price
@@ -512,13 +535,11 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def valid_transfer_sheet?
-    if transfer_sheet.nil?
-      errors.add(:transfer_sheet, "没有汇款单号!")
-    end
+    errors.add(:transfer_sheet, "没有汇款单号!") if transfer_sheet.nil?
   end
 
   def valid_payment?
-    if buyer.reload.money < stotal
+    if buyer.valid_money?(stotal)
       errors.add(:buyer, "您的金额不足!")
       false
     else
@@ -604,6 +625,18 @@ class OrderTransaction < ActiveRecord::Base
       unless activity_tran.activity.valid_expired?
         errors.add(:state, "活动过期不能付款了?")
       end
+    end
+  end
+
+  def change_info_notify
+    return unless persisted?
+    if edit_delivery_price_valid? && changed.include?("delivery_price")
+      buyer.notify(
+        "/transactions/#{id}/change_delivery_price",
+        "订单#{number}已经修改运费",
+        :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+        :stotal => stotal
+      )        
     end
   end
 

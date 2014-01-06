@@ -10,6 +10,7 @@ class TransactionCard extends TransactionCardBase
     @urlRoot = @transaction.urlRoot
     @initMessagePanel()
     @countdown()
+    @notify_delivery_price()
 
   events:
     "click .transaction-actions .btn_event"  : "clickAction"
@@ -167,6 +168,13 @@ class TransactionCard extends TransactionCardBase
 
   realtime_url: () ->
     "notify:/transactions#{super}"
+
+  notify_delivery_price: () ->
+    @client.subscribe "#{@realtime_url()}/change_delivery_price", (data) =>
+      pnotify(text: data.content)     
+      total = @$(".stotal")
+      total.html(
+        total.text().trim().substring(0, 1) +" "+ data.stotal) if total.length > 0
 
 
 root.TransactionCard = TransactionCard
