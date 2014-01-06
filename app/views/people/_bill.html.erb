@@ -1,0 +1,30 @@
+<div class='body'>
+  <table class='table table-striped table-images'>
+    <thead>
+      <tr>
+        <th>流水号</th>
+        <th>金额</th>
+        <th>描述</th>
+        <th>支付类型</th>
+        <th>交易对象</th>                
+      </tr>
+    </thead>
+    <tbody>
+      <% if transfer_moneys.blank? %>
+        <tr>
+          <td colspan="5">您还没有资金记录</td>
+        </tr>
+      <% else %>
+        <% transfer_moneys.each do |bill| %>
+          <tr>
+            <td><%= bill.number %></td>
+            <td><%= bill.money %></td>
+            <td><%= bill.decription %></td>
+            <td><%= bill.pay_type_title %></td>
+            <td><%= bill.source_value %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
