@@ -23,6 +23,9 @@ class UserChecking < ActiveRecord::Base
 
   define_graphical_attr :ower_photos, :handler => :ower_photo
   # define_graphical_attr :shop_photos, :handler => :shop_photo
+  after_update do 
+    clone_delivery_address
+  end
 
   def unchecked
     update_attributes(checked: false)
@@ -133,6 +136,14 @@ class UserChecking < ActiveRecord::Base
   def validate_user_already_exists?
     if UserChecking.where("user_id=? and id<>?", user_id, id.to_s).count > 0
       errors.add(:user_id, "该用户已经存在了，服务商！")
+    end
+  end
+
+  def clone_delivery_address
+    if changed.include?("address_id")
+      if address.present?
+        user.delivery_addresses.create(address.attributes)
+      end
     end
   end
 end

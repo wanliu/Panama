@@ -114,6 +114,13 @@ Panama::Application.routes.draw do
       get 'unfollow'
     end
 
+    resources :withdraw_money, :controller => "people/withdraw_money" do 
+      
+    end
+
+    resources :banks, :controller => "people/banks" do 
+    end
+    
     resources :transactions, :controller => "people/transactions" do
       member do
         get "page", :to => "people/transactions#page"
@@ -417,7 +424,11 @@ Panama::Application.routes.draw do
         end
       end
 
-      resources :shop_banks, :controller => "shops/shop_banks"
+      resources :banks, :controller => "shops/banks" do 
+
+      end
+
+      #resources :shop_banks, :controller => "shops/shop_banks"
 
       resources :products, :controller => "shops/products" do
         collection do

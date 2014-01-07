@@ -35,11 +35,19 @@ class root.CartContainer extends Backbone.View
     'click .submit-cart': 'submitCart'
     'click .remove-item': 'removeItem'
 
+  @getInstance = (options) ->
+    CartContainer.instance ||= new CartContainer(options)
+
   initialize: (options) ->
     _.extend(@, options)
     _.each @$(".item-tr"), ($item) =>
       new CartItemView({ el: $item, parent: @, login: @login })
     @$('.item-tr .controls').css('margin-left', 0)
+    @render()
+
+  render: () ->
+    @$('.check-all').attr('checked', true)
+    @checkAll()
 
   submitCart: () ->
     return pnotify(type: 'error', text: '请勾选要结算的商品') unless @$('.check-item:checked').length > 0

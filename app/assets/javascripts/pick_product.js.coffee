@@ -44,6 +44,7 @@ class root.WizardView extends Backbone.View
     @$search = @$("form.product input.search")
     template = @options['category_product_template'] || category_product_template
     @category_product_tpl ||= Hogan.compile(template)
+    @$product_list = @$(".category_product_list>ul")
     @bind_typeahead()
 
   get_category_products: (event) ->
@@ -52,7 +53,7 @@ class root.WizardView extends Backbone.View
     category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
     @default_options()
     @fetch {}, (data) =>
-      @$(".category_product_list").empty()
+      @$product_list.empty()
       @load_default_fetch()
 
     false
@@ -63,19 +64,21 @@ class root.WizardView extends Backbone.View
   fetch: (data = {}, callback = (data) -> ) ->
     _data = _.extend({}, @remote_options, data)
     return if @promise && @promise.state() == "pending"
+    @$(".loader").show()
     @promise = $.ajax({
        type: "get",
        url: @url,
        dataType: "json",
        data: _data,
        success: (data) =>
+         @$(".loader").hide()
          callback(data)
          @reset(data)
     })
     $(".select_all").text("全选")
 
   add_one: (product) ->
-    @$(".category_product_list").append(@category_product_tpl.render(product))
+    @$product_list.append(@category_product_tpl.render(product))
 
   render_product_infor: (product_ids) =>
     $.ajax({
@@ -152,7 +155,7 @@ class root.WizardView extends Backbone.View
       url: "/product_search",
       data: {shop_id: @remote_options.shop_id, q: query},
       success: (data) =>
-        @$(".category_product_list").empty()
+        @$product_list.empty()
         @reset(data)
     })
     false

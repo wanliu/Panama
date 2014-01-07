@@ -58,6 +58,7 @@ class root.ChatManager extends Backbone.View
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
       console.log('channel:new ', channel)
+      return unless channel.type is 3
       if @is_ready
         @targetView(channel.type).process(channel)
       else
@@ -99,7 +100,13 @@ class root.ChatManager extends Backbone.View
 
   addChatIcon: (model) ->
     model.setAttributes()
-    @targetView(model.get('type')).collection.add(model)
+    exist_model = @findExist(model)
+    if model.get('type') is 3 && exist_model
+      return exist_model
+    else
+      targetView = @targetView(model.get('type'))
+      targetView.collection.add(model)
+      model = targetView.collection.where(model.attributes)[0]
 
   removeChatIcon: (model) ->
     model.setAttributes()
@@ -222,7 +229,6 @@ class BaseIconsView extends Backbone.View
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
     @collection.bind('remove', @removeOne, @)
-    # @initFetch()
     @render()
 
   addAll: () ->
@@ -371,14 +377,12 @@ class BaseIconView extends Backbone.View
   setChannel: (@channel) ->
     @getChannel()
     @model.set({ channel: @channel })
-    if $.isEmptyObject(@channel._listeners.message)
-      @channel.onMessage (msg) =>
-        # unless @channel.isActive()
-        unless @getChat().displayState()
-          @channel.message_buffer.push(msg)
-          @incMsgCount()
-          @active()
-      , @
+    @channel.onMessage (msg) =>
+      unless @getChat().displayState()
+        @channel.message_buffer.push(msg)
+        @incMsgCount()
+        @active()
+    , @
 
   getChat: () ->
     unless @chat_view

@@ -24,17 +24,22 @@ module ActsAsStatus
 
       self.class_eval do
 
-        def self.__states(states = nil)
-          @states = states if states.present?
+        def self.__states(field = nil, states = nil)
+          @states ||= {}
+          @states[field] = states if states.present?
           @states
         end
 
-        def self._get_state_val(state)
-          (__states.index(state.to_sym) || 0) + 1
+        def self._get_state_val(field, state = nil)
+          if state.nil?
+            state = field
+            field = __states.keys.first
+          end
+          (__states[field].index(state.to_sym) || -1) + 1
         end
       end
 
-      self.__states(status)
+      self.__states(field, status)
     end
   end
 end

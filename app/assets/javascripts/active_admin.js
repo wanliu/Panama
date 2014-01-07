@@ -13,3 +13,4 @@
 //= require system/region
 //= require system/category_property
 //= require lib/chosen.ex
+//= require system/withdraw_money
