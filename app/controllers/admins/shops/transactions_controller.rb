@@ -80,7 +80,8 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def dispose
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do |format|
-      if @transaction.operator_create(current_user.id).valid?
+      @operator = @transaction.operator_create(current_user.id)
+      if @operator.valid?
         @transaction.unmessages.update_all(
           :read => true,
           :receive_user_id => current_user.id)
@@ -94,7 +95,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
         }
       else
         format.json{
-          render :json => draw_errors_message(@transaction), :status => 403 }
+          render :json => draw_errors_message(@operator), :status => 403 }
       end
     end
   end

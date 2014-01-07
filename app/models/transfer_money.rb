@@ -35,6 +35,8 @@ class TransferMoney < ActiveRecord::Base
       source.name
     when "Recharge"
       source.payer_title
+    when "WithdrawMoney"
+      source.bank.bank_name
     else
       "未知"
     end
@@ -57,14 +59,33 @@ class TransferMoney < ActiveRecord::Base
 
   class << self 
 
+    # 支出
+    # options{
+    #   money => 金额
+    #   source => 给某个对象或者用户
+    #   owner => 所属 为空就和source一样
+    #   decription => 描述
+    #   pay_type => 支付方式 默认 account
+    # }
     def pay_out!(options = {})
       options[:money] = -options[:money]  
       options[:owner] = options[:owner] || options[:source]
+      options[:pay_type] = :account unless options.key?(:pay_type)
+
       that = create!(options)              
       that.create_money_bill if that.pay_type == :account
       that
     end
 
+    # 收入
+    # options {
+    #   state => 对方是否及时到帐户 
+    #   money => 金额
+    #   source => 给某个对象或者用户
+    #   owner => 所属 为空就和source一样
+    #   decription => 描述
+    #   pay_type => 支付方式 默认 account
+    # }
     def income!(options = {})           
       state = options.delete(:state)             
       options[:owner] = options[:owner] || options[:source]

@@ -228,6 +228,7 @@ zh-CN:
       region: 区域
       category_property_value: 分类属性值
       property_value: 属性
+      withdraw_money: 提现
     attributes:
       setting:
         id: 编号
@@ -412,6 +413,12 @@ zh-CN:
         name: 名称
         title: 标题
         property: 值
+      withdraw_money:
+        user: 用户
+        money: 金额
+        arrive_mode: 到帐时间
+        state: 处理状态
+
   mongoid:
     models:
       content: "内容"
@@ -448,8 +455,10 @@ zh-CN:
   bill_detail: 账单明细
   shop_info: 店铺信息
   product_comments: 商品评论
-  shop_banks: 银行帐户
+  shop_banks: 银行卡
   ask_buy: 求购
+  banks: 银行卡
+  withdraw_money: 提现
 
   completing_shop: 注册商店
   completing_people: 注册用户
@@ -476,6 +485,15 @@ zh-CN:
     external: "外扩圈子"
     puliceity: "公开"
     community: "商家"
+
+  withdraw_money: 
+    arrive_mode:
+      morrow: 次日
+      intime: 2小时
+    state: 
+      invalid: 未处理
+      succeed: 成功
+      failer: 失败
 
   community:
     circle:

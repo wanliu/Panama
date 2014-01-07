@@ -46,15 +46,15 @@
           <tr>
             <td class='bank-wrapper'>
               <div class="bank_card">
-                <label for="bank_<%=shop_bank.bank.code %>">
-                  <span class="banks bank-<%=shop_bank.bank.code %>">
-                    <%= shop_bank.bank.name %>
+                <label for="bank_<%=shop_bank.bank_code %>">
+                  <span class="banks bank-<%=shop_bank.bank_code.downcase %>">
+                    <%= shop_bank.bank_name %>
                   </span>
                 </label>
               </div>
             </td>
             <td><%= shop_bank.name %></td>
-            <td><%= shop_bank.code %></td>
+            <td><%= shop_bank.code_title %></td>
           </tr>
           <% end %>
         <% end %>

@@ -1,0 +1,5 @@
+<% active_section :bank %>
+<%=render :partial => "context", :locals => {
+  :remote_url => person_banks_path(@people),
+  :user => @people
+} %>
