@@ -10,9 +10,10 @@ class CaramalClient
   #     require 'caramal_client'
   #     CaramalClient.publish('hysios', '/transcations', {:id => 1234 })
 
+
   def self.publish(login, channel, msg = {})
 
-    conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
     
     info = {
@@ -29,7 +30,7 @@ class CaramalClient
   end
 
   def self.create_temporary_channel(name, owner, options={}, &block)
-    conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
 
     data = {:name => name, :owner => owner}
@@ -69,7 +70,7 @@ class CaramalClient
 
 
   def self.remove_temporary_channel(name, owner, &block)
-    conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
 
     data = {:name => name, :owner => owner}.to_json
@@ -105,7 +106,7 @@ class CaramalClient
   end
 
   def self.create_persistent_channel(group, user, type, role=nil)
-    conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
 
     data = {:group => group, :user => user, :type => type}
@@ -124,7 +125,7 @@ class CaramalClient
   end
 
   def self.remove_persistent_channel(group, user, type)
-    conn = Bunny.new(:hostname =>  ENV["rabbitmq"], :threaded => false)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
 
     data = {:group => group, :user => user, :type => type}.to_json
