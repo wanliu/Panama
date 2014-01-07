@@ -100,7 +100,13 @@ class root.ChatManager extends Backbone.View
 
   addChatIcon: (model) ->
     model.setAttributes()
-    @targetView(model.get('type')).collection.add(model)
+    exist_model = @findExist(model)
+    if model.get('type') is 3 && exist_model
+      return exist_model
+    else
+      targetView = @targetView(model.get('type'))
+      targetView.collection.add(model)
+      model = targetView.collection.where(model.attributes)[0]
 
   removeChatIcon: (model) ->
     model.setAttributes()

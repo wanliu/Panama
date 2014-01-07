@@ -326,12 +326,12 @@ class BaseChatView extends Caramal.BackboneView
       @showWithMsg()
 
   hideDialog: () ->
-    @getShowEl().slideToggle()
+    @getShowEl().toggle()
     @displayState()
     # @unbindMessage() if @display
 
   showDialog: () ->
-    @getShowEl().slideDown()
+    @getShowEl().show()
     @displayState()
     @showUnread() if @display
     # @bindMessage() unless @display
