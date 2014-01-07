@@ -60,6 +60,10 @@ class Shop < ActiveRecord::Base
     update_attribute(:actived, false)
   end
 
+  def address_location
+    address.try(:location)
+  end
+
   def active_shop
     update_attribute(:actived, true)
     if audit_count == 0
