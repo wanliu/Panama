@@ -79,7 +79,7 @@ class TransferMoney < ActiveRecord::Base
 
     # 收入
     # options {
-    #   state => 对方是否及时到帐户
+    #   state => 对方是否及时到帐户 
     #   money => 金额
     #   source => 给某个对象或者用户
     #   owner => 所属 为空就和source一样

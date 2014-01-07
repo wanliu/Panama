@@ -3,6 +3,9 @@
 # arrive_mode: 到帐方式
 class WithdrawMoney < ActiveRecord::Base
   attr_accessible :arrive_mode, :bank_id, :money, :user
+  scope :untreated, ->{ where(:state => 0) }
+  scope :completed, ->{ where(:state => _get_state_val(:state, :succeed)) }
+  scope :failer, ->{ where(:state => _get_state_val(:state, :failer)) }
 
   belongs_to :bank, :class_name => "UserBank"
   belongs_to :user
@@ -28,6 +31,10 @@ class WithdrawMoney < ActiveRecord::Base
     end
   end
 
+  after_update do 
+    failer_rollback_money
+  end
+
   validate :valid_arrive_mode?, :bank_owner_user?
 
   validate :valid_user_money?, :on => :create
@@ -48,5 +55,17 @@ class WithdrawMoney < ActiveRecord::Base
 
   def valid_user_money?
     errors.add(:money, "金额大于你的余额!") if user.nil? || user.money < money
+  end
+
+  def failer_rollback_money
+    if changed.include?("state")
+      if state == :failer
+        user.transfer_moneys.income!(
+          :money => money,
+          :source => self,
+          :decription => "提现失败还原金额"
+        )
+      end
+    end
   end
 end
