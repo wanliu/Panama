@@ -12,6 +12,10 @@ class UserBank < ActiveRecord::Base
 
   validate :valid_bank_uniq?
 
+  def code_title
+    code.gsub(/(.{4})/){ "#{$1} " }
+  end
+
   private 
   def valid_bank_uniq?
     if UserBank.exists?([

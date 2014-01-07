@@ -1,12 +1,12 @@
 <div class='row-fluid'>
   <div class='span12 people_actions'>
-    <a href='#' class='withdraw'>
+    <a href="<%=person_withdraw_money_index_path(people) %>" class='withdraw'>
       提现
     </a>
     <a href="<%=person_recharges_path(people) %>" class='recharge'>
       充值
     </a>
-    <a href="<%= edit_person_path(people) %>" class='edit_info'>
+    <a href="<%=edit_person_path(people) %>" class='edit_info'>
       修改资料
     </a>
   </div>

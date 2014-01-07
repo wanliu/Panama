@@ -38,3 +38,4 @@
 #= require people/community
 #= require lib/recharge
 #= require lib/banks
+#= require lib/withdraw_money

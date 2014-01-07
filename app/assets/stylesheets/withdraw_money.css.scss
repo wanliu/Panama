@@ -1,0 +1,88 @@
+
+
+.withdraw_money_wrap{
+  
+  .item{
+    line-height: 30px;
+
+    .money{
+      width: 100px;
+      margin: 0px;
+    }
+  }
+
+  .actions{
+    margin-top: 10px;
+  }
+
+  .bank-wrapper{
+    margin-bottom: 10px;
+
+    .chose_banks{
+      position: relative;
+    }
+
+    .bank{      
+      padding: 8px;
+      margin-top: 8px;
+      border: 1px solid white;
+
+      .panel{
+        margin-left: 25px;
+
+        .person{
+          font-weight: bold;
+          font-size: 17px;
+          margin-top: 5px;
+        }
+      }
+
+      .info{
+        position: relative;
+
+        input[type='radio']{
+          position: absolute;
+          top: 20px;
+          left: -23px;
+        }
+
+      }
+    }
+
+    .toolbar{
+      margin-top: 5px;
+      
+      .expand{        
+        margin-right: 10px;
+        display: none;
+      }
+    }
+
+    &._collapse{
+
+      .bank{
+        position: absolute;        
+
+        .panel{
+          display: none;
+        }
+      }
+
+      .bank.active{
+        background-color: rgb(116, 108, 108);
+
+        .panel{
+          display: block;
+        }
+      }
+
+      .toolbar{
+        margin-top: 110px;
+
+        .expand{
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
