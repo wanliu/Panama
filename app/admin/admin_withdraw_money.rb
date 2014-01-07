@@ -22,9 +22,11 @@ ActiveAdmin.register WithdrawMoney do
       I18n.t("withdraw_money.arrive_mode.#{row.arrive_mode.name}")
     end    
     column "操作" do |row|
-      link1 = link_to("完成", completed_system_withdraw_money_path(row), :class => "member_link succeed")
-      link2 = link_to("失败", failer_system_withdraw_money_path(row), :class => "member_link failer")
-      link1 + link2
+      if row.state == :invalid
+        link1 = link_to("完成", completed_system_withdraw_money_path(row), :class => "member_link succeed")
+        link2 = link_to("失败", failer_system_withdraw_money_path(row), :class => "member_link failer")
+        link1 + link2
+      end
     end
 
     render :partial => "javascript"
