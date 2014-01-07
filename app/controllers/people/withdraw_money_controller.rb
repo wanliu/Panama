@@ -16,4 +16,7 @@ class People::WithdrawMoneyController < People::BaseController
     end
   end
 
+  def title
+    "提现"
+  end
 end
