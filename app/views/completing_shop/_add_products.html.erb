@@ -26,8 +26,8 @@
       </div>
     </div>
   </div>
-  <div class="span4">
-    <div class='panel' style="margin-right:13px;">
+  <div class="span4 product_list_wrap">
+    <div class='panel'>
       <h4><i class='icon-th-large'></i>分类商品
         <!-- <i class="icon-foursquare"></i> -->
         <button class='btn select_all pull-right' style="margin-bottom:3px;">全选</button>
@@ -40,9 +40,16 @@
           </form>
         </div>
       </div>
-      <ul class='category_product_list product_list'>
-        <p class='info'><i class="icon-arrow-left"></i>请从左边选择分类添加...</p>
-      </ul>
+      <div class='category_product_list'>
+        <ul class='product_list'>
+          <p class='info'>
+            <i class="icon-arrow-left"></i>请从左边选择分类添加...
+          </p>
+        </ul>
+        <div class='loader'>
+          <img src="/assets/loading_max.gif" />
+          正在加载...</div>
+      </div>
       <div class="btn-group btn-group-vertical pull-right position">
         <div class='buttons'>
           <%= link_to '#', :class => 'btn add_to_shop' do %>
@@ -65,6 +72,9 @@
         <h5>{{ name }} <b>{{ brand_name }}</b></h5>
         <span>单价:<i class='icon-jpy'></i> {{ price }}</span>
         <span>库存: {{ inventory }}</span>
+        {{#join_state}}
+          <span class="label label-warning pull-right">已添加</span>
+        {{/join_state}}
       </li>
     </script>
   </div>
@@ -83,26 +93,23 @@
       </ul>
     </div>
 
-		<script type="text/template" id="product_show" >
-			<li id="{{ id }}" class='product_item'>
-				<img src="{{ url }}" alt="{{name}}" class='product_img' />
-				<h5>{{ name }} <b>{{ brand_name }}</b></h5>
-				<section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span>
-				</section>
-				<section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span>
-				</section>
-				{{#join_state}}
-					<span class="label label-warning pull-right">已添加</span>
-				{{/join_state}}
-			</li>
-		</script>
+    <script type="text/template" id="product_show" >
+      <li id="{{ id }}" class='product_item'>
+        <img src="{{ url }}" alt="{{name}}" class='product_img' />
+        <h5>{{ name }} <b>{{ brand_name }}</b></h5>
+        <section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span>
+        </section>
+        <section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span>
+        </section>
+      </li>
+    </script>
 
     <script type="text/javascript">
       $(function(){
         var product_view = new ProductView({
           el      : $(".my_products"),
           shop    : {
-            id: <%= current_user.shop.id %>
+            id: <%= current_shop.id %>
           },
           template: $("#product_show").html()
         });
@@ -111,7 +118,7 @@
           el: $(".dialog_product"),
           category_product_template: $("#category_product_show").html(),
           remote_options: {
-            shop_id: <%= current_user.shop.id %>
+            shop_id: <%= current_shop.id %>
           },
           select_handle: function(models){
             _.each(models, function(model){
