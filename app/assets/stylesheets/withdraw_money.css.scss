@@ -1,13 +1,28 @@
 
 
 .withdraw_money_wrap{
+
+  label.message{
+    color: #b94a48;
+  }
   
   .item{
+    margin-top: 8px;
     line-height: 30px;
 
     .money{
       width: 100px;
       margin: 0px;
+    }
+
+    &.arrive_mode{
+      span:first-child{
+        margin-right: 20px;
+      }
+
+      input[type=radio]{
+        margin-top: 0px;
+      }
     }
   }
 

@@ -37,8 +37,9 @@ class User < ActiveRecord::Base
   has_many :money_bills, :dependent => :destroy
   has_many :transfer_moneys, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy
-  has_many :ask_buies, :dependent => :destroy
+  has_many :ask_buies, class_name: "AskBuy", :dependent => :destroy
   has_many :banks, :dependent => :destroy, class_name: "UserBank"
+  has_many :withdraw_money, :dependent => :destroy, class_name: "WithdrawMoney"
 
 
   # has_and_belongs_to_many :services
