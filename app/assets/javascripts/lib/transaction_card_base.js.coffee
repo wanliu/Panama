@@ -205,7 +205,7 @@ class TransactionCardBase extends AbstructStateView
         name: @transaction.get('token'),
         group: @transaction.get('number')
       })
-      @model = ChatManager.getInstance().temporarys_view.addModel(@model)
+      @model = ChatManager.getInstance().addChatIcon(@model)
     @model.icon_view.toggleChat()
     false
 

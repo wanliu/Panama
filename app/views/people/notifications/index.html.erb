@@ -98,7 +98,7 @@
       $target.css('background-color', 'rgb(29, 107, 126)');
     }
     
-    $(".mark_read").bind("click", function(){
+    $(".mark_read").bind("click", function(event){
       target = $(event.target),
       current_user = "<%= current_user.login %>",
       notification = target.parents('.notification_one').attr("data-id"),

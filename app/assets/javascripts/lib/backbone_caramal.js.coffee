@@ -151,30 +151,7 @@ class BaseChatView extends Caramal.BackboneView
         </div>
       </div>
       <div class="message-body">
-        <span class="arrow"></span>
         <div class="pull-left">
-          <a href="#" class="login">{{ user }}</a>
-          {{calender time}}
-        </div>
-        <div class="message">
-          {{ msg }}
-          {{#if attachments}}
-            <img src="{{attachments}}" alt="图片" />
-          {{/if}}
-        </div>
-      </div>
-    </li>')
-
-  send_template: Handlebars.compile('
-    <li class="row-send">
-      <div class="pull-right">
-        <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg">
-        </div>
-      </div>
-      <div class="message-body on-left">
-        <span class="arrow"></span>
-        <div class="pull-right">
           <a href="#" class="login">{{ user }}</a>
           {{calender time}}
         </div>
@@ -277,7 +254,7 @@ class BaseChatView extends Caramal.BackboneView
 
   parseOne: (message) ->
     if message.user is clients.current_user
-      html = @send_template(message)
+      html = @receive_template(message)
     else
       html = @receive_template(message)
 

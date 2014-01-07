@@ -13,6 +13,8 @@ class root.ChatModel extends Backbone.Model
         console.error('未处理的类型')
 
   setAttributes: () ->
+    type = @get('type') || @get('follow_type')
+    @set({ type: type }) if type
     switch @get('type')
       when 1
         title = @get('title') || "好友 #{@get('login')}"
@@ -66,7 +68,8 @@ class root.ChatManager extends Backbone.View
     _.extend(@, options)
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
-    @collection.bind('add', @addOne, @)
+    @collection.bind('add', @addChatIcon, @)
+    @collection.bind('remove', @removeChatIcon, @)
 
     @temporarys_view = new TemporaryIconsView(parent_view: @)
     @friends_view = new FriendIconsView(parent_view: @)
@@ -84,7 +87,7 @@ class root.ChatManager extends Backbone.View
   addAll: () ->
     @$("ul").html('')
     @collection.each (model) =>
-      @addOne(model)
+      @addChatIcon(model)
     @showUnprocessed()
 
   showUnprocessed: () ->
@@ -94,11 +97,15 @@ class root.ChatManager extends Backbone.View
       @is_ready = true
     , 300) # fix me: setTimeout should be removed
 
-  addOne: (model) ->
-    type = model.get('type') || model.get('follow_type')
-    model.set({ type: type }) if type
+  addChatIcon: (model) ->
     model.setAttributes()
-    @targetView(type).collection.add(model)
+    @targetView(model.get('type')).collection.add(model)
+
+  removeChatIcon: (model) ->
+    model.setAttributes()
+    targetView = @targetView(model.get('type'))
+    exist_model = targetView.collection.where(model.attributes)[0]
+    targetView.collection.remove(exist_model)
 
   targetView: (type) ->
     switch type
@@ -203,6 +210,10 @@ class BaseIconsView extends Backbone.View
   addOne: (model) ->
     console.log('unimplemented...')
 
+  removeOne: (model) ->
+    $(model.icon_view.el).remove() if model.icon_view?
+    $(model.chat_view.el).remove() if model.chat_view?
+
   initialize: () ->
     @parent_view  = @options.parent_view
     @$parent_view = $(@options.parent_view.el)
@@ -210,6 +221,7 @@ class BaseIconsView extends Backbone.View
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
+    @collection.bind('remove', @removeOne, @)
     # @initFetch()
     @render()
 
@@ -267,7 +279,6 @@ class FriendIconsView extends BaseIconsView
 
   initialize: () ->
     super
-    @collection.bind('remove', @removeOne, @)
 
   render: () ->
     $(@el).html(@template)
@@ -280,18 +291,6 @@ class FriendIconsView extends BaseIconsView
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.icon_view  = friend_view
     @$(".users-list").append(friend_view.render().el)
-
-  removeOne: (model) ->
-    if model.icon_view?
-      $(model.icon_view.el).remove();
-
-  addFriend: (attributes) ->
-    chat = new ChatModel(attributes)
-    @collection.add(chat)
-
-  removeFriend: (attributes) ->
-    delete attributes['icon']
-    @collection.remove(@collection.where(attributes)[0])
 
 
 class GroupIconsView extends BaseIconsView
@@ -372,13 +371,14 @@ class BaseIconView extends Backbone.View
   setChannel: (@channel) ->
     @getChannel()
     @model.set({ channel: @channel })
-    @channel.onMessage (msg) =>
-      # unless @channel.isActive()
-      unless @getChat().displayState()
-        @channel.message_buffer.push(msg)
-        @incMsgCount()
-        @active()
-    , @
+    if $.isEmptyObject(@channel._listeners.message)
+      @channel.onMessage (msg) =>
+        # unless @channel.isActive()
+        unless @getChat().displayState()
+          @channel.message_buffer.push(msg)
+          @incMsgCount()
+          @active()
+      , @
 
   getChat: () ->
     unless @chat_view

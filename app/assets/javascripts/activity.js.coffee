@@ -155,7 +155,7 @@ class ActivityPreview extends Backbone.View
       group: $(@el).data('group')
       # title: @$(".summary .title").text()
     })
-    model = ChatManager.getInstance().temporarys_view.addModel(model)
+    model = ChatManager.getInstance().addChatIcon(model)
     model.icon_view.toggleChat()
 
   launch: (event) ->
