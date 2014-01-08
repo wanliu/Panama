@@ -1,4 +1,6 @@
-<div id="direct<%=direct_transaction.id %>" class='row-fluid widget direct transaction' data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'>
+<div id="direct<%=direct_transaction.id %>" class='row-fluid widget direct transaction' data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
+  data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
+  data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
   <div class='span7 direct-info'>
     <div class='row-fluid'>
       <div class='span7 avatar'>
@@ -69,8 +71,8 @@
       <%= button_tag icon(:comments), :class => "btn", :type => :button %>
     </div>
     <div class='row-fluid messages'>
-      <iframe src="<%= dialog_shop_admins_direct_transaction_path(current_shop, direct_transaction) %>" style="frameborder: 0;">
-      </iframe>
+      <!-- <iframe src="<%= dialog_shop_admins_direct_transaction_path(current_shop, direct_transaction) %>" style="frameborder: 0;">
+      </iframe> -->
     </div>
   </div>
 </div>
