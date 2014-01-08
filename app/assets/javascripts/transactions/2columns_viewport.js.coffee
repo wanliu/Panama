@@ -188,7 +188,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
 class MiniRow2ColView  extends Backbone.View
 
   events:
-    "click .open": "openView"
+    "click .card_item_header .open": "openView"
     # "click": "toggleView"
 
   initialize: (@options) ->
@@ -200,6 +200,7 @@ class MiniRow2ColView  extends Backbone.View
 
   openView: () ->
     @activeRowView()
+    $(window).trigger('enterAttachChat')
 
   activeRowView: () ->
     if @parentView?

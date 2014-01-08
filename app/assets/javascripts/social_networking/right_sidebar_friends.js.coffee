@@ -1,29 +1,47 @@
 root = (window || @)
 
 class root.ChatModel extends Backbone.Model
+  getPrefixTitle: (group) ->
+    prefix = group.substring(0, group.indexOf('_'))
+    switch prefix
+      when 'OrderTransaction'
+        @set({ attach_el: "[data-number='" + group + "'] .message_wrap" })
+        '担保交易'
+      when 'DirectTransaction'
+        @set({ attach_el: "[data-number='" + group + "'] .messages" })
+        '直接交易'
+      when 'Activity'
+        '活动'
+      else
+        console.error('未处理的类型')
+
   setAttributes: () ->
+    type = @get('type') || @get('follow_type')
+    @set({ type: type }) if type
     switch @get('type')
       when 1
+        title = @get('title') || "好友 #{@get('login')}"
         @set({
           name: @get('login'),
-          title: "好友 #{@get('login')}"
+          title: title
         })
       when 2
         name = @get('login') || @get('group')
+        title = @get('title') || "商圈 #{name}"
         @set({
           name: name,
           group: name,
-          title: "商圈 #{name}"
+          title: title
         })
       when 3
         name = @get('name')
         group = @get('group')
         number = group.substring(group.indexOf('_')+1, group.length)
+        title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
         @set({
           name: name,
           group: group,
-          title: "订单 #{number}",
-          attach_el: "[data-number='" + group + "'] .message_wrap"
+          title: title
         })
 
 class root.ChatList extends Backbone.Collection
@@ -43,6 +61,7 @@ class root.ChatManager extends Backbone.View
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
       console.log('channel:new ', channel)
+      return unless channel.type is 3
       if @is_ready
         @targetView(channel.type).process(channel)
       else
@@ -53,7 +72,8 @@ class root.ChatManager extends Backbone.View
     _.extend(@, options)
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
-    @collection.bind('add', @addOne, @)
+    @collection.bind('add', @addChatIcon, @)
+    @collection.bind('remove', @removeChatIcon, @)
 
     @temporarys_view = new TemporaryIconsView(parent_view: @)
     @friends_view = new FriendIconsView(parent_view: @)
@@ -71,7 +91,7 @@ class root.ChatManager extends Backbone.View
   addAll: () ->
     @$("ul").html('')
     @collection.each (model) =>
-      @addOne(model)
+      @addChatIcon(model)
     @showUnprocessed()
 
   showUnprocessed: () ->
@@ -79,13 +99,23 @@ class root.ChatManager extends Backbone.View
       _.each @unprocessed_channels, (channel) =>
         @targetView(channel.type).process(channel)
       @is_ready = true
-    , 200) # fix me: setTimeout should be removed
+    , 300) # fix me: setTimeout should be removed
 
-  addOne: (model) ->
-    type = model.get('type') || model.get('follow_type')
-    model.set({ type: type }) if type
+  addChatIcon: (model) ->
     model.setAttributes()
-    @targetView(type).collection.add(model)
+    exist_model = @findExist(model)
+    if model.get('type') is 3 && exist_model
+      return exist_model
+    else
+      targetView = @targetView(model.get('type'))
+      targetView.collection.add(model)
+      model = targetView.collection.where(model.attributes)[0]
+
+  removeChatIcon: (model) ->
+    model.setAttributes()
+    targetView = @targetView(model.get('type'))
+    exist_model = targetView.collection.where(model.attributes)[0]
+    targetView.collection.remove(exist_model)
 
   targetView: (type) ->
     switch type
@@ -141,7 +171,7 @@ class root.ChatManager extends Backbone.View
   findExist: (item) ->
     type = item.type || item.get('type')
     _.find @collection.models, (model) =>
-      if  type is model.get('type')
+      if type is model.get('type')
         switch type
           when 1
             model.get('name') is (item.user || item.get('name'))
@@ -152,7 +182,6 @@ class root.ChatManager extends Backbone.View
 
   addModel: (model) ->
     $('body').append(model.chat_view.el)
-    model.setAttributes()
     @collection.add(model)
     @addChat(model)
     @addResizable(model)
@@ -191,6 +220,10 @@ class BaseIconsView extends Backbone.View
   addOne: (model) ->
     console.log('unimplemented...')
 
+  removeOne: (model) ->
+    $(model.icon_view.el).remove() if model.icon_view?
+    $(model.chat_view.el).remove() if model.chat_view?
+
   initialize: () ->
     @parent_view  = @options.parent_view
     @$parent_view = $(@options.parent_view.el)
@@ -198,7 +231,7 @@ class BaseIconsView extends Backbone.View
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
     @collection.bind('add', @addOne, @)
-    # @initFetch()
+    @collection.bind('remove', @removeOne, @)
     @render()
 
   addAll: () ->
@@ -218,7 +251,6 @@ class BaseIconsView extends Backbone.View
         group: channel.group,
         channel: channel 
       })
-      model.setAttributes()
       @parent_view.targetView(channel.type).addModel(model)
 
   filterList: (keyword) ->
@@ -235,6 +267,7 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setAttributes()
+      return pnotify(type: 'error', text: '请求聊天失败，name为空') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
@@ -255,7 +288,6 @@ class FriendIconsView extends BaseIconsView
 
   initialize: () ->
     super
-    @collection.bind('remove', @removeOne, @)
 
   render: () ->
     $(@el).html(@template)
@@ -265,22 +297,9 @@ class FriendIconsView extends BaseIconsView
   #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
-    model.setAttributes()
     friend_view = new FriendIconView({ model: model, parent_view: @ })
     model.icon_view  = friend_view
     @$(".users-list").append(friend_view.render().el)
-
-  removeOne: (model) ->
-    if model.icon_view?
-      $(model.icon_view.el).remove();
-
-  addFriend: (attributes) ->
-    chat = new ChatModel(attributes)
-    @collection.add(chat)
-
-  removeFriend: (attributes) ->
-    delete attributes['icon']
-    @collection.remove(@collection.where(attributes)[0])
 
 
 class GroupIconsView extends BaseIconsView
@@ -298,7 +317,6 @@ class GroupIconsView extends BaseIconsView
     @
 
   addOne: (model) ->
-    model.setAttributes()
     groupView = new GroupIconView({ model: model, parent_view: @ })
     model.icon_view  = groupView
     @$(".users-list").append(groupView.render().el)
@@ -342,11 +360,9 @@ class BaseIconView extends Backbone.View
     </a>""")
 
   initialize: () ->
-    # console.log('icon --> ', this.model.attributes)
     @clearMsgCount()
     @model.icon_view = @
-    # @setChannel() unless @channel?
-    @setChannel()
+    @setChannel() unless @channel?
 
   render: () ->
     html = @template(@model.attributes)
@@ -365,7 +381,7 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      unless @channel.isActive()
+      unless @getChat().displayState()
         @channel.message_buffer.push(msg)
         @incMsgCount()
         @active()
@@ -382,8 +398,8 @@ class BaseIconView extends Backbone.View
     @getChat().toggleDialog()
 
   bind_chat: () ->
-    @chat_view.bind("active_avatar", _.bind(@active, @))
-    @chat_view.bind("unactive_avatar", _.bind(@unactive, @))
+    @model.bind("active_avatar", _.bind(@active, @))
+    @model.bind("unactive_avatar", _.bind(@unactive, @))
 
   active: () ->
     $(@el).addClass('active')
@@ -420,11 +436,11 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('name'))
-    clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
-      @channel.room = msg
+    if @channel.room
       clients.socket.emit('join', {room: @channel.room})
-      clients.socket.on('chat', (msg) => 
-        # console.log('msg --> ', msg)
+    else
+      clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
+        @channel.room = msg
+        clients.socket.emit('join', {room: @channel.room})
       )
-    )
 

@@ -248,6 +248,10 @@ class Activity < ActiveRecord::Base
         :id => shop_product.try(:product_id),
         :name => shop_product.try(:name),
         :properties => shop_product.try(:properties_json)
+      },
+      :temporary_channel => {
+        :name => temporary_channel.try(:name),
+        :token => temporary_channel.try(:token)
       }
     }.to_json
   end

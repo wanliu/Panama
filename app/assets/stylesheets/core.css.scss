@@ -1410,6 +1410,11 @@ h2 small {
       list-style: none;
       margin: 0px;
 
+      .icon {
+        width: 30px;
+        height: 30px;
+      }
+
       li{
         clear: both;
         padding: 2px 0px 5px 5px;
@@ -1453,12 +1458,12 @@ h2 small {
         }
 
         .message-body {
-          margin-left: 55px;
+          margin-left: 35px;
           padding: 2px 2px;
-          @include transparent(rgb(162, 217, 243), 0.25);
+          // @include transparent(rgb(162, 217, 243), 0.25);
           @include border-radius(1px);
           position: relative;
-          border-left: 2px solid rgb(162, 217, 243);
+          // border-left: 2px solid rgb(162, 217, 243);
 
           .message{
             line-height: 20px;
@@ -1666,4 +1671,12 @@ h2 small {
 
 .btn-group > .btn + .dropdown-toggle {
   @include box-shadow(none);
+}
+
+.people_actions{
+  text-align: right;
+
+  .withdraw, .recharge{
+    margin-right: 10px
+  }
 }

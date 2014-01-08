@@ -92,6 +92,7 @@ class People::TransactionsController < People::BaseController
       :bank_id => params[:bank]) if params[:bank].present?
     pay_ment = KuaiQian::PayMent.request(options)
     respond_to do |format|
+      format.js{ render :js => "window.location.href='#{pay_ment.url}'" }
       format.html{ redirect_to pay_ment.url }
     end
   end
@@ -100,7 +101,7 @@ class People::TransactionsController < People::BaseController
     _response = KuaiQian::PayMent.response(params)
     @transaction = current_order.find(params[:id])
     url = if _response.successfully?
-      @transaction.online_paid
+      @transaction.kuaiqian_paid
       "#{paid_receive_url}?pay_msg=success"
     else
       "#{paid_receive_url}?pay_msg=error"
@@ -109,11 +110,14 @@ class People::TransactionsController < People::BaseController
   end
 
   def test_payment
-     @transaction = current_order.find(params[:id])
-    if Settings.pay_mode == "test"
-      @transaction.online_paid
+    @transaction = current_order.find(params[:id])
+    @transaction.kuaiqian_paid if payment_mode?
+    respond_to do |format|
+      url = "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
+      format.html{
+        redirect_to url }
+      format.js{ render :js => "window.location.href='#{url}'" }
     end
-    redirect_to "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
   end
 
   def base_info
@@ -144,14 +148,6 @@ class People::TransactionsController < People::BaseController
     @transactions = OrderTransaction.buyer(@people).completed.order("created_at desc").page(params[:page])
     @direct_transactions = @people.direct_transactions.completed.order("created_at desc").page(params[:page])
   end
-
-  # def get_delivery_price
-  #   # @price = current_order.find(params[:id]).get_delivery_price(params[:delivery_type_id])
-  #   @price = DeliveryType.find(params[:delivery_type_id]).try(:price)
-  #   respond_to do |format|
-  #     format.json{ render :json => {delivery_price: @price} }
-  #   end
-  # end
 
   def refund
     order, options = current_order.find(params[:id]), params[:order_refund]

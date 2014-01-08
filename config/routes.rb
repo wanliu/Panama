@@ -120,6 +120,13 @@ Panama::Application.routes.draw do
       get 'unfollow'
     end
 
+    resources :withdraw_money, :controller => "people/withdraw_money" do 
+      
+    end
+
+    resources :banks, :controller => "people/banks" do 
+    end
+    
     resources :transactions, :controller => "people/transactions" do
       member do
         get "page", :to => "people/transactions#page"
@@ -170,8 +177,16 @@ Panama::Application.routes.draw do
       end
     end
 
-    match 'recharges/ibank', :to => "people/recharges#ibank", :via => :post
-    match 'recharges/remittance', :to => "people/recharges#remittance", :via => :post
+    resources :recharges, :controller => "people/recharges", :only => [:index, :show] do 
+      collection do 
+        match :payment, :to => "people/recharges#payment", :via => [:get, :post]    
+        get :test_payment
+      end
+
+      member do
+        get :receive
+      end
+    end
 
     resources :topics, :controller => "people/topics" do
       collection do
@@ -415,7 +430,11 @@ Panama::Application.routes.draw do
         end
       end
 
-      resources :shop_banks, :controller => "shops/shop_banks"
+      resources :banks, :controller => "shops/banks" do 
+
+      end
+
+      #resources :shop_banks, :controller => "shops/shop_banks"
 
       resources :products, :controller => "shops/products" do
         collection do

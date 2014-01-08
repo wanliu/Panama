@@ -1,5 +1,9 @@
+<% active_section :refunds %>
 <div class='row-fluid'>
   <div class='span7'>
+    <div class='card_item'>
+      <%=render "order_refunds/header", :row => @refund %>
+    </div>
     <%= render "context", :refund => @refund %>
   </div>
 </div>

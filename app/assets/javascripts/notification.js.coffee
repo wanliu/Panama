@@ -65,21 +65,21 @@ class NotificationManager
 
   add_user: (data) =>
     @commonNotify(data)
-    friendsView = ChatManager.getInstance().friends_view
-    friendsView.addFriend(
+    model = new ChatModel({
       follow_type: 1,
       login: data.friend_name,
       icon: data.avatar
-    )
+    })
+    ChatManager.getInstance().addChatIcon(model)
 
   remove_user: (data) =>
     @commonNotify(data)
-    friendsView = ChatManager.getInstance().friends_view
-    friendsView.removeFriend(
+    model = new ChatModel({
       follow_type: 1,
       login: data.friend_name,
       icon: data.avatar
-    )
+    })
+    ChatManager.getInstance().removeChatIcon(model)
 
   commonNotify: (data) =>
     @addToPlays data, (info) =>

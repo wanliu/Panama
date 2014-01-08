@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
@@ -474,12 +474,11 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
   create_table "money_bills", :force => true do |t|
     t.string   "serial_number"
     t.decimal  "money",         :precision => 10, :scale => 2
-    t.text     "decription"
     t.integer  "user_id"
-    t.integer  "owner_id"
-    t.string   "owner_type"
-    t.datetime "created_at",                                   :null => false
-    t.datetime "updated_at",                                   :null => false
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
+    t.boolean  "state",                                        :default => true
+    t.integer  "transfer_id"
   end
 
   create_table "notifications", :force => true do |t|
@@ -543,17 +542,17 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",           :precision => 10, :scale => 2
+    t.decimal  "total",          :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                        :null => false
-    t.datetime "updated_at",                                                        :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                 :default => false
-    t.decimal  "delivery_price",  :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                :default => false
+    t.decimal  "delivery_price", :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "online_pay_type",                                :default => 0
+    t.integer  "pay_status",                                    :default => 0
     t.string   "number"
     t.datetime "dispose_date"
     t.string   "transport_type"
@@ -574,6 +573,14 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
     t.string   "icon"
+  end
+
+  create_table "price_lists", :force => true do |t|
+    t.integer  "people_number"
+    t.decimal  "price",         :precision => 10, :scale => 0
+    t.integer  "activity_id"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
   end
 
   create_table "price_options", :force => true do |t|
@@ -701,6 +708,15 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.string   "valuable_type"
   end
 
+  create_table "recharges", :force => true do |t|
+    t.integer  "user_id"
+    t.decimal  "money",      :precision => 10, :scale => 2
+    t.integer  "payer"
+    t.boolean  "state",                                     :default => false
+    t.datetime "created_at",                                                   :null => false
+    t.datetime "updated_at",                                                   :null => false
+  end
+
   create_table "region_cities", :force => true do |t|
     t.integer  "city_id"
     t.integer  "region_id"
@@ -757,17 +773,6 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.string   "target_type"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-  end
-
-  create_table "shop_banks", :force => true do |t|
-    t.integer  "shop_id"
-    t.integer  "bank_id"
-    t.string   "code"
-    t.string   "name"
-    t.boolean  "state"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.time     "deleted_at"
   end
 
   create_table "shop_groups", :force => true do |t|
@@ -908,6 +913,20 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "transfer_moneys", :force => true do |t|
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.string   "decription"
+    t.string   "number"
+    t.datetime "created_at",                                 :null => false
+    t.datetime "updated_at",                                 :null => false
+    t.integer  "user_id"
+    t.integer  "pay_type"
+    t.integer  "source_id"
+    t.string   "source_type"
+    t.decimal  "money",       :precision => 10, :scale => 2
+  end
+
   create_table "transfer_sheets", :force => true do |t|
     t.string   "person"
     t.string   "code"
@@ -915,6 +934,16 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.integer  "order_transaction_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+  end
+
+  create_table "user_banks", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "bank_id"
+    t.string   "code"
+    t.string   "name"
+    t.boolean  "state",      :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
   create_table "user_checkings", :force => true do |t|
@@ -954,6 +983,16 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.integer  "shop_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "withdraw_moneys", :force => true do |t|
+    t.decimal  "money",       :precision => 10, :scale => 2
+    t.integer  "bank_id"
+    t.integer  "user_id"
+    t.integer  "state",                                      :default => 0
+    t.integer  "arrive_mode",                                :default => 0
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
   end
 
 end

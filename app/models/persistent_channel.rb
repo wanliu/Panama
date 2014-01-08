@@ -2,6 +2,8 @@ class PersistentChannel < ActiveRecord::Base
   # attr_accessible :title, :body
   belongs_to :user
 
+  # delegate :icon, :to => :user
+
   after_create do
     # TODO： system avatar
     system_avatar = AvatarUploader.new.url

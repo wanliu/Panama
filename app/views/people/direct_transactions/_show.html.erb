@@ -1,4 +1,6 @@
-<div class='row-fluid widget direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'>
+<div class='row-fluid widget direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
+  data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
+  data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
   <div class='span7 direct-info'>
     <div class='row-fluid'>
       <div class='span7 avatar'>
@@ -46,15 +48,15 @@
           <tr>
             <td class='bank-wrapper'>
               <div class="bank_card">
-                <label for="bank_<%=shop_bank.bank.code %>">
-                  <span class="banks bank-<%=shop_bank.bank.code %>">
-                    <%= shop_bank.bank.name %>
+                <label for="bank_<%=shop_bank.bank_code %>">
+                  <span class="banks bank-<%=shop_bank.bank_code.downcase %>">
+                    <%= shop_bank.bank_name %>
                   </span>
                 </label>
               </div>
             </td>
             <td><%= shop_bank.name %></td>
-            <td><%= shop_bank.code %></td>
+            <td><%= shop_bank.code_title %></td>
           </tr>
           <% end %>
         <% end %>
@@ -111,7 +113,7 @@
       <%= button_tag icon(:comments), :class => "btn", :type => :button %>
     </div>
     <div class='row-fluid messages'>
-      <iframe src="<%= dialog_person_direct_transaction_path(@people, direct_transaction) %>" style="frameborder: 0;"></iframe>
-    </div>
+      <!-- <iframe src="<%= dialog_person_direct_transaction_path(@people, direct_transaction) %>" style="frameborder: 0;"></iframe>
+    </div> -->
   </div>
 </div>

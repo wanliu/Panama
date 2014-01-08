@@ -151,30 +151,7 @@ class BaseChatView extends Caramal.BackboneView
         </div>
       </div>
       <div class="message-body">
-        <span class="arrow"></span>
         <div class="pull-left">
-          <a href="#" class="login">{{ user }}</a>
-          {{calender time}}
-        </div>
-        <div class="message">
-          {{ msg }}
-          {{#if attachments}}
-            <img src="{{attachments}}" alt="图片" />
-          {{/if}}
-        </div>
-      </div>
-    </li>')
-
-  send_template: Handlebars.compile('
-    <li class="row-send">
-      <div class="pull-right">
-        <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg">
-        </div>
-      </div>
-      <div class="message-body on-left">
-        <span class="arrow"></span>
-        <div class="pull-right">
           <a href="#" class="login">{{ user }}</a>
           {{calender time}}
         </div>
@@ -190,8 +167,9 @@ class BaseChatView extends Caramal.BackboneView
   fetchHistory: () ->
     @msgLoaded ||= false
     return if @msgLoaded
+    start = @channel.message_buffer.length + 1
     setTimeout( () =>
-      @channel.history({start: 1}, (chat, err, messages) =>
+      @channel.history({start: start}, (chat, err, messages) =>
         @msgLoaded = true
         $html = @parseMessages(messages)
         text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
@@ -199,7 +177,7 @@ class BaseChatView extends Caramal.BackboneView
         @msgContent().prepend($html)
         @scrollDialog()
       )
-    , 200)
+    , 300)
 
   resetHistory: () ->
     @msgLoaded = false
@@ -219,7 +197,6 @@ class BaseChatView extends Caramal.BackboneView
     console.log('unimplemented...')
 
   initDialog: () ->
-    @display = false
     $(@el).html(@chat_template({model: @model}))
     @state_el = @$(".head>.state")
     @model.chat_view = @
@@ -229,8 +206,10 @@ class BaseChatView extends Caramal.BackboneView
     @$('.choose-face').popover({
       content: () => EmojifyChooser.getInstance().el
     })
+    $(@el).hide()
 
   bindEvent: () ->
+    @bindMessage()
     @stateService()
     @channel.onEvent (data) =>
       return unless data.type
@@ -245,6 +224,9 @@ class BaseChatView extends Caramal.BackboneView
           @offline()
         else
           console.log('未处理的事件')
+    $(window).bind('enterAttachChat', () =>
+      $(@el).hide()
+    )
 
   stateService: () ->
     console.log('unimplemented...')
@@ -272,7 +254,7 @@ class BaseChatView extends Caramal.BackboneView
 
   parseOne: (message) ->
     if message.user is clients.current_user
-      html = @send_template(message)
+      html = @receive_template(message)
     else
       html = @receive_template(message)
 
@@ -302,48 +284,57 @@ class BaseChatView extends Caramal.BackboneView
 
   receiveMessage: (data) ->
     # @msgContent().append(@parseMessages(data))
-    @$('.msg_content').append(@parseMessages(data))
-    @trigger('active_avatar') if @name is data.user
-    @scrollDialog()
+    if @displayState()
+      @$('.msg_content').append(@parseMessages(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @scrollDialog()
+
+  getShowEl: () ->
+    $attach_el = $(@model.get('attach_el'))
+    if $attach_el.length is 1
+      @newAttachView()
+      if @isFullMode()
+        return $(@attach_view.el)
+    return $(@el)
+
+  newAttachView: () ->
+    @attach_view ||= new AttachChatView({
+      model: @model,
+      channel: @channel,
+      el: $(@el).clone()
+    })
+
+  isFullMode: () ->
+    $attach_el = $(@model.get('attach_el'))
+    display = $attach_el.parents('.full-mode').is(':visible')
+    $(@el).hide() if display
+    display
+
+  displayState: () ->
+    @display = $(@el).is(':visible') || @isFullMode()
+    if @display
+      @channel.active()
+    else
+      @channel.deactive()
+    @display
 
   toggleDialog: () ->
+    @displayState()
     if @display
       @hideDialog()
     else
       @showWithMsg()
 
-    $attach_el = $(@model.get('attach_el'))
-    if $attach_el.length is 1
-      if !@attach_view
-        @attach_view = new AttachChatView({
-          model: @model,
-          channel: @channel,
-          el: $(@el).clone()
-        })
-        $(@attach_view.el).slideDown()
-      else
-        $(@attach_view.el).slideToggle()
-
-      if $attach_el.find('.global_chat:visible').length is 0
-        $(@el).css('visibility', 'visible')
-      else
-        $(@el).css('visibility', 'hidden')
-    else
-      # 显示全局对话框
-      $(@el).css('visibility', 'visible')
-
   hideDialog: () ->
-    $(@el).slideUp()
-    @channel.deactive()
-    @unbindMessage() if @display
-    @display = false
+    @getShowEl().toggle()
+    @displayState()
+    # @unbindMessage() if @display
 
   showDialog: () ->
-    $(@el).css('z-index', 10000).slideDown()
-    @channel.active()
-    @showUnread()
-    @bindMessage() unless @display
-    @display = true
+    @getShowEl().show()
+    @displayState()
+    @showUnread() if @display
+    # @bindMessage() unless @display
     @scrollDialog()
 
   scrollDialog: () ->
@@ -366,7 +357,7 @@ class BaseChatView extends Caramal.BackboneView
     @channel.removeEventListener('message', @receiveMessage)
 
   activeDialog: () ->
-    @trigger('unactive_avatar')
+    @model.trigger('unactive_avatar')
     @$el.css('z-index', 10000)
     @$el.siblings('.global_chat').css('z-index', 9999)
 
@@ -471,4 +462,5 @@ class root.AttachChatView extends TemporaryChatView
     @$('.choose-face').popover({
       content: () => EmojifyChooser.getInstance().el
     })
+    $(@el).hide()
 

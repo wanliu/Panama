@@ -1,41 +1,41 @@
 #encoding: utf-8
-#资金帐目
+# 余额帐单
+#
+# state: 是否可以使用(true 可用, false 不可用)
 class MoneyBill < ActiveRecord::Base
-  attr_accessible :decription, :money, :owner, :user
+  attr_accessible :money, :user, :state, :transfer
 
-  belongs_to :owner, :polymorphic => true
   belongs_to :user
+  belongs_to :transfer, :class_name => "TransferMoney"
 
   validates :user, :presence => true
-  validates :owner, :presence => true
   validates :serial_number, :presence => true
+  validates :money, :presence => true, :numericality => true
 
   before_validation(:on => :create) do
     self.serial_number = Time.now.strftime("%Y%m%d%H%M%S%4N")
+    self.state = true if state.nil?
   end
 
   after_create :calculate_money
 
+  after_update do 
+    calculate_money if changed.include?("state")
+  end
+
   def calculate_money
-    u = user.reload
-    u.money = u.money + money
-    u.save
-  end
-
-  def owner_name
-    I18n.t("activerecord.models.#{owner_type.underscore}")
-  end
-
-  def owner_value
-    case owner_type
-    when "OrderTransaction"
-      owner.number
-    when "Bank"
-      owner.name
-    when "OrderRefund"
-      owner.id
-    else
-      "未知"
+    if state
+      user.money = user.money + money
+      user.save
     end
   end
+
+  def active_money
+    self.update_attributes(:state => true)
+  end
+
+  def self.unavailable
+    self.where(:state => false).sum(:money)
+  end
+
 end

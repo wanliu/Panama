@@ -110,7 +110,7 @@ class ShopTransactionCard extends TransactionCardBase
     old_price = @$dprice_panel.attr("data-value")
     new_price = @$dprice_input.val()
 
-    unless /^\d+(.\d+)?$/.test(new_price)
+    unless /^\d+(\.\d+)?$/.test(new_price)
       pnotify(title: "错误信息", text: "请输入正确运费！", type: "error")
       return
 

@@ -21,37 +21,6 @@
     margin: 20px 20px;
   }
 
-  .paid_bank{
-    .bank-wrapper {
-
-      .bank_card{
-        float: left;
-        position: relative;
-        margin:0px 0px 10px 3px;
-
-        .cart {
-          width: 100px;
-          // height: 62px;
-          @include box-shadow(0 1px 2px $gray);
-        }
-
-        input[type='radio']{
-          position: absolute;
-          top: 8px;
-          left: 5px;
-        }
-
-        label {
-          display: inline-block;
-          line-height: 36px;
-          margin-bottom: 0px;
-          margin-left: 25px;
-        }
-
-      }
-    }
-  }
-
   .transaction-header {
     height: 75px;
     margin-bottom: 10px;
@@ -289,10 +258,7 @@
 
 .transaction{
   .nav-tabls-wrapper{
-    .paid-next{
-      margin-top: 15px;
-    }
-
+    
     .tab-content{
       margin-bottom: 10px;
     }

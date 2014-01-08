@@ -36,3 +36,6 @@
 #= require people/order_transactions
 #= require people/order_refund_list
 #= require people/community
+#= require lib/recharge
+#= require lib/banks
+#= require lib/withdraw_money

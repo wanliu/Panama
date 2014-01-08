@@ -19,17 +19,10 @@
         <div class="page-header">
           <div class="trasaction-title">
             <div class="name"><%= buyer.login %></div>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <span class='order_number pull-right'>订单编号：<%=refund.order.number %></span>   
           </div>
-          <div class="transaction-number">
-            <span class='number'>编号: <%=refund.number %></span>
-            <span class='order_number'>订单编号：<%=refund.order.number %></span>
-            <span class='pull-right'><%=refund.created_at.strftime("%Y-%m-%d %H:%M:%S") %></span>
-          </div>
-          <div class="state-progress">
-            <% unless refund.state == "failure" %>
-              <%#=render "progress", :refund => refund %>
-            <% end %>
+          <div class="transaction-address">
+            <%=refund.order.address.location %>
           </div>
         </div>
       </div>

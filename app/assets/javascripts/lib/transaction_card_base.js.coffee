@@ -199,15 +199,14 @@ class TransactionCardBase extends AbstructStateView
 
   toggleMessage: () ->
     # @$(".message_wrap", ".transaction-footer").slideToggle()
-    unless @model?
-      @model = new ChatModel({
+    unless @chat_model?
+      @chat_model = new ChatModel({
         type: 3,
         name: @transaction.get('token'),
         group: @transaction.get('number')
       })
-      @model.setAttributes()
-      @model = ChatManager.getInstance().temporarys_view.addModel(@model)
-    @model.icon_view.toggleChat()
+      @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
+    @chat_model.icon_view.toggleChat()
     false
 
   current_state: () ->

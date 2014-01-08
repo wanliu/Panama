@@ -32,8 +32,10 @@ class ActivitiesParticipate < ActiveRecord::Base
       activity.transactions.each do |t|
         unless t.buyer == user
           money = price * t.items[0].amount
-          t.seller.user.payment(money, t.buyer, "活动聚集返还金额给#{t.buyer.login}买家")
-          t.buyer.recharge(money, t.seller, "#{t.seller.name}商家，活动聚集返还金额")
+          t.seller.user.payment(money, {
+            :target => t.buyer,
+            :owner => t,
+            :decription => "活动聚集返还金额给#{t.buyer.login}买家"})
         end
       end if price > 0
     end
