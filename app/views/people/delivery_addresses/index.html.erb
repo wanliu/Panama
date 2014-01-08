@@ -1,62 +1,63 @@
 <% active_section :delivery_addresses %>
 
 <div class='row-fluid'>
-	<div class="span9 widget">
-		<div class='row-fluid'>
-			<h2 class="page-title">地址管理 <small>收货地址的清单</small></h2>      
-		</div>
-		<div class='row-fluid'>
-			<div class="addresses-panel">
-				<div class='row-fluid'>
-					<div class="addresses-button pull-right">
-						<small>已有<%= @addresses.count %>个地址</small>
-						<a href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">添加</a>
-					</div>
-				</div>
+  <div class="span9 widget">
+    <div class='row-fluid'>
+      <h2 class="page-title">地址管理 <small>收货地址的清单</small></h2>      
+    </div>
+    <div class='row-fluid'>
+      <div class="addresses-panel">
+        <div class='row-fluid'>
+          <div class="addresses-button pull-right">
+            <small>已有<%= @addresses.count %>个地址</small>
+            <a href="#new_address" class="btn btn-primary" type="button" data-toggle="modal">添加</a>
+          </div>
+        </div>
 
-				<div class="address-list">
-					<% unless flash.empty? %>
-						<% flash.each do |f| %>
-							<div class="alert alert-<%=f[0]%>">
-								<button type="button" class="close" data-dismiss="alert">×</button>
-								<%= f[1] %>
-							</div>
-						<% end %>
-					<% end %>
-					<table class="table table-striped address_table address">
-						<tr>
-							<th style="width:10%">收货人</th>
-							<th style="width:28%">所在地区</th>
-							<th style="width:35%">街道地址</th>
-							<th style="width:10%">邮编</th>
-							<th style="width:10%">联系方式</th>
-							<th style="width:7%">操作</th>
-						</tr>
-						<tbody class="table-striped">
-							<% unless @addresses.nil? %>
-								<% @addresses.each do |address| %>
-									<tr class ="address<%=address.id%> address_line">
-										<%= render "show", :address => address %>
-									</tr>
-								<% end %>
-							<% else %>
-								<tr class ="address_line">
-									<td colspan="6">暂时还没有收获地址，去添加一个吧....</td>
-								</tr>
-							<% end %>
-						</tbody>
-					</table>
-				</div>
+        <div class="address-list">
+          <% unless flash.empty? %>
+            <% flash.each do |f| %>
+              <div class="alert alert-<%=f[0]%>">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <%= f[1] %>
+              </div>
+            <% end %>
+          <% end %>
+          <table class="table table-striped address_table address">
+            <tr>
+              <th style="width:10%">收货人</th>
+              <th style="width:28%">所在地区</th>
+              <th style="width:35%">街道地址</th>
+              <th style="width:10%">邮编</th>
+              <th style="width:10%">联系方式</th>
+              <th style="width:7%">操作</th>
+            </tr>
+            <tbody class="table-striped">
+              <% unless @addresses.nil? %>
+                <% @addresses.each do |address| %>
+                  <tr class ="address<%=address.id%> address_line">
+                    <%= render "show", :address => address %>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr class ="address_line">
+                  <td colspan="6">暂时还没有收获地址，去添加一个吧....</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
 
-				<%= render :partial => "people/delivery_addresses/new", 
-						   :locals => {:address => @people.delivery_addresses.build} %>
-			</div>
-		</div>
-	</div>
+        <%= render :partial => "people/delivery_addresses/new", 
+               :locals => {:address => @people.delivery_addresses.build} %>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">
-	new AddressesView({
-		el: "div.addresses-panel"
-	})
+  new AddressesView({
+    el: "div.addresses-panel",
+    formName: "delivery_address"
+  })
 </script>

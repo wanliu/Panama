@@ -1,18 +1,18 @@
 <div id="direct<%=direct_transaction.id %>" class='row-fluid widget direct transaction' data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'>
   <div class='span7 direct-info'>
     <div class='row-fluid'>
-      <div class='span7 avatar'>
+      <div class='span8 avatar'>
         <img src="<%=direct_transaction.buyer.photos.header %>" class='img-polaroid' />
         <div class='header-title'>
           <h3 class='owner_name'>
             <%=direct_transaction.buyer.login %>
           </h3>
-          <div class='number'>
-            编号: <%=direct_transaction.number %>
+          <div class='address'>
+            <%=direct_transaction.buyer.address_location %>
           </div>
         </div>
       </div>
-      <div class='span5'>
+      <div class='span4'>
         <h4 class='pull-right state_title'>
           <%=t "direct_transaction_state.#{direct_transaction.state.name}" %>
         </h4>

@@ -1,42 +1,51 @@
 # coding: utf-8
 class People::DeliveryAddressesController < People::BaseController
 
-	def index
-		@addresses = DeliveryAddress.all
-	end
+  def index
+    @addresses = DeliveryAddress.all
+  end
 
-	def new
-		@address = DeliveryAddress.new
-	end
+  def new
+    @address = DeliveryAddress.new
+  end
 
-	def edit
-		@address = DeliveryAddress.find(params[:id])
-		render layout: false
-	end
+  def edit
+    @address = current_user_address(params[:id])
+    render layout: false
+  end
 
-	def create
-		@address = @people.delivery_addresses.create(params[:delivery_addresses])
-		if @address.valid?
-			flash[:success] = "创建收货地址成功！"
-		else
-			flash[:error] = "请确定输入的地址非空！"
-		end
-		redirect_to person_delivery_addresses_path
-	end
+  def create
+    @address = @people.delivery_addresses.build(params[:delivery_addresses])
+    respond_to do |format|
+      if @address.save
+        flash[:success] = "添加成功！"
+        format.json{ head :no_content }
+      else
+        format.json{ render :json => draw_errors_message(@address), :status => 403 }
+      end
+    end
+  end
 
-	def update
-		@address = DeliveryAddress.find(params[:id])
-		if @address.update_attributes(params[:delivery_address])
-			flash[:success] = "修改收货地址成功！"
-		else
-			flash[:error] = "请确定修改后的地址非空！"
-		end
-		redirect_to person_delivery_addresses_path
-	end
+  def update
+    @address = current_user_address(params[:id])
+    respond_to do |format|
+      if @address.update_attributes(params[:delivery_address])
+        flash[:success] = "修改收货地址成功！"
+        format.json{ head :no_content }
+      else
+        format.json{ render :json => draw_errors_message(@address), :status => 403 }
+      end
+    end
+  end
 
-	def destroy
-		DeliveryAddress.delete(params[:id])
-		flash[:success] = "删除收货地址成功！"
-		redirect_to person_delivery_addresses_path
-	end
+  def destroy
+    current_user_address(params[:id]).destroy
+    flash[:success] = "删除收货地址成功！"
+    redirect_to person_delivery_addresses_path
+  end
+
+  private 
+  def current_user_address(id)
+    @people.delivery_addresses.find(id)
+  end
 end
