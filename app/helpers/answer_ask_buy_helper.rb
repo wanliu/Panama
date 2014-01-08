@@ -1,0 +1,2 @@
+module AnswerAskBuyHelper
+end

@@ -1,5 +1,11 @@
 Panama::Application.routes.draw do
 
+  resources :answer_ask_buy do 
+    member do
+      post :create_order, :to => "answer_ask_buy#create_order"
+    end
+  end
+
   resources :shop_products do
     collection do
       get ":shop_id/search", :to => "shop_products#search"

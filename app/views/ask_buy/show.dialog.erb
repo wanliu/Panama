@@ -37,6 +37,27 @@
             <span style="word-wrap:break-word;margin-left:10px;">
               <%=@ask_buy.describe %>
             </span>
+            
+            <% if current_user == @ask_buy.user %>
+              <h4>商家报价</h4>
+              <table class="report">
+                <% answer_ask_buys = @ask_buy.answer_ask_buys %>
+                <% unless answer_ask_buys.blank? %>
+                  <% answer_ask_buys.each do |a| %>
+                    <tr class="report_line" data-value-id="<%=a.id %>">
+                      <td style="width:10%" ><img src="<%=a.user.icon %>"/><%=a.user.login %></td>
+                      <td style="width:30%"><span><%=a.shop_product_name %><span><img src="<%=a.shop_product_icon %>" /></td>
+                      <td style="width:20%"><span> ￥<%=a.price %> x <%=a.amount %> <span></td>
+                      <td style="width:20%">总计：￥<%=a.total %></td>
+                      <td style="width:20%"><a href="javascript:void(0)" class="btn btn-danger create_transaction">生成订单</a></td>
+                    </tr>
+                  <% end %>    
+                <% else %>
+                  <tr><td colspan="5">暂无人参与报价</td></tr>
+                <% end %>
+              </table>
+            <% end %>
+
           </div>
           <div class="modal-footer">
             <div class="big_comments_and_reply">
@@ -83,41 +104,60 @@
 
         <div class="dialog" id="purchase-forms">
           <div class="modal-body">
-              <label class="decimal optional control-label" for="product_item_price">
-                价格
-              </label>
+            <% if current_user.is_seller? && @ask_buy.user_id != current_user.id && @ask_buy.status == 0 %>
+              <h4>我的报价</h4>
+              <%= simple_form_for @answer_ask_buy, :remote => true, :url => answer_ask_buy_index_path, :html => { class: 'form-horizontal form_answer_ask_buy'},:method => "post", :type => :json do |f| %>
+                <%=f.input :ask_buy_id, :as => :hidden, :input_html => { :value => @ask_buy.id } %>
+                <%= f.input :shop_product_id,
+                            :label => "商品",
+                            :collection => [],
+                            :wrapper_html => {
+                              :class => "shop_product_wrap"
+                            },
+                            :collection => [],
+                            :input_html => {
+                              :class => "shop_product_id",
+                              :id => "answer_ask_buy_shop_product"
+                            } %>
+                <%=f.input  :price,  
+                            :label => "单价", 
+                            :wrapper_html => {
+                              :class => "answer_ask_buy_price_wrap"
+                            }, 
+                            :input_html => { 
+                              :value => @ask_buy.price, 
+                              :class => "answer_ask_buy_price" }%>
+
+                <%=f.input :amount, 
+                           :label => "数量",
+                           :wrapper_html => {
+                              :class => "answer_ask_buy_amount_wrap"
+                            },
+                           :input_html => { 
+                            :value => @ask_buy.amount,
+                            :class => "answer_ask_buy_amount" }%>
+                <% total = @ask_buy.price * @ask_buy.amount %>
+                <%=f.input :total,
+                           :label => "总计",
+                           :wrapper_html => {
+                              :class => "answer_ask_buy_total_wrap"
+                            },
+                           :input_html => { 
+                            :value => total,
+                            :class => "answer_ask_buy_total" }%>
+              <% end %>
+              <% if current_user.answered_ask_buy(@ask_buy.id).nil? %>
+                <input type="button" value="提交报价" class="btn btn-danger pull-right submit_report">
+              <% end %>
+            <% else %>
+              <h4><%=@ask_buy.title %> 求购</h4>
+              <label class="decimal optional control-label" for="product_item_price">价格</label>
               <input type='text' class='span12' value="<%=@ask_buy.price %>"  readonly=true />
-              <div class="control-group integer optional">
-                <label class="integer optional control-label" for="product_item_amount">
-                  数量
-                </label>
-                <div class="controls">
-                  <input class="numeric integer span12" name="" readonly=true type="number" value="<%=@ask_buy.amount %>">
-                </div>
-              </div>
-          </div>
-          <div class="modal-footer">
-            <div class="btn-group">
-            <% if current_user.is_seller? &&
-              @ask_buy.user_id != current_user.id &&
-              @ask_buy.status !=1 %>
-              <button class="btn btn-danger" type="button" name="join">
-                <%= icon(:'shopping-cart', :white) + " 参与" %>
-              </button>
+              <label class="integer optional control-label" for="product_item_amount">数量</label>
+              <input class="numeric integer span12" name="" readonly=true type="number" value="<%=@ask_buy.amount %>">
             <% end %>
+            <div class="modal-footer">
             </div>
-            <% if @ask_buy.paticipate.present? %>
-            <div class='seller-info'>
-              <a href="/shops/<%=@ask_buy.paticipate.shop.name %>">
-              <img src="<%=@ask_buy.paticipate.shop.photos.icon %>" />
-              </a>
-              <span>
-                <a href="/shops/<%=@ask_buy.paticipate.shop.name %>">
-                  <%=@ask_buy.paticipate.shop.name %>
-                </a> 参与
-              </span>
-            </div>
-            <% end %>
           </div>
         </div>
       </div>
@@ -131,5 +171,32 @@
 <script type="text/javascript">
   $(function(){
     $(".item").first().addClass("active")
-  })
+  });
+  <% if current_user.is_seller? %>
+    var sp_elem = $(".form_answer_ask_buy .shop_product_id")
+    <% shop_product = current_user.shop.has_product(@ask_buy.product_id) %>
+    sp_elem.chosenEx({
+      allow_single_deselect : true,
+      placeholder_text : "选择一个商品",
+      <% if @answer_ask_buy.shop_product.present? %>
+        data: [{
+          id: <%= @answer_ask_buy.shop_product_id %>,
+          name: "<%= @answer_ask_buy.shop_product.name %>"
+        }],
+      <% elsif shop_product.present? %>
+        data: [{
+          id: <%= shop_product.id %>,
+          name: "<%= shop_product.product.name %>"
+        }],
+      <% end %>
+      remote: {
+        url: "/search/shop_products",
+        dataType: "json",
+        no_results_text : "没有找到你的商品, 请到<a href='/shops/<%=current_user.shop.name %>/admins/shop_products'>商品管理</a>中添加"
+      }
+    });
+  <% end %>
+  <% if !current_user.answered_ask_buy(@ask_buy.id).nil? %>
+    $(".form_answer_ask_buy input").attr("readonly","readonly")
+  <% end %>
 </script>

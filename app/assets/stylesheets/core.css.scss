@@ -1002,6 +1002,13 @@ body>.model-popup-backdrop.out{
         @include background-clip(padding-box);
         outline: none;
         margin-bottom: 20px;
+        .report{
+          width: 100%;
+          .report_line{
+            background-color: bisque;
+            border: 2px solid #EEEBEB;
+          }
+        }
 
         .modal-body {
           .author_image {
@@ -1058,8 +1065,11 @@ body>.model-popup-backdrop.out{
       }
 
       .dialog#purchase-forms{
-        .modal-body{
-          height: 140px;
+        .control-label{
+          width: 60px;
+        }
+        .controls{
+          margin-left: 80px;
         }
       }
     }
@@ -1265,6 +1275,9 @@ h2 small {
 
 .error{
   input[type=text], textarea{
+    border: 1px solid #b94a48;
+  }
+  input[type=number]{
     border: 1px solid #b94a48;
   }
 }
