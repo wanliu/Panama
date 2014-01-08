@@ -4,23 +4,25 @@
 <td><%= address.zip_code %></td>
 <td><%= address.try(:contact_phone) %></td>
 <td style="min-width:40px;">
-	<div class="row-fluid button_group">
-		<div class="pull-right">
-			<a class="btn_linked" data-toggle="modal" href="delivery_addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
-		<%= link_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn_linked btn-danger" %>
-		</div>
-	</div>
+  <div class="row-fluid button_group">
+    <div class="pull-right">
+      <a class="btn_linked" data-toggle="modal" href="delivery_addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
+    <%= link_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn_linked btn-danger" %>
+    </div>
+  </div>
 </td>
-<td><div id="edit_address<%=address.id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addAddressLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="addAddressLabel">编辑地址</h3>
-	</div>
-	<div class="modal-body">
-		
-	</div>
-	<div class="modal-footer">
-		<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-		<button class="btn btn-primary edit-button">保存</button>
-	</div>
-</div></td>
+<td>
+  <div id="edit_address<%=address.id%>" class="modal hide fade edit_wrap" tabindex="-1" role="dialog" aria-labelledby="addAddressLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="addAddressLabel">编辑地址</h3>
+    </div>
+    <div class="modal-body">
+      
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+      <button class="btn btn-primary edit-button">保存</button>
+    </div>
+  </div>
+</td>
