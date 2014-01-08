@@ -14,6 +14,7 @@ class DirectTransaction < ActiveRecord::Base
   has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
   has_many :messages, :class_name => "ChatMessage", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
+  has_one :temporary_channel, as: :targeable, dependent: :destroy
 
   validates :buyer, :presence => true
   validates :seller, :presence => true
@@ -30,6 +31,8 @@ class DirectTransaction < ActiveRecord::Base
   after_destroy :notice_destroy
 
   after_update :notice_change_state
+
+  after_commit :create_the_temporary_channel, on: :create
 
   def init_data
     self.total = items.inject(0){|s, v|  s = s + (v.amount * v.price) }
@@ -154,6 +157,11 @@ class DirectTransaction < ActiveRecord::Base
 
   def self.max_id
     select("max(id) as id")[0].try(:id) || 0
+  end
+
+  def create_the_temporary_channel
+    name = self.class.to_s << "_" << number
+    self.create_temporary_channel(targeable_type: 'DirectTransaction', user_id: seller.owner.id, name: name)
   end
 
 end

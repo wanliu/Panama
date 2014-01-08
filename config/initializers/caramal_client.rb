@@ -140,4 +140,3 @@ class CaramalClient
     conn.stop
   end
 end
-

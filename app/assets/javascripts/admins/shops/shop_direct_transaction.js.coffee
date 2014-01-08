@@ -15,7 +15,8 @@ class root.ShopDirectTransactionView extends Backbone.View
 
     @model.bind("change:state", @change_state, @)
     @load_realtime()
-    @load_style()
+    # @load_style()
+    @toggle_message()
 
   init_elem: () =>
     @$el = $(@el)
@@ -32,7 +33,15 @@ class root.ShopDirectTransactionView extends Backbone.View
     , 60
 
   toggle_message: () ->
-    @$messages.slideToggle()
+    # @$messages.slideToggle()
+    unless @chat_model?
+      @chat_model = new ChatModel({
+        type: 3,
+        name: @$el.data('token'),
+        group: @$el.data('number')
+      })
+      @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
+    @chat_model.icon_view.toggleChat()
 
   change_state: () ->
     $(".state_title", @$info).html(@model.get("state_title"))
