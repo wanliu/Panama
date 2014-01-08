@@ -6,7 +6,10 @@ class root.ChatModel extends Backbone.Model
     switch prefix
       when 'OrderTransaction'
         @set({ attach_el: "[data-number='" + group + "'] .message_wrap" })
-        '订单'
+        '担保交易'
+      when 'DirectTransaction'
+        @set({ attach_el: "[data-number='" + group + "'] .messages" })
+        '直接交易'
       when 'Activity'
         '活动'
       else

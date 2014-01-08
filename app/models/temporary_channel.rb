@@ -13,6 +13,7 @@ class TemporaryChannel < ActiveRecord::Base
     end
 
     CaramalClient.create_temporary_channel(name, user.login, options) do |_token|
+      puts _token
       self.update_attribute(:token, _token)
     end
   end
