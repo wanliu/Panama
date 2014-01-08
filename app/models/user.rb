@@ -77,6 +77,10 @@ class User < ActiveRecord::Base
     user_checking.try(:address).try(:area)
   end
 
+  def address_location
+    user_checking.try(:address).try(:location)
+  end
+
   # 收入
   # options: {
   #   owner => '所属类型 (订单 退货 或者是用户)'
