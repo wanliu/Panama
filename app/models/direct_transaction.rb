@@ -12,7 +12,6 @@ class DirectTransaction < ActiveRecord::Base
   belongs_to :operator, :class_name => "User"
 
   has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
-  has_many :messages, :class_name => "ChatMessage", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_one :temporary_channel, as: :targeable, dependent: :destroy
 
@@ -51,38 +50,6 @@ class DirectTransaction < ActiveRecord::Base
     attra
   end
 
-  def chat_notify(send_user, receive_user, content)
-    if receive_user.present?
-      url = if receive_user == buyer
-        "/people/#{receive_user.login}/direct_transactions/#{id}"
-      else
-        "/shops/#{seller.name}/admins/direct_transactions/#{id}"
-      end
-
-      receive_user.notify(
-        "/#{seller.im_token}/direct_transactions/#{id}/chat",
-        content,
-        :direct_id => id,
-        :send_user => {
-          :login => send_user.login,
-          :id => send_user.id,
-          :photos => send_user.photos.attributes
-        },
-        :created_at => DateTime.now,
-        :avatar => send_user.photos.icon,
-        :url => url
-      )
-    else
-      seller.notify(
-        "/#{seller.im_token}/direct_transactions/#{id}/chat",
-        content,
-        :direct_id => id,
-        :avatar => send_user.photos.icon,
-        :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}"
-      )
-    end
-  end
-
   def state_title
     I18n.t("direct_transaction_state.#{state.name}")
   end
@@ -91,54 +58,62 @@ class DirectTransaction < ActiveRecord::Base
     results = if operator.nil? && seller.is_employees?(user)
       update_attributes(:operator => user)
     end
-    seller.notify(
-      "/#{seller.im_token}/direct_transactions/dispose",
-      "直接交易订单#{number}被#{user.login}处理了",
+    Notification.dual_notify(seller,
+      :channel => "/#{seller.im_token}/direct_transactions/dispose",
+      :content => "直接交易订单#{number}被#{user.login}处理了",
       :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
       :avatar => user.photos.icon,
       :target => self,
       :direct_id => id,
       :exclude => user
-    ) if results
+    ) do |options|
+      options[:channel] = "/direct_transactions/dispose"
+    end if results
+
     results
   end
 
   def notice_seller
-    seller.notify(
-      "/#{seller.im_token}/direct_transactions/create",
-      "你有新的直接交易订单#{number}",
+    Notification.dual_notify(seller,
+      :channel => "/#{seller.im_token}/direct_transactions/create",
+      :content => "你有新的直接交易订单#{number}",
       :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
       :avatar => buyer.photos.icon,
       :target => self,
       :direct_id => id
-    )
+    ) do |options|
+      options[:channel] = "/direct_transactions/create"
+    end
   end
 
   def notice_change_state
     if changed.include?("state")
       target = operator.nil? ? seller : operator
-      target.notify(
-        "/#{seller.im_token}/direct_transactions/#{id}/change_state",
-        "直接交易订单#{number}状态变更#{state_title}",
+      Notification.dual_notify(target
+        :channel => "/#{seller.im_token}/direct_transactions/#{id}/change_state",
+        :content => "直接交易订单#{number}状态变更#{state_title}",
         :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
         :avatar => buyer.photos.icon,
         :target => self,
         :state => state.name,
         :state_title => state_title,
         :direct_id => id
-      )
+      ) do |options|
+        options[:channel] = "/direct_transactions/change_state"
+      end
     end
   end
 
   def notice_destroy
     target = operator.nil? ? seller : operator
-    target.notify(
-      "/#{seller.im_token}/direct_transactions/destroy",
-      "直接交易订单#{number}被删除",
+    Notification.dual_notify(target,
+      :channel => "/#{seller.im_token}/direct_transactions/destroy",
+      :content => "直接交易订单#{number}被删除",
       :avatar => buyer.photos.icon,
       :direct_id => id,
-      :persistent => false
-    )
+    ) do |options|
+      options[:channel] = "/direct_transactions/destroy"
+    end
   end
 
   def items_count

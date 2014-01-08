@@ -29,10 +29,9 @@ class TransactionView extends CardItemView
 
   destroy: (event) ->
     if confirm("要取消这笔交易吗?")
-      @model.destroy({
-        success: (model, data) =>
-          @remove()
-      })
+      @model.destroy(
+        success: (model, data) => @remove()
+      )
 
     false
 

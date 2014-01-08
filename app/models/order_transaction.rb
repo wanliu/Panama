@@ -40,7 +40,6 @@ class OrderTransaction < ActiveRecord::Base
             autosave: true,
             dependent: :destroy
 
-  has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :state_details, class_name: "TransactionStateDetail", dependent: :destroy
   has_many :refunds, class_name: "OrderRefund", dependent: :destroy
   has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy, inverse_of: :order_transaction
@@ -78,10 +77,15 @@ class OrderTransaction < ActiveRecord::Base
   after_commit :create_the_temporary_channel, on: :create
 
   def notice_user
-    seller.notify("/#{seller.im_token}/transactions/create", "你有编号#{number}新的订单",
+    Notification.dual_notify(seller,
+      :channel => "/#{seller.im_token}/transactions/create",
+      :content => "你有编号#{number}新的订单",
       :url => "/shops/#{seller.name}/admins/transactions/#{id}",
       :order_id => id,
-      :target => self)
+      :target => self
+    ) do |options|
+      options[:channel] = "/transactions/create"
+    end
   end
   after_destroy :notice_destroy, :destroy_activity
 
@@ -238,11 +242,13 @@ class OrderTransaction < ActiveRecord::Base
 
   def notice_destroy
     target = current_operator.nil? ? seller : current_operator
-    target.notify(
-      "/#{seller.im_token}/transactions/destroy",
-      "订单#{number}被删除！",
-      :order_id => id,
-      :url => "/shops/#{seller.name}/admins/pendding")
+    Notification.dual_notify(target,
+      :channel => "/#{seller.im_token}/transactions/destroy",
+      :content => "订单#{number}被删除！",
+      :order_id => id
+    ) do |options|
+      options[:channel] = "/transactions/destroy"
+    end
   end
 
   #如果卖家没有发货直接删除明细，返还买家的金额
@@ -328,7 +334,6 @@ class OrderTransaction < ActiveRecord::Base
 
   def buyer_fire_event!(event)
     events = %w(online_payment bank_transfer back paid sign transfer confirm_transfer)
-    #event = pay_type if event.to_s == "buy"
     if filter_fire_event!(events, event)
       change_state_notify_seller(event)
     end
@@ -350,28 +355,32 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def change_state_notify_seller(event = nil)
-    target = current_operator.nil? ? seller : current_operator
-    target.notify(
-      "/#{seller.im_token}/transactions/#{id}/change_state",
-      "您的订单#{number}买家已经#{seller_state_title}",
+    target = current_operator.nil? ? seller : current_operator    
+    Notification.dual_notify(target,
+      :channel => "/#{seller.im_token}/transactions/#{id}/change_state",
+      :content => "您的订单#{number}买家已经#{seller_state_title}",
       :order_id => id,
       :state => state_name,
       :event => "refresh_#{event}",
       :state_title => seller_state_title,
       :url => "/shops/#{seller.name}/admins/transactions/#{id}"
-    )
+    ) do |options|
+      options[:channel] = "/transactions/change_state"
+    end
   end
 
-  def change_state_notify_buyer(event = nil)
-    buyer.notify(
-      "/transactions/#{id}/change_state",
-      "您的订单#{number}卖家已经#{buyer_state_title}",
+  def change_state_notify_buyer(event = nil)    
+    Notification.dual_notify(buyer,
+      :channel => "/transactions/#{id}/change_state",
+      :content => "您的订单#{number}卖家已经#{buyer_state_title}",
       :order_id => id,
       :state => state_name,
       :state_title => buyer_state_title,
       :event => "refresh_#{event}",
       :url => "/people/#{buyer.login}/transactions/#{id}"
-    )
+    ) do |options|
+      options[:channel] = "/transactions/change_state"
+    end
   end
 
   def refund_items
@@ -439,14 +448,16 @@ class OrderTransaction < ActiveRecord::Base
     _operator
   end
 
-  def notice_change_operator(user)
-    seller.notify(
-      "/#{seller.im_token}/transactions/dispose",
-      "#{user.login}处理 #{number}订单",
+  def notice_change_operator(user)    
+    Notification.dual_notify(seller,
+      :channel => "/#{seller.im_token}/transactions/dispose",
+      :content => "#{user.login}处理 #{number}订单",
       :persistent => false,
       :order_id => id,
       :exclude => user
-    )
+    ) do |options|
+      options[:channel] = "/transactions/dispose"
+    end
   end
 
   #买家发送信息
@@ -503,37 +514,6 @@ class OrderTransaction < ActiveRecord::Base
     state_title("buyer")
   end
 
-  def chat_notify(send_user, receive_user, content)
-    if receive_user.present?
-      url = if receive_user == buyer
-        "/people/#{receive_user.login}/transactions/#{id}"
-      else
-        "/shops/#{seller.name}/admins/transactions/#{id}"
-      end
-      receive_user.notify(
-        "/#{seller.im_token}/transactions/#{id}/chat",
-        content,
-        :order_id => id,
-        :send_user => {
-          :login => send_user.login,
-          :id => send_user.id,
-          :photos => send_user.photos.attributes
-        },
-        :created_at => DateTime.now,
-        :url => url
-      )
-    else
-      seller.notify(
-        "/#{seller.im_token}/transactions/chat",
-        _content,
-        :order_id => id,
-        :avatar => send_user.photos.icon,
-        :unmessages_count => unmessages.count,
-        :url => "/shops/#{seller.name}/admins/transactions/#{id}"
-      )
-    end
-  end
-
   def valid_transfer_sheet?
     errors.add(:transfer_sheet, "没有汇款单号!") if transfer_sheet.nil?
   end
@@ -549,7 +529,8 @@ class OrderTransaction < ActiveRecord::Base
 
   def create_transfer(options = {})
     if transfer_sheet.nil?
-      TransferSheet.create(options.merge(:order_transaction => self))
+      TransferSheet.create(
+        options.merge(:order_transaction => self))
     else
       transfer_sheet.update_attributes(options)
     end
@@ -631,12 +612,14 @@ class OrderTransaction < ActiveRecord::Base
   def change_info_notify
     return unless persisted?
     if edit_delivery_price_valid? && changed.include?("delivery_price")
-      buyer.notify(
-        "/transactions/#{id}/change_delivery_price",
-        "订单#{number}已经修改运费",
+      Notification.dual_notify(buyer, 
+        :channel => "/transactions/#{id}/change_delivery_price",
+        :content => "订单#{number}已经修改运费",
         :url => "/shops/#{seller.name}/admins/transactions/#{id}",
         :stotal => stotal
-      )        
+      ) do |options|
+        options[:channel] = "/transactions/change_delivery_price"
+      end
     end
   end
 

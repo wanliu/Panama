@@ -59,6 +59,18 @@ class NotificationManager
     # @client.monitor("/comments/update", @commonNotify)
     # @client.monitor("/comments/remove", @commonNotify)
 
+    #交易订单
+    @client.monitor("/transactions/create", @commonNotify)
+    @client.monitor("/transactions/destroy", @commonNotify)
+    @client.monitor("/transactions/dispose", @commonNotify)
+    @client.monitor("/transactions/change_state", @commonNotify)
+    @client.monitor("/transactions/change_delivery_price", @commonNotify)
+
+    #直接订单
+    @client.monitor("/direct_transactions/create", @commonNotify)
+    @client.monitor("/direct_transactions/destroy", @commonNotify)
+    @client.monitor("/direct_transactions/change_state", @commonNotify)
+
   add_user: (data) =>
     @commonNotify(data)
     model = new ChatModel({

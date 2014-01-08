@@ -19,25 +19,6 @@ class People::DirectTransactionsController < People::BaseController
     render :layout => false
   end
 
-  def messages
-    @direct_transaction = current_direct_transaction
-    @messages = @direct_transaction.messages.order("created_at desc").limit(30)
-    respond_to do |format|
-      format.json{ render :json => @messages }
-    end
-  end
-
-  def send_message
-    @direct_transaction = current_direct_transaction
-    @message = @direct_transaction.messages.create(
-      params[:message].merge(
-        :send_user => current_user,
-        :receive_user => @direct_transaction.operator))
-    respond_to do |format|
-      format.json{ render :json => @message }
-    end
-  end
-
   def completed
     @direct_transaction = current_direct_transaction
     @direct_transaction.state = :complete

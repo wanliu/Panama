@@ -22,30 +22,10 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     render :partial => "show", :locals => { direct_transaction: @direct_transaction }
   end
 
-  def messages
-    @direct_transaction = current_shop_direct_transaction
-    @messages = @direct_transaction.messages.order("created_at desc").limit(30)
-    respond_to do |format|
-      format.json{ render :json => @messages }
-    end
-  end
-
-  def send_message
-    @direct_transaction = current_shop_direct_transaction
-    @message = @direct_transaction.messages.create(
-      params[:message].merge(
-        :receive_user => @direct_transaction.buyer,
-        :send_user => current_user))
-    respond_to do |format|
-      format.json{ render :json => @message }
-    end
-  end
-
   def dispose
     @direct_transaction = current_shop_direct_transaction
     respond_to do |format|
       if @direct_transaction.update_operator(current_user)
-        @direct_transaction.unmessages.update_all(:receive_user_id => current_user.id)
         format.html{
           render :partial => "admins/shops/direct_transactions/show", :locals => {
             :direct_transaction => @direct_transaction

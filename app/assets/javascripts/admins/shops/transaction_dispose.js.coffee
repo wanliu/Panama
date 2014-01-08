@@ -114,15 +114,9 @@ class exports.TransactionDispose extends Backbone.View
     model = @transactions.get(id)
     @remove_tran model if model?
 
-  realtime_chat: (data) ->
-    model = @transactions.get(data[@type_key()])
-    if model?
-      model.set("unmessages_count", data.unmessages_count)
-
   realtime_change: (data) ->
     model = @transactions.get(data[@type_key()])
-    if model?
-      model.set("state_title", data.state_title)
+    model.set("state_title", data.state_title) if model?
 
   shop_key: () ->
     @shop.token

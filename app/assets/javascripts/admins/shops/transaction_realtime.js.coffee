@@ -23,10 +23,6 @@ class root.TransactionRealTime
     @client.subscribe "#{@url_root()}/destroy", (data) =>
       callback(data) if $.isFunction(callback)
 
-  chat: (callback) ->
-    @client.subscribe "#{@url_root()}/chat", (data) =>
-      callback(data) if $.isFunction(callback)
-
   change_state: (id, callback) ->
     @client.subscribe "#{@url_root()}/#{id}/change_state", (data) =>
       callback(data) if $.isFunction(callback)
