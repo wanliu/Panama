@@ -37,7 +37,8 @@
   })
 
   new AskBuyPreview({
-    el: $("#activities")
+    el: $("#activities"),
+    login: '<%= current_user.login %>'
   })
 
   new ShopProductPreview({

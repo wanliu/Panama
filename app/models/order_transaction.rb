@@ -32,6 +32,7 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
+  has_one :answer_ask_buy
 
   has_many  :items,
             class_name: "ProductItem",

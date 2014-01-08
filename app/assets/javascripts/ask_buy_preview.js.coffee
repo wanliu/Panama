@@ -8,7 +8,12 @@ class AskBuyView extends Backbone.View
     "click .submit-comment"               : 'comment'
     "keypress textarea[name='content']"   : "key_up"
     "keyup textarea[name='content']"      : 'filter_status'
-    "click [name='join']"                 : "join"
+    #"click [name='join']"                 : "join"
+    "click .submit_report"                : "report"
+    "click .create_transaction"           : "create_order"
+    "keyup .answer_ask_buy_price"         : "changes"
+    "keyup .answer_ask_buy_amount"        : "changes"
+    "keyup .answer_ask_buy_total"         : "changes"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -43,6 +48,17 @@ class AskBuyView extends Backbone.View
         _.each comments, (comment) =>
           @render_comment(comment)
     )
+
+  changes: (e) ->
+    $target =  $(e.currentTarget)
+    $total = @$(".answer_ask_buy_total")
+    $price = @$(".answer_ask_buy_price")
+    $amount = @$(".answer_ask_buy_amount")
+
+    if $target.hasClass("answer_ask_buy_price") || $target.hasClass("answer_ask_buy_amount")
+      $total.val(($price.val() * $amount.val()).toFixed(2))
+    else
+      $price.val(($total.val() / $amount.val()).toFixed(2))
 
   render: () ->
     @template
@@ -81,16 +97,67 @@ class AskBuyView extends Backbone.View
     comment = Hogan.compile($("#ask_buy-comment-template").html()).render(comment)
     @$(".comments").append(comment)
 
-  join: () ->
-    $.ajax(
-      url: "/ask_buy/#{@ask_buy_id}/join",
-      type: "POST",
-      success: () ->
-        pnotify(text: "参与求购成功，等待用户付款！")
-      error: (xhr) ->
-        pnotify(text: JSON.parse(xhr.responseText).join(""),type: "error")
-    )
+  # join: () ->
+  #   $.ajax(
+  #     url: "/ask_buy/#{@ask_buy_id}/join",
+  #     type: "POST",
+  #     success: () ->
+  #       pnotify(text: "参与求购成功，等待用户付款！")
+  #     error: (xhr) ->
+  #       pnotify(text: JSON.parse(xhr.responseText).join(""),type: "error")
+  #   )
+  
+  filter_params: () ->
+    $total = @$(".answer_ask_buy_total")
+    $price = @$(".answer_ask_buy_price")
+    $amount = @$(".answer_ask_buy_amount")
+    if @$(".submit_report").hasClass("disabled")
+      return false
+      
+    if _.isEmpty($("#answer_ask_buy_shop_product").val())
+      @$(".shop_product_wrap").addClass("error")
+      return  false
+      
+    if isNaN($total.val()) || _.isEmpty($total.val())
+      @$(".answer_ask_buy_total_wrap").addClass("error")
+      return  false
 
+    if isNaN($price.val()) || _.isEmpty($price.val())
+      @$(".answer_ask_buy_price_wrap").addClass("error")
+      return  false
+
+    if isNaN($amount.val()) || _.isEmpty($amount.val())
+      @$(".answer_ask_buy_amount_wrap").addClass("error")
+      return  false
+    return true
+
+  report: () ->
+    if @filter_params()
+      $data = @$(".form_answer_ask_buy").serializeHash()
+      $.ajax({
+        data: $data,
+        url: @$(".form_answer_ask_buy").attr("action"),
+        type: "POST",
+        success: () =>
+          pnotify(text: '报价成功!!')
+          @$(".submit_report").addClass("disabled")
+          @$(".form_answer_ask_buy input").attr("readonly","readonly")
+
+        error: (messages) ->
+          pnotify(text: JSON.parse(messages.responseText), type: "error")
+      })
+    false
+
+  create_order: (e) ->
+    answer_ask_buy_id = $(e.currentTarget).parents(".report_line").attr("data-value-id")
+    $.ajax(
+      url: "/answer_ask_buy/"+answer_ask_buy_id+"/create_order",
+      type: "POST",
+      success: () =>
+        window.location.href = "/people/#{@login}/transactions"
+      error: (data) ->
+        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+    )
 
 class AskBuyPreview extends Backbone.View
   events:
@@ -102,7 +169,6 @@ class AskBuyPreview extends Backbone.View
 
   launch: (event) ->
     id = $(event.currentTarget).parents(".ask_buy").attr("ask-buy-id")
-    new AskBuyView( ask_buy_id: id ).modal()
-
+    new AskBuyView( ask_buy_id: id, login: @login ).modal()
 
 root.AskBuyPreview = AskBuyPreview

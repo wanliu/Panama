@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   has_one :shop
   has_one :shop_user
   has_one :user_checking
+  
+  has_many :answer_ask_buys
 
   has_many :transactions,
            class_name: "OrderTransaction",
@@ -58,6 +60,10 @@ class User < ActiveRecord::Base
 
   def liked_activities
     Activity.joins("left join activities_likes as al on activities.id = al.activity_id left join users on users.id = al.user_id").where("users.id = ?", id)
+  end
+
+  def answered_ask_buy(ask_buy_id)
+    AnswerAskBuy.where(:ask_buy_id => ask_buy_id, :user_id => self.id).first
   end
 
   def city

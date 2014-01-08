@@ -12,6 +12,7 @@ class ShopProduct < ActiveRecord::Base
   has_many :activities, :dependent => :destroy, :foreign_key => :shop_product_id
   belongs_to :shop
   belongs_to :product
+  has_many :answer_ask_buys
 
   validate :valid_shop_and_product_uniq?
 
