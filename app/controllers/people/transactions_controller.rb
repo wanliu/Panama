@@ -26,6 +26,13 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def mini_item
+    @transaction = current_order.find(params[:id])
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
+  end
+
   def print
     @transaction = current_order.find(params[:id])
     render :layout => "print"

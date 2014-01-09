@@ -140,6 +140,7 @@ Panama::Application.routes.draw do
         get :kuaiqian_receive
         match 'kuaiqian_payment', :via => [:get, :post]
         match 'test_payment', :via => [:get, :post]
+        get :mini_item
       end
 
       collection do
@@ -452,6 +453,7 @@ Panama::Application.routes.draw do
           put "update_delivery", :to => "shops/transactions#update_delivery"
           get "print", :to => "shops/transactions#print"
           put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
+          get "mini_item"
         end
       end
 

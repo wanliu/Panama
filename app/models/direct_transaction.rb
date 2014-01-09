@@ -88,7 +88,7 @@ class DirectTransaction < ActiveRecord::Base
   def notice_change_state
     if changed.include?("state")
       target = operator.nil? ? seller : operator
-      Notification.dual_notify(target
+      Notification.dual_notify(target,
         :channel => "/#{seller.im_token}/direct_transactions/#{id}/change_state",
         :content => "直接交易订单#{number}状态变更#{state_title}",
         :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",

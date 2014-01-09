@@ -11,6 +11,7 @@ class Transaction extends Backbone.Model
     $.ajax(
       url: "#{@url()}/dispose"
       type: "POST",
+      dataType: "JSON",
       success: callback
     )
 
@@ -34,6 +35,7 @@ class TransactionEvent extends Backbone.View
 
   dispose: () ->
     @model.dispose (data, xhr)  =>
+      window.location.href = "#open/#{data.id}"
       window.location.reload();
 
   change_address: () ->
@@ -131,8 +133,9 @@ class exports.TransactionDispose extends Backbone.View
 
   add: (items) ->
     length = items.length-1
-    for i in [length..0]
-      @add_one items[i]
+    if length >= 0
+      for i in [length..0]
+        @add_one items[i]
 
     return
 

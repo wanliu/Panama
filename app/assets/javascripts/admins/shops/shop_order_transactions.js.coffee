@@ -36,9 +36,9 @@ class root.ShopOrderTransactions extends Backbone.View
 
     @collection = new Transactions
     @collection.bind("add", @add_one, @)
+    @realtime_load()   
+    @reset()         
     @load_table_list()
-    @realtime_load()
-    @reset()
 
   add_one: (model) ->
     elem = model.get("elem")
@@ -51,11 +51,13 @@ class root.ShopOrderTransactions extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".orders>.card_item"), (el) =>
-      @collection.add(
-        elem: $(el),
-        register: false,
-        id: $(el).attr('data-value-id'))
+    _.each @$(".orders>.card_item"), (el) => @add_elem(el)
+
+  add_elem: (el) ->
+    @collection.add(
+      elem: $(el),
+      register: false,
+      id: $(el).attr('data-value-id'))
 
   register: (id) ->
     model = @collection.get(id)
@@ -89,5 +91,11 @@ class root.ShopOrderTransactions extends Backbone.View
       secondContainer: ".order-detail",
       remote_url: @remote_url,
       leftSide: "#left_sidebar",
-      registerView: (view) => @register(view.model.id)
+      registerView: (view) => 
+        state = view.model.get("fetch_state")
+        if !_.isEmpty(state) && state
+          delete view.model.attributes.fetch_state
+          @add_elem(view.$el)
+        
+        @register(view.model.id)
     })

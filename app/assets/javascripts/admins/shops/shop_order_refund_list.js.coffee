@@ -15,7 +15,8 @@ class OrderRefund extends CardItemView
   get_register_view: () ->
     view = new ShopOrderRefundCard(
       el: @$(".full-mode .order_refund"),
-      shop: @shop
+      shop: @shop,
+      dialogState: false
     )
     transaction = view.transaction
     transaction.bind("change:state", @card_change_state, @)
@@ -41,9 +42,9 @@ class root.ShopOrderRefundList extends Backbone.View
     @collection = new Refunds
     @collection.url = @remote_url
     @collection.bind("add", @add_one, @)
-    @load_table_list()
     @load_realtime()
     @reset()
+    @load_table_list()
 
   add_one: (model) ->
     elem = model.get("elem")
@@ -74,7 +75,13 @@ class root.ShopOrderRefundList extends Backbone.View
       secondContainer: ".refund-detail",
       remote_url: @remote_url,
       leftSide: "#left_sidebar",
-      registerView: (view) => @register view.model.id
+      registerView: (view) => 
+        state = view.model.get("fetch_state")
+        if !_.isEmpty(state) && state
+          delete view.model.attributes.fetch_state
+          @add(view.$el)
+          
+        @register view.model.id
     })
 
   load_realtime: () ->

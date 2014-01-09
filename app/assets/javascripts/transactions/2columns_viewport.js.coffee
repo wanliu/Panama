@@ -1,5 +1,12 @@
 root = (window || @)
 
+class Workspace extends Backbone.Router
+  
+  routes: {
+    "open/:id" : "open",
+    "" : "home"
+  }
+
 class Transaction extends Backbone.Model
 
   loadTemplate: (callback = () ->) ->
@@ -35,6 +42,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @$secondContainer = @$(@secondContainer)
     @$orders = @$(@warpClass)
     @loadView()
+    @bindRoute()
 
   getCurrentTransaction: () ->
 
@@ -49,10 +57,12 @@ class TransactionTwoColumnsViewport extends Backbone.View
       id: $(elem).attr('data-value-id')
     )
 
-    @models.add(model)
+    @models.add(model)    
+    model
 
   addView: (model) ->
     elem = model.get("elem")
+    model.set(display: false)
     delete model.attributes.elem
 
     rowView = new MiniRow2ColView({
@@ -61,6 +71,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
       model: model
     })
     rowView.bind("registerView", _.bind(@registerView, @))
+    rowView.bind("exitMenu", _.bind(@exitMenu, @))
 
     @rows.push rowView
 
@@ -175,6 +186,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @restoreFromDetail()
 
     @$orders.slimScroll(destroy: true)
+
     @$orders.attr('style', '')
 
     @inLayout = false
@@ -184,21 +196,79 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
   registerView: (view) ->
 
+  bindRoute: () ->
+    @route = new Workspace()
+    @route.on "route:open", (id) =>
+      model = @models.get(id)
+      unless _.isEmpty(model)
+        @openView(model)
+      else
+        @load_item(id)
+
+    @route.on "route:home", () =>     
+      model = @find_on()
+      model.set(display: false) unless _.isEmpty(model)
+      
+    Backbone.history.start()
+
+  openView: (id) ->  
+    model = @models.get(id)
+    unless _.isEmpty(model)
+      @clearDisplay()
+      model.set({display: true}) 
+
+  clearDisplay: () ->
+    @models.each (model) ->
+      model.attributes.display = false
+      model._currentAttributes.display = false        
+
+  find_on: () ->
+    @models.where(display: true)[0]
+
+  load_item: (id) ->
+    $.ajax(
+      url: "#{@remote_url}/#{id}/mini_item"
+      success: (data) => 
+        item = $(data).appendTo(@$(".left-column .card_list"))
+        model = @add(item)            
+        model.set({fetch_state: true})
+        @openView(model)
+    )
+
+  exitMenu: () ->
+    @$sidebar.exitWrap() unless _.isEmpty(@$sidebar)
+
 
 class MiniRow2ColView  extends Backbone.View
 
   events:
-    "click .card_item_header .open": "openView"
+    "click .card_item_header .open": "_open"
+    "click .card_item_header .exit": "_exit"
     # "click": "toggleView"
 
   initialize: (@options) ->
     _.extend(@, @options)
     @$detail = @$('.full-mode')
+    @model.bind("change:display", @changeDisplay, @)
+    @$operator = @$(".card_item_header .operator")
+
+  changeDisplay: () ->
+    if @model.get("display")
+      @openView()
+    else
+      @exitLayout()
+
+  _open: () ->
+    window.location.href = "#open/#{@model.id}"
+
+  _exit: () ->
+    window.location.href = "#"    
 
   toggleView: () =>
     @openView()
 
   openView: () ->
+    @$operator.removeClass("open").addClass("exit").html("关闭")
     @activeRowView()
     $(window).trigger('enterAttachChat')
 
@@ -262,6 +332,10 @@ class MiniRow2ColView  extends Backbone.View
     @$el
       .addClass("threeD")
       .removeClass("active")
+
+  exitLayout: () -> 
+    @$operator.removeClass("exit").addClass("open").html("打开")   
+    @trigger("exitMenu")
 
 
 root.TransactionTwoColumnsViewport = TransactionTwoColumnsViewport

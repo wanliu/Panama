@@ -26,14 +26,11 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     @direct_transaction = current_shop_direct_transaction
     respond_to do |format|
       if @direct_transaction.update_operator(current_user)
-        format.html{
-          render :partial => "admins/shops/direct_transactions/show", :locals => {
-            :direct_transaction => @direct_transaction
-          }
-        }
+        format.html
+        format.json{ render :json => @direct_transaction }
       else
         format.json{
-          render :json => draw_errors_message(@direct_transaction), :status => 403
+          render :json => draw_errors_message(@operator), :status => 403
         }
       end
     end

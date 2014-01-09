@@ -132,7 +132,6 @@ class OrderRefund < ActiveRecord::Base
   def change_order_state
     order.fire_events!(:returned)
     order.change_state_notify_seller(:returned)
-    order.change_state_notify_buyer(:returned)
   end
 
   def current_state_detail

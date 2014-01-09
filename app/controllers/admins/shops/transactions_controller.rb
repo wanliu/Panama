@@ -38,6 +38,13 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
+  def mini_item
+    @transaction = current_shop_order.find_by(:id => params[:id])
+    respond_to do | format |
+      format.html{ render :layout => false }
+    end
+  end
+
   def event
     @transaction = current_shop_order.find_by(:id => params[:id])
     if @transaction.seller_fire_event!(params[:event])
@@ -82,13 +89,9 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     respond_to do |format|
       @operator = @transaction.operator_create(current_user.id)
       if @operator.valid?   
-        format.html{
-          render partial: 'transaction',object:  @transaction,
-           locals: {
-             state:  @transaction.state,
-             people: current_user
-           }
-        }
+        format.html
+        format.json{ 
+          render :json => @transaction }
       else
         format.json{
           render :json => draw_errors_message(@operator), :status => 403 }
