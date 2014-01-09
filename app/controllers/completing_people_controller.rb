@@ -46,7 +46,7 @@ class CompletingPeopleController < Wicked::WizardController
     if @address.valid?
       render json: { id: @address.id, address: @address.address_only }
     else
-      render json: {}, :status => 403
+      render json: draw_errors_message(@address), :status => 403
     end
   end
 

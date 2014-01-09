@@ -12,6 +12,7 @@ class AskBuy < ActiveRecord::Base
   has_and_belongs_to_many :attachments
   has_many :comments, :as => :targeable
   has_one :paticipate, :class_name => "AskBuyPaticipate"
+  has_many :answer_ask_buys
 
   validates :user, :presence => true
   validates :title, :presence => true
@@ -27,6 +28,13 @@ class AskBuy < ActiveRecord::Base
     	attachments.first.file
     else
      	Attachment.new.file
+    end
+  end
+
+  def answers
+    users = []
+    answer_ask_buys.each do |aab|
+      users << aab.user
     end
   end
 

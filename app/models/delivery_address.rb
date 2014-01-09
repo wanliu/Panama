@@ -10,6 +10,8 @@ class DeliveryAddress < ActiveRecord::Base
   belongs_to :city, :inverse_of => :address , class_name: "City"      # 市
   belongs_to :area, :inverse_of => :address , class_name: "City"      # 县
 
+  validates :contact_phone, :format => { :with => /^\d{11}$|\d{3,4}-\d{6,8}(?:-\d{1,4})?$/ }
+
   def location_area
     "#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}"
   end

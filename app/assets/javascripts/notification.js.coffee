@@ -59,6 +59,10 @@ class NotificationManager
     # @client.monitor("/comments/update", @commonNotify)
     # @client.monitor("/comments/remove", @commonNotify)
 
+    #求购
+    @client.monitor("/shops/answer_ask_buy", @commonNotify)
+    
+
   add_user: (data) =>
     @commonNotify(data)
     model = new ChatModel({

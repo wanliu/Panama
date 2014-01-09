@@ -24,7 +24,8 @@
   $(function(){
     new AskBuyPreview({
       el: $("#ask_buy<%= ask_buy.id %>"),
-      id: <%= ask_buy.id %>
+      id: <%= ask_buy.id %>,
+      login: '<%= current_user.login %>'
     })
   })
 </script>

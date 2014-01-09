@@ -69,13 +69,9 @@ class People::TransactionsController < People::BaseController
 
   def batch_create
     authorize! :batch_create, OrderTransaction
-    item_ids = []
-    params[:items].map{ |k, v|
-      if v[:checked] == 'on'
-        item_ids.push(v[:id].to_i)
-      end
-    }
-
+    item_ids = params[:items].map{ |k, v| 
+      v[:id].to_i if v[:checked] == 'on' }.compact
+          
     if my_cart.create_transaction(@people, item_ids)
       redirect_to person_transactions_path(@people.login),
                   notice: 'Transaction was successfully created.'

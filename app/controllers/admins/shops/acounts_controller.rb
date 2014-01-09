@@ -36,7 +36,6 @@ class Admins::Shops::AcountsController < Admins::Shops::SectionController
 
   def create_address
     @address = Address.new(params[:address])
-    @address.targeable = current_user.user_checking
     if @address.save
       render json: { id: @address.id, address: @address.address_only }
     else

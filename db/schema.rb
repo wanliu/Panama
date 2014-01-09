@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140106070212) do
+ActiveRecord::Schema.define(:version => 20140108032453) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -112,6 +112,19 @@ ActiveRecord::Schema.define(:version => 20140106070212) do
   end
 
   add_index "admin_users", ["login"], :name => "index_admin_users_on_login", :unique => true
+
+  create_table "answer_ask_buys", :force => true do |t|
+    t.integer  "ask_buy_id"
+    t.integer  "shop_product_id"
+    t.integer  "amount",                                              :default => 0
+    t.decimal  "price",                :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "user_id"
+    t.decimal  "total",                :precision => 10, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
+    t.integer  "status",                                              :default => 0
+    t.integer  "order_transaction_id"
+  end
 
   create_table "ask_buy_paticipates", :force => true do |t|
     t.integer  "ask_buy_id"
@@ -724,6 +737,15 @@ ActiveRecord::Schema.define(:version => 20140106070212) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "report_prices", :force => true do |t|
+    t.integer  "ask_buy_id"
+    t.decimal  "my_price",        :precision => 10, :scale => 2
+    t.integer  "user_id"
+    t.integer  "shop_product_id"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
   end
 
   create_table "resources", :force => true do |t|

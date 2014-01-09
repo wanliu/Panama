@@ -94,6 +94,10 @@ class Shop < ActiveRecord::Base
       :owner_id => user_ids)
   end
 
+  def has_product(product_id)
+    ShopProduct.find_by(:product_id => product_id, :shop_id => self.id)
+  end
+
   def as_json(*args)
     attribute = super *args
     attribute["photos"] = photos.attributes

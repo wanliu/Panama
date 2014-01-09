@@ -45,6 +45,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :refunds, class_name: "OrderRefund", dependent: :destroy
   has_one  :transfer_sheet, class_name: "TransferSheet", dependent: :destroy, inverse_of: :order_transaction
   has_one :temporary_channel, as: :targeable, dependent: :destroy
+  has_one :answer_ask_buy
 
   validates :state, :presence => true
 

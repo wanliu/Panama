@@ -37,7 +37,8 @@
 <script type='text/javascript'>
 $(function(){
   new AskBuyPreview({
-    el: $("table.ask_buies>tbody")
+    el: $("table.ask_buies>tbody"),
+    login: '<%= current_user.login %>'
   })
 })
 </script>
