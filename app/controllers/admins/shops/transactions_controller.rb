@@ -47,6 +47,13 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
+  def mini_item
+    @transaction = current_shop_order.find_by(:id => params[:id])
+    respond_to do | format |
+      format.html{ render :layout => false }
+    end
+  end
+
   def event
     @transaction = current_shop_order.find_by(:id => params[:id])
     if @transaction.seller_fire_event!(params[:event])
@@ -90,50 +97,14 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do |format|
       @operator = @transaction.operator_create(current_user.id)
-      if @operator.valid?
-        @transaction.unmessages.update_all(
-          :read => true,
-          :receive_user_id => current_user.id)
-        ChatMessage.notice_read_state(current_user, @transaction.buyer.id)
-        format.html{
-          render partial: 'transaction',object:  @transaction,
-           locals: {
-             state:  @transaction.state,
-             people: current_user
-           }
-        }
+      if @operator.valid?   
+        format.html
+        format.json{ 
+          render :json => @transaction }
       else
         format.json{
           render :json => draw_errors_message(@operator), :status => 403 }
       end
-    end
-  end
-
-  def dialogue
-    @transaction = current_shop_order.find_by(:id => params[:id])
-    @transaction_message_url = shop_admins_transaction_path(current_shop.name, @transaction.id)
-    render :partial => "transactions/dialogue", :layout => "message", :locals => {
-      :transaction_message_url => @transaction_message_url,
-      :transaction => @transaction }
-  end
-
-  def send_message
-    @transaction = current_shop_order.find_by(:id => params[:id])
-    @message = @transaction.chat_messages.create(
-      params[:message].merge(
-        send_user: current_user,
-        receive_user: @transaction.buyer))
-
-    respond_to do |format|
-      format.json{ render :json => @message }
-    end
-  end
-
-  def messages
-    @transaction = current_shop_order.find(params[:id])
-    @messages = @transaction.messages.order("created_at desc").limit(30)
-    respond_to do |format|
-      format.json{ render :json => @messages}
     end
   end
 

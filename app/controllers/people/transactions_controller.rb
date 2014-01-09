@@ -35,6 +35,13 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def mini_item
+    @transaction = current_order.find(params[:id])
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
+  end
+
   def print
     @transaction = current_order.find(params[:id])
     render :layout => "print"
@@ -190,12 +197,6 @@ class People::TransactionsController < People::BaseController
     @shop_product = ShopProduct.find(params[:shop_product_id])
   end
 
-  def notify
-  end
-
-  def done
-  end
-
   def destroy
     @transaction = current_order.find(params[:id])
     authorize! :destroy, @transaction
@@ -210,63 +211,7 @@ class People::TransactionsController < People::BaseController
       end
     end
   end
-
-  def dialogue
-    @transaction = current_user.transactions.find(params[:id])
-    @transaction_message_url = person_transaction_path(current_user, @transaction)
-    render :partial => "transactions/dialogue", :layout => "message", :locals => {
-      :transaction_message_url => @transaction_message_url,
-      :transaction => @transaction }
-  end
-
-  def send_message
-    @transaction = current_user.transactions.find(params[:id])
-    @message = @transaction.message_create(
-      params[:message].merge(
-        send_user: current_user,
-        receive_user: @transaction.current_operator))
-
-    respond_to do |format|
-      format.json{ render :json => @message }
-    end
-  end
-
-  def messages
-    @transaction = current_user.transactions.find(params[:id])
-    @messages = @transaction.messages.order("created_at desc").limit(30)
-    respond_to do |format|
-      format.json{ render :json => @messages  }
-    end
-  end
-
-  def unread_messages
-    authorize! :index, OrderTransaction
-    @messages = ChatMessage.select("chat_messages.*, cm.count")
-                           .joins("inner join (select max(id) as id, owner_id, owner_type, count(*) as count from chat_messages where `read`=0 group by owner_id, owner_type) as cm on chat_messages.id=cm.id")
-                           .where("chat_messages.receive_user_id=?", @people.id)
-
-    _messages = @messages.map do |m|
-      attrs = m.attributes
-      attrs["send_user"] = m.send_user.as_json
-      attrs
-    end
-    respond_to do |format|
-      format.json{ render :json => _messages }
-    end
-  end
-
-  def mark_as_read
-    @transaction = Module.const_get(params[:owner_type]).find_by(:id => params[:id])
-    @url = @transaction.notice_url(current_user)
-
-    @messages = @transaction.messages.unread
-    @messages.update_all(read: true)
-
-    respond_to do | format |
-      format.json { render json:{:url => @url} }
-    end
-  end
-
+  
   private
   def current_order
     OrderTransaction.where(:buyer_id => @people.id)

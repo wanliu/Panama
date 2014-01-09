@@ -9,8 +9,10 @@ class Transaction extends Backbone.Model
     @urlRoot = url
 
 class TransactionCardBase extends AbstructStateView
+  dialogState: true
 
   initialize:(@option) ->
+    _.extend(@, @options)
     @options['initial'] ?= @current_state().state
     @options['id']        ?= @$el.attr('state-id')
     @options['url']       ?= @$el.attr('state-url')
@@ -29,7 +31,7 @@ class TransactionCardBase extends AbstructStateView
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
 
-    @toggleMessage()
+    @toggleMessage() if @dialogState
     @load_realtime()
     super
 
@@ -236,8 +238,8 @@ class TransactionCardBase extends AbstructStateView
     @setMessagePanel()
 
   load_realtime: () ->
-    @client = window.clients.socket
-    @client.subscribe "#{@realtime_url()}/change_state", (data) =>
+    @client = window.clients
+    @client.monitor "#{@realtime_url()}/change_state", (data) =>
       @stateChange data
 
   realtime_url: () ->

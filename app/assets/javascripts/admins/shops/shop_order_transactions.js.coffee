@@ -36,9 +36,9 @@ class root.ShopOrderTransactions extends Backbone.View
 
     @collection = new Transactions
     @collection.bind("add", @add_one, @)
+    @realtime_load()   
+    @reset()         
     @load_table_list()
-    @realtime_load()
-    @reset()
 
   add_one: (model) ->
     elem = model.get("elem")
@@ -51,24 +51,26 @@ class root.ShopOrderTransactions extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".orders>.card_item"), (el) =>
-      @collection.add(
-        elem: $(el),
-        register: false,
-        id: $(el).attr('data-value-id'))
+    _.each @$(".orders>.card_item"), (el) => @add_elem(el)
+
+  add_elem: (el) ->
+    @collection.add(
+      elem: $(el),
+      register: false,
+      id: $(el).attr('data-value-id'))
 
   register: (id) ->
     model = @collection.get(id)
     model.set(register: true) unless _.isEmpty(model)
 
   realtime_load: () ->
-    @client = window.clients.socket
+    @client = window.clients
 
-    @client.subscribe "notify:/#{@shop.token}/transactions/destroy", (data) =>
+    @client.monitor "/#{@shop.token}/transactions/destroy", (data) =>
       @destroy data
 
   monitor_state: (order_id) ->
-    @client.subscribe "notify:/#{@shop.token}/transactions/#{order_id}/change_state", (data) =>
+    @client.monitor "/#{@shop.token}/transactions/#{order_id}/change_state", (data) =>
       @change_state data
 
   destroy: (data) ->
@@ -89,5 +91,11 @@ class root.ShopOrderTransactions extends Backbone.View
       secondContainer: ".order-detail",
       remote_url: @remote_url,
       leftSide: "#left_sidebar",
-      registerView: (view) => @register(view.model.id)
+      registerView: (view) => 
+        state = view.model.get("fetch_state")
+        if !_.isEmpty(state) && state
+          delete view.model.attributes.fetch_state
+          @add_elem(view.$el)
+        
+        @register(view.model.id)
     })

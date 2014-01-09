@@ -2,7 +2,7 @@
 class People::DeliveryAddressesController < People::BaseController
 
   def index
-    @addresses = DeliveryAddress.all
+    @addresses = DeliveryAddress.where(:user_id => @people.id)
   end
 
   def new
@@ -15,7 +15,7 @@ class People::DeliveryAddressesController < People::BaseController
   end
 
   def create
-    @address = @people.delivery_addresses.build(params[:delivery_addresses])
+    @address = @people.delivery_addresses.build(params[:delivery_address])
     respond_to do |format|
       if @address.save
         flash[:success] = "添加成功！"

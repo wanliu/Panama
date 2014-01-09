@@ -11,7 +11,7 @@ class TransactionView extends CardItemView
   }
   initialize: (options) ->
     _.extend(@, options)
-    super
+    super    
 
   get_register_view: () ->
     view = new TransactionCard({
@@ -29,10 +29,9 @@ class TransactionView extends CardItemView
 
   destroy: (event) ->
     if confirm("要取消这笔交易吗?")
-      @model.destroy({
-        success: (model, data) =>
-          @remove()
-      })
+      @model.destroy(
+        success: (model, data) => @remove()
+      )
 
     false
 
@@ -45,9 +44,9 @@ class root.OrderTransactions extends Backbone.View
     @collection = new Transactions
     @collection.url = @remote_url
     @collection.bind("add", @add_one, @)
-    @load_table_list()
-    @realtime_load()
+    @realtime_load()    
     @reset()
+    @load_table_list()
 
   add_one: (model) ->
     elem = model.get("elem")
@@ -59,22 +58,32 @@ class root.OrderTransactions extends Backbone.View
     )
 
   reset: () ->
-    _.each @$(".orders>.card_item"), (el) =>
-      @collection.add(
-        elem: $(el),
-        register: false,
-        id: $(el).attr('data-value-id'))
+    _.each @$(".orders>.card_item"), (el) => 
+      @add_elem(el)
+
+  add_elem: (el) ->
+    @collection.add(
+      elem: $(el),
+      register: false,
+      id: $(el).attr('data-value-id'))
 
   register: (id) ->
     model = @collection.get(id)
     model.set(register: true) unless _.isEmpty(model)
 
   realtime_load: () ->
-    @client = window.clients.socket
+    @client = window.clients
 
   monitor_state: (order_id) ->
-    @client.subscribe "notify:/transactions/#{order_id}/change_state", (data) =>
+    @client.monitor "/transactions/#{order_id}/change_state", (data) =>
       @change_state data
+
+    @client.monitor "/transactions/#{order_id}/change_delivery_price", (data) =>
+      @change_total(data)
+
+  change_total: (data) ->
+    model = @collection.get(data.order_id)
+    model.set({total: data.stotal}) unless _.isEmpty(model)
 
   change_state: (data) ->
     model = @collection.get(data.order_id)
@@ -89,5 +98,11 @@ class root.OrderTransactions extends Backbone.View
       el: @$el,
       secondContainer: ".order-detail",
       remote_url: @remote_url,
-      registerView: (view) =>  @register(view.model.id)
+      registerView: (view) =>  
+        state = view.model.get("fetch_state")
+        if !_.isEmpty(state) && state
+          delete view.model.attributes.fetch_state
+          @add_elem(view.$el)
+
+        @register(view.model.id)
     })

@@ -132,7 +132,6 @@ class OrderRefund < ActiveRecord::Base
   def change_order_state
     order.fire_events!(:returned)
     order.change_state_notify_seller(:returned)
-    order.change_state_notify_buyer(:returned)
   end
 
   def current_state_detail
@@ -148,16 +147,18 @@ class OrderRefund < ActiveRecord::Base
   def notice_change_buyer(event_name)
     ename = event_name.to_s
     if %w(shipped_agree unshipped_agree refuse sign).include?(ename)
-      buyer.notify(
-        "/order_refunds/#{id}/change_state",
-        "退货单#{number} 状态变更为#{state_title}",
+      Notification.dual_notify(buyer, 
+        :channel => "/order_refunds/#{id}/change_state",
+        :content => "退货单#{number} 状态变更为#{state_title}",
         :url => "/people/#{buyer.login}/order_refunds/#{id}",
         :target => self,
         :state => state_name,
         :event => "refresh_#{ename}",
         :state_title => state_title,
         :refund_id => id
-      )
+      ) do |options|
+        options[:channel] = "/order_refunds/change_state"
+      end
     end
   end
 
@@ -165,16 +166,18 @@ class OrderRefund < ActiveRecord::Base
     ename = event_name.to_s
     if %w(delivered).include?(ename)
       target = operator.nil? ? seller : operator
-      target.notify(
-        "/#{seller.im_token}/order_refunds/#{id}/change_state",
-        "退货单#{number} 状态变更为#{state_title}",
+      Notification.dual_notify(target,
+        :channel => "/#{seller.im_token}/order_refunds/#{id}/change_state",
+        :content => "退货单#{number} 状态变更为#{state_title}",
         :url => "/shops/#{seller.name}/order_refunds/#{id}",
         :target => self,
         :event => "refresh_#{ename}",
         :state => state_name,
         :state_title => state_title,
         :refund_id => id
-      )
+      ) do |options|
+        options[:channel] = "/order_refunds/change_state"
+      end
     end
   end
 
@@ -346,26 +349,30 @@ class OrderRefund < ActiveRecord::Base
 
   def notify_shop_destroy
     target = operator.nil? ? seller : operator
-    target.notify(
-      "/#{seller.im_token}/order_refunds/destroy",
-      "退货单#{number}已经删除了!",
+    Notification.dual_notify(target,
+      :channel => "/#{seller.im_token}/order_refunds/destroy",
+      :content => "退货单#{number}已经删除了!",
       :url => "/shops/#{seller.name}/admins/order_refunds",
       :avatar => buyer.photos.icon,
       :refund_id => id,
       :target => self
-    )
+    ) do |options|
+      options[:channel] = "/order_refunds/destroy"
+    end
   end
 
   def notify_shop_refund
     target = operator.nil? ? seller : operator
-    target.notify(
-      "/#{seller.im_token}/order_refunds/create",
-      "订单#{order.number}申请退货",
+    Notification.dual_notify(target,
+      :channel => "/#{seller.im_token}/order_refunds/create",
+      :content => "订单#{order.number}申请退货",
       :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
       :avatar => buyer.photos.icon,
       :refund_id => id,
       :target => self
-    )
+    ) do |options|
+      options[:channel] = "/order_refunds/create"
+    end
   end
 
   def type_fire_events!(states, event)

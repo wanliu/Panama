@@ -7,8 +7,8 @@ class root.AddressesView extends Backbone.View
   initialize: (options) ->  
     _.extend(@, options)
     @$el = $(@el)
-    @$new_form = @$("form#new_address_form")
-    @$edit_form = @$("form#edit_address_form")
+    @$new_form = @$(".new_wrap form#address")
+    @$edit_form = @$(".edit_wrap form#address")
 
   events:
     "click #new_address .save-button" : "new_address"
@@ -71,7 +71,7 @@ class root.AddressesView extends Backbone.View
       pnotify(text: "请输入联系电话!", type: "warning")
       return false
 
-    unless /^\d{11}$|\d{3,4}-\d{6,8}(?:-\d{1,4})?$/.test(data.phone)
+    unless /^\d{11}$|\d{3,4}-\d{6,8}(?:-\d{1,4})?$/.test(data.contact_phone)
       pnotify(text: "请输入正确的联系电话", type: "warning")
       return false
 

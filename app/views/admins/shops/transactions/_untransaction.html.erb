@@ -1,13 +1,10 @@
 <td>{{number}}</td>
 <td>{{buyer_login}}</td>
 <td>{{items_count}}</td>
-<td>{{total}}</td>
+<td class='total'>{{total}}</td>
 <td>{{created_at}}</td>
 <td class='state'>{{seller_state_title}}</td>
-<td>{{address}}{{^address}}暂时没有{{/address}}</td>
+<td class='address'>{{address}}{{^address}}暂时没有{{/address}}</td>
 <td>
   <input type='button' class='btn dispose btn-primary' value='接单' />
-  <span class='badge badge-important message_count'>
-    {{unmessages_count}}
-  </span>
 </td>

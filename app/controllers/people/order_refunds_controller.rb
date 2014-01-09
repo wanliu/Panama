@@ -15,6 +15,13 @@ class People::OrderRefundsController < People::BaseController
     @refund = current_user_refunds.find(params[:id])
   end
 
+  def mini_item
+    @refund = current_user_refunds.find(params[:id])
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
+  end
+
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
     if @refund.buyer_fire_events!(params[:event])

@@ -12,16 +12,17 @@ class MiniLeftSideView extends Backbone.View
     @mininum = false
 
   buildMenu: () ->
-    @$menu = $("<a href='#' ><i class='icon-reorder' /></a>").prependTo(@$menuDocker)
-    @$menu
-      .css({
-        'width': 40,
-        'height': 40,
-        'font-size': 30,
-        'float': 'left'
-      })
-      .click(@toggleSide)
-    @addExitButton()
+    if $(">.menu", @$menuDocker).length <= 0
+      @$menu = $("<a href='javascript:void(0)' class='menu' ><i class='icon-reorder' /></a>").prependTo(@$menuDocker)
+      @$menu
+        .css({
+          'width': 40,
+          'height': 40,
+          'font-size': 30,
+          'float': 'left'
+        })
+        .click(@toggleSide)
+      @addExitButton()
 
   addExitButton: () ->
     menus = @$(".side-nav")
@@ -36,8 +37,7 @@ class MiniLeftSideView extends Backbone.View
 
     btn = exitButton.find('a')
     btn.click () =>
-      @restore()
-      @removeExitButton()
+      @exitWrap()
       false
     # id = menus.attr(id)
     menus
@@ -49,6 +49,10 @@ class MiniLeftSideView extends Backbone.View
     li.remove()
     if (@exitCallback && _.isFunction(@exitCallback))
       @exitCallback()
+
+  exitWrap: () ->
+    @restore()
+    @removeExitButton()
 
   toggleSide: () =>
     if @mininum
