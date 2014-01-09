@@ -1563,6 +1563,11 @@ h2 small {
   }
 }
 
+body>.global_chat {
+  border: 1px solid #ccc;
+  @include box-shadow(1px 1px 3px);
+}
+
 // @-webkit-keyframes bounce_circle{
 //  0%{opacity:0.3;}
 //  50%{opacity:1;background-color:#111}

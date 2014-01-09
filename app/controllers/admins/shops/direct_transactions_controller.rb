@@ -8,6 +8,15 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     @directs = directs.uncomplete.where(:operator_id => current_user.id).page(params[:page])
   end
 
+  def generate_token
+    @direct_transaction = current_direct_transaction
+    @direct_transaction.send('create_the_temporary_channel')
+    
+    respond_to do |format|
+      format.json{ render :json => { token: @direct_transaction.temporary_channel.try(:token) } }
+    end
+  end
+
   def dialog
     @direct_transaction = current_shop_direct_transaction
     render :partial => "direct_transactions/dialog",

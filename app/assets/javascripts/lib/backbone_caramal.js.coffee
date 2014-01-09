@@ -109,7 +109,7 @@ class BaseChatView extends Caramal.BackboneView
   events:
     'mouseover '                : 'activeDialog'
     'click .close_label'        : 'hideDialog'
-    'click .send_button'        : 'sendMeessage'
+    'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
 
@@ -189,6 +189,7 @@ class BaseChatView extends Caramal.BackboneView
     @name = @model.get('name')
     @title = @name unless @title
     @channel = @model.get('channel')
+    return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
     @initChannel()
     @initDialog()
     @bindEvent()
@@ -200,6 +201,7 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).html(@chat_template({model: @model}))
     @state_el = @$(".head>.state")
     @model.chat_view = @
+    @display = false
 
     ChatManager.getInstance().addModel(@model)
     new ImageUpload({ el: @el, parent_view: @ })
@@ -319,7 +321,6 @@ class BaseChatView extends Caramal.BackboneView
     @display
 
   toggleDialog: () ->
-    @displayState()
     if @display
       @hideDialog()
     else
@@ -369,13 +370,13 @@ class BaseChatView extends Caramal.BackboneView
 
   fastKey: (event) ->
     @sendInputing()
-    @sendMeessage(event) if event.ctrlKey && event.keyCode == 13
+    @sendMessage(event) if event.ctrlKey && event.keyCode == 13
 
   sendImg: (url) ->
     return unless url
     @channel.send({ msg: '', attachments: [url] })
 
-  sendMeessage: (event) ->
+  sendMessage: (event) ->
     # msg = @sendContent().val().trim()
     $msg = $(event.target).parents('.foot').find('textarea.content')
     msg = $msg.val().trim()
@@ -444,7 +445,7 @@ class root.AttachChatView extends TemporaryChatView
   events:
     'mouseover '                : 'activeDialog'
     'click .close_label'        : 'hideDialog'
-    'click .send_button'        : 'sendMeessage'
+    'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
  

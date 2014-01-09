@@ -12,6 +12,15 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def generate_token
+    @transaction = current_order.find(params[:id])
+    @transaction.send('create_the_temporary_channel')
+    
+    respond_to do |format|
+      format.json{ render :json => { token: @transaction.temporary_channel.try(:token) } }
+    end
+  end
+
   def show
     @transaction = current_order.find(params[:id])
     @pay_msg = params[:pay_msg]
@@ -142,7 +151,7 @@ class People::TransactionsController < People::BaseController
 
   def completed
     @transactions = OrderTransaction.buyer(@people).completed.order("created_at desc").page(params[:page])
-    @direct_transactions = @people.direct_transactions.completed.order("created_at desc").page(params[:page])
+    @transactions = @people.transactions.completed.order("created_at desc").page(params[:page])
   end
 
   def refund

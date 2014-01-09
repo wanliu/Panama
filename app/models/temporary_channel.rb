@@ -8,6 +8,9 @@ class TemporaryChannel < ActiveRecord::Base
     if "OrderTransaction" == self.targeable_type
       options[:members] = [self.targeable.buyer.login]
       options[:mode] = "onlyMember"
+    elsif "DirectTransaction" == self.targeable_type
+      options[:members] = [self.targeable.buyer.login]
+      options[:mode] = "onlyMember"
     elsif "Activity" == self.targeable_type
       options[:mode] = "any"
     end

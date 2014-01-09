@@ -8,7 +8,7 @@ class root.ChatModel extends Backbone.Model
         @set({ attach_el: "[data-number='" + group + "'] .message_wrap" })
         '担保交易'
       when 'DirectTransaction'
-        @set({ attach_el: "[data-number='" + group + "'] .messages" })
+        @set({ attach_el: "[data-number='" + group + "'] .message_wrap" })
         '直接交易'
       when 'Activity'
         '活动'
@@ -440,6 +440,7 @@ class TemporaryIconView extends BaseIconView
       clients.socket.emit('join', {room: @channel.room})
     else
       clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
+        pnotify(type: 'error', text: '请求聊天房间号失败') if _.isEmpty(msg)
         @channel.room = msg
         clients.socket.emit('join', {room: @channel.room})
       )

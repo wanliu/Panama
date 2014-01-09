@@ -5,6 +5,15 @@ class People::DirectTransactionsController < People::BaseController
     @direct_transactions = current_user.direct_transactions.uncomplete.order("created_at desc").page(params[:page])
   end
 
+  def generate_token
+    @direct_transaction = current_direct_transaction
+    @direct_transaction.send('create_the_temporary_channel')
+    
+    respond_to do |format|
+      format.json{ render :json => { token: @direct_transaction.temporary_channel.try(:token) } }
+    end
+  end
+
   def dialog
     @direct_transaction = current_direct_transaction
     render :partial => "direct_transactions/dialog",

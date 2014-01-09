@@ -199,6 +199,10 @@ class TransactionCardBase extends AbstructStateView
 
   toggleMessage: () ->
     # @$(".message_wrap", ".transaction-footer").slideToggle()
+    @generateToken () =>
+      @newAttachChat()
+
+  newAttachChat: () ->
     unless @chat_model?
       @chat_model = new ChatModel({
         type: 3,
@@ -208,6 +212,19 @@ class TransactionCardBase extends AbstructStateView
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()
     false
+
+  generateToken: (handle) ->
+    return handle.call(@) unless _.isEmpty(@$el.attr('data-token'))
+    $.ajax(
+      type: 'POST',
+      dataType: 'json',
+      url: "#{@transaction.urlRoot}/generate_token",
+      success: (data, xhr, res) =>
+        @$el.attr('data-token', data.token)
+        handle.call(@)
+      error: () =>
+        pnotify(type: 'error', text: '获取聊天token失败')
+    )
 
   current_state: () ->
     {

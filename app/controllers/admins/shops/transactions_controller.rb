@@ -9,6 +9,15 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     .order("dispose_date desc").page(params[:page])
   end
 
+  def generate_token
+    @transaction = current_shop_order.find(params[:id])
+    @transaction.send('create_the_temporary_channel')
+    
+    respond_to do |format|
+      format.json{ render :json => { token: @transaction.temporary_channel.try(:token) } }
+    end
+  end
+
   def complete
     @transactions = current_shop_order.completed.order("created_at desc").page(params[:page])
     @direct_transactions = current_shop.direct_transactions.completed.order("created_at desc").page(params[:page])

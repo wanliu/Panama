@@ -68,9 +68,9 @@
   </div>
   <div class='span5 direct-message'>
     <div class='row-fluid toolbar'>
-      <%= button_tag icon(:comments), :class => "btn", :type => :button %>
+      <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
     </div>
-    <div class='row-fluid messages'>
+    <div class='row-fluid message_wrap'>
       <!-- <iframe src="<%= dialog_shop_admins_direct_transaction_path(current_shop, direct_transaction) %>" style="frameborder: 0;">
       </iframe> -->
     </div>
