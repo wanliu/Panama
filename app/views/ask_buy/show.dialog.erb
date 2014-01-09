@@ -102,7 +102,7 @@
               <h4>我的报价</h4>
               <%= simple_form_for @answer_ask_buy, :remote => true, :url => answer_ask_buy_index_path, :html => { class: 'form-horizontal form_answer_ask_buy'},:method => "post", :type => :json do |f| %>
                 <%=f.input :ask_buy_id, :as => :hidden, :input_html => { :value => @ask_buy.id } %>
-                <%= f.input :shop_product_id,
+                <%=f.input :shop_product_id,
                             :label => "商品",
                             :collection => [],
                             :wrapper_html => {

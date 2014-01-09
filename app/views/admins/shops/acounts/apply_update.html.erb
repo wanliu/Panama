@@ -16,7 +16,7 @@
             </div>
             <div id="image_bottom">
               <div class="hidden_one offset2" id="hidden_text">
-                <%= upload_tip %>
+                <%#= upload_tip %>
               </div>
               <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
               </div>
@@ -42,7 +42,7 @@
             </div>
             <div id="image_bottom">
               <div class="hidden_one offset2" id="hidden_text">
-                <%= upload_tip %>
+                <%#= upload_tip %>
               </div>
               <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
               </div>
@@ -53,9 +53,24 @@
             <%= f.input :company_name, label: '营业店名' %>
             <div class="control-group string required address">
               <%= f.label :address_id, wrapper: :inline_label %>
-              <div class="controls">
+              <div class="controls address_panels">
                 <input class="string required address_input" style="width:75%;" size="60" type="text" value="<%= address.try(:address_only) %>" />
                 <a class="btn" data-toggle="modal" href="<%= shop_admins_edit_address_path %>" data-target="#edit_address">编辑</a>
+
+                <div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editEddressLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="editEddressLabel">编辑地址</h3>
+                  </div>
+                  <div class="modal-body">
+
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                    <button class="btn btn-primary edit-button">保存</button>
+                  </div>
+                </div>
+
               </div>
             </div>
             <%= f.input :company_license, label: '营业执照号' %>
@@ -74,7 +89,7 @@
             </div>
             <div id="image_bottom">
               <div class="hidden_one offset2" id="hidden_text">
-                <%= upload_tip %>
+                <%#= upload_tip %>
               </div>
               <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
               </div>
@@ -91,19 +106,7 @@
     <% end %>
   </div>
 </div>
-<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editEddressLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="editEddressLabel">编辑地址</h3>
-  </div>
-  <div class="modal-body">
 
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <button class="btn btn-primary edit-button">保存</button>
-  </div>
-</div>
 
 <script type="text/javascript">
   $(function(){
@@ -127,7 +130,7 @@
   })
 
   new AddressEditView({
-    el: "div#edit_address"
+    el: ".address_panels"
   })
 
 </script>

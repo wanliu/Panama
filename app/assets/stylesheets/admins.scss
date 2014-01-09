@@ -315,6 +315,15 @@ $left-side-admin-width: 160px;
         min-width: 90px;
       }
 
+      .address_panels{
+        input{
+          width: 63%;
+        }
+        .address-panel{
+          margin-left: 10%;
+        }
+      }
+
       .control-label {
         width: 80px !important;
       }
