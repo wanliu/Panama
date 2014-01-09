@@ -131,7 +131,7 @@ class ShopTransactionCard extends TransactionCardBase
       @$dprice_edit_panel.hide()
 
   realtime_url: () ->
-    "notify:/#{@shop.token}/transactions#{super}"
+    "/#{@shop.token}/transactions#{super}"
 
 exports.ShopTransactionCard = ShopTransactionCard
 exports

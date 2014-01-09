@@ -98,7 +98,7 @@ class OrderRefundCard extends TransactionCardBase
     @$input.focus();
 
   realtime_url: () ->
-    "notify:/order_refunds#{super}"
+    "/order_refunds#{super}"
 
   delivery_code_val: () ->
     @$("input:text.delivery_code").val()

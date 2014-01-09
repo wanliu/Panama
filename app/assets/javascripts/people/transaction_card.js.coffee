@@ -167,7 +167,7 @@ class TransactionCard extends TransactionCardBase
       code_input.val(code_input.val().replace(/(\w{4})(?=\w)/g,"$1 "))
 
   realtime_url: () ->
-    "notify:/transactions#{super}"
+    "/transactions#{super}"
 
   notify_delivery_price: () ->
     @client.subscribe "#{@realtime_url()}/change_delivery_price", (data) =>

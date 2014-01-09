@@ -245,6 +245,7 @@ class OrderTransaction < ActiveRecord::Base
     Notification.dual_notify(target,
       :channel => "/#{seller.im_token}/transactions/destroy",
       :content => "订单#{number}被删除！",
+      :url => "/shops/#{seller.name}/admins/pendding",
       :order_id => id
     ) do |options|
       options[:channel] = "/transactions/destroy"
@@ -452,32 +453,11 @@ class OrderTransaction < ActiveRecord::Base
     Notification.dual_notify(seller,
       :channel => "/#{seller.im_token}/transactions/dispose",
       :content => "#{user.login}处理 #{number}订单",
-      :persistent => false,
       :order_id => id,
       :exclude => user
     ) do |options|
       options[:channel] = "/transactions/dispose"
     end
-  end
-
-  #买家发送信息
-  def message_create(options)
-    #是否有销售组成员在线
-    unless seller.seller_group_employees.any?{|u| u.connect_state }
-      not_service_online(id.to_s)
-    end
-
-    options[:receive_user] = current_operator if operator_state
-    chat_messages.create(options)
-  end
-
-  def unmessages
-    chat_messages.where("receive_user_id is null")
-  end
-
-  #获取信息
-  def messages
-    chat_messages
   end
 
   def build_items(item_ar)
@@ -500,7 +480,6 @@ class OrderTransaction < ActiveRecord::Base
     attra["buyer_login"] = buyer.try(:login)
     attra["seller_name"] = seller.name
     attra["address"] = address.try(:address_only)
-    attra["unmessages_count"] = unmessages.count
     attra["stotal"] = stotal
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
     attra
@@ -611,7 +590,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_info_notify
     return unless persisted?
-    if edit_delivery_price_valid? && changed.include?("delivery_price")
+    if state = "waiting_delivery" && changed.include?("delivery_price")
       Notification.dual_notify(buyer, 
         :channel => "/transactions/#{id}/change_delivery_price",
         :content => "订单#{number}已经修改运费",
@@ -620,6 +599,27 @@ class OrderTransaction < ActiveRecord::Base
       ) do |options|
         options[:channel] = "/transactions/change_delivery_price"
       end
+    end 
+    notify_seller_change   
+  end
+
+  def notify_seller_change
+    attas = ["delivery_price", "address_id"]
+    if changed.map{|c| attas.include?(c) }.any?
+      target = current_operator.nil? ? seller : current_operator
+      options = {
+        :order_id => id,
+        :persistent => false,
+        :info => {
+          :total => stotal,
+          :address => address.try(:location)  
+        }
+      }
+      
+      target.notify(
+        "/#{seller.im_token}/transactions/#{id}/change_info",
+        "订单#{number}资料修改!",
+        options)
     end
   end
 

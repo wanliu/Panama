@@ -78,10 +78,10 @@ class root.OrderRefundList extends Backbone.View
     });
 
   load_realtime: () ->
-    @client = window.clients.socket
+    @client = window.clients
 
   monitor_state: (id) ->
-    @client.subscribe "notify:/order_refunds/#{id}/change_state", (data) =>
+    @client.monitor "/order_refunds/#{id}/change_state", (data) =>
       @change_state(data)
 
   change_state: (data) ->

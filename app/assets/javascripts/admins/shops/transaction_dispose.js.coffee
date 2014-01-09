@@ -26,19 +26,24 @@ class TransactionEvent extends Backbone.View
     _.extend(@, options)
     @$el = $(@el)
     @$el.html @template.render(@model.toJSON())
-    @model.bind("change:unmessages_count", @change_message_count, @)
     @model.bind("change:state_title", @change_state, @)
+    @model.bind("change:total", @change_total, @)
+    @model.bind("change:address", @change_address, @)
+
     @model.bind("remove", @remove, @)
 
   dispose: () ->
     @model.dispose (data, xhr)  =>
       window.location.reload();
 
+  change_address: () ->
+    @$(".address").html(@model.get("address"))
+
+  change_total: () ->
+    @$(".total").html(@model.get("total"))
+
   render: () ->
     @$el
-
-  change_message_count: () ->
-    @$(".message_count").html(@model.get("unmessages_count"))
 
   change_state: () ->
     @$(".state").html(@model.get("state_title"))
@@ -58,11 +63,13 @@ class exports.TransactionDispose extends Backbone.View
   add_data: (model) ->
     view = new TransactionEvent(
       model: model,
-      template: @template
-    )
+      template: @template)
 
     @realtime.change_state model.id, (data) =>
       @realtime_change data
+
+    @realtime.change_info model.id, (data) =>
+      @realtime_change_info data
 
     view.bind("remove_tran", _.bind(@remove_tran, @))
     @$tbody.prepend view.render()
@@ -102,9 +109,6 @@ class exports.TransactionDispose extends Backbone.View
     @realtime.destroy (data) =>
       @realtime_destroy data[@type_key()]
 
-    @realtime.chat (data) =>
-      @realtime_chat data
-
   fetch_data: (id) ->
     model = new Transaction(id: id)
     url = "#{@transactions.url}/#{id}"
@@ -118,13 +122,18 @@ class exports.TransactionDispose extends Backbone.View
     model = @transactions.get(data[@type_key()])
     model.set("state_title", data.state_title) if model?
 
+  realtime_change_info: (data) ->
+    model = @transactions.get(data[@type_key()])
+    model.set(data.info) if model?
+
   shop_key: () ->
     @shop.token
 
   add: (items) ->
-    `for(var i=items.length-1; i>=0; i--){
-      this.add_one(items[i])
-    }`
+    length = items.length-1
+    for i in [length..0]
+      @add_one items[i]
+
     return
 
   type_key: () ->

@@ -42,8 +42,7 @@ class DirectTransaction < ActiveRecord::Base
     attra = super *args
     attra["number"] =  number
     attra["buyer_login"] = buyer.try(:login)
-    attra["items_count"] = items_count
-    attra["unmessages_count"] = unmessages.count
+    attra["items_count"] = items_count    
     attra["state_title"] = state_title
     attra["state_name"] = state.name
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
@@ -110,6 +109,7 @@ class DirectTransaction < ActiveRecord::Base
       :channel => "/#{seller.im_token}/direct_transactions/destroy",
       :content => "直接交易订单#{number}被删除",
       :avatar => buyer.photos.icon,
+      :url => "/shops/#{seller.name}/admins/direct_transactions",
       :direct_id => id,
     ) do |options|
       options[:channel] = "/direct_transactions/destroy"
@@ -120,10 +120,7 @@ class DirectTransaction < ActiveRecord::Base
     items.inject(0){|s, item| s = s + item.amount }
   end
 
-  def unmessages
-    messages.where(:receive_user_id => nil)
-  end
-
+  
   def generate_number
     _number = (DirectTransaction.max_id + 1).to_s
     _number = "D#{'0' * (9-_number.length)}#{_number}" if _number.length < 9

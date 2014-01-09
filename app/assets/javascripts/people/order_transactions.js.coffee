@@ -69,10 +69,10 @@ class root.OrderTransactions extends Backbone.View
     model.set(register: true) unless _.isEmpty(model)
 
   realtime_load: () ->
-    @client = window.clients.socket
+    @client = window.clients
 
   monitor_state: (order_id) ->
-    @client.subscribe "notify:/transactions/#{order_id}/change_state", (data) =>
+    @client.monitor "/transactions/#{order_id}/change_state", (data) =>
       @change_state data
 
   change_state: (data) ->

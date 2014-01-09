@@ -60,16 +60,28 @@ class NotificationManager
     # @client.monitor("/comments/remove", @commonNotify)
 
     #交易订单
-    @client.monitor("/transactions/create", @commonNotify)
+    @client.monitor("/shops/transactions/create", @commonNotify)
+    @client.monitor("/shops/transactions/destroy", @commonNotify)    
+    @client.monitor("/shops/transactions/dispose", @commonNotify)
+    @client.monitor("/shops/transactions/change_state", @commonNotify)
+
     @client.monitor("/transactions/destroy", @commonNotify)
-    @client.monitor("/transactions/dispose", @commonNotify)
     @client.monitor("/transactions/change_state", @commonNotify)
     @client.monitor("/transactions/change_delivery_price", @commonNotify)
 
+
     #直接订单
-    @client.monitor("/direct_transactions/create", @commonNotify)
+    @client.monitor("/shops/direct_transactions/create", @commonNotify)
+    @client.monitor("/shops/direct_transactions/dispose", @commonNotify)
+    @client.monitor("/shops/direct_transactions/destroy", @commonNotify)
+    @client.monitor("/shops/direct_transactions/change_state", @commonNotify)
+
     @client.monitor("/direct_transactions/destroy", @commonNotify)
     @client.monitor("/direct_transactions/change_state", @commonNotify)
+
+    #退货
+    @client.monitor("/order_refunds/create", @commonNotify)    
+    @client.monitor("/order_refunds/change_state", @commonNotify)
 
   add_user: (data) =>
     @commonNotify(data)

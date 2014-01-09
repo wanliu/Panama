@@ -219,8 +219,8 @@ class TransactionCardBase extends AbstructStateView
     @setMessagePanel()
 
   load_realtime: () ->
-    @client = window.clients.socket
-    @client.subscribe "#{@realtime_url()}/change_state", (data) =>
+    @client = window.clients
+    @client.monitor "#{@realtime_url()}/change_state", (data) =>
       @stateChange data
 
   realtime_url: () ->

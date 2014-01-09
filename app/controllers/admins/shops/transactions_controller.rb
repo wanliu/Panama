@@ -81,10 +81,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do |format|
       @operator = @transaction.operator_create(current_user.id)
-      if @operator.valid?
-        @transaction.unmessages.update_all(
-          :read => true,
-          :receive_user_id => current_user.id)        
+      if @operator.valid?   
         format.html{
           render partial: 'transaction',object:  @transaction,
            locals: {

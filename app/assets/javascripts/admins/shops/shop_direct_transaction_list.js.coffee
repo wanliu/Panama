@@ -72,13 +72,13 @@ class root.ShopDirectTransactionList extends Backbone.View
     )
 
   load_realtime: () ->
-    @client = window.clients.socket
+    @client = window.clients
 
-    @client.subscribe "notify:/#{@shop.token}/direct_transactions/destroy", (data) =>
+    @client.monitor "/#{@shop.token}/direct_transactions/destroy", (data) =>
       @destroy data.direct_id
 
   monitor_state: (direct_id) ->
-    @client.subscribe "notify:/#{@shop.token}/direct_transactions/#{direct_id}/change_state", (data) =>
+    @client.monitor "/#{@shop.token}/direct_transactions/#{direct_id}/change_state", (data) =>
       @change_state(data)
 
   change_state: (data) ->

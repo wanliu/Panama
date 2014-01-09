@@ -78,4 +78,4 @@ class root.DirectTransactionList extends Backbone.View
     });
 
   load_realtime: () ->
-    @client = window.clients.socket
+    @client = window.clients

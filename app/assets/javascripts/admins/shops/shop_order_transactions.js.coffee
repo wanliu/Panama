@@ -62,13 +62,13 @@ class root.ShopOrderTransactions extends Backbone.View
     model.set(register: true) unless _.isEmpty(model)
 
   realtime_load: () ->
-    @client = window.clients.socket
+    @client = window.clients
 
-    @client.subscribe "notify:/#{@shop.token}/transactions/destroy", (data) =>
+    @client.monitor "/#{@shop.token}/transactions/destroy", (data) =>
       @destroy data
 
   monitor_state: (order_id) ->
-    @client.subscribe "notify:/#{@shop.token}/transactions/#{order_id}/change_state", (data) =>
+    @client.monitor "/#{@shop.token}/transactions/#{order_id}/change_state", (data) =>
       @change_state data
 
   destroy: (data) ->
