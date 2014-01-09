@@ -11,7 +11,7 @@ class TransactionView extends CardItemView
   }
   initialize: (options) ->
     _.extend(@, options)
-    super
+    super    
 
   get_register_view: () ->
     view = new TransactionCard({
@@ -77,6 +77,13 @@ class root.OrderTransactions extends Backbone.View
   monitor_state: (order_id) ->
     @client.monitor "/transactions/#{order_id}/change_state", (data) =>
       @change_state data
+
+    @client.monitor "/transactions/#{order_id}/change_delivery_price", (data) =>
+      @change_total(data)
+
+  change_total: (data) ->
+    model = @collection.get(data.order_id)
+    model.set({total: data.stotal}) unless _.isEmpty(model)
 
   change_state: (data) ->
     model = @collection.get(data.order_id)

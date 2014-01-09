@@ -170,11 +170,12 @@ class TransactionCard extends TransactionCardBase
     "/transactions#{super}"
 
   notify_delivery_price: () ->
-    @client.subscribe "#{@realtime_url()}/change_delivery_price", (data) =>
-      pnotify(text: data.content)     
-      total = @$(".stotal")
-      total.html(
-        total.text().trim().substring(0, 1) +" "+ data.stotal) if total.length > 0
+    @client.monitor "#{@realtime_url()}/change_delivery_price", (data) =>
+      total = @$(".stotal")      
+      if total.length > 0
+        tag = total.text().trim().substring(0, 1)
+        total.html("#{tag} #{data.stotal}")
+
 
 
 root.TransactionCard = TransactionCard

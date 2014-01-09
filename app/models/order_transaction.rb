@@ -590,12 +590,13 @@ class OrderTransaction < ActiveRecord::Base
 
   def change_info_notify
     return unless persisted?
-    if state = "waiting_delivery" && changed.include?("delivery_price")
+    if state_name != :order && changed.include?("delivery_price")
       Notification.dual_notify(buyer, 
         :channel => "/transactions/#{id}/change_delivery_price",
         :content => "订单#{number}已经修改运费",
         :url => "/shops/#{seller.name}/admins/transactions/#{id}",
-        :stotal => stotal
+        :stotal => stotal,
+        :order_id => id
       ) do |options|
         options[:channel] = "/transactions/change_delivery_price"
       end
