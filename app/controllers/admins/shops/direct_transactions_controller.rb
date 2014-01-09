@@ -44,9 +44,13 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     end
   end
 
-  def item
+  def mini_item
     @direct_transaction = current_shop_direct_transaction
-    render :layout => false
+    respond_to do |format|
+      format.html{ 
+        render :layout => false
+      }      
+    end
   end
 
   private

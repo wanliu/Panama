@@ -31,9 +31,12 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     end
   end
 
-  def item
+  def mini_item
     @refund = current_shop_refunds.find_by(:id => params[:id])
-    render :layout => false
+    respond_to do |format|
+      format.html{
+        render :layout => false }      
+    end
   end
 
   private

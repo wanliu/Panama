@@ -48,6 +48,13 @@ class People::DirectTransactionsController < People::BaseController
     @direct_transaction = current_direct_transaction
   end
 
+  def mini_item
+    @direct_transaction = current_direct_transaction
+    respond_to do |format|
+      format.html{ render :layout => false }
+    end
+  end
+
   def page
     @direct_transaction = current_direct_transaction
     respond_to do |format|
