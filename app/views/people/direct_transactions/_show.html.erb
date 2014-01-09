@@ -110,9 +110,9 @@
   </div>
   <div class='span5 direct-message'>
     <div class='row-fluid toolbar'>
-      <%= button_tag icon(:comments), :class => "btn", :type => :button %>
+      <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
     </div>
-    <div class='row-fluid messages'>
+    <div class='row-fluid message_wrap'>
       <!-- <iframe src="<%= dialog_person_direct_transaction_path(@people, direct_transaction) %>" style="frameborder: 0;"></iframe>
     </div> -->
   </div>

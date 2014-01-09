@@ -8,7 +8,6 @@ class root.Realtime
     Realtime.globalClient ||= new Realtime(options)
 
   constructor: (options) ->
-    Caramal.debug = true
     _.extend(@, options)
     @url = @server_uri + '?token=' + @token
     @connect()

@@ -2,7 +2,7 @@ root = (window || @)
 
 class root.ShopDirectTransactionView extends Backbone.View
   events: {
-    "click .direct-message button" : "toggle_message"
+    "click .direct-message .message-toggle" : "toggle_message"
   }
 
   initialize: (options) ->
@@ -34,14 +34,32 @@ class root.ShopDirectTransactionView extends Backbone.View
 
   toggle_message: () ->
     # @$messages.slideToggle()
+    @generateToken () =>
+      @newAttachChat()
+
+  newAttachChat: () ->
     unless @chat_model?
       @chat_model = new ChatModel({
         type: 3,
-        name: @$el.data('token'),
+        name: @$el.attr('data-token'),
         group: @$el.data('number')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()
+
+  generateToken: (handle) ->
+    return handle.call(@) unless _.isEmpty(@$el.attr('data-token'))
+    @urlRoot = "/shops/#{@shop.name}/admins/direct_transactions/#{@model.id}"
+    $.ajax(
+      type: 'POST',
+      dataType: 'json',
+      url: "#{@urlRoot}/generate_token",
+      success: (data, xhr, res) =>
+        @$el.attr('data-token', data.token)
+        handle.call(@)
+      error: () =>
+        pnotify(type: 'error', text: '获取聊天token失败')
+    )
 
   change_state: () ->
     $(".state_title", @$info).html(@model.get("state_title"))

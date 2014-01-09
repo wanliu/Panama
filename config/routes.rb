@@ -140,6 +140,7 @@ Panama::Application.routes.draw do
         get :kuaiqian_receive
         match 'kuaiqian_payment', :via => [:get, :post]
         match 'test_payment', :via => [:get, :post]
+        post :generate_token
       end
 
       collection do
@@ -168,6 +169,7 @@ Panama::Application.routes.draw do
         post :send_message, :to => "people/direct_transactions#send_message"
         post :completed, :to => "people/direct_transactions#completed"
         get :page
+        post :generate_token
       end
     end
 
@@ -412,6 +414,7 @@ Panama::Application.routes.draw do
           post :dispose, :to => "shops/direct_transactions#dispose"
           get :page
           get :item
+          post :generate_token
         end
       end
 
@@ -452,6 +455,7 @@ Panama::Application.routes.draw do
           put "update_delivery", :to => "shops/transactions#update_delivery"
           get "print", :to => "shops/transactions#print"
           put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
+          post :generate_token
         end
       end
 
