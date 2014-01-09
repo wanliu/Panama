@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140108032453) do
+ActiveRecord::Schema.define(:version => 20140109053952) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like"
-    t.integer  "participate"
+    t.integer  "like",                                                         :default => 0
+    t.integer  "participate",                                                  :default => 0
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
@@ -141,9 +141,10 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.float    "amount",                                    :default => 0.0
     t.text     "describe"
     t.integer  "status",                                    :default => 0
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                                  :null => false
+    t.datetime "updated_at",                                                  :null => false
     t.integer  "user_id"
+    t.boolean  "open",                                      :default => true
   end
 
   create_table "ask_buys_attachments", :force => true do |t|
@@ -575,14 +576,6 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.string   "icon"
   end
 
-  create_table "price_lists", :force => true do |t|
-    t.integer  "people_number"
-    t.decimal  "price",         :precision => 10, :scale => 0
-    t.integer  "activity_id"
-    t.datetime "created_at",                                   :null => false
-    t.datetime "updated_at",                                   :null => false
-  end
-
   create_table "price_options", :force => true do |t|
     t.string   "name"
     t.string   "title"
@@ -944,6 +937,7 @@ ActiveRecord::Schema.define(:version => 20140108032453) do
     t.boolean  "state",      :default => true
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
+    t.time     "deleted_at"
   end
 
   create_table "user_checkings", :force => true do |t|

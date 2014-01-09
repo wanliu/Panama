@@ -1005,8 +1005,13 @@ body>.model-popup-backdrop.out{
         .report{
           width: 100%;
           .report_line{
+            .product_item{
+              width:40%;
+              text-align: left;
+            }
             background-color: bisque;
             border: 2px solid #EEEBEB;
+            >td {text-align: right;}
           }
         }
 

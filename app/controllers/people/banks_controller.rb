@@ -16,4 +16,12 @@ class People::BanksController < People::BaseController
       end
     end
   end
+
+  def destroy
+    @bank = current_user.banks.find(params[:id])
+    @bank.destroy if @bank
+    respond_to do |format|
+      format.json{ head :no_content}
+    end
+  end
 end

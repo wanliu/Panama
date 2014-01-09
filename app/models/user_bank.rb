@@ -1,12 +1,15 @@
 # encoding: utf-8
 # 银行卡管理
 class UserBank < ActiveRecord::Base
+  acts_as_paranoid
   attr_accessible :bank_id, :code, :name, :state, :user
 
   belongs_to :bank
   belongs_to :user
 
-  validates :bank, :user, :code, :name, :presence => true
+  validates :code, :presence => true, format: { with: /^\d{19}$/, message: "请确定银行卡号真实有效，只能是19位数字" }
+
+  validates :bank, :user, :name, :presence => true
 
   delegate :name, :code, :to => :bank, :prefix => :bank
 

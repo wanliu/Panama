@@ -60,20 +60,16 @@ class AnswerAskBuy < ActiveRecord::Base
   end
 
   def notice_all_answered_user
-    hited_user.notify("/shops/answer_ask_buy",
+    hited_user.notify("/shops/answer_ask_buy/success",
                       "#{ ask_buy.title}求购买家选择了你进行交易，请查看订单#{ order_transaction.number}",
                       :target => self,
                       :url => "/shops/#{ hited_user.shop.name}/admins/transactions/#{order_transaction.id}")
     
     unhited_users.each do |u| 
-      u.notify("/shops/answer_ask_buy",
+      u.notify("/shops/answer_ask_buy/failer",
               "很遗憾,#{ ask_buy.title}求购买家选择了商家 #{ order_transaction.seller.name} 进行交易,感谢您的参与...",
               :target => self,
               :url => "/shops/#{order_transaction.seller.name}")
     end
-  end
-
-  class << self
-    
   end
 end

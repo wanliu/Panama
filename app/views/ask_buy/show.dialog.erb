@@ -43,14 +43,8 @@
               <table class="report">
                 <% answer_ask_buys = @ask_buy.answer_ask_buys %>
                 <% unless answer_ask_buys.blank? %>
-                  <% answer_ask_buys.each do |a| %>
-                    <tr class="report_line" data-value-id="<%=a.id %>">
-                      <td style="width:10%" ><img src="<%=a.user.icon %>"/><%=a.user.login %></td>
-                      <td style="width:30%"><span><%=a.shop_product_name %><span><img src="<%=a.shop_product_icon %>" /></td>
-                      <td style="width:20%"><span> ￥<%=a.price %> x <%=a.amount %> <span></td>
-                      <td style="width:20%">总计：￥<%=a.total %></td>
-                      <td style="width:20%"><a href="javascript:void(0)" class="btn btn-danger create_transaction">生成订单</a></td>
-                    </tr>
+                  <% answer_ask_buys.each do |answer_ask_buy| %>
+                    <%= render partial: "anwser_list.html", locals: {answer_ask_buy: answer_ask_buy} %>
                   <% end %>    
                 <% else %>
                   <tr><td colspan="5">暂无人参与报价</td></tr>
@@ -104,7 +98,7 @@
 
         <div class="dialog" id="purchase-forms">
           <div class="modal-body">
-            <% if current_user.is_seller? && @ask_buy.user_id != current_user.id && @ask_buy.status == 0 %>
+            <% if current_user.is_seller? && @ask_buy.user_id != current_user.id && @ask_buy.open == true %>
               <h4>我的报价</h4>
               <%= simple_form_for @answer_ask_buy, :remote => true, :url => answer_ask_buy_index_path, :html => { class: 'form-horizontal form_answer_ask_buy'},:method => "post", :type => :json do |f| %>
                 <%=f.input :ask_buy_id, :as => :hidden, :input_html => { :value => @ask_buy.id } %>
@@ -116,7 +110,7 @@
                             },
                             :collection => [],
                             :input_html => {
-                              :class => "shop_product_id",
+                              :class => "shop_product_id span-blank",
                               :id => "answer_ask_buy_shop_product"
                             } %>
                 <%=f.input  :price,  
@@ -126,7 +120,7 @@
                             }, 
                             :input_html => { 
                               :value => @ask_buy.price, 
-                              :class => "answer_ask_buy_price" }%>
+                              :class => "answer_ask_buy_price span-blank" }%>
 
                 <%=f.input :amount, 
                            :label => "数量",
@@ -135,7 +129,7 @@
                             },
                            :input_html => { 
                             :value => @ask_buy.amount,
-                            :class => "answer_ask_buy_amount" }%>
+                            :class => "answer_ask_buy_amount span-blank" }%>
                 <% total = @ask_buy.price * @ask_buy.amount %>
                 <%=f.input :total,
                            :label => "总计",
@@ -144,7 +138,7 @@
                             },
                            :input_html => { 
                             :value => total,
-                            :class => "answer_ask_buy_total" }%>
+                            :class => "answer_ask_buy_total span-blank" }%>
               <% end %>
               <% if current_user.answered_ask_buy(@ask_buy.id).nil? %>
                 <input type="button" value="提交报价" class="btn btn-danger pull-right submit_report">

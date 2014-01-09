@@ -59,9 +59,10 @@ class NotificationManager
     # @client.monitor("/comments/update", @commonNotify)
     # @client.monitor("/comments/remove", @commonNotify)
 
-    #求购
-    @client.monitor("/shops/answer_ask_buy", @commonNotify)
-    
+    #求购 
+    @client.monitor("/answer_ask_buy", @commonNotify)
+    @client.monitor("/shops/answer_ask_buy/failer", @commonNotify)
+    @client.monitor("/shops/answer_ask_buy/success", @commonNotify)
 
   add_user: (data) =>
     @commonNotify(data)

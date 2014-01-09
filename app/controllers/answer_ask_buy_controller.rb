@@ -8,8 +8,10 @@ class AnswerAskBuyController < ApplicationController
   def create
     @ask_buy = AskBuy.find(params[:answer_ask_buy][:ask_buy_id])
     respond_to do |format|
-      if current_user.id == @ask_buy.user_id || !current_user.is_seller? || !current_user.answered_ask_buy(@ask_buy.id).nil?
-        format.json{ render :json => ['不能参与自己的求购或者不是供应商,或者您已经参与过此求购！'], :status => 403 }
+      if current_user.id == @ask_buy.user_id || !current_user.is_seller? 
+        format.json{ render :json => ['不能参与自己的求购或者不是供应商！'], :status => 403 }
+      elsif @ask_buy.open == false || !current_user.answered_ask_buy(@ask_buy.id).nil?
+        format.json{ render :json => ['您已经参与过此求购,或此求购已经被关闭'], :status => 403 }
       else
         all_params = params[:answer_ask_buy].merge!(:user_id => current_user.id)
         @answer_ask_buy = AnswerAskBuy.create(all_params) unless @ask_buy.nil?
@@ -37,6 +39,7 @@ class AnswerAskBuyController < ApplicationController
       })
       @item.buy_state = :guarantee
       if @order.save
+        @answer_ask_buy.ask_buy.close
         @answer_ask_buy.add_order_id_and_status(@order.id)
         @answer_ask_buy.notice_all_answered_user
         format.json{ render :json => @order }

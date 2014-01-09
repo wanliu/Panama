@@ -5,7 +5,7 @@ class AskBuy < ActiveRecord::Base
   include Tire::Model::Callbacks
   include Tire::Model::UpdateByQuery
 
-  attr_accessible :amount, :describe, :price, :product_id, :status, :title
+  attr_accessible :amount, :describe, :price, :product_id, :status, :title, :open
 
   belongs_to :product
   belongs_to :user
@@ -36,6 +36,10 @@ class AskBuy < ActiveRecord::Base
     answer_ask_buys.each do |aab|
       users << aab.user
     end
+  end
+
+  def close
+    update_attributes(:open => false)
   end
 
   def init_data
