@@ -104,7 +104,8 @@ class People::TransactionsController < People::BaseController
       :bank_id => params[:bank]) if params[:bank].present?
     pay_ment = KuaiQian::PayMent.request(options)
     respond_to do |format|
-      format.js{ render :js => "window.location.href='#{pay_ment.url}'" }
+      format.js{ 
+        render :js => "window.location.href='#{pay_ment.url}'" }
       format.html{ redirect_to pay_ment.url }
     end
   end
@@ -128,7 +129,8 @@ class People::TransactionsController < People::BaseController
       url = "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
       format.html{
         redirect_to url }
-      format.js{ render :js => "window.location.href='#{url}'" }
+      format.js{ 
+        render :js => "window.location.href='#{url}'" }
     end
   end
 
