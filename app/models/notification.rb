@@ -191,6 +191,24 @@ class Notification < ActiveRecord::Base
     notic
   end
 
+  def self.dual_notify(target, opts = {}, &block)
+    options = opts.symbolize_keys
+    channel = options.delete(:channel)
+    content = options.delete(:content)
+
+    target.notify(
+      channel, content, options.merge(
+        :persistent => false))
+
+    if block_given? 
+      yield(options) 
+      channel = options.delete(:channel) if options.key?(:channel)
+      content = options.delete(:content) if options.key?(:content)
+    end
+
+    target.notify(channel, content, options)
+  end
+
 
   protected
 

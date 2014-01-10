@@ -60,6 +60,7 @@ class TransactionRefundView extends Backbone.View
       success: (model, data) =>
         @notify("退货申请成功, 等待商家确认!", "success")
         @toggle_panel()
+        
       error: (model, data) =>
         error_message = JSON.parse(data.responseText)
         error_message = error_message.message if error_message.message

@@ -8,12 +8,18 @@ class root.CardItemView extends Backbone.View
 
     @model.bind("remove", @remove, @)
     @model.bind("change:state", @change_state, @)
+    @model.bind("change:total", @change_total, @)
     @model.bind("change:register", @register_view, @)
     @register_view()
 
   remove: () ->
     @card.remove() unless _.isEmpty(@card)
     super
+
+  change_total: () ->
+    atotal = @$(".actions .atotal")
+    tag = atotal.text().trim().substring(0, 1)
+    atotal.html("#{tag} #{@model.get('total')}")
 
   change_state: () ->
     @change_table_state()

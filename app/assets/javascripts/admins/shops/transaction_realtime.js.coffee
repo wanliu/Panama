@@ -6,29 +6,30 @@ class root.TransactionRealTime
   constructor: (shop_key, type) ->
     @type = type
     @shop_key = shop_key
-    @client = window.clients.socket
+    @client = window.clients
 
   url_root: () ->
-    "notify:/shops/#{@shop_key}/#{@type}"
+    "/shops/#{@shop_key}/#{@type}"
 
   create: (callback) ->
-    @client.subscribe "#{@url_root()}/create", (data) =>
+    @client.monitor "#{@url_root()}/create", (data) =>
       callback(data) if $.isFunction(callback)
 
   dispose: (callback) ->
-    @client.subscribe "#{@url_root()}/dispose", (data) =>
+    @client.monitor "#{@url_root()}/dispose", (data) =>
       callback(data) if $.isFunction(callback)
 
   destroy: (callback) ->
-    @client.subscribe "#{@url_root()}/destroy", (data) =>
-      callback(data) if $.isFunction(callback)
-
-  chat: (callback) ->
-    @client.subscribe "#{@url_root()}/chat", (data) =>
+    @client.monitor "#{@url_root()}/destroy", (data) =>
       callback(data) if $.isFunction(callback)
 
   change_state: (id, callback) ->
-    @client.subscribe "#{@url_root()}/#{id}/change_state", (data) =>
+    @client.monitor "#{@url_root()}/#{id}/change_state", (data) =>
       callback(data) if $.isFunction(callback)
+
+  change_info: (id, callback) ->
+    @client.monitor "#{@url_root()}/#{id}/change_info", (data) =>
+      callback(data) if $.isFunction(callback)
+
 
 

@@ -65,4 +65,4 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
       button.removeClass("disabled")
 
   realtime_url: () ->
-    "notify:/#{@shop.token}/order_refunds#{super}"
+    "/#{@shop.token}/order_refunds#{super}"

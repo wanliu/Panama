@@ -43,9 +43,9 @@ class root.DirectTransactionList extends Backbone.View
     @collection = new Transactions
     @collection.url = @remote_url
     @collection.bind("add", @add_one, @)
-    @load_table_list()
     @load_realtime()
     @reset()
+    @load_table_list()
 
   add_one: (model) ->
     elem = model.get("elem")
@@ -74,8 +74,14 @@ class root.DirectTransactionList extends Backbone.View
       el: @$el,
       secondContainer: ".direct-detail",
       remote_url: @remote_url,
-      registerView: (view) => @register(view.model.id)
+      registerView: (view) => 
+        state = view.model.get("fetch_state")
+        if !_.isEmpty(state) && state
+          delete view.model.attributes.fetch_state
+          @add(view.$el)
+          
+        @register(view.model.id)
     });
 
   load_realtime: () ->
-    @client = window.clients.socket
+    @client = window.clients
