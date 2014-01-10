@@ -45,7 +45,7 @@
     new TransactionPayment({
       el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
       model: {
-        total: <%= transaction.total %>,
+        total: <%= transaction.stotal %>,
         money: <%= current_user.money || 0 %>
       },
       remote_url: "<%=payment_order_path(current_user, transaction) %>"
