@@ -41,11 +41,12 @@
   </form>
 </div>
 <script type="text/javascript">
-  $(function(){
+  $(function(){      
     new TransactionPayment({
       el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
       model: {
-        total: <%= transaction.stotal %>,
+        id: <%=transaction.id %>,
+        stotal: <%= transaction.stotal %>,
         money: <%= current_user.money || 0 %>
       },
       remote_url: "<%=payment_order_path(current_user, transaction) %>"

@@ -72,7 +72,7 @@ class NotificationManager
 
     @client.monitor("/transactions/destroy", @commonNotify)
     @client.monitor("/transactions/change_state", @commonNotify)
-    @client.monitor("/transactions/change_delivery_price", @commonNotify)
+    @client.monitor("/transactions/change_info", @commonNotify)
 
 
     #直接订单

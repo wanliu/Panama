@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
@@ -140,15 +140,9 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.decimal  "price",      :precision => 10, :scale => 0
     t.float    "amount"
     t.text     "describe"
-<<<<<<< HEAD
-    t.integer  "status",                                    :default => 0
+    t.integer  "status"
     t.datetime "created_at",                                                  :null => false
     t.datetime "updated_at",                                                  :null => false
-=======
-    t.integer  "status"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
->>>>>>> order_bug
     t.integer  "user_id"
     t.boolean  "open",                                      :default => true
   end
@@ -727,15 +721,6 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "report_prices", :force => true do |t|
-    t.integer  "ask_buy_id"
-    t.decimal  "my_price",        :precision => 10, :scale => 2
-    t.integer  "user_id"
-    t.integer  "shop_product_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
   end
 
   create_table "resources", :force => true do |t|

@@ -33,7 +33,8 @@ class root.ShopOrderTransactions extends CardItemListView
     @shop = options.shop
 
     @columns_options = {
-      secondContainer: ".order-detail"
+      secondContainer: ".order-detail",
+      leftSide: "#left_sidebar"
     }
     super options
     @realtime_load()

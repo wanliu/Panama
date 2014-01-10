@@ -37,7 +37,8 @@ class root.ShopOrderRefundList extends CardItemListView
   initialize: (options) ->
     @shop = options.shop
     @columns_options = {
-      secondContainer : ".refund-detail"
+      secondContainer : ".refund-detail",
+      leftSide: "#left_sidebar"
     }
     super options
     @load_realtime()
@@ -51,7 +52,7 @@ class root.ShopOrderRefundList extends CardItemListView
     )
 
   reset: () ->
-    _.each @$(".refunds>.card_item"), (el) => @add el
+    _.each @$(".refunds>.card_item"), (el) => @add_elem el
 
   load_realtime: () ->
     @root = "/#{@shop.token}/order_refunds"

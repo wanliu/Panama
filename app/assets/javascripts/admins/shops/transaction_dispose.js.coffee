@@ -28,7 +28,7 @@ class TransactionEvent extends Backbone.View
     @$el = $(@el)
     @$el.html @template.render(@model.toJSON())
     @model.bind("change:state_title", @change_state, @)
-    @model.bind("change:total", @change_total, @)
+    @model.bind("change:stotal", @change_stotal, @)
     @model.bind("change:address", @change_address, @)
 
     @model.bind("remove", @remove, @)
@@ -42,7 +42,7 @@ class TransactionEvent extends Backbone.View
     @$(".address").html(@model.get("address"))
 
   change_total: () ->
-    @$(".total").html(@model.get("total"))
+    @$(".stotal").html(@model.get("stotal"))
 
   render: () ->
     @$el

@@ -31,6 +31,7 @@ class root.ShopDirectTransactionList extends CardItemListView
   initialize: (options) ->
     @shop = options.shop
     @columns_options = {
+      leftSide: "#left_sidebar",
       secondContainer: ".direct-detail"
     }
     super options
@@ -46,7 +47,7 @@ class root.ShopDirectTransactionList extends CardItemListView
     )
 
   reset: () ->
-    _.each @$(".directs>.card_item"), (el) => @add el
+    _.each @$(".directs>.card_item"), (el) => @add_elem el
 
   load_realtime: () ->
     @client.monitor "/#{@shop.token}/direct_transactions/destroy", (data) =>

@@ -385,6 +385,19 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def way_change_state_notify_buyer(event = nil)
+    buyer.notify(
+      "/transactions/#{id}/change_state",
+      "您的订单#{number}卖家已经#{buyer_state_title}",
+      :order_id => id,
+      :state => state_name,
+      :state_title => buyer_state_title,
+      :event => "refresh_#{event}",
+      :persistent => false,
+      :url => buyer_open_path
+    )
+  end
+
   def refund_items
     OrderRefundItem.where(
       :order_refund_id => refunds.pluck("id"))
@@ -594,13 +607,16 @@ class OrderTransaction < ActiveRecord::Base
     return unless persisted?
     if state_name != :order && changed.include?("delivery_price")
       Notification.dual_notify(buyer, 
-        :channel => "/transactions/#{id}/change_delivery_price",
+        :channel => "/transactions/#{id}/change_info",
         :content => "订单#{number}已经修改运费",
         :url => buyer_open_path,
-        :stotal => stotal,
+        :info => {
+          :stotal => stotal,
+          :delivery_price => delivery_price
+        },        
         :order_id => id
       ) do |options|
-        options[:channel] = "/transactions/change_delivery_price"
+        options[:channel] = "/transactions/change_info"
       end
     end 
     notify_seller_change   
@@ -615,7 +631,7 @@ class OrderTransaction < ActiveRecord::Base
         :persistent => false,
         :url => seller_open_path,
         :info => {
-          :total => stotal,
+          :stotal => stotal,
           :address => address.try(:location)  
         }
       }

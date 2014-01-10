@@ -54,4 +54,4 @@ class root.DirectTransactionList extends CardItemListView
     )
 
   reset: () ->
-    _.each @$(".directs>.card_item"), (el) => @add el
+    _.each @$(".directs>.card_item"), (el) => @add_elem el

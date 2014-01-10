@@ -54,7 +54,7 @@ class root.OrderRefundList extends CardItemListView
     )
 
   reset: () ->
-    _.each @$(".refunds>.card_item"), (el) => @add el
+    _.each @$(".refunds>.card_item"), (el) => @add_elem el
 
   monitor_state: (id) ->
     @client.monitor "/order_refunds/#{id}/change_state", (data) =>
