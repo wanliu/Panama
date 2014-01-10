@@ -26,22 +26,18 @@ class DirectTransaction extends CardItemView
 
     super
 
-class root.ShopDirectTransactionList extends Backbone.View
+class root.ShopDirectTransactionList extends CardItemListView
 
   initialize: (options) ->
-    @$el = $(@el)
-    @remote_url = options.remote_url
     @shop = options.shop
-    @collection = new Transactions
-    @collection.url = @remote_url
-    @collection.bind("add", @add_one, @)
-    @load_realtime()    
-    @reset()
-    @load_table_list()
+    @columns_options = {
+      secondContainer: ".direct-detail"
+    }
+    super options
+    @load_realtime()
 
-  add_one: (model) ->
-    elem = model.get("elem")
-    delete model.attributes.elem
+  add_one: (elem, model) ->
+
     @monitor_state model.id
     new DirectTransaction(
       model: model,
@@ -52,34 +48,7 @@ class root.ShopDirectTransactionList extends Backbone.View
   reset: () ->
     _.each @$(".directs>.card_item"), (el) => @add el
 
-  add: (item) ->
-    @collection.add(
-      elem: $(item),
-      register: false,
-      id: $(item).attr('data-value-id'))
-
-  register: (id) ->
-    model = @collection.get(id)
-    model.set(register: true) unless _.isEmpty(model)
-
-  load_table_list: () ->
-    @table = new TransactionTwoColumnsViewport(
-      el: @$el,
-      secondContainer: ".direct-detail",
-      remote_url: @remote_url,
-      leftSide: "#left_sidebar",
-      registerView: (view) => 
-        state = view.model.get("fetch_state")
-        if !_.isEmpty(state) && state
-          delete view.model.attributes.fetch_state
-          @add(view.$el)
-          
-        @register(view.model.id)
-    )
-
   load_realtime: () ->
-    @client = window.clients
-
     @client.monitor "/#{@shop.token}/direct_transactions/destroy", (data) =>
       @destroy data.direct_id
 
