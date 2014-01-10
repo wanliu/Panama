@@ -1,3 +1,6 @@
-<span class='pull-right state-display'>
-	等待汇款
-</span>
+<div class='pull-right'>
+  <span class='state-description'>等待汇款</span>
+  <%= link_to 'javascript:void(0)', :class => 'btn btn-large btn_event disabled' do %>
+    <%= raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
+  <% end %>
+</div>
