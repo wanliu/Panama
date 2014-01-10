@@ -75,9 +75,6 @@
         <h5>{{ name }} <b>{{ brand_name }}</b></h5>
         <span>单价:<i class='icon-jpy'></i> {{ price }}</span>
         <span>库存: {{ inventory }}</span>
-        {{#join_state}}
-          <span class="label label-warning pull-right">已添加</span>
-        {{/join_state}}
       </li>
     </script>
   </div>
@@ -106,13 +103,12 @@
         </section>
       </li>
     </script>
-
     <script type="text/javascript">
       $(function(){
         var product_view = new ProductView({
           el      : $(".my_products"),
           shop    : {
-            id: <%= current_shop.id %>
+            id: <%= shop.id %>
           },
           template: $("#product_show").html()
         });
@@ -121,7 +117,7 @@
           el: $(".dialog_product"),
           category_product_template: $("#category_product_show").html(),
           remote_options: {
-            shop_id: <%= current_shop.id %>
+            shop_id: <%= shop.id %>
           },
           select_handle: function(models){
             _.each(models, function(model){

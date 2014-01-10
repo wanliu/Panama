@@ -32,7 +32,7 @@
 						<% address = @user_checking.address || Address.new %>
 						<div data-id="<%= address.id %>" class="control-group string required address">
 							<div class="hide">
-								<%#= f.input :address_id, input_html: { value: address.id }  %>
+								<%= f.input :address_id, input_html: { value: address.id }  %>
 							</div>
 							<%= f.label :address_id, wrapper: :inline_label %>
 							<div class="controls">
