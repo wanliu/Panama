@@ -4,7 +4,7 @@ class Direct extends Backbone.Model
 
 class root.DirectTransactionView extends Backbone.View
   events: {
-    "click .direct-message .message-toggle": "toggle_message"
+    "click .chat_wrapper .message-toggle": "toggle_message"
     "click .direct-info .completed"        : "completed"
   }
 
@@ -12,7 +12,7 @@ class root.DirectTransactionView extends Backbone.View
     @$info = @$(".direct-info")
     @login = @options.login
     @$el = $(@el)
-    @$message = @$(".direct-message")
+    @$message = @$(".chat_wrapper")
     @$iframe = @$message.find("iframe")
     @$messages = @$message.find(".messages")
     @$toolbar = @$message.find(".toolbar")

@@ -132,7 +132,7 @@ class BaseChatView extends Caramal.BackboneView
       </div>
       <div class="foot_nav">
         <span class="face-panel">
-          <a href="#" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-html="true" data-original-title="">
+          <a href="javascript:void(0)" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-html="true" data-original-title="">
             <i class="icon-glass"></i>
           </a>
         </span>
@@ -455,7 +455,8 @@ class root.AttachChatView extends TemporaryChatView
           .css('position', 'static')
           .css('width', '100%')
           .css('height', '100%')
-          .find('.head').addClass('hide')
+    @$('.head').addClass('hide')
+    @$('.ui-resizable-handle').addClass('hide')
     $(@model.get('attach_el')).html(@el)
 
     @bindMessage()

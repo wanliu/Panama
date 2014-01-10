@@ -1,73 +1,79 @@
 @import "lib/helper";
 
+.wrapper-box {
+  // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+  padding: 10px;
+  @include transparent(rgb(51, 51, 51), 0.4);
+  
+  .ui-resizable-handle {
+    position: relative;
+  }
+}
+
 .direct_transactions{
   .direct{
     padding: 8px;
+    /*padding: 10px 0px;*/
 
-    .direct-info{
-      /*padding: 10px 0px;*/
+    .create_time{
+      clear: both;
+      float: right;
+    }
 
-      .create_time{
-        clear: both;
-        float: right;
+    .close{
+      margin-left: 10px;
+    }
+
+    .avatar{
+      img{
+        width:70px;
+        height:70px;
+        vertical-align: top;
+        float: left;
       }
 
-      .close{
-        margin-left: 10px;
+      .header-title{
+        margin-left: 85px;
       }
 
-      .avatar{
-        img{
-          width:70px;
-          height:70px;
-          vertical-align: top;
-          float: left;
-        }
-
-        .header-title{
-          margin-left: 85px;
-        }
-
-        .owner_name{
-          display: inline-block;
-          margin: 0px
-        }
-      }
-
-      .products{
-        tfoot{
-          td{
-            text-align:right;
-            font-size:20px;
-          }
-        }
-
-        tbody{
-          tr{
-            line-height: 66px;
-          }
-        }
+      .owner_name{
+        display: inline-block;
+        margin: 0px
       }
     }
 
-    .direct-message{
+    .products{
+      tfoot{
+        td{
+          text-align:right;
+          font-size:20px;
+        }
+      }
+
+      tbody{
+        tr{
+          line-height: 66px;
+        }
+      }
+    }
+  }
+
+  .chat_wrapper{
+    background: white;
+    padding: 5px;
+    @include box_sizing(border-box);
+
+    .toolbar{
+    }
+
+    .messages{
       background: white;
-      padding: 5px;
-      @include box_sizing(border-box);
 
-      .toolbar{
-      }
-
-      .messages{
-        background: white;
-
-        iframe{
-          width: 100%;
-          border: none;
-          height: 100%;
-        }
+      iframe{
+        width: 100%;
+        border: none;
+        height: 100%;
       }
     }
-
   }
 }

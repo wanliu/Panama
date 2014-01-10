@@ -1,48 +1,46 @@
 <% buyer = transaction.buyer %>
-<div id="order<%=transaction.id %>" class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
-   state-id="<%= transaction.id %>"
-   state-initial="<%= transaction.state %>"
-   state-title="<%= transaction.seller_state_title %>"
-   state-url="<%= page_shop_admins_transaction_path(current_shop, transaction) %>"
-   state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
-   url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>"
-   data-token="<%= @transaction.temporary_channel.try(:token) %>"
-   data-number="<%= 'OrderTransaction_' + @transaction.number %>" >
-  <div class='wrapper-box'>
-    <div class='row-fluid'>
-      <div class='left span7'>
-        <div class="transaction-header">
-          <div class="avatar">
-            <%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
-          </div>
-          <div class="container-fluid info-header">
-            <div class="page-header">
-              <div class="trasaction-title">
-                <div class="name">
-                  <%= buyer.login %>
-                </div>
-              </div>
-              <div class="transaction-address">
-                <%=render_base_template "address", :transaction => transaction  %>
-              </div>     
-            </div>
-          </div>
+<div class='row-fluid wrapper-box'>
+  <div class='left span7'>
+    <div id="order<%=transaction.id %>" class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
+       state-id="<%= transaction.id %>"
+       state-initial="<%= transaction.state %>"
+       state-title="<%= transaction.seller_state_title %>"
+       state-url="<%= page_shop_admins_transaction_path(current_shop, transaction) %>"
+       state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
+       url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>"
+       data-token="<%= @transaction.temporary_channel.try(:token) %>"
+       data-number="<%= 'OrderTransaction_' + @transaction.number %>" >
+      <div class="transaction-header">
+        <div class="avatar">
+          <%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
         </div>
-        <div class="transaction-body">
-          <%= render state, transaction: transaction %>
-          <div class='transaction-actions'>
-            <%= render "state_buttons", :transaction => transaction %>
+        <div class="container-fluid info-header">
+          <div class="page-header">
+            <div class="trasaction-title">
+              <div class="name">
+                <%= buyer.login %>
+              </div>
+            </div>
+            <div class="transaction-address">
+              <%=render_base_template "address", :transaction => transaction  %>
+            </div>     
           </div>
         </div>
       </div>
-      <div class='span5 chat_wrapper'>
-        <div class="transaction-footer" id="transaction_message_<%=transaction.id %>">
-          <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
-          <div class='message_wrap'>
-            <!-- <iframe frameborder='0' src="<%=dialogue_shop_admins_transaction_path(current_shop.name, transaction.id) %>">
-            </iframe> -->
-          </div>
+      <div class="transaction-body">
+        <%= render state, transaction: transaction %>
+        <div class='transaction-actions'>
+          <%= render "state_buttons", :transaction => transaction %>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class='span5 chat_wrapper'>
+    <div class="transaction-footer">
+      <!-- <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %>
+      </div> -->
+      <div class='message_wrap'>
       </div>
     </div>
   </div>

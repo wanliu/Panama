@@ -2,7 +2,7 @@ root = (window || @)
 
 class root.ShopDirectTransactionView extends Backbone.View
   events: {
-    "click .direct-message .message-toggle" : "toggle_message"
+    "click .chat_wrapper .message-toggle" : "toggle_message"
   }
 
   initialize: (options) ->
@@ -21,7 +21,7 @@ class root.ShopDirectTransactionView extends Backbone.View
   init_elem: () =>
     @$el = $(@el)
     @$info = @$(".direct-info")
-    @$message = @$(".direct-message")
+    @$message = @$(".chat_wrapper")
     @$iframe = @$message.find("iframe")
     @$messages = @$message.find(".messages")
     @$toolbar = @$message.find(".toolbar")

@@ -193,7 +193,7 @@ class TransactionCardBase extends AbstructStateView
 
   setMessagePanel: () ->
     @message_panel = @$(".message_wrap", ".transaction-footer")
-    total = @$(".wrapper-box>>.left").outerHeight()
+    total = @$(".wrapper-box>.left").outerHeight()
     tm = @$(".message-toggle").outerHeight()
     wrap = @$('.transaction-footer')
     padding = parseInt(wrap.css("padding-top")) + parseInt(wrap.css("padding-bottom"))

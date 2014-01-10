@@ -3,18 +3,22 @@
 @import "lib/transparent";
 @import "lib/helper";
 
+.wrapper-box {
+  // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
+  padding: 10px;
+  @include transparent(rgb(51, 51, 51), 0.4);
+  
+  .ui-resizable-handle {
+    position: relative;
+  }
+}
+
 .transaction {
   /*margin-bottom: 30px;*/
 
   .container-fluid {
     padding-left: 0px;
     padding-right: 0px;
-  }
-
-  .wrapper-box {
-    // @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 1px);
-    @include transparent(rgb(51, 51, 51), 0.4);
-    padding: 10px;
   }
 
   hr {

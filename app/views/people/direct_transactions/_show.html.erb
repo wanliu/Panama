@@ -1,117 +1,119 @@
-<div class='row-fluid widget direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
-  data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
-  data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
+<div class='row-fluid wrapper-box'>
   <div class='span7 direct-info'>
-    <div class='row-fluid'>
-      <div class='span8 avatar'>
-        <img src="<%=direct_transaction.seller.photos.header %>" class='img-polaroid' />
-        <div class='header-title'>
-          <h3 class='owner_name'>
-            <%=direct_transaction.seller.name %>
-          </h3>
+    <div class='direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
+      data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
+      data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
+      <div class='row-fluid'>
+        <div class='span8 avatar'>
+          <img src="<%=direct_transaction.seller.photos.header %>" class='img-polaroid' />
+          <div class='header-title'>
+            <h3 class='owner_name'>
+              <%=direct_transaction.seller.name %>
+            </h3>
+          </div>
+          <div>
+            <%=direct_transaction.seller.address_location %>
+          </div>
         </div>
-        <div>
-          <%=direct_transaction.seller.address_location %>
+        <div class='span4'>
+          <div class='wrap_event'>
+            <h4 class='pull-right state_title'>
+              <% if direct_transaction.state == :uncomplete %>
+              <input type='button' class='btn btn-large btn-primary pull-right completed' value='完成交易' />
+              <% else %>
+                交易成功
+              <% end %>
+            </h4>
+          </div>
         </div>
       </div>
-      <div class='span4'>
-        <div class='wrap_event'>
-          <h4 class='pull-right state_title'>
-            <% if direct_transaction.state == :uncomplete %>
-            <input type='button' class='btn btn-large btn-primary pull-right completed' value='完成交易' />
-            <% else %>
-              交易成功
+
+      <div class='row-fluid'>
+        <table class='table table-striped'>
+          <thead>
+            <tr>
+              <th>银行</th>
+              <th>开户姓名</th>
+              <th>帐户</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% if direct_transaction.seller.banks.blank? %>
+            <tr>
+              <td colspan="3">暂时没有</td>
+            </tr>
+          <% else %>
+            <% direct_transaction.seller.banks.each do |shop_bank| %>
+            <tr>
+              <td class='bank-wrapper'>
+                <div class="bank_card">
+                  <label for="bank_<%=shop_bank.bank_code %>">
+                    <span class="banks bank-<%=shop_bank.bank_code.downcase %>">
+                      <%= shop_bank.bank_name %>
+                    </span>
+                  </label>
+                </div>
+              </td>
+              <td><%= shop_bank.name %></td>
+              <td><%= shop_bank.code_title %></td>
+            </tr>
             <% end %>
-          </h4>
-        </div>
+          <% end %>
+          </tbody>
+        </table>
       </div>
-    </div>
 
-    <div class='row-fluid'>
-      <table class='table table-striped'>
-        <thead>
-          <tr>
-            <th>银行</th>
-            <th>开户姓名</th>
-            <th>帐户</th>
-          </tr>
-        </thead>
-        <tbody>
-        <% if direct_transaction.seller.banks.blank? %>
-          <tr>
-            <td colspan="3">暂时没有</td>
-          </tr>
-        <% else %>
-          <% direct_transaction.seller.banks.each do |shop_bank| %>
-          <tr>
-            <td class='bank-wrapper'>
-              <div class="bank_card">
-                <label for="bank_<%=shop_bank.bank_code %>">
-                  <span class="banks bank-<%=shop_bank.bank_code.downcase %>">
-                    <%= shop_bank.bank_name %>
-                  </span>
-                </label>
-              </div>
-            </td>
-            <td><%= shop_bank.name %></td>
-            <td><%= shop_bank.code_title %></td>
-          </tr>
-          <% end %>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
-
-    <div class='row-fluid'>
-      <table class='table table-striped products'>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>图片</th>
-            <th>商品</th>
-            <th>数量</th>
-            <th>单价</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% direct_transaction.items.each do |item| %>
-          <tr>
-            <td><%=item.id %></td>
-            <td>
-              <%=image_tag item.product.photos.icon %>
-            </td>
-            <td>
-              <%= item.title %>
-            </td>
-            <td>
-              <%= item.amount %>
-            </td>
-            <td>
-              <%= number_to_currency(item.price) %>
-            </td>
-            <td>
-              <%= number_to_currency(item.total) %>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan='6'>
-              合计：<%= number_to_currency(direct_transaction.total) %>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class='row-fluid'>
+        <table class='table table-striped products'>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>图片</th>
+              <th>商品</th>
+              <th>数量</th>
+              <th>单价</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% direct_transaction.items.each do |item| %>
+            <tr>
+              <td><%=item.id %></td>
+              <td>
+                <%=image_tag item.product.photos.icon %>
+              </td>
+              <td>
+                <%= item.title %>
+              </td>
+              <td>
+                <%= item.amount %>
+              </td>
+              <td>
+                <%= number_to_currency(item.price) %>
+              </td>
+              <td>
+                <%= number_to_currency(item.total) %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan='6'>
+                合计：<%= number_to_currency(direct_transaction.total) %>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
-  <div class='span5 direct-message'>
-    <div class='row-fluid toolbar'>
+
+  <div class='span5 chat_wrapper'>
+    <!-- <div class='row-fluid toolbar'>
       <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>
-    </div>
-    <div class='row-fluid message_wrap'>
-      <!-- <iframe src="<%= dialog_person_direct_transaction_path(@people, direct_transaction) %>" style="frameborder: 0;"></iframe>
     </div> -->
+    <div class='message_wrap'>
+    </div>
   </div>
 </div>
