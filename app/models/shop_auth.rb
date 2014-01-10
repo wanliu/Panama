@@ -6,9 +6,10 @@ class ShopAuth
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  ATTR_FIELDS = [:user_id, :company_name, :address_id, :company_license, 
-                 :company_license_photo, :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone]
-  
+  ATTR_FIELDS = [:user_id, :company_name, :address_id, :company_license,
+                 :shop_name, :shop_summary, :company_license_photo,
+                 :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone]
+
   attr_accessor *ATTR_FIELDS
 
   # 在这里添加不能重复的字段

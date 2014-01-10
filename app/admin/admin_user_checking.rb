@@ -40,19 +40,7 @@ ActiveAdmin.register UserChecking do
       end
       shop.configure_shop
     end
-    # if user_checking.update_attributes(:checked => true, :rejected => false)
-    #   if user_checking.user.try(:shop)
-    #     shop = user_checking.user.shop
-    #     shop_url = "/shops/" + shop.name
-    #     shop.transaction do
-    #       shop.update_attributes!(:shop_url => shop_url, :audit_count => shop.audit_count + 1)
-    #       shop.active_shop!
-    #       # shop.save!
-    #     end
-    #   end
-    # end
-
-    user_checking.send_checked_mail
+    user_checking.send_checked_mail if shop.actived?
 
     redirect_to action: :index
   end

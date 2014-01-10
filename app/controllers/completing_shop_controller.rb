@@ -7,7 +7,6 @@ class CompletingShopController < Wicked::WizardController
   def show
     @user_checking = UserChecking.where(:service => "seller", 
                                         :user_id => current_user.id).first_or_create
-    binding.pry
     @shop_auth = ShopAuth.new(@user_checking.attributes)
     if @user_checking.checked && current_user.try(:shop).try(:actived)
       redirect_to "/"
@@ -63,22 +62,29 @@ class CompletingShopController < Wicked::WizardController
   end
 
   def save_license
-    binding.pry
     shop_auth_params = params[:shop_auth]
-    shop_params = shop_auth_params[:shop].merge(
-      address_id: @user_checking.address.try(:id))
-    if current_user.shop.blank?
-      @shop = @user_checking.user.create_shop!(shop_params)
-    else
-      @user_checking.user.shop.update_attributes!(shop_params)
-    end
-    shop_auth_params.delete(:shop)
-    @shop_auth = ShopAuth.new(shop_auth_params.merge(user_id: @user_checking.user.id))
+
+    @shop_auth = ShopAuth.new(shop_auth_params.merge(
+      user_id: @user_checking.user.id
+    ))
+
     if @shop_auth.valid?
+      shop_params = {
+        name: shop_auth_params[:shop_name],
+        shop_summary: shop_auth_params[:shop_summary],
+        address_id: @user_checking.address.try(:id)
+      }
+
+      if current_user.shop.blank?
+        @shop = @user_checking.user.create_shop!(shop_params)
+      else
+        @user_checking.user.shop.update_attributes!(shop_params)
+      end
+
       @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
       render_wizard(@user_checking)
     else
-      render_wizard
+      render_wizard()
     end
   end
 
