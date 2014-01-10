@@ -40,13 +40,14 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
     t.string   "title"
+    t.string   "group_name"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -540,17 +541,19 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",          :precision => 10, :scale => 2
+    t.decimal  "total",             :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                       :null => false
-    t.datetime "updated_at",                                                       :null => false
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                :default => false
-    t.decimal  "delivery_price", :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                   :default => false
+    t.decimal  "delivery_price",    :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "pay_status",                                    :default => 0
+    t.integer  "transfer_sheet_id"
+    t.integer  "pay_status",                                       :default => 0
+    t.string   "group_name"
     t.string   "number"
     t.datetime "dispose_date"
     t.string   "transport_type"
@@ -727,15 +730,6 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "report_prices", :force => true do |t|
-    t.integer  "ask_buy_id"
-    t.decimal  "my_price",        :precision => 10, :scale => 2
-    t.integer  "user_id"
-    t.integer  "shop_product_id"
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
   end
 
   create_table "resources", :force => true do |t|

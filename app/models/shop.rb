@@ -46,8 +46,8 @@ class Shop < ActiveRecord::Base
 
   scope :actived, where(actived: true)
 
-  validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }, if: :actived?
-  validates :name, presence: true, if: :actived?
+  validates :name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }
+  validates :name, presence: true
   validates :name, uniqueness: true
 
   validates_presence_of :user
@@ -64,8 +64,11 @@ class Shop < ActiveRecord::Base
     address.try(:location)
   end
 
-  def active_shop
-    update_attribute(:actived, true)
+  def active!
+    update_attributes!(:actived => true)
+  end
+
+  def configure_shop
     if audit_count == 1
       create_shop
       initial_shop_data
