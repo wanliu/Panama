@@ -219,8 +219,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
   clearDisplay: () ->
     @models.each (model) ->
-      model.attributes.display = false
-      model._currentAttributes.display = false        
+      model.set(display: false)
 
   find_on: () ->
     @models.where(display: true)[0]
@@ -236,7 +235,9 @@ class TransactionTwoColumnsViewport extends Backbone.View
     )
 
   exitMenu: () ->
-    @$sidebar.exitWrap() unless _.isEmpty(@$sidebar)
+    unless _.isEmpty(@$sidebar)
+      model = @find_on()      
+      @$sidebar.exitWrap() if _.isEmpty(model)
 
 
 class MiniRow2ColView  extends Backbone.View
