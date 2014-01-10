@@ -81,7 +81,7 @@ class OrderTransaction < ActiveRecord::Base
     Notification.dual_notify(seller,
       :channel => "/#{seller.im_token}/transactions/create",
       :content => "你有编号#{number}新的订单",
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+      :url => "/shops/#{seller.name}/admins/pending#open/#{id}",
       :order_id => id,
       :target => self
     ) do |options|
@@ -365,7 +365,7 @@ class OrderTransaction < ActiveRecord::Base
       :state => state_name,
       :event => "refresh_#{event}",
       :state_title => seller_state_title,
-      :url => "/shops/#{seller.name}/admins/transactions/#{id}"
+      :url => "/shops/#{seller.name}/admins/pending#open/#{id}"
     ) do |options|
       options[:channel] = "/transactions/change_state"
     end
@@ -379,7 +379,7 @@ class OrderTransaction < ActiveRecord::Base
       :state => state_name,
       :state_title => buyer_state_title,
       :event => "refresh_#{event}",
-      :url => "/people/#{buyer.login}/transactions/#{id}"
+      :url => "/people/#{buyer.login}/transactions#open/#{id}"
     ) do |options|
       options[:channel] = "/transactions/change_state"
     end
@@ -455,6 +455,7 @@ class OrderTransaction < ActiveRecord::Base
       :channel => "/#{seller.im_token}/transactions/dispose",
       :content => "#{user.login}处理 #{number}订单",
       :order_id => id,
+      :url => "/people/#{buyer.login}/transactions#open/#{id}",
       :exclude => user
     ) do |options|
       options[:channel] = "/transactions/dispose"
@@ -595,7 +596,7 @@ class OrderTransaction < ActiveRecord::Base
       Notification.dual_notify(buyer, 
         :channel => "/transactions/#{id}/change_delivery_price",
         :content => "订单#{number}已经修改运费",
-        :url => "/shops/#{seller.name}/admins/transactions/#{id}",
+        :url => "/shops/#{seller.name}/admins/pending#open/#{id}",
         :stotal => stotal,
         :order_id => id
       ) do |options|
