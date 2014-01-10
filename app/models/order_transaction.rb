@@ -81,7 +81,7 @@ class OrderTransaction < ActiveRecord::Base
     Notification.dual_notify(seller,
       :channel => "/#{seller.im_token}/transactions/create",
       :content => "你有编号#{number}新的订单",
-      :url => "/shops/#{seller.name}/admins/pending#open/#{id}",
+      :url => seller_open_path,
       :order_id => id,
       :target => self
     ) do |options|
@@ -365,7 +365,7 @@ class OrderTransaction < ActiveRecord::Base
       :state => state_name,
       :event => "refresh_#{event}",
       :state_title => seller_state_title,
-      :url => "/shops/#{seller.name}/admins/pending#open/#{id}"
+      :url => seller_open_path
     ) do |options|
       options[:channel] = "/transactions/change_state"
     end
@@ -379,7 +379,7 @@ class OrderTransaction < ActiveRecord::Base
       :state => state_name,
       :state_title => buyer_state_title,
       :event => "refresh_#{event}",
-      :url => "/people/#{buyer.login}/transactions#open/#{id}"
+      :url => buyer_open_path
     ) do |options|
       options[:channel] = "/transactions/change_state"
     end
@@ -455,7 +455,7 @@ class OrderTransaction < ActiveRecord::Base
       :channel => "/#{seller.im_token}/transactions/dispose",
       :content => "#{user.login}处理 #{number}订单",
       :order_id => id,
-      :url => "/people/#{buyer.login}/transactions#open/#{id}",
+      :url => buyer_open_path,
       :exclude => user
     ) do |options|
       options[:channel] = "/transactions/dispose"
@@ -596,7 +596,7 @@ class OrderTransaction < ActiveRecord::Base
       Notification.dual_notify(buyer, 
         :channel => "/transactions/#{id}/change_delivery_price",
         :content => "订单#{number}已经修改运费",
-        :url => "/shops/#{seller.name}/admins/pending#open/#{id}",
+        :url => buyer_open_path,
         :stotal => stotal,
         :order_id => id
       ) do |options|
@@ -613,6 +613,7 @@ class OrderTransaction < ActiveRecord::Base
       options = {
         :order_id => id,
         :persistent => false,
+        :url => seller_open_path,
         :info => {
           :total => stotal,
           :address => address.try(:location)  
@@ -659,6 +660,14 @@ class OrderTransaction < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def buyer_open_path
+    "/people/#{buyer.login}/transactions#open/#{id}"
+  end
+
+  def seller_open_path
+    "/shops/#{seller.name}/admins/pending#open/#{id}"
   end
 
 end
