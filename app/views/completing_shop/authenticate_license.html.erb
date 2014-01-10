@@ -58,12 +58,12 @@
 						<% address_error = @shop_auth.errors[:address_id] %>
 						<div data-id="<%= address.id %>" class="control-group string required address-panel <%= 'error' if address_error.present? %>">
 							<div class="hide">
-								<%= f.input :address_id, input_html: { value: address.id }  %>
+								<%= f.input :address_id, input_html: { value: address.try(:id) }  %>
 							</div>
 							<%= f.label :address_id, wrapper: :inline_label %>
 							<div class="controls">
 								<div>
-									<input class="string required address_input" size="50" type="text" value="<%= address.address_only %>" readonly="readonly">
+									<input class="string required address_input" size="50" type="text" value="<%= address.try(:address_only) %>" readonly="readonly">
 									<a class="btn" data-toggle="modal" href="<%= edit_address_completing_shop_path %>" data-target="#edit_address">编辑</a>
 									<div id="edit_address" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="editAddressLabel" aria-hidden="true">
 										<div class="modal-header">

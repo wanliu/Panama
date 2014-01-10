@@ -66,7 +66,7 @@ class Shop < ActiveRecord::Base
 
   def active_shop
     update_attribute(:actived, true)
-    if audit_count == 0
+    if audit_count == 1
       create_shop
       initial_shop_data
     end
