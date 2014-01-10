@@ -1,9 +1,9 @@
 <span class="pull-right">
+  <span class='state-description'>
+    等待确认</span>
   <div class="btn-group">
-    <%= link_to '#',
-          :class => 'btn btn-large disabled',
-          'event-name' => 'buy' do %>
-      <%=raw "等待确认&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
+    <%= link_to 'javascript:void(0)', :class => "btn btn-large disabled btn_event" do %>
+      <%=raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
     <% end %>
   </div>
 </span>

@@ -1,7 +1,10 @@
 <span class="pull-right">
+  <span class='state-description'>
+    确认收货
+  </span>
   <div class="btn-group">
-    <%= link_to '#', :class => 'btn btn-large btn-primary btn_event', 'event-name' => 'sign' do %>
-      <%=raw "确认收货&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
+    <%= link_to 'javascript:void(0)', :class => 'btn btn-large btn-primary btn_event', 'event-name' => 'sign' do %>
+      <%=raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
     <% end %>
   </div>
 </span>

@@ -98,7 +98,7 @@
 
         <div class="dialog" id="purchase-forms">
           <div class="modal-body">
-            <% if current_user.is_seller? && @ask_buy.user_id != current_user.id && @ask_buy.open == true %>
+            <% if current_user.is_seller? && @ask_buy.user_id != current_user.id && @ask_buy.open && current_user.shop.actived %>
               <h4>我的报价</h4>
               <%= simple_form_for @answer_ask_buy, :remote => true, :url => answer_ask_buy_index_path, :html => { class: 'form-horizontal form_answer_ask_buy'},:method => "post", :type => :json do |f| %>
                 <%=f.input :ask_buy_id, :as => :hidden, :input_html => { :value => @ask_buy.id } %>

@@ -1,7 +1,8 @@
 <span class="pull-right">
+  <span class='state-description'>审核失败，请确认汇款信息</span>
   <div class="btn-group">
-    <%= link_to "javascript:void(0)", :class => 'btn btn-large btn-primary btn_event pay-button', 'event-name' => 'confirm_transfer' do %>
-      <%=raw "确认汇款信息&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
+    <%= link_to "javascript:void(0)", :class => 'btn btn-large btn-primary btn_event', 'event-name' => 'confirm_transfer' do %>
+      <%=raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
     <% end %>
   </div>
 </span>

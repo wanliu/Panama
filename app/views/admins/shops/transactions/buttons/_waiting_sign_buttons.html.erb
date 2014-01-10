@@ -1,15 +1,8 @@
 <span class="pull-right">
+  <span class='state-description'>等待收货</span>
   <div class="btn-group">
-    <% if Rails.env.development? %>
-      <%= link_to '#',
-        :class => 'btn btn-large',
-        'event-name' => 'back_deliver' do %>
-        <%=raw "#{caret(:left)}&nbsp;&nbsp;&nbsp;后退" %>
-      <% end %>
-    <% end %>
-
-    <%= link_to '#', :class => 'btn btn-large disabled', 'event-name' => 'sign' do %>
-      <%=raw "等待收货&nbsp;&nbsp;&nbsp;#{caret(:right)}" %>
+    <%= link_to 'javascript:void(0)', :class => 'btn btn-large disabled' do %>
+      <%=raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right)}" %>
     <% end %>
   </div>
 </span>

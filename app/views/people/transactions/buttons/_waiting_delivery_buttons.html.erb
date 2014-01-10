@@ -1,8 +1,8 @@
 <span class="pull-right">
+  <span class='state-description'>等待卖家发货</span>
   <div class="btn-group">
-    <%= link_to '#', :class => 'btn btn-large btn-primary btn_event disabled', 'event-name' => 'delivered' do %>
-      <%= raw "等待发货&nbsp" %>
-      <%= caret(:right) %>
+    <%= link_to 'javascript:void(0)', :class => 'btn btn-large btn_event disabled' do %>
+      <%= raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
     <% end %>
   </div>
 </span>

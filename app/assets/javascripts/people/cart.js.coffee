@@ -9,6 +9,7 @@ class CartItemView extends Backbone.View
     'click .spinner-up'  : 'countCart'
     'click .spinner-down': 'countCart'
     'change .check-item' : 'checkItem'
+    "keyup .spinner-input" : "countCart"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -18,15 +19,16 @@ class CartItemView extends Backbone.View
     @parent.checkItem()
 
   countCart: () ->
-    amount = @$(".spinner-input").val()
-    $.ajax({
-      type: "post",
-      url: "/people/#{@login}/cart/#{@item_id}/change_number",
-      data : { amount: amount }
-      dataType: "json"
-    }).success((data, xhr, res) =>
-      @parent.countCart()
-    )
+    amount = @$(".spinner-input").val() 
+    if !_.isEmpty(amount) &&  !isNaN(amount)
+      $.ajax({
+        type: "post",
+        url: "/people/#{@login}/cart/#{@item_id}/change_number",
+        data : { amount: amount }
+        dataType: "json"
+      }).success((data, xhr, res) =>
+        @parent.countCart()
+      )
 
 
 class root.CartContainer extends Backbone.View
