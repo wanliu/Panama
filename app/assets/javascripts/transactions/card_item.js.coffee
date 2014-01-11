@@ -83,7 +83,7 @@ class root.CardItemListView extends Backbone.View
 
   load_table_list: () ->
     @table = new TransactionTwoColumnsViewport(_.extend({
-      el: @$el,
+      el: @$(".wrap_list"),
       remote_url: @remote_url,
       registerView: (view) =>  
         state = view.model.get("fetch_state")
@@ -92,3 +92,17 @@ class root.CardItemListView extends Backbone.View
 
         @register(view.model.id)
     }, @columns_options))
+
+  open_on: (callback = () ->) ->    
+    @table.route.on "route:open", () =>
+      callback.call(@)
+
+  home_on: (callback = () ->) ->
+    @table.route.on "route:home", () =>
+      callback.call(@)
+
+  hide: () ->
+    @$el.hide()
+
+  show: () ->
+    @$el.show()    

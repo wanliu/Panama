@@ -16,18 +16,16 @@
       </div>
 
       <div class="container-fluid info-header">
-        <div class="page-header">
-          <div class="trasaction-title">
-            <div class="name">
-              <%= seller.name %>
-            </div>
-            <span class='pull-right'>
-              订单编号: <%=refund.order.number %>
-            </span>
+        <div class="trasaction-title">
+          <div class="name">
+            <%= seller.name %>
           </div>
-          <div class="transaction-address">
-            <%=seller.address.location %>
-          </div>
+          <span class='pull-right'>
+            订单编号: <%=refund.order.number %>
+          </span>
+        </div>
+        <div class="transaction-address">
+          <%=seller.address.location %>
         </div>
       </div>
     </div>

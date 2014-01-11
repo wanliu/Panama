@@ -40,7 +40,8 @@ class root.OrderRefundList extends CardItemListView
 
   initialize: (options) ->
     @columns_options = {
-      secondContainer: ".refund-detail"
+      secondContainer: ".refund-detail",
+      spaceName: "refund"
     }
 
     super options

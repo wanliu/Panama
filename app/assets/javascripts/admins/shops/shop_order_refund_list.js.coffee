@@ -38,7 +38,8 @@ class root.ShopOrderRefundList extends CardItemListView
     @shop = options.shop
     @columns_options = {
       secondContainer : ".refund-detail",
-      leftSide: "#left_sidebar"
+      leftSide: "#left_sidebar",
+      spaceName: "refund"      
     }
     super options
     @load_realtime()

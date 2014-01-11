@@ -37,7 +37,8 @@ class root.OrderTransactions extends CardItemListView
 
   initialize: (options) ->
     @columns_options = {
-      secondContainer: ".order-detail"
+      secondContainer: ".order-detail",
+      spaceName: "order"
     }
 
     super options

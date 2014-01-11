@@ -12,7 +12,8 @@ class MiniLeftSideView extends Backbone.View
     @mininum = false
 
   buildMenu: () ->
-    if $(">.menu", @$menuDocker).length <= 0
+    @$menu = $(">.menu", @$menuDocker)
+    if @$menu.length <= 0
       @$menu = $("<a href='javascript:void(0)' class='menu' ><i class='icon-reorder' /></a>").prependTo(@$menuDocker)
       @$menu
         .css({
@@ -22,7 +23,7 @@ class MiniLeftSideView extends Backbone.View
           'float': 'left'
         })
         .click(@toggleSide)
-      @addExitButton()
+      @addExitButton()   
 
   addExitButton: () ->
     menus = @$(".side-nav")

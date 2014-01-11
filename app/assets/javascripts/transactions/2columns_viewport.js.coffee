@@ -1,11 +1,10 @@
 root = (window || @)
 
-class Workspace extends Backbone.Router
-  
-  routes: {
-    "open/:id" : "open",
-    "" : "home"
-  }
+class WorkList extends Backbone.Router
+
+  initialize: (name) ->
+    @route "open/:id/#{name}", "open"
+    @route "#{name}", "home"
 
 class Transaction extends Backbone.Model
 
@@ -197,7 +196,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   registerView: (view) ->
 
   bindRoute: () ->
-    @route = new Workspace()
+    @route = new WorkList(@spaceName)
     @route.on "route:open", (id) =>
       model = @models.get(id)
       unless _.isEmpty(model)
@@ -209,7 +208,10 @@ class TransactionTwoColumnsViewport extends Backbone.View
       model = @find_on()
       model.set(display: false) unless _.isEmpty(model)
       
-    Backbone.history.start()
+    Backbone.history.start() unless Backbone.History.started
+
+  navigate: (url) ->
+    @route.navigate("#{url}#{@spaceName}", true)
 
   openView: (id) ->  
     model = @models.get(id)
@@ -259,11 +261,11 @@ class MiniRow2ColView  extends Backbone.View
     else
       @exitLayout()
 
-  _open: () ->
-    window.location.href = "#open/#{@model.id}"
+  _open: () ->    
+    @parentView.navigate("open/#{@model.id}/")
 
   _exit: () ->
-    window.location.href = "#"    
+    @parentView.navigate("")    
 
   toggleView: () =>
     @openView()

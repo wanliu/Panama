@@ -2,16 +2,16 @@
   data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
   data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
   <div class='span7 direct-info'>
-    <div class='row-fluid'>
-      <div class='span12 avatar'>
+    <div class='transaction-header'>
+      <div class='avatar'>
         <img src="<%=direct_transaction.buyer.photos.header %>" class='img-polaroid' />
-        <div class='header-title'>
-          <h3 class='owner_name'>
-            <%=direct_transaction.buyer.login %>
-          </h3>
-          <div class='address'>
-            <%=direct_transaction.buyer.address_location %>
-          </div>
+      </div>
+      <div class='info-header'>
+        <h3 class='owner_name'>
+          <%=direct_transaction.buyer.login %>
+        </h3>
+        <div class='address'>
+          <%=direct_transaction.buyer.address_location %>
         </div>
       </div>
     </div>

@@ -39,7 +39,8 @@ class root.DirectTransactionList extends CardItemListView
   initialize: (options) ->
     @login = options.login
     @columns_options = {
-      secondContainer: ".direct-detail"
+      secondContainer: ".direct-detail",
+      spaceName: "direct"
     }
 
     super options

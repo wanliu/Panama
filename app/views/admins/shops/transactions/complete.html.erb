@@ -1,74 +1,66 @@
 <% admin_active_section :complete %>
 
-<div class='row-fluid'>
-  <div class='span8'>
-    <h3 class='page-title'>担保交易</h3>
-  </div>
-</div>
-<div class='row-fluid transaction-list'>
-  <div class='span12 left-column'>
-    <div class='people-groups'>
+<div class='transaction-list'>
+  <div class='row-fluid'>
+    <div class='span8'>
+      <h3 class='page-title'>担保交易</h3>
     </div>
-
-    <div class='threeD-viewport'>
-      <div class='orders card_list'>
-        <% @transactions.each do |row| %>
-          <%=render_base_template "order_mini_row", :row => row %>
-        <% end %>
+  </div>
+  <div class='row-fluid wrap_list'>
+    <div class='span12 left-column'>
+      <div class='people-groups'>
       </div>
-    </div>
 
-    <div class='boxes'>
-      <div class='upbox'></div>
-      <div class='currentbox'></div>
-      <div class='downbox'></div>
-    </div>
-    <%= paginate @transactions %>
-  </div>
-  <div class='order-detail'></div>
-</div>
-<div class='row-fluid'>
-  <div class='span8'>
-    <h3 class='page-title'>直接交易</h3>
-  </div>
-</div>
-<div class='row-fluid'>
-  <div class='span8'>
-    <section class='widget'>
-      <table class='table table-images table-hover complete'>
-        <thead>
-          <tr>
-            <th>买家</th>
-            <th>编号</th>
-            <th>金额</th>
-            <th>下单日期</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if @direct_transactions.present? %>
-            <% @direct_transactions.each do |t| %>
-              <tr class="transaction_complete-<%=t.id%>">
-                <td>
-                  <%= image_tag t.buyer.photos.icon %>
-                  <%= t.buyer.login %>
-                </td>
-                <td><%= t.number %></td>
-                <td><%= t.total %></td>
-                <td>
-                  <%= t.created_at.strftime("%Y-%d-%m %H:%M") %>
-                </td>
-                <td>
-                  <a class="btn btn-info btn-small" href="/shops/<%=t.seller.name %>/admins/direct_transactions/<%= t.id %>">明细</a>
-                </td>
-              </tr>
-            <% end %>
-          <% else %>
-            <tr class="widget"><td colspan="5">暂无直接交易记录</td></tr>
+      <div class='threeD-viewport'>
+        <div class='orders card_list'>
+          <% @transactions.each do |row| %>
+            <%=render_base_template "order_mini_row", :row => row %>
           <% end %>
-        </tbody>
-      </table>
-    </section>
+        </div>
+      </div>
+
+      <div class='boxes'>
+        <div class='upbox'></div>
+        <div class='currentbox'></div>
+        <div class='downbox'></div>
+      </div>
+      <%= paginate @transactions %>
+    </div>
+    <div class='order-detail'></div>
+  </div>
+</div>
+
+<div class='direct_transaction_list'>
+  <div class='row-fluid'>
+    <div class='span8'>
+      <h3 class='page-title'>直接交易</h3>
+    </div>
+  </div>
+  <div class='row-fluid wrap_list'>
+    <div class='span12 left-column'>
+      <div class='people-groups'>
+      </div>
+
+      <div class='threeD-viewport'>
+        <div class='directs card_list'>
+          <% if @directs.length > 0 %>
+            <%= render :partial => "direct_transactions/mini_row", :collection => @directs, :as => :row %>
+          <% else %>
+            <div class='widget'>
+              没有直接处理的交易
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class='boxes'>
+        <div class='upbox'></div>
+        <div class='currentbox'></div>
+        <div class='downbox'></div>
+      </div>
+      <%= paginate @directs %>
+    </div>
+    <div class='direct-detail'></div>
   </div>
 </div>
 
@@ -81,9 +73,21 @@
       token: "<%= current_shop.im_token %>"
     }
 
-    var orders = new ShopOrderTransactions({
+    var view = new TransactionComplete()
+
+    var order = new ShopOrderTransactions({
       el: $(".transaction-list"),
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
       shop: shop})
+
+    var direct = new ShopDirectTransactionList({
+      el: $(".direct_transaction_list"),
+      shop: shop,
+      remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>"
+    })
+    
+    view.register(order)
+    view.register(direct)
+    view.start()
   })
 </script>

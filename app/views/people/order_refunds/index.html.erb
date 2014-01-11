@@ -1,25 +1,32 @@
 <% active_section :refunds %>
-
-<div class='row-fluid order_refund_list'>
-  <div class='span8'>
-    <div class='left-column'>
-      <div class='people-groups'>
-      </div>
-
-      <div class='threeD-viewport'>
-         <div class='refunds card_list'>
-          <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
+<div class="order_refund_list">
+  <div class='row-fluid'>
+    <h4 class="page-title">
+      直接交易订单
+      <small>交易的清单</small>
+    </h4>
+  </div>
+  <div class='row-fluid wrap_list'>
+    <div class='span8'>
+      <div class='left-column'>
+        <div class='people-groups'>
         </div>
-      </div>
 
-      <div class='boxes'>
-        <div class='upbox'></div>
-        <div class='currentbox'></div>
-        <div class='downbox'></div>
+        <div class='threeD-viewport'>
+           <div class='refunds card_list'>
+            <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
+          </div>
+        </div>
+
+        <div class='boxes'>
+          <div class='upbox'></div>
+          <div class='currentbox'></div>
+          <div class='downbox'></div>
+        </div>
+        <%= paginate @refunds %>
       </div>
-      <%= paginate @refunds %>
+      <div class='refund-detail'></div>
     </div>
-    <div class='refund-detail'></div>
   </div>
 </div>
 

@@ -27,12 +27,13 @@ class DirectTransaction extends CardItemView
     super
 
 class root.ShopDirectTransactionList extends CardItemListView
-
+  
   initialize: (options) ->
     @shop = options.shop
     @columns_options = {
       leftSide: "#left_sidebar",
-      secondContainer: ".direct-detail"
+      secondContainer: ".direct-detail",
+      spaceName: "direct"
     }
     super options
     @load_realtime()
