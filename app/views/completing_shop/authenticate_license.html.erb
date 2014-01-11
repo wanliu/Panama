@@ -27,11 +27,13 @@
 						</div>
 					</div>
 					<div class="span7 input_locate" >
-						<%= f.simple_fields_for (@user_checking.user.shop || Shop.new ) do |s| %>
-							<%= s.input :name, label: '商店名称' %>
+						<%#= f.simple_fields_for (@user_checking.user.shop || Shop.new ) do |s| %>
+							<%#= s.input :name, label: '商店名称' %>
 							<%#= f.input :shop_url, label: '商店地址' %>
-							<%= s.input :shop_summary, label: '商店简介' %>
-						<% end %>
+							<%#= s.input :shop_summary, label: '商店简介' %>
+						<%# end %>
+						<%= f.input :shop_name, label: '商店名称' %>
+						<%= f.input :shop_summary, label: '商店简介' %>
 					</div>
 				</div>
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140109053952) do
+ActiveRecord::Schema.define(:version => 20140110093339) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
     t.string   "title"
+    t.string   "group_name"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -532,17 +533,19 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",          :precision => 10, :scale => 2
+    t.decimal  "total",             :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                       :null => false
-    t.datetime "updated_at",                                                       :null => false
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                :default => false
-    t.decimal  "delivery_price", :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                   :default => false
+    t.decimal  "delivery_price",    :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "pay_status",                                    :default => 0
+    t.integer  "transfer_sheet_id"
+    t.integer  "pay_status",                                       :default => 0
+    t.string   "group_name"
     t.string   "number"
     t.datetime "dispose_date"
     t.string   "transport_type"
@@ -947,6 +950,8 @@ ActiveRecord::Schema.define(:version => 20140109053952) do
     t.integer  "rejected_times",                         :default => 0
     t.integer  "address_id"
     t.string   "service",                  :limit => 20
+    t.string   "shop_name"
+    t.string   "shop_summary"
   end
 
   create_table "users", :force => true do |t|

@@ -30,17 +30,17 @@ ActiveAdmin.register UserChecking do
 
   member_action :check, method: :post do
     user_checking = UserChecking.find(params[:id])
-    if user_checking.update_attributes(:checked => true, :rejected => false)
-      if user_checking.user.try(:shop)
-        shop = user_checking.user.shop
-        shop_url = "/shops/"+shop.name
-        shop.update_attributes(:shop_url => shop_url,:audit_count => shop.audit_count+1)
-        shop.active_shop
-        shop.save!
+    shop = user_checking.user.try(:shop)
+    if !shop.blank?
+      shop_url = "/shops/" + shop.name
+      shop.transaction do
+        user_checking.update_attributes!(:checked => true, :rejected => false)
+        shop.update_attributes!(:shop_url => shop_url, :audit_count => shop.audit_count + 1)
+        shop.active!
       end
+      shop.configure_shop
     end
-
-    user_checking.send_checked_mail
+    user_checking.send_checked_mail if shop.actived?
 
     redirect_to action: :index
   end
