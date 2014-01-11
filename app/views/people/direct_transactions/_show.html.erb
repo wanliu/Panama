@@ -1,33 +1,23 @@
 <div class='row-fluid wrapper-box'>
   <div class='span7 direct-info'>
-    <div class='direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
+    <div class='direct transaction' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
       data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
       data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
-      <div class='row-fluid'>
-        <div class='span8 avatar'>
+      <div class='transaction-header'>
+        <div class='avatar'>
           <img src="<%=direct_transaction.seller.photos.header %>" class='img-polaroid' />
-          <div class='header-title'>
-            <h3 class='owner_name'>
+        </div>
+        <div class='container-fluid info-header'>
+          <div class='page-header'>
+            <span class='name'>
               <%=direct_transaction.seller.name %>
-            </h3>
+            </span>
           </div>
           <div>
-            <%=direct_transaction.seller.address_location %>
-          </div>
-        </div>
-        <div class='span4'>
-          <div class='wrap_event'>
-            <h4 class='pull-right state_title'>
-              <% if direct_transaction.state == :uncomplete %>
-              <input type='button' class='btn btn-large btn-primary pull-right completed' value='完成交易' />
-              <% else %>
-                交易成功
-              <% end %>
-            </h4>
+            <%= direct_transaction.seller.address_location || "暂无" %>
           </div>
         </div>
       </div>
-
       <div class='row-fluid'>
         <table class='table table-striped'>
           <thead>
@@ -62,7 +52,6 @@
           </tbody>
         </table>
       </div>
-
       <div class='row-fluid'>
         <table class='table table-striped products'>
           <thead>
@@ -105,6 +94,17 @@
             </tr>
           </tfoot>
         </table>
+      </div>
+      <div class='row-fluid'>
+        <div class='wrap_event'>
+          <h4 class='pull-right state_title'>
+            <% if direct_transaction.state == :uncomplete %>
+            <input type='button' class='btn btn-large btn-primary pull-right completed' value='完成交易' />
+            <% else %>
+              成功
+            <% end %>
+          </h4>
+        </div>
       </div>
     </div>
   </div>

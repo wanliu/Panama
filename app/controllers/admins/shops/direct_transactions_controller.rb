@@ -9,7 +9,7 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
   end
 
   def generate_token
-    @direct_transaction = current_direct_transaction
+    @direct_transaction = current_shop_direct_transaction
     @direct_transaction.send('create_the_temporary_channel')
     
     respond_to do |format|

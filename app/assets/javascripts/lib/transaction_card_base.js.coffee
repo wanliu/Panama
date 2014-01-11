@@ -30,6 +30,7 @@ class TransactionCardBase extends AbstructStateView
 
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
+    @transaction.bind("change:stotal", @change_stotal, @)
 
     @toggleMessage() if @dialogState
     @load_realtime()
@@ -239,8 +240,12 @@ class TransactionCardBase extends AbstructStateView
 
   load_realtime: () ->
     @client = window.clients
+
     @client.monitor "#{@realtime_url()}/change_state", (data) =>
       @stateChange data
+
+    @client.monitor "#{@realtime_url()}/change_info", (data) =>
+      @transaction.set(data.info)
 
   realtime_url: () ->
     "/#{@transaction.id}"
@@ -248,6 +253,12 @@ class TransactionCardBase extends AbstructStateView
   back_state: () ->
     @alarm()
     @transition.cancel()
+
+  change_stotal: () ->
+    total = @$(".stotal")      
+    if total.length > 0
+      tag = total.text().trim().substring(0, 1)
+      total.html("#{tag} #{@transaction.get('stotal')}")
 
 exports.TransactionCardBase = TransactionCardBase
 exports

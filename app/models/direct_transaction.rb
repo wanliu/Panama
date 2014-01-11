@@ -60,7 +60,7 @@ class DirectTransaction < ActiveRecord::Base
     Notification.dual_notify(seller,
       :channel => "/#{seller.im_token}/direct_transactions/dispose",
       :content => "直接交易订单#{number}被#{user.login}处理了",
-      :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
+      :url => seller_open_path,
       :avatar => user.photos.icon,
       :target => self,
       :direct_id => id,
@@ -76,7 +76,7 @@ class DirectTransaction < ActiveRecord::Base
     Notification.dual_notify(seller,
       :channel => "/#{seller.im_token}/direct_transactions/create",
       :content => "你有新的直接交易订单#{number}",
-      :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
+      :url => seller_open_path,
       :avatar => buyer.photos.icon,
       :target => self,
       :direct_id => id
@@ -91,7 +91,7 @@ class DirectTransaction < ActiveRecord::Base
       Notification.dual_notify(target,
         :channel => "/#{seller.im_token}/direct_transactions/#{id}/change_state",
         :content => "直接交易订单#{number}状态变更#{state_title}",
-        :url => "/shops/#{seller.name}/admins/direct_transactions/#{id}",
+        :url => seller_open_path,
         :avatar => buyer.photos.icon,
         :target => self,
         :state => state.name,
@@ -136,4 +136,11 @@ class DirectTransaction < ActiveRecord::Base
     self.create_temporary_channel(targeable_type: 'DirectTransaction', user_id: seller.owner.id, name: name)
   end
 
+  def buyer_open_path
+    "/people/#{buyer.login}/direct_transactions#open/#{id}/direct"    
+  end
+
+  def seller_open_path
+    "/shops/#{seller.name}/admins/direct_transactions#open/#{id}/direct"
+  end
 end

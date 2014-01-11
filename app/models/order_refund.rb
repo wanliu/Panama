@@ -132,6 +132,7 @@ class OrderRefund < ActiveRecord::Base
   def change_order_state
     order.fire_events!(:returned)
     order.change_state_notify_seller(:returned)
+    order.way_change_state_notify_buyer(:returned)
   end
 
   def current_state_detail
@@ -150,7 +151,7 @@ class OrderRefund < ActiveRecord::Base
       Notification.dual_notify(buyer, 
         :channel => "/order_refunds/#{id}/change_state",
         :content => "退货单#{number} 状态变更为#{state_title}",
-        :url => "/people/#{buyer.login}/order_refunds/#{id}",
+        :url => buyer_open_path,
         :target => self,
         :state => state_name,
         :event => "refresh_#{ename}",
@@ -169,7 +170,7 @@ class OrderRefund < ActiveRecord::Base
       Notification.dual_notify(target,
         :channel => "/#{seller.im_token}/order_refunds/#{id}/change_state",
         :content => "退货单#{number} 状态变更为#{state_title}",
-        :url => "/shops/#{seller.name}/order_refunds/#{id}",
+        :url => seller_open_path,
         :target => self,
         :event => "refresh_#{ename}",
         :state => state_name,
@@ -366,7 +367,7 @@ class OrderRefund < ActiveRecord::Base
     Notification.dual_notify(target,
       :channel => "/#{seller.im_token}/order_refunds/create",
       :content => "订单#{order.number}申请退货",
-      :url => "/shops/#{seller.name}/admins/order_refunds/#{id}",
+      :url => seller_open_path,
       :avatar => buyer.photos.icon,
       :refund_id => id,
       :target => self
@@ -381,5 +382,13 @@ class OrderRefund < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def buyer_open_path
+    "/people/#{buyer.login}/order_refunds#open/#{id}/refund"    
+  end
+
+  def seller_open_path
+    "/shops/#{seller.name}/admins/order_refunds#open/#{id}/refund"
   end
 end

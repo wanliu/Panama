@@ -3,8 +3,7 @@
     确认付款
   </span>
   <div class="btn-group">
-    <% class_name = transaction.valid_payment? ? "btn-primary" : "disabled" %>
-    <%= link_to "javascript:void(0)", :class => "btn btn-large btn_event pay-button #{class_name}", 'event-name' => 'paid' do %>
+    <%= link_to "javascript:void(0)", :class => "btn btn-large btn_event pay-button btn-primary", 'event-name' => 'paid' do %>
       <%=raw "下一步&nbsp;&nbsp;&nbsp;#{caret(:right, :inverse)}" %>
     <% end %>    
   </div>

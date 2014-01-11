@@ -3,22 +3,19 @@
     <div id="direct<%=direct_transaction.id %>" class='row-fluid direct transaction' data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
       data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
       data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
-      <div class='row-fluid'>
-        <div class='span8 avatar'>
+      <div class='transaction-header'>
+        <div class='avatar'>
           <img src="<%=direct_transaction.buyer.photos.header %>" class='img-polaroid' />
-          <div class='header-title'>
-            <h3 class='owner_name'>
+        </div>
+        <div class='container-fluid info-header'>
+          <div class='page-header'>
+            <div class='name'>
               <%=direct_transaction.buyer.login %>
-            </h3>
+            </div>
             <div class='address'>
-              <%=direct_transaction.buyer.address_location %>
+              <%=direct_transaction.buyer.address_location || "暂无" %>
             </div>
           </div>
-        </div>
-        <div class='span4'>
-          <h4 class='pull-right state_title'>
-            <%=t "direct_transaction_state.#{direct_transaction.state.name}" %>
-          </h4>
         </div>
       </div>
 
@@ -68,9 +65,14 @@
 
       <div class='row-fluid'>
       </div>
+
+      <div class='row-fluid'>
+        <h4 class='pull-right state_title'>
+          <%=t "direct_transaction_state.#{direct_transaction.state.name}" %>
+        </h4>
+      </div>
     </div>
   </div>
-
   <div class='span5 chat_wrapper'>
     <!-- <div class='row-fluid toolbar'>
       <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %></div>

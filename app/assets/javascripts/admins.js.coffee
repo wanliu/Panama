@@ -37,3 +37,4 @@
 #= require admins/shops/community_message
 #= require people/community
 #= require lib/banks
+#= require transaction_complete

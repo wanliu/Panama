@@ -10,7 +10,6 @@ class TransactionCard extends TransactionCardBase
     @urlRoot = @transaction.urlRoot
     @initMessagePanel()
     @countdown()
-    @notify_delivery_price()
 
   events:
     "click .transaction-actions .btn_event"  : "clickAction"
@@ -145,10 +144,7 @@ class TransactionCard extends TransactionCardBase
   create_transfer_info: (event_name) ->
     body = @$(".transaction-body")
     form = body.find("form.transfer_sheet")
-    data = form.serializeArray()
-    transfers = {}
-    _.each data, (d)  -> transfers[d.name] = d.value
-
+    transfers = form.serializeHash()
     if @validate_transfer(transfers, form)
       @transaction.fetch(
         url: "#{@urlRoot}/transfer",
@@ -167,14 +163,7 @@ class TransactionCard extends TransactionCardBase
       code_input.val(code_input.val().replace(/(\w{4})(?=\w)/g,"$1 "))
 
   realtime_url: () ->
-    "/transactions#{super}"
-
-  notify_delivery_price: () ->
-    @client.monitor "#{@realtime_url()}/change_delivery_price", (data) =>
-      total = @$(".stotal")      
-      if total.length > 0
-        tag = total.text().trim().substring(0, 1)
-        total.html("#{tag} #{data.stotal}")
+    "/transactions#{super}"   
 
 
 

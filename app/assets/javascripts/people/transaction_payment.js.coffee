@@ -22,22 +22,32 @@ class PayMentView extends PayMentsView
       error: () ->
     )
 
-
 class exports.TransactionPayment extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
+    @model = new Backbone.Model(@model)
+    @model.bind("change:stotal", @change_stotal, @)
+
+    @client = window.clients
+    @client.monitor "/transactions/#{@model.id}/change_info", (data) =>
+      @model.set(data.info)
 
     @button = @$(".pay-button")
     @filter_state()
+
+    @client.monitor ""
 
     new PayMentView(
       el: @$("form.payment"),
       remote_url: @remote_url
     )
 
+  change_stotal: () ->    
+    @filter_state()
+
   filter_state: () ->
-    if @model.total > @model.money
-      @button.addClass("disabled")
+    if @model.get("stotal") > @model.get("money")
+      @button.addClass("disabled").removeClass("btn-primary")
     else
-      @button.removeClass("disabled")
+      @button.removeClass("disabled").addClass("btn-primary")

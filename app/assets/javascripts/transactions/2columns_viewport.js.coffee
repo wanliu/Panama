@@ -1,11 +1,10 @@
 root = (window || @)
 
-class Workspace extends Backbone.Router
-  
-  routes: {
-    "open/:id" : "open",
-    "" : "home"
-  }
+class WorkList extends Backbone.Router
+
+  initialize: (name) ->
+    @route "open/:id/#{name}", "open"
+    @route "#{name}", "home"
 
 class Transaction extends Backbone.Model
 
@@ -29,6 +28,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   leftClass: "float"
   rightClass: ""
   warpClass: ".card_list"
+  scrollTop: 0
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -197,8 +197,10 @@ class TransactionTwoColumnsViewport extends Backbone.View
   registerView: (view) ->
 
   bindRoute: () ->
-    @route = new Workspace()
+
+    @route = new WorkList(@spaceName)
     @route.on "route:open", (id) =>
+      @scrollTop = @bodyScrollTop()
       model = @models.get(id)
       unless _.isEmpty(model)
         @openView(model)
@@ -208,8 +210,21 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @route.on "route:home", () =>     
       model = @find_on()
       model.set(display: false) unless _.isEmpty(model)
+      @bodyScrollTop(@scrollTop)
       
-    Backbone.history.start()
+    Backbone.history.start() unless Backbone.History.started
+
+  bodyScrollTop: (number) ->
+    if number?
+      setTimeout () =>
+        $("body").scrollTop(number)      
+      , 100
+    else
+      top = $("body").scrollTop()
+      return top
+    
+  navigate: (url) ->
+    @route.navigate("#{url}#{@spaceName}", true)
 
   openView: (id) ->  
     model = @models.get(id)
@@ -219,8 +234,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
   clearDisplay: () ->
     @models.each (model) ->
-      model.attributes.display = false
-      model._currentAttributes.display = false        
+      model.set(display: false)
 
   find_on: () ->
     @models.where(display: true)[0]
@@ -236,7 +250,9 @@ class TransactionTwoColumnsViewport extends Backbone.View
     )
 
   exitMenu: () ->
-    @$sidebar.exitWrap() unless _.isEmpty(@$sidebar)
+    unless _.isEmpty(@$sidebar)
+      model = @find_on()      
+      @$sidebar.exitWrap() if _.isEmpty(model)
 
 
 class MiniRow2ColView  extends Backbone.View
@@ -258,11 +274,11 @@ class MiniRow2ColView  extends Backbone.View
     else
       @exitLayout()
 
-  _open: () ->
-    window.location.href = "#open/#{@model.id}"
+  _open: () ->    
+    @parentView.navigate("open/#{@model.id}/")
 
   _exit: () ->
-    window.location.href = "#"    
+    @parentView.navigate("")    
 
   toggleView: () =>
     @openView()
