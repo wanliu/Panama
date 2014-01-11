@@ -164,7 +164,12 @@ class root.ChatManager extends Backbone.View
         when 2
           new GroupChatView({model: model})
         when 3
-          new TemporaryChatView({model: model})
+          pages = [ '/transactions', '/direct_transactions' ]
+          url = _.find pages, (page) => location.href.indexOf(page) != -1
+          if url
+            new OrderChatView({model: model})
+          else
+            new TemporaryChatView({model: model})
         else
           console.error('undefined type...')
 
@@ -181,10 +186,8 @@ class root.ChatManager extends Backbone.View
             model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
-    $('body').append(model.chat_view.el)
     @collection.add(model)
     @addChat(model)
-    @addResizable(model)
 
   addChat: (model) ->
     count = $('.global_chat:visible').length
@@ -201,15 +204,6 @@ class root.ChatManager extends Backbone.View
     top = w_height - ChatManager.rows*$el.height()
     $el.css('right', right + "px")
     $el.css('top', top + "px")
-
-  addResizable: (model) ->
-    $el = $(model.chat_view.el)
-    $el.resizable().draggable().css('position', 'fixed')
-    $el.on('resize', (event, ui) =>
-      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
-      $el.find(".body").css('height', height)
-      $el.css('position', 'fixed')
-    )
 
 
 class BaseIconsView extends Backbone.View
@@ -381,7 +375,9 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      unless @getChat().display
+      if $(@getChat().el).is(':visible')
+        @getChat().receiveMessage(msg)
+      else
         @channel.message_buffer.push(msg)
         @incMsgCount()
         @active()
