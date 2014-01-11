@@ -679,11 +679,11 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def buyer_open_path
-    "/people/#{buyer.login}/transactions#open/#{id}"
+    "/people/#{buyer.login}/transactions#open/#{id}/order"
   end
 
   def seller_open_path
-    "/shops/#{seller.name}/admins/pending#open/#{id}"
+    "/shops/#{seller.name}/admins/pending#open/#{id}/order"
   end
 
 end

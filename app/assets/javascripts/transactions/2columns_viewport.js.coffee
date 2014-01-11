@@ -28,6 +28,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
   leftClass: "float"
   rightClass: ""
   warpClass: ".card_list"
+  scrollTop: 0
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -196,8 +197,10 @@ class TransactionTwoColumnsViewport extends Backbone.View
   registerView: (view) ->
 
   bindRoute: () ->
+
     @route = new WorkList(@spaceName)
     @route.on "route:open", (id) =>
+      @scrollTop = @bodyScrollTop()
       model = @models.get(id)
       unless _.isEmpty(model)
         @openView(model)
@@ -207,9 +210,19 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @route.on "route:home", () =>     
       model = @find_on()
       model.set(display: false) unless _.isEmpty(model)
+      @bodyScrollTop(@scrollTop)
       
     Backbone.history.start() unless Backbone.History.started
 
+  bodyScrollTop: (number) ->
+    if number?
+      setTimeout () =>
+        $("body").scrollTop(number)      
+      , 100
+    else
+      top = $("body").scrollTop()
+      return top
+    
   navigate: (url) ->
     @route.navigate("#{url}#{@spaceName}", true)
 

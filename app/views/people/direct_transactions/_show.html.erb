@@ -1,4 +1,4 @@
-<div class='row-fluid widget direct' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
+<div class='row-fluid widget direct transaction' id="direct<%=direct_transaction.id %>"  data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
   data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
   data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
   <div class='span7 direct-info'>
@@ -13,7 +13,7 @@
           </h3>
         </div>
         <div>
-          <%=direct_transaction.seller.address_location %>
+          <%= direct_transaction.seller.address_location || "暂无" %>
         </div>
       </div>
     </div>

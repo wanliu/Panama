@@ -35,7 +35,7 @@ class TransactionEvent extends Backbone.View
 
   dispose: () ->
     @model.dispose (data, xhr)  =>
-      window.location.href = "#open/#{data.id}"
+      window.location.href = "#open/#{data.id}/#{@workName}"
       window.location.reload();
 
   change_address: () ->
@@ -65,6 +65,7 @@ class exports.TransactionDispose extends Backbone.View
   add_data: (model) ->
     view = new TransactionEvent(
       model: model,
+      workName: @workName(),
       template: @template)
 
     @realtime.change_state model.id, (data) =>
@@ -144,6 +145,12 @@ class exports.TransactionDispose extends Backbone.View
       when "direct_transactions" then "direct_id"
       when "transactions" then "order_id"
       else "id"
+
+  workName: () ->
+    switch @_type
+      when "direct_transactions" then "direct"
+      when "transactions" then "order"
+      else ""
 
 
 

@@ -159,8 +159,9 @@ class People::TransactionsController < People::BaseController
   end
 
   def completed
-    @transactions = OrderTransaction.buyer(@people).completed.order("created_at desc").page(params[:page])
-    @direct_transactions = DirectTransaction.completed.where(:buyer_id => @people.id).order("created_at desc").page(params[:page])
+    @orders = OrderTransaction.buyer(@people).completed.order("created_at desc").page(params[:page])
+    @directs = DirectTransaction.completed.where(:buyer_id => @people.id).order("created_at desc").page(params[:page])
+    @refunds = OrderRefund.completed.where(:buyer_id => @people.id).order("created_at desc").page(params[:page])
   end
 
   def refund
