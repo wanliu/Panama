@@ -198,6 +198,7 @@ class BaseChatView extends Caramal.BackboneView
     console.log('unimplemented...')
 
   initDialog: () ->
+    # @bindMessage()
     $(@el).html(@chat_template({model: @model}))
     @state_el = @$(".head>.state")
     @model.chat_view = @
@@ -211,7 +212,6 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).hide()
 
   bindEvent: () ->
-    @bindMessage()
     @stateService()
     @channel.onEvent (data) =>
       return unless data.type
@@ -272,53 +272,16 @@ class BaseChatView extends Caramal.BackboneView
     html
 
   sendContent: () ->
-    @targetEl(@el).find('.content')
+    @$('.content')
 
   msgContent: () ->
-    @targetEl(@el).find('.msg_content')
-
-  targetEl: (el) =>
-    $attach_el = $(@model.get('attach_el'))
-    if $attach_el.length is 0
-      $(el)
-    else
-      $([ $attach_el[0], el])
+    @$('.msg_content')
 
   receiveMessage: (data) ->
-    # @msgContent().append(@parseMessages(data))
-    if @displayState()
-      @$('.msg_content').append(@parseMessages(data))
+    if @display
+      @msgContent().append(@parseMessages(data))
       @model.trigger('active_avatar') if @name is data.user
       @scrollDialog()
-
-  getShowEl: () ->
-    $attach_el = $(@model.get('attach_el'))
-    if $attach_el.length is 1
-      @newAttachView()
-      if @isFullMode()
-        return $(@attach_view.el)
-    return $(@el)
-
-  newAttachView: () ->
-    @attach_view ||= new AttachChatView({
-      model: @model,
-      channel: @channel,
-      el: $(@el).clone()
-    })
-
-  isFullMode: () ->
-    $attach_el = $(@model.get('attach_el'))
-    display = $attach_el.parents('.full-mode').is(':visible')
-    $(@el).hide() if display
-    display
-
-  displayState: () ->
-    @display = $(@el).is(':visible') || @isFullMode()
-    if @display
-      @channel.active()
-    else
-      @channel.deactive()
-    @display
 
   toggleDialog: () ->
     if @display
@@ -327,20 +290,21 @@ class BaseChatView extends Caramal.BackboneView
       @showWithMsg()
 
   hideDialog: () ->
-    @getShowEl().toggle()
-    @displayState()
-    # @unbindMessage() if @display
+    $(@el).hide()
+    @display = false
+    @channel.deactive()
+    @unbindMessage()
 
   showDialog: () ->
-    @getShowEl().show()
-    @displayState()
-    @showUnread() if @display
-    # @bindMessage() unless @display
+    $(@el).show()
+    @display = true
+    @channel.active()
+    @showUnread()
+    @bindMessage()
     @scrollDialog()
 
   scrollDialog: () ->
-    $body = @targetEl(@el).find('.body')
-    $body.scrollTop($body[0].scrollHeight)
+    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   showUnread: () ->
     _.each @channel.message_buffer, (msg) =>
@@ -377,9 +341,7 @@ class BaseChatView extends Caramal.BackboneView
     @channel.send({ msg: '', attachments: [url] })
 
   sendMessage: (event) ->
-    # msg = @sendContent().val().trim()
-    $msg = $(event.target).parents('.foot').find('textarea.content')
-    msg = $msg.val().trim()
+    msg = @sendContent().val().trim()
     return if msg is ''
     @channel.send(msg)
     @sendContent().val('')
@@ -438,31 +400,4 @@ class root.TemporaryChatView extends BaseChatView
     @channel ||= Caramal.Temporary.of(@name)
     @channel.open()
     @channel.record()
-
-
-class root.AttachChatView extends TemporaryChatView
-
-  events:
-    'mouseover '                : 'activeDialog'
-    'click .close_label'        : 'hideDialog'
-    'click .send_button'        : 'sendMessage'
-    'click .emojify-chooser img': 'chooseEmojify'
-    'keyup textarea.content'    : 'fastKey'
- 
-  initialize: (options) ->
-    _.extend(@, options)
-    $(@el).removeAttr('style')
-          .css('position', 'static')
-          .css('width', '100%')
-          .css('height', '100%')
-    @$('.head').addClass('hide')
-    @$('.ui-resizable-handle').addClass('hide')
-    $(@model.get('attach_el')).html(@el)
-
-    @bindMessage()
-    new ImageUpload({ el: @el, parent_view: @ })
-    @$('.choose-face').popover({
-      content: () => EmojifyChooser.getInstance().el
-    })
-    $(@el).hide()
 

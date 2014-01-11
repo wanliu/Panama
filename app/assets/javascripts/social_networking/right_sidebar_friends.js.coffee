@@ -5,10 +5,10 @@ class root.ChatModel extends Backbone.Model
     prefix = group.substring(0, group.indexOf('_'))
     switch prefix
       when 'OrderTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap:visible' })
+        @set({ attach_el: '.chat_wrapper .message_wrap' })
         '担保交易'
       when 'DirectTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap:visible' })
+        @set({ attach_el: '.chat_wrapper .message_wrap' })
         '直接交易'
       when 'Activity'
         '活动'
@@ -381,7 +381,7 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      unless @getChat().displayState()
+      unless @getChat().display
         @channel.message_buffer.push(msg)
         @incMsgCount()
         @active()

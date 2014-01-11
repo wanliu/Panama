@@ -18,8 +18,8 @@ class TransactionCardBase extends AbstructStateView
     @options['url']       ?= @$el.attr('state-url')
     @options['event_url'] ?= @$el.attr('state-event-url')
     @options['url_root'] ?= @$el.attr('url-root')
-    @options['token']    ?= @$el.data('token')
-    @options['number']   ?= @$el.data('number')
+    @options['token']    ?= @$el.attr('data-token')
+    @options['number']   ?= @$el.attr('data-number')
 
     @transaction = new Transaction(
       _.extend({
