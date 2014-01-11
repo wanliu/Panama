@@ -13,6 +13,8 @@ class ProductComment < ActiveRecord::Base
   validates :shop, :presence => true
   validates :user, :presence => true
   validates :product_id, :presence => true
+  
+  validate :valid_user?
 
   before_validation(:on => :create) do
     init_data
@@ -26,6 +28,12 @@ class ProductComment < ActiveRecord::Base
     self.star_logistics = 5 if self.star_logistics > 5
     self.star_product = 5 if self.star_product > 5
     self.star_service = 5 if self.star_service > 5
+  end
+
+  def valid_user?
+    unless product_item.user == user
+      errors.add(:user_id, "这订单评论不属于你！")
+    end
   end
 
 end

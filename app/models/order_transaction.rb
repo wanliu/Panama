@@ -290,10 +290,6 @@ class OrderTransaction < ActiveRecord::Base
     %w(waiting_sign complete).include?(state)
   end
 
-  def undelayed_sign_state?
-    %w(waiting_sign).include?(state)
-  end
-
   def order_state?
     "order" == state
   end
@@ -537,7 +533,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def can_delay_sign_expired?
-    undelayed_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
+    waiting_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
   end
 
   def self.max_id

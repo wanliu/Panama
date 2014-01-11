@@ -1,14 +1,4 @@
 <div class='container-fluid'>
-  <div class='row-fluid'>
-    <div class="offset8">
-      <a href='javascript:void(0)' class='returned-event'>
-        申请退货
-      </a>
-      <a href="<%= person_product_comment_path(@people, transaction.id) %>/order">
-        商品评论
-      </a>
-    </div>
-  </div>
   <%= render_funcat "refund_display", :locals => {:transaction => transaction, :people => people } %>
   <%=render_base_template "express_company", :transaction => transaction %>
   <%=render_base_template "manner_and_address", :transaction => transaction %>

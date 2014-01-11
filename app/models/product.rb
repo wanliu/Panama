@@ -30,7 +30,8 @@ class Product < ActiveRecord::Base
 
   define_graphical_attr :photos, :handler => :default_photo
 
-  belongs_to :shop                                                                # 所属商店
+  belongs_to :shop      
+  belongs_to :user                                                          # 所属商店
   belongs_to :category, :autosave => true                                         # 商品类型
   belongs_to :shops_category                                                      # 商店分类
   belongs_to :default_attachment, :class_name => "Attachment"                     # 默认图片

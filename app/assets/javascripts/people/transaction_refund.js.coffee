@@ -16,7 +16,6 @@ class TransactionRefund extends Backbone.Model
 
 class TransactionRefundView extends Backbone.View
   events: {
-    "click .returned-event"        : "toggle_panel",
     "submit .returned_panel form"  : "create"
   }
 
@@ -26,25 +25,8 @@ class TransactionRefundView extends Backbone.View
     @$panel = @$(".returned_panel")
     @$form = @$panel.find("form")
 
-  toggle_panel: () ->
-    @$panel.slideToggle(_.bind(@toggle_chose_product, @))
-
-  toggle_chose_product: () ->
-    ###
-    state = if @$panel.css("display") == "none" then false else true
-    @each_details (row) ->
-      check = @row_checkbox(row)
-      if check.length > 0
-        if state then check.show() else check.hide()
-        check[0].checked = state
-    ###
-
   create: () ->
     data = @get_form_data()
-    #data["product_items"] = @get_details()
-    #if data.product_items.length <= 0
-    #  @notify("请选择退货商品!", "error")
-    #  return false
 
     if data.hasOwnProperty('delivery_price')
       if _.isEmpty(data.delivery_price)
@@ -59,7 +41,7 @@ class TransactionRefundView extends Backbone.View
     @refund.create
       success: (model, data) =>
         @notify("退货申请成功, 等待商家确认!", "success")
-        @toggle_panel()
+        @$panel.slideToggle()
         
       error: (model, data) =>
         error_message = JSON.parse(data.responseText)
@@ -73,17 +55,6 @@ class TransactionRefundView extends Backbone.View
     _.each data, (d) ->
       options[d.name] = d.value
     options
-
-  get_details: () ->
-    ###
-    product_items = []
-    @each_details (row) ->
-      check = @row_checkbox(row)
-      if check.length > 0 && check[0].checked
-        product_items.push(row.attr('data-value-id'))
-
-    product_items
-    ###
 
   each_details: (callback) ->
     _.each @$details, (row) =>

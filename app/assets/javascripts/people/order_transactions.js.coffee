@@ -4,8 +4,11 @@
 root = (window || @)
 
 class TransactionView extends CardItemView
+  returned_state: false
+
   events: {
     "click .btn_delete" : "destroy"
+    "click .actions .returned-event" : "returned"
   }
   initialize: (options) ->
     _.extend(@, options)
@@ -16,7 +19,12 @@ class TransactionView extends CardItemView
       el: @$(".full-mode .transaction")
     })
     view.transaction.bind("change:state", @card_change_state, @)
+    @toggleReturned(view) if @returned_state
+
     view
+
+  toggleReturned: (view) ->
+    view.$(".returned_panel").slideToggle()   
 
   card_change_state: () ->
     unless _.isEmpty(@card)
@@ -32,6 +40,22 @@ class TransactionView extends CardItemView
       )
 
     false
+
+  returned: () ->
+    $operator = @$(".actions .operator")
+    if $operator.hasClass("open")      
+      $operator.click()
+      if _.isEmpty(@card)
+        @returned_state = true
+      else
+        if @card.$(".returned_panel").css("display") == "none"
+          @toggleReturned(@card)
+          
+    else
+      @toggleReturned(@card) unless _.isEmpty(@card)    
+
+
+
 
 class root.OrderTransactions extends CardItemListView
 
