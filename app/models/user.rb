@@ -47,7 +47,6 @@ class User < ActiveRecord::Base
   # has_and_belongs_to_many :services
 
   after_create :load_initialize_data
-  before_create :generate_token
 
   after_update do
     update_relation_index
@@ -56,10 +55,6 @@ class User < ActiveRecord::Base
   delegate :groups, :jshop, :to => :shop_user
 
   after_initialize :init_user_info
-
-  def generate_token
-    self.im_token = SecureRandom.hex
-  end
 
   def liked_activities
     Activity.joins("left join activities_likes as al on activities.id = al.activity_id left join users on users.id = al.user_id").where("users.id = ?", id)
