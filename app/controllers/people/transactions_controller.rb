@@ -115,24 +115,26 @@ class People::TransactionsController < People::BaseController
   def kuaiqian_receive
     _response = KuaiQian::PayMent.response(params)
     @transaction = current_order.find(params[:id])
-    url = if _response.successfully?
+    state = if _response.successfully?
       @transaction.kuaiqian_paid
-      "#{paid_receive_url}?pay_msg=success"
+      "success"
     else
-      "#{paid_receive_url}?pay_msg=error"
+      "error"
     end
-    render :xml => {:result => "1", :redirecturl => url }
+    url = "#{paid_receive_url}?pay_msg=#{state}#open/#{@transaction.id}/order"
+    render :xml => {
+      :result => "1", 
+      :redirecturl => url }
   end
 
   def test_payment
     @transaction = current_order.find(params[:id])
     @transaction.kuaiqian_paid if payment_mode?
     respond_to do |format|
-      url = "#{person_transaction_path(@people, @transaction)}?pay_msg=success"
-      format.html{
-        redirect_to url }
+      url = "#{person_transactions_path(@people)}?pay_msg=success#open/#{@transaction.id}/order"
       format.js{ 
         render :js => "window.location.href='#{url}'" }
+      format.html{ redirect_to url }      
     end
   end
 
@@ -262,7 +264,7 @@ class People::TransactionsController < People::BaseController
   end
 
   def paid_receive_url
-    "#{Settings.site_url}#{person_transaction_path(@people, @transaction)}"
+    "#{Settings.site_url}#{person_transactions_path(@people)}"
   end
 
   def paid_send_url

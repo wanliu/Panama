@@ -85,6 +85,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     respond_to do |format|
       @transaction.delivery_price = params[:delivery_price] || 0
       if @transaction.save
+        @transaction.notify_buyer_change
         format.json{ head :no_content }
       else
         format.json{ render draw_errors_message(@transaction), :status => 403  }

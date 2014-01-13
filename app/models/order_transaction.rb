@@ -71,8 +71,8 @@ class OrderTransaction < ActiveRecord::Base
     notice_user
   end
 
-  after_save do 
-    change_info_notify
+  after_save do     
+    notify_seller_change
   end
 
   after_commit :create_the_temporary_channel, on: :create
@@ -599,9 +599,9 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def change_info_notify
-    return unless persisted?
-    if state_name != :order && changed.include?("delivery_price")
+  def notify_buyer_change
+    return unless persisted?  
+    if changed.include?("delivery_price")
       Notification.dual_notify(buyer, 
         :channel => "/transactions/#{id}/change_info",
         :content => "订单#{number}已经修改运费",
@@ -615,10 +615,10 @@ class OrderTransaction < ActiveRecord::Base
         options[:channel] = "/transactions/change_info"
       end
     end 
-    notify_seller_change   
   end
 
   def notify_seller_change
+    return unless persisted?  
     attas = ["delivery_price", "address_id"]
     if changed.map{|c| attas.include?(c) }.any?
       target = current_operator.nil? ? seller : current_operator
