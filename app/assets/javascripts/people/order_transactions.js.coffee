@@ -83,7 +83,7 @@ class root.OrderTransactions extends CardItemListView
     @client.monitor "/transactions/#{order_id}/change_state", (data) =>
       @change_state data
 
-    @client.monitor "/transactions/#{order_id}/change_delivery_price", (data) =>
+    @client.monitor "/transactions/#{order_id}/change_info", (data) =>
       @change_total(data)
 
   change_total: (data) ->

@@ -36,7 +36,7 @@
   $(document).ready(function(){
     new TransactionRefundView({
       el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
-      remote_url: "<%= person_transaction_path(people, transaction)%>"
+      remote_url: "<%= person_transaction_path(@people, transaction)%>"
     })
   })
 </script>

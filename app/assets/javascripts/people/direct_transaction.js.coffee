@@ -5,7 +5,7 @@ class Direct extends Backbone.Model
 class root.DirectTransactionView extends Backbone.View
   events: {
     "click .chat_wrapper .message-toggle": "toggle_message"
-    "click .direct-info .completed"        : "completed"
+    "click .wrap_event .completed"        : "completed"
   }
 
   initialize: () ->
@@ -72,7 +72,7 @@ class root.DirectTransactionView extends Backbone.View
     )
 
   change_state: () ->
-    $(".state_title", @$info).html(@model.get("state_title"))
+    @$(".wrap_event .state_title").html(@model.get("state_title"))
 
   load_realtime: () ->
     @client = window.clients.socket

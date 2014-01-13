@@ -1,6 +1,1 @@
-<%= render partial: 'transaction',
-           object:  @transaction,
-           locals: {
-             state:  @transaction.state,
-             people: @people
-           } %>
+<%=render "transaction", :transaction => @transaction %>

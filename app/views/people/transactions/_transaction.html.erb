@@ -1,35 +1,6 @@
-<% seller = transaction.seller %>
 <div class='row-fluid wrapper-box'>
   <div class='left span7'>
-    <div id="order<%=transaction.id %>" class="transaction transaction-<%=transaction.id %>-<%= transaction.state %>"
-       state-id="<%= transaction.id %>"
-       state-initial="<%= transaction.state %>"
-       state-url="<%= page_person_transaction_path(@people, transaction) %>"
-       state-title="<%=transaction.buyer_state_title %>"
-       state-event-url= "<%=trigger_event_person_transaction_path(@people, transaction) %>"
-       url-root="<%= person_transaction_path(@people, transaction) %>"
-       data-token="<%= @transaction.temporary_channel.try(:token) %>"
-       data-number="<%= 'OrderTransaction_' + @transaction.number %>" >
-      <div class="transaction-header">
-        <div class="avatar">
-          <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
-        </div>
-        <div class="container-fluid info-header">
-          <div class="page-header">
-            <div class="trasaction-title">
-              <div class="name"><%= seller.name %></div>
-              <div class="address"><%= seller.address_location %></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="transaction-body">
-        <%= render state, transaction: transaction, people: people %>
-        <div class='transaction-actions'>
-          <%= render "state_buttons", :transaction => transaction %>
-        </div>
-      </div>
-    </div>
+    <%=render_base_template "card", :transaction => transaction %>
   </div>
 
   <div class='span5 chat_wrapper'>

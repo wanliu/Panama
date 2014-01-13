@@ -27,11 +27,18 @@ class People::TransactionsController < People::BaseController
     authorize! :show, @transaction
     respond_to do |format|
       format.html
-      format.json { render json: @transaction }
+      format.json{ render json: @transaction }
       format.csv{
         send_data(to_csv(OrderTransaction.export_column, @transaction.convert_json),
           :filename => "order#{DateTime.now.strftime('%Y%m%d%H%M%S')}.csv")
       }
+    end
+  end
+
+  def card
+    @transaction = current_order.find(params[:id])
+    respond_to do |format|
+      format.html{ render :layout => false }
     end
   end
 
@@ -61,12 +68,7 @@ class People::TransactionsController < People::BaseController
     authorize! :event, @transaction
 
     if @transaction.buyer_fire_event!(event_name)
-      render partial: 'transaction',
-             object:  @transaction,
-             locals: {
-                state:  @transaction.state,
-                people: @people
-              }
+      render_base_template "card", :transaction => @transaction
     else
       render :json => {message: "#{event_name}不属于你的!"}, :status => 403
       # render :partial => 'transaction', :transaction => @transaction, :layout => false

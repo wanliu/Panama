@@ -40,8 +40,8 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan='6' class='stotal'>
-          合计<%='(包含运费)' unless transaction.order_state? %>: <%= number_to_currency(transaction.stotal) %>
+        <td colspan='6' class='product_tfoot'>
+          合计<%='(包含运费)' unless transaction.order_state? %>: <span class='stotal'><%= number_to_currency(transaction.stotal) %></span>
         </td>
       </tr>
     </tfoot>

@@ -88,7 +88,7 @@ class root.CardItemListView extends Backbone.View
       registerView: (view) =>  
         state = view.model.get("fetch_state")
         delete view.model.attributes.fetch_state
-        @add_elem(view.$el) if !_.isEmpty(state) && state                   
+        @add_elem(view.$el) if state? && state                   
 
         @register(view.model.id)
     }, @columns_options))

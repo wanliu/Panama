@@ -1,11 +1,11 @@
 <div class="address-form">
 <%= simple_nested_form_for transaction,
-          :url => base_info_person_transaction_path(people, transaction),
+          :url => base_info_person_transaction_path(@people, transaction),
           :html => { :class => "form-horizontal"},
           :remote=>true do |f| %>
   <div class="address_input">
     <%= f.input :address_id,
-          :collection => people.delivery_addresses,
+          :collection => @people.delivery_addresses,
           :object => transaction,
           :selected => transaction.address_id,
           :include_blank => true,

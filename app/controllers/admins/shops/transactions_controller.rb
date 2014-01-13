@@ -31,6 +31,10 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
+  def card
+    @transaction = current_shop_order.find_by(:id => params[:id])    
+  end
+
   def print
     @transaction = current_shop_order.find_by(:id => params[:id])
     render :layout => "print"
@@ -58,12 +62,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def event
     @transaction = current_shop_order.find_by(:id => params[:id])
     if @transaction.seller_fire_event!(params[:event])
-      render partial: 'transaction',
-                   object:  @transaction,
-                   locals: {
-                     state:  @transaction.state,
-                     people: @people
-                   }
+      render_base_template 'card', :transaction => @transaction
     else
       redirect_to shop_admins_pending_path(current_shop.name)
     end

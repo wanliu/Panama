@@ -62,7 +62,7 @@ class root.ShopDirectTransactionView extends Backbone.View
     )
 
   change_state: () ->
-    $(".state_title", @$info).html(@model.get("state_title"))
+    @$(".wrap_event .state_title").html(@model.get("state_title"))
 
   load_realtime: () ->
     @client = window.clients.socket

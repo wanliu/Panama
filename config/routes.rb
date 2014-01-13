@@ -148,6 +148,7 @@ Panama::Application.routes.draw do
         match 'test_payment', :via => [:get, :post]
         post :generate_token
         get :mini_item
+        get :card
       end
 
       collection do
@@ -466,6 +467,7 @@ Panama::Application.routes.draw do
           put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
           post :generate_token
           get "mini_item"
+          get :card
         end
       end
 
