@@ -516,7 +516,7 @@ class root.OrderChatView extends Caramal.BackboneView
     $(@el).html(@chat_template({model: @model}))
     @model.chat_view = @
     @display = false
-    $('.chat_wrapper .message_wrap').append(@el)
+    $(@model.get('attach_el')).append(@el)
 
     ChatManager.getInstance().collection.add(@model)
     new ImageUpload({ el: @el, parent_view: @ })

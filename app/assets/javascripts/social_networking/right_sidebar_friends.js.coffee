@@ -5,10 +5,10 @@ class root.ChatModel extends Backbone.Model
     prefix = group.substring(0, group.indexOf('_'))
     switch prefix
       when 'OrderTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap' })
+        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
         '担保交易'
       when 'DirectTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap' })
+        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
         '直接交易'
       when 'Activity'
         '活动'
@@ -39,6 +39,7 @@ class root.ChatModel extends Backbone.Model
         number = group.substring(group.indexOf('_')+1, group.length)
         title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
         @set({
+          number: number,
           name: name,
           group: group,
           title: title
@@ -164,7 +165,7 @@ class root.ChatManager extends Backbone.View
         when 2
           new GroupChatView({model: model})
         when 3
-          pages = [ '/transactions', '/direct_transactions' ]
+          pages = [ '/transactions', '/direct_transactions', '/pending' ]
           url = _.find pages, (page) => location.href.indexOf(page) != -1
           if url
             new OrderChatView({model: model})
@@ -341,10 +342,10 @@ class BaseIconView extends Backbone.View
   tagName: 'li'
 
   events:
-    "click " : "toggleChat"
+    "click " : "showChat"
 
   template: Handlebars.compile("""
-    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
+    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
       <span class="badge badge-important message_count"></span>
       {{#if icon}}
         <img src='{{icon}}' alt='{{title}}' />
@@ -375,7 +376,8 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      if $(@getChat().el).is(':visible')
+      # if $(@getChat().el).is(':visible')
+      if @channel.isActive()
         @getChat().receiveMessage(msg)
       else
         @channel.message_buffer.push(msg)
@@ -383,12 +385,28 @@ class BaseIconView extends Backbone.View
         @active()
     , @
 
+  gotoOrder: (url) ->
+    goto = location.href.substring(0, location.href.indexOf(url) +  url.length)
+    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}"
+    location.href = goto unless location.href is goto
+
   getChat: () ->
     unless @chat_view
       @chat_view = ChatManager.getInstance().newChat(@model)
       @model.chat_view = @chat_view
       @bind_chat()
     @chat_view
+
+  showChat: () ->
+    if @model.get('type') is 3
+      pages = [ '/transactions', '/direct_transactions', '/pending' ]
+      url = _.find pages, (page) => location.href.indexOf(page) != -1
+      if url
+        @gotoOrder(url)
+      else
+        @toggleChat()
+    else
+      @toggleChat()
 
   toggleChat: () ->
     @getChat().toggleDialog()
