@@ -67,23 +67,19 @@ class TransactionCardBase extends AbstructStateView
     console.log event_name
     @[event_name].call(@)
     $.get @url(), (data) =>
-      @effect 'flipInY'
-
+      @slidePage(data)
+      #@effect 'flipInY'
+      ###
       setTimeout () =>
-        # @$el.wrap("<p>")
-        # p = @$el.parent()
-        # p.html(data)
-        # @$el.unwrap()
         html = $(data)
         @$el.replaceWith(html)
         @$el = html
         @delegateEvents()
         @countdown()
         @transaction.set(@current_state())
-        # .html(data).unwrap()
       , 300
+      ###
 
-      # @$el.addClass("animated flipInY")
 
   closeThis: (event) ->
     if confirm("要取消这笔交易吗?")
