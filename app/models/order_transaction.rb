@@ -50,13 +50,13 @@ class OrderTransaction < ActiveRecord::Base
 
   validates_presence_of :buyer
   validates_presence_of :seller
-  validates_associated :address
+  # validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
 
-  accepts_nested_attributes_for :address
+  # accepts_nested_attributes_for :address
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
@@ -427,7 +427,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def get_delivery_price
-    OrderTransportType.get(transport_type).price || 0
+    transport = OrderTransportType.get(transport_type)
+    transport.blank? ? 0 : (transport.price || 0)
   end
 
   def pay_type_name
@@ -586,8 +587,9 @@ class OrderTransaction < ActiveRecord::Base
       errors.add(:address, "地址不存在！") if address.nil?
     end
 
-    if changed.include?("delivery_price")
-      unless edit_delivery_price_valid?
+    if changed.include?("delivery_price")      
+      unless edit_delivery_price_valid? || 
+        transport_type.blank? || state_name == :order
         errors.add(:delivery_price, "这个状态不能修改运费！")
       end
     end

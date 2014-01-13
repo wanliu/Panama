@@ -142,9 +142,12 @@ class People::TransactionsController < People::BaseController
     @transaction = current_order.find(params[:id])
     respond_to do |format|
       @transaction.address = generate_address
-      if @transaction.address.valid? &&
-        @transaction.update_attributes(params[:order_transaction])
-        format.json { render :json => {:event => @transaction.pay_type_name} }
+      if @transaction.address.valid? 
+        if @transaction.update_attributes(params[:order_transaction])
+          format.json { render :json => {:event => @transaction.pay_type_name} }
+        else
+          format.json { render :json => draw_errors_message(@transaction), :status => 403 }
+        end
       else
         format.html{ render error_back_address_html }
       end

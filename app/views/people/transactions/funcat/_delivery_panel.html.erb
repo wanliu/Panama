@@ -18,8 +18,16 @@
           </a>
         </li>
         <% end %>
+        <li class='custom' data-value-title="自定义" data-value-price="">
+          <a href='javascript:void(0)' >
+            自定义
+          </a>
+        </li>
       </ul>
-    </div>
+    </div>    
+    <span class='custom_delivery_price'>
+      <input type='text' name='delivery_price' value="0" />
+    </span>
   </div>
   <div class='pay_types_panel span6'>
     <div class="btn-group">
@@ -47,9 +55,17 @@
     var delivery = new TransactionManner({
       el: $(".delivery_types_panel", elem),
       keys: ["title", "price"],
-      select: function(data){
+      select: function(data){  
+        var custom = this.$(".custom_delivery_price")
+        var transport_type = this.$("input.transport_type")
         this.$chose.html(data.title +" "+data.price)
-        this.$("input.transport_type").val(data.title)
+        if(data.title == "自定义"){
+          custom.show()
+          $("input:text", custom).focus()
+        }else{                    
+          custom.hide()
+        }
+        transport_type.val(data.title)
       }
     })
 
