@@ -164,7 +164,8 @@ class ActivityBind extends Backbone.View
     )
 
   join: () ->
-    new ActivityBuyView({activity_id: @model.id})
+    amount = @$('form.new_product_item input[name="product_item[amount]"]').val()
+    new ActivityBuyView({activity_id: @model.id, amount: amount})
     false
 
 root.ActivityBind = ActivityBind

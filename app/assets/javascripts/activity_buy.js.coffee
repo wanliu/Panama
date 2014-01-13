@@ -7,6 +7,7 @@ class root.ActivityBuyView extends Backbone.View
   }
   initialize: () ->
     @activity_id = @options.activity_id
+    @amount = @options.amount || 1;
     @load_template (html) ->
       @render(html)
 
@@ -34,6 +35,7 @@ class root.ActivityBuyView extends Backbone.View
     @$form = @$("form.buy_activity")
     @load_depend_chose()
     @address_chose()
+    @$('input[name="product_item[amount]"]').val(@amount)
 
   load_depend_chose: () ->
     @depend_select(
