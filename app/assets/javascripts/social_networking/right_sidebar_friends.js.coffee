@@ -1,6 +1,10 @@
 root = (window || @)
 
 class root.ChatModel extends Backbone.Model
+  getOrderUrl: () ->
+    pages = [ '/transactions', '/direct_transactions', '/pending' ]
+    url = _.find pages, (page) => location.href.indexOf(page) != -1
+
   getPrefixTitle: (group) ->
     prefix = group.substring(0, group.indexOf('_'))
     switch prefix
@@ -165,9 +169,7 @@ class root.ChatManager extends Backbone.View
         when 2
           new GroupChatView({model: model})
         when 3
-          pages = [ '/transactions', '/direct_transactions', '/pending' ]
-          url = _.find pages, (page) => location.href.indexOf(page) != -1
-          if url
+          if model.getOrderUrl()
             new OrderChatView({model: model})
           else
             new TemporaryChatView({model: model})
@@ -385,16 +387,6 @@ class BaseIconView extends Backbone.View
         @active()
     , @
 
-  gotoOrder: (url) ->
-    goto = location.href.substring(0, location.href.indexOf(url) +  url.length)
-    number = @model.get('number')
-    if number.indexOf('D') is -1
-      temp = 'order'
-    else
-      temp = 'direct'
-    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{temp}"
-    location.href = goto unless location.href is goto
-
   getChat: () ->
     unless @chat_view
       @chat_view = ChatManager.getInstance().newChat(@model)
@@ -403,15 +395,7 @@ class BaseIconView extends Backbone.View
     @chat_view
 
   showChat: () ->
-    if @model.get('type') is 3
-      pages = [ '/transactions', '/direct_transactions', '/pending' ]
-      url = _.find pages, (page) => location.href.indexOf(page) != -1
-      if url
-        @gotoOrder(url)
-      else
-        @toggleChat()
-    else
-      @toggleChat()
+    @toggleChat()
 
   toggleChat: () ->
     @getChat().toggleDialog()
@@ -463,4 +447,40 @@ class TemporaryIconView extends BaseIconView
         @channel.room = msg
         clients.socket.emit('join', {room: @channel.room})
       )
+
+  showChat: () ->
+    url = @model.getOrderUrl()
+    if url
+      @gotoOrder(url)
+    else
+      @toggleChat()
+
+  gotoOrder: (url) ->
+    number = @model.get('number')
+    flag = number.indexOf('D') is -1    # true 担保交易，false 直接交易
+    current_shop = clients.current_shop # true admin页面，false people页面
+
+    if current_shop
+      if flag
+        # /shops/xxx/admins/pending#open/yyy/order
+        transactions = "pending"
+      else
+        # /shops/xxx/admins/direct_transactions#open/yyy/direct
+        transactions = "direct_transactions"
+      goto = "/shops/#{current_shop}/admins/#{transactions}"
+    else
+      if flag
+        # /people/xxx/transactions#open/yyy/order
+        transactions = "transactions"
+      else
+        # /people/xxx/direct_transactions#open/yyy/direct
+        transactions = "direct_transactions"
+      goto = "/people/#{clients.current_user}/#{transactions}"
+
+    if flag
+      temp = 'order'
+    else
+      temp = 'direct'
+    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{temp}"
+    location.href = goto unless location.href is goto
 
