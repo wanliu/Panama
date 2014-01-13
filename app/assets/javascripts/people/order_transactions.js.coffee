@@ -9,6 +9,7 @@ class TransactionView extends CardItemView
   events: {
     "click .btn_delete" : "destroy"
     "click .actions .returned-event" : "returned"
+    "click .actions .delay-sign-event" : "delay_sign"
   }
   initialize: (options) ->
     _.extend(@, options)
@@ -54,7 +55,19 @@ class TransactionView extends CardItemView
     else
       @toggleReturned(@card) unless _.isEmpty(@card)    
 
+  delay_sign: () ->  
+    url = "#{@model.url()}/delay_sign"
+    $.ajax(
+      url: url
+      type: 'POST'
+      dataType: "JSON"
+      success: () =>
+        pnotify(text: "订单已经延时3天收货期！")
 
+      error: (data) =>
+        ms = JSON.parse(data.responseText)
+        pnotify(text: ms.join("<br />"), type: "error")
+    )
 
 
 class root.OrderTransactions extends CardItemListView
