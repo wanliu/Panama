@@ -240,6 +240,7 @@ class BaseIconsView extends Backbone.View
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
+      return unless channel.type is 3
       exist_model.icon_view.setChannel(channel)
     else
       model = new ChatModel({ 
@@ -378,9 +379,9 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      # if $(@getChat().el).is(':visible')
-      if @channel.isActive()
-        @getChat().receiveMessage(msg)
+      # if @channel.isActive()
+      if @chat_view && $(@chat_view.el).is(':visible')
+        @chat_view.receiveMessage(msg)
       else
         @channel.message_buffer.push(msg)
         @incMsgCount()

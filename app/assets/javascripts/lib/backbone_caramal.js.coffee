@@ -237,9 +237,6 @@ class BaseChatView extends Caramal.BackboneView
           @offline()
         else
           console.log('未处理的事件')
-    $(window).bind('enterAttachChat', () =>
-      $(@el).hide()
-    )
 
   stateService: () ->
     console.log('unimplemented...')
@@ -304,14 +301,14 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).hide()
     @display = false
     @channel.deactive()
-    @unbindMessage()
+    # @unbindMessage()
 
   showDialog: () ->
     $(@el).show()
     @display = true
     @channel.active()
     @showUnread()
-    @bindMessage()
+    # @bindMessage()
     @scrollDialog()
 
   scrollDialog: () ->
@@ -505,6 +502,9 @@ class root.OrderChatView extends Caramal.BackboneView
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
     @initChannel()
     @initDialog()
+    $(window).bind('enterOrderChat', () =>
+      @showWithMsg()
+    )
 
   initChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
@@ -613,5 +613,4 @@ class root.OrderChatView extends Caramal.BackboneView
     return if msg is ''
     @channel.send(msg)
     @sendContent().val('')
-
 
