@@ -41,7 +41,7 @@ class TransactionEvent extends Backbone.View
   change_address: () ->
     @$(".address").html(@model.get("address"))
 
-  change_total: () ->
+  change_stotal: () ->
     @$(".stotal").html(@model.get("stotal"))
 
   render: () ->

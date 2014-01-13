@@ -533,7 +533,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def can_delay_sign_expired?
-    waiting_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
+    waiting_sign_state? && DateTime.now > current_state_detail.expired - pre_delay_sign_time
   end
 
   def self.max_id

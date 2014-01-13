@@ -7,18 +7,25 @@
           <a href="javascript:void(0)" class='btn btn-primary btn-mini open operator'>打开</a>
         </li>
         <% if row.order_refund_state? %>
-        <li>
-          <a href='javascript:void(0)' class='returned-event btn btn-primary btn-mini'>
-          申请退货
-          </a>
-        </li>
+          <li>
+            <a href='javascript:void(0)' class='returned-event btn btn-primary btn-mini'>
+            申请退货
+            </a>
+          </li>
+        <% end %>
+        <% if row.waiting_sign_state? %>        
+          <li>
+            <a href='javascript:void(0)' class='delay-sign-event btn btn-primary btn-mini'>
+            延长收货时间
+            </a>
+          </li>
         <% end %>
         <% if row.complete_state? %>
-        <li>
-          <a class='btn btn-primary btn-mini' href="<%= person_product_comment_path(@people, row.id) %>/order">
-          商品评论
-          </a>
-        </li>
+          <li>
+            <a class='btn btn-primary btn-mini' href="<%= person_product_comment_path(@people, row.id) %>/order">
+            商品评论
+            </a>
+          </li>
         <% end %>
         <li class='state'>
           <div class='state-label label label-success'>

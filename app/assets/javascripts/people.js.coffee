@@ -22,7 +22,6 @@
 #= require people/transaction_manner
 #= require people/transaction_payment
 #= require people/transaction_refund
-#= require people/transaction_delay_sign
 #= require people/transaction_view
 #= require lib/transaction_bubbling
 #= require lib/state_progress
