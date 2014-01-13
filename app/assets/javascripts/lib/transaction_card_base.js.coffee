@@ -18,14 +18,14 @@ class TransactionCardBase extends AbstructStateView
     @options['url']       ?= @$el.attr('state-url')
     @options['event_url'] ?= @$el.attr('state-event-url')
     @options['url_root'] ?= @$el.attr('url-root')
-    @options['token']    ?= @$el.data('token')
-    @options['number']   ?= @$el.data('number')
+    @options['token']    ?= @$el.attr('data-token')
+    @options['group']   ?= @$el.parents('.wrapper-box').attr('data-group')
 
     @transaction = new Transaction(
       _.extend({
         id: @options['id'],
         token: @options['token'],
-        number: @options['number']
+        group: @options['group']
       }, @current_state()))
 
     @transaction.set_url(@options['url_root'])
@@ -206,7 +206,7 @@ class TransactionCardBase extends AbstructStateView
       @chat_model = new ChatModel({
         type: 3,
         name: @transaction.get('token'),
-        group: @transaction.get('number')
+        group: @transaction.get('group')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()

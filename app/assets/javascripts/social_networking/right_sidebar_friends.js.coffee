@@ -5,10 +5,10 @@ class root.ChatModel extends Backbone.Model
     prefix = group.substring(0, group.indexOf('_'))
     switch prefix
       when 'OrderTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap:visible' })
+        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
         '担保交易'
       when 'DirectTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap:visible' })
+        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
         '直接交易'
       when 'Activity'
         '活动'
@@ -39,6 +39,7 @@ class root.ChatModel extends Backbone.Model
         number = group.substring(group.indexOf('_')+1, group.length)
         title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
         @set({
+          number: number,
           name: name,
           group: group,
           title: title
@@ -164,7 +165,12 @@ class root.ChatManager extends Backbone.View
         when 2
           new GroupChatView({model: model})
         when 3
-          new TemporaryChatView({model: model})
+          pages = [ '/transactions', '/direct_transactions', '/pending' ]
+          url = _.find pages, (page) => location.href.indexOf(page) != -1
+          if url
+            new OrderChatView({model: model})
+          else
+            new TemporaryChatView({model: model})
         else
           console.error('undefined type...')
 
@@ -181,10 +187,8 @@ class root.ChatManager extends Backbone.View
             model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
-    $('body').append(model.chat_view.el)
     @collection.add(model)
     @addChat(model)
-    @addResizable(model)
 
   addChat: (model) ->
     count = $('.global_chat:visible').length
@@ -201,15 +205,6 @@ class root.ChatManager extends Backbone.View
     top = w_height - ChatManager.rows*$el.height()
     $el.css('right', right + "px")
     $el.css('top', top + "px")
-
-  addResizable: (model) ->
-    $el = $(model.chat_view.el)
-    $el.resizable().draggable().css('position', 'fixed')
-    $el.on('resize', (event, ui) =>
-      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
-      $el.find(".body").css('height', height)
-      $el.css('position', 'fixed')
-    )
 
 
 class BaseIconsView extends Backbone.View
@@ -347,10 +342,10 @@ class BaseIconView extends Backbone.View
   tagName: 'li'
 
   events:
-    "click " : "toggleChat"
+    "click " : "showChat"
 
   template: Handlebars.compile("""
-    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
+    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
       <span class="badge badge-important message_count"></span>
       {{#if icon}}
         <img src='{{icon}}' alt='{{title}}' />
@@ -381,11 +376,24 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      unless @getChat().displayState()
+      # if $(@getChat().el).is(':visible')
+      if @channel.isActive()
+        @getChat().receiveMessage(msg)
+      else
         @channel.message_buffer.push(msg)
         @incMsgCount()
         @active()
     , @
+
+  gotoOrder: (url) ->
+    goto = location.href.substring(0, location.href.indexOf(url) +  url.length)
+    number = @model.get('number')
+    if number.indexOf('D') is -1
+      temp = 'order'
+    else
+      temp = 'direct'
+    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{temp}"
+    location.href = goto unless location.href is goto
 
   getChat: () ->
     unless @chat_view
@@ -393,6 +401,17 @@ class BaseIconView extends Backbone.View
       @model.chat_view = @chat_view
       @bind_chat()
     @chat_view
+
+  showChat: () ->
+    if @model.get('type') is 3
+      pages = [ '/transactions', '/direct_transactions', '/pending' ]
+      url = _.find pages, (page) => location.href.indexOf(page) != -1
+      if url
+        @gotoOrder(url)
+      else
+        @toggleChat()
+    else
+      @toggleChat()
 
   toggleChat: () ->
     @getChat().toggleDialog()
