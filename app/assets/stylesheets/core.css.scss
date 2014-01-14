@@ -1346,13 +1346,7 @@ h2 small {
   }
 }
 
-.global_chat{
-  top: 55px;
-  // right: 60px;
-  width: 330px;
-  height: 380px;
-  z-index: 9999;
-  position: fixed;
+@mixin base-chat(){
   background: white;
   font-size: 14px;
   line-height: 20px;
@@ -1542,9 +1536,9 @@ h2 small {
       }
 
       .face-panel {
-      	.popover-content {
-      		padding: 0px;
-      	}
+        .popover-content {
+          padding: 0px;
+        }
 
         ul {
           display: inline-block;
@@ -1553,8 +1547,8 @@ h2 small {
             display: inline-block;
 
             img {
-            	width: 25px;
-            	height: 25px;
+              width: 25px;
+              height: 25px;
             }
           }
         }
@@ -1562,6 +1556,24 @@ h2 small {
     }
   }
 }
+
+.global_chat{
+  @include base-chat();
+  top: 55px;
+  // right: 60px;
+  width: 330px;
+  height: 380px;
+  z-index: 9999;
+  position: fixed;
+}
+
+.order_chat{
+  @include base-chat();
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+
 
 body>.global_chat {
   border: 1px solid #ccc;

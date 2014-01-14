@@ -19,6 +19,7 @@ class PayMentView extends PayMentsView
       url: @remote_url,
       data: data,
       dataType: "script",
+      
       error: () ->
     )
 
