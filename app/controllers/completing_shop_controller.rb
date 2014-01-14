@@ -5,9 +5,19 @@ class CompletingShopController < Wicked::WizardController
   steps :pick_industry, :authenticate_license, :pick_product
 
   def show
-    @user_checking = UserChecking.where(:service => "seller", 
+    @user_checking = UserChecking.where(:service => "seller",
                                         :user_id => current_user.id).first_or_create
-    @shop_auth = ShopAuth.new(@user_checking.attributes)
+
+    the_shop          = @user_checking.user.shop
+    shop_auth_options = @user_checking.attributes
+    if !the_shop.blank?
+      shop_auth_options = shop_auth_options.merge({
+        "shop_name" => the_shop.name,
+        "shop_summary" => the_shop.shop_summary
+      })
+    end
+    @shop_auth = ShopAuth.new(shop_auth_options)
+
     if @user_checking.checked && current_user.try(:shop).try(:actived)
       redirect_to "/"
     else

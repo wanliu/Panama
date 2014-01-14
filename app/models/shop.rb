@@ -66,7 +66,7 @@ class Shop < ActiveRecord::Base
   end
 
   def active
-    update_attributes(:actived => true)
+    update_attribute(:actived, true)
   end
 
   def configure_shop

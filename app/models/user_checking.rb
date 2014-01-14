@@ -5,7 +5,7 @@ class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :industry_type, :service,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
-                  :rejected, :rejected_reason, :checked, :address_id, :shop_name, :shop_summary
+                  :rejected, :rejected_reason, :checked, :address_id
   attr_accessor :uploader_secure_token
 
   belongs_to :user
@@ -13,7 +13,6 @@ class UserChecking < ActiveRecord::Base
 
   validates :ower_shenfenzheng_number, presence: true, if: :industry_choosen?
   validates :user_id, presence: true, uniqueness: true
-  validates :shop_name, presence: true, uniqueness: true
   validates :industry_type, presence: true, if: :service_choosen?
 
   validate :validate_user_already_exists?

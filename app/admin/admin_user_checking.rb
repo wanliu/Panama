@@ -2,7 +2,6 @@
 
 ActiveAdmin.register UserChecking do
   scope :等待审核, default: true do
-    # UserChecking.where("shop_name <> '' and rejected = ? and checked = ?", false, false)
     UserChecking.joins(:user).where("rejected = ? and checked = ? and users.services <> ?", false, false, '')
   end
 
