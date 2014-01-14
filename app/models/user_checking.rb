@@ -13,6 +13,7 @@ class UserChecking < ActiveRecord::Base
 
   validates :ower_shenfenzheng_number, presence: true, if: :industry_choosen?
   validates :user_id, presence: true, uniqueness: true
+  validates :shop_name, presence: true, uniqueness: true
   validates :industry_type, presence: true, if: :service_choosen?
 
   validate :validate_user_already_exists?
