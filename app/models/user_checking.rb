@@ -5,7 +5,7 @@ class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :industry_type, :service,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
-                  :rejected, :rejected_reason, :checked, :address_id
+                  :rejected, :rejected_reason, :checked, :address_id, :shop_name, :shop_summary
   attr_accessor :uploader_secure_token
 
   belongs_to :user

@@ -34,9 +34,9 @@ ActiveAdmin.register UserChecking do
     if !shop.blank?
       shop_url = "/shops/" + shop.name
       shop.transaction do
-        user_checking.update_attributes!(:checked => true, :rejected => false)
-        shop.update_attributes!(:shop_url => shop_url, :audit_count => shop.audit_count + 1)
-        shop.active!
+        user_checking.update_attributes(:checked => true, :rejected => false)
+        shop.update_attributes(:shop_url => shop_url, :audit_count => shop.audit_count + 1)
+        shop.active
       end
       shop.configure_shop
     end

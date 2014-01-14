@@ -75,13 +75,24 @@ class CompletingShopController < Wicked::WizardController
         address_id: @user_checking.address.try(:id)
       }
 
-      if current_user.shop.blank?
-        @shop = @user_checking.user.create_shop!(shop_params)
-      else
-        @user_checking.user.shop.update_attributes!(shop_params)
+      begin
+        if current_user.shop.blank?
+          @user_checking.transaction do
+            current_user.create_shop!(shop_params)
+            @user_checking.update_attributes!(@shop_auth.update_options.merge(rejected: false))
+          end
+        else
+          @user_checking.transaction do
+            current_user.shop.update_attributes!(shop_params)
+            @user_checking.update_attributes!(@shop_auth.update_options.merge(rejected: false))
+          end
+        end
+      rescue ActiveRecord::StatementInvalid
+          @shop_auth.valid?
+          render_wizard
+          return
       end
 
-      @user_checking.update_attributes(@shop_auth.update_options.merge(rejected: false))
       render_wizard(@user_checking)
     else
       render_wizard()
