@@ -20,6 +20,7 @@ class Attachment < ActiveRecord::Base
   def as_json(*args)
     options = args.extract_options!
     _attributes = super *args
+    _attributes[:photos] = photos.attributes
     _attributes[:url] = file.url(options[:version_name])
     _attributes
   end

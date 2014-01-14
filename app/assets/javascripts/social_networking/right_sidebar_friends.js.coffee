@@ -2,7 +2,7 @@ root = (window || @)
 
 class root.ChatModel extends Backbone.Model
   getOrderUrl: () ->
-    pages = [ '/transactions', '/direct_transactions', '/pending' ]
+    pages = [ '/transactions', '/pending', '/direct_transactions' ]
     url = _.find pages, (page) => location.href.indexOf(page) != -1
 
   getPrefixTitle: (group) ->
@@ -165,7 +165,7 @@ class root.ChatManager extends Backbone.View
     else
       switch model.get('type')
         when 1
-          new ChatView({model: model})
+          new FriendChatView({model: model})
         when 2
           new GroupChatView({model: model})
         when 3
@@ -193,7 +193,7 @@ class root.ChatManager extends Backbone.View
     @addChat(model)
 
   addChat: (model) ->
-    count = $('.global_chat:visible').length
+    count = $('.global_chat').length
     $el = $(model.chat_view.el)
     w_width = $(window).width()
     w_height = $(window).height()
@@ -290,9 +290,6 @@ class FriendIconsView extends BaseIconsView
   render: () ->
     $(@el).html(@template)
     @
-
-  # initFetch: () ->
-  #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
     friend_view = new FriendIconView({ model: model, parent_view: @ })
@@ -479,9 +476,9 @@ class TemporaryIconView extends BaseIconView
       goto = "/people/#{clients.current_user}/#{transactions}"
 
     if flag
-      temp = 'order'
+      type = 'order'
     else
-      temp = 'direct'
-    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{temp}"
+      type = 'direct'
+    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{type}"
     location.href = goto unless location.href is goto
 

@@ -61,7 +61,7 @@ class ImageUpload extends Backbone.View
   onComplete: (id, filename, data) =>
     if data.success
       @$("div.qq-upload-button").show()
-      @parent_view.sendImg(data.attachment.file.t100100.url)
+      @parent_view.sendImg(data.attachment.photos.header)
 
   newFileUploader: () ->
     @fileupload = new qq.FileUploader({
@@ -355,7 +355,7 @@ class BaseChatView extends Caramal.BackboneView
     @sendContent().val('')
 
 
-class root.ChatView extends BaseChatView
+class root.FriendChatView extends BaseChatView
 
   initialize: () ->
     super
