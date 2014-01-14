@@ -355,7 +355,7 @@ class BaseChatView extends Caramal.BackboneView
     @sendContent().val('')
 
 
-class root.ChatView extends BaseChatView
+class root.FriendChatView extends BaseChatView
 
   initialize: () ->
     super
