@@ -1697,3 +1697,25 @@ body>.global_chat {
     margin-top: 5px;
   }
 }
+
+.page-header{
+  .navbar-search{
+    .chose_condition{
+      margin-right: 0px;
+
+      li.dropdown{
+        a.dropdown-toggle{
+          background-color: rgba(51, 51, 51, 0.4);
+          padding: 4px;
+          font-size: 12px;
+          text-shadow: none;
+          color: #dbc2c2;
+        }
+      }
+
+      li.dropdown.open{
+        background-color: rgba(51, 51, 51, 0.4);
+      }
+    }
+  }
+}

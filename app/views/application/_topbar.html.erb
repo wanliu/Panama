@@ -1,144 +1,172 @@
 <ul id='topbar' class="nav pull-right">
-	<li class="dropdown">
-		<form id="search-form" class="navbar-search">
-			<div class="input-prepend input-append">
-				<input type="search" class="search-query" placeholder="搜索商品，种类...">
-				<span class="add-on search-btn">搜索</span>
-			</div>
-		</form>
-	</li>
-	<li class="dropdown"  title="活动发布与购物需求">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-		<i class="icon-plus"></i>&nbsp;发布</a>
-		<ul class="dropdown-menu publish">
-			<% if current_user.present? %>
-				<% if current_user.is_seller? && current_user.shop.try(:actived?) %>
-					<li>
-						<a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog" data-keyboard="false">
-							优惠活动
-						</a>
-					</li>
-				<% elsif  current_user.is_seller? && !current_user.shop.try(:actived?) %>
-					<li>
-						<a href="javascript:void(0)" class="create_active" data-keyboard="false">
-							优惠活动(正在审核...)
-						</a>
-					</li>
-				<% end %>
-			<% end %>
-			<li>
-				<a href="/ask_buy/new.dialog" class="create_ask_buy" data-toggle='modal' data-target='#ask_buy_dialog' data-keyboard="false">
-					求购信息
-				</a>
-			</li>
-		</ul>
-	</li>
+  <li class="dropdown">
+    <form id="search-form" class="navbar-search">
+      <ul class="nav pull-left chose_condition">
+        <li id="fat-menu" class="dropdown">
+          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">找活动 <b class="caret"></b>
+        </a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+                找活动
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+                找人
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+                找商店
+              </a>
+            </li>
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+                找商圈
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <div class="input-prepend input-append">
+        <input type="search" class="search-query" placeholder="搜索商品，种类...">
+        <span class="add-on search-btn">搜索</span>
+      </div>
+    </form>
+  </li>
+  <li class="dropdown"  title="活动发布与购物需求">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <i class="icon-plus"></i>&nbsp;发布</a>
+    <ul class="dropdown-menu publish">
+      <% if current_user.present? %>
+        <% if current_user.is_seller? && current_user.shop.try(:actived?) %>
+          <li>
+            <a href="/activities/new.dialog" class="create_active" data-toggle="modal" data-target="#active_dialog" data-keyboard="false">
+              优惠活动
+            </a>
+          </li>
+        <% elsif  current_user.is_seller? && !current_user.shop.try(:actived?) %>
+          <li>
+            <a href="javascript:void(0)" class="create_active" data-keyboard="false">
+              优惠活动(正在审核...)
+            </a>
+          </li>
+        <% end %>
+      <% end %>
+      <li>
+        <a href="/ask_buy/new.dialog" class="create_ask_buy" data-toggle='modal' data-target='#ask_buy_dialog' data-keyboard="false">
+          求购信息
+        </a>
+      </li>
+    </ul>
+  </li>
 
-	<!--购物车信息-->
-	<li class="dropdown shoppingcart" title="我的购物车">
-		<a href="#"  id="cart" class="dropdown-toggle" data-toggle="dropdown" >
-			<i class="icon-shopping-cart handle"></i>
-			<span id="shop_count" class="count badge badge-important"> </span>
-		</a>
-		 <ul id="shopping-cart" class="dropdown-menu support" role="menu">
-			<li role="presentation">
-				<div class="details">
-					<%= render_widget :my_cart %>
-				</div>
-			</li>
-		</ul>
-	</li>
+  <!--购物车信息-->
+  <li class="dropdown shoppingcart" title="我的购物车">
+    <a href="#"  id="cart" class="dropdown-toggle" data-toggle="dropdown" >
+      <i class="icon-shopping-cart handle"></i>
+      <span id="shop_count" class="count badge badge-important"> </span>
+    </a>
+     <ul id="shopping-cart" class="dropdown-menu support" role="menu">
+      <li role="presentation">
+        <div class="details">
+          <%= render_widget :my_cart %>
+        </div>
+      </li>
+    </ul>
+  </li>
 
-	<!--交易信息-->
-<!-- 	<li class="dropdown transaction_list" title="我的交易" data-toggle='tooltip' data-placement='bottom' >
-		<a href="#"  id="transcations-button" class="dropdown-toggle" data-toggle="dropdown">
-			<i class="icon-tasks handle"></i>
-			<span id="transaction_count" class="count badge badge-important"> </span>
-		</a>
-		 <ul id="transcations-box" class="dropdown-menu support" role="menu">
+  <!--交易信息-->
+<!--  <li class="dropdown transaction_list" title="我的交易" data-toggle='tooltip' data-placement='bottom' >
+    <a href="#"  id="transcations-button" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-tasks handle"></i>
+      <span id="transaction_count" class="count badge badge-important"> </span>
+    </a>
+     <ul id="transcations-box" class="dropdown-menu support" role="menu">
 
-		</ul>
-	</li> -->
+    </ul>
+  </li> -->
 
 
-	<!--通知信息-->
-	<li class="dropdown notification-menu" title="消息通知">
-		<a href="#"  id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
-			<i class="icon-comments"></i>
-			<span id="notification_count" class="count badge badge-important"></span>
-		</a>
-		 <ul id="notification-list" class="dropdown-menu notifications" role="menu">
-		</ul>
-	</li>
+  <!--通知信息-->
+  <li class="dropdown notification-menu" title="消息通知">
+    <a href="#"  id="notification_message" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-comments"></i>
+      <span id="notification_count" class="count badge badge-important"></span>
+    </a>
+     <ul id="notification-list" class="dropdown-menu notifications" role="menu">
+    </ul>
+  </li>
 
-	<!--商店入口-->
-	<% if current_user.is_seller? && current_user.shop.try(:name) %>
-		<li class="dropdown" title="我的商店">
-			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
-				<i class="icon-building handle"></i>商店
-			</a>
-			<ul id="shop-menu" class="dropdown-menu account" role="menu">
-				<li>
+  <!--商店入口-->
+  <% if current_user.is_seller? && current_user.shop.try(:name) %>
+    <li class="dropdown" title="我的商店">
+      <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="icon-building handle"></i>商店
+      </a>
+      <ul id="shop-menu" class="dropdown-menu account" role="menu">
+        <li>
 
-					<a href="/shops/<%= current_user.shop.name %>">
-						<i class='icon-home'></i> 首 页
-					</a>
-				</li>
-				<li>
-					<a href="/shops/<%= current_user.shop.name %>/admins">
-						<i class='icon-cog'></i>
-						管 理
-					</a>
-				</li>
-				<li>
-					<a href="/shops/<%= current_user.shop.name %>/admins/communities">
-						<i class='icon-group'></i>
-						商 圈
-					</a>
-				</li>
-			</ul>
-		</li>
-	<% end %>
-	<li class="divider"></li>
-	<li class="hidden-phone dropdown" title="在线状态与个人设置">
-		<a href="javascript:void(0)" id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
-			<%= account_info %>
-			<div class="progress login_progress progress-striped active" style="display:none;">
-			  <div class="bar login_bar" style="width: 100%;"></div>
-			</div>
-		</a>
-		<div class="realtime_state" data-toggle="popover"></div>
-		<div class="bumbble_notice" data-toggle="popover" data-placement="bottom"></div>
-		<ul id="account-menu" class="dropdown-menu account" role="menu">
-			<li role="presentation">
-				<%= link_to_account %>
-			</li>
-			<li>
-				<%= link_to_community %>
-			</li>
-			<li>
-				<%= link_to_logout %>
-			</li>
-		</ul>
-	</li>
-	<li class="visible-phone">
-		<a href="#" class="btn-navbar" data-toggle="collapse" data-target=".sidebar" title="">
-			<i class="icon-reorder"></i>
-		</a>
-	</li>
+          <a href="/shops/<%= current_user.shop.name %>">
+            <i class='icon-home'></i> 首 页
+          </a>
+        </li>
+        <li>
+          <a href="/shops/<%= current_user.shop.name %>/admins">
+            <i class='icon-cog'></i>
+            管 理
+          </a>
+        </li>
+        <li>
+          <a href="/shops/<%= current_user.shop.name %>/admins/communities">
+            <i class='icon-group'></i>
+            商 圈
+          </a>
+        </li>
+      </ul>
+    </li>
+  <% end %>
+  <li class="divider"></li>
+  <li class="hidden-phone dropdown" title="在线状态与个人设置">
+    <a href="javascript:void(0)" id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
+      <%= account_info %>
+      <div class="progress login_progress progress-striped active" style="display:none;">
+        <div class="bar login_bar" style="width: 100%;"></div>
+      </div>
+    </a>
+    <div class="realtime_state" data-toggle="popover"></div>
+    <div class="bumbble_notice" data-toggle="popover" data-placement="bottom"></div>
+    <ul id="account-menu" class="dropdown-menu account" role="menu">
+      <li role="presentation">
+        <%= link_to_account %>
+      </li>
+      <li>
+        <%= link_to_community %>
+      </li>
+      <li>
+        <%= link_to_logout %>
+      </li>
+    </ul>
+  </li>
+  <li class="visible-phone">
+    <a href="#" class="btn-navbar" data-toggle="collapse" data-target=".sidebar" title="">
+      <i class="icon-reorder"></i>
+    </a>
+  </li>
 </ul>
 
 <script type="text/javascript">
-	var topbar = new TopBar({ el: "#topbar" });
-	NotificationViewList.startup({
-		el: $(".notification-menu"),
-		current_user_login: '<%= current_user.login %>'
-	});
+  var topbar = new TopBar({ el: "#topbar" });
+  NotificationViewList.startup({
+    el: $(".notification-menu"),
+    current_user_login: '<%= current_user.login %>'
+  });
 
-	$(document).delegate( ".connect_by_self", "click", function(){
-		clients.socket.socket.socket.reconnect()
-		$(".popover-content").html("正在连接...")
-	})
+  $(document).delegate( ".connect_by_self", "click", function(){
+    clients.socket.socket.socket.reconnect()
+    $(".popover-content").html("正在连接...")
+  })
 
 </script>
 <%= javascript_include_tag "my_cart" %>
