@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   include Graphical::Display
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
   extend FriendlyId
 
   attr_accessible :uid, :login, :first_name, :last_name, :email
@@ -317,6 +319,13 @@ class User < ActiveRecord::Base
 
   def author_setting
     { is_follower_and_is_following: false }
+  end
+
+  def to_indexed_json
+    {
+      :login => login,
+      :email => email      
+    }
   end
 
   def in_black_list_of(another_user)

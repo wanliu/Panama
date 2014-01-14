@@ -48,27 +48,27 @@ class SearchController < ApplicationController
 
   def all
     val = filter_special_sym(params[:q].gsub(/ /,''))
-    if val.present?
-      @results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
-        query do
-          boolean do
-            must do
-              filtered do
-                filter :query, :query_string => {
-                  :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
-                  :default_operator => "AND"
-                }
+    
+    @results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
+      query do
+        boolean do
+          must do
+            filtered do
+              filter :query, :query_string => {
+                :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
+                :default_operator => "AND"
+              }
 
-                filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
-              end
+              filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
             end
           end
         end
-        size 10
+      end
+      size 10
 
-        sort{ by :_score, :desc }
-      end.results
-    end
+      sort{ by :_score, :desc }
+    end.results if val.present?
+    
     respond_to do |format|
       format.json{ render :json => @results || [] }
     end
@@ -92,104 +92,30 @@ class SearchController < ApplicationController
   end
 
   def index
-    _size, _from, q = params[:limit], params[:offset], (params[:q] || {})
-    conditions = get_coditions(q)
+    _size, _from, q = params[:limit], params[:offset], (params[:q] || {})    
+
+    activity_score = custom_score_script(:activitySort, :activity)
+    ask_buy_score = custom_score_script(:askbuySort, :ask_buy)
+    shop_product_score = custom_score_script(:shopProductSort, :shop_product)
+    product_score = custom_score_script(:productSort, :product)
+
+    _query = condition_query(q)
+
     s = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
       from _from
       size _size
 
       query do
         boolean do
-          must do
-            filtered do
-              if q[:title].present?
-                val = conditions[:title].gsub(/ /,'')
-                filter :query, :query_string => {
-                  :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
-                  :default_operator => "AND"
-                }
-              end
+          must &_query
+  
+          should &activity_score
 
-              if q[:catalog_id].present?
-                filter :terms, "category.id" => conditions[:catalog_id]
-              end
+          should &ask_buy_score
 
-              if q[:category_id].present?
-                filter :terms, "category.id" => conditions[:category_id]
-              end
+          should &shop_product_score
 
-              conditions[:properties].each do |key, val|
-                filter :or, [{
-                  :and => [{
-                    :terms => {
-                      "product.properties.#{val['name']}" => val["values"]
-                    }
-                  },{
-                    :terms => {
-                      :_type => ["ask_buy", "activity"]
-                    }
-                  }]
-                },{
-                  :and => [{
-                    :terms => {
-                      "properties.#{val['name']}" => val["values"]
-                    }
-                  },{
-                    :terms => {
-                      :_type => ["shop_product", "product"]
-                    }
-                  }]
-                }]
-              end if q[:properties].present?
-
-              filter :or, [{
-                :and => [{
-                  :term => {
-                    :_type => "activity",
-                    :status => Activity.statuses[:access]
-                  }
-                }]
-              },{
-                :and => [{
-                  :terms => {
-                    :_type => ["ask_buy", "shop_product", "product"]
-                  }
-                }]
-              }]
-            end
-          end
-
-          should do
-            custom_score :script => :activitySort, :lang => :native do
-              filtered do
-                filter :term, :_type => :activity
-              end
-            end
-          end
-
-          should do
-            custom_score :script => :askbuySort, :lang => :native do
-              filtered do
-                filter :term, :_type => :ask_buy
-              end
-            end
-          end
-
-          should do
-            custom_score :script => :shopProductSort, :lang => :native do
-              filtered do
-                filter :term, :_type => :shop_product
-              end
-            end
-          end
-
-          should do
-            custom_score :script => :productSort, :lang => :native do
-              filtered do
-                filter :term, :_type => :product
-              end
-            end
-          end
+          should &product_score          
         end
       end
       sort{ by :_score, :desc }
@@ -258,4 +184,77 @@ class SearchController < ApplicationController
     @@conditions[key] = @@conditions[_key]
   end
 
+  def custom_score_script(_script, _type)
+    lambda do |should| 
+      should.custom_score :script => _script, :lang => :native do
+        filtered do
+          filter :term, :_type => _type
+        end
+      end
+    end
+  end
+
+  def condition_query(options = {})
+    conditions = get_coditions(options)
+
+    lambda do |must|      
+      must.filtered do
+        if options[:title].present?
+          val = conditions[:title].gsub(/ /,'')
+          filter :query, :query_string => {
+            :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
+            :default_operator => "AND"
+          }
+        end
+
+        if options[:catalog_id].present?
+          filter :terms, "category.id" => conditions[:catalog_id]
+        end
+
+        if options[:category_id].present?
+          filter :terms, "category.id" => conditions[:category_id]
+        end
+
+        conditions[:properties].each do |key, val|
+          filter :or, [{
+            :and => [{
+              :terms => {
+                "product.properties.#{val['name']}" => val["values"]
+              }
+            },{
+              :terms => {
+                :_type => ["ask_buy", "activity"]
+              }
+            }]
+          },{
+            :and => [{
+              :terms => {
+                "properties.#{val['name']}" => val["values"]
+              }
+            },{
+              :terms => {
+                :_type => ["shop_product", "product"]
+              }
+            }]
+          }]
+        end if options[:properties].present?
+
+        filter :or, [{
+          :and => [{
+            :term => {
+              :_type => "activity",
+              :status => Activity.statuses[:access]
+            }
+          }]
+        },{
+          :and => [{
+            :terms => {
+              :_type => ["ask_buy", "shop_product", "product"]
+            }
+          }]
+        }]
+      end
+      
+    end
+  end
 end
