@@ -13,6 +13,34 @@ class NotificationManager
           {{/if}}
           <span class='noty_text'></span>
           <div class='noty_close'></div>
+          <a href="{{ url }}" class='follow  btn btn-danger'>查看</a>
+      </div>""")
+
+  followTemplate: Handlebars.compile(
+    """<div class='noty_message'>
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          {{ text }}
+          <div>
+            <button data-value-id={{ user_id }} class='follow btn-danger'>回关注</button>
+            <a href="{{ url }}" class='follow  btn btn-danger'>查看</a>
+          </div>
+      </div>""")
+  
+  shopFollowTempate: Handlebars.compile(
+    """<div class='noty_message'>
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          {{ text }}
+          <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              邀请加入商圈
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              {{#each circles}}
+                <li class="circle_li" data-value-id="{{ id }}">{{ name }}</li>
+              {{/each}}
+            </ul>
+          </div>
       </div>""")
 
   constructor: () ->
@@ -36,7 +64,7 @@ class NotificationManager
     @client.monitor("/friends/remove_user", @remove_user) # √
     @client.monitor("/friends/remove_quan", @commonNotify) # √
     # 个人社交部分
-    @client.monitor("/follow", @commonNotify) # √
+    @client.monitor("/follow", @follow) # √
     @client.monitor("/unfollow", @commonNotify) # √
     @client.monitor("/circles/request", @commonNotify) # √
     @client.monitor("/circles/invite", @commonNotify) # √
@@ -44,7 +72,7 @@ class NotificationManager
     @client.monitor("/circles/joined", @commonNotify) # √
     @client.monitor("/circles/leaved", @commonNotify) # √
     # 商店社交部分
-    @client.monitor("/shops/follow", @commonNotify) # √
+    @client.monitor("/shops/follow", @shop_follow) # √
     @client.monitor("/shops/unfollow", @commonNotify) # √
     @client.monitor("/shops/like", @commonNotify) #暂时不需要实现
     @client.monitor("/shops/unlike", @commonNotify) #暂时不需要实现
@@ -87,6 +115,28 @@ class NotificationManager
     #退货
     @client.monitor("/order_refunds/create", @commonNotify)    
     @client.monitor("/order_refunds/change_state", @commonNotify)
+
+  follow: (data) =>
+    @addToPlays data, (info) =>
+      console.log(info)
+      @notificationsList.collection.add(info)
+      @notify({
+        id: info.id,
+        title: info.title,
+        text: info.content,
+        avatar: info.avatar,
+        user_id: info.user.id
+      })
+
+
+  shop_follow: (data) =>
+    $.ajax({
+      url: "",
+      success: (circles) =>
+        $.extend(data,{circles: circles})
+
+    })
+
 
   add_user: (data) =>
     @commonNotify(data)

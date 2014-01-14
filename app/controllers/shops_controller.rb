@@ -97,6 +97,14 @@ class ShopsController < ApplicationController
     end
   end
 
+  def shop_circles
+    @shop = Shop.find_by(:name => params[:id])
+    @circles = @shop.circles
+    respond_to do |format|
+      format.json{ render json: @circles}
+    end
+  end
+
   # 关注
   def follow
     this_shop = Shop.find_by(:name => params[:id])

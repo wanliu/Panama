@@ -400,6 +400,7 @@ Panama::Application.routes.draw do
     member do
       get "follow"
       get "unfollow"
+      get "shop_circles"
     end
 
     namespace :admins do

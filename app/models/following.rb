@@ -20,13 +20,16 @@ class Following < ActiveRecord::Base
                     "用户 #{user.login} 关注了您",
                     :target => self,
                     :url => "/people/#{user.login}",
-                    :avatar => user.avatar)
+                    :avatar => user.avatar,
+                    :user =>  user)
+      
     elsif follow.is_a?(Shop)
       follow.notify("/follow",
                     "用户 #{user.login} 关注了您的商店",
                     :target => self,
                     :url => "/people/#{user.login}",
-                    :avatar => user.avatar)
+                    :avatar => user.avatar,
+                    :shop_name => follow.name)
     end
   end
 
