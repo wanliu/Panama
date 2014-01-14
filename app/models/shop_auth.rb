@@ -43,7 +43,7 @@ class ShopAuth
     options = {}
     ATTR_FIELDS.each do |field|
       value = send(field)
-      options[field] = value unless value.blank?
+      options[field] = value unless value.blank? || field.to_s.start_with?('shop_')
     end
     options
   end
@@ -51,8 +51,16 @@ class ShopAuth
   protected
     def uniqueness_fields_validate
       UNIQUENESS_FIELDS.each do |field|
-        unless UserChecking.where("#{ field } = ? and user_id <> ?", send(field), user_id).blank?
-          errors.add(field, "已经被注册！请另外选择")
+        value = send(field)
+        error = "#{value}已经被注册！请另外选择"
+        if field == :shop_name
+          unless Shop.where("name = ?", value).blank?
+            errors.add(field, error)
+          end
+        else
+          unless UserChecking.where("#{ field } = ? and user_id <> ?", value, user_id).blank?
+            errors.add(field, error)
+          end
         end
       end
     end

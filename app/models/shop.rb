@@ -65,8 +65,8 @@ class Shop < ActiveRecord::Base
     address.try(:location)
   end
 
-  def active!
-    update_attributes!(:actived => true)
+  def active
+    update_attribute(:actived, true)
   end
 
   def configure_shop
