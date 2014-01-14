@@ -8,14 +8,14 @@ class TreeSlide extends Backbone.View
 		# "mouseenter a[data-toggle='slide']": "openSlide"
 
 	toggleSlide: (e) ->
-		$collapse_target = @$(@$(e.target).attr('href'))
+		$collapse_target = @$(@$(e.currentTarget).attr('href'))
 		if $collapse_target.toggleClass("in").hasClass("in")
 			$collapse_target.css('height', 'auto');
-			@$(e.target).find('i').removeClass("icon-caret-right").addClass("icon-caret-down")
+			@$(e.currentTarget).find('i').removeClass("icon-caret-right").addClass("icon-caret-down")
 			@foldOtherRoot($collapse_target)
 		else
 			$collapse_target.css('height', '0px');
-			@$(e.target).find('i').removeClass("icon-caret-down").addClass("icon-caret-right")
+			@$(e.currentTarget).find('i').removeClass("icon-caret-down").addClass("icon-caret-right")
 		false
 
 	foldOtherRoot: (el) ->

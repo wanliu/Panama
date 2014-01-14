@@ -50,13 +50,13 @@ class OrderTransaction < ActiveRecord::Base
 
   validates_presence_of :buyer
   validates_presence_of :seller
-  validates_associated :address
+  # validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
 
-  accepts_nested_attributes_for :address
+  # accepts_nested_attributes_for :address
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
@@ -71,8 +71,8 @@ class OrderTransaction < ActiveRecord::Base
     notice_user
   end
 
-  after_save do 
-    change_info_notify
+  after_save do     
+    notify_seller_change
   end
 
   after_commit :create_the_temporary_channel, on: :create
@@ -427,7 +427,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def get_delivery_price
-    OrderTransportType.get(transport_type).price || 0
+    transport = OrderTransportType.get(transport_type)
+    transport.blank? ? 0 : (transport.price || 0)
   end
 
   def pay_type_name
@@ -533,7 +534,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def can_delay_sign_expired?
-    waiting_sign_state? && current_state_detail.count == 0 && DateTime.now > current_state_detail.expired - pre_delay_sign_time
+    waiting_sign_state? && DateTime.now > current_state_detail.expired - pre_delay_sign_time
   end
 
   def self.max_id
@@ -586,8 +587,9 @@ class OrderTransaction < ActiveRecord::Base
       errors.add(:address, "地址不存在！") if address.nil?
     end
 
-    if changed.include?("delivery_price")
-      unless edit_delivery_price_valid?
+    if changed.include?("delivery_price")      
+      unless edit_delivery_price_valid? || 
+        transport_type.blank? || state_name == :order
         errors.add(:delivery_price, "这个状态不能修改运费！")
       end
     end
@@ -599,9 +601,9 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def change_info_notify
-    return unless persisted?
-    if state_name != :order && changed.include?("delivery_price")
+  def notify_buyer_change
+    return unless persisted?  
+    if changed.include?("delivery_price")
       Notification.dual_notify(buyer, 
         :channel => "/transactions/#{id}/change_info",
         :content => "订单#{number}已经修改运费",
@@ -615,10 +617,10 @@ class OrderTransaction < ActiveRecord::Base
         options[:channel] = "/transactions/change_info"
       end
     end 
-    notify_seller_change   
   end
 
   def notify_seller_change
+    return unless persisted?  
     attas = ["delivery_price", "address_id"]
     if changed.map{|c| attas.include?(c) }.any?
       target = current_operator.nil? ? seller : current_operator

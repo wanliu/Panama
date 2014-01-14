@@ -102,8 +102,17 @@ class TransactionCard extends TransactionCardBase
       @back_state()
       return false
 
-    if _.isEmpty(manner.transport_type)
+    if _.isEmpty(manner.transport_type)  
       pnotify(text: "请选择运输方式", type:"warning")
+      @back_state()
+      return false
+
+    if manner.transport_type == "自定义" &&
+    _.isEmpty(manner.delivery_price) && 
+    !_.isFinite(manner.delivery_price)
+
+      pnotify(text: "请输入自定义运费！", type:"warning")
+      @$("input:text[name='delivery_price']").focus()
       @back_state()
       return false
 
@@ -119,25 +128,30 @@ class TransactionCard extends TransactionCardBase
         @slideAfterEvent(data.event)
 
       error: (xhr, status) =>
-        @$(".address-form").html(xhr.responseText)
-        @notify("错误信息", '请填写完整的信息！', "error")
-        @back_state()
+        try
+          ms = JSON.parse(xhr.responseText)
+          @notify("错误信息", ms.join("<br />"), "error")
+
+        catch error
+          @$(".address-form").html(xhr.responseText)
+          @notify("错误信息", '请填写完整的信息！', "error")
+          @back_state()
     )
     false
 
   validate_transfer: (transfers, form) ->
     state = true
     if _.isEmpty(transfers.person)
-        form.find(".person").addClass("error")
-        state = false
+      form.find(".person").addClass("error")
+      state = false
 
     if _.isEmpty(transfers.code)
-        form.find(".code").addClass("error")
-        state = false
+      form.find(".code").addClass("error")
+      state = false
 
     if _.isEmpty(transfers.bank)
-        form.find(".bank").addClass("error")
-        state = false
+      form.find(".bank").addClass("error")
+      state = false
 
     state
 

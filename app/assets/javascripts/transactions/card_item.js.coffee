@@ -62,7 +62,7 @@ class root.CardItemListView extends Backbone.View
     @load_table_list()
 
   _add_one: (model) ->
-    elem = model.get("elem")
+    elem = model.get("elem")    
     delete model.attributes.elem
 
     @add_one(elem, model)

@@ -1,15 +1,5 @@
 <!-- 等待收货确认 -->
 <div class="container-fluid">
-  <div class='row-fluid'>
-    <div class='offset8'>
-      <a href='javascript:void(0)' class='returned-event'>
-        申请退货
-      </a>
-      <a href='javascript:void(0)' class='delay-sign-event'>
-        延长收货时间
-      </a>
-    </div>
-  </div>
   <%= render_funcat "refund_display", :locals => {
     :transaction => transaction } %>
   <div class='row-fluid'>
@@ -24,11 +14,3 @@
 <div class="container-fluid">
   <%= render "products", :transaction => transaction %>
 </div>
-<script type='text/javascript'>
-  $(function(){
-    new TransactionDelaySignView({
-      el: $(".transaction-<%=transaction.id %>-<%=transaction.state %>"),
-      remote_url: "<%= person_transaction_path(@people, transaction)%>"
-    })
-  })
-</script>

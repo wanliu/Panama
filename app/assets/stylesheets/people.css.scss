@@ -503,3 +503,15 @@
     }
   }
 }
+
+
+.manner_wrap{
+  .custom_delivery_price{
+    display: none;
+
+    input[type=text]{
+      margin: 0px;
+      width: 60px;
+    }
+  }
+}

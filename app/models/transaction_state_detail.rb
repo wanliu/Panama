@@ -11,16 +11,15 @@ class TransactionStateDetail < ActiveRecord::Base
 
   before_create :calculate_expired
 
+  validate :valid_delay_time?
+
   def calculate_expired
     self.expired = switch_state
   end
 
   def delay_sign_expired
-    if order_transaction.can_delay_sign_expired?
-      expired_time = expired + order_transaction.delay_sign_time
-      self.update_attributes({:expired => expired_time, :count => count + 1})
-    end
-    false
+    expired_time = expired + order_transaction.delay_sign_time
+    self.update_attributes({:expired => expired_time, :count => count + 1})    
   end
 
   private
@@ -48,4 +47,16 @@ class TransactionStateDetail < ActiveRecord::Base
     end
   end
 
+  def valid_delay_time?
+    if persisted?
+      if changed.include?("expired")
+        unless order_transaction.can_delay_sign_expired?
+          errors.add(:expired, "请在到期前3天内申请延时!")
+        end        
+      end
+      if changed.include?("count")
+        errors.add(:expired, "该订单有已经延长时间了!") if count > 1
+      end
+    end
+  end
 end
