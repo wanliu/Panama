@@ -16,12 +16,17 @@ class SearchController < ApplicationController
     end
   end
 
-  def circles
-    query_val = "%#{params[:q]}%"
-    @circles = Circle.where("circles.name like ?",query_val)
+  def shops
+    @results = shop_search
     respond_to do |format|
-      format.json { render json: @circles.as_json(
-        methods: [:friend_count, :header_url]) }
+      format.json{ render :json => @results }
+    end
+  end
+
+  def circles
+    @results = circle_search
+    respond_to do |format|
+      format.json { render json: @results }
     end
   end
 
@@ -39,38 +44,25 @@ class SearchController < ApplicationController
   end
 
   def users
-    query_val = "%#{params[:q]}%"
-    users = User.where("id<>#{current_user.id} and (login like ? or email like ?)", query_val, query_val).limit(params[:limit])
+    @results = users_search
     respond_to do |format|
-      format.json{ render :json => users }
+      format.json{ render :json => @results }
     end
   end
 
   def all
-    val = filter_special_sym(params[:q].gsub(/ /,''))
-    
-    @results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
-      query do
-        boolean do
-          must do
-            filtered do
-              filter :query, :query_string => {
-                :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
-                :default_operator => "AND"
-              }
-
-              filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
-            end
-          end
-        end
-      end
-      size 10
-
-      sort{ by :_score, :desc }
-    end.results if val.present?
-    
+    @results = case params[:search_type]
+    when "user"
+      users_search
+    when "circle"
+      circles_search
+    when "shop"
+      shops_search
+    else
+      multi_index
+    end
     respond_to do |format|
-      format.json{ render :json => @results || [] }
+      format.json{ render :json => @results }
     end
   end
 
@@ -256,5 +248,96 @@ class SearchController < ApplicationController
       end
       
     end
+  end
+
+  def multi_index
+    _size, _from, val = params[:limit], params[:offset], filter_special_sym(params[:q].gsub(/ /,''))
+    
+    results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
+      size _size || 10
+      from _from || 0
+
+      query do
+        boolean do
+          must do
+            filtered do
+              filter :query, :query_string => {
+                :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
+                :default_operator => "AND"
+              }
+
+              filter :terms, :_type => ["activity", "ask_buy", "shop_product", "product"]
+            end
+          end
+        end
+      end     
+
+      sort{ by :_score, :desc }
+    end.results if val.present?
+    results || []
+  end
+
+  def users_search
+    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(params[:q])
+
+    User.search2 do 
+      size _size || 10
+      from _from || 0
+
+      query do 
+        boolean do 
+          must do 
+            filtered do 
+              filter :query, :query_string => {
+                :query => "login:#{query_val} OR address:#{query_val} OR primitive:#{query_val} OR untouched:#{query_val}*",
+                :default_operator => "AND"
+              }
+            end
+          end
+        end
+      end
+    end.results
+  end
+
+  def circles_search
+    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(params[:q])
+    Circle.search2 do 
+      size _size || 10
+      from _from || 0
+
+      query do 
+        boolean do 
+          must do 
+            filtered do 
+              filter :query, :query_string => {
+                :query => "name:#{query_val} OR address:#{query_val} OR primitive:#{query_val} OR untouched:#{query_val}*",
+                :default_operator => "AND"
+              }
+            end
+          end
+        end
+      end
+    end.results
+  end
+
+  def shops_search
+    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(params[:q])
+    Shop.search2 do 
+      size _size || 10
+      from _from || 0
+
+      query do 
+        boolean do 
+          must do 
+            filtered do 
+              filter :query, :query_string => {
+                :query => "name:#{query_val} OR address:#{query_val} OR primitive:#{query_val} OR untouched:#{query_val}*",
+                :default_operator => "AND"
+              }
+            end
+          end
+        end
+      end
+    end.results
   end
 end

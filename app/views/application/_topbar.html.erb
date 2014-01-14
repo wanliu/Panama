@@ -3,25 +3,28 @@
     <form id="search-form" class="navbar-search">
       <ul class="nav pull-left chose_condition">
         <li id="fat-menu" class="dropdown">
-          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">找活动 <b class="caret"></b>
-        </a>
+          <input type='hidden' name='search_type' />
+          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
+            <span class='title'>找活动</span>
+            <b class="caret"></b>
+          </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-            <li role="presentation">
-              <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+            <li role="presentation" data-value="activity">
+              <a role="menuitem" tabindex="-1" href="javascript:void(0)" >
                 找活动
               </a>
             </li>
-            <li role="presentation">
+            <li role="presentation" data-value="user">
               <a role="menuitem" tabindex="-1" href="javascript:void(0)">
                 找人
               </a>
             </li>
-            <li role="presentation">
+            <li role="presentation" data-value="shop">
               <a role="menuitem" tabindex="-1" href="javascript:void(0)">
                 找商店
               </a>
             </li>
-            <li role="presentation">
+            <li role="presentation" data-value="circle">
               <a role="menuitem" tabindex="-1" href="javascript:void(0)">
                 找商圈
               </a>
