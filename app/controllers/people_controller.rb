@@ -17,6 +17,20 @@ class PeopleController < ApplicationController
     authorize! :manage, User
   end
 
+  def update_user_auth
+    @people = User.where(:login => params[:login]).first
+    current_ability(@people)
+    authorize! :manage, User
+    @user_checking = @people.user_checking
+    @user_auth = UserAuth.new(params[:user_auth])
+    if @user_auth.valid?
+      @user_checking.update_attributes(params[:user_auth])
+      redirect_to person_path(current_user)
+    else
+      render "edit"
+    end
+  end
+
   def show_invite
     valid_invite_user
   end
