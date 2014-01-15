@@ -120,16 +120,18 @@
                             }, 
                             :input_html => { 
                               :value => @ask_buy.price, 
-                              :class => "answer_ask_buy_price span-blank" }%>
+                              :class => "answer_ask_buy_price span-blank",
+                              :type => "text" }%>
 
-                <%=f.input :amount, 
+                <%=f.input :amount,
                            :label => "数量",
                            :wrapper_html => {
                               :class => "answer_ask_buy_amount_wrap"
                             },
                            :input_html => { 
-                            :value => @ask_buy.amount,
-                            :class => "answer_ask_buy_amount span-blank" }%>
+                            :value => @ask_buy.amount.to_i,
+                            :class => "answer_ask_buy_amount span-blank",
+                            :type => "text" }%>
                 <% total = @ask_buy.price * @ask_buy.amount %>
                 <%=f.input :total,
                            :label => "总计",
@@ -138,7 +140,8 @@
                             },
                            :input_html => { 
                             :value => total,
-                            :class => "answer_ask_buy_total span-blank" }%>
+                            :class => "answer_ask_buy_total span-blank",
+                            :type => "text" }%>
               <% end %>
               <% if current_user.answered_ask_buy(@ask_buy.id).nil? %>
                 <input type="button" value="提交报价" class="btn btn-danger pull-right submit_report">
