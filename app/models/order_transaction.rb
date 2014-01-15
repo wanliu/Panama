@@ -478,7 +478,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def update_total_count
-    self.items_count = items.inject(0) { |s, item| s + item.amount }
+    self.items_count = items.inject(0) { |s, item| s + (item.amount || 0) }
     self.total = items.inject(0) { |s, item| s + item.total }
   end
 
