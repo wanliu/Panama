@@ -70,8 +70,7 @@ class ProductItem < ActiveRecord::Base
   validates :product, :presence => true
   validates :price, :numericality => true
 
-  validates_numericality_of :amount, :greater_than => 0
-
+  validates_numericality_of :amount, :greater_than => 0, :only_integer => true
   validate :valid_buyer_self_product?
 
   after_initialize do
