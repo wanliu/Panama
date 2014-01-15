@@ -70,10 +70,11 @@ class ProductItem < ActiveRecord::Base
   validates :product, :presence => true
   validates :price, :numericality => true
 
-  validates_numericality_of :amount, :greater_than => 0, :only_integer => true
+  validates :amount, :presence => true, 
+            :numericality => { :greater_than => 0, :only_integer => true }
   validate :valid_buyer_self_product?
 
-  after_initialize do
+  before_save do
     update_total
   end
 
@@ -96,7 +97,9 @@ class ProductItem < ActiveRecord::Base
   end
 
   def update_total
-    self.total = self.price * self.amount
+    unless amount.nil? || price.nil?
+      self.total = self.price * self.amount
+    end
   end
 
   def options
