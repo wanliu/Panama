@@ -6,6 +6,29 @@ class Admins::Shops::CommunitiesController < Admins::Shops::SectionController
   def people
   end
 
+  def invite_people
+    @shop = Shop.find_by(:name => params[:shop_id])
+    @user = User.find(params[:user_id])
+    ids = params[:ids] unless params[:ids].blank?
+    @circles = @shop.circles.where(:id => ids)
+    respond_to do |format|
+      @circles.each do |circle|
+        unless circle.is_member?(@user)
+          @invite = circle.invite_users.create(
+            :user => @user,
+            :send_user => current_user)
+          if @invite.valid?
+            format.json{ render :json => @invite.as_json(:includes => :user) }
+          else
+            format.json{ render :json => draw_errors_message(@invite), :status => 403 }
+          end
+        else
+          format.json{ render :json => ["该用户已经加入圈子#{ circle.name}!"], :status => 403 }
+        end
+      end
+    end
+  end
+
   # def apply_join
   #   @cnotification = current_shop_notification.find(params[:cn_id])
   #   @cnotification.read_notify

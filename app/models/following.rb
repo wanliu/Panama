@@ -29,6 +29,7 @@ class Following < ActiveRecord::Base
                     :target => self,
                     :url => "/people/#{user.login}",
                     :avatar => user.avatar,
+                    :user => user,
                     :shop_name => follow.name)
     end
   end

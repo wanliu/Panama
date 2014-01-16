@@ -1,4 +1,4 @@
-
+#= require chosen_tool
 root  = window || @
 
 class NotificationManager
@@ -13,34 +13,43 @@ class NotificationManager
           {{/if}}
           <span class='noty_text'></span>
           <div class='noty_close'></div>
-          <a href="{{ url }}" class='follow  btn btn-danger'>查看</a>
+          <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+          <div><a href="{{ url }}" class='btn btn-danger pull-right'>查看</a></div>
       </div>""")
 
   followTemplate: Handlebars.compile(
-    """<div class='noty_message'>
+    """<div class='noty_message noty_message_follow'>
           <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
-          {{ text }}
+          <span class='noty_text'></span>
           <div>
-            <button data-value-id={{ user_id }} class='follow btn-danger'>回关注</button>
-            <a href="{{ url }}" class='follow  btn btn-danger'>查看</a>
+            <div class='noty_close'></div>
+            <a href="{{ url }}" class='btn btn-danger pull-right'>查看对方</a>
+            <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
           </div>
       </div>""")
   
   shopFollowTempate: Handlebars.compile(
     """<div class='noty_message'>
-          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
-          {{ text }}
-          <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              邀请加入商圈
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-              {{#each circles}}
-                <li class="circle_li" data-value-id="{{ id }}">{{ name }}</li>
-              {{/each}}
-            </ul>
-          </div>
+        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        <span class='noty_text'></span>
+        <div>
+          <div class='noty_close'></div>
+          <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
+          <a  href='/shops/{{ shop_name }}/shop_circles' data-toggle='modal' data-dismiss='modal' class="btn btn-primary pull-right" data-target='#choseCircle'>
+            邀请加入商圈
+          </a>
+        </div>
+      </div>""")
+
+  circleInviteTemplate: Handlebars.compile(
+    """<div class='noty_message'>
+        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        <span class='noty_text'></span>
+        <div>
+          <div class='noty_close'></div>
+          <button  class='btn btn-danger pull-right agree'>同意</button>
+          <button class="btn btn-primary pull-right refuse" >拒绝</button>
+        </div>
       </div>""")
 
   constructor: () ->
@@ -67,7 +76,7 @@ class NotificationManager
     @client.monitor("/follow", @follow) # √
     @client.monitor("/unfollow", @commonNotify) # √
     @client.monitor("/circles/request", @commonNotify) # √
-    @client.monitor("/circles/invite", @commonNotify) # √
+    @client.monitor("/circles/invite", @circle_invite) # √
     @client.monitor("/circles/refuse", @commonNotify) # √
     @client.monitor("/circles/joined", @commonNotify) # √
     @client.monitor("/circles/leaved", @commonNotify) # √
@@ -116,27 +125,36 @@ class NotificationManager
     @client.monitor("/order_refunds/create", @commonNotify)    
     @client.monitor("/order_refunds/change_state", @commonNotify)
 
-  follow: (data) =>
-    @addToPlays data, (info) =>
-      console.log(info)
-      @notificationsList.collection.add(info)
-      @notify({
-        id: info.id,
-        title: info.title,
-        text: info.content,
-        avatar: info.avatar,
-        user_id: info.user.id
-      })
+
+  circle_invite: (data) =>
+    data.template = $(@circleInviteTemplate(data))
+    @commonNotify(data)
+    new AnswerInvite({
+      el: data.template,
+      invite: data.invite,
+    })
 
 
   shop_follow: (data) =>
-    $.ajax({
-      url: "",
-      success: (circles) =>
-        $.extend(data,{circles: circles})
-
+    data.template = $(@shopFollowTempate(data))
+    @commonNotify(data)
+    new InviteManyView({
+      el: $(".circle_invite_list"),
+      shop_name: data.shop_name,
+      user_id: data.user.id
     })
 
+  follow: (data) =>
+    data.template = $(@followTemplate(data))
+    @commonNotify(data)
+    new FollowView({
+      data: {
+        follow_id:  data.user.id,
+        follow_type: "User"
+      },
+      login: @current_user_login,
+      el: data.template
+    })
 
   add_user: (data) =>
     @commonNotify(data)
@@ -157,14 +175,25 @@ class NotificationManager
     ChatManager.getInstance().removeChatIcon(model)
 
   commonNotify: (data) =>
+    unless data.template?
+      data.template = $(@defaultTemplate(data))
+      new DefaultView({ el: data.template})
     @addToPlays data, (info) =>
       console.log(info)
+      _user_id = info.user.id if info.user?
+      _shop_name = info.shop_name if info.shop_name?
+      _tempalte = info.template if info.template?
       @notificationsList.collection.add(info)
       @notify({
+        button: $(".noty_close")
+        template: _tempalte,
         id: info.id,
         title: info.title,
         text: info.content,
-        avatar: info.avatar
+        avatar: info.avatar,
+        user_id: _user_id,
+        shop_name: _shop_name,
+        url:  "/people/#{@current_user_login}/notifications/"+info.id+"/mark_as_read",
       })
 
   addToPlays: (data, callback, delay = 3000) =>
@@ -180,9 +209,9 @@ class NotificationManager
       options.theme = 'notifyTheme'
 
     unless options.hasOwnProperty('timeout')
-      options.timeout = 5000
+      options.timeout = false
 
-    unless options.hasOwnProperty('template')
+    unless options.hasOwnProperty('template') && options.template?
       options.template = @defaultTemplate(options)
 
     unless options.hasOwnProperty('animation')
@@ -213,11 +242,65 @@ class NotificationManager
     options.animation.open = {
       opacity: 1,
     }
-    options.callback.onCloseClick = (options) ->
-      $url = "/people/#{self.current_user_login}/notifications/#{ @options.id}/mark_as_read"
-      window.location.href = $url
-
     pnotify(options)
+
+class DefaultView extends Backbone.View
+  events:
+    "click .i_know" : "close_message"
+
+  close_message: () ->
+    @$(".noty_close").click()
+
+class InviteManyView extends Backbone.View
+  events: 
+    "click .invite_user" : "invite_user"
+
+  initialize: (options) ->
+    _.extend(@, options)
+    @el = $(@el)
+    @tool_view = new chosenTool({
+      el: @el
+    })
+
+  invite_user: (e) =>
+    return false if @$(".disabled").length == 1
+    $(e.currentTarget).addClass("disabled")
+    ids = @tool_view.data()
+    $.ajax({
+      type: "POST",
+      data: {ids: ids, user_id: @user_id},
+      url: "/shops/"+@shop_name+"/admins/communities/invite_people",
+      success: () =>
+        pnotify(text: "邀请成功，等待对方确认......")
+        @$(".noty_close").click()
+        @el.modal("hide")
+      error: (message) ->
+        pnotify(text: message.responseText, type: "error")
+    })
+
+class AnswerInvite extends Backbone.View
+  events:
+    "click .agree"   :  "agree_invite"
+    "click .refuse"  :  "refuse_invite"
+
+  agree_invite: () =>
+    $.ajax({
+      dataType: "json",
+      type: "post",
+      url: "/communities/#{@options.invite.targeable_id}/invite/#{ @options.invite.id }/agree_join",
+      success: () =>
+        @$(".noty_close").click()
+        pnotify(text: "加入商圈成功.....")
+    })
+  refuse_invite: () =>
+    $.ajax({
+      dataType: "json",
+      type: "post",
+      url: "/communities/#{@options.invite.targeable_id}/invite/#{ @options.invite.id }/refuse_join",
+      success: () =>
+        @$(".noty_close").click()
+        pnotify(text: "拒绝加入商圈成功.....")
+    })
 
 class root.NotificationViewList extends Backbone.View
 
@@ -276,7 +359,6 @@ class root.NotificationViewList extends Backbone.View
       url: "#{@urlRoot}/unreads",
       data: { offset: 0 } 
     )
-
 
 class NotificationView extends Backbone.View
   tagName: "li"

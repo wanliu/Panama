@@ -1,3 +1,4 @@
+#= require chosen_tool
 root = window || @
 
 class ActivityBind extends Backbone.View
@@ -12,13 +13,19 @@ class ActivityBind extends Backbone.View
     'submit form.new_product_item'       : 'join'
     "click .focus .partic-button"        : "joinFocus"
     "click .focus .unpartic-button"      : "unjoinFocus"
-    "click .circle"                      : "select_circle"
+    # "click .circle"                      : "select_circle"
     "click .share_activity"              : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
   unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
   unpartic_template: '<button class="btn btn-danger unpartic-button" type="submit" name="unjoin"> 取消参与</button>'
   partic_template: '<button class="btn btn-danger partic-button active" type="submit" name="join"><i class="icon-shopping-cart icon-white"></i> 参与</button>'
+
+  initialize: (options) ->
+    _.extend(@, options)
+    @tool = new chosenTool({
+      el: $(@el)
+    })
 
   like: (event) ->
     $.post(@model.url() + "/like", (data) =>
@@ -123,34 +130,10 @@ class ActivityBind extends Backbone.View
     MyCart.myCart.addToCart(@$('.preview'),$form , url)
     false
 
-  state: () ->
-    if @$(".selected").length > 0
-      @$(".share_activity").removeClass("disabled")
-    else
-      @$(".share_activity").addClass("disabled")
-
-  select_circle: (e) ->
-    target = $(e.currentTarget)
-    if target.hasClass("selected")
-      target.removeClass("selected")
-    else
-      target.addClass("selected")
-    @state()
-
-  data: () ->
-    ids = []
-    if @$(".selected").length > 0
-      els = @$(".selected") 
-      _.each els, (el) =>
-        ids.push($(el).attr("data-value-id"))
-      return ids
-    else
-      return false
-
   share_activity: () ->
     return false if $(".share_activity_to_circles .disabled").length == 1
     @$(".share_activity").addClass('disabled')
-    ids = @data()
+    ids = @tool.data()
     activity_id = @model.get('id')
     $.ajax(
       data: {ids: ids}

@@ -50,6 +50,7 @@ Panama::Application.routes.draw do
   match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth", :via => :put
   match "user_checkings/upload_photo/:id", :to => "user_checkings#upload_photo", :via => :post
 
+  match "people/:shop_name/invite_people", :to => "people#invite_people"
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
   match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
@@ -104,7 +105,7 @@ Panama::Application.routes.draw do
         post :agree_join
         post :refuse_join
       end
-    end
+    end 
 
     resources :categories, :controller => "communities/categories" do
       member do
@@ -493,9 +494,10 @@ Panama::Application.routes.draw do
 
       resources :communities, :controller => "shops/communities" do
         collection do
-          get :people
-          get :settings
-          get :messages
+          get  :people
+          get  :settings
+          get  :messages
+          post :invite_people
           get "apply_join/:cn_id", :to => "shops/communities#apply_join"
           post "join_circle/:cn_id", :to => "shops/communities#join_circle"
           post "refuse_join/:cn_id", :to => "shops/communities#refuse_join"

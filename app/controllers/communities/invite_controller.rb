@@ -46,6 +46,7 @@ class Communities::InviteController < Communities::BaseController
         format.html{
           redirect_to community_circles_path(@circle)
         }
+        format.json{ head :no_content}
       else
         format.js{
           render :js => "pnotify({text: '出错了！'})" }
@@ -61,6 +62,7 @@ class Communities::InviteController < Communities::BaseController
         format.html{
           redirect_to person_communities_path(@current_user)
         }
+        format.json{ head :no_content}
       else
         format.js{
           render :js => "pnotify({text: '出错了！'})" }

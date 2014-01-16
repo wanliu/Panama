@@ -100,9 +100,7 @@ class ShopsController < ApplicationController
   def shop_circles
     @shop = Shop.find_by(:name => params[:id])
     @circles = @shop.circles
-    respond_to do |format|
-      format.json{ render json: @circles}
-    end
+    render "/people/communities/all_circles", :layout => false    
   end
 
   # 关注

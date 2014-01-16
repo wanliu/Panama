@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-  <%= cache do %>
-    <%= render "head", :styles => ['application'], :javascripts => ['application'] %>
-  <% end %>
+  <%= render "head", :styles => ['application'], :javascripts => ['application'] %>
   <body class="<%= controller.controller_name %>" style="zoom: 1">
     <%= render "chromeframe" %>
     <%= render "logo" %>
