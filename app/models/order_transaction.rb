@@ -528,7 +528,7 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def update_transport
-    if transport_type.present?
+    if OrderTransportType.exists?(transport_type)
       self.delivery_price = get_delivery_price
     end
   end
