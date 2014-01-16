@@ -141,10 +141,10 @@ class TransactionCard extends TransactionCardBase
         try
           ms = JSON.parse(xhr.responseText)
           @notify("错误信息", ms.join("<br />"), "error")
-
         catch error
           @$(".address-form").html(xhr.responseText)
           @notify("错误信息", '请填写完整的信息！', "error")
+        finally
           @back_state()
     )
     false
@@ -176,10 +176,21 @@ class TransactionCard extends TransactionCardBase
         type: 'POST',
         success: (model, data) =>
           @slideAfterEvent(event_name)
+        error: (data, xhr, res) =>
+          try
+            ms = JSON.parse(xhr.responseText)
+            @notify("错误信息", ms.join("<br />"), "error")
+          catch error
+            form.html(xhr.responseText)
+            @notify("错误信息", '请确认汇款单信息！', "error")
+          finally
+            @back_state()
+            return false
       )
     else
       @alarm()
       @transition.cancel()
+    false
 
   show_transfer_code: (event) ->
     code_input = @$("input:text[name=code]")
