@@ -7,14 +7,9 @@ class root.ShopViewTemplate extends Backbone.View
 
   initialize: () ->
     @$el = $(@el)
-    @model.shop = @model
     @$el.attr("shop-id", @model.id)
-    @template = $(Handlebars.compile($("#shop_template").html())(@model))
+    @template = $(Handlebars.compile($("#circle_template").html())(@model))
     @$el.html(@template)
-    new ShopCardInfo(
-      el: @template,
-      model: @model
-    )
 
   render: () ->    
     @

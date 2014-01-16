@@ -10,6 +10,7 @@
 #= require activity_buy
 #= require lib/bootstrap-progressbar
 #= require activity_bind
+#= require apply_join_circle
 #= require_tree ./template
 
 root = window || @

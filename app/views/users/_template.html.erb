@@ -1,4 +1,4 @@
-<div class='user_info' id="{{ id }}">
+<div class='user_info'>
   <div class="hover_place">
     <div class='info_detail' user-id='{{ id }}' >
         <div class="bg_nature">
@@ -6,11 +6,11 @@
         </div>
         <div class='userinfo'>
           <div class="circle_avatar">
-            <img src='{{ user.photos.header }}' class="author " />
+            <img src='{{ photos.header }}' class="author " />
           </div>
           <div class="login">
-            <a href="/people/{{ user.login }} ">
-              {{ user.login }}</a>
+            <a href="/people/{{ login }} ">
+              {{ login }}</a>
           </div>
           <div class="industry_type">
             <span>行业：{{ industry_type }}</span>
@@ -29,14 +29,14 @@
         </div>
     </div>
     <span class="label label-warning pull-right">买家</span>
-    <a href="/people/{{ user.login }}">
-      <img src="{{ user.photos.icon }}" class="avatar"/>
+    <a href="/people/{{ login }}">
+      <img src="{{ photos.icon }}" class="avatar"/>
     </a>
   </div>
   <div  class="content">
     <div class="name">
       <i class="icon-user"></i>
-      <a href="/people/{{ user.login }}" class="title">{{ user.login }}</a>
+      <a href="/people/{{ login }}" class="title">{{ login }}</a>
     </div>
     <div class="industry">
       <i class="icon-star"></i>

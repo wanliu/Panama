@@ -40,7 +40,7 @@ class Circle < ActiveRecord::Base
 
   #若是Shop类型的circle,就可以看出商店名
   def shop_name
-    Shop.find(owner_id).try(:name) if owner_type == "Shop"
+    owner.name if owner_type == "Shop"
   end
 
   def apply_join_notice(sender)
@@ -120,13 +120,23 @@ class Circle < ActiveRecord::Base
       },
       :photos => photos.attributes,
       :owner_type => owner_type,
+      :city => {
+        :id => city.try(:id),
+        :name => city.try(:name)
+      },
       :owner => {
         :id => owner.id,
         :photos => owner.photos.attributes
-      }      
+      }            
     }
     options[:owner][:login] = owner.login if owner.is_a?(User)
-    options[:owner][:name] = owner.name if owner.is_a?(Shop)
+    if owner.is_a?(Shop)
+      options[:owner][:name] = owner.name
+      options[:owner][:user] = {
+        :id => owner.user.id,
+        :login => owner.user.login
+      }
+    end
     options.to_json
   end
 

@@ -6,7 +6,6 @@ class root.UserViewTemplate extends Backbone.View
 
   initialize: () ->
     @$el = $(@el)
-    @model.user = @model    
     @$el.attr("user-id", @model.id)
     @template = $(Handlebars.compile($("#user_template").html())(@model))
     @$el.html(@template)   

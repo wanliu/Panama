@@ -24,7 +24,15 @@ class SearchController < ApplicationController
   end
 
   def circles
-    @results = circles_search(params[:q][:query])
+    @results = circles_search(params[:q][:query]).map do |result|      
+      s = result.as_json
+      circle = Circle.find(result.id)
+      s[:isOwner] = circle.is_owner_people?(current_user)
+      s[:isJoin] = circle.is_member?(current_user)
+      s[:friends] = circle.friends.order("created_at desc").limit(4)
+      s[:isSeller] = circle.owner_type == "Shop"
+      s
+    end
     respond_to do |format|
       format.json { render json: @results }
     end
@@ -99,14 +107,10 @@ class SearchController < ApplicationController
 
       query do
         boolean do
-          must &_query
-  
+          must &_query  
           should &activity_score
-
           should &ask_buy_score
-
           should &shop_product_score
-
           should &product_score          
         end
       end

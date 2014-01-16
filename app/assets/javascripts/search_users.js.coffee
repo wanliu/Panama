@@ -44,12 +44,12 @@ class NewUsersView extends Backbone.View
       _.each datas, (data) =>
         view = if data.service == "buyer"          
           new UserCardInfo(
-            el: $(@buyer_template(data)),
+            el: $(@buyer_template(_.extend(data, data.user))),
             model: data
           )
         else
           new ShopCardInfo(
-            el: $(@seller_template(data)),
+            el: $(@seller_template(_.extend(data, data.shop))),
             model: data
           )          
 
@@ -89,14 +89,14 @@ class FindUserView extends Backbone.View
       @$(".alert").fadeOut()
       @$(".wrapper").html ""
       _.each datas, (data) =>
-        view = if data.service == "buyer"
+        view = if data.service == "buyer"          
           new UserCardInfo(
-            el: $(@buyer_template(data)),
+            el: $(@buyer_template(_.extend(data, data.user))),
             model: data
           )
         else
           new ShopCardInfo(
-            el: $(@seller_template(data)),
+            el: $(@seller_template(_.extend(data, data.shop))),
             model: data
           )
 
@@ -120,7 +120,8 @@ class FindCircleView extends Backbone.View
     # return @$(".find_circle_tip").show() unless keyword != ""
     $.ajax({
       type: "get",
-      url: "/search/shop_circles.dialog",
+      dataType: "json",
+      url: "/search/shop_circles",
       data: {q: keyword ,area_id: @options.area_id }
       success: (data) =>
         if data == ""

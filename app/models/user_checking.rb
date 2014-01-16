@@ -47,6 +47,16 @@ class UserChecking < ActiveRecord::Base
   def as_json(*args)
     attas = super *args
     attas['ower_photos'] = ower_photos.attributes
+    attas['user'] = {
+      :id => user.id,
+      :login => user.login,
+      :photos => user.photos.attributes
+    }
+    attas['shop'] = {
+      :id => shop.try(:id),
+      :name => shop.try(:name),
+      :photos => shop.try(:photos).try(:attributes)
+    }
     # attas['shop_photos'] = shop_photos.attributes
     attas
   end
