@@ -5472,9 +5472,24 @@ if (typeof define === "function" && define.amd) {
               channel = Chat.create(info.from, {
                 room: info.room
               });
-              channel.command('join', info.room);
-              channel.setState('open');
-              return Caramal.MessageManager.emit('channel:new', channel);
+              return channel.command('join', info.room, {}, function(ch, err, msg) {
+                if (err != null) {
+                  return console.error('fails to join room! becouse of', err);
+                } else {
+                  channel.setState('open');
+                  return Caramal.MessageManager.emit('channel:new', channel);
+                }
+              });
+            } else if (channel.room !== info.room) {
+              return channel.command('join', info.room, {}, function(ch, err, msg) {
+                if (err != null) {
+                  return console.error('fails to join room! becouse of', err);
+                } else {
+                  channel.room = info.room;
+                  channel.setState('open');
+                  return Caramal.MessageManager.emit('channel:new', channel);
+                }
+              });
             }
           } else {
             return next();
@@ -5601,12 +5616,27 @@ if (typeof define === "function" && define.amd) {
           if (info.type === Channel.TYPES['group']) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
-              channel = Group.create(info.group, {
+              channel = Chat.create(info.from, {
                 room: info.room
               });
-              channel.command('join', info.room);
-              channel.setState('open');
-              return Caramal.MessageManager.emit('channel:new', channel);
+              return channel.command('join', info.room, {}, function(ch, err, msg) {
+                if (err != null) {
+                  return console.error('fails to join room! becouse of', err);
+                } else {
+                  channel.setState('open');
+                  return Caramal.MessageManager.emit('channel:new', channel);
+                }
+              });
+            } else if (channel.room !== info.room) {
+              return channel.command('join', info.room, {}, function(ch, err, msg) {
+                if (err != null) {
+                  return console.error('fails to join room! becouse of', err);
+                } else {
+                  channel.room = info.room;
+                  channel.setState('open');
+                  return Caramal.MessageManager.emit('channel:new', channel);
+                }
+              });
             }
           } else {
             return next();
@@ -5713,12 +5743,27 @@ if (typeof define === "function" && define.amd) {
           if (info.type === Channel.TYPES['temporary']) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
-              channel = Temporary.create(info.group, {
+              channel = Chat.create(info.from, {
                 room: info.room
               });
-              channel.command('join', info.room);
-              channel.setState('open');
-              return Caramal.MessageManager.emit('channel:new', channel);
+              return channel.command('join', info.room, {}, function(ch, err, msg) {
+                if (err != null) {
+                  return console.error('fails to join room! becouse of', err);
+                } else {
+                  channel.setState('open');
+                  return Caramal.MessageManager.emit('channel:new', channel);
+                }
+              });
+            } else if (channel.room !== info.room) {
+              return channel.command('join', info.room, {}, function(ch, err, msg) {
+                if (err != null) {
+                  return console.error('fails to join room! becouse of', err);
+                } else {
+                  channel.room = info.room;
+                  channel.setState('open');
+                  return Caramal.MessageManager.emit('channel:new', channel);
+                }
+              });
             }
           } else {
             return next();
