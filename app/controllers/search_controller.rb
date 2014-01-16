@@ -283,8 +283,8 @@ class SearchController < ApplicationController
 
   def users_search(query_val)
     _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(query_val)
-
-    User.search2 do 
+    results = []
+    results = User.search2 do 
       size _size || 10
       from _from || 0
 
@@ -300,12 +300,14 @@ class SearchController < ApplicationController
           end
         end
       end
-    end.results
+    end.results if query_val.present?
+    results
   end
 
   def circles_search(query_val)
     _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(query_val)
-    Circle.search2 do 
+    results = []
+    results = Circle.search2 do 
       size _size || 10
       from _from || 0
 
@@ -322,11 +324,13 @@ class SearchController < ApplicationController
         end
       end
     end.results if query_val.present?
+    results
   end
 
   def shops_search(query_val)
     _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(query_val)
-    Shop.search2 do 
+    results = []
+    results = Shop.search2 do 
       size _size || 10
       from _from || 0
 
@@ -343,5 +347,6 @@ class SearchController < ApplicationController
         end
       end
     end.results if query_val.present?
+    results
   end
 end

@@ -72,9 +72,12 @@ class ProductItem < ActiveRecord::Base
 
   validates :amount, :presence => true, 
             :numericality => { :greater_than => 0, :only_integer => true }
+  validates :total, :presence => true,
+            :numericality => { :greater_than_or_equal_to => 1 }
+
   validate :valid_buyer_self_product?
 
-  before_save do
+  after_initialize do
     update_total
   end
 
