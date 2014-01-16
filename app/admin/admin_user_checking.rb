@@ -33,10 +33,13 @@ ActiveAdmin.register UserChecking do
     if !shop.blank?
       shop_url = "/shops/" + shop.name
       shop.transaction do
-        user_checking.update_attributes(:checked => true, :rejected => false)
-        shop.update_attributes(:shop_url => shop_url, :audit_count => shop.audit_count + 1)
-        shop.active
+        unless user_checking.update_attributes(:checked => true, :rejected => false) &&
+          shop.update_attributes(:shop_url => shop_url, :audit_count => shop.audit_count + 1) &&
+          shop.active
+          raise ActiveRecord::Rollback
+        end
       end
+      shop.reload
       shop.configure_shop
     end
     user_checking.send_checked_mail if shop.actived?
