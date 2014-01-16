@@ -229,6 +229,8 @@ zh-CN:
       category_property_value: 分类属性值
       property_value: 属性
       withdraw_money: 提现
+      ask_buy: 求购
+      answer_ask_buy: 报价
     attributes:
       setting:
         id: 编号
@@ -418,6 +420,10 @@ zh-CN:
         money: 金额
         arrive_mode: 到帐时间
         state: 处理状态
+      answer_ask_buy:
+        price: 价格
+        amount: 数量
+        total: 总计
 
   mongoid:
     models:
