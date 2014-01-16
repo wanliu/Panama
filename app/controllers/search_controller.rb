@@ -163,10 +163,10 @@ class SearchController < ApplicationController
         condition_stores(key, q[key]) do
           query_category(q[key])
         end
-      when :title
+      when :query
         @@conditions[key] = filter_special_sym(q[key])
       else
-        @@conditions[key] = q[key]
+        @@conditions[key] = filter_special_sym(q[key])
       end
     end
     @@conditions
