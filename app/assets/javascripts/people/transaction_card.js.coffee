@@ -96,6 +96,16 @@ class TransactionCard extends TransactionCardBase
     form = @$(".address-form>form")
     params = form.serializeHash()
     manner = @$(".manner_wrap").serializeHash()
+    
+    if _.isEmpty(params.order_transaction.address_id)
+      flag = true
+      # 验证填写的地址信息完整性，邮编除外
+      _.map params.address, (value, key) =>
+        if flag && key isnt 'zip_code' && _.isEmpty(value)
+          @notify("错误信息", '请填写完整的地址信息！', "error")
+          @back_state()
+          flag = false
+      return flag unless flag
 
     if _.isEmpty(manner.pay_type)
       pnotify(text: "请选择支付类型", type:"warning")
@@ -131,10 +141,10 @@ class TransactionCard extends TransactionCardBase
         try
           ms = JSON.parse(xhr.responseText)
           @notify("错误信息", ms.join("<br />"), "error")
-
         catch error
           @$(".address-form").html(xhr.responseText)
           @notify("错误信息", '请填写完整的信息！', "error")
+        finally
           @back_state()
     )
     false
@@ -166,10 +176,21 @@ class TransactionCard extends TransactionCardBase
         type: 'POST',
         success: (model, data) =>
           @slideAfterEvent(event_name)
+        error: (data, xhr, res) =>
+          try
+            ms = JSON.parse(xhr.responseText)
+            @notify("错误信息", ms.join("<br />"), "error")
+          catch error
+            form.html(xhr.responseText)
+            @notify("错误信息", '请确认汇款单信息！', "error")
+          finally
+            @back_state()
+            return false
       )
     else
       @alarm()
       @transition.cancel()
+    false
 
   show_transfer_code: (event) ->
     code_input = @$("input:text[name=code]")

@@ -94,8 +94,12 @@ class root.AddressEditView extends Backbone.View
         @$("#edit_address").modal('hide')
         pnotify({text: "修改地址成功！"})
       error: (xhr, status) =>
-        ms = JSON.parse(xhr.responseText)
-        pnotify({text: ms.join("<br />"), type: "error"})
+        if xhr.status is 400
+          # 商店验证的地址验证, 重新渲染模板
+          @$('#edit_address .modal-body').html(xhr.responseText)
+        else
+          ms = JSON.parse(xhr.responseText)
+          pnotify({text: ms.join("<br />"), type: "error"})
     )
     false
 

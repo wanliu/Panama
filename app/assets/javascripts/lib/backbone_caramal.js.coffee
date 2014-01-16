@@ -61,7 +61,7 @@ class ImageUpload extends Backbone.View
   onComplete: (id, filename, data) =>
     if data.success
       @$("div.qq-upload-button").show()
-      @parent_view.sendImg(data.attachment.file.t100100.url)
+      @parent_view.sendImg(data.attachment.photos)
 
   newFileUploader: () ->
     @fileupload = new qq.FileUploader({
@@ -157,9 +157,11 @@ class BaseChatView extends Caramal.BackboneView
         </div>
         <div class="message">
           {{ msg }}
-          {{#if attachments}}
-            <img src="{{attachments}}" alt="图片" />
-          {{/if}}
+          {{#each attachments}}
+            <a class="image-zoom" target="_blank" href="{{default}}">
+              <img src="{{header}}" alt="图片">
+            </a>
+          {{/each}}
         </div>
       </div>
     </li>')
@@ -175,6 +177,7 @@ class BaseChatView extends Caramal.BackboneView
         text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
         $html += @history_tip({text: text})
         @msgContent().prepend($html)
+        @$('.message .image-zoom').fancybox()
         @scrollDialog()
       )
     , 300)
@@ -198,10 +201,13 @@ class BaseChatView extends Caramal.BackboneView
     console.log('unimplemented...')
 
   initDialog: () ->
+    # @bindMessage()
     $(@el).html(@chat_template({model: @model}))
     @state_el = @$(".head>.state")
     @model.chat_view = @
     @display = false
+    $('body').append(@el)
+    @addResizable()
 
     ChatManager.getInstance().addModel(@model)
     new ImageUpload({ el: @el, parent_view: @ })
@@ -210,8 +216,18 @@ class BaseChatView extends Caramal.BackboneView
     })
     $(@el).hide()
 
+  addResizable: () ->
+    $el = $(@el)
+    $el.resizable()
+       .draggable(handle: @$('.head'))
+       .css('position', 'fixed')
+    $el.on('resize', (event, ui) =>
+      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
+      $el.find(".body").css('height', height)
+      $el.css('position', 'fixed')
+    )
+
   bindEvent: () ->
-    @bindMessage()
     @stateService()
     @channel.onEvent (data) =>
       return unless data.type
@@ -226,9 +242,6 @@ class BaseChatView extends Caramal.BackboneView
           @offline()
         else
           console.log('未处理的事件')
-    $(window).bind('enterAttachChat', () =>
-      $(@el).hide()
-    )
 
   stateService: () ->
     console.log('unimplemented...')
@@ -268,57 +281,21 @@ class BaseChatView extends Caramal.BackboneView
     html = ''
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
-      html += @parseOne(message)  
+      html += @parseOne(message)
     html
 
   sendContent: () ->
-    @targetEl(@el).find('.content')
+    @$('.content')
 
   msgContent: () ->
-    @targetEl(@el).find('.msg_content')
-
-  targetEl: (el) =>
-    $attach_el = $(@model.get('attach_el'))
-    if $attach_el.length is 0
-      $(el)
-    else
-      $([ $attach_el[0], el])
+    @$('.msg_content')
 
   receiveMessage: (data) ->
-    # @msgContent().append(@parseMessages(data))
-    if @displayState()
-      @$('.msg_content').append(@parseMessages(data))
-      @model.trigger('active_avatar') if @name is data.user
-      @scrollDialog()
-
-  getShowEl: () ->
-    $attach_el = $(@model.get('attach_el'))
-    if $attach_el.length is 1
-      @newAttachView()
-      if @isFullMode()
-        return $(@attach_view.el)
-    return $(@el)
-
-  newAttachView: () ->
-    @attach_view ||= new AttachChatView({
-      model: @model,
-      channel: @channel,
-      el: $(@el).clone()
-    })
-
-  isFullMode: () ->
-    $attach_el = $(@model.get('attach_el'))
-    display = $attach_el.parents('.full-mode').is(':visible')
-    $(@el).hide() if display
-    display
-
-  displayState: () ->
-    @display = $(@el).is(':visible') || @isFullMode()
     if @display
-      @channel.active()
-    else
-      @channel.deactive()
-    @display
+      @msgContent().append(@parseMessages(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
 
   toggleDialog: () ->
     if @display
@@ -327,20 +304,21 @@ class BaseChatView extends Caramal.BackboneView
       @showWithMsg()
 
   hideDialog: () ->
-    @getShowEl().toggle()
-    @displayState()
-    # @unbindMessage() if @display
+    $(@el).hide()
+    @display = false
+    @channel.deactive()
+    # @unbindMessage()
 
   showDialog: () ->
-    @getShowEl().show()
-    @displayState()
-    @showUnread() if @display
-    # @bindMessage() unless @display
+    $(@el).show()
+    @display = true
+    @channel.active()
+    @showUnread()
+    # @bindMessage()
     @scrollDialog()
 
   scrollDialog: () ->
-    $body = @targetEl(@el).find('.body')
-    $body.scrollTop($body[0].scrollHeight)
+    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   showUnread: () ->
     _.each @channel.message_buffer, (msg) =>
@@ -372,20 +350,18 @@ class BaseChatView extends Caramal.BackboneView
     @sendInputing()
     @sendMessage(event) if event.ctrlKey && event.keyCode == 13
 
-  sendImg: (url) ->
-    return unless url
-    @channel.send({ msg: '', attachments: [url] })
+  sendImg: (photo) ->
+    return if _.isEmpty(photo)
+    @channel.send(msg: '', attachments: [ photo ])
 
   sendMessage: (event) ->
-    # msg = @sendContent().val().trim()
-    $msg = $(event.target).parents('.foot').find('textarea.content')
-    msg = $msg.val().trim()
+    msg = @sendContent().val().trim()
     return if msg is ''
     @channel.send(msg)
     @sendContent().val('')
 
 
-class root.ChatView extends BaseChatView
+class root.FriendChatView extends BaseChatView
 
   initialize: () ->
     super
@@ -440,7 +416,17 @@ class root.TemporaryChatView extends BaseChatView
     @channel.record()
 
 
-class root.AttachChatView extends TemporaryChatView
+class root.OrderChatView extends Caramal.BackboneView
+  on_class: "online"
+  off_class: "offline"
+  className: 'order_chat'
+
+  EVENT_TYPE: {
+    'joined'     : 1,
+    'leaved'     : 2,
+    'inputing'   : 3,
+    'onlineState': 4
+  }
 
   events:
     'mouseover '                : 'activeDialog'
@@ -448,21 +434,193 @@ class root.AttachChatView extends TemporaryChatView
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
- 
-  initialize: (options) ->
-    _.extend(@, options)
-    $(@el).removeAttr('style')
-          .css('position', 'static')
-          .css('width', '100%')
-          .css('height', '100%')
-    @$('.head').addClass('hide')
-    @$('.ui-resizable-handle').addClass('hide')
-    $(@model.get('attach_el')).html(@el)
 
-    @bindMessage()
+  history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
+
+  chat_template:  _.template('
+    <div class="body">
+      <ul class="msg_content">
+      </ul>
+    </div>
+    <div class="foot">
+      <div class="send_content">
+        <textarea class="content"></textarea>
+      </div>
+      <div class="foot_nav">
+        <span class="face-panel">
+          <a href="javascript:void(0)" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-html="true" data-original-title="">
+            <i class="icon-glass"></i>
+          </a>
+        </span>
+        <span class="upload-panel">
+          <i class="icon-picture upload-image"></i>
+        </span>
+        <button class="btn btn-primary send_button">发送</button>
+      </div>
+    </div>')
+
+  receive_template: Handlebars.compile('
+    <li clas="row-receive">
+      <div class="pull-left">
+        <div class="icon">
+          <img src="/default_img/t5050_default_avatar.jpg">
+        </div>
+      </div>
+      <div class="message-body">
+        <div class="pull-left">
+          <a href="#" class="login">{{ user }}</a>
+          {{calender time}}
+        </div>
+        <div class="message">
+          {{ msg }}
+          {{#each attachments}}
+            <a class="image-zoom" target="_blank" href="{{default}}">
+              <img src="{{header}}" alt="图片">
+            </a>
+          {{/each}}
+        </div>
+      </div>
+    </li>')
+
+  fetchHistory: () ->
+    @msgLoaded ||= false
+    return if @msgLoaded
+    start = @channel.message_buffer.length + 1
+    setTimeout( () =>
+      @channel.history({start: start}, (chat, err, messages) =>
+        @msgLoaded = true
+        $html = @parseMessages(messages)
+        text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+        $html += @history_tip({text: text})
+        @msgContent().prepend($html)
+        @$('.message .image-zoom').fancybox()
+        @scrollDialog()
+      )
+    , 300)
+
+  resetHistory: () ->
+    @msgLoaded = false
+    @msgContent().html('')
+    @fetchHistory()
+
+  initialize: (options) ->
+    super
+    @name = @model.get('name')
+    @title = @name unless @title
+    @channel = @model.get('channel')
+    return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
+    @initChannel()
+    @initDialog()
+    $(window).bind('enterOrderChat', () =>
+      @showWithMsg()
+    )
+
+  initChannel: () ->
+    @channel ||= Caramal.Temporary.of(@name)
+    @channel.open()
+    @channel.record()
+
+  initDialog: () ->
+    # @bindMessage()
+    $(@el).html(@chat_template({model: @model}))
+    @model.chat_view = @
+    @display = false
+    $(@model.get('attach_el')).append(@el)
+
+    ChatManager.getInstance().collection.add(@model)
     new ImageUpload({ el: @el, parent_view: @ })
     @$('.choose-face').popover({
       content: () => EmojifyChooser.getInstance().el
     })
     $(@el).hide()
+
+  chooseEmojify: (event) ->
+    @$('.choose-face').popover('hide')
+    @sendContent().insertAtCursor(":#{$(event.target).data('name')}:")
+
+  parseOne: (message) ->
+    if message.user is clients.current_user
+      html = @receive_template(message)
+    else
+      html = @receive_template(message)
+
+    html.replace(/:([a-z]|_)+:/g, (word) =>
+      '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
+    )
+
+  parseMessages: (messages) ->
+    html = ''
+    messages = [messages] unless $.isArray(messages)
+    _.each messages, (message) =>
+      html += @parseOne(message)  
+    html
+
+  sendContent: () ->
+    @$('.content')
+
+  msgContent: () ->
+    @$('.msg_content')
+
+  receiveMessage: (data) ->
+    if @display
+      @msgContent().append(@parseMessages(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+
+  toggleDialog: () ->
+    if @display
+      @hideDialog()
+    else
+      @showWithMsg()
+
+  hideDialog: () ->
+    $(@el).hide()
+    @display = false
+    @channel.deactive()
+    # @unbindMessage()
+
+  showDialog: () ->
+    $(@el).show()
+    @display = true
+    @channel.active()
+    @showUnread()
+    # @bindMessage()
+    @scrollDialog()
+
+  scrollDialog: () ->
+    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
+
+  showUnread: () ->
+    _.each @channel.message_buffer, (msg) =>
+      @receiveMessage(msg)
+    @channel.message_buffer.splice(0, @channel.message_buffer.length)
+
+  showWithMsg: () ->
+    @resetHistory()
+    @showDialog()
+
+  bindMessage: () ->
+    @channel.onMessage(@receiveMessage, @)
+
+  unbindMessage: () ->
+    @channel.removeEventListener('message', @receiveMessage)
+
+  activeDialog: () ->
+    @model.trigger('unactive_avatar')
+    @$el.css('z-index', 10000)
+    @$el.siblings('.global_chat').css('z-index', 9999)
+
+  fastKey: (event) ->
+    @sendMessage(event) if event.ctrlKey && event.keyCode == 13
+
+  sendImg: (photo) ->
+    return if _.isEmpty(photo)
+    @channel.send(msg: '', attachments: [ photo ])
+
+  sendMessage: (event) ->
+    msg = @sendContent().val().trim()
+    return if msg is ''
+    @channel.send(msg)
+    @sendContent().val('')
 

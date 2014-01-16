@@ -42,7 +42,7 @@ class root.ShopDirectTransactionView extends Backbone.View
       @chat_model = new ChatModel({
         type: 3,
         name: @$el.attr('data-token'),
-        group: @$el.data('number')
+        group: @$el.parents('.wrapper-box').attr('data-group')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()

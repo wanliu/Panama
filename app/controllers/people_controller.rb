@@ -1,11 +1,6 @@
 #encoding: utf-8
 class PeopleController < ApplicationController
-  before_filter :login_and_service_required, :only => [
-    :show_invite,
-    :agree_invite_user,
-    :agree_email_invite_user,
-    :show_email_invite,
-    :show_bill]
+  before_filter :login_and_service_required
 
   layout "people"
 
@@ -21,6 +16,20 @@ class PeopleController < ApplicationController
     @people = User.find_by(:login => params[:id])
     current_ability(@people)
     authorize! :manage, User
+  end
+
+  def update_user_auth
+    @people = User.where(:login => params[:login]).first
+    current_ability(@people)
+    authorize! :manage, User
+    @user_checking = @people.user_checking
+    @user_auth = UserAuth.new(params[:user_auth])
+    if @user_auth.valid?
+      @user_checking.update_attributes(params[:user_auth])
+      redirect_to person_path(current_user)
+    else
+      render "edit"
+    end
   end
 
   def show_invite

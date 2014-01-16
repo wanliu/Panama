@@ -1,14 +1,18 @@
 root = (window || @)
 
 class root.ChatModel extends Backbone.Model
+  getOrderUrl: () ->
+    pages = [ '/transactions', '/pending', '/direct_transactions' ]
+    url = _.find pages, (page) => location.href.indexOf(page) != -1
+
   getPrefixTitle: (group) ->
     prefix = group.substring(0, group.indexOf('_'))
     switch prefix
       when 'OrderTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap:visible' })
+        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
         '担保交易'
       when 'DirectTransaction'
-        @set({ attach_el: '.chat_wrapper .message_wrap:visible' })
+        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
         '直接交易'
       when 'Activity'
         '活动'
@@ -39,6 +43,7 @@ class root.ChatModel extends Backbone.Model
         number = group.substring(group.indexOf('_')+1, group.length)
         title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
         @set({
+          number: number,
           name: name,
           group: group,
           title: title
@@ -160,11 +165,14 @@ class root.ChatManager extends Backbone.View
     else
       switch model.get('type')
         when 1
-          new ChatView({model: model})
+          new FriendChatView({model: model})
         when 2
           new GroupChatView({model: model})
         when 3
-          new TemporaryChatView({model: model})
+          if model.getOrderUrl()
+            new OrderChatView({model: model})
+          else
+            new TemporaryChatView({model: model})
         else
           console.error('undefined type...')
 
@@ -181,13 +189,11 @@ class root.ChatManager extends Backbone.View
             model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
-    $('body').append(model.chat_view.el)
     @collection.add(model)
     @addChat(model)
-    @addResizable(model)
 
   addChat: (model) ->
-    count = $('.global_chat:visible').length
+    count = $('.global_chat').length
     $el = $(model.chat_view.el)
     w_width = $(window).width()
     w_height = $(window).height()
@@ -201,15 +207,6 @@ class root.ChatManager extends Backbone.View
     top = w_height - ChatManager.rows*$el.height()
     $el.css('right', right + "px")
     $el.css('top', top + "px")
-
-  addResizable: (model) ->
-    $el = $(model.chat_view.el)
-    $el.resizable().draggable().css('position', 'fixed')
-    $el.on('resize', (event, ui) =>
-      height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
-      $el.find(".body").css('height', height)
-      $el.css('position', 'fixed')
-    )
 
 
 class BaseIconsView extends Backbone.View
@@ -243,6 +240,7 @@ class BaseIconsView extends Backbone.View
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
+      return unless channel.type is 3
       exist_model.icon_view.setChannel(channel)
     else
       model = new ChatModel({ 
@@ -292,9 +290,6 @@ class FriendIconsView extends BaseIconsView
   render: () ->
     $(@el).html(@template)
     @
-
-  # initFetch: () ->
-  #   @collection.fetch(url: "/users/channels")
 
   addOne: (model) ->
     friend_view = new FriendIconView({ model: model, parent_view: @ })
@@ -347,10 +342,10 @@ class BaseIconView extends Backbone.View
   tagName: 'li'
 
   events:
-    "click " : "toggleChat"
+    "click " : "showChat"
 
   template: Handlebars.compile("""
-    <a href="#" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
+    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
       <span class="badge badge-important message_count"></span>
       {{#if icon}}
         <img src='{{icon}}' alt='{{title}}' />
@@ -381,7 +376,10 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
-      unless @getChat().displayState()
+      # if @channel.isActive()
+      if @chat_view && $(@chat_view.el).is(':visible')
+        @chat_view.receiveMessage(msg)
+      else
         @channel.message_buffer.push(msg)
         @incMsgCount()
         @active()
@@ -393,6 +391,9 @@ class BaseIconView extends Backbone.View
       @model.chat_view = @chat_view
       @bind_chat()
     @chat_view
+
+  showChat: () ->
+    @toggleChat()
 
   toggleChat: () ->
     @getChat().toggleDialog()
@@ -444,4 +445,40 @@ class TemporaryIconView extends BaseIconView
         @channel.room = msg
         clients.socket.emit('join', {room: @channel.room})
       )
+
+  showChat: () ->
+    url = @model.getOrderUrl()
+    if url
+      @gotoOrder(url)
+    else
+      @toggleChat()
+
+  gotoOrder: (url) ->
+    number = @model.get('number')
+    flag = number.indexOf('D') is -1    # true 担保交易，false 直接交易
+    current_shop = clients.current_shop # true admin页面，false people页面
+
+    if current_shop
+      if flag
+        # /shops/xxx/admins/pending#open/yyy/order
+        transactions = "pending"
+      else
+        # /shops/xxx/admins/direct_transactions#open/yyy/direct
+        transactions = "direct_transactions"
+      goto = "/shops/#{current_shop}/admins/#{transactions}"
+    else
+      if flag
+        # /people/xxx/transactions#open/yyy/order
+        transactions = "transactions"
+      else
+        # /people/xxx/direct_transactions#open/yyy/direct
+        transactions = "direct_transactions"
+      goto = "/people/#{clients.current_user}/#{transactions}"
+
+    if flag
+      type = 'order'
+    else
+      type = 'direct'
+    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{type}"
+    location.href = goto unless location.href is goto
 
