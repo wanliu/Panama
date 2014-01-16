@@ -3,25 +3,28 @@
     <form id="search-form" class="navbar-search">
       <ul class="nav pull-left chose_condition">
         <li id="fat-menu" class="dropdown">
-          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">找活动 <b class="caret"></b>
-        </a>
+          <input type='hidden' name='search_type' />
+          <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
+            <span class='title'>找活动</span>
+            <b class="caret"></b>
+          </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-            <li role="presentation">
-              <a role="menuitem" tabindex="-1" href="javascript:void(0)">
+            <li role="presentation" data-value="activities">
+              <a role="menuitem" tabindex="-1" href="javascript:void(0)" >
                 找活动
               </a>
             </li>
-            <li role="presentation">
+            <li role="presentation" data-value="users">
               <a role="menuitem" tabindex="-1" href="javascript:void(0)">
                 找人
               </a>
             </li>
-            <li role="presentation">
+            <li role="presentation" data-value="shops">
               <a role="menuitem" tabindex="-1" href="javascript:void(0)">
                 找商店
               </a>
             </li>
-            <li role="presentation">
+            <li role="presentation" data-value="circles">
               <a role="menuitem" tabindex="-1" href="javascript:void(0)">
                 找商圈
               </a>
@@ -30,7 +33,7 @@
         </li>
       </ul>
       <div class="input-prepend input-append">
-        <input type="search" class="search-query" placeholder="搜索商品，种类...">
+        <input type="search" name='query' class="search-query" placeholder="搜索商品，种类...">
         <span class="add-on search-btn">搜索</span>
       </div>
     </form>

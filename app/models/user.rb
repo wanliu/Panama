@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Tire::Model::UpdateByQuery
   extend FriendlyId
 
   attr_accessible :uid, :login, :first_name, :last_name, :email
@@ -49,10 +50,6 @@ class User < ActiveRecord::Base
   # has_and_belongs_to_many :services
 
   after_create :load_initialize_data
-
-  after_update do
-    update_relation_index
-  end
 
   delegate :groups, :jshop, :to => :shop_user
 
@@ -154,12 +151,20 @@ class User < ActiveRecord::Base
 
   def as_json(*args)
     attribute = super *args
-    attribute["icon_url"] = icon
-    attribute["avatar_url"] = avatar
-    attribute["header_url"] = photos.header
+    # attribute["icon_url"] = icon
+    # attribute["avatar_url"] = avatar
+    # attribute["header_url"] = photos.header
     attribute["photos"] = photos.attributes
 
     attribute
+  end
+
+  def industry_type
+    user_checking.try(:industry_type)
+  end
+
+  def phone
+    user_checking.try(:phone)
   end
 
   def icon
@@ -202,12 +207,12 @@ class User < ActiveRecord::Base
     services.include?("seller")
   end
 
-  def chat_notify(send_user, receive_user, content)
-    notify("/chat",
-      "#{send_user.login}说: #{content}",
-      :send_user_id => send_user.id,
-      :persistent => false)
-  end
+  # def chat_notify(send_user, receive_user, content)
+  #   notify("/chat",
+  #     "#{send_user.login}说: #{content}",
+  #     :send_user_id => send_user.id,
+  #     :persistent => false)
+  # end
 
   def load_initialize_data
     load_friend_group
@@ -324,8 +329,14 @@ class User < ActiveRecord::Base
   def to_indexed_json
     {
       :login => login,
-      :email => email      
-    }
+      :email => email,
+      :photos => photos.attributes,
+      :address_id => user_checking.try(:address_id),
+      :address => user_checking.try(:address).try(:address_only),
+      :industry_type => user_checking.try(:industry_type),
+      :service => user_checking.try(:service),
+      :phone => user_checking.try(:phone)
+    }.to_json
   end
 
   def in_black_list_of(another_user)
@@ -341,7 +352,7 @@ class User < ActiveRecord::Base
   end
 
   def update_relation_index
-    update_activity_index
+    update_activity_index 
     update_ask_buy_index
   end
 

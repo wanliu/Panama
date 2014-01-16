@@ -315,6 +315,13 @@ ul {
 		.typeahead.dropdown-menu{
 			width: 100%;
 			margin-top: 1px;
+
+      .user, .shop, .circle{
+        .icon{
+          width: 25px;
+          height: 25px;
+        }
+      }
 		}
 	}
 

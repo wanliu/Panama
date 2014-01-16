@@ -16,7 +16,7 @@ class CircleFriends < ActiveRecord::Base
 
   validate :valid_some_user_and_circle?
 
-  delegate :photos, :to => :user
+  delegate :photos, :login, :to => :user  
 
   after_create :add_to_persistent_channel
 
@@ -90,6 +90,13 @@ class CircleFriends < ActiveRecord::Base
         return false
       end
     end
+  end
+
+  def as_json(*args)
+    attas = super *args
+    attas["photos"] = photos.attributes
+    attas["login"] = login
+    attas
   end
 
   def self.create_manage(user_id, circle_id = nil)

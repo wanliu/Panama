@@ -104,7 +104,7 @@ class People::CirclesController < People::BaseController
     friend = @circle.friends.build(:user_id => @people.id)
     respond_to do |format|
       if friend.valid?
-        if @circle.setting.limit_join
+        if @circle.limit_join?
           @circle.apply_join_notice(@people)
           format.json{ render json:{ message: "请求已经发送~~~",type: "waiting" }}
         else

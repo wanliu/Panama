@@ -3,6 +3,9 @@ require 'orm_fs'
 
 class Shop < ActiveRecord::Base
   include Graphical::Display
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
   extend FriendlyId
 
   attr_accessible :name, :user, :address, :shop_summary, :address_id,:shop_url,:audit_count
@@ -105,9 +108,29 @@ class Shop < ActiveRecord::Base
   def as_json(*args)
     attribute = super *args
     attribute["photos"] = photos.attributes
-    attribute["icon_url"] = icon_url
+    # attribute["icon_url"] = icon_url
 
     attribute
+  end
+
+  def to_indexed_json
+    {
+      :name => name,
+      :address_id => address_id,
+      :address => address.try(:address_only),
+      :user => {
+        :id => user_id,
+        :login => user.login,
+        :photos => user.photos.attributes
+      },
+      :actived => actived,
+      :audit_count => audit_count,
+      :shop_summary => shop_summary,
+      :shop_url => shop_url,
+      :photos => photos.attributes,
+      :industry_type => user.try(:industry_type),
+      :phone => user.try(:phone)
+    }.to_json
   end
 
   def all_circle_topics(circles)
