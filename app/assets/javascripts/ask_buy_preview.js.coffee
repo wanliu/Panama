@@ -142,9 +142,8 @@ class AskBuyView extends Backbone.View
           pnotify(text: '报价成功!!')
           @$(".submit_report").addClass("disabled")
           @$(".form_answer_ask_buy input").attr("readonly","readonly")
-
-        error: (messages) ->
-          pnotify(text: JSON.parse(messages.responseText), type: "error")
+        error: (data) ->
+          pnotify(text: JSON.parse(data.responseText).join("<br />"), type: "error")
       })
     false
 
