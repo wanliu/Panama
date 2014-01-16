@@ -1,71 +1,22 @@
 <div class='newer_panel newer widget'>
-	<div class="title row-fluid">
-		<span style="font-size:25px;font-weight:bold;">新入驻成员</span>
-		<div class="find_people_panel pull-right">
-			<input type="text" class="people_input_info" placeholder="请输入用户名、商店名或email"/>
-			<button id="find_people" class="btn find_people">找用户</button>
-		</div>
-	</div>
-	<div class="hot_region newer row-fluid">
-		<strong>热门区域: </strong>
-		<span></span>
-	</div>
-	<div class='alert hide find_people_tip'>没有找到符合要求的用户或商店</div>
-	<div class="wrapper row-fluid">
-		<% if  @new_users.length > 0 %>
-			<% @new_users.each do |new_user| %>
-				<div class='span3 new_user user_info' id="<%= new_user.id %>">
-				    <div class="hover_place">
-						<% if new_user.service == "buyer" %>
-							<%= render :partial => "hover_buyer_template", :locals => { new_user: new_user} %>
-							<span class="label label-warning pull-right">买家</span>
-					    	<a href="/people/<%= new_user.login_name %>">
-					    		<img src="<%= new_user.ower_photos.icon %>" class="user_icon" alt="头像"/>
-					    	</a>
-						<% else %>
-							<%= render :partial =>"hover_seller_template", :locals => { new_user: new_user} %>
-							<span class="label label-important pull-right">卖家</span>
-							<a href="/shops/<%= new_user.shop.try(:name) %>">
-								<img src="<%= new_user.shop.try(:photos).try(:icon) %>" class="user_icon" alt="头像" />
-							</a>
-						<% end %>
-					</div>
-					<div  class="content">
-						<div class="name">
-							<i class="icon-user"></i>
-							<% if new_user.service == "buyer" %>
-								<a href="/people/<%= new_user.login_name %>" class="title"><%= new_user.login_name %></a>
-							<% else %>
-								<a href="/shops/<%= new_user.shop.try(:name) %>" class="title"><%= new_user.shop.try(:name) %></a>
-							<% end %>
-						</div>
-						<div class="industry"> 
-							<i class=" icon-star"></i>
-							<a href="#"><%= new_user.try(:industry_type)%></a>
-						</div>
-					</div>
-				</div>
-			<% end %>
-		<% else %>
-			<div class="widget">该地区暂时还没有商家入驻</div>
-		<% end %>
-	</div>
+    <div class="title row-fluid">
+        <span style="font-size:25px;font-weight:bold;">新入驻成员</span>
+        <div class="find_people_panel pull-right">
+            <input type="text" class="people_input_info" placeholder="请输入用户名、商店名或email"/>
+            <button id="find_people" class="btn find_people">找用户</button>
+        </div>
+    </div>
+    <div class="hot_region newer row-fluid">
+        <strong>热门区域: </strong>
+        <span></span>
+    </div>
+    <div class='alert hide find_people_tip'>没有找到符合要求的用户或商店</div>
+    <div class="info-wrapper wrapper row-fluid">
+    </div>
 </div>
 
 <script type="text/javascript">
-	$(function(){
-		$(".user_info").live("mouseenter",function(e){
-			$(".user_base_info", this).each(function(){
-				$(this).hide();
-			})
-			$top = e.pageY - $(document).scrollTop();
-			$left = e.pageX - $(document).scrollLeft();
-			$(".user_base_info", this).css('top', $top - 10);
-            $(".user_base_info", this).css('left', $left + 10);
-			$(".user_base_info", this).show();
-		})
-		$(".user_info").live("mouseleave",function(e){
-			$(".user_base_info", this).hide();
-		})
-	})
+    $(function(){        
+        
+    })
 </script>

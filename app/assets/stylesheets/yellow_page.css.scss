@@ -1,6 +1,7 @@
 // Place all the styles related to the yellow_page controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'card_info';
 
 .yellow_page{
 
@@ -47,143 +48,12 @@
 		}
 	}
 
-	.new_user, .seller_user, .buyer_user{
-		@include transparent(rgb(51,51,51),0.4);
-		margin-bottom: 20px;
-		margin-left: 20px;
-		-webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
-		box-shadow: 1px 2px 0 rgba(0,0,0,.05);
-		width: 30%;
-		background-color: "";
-		.hover_place{
-			top: 0px;
-			left: 0px;
-		}
-		.user_base_info {
-			position: fixed;
-			top: 0px;
-			left: 0px;
-			-webkit-border-radius: 3px;
-			border-radius: 3px;
-			background-color: #fff;
-			overflow: hidden;
-			text-align: center;
-			display: none;
-			width: 240px;
-			height: 300;
-			z-index:1;
-
-			.userinfo {
-				margin-top: 110px;
-				.contact {
-					line-height: 30px;
-					padding-top: 20px;
-					background-color: rgba(231, 192, 192, 0.09);
-					.icon-leaf {
-						color: green;
-					}
-				}
-			}
-
-			.login, .shop_name {
-				-webkit-transition: color .218s;
-				transition: color .218s;
-				a {
-					color: #338DCE;
-				}
-				font-weight: bold;
-				margin-bottom: -40px;
-			}
-
-			.industry_type {
-				color: #160f0f;
-				font-size: 13px;
-				line-height: 20px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				margin-top: 40px;
-			}
-
-			.tel{
-				color: #160f0f;
-			}
-
-			.entry, .add_friend {
-				text-align: center;
-				a{
-					color: #338DCE;
-				}
-			}
-
-			.bg_nature {
-				opacity: .80;
-				background-color: #000;
-				height: 135px;
-				left: 0;
-				position: absolute;
-				right: 0;
-				top: 0;
-				padding-top: 0px;
-				width: 240px;
-				height: 150px;
-			}
-
-			div {
-				padding-top: 6px;
-			}
-
-			.circle_avatar {
-				position: relative;
-				img{
-					height: 50px;
-					width: 50px;
-				}
-			}
-		}
-	}
 	.newer_panel{
 		.alert{
 			margin-right: 20px;
 			margin-left: 20px;
 		}
-		.user_info{
-			position: relative;
-			.user_icon {
-				float:left;
-				margin-right:5px;
-				width: 70px;
-				height: 70px;
-				cursor: pointer;
-			}
-		}
-	}
 
-	.wrapper{
-		.user_info:first-child{
-			margin-left: 20px;
-		}
-
-		.user_info{
-			.content {
-				margin-top: 5px;
-				float:left;
-				margin-left: 2px;
-			}
-
-			.name {
-				color: #404040;
-				font-size: 13px;
-				font-weight: bold;
-				.title{
-					color: rgb(210, 224, 50);
-					font-size: 16px; 
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
-			}
-		}
 	}
 
 	.address-panel{

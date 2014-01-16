@@ -10,6 +10,7 @@
 #= require activity_buy
 #= require lib/bootstrap-progressbar
 #= require activity_bind
+#= require_tree ./template
 
 root = window || @
 
@@ -88,10 +89,11 @@ class ActivityView extends Backbone.View
     })
 
   state: () ->
+    share = @$(".share_activity")
     if @$(".selected").length > 0
-      @$(".share_activity").removeClass("disabled")
+      share.removeClass("disabled")
     else
-      @$(".share_activity").addClass("disabled")
+      share.addClass("disabled")
 
   select_circle: (e) ->
     target = $(e.currentTarget)
@@ -127,7 +129,6 @@ class ActivityView extends Backbone.View
       error: (messages) ->
         pnotify(text: messages.responseText, type: "error")
     )
-
 
 class ActivityPreview extends Backbone.View
 
@@ -224,74 +225,6 @@ class ActivityPreview extends Backbone.View
           $(elem).addClass("follow").removeClass("unfollow")
           $(elem).html("+ 关注")
 
-class ProductViewTemplate extends Backbone.View
-  initialize: () ->
-    @template = Hogan.compile($("#product-preview-template").html())
-    @$el = $(@template.render(@model)) if @template
-
-  render: () ->
-    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
-    @
-
-
-class ShopProductViewTemplate extends Backbone.View
-
-  initialize: () ->
-    @template = Hogan.compile($("#shop-product-preview-template").html())
-    @$el = $(@template.render(@model)) if @template
-
-  render: () ->
-    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
-    @
-
-
-class ActivityViewTemplate extends Backbone.View
-  initialize: () ->
-    @template = Hogan.compile($("##{@model.activity_type}-preview-template").html())
-    @$el = $(@template.render(@model)) if @template
-
-  render: () ->
-    @show_status(@get_status())
-    @
-
-  show_status: (status) ->
-    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
-    @$el.find(".time-left").html(status.text).addClass(status.name)
-    switch status.name
-      when 'over'
-        $(".buttons>.launch-button", @$el).remove()
-      when 'waiting'
-        $(".buttons>.launch-button", @$el).remove()
-
-  get_status: () ->
-    time_wait = @model.start_time.toDate().getTime() - new Date().getTime()
-    return {name: 'waiting', text: "敬请期待"} unless time_wait < 0 && @model.status == 1
-    time_left = @model.end_time.toDate().getTime() - new Date().getTime()
-    return {name: 'over', text: "已结束"} unless time_left > 0
-
-    leave1 = time_left%(24*3600*1000) # 计算天数后剩余的毫秒数
-    leave2 = leave1%(3600*1000)
-    # leave3 = leave2%(60*1000)
-    days = Math.floor(time_left/(24*3600*1000))
-    return {name: 'started', text: "还剩#{days}天"} if days > 0
-    hours = Math.floor(leave1/(3600*1000))
-    return {name: 'started', text: "仅剩#{hours}小时"} if hours > 0
-    minutes = Math.floor(leave2/(60*1000))
-    return {name: 'started', text: "最后#{minutes}分钟"} if minutes > 0
-    # seconds = Math.round(leave3/1000)
-
-
-class AskBuyViewTemplate extends Backbone.View
-  initialize: () ->
-    @template = Hogan.compile($("#ask_buy-preview-template").html())
-    @$el = $(@template.render(@model)) if @template
-
-  render: () ->
-    $(".notify", @$el).html("已经有商家参与") if @model.status == 1
-    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
-    @
-
-
 class ActivityModel extends Backbone.Model
 
   urlRoot: '/activities'
@@ -376,6 +309,12 @@ class ActivityLayoutView extends Backbone.View
         new ActivityViewTemplate({model: model}).render()
       when "ask_buy"
         new AskBuyViewTemplate(model: model).render()
+      when "user"
+        new UserViewTemplate(model: model).render()
+      when "shop"
+        new ShopViewTemplate(model: model).render()
+      when "circle"
+        new CircleViewTemplate(model: model).render()
       else
         console.error('没有模板')
 
@@ -400,6 +339,12 @@ class LoadActivities extends InfiniteScrollView
     _.extend(@params, @default_params, options.params)
     super @params
     $(window).bind "reset_search", (e, data) =>
+
+      @fetch_url = if data.search_type == "activities"
+        "/search"
+      else
+        "/search/#{data.search_type}"
+
       @reset_fetch(data)
 
   add_one: (c) ->

@@ -17,14 +17,14 @@ class SearchController < ApplicationController
   end
 
   def shops
-    @results = shop_search
+    @results = shops_search(params[:q][:query])
     respond_to do |format|
       format.json{ render :json => @results }
     end
   end
 
   def circles
-    @results = circle_search
+    @results = circles_search(params[:q][:query])
     respond_to do |format|
       format.json { render json: @results }
     end
@@ -44,7 +44,7 @@ class SearchController < ApplicationController
   end
 
   def users
-    @results = users_search
+    @results = users_search(params[:q][:query])
     respond_to do |format|
       format.json{ render :json => @results }
     end
@@ -52,14 +52,14 @@ class SearchController < ApplicationController
 
   def all
     @results = case params[:search_type]
-    when "user"
-      users_search
-    when "circle"
-      circles_search
-    when "shop"
-      shops_search
+    when "users"
+      users_search(params[:q])
+    when "circles"
+      circles_search(params[:q])
+    when "shops"
+      shops_search(params[:q])
     else
-      multi_index
+      multi_index(params[:q])
     end
     respond_to do |format|
       format.json{ render :json => @results }
@@ -191,8 +191,8 @@ class SearchController < ApplicationController
 
     lambda do |must|      
       must.filtered do
-        if options[:title].present?
-          val = conditions[:title].gsub(/ /,'')
+        if options[:query].present?
+          val = conditions[:query].gsub(/ /,'')
           filter :query, :query_string => {
             :query => "title:#{val} OR name:#{val} OR primitive:#{val} OR untouched:#{val}*",
             :default_operator => "AND"
@@ -250,8 +250,8 @@ class SearchController < ApplicationController
     end
   end
 
-  def multi_index
-    _size, _from, val = params[:limit], params[:offset], filter_special_sym(params[:q].gsub(/ /,''))
+  def multi_index(val)
+    _size, _from, val = params[:limit], params[:offset], filter_special_sym(val.gsub(/ /,''))
     
     results = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
       size _size || 10
@@ -277,8 +277,8 @@ class SearchController < ApplicationController
     results || []
   end
 
-  def users_search
-    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(params[:q])
+  def users_search(query_val)
+    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(query_val)
 
     User.search2 do 
       size _size || 10
@@ -299,8 +299,8 @@ class SearchController < ApplicationController
     end.results
   end
 
-  def circles_search
-    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(params[:q])
+  def circles_search(query_val)
+    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(query_val)
     Circle.search2 do 
       size _size || 10
       from _from || 0
@@ -317,11 +317,11 @@ class SearchController < ApplicationController
           end
         end
       end
-    end.results
+    end.results if query_val.present?
   end
 
-  def shops_search
-    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(params[:q])
+  def shops_search(query_val)
+    _size, _from, query_val = params[:limit], params[:offset], filter_special_sym(query_val)
     Shop.search2 do 
       size _size || 10
       from _from || 0
@@ -338,6 +338,6 @@ class SearchController < ApplicationController
           end
         end
       end
-    end.results
+    end.results if query_val.present?
   end
 end

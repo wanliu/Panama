@@ -1,0 +1,12 @@
+root = (window || @)
+
+class root.ShopProductViewTemplate extends Backbone.View
+
+  initialize: () ->
+    @template = Hogan.compile($("#shop-product-preview-template").html())
+    @$el = $(@template.render(@model)) if @template
+
+  render: () ->
+    @$el.find(".price").html(@model.price.toString().toMoney()) if @model.price
+    @
+

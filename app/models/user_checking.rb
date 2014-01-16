@@ -24,7 +24,8 @@ class UserChecking < ActiveRecord::Base
   define_graphical_attr :ower_photos, :handler => :ower_photo
   # define_graphical_attr :shop_photos, :handler => :shop_photo
   after_update do 
-    clone_delivery_address
+    clone_delivery_address    
+    update_relation_index
   end
 
   def unchecked
@@ -91,6 +92,39 @@ class UserChecking < ActiveRecord::Base
     joins("left join users us on user_checkings.user_id = us.id
            right join shops sh on sh.user_id = us.id
            left join addresses ad on ad.id = user_checkings.address_id")
+  end
+
+  def update_relation_index
+
+  end
+
+  def update_user_index
+    User.index_update_by_query(
+      :query => {
+        :term => {
+          "id" => user_id
+        }
+      },
+      :update => {
+        :industry_type => industry_type,
+        :service => service,
+        :phone => phone
+      }
+    )
+  end
+
+  def update_shop_index
+    Shop.index_update_by_query(
+      :query => {
+        :term => {
+          "user.id" => user_id
+        }
+      },
+      :update => {
+        :industry_type => industry_type,
+        :phone => phone
+      }
+    )
   end
 
   protected

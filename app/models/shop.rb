@@ -127,7 +127,9 @@ class Shop < ActiveRecord::Base
       :audit_count => audit_count,
       :shop_summary => shop_summary,
       :shop_url => shop_url,
-      :photos => photos.attributes    
+      :photos => photos.attributes,
+      :industry_type => user.try(:industry_type),
+      :phone => user.try(:phone)
     }.to_json
   end
 

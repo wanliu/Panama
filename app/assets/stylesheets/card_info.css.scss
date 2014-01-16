@@ -1,0 +1,106 @@
+.info-wrapper{  
+  .user_info, .shop_info{
+    @include transparent(rgb(51,51,51),0.4);
+    margin-bottom: 20px;
+    margin-left: 20px;
+    -webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
+    box-shadow: 1px 2px 0 rgba(0,0,0,.05);
+    width: 30%;
+    background-color: "";
+    height: 70px;
+    
+    .hover_place{
+      top: 0px;
+      left: 0px;
+
+      .avatar{
+        float: left;
+        width: 70px;
+        height: 70px;
+        margin-right: 5px;
+      }
+    }
+    .info_detail{
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+      background-color: #fff;
+      overflow: hidden;
+      text-align: center;
+      display: none;
+      width: 240px;
+      height: 300;
+      z-index:1;
+
+      .userinfo {
+        margin-top: 110px;
+        .contact {
+          line-height: 30px;
+          padding-top: 20px;
+          background-color: rgba(231, 192, 192, 0.09);
+          .icon-leaf {
+            color: green;
+          }
+        }
+      }
+
+      .login, .shop_name {
+        -webkit-transition: color .218s;
+        transition: color .218s;
+        a {
+          color: #338DCE;
+        }
+        font-weight: bold;
+        margin-bottom: -40px;
+      }
+
+      .industry_type {
+        color: #160f0f;
+        font-size: 13px;
+        line-height: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-top: 40px;
+      }
+
+      .tel{
+        color: #160f0f;
+      }
+
+      .entry, .add_friend {
+        text-align: center;
+        a{
+          color: #338DCE;
+        }
+      }
+
+      .bg_nature {
+        opacity: .80;
+        background-color: #000;
+        height: 135px;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding-top: 0px;
+        width: 240px;
+        height: 150px;
+      }
+
+      div {
+        padding-top: 6px;
+      }
+
+      .circle_avatar {
+        position: relative;
+        img{
+          height: 50px;
+          width: 50px;
+        }
+      }
+    }
+  }
+}

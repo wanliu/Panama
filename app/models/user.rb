@@ -159,6 +159,14 @@ class User < ActiveRecord::Base
     attribute
   end
 
+  def industry_type
+    user_checking.try(:industry_type)
+  end
+
+  def phone
+    user_checking.try(:phone)
+  end
+
   def icon
     photos.icon
   end
@@ -199,12 +207,12 @@ class User < ActiveRecord::Base
     services.include?("seller")
   end
 
-  def chat_notify(send_user, receive_user, content)
-    notify("/chat",
-      "#{send_user.login}说: #{content}",
-      :send_user_id => send_user.id,
-      :persistent => false)
-  end
+  # def chat_notify(send_user, receive_user, content)
+  #   notify("/chat",
+  #     "#{send_user.login}说: #{content}",
+  #     :send_user_id => send_user.id,
+  #     :persistent => false)
+  # end
 
   def load_initialize_data
     load_friend_group
@@ -322,9 +330,12 @@ class User < ActiveRecord::Base
     {
       :login => login,
       :email => email,
+      :photos => photos.attributes,
       :address_id => user_checking.try(:address_id),
       :address => user_checking.try(:address).try(:address_only),
-      :photos => photos.attributes
+      :industry_type => user_checking.try(:industry_type),
+      :service => user_checking.try(:service),
+      :phone => user_checking.try(:phone)
     }.to_json
   end
 
