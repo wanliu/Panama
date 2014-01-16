@@ -21,6 +21,7 @@ class root.Realtime
     )
 
     @on('disconnect', (error) =>
+      @reset_channel_rooms()
       @error_tip(error)
       @disconnect_state()
       console.error("disconnect: " + error)
@@ -37,6 +38,7 @@ class root.Realtime
       console.log('connect_failed')
     )
     @on('error', (err) =>
+      @reset_channel_rooms()
       @error_tip(err)
       @disconnect_state()
       console.log('error:' + err)
@@ -93,6 +95,14 @@ class root.Realtime
         trigger: "hover"
       })
     target.popover("show")
+
+  # drop room property of channel once disconnecting/reconnecting happens
+  # so we can join the room again
+  # every time the client reconnected, it's a new socket instance
+  # and not in the previous room any more
+  reset_channel_rooms: () ->
+    for group, channel  of Caramal.MessageManager.channels
+      delete channel.room
 
   connected: (time) ->
     $(".realtime_state").popover('hide')

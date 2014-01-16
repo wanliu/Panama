@@ -2,7 +2,7 @@
 # 资金帐单
 class TransferMoney < ActiveRecord::Base
   attr_accessible :decription, :user, :money, :owner, :pay_type, :source
-
+  
   belongs_to :user
   belongs_to :owner, :polymorphic => true
   belongs_to :source, :polymorphic => true

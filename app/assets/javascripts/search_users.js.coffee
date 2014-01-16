@@ -1,3 +1,5 @@
+#= require 'lib/card_info'
+
 root = window || @
 
 class NewUsersView extends Backbone.View
@@ -7,9 +9,9 @@ class NewUsersView extends Backbone.View
   initialize: () ->
     _.extend(@, @options)
     @get_hot_regions()
-    @buyer_template = Hogan.compile($("#buyer_base_template").html())
-    @seller_template = Hogan.compile($("#seller_base_template").html())
-    @hot_region_template = Hogan.compile("<a id='{{ id }}' href='#' class='hot_region_search'>{{ name }}</a>&nbsp;")
+    @buyer_template = Handlebars.compile($("#buyer_base_template").html())
+    @seller_template = Handlebars.compile($("#seller_base_template").html())
+    @hot_region_template = Handlebars.compile("<a id='{{ id }}' href='#' class='hot_region_search'>{{ name }}</a>&nbsp;")
 
   get_hot_regions: () ->
     $.ajax({
@@ -18,7 +20,7 @@ class NewUsersView extends Backbone.View
       url: "/communities/hot_region_name",
       success: (datas) =>
         _.each datas, (data) =>
-          @$(".hot_region span").append(@hot_region_template.render(data))
+          @$(".hot_region span").append(@hot_region_template(data))
     })
 
   hot_region_search: (event) ->
@@ -40,11 +42,18 @@ class NewUsersView extends Backbone.View
     else
       @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
       _.each datas, (data) =>
-        tpl = if data.service == "buyer"
-          @buyer_template
+        view = if data.service == "buyer"          
+          new UserCardInfo(
+            el: $(@buyer_template(_.extend(data, data.user))),
+            model: data
+          )
         else
-          @seller_template
-        @$(".wrapper").append(tpl.render(data))
+          new ShopCardInfo(
+            el: $(@seller_template(_.extend(data, data.shop))),
+            model: data
+          )          
+
+        @$(".wrapper").append(view.render())
 
 
 class FindUserView extends Backbone.View
@@ -54,8 +63,8 @@ class FindUserView extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
-    @buyer_template = Hogan.compile($("#buyer_base_template").html())
-    @seller_template = Hogan.compile($("#seller_base_template").html())
+    @buyer_template = Handlebars.compile($("#buyer_base_template").html())
+    @seller_template = Handlebars.compile($("#seller_base_template").html())
 
   key_up: (e) =>
     @find_user() if e.keyCode == 13
@@ -80,11 +89,18 @@ class FindUserView extends Backbone.View
       @$(".alert").fadeOut()
       @$(".wrapper").html ""
       _.each datas, (data) =>
-        tpl = if data.service == "buyer"
-          @buyer_template
+        view = if data.service == "buyer"          
+          new UserCardInfo(
+            el: $(@buyer_template(_.extend(data, data.user))),
+            model: data
+          )
         else
-          @seller_template
-        @$(".wrapper").append(tpl.render(data))
+          new ShopCardInfo(
+            el: $(@seller_template(_.extend(data, data.shop))),
+            model: data
+          )
+
+        @$(".wrapper").append(view.render())
 
 
 class FindCircleView extends Backbone.View
@@ -104,7 +120,8 @@ class FindCircleView extends Backbone.View
     # return @$(".find_circle_tip").show() unless keyword != ""
     $.ajax({
       type: "get",
-      url: "/search/shop_circles.dialog",
+      dataType: "json",
+      url: "/search/shop_circles",
       data: {q: keyword ,area_id: @options.area_id }
       success: (data) =>
         if data == ""

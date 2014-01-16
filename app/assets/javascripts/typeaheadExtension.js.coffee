@@ -9,6 +9,8 @@ class TypeaheadExtension
   select: (item) ->
 
   constructor: (options) ->
+    @data = {}
+
     $.extend(@, options)
     @$el = $(@el)
 
@@ -29,7 +31,7 @@ class TypeaheadExtension
   remote: (query, process) ->
     $.ajax(
       url: @url
-      data: {q: query, limit: @limit}
+      data: _.extend(@data, {q: query, limit: @limit})
       success: (data) =>
         process(data)
     )

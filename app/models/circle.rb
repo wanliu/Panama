@@ -6,6 +6,8 @@
 #   owner: 所属者(商店与用户)
 class Circle < ActiveRecord::Base
   include Graphical::Display
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
 
   attr_accessible :name, :owner_id, :owner_type, :description, :city_id, :setting_id, :attachment_id, :setting
 
@@ -38,7 +40,7 @@ class Circle < ActiveRecord::Base
 
   #若是Shop类型的circle,就可以看出商店名
   def shop_name
-    Shop.find(owner_id).try(:name) if owner_type == "Shop"
+    owner.name if owner_type == "Shop"
   end
 
   def apply_join_notice(sender)
@@ -77,6 +79,12 @@ class Circle < ActiveRecord::Base
     friends.count
   end
 
+  def as_json *args
+    atts = super *args
+    atts[:photos] = photos.attributes
+    atts
+  end
+
   def header_url
     photos.header
   end
@@ -97,6 +105,39 @@ class Circle < ActiveRecord::Base
   def address
     return "" if city.nil?
     "#{city.parent.parent.try(:name)}#{city.parent.try(:name)}#{city.name}"
+  end
+
+  def to_indexed_json
+    options = {
+      :name => name,
+      :friend_count => friend_count,
+      :address => address,
+      :description => description,
+      :setting => {
+        :id => setting.try(:id),
+        :limit_city => setting.try(:limit_city),
+        :limit_join => setting.try(:limit_join)
+      },
+      :photos => photos.attributes,
+      :owner_type => owner_type,
+      :city => {
+        :id => city.try(:id),
+        :name => city.try(:name)
+      },
+      :owner => {
+        :id => owner.id,
+        :photos => owner.photos.attributes
+      }            
+    }
+    options[:owner][:login] = owner.login if owner.is_a?(User)
+    if owner.is_a?(Shop)
+      options[:owner][:name] = owner.name
+      options[:owner][:user] = {
+        :id => owner.user.id,
+        :login => owner.user.login
+      }
+    end
+    options.to_json
   end
 
   def friend_users

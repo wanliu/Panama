@@ -369,7 +369,265 @@ namespace "index" do
               }
             }
           }
-        },
+        }
+      }
+    end
+
+    Tire.index "users" do 
+      delete
+
+      create({
+        "index" => {
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
+            }
+          }
+        }
+      })
+
+      sleep 1
+
+      mapping :user, {
+        "properties" => {
+          "login" => {
+            "type" => "multi_field",
+            "fields" => {
+              "login" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          },
+          "address" => {
+            "type" => "multi_field",
+            "fields" => {
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          }
+        }
+      }
+    end
+
+    Tire.index "shops" do 
+      delete
+
+      create({
+        "index" => {
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
+            }
+          }
+        }
+      })
+
+      sleep 1
+
+      mapping :shop, {
+        "properties" => {
+          "name" => {
+            "type" => "multi_field",
+            "fields" => {
+              "name" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          },
+          "shop_summary" => {
+            "type" => "multi_field",
+            "fields" => {
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          },
+          "address" => {
+            "type" => "multi_field",
+            "fields" => {
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          }
+        }
+      }
+    end
+
+    Tire.index "circles" do 
+      delete
+
+      create({
+        "index" => {
+          "analysis" => {
+            "analyzer" => {
+              "pinyin_analyzer" => {
+                "tokenizer" => "my_pinyin",
+                "filter" => ["standard", "nGram"]
+              }
+            },
+            "tokenizer" => {
+              "my_pinyin" => {
+                "type" => "pinyin",
+                "first_letter" => "prefix",
+                "padding_char" => ""
+              }
+            }
+          }
+        }
+      })
+
+      sleep 1
+
+      mapping :circle, {
+        "properties" => {
+          "name" => {
+            "type" => "multi_field",
+            "fields" => {
+              "name" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "analyzer" => "pinyin_analyzer",
+                "boost" => 10
+              },
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          },
+          "description" => {
+            "type" => "multi_field",
+            "fields" => {
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          },
+          "address" => {
+            "type" => "multi_field",
+            "fields" => {
+              "primitive" => {
+                "type" => "string",
+                "store" => "no",
+                "term_vector" => "with_positions_offsets",
+                "indexAnalyzer" => "mmseg",
+                "searchAnalyzer" => "mmseg",
+                "include_in_all" => "true",
+                "boost" => 10
+              },
+              "untouched" => {
+                "type" => "string",
+                "index" => "not_analyzed"
+              }
+            }
+          }
+        }
       }
     end
   end
