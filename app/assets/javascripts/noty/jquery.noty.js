@@ -437,7 +437,7 @@ if (typeof Object.create !== 'function') {
         force:false,
         modal:false,
         maxVisible:5,
-        closeWith:['click'],
+        closeWith:['button'],
         callback:{
             onShow:function () {
             },

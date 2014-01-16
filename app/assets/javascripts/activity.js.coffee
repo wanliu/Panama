@@ -44,6 +44,9 @@ class ActivityView extends Backbone.View
       @$el = $(@render()).appendTo(@$dialog)
       #$(window).scroll()
     @activity_bind_view = new ActivityBind({el: @$dialog, model: @model})
+    @tool = new chosenTool({
+      el: $(@el)
+    })
 
     super
 
@@ -89,35 +92,10 @@ class ActivityView extends Backbone.View
       backdrop: false
     })
 
-  state: () ->
-    share = @$(".share_activity")
-    if @$(".selected").length > 0
-      share.removeClass("disabled")
-    else
-      share.addClass("disabled")
-
-  select_circle: (e) ->
-    target = $(e.currentTarget)
-    if target.hasClass("selected")
-      target.removeClass("selected")
-    else
-      target.addClass("selected")
-    @state()
-
-  data: () ->
-    ids = []
-    if @$(".selected").length > 0
-      els = @$(".selected")
-      _.each els, (el) =>
-        ids.push($(el).attr("data-value-id"))
-      return ids
-    else
-      return false
-
   share_activity: () ->
     return false if $(".share_activity .disabled").length == 1
     @$(".share_activity").addClass('disabled')
-    ids = @activity_bind_view.data()
+    ids = @tool.data()
     activity_id = @model.get('id')
     $.ajax(
       data: {ids: ids}

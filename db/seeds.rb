@@ -23,9 +23,9 @@ def initialize_data
 
   load_order_reason
 
-  load_pay_manner
+  # load_pay_manner
 
-  load_delivery_manner
+  #load_delivery_manner
 
   # load_user_service
 
@@ -62,9 +62,9 @@ def load_order_reason
   rake['order_reason:load'].invoke
 end
 
-def load_pay_manner
-  rake['pay_manner:load'].invoke
-end
+# def load_pay_manner
+#   rake['pay_manner:load'].invoke
+# end
 
 def load_delivery_manner
   rake['delivery_manner:load'].invoke

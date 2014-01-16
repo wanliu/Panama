@@ -1,4 +1,4 @@
-
+#= require chosen_tool
 root = window || @
 
 class InviteUserView extends Backbone.View
@@ -54,41 +54,20 @@ class root.CircleInfoView extends Backbone.View
 
   events:
     "click .shared" : "share_circle"
-    "click .circle" : "select_circle"
+    # "click .circle" : "select_circle"
 
   initialize: () ->
     @circle_id = @options.circle_id
     new InviteUserView(
       el: @$(".dialog-invite"),
       circle_id:@circle_id)
-
-  state: () ->
-    if @$(".selected").length > 0
-      @$(".shared").removeClass("disabled")
-    else
-      @$(".shared").addClass("disabled")
-
-  select_circle: (e) ->
-    target = $(e.currentTarget)
-    if target.hasClass("selected")
-      target.removeClass("selected")
-    else
-      target.addClass("selected")
-    @state()
-
-  data: () ->
-    ids = []
-    if @$(".selected").length > 0
-      els = @$(".selected") 
-      _.each els, (el) =>
-        ids.push($(el).attr("data-value-id"))
-      return ids
-    else
-      return false
+    @tool = new chosenTool({
+      el: $(@el)
+    })
 
   share_circle: () ->
     return false if @$(".disabled").length == 1
-    ids = @data()
+    ids = @tool.data()
     $.ajax(
       data: {ids: ids}
       url: "/communities/#{@circle_id}/circles/share_circle"
@@ -99,4 +78,3 @@ class root.CircleInfoView extends Backbone.View
       error: (messages) ->
         pnotify(text: messages.responseText, type: "error")
     )
-

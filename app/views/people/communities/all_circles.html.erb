@@ -1,17 +1,21 @@
 <div class="row-fluid circles">
-  <% @circles.each do |circle| %>
-    <div class="circle" data-value-id='<%=circle.id %>'>
-      <div class="photo">
-        <img src="<%=circle.photos.header %>">
-      </div>
-      <div class="info">
-        <div>
-          <%= circle.name %>
+  <% if @circles.length > 0 %>
+    <% @circles.each do |circle| %>
+      <div class="circle" data-value-id='<%=circle.id %>'>
+        <div class="photo">
+          <img src="<%=circle.photos.header %>">
         </div>
-        <div>
-          <%= circle.friend_count%> 个成员
+        <div class="info">
+          <div>
+            <%= circle.name %>
+          </div>
+          <div>
+            <%= circle.friend_count%> 个成员
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
+  <% else %>
+    <div>你还没有圈子,赶紧去<a href="/shops/<% current_user.try(:shop).try(:name) %>/admins/communities">添加</a>一个吧.....</div>
   <% end %>
 </div>

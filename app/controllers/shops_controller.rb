@@ -97,6 +97,12 @@ class ShopsController < ApplicationController
     end
   end
 
+  def shop_circles
+    @shop = Shop.find_by(:name => params[:id])
+    @circles = @shop.circles
+    render "/people/communities/all_circles", :layout => false    
+  end
+
   # 关注
   def follow
     this_shop = Shop.find_by(:name => params[:id])
