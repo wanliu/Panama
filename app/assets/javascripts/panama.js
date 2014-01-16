@@ -21,6 +21,7 @@
 //= require lib/jquery.raty
 //= require lib/jquery.columnview
 //= require lib/jquery.slimscroll
+//= require lib/jquery.fancybox
 //= require lib/bootstrap-datetimepicker.min
 //= require lib/bootstrap-datetimepicker-zh-CN
 //= require lib/colorpicker/js/bootstrap-colorpicker

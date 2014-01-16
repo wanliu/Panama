@@ -32,10 +32,13 @@ class InviteUser < ActiveRecord::Base
 
   private
   def notify_receiver
-    user.notify("/circles/invite",
-        "#{send_user.login}邀请你加入商圈 #{targeable.name}",
-        :target => targeable,
-        :user_id => send_user.id,
-        :url => notify_url)
+    if targeable_type == "Circle"
+      user.notify("/circles/invite",
+          "#{send_user.login}邀请你加入商圈 #{targeable.name}",
+          :target => targeable,
+          :user_id => send_user.id,
+          :invite => self,
+          :url => notify_url)
+    end
   end
 end

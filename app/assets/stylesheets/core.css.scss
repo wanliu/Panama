@@ -4,6 +4,7 @@
 @import "caret";
 @import "lib/notify/pnotify";
 @import "lib/transparent";
+@import "lib/jquery.fancybox";
 @import "lib/chosen";
 @import "my_cart";
 @import "font-awesome";
@@ -314,6 +315,13 @@ ul {
 		.typeahead.dropdown-menu{
 			width: 100%;
 			margin-top: 1px;
+
+      .user, .shop, .circle{
+        .icon{
+          width: 25px;
+          height: 25px;
+        }
+      }
 		}
 	}
 
@@ -1689,6 +1697,11 @@ body>.global_chat {
     font-weight: bold;
     margin-bottom: 5px;
   }
+  .btn{
+    line-height: 16px;
+    padding: 2px 6px;
+    margin-top: 5px;
+  }
 }
 
 .btn-group > .btn + .dropdown-toggle {
@@ -1707,5 +1720,27 @@ body>.global_chat {
   .help-block{
     color: rgb(156, 155, 155);
     margin-top: 5px;
+  }
+}
+
+.page-header{
+  .navbar-search{
+    .chose_condition{
+      margin-right: 0px;
+
+      li.dropdown{
+        a.dropdown-toggle{
+          background-color: rgba(51, 51, 51, 0.4);
+          padding: 4px;
+          font-size: 12px;
+          text-shadow: none;
+          color: #dbc2c2;
+        }
+      }
+
+      li.dropdown.open{
+        background-color: rgba(51, 51, 51, 0.4);
+      }
+    }
   }
 }

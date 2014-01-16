@@ -61,7 +61,7 @@ class ImageUpload extends Backbone.View
   onComplete: (id, filename, data) =>
     if data.success
       @$("div.qq-upload-button").show()
-      @parent_view.sendImg(data.attachment.photos.header)
+      @parent_view.sendImg(data.attachment.photos)
 
   newFileUploader: () ->
     @fileupload = new qq.FileUploader({
@@ -157,9 +157,11 @@ class BaseChatView extends Caramal.BackboneView
         </div>
         <div class="message">
           {{ msg }}
-          {{#if attachments}}
-            <img src="{{attachments}}" alt="图片" />
-          {{/if}}
+          {{#each attachments}}
+            <a class="image-zoom" target="_blank" href="{{default}}">
+              <img src="{{header}}" alt="图片">
+            </a>
+          {{/each}}
         </div>
       </div>
     </li>')
@@ -175,6 +177,7 @@ class BaseChatView extends Caramal.BackboneView
         text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
         $html += @history_tip({text: text})
         @msgContent().prepend($html)
+        @$('.message .image-zoom').fancybox()
         @scrollDialog()
       )
     , 300)
@@ -278,7 +281,7 @@ class BaseChatView extends Caramal.BackboneView
     html = ''
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
-      html += @parseOne(message)  
+      html += @parseOne(message)
     html
 
   sendContent: () ->
@@ -291,6 +294,7 @@ class BaseChatView extends Caramal.BackboneView
     if @display
       @msgContent().append(@parseMessages(data))
       @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
   toggleDialog: () ->
@@ -346,9 +350,9 @@ class BaseChatView extends Caramal.BackboneView
     @sendInputing()
     @sendMessage(event) if event.ctrlKey && event.keyCode == 13
 
-  sendImg: (url) ->
-    return unless url
-    @channel.send({ msg: '', attachments: [url] })
+  sendImg: (photo) ->
+    return if _.isEmpty(photo)
+    @channel.send(msg: '', attachments: [ photo ])
 
   sendMessage: (event) ->
     msg = @sendContent().val().trim()
@@ -469,9 +473,11 @@ class root.OrderChatView extends Caramal.BackboneView
         </div>
         <div class="message">
           {{ msg }}
-          {{#if attachments}}
-            <img src="{{attachments}}" alt="图片" />
-          {{/if}}
+          {{#each attachments}}
+            <a class="image-zoom" target="_blank" href="{{default}}">
+              <img src="{{header}}" alt="图片">
+            </a>
+          {{/each}}
         </div>
       </div>
     </li>')
@@ -487,6 +493,7 @@ class root.OrderChatView extends Caramal.BackboneView
         text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
         $html += @history_tip({text: text})
         @msgContent().prepend($html)
+        @$('.message .image-zoom').fancybox()
         @scrollDialog()
       )
     , 300)
@@ -558,6 +565,7 @@ class root.OrderChatView extends Caramal.BackboneView
     if @display
       @msgContent().append(@parseMessages(data))
       @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
   toggleDialog: () ->
@@ -606,9 +614,9 @@ class root.OrderChatView extends Caramal.BackboneView
   fastKey: (event) ->
     @sendMessage(event) if event.ctrlKey && event.keyCode == 13
 
-  sendImg: (url) ->
-    return unless url
-    @channel.send({ msg: '', attachments: [url] })
+  sendImg: (photo) ->
+    return if _.isEmpty(photo)
+    @channel.send(msg: '', attachments: [ photo ])
 
   sendMessage: (event) ->
     msg = @sendContent().val().trim()

@@ -6,6 +6,7 @@ class PeopleController < ApplicationController
 
   def show
     @people = User.find_by(:login => params[:id])
+    @transfer_moneys = @people.transfer_moneys.order("created_at desc").page(params[:page])
     current_ability(@people)
   end
 

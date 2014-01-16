@@ -8,6 +8,7 @@ class Image < ActiveRecord::Base
   after_update do
     if imageable.is_a?(User)
       imageable.update_attributes(:updated_at => DateTime.now)
+      imageable.update_relation_index
     end
   end
 
