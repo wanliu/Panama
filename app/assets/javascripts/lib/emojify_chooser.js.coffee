@@ -204,6 +204,6 @@ class root.EmojifyChooser extends Backbone.View
   initialize: () ->
     html = ''
     _.each this.emoticons, (item) =>
-      html += '<li><img src="/assets/emojis/' + item[0] + '.png" class="emoji" data-name="' + item[0] + '" title="' + item[1] + '" /></li>'
+      html += '<li><img src="/assets/emojis/' + item[0] + '.png" class="emoji" data-name="' + item[0] + '" title="' + item[1] + '" alt="' + item[1] + '" /></li>'
     $(@el).append(html)
 
