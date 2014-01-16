@@ -26,6 +26,18 @@
   <%=render "ask_buy/preview_template" %>
 </script>
 
+<script type='text/template' id="user_template">
+  <%=render "users/template" %>
+</script>
+
+<script type='text/template' id="shop_template">
+  <%=render "shops/template" %>
+</script>
+
+<script type="text/javascript" id='circle_template'>
+  <%=render "circles/template" %>
+</script>
+
 <script type="text/javascript">
   new ActivityLayoutView({
     el: '#activities'
@@ -47,5 +59,10 @@
 
   new ProductPreview({
     el: $("#activities")
+  })
+
+  new CirclePreview({
+    el: $("#activities"),
+    login: '<%= current_user.login %>'
   })
 </script>

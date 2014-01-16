@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140110093339) do
+ActiveRecord::Schema.define(:version => 20140115054608) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(:version => 20140110093339) do
   create_table "ask_buys", :force => true do |t|
     t.integer  "product_id"
     t.string   "title"
-    t.decimal  "price",      :precision => 10, :scale => 0
+    t.decimal  "price",      :precision => 10, :scale => 2, :default => 0.0
     t.float    "amount"
     t.text     "describe"
     t.integer  "status"
@@ -942,8 +942,6 @@ ActiveRecord::Schema.define(:version => 20140110093339) do
     t.integer  "rejected_times",                         :default => 0
     t.integer  "address_id"
     t.string   "service",                  :limit => 20
-    t.string   "shop_name"
-    t.string   "shop_summary"
   end
 
   create_table "users", :force => true do |t|

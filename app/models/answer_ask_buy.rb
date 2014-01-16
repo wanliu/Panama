@@ -9,7 +9,8 @@ class AnswerAskBuy < ActiveRecord::Base
   validates :user, :presence => true
   validates :shop_product, :presence => true
   validates :price,  :numericality => { :greater_than => 0 }, :presence => true
-  validates :amount, :numericality => { :greater_than => 0 }, :presence => true 
+  validates :amount, :presence => true, 
+            :numericality => { :greater_than => 0, :only_integer => true } 
   validates :total,  :numericality => { :greater_than => 0 }
 
   scope :hited, ->{ where(:status => 1)}

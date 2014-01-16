@@ -10,10 +10,10 @@
     没有找到符合要求的本地商圈
   </div>
 
-  <div class ="wrapper row-fluid circles-list">
+  <div class ="info-wrapper wrapper row-fluid circles-list">
     <% if @circles.length > 0 %>
       <% @circles.each do |circle| %>
-        <div class='businiess_community span3' id="<%= circle.id %>">
+        <div class='businiess_community span3 circle_info' id="<%= circle.id %>">
           <div class="head_img">
             <a href="/communities/<%=circle.id %>/circles">
               <img src="<%= circle.photos.avatar %>" class="circle_icon" alt="头像"/>

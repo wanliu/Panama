@@ -19,7 +19,7 @@
 
   <div class="address-panel">
   <%= simple_fields_for :address, transaction.address do |address_form| %>
-    <label class="chosen optional control-label" for="transaction_address">选择省,市,县</label>
+    <label class="chosen optional control-label" for="transaction_address">省,市,县</label>
     <div class="controls controls-row">
       <div class="span8 control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
         <%= address_form.input :province_id,

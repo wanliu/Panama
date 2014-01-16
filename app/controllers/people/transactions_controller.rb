@@ -156,8 +156,9 @@ class People::TransactionsController < People::BaseController
 
   def transfer
     @transaction = current_order.find(params[:id])
+    @transfer = @transaction.create_transfer(params[:transfer])
     respond_to do |format|
-      if @transaction.create_transfer(params[:transfer])
+      if @transfer.valid?
         format.json{ head :no_content }
       else
         format.json{ render :json => draw_errors_message(@transfer), :status => 403 }

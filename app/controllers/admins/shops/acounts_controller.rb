@@ -4,6 +4,7 @@ class Admins::Shops::AcountsController < Admins::Shops::SectionController
 
   def bill_detail
     @people = current_user
+    @transfer_moneys = @people.transfer_moneys.order("created_at desc").page(params[:page])
   end
 
   def shop_info

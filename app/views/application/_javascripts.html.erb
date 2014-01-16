@@ -1,19 +1,31 @@
 <%# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet %>
 <%# Looks for google_account_id first in ENV['GOOGLE_ACCOUNT_ID'] then in config/html5_rails.yml %>
 <script type="text/javascript">
-  <% if !google_account_id.blank? %>
-    //<![CDATA[
-      var _gaq=[['_setAccount','<%= google_account_id %>'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
-    //]]>
-  <% end %>
   window.clients = Realtime.connect({
     server_uri: '<%= realtime_uri %>',
-    token: '<%= current_user.im_token %>',
-    current_user: '<%= current_user.login %>',
+    token: '<%= current_user.try(:im_token) %>',
+    current_user: '<%= current_user.try(:login) %>',
     current_shop: '<%= current_shop.try(:name) %>',
     form_token: '<%= form_authenticity_token %>'
+  })
+
+  $(function(){
+    <% if !google_account_id.blank? %>
+      //<![CDATA[
+        var _gaq=[['_setAccount','<%= google_account_id %>'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+      //]]>
+    <% end %>
+
+    $('body').on('click', function (e) {
+      $choose_face = $('[data-toggle="popover"].choose-face');
+      $choose_face.each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $choose_face.has(e.target).length === 0) {
+          $(this).popover('hide');
+        }
+      });
+    });
   })
 </script>

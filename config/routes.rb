@@ -46,11 +46,11 @@ Panama::Application.routes.draw do
 
   match "catalog/products"
 
-  match "user_checkings/update_user_auth", :to => "user_checkings#update_user_auth", :via => :put
   match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth", :via => :put
   match "user_checkings/upload_photo/:id", :to => "user_checkings#upload_photo", :via => :post
 
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
+  match "people/:login/update_user_auth", :to => "people#update_user_auth", :via => :put
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
   match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
   match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post
@@ -585,6 +585,8 @@ Panama::Application.routes.draw do
   match "search/shop_circles", :to => "search#shop_circles", :via => :get
   match "search/circles", :to => "search#circles", :via => :get
   match "search/all", :to => "search#all", :via => :get
+  match "search/shops", :to => "search#shops", :via => :get
+  match "search/circles", :to => "search#circles", :via => :get
 
 
   # omniauth
