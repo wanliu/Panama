@@ -54,6 +54,17 @@ class NotificationManager
         </div>
       </div>""")
 
+  activityTemplate: Handlebars.compile(
+    """<div class='noty_message'>
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          <span class='noty_text'></span>
+          <div class='noty_close'></div>
+          <div>
+            <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+            <a href="javascript:void(0)" class='btn btn-danger pull-right preview'>查看</a>
+          </div>
+      </div>""")
+
   constructor: () ->
     @plays = []
     setInterval(@playNotify, 3000)
@@ -64,7 +75,7 @@ class NotificationManager
 
     # 活动通知绑定
     # @client.monitor("/activities/arrived", @commonNotify)
-    @client.monitor("/activities/add", @commonNotify) # √
+    @client.monitor("/activities/add", @activity) # √
     # @client.monitor("/activities/change", @commonNotify)
     # @client.monitor("/activities/remove", @commonNotify)
     @client.monitor("/activities/like", @commonNotify) # √
@@ -127,6 +138,13 @@ class NotificationManager
     @client.monitor("/order_refunds/create", @commonNotify)    
     @client.monitor("/order_refunds/change_state", @commonNotify)
 
+  activity: (data) =>
+    data.template = $(@activityTemplate(data))
+    @commonNotify(data)
+    new ActivityPreview({
+      el: data.template,
+      login: @current_user_login
+    })
 
   circle_invite: (data) =>
     data.template = $(@circleInviteTemplate(data))
