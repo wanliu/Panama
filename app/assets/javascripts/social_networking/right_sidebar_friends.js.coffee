@@ -245,7 +245,7 @@ class BaseIconsView extends Backbone.View
     else
       model = new ChatModel({ 
         type: channel.type,
-        name: channel.group,
+        name: channel.name,
         group: channel.group,
         channel: channel 
       })
@@ -436,7 +436,7 @@ class TemporaryIconView extends BaseIconView
     super
 
   getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@model.get('name'))
+    @channel ||= Caramal.Temporary.of(@model.get('group'), { name: @model.get('name') })
     if @channel.room
       clients.socket.emit('join', {room: @channel.room})
     else

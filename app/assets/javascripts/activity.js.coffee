@@ -32,7 +32,7 @@ class ActivityView extends Backbone.View
     "click [data-dismiss=modal]"    : "close"
     "click .animate-play"           : "playAnimate"
     "click .load_modal"             : "load_modal"
-    "click .share_activity"         : "share_activity"
+    "click .shared"                 : "share_activity"
 
   initialize: (@options) ->
     _.extend(@, @options)
@@ -93,8 +93,8 @@ class ActivityView extends Backbone.View
     })
 
   share_activity: () ->
-    return false if $(".share_activity .disabled").length == 1
-    @$(".share_activity").addClass('disabled')
+    return false if $(".shared .disabled").length == 1
+    @$(".shared").addClass('disabled')
     ids = @tool.data()
     activity_id = @model.get('id')
     $.ajax(
