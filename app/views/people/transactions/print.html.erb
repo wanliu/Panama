@@ -15,31 +15,19 @@
   </tr>
   <tr>
     <td>付款方式</td>
-    <td><%=@transaction.pay_manner.try(:name) %></td>
+    <td><%=@transaction.pay_type %></td>
     <td>运输方式</td>
-    <td><%=@transaction.delivery_manner.try(:name) %></td>
+    <td><%=@transaction.transport_type %></td>
   </tr>
-  <% if @transaction.delivery_manner.present? %>
-    <% if @transaction.delivery_manner.express? %>
-      <tr>
-        <td>配送方式</td>
-        <td><%=@transaction.delivery_type.try(:name) %></td>
-        <td>运费</td>
-        <td><%=@transaction.delivery_price %></td>
-      </tr>
-      <% if @transaction.logistics_company.present? %>
-      <tr>
-        <td>快递公司</td>
-        <td><%=@transaction.logistics_company.name %></td>
-        <td>运单号</td>
-        <td><%=@transaction.delivery_code %></td>
-      </tr>
-      <% end %>
-    <% end %>
-  <% end %>
+  <tr>        
+    <td>运单号</td>
+    <td><%=@transaction.delivery_code %></td>
+    <td>运费</td>
+    <td><%=@transaction.delivery_price %></td>
+  </tr>
   <tr>
     <td>地址</td>
-    <td colspan='3'><%=@transaction.address.try(:address_only) %></td>
+    <td colspan='3'><%=@transaction.address.try(:address_only) || "暂无" %></td>
   </tr>
   <tr>
     <td colspan='4'>

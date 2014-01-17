@@ -20,6 +20,10 @@ class ShopProduct < ActiveRecord::Base
     self.index.remove self
   end
 
+  before_create do 
+    self.inventory = 0 if inventory.nil?
+  end
+
   after_update do
     update_relation_index
   end
