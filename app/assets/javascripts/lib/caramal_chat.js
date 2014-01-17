@@ -4665,12 +4665,20 @@ if (typeof define === "function" && define.amd) {
       }
 
       RecordCommand.prototype.doExecute = function(data, callback) {
+        var room;
         if (callback == null) {
           callback = null;
         }
-        data = {
-          room: this.channel.room
-        };
+        if (data == null) {
+          data = {
+            room: this.channel.room
+          };
+        } else {
+          room = data.room ? data.room : data;
+          data = {
+            room: room
+          };
+        }
         return this.sendCommand('record', data, callback);
       };
 
@@ -5485,6 +5493,7 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
+                  channel.command('record', info.room);
                   channel.room = info.room;
                   channel.setState('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
@@ -5616,7 +5625,7 @@ if (typeof define === "function" && define.amd) {
           if (info.type === Channel.TYPES['group']) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
-              channel = Chat.create(info.from, {
+              channel = Group.create(info.from, {
                 room: info.room
               });
               return channel.command('join', info.room, {}, function(ch, err, msg) {
@@ -5632,6 +5641,7 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
+                  channel.command('record', info.room);
                   channel.room = info.room;
                   channel.setState('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
@@ -5673,7 +5683,7 @@ if (typeof define === "function" && define.amd) {
         this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
-          group: this.channel.group
+          group: this.channel.name
         });
       });
 
@@ -5743,8 +5753,9 @@ if (typeof define === "function" && define.amd) {
           if (info.type === Channel.TYPES['temporary']) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
-              channel = Chat.create(info.from, {
-                room: info.room
+              channel = Temporary.create(info.group, {
+                room: info.room,
+                name: info.name
               });
               return channel.command('join', info.room, {}, function(ch, err, msg) {
                 if (err != null) {
@@ -5759,7 +5770,9 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
+                  channel.command('record', info.room);
                   channel.room = info.room;
+                  channel.name = info.name;
                   channel.setState('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
