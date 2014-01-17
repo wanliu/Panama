@@ -57,7 +57,7 @@ class Activity < ActiveRecord::Base
 
   def notice_author
     author.notify("/activities/add",
-                  "您发布的活动#{ title}已经通过审核",
+                  "您发布的活动#{ title}已经通过审核,定于#{ start_time}正式开始",
                   {:url => notify_url,
                    :avatar => photos.avatar,
                    :target => self })
@@ -67,7 +67,7 @@ class Activity < ActiveRecord::Base
     unless shop.followers.blank?
       (shop.followers - [ author ]).each do |follower|
         follower.user.notify('/activities/add',
-                             "您关注的商家 #{shop.name} 发布新活动 #{title} 敬请期待",
+                             "您关注的商家 #{shop.name} 发布新活动 #{title},定于#{ start_time}正式开始,敬请期待",
                              {:target => self,
                               :url => notify_url,
                               :avatar => photos.avatar } )

@@ -18,10 +18,11 @@ class People::CartController < People::BaseController
       :price => @shop_product.product.price,
       :user_id => current_user.id
     }))
+    
     if @item.save
       render :json => @item.as_json.merge(:img_path => @item.photos.icon)
     else
-      render json: draw_errors_message(@item), status: :unprocessable_entity
+      render json: draw_errors_message(@item), status: 403
     end
   end
 

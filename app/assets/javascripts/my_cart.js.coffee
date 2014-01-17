@@ -87,8 +87,10 @@ class MyCart extends Backbone.View
 				@cartAddAction(urlAction, form)
 
 	cartAddAction: (url, form) ->
+		amount = form.serializeHash().product_item.amount
+		return pnotify(type: 'error', text: '数量必须为大于0的整数') unless amount > 0 && amount % 1 is 0
 		$.post url, form.serialize(), (item) =>
-			if  $("#product_item#{item.id}").length > 0
+			if $("#product_item#{item.id}").length > 0
 				trObj = $("#product_item#{item.id}")
 				trObj.replaceWith(@trHtml(item))
 			else

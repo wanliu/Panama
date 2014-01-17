@@ -338,11 +338,13 @@ class Chosen extends AbstractChosen
 
   results_reset: ->
     @form_field.options[0].selected = true
+    @search_results.find(">li").removeClass "result-selected"
     @selected_item.find("span").text @default_text
     @selected_item.addClass("chzn-default") if not @is_multiple
     this.show_search_field_default()
     this.results_reset_cleanup()
     @form_field_jq.trigger "change"
+    @form_field_jq.trigger "reset"
     this.results_hide() if @active_field
 
   results_reset_cleanup: ->
