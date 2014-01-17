@@ -95,6 +95,9 @@ class root.Realtime
         trigger: "hover"
       })
     target.popover("show")
+    setTimeout( () ->
+      target.popover("hide")
+    ,5000);
 
   # drop room property of channel once disconnecting/reconnecting happens
   # so we can join the room again
