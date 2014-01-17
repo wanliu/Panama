@@ -5770,7 +5770,9 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
-                  channel.command('record', info.room);
+                  if (info.mode === 1) {
+                    channel.command('record', info.room);
+                  }
                   channel.room = info.room;
                   channel.name = info.name;
                   channel.setState('open');
