@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
       ms.each do |m|
         if t(t_model).is_a?(Hash) && t(t_model).key?(attr)
           attr_name = t("#{t_model}.#{attr}")
-          messages << "#{attr_name}: #{m}"
+          messages << "#{attr_name} #{m}"
         else
           messages << "#{attr}: #{m}"
         end
