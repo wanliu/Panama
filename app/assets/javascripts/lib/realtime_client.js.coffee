@@ -93,6 +93,9 @@ class root.Realtime
         trigger: "hover"
       })
     target.popover("show")
+    setTimeout( () ->
+      target.popover("hide")
+    ,5000);
 
   connected: (time) ->
     $(".realtime_state").popover('hide')

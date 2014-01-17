@@ -173,14 +173,14 @@
     id = $(elem).attr("id")
     $(elem).find("input").select()
     $("."+ class_name , elem).editable({
-        pk   :    id,
-        type :  'text',
-        name :  class_name,
-        title: 'change your '+ class_name,
-        url  :   "/shop_products/"+ id +"/update_attribute",
-        ajaxOptions: {
-          type: 'put',
-          dataType: 'json'
+      pk   :    id,
+      type :  'text',
+      name :  class_name,
+      title: 'change your '+ class_name,
+      url  :   "/shop_products/"+ id +"/update_attribute",
+      ajaxOptions: {
+        type: 'put',
+        dataType: 'json'
       },
       validate: function(value) {
         if(isNaN($.trim(value))) {
