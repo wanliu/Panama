@@ -59,7 +59,7 @@ class NotificationManager
           <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
           <span class='noty_text'></span>
           <div class='noty_close'></div>
-          <div>
+          <div class='activity' activity-id="{{ target.id }}">
             <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
             <a href="javascript:void(0)" class='btn btn-danger pull-right preview'>查看</a>
           </div>
@@ -229,7 +229,7 @@ class NotificationManager
       options.theme = 'notifyTheme'
 
     unless options.hasOwnProperty('timeout')
-      options.timeout = 5000
+      options.timeout = false
 
     unless options.hasOwnProperty('template') && options.template?
       options.template = @defaultTemplate(options)
