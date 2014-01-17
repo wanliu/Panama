@@ -47,6 +47,9 @@ class ChosenEx extends Chosen
     if $.isFunction(@options.select)
       @search_results.on "mouseup", "li", $.proxy(@_select, @)
 
+    if $.isFunction(@options.reset)
+      @form_field_jq.bind('reset', $.proxy(@options.reset, @))
+
     @remote_callback(@options.data) if $.isArray(@options.data)
 
 

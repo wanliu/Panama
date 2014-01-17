@@ -9,7 +9,7 @@ class People::DeliveryAddressesController < People::BaseController
     @address = DeliveryAddress.new
   end
 
-  def edit
+  def edit    
     @address = current_user_address(params[:id])
     render layout: false
   end

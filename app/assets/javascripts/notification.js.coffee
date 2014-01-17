@@ -13,8 +13,10 @@ class NotificationManager
           {{/if}}
           <span class='noty_text'></span>
           <div class='noty_close'></div>
-          <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-          <div><a href="{{ url }}" class='btn btn-danger pull-right'>查看</a></div>
+          <div>
+            <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+            <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
+          </div>
       </div>""")
 
   followTemplate: Handlebars.compile(
@@ -209,7 +211,7 @@ class NotificationManager
       options.theme = 'notifyTheme'
 
     unless options.hasOwnProperty('timeout')
-      options.timeout = false
+      options.timeout = 5000
 
     unless options.hasOwnProperty('template') && options.template?
       options.template = @defaultTemplate(options)

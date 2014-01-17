@@ -92,9 +92,8 @@
           <div class="modal-body">
             <%= f.label "价格" %>
             <input type='text' class='span12' value="<%= activity.activity_price %>"  readonly="true" />
-            <%= f.input :amount, input_html: {
-              :class => "amount"
-            } %>
+            <%= f.label "数量" %>
+            <input type='number' class='span12 amount' value="1"  name="product_item[amount]" step="1"  />
           </div>
           <div class="modal-footer">
             <div class="btn-group">
