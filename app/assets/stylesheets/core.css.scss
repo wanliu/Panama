@@ -1545,13 +1545,20 @@ h2 small {
 
       .face-panel {
         .popover-content {
+          margin: 0px;
           padding: 0px;
         }
 
         ul {
+          width: 250px;
+          min-height: 150px;
+          margin: 0px;
+          padding: 0px;
           display: inline-block;
 
           li {
+            width: 25px;
+            height: 25px;
             display: inline-block;
 
             img {
