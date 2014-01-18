@@ -247,6 +247,14 @@ class TransactionTwoColumnsViewport extends Backbone.View
         model = @add(item)            
         model.set({fetch_state: true})
         @openView(model)
+      error: (data) =>
+        try
+          ms = JSON.parse(data.responseText)
+          pnotify(text: ms.join("<br />"), type: "error")
+        catch err
+          pnotify(text: data.responseText, type: "error")
+        finally
+          @navigate("")
     )
 
   exitMenu: () ->

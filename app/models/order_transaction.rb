@@ -341,7 +341,7 @@ class OrderTransaction < ActiveRecord::Base
     events = %w(expired audit_transfer audit_failure)
     if filter_fire_event!(events, event)
       change_state_notify_seller(event)
-      change_state_notify_buyer(event)
+      change_state_notify_buyer(event)    
     end
   end
 

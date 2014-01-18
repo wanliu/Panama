@@ -10,6 +10,7 @@ class ShopTransactionCard extends TransactionCardBase
     @filter_delivery_code()
     @initMessagePanel()
     @countdown()
+    @monitor_notify()   
 
   events:
     "click .transaction-actions .btn_event" : "clickAction"
@@ -62,24 +63,23 @@ class ShopTransactionCard extends TransactionCardBase
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
-    if !/back/.test(_event) && !/refresh_returned/.test(_event) && @filter_delivery_code()
+    if !/back/.test(_event) && !/refresh_returned/.test(_event)
       @save_delivery_code () =>
         @slideAfterEvent(_event)
     else
-      @alarm()
-      @transition.cancel()
+      @back_state()
 
-  filter_delivery_code: () ->
-    button = @$(".delivered")
-    delivery_code = @$("input:text.delivery_code")
-    if delivery_code.length < 1
-      button.addClass("disabled").removeAttr("event-name")
+  filter_delivery_code: () ->      
+    $btn = @$(".btn_event.delivered")
+    return if $btn.hasClass("invalid")
+    delivery_code = @delivery_code_elem().val()
+    if _.isEmpty(delivery_code) 
+      $btn.addClass("disabled")
     else
-      button.removeClass("disabled").attr("event-name", "delivered")
-      true
+      $btn.removeClass("disabled")      
 
   save_delivery_code: (cb) ->
-    delivery = @$("input:text.delivery_code")
+    delivery = @delivery_code_elem()
 
     if delivery.length > 0
       delivery_code = delivery.val()
@@ -96,6 +96,13 @@ class ShopTransactionCard extends TransactionCardBase
       )
     else
       cb()
+
+  monitor_notify: () ->
+    @client.monitor "/shops#{@realtime_url()}/change_state", () ->
+      @stateChange data
+
+  delivery_code_elem: () ->
+    @$("input:text.delivery_code")
 
   show_dprice_edit: () ->
     @$dprice_panel = @$(".dprice_panel")

@@ -7,10 +7,13 @@ root = (window || @)
 class Transactions extends Backbone.Collection
 
 class TransactionView extends CardItemView
-
+  events: {
+    "click .actions .dispose" : "dispose"
+  }
   initialize: (options) ->
     _.extend(@, options)
     super
+    @model.bind("undispose", _.bind(@undispose, @))
 
   get_register_view: () ->
     view = new ShopTransactionCard({
@@ -26,6 +29,20 @@ class TransactionView extends CardItemView
       @model.set(state_title: @card.transaction.get("state_title"))
 
     super
+
+  dispose: () ->
+    $.ajax(
+      url: "#{@model.url()}/dispose",
+      type: "POST",
+      dataType: "JSON",
+      success: (data) ->
+        window.location.href = "#open/#{data.id}/order"
+        window.location.reload()
+    )
+
+  undispose: () ->
+    @$(".actions .dispose").parent().remove()
+
 
 class root.ShopOrderTransactions extends CardItemListView
 
@@ -52,11 +69,26 @@ class root.ShopOrderTransactions extends CardItemListView
     _.each @$(".orders>.card_item"), (el) => @add_elem(el)
 
   realtime_load: () ->  
-    @client.monitor "/#{@shop.token}/transactions/destroy", (data) =>
+    @monitor_destroy()
+    @client.monitor "/shops/#{@shop.token}/transactions/dispose", (data) =>
+      @dispose data
+
+  monitor_destroy: () ->
+    url = "/#{@shop.token}/transactions/destroy"
+    @client.monitor url, (data) =>
       @destroy data
 
+    @client.monitor "/shops#{url}", (data) =>
+      @destroy data
+
+
   monitor_state: (order_id) ->
-    @client.monitor "/#{@shop.token}/transactions/#{order_id}/change_state", (data) =>
+    url = "/#{@shop.token}/transactions/#{order_id}/change_state"
+
+    @client.monitor url, (data) =>
+      @change_state data
+
+    @client.monitor "/shops#{url}", (data) =>
       @change_state data
 
   destroy: (data) ->
@@ -70,3 +102,7 @@ class root.ShopOrderTransactions extends CardItemListView
         state: data.state,
         event: data.event,
         state_title: data.state_title})
+
+  dispose: (data) ->
+    model = @collection.get(data.order_id)
+    model.trigger("undispose") unless _.isEmpty(model)
