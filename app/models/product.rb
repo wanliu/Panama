@@ -160,10 +160,9 @@ class Product < ActiveRecord::Base
 
   # Tire 索引结构的 json
   def to_indexed_json
-    {
+    options = {
       :name        => name,
-      :category_id => category_id,
-      :created_at  => created_at,
+      :category_id => category_id,      
       :price       => price,
       :shop_id     => shop_id,
       :brand_name  => brand_name,
@@ -178,7 +177,11 @@ class Product < ActiveRecord::Base
         :name      => category.try(:name)
       },
       :properties => properties_json
-    }.to_json
+    }
+    if created_at.present?
+      options[:created_at] = created_at.strftime("%Y-%m-%d %H:%M:%S")
+    end
+    options.to_json
   end
 
   def properties_json

@@ -50,7 +50,7 @@ class TransactionCardBase extends AbstructStateView
 
   clickAction: (event) ->
     btn = $(event.target)
-    if !btn.hasClass("disabled")
+    unless btn.hasClass("disabled")
       event_name = btn.attr('event-name')
       if @[event_name]
         try
@@ -103,13 +103,16 @@ class TransactionCardBase extends AbstructStateView
     @slideEvent(event, 'right')
 
   slideEvent: (event, direction = 'right') ->
+    $btn = @$(".transaction-actions .btn_event")
+    $btn.addClass("disabled")
     $.post @eventUrl(event), (data) =>
         @slidePage(data, direction)
     .fail (data) =>
       if data.status isnt 500
         error_massage = JSON.parse(data.responseText).message
         @notify("错误信息", error_massage, "error")
-
+    .complete () ->
+      $btn.removeClass("disabled")
 
   slidePage: (page, direction = 'right') ->
     $side1 = $("<div class='slide-1'></div>")
