@@ -81,10 +81,12 @@ class AskBuyView extends Backbone.View
       url: "/ask_buy/#{@ask_buy_id}/comment",
       type: 'POST',
       data: {comment: {content: content}},
-      success: (comment) =>
+      success: (data, xhr, res) =>
         @textarea.val('')
-        @render_comment(comment)
+        @render_comment(data)
       )
+      error: (data, xhr, res) =>
+        pnotify(type: 'error', text: "评论失败了～～～")
 
   filter_status: () ->
     content = @textarea.val()
@@ -93,8 +95,9 @@ class AskBuyView extends Backbone.View
     else
       @btn.removeClass("disabled")
 
-  render_comment: (comment) ->
-    comment = Hogan.compile($("#ask_buy-comment-template").html()).render(comment)
+  render_comment: (data) ->
+    data.created_at = new Date().format('yyyy-MM-dd hh:mm')
+    comment = Hogan.compile($("#ask_buy-comment-template").html()).render(data)
     @$(".comments").append(comment)
 
   # join: () ->
