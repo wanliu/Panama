@@ -62,7 +62,7 @@ class OrderRefundCard extends TransactionCardBase
   update_delivery_price: () ->
     url = @transaction.urlRoot
     price = @$input.val()
-    if /^\d+.?\d+$/.test(price)
+    if /^\d+(\.\d+)?$/.test(price)
       old_price = @$rdp_panel.attr("data-value")
       if parseFloat(price) ==  parseFloat(old_price)
         @$rdp_panel.show()
@@ -85,8 +85,7 @@ class OrderRefundCard extends TransactionCardBase
         type: "error",
         title: "编辑出错"
         text: "请输入正确的运费！"
-      })
-      @$input.focus()
+      })      
 
   edit_delivery_price: () ->
     @$input = $("input:text[name='edit_rdprice']")

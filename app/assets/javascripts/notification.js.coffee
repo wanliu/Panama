@@ -148,6 +148,9 @@ class NotificationManager
     #退货
     @client.monitor("/order_refunds/create", @commonNotify)    
     @client.monitor("/order_refunds/change_state", @commonNotify)
+    @client.monitor("/order_refunds/change_info", @commonNotify)
+
+    @client.monitor("/shops/order_refunds/change_info", @commonNotify)
 
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))

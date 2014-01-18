@@ -6,6 +6,7 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
   initialize: (options) ->
     @shop = options.shop
     super
+    @transaction.bind("change:delivery_price", @change_delivery_price, @)
 
   events: {
     "click .transaction-actions .btn_event" : "clickAction",
@@ -66,3 +67,9 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
 
   realtime_url: () ->
     "/#{@shop.token}/order_refunds#{super}"
+
+  
+  change_delivery_price: () ->
+    price = @$(".delivery_price")
+    tag = price.text().trim().substring(0, 1)
+    price.html("#{tag} #{@transaction.get('delivery_price')}")
