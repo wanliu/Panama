@@ -48,7 +48,7 @@
 				fontSize: '13px',
 				lineHeight: '16px',
 				textAlign: 'center',
-				padding: '8px 10px 9px',
+				padding: '8px 10px 9px 2px',
 				width: 'auto',
 				position: 'relative'
 			});
