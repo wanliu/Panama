@@ -163,6 +163,10 @@ class User < ActiveRecord::Base
     user_checking.try(:industry_type)
   end
 
+  def belongs_shop
+    self.is_seller? ? shop : jshop
+  end
+
   def phone
     user_checking.try(:phone)
   end

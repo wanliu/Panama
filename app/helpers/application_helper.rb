@@ -367,4 +367,8 @@ module ApplicationHelper
   def render_base_template(template, options = {})
     render :partial => "#{base_template_path}/#{template}", locals: options
   end
+
+  def has_right_to_answer_ask_buy?(ask_buy)
+    current_user.is_seller? && ask_buy.user_id != current_user.id && ask_buy.open && current_user.shop.actived
+  end
 end
