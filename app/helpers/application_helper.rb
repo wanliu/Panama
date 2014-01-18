@@ -369,6 +369,6 @@ module ApplicationHelper
   end
 
   def has_right_to_answer_ask_buy?(ask_buy)
-    current_user.is_seller? && ask_buy.user_id != current_user.id && ask_buy.open && current_user.shop.actived
+    !current_user.belongs_shop.nil?  && ask_buy.open && current_user.belongs_shop.actived && ask_buy.user_id != current_user.id 
   end
 end
