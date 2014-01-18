@@ -346,7 +346,7 @@ class BaseIconView extends Backbone.View
 
   template: Handlebars.compile("""
     <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
-      <span class="badge badge-important message_count"></span>
+      <span class="badge badge-important message_count">0</span>
       {{#if icon}}
         <img src='{{icon}}' alt='{{title}}' />
       {{else}}
@@ -355,13 +355,13 @@ class BaseIconView extends Backbone.View
     </a>""")
 
   initialize: () ->
-    @clearMsgCount()
     @model.icon_view = @
     @setChannel() unless @channel?
 
   render: () ->
     html = @template(@model.attributes)
     $(@el).html(html)
+    @clearMsgCount()
     @
 
   clearMsgCount: () ->
