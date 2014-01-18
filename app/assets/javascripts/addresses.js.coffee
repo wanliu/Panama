@@ -8,7 +8,7 @@ class root.AddressesView extends Backbone.View
     _.extend(@, options)
     @$el = $(@el)
     @$new_form = @$(".new_wrap form#address")
-    @$edit_form = @$(".edit_wrap form#address")
+    
 
   events:
     "click #new_address .save-button" : "new_address"
@@ -32,10 +32,11 @@ class root.AddressesView extends Backbone.View
     false
 
   update_address: (event) ->
+    @$edit_form = @$(".edit_wrap form#address")
     data = @$edit_form.serializeHash()
     return false unless @valid_data(data[@formName] || {})
     $.ajax(
-      url: @$new_form.attr("action"),
+      url: @$edit_form.attr("action"),
       data: data,
       type: 'PUT',
       success: () =>
@@ -46,7 +47,7 @@ class root.AddressesView extends Backbone.View
     )
     false
 
-  valid_data: (data) ->    
+  valid_data: (data) ->   
     if _.isEmpty(data.province_id)
       pnotify(text: "请选择省!", type: "warning")
       return false
