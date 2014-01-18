@@ -28,6 +28,7 @@ class AnswerAskBuy < ActiveRecord::Base
 
   def add_order_id_and_status(order_transaction_id)
     update_attributes(:order_transaction_id => order_transaction_id, :status => true)
+    ask_buy.close
   end
 
   def total_money

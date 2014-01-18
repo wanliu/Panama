@@ -184,7 +184,7 @@ class TransactionCardBase extends AbstructStateView
   notify: (title, message, type) ->
     pnotify({
       title: title,
-      text: message,
+      text: message.join("<br />"),
       type: type
     })
 

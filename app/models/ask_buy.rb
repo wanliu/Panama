@@ -33,14 +33,11 @@ class AskBuy < ActiveRecord::Base
   end
 
   def answers
-    users = []
-    answer_ask_buys.each do |aab|
-      users << aab.user
-    end
+    answer_ask_buys.map{|aab| aab.user }
   end
 
   def close
-    update_attributes(:open => false)
+    update_attributes(:open => false)    
   end
 
   def init_data
@@ -49,7 +46,11 @@ class AskBuy < ActiveRecord::Base
 
   def as_json(*args)
     attra = super *args
-    attra["user"] = user.as_json
+    attra["user"] = {
+      :id => user.id,
+      :login => user.login,
+      :photos => user.photos.attributes      
+    }
     attra["url"] = photos.default
     attra
   end
