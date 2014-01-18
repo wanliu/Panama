@@ -28,7 +28,7 @@ class Caramal.BackboneView extends Backbone.View
 
 
 class ImageUpload extends Backbone.View
-  input_name: "attachment_ids"
+  input_name: "attachable"
   action: "/attachments/upload"
   messages: {
     sizeError: "{file}图片，超过{sizeLimit}了！",
