@@ -26,8 +26,10 @@ class AnswerAskBuy < ActiveRecord::Base
     total_money
   end
 
-  def add_order_id_and_status(order_transaction_id)
+  def convert_to_order(order_transaction_id)
     update_attributes(:order_transaction_id => order_transaction_id, :status => true)
+    ask_buy.close
+    notice_all_answered_user
   end
 
   def total_money
@@ -43,7 +45,7 @@ class AnswerAskBuy < ActiveRecord::Base
   end
 
   def seller_shop
-    self.user.shop
+    self.user.belongs_shop
   end
 
   def buyer

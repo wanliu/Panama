@@ -55,16 +55,31 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def mini_item
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do | format |
-      format.html{ render :layout => false }
+      operator = @transaction.current_operator
+      if operator.present? && operator !=  current_user
+        format.json{ render :json => ["这订单已经被#{operator.login}处理了！"], :status => 403 }
+      else
+        format.html{ render :layout => false }
+      end
     end
   end
 
   def event
     @transaction = current_shop_order.find_by(:id => params[:id])
-    if @transaction.seller_fire_event!(params[:event])
-      render_base_template 'card', :transaction => @transaction
-    else
-      redirect_to shop_admins_pending_path(current_shop.name)
+    respond_to do |format|
+      if @transaction.current_operator == current_user
+        if @transaction.seller_fire_event!(params[:event])
+          format.html{
+            render_base_template 'card', :transaction => @transaction
+          }          
+        else
+          format.json{ render :json => ["你不能操作这状态！"], :status => 403 }
+          format.html{
+            redirect_to shop_admins_pending_path(current_shop.name) }        
+        end
+      else
+        format.json{ render :json => ["你不能操作这状态！"], :status => 403 }
+      end
     end
   end
 

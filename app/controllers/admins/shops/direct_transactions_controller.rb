@@ -56,9 +56,14 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
   def mini_item
     @direct_transaction = current_shop_direct_transaction
     respond_to do |format|
-      format.html{ 
-        render :layout => false
-      }      
+      operator = @direct_transaction.operator
+      if operator.present? && operator != current_user
+        format.json{ render :json => ["这订单已经被#{operator.login}接了"], :status => 403 }
+      else
+        format.html{ 
+          render :layout => false
+        }      
+      end
     end
   end
 

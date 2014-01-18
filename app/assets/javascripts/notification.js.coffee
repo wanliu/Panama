@@ -260,6 +260,7 @@ class NotificationManager
             }
     self = @
     options.callback || = {}
+
     options.callback.onClose = () ->
       pos = @$bar.offset()
       target_pos = self.$notify_target.offset()

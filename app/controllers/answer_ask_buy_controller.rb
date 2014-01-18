@@ -38,10 +38,8 @@ class AnswerAskBuyController < ApplicationController
         :shop_id => @answer_ask_buy.seller_shop.id
       })
       @item.buy_state = :guarantee
-      if @order.save
-        @answer_ask_buy.ask_buy.close
-        @answer_ask_buy.add_order_id_and_status(@order.id)
-        @answer_ask_buy.notice_all_answered_user
+      if @order.save        
+        @answer_ask_buy.convert_to_order(@order.id)
         format.json{ render :json => @order }
       else
         format.json{ render :json => draw_errors_message(@order), :status => 403 }
