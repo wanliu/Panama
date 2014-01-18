@@ -169,9 +169,9 @@
   $(function(){
     $(".item").first().addClass("active")
   });
-  <% if current_user.is_seller? %>
+  <% if has_right_to_answer_ask_buy?(@ask_buy) %>
     var sp_elem = $(".form_answer_ask_buy .shop_product_id")
-    <% shop_product = current_user.shop.has_product(@ask_buy.product_id) %>
+    <% shop_product = current_user.belongs_shop.has_product(@ask_buy.product_id) %>
     sp_elem.chosenEx({
       allow_single_deselect : true,
       placeholder_text : "选择一个商品",
@@ -189,7 +189,7 @@
       remote: {
         url: "/search/shop_products",
         dataType: "json",
-        no_results_text : "没有找到你的商品, 请到<a href='/shops/<%=current_user.shop.name %>/admins/shop_products'>商品管理</a>中添加"
+        no_results_text : "没有找到你的商品, 请到<a href='/shops/<%=current_user.belongs_shop.name %>/admins/shop_products'>商品管理</a>中添加"
       }
     });
   <% end %>
