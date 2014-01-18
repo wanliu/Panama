@@ -113,8 +113,8 @@ class AskBuyView extends Backbone.View
     $amount = @$(".answer_ask_buy_amount")
     if @$(".submit_report").hasClass("disabled")
       return false
-      
-    if _.isEmpty($("#answer_ask_buy_shop_product").val())
+    
+    if !$("#answer_ask_buy_shop_product_chzn .chzn-results li").hasClass("result-selected")
       @$(".shop_product_wrap").addClass("error")
       return  false
       
