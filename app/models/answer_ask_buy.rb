@@ -13,15 +13,13 @@ class AnswerAskBuy < ActiveRecord::Base
             :numericality => { :greater_than => 0, :only_integer => true } 
   validates :total,  :numericality => { :greater_than => 0 }
 
-  scope :hited, ->{ where(:status => 1)}
-  scope :unhited, ->{ where(:status => 0)}
-
   after_create do 
   	ask_buy.user.notify("/answer_ask_buy",
 								        "用户#{user.login} 对你求购的#{ ask_buy.title}  进行了报价",
 								        :target => self,
-								        :url => "/people/#{user.login}/ask_buy",
-								        :avatar => user.avatar)
+								        :url => "/people/#{ask_buy.user.login}/ask_buy",
+								        :avatar => user.avatar,
+                        :ask_buy_id => ask_buy.id )
   end
 
   before_validation(:on => :create) do
@@ -52,25 +50,25 @@ class AnswerAskBuy < ActiveRecord::Base
     self.ask_buy.user
   end
 
-  def hited_user
-    AnswerAskBuy.hited.where(:ask_buy_id => ask_buy_id).first.user 
+  def hited_shop
+    ask_buy.answer_ask_buys.where(:status => true).first.user.belongs_shop
   end
 
-  def unhited_users
-    AnswerAskBuy.unhited.where(:ask_buy_id => ask_buy_id)
+  def unhited_answer
+    ask_buy.answer_ask_buys.where(:status => false)
   end
 
   def notice_all_answered_user
-    hited_user.notify("/shops/answer_ask_buy/success",
+    hited_shop.notify("/shops/answer_ask_buy/success",
                       "#{ ask_buy.title}求购买家选择了你进行交易，请查看订单#{ order_transaction.number}",
                       :target => self,
-                      :url => "/shops/#{ hited_user.shop.name}/admins/transactions/#{order_transaction.id}")
+                      :url => "/shops/#{ hited_shop.name}/admins/pending/#open/#{order_transaction.id}/order")
     
-    unhited_users.each do |u| 
-      u.notify("/shops/answer_ask_buy/failer",
+    unhited_answer.each do |answer| 
+      answer.user.notify("/shops/answer_ask_buy/failer",
               "很遗憾,#{ ask_buy.title}求购买家选择了商家 #{ order_transaction.seller.name} 进行交易,感谢您的参与...",
               :target => self,
               :url => "/shops/#{order_transaction.seller.name}")
-    end
+    end unless unhited_answer.blank?
   end
 end

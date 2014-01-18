@@ -21,13 +21,13 @@ class NotificationManager
 
   followTemplate: Handlebars.compile(
     """<div class='noty_message noty_message_follow'>
-          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
-          <span class='noty_text'></span>
-          <div>
-            <div class='noty_close'></div>
-            <a href="{{ url }}" class='btn btn-danger pull-right'>查看对方</a>
-            <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
-          </div>
+        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        <span class='noty_text'></span>
+        <div>
+          <div class='noty_close'></div>
+          <a href="{{ url }}" class='btn btn-danger pull-right'>查看对方</a>
+          <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
+        </div>
       </div>""")
   
   shopFollowTempate: Handlebars.compile(
@@ -56,12 +56,23 @@ class NotificationManager
 
   activityTemplate: Handlebars.compile(
     """<div class='noty_message'>
+        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        <span class='noty_text'></span>
+        <div class='noty_close'></div>
+        <div class='activity' activity-id="{{ target.id }}">
+          <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+          <a href="javascript:void(0)" class='btn btn-danger pull-right preview'>查看</a>
+        </div>
+      </div>""")
+
+  askBuyTemplate: Handlebars.compile(
+   """<div class='noty_message'>
           <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
           <span class='noty_text'></span>
           <div class='noty_close'></div>
-          <div class='activity' activity-id="{{ target.id }}">
+          <div class='ask_buy' ask-buy-id="{{ ask_buy_id }}">
             <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-            <a href="javascript:void(0)" class='btn btn-danger pull-right preview'>查看</a>
+            <a href="javascript:void(0)" class='btn btn-danger pull-right preview '>查看求购</a>
           </div>
       </div>""")
 
@@ -110,7 +121,7 @@ class NotificationManager
     # @client.monitor("/comments/remove", @commonNotify)
 
     #求购 
-    @client.monitor("/answer_ask_buy", @commonNotify)
+    @client.monitor("/answer_ask_buy", @answer_ask_buy)
     @client.monitor("/shops/answer_ask_buy/failer", @commonNotify)
     @client.monitor("/shops/answer_ask_buy/success", @commonNotify)
 
@@ -137,6 +148,14 @@ class NotificationManager
     #退货
     @client.monitor("/order_refunds/create", @commonNotify)    
     @client.monitor("/order_refunds/change_state", @commonNotify)
+
+  answer_ask_buy: (data) =>
+    data.template = $(@askBuyTemplate(data))
+    @commonNotify(data)
+    new AskBuyPreview({
+      el: data.template,
+      login: @current_user_login
+    })
 
   activity: (data) =>
     data.template = $(@activityTemplate(data))

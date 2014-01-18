@@ -4795,7 +4795,14 @@ if (typeof define === "function" && define.amd) {
       };
 
       Event.prototype.on = function(event, callback, context) {
-        return this.addEventListener(event, callback, context);
+        var added, cb_string;
+        cb_string = callback.toString();
+        added = _.any(this._listeners[event], function(handle) {
+          return handle.toString() === cb_string;
+        });
+        if (!added) {
+          return this.addEventListener(event, callback, context);
+        }
       };
 
       Event.prototype.emit = function() {
@@ -5494,9 +5501,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.command('record', info.room);
-                  channel.room = info.room;
-                  channel.setState('open');
-                  return Caramal.MessageManager.emit('channel:new', channel);
+                  return channel.room = info.room;
                 }
               });
             }
@@ -5642,9 +5647,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.command('record', info.room);
-                  channel.room = info.room;
-                  channel.setState('open');
-                  return Caramal.MessageManager.emit('channel:new', channel);
+                  return channel.room = info.room;
                 }
               });
             }
@@ -5774,9 +5777,7 @@ if (typeof define === "function" && define.amd) {
                     channel.command('record', info.room);
                   }
                   channel.room = info.room;
-                  channel.name = info.name;
-                  channel.setState('open');
-                  return Caramal.MessageManager.emit('channel:new', channel);
+                  return channel.name = info.name;
                 }
               });
             }

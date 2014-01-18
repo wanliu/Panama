@@ -342,11 +342,12 @@ class BaseIconView extends Backbone.View
   tagName: 'li'
 
   events:
-    "click " : "showChat"
+    'click '   : "showChat"
+    'mouseout ': 'hideTooltip'
 
   template: Handlebars.compile("""
     <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
-      <span class="badge badge-important message_count"></span>
+      <span class="badge badge-important message_count">0</span>
       {{#if icon}}
         <img src='{{icon}}' alt='{{title}}' />
       {{else}}
@@ -355,14 +356,18 @@ class BaseIconView extends Backbone.View
     </a>""")
 
   initialize: () ->
-    @clearMsgCount()
     @model.icon_view = @
     @setChannel() unless @channel?
 
   render: () ->
     html = @template(@model.attributes)
     $(@el).html(html)
+    @clearMsgCount()
     @
+
+  hideTooltip: (event) ->
+    @$('[data-toggle="tooltip"]').tooltip('hide')
+    event.stopPropagation()
 
   clearMsgCount: () ->
     @msg_count = 0
