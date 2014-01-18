@@ -6,11 +6,13 @@
     <span class='dprice_panel' data-value="<%=transaction.delivery_price %>">
       <%= number_to_currency(transaction.delivery_price) %>
     </span>
+    <% if transaction.operator_state  %>
     <span class='dprice_edit_panel'>
       <input type='text' class='span4' name='delivery_price' value="<%=transaction.delivery_price %>" />
     </span>
     <a href='javascript:void(0)' class='dprice_edit'>
       <i class='icon-edit'></i>
     </a>
+    <% end %>
   </div>
 </div>

@@ -106,6 +106,7 @@ class ShopProductsController < ApplicationController
         :shop_id =>  @shop_product.shop_id,
         :buy_state => :direct
       })
+      
       if @order.save
         format.json{ render :json => @order }
       else
