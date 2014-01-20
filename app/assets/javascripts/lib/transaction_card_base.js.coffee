@@ -32,7 +32,7 @@ class TransactionCardBase extends AbstructStateView
     @transaction.bind("change:state", @change_state, @)
     @transaction.bind("change:stotal", @change_stotal, @)
 
-    @toggleMessage() if @dialogState
+    @initAttachChat() if @dialogState
     @load_realtime()
     super
 
@@ -197,7 +197,7 @@ class TransactionCardBase extends AbstructStateView
     padding = parseInt(wrap.css("padding-top")) + parseInt(wrap.css("padding-bottom"))
     @message_panel.height(total - tm - padding)
 
-  toggleMessage: () ->
+  initAttachChat: () ->
     # @$(".message_wrap", ".transaction-footer").slideToggle()
     @generateToken () =>
       @newAttachChat()

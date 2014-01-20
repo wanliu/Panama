@@ -36,7 +36,7 @@ class TransactionEvent extends Backbone.View
   dispose: () ->
     @model.dispose (data, xhr)  =>
       window.location.href = "#open/#{data.id}/#{@workName}"
-      window.location.reload();
+      # window.location.reload();
 
   change_address: () ->
     @$(".address").html(@model.get("address"))

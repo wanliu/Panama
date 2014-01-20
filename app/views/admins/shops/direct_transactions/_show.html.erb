@@ -2,7 +2,7 @@
   <div class='span7 direct-info'>
     <div id="direct<%=direct_transaction.id %>" class='row-fluid direct transaction' data-value-id="<%=direct_transaction.id %>" state-name='<%=direct_transaction.state.name %>'
       data-token="<%= direct_transaction.temporary_channel.try(:token) %>"
-      data-number="<%= 'DirectTransaction_' + direct_transaction.number %>" >
+      >
       <div class='transaction-header'>
         <div class='avatar'>
           <img src="<%=direct_transaction.buyer.photos.header %>" class='img-polaroid' />

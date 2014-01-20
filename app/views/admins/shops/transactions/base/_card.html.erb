@@ -7,7 +7,7 @@
    state-event-url= "<%= trigger_event_shop_admins_transaction_path(current_shop, transaction) %>"
    url-root="<%=shop_admins_transaction_path(current_shop, transaction)  %>"
    data-token="<%= @transaction.temporary_channel.try(:token) %>"
-   data-number="<%= 'OrderTransaction_' + @transaction.number %>" >
+   >
   <div class="transaction-header">
     <div class="avatar">
       <%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
