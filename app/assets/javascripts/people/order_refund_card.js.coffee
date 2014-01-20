@@ -108,4 +108,6 @@ class OrderRefundCard extends TransactionCardBase
   rdp_panel_elem: () ->
     @$(".rdp_panel")
 
+
 root.OrderRefundCard = OrderRefundCard
+
