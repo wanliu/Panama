@@ -78,6 +78,7 @@ class LoadTopicList extends InfiniteScrollView
     @fetch_url = options.fetch_url
     @add_one = options.add_one
     super options
+    @fetch()
 
 class TopicViewList extends Backbone.View
 

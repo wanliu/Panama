@@ -1743,6 +1743,12 @@ body>.global_chat {
           text-shadow: none;
           color: #dbc2c2;
         }
+
+        ul.dropdown-menu{
+          li.circles{
+            margin: 0px;
+          }
+        }
       }
 
       li.dropdown.open{

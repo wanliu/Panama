@@ -12,7 +12,6 @@ class root.InfiniteScrollView extends Backbone.View
     @search_options = {}
     @msg_tip = '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
     _.extend(@, options)
-    @fetch()
     $(window).scroll(_.bind(@scroll_load, @))
 
   fetch: () ->
