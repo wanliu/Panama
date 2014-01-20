@@ -43,7 +43,6 @@
         </div>
         <div class="modal-footer">
           <div class="big_comments_and_reply">
-
             <div class="comments">
               <% activity.comments.each do |c| %>
               <div class="comment">
@@ -53,6 +52,9 @@
                     <%= c.user.login %>
                   </a>
                 </span>
+                <div class="pull-right">
+                  评论于<%= c.created_at.strftime('%Y-%m-%d %H:%M') %>
+                </div>
                 <div class="message"><%= raw c.content_html %></div>
               </div>
               <% end %>
@@ -129,6 +131,9 @@
     <span class="author-name">
       <a href='/people/<%=current_user.login %>'><%= current_user.login %></a>
     </span>
+    <div class="pull-right">
+      评论于<%%= created_at %>
+    </div>
     <div class="message">
       <%%= content %>
     </div>

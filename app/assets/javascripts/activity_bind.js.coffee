@@ -67,11 +67,14 @@ class ActivityBind extends Backbone.View
       data: {comment: comment}
       type: 'POST'
       dataType: "JSON"
-      success: (data) =>
+      success: (data, xhr, res) =>
+        data.created_at = new Date().format('yyyy-MM-dd hh:mm')
         comment_template = _.template($('#comment-template').html())
-        @$(".comments").append(comment_template(comment))
+        @$(".comments").append(comment_template(data))
         @$(".comments>.comment").last().slideDown("slow")
         @$("textarea",".message").val("")
+      error: (data, xhr, res) =>
+        pnotify(type: 'error', text: "评论失败了～～～")
     )
 
   filter_state: () ->
