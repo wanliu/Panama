@@ -217,9 +217,10 @@ class NotificationManager
     ChatManager.getInstance().removeChatIcon(model)
 
   commonNotify: (data) =>
-    unless data.template?
+    unless data.template? 
       data.template = $(@defaultTemplate(data))
       new DefaultView({ el: data.template})
+
     @addToPlays data, (info) =>
       console.log(info)
       _user_id = info.user.id if info.user?

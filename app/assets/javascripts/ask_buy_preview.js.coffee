@@ -151,6 +151,7 @@ class AskBuyView extends Backbone.View
     false
 
   create_order: (e) ->
+    return false if $(e.currentTarget).hasClass("disabled")
     answer_ask_buy_id = $(e.currentTarget).parents(".report_line").attr("data-value-id")
     $.ajax(
       url: "/answer_ask_buy/"+answer_ask_buy_id+"/create_order",
