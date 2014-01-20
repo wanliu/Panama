@@ -5,7 +5,7 @@ class Shop < ActiveRecord::Base
   include Graphical::Display
   include Tire::Model::Search
   include Tire::Model::Callbacks
-
+  include Tire::Model::UpdateByQuery
   extend FriendlyId
 
   attr_accessible :name, :user, :address, :shop_summary, :address_id,:shop_url,:audit_count

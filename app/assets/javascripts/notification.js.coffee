@@ -159,6 +159,7 @@ class NotificationManager
       el: data.template,
       login: @current_user_login
     })
+    new DefaultView({ el: data.template})
 
   activity: (data) =>
     data.template = $(@activityTemplate(data))
@@ -167,6 +168,7 @@ class NotificationManager
       el: data.template,
       login: @current_user_login
     })
+    new DefaultView({ el: data.template})
 
   circle_invite: (data) =>
     data.template = $(@circleInviteTemplate(data))

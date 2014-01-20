@@ -35,7 +35,7 @@ class Circle < ActiveRecord::Base
   after_create :generate_manage
 
   def all_detail
-    "<h4>分享商圈：<a href='/communities/#{id }/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
+    "<h4>分享商圈：<a href='/communities/#{id}/circles'>#{ name}</h4></a><p>简介：#{ description}</p>"
   end
 
   #若是Shop类型的circle,就可以看出商店名

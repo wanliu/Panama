@@ -15,6 +15,7 @@ class LoadCategoryProducts extends InfiniteScrollView
   initialize: (options) ->
     _.extend(@params, options.params)
     super @params
+    @fetch()
 
   add_one: (c) ->
     template = Hogan.compile($("#category_product-preview-template").html())

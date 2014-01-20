@@ -100,15 +100,6 @@ class AskBuyView extends Backbone.View
     comment = Hogan.compile($("#ask_buy-comment-template").html()).render(data)
     @$(".comments").append(comment)
 
-  # join: () ->
-  #   $.ajax(
-  #     url: "/ask_buy/#{@ask_buy_id}/join",
-  #     type: "POST",
-  #     success: () ->
-  #       pnotify(text: "参与求购成功，等待用户付款！")
-  #     error: (xhr) ->
-  #       pnotify(text: JSON.parse(xhr.responseText).join(""),type: "error")
-  #   )
   
   filter_params: () ->
     $total = @$(".answer_ask_buy_total")
@@ -142,7 +133,7 @@ class AskBuyView extends Backbone.View
         url: @$(".form_answer_ask_buy").attr("action"),
         type: "POST",
         success: () =>
-          pnotify(text: '报价成功!!')
+          pnotify(text: '报价成功,等待买家选择!!')
           @$(".submit_report").addClass("disabled")
           @$(".form_answer_ask_buy input").attr("readonly","readonly")
         error: (data) ->

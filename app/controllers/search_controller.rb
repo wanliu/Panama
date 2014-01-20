@@ -24,12 +24,13 @@ class SearchController < ApplicationController
   end
 
   def circles
+    friend_ids = current_user.circle_all_friends.pluck("user_id")
     @results = circles_search(params[:q][:query]).map do |result|      
       s = result.as_json
       circle = Circle.find(result.id)
       s[:isOwner] = circle.is_owner_people?(current_user)
       s[:isJoin] = circle.is_member?(current_user)
-      s[:friends] = circle.friends.order("created_at desc").limit(4)
+      s[:friends] = circle.friends.where(:user_id => friend_ids).limit(4)
       s[:isSeller] = circle.owner_type == "Shop"
       s
     end
@@ -292,10 +293,21 @@ class SearchController < ApplicationController
         boolean do 
           must do 
             filtered do 
-              filter :query, :query_string => {
-                :query => "login:#{query_val} OR address:#{query_val} OR primitive:#{query_val} OR untouched:#{query_val}*",
-                :default_operator => "AND"
-              }
+              filter :or, :filters => [{
+                :query => {
+                  :query_string => {
+                    :query => "login:#{query_val} OR login.primitive:#{query_val} OR login.untouched:#{query_val}*",
+                    :default_operator => "AND"
+                  }
+                }
+              },{
+                :query => {
+                  :query_string => {
+                    :query => "address:#{query_val} OR address.primitive:#{query_val} OR address.untouched:#{query_val}*",
+                    :default_operator => 'AND'
+                  }
+                }
+              }]
             end
           end
         end
@@ -314,11 +326,23 @@ class SearchController < ApplicationController
       query do 
         boolean do 
           must do 
-            filtered do 
-              filter :query, :query_string => {
-                :query => "name:#{query_val} OR address:#{query_val} OR primitive:#{query_val} OR untouched:#{query_val}*",
-                :default_operator => "AND"
-              }
+            filtered do           
+
+              filter :or, :filters => [{
+                :query => {
+                  :query_string => {
+                    :query => "name:#{query_val} OR name.primitive:#{query_val} OR name.untouched:#{query_val}*",
+                    :default_operator => "AND"
+                  }                  
+                }
+              },{
+                :query =>  {
+                  :query_string => {
+                    :query => "address:#{query_val} OR address.primitive:#{query_val} OR address.untouched:#{query_val}*",
+                    :default_operator => "AND"
+                  }
+                }
+              }]
             end
           end
         end
@@ -337,11 +361,22 @@ class SearchController < ApplicationController
       query do 
         boolean do 
           must do 
-            filtered do 
-              filter :query, :query_string => {
-                :query => "name:#{query_val} OR address:#{query_val} OR primitive:#{query_val} OR untouched:#{query_val}*",
-                :default_operator => "AND"
-              }
+            filtered do               
+              filter :or, :filters => [{
+                :query => {
+                  :query_string => {
+                    :query => "name: #{query_val} OR name.primitive:#{query_val} OR name.untouched:#{query_val}*",
+                    :default_operator => "AND" 
+                  }
+                }
+              },{
+                :query => {
+                  :query_string => {
+                    :query => "address:#{query_val} OR address.primitive:#{query_val} OR address.untouched:#{query_val}*",
+                    :default_operator => "AND"
+                  }
+                }
+              }]
             end
           end
         end
