@@ -3,10 +3,13 @@
     <img class='people-image' src="{{ user_header_url }}">
   </a>
   <span class='author-name'>
-  <a href="/people/{{user_login}}">
-    {{ user_login }}
-  </a>
+    <a href="/people/{{user_login}}">
+      {{ user_login }}
+    </a>
   </span>
+  <div class="pull-right">
+    评论于{{ created_at }}
+  </div>
   <div class="message">
     {{{ content_html }}}
   </div>
