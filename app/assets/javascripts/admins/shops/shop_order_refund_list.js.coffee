@@ -16,7 +16,7 @@ class OrderRefund extends CardItemView
     view = new ShopOrderRefundCard(
       el: @$(".full-mode .order_refund"),
       shop: @shop,
-      dialogState: false
+      dialogState: true
     )
     transaction = view.transaction
     transaction.bind("change:state", @card_change_state, @)
@@ -79,11 +79,11 @@ class root.ShopOrderRefundList extends CardItemListView
 
   realtime_create: (data) ->
     $.ajax(
-      url: "#{@remote_url}/#{data.refund_id}/item",
+      url: "#{@remote_url}/#{data.refund_id}/mini_item",
       success: (html) =>
         @$(".refunds").prepend(html)
         item = @$(".card_item:eq(0)")
-        @add(item)
+        @add_elem(item)
         @table.add(item)
     )
 
