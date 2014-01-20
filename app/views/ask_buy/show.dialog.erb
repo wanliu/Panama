@@ -154,6 +154,9 @@
               <input class="numeric integer span12" name="" readonly=true type="number" value="<%=@ask_buy.amount %>">
             <% end %>
             <div class="modal-footer">
+              <% unless @ask_buy.open %>
+                <span class="label label-important">求购已关闭</span>
+              <% end %>
             </div>
           </div>
         </div>
