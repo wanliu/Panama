@@ -30,6 +30,7 @@ class UserChecking < ActiveRecord::Base
 
   def unchecked
     update_attributes(checked: false)
+    unreject
   end
 
   def unreject

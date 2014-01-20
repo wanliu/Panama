@@ -1,22 +1,26 @@
 <tr class="report_line" data-value-id="<%=answer_ask_buy.id %>">
   <td class="product_item">
-  	<img src="<%=answer_ask_buy.shop_product_icon %>" />
-  	<span><%=answer_ask_buy.shop_product_name %><span>
+    <img src="<%=answer_ask_buy.shop_product_icon %>" />
+    <span><%=answer_ask_buy.shop_product_name %><span>
   </td>
   <td style="width:20%">
-  	<span> ￥<%=answer_ask_buy.price %> x <%=answer_ask_buy.amount %> <span>
+    <span> ￥<%=answer_ask_buy.price %> x <%=answer_ask_buy.amount %> <span>
   </td>
   <td style="width:20%">总计：￥<%=answer_ask_buy.total %></td>
   <td style="width:15%">
-  	<% if answer_ask_buy.ask_buy.open %>
-  		<a href="javascript:void(0)" class="btn btn-danger create_transaction">生成订单</a>
-  	<% else %>
-  		<a href="javascript:void(0)" class="btn btn-danger create_transaction disabled">生成订单</a>
-  	<% end %>
+    <% if answer_ask_buy.ask_buy.open %>
+      <a href="javascript:void(0)" class="btn btn-danger create_transaction">生成订单</a>
+    <% else %>
+      <% if answer_ask_buy.status == 1 %>
+        <a href="javascript:void(0)" class="label label-success disabled">已选择</a>
+      <% else %>
+        <a href="javascript:void(0)" class="label label-info disabled">已关闭</a>
+      <% end %>
+    <% end %>
   </td>
   <td style="width:5%" >
-  	<a href="javascript:void(0)" data-toggle="tooltip" title="<%=answer_ask_buy.user.login %>">
-  		<img style="height:30px;width:30px;" src="<%=answer_ask_buy.user.icon %>"/>
-  	</a>
+    <a href="javascript:void(0)" data-toggle="tooltip" title="<%=answer_ask_buy.user.login %>">
+      <img style="height:30px;width:30px;" src="<%=answer_ask_buy.user.icon %>"/>
+    </a>
   </td>
 </tr>

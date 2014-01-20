@@ -25,21 +25,6 @@
         margin: 0px;
       }
 
-      .like-button, .unlike-button{
-        background-color: #FF0000;
-        background-image: linear-gradient(to bottom, #FF0000, #ff0000);
-      }
-
-      .like-button:hover{
-        background-position: 0 30px;
-        background-color: #FF0000;
-      }
-
-      .unlike-button:hover{
-        background-position: 0 30px;
-        background-color: #FF0000;
-      }
-
       .href_name {
         overflow: hidden; 
         white-space: nowrap; 
@@ -364,4 +349,20 @@
       }
     }
   }
+}
+
+.like-button, .unlike-button, .dialog .like-count, .btn.active{
+  color: white;
+  background-color: #FF0000;
+  background-image: linear-gradient(to bottom, #FF0000, #ff0000);
+}
+
+.like-button:hover{
+  background-position: 0 30px;
+  background-color: #FF0000;
+}
+
+.unlike-button:hover{
+  background-position: 0 30px;
+  background-color: #FF0000;
 }

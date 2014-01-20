@@ -1,4 +1,7 @@
-.info-wrapper{  
+.info-wrapper > div:first-child {
+  margin-left: 20px !important;
+}
+.info-wrapper{ 
   .user_info, .shop_info{
     @include transparent(rgb(51,51,51),0.4);
     margin-bottom: 20px;
