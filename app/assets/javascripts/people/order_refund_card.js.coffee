@@ -103,4 +103,6 @@ class OrderRefundCard extends TransactionCardBase
   delivery_code_val: () ->
     @$("input:text.delivery_code").val()
 
+
 root.OrderRefundCard = OrderRefundCard
+

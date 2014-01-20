@@ -6,8 +6,7 @@
    state-title="<%=transaction.buyer_state_title %>"
    state-event-url= "<%=trigger_event_person_transaction_path(@people, transaction) %>"
    url-root="<%= person_transaction_path(@people, transaction) %>"
-   data-token="<%= @transaction.temporary_channel.try(:token) %>"
-   data-number="<%= 'OrderTransaction_' + @transaction.number %>" >
+   data-token="<%= @transaction.temporary_channel.try(:token) %>" >
   <div class="transaction-header">
     <div class="avatar">
       <%= image_tag seller.photos.header, :class => 'img-polaroid' %>

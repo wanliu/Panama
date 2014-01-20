@@ -182,9 +182,10 @@ class TransactionCardBase extends AbstructStateView
     , 1300
 
   notify: (title, message, type) ->
+    message = message.join("<br />") if _.isArray(message)
     pnotify({
       title: title,
-      text: message.join("<br />"),
+      text: message,
       type: type
     })
 
