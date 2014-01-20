@@ -171,3 +171,4 @@ gem "puma"
 
 gem 'rails_emoji', '~> 1.7.1', :github => "jsw0528/rails_emoji"
 gem "settings", :github => "hysios/settings"
+gem 'newrelic_rpm'
