@@ -7,6 +7,7 @@ class OrderRefundCard extends TransactionCardBase
 
   initialize: () ->
     super
+    @transaction.bind("change:delivery_price", @change_delivery_price, @)
 
   events: {
     "click .refuse_protect" : "toggle_panel"
@@ -72,11 +73,8 @@ class OrderRefundCard extends TransactionCardBase
           url: "#{url}/update_delivery_price",
           type: 'POST',
           data: {delivery_price: price},
-          success: () =>
+          success: (model) =>
             @$rdp_panel.attr('data-value', price)
-            _price = @$rdp_panel.text().trim()
-            _price = _price.replace(_price.substring(1, _price.length), " #{price}")
-            @$rdp_panel.html(_price)
             @$rdp_panel.show()
             @$edit_rdp_panel.hide()
         )
@@ -90,7 +88,7 @@ class OrderRefundCard extends TransactionCardBase
   edit_delivery_price: () ->
     @$input = $("input:text[name='edit_rdprice']")
     price = @$input.val()
-    @$rdp_panel = @$(".rdp_panel")
+    @$rdp_panel = @rdp_panel_elem()
     @$rdp_panel.hide();
     @$edit_rdp_panel = @$(".edit_rdp_panel")
     @$edit_rdp_panel.show();
@@ -101,5 +99,13 @@ class OrderRefundCard extends TransactionCardBase
 
   delivery_code_val: () ->
     @$("input:text.delivery_code").val()
+
+  change_delivery_price: () ->
+    price = @rdp_panel_elem()
+    tag = price.text().trim().substring(0, 1)
+    price.html("#{tag} #{@transaction.get('delivery_price')}")
+
+  rdp_panel_elem: () ->
+    @$(".rdp_panel")
 
 root.OrderRefundCard = OrderRefundCard
