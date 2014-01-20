@@ -53,7 +53,6 @@
       邀请更多人</a>
       <%= render "/communities/invite/new" %>
     <% end %>
-    <!-- <input type='button' value="分享此圈" class='btn shared' /> -->
     <% if @circle.is_member?(current_user.id) %>
       <a href="<%= all_circles_person_communities_path(current_user) %>" data-toggle="modal" class="btn" data-target="#SelectCircle">分享此圈</a>
       <%= render "/communities/circles/select_circle_to_share"%>

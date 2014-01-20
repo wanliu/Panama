@@ -332,6 +332,22 @@ class OrderRefund < ActiveRecord::Base
     if changed.include?("delivery_price")
       unless %w(apply_refund apply_expired apply_failure).include?(state_name.to_s)
         errors.add(:delivery_price, "这状态不能修改运费！")
+      else
+        target = operator.nil? ? seller : operator
+        Notification.dual_notify(target, 
+          :channel => "/#{seller.im_token}/order_refunds/#{id}/change_info",
+          :content => "退货单#{number}更改运费",
+          :url => seller_open_path,
+          :avatar => buyer.photos.icon,
+          :refund_id => id,
+          :target => self,
+          :info => {
+            :delivery_price => delivery_price,
+            :stotal => stotal            
+          }
+        ) do |options|
+          options[:channel] = "/order_refunds/change_info"
+        end
       end
     end
   end

@@ -11,7 +11,7 @@ class OrderRefund extends CardItemView
   }
   initialize: (options) ->
     _.extend(@, options)
-    super
+    super    
 
   get_register_view: () ->
     view = new OrderRefundCard(
@@ -35,6 +35,7 @@ class OrderRefund extends CardItemView
       @model.destroy success: () => @remove()
 
     false
+
 
 class root.OrderRefundList extends CardItemListView
 

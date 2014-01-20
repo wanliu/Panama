@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
 
   after_create :load_initialize_data
 
-  delegate :groups, :jshop, :to => :shop_user
+  delegate :groups, :jshop, :to => :shop_user, :allow_nil => true
 
   after_initialize :init_user_info
 

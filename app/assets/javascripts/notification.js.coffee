@@ -148,6 +148,9 @@ class NotificationManager
     #退货
     @client.monitor("/order_refunds/create", @commonNotify)    
     @client.monitor("/order_refunds/change_state", @commonNotify)
+    @client.monitor("/order_refunds/change_info", @commonNotify)
+
+    @client.monitor("/shops/order_refunds/change_info", @commonNotify)
 
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
@@ -214,9 +217,10 @@ class NotificationManager
     ChatManager.getInstance().removeChatIcon(model)
 
   commonNotify: (data) =>
-    unless data.template?
+    unless data.template? 
       data.template = $(@defaultTemplate(data))
       new DefaultView({ el: data.template})
+
     @addToPlays data, (info) =>
       console.log(info)
       _user_id = info.user.id if info.user?

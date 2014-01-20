@@ -37,7 +37,10 @@ class People::OrderRefundsController < People::BaseController
       @refund.update_attributes(
         :delivery_price => params[:delivery_price])
       if @refund.valid?
-        format.json{ head :no_content }
+        format.json{ render :json => {
+          :delivery_price => @refund.delivery_price,
+          :stotal => @refund.stotal
+        }}
       else
         format.json{ render :json => draw_errors_message(@refund), :status => 403 }
       end

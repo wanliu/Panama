@@ -17,19 +17,22 @@
         </div>
 
         <div class="container-fluid info-header">
-          <div class="trasaction-title">
-            <div class="name">
-              <%= seller.name %>
+          <div class='page-header'>
+            <div class="trasaction-title">
+              <div class="name">
+                <%= seller.name %>
+              </div>
+              <span class='pull-right'>
+                订单编号: <%=refund.order.try(:number) %>
+              </span>
             </div>
-            <span class='pull-right'>
-              订单编号: <%=refund.order.try(:number) %>
-            </span>
-          </div>
-          <div class="transaction-address">
-            <%=seller.address.location %>
+            <div class="transaction-address">
+              <%=seller.address.location %>
+            </div>
           </div>
         </div>
       </div>
+
       <div class="transaction-body">
         <%=render refund.state, :refund => refund %>
         <div class='transaction-actions'>

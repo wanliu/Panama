@@ -10,7 +10,7 @@ class OrderRefund extends CardItemView
 
   initialize: (options) ->
     _.extend(@, options)
-    super
+    super    
 
   get_register_view: () ->
     view = new ShopOrderRefundCard(
@@ -31,6 +31,7 @@ class OrderRefund extends CardItemView
         @card.transaction.get('state_title'))
 
     super
+
 
 class root.ShopOrderRefundList extends CardItemListView
 
@@ -68,17 +69,21 @@ class root.ShopOrderRefundList extends CardItemListView
     @client.monitor "#{@root}/#{id}/change_state", (data) =>
       @change_state(data)
 
+    @client.monitor "#{@root}/#{id}/change_info", (data) =>
+      model = @collection.get data.refund_id
+      model.set(data.info) unless _.isEmpty(model)
+
   destroy: (id) ->
     model = @collection.get(id)
     model.trigger("remove") unless _.isEmpty(model)
 
   realtime_create: (data) ->
     $.ajax(
-      url: "#{@remote_url}/#{data.refund_id}/item",
+      url: "#{@remote_url}/#{data.refund_id}/mini_item",
       success: (html) =>
         @$(".refunds").prepend(html)
         item = @$(".card_item:eq(0)")
-        @add(item)
+        @add_elem(item)
         @table.add(item)
     )
 
