@@ -144,7 +144,7 @@
 			var template = 
 				'<div class="progress progress-mini progress-striped active" style="height: 10px; overflow-y: visible;">' + 
 					'<div class="bar ' + this.barClass + ' progress-bar progress-' + this.barClass + '" style="width: 0%;left: 0%"></div>' + 
-					'<span class="current-badge" style="position: absolute; top: -15px;"></span>' + 
+					'<span class="current-badge" style="position: absolute; top: -23px;"></span>' + 
 					'<span class="state-position badge" style="position: absolute; left: 0%; top: -5px;">0</span>';
 
 			iterSize = this.markers.length;
