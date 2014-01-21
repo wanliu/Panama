@@ -14,12 +14,11 @@ class ShopTransactionCard extends TransactionCardBase
 
   events:
     "click .transaction-actions .btn_event" : "clickAction"
-    "click button.close"      : "closeThis"
-    "click .detail"           : "toggleItemDetail"
-    "click .message-toggle"   : "toggleMessage"
-    "keyup input.delivery_code"    : "filter_delivery_code"
-    "click .dprice_edit"      : "show_dprice_edit"
-    "blur input:text[name=delivery_price]" : "update_dprice"
+    "blur input:text[name=delivery_price]"  : "update_dprice"
+    "click button.close"       : "closeThis"
+    "click .detail"            : "toggleItemDetail"
+    "keyup input.delivery_code": "filter_delivery_code"
+    "click .dprice_edit"       : "show_dprice_edit"
 
   states:
     initial: 'none'
@@ -55,11 +54,6 @@ class ShopTransactionCard extends TransactionCardBase
   initMessagePanel: () ->
   #   @setMessagePanel()
   #   @message_panel.show()
-
-  # toggleMessage: () ->
-  #   @setMessagePanel()
-  #   @message_panel.slideToggle()
-  #   false
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event

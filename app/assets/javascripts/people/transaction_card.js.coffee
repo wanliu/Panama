@@ -16,7 +16,6 @@ class TransactionCard extends TransactionCardBase
     "click .btn_delete"              : "closeThis"
     "click .address-add>button"      : "addAddress"
     "click .item-detail"             : "toggleItemDetail"
-    "click .message-toggle>button"   : "toggleMessage"
     "submit .address-form>form"      : "saveAddress"
     "click .chzn-results>li"         : "hideAddress"
     "keyup .code>input:text"         : "show_transfer_code"
@@ -67,11 +66,6 @@ class TransactionCard extends TransactionCardBase
   initMessagePanel: () ->
     # @setMessagePanel()
     # @message_panel.show()
-
-  # toggleMessage: () ->
-  #   @setMessagePanel()
-  #   @message_panel.slideToggle()
-  #   false
 
   leaveWaitingTransfer: (event, from, to, msg) ->
     @create_transfer_info(event)
@@ -199,7 +193,6 @@ class TransactionCard extends TransactionCardBase
 
   realtime_url: () ->
     "/transactions#{super}"   
-
 
 
 root.TransactionCard = TransactionCard

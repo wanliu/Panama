@@ -232,6 +232,13 @@ zh-CN:
       ask_buy: 求购
       answer_ask_buy: 报价
       product_item: 商品项
+      circle_friends: 商圈
+      following: 关注
+      activities_like: 支持
+      circle: 商圈
+      persistent_channel: 好友 
+      community_notification:  圈子
+
     attributes:
       setting:
         id: 编号
