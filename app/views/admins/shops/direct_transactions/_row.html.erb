@@ -3,9 +3,11 @@
     <ul class='order_header'>
       <li class='actions'>
         <ul>
-          <li>
-            <%= icon :open %>
-            <a href="javascript:void(0)" class='btn btn-primary btn-mini open operator'>打开</a>
+          <%= render :partial => "direct_transactions/operator", :locals => { :operator => row.operator } %>
+          <li>            
+            <a href="javascript:void(0)" class='btn btn-primary btn-mini open operator'>
+              <%= icon :open %>打开
+            </a>
           </li>
           <% if row.operator.nil? %>
           <li>

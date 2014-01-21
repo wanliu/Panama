@@ -67,6 +67,14 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     end
   end
 
+  def operator
+    @operator = current_shop_direct_transaction.operator
+    respond_to do |format|
+      format.html{ 
+        render :partial => "direct_transactions/operator", :locals => {operator: @operator} }
+    end
+  end
+
   private
   def current_shop_direct_transaction
     current_shop.direct_transactions.find(params[:id])

@@ -182,6 +182,7 @@ Panama::Application.routes.draw do
         get :page
         post :generate_token
         get :mini_item
+        get :operator
       end
     end
 
@@ -428,6 +429,7 @@ Panama::Application.routes.draw do
           get :page
           post :generate_token
           get :mini_item
+          get :operator
         end
       end
 

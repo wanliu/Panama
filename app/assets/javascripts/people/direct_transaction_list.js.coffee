@@ -12,6 +12,7 @@ class DirectTransaction extends CardItemView
   initialize: (options) ->
     _.extend(@, options)
     super
+    @model.bind("dispose", _.bind(@dispose, @))
 
   get_register_view: () ->
     view = new DirectTransactionView(
@@ -34,6 +35,13 @@ class DirectTransaction extends CardItemView
 
     false
 
+  dispose: () ->
+    $.ajax(
+      url: "#{@model.url()}/operator",
+      success: (data) =>
+        $(".actions ul", @$header).prepend(data)
+    )
+
 class root.DirectTransactionList extends CardItemListView
 
   initialize: (options) ->
@@ -44,6 +52,7 @@ class root.DirectTransactionList extends CardItemListView
     }
 
     super options
+    @monitor_dispose()
 
 
   add_one: (elem, model) ->
@@ -54,5 +63,11 @@ class root.DirectTransactionList extends CardItemListView
       el: elem
     )
 
+  monitor_dispose: () ->
+    @client.monitor "/direct_transactions/dispose", (data) =>
+      model = @collection.get(data.direct_id)
+      model.trigger("dispose") unless _.isEmpty(model)
+
   reset: () ->
     _.each @$(".directs>.card_item"), (el) => @add_elem el
+

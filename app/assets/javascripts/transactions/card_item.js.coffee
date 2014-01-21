@@ -13,6 +13,7 @@ class root.CardItemView extends Backbone.View
     @model.bind("change:stotal", @change_stotal, @)
     @model.bind("change:register", @register_view, @)
     @register_view()
+    @header = @$(".card_item_header")
 
   remove: () ->
     @card.remove() unless _.isEmpty(@card)

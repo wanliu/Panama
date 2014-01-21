@@ -32,6 +32,12 @@ class DirectTransaction extends CardItemView
 
   undispose: () ->
     @$(".actions .dispose").remove()
+    $.ajax(
+      url: "#{@model.url()}/operator",
+      type: 'GET',
+      success: (data) =>
+        $(".actions ul", @$header).prepend(data)
+    )
 
   dispose: () ->
     $.ajax(

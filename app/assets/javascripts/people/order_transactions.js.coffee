@@ -76,7 +76,7 @@ class TransactionView extends CardItemView
       url: "#{@model.url()}/operator",
       type: 'GET',
       success: (data) =>
-        @$(".actions ul").prepend(data)
+        $(".actions ul", @$header).prepend(data)
     )
 
 
