@@ -238,6 +238,7 @@ zh-CN:
       circle: 商圈
       persistent_channel: 好友 
       community_notification:  圈子
+      address: 地址
 
     attributes:
       setting:
@@ -440,6 +441,14 @@ zh-CN:
         price: 价格
         amount: 数量
         total: 总计
+      address: 
+        province_id: 省份
+        city_id: 城市
+        area_id: 区域
+        road: 街道
+        zip_code: 邮编
+        contact_name: 联系人
+        contact_phone: 联系电话
 
   mongoid:
     models:

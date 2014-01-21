@@ -9,7 +9,7 @@
             <h4><i class="icon-user"></i>个人账户</h4>
           </div>
           <div class='span3'>
-            <div class="isfollowing">
+            <div class="btn-follow">
               <% if current_user.present? %>
                 <% unless @people.id == current_user.id %>
                   <% unless current_user.is_follow_user?(@people.id) %>
@@ -70,7 +70,7 @@
         login: "<%= current_user.login %>",
         people_id: "<%= @people.id %>",
         follow_type: "User",
-        el: $(".isfollowing") })
+        el: $(".people_info .btn-follow") })
       new PeopleSideView({ el: $("#people-sidebar") })
     <% end %>
   })
