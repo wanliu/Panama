@@ -17,14 +17,9 @@
   <%#= javascript_include_tag "faye" %>
 
   <% if defined?(javascripts) && javascripts.respond_to?(:each) %>
-    <% javascripts.each do |script| %>
-      <%= javascript_include_tag script %>
-    <% end %>
-  <% end %>
-
-  <%# 开发环境下显示500错误信息 %>
-  <% unless Rails.env.production? %>
-    <%= javascript_include_tag "show_500_error_in_dev" %>
+    <%# javascripts.each do |script| %>
+      <%#= javascript_include_tag script %>
+    <%# end %>
   <% end %>
 
 
@@ -32,8 +27,6 @@
   <%# More ideas for your <head> here: h5bp.com/d/head-Tips %>
 
   <%# All JavaScript at the bottom, except polyfills %>
-  <%= javascript_include_tag "polyfills" %>
-  <%= render "javascripts" %>
   <%#= stylesheet_link_tag "font-awesome/css/font-awesome.min" %>
   <!--[if IE 7]>
     <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome-ie7.min.css">

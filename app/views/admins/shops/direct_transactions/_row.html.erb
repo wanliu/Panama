@@ -54,7 +54,7 @@
           </li>
         </ul>
       </li>
-      <%= render :partial => "transactions/product_item_vertical", :collection => row.items, :as => :item %>
+      <%= render :partial => "transactions/product_item_vertical", :collection => row.items, :as => :item, :cache => true %>
       <li class='divider'></li>
       <li class='vertical'>
         <ul>
