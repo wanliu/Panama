@@ -2,12 +2,4 @@
   <div class="body tab-content"></div>
 </section>
 
-<script type="text/javascript">
-  $("body").addClass('right-mini');
-  ChatManager.getInstance({ el: $(".right-sidebar .body") });
-  $( window ).resize(function() {
-    $viewportHeight = $(window).height()
-    $( ".right-sidebar .body" ).css("height", $viewportHeight);
-    $( ".right-sidebar .slimScrollDiv" ).css("height", $viewportHeight);
-  });
-</script>
+

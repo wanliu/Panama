@@ -121,17 +121,3 @@
     <button type="button" data-value="auto" class="btn-auto btn btn-transparent btn-small">自&nbsp;动</button>
   </div> -->
 </nav>
-
-<script type="text/javascript">
-  var section = "<%= yield :admin_siderbar %>";
-  if(section != ""){
-    $("#left_sidebar ul li #" + section).parents("li")
-      .addClass("active")
-      .parents(".accordion-body")
-      .addClass("in");
-  }
-
-  // $(function(){
-  //  new LeftSideBar({ el: "#left_sidebar" })
-  // })
-</script>

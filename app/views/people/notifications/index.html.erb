@@ -49,27 +49,3 @@
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-  $(function(){
-    id = ~~paramsFromUrl().id;
-    if (id > 0) {
-      $target = $('.notification_panel').find('[data-id="'+id+'"]');
-      $target.css('background-color', 'rgb(29, 107, 126)');
-    }
-    
-    $(".mark_read").bind("click", function(event){
-      target = $(event.target),
-      current_user = "<%= current_user.login %>",
-      notification = target.parents('.notification_one').attr("data-id"),
-      $.ajax({
-        type: "post",
-        dataType: "json",
-        url: "/people/"+current_user+"/notifications/"+notification+"/mark_as_read",
-        success: function(){
-          target.parents('.notification_one').fadeOut();
-        }
-      })
-    })
-  })
-</script>
