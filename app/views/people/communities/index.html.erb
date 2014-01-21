@@ -49,12 +49,15 @@
 </script>
 
 <script type='text/javascript'>
-  var community = new CommunityView({
-    el: $(".community")
-  })
 
-  community.fetch_circles("<%= person_circles_path(current_user) %>")
   $(function(){
+
+    var community = new CommunityView({
+      el: $(".community")
+    })
+
+    community.fetch_circles("<%= person_circles_path(current_user) %>");
+    
     new CircleCreate({
       el: $(".create_circle"),
       current_user: '<%= current_user.login %>',

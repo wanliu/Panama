@@ -51,13 +51,14 @@
 </script>
 
 <script type='text/javascript'>
-  var community = new CommunityView({
-    el: $(".community")
-  })
-
-  community.fetch_circles("<%= shop_admins_circles_path(current_shop) %>")
-
   $(function(){
+    var community = new CommunityView({
+      el: $(".community")
+    })
+
+    community.fetch_circles("<%= shop_admins_circles_path(current_shop) %>")
+
+
     new CircleCreate({
       el: $(".create_circle"),
       current_shop: '<%= current_shop.name %>',

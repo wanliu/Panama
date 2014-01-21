@@ -151,14 +151,3 @@
     </div>
   </div>
 </nav>
-
-<script type="text/javascript">
-  $(function(argument) {
-    var section = "<%= yield :people_siderbar %>"
-    if (section != "") {
-      $(".people-" + section)
-        .parents("li").addClass("active")
-        .parents(".accordion-body").addClass("in")
-    }
-  })
-</script>
