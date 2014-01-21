@@ -13,7 +13,8 @@ class TransactionView extends CardItemView
   }
   initialize: (options) ->
     _.extend(@, options)
-    super    
+    super 
+    @model.bind("dispose", _.bind(@dispose, @))   
 
   get_register_view: () ->
     view = new TransactionCard({
@@ -30,7 +31,8 @@ class TransactionView extends CardItemView
   card_change_state: () ->
     unless _.isEmpty(@card)
       @set_state(@card.transaction.get("state"))
-      @model.set(state_title: @card.transaction.get("state_title"))
+      @model.set(
+        state_title: @card.transaction.get("state_title"))
 
     super
 
@@ -69,6 +71,14 @@ class TransactionView extends CardItemView
         pnotify(text: ms.join("<br />"), type: "error")
     )
 
+  dispose: () ->
+    $.ajax(
+      url: "#{@model.url()}/operator",
+      type: 'GET',
+      success: (data) =>
+        $(".actions ul", @$header).prepend(data)
+    )
+
 
 class root.OrderTransactions extends CardItemListView
 
@@ -79,6 +89,8 @@ class root.OrderTransactions extends CardItemListView
     }
 
     super options
+
+    @monitor_realtime()
 
   add_one: (elem, model) ->
 
@@ -92,6 +104,11 @@ class root.OrderTransactions extends CardItemListView
     _.each @$(".orders>.card_item"), (el) => 
       @add_elem(el)
 
+
+  monitor_realtime: () ->
+    @client.monitor "/transactions/dispose", (data) =>
+      @dispose(data)
+
   monitor_state: (order_id) ->
     @client.monitor "/transactions/#{order_id}/change_state", (data) =>
       @change_state data
@@ -101,7 +118,7 @@ class root.OrderTransactions extends CardItemListView
 
   change_total: (data) ->
     model = @collection.get(data.order_id)
-    model.set({total: data.stotal}) unless _.isEmpty(model)
+    model.set(data.info) unless _.isEmpty(model)
 
   change_state: (data) ->
     model = @collection.get(data.order_id)
@@ -110,3 +127,7 @@ class root.OrderTransactions extends CardItemListView
         state: data.state,
         event: data.event,
         state_title: data.state_title})
+
+  dispose: (data) ->
+    model = @collection.get(data.order_id)
+    model.trigger("dispose") unless _.isEmpty(model) 

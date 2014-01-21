@@ -42,8 +42,9 @@ class root.ShopOrderRefundList extends CardItemListView
       leftSide: "#left_sidebar",
       spaceName: "refund"      
     }
+    @root = "/#{@shop.token}/order_refunds"
     super options
-    @load_realtime()
+    @bind_realtime()
 
   add_one: (elem, model) ->
     @monitor_state(model.id)
@@ -56,9 +57,7 @@ class root.ShopOrderRefundList extends CardItemListView
   reset: () ->
     _.each @$(".refunds>.card_item"), (el) => @add_elem el
 
-  load_realtime: () ->
-    @root = "/#{@shop.token}/order_refunds"
-
+  bind_realtime: () ->  
     @client.monitor "#{@root}/create", (data) =>
       @realtime_create(data)
 

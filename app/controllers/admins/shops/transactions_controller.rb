@@ -124,6 +124,14 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     end
   end
 
+  def operator
+    @operator = current_shop_order.find(params[:id]).current_operator
+    respond_to do |format|
+      format.html{ 
+        render :partial => "transactions/operator", :locals => {operator: @operator} }
+    end
+  end
+
   private
   def render(*args)
     options = args.extract_options!

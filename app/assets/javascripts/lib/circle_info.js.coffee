@@ -41,20 +41,20 @@ class InviteUserView extends Backbone.View
     return false
 
   search_user: () ->
-    if @$("input.login").length  > 0
+    inputs = @$("input.login")
+    if inputs.length  > 0
       new TypeaheadExtension({
-        el: @$("input.login"),
-        source: "/search/users",
+        el: inputs,
+        source: "/search/all?search_type=users",
         field: "login",
         highlighter: (item) ->
-          "<img class='photo' src='#{item.icon_url}' />#{item.login}"
+          "<img class='photo' src='#{item.photos.icon}' />#{item.login}"
       })
 
 class root.CircleInfoView extends Backbone.View
 
   events:
     "click .shared" : "share_circle"
-    # "click .circle" : "select_circle"
 
   initialize: () ->
     @circle_id = @options.circle_id

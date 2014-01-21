@@ -236,7 +236,8 @@ zh-CN:
       following: 关注
       activities_like: 支持
       circle: 商圈
-      persistent_channel: 好友  
+      persistent_channel: 好友 
+      community_notification:  圈子
 
     attributes:
       setting:
