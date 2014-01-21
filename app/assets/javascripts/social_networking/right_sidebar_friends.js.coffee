@@ -38,7 +38,7 @@ class root.ChatModel extends Backbone.Model
           title: title
         })
       when 3
-        name = @get('name')
+        name = @get('name') || @get('group')
         group = @get('group')
         number = group.substring(group.indexOf('_')+1, group.length)
         title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
@@ -61,7 +61,7 @@ class root.ChatManager extends Backbone.View
     ChatManager.instance ||= new ChatManager(options)
 
   events:
-    'keyup input.filter_key' : 'filterList'
+    'keyup input.filter_key' : 'filterChat'
 
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
@@ -138,11 +138,10 @@ class root.ChatManager extends Backbone.View
     @unprocessed_channels = []
     @collection.fetch(url: "/users/channels")
 
-  filterList: (event) ->
+  filterChat: (event) ->
     keyword = $(event.target).val().trim()
-    @temporarys_view.filterList(keyword)
-    @friends_view.filterList(keyword)
-    @groups_view.filterList(keyword)
+    views = [ @friends_view, @groups_view, @temporarys_view ]
+    _.each views, (view) => view.filterList(keyword)
 
   bindEvent: () ->
     ifvisible.setIdleDuration(60)
@@ -251,13 +250,21 @@ class BaseIconsView extends Backbone.View
       })
       @parent_view.targetView(channel.type).addModel(model)
 
+  filterEmpty: () ->
+    _.each @collection.models, (model) ->
+      $(model.icon_view.el).show()
+
   filterList: (keyword) ->
     pattern = new RegExp(keyword)
-    _.each @collection.models, (model) ->
-      if pattern.test(model.get('name'))
-        $(model.icon_view.el).show()
-      else
-        $(model.icon_view.el).hide()
+    if _.isEmpty(keyword)
+      @filterEmpty()
+    else
+      _.each @collection.models, (model) ->
+        # be sure title is exists
+        if pattern.test(model.get('title'))
+          $(model.icon_view.el).show()
+        else
+          $(model.icon_view.el).hide()
 
   addModel: (model) ->
     exist_model = @parent_view.findExist(model)
@@ -265,7 +272,7 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setAttributes()
-      return pnotify(type: 'error', text: '请求聊天失败，name为空') unless model.get('name')
+      return pnotify(type: 'error', text: '请求聊天失败，token为空') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
@@ -336,6 +343,14 @@ class TemporaryIconsView extends BaseIconsView
     model.icon_view  = temporaryView
     @$(".users-list").append(temporaryView.render().el)
 
+  filterEmpty: () ->
+    _.each @collection.models, (model) ->
+      # 默认显示激活状态的临时聊天头像
+      if model.icon_view.channel.isActive()
+        $(model.icon_view.el).show()
+      else
+        $(model.icon_view.el).hide()
+
 
 class BaseIconView extends Backbone.View
 
@@ -381,6 +396,7 @@ class BaseIconView extends Backbone.View
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
+      $(@el).show()
       # if @channel.isActive()
       if @chat_view && $(@chat_view.el).is(':visible')
         @chat_view.receiveMessage(msg)
@@ -439,6 +455,7 @@ class TemporaryIconView extends BaseIconView
 
   initialize: () ->
     super
+    $(@el).hide()
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('group'), { name: @model.get('name') })
