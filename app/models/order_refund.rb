@@ -348,6 +348,17 @@ class OrderRefund < ActiveRecord::Base
         ) do |options|
           options[:channel] = "/order_refunds/change_info"
         end
+
+        buyer.notify(
+          "/order_refunds/#{id}/change_info",
+          "退货单#{number}更改运费",
+          :persistent => false,
+          :refund_id => id,
+          :info => {
+            :delivery_price => delivery_price,
+            :stotal => stotal  
+          }
+        )
       end
     end
   end

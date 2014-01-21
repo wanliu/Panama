@@ -32,6 +32,12 @@ class DirectTransaction extends CardItemView
 
   undispose: () ->
     @$(".actions .dispose").remove()
+    $.ajax(
+      url: "#{@model.url()}/operator",
+      type: 'GET',
+      success: (data) =>
+        $(".actions ul", @$header).prepend(data)
+    )
 
   dispose: () ->
     $.ajax(
@@ -39,7 +45,7 @@ class DirectTransaction extends CardItemView
       type: "POST",
       dataType: "JSON",      
       success: (data) => 
-        window.location.href = "#open/#{data.direct_id}/direct"
+        window.location.href = "#open/#{data.id}/direct"
         window.location.reload()
     )
 

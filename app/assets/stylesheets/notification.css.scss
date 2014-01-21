@@ -54,3 +54,37 @@
 		}
 	}
 }
+.notification_panel{
+	.circlefriends{
+		background-color: #f89406;
+		padding: 2px 6px 3px;
+	}
+	.following{
+		background-color: blue;
+		padding: 2px 6px 3px;
+	}
+	.circle{
+		background-color: green;
+		padding: 2px 6px 3px;
+	}
+	.activity{
+		background-color: #3a87ad;
+		padding: 2px 6px 3px;
+	}
+	.ordertransaction, .directtransaction{
+		background-color: #b94a48;
+		padding: 2px 6px 3px;
+	}
+	.activitieslike{
+		background-color: red;
+		padding: 0.2em 0.6em 0.3em;
+	}
+	.persistentchannel{
+		background-color: #2DC3BD;
+		padding: 0.2em 0.6em 0.3em;
+	}
+	.answeraskbuy{
+		background-color: #8E14DF;
+		padding: 0.2em 0.6em 0.3em;
+	}
+}

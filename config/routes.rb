@@ -150,6 +150,7 @@ Panama::Application.routes.draw do
         post :generate_token
         get :mini_item
         get :card
+        get :operator
       end
 
       collection do
@@ -181,6 +182,7 @@ Panama::Application.routes.draw do
         get :page
         post :generate_token
         get :mini_item
+        get :operator
       end
     end
 
@@ -427,6 +429,7 @@ Panama::Application.routes.draw do
           get :page
           post :generate_token
           get :mini_item
+          get :operator
         end
       end
 
@@ -468,8 +471,9 @@ Panama::Application.routes.draw do
           get "print", :to => "shops/transactions#print"
           put 'update_delivery_price', :to => "shops/transactions#update_delivery_price"
           post :generate_token
-          get "mini_item"
+          get :mini_item
           get :card
+          get :operator
         end
       end
 

@@ -470,6 +470,13 @@ class OrderTransaction < ActiveRecord::Base
     ) do |options|
       options[:channel] = "/transactions/dispose"
     end
+
+    buyer.notify(
+      "/transactions/dispose",
+      "#{user.login}处理 #{number}订单",
+      :order_id => id,
+      :persistent => false      
+    )
   end
 
   def build_items(item_ar)
@@ -578,6 +585,21 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  def notify_buyer_change
+    Notification.dual_notify(buyer, 
+      :channel => "/transactions/#{id}/change_info",
+      :content => "订单#{number}已经修改运费",
+      :url => buyer_open_path,
+      :info => {
+        :stotal => stotal,
+        :delivery_price => delivery_price
+      },        
+      :order_id => id
+    ) do |options|
+      options[:channel] = "/transactions/change_info"
+    end
+  end
+
   private
   def valid_base_info?
     unless %w(order close).include?(state)
@@ -599,25 +621,7 @@ class OrderTransaction < ActiveRecord::Base
         errors.add(:state, "活动过期不能付款了?")
       end
     end
-  end
-
-  def notify_buyer_change
-    return unless persisted?  
-    if changed.include?("delivery_price")
-      Notification.dual_notify(buyer, 
-        :channel => "/transactions/#{id}/change_info",
-        :content => "订单#{number}已经修改运费",
-        :url => buyer_open_path,
-        :info => {
-          :stotal => stotal,
-          :delivery_price => delivery_price
-        },        
-        :order_id => id
-      ) do |options|
-        options[:channel] = "/transactions/change_info"
-      end
-    end 
-  end
+  end  
 
   def notify_seller_change
     return unless persisted?  
