@@ -42,7 +42,12 @@ class TransactionView extends CardItemView
 
   undispose: () ->
     @$(".actions .dispose").parent().remove()
-
+    $.ajax(
+      url: "#{@model.url()}/operator",
+      type: 'GET',
+      success: (data) =>
+        @$(".actions ul").prepend(data)
+    )
 
 class root.ShopOrderTransactions extends CardItemListView
 
@@ -59,6 +64,7 @@ class root.ShopOrderTransactions extends CardItemListView
 
   add_one: (elem, model) ->
     @monitor_state model.id
+    @monitor_change_info model.id
     new TransactionView(
       model: model,
       el: elem,
@@ -72,6 +78,12 @@ class root.ShopOrderTransactions extends CardItemListView
     @monitor_destroy()
     @client.monitor "/shops/#{@shop.token}/transactions/dispose", (data) =>
       @dispose data
+
+  monitor_change_info: (order_id) ->
+    url = "/#{@shop.token}/transactions/#{order_id}/change_info"
+
+    @client.monitor url, (data) => @change_info(data)
+    @client.monitor "/shops#{url}", (data) => @change_info(data)
 
   monitor_destroy: () ->
     url = "/#{@shop.token}/transactions/destroy"
@@ -106,3 +118,7 @@ class root.ShopOrderTransactions extends CardItemListView
   dispose: (data) ->
     model = @collection.get(data.order_id)
     model.trigger("undispose") unless _.isEmpty(model)
+
+  change_info: (data) ->
+    model = @collection.get(data.order_id)
+    model.set(data.info) unless _.isEmpty(model)

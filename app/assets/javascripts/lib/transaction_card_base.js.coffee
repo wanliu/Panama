@@ -252,10 +252,14 @@ class TransactionCardBase extends AbstructStateView
     @transition.cancel()
 
   change_stotal: () ->
-    total = @$(".stotal")      
-    if total.length > 0
-      tag = total.text().trim().substring(0, 1)
-      total.html("#{tag} #{@transaction.get('stotal')}")
+    @replace_total(@$(".stotal"), @transaction.get('stotal'))
+
+  replace_total: (elem, stotal) ->
+    if elem.length > 0
+      tag = elem.text().trim().substring(0, 1)
+      elem.html("#{tag} #{stotal}")
+
+
 
 exports.TransactionCardBase = TransactionCardBase
 exports

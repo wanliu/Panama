@@ -127,9 +127,7 @@ class ShopTransactionCard extends TransactionCardBase
         data: {delivery_price: new_price},
         type: "PUT",
         success: () =>
-          price = @$dprice_panel.text().trim()
-          price = price.replace(price.substring(1, price.length), " #{new_price}")
-          @$dprice_panel.html(price)
+          @replace_total(@$dprice_panel, new_price)
           @$dprice_panel.show()
           @$dprice_edit_panel.hide()
       )
