@@ -45,7 +45,7 @@ class DirectTransaction extends CardItemView
       type: "POST",
       dataType: "JSON",      
       success: (data) => 
-        window.location.href = "#open/#{data.direct_id}/direct"
+        window.location.href = "#open/#{data.id}/direct"
         window.location.reload()
     )
 
