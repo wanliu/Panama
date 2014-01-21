@@ -218,7 +218,8 @@ zh-CN:
       property: "属性"
       property_item: "属性项"
       price_option: "价格方案"
-      order_transaction: "订单"
+      order_transaction: 订单
+      direct_transaction: 订单
       bank: 银行
       category: 分类
       admin_user: 管理员
