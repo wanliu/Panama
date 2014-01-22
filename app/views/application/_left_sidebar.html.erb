@@ -25,7 +25,7 @@
       </a>
     </li>
     <li>
-      <a href="/communities">
+      <a href="/communities" class="side-communities">
         <i class="icon-group"></i>
         <span class='name'>本地商圈</span>
       </a>
@@ -51,13 +51,3 @@
   </div>
 </nav>
 
-<script type="text/javascript">
-  $(function(){
-    new CategoryTree({el: "#category-sidebar"})
-    new LeftSideBar({el: "#left_sidebar"})
-
-    var side_class = "<%= yield :side_nav %>"
-    $("#side-nav li.active").removeClass("active")
-    $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in")
-  })
-</script>

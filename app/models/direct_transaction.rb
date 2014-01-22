@@ -69,6 +69,13 @@ class DirectTransaction < ActiveRecord::Base
       options[:channel] = "/direct_transactions/dispose"
     end if results
 
+    buyer.notify(
+      "/direct_transactions/dispose",
+      "直接交易订单#{number}被#{user.login}处理了",
+      :persistent => false,
+      :direct_id => id
+    )
+
     results
   end
 

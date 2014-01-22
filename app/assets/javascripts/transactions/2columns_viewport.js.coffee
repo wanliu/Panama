@@ -250,7 +250,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
       error: (data) =>
         try
           ms = JSON.parse(data.responseText)
-          pnotify(text: ms.join("<br />"), type: "error")
+          pnotify(text: ms.join("<br />"), type: "warning")
         catch err
           pnotify(text: data.responseText, type: "error")
         finally
@@ -292,7 +292,7 @@ class MiniRow2ColView  extends Backbone.View
     @openView()
 
   openView: () ->
-    @$operator.removeClass("open").addClass("exit").html("关闭")
+    @$operator.removeClass("open").addClass("exit").html("返回")
     @activeRowView()
     $(window).trigger('enterOrderChat')
 

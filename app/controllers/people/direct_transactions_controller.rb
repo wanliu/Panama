@@ -71,6 +71,14 @@ class People::DirectTransactionsController < People::BaseController
     end
   end
 
+  def operator
+    @operator = current_direct_transaction.operator
+    respond_to do |format|
+      format.html{ 
+        render :partial => "direct_transactions/operator", :locals => {operator: @operator} }
+    end
+  end
+
   private
   def current_direct_transaction
     @people.direct_transactions.find(params[:id])

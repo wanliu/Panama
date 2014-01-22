@@ -218,7 +218,8 @@ zh-CN:
       property: "属性"
       property_item: "属性项"
       price_option: "价格方案"
-      order_transaction: "订单"
+      order_transaction: 订单
+      direct_transaction: 订单
       bank: 银行
       category: 分类
       admin_user: 管理员
@@ -238,6 +239,7 @@ zh-CN:
       circle: 商圈
       persistent_channel: 好友 
       community_notification:  圈子
+      address: 地址
 
     attributes:
       setting:
@@ -440,6 +442,14 @@ zh-CN:
         price: 价格
         amount: 数量
         total: 总计
+      address: 
+        province_id: 省份
+        city_id: 城市
+        area_id: 区域
+        road: 街道
+        zip_code: 邮编
+        contact_name: 联系人
+        contact_phone: 联系电话
 
   mongoid:
     models:

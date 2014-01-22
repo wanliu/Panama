@@ -1,0 +1,7 @@
+<% if operator.present? %>
+<li class='avatar'>
+  <a href="<%=person_path(operator) %>" data-toggle="tooltip" title="<%=operator.login %>在处理这单">
+    <img src="<%=operator.photos.icon %>" alt="<%=operator.login %>" />
+  </a>
+</li>
+<% end %>

@@ -208,6 +208,13 @@ class People::TransactionsController < People::BaseController
     @shop_product = ShopProduct.find(params[:shop_product_id])
   end
 
+  def operator
+    @operator = current_order.find(params[:id]).current_operator
+    respond_to do |format|
+      format.html{ render :partial => "transactions/operator", :locals => {operator: @operator} }
+    end
+  end
+
   def destroy
     @transaction = current_order.find(params[:id])
     authorize! :destroy, @transaction

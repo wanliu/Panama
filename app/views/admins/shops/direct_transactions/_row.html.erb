@@ -3,9 +3,11 @@
     <ul class='order_header'>
       <li class='actions'>
         <ul>
-          <li>
-            <%= icon :open %>
-            <a href="javascript:void(0)" class='btn btn-primary btn-mini open operator'>打开</a>
+          <%= render :partial => "direct_transactions/operator", :locals => { :operator => row.operator } %>
+          <li>            
+            <a href="javascript:void(0)" class='btn btn-primary btn-mini open operator'>
+              <%= icon :open %>打开
+            </a>
           </li>
           <% if row.operator.nil? %>
           <li>
@@ -54,7 +56,7 @@
           </li>
         </ul>
       </li>
-      <%= render :partial => "transactions/product_item_vertical", :collection => row.items, :as => :item %>
+      <%= render :partial => "transactions/product_item_vertical", :collection => row.items, :as => :item, :cache => true %>
       <li class='divider'></li>
       <li class='vertical'>
         <ul>

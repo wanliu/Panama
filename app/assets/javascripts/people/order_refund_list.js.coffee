@@ -48,8 +48,8 @@ class root.OrderRefundList extends CardItemListView
     super options
 
   add_one: (elem, model) ->
-
-    @monitor_state(model.id)
+    @monitor_info model.id
+    @monitor_state model.id
     new OrderRefund(
       model: model,
       el: elem
@@ -62,6 +62,10 @@ class root.OrderRefundList extends CardItemListView
     @client.monitor "/order_refunds/#{id}/change_state", (data) =>
       @change_state(data)
 
+  monitor_info: (id) ->
+    @client.monitor "/order_refunds/#{id}/change_info", (data) =>
+      @change_info(data)
+
   change_state: (data) ->
     model = @collection.get data.refund_id
     unless _.isEmpty(model)
@@ -70,3 +74,8 @@ class root.OrderRefundList extends CardItemListView
         event: data.event,
         state_title: data.state_title
       )
+
+  change_info: (data) ->
+    model = @collection.get data.refund_id
+    model.set(data.info) unless _.isEmpty(model)
+

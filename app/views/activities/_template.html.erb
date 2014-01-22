@@ -38,31 +38,3 @@
   <%=render "circles/template" %>
 </script>
 
-<script type="text/javascript">
-  new ActivityLayoutView({
-    el: '#activities'
-  })
-
-  new ActivityPreview({
-    el: $("#activities"),
-    login: '<%= current_user.login %>'
-  })
-
-  new AskBuyPreview({
-    el: $("#activities"),
-    login: '<%= current_user.login %>'
-  })
-
-  new ShopProductPreview({
-    el: $("#activities")
-  })
-
-  new ProductPreview({
-    el: $("#activities")
-  })
-
-  new CirclePreview({
-    el: $("#activities"),
-    login: '<%= current_user.login %>'
-  })
-</script>

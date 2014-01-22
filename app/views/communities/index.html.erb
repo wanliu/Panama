@@ -1,3 +1,5 @@
+<% side_nav_for 'communities' %>
+
 <div id="set_area_modal" class="modal hide fade detail_city_choice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
       <h3>地区选择</h3>
@@ -52,28 +54,3 @@
   <%= render "users/template" %>
 </script>
 
-<script type="text/javascript">
-	$("#set_area_modal").modal({
-		show: true,
-		keyboard: false,
-		backdrop: "static"
-	});
-
-  $(function() {
-    new NewUsersView({
-      el: $(".base_info")
-    })
-    $(".depend_select>option[value=]").html("--请选择--")
-    
-    $("#set_area_modal #address_province_id").bind("change", function(){
-      $("#set_area_modal .area_list").hide()
-    })
-    $("#set_area_modal #address_city_id").bind("change", function(){
-      $("#set_area_modal .area_list").hide()
-    })
-    $("#set_area_modal #address_area_id").bind("change", function(){
-      $selected = $(this).find("option:selected")
-      window.location.href = "/cities/"+$selected.val()+"/communities"
-    })
-  })
-</script>
