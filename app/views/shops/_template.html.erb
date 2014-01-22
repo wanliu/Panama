@@ -1,5 +1,5 @@
 <div class='shop_info span4'>
-  <div class="hover_place">
+<!--   <div class="hover_place">
     <div class='info_detail' user-id='{{ id }}' >
         <div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
         <div class='userinfo'>
@@ -27,15 +27,29 @@
     <a href="/shops/{{ name }}">
       <img src="{{ photos.header }}" class="avatar" />
     </a>
-  </div>
-  <div  class="content">
+  </div> -->
+  <div class="content">
+    <div class="actions">
+      <a href="javascript:void(0)" class="btn btn-success sayhi">打招呼</a>
+    </div>    
+    <a href="/people/{{ login }}">
+      <img src="{{ photos.header }}" class="avatar header"/>
+    </a>    
+    <div class="realname">
+      <p>{{ower_name }}</p>
+    </div>
     <div class="name">
-      <i class="icon-home"></i>
-      <a href="/shops/{{ name }}" class="title">{{ name }}</a>
+      <!-- <i class="icon-user"></i> -->
+      {{ login }}
     </div>
+
+    <div class="telephone">
+      {{phone}}
+    </div>
+
     <div class="industry">
-      <i class="icon-star"></i>
-      <a href="#">{{ industry_type }}</a>
-    </div>
+      <!-- <i class="icon-star"></i> -->
+      {{ industry_type }}行业&nbsp;卖家
+    </div>    
   </div>
 </div>

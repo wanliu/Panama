@@ -28,19 +28,31 @@
           </div>
         </div>
     </div>
-    <span class="label label-warning pull-right">买家</span>
-    <a href="/people/{{ login }}">
-      <img src="{{ photos.icon }}" class="avatar"/>
-    </a>
+    <!-- <span class="label label-warning pull-right">买家</span> -->
+
   </div>
-  <div  class="content">
+  <div class="content">
+    <div class="actions">
+      <a href="javascript:void(0)" class="btn btn-success sayhi">打招呼</a>
+    </div>
+    <a href="/people/{{ login }}">
+      <img src="{{ photos.header }}" class="avatar header"/>
+    </a>    
+    <div class="realname">
+      <p>{{ower_name }}</p>
+    </div>
     <div class="name">
-      <i class="icon-user"></i>
-      <a href="/people/{{ login }}" class="title">{{ login }}</a>
+      <!-- <i class="icon-user"></i> -->
+      {{ login }}
     </div>
+
+    <div class="telephone">
+      {{phone}}
+    </div>
+
     <div class="industry">
-      <i class="icon-star"></i>
-      <a href="#">{{ industry_type }}</a>
-    </div>
+      <!-- <i class="icon-star"></i> -->
+      {{ industry_type }}行业&nbsp;买家
+    </div>    
   </div>
 </div>

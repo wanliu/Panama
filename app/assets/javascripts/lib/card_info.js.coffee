@@ -1,49 +1,48 @@
 root = window || @
 
-class root.UserCardInfo extends Backbone.View
+
+class CardInfo extends Backbone.View
   events: {
-    "mouseenter" : "show"
-    "mouseleave" : "hide"
+    # "mouseenter" : "show"
+    # "mouseleave" : "hide"
+    "mouseenter" : "showActions"
+    "mouseleave" : "hideActions"
   }
 
   initialize: () ->
     @$detail = @$(".info_detail")
+    @$actions = @$(".actions")
 
   show: (e) ->
     $(".info-wrapper .info_detail").each () -> $(@).hide();     
     $top = e.pageY - $(document).scrollTop();
     $left = e.pageX - $(document).scrollLeft();
     @$detail.css({
-      'left': $left + 10,
-      'top': $top - 10});
-    @$detail.show();
+      'left': $left,
+      'top': $top})
 
-  hide: () ->
-    @$detail.hide();
+    @$detail.show()
 
-  render: () ->
-    @$el
-
-class root.ShopCardInfo extends Backbone.View
-  events: {
-    "mouseenter" : "show"
-    "mouseleave" : "hide"
-  }
-
-  initialize: () ->
-    @$detail = @$(".info_detail")
-
-  show: (e) ->
-    $(".info-wrapper .info_detail").each () -> $(@).hide();     
-    $top = e.pageY - $(document).scrollTop();
-    $left = e.pageX - $(document).scrollLeft();
-    @$detail.css({
-      'left': $left + 10,
-      'top': $top - 10});
-    @$detail.show();
 
   hide: () ->
     @$detail.hide()
 
+  showActions: (e) ->
+    @$actions.animate({
+      top : 85,
+      opacity: 1
+    })
+
+  hideActions: (e) ->
+    @$actions.animate({
+      top:  150,
+      opacity: 0
+    })
+
   render: () ->
     @$el
+
+class root.UserCardInfo extends CardInfo
+
+class root.ShopCardInfo extends CardInfo
+
