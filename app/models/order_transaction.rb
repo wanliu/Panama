@@ -33,6 +33,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
   has_many :transfer_moneys, :as => :owner, dependent: :destroy
+  has_many :transfers, :as => :targeable, dependent: :destroy
 
   has_many  :items,
             class_name: "ProductItem",
@@ -50,13 +51,10 @@ class OrderTransaction < ActiveRecord::Base
 
   validates_presence_of :buyer
   validates_presence_of :seller
-  # validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total, :greater_than_or_equal_to => 1
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
-
-  # accepts_nested_attributes_for :address
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
@@ -69,6 +67,10 @@ class OrderTransaction < ActiveRecord::Base
   after_create do
     state_change_detail
     notice_user
+  end
+
+  before_create do 
+    generate_transfer
   end
 
   after_save do     
@@ -271,6 +273,14 @@ class OrderTransaction < ActiveRecord::Base
     else
       _number
     end
+  end
+
+  def generate_transfer
+    items.each do |item|
+      transfers.create!(
+        :amount => item.amount,        
+        :shop_product => item.shop_product)
+    end    
   end
 
   def transport_type_name

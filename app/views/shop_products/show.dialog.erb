@@ -26,14 +26,14 @@
                   <%= number_to_currency(@shop_product.price) %>
                 </p>
               </div>
-              <!-- <label class="control-label" for="inputEmail">
-                配送费
+              <label class="control-label" for="inputEmail">
+                库存
               </label>
               <div class="controls">
                 <p class="text">
-                  10
+                  <%=@shop_product.inventory %>
                 </p>
-              </div> -->
+              </div>
               <label class="control-label" for="inputEmail">
                 商品评分
               </label>
@@ -74,26 +74,26 @@
         <div class='span12'>
           <ul class="nav nav-tabs">
             <li class="active">
-              <a href="#details" data-toggle="tab">
+              <a href="#details<%=@shop_product.id %>" data-toggle="tab">
                 详细信息
               </a>
             </li>
             <li>
-              <a href="#comment" data-toggle="tab">
+              <a href="#comment<%=@shop_product.id %>" data-toggle="tab">
                 商品评价
               </a>
             </li>
             <li>
-              <a href="#message" data-toggle="tab">
+              <a href="#message<%=@shop_product.id %>" data-toggle="tab">
                 Messages
               </a>
             </li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane active" id="details">
+            <div class="tab-pane active" id="details<%=@shop_product.id %>">
               <p>I'm in Section 1.</p>
             </div>
-            <div class="tab-pane" id="comment">
+            <div class="tab-pane" id="comment<%=@shop_product.id %>">
               <% if @product_comments.present? %>
                 <% @product_comments.each do |c| %>
                   <div class='row-fluid'>
@@ -123,7 +123,7 @@
                 暂时没有评价
               <% end %>
             </div>
-            <div class="tab-pane" id="message">
+            <div class="tab-pane" id="message<%=@shop_product.id %>">
               <p>H3254453.</p>
             </div>
           </div>
@@ -137,7 +137,8 @@
             <input type='radio' name='buy_manner' value='direct' />非担保交易
             <input type='radio' checked name='buy_manner' value='guarantee' />担保交易
           </span>
-          <button type="button" class="btn btn-primary btn-large buy">购买</button>
+          <% class_name = "disabled" if @shop_product.no_inventory?  %>
+          <button type="button" class="btn btn-primary btn-large buy <%=class_name %>">购买</button>
           <%= add_to_my_cart("加入购物车", ".shop_product_#{@shop_product.id} .preview") %>
         </div>
       </div>

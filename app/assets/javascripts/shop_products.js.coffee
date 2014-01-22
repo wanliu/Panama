@@ -91,7 +91,8 @@ class ShopProductToolbar extends Backbone.View
     @login = @options.login
     @shop_product_id = @$el.attr("data-value-id")
     @amount = @$("input.amount")
-    @$cart_el = $(".toolbar .cart")
+    @$cart_el = @$(".toolbar .cart")
+    @$buy_el = @$(".toolbar .buy")
 
   buy: () ->
     state = @buy_manner()
@@ -101,26 +102,32 @@ class ShopProductToolbar extends Backbone.View
       @create_direct_buy()
 
   create_order: () ->
-    $.ajax(
-      url: "/shop_products/#{@shop_product_id}/buy",
-      type: "POST",
-      data: {amount: @amount.val()}
-      success: () =>
-        window.location.href = "/people/#{@login}/transactions"
-      error: (data) ->
-        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
-    )
+    if @$buy_el.hasClass("disabled")
+      pnotify(text: "这商品不能购买,可能没有库存!", type: "warning")
+    else    
+      $.ajax(
+        url: "/shop_products/#{@shop_product_id}/buy",
+        type: "POST",
+        data: {amount: @amount.val()}
+        success: () =>
+          window.location.href = "/people/#{@login}/transactions"
+        error: (data) ->
+          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+      )
 
   create_direct_buy: () ->
-    $.ajax(
-      url: "/shop_products/#{@shop_product_id}/direct_buy",
-      type: "POST",
-      data: {amount: @amount.val()}
-      success: () =>
-        window.location.href = "/people/#{@login}/direct_transactions"
-      error: (data) ->
-        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
-    )
+    if @$buy_el.hasClass("disabled")
+      pnotify(text: "这商品不能购买,可能没有库存!", type: "warning")
+    else
+      $.ajax(
+        url: "/shop_products/#{@shop_product_id}/direct_buy",
+        type: "POST",
+        data: {amount: @amount.val()}
+        success: () =>
+          window.location.href = "/people/#{@login}/direct_transactions"
+        error: (data) ->
+          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+      )
 
   cart: () ->
     form = @form_load_buy_manner()

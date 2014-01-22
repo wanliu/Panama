@@ -57,13 +57,14 @@
                       <h5><%= item.shop.name %></h5>
                     </td>
                     <td>
-                      <%= f.input :amount,
-                        :label => false,
-                        :value => item.amount,
-                        :as => :spinner,
-                        input_html: {
-                          :name => "items[#{item.id}][amount]",
-                          :panel_class => "amount_#{item.id}" } %>
+                      <div>
+                        <input type='number' name="items[<%=item.id %>][amount]" class='amount' value="<%=item.amount %>" min="1" />
+                      </div>
+                      <div>                        
+                        <span class="label label-warning">
+                          库存<%=item.shop_product.inventory %>  
+                        </span>
+                      </div>
                     </td>
                     <td>
                       <input type="hiddden" name="items[<%= item.id %>][price]" value="<%=item.price %>" class="hide"/>
@@ -117,5 +118,7 @@
       el: $('.cart-container'),
       login: "<%= current_user.login %>"
     })
+
+    $( "#spinner" ).spinner()
   })
 </script>

@@ -77,7 +77,7 @@ class ProductItem < ActiveRecord::Base
 
   validate :valid_buyer_self_product?
 
-  after_initialize do
+  before_validation(:on => :create) do
     update_total
   end
 
@@ -99,10 +99,16 @@ class ProductItem < ActiveRecord::Base
     end
   end
 
-  def update_total
+  def update_total    
     unless amount.nil? || price.nil?
       self.total = self.price * self.amount
     end
+  end
+
+  def shop_product
+    ShopProduct.find_by(
+      :shop_id => shop_id, 
+      :product_id => product_id)
   end
 
   def options

@@ -23,7 +23,7 @@ config = YAML::load_file("config/whenever.yml")
 set :output, "~/whenever.log"
 set :environment, config["environment"]
 
-every 2.minutes do
+every 5.minutes do
   runner "OrderTransaction.state_expired"
 end
 
