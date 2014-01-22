@@ -26,7 +26,11 @@ class TransactionStateDetail < ActiveRecord::Base
   def switch_state
     case state
     when "order"
-      DateTime.now + 1.days
+      DateTime.now + 1.day
+    when "waiting_transfer"
+      DateTime.now + 1.day
+    when "waiting_audit_failure"
+      DateTime.now + 2.days
     when "waiting_paid"
       DateTime.now + 2.days
     when "waiting_delivery"
@@ -40,7 +44,7 @@ class TransactionStateDetail < ActiveRecord::Base
     when "complete"
       DateTime.now + 15.days
     when "refund"
-      DateTime.now + 15.days
+      DateTime.now + 15.days    
     else
       self.expired_state = false
       DateTime.now

@@ -10,6 +10,8 @@ class Transfer < ActiveRecord::Base
 
   validate :valid_status?, :on => :create
 
+  validate :valid_modify_ability?
+
   before_validation(:on => :create) do 
     self.status = :wait if status == :invalid    
     change_inventory
@@ -17,6 +19,14 @@ class Transfer < ActiveRecord::Base
 
   before_validation(:on => :update) do 
     change_status
+  end
+
+  def update_success
+    self.update_attributes(:status => :success)
+  end
+
+  def update_failer
+    self.update_attributes(:status => :failer)
   end
 
   private 
@@ -40,6 +50,14 @@ class Transfer < ActiveRecord::Base
   end
 
   def valid_status?   
-    errors.add(:status, "初始化不能使用#{status.name}") if status == :failer
+    errors.add(:status, "初始化不能使用#{status.name}状态") if status == :failer
+  end
+
+  def valid_modify_ability?
+    if persisted?
+      if changed_attributes["status"] == Transfer._get_state_val(:success)
+        errors.add(:status, "该记录已经成功了，不能更改了！")         
+      end
+    end
   end
 end

@@ -121,20 +121,17 @@ class OrderTransaction < ActiveRecord::Base
       transition :waiting_audit_failure => :waiting_audit
     end
 
-    event :back do
-      transition :waiting_paid     => :order,
-                 :waiting_delivery => :waiting_paid,
-                 :waiting_sign     => :waiting_delivery
-    end
-
     #过期事件
     event :expired do
       transition  :order             =>  :close,
+                  :waiting_transfer  =>  :close,
+                  :waiting_audit_failure =>  :close,
                   :waiting_paid      =>  :close,
                   :refund            =>  :close,
                   :complete          =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete
+
     end
 
     #退货事件方式
@@ -208,6 +205,14 @@ class OrderTransaction < ActiveRecord::Base
     #商家发货延时
     after_transition :waiting_delivery => :delivery_failure do |order, transition|
       order.expired_delivery
+    end
+
+    after_transition [:order, :waiting_paid, :waiting_transfer, :waiting_audit_failure] => :close do |order, transition|
+      order.update_transfer_failer
+    end
+
+    after_transition [:waiting_paid, :waiting_audit] => :waiting_delivery do |order, transition|
+      order.update_transfer_success
     end
 
     after_transition :waiting_sign => :complete do |order, transition|
@@ -431,6 +436,14 @@ class OrderTransaction < ActiveRecord::Base
 
   def update_pay_status(status)
     self.update_attribute(:pay_status, status)
+  end
+
+  def update_transfer_success
+    transfers.each{|t| t.update_success }
+  end
+
+  def update_transfer_failer
+    transfers.each{|t| t.update_failer }
   end
 
   def get_delivery_price

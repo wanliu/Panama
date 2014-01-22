@@ -14,7 +14,7 @@ class ShopProduct < ActiveRecord::Base
   belongs_to :product
   has_many :answer_ask_buys, :dependent => :destroy
   has_many :transfers
-  has_many :adjust_transfers, as: :transfers, dependent: :destroy, class_name: "Transfer"
+  has_many :adjust_transfers, as: :targeable, dependent: :destroy, class_name: "Transfer"
 
   validate :valid_shop_and_product_uniq?, :valid_inventory?
 
