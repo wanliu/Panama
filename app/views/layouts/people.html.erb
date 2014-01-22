@@ -6,7 +6,6 @@
   <%= render "chromeframe" %>
   <%= render "logo" %>
   <%= render "people_sidebar" %>
-  <%#= render "left_sidebar" %>
   <div class="wrap">
     <%= render "header" %>
     <div class='content container-fluid'>
@@ -15,10 +14,8 @@
   </div>
   <div id="popup-layout"></div>
   <%= render "right_sidebar" %>
-  <%#= render 'header' %>
   <%= render "footer" %>
   <%= javascript_include_tag "polyfills" %>
-  <%# Javascript at the bottom for fast page loading %>
   <%= render "baidu_analyzer" %>
   <%= javascript_include_tag :people %>
   <%= javascript_include_tag "my_cart" %>  
@@ -37,6 +34,38 @@
 
 
     $(function(){
+      console.log('ready');
+
+
+      // new Upload({
+      //   verify_authenticity_token: "<%= form_authenticity_token %>",
+      //   action: "/users/upload_avatar/",
+      //   current_user: { 
+      //     id: "<%= current_user.id %>", 
+      //     login: "<%= current_user.login %>",
+      //   },
+      //   targets: [{ 
+      //     el: $(".main_panle1"), 
+      //     input_name: "filename", 
+      //     photo: "<%= @people.photo.filename %>" 
+      //   }]
+      // });
+
+
+      // new Upload({
+      //   verify_authenticity_token: "<%= form_authenticity_token %>",
+      //   action: "/user_checkings/upload_photo/",
+      //   current_user: { 
+      //     id: "<%=current_user.id %>", 
+      //     login: "<%= current_user.login %>",
+      //   },
+      //   targets: [{ 
+      //     el: $(".main_panle"), 
+      //     input_name: "ower_photo", 
+      //     photo: "<%= @user_checking.try(:ower_photo) %>"
+      //   }]
+      // })   
+
 
       $("body").addClass('right-mini');
       ChatManager.getInstance({ el: $(".right-sidebar .body") });

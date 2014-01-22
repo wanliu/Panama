@@ -9,10 +9,13 @@
     <div class="paddings">
       <%= render :partial => "people/user_login_info" %>
     </div>
+  </div>
 </div>
 
 <script type="text/javascript">
-  $(".user_info .modify").bind("click",function(){
-    $(".user_info .user_auth").submit();
-  })
+  $(function(){
+    $(".user_info .modify").bind("click",function(){
+      $(".user_info .user_auth").submit();
+    });
+  });
 </script>
