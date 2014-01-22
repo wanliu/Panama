@@ -74,6 +74,10 @@ class OrderTransaction < ActiveRecord::Base
     notify_seller_change
   end
 
+  before_destroy do 
+    update_transfer_failer
+  end
+
   after_commit :create_the_temporary_channel, on: :create
 
   def notice_user

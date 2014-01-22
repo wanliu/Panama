@@ -19,5 +19,11 @@ class OrderRefundItem < ActiveRecord::Base
     self.total = price * amount
   end
 
+  def shop_product
+    ShopProduct.find_by(
+      :product_id => product_id,
+      :shop_id => order_refund.seller.id)
+  end
+
   private
 end

@@ -22,6 +22,7 @@ class DirectTransaction < ActiveRecord::Base
 
   before_validation(:on => :create) do
     generate_number
+    generate_transfer
   end
 
   before_create :init_data
@@ -30,7 +31,7 @@ class DirectTransaction < ActiveRecord::Base
 
   after_destroy :notice_destroy
 
-  after_update :notice_change_state
+  after_update :notice_change_state, :update_transfer
 
   after_commit :create_the_temporary_channel, on: :create
 
@@ -111,6 +112,16 @@ class DirectTransaction < ActiveRecord::Base
     end
   end
 
+  def update_transfer
+    update_transfer_success
+  end
+
+  def update_transfer_success
+    if changed.include?("state") && state == :complete
+      transfers.each{|t| t.update_success }
+    end
+  end
+
   def notice_destroy
     target = operator.nil? ? seller : operator
     Notification.dual_notify(target,
@@ -121,6 +132,14 @@ class DirectTransaction < ActiveRecord::Base
       :direct_id => id,
     ) do |options|
       options[:channel] = "/direct_transactions/destroy"
+    end
+  end
+
+  def generate_transfer
+    items.each do |item|
+      transfers.build(
+        :amount => -item.amount,        
+        :shop_product => item.shop_product)      
     end
   end
 
