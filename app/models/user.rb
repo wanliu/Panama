@@ -118,8 +118,12 @@ class User < ActiveRecord::Base
   end
 
   def money
-    reload
-    read_attribute("money") || 0
+    if persisted?
+      reload
+      read_attribute("money") || 0
+    else
+      0
+    end
   end
 
   def valid_money?(_money)

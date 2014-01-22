@@ -33,7 +33,7 @@ class OrderTransaction < ActiveRecord::Base
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
   has_many :transfer_moneys, :as => :owner, dependent: :destroy
-  has_many :transfers, :as => :targeable, dependent: :destroy
+  has_many :transfers, :as => :targeable, dependent: :destroy, autosave: true
 
   has_many  :items,
             class_name: "ProductItem",
@@ -61,16 +61,13 @@ class OrderTransaction < ActiveRecord::Base
 
   before_validation(:on => :create) do
     update_total_count
-    generate_number
-  end
-
-  after_create do
-    state_change_detail
-    notice_user
-  end
-
-  before_create do 
+    generate_number        
     generate_transfer
+  end
+
+  after_create do    
+    state_change_detail
+    notice_user    
   end
 
   after_save do     
@@ -277,10 +274,10 @@ class OrderTransaction < ActiveRecord::Base
 
   def generate_transfer
     items.each do |item|
-      transfers.create!(
-        :amount => item.amount,        
-        :shop_product => item.shop_product)
-    end    
+      transfers.build(
+        :amount => -item.amount,        
+        :shop_product => item.shop_product)      
+    end
   end
 
   def transport_type_name

@@ -5,26 +5,21 @@ class Transfer < ActiveRecord::Base
   belongs_to :shop_product
 
   acts_as_status :status, [:wait, :success, :failer]
+  validates :targeable, :presence => true
+  validates :shop_product, :presence => true
 
-  validate :valid_product_inventory?, :valid_status?, :on => :create
+  validate :valid_status?, :on => :create
 
-  before_save do 
-    change_status
-  end
-
-  after_create do 
+  before_validation(:on => :create) do 
+    self.status = :wait if status == :invalid    
     change_inventory
   end
 
-  before_validation(:on => :create) do 
-    self.status = :wait if status == :invalid
+  before_validation(:on => :update) do 
+    change_status
   end
 
-  private  
-  def valid_product_inventory?
-    errors.add(:amount, "商品库存不足!") if shop_product.inventory + amount < 0 
-  end
-
+  private 
   def change_inventory
     update_inventory(amount)
   end
@@ -36,9 +31,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def update_inventory(number)
-    unless targeable.is_a?(ShopProduct)
-      shop_product.inventory += number
-      shop_product.save!
+    shop_product.skip_callback_update(number)        
+    unless shop_product.valid?
+      shop_product.errors.messages.each do |key, ms|
+        errors.add("shop_product", ms.join("<br />"))
+      end
     end
   end
 

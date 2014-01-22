@@ -13,6 +13,7 @@ class DirectTransaction < ActiveRecord::Base
 
   has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
+  has_many :transfers, :as => :targeable, dependent: :destroy
   has_one :temporary_channel, as: :targeable, dependent: :destroy
 
   validates :buyer, :presence => true
