@@ -3,7 +3,6 @@ class UserCheckingsController < ApplicationController
   before_filter :login_required
 
   def update_shop_auth
-
     @current_shop = Shop.find(params[:shop_id])
     @user = @current_shop.user
     @shop_auth = ShopAuth.new(params[:shop_auth].merge!(:user_id => @user.id))

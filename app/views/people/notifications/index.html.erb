@@ -32,10 +32,10 @@
                 </li>
               </ul>
               <p class='content'>
+                <%= raw n.content %>
                 <label class="label <%=n.targeable_type.try(:downcase) %>">
                   <%= t("activerecord.models." + n.targeable_type.try(:underscore).to_s) %>
                 </label>
-                <%= raw n.content %>
               </p>
             </li>
           <% end %>
