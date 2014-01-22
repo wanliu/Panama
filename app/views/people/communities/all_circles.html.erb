@@ -16,6 +16,6 @@
       </div>
     <% end %>
   <% else %>
-    <div>你还没有圈子,赶紧去<a href="/shops/<% current_user.try(:shop).try(:name) %>/admins/communities">添加</a>一个吧.....</div>
+    <div>你还没有圈子,赶紧去<a href="/people/<%=current_user.login %>/communities">添加</a>一个吧.....</div>
   <% end %>
 </div>

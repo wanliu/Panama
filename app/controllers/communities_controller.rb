@@ -57,11 +57,11 @@ class CommunitiesController < ApplicationController
 		respond_to do |format|
 			format.html
 			format.json { render  :json =>{ :new_users => @new_users,
-										    :circles => @circles,
-										    :top_10_shops => @top_10_shops,
-										    :city => @city,
-										    :address => @address,
-										    :region => @region }}
+												    :circles => @circles,
+												    :top_10_shops => @top_10_shops,
+												    :city => @city,
+												    :address => @address,
+												    :region => @region }}
 		end
 	end
 

@@ -4,7 +4,7 @@
   <div class='span8 widget shop_info'>
     <%= simple_form_for @shop_auth,
     url: '/user_checkings/update_shop_auth',
-    html: { method: :put, class: "form-horizontal shop_auth" } do |f| %>
+    html: { class: "form-horizontal shop_auth_update" } do |f| %>
       <div class="section">
         <h4>商店信息</h4>
         <hr />
@@ -23,10 +23,8 @@
             </div>
           </div>
           <div class="span7 input_locate">
-            <%= f.simple_fields_for @user_checking.user.shop do |s| %>
-              <%= s.input :name, label: '商店名称' %>
-              <%= s.input :shop_summary, label: '商店简介' %>
-            <% end %>
+            <%= f.input :shop_name, label: '商店名称' %>
+            <%= f.input :shop_summary, label: '商店简介' %>
           </div>
         </div>
       </div>
@@ -105,7 +103,7 @@
           </div>
         </div>
       </div>
-      <input type="submit" class="btn pull-right" value="提交">
+      <input type="submit" class="btn pull-right submit_update" value="提交">
     <% end %>
   </div>
 </div>
@@ -134,6 +132,10 @@
 
   new AddressEditView({
     el: ".address_panels"
+  })
+  new ShopDataView({
+    el: $(".shop_info"),
+    shop_id: '<%=current_shop.id %>'
   })
 
 </script>
