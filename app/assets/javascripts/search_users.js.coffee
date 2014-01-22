@@ -12,6 +12,7 @@ class NewUsersView extends Backbone.View
     @buyer_template = Handlebars.compile($("#buyer_base_template").html())
     @seller_template = Handlebars.compile($("#seller_base_template").html())
     @hot_region_template = Handlebars.compile("<a id='{{ id }}' href='#' class='hot_region_search'>{{ name }}</a>&nbsp;")
+    @$wrapper = @$(".wrapper")
 
   get_hot_regions: () ->
     $.ajax({
@@ -53,7 +54,14 @@ class NewUsersView extends Backbone.View
             model: data
           )          
 
-        @$(".wrapper").append(view.render())
+        @appendToWrapper(view.render());
+
+  appendToWrapper: (el) ->
+
+    if @$wrapper.find(".span4").length % 3 == 0
+      @$row = $("<div class='row-fluid' />").appendTo(@$wrapper)
+
+    @$row.append(el)
 
 
 class FindUserView extends Backbone.View
@@ -99,7 +107,15 @@ class FindUserView extends Backbone.View
             model: data
           )
 
-        @$(".wrapper").append(view.render())
+        @appendToWrapper(view.render());
+
+  appendToWrapper: (el) ->
+
+    if @$wrapper.find(".span4").length % 3 == 0
+      @$row = $("<div class='row-fluid' />").appendTo(@$wrapper)
+
+    @$row.append(el)
+
 
 
 class FindCircleView extends Backbone.View

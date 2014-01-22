@@ -21,13 +21,12 @@ class CommunitiesController < ApplicationController
 
 	def city_index
 		city_ids = city_ids(params[:city_id])
-		# @new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
-		# 												 .where("user_checkings.checked = true and addr.area_id in (?)", city_ids)
-		# 												 .group('user_checkings.id')
-		# 												 .order('created_at DESC')
-		# 												 .limit(15)	
-		@new_users = UserChecking.all
-								 
+		@new_users = UserChecking.joins("left join addresses as addr on addr.id = user_checkings.address_id ")
+														 .where("user_checkings.checked = true and addr.area_id in (?)", city_ids)
+														 .group('user_checkings.id')
+														 .order('created_at DESC')
+														 .limit(30)	
+
 		my_friends = current_user.circle_all_friends.pluck("user_id")
 
 		@circles = Circle.joins("left join circle_friends as cf on circles.id=cf.circle_id left join addresses as addr on addr.area_id = circles.city_id")
