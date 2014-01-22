@@ -40,6 +40,10 @@ class ShopAuth
     false
   end
 
+  def shop_id(id)
+    @shop_id = id 
+  end
+
   def update_options
     options = {}
     ATTR_FIELDS.each do |field|
@@ -55,7 +59,7 @@ class ShopAuth
         value = send(field)
         error = "#{value}已经被注册！请另外选择"
         if field == :shop_name
-          unless Shop.where("name = ?", value).blank?
+          unless Shop.where("name = ? and id<>?", value, @shop_id.to_s).blank?
             errors.add(field, error)
           end
         else

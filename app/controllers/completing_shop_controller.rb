@@ -71,6 +71,7 @@ class CompletingShopController < Wicked::WizardController
   end
 
   def save_license
+    @user_checking.unchecked
     shop_auth_params = params[:shop_auth]
 
     @shop_auth = ShopAuth.new(shop_auth_params.merge(

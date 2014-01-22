@@ -3,14 +3,22 @@ class UserCheckingsController < ApplicationController
   before_filter :login_required
 
   def update_shop_auth
-    shop_auth_params = params[:shop_auth]
-  	@user_checking = current_user.user_checking
-    @shop = current_user.shop
-    @shop.update_attributes(shop_auth_params[:shop])
-    shop_auth_params.delete(:shop)
-    @user_checking.update_attributes(shop_auth_params)
-    @user_checking.unchecked
-  	redirect_to URI::escape("/shops/#{ @shop.name }/admins/shop_info")
+
+    @current_shop = Shop.find(params[:shop_id])
+    @user = @current_shop.user
+    @shop_auth = ShopAuth.new(params[:shop_auth].merge!(:user_id => @user.id))
+    @shop_auth.shop_id(@current_shop.id)
+    respond_to do |format|
+      if @shop_auth.valid?
+        @user_checking =@user.user_checking
+        @current_shop.update_attributes(:name => @shop_auth.shop_name, :shop_summary => @shop_auth.shop_summary)
+        @user_checking.update_attributes(@shop_auth.to_param)
+        @user_checking.unchecked
+        format.json{ render :json => @shop_auth }
+      else
+        format.json{ render :json => draw_errors_message(@shop_auth), :status => 403 }
+      end
+    end
   end
 
   def upload_shop_photo(file)

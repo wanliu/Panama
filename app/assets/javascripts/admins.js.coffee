@@ -38,3 +38,4 @@
 #= require people/community
 #= require lib/banks
 #= require transaction_complete
+#= require admins/shops/shop_data
