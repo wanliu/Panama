@@ -83,7 +83,7 @@ class People::TransactionsController < People::BaseController
           
     respond_to do |format|      
       if my_cart.create_transaction(@people, item_ids)
-        url = person_transactions_path(@people.login)
+        url = cart_transaction_path
         format.js{
           render :js => "window.location.href='#{url}'" }
         format.html{
@@ -291,5 +291,13 @@ class People::TransactionsController < People::BaseController
 
   def base_template_path
     "people/transactions/base"
+  end
+
+  def cart_transaction_path
+    if my_cart.items.map{|item| item.buy_state.name }.include?(:guarantee)
+      person_transactions_path(@people.login)
+    else
+      person_direct_transactions_path(@people.login)
+    end
   end
 end

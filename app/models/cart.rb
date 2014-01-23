@@ -68,7 +68,7 @@ class Cart < ActiveRecord::Base
   def save_transcation(shop, pro_items, people)
     transaction = people.transactions.build(seller_id: shop.id)
     transaction.items = pro_items    
-    state = transaction.save    
+    state = transaction.save  
     errors_build(transaction) unless state        
     state
   end

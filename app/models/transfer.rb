@@ -5,7 +5,7 @@ class Transfer < ActiveRecord::Base
   belongs_to :shop_product
 
   acts_as_status :status, [:wait, :success, :failer]
-  validates :targeable, :presence => true
+  validates :targeable, :presence => true, on: :save
   validates :shop_product, :presence => true
 
   validate :valid_status?, :on => :create
@@ -40,7 +40,7 @@ class Transfer < ActiveRecord::Base
     end
   end
 
-  def update_inventory(number)
+  def update_inventory(number)    
     shop_product.skip_callback_update(number)        
     unless shop_product.valid?
       shop_product.errors.messages.each do |key, ms|        
