@@ -50,14 +50,17 @@ class People::CartController < People::BaseController
   def change_number
     item = my_cart.items.find(params[:id])
     item.amount = params[:amount]
-    item.total = item.price * item.amount
-    item.save
-
-    quantity_total = my_cart.items.sum(:amount)
-    price_total = my_cart.items.sum(:total).to_f
+    item.total = item.price * item.amount   
 
     respond_to do |format|
-      format.json { render json: { quantity_total: quantity_total, price_total: price_total } }
+      if item.save
+        cart_amount = my_cart.items.sum(:amount)
+        cart_total = my_cart.items.sum(:total).to_f
+        format.json { render json: item.as_json.merge(
+        cart: {amount: cart_amount, total: cart_total})  }
+      else
+        format.json{ render :json => draw_errors_message(item), :status => 403 }
+      end
     end
   end
 end

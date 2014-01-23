@@ -43,8 +43,8 @@ class Transfer < ActiveRecord::Base
   def update_inventory(number)
     shop_product.skip_callback_update(number)        
     unless shop_product.valid?
-      shop_product.errors.messages.each do |key, ms|
-        errors.add("shop_product", ms.join("<br />"))
+      shop_product.errors.messages.each do |key, ms|        
+        ms.each{|m| errors.add(:shop_product, m) }
       end
     end
   end

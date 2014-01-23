@@ -124,7 +124,7 @@ class ProductItem < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super.merge merge_photos(options[:photos])
+    attrs = super.merge merge_photos(options[:photos])
   end
 
   def merge_photos(options = nil)
