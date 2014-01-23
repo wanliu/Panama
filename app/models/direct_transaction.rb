@@ -2,7 +2,7 @@
 class DirectTransaction < ActiveRecord::Base
   attr_accessible :buyer_id, :seller_id, :operator
 
-  acts_as_status :state, [:uncomplete, :complete]
+  acts_as_status :state, [:uncomplete, :complete, :close]
 
   scope :uncomplete, where(:state => _get_state_val(:uncomplete))
   scope :completed, where(:state => _get_state_val(:complete))
@@ -38,6 +38,7 @@ class DirectTransaction < ActiveRecord::Base
   def init_data
     self.total = items.inject(0){|s, v|  s = s + (v.amount * v.price) }
     self.state = :uncomplete
+    self.expired_time = DateTime.now + 3.days
   end
 
   def as_json(*args)
@@ -114,11 +115,18 @@ class DirectTransaction < ActiveRecord::Base
 
   def update_transfer
     update_transfer_success
+    update_transfer_failer
   end
 
   def update_transfer_success
     if changed.include?("state") && state == :complete
       transfers.each{|t| t.update_success }
+    end
+  end
+
+  def update_transfer_failer
+    if changed.include?("state") && state == :close
+      transfers.each{|t| t.update_failer }
     end
   end
 
@@ -156,6 +164,12 @@ class DirectTransaction < ActiveRecord::Base
 
   def self.max_id
     select("max(id) as id")[0].try(:id) || 0
+  end
+
+  def self.expired_state
+    uncomplete.where("expired_time <= ?", DateTime.now).each do |t|
+      t.update_attributes(:state, :close)
+    end
   end
 
   def create_the_temporary_channel

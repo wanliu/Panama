@@ -30,3 +30,7 @@ end
 every 5.minutes do
   runner "OrderRefund.state_expired"
 end
+
+every 5.minutes do
+  runner "DirectTransaction.expired_state"
+end
