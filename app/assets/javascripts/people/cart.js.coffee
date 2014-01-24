@@ -6,20 +6,19 @@ exports = window || @
 class CartItemView extends Backbone.View
 
   events: 
-    'click .spinner-up'  : 'countCart'
-    'click .spinner-down': 'countCart'
+    'change input.amount'  : 'countCart'
     'change .check-item' : 'checkItem'
-    "keyup .spinner-input" : "countCart"
 
   initialize: (options) ->
     _.extend(@, options)
     @item_id = $(@el).data('id')
+    @$total = @$(".total")
 
   checkItem: () ->
     @parent.checkItem()
 
   countCart: () ->
-    amount = @$(".spinner-input").val() 
+    amount = @$("input.amount").val() 
     if !_.isEmpty(amount) &&  !isNaN(amount)
       $.ajax({
         type: "post",
@@ -27,8 +26,13 @@ class CartItemView extends Backbone.View
         data : { amount: amount }
         dataType: "json"
       }).success((data, xhr, res) =>
+        @set_total(data.total)
         @parent.countCart()
       )
+
+  set_total: (total) ->
+     tag = @$total.text().trim().substring(0, 1)
+     @$total.html("#{tag} #{total}")
 
 
 class root.CartContainer extends Backbone.View
@@ -45,6 +49,7 @@ class root.CartContainer extends Backbone.View
     _.each @$(".item-tr"), ($item) =>
       new CartItemView({ el: $item, parent: @, login: @login })
     @$('.item-tr .controls').css('margin-left', 0)
+    @$form = @$('form#cartForm')
     @render()
 
   render: () ->
@@ -52,8 +57,21 @@ class root.CartContainer extends Backbone.View
     @checkAll()
 
   submitCart: () ->
-    return pnotify(type: 'error', text: '请勾选要结算的商品') unless @$('.check-item:checked').length > 0
-    @$('form#cartForm')[0].submit()
+    return pnotify(type: 'error', text: '请勾选要结算的商品') unless @$('.check-item:checked').length > 0    
+    $.ajax(
+      url: @$form.attr("action"),
+      type: @$form.attr('method'),
+      data: @$form.serializeHash(),
+      error: (data) =>
+        try
+          ms = JSON.parse(data.responseText)
+          pnotify(text: ms.join("<br />"), type: "error")
+        catch error
+          pnotify(text: data.responseText, type: "error")
+
+    )
+    false
+    
 
   checkItem: () ->
     @countCart()

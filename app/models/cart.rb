@@ -67,15 +67,24 @@ class Cart < ActiveRecord::Base
 
   def save_transcation(shop, pro_items, people)
     transaction = people.transactions.build(seller_id: shop.id)
-    transaction.items = pro_items
-    transaction.save
+    transaction.items = pro_items    
+    state = transaction.save  
+    errors_build(transaction) unless state        
+    state
   end
 
   def create_direct_transaction(shop, pro_items, people)
     transaction = people.direct_transactions.build(seller_id: shop.id)
     transaction.items = pro_items
-    transaction.save
+    state = transaction.save
+    errors_build(transaction) unless state
+    state
   end
 
   private
+  def errors_build(model)
+    model.errors.messages.each do |k, v| 
+      v.each{|e| errors.add(k, e) }      
+    end
+  end
 end

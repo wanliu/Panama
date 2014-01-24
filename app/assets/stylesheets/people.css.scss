@@ -129,6 +129,10 @@
       border-color: $blue;
       @include box-shadow(0 1px 4px rgba(0, 105, 214, 0.25));
     }
+
+    .amount{
+      width: 50px;
+    }
   }
 
   table {

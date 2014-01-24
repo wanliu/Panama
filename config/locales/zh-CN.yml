@@ -718,6 +718,7 @@ zh-CN:
   direct_transaction_state:
     uncomplete: 未完成
     complete: 完成交易
+    close: 关闭
 
   refund_state:
     apply_refund: 申请退货

@@ -2,7 +2,7 @@
 class DirectTransaction < ActiveRecord::Base
   attr_accessible :buyer_id, :seller_id, :operator
 
-  acts_as_status :state, [:uncomplete, :complete]
+  acts_as_status :state, [:uncomplete, :complete, :close]
 
   scope :uncomplete, where(:state => _get_state_val(:uncomplete))
   scope :completed, where(:state => _get_state_val(:complete))
@@ -13,6 +13,7 @@ class DirectTransaction < ActiveRecord::Base
 
   has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
+  has_many :transfers, :as => :targeable
   has_one :temporary_channel, as: :targeable, dependent: :destroy
 
   validates :buyer, :presence => true
@@ -21,21 +22,23 @@ class DirectTransaction < ActiveRecord::Base
 
   before_validation(:on => :create) do
     generate_number
+    generate_transfer
   end
 
   before_create :init_data
 
   after_create :notice_seller
 
-  after_destroy :notice_destroy
+  after_destroy :notice_destroy, :update_transfer_failer
 
-  after_update :notice_change_state
+  after_update :notice_change_state, :update_transfer
 
   after_commit :create_the_temporary_channel, on: :create
 
   def init_data
     self.total = items.inject(0){|s, v|  s = s + (v.amount * v.price) }
     self.state = :uncomplete
+    self.expired_time = DateTime.now + 3.days
   end
 
   def as_json(*args)
@@ -110,6 +113,27 @@ class DirectTransaction < ActiveRecord::Base
     end
   end
 
+  def update_transfer
+    update_transfer_success
+    change_state_update_transfer
+  end
+
+  def update_transfer_success
+    if changed.include?("state") && state == :complete
+      transfers.each{|t| t.update_success }
+    end
+  end
+
+  def change_state_update_transfer
+    if changed.include?("state") && state == :close
+      update_transfer_failer
+    end
+  end
+
+  def update_transfer_failer    
+    transfers.each{|t| t.update_failer }    
+  end
+
   def notice_destroy
     target = operator.nil? ? seller : operator
     Notification.dual_notify(target,
@@ -120,6 +144,14 @@ class DirectTransaction < ActiveRecord::Base
       :direct_id => id,
     ) do |options|
       options[:channel] = "/direct_transactions/destroy"
+    end
+  end
+
+  def generate_transfer
+    items.each do |item|
+      transfers.build(
+        :amount => -item.amount,        
+        :shop_product => item.shop_product)      
     end
   end
 
@@ -136,6 +168,12 @@ class DirectTransaction < ActiveRecord::Base
 
   def self.max_id
     select("max(id) as id")[0].try(:id) || 0
+  end
+
+  def self.expired_state
+    uncomplete.where("expired_time <= ?", DateTime.now).each do |t|
+      t.update_attributes(:state, :close)
+    end
   end
 
   def create_the_temporary_channel
