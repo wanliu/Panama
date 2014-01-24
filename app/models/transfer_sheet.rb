@@ -12,4 +12,8 @@ class TransferSheet < ActiveRecord::Base
   validates :person, presence: true
   validates :order_transaction, presence: true 
   validates :code, presence: true, format: { with: /^\w{6,}$/, message: "请确定汇款单号真实有效" }
+
+  def code_title
+  	code.gsub(/(\w{4})/){ "#{$1} " }
+  end
 end

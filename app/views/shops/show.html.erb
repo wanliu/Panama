@@ -57,3 +57,21 @@
 <script type="text/template" id="shop_products-preview-template">
   <%= render "shop_products/page" %>
 </script>
+
+<script type="text/javascript">
+  $(function(){
+    new ActivityLayoutView({
+      el: '#shop_products'
+    })
+ 
+    new ShopProductList({
+       el: $(".shop_wrap"),
+       shop: {
+         id: <%=@shop.id %>
+       },
+       user: {
+         login: "<%=current_user.login %>"
+       }
+    })
+  })
+</script>

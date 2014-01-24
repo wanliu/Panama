@@ -1,80 +1,110 @@
-<table>
-	<colgroup width="20%"></colgroup>
-	<colgroup width="80%"></colgroup>
-	<tbody>
-		<tr>
-			<td>编号</td>
-			<td><%= @order_transaction.number %></td>
-		</tr>
-		<tr>
-			<td>状态</td>
-			<td><%= @order_transaction.seller_state_title %></td>
-		</tr>
-		<tr>
-			<td>总计项</td>
-			<td><%= @order_transaction.items_count %></td>
-		</tr>
-		<tr>
-			<td>小计</td>
-			<td><%= @order_transaction.total %></td>
-		</tr>
-		<tr>
-			<td>卖家</td>
-			<td><%= @order_transaction.seller.name %></td>
-		</tr>
-		<tr>
-			<td>买家</td>
-			<td><%= @order_transaction.buyer.login %></td>
-		</tr>
-		<tr>
-			<td>创建时间</td>
-			<td><%= @order_transaction.created_at %></td>
-		</tr>
-		<tr>
-			<td>更新时间</td>
-			<td><%= @order_transaction.updated_at %></td>
-		</tr>
-		<tr>
-			<td>收货地址</td>
-			<td><%= @order_transaction.address.location %></td>
-		</tr>
-		<tr>
-			<td>已接单</td>
-			<td><%= @order_transaction.operator_state %></td>
-		</tr>
-		<tr>
-			<td>接单员</td>
-			<td><%= @order_transaction.current_operator.try(:login) || "无" %></td>
-		</tr>
-		<tr>
-			<td>运输方式</td>
-			<td><%= @order_transaction.transport_type_name %></td>
-		</tr>
-		<tr>
-			<td>配送费用</td>
-			<td><%= @order_transaction.delivery_price %></td>
-		</tr>
-		<tr>
-			<td>配送地邮编</td>
-			<td><%= @order_transaction.address.zip_code %></td>
-		</tr>
-		<tr>
-			<td>支付方式</td>
-			<td><%= @order_transaction.pay_type %></td>
-		</tr>
-	</tbody>
-</table>
+<div>
+  <table>
+    <colgroup width="20%"></colgroup>
+    <colgroup width="80%"></colgroup>
+    <tbody>
+      <tr>
+        <td>编号</td>
+        <td><%= @order_transaction.number %></td>
+      </tr>
+      <tr>
+        <td>状态</td>
+        <td><%= @order_transaction.seller_state_title %></td>
+      </tr>
+      <tr>
+        <td>总计项</td>
+        <td><%= @order_transaction.items_count %></td>
+      </tr>
+      <tr>
+        <td>小计</td>
+        <td><%= @order_transaction.total %></td>
+      </tr>
+      <tr>
+        <td>卖家</td>
+        <td><%= @order_transaction.seller.name %></td>
+      </tr>
+      <tr>
+        <td>买家</td>
+        <td><%= @order_transaction.buyer.login %></td>
+      </tr>
+      <tr>
+        <td>创建时间</td>
+        <td><%= @order_transaction.created_at %></td>
+      </tr>
+      <tr>
+        <td>更新时间</td>
+        <td><%= @order_transaction.updated_at %></td>
+      </tr>
+      <tr>
+        <td>收货地址</td>
+        <td><%= @order_transaction.address.location %></td>
+      </tr>
+      <tr>
+        <td>已接单</td>
+        <td><%= @order_transaction.operator_state %></td>
+      </tr>
+      <tr>
+        <td>接单员</td>
+        <td><%= @order_transaction.current_operator.try(:login) || "无" %></td>
+      </tr>
+      <tr>
+        <td>运输方式</td>
+        <td><%= @order_transaction.transport_type_name %></td>
+      </tr>
+      <tr>
+        <td>配送费用</td>
+        <td><%= @order_transaction.delivery_price %></td>
+      </tr>
+      <tr>
+        <td>配送地邮编</td>
+        <td><%= @order_transaction.address.zip_code %></td>
+      </tr>
+      <tr>
+        <td>支付方式</td>
+        <td><%= @order_transaction.pay_type %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<% sheet = @order_transaction.transfer_sheet  %>
+<% if sheet.present? %>
+<div class="panel">
+  <h3>汇款信息</h3>
+  <div class="panel_contents">
+    <div class='attributes_table transfer_sheet'>
+      <table border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+          <tr>
+            <th>汇款人</th>
+            <td><%=sheet.person %></td>
+          </tr>
+          <tr>
+            <th>汇款银行</th>
+            <td>
+              <%=sheet.bank %>
+            </td>
+          </tr>
+          <tr>
+            <th>汇款单号</th>
+            <td class='code'><%=sheet.code_title %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% end %>
 
 <% if @order_transaction.waiting_audit_state? %>
-	<%= button_to "审核通过", { action: :audit } %>
-	<%= button_to "审核未通过", { action: :audit_failure } %>
+  <%= button_to "审核通过", { action: :audit } %>
+  <%= button_to "审核未通过", { action: :audit_failure } %>
 <% end %>
 
 <style type="text/css">
-	form.button_to {
-		display: inline;
-	}
-	form.button_to div {
-		display: inline;
-	}
+  form.button_to {
+    display: inline;
+  }
+  form.button_to div {
+    display: inline;
+  }
 </script>

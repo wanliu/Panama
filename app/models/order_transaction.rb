@@ -555,6 +555,7 @@ class OrderTransaction < ActiveRecord::Base
         options.merge(:order_transaction => self))
     else
       transfer_sheet.update_attributes(options)
+      transfer_sheet
     end
   end
 
