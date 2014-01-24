@@ -13,7 +13,7 @@ class DirectTransaction < ActiveRecord::Base
 
   has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
-  has_many :transfers, :as => :targeable, dependent: :destroy
+  has_many :transfers, :as => :targeable
   has_one :temporary_channel, as: :targeable, dependent: :destroy
 
   validates :buyer, :presence => true
@@ -115,7 +115,7 @@ class DirectTransaction < ActiveRecord::Base
 
   def update_transfer
     update_transfer_success
-    update_transfer_failer
+    change_state_update_transfer
   end
 
   def update_transfer_success
@@ -124,10 +124,14 @@ class DirectTransaction < ActiveRecord::Base
     end
   end
 
-  def update_transfer_failer
+  def change_state_update_transfer
     if changed.include?("state") && state == :close
-      transfers.each{|t| t.update_failer }
+      update_transfer_failer
     end
+  end
+
+  def update_transfer_failer    
+    transfers.each{|t| t.update_failer }    
   end
 
   def notice_destroy

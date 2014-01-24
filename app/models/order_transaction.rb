@@ -32,8 +32,8 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
-  has_many :transfer_moneys, :as => :owner, dependent: :destroy
-  has_many :transfers, :as => :targeable, dependent: :destroy, autosave: true
+  has_many :transfer_moneys, :as => :owner
+  has_many :transfers, :as => :targeable, autosave: true
 
   has_many  :items,
             class_name: "ProductItem",
