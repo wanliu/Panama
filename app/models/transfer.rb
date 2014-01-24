@@ -1,6 +1,9 @@
 class Transfer < ActiveRecord::Base
   attr_accessible :amount, :shop_product, :status, :targeable_id, :targeable_type, :shop_product_id
 
+  scope :failers, -> { where(:status => _get_state_val(:failer)) }
+  scope :completed, -> { where("status<>?", _get_state_val(:failer)) }
+
   belongs_to :targeable, :polymorphic => true
   belongs_to :shop_product
 
@@ -10,14 +13,18 @@ class Transfer < ActiveRecord::Base
 
   validate :valid_status?, :on => :create
 
-  validate :valid_modify_ability?
+  validate :valid_invalid_status?, :valid_modify_ability?, :valid_create_inventory?
+  validate :valid_update_inventory?, :on => :update
 
   before_validation(:on => :create) do 
     self.status = :wait if status == :invalid    
+  end
+
+  after_create do 
     change_inventory
   end
 
-  before_validation(:on => :update) do 
+  after_update do
     change_status
   end
 
@@ -42,21 +49,43 @@ class Transfer < ActiveRecord::Base
 
   def update_inventory(number)    
     shop_product.skip_callback_update(number)        
-    unless shop_product.valid?
-      shop_product.errors.messages.each do |key, ms|        
-        ms.each{|m| errors.add(:shop_product, m) }
-      end
+    raise shop_product.errors.messages unless shop_product.valid?
+  end
+
+  def valid_status? 
+    if status == :failer 
+      errors.add(:status, "初始化不能使用#{status.name}状态") 
     end
   end
 
-  def valid_status?   
-    errors.add(:status, "初始化不能使用#{status.name}状态") if status == :failer
+  def valid_invalid_status?
+    if status == :invalid
+      errors.add(:status, "不能使用#{status.name}状态") 
+    end
   end
 
   def valid_modify_ability?
     if persisted?
       if changed_attributes["status"] == Transfer._get_state_val(:success)
         errors.add(:status, "该记录已经成功了，不能更改了！")         
+      end
+    end
+  end
+
+  def valid_create_inventory?
+    if shop_product.present?
+      inventory = shop_product.inventory
+      if (inventory + amount) < 0
+        errors.add(:shop_product, "#{shop_product.name}库存不足！")
+      end
+    end
+  end
+
+  def valid_update_inventory?
+    if status == :failer 
+      inventory = shop_product.inventory
+      if (inventory + -amount) < 0
+        errors.add(:shop_product, "#{shop_product.name}库存不足！")
       end
     end
   end

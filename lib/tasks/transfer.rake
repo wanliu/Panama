@@ -3,8 +3,6 @@
 namespace :transfer do 
   desc "重新统计库存"
   task :init => :environment do 
-    ShopProduct.all.each do |s|
-      s.update_column(:inventory, s.transfers.sum(:amount))
-    end
+    ShopProduct.all.each{|s| s.recount_inventory }
   end
 end

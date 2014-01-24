@@ -101,8 +101,12 @@ class ShopProduct < ActiveRecord::Base
   end
 
   def skip_callback_update(amount)
-    self.inventory += amount    
+    self.inventory += amount 
     self.update_column(:inventory, inventory) if valid?
+  end
+
+  def recount_inventory
+    self.update_column(:inventory, transfers.completed.sum(:amount))
   end
 
   private

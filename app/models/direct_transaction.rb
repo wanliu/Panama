@@ -29,7 +29,7 @@ class DirectTransaction < ActiveRecord::Base
 
   after_create :notice_seller
 
-  after_destroy :notice_destroy
+  after_destroy :notice_destroy, :update_transfer_failer
 
   after_update :notice_change_state, :update_transfer
 
