@@ -3,6 +3,7 @@
 //= require jquery_ujs
 //= require lib/jquery.resize
 //= require lib/underscore
+//= require notify_dispose_state
 //= require backbone
 //= require twitter/bootstrap
 //= require h5bp

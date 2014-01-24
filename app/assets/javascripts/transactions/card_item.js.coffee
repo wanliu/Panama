@@ -61,6 +61,7 @@ class root.CardItemListView extends Backbone.View
     @client = window.clients
     @reset()
     @load_table_list()
+    @bind_notify_state()
 
   _add_one: (model) ->
     elem = model.get("elem")    
@@ -87,6 +88,7 @@ class root.CardItemListView extends Backbone.View
       el: @$(".wrap_list"),
       remote_url: @remote_url,
       registerView: (view) =>  
+        @set_type_state(view.model.id)
         state = view.model.get("fetch_state")
         delete view.model.attributes.fetch_state
         @add_elem(view.$el) if state? && state                   
@@ -94,9 +96,9 @@ class root.CardItemListView extends Backbone.View
         @register(view.model.id)
     }, @columns_options))
 
-  open_on: (callback = () ->) ->    
-    @table.route.on "route:open", () =>
-      callback.call(@)
+  open_on: (callback = (id) ->) ->    
+    @table.route.on "route:open", (id) =>
+      callback.call(@, id)
 
   home_on: (callback = () ->) ->
     @table.route.on "route:home", () =>
@@ -106,4 +108,13 @@ class root.CardItemListView extends Backbone.View
     @$el.hide()
 
   show: () ->
-    @$el.show()    
+    @$el.show()
+
+  bind_notify_state: () ->
+    @open_on (id) -> @set_type_state(id)
+    @home_on () -> @set_type_state(null)        
+
+  set_type_state: (value) ->
+    notifyDisposeState.setTypeValue(@table.spaceName, value)
+    
+
