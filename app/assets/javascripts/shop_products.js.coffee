@@ -37,15 +37,15 @@ class ShopProductView extends Backbone.View
   unmodal: () ->
     $("body").removeClass("noScroll")
 
-  close: () ->
+  close: () ->    
+    @remove()
     @unmodal()
 
 class ShopProductPreview extends Backbone.View
 
   events:
     "click .shop_product .preview"    : "launchShopProduct",
-    "click .shop_product .buy"        : "launchShopProduct",
-    #"click .shop_product .buy"        : "buy"
+    "click .shop_product .buy"        : "launchShopProduct"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -59,22 +59,6 @@ class ShopProductPreview extends Backbone.View
     })
     view.modal()
     false
-
-  buy: (event) ->
-    @load_view(event.currentTarget)
-    try
-      $.ajax(
-        url: "/shop_products/#{@model.id}/direct_buy",
-        type: "POST",
-        data: {amount: 1}
-        success: (data) =>
-          window.location.href = "/people/#{data.buyer_login}/transactions"
-        error: (data) ->
-          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
-      )
-      false
-    catch error
-      false
 
   load_view: (target) ->
     @$el = @el = $(target).parents(".shop_product")
