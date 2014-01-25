@@ -237,13 +237,13 @@ ul {
   }
 }
 
-.page-header {
+.page-header{
 
 	margin: 15px 0 0px;
 	border: none;
 
 	.navbar{
-		.navbar-inner {
+		.navbar-inner{
 			background: transparent;
 			@include transparent(rgb(0,0,0), 0.0);
 			@include box-shadow(none);
@@ -252,7 +252,7 @@ ul {
 				font-size: 18px;
 			}
 
-			.nav>li .count {
+			.nav>li .count{
 				position: absolute;
 				bottom: 2px;
 				/*right: 2px;*/
@@ -1734,10 +1734,10 @@ body>.global_chat {
   .navbar-search{
     .chose_condition{
       margin-right: 0px;
+      @include transparent(rgb(51, 51, 51), 0.4);
 
       li.dropdown{
         a.dropdown-toggle{
-          background-color: rgba(51, 51, 51, 0.4);
           padding: 4px;
           font-size: 12px;
           text-shadow: none;
@@ -1749,10 +1749,6 @@ body>.global_chat {
             margin: 0px;
           }
         }
-      }
-
-      li.dropdown.open{
-        background-color: rgba(51, 51, 51, 0.4);
       }
     }
   }
