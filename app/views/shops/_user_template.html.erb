@@ -1,0 +1,55 @@
+<div class='shop_info span4'>
+<!--   <div class="hover_place">
+    <div class='info_detail' user-id='{{ id }}' >
+        <div class="bg_nature"><img src="http://lorempixel.com/240/150/nature" /></div>
+        <div class='userinfo'>
+          <div class="circle_avatar">
+            <img src='{{ photos.icon }}', class="author" />
+          </div>
+          <div class="shop_name">
+            <a href="/shops/{{ name }}">{{ name }}</a>
+          </div>
+          <div class="industry_type">
+            <span>行业：{{ industry_type }} </span>
+          </div>
+          <div class="tel">
+            <span>联系方式：{{ phone }}</span>
+          </div>
+          <div class="entry">
+            <button><a href="/shops/{{ name }}">进入商铺</a></button>
+          </div>
+          <div class="contact">
+            <a href="#"><i class="icon-leaf"></i></a>
+          </div>
+        </div>
+    </div>
+    <span class="label label-important pull-right">卖家</span>
+    <a href="/shops/{{ name }}">
+      <img src="{{ photos.header }}" class="avatar" />
+    </a>
+  </div> -->
+  <div class="content">
+    <div class="actions">
+      <a href="javascript:void(0)" class="btn btn-success sayhi">打招呼</a>
+    </div>    
+    <a href="/people/{{ login }}">
+      <img src="{{ photos.header }}" class="avatar header"/>
+    </a>    
+    <div class="realname">
+      <p>{{ower_name }}</p>
+    </div>
+    <div class="name">
+      <!-- <i class="icon-user"></i> -->
+      {{ login }}
+    </div>
+
+    <div class="telephone">
+      {{phone}}
+    </div>
+
+    <div class="industry">
+      <!-- <i class="icon-star"></i> -->
+      {{ industry_type }}行业&nbsp;卖家
+    </div>    
+  </div>
+</div>
