@@ -16,6 +16,9 @@ class ShopProduct < ActiveRecord::Base
   has_many :transfers
   has_many :adjust_transfers, as: :targeable, dependent: :destroy, class_name: "Transfer"
 
+  validates :price, :numericality => { :greater_than => 0, :less_than => 9999999 }, :presence => true
+  validates :inventory, :numericality => { :greater_than_or_equal_to => 0, :less_than => 9999999 }, :presence => true
+
   validate :valid_shop_and_product_uniq?, :valid_inventory?
 
   after_destroy do

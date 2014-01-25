@@ -31,7 +31,7 @@ class Activity < ActiveRecord::Base
   has_many :participates, :through => :activities_participates, :source => :user
   has_one :temporary_channel, :as => :targeable
   # validates_associated :product
-  validates :price, :numericality => { :greater_than => 0 }, :presence => true
+  validates :price, :numericality => { :greater_than => 0, :less_than => 9999999 }, :presence => true
   validates :author, :title, :start_time, :end_time, :shop_product_id, :presence => true
 
   validate :validate_update_access?, :on => :update, :except => :update_like
