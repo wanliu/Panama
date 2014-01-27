@@ -9,9 +9,9 @@ namespace :user do
 
   desc "sync user following channels"
   task :channels => :environment do
-    host = Settings.defaults['rabbitmq']['host']
+    # host = Settings.defaults['rabbitmq']['host']
 
-    conn = Bunny.new(:hostname => host)
+    conn = Bunny.new(:hostname => "localhost")
     conn.start
 
     ch = conn.create_channel
@@ -25,7 +25,8 @@ namespace :user do
             role = "Owner"
           end
         end
-        { name: channel.name, type: channel.channel_type, role: role}
+        channel_id = channel.channel_id
+        { name: channel_id, type: channel.channel_type, role: role}
       end
 
       info = {
@@ -45,7 +46,8 @@ namespace :user do
     targets = [ Activity, OrderTransaction, DirectTransaction ]
     targets.each do |target|
       target.all.each do |o|
-        name = o.class.to_s << "_" << o.number 
+        # name = o.class.to_s << "_" << o.number 
+        channel_id = o.channel_id
         o.create_temporary_channel(targeable_type: o.class.to_s, user_id: o.seller.owner.id, name: name)
         # o.send('create_the_temporary_channel')
       end

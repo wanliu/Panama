@@ -32,6 +32,7 @@ class UsersController < ApplicationController
 
   def channels
     @channels = current_user.persistent_channels.map do |c| {
+      channel: c.channel_id,
       login: c.name,
       icon: c.icon,
       follow_type: c.channel_type }

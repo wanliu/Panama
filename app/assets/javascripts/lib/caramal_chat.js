@@ -5059,8 +5059,6 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype.commands = ['open', 'join', 'close'];
 
-      Channel.nextId = 0;
-
       /**
        * 管理器对象
        * @type {Caramal.ClientMessageManager}
@@ -5080,7 +5078,6 @@ if (typeof define === "function" && define.amd) {
         var manager;
         this.options = options != null ? options : {};
         Channel.__super__.constructor.apply(this, arguments);
-        this.id = Channel.nextId++;
         this.unreadMsgCount = 0;
         /**
          * 消息缓存区
@@ -5397,7 +5394,8 @@ if (typeof define === "function" && define.amd) {
         this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
-          user: this.channel.user
+          user: this.channel.user,
+          group: this.channel.id
         });
       });
 
@@ -5413,8 +5411,8 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      function Chat(user, options) {
-        this.user = user;
+      function Chat(id, options) {
+        this.id = id;
         this.options = options;
         Chat.__super__.constructor.call(this, this.options);
       }
@@ -5467,23 +5465,23 @@ if (typeof define === "function" && define.amd) {
         });
       };
 
-      Chat.create = function(user, options) {
+      Chat.create = function(id, options) {
         var manager;
         if (options == null) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        return manager.addNamedChannel(user, new Chat(user, options));
+        return manager.addNamedChannel(id, new Chat(id, options));
       };
 
-      Chat.of = function(user, options) {
+      Chat.of = function(id, options) {
         var chat, manager;
         if (options == null) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        chat = manager.nameOfChannel(user);
-        return chat || this.create(user, options);
+        chat = manager.nameOfChannel(id);
+        return chat || this.create(id, options);
       };
 
       return Chat;
@@ -5584,8 +5582,8 @@ if (typeof define === "function" && define.amd) {
         return this.channel.room = room;
       });
 
-      function Group(group, options) {
-        this.group = group;
+      function Group(id, options) {
+        this.id = id;
         this.options = options;
         Group.__super__.constructor.call(this, this.options);
       }
@@ -5613,23 +5611,23 @@ if (typeof define === "function" && define.amd) {
         return this.socket.emit('chat', msg);
       };
 
-      Group.create = function(group, options) {
+      Group.create = function(id, options) {
         var manager;
         if (options == null) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        return manager.addNamedChannel(group, new Group(group, options));
+        return manager.addNamedChannel(id, new Group(id, options));
       };
 
-      Group.of = function(group, options) {
+      Group.of = function(id, options) {
         var channel, manager;
         if (options == null) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        channel = manager.nameOfChannel(group);
-        return channel || this.create(group, options);
+        channel = manager.nameOfChannel(id);
+        return channel || this.create(id, options);
       };
 
       return Group;

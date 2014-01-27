@@ -1,8 +1,22 @@
 class PersistentChannel < ActiveRecord::Base
   # attr_accessible :title, :body
   belongs_to :user
+  has_one :channel, as: :target
+
+  before_create do
+    create_channel(name: name)
+  end
 
   # delegate :icon, :to => :user
+
+  def channel_id
+    if channel.blank?
+      create_channel(name: name)
+      channel.id
+    else
+      channel.id
+    end
+  end
 
   after_create do
     # TODO： system avatar
@@ -20,7 +34,9 @@ class PersistentChannel < ActiveRecord::Base
         role = "Owner"
       end
     end
-    CaramalClient.create_persistent_channel(name, user.login, channel_type, role)
+
+    channel_id = channel.id
+    CaramalClient.create_persistent_channel(channel_id, user.login, channel_type, role)
   end
 
   after_destroy do
@@ -31,6 +47,7 @@ class PersistentChannel < ActiveRecord::Base
       user.notify('/friends/remove_quan', "已经从好友列表移除商圈 #{name}", :avatar => icon, :group_name => name, :target => self, :url => "/communities")
     end
 
-    CaramalClient.remove_persistent_channel(name, user.login, channel_type)
+    channel_id = channel.id
+    CaramalClient.remove_persistent_channel(channel_id, user.login, channel_type)
   end
 end
