@@ -4795,14 +4795,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Event.prototype.on = function(event, callback, context) {
-        var added, cb_string;
-        cb_string = callback.toString();
-        added = _.any(this._listeners[event], function(handle) {
-          return handle.toString() === cb_string;
-        });
-        if (!added) {
-          return this.addEventListener(event, callback, context);
-        }
+        return this.addEventListener(event, callback, context);
       };
 
       Event.prototype.emit = function() {
@@ -4899,6 +4892,7 @@ if (typeof define === "function" && define.amd) {
       __extends(ClientMessageManager, _super);
 
       function ClientMessageManager(client) {
+        var _this = this;
         this.client = client;
         ClientMessageManager.__super__.constructor.apply(this, arguments);
         this.message_dispatchs = {};
@@ -4907,6 +4901,9 @@ if (typeof define === "function" && define.amd) {
         if (this.client == null) {
           return;
         }
+        this.client.on('connect', function() {
+          return _this.clent.emit('get-unread', {}, _this.setUnreadMsg);
+        });
         this.bind();
       }
 
@@ -4933,9 +4930,17 @@ if (typeof define === "function" && define.amd) {
             return _this.onError(e);
           }
         });
-        return this.client.on('chat', function(data) {
+        this.client.on('chat', function(data) {
           return _this.dispatch_process('message', data);
         });
+        return this.client.emit('get-unread', {}, function(err, unreadMsgs) {
+          return _this.setUnreadMsg(err, unreadMsgs);
+        });
+      };
+
+      ClientMessageManager.prototype.setUnreadMsg = function(err, unreadMsgs) {
+        this.unreadMsgs = unreadMsgs;
+        return this.emit('resetUnreadMsgs', {});
       };
 
       ClientMessageManager.prototype.dispatch_process = function(name, data) {
@@ -5076,6 +5081,7 @@ if (typeof define === "function" && define.amd) {
         this.options = options != null ? options : {};
         Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
+        this.unreadMsgCount = 0;
         /**
          * 消息缓存区
          * @type {Array}
@@ -5113,6 +5119,11 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype.setState = function(_state) {
         this._state = _state;
+      };
+
+      Channel.prototype.setUnreadMsgCount = function() {
+        this.unreadMsgCount = this.manager.unreadMsgs && this.manager.unreadMsgs[this.group] ? this.manager.unreadMsgs[this.group] : 0;
+        return this.emit('unreadMsgsSeted', {});
       };
 
       Channel.prototype.getState = function() {
@@ -5213,7 +5224,11 @@ if (typeof define === "function" && define.amd) {
 
 
       Channel.prototype.setManager = function(manager) {
+        var _this = this;
         this.manager = manager;
+        return this.manager.on('resetUnreadMsgs', function() {
+          return _this.setUnreadMsgCount();
+        });
       };
 
       /**
