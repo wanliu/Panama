@@ -167,20 +167,20 @@ class BaseChatView extends Caramal.BackboneView
     </li>')
 
   fetchHistory: () ->
-    @msgLoaded ||= false
-    return if @msgLoaded
-    start = @channel.message_buffer.length + 1
-    setTimeout( () =>
-      @channel.history({start: start}, (chat, err, messages) =>
-        @msgLoaded = true
-        $html = @parseMessages(messages)
-        text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-        $html += @history_tip({text: text})
-        @msgContent().prepend($html)
-        @$('.message .image-zoom').fancybox()
-        @scrollDialog()
-      )
-    , 300)
+    # @msgLoaded ||= false
+    # return if @msgLoaded
+    # start = @channel.message_buffer.length + 1
+    # setTimeout( () =>
+    #   @channel.history({start: start}, (chat, err, messages) =>
+    #     @msgLoaded = true
+    #     $html = @parseMessages(messages)
+    #     text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+    #     $html += @history_tip({text: text})
+    #     @msgContent().prepend($html)
+    #     @$('.message .image-zoom').fancybox()
+    #     @scrollDialog()
+    #   )
+    # , 300)
 
   resetHistory: () ->
     @msgLoaded = false
@@ -483,20 +483,20 @@ class root.OrderChatView extends Caramal.BackboneView
     </li>')
 
   fetchHistory: () ->
-    @msgLoaded ||= false
-    return if @msgLoaded
-    start = @channel.message_buffer.length + 1
-    setTimeout( () =>
-      @channel.history({start: start}, (chat, err, messages) =>
-        @msgLoaded = true
-        $html = @parseMessages(messages)
-        text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-        $html += @history_tip({text: text})
-        @msgContent().prepend($html)
-        @$('.message .image-zoom').fancybox()
-        @scrollDialog()
-      )
-    , 300)
+    # @msgLoaded ||= false
+    # return if @msgLoaded
+    # start = @channel.message_buffer.length + 1
+    # setTimeout( () =>
+    #   @channel.history({start: start}, (chat, err, messages) =>
+    #     @msgLoaded = true
+    #     $html = @parseMessages(messages)
+    #     text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+    #     $html += @history_tip({text: text})
+    #     @msgContent().prepend($html)
+    #     @$('.message .image-zoom').fancybox()
+    #     @scrollDialog()
+    #   )
+    # , 300)
 
   resetHistory: () ->
     @msgLoaded = false
