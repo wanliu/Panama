@@ -14,34 +14,30 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="bank">
-        <form>
-          <div class='row-fluid'>
-            <% default = Bank.first %>
-            <% Bank.all.each do |bank| %>
-              <%= content_tag :div, :class => 'bank_card' do %>
-                <% state = default == bank %>
-                <%= radio_button_tag :bank, bank.code, state %>
-                <%= label_tag "bank_#{bank.code.downcase}" do %>
-                  <span class="banks bank-<%= bank.code.downcase %>">
-                    <%= bank.name %>
-                  </span>
-                <% end %>
+        <div class='row-fluid'>
+          <% default = Bank.first %>
+          <% Bank.all.each do |bank| %>
+            <%= content_tag :div, :class => 'bank_card' do %>
+              <% state = default == bank %>
+              <%= radio_button_tag :bank, bank.code, state %>
+              <%= label_tag "bank_#{bank.code.downcase}" do %>
+                <span class="banks bank-<%= bank.code.downcase %>">
+                  <%= bank.name %>
+                </span>
               <% end %>
             <% end %>
-          </div>
-        </form>
+          <% end %>
+        </div>
       </div>
       <div class='tab-pane' id="pay_plat">
-        <form>
-          <ul class='payments-plat clearfix'>
-            <li class='payment 99bill'>
-              <a href='javascript:void(0)'>
-                <input type='radio' name='pay_plat' value='99bill' checked class='pull-left' />
-                <img src='/assets/payments/99bill.png' />
-              </a>
-            </li>
-          </ul>
-        </form>
+        <ul class='payments-plat clearfix'>
+          <li class='payment 99bill'>
+            <a href='javascript:void(0)'>
+              <input type='radio' name='pay_plat' value='99bill' checked class='pull-left' />
+              <img src='/assets/payments/99bill.png' />
+            </a>
+          </li>
+        </ul>
       </div>
       <div>
         <input type='button' value='支 付' class='btn btn-large btn-primary btn_paid' />

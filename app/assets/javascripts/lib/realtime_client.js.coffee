@@ -66,7 +66,7 @@ class root.Realtime
   unsubscribe: (channel) ->
     @socket.removeListener(channel)
 
-  unmonitor: () ->
+  unmonitor: (channel, callback) ->
     @socket.unNotify(channel,callback)
 
   monitor: (channel,callback) ->

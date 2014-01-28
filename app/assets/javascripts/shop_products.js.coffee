@@ -37,15 +37,15 @@ class ShopProductView extends Backbone.View
   unmodal: () ->
     $("body").removeClass("noScroll")
 
-  close: () ->
+  close: () ->    
+    @remove()
     @unmodal()
 
 class ShopProductPreview extends Backbone.View
 
   events:
     "click .shop_product .preview"    : "launchShopProduct",
-    "click .shop_product .buy"        : "launchShopProduct",
-    #"click .shop_product .buy"        : "buy"
+    "click .shop_product .buy"        : "launchShopProduct"
 
   initialize: (options) ->
     _.extend(@, options)
@@ -59,22 +59,6 @@ class ShopProductPreview extends Backbone.View
     })
     view.modal()
     false
-
-  buy: (event) ->
-    @load_view(event.currentTarget)
-    try
-      $.ajax(
-        url: "/shop_products/#{@model.id}/direct_buy",
-        type: "POST",
-        data: {amount: 1}
-        success: (data) =>
-          window.location.href = "/people/#{data.buyer_login}/transactions"
-        error: (data) ->
-          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
-      )
-      false
-    catch error
-      false
 
   load_view: (target) ->
     @$el = @el = $(target).parents(".shop_product")
@@ -91,7 +75,8 @@ class ShopProductToolbar extends Backbone.View
     @login = @options.login
     @shop_product_id = @$el.attr("data-value-id")
     @amount = @$("input.amount")
-    @$cart_el = $(".toolbar .cart")
+    @$cart_el = @$(".toolbar .cart")
+    @$buy_el = @$(".toolbar .buy")
 
   buy: () ->
     state = @buy_manner()
@@ -101,26 +86,32 @@ class ShopProductToolbar extends Backbone.View
       @create_direct_buy()
 
   create_order: () ->
-    $.ajax(
-      url: "/shop_products/#{@shop_product_id}/buy",
-      type: "POST",
-      data: {amount: @amount.val()}
-      success: () =>
-        window.location.href = "/people/#{@login}/transactions"
-      error: (data) ->
-        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
-    )
+    if @$buy_el.hasClass("disabled")
+      pnotify(text: "这商品不能购买,可能没有库存!", type: "warning")
+    else    
+      $.ajax(
+        url: "/shop_products/#{@shop_product_id}/buy",
+        type: "POST",
+        data: {amount: @amount.val()}
+        success: () =>
+          window.location.href = "/people/#{@login}/transactions"
+        error: (data) ->
+          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+      )
 
   create_direct_buy: () ->
-    $.ajax(
-      url: "/shop_products/#{@shop_product_id}/direct_buy",
-      type: "POST",
-      data: {amount: @amount.val()}
-      success: () =>
-        window.location.href = "/people/#{@login}/direct_transactions"
-      error: (data) ->
-        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
-    )
+    if @$buy_el.hasClass("disabled")
+      pnotify(text: "这商品不能购买,可能没有库存!", type: "warning")
+    else
+      $.ajax(
+        url: "/shop_products/#{@shop_product_id}/direct_buy",
+        type: "POST",
+        data: {amount: @amount.val()}
+        success: () =>
+          window.location.href = "/people/#{@login}/direct_transactions"
+        error: (data) ->
+          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+      )
 
   cart: () ->
     form = @form_load_buy_manner()

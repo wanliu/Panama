@@ -28,23 +28,29 @@ class ActivityBind extends Backbone.View
     })
 
   like: (event) ->
+    $btn = @$(".like-button")
+    return false if $btn.hasClass("disabled") 
+    $btn.addClass("disabled")
     $.post(@model.url() + "/like", (data) =>
       @like_view = new LikeListView()
       @like_view.add_to_cart(data)
       @$('.like-button').replaceWith(@unlike_template)
       @$('.like-count').addClass("active")
       @incLike()
-    )
+    ).complete () -> $btn.removeClass("disabled")
     false
 
   unlike: (event) ->
+    $btn = @$(".unlike-button")
+    return false if $btn.hasClass("disabled") 
+    $btn.addClass("disabled")
     $.post(@model.url() + "/unlike", (data) =>
       @like_view = new LikeListView()
       @like_view.move_from_cart(data)
       @$('.unlike-button').replaceWith(@like_template)
       @$('.like-count').removeClass("active")
       @decLike()
-    )
+    ).complete () -> $btn.removeClass("disabled")
     false
 
   incLike: (n = 1) ->

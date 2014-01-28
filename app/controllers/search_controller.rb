@@ -106,7 +106,7 @@ class SearchController < ApplicationController
 
     _query = condition_query(q)
 
-    s = Tire.search ["shop_products", "products", "ask_buys", "activities"] do
+    s = Tire.search ["ask_buys", "activities", "shop_products", "products"] do
       from _from
       size _size
 

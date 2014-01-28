@@ -30,6 +30,7 @@ class OrderRefund < ActiveRecord::Base
   has_many :items, class_name: "OrderRefundItem", dependent: :destroy
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
+  has_many :transfers, :as => :targeable, dependent: :destroy
 
   validates :order_reason, :presence => true
   validates :order, :presence => true
@@ -109,6 +110,7 @@ class OrderRefund < ActiveRecord::Base
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
       refund.change_order_refund_state
+      refund.generate_transfer
     end
 
     after_transition :apply_refund => :apply_expired do |refund, transition|
@@ -127,6 +129,15 @@ class OrderRefund < ActiveRecord::Base
     refunds.each{|ref| ref.fire_events!(:expired) }
     puts "=refund===start: #{DateTime.now}=====count: #{refunds.count}===="
     refunds
+  end
+
+  def generate_transfer
+    items.each do |item|
+      transfers.build(
+        :status => :success,
+        :amount => item.amount,        
+        :shop_product => item.shop_product)      
+    end
   end
 
   def change_order_state

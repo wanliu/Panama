@@ -81,13 +81,20 @@ class People::TransactionsController < People::BaseController
     item_ids = params[:items].map{ |k, v| 
       v[:id].to_i if v[:checked] == 'on' }.compact
           
-    if my_cart.create_transaction(@people, item_ids)
-      redirect_to person_transactions_path(@people.login),
-                  notice: 'Transaction was successfully created.'
-    else
-      # FIXME
-      redirect_to person_cart_index_path(@people.login),
-                  notice: 'We are sorry, but the transaction was not successfully created.'
+    respond_to do |format|      
+      if my_cart.create_transaction(@people, item_ids)
+        url = cart_transaction_path
+        format.js{
+          render :js => "window.location.href='#{url}'" }
+        format.html{
+          redirect_to url }
+      else
+        format.json{ 
+          render :json => draw_errors_message(my_cart), :status => 403 }
+        format.html{
+          redirect_to person_cart_index_path(@people.login),
+                    notice: 'We are sorry, but the transaction was not successfully created.'}
+      end
     end
   end
 
@@ -284,5 +291,13 @@ class People::TransactionsController < People::BaseController
 
   def base_template_path
     "people/transactions/base"
+  end
+
+  def cart_transaction_path
+    if my_cart.items.map{|item| item.buy_state.name }.include?(:guarantee)
+      person_transactions_path(@people.login)
+    else
+      person_direct_transactions_path(@people.login)
+    end
   end
 end

@@ -128,29 +128,42 @@ class NotificationManager
     #交易订单
     @client.monitor("/shops/transactions/create", @commonNotify)
     @client.monitor("/shops/transactions/destroy", @commonNotify)    
-    @client.monitor("/shops/transactions/dispose", @commonNotify)
-    @client.monitor("/shops/transactions/change_state", @commonNotify)
+    @client.monitor("/shops/transactions/dispose", @orderNotify)
+    @client.monitor("/shops/transactions/change_state", @orderNotify)
 
     @client.monitor("/transactions/destroy", @commonNotify)
-    @client.monitor("/transactions/change_state", @commonNotify)
+    @client.monitor("/transactions/change_state", @orderNotify)
     @client.monitor("/transactions/change_info", @commonNotify)
 
 
     #直接订单
     @client.monitor("/shops/direct_transactions/create", @commonNotify)
-    @client.monitor("/shops/direct_transactions/dispose", @commonNotify)
+    @client.monitor("/shops/direct_transactions/dispose", @directNotify)
     @client.monitor("/shops/direct_transactions/destroy", @commonNotify)
-    @client.monitor("/shops/direct_transactions/change_state", @commonNotify)
+    @client.monitor("/shops/direct_transactions/change_state", @directNotify)
 
     @client.monitor("/direct_transactions/destroy", @commonNotify)
-    @client.monitor("/direct_transactions/change_state", @commonNotify)
+    @client.monitor("/direct_transactions/change_state", @directNotify)
 
     #退货
     @client.monitor("/order_refunds/create", @commonNotify)    
-    @client.monitor("/order_refunds/change_state", @commonNotify)
+    @client.monitor("/order_refunds/change_state", @refundNotify)
     @client.monitor("/order_refunds/change_info", @commonNotify)
 
     @client.monitor("/shops/order_refunds/change_info", @commonNotify)
+
+  orderNotify: (data) =>
+    @commonNotify(data) if data.order_id.toString() != @getTypeId("order")
+
+  directNotify: (data) =>    
+    @commonNotify(data) if data.direct_id.toString() != @getTypeId("direct")
+      
+  refundNotify: (data) =>    
+    @commonNotify(data) if data.refund_id.toString() != @getTypeId("refund")
+
+  getTypeId: (type) ->
+    type_id = notifyDisposeState.getType(type) || ""
+    type_id.toString()
 
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
@@ -352,7 +365,7 @@ class root.NotificationViewList extends Backbone.View
 
   @startup = (options) ->
     @instance ||= new NotificationViewList(options)
-    @instanceManager = new NotificationManager()
+    @instanceManager ||= new NotificationManager()
 
   @getInstance = () ->
     @instance

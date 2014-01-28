@@ -21,8 +21,9 @@
                 <th><input type="checkbox" class="check-all"/></th>
                 <th>图片</th>
                 <th>名称</th>
-                <th style="width:40px;">卖家</th>
+                <th>卖家</th>
                 <th>数量</th>
+                <th>单价</th>
                 <th>小计</th>
               </tr>
             </thead>
@@ -51,23 +52,31 @@
                       </div>
                     </td>
                     <td>
-                      <%= link_to '#' do %>
-                        <%= image_tag item.shop.try(:icon_url), :class => "img-polaroid img-seller" %>
-                      <% end %>
-                      <h5><%= item.shop.name %></h5>
+                      <div>
+                        <%= link_to '#' do %>
+                          <%= image_tag item.shop.try(:icon_url), :class => "img-polaroid img-seller" %>
+                        <% end %>
+                      </div>
+                      <h5><%= item.shop.name.truncate(5) %></h5>
                     </td>
                     <td>
-                      <%= f.input :amount,
-                        :label => false,
-                        :value => item.amount,
-                        :as => :spinner,
-                        input_html: {
-                          :name => "items[#{item.id}][amount]",
-                          :panel_class => "amount_#{item.id}" } %>
+                      <div>
+                        <input type='number' name="items[<%=item.id %>][amount]" class='amount' value="<%=item.amount %>" min="1" />
+                      </div>
+                      <div>                        
+                        <span class="label label-warning">
+                          库存<%=item.shop_product.inventory %>  
+                        </span>
+                      </div>
                     </td>
                     <td>
                       <input type="hiddden" name="items[<%= item.id %>][price]" value="<%=item.price %>" class="hide"/>
-                      <price><%= number_to_currency(item.price) %></price>
+                      <%= number_to_currency(item.price) %>
+                    </td>
+                    <td>         
+                      <span class='total'>
+                        <%= number_to_currency(item.total) %>
+                      </span>
                     </td>
                   </tr>
                 <% end %>
@@ -117,5 +126,7 @@
       el: $('.cart-container'),
       login: "<%= current_user.login %>"
     })
+
+    $( "#spinner" ).spinner()
   })
 </script>

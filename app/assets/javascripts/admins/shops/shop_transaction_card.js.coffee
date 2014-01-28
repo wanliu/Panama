@@ -123,6 +123,8 @@ class ShopTransactionCard extends TransactionCardBase
         success: () =>
           @replace_total(@$dprice_panel, new_price)
           @$dprice_panel.show()
+          @$dprice_panel.attr("data-value", new_price)
+          @$dprice_input.val(new_price)
           @$dprice_edit_panel.hide()
       )
     else

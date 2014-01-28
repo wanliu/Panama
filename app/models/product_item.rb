@@ -99,10 +99,16 @@ class ProductItem < ActiveRecord::Base
     end
   end
 
-  def update_total
+  def update_total    
     unless amount.nil? || price.nil?
       self.total = self.price * self.amount
     end
+  end
+
+  def shop_product
+    ShopProduct.find_by(
+      :shop_id => shop_id, 
+      :product_id => product_id)
   end
 
   def options
@@ -118,7 +124,7 @@ class ProductItem < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super.merge merge_photos(options[:photos])
+    attrs = super.merge merge_photos(options[:photos])
   end
 
   def merge_photos(options = nil)

@@ -34,6 +34,7 @@ class TransactionCard extends TransactionCardBase
       { name: 'refresh_returned',       from: 'waiting_sign',           to: 'waiting_refund' },
       { name: 'refresh_returned',       from: 'complete',               to: 'waiting_refund' },
       { name: 'refresh_audit_transfer', from: 'waiting_audit',          to: 'waiting_delivery'},
+      { name: 'refresh_audit_failure',  from: 'waiting_audit',          to: 'waiting_audit_failure'  },
       { name: 'sign',                   from: 'waiting_sign',           to: 'complete' },
       { name: 'back',                   from: 'waiting_paid',           to: 'order' },
       { name: 'back',                   from: 'waiting_delivery',       to: 'waiting_paid' }, # only for development
@@ -182,8 +183,8 @@ class TransactionCard extends TransactionCardBase
             return false
       )
     else
-      @alarm()
-      @transition.cancel()
+      @back_state()
+      
     false
 
   show_transfer_code: (event) ->

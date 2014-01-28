@@ -5,14 +5,15 @@ exports = window || @
 
 class PayMentView extends PayMentsView
   events : {
-    "click .btn_paid" : "paid"
+    "click .btn_paid" : "online_paid"
   }
 
   initialize: () ->
     _.extend(@, @options)
+    console.log("===#{@$(".btn_paid").length}==========")
     super
 
-  paid: () ->
+  online_paid: () ->
     data = @serialize @$el.serializeHash()
 
     $.ajax(
