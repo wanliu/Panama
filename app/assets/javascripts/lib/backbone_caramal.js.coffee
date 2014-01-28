@@ -113,7 +113,7 @@ class BaseChatView extends Caramal.BackboneView
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
 
-  history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
+  # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="head">
@@ -185,7 +185,7 @@ class BaseChatView extends Caramal.BackboneView
   resetHistory: () ->
     @msgLoaded = false
     @msgContent().html('')
-    @fetchHistory()
+    # @fetchHistory()
 
   initialize: (options) ->
     super
@@ -297,6 +297,13 @@ class BaseChatView extends Caramal.BackboneView
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
+  receiveHisMessage: (data) ->
+    if @display
+      @msgContent().preppend(@parseMessages(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+
   toggleDialog: () ->
     if @display
       @hideDialog()
@@ -308,6 +315,7 @@ class BaseChatView extends Caramal.BackboneView
     @display = false
     @channel.deactive()
     # @unbindMessage()
+
 
   showDialog: () ->
     $(@el).show()
@@ -435,7 +443,7 @@ class root.OrderChatView extends Caramal.BackboneView
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
 
-  history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
+  # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="body">

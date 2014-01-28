@@ -5082,6 +5082,8 @@ if (typeof define === "function" && define.amd) {
         Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
         this.unreadMsgCount = 0;
+        this.unreadFetchFlag = false;
+        this.onOpened();
         /**
          * 消息缓存区
          * @type {Array}
@@ -5122,8 +5124,49 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.setUnreadMsgCount = function() {
-        this.unreadMsgCount = this.manager.unreadMsgs && this.manager.unreadMsgs[this.group] ? this.manager.unreadMsgs[this.group] : 0;
-        return this.emit('unreadMsgsSeted', {});
+        if (this.manager.unreadMsgs && this.manager.unreadMsgs[this.group]) {
+          this.unreadMsgCount = this.manager.unreadMsgs[this.group];
+          this.unreadFetchFlag = true;
+          this.unreadFetched = 0;
+          return this.emit('unreadMsgsSeted', {});
+        }
+      };
+
+      Channel.prototype.onOpened = function() {
+        var _this = this;
+        return this.on('open', function() {
+          return _this.fetchUnread();
+        });
+      };
+
+      Channel.prototype.fetchUnread = function() {
+        var fetch_options, step,
+          _this = this;
+        if (!this.unreadFetchFlag) {
+          return;
+        }
+        step = this.unreadMsgCount - this.unreadFetched > 10 ? 10 : this.unreadMsgCount - this.unreadFetched;
+        fetch_options = this.lastFetchedMsgTime != null ? {
+          type: "time_step",
+          room: this.room,
+          start: this.lastFetchedMsgTime,
+          step: step
+        } : {
+          room: this.room,
+          start: 1,
+          step: step
+        };
+        return this.socket.emit('history', fetch_options, function(err, msgs) {
+          if (msgs.length === 0) {
+            return;
+          }
+          _this.lastFetchedMsgTime = 1 * msgs[0].time;
+          _this.unreadFetched += msgs.length;
+          if (_this.unreadFetched === _this.setUnreadMsgCount) {
+            _this.unreadFetchFlag = false;
+          }
+          return _this.emit('unreadMsgsFetched', msgs);
+        });
       };
 
       Channel.prototype.getState = function() {
@@ -5507,6 +5550,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.setState('open');
+                  channel.emit('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5516,7 +5560,9 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.command('record', info.room);
-                  return channel.room = info.room;
+                  channel.room = info.room;
+                  channel.setState('open');
+                  return channel.emit('open');
                 }
               });
             }
@@ -5653,6 +5699,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.setState('open');
+                  channel.emit('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5662,7 +5709,9 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.command('record', info.room);
-                  return channel.room = info.room;
+                  channel.room = info.room;
+                  channel.emit('open');
+                  return channel.setState('open');
                 }
               });
             }
@@ -5780,6 +5829,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.setState('open');
+                  channel.emit('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5792,7 +5842,8 @@ if (typeof define === "function" && define.amd) {
                     channel.command('record', info.room);
                   }
                   channel.room = info.room;
-                  return channel.name = info.name;
+                  channel.name = info.name;
+                  return channel.emit('open');
                 }
               });
             }
