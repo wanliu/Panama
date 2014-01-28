@@ -5090,6 +5090,10 @@ if (typeof define === "function" && define.amd) {
         */
 
         this.message_buffer = [];
+        this.unread_buffer = {
+          theEnd: true,
+          msgs: []
+        };
         /**
          * 频道状态
          * @type {String}
@@ -5160,12 +5164,15 @@ if (typeof define === "function" && define.amd) {
           if (msgs.length === 0) {
             return;
           }
-          _this.lastFetchedMsgTime = 1 * msgs[0].time;
+          _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
           _this.unreadFetched += msgs.length;
           if (_this.unreadFetched === _this.setUnreadMsgCount) {
             _this.unreadFetchFlag = false;
           }
-          return _this.emit('unreadMsgsFetched', msgs);
+          return _this.emit('unreadMsgsFetched', {
+            msgs: msgs,
+            theEnd: !_this.unreadFetchFlag
+          });
         });
       };
 

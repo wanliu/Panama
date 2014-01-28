@@ -406,13 +406,15 @@ class BaseIconView extends Backbone.View
         @active()
     , @
 
-    @channel.on('unreadMsgsFetched', (msgs) =>
-      if @chat_view && $(@chat_view.el).is(':visible')
-        @chat_view.receiveHisMessage(msgs)
+    @channel.on('unreadMsgsFetched', (options) =>
+      msgs = options.msgs
+      theEnd = options.theEnd
+      # @chat_view.receiveHisMessage(msgs, { theEnd: theEnd })
+
+      if @chat_view# && $(@chat_view.el).is(':visible')
+        @chat_view.receiveHisMessage(options)
       else
-        @channel.message_buffer = @channel.message_buffer.concat(msgs)
-        # @incMsgCount()
-        @active()
+        @channel.unread_buffer = options
     )
 
     @channel.on 'unreadMsgsSeted', () =>

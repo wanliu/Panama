@@ -112,6 +112,7 @@ class BaseChatView extends Caramal.BackboneView
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
+    # 'scroll div.body'           : 'more_unread_histroy'
 
   # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
@@ -203,6 +204,7 @@ class BaseChatView extends Caramal.BackboneView
   initDialog: () ->
     # @bindMessage()
     $(@el).html(@chat_template({model: @model}))
+    @$('div.body').scroll($.proxy(@more_unread_histroy, @))
     @state_el = @$(".head>.state")
     @model.chat_view = @
     @display = false
@@ -297,12 +299,33 @@ class BaseChatView extends Caramal.BackboneView
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
-  receiveHisMessage: (data) ->
+  receiveHisMessage: (options) ->
+    # if @display
+    msgs = options.msgs
+    @msgContent().prepend(@parseMessages(msgs))
+    if !options.theEnd
+      @showMoreFlag()
+    else
+      @removeMoreFlag()
+    # @model.trigger('active_avatar') if @name is msgs.user
     if @display
-      @msgContent().preppend(@parseMessages(data))
-      @model.trigger('active_avatar') if @name is data.user
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
+
+  more_unread_histroy: (event) ->
+    target = event.target || event.srcElement
+    if $(target).scrollTop() < 5
+      @channel.fetchUnread()
+
+  showMoreFlag: () ->
+    moreFlag = @msgContent().find('.showMoreFlag')
+    moreFlag.remove()
+    @msgContent().prepend("<li class='row-receive showMoreFlag' style='text-align: center; color: #478ebb'>\
+      <i class='icon-time'></i>查看更多信息</li>")
+
+  removeMoreFlag: () ->
+    moreFlag = @msgContent().find('.showMoreFlag')
+    moreFlag.remove()
 
   toggleDialog: () ->
     if @display
@@ -332,6 +355,8 @@ class BaseChatView extends Caramal.BackboneView
     _.each @channel.message_buffer, (msg) =>
       @receiveMessage(msg)
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
+    @receiveHisMessage(@channel.unread_buffer) if @channel.unread_buffer['msgs'].length > 0
+    @channel.unread_buffer = { theEnd: true, msgs: [] };
 
   showWithMsg: () ->
     @resetHistory()
@@ -506,10 +531,10 @@ class root.OrderChatView extends Caramal.BackboneView
     #   )
     # , 300)
 
-  resetHistory: () ->
-    @msgLoaded = false
-    @msgContent().html('')
-    @fetchHistory()
+  # resetHistory: () ->
+  #   @msgLoaded = false
+  #   @msgContent().html('')
+  #   @fetchHistory()
 
   initialize: (options) ->
     super
@@ -585,6 +610,7 @@ class root.OrderChatView extends Caramal.BackboneView
   hideDialog: () ->
     $(@el).hide()
     @display = false
+    @msgContent().html('')
     @channel.deactive()
     # @unbindMessage()
 
@@ -605,7 +631,7 @@ class root.OrderChatView extends Caramal.BackboneView
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
 
   showWithMsg: () ->
-    @resetHistory()
+    # @resetHistory()
     @showDialog()
 
   bindMessage: () ->
