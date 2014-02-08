@@ -144,6 +144,9 @@ GEM
     builder (3.0.4)
     bunny (1.0.6)
       amq-protocol (>= 1.9.0)
+    byebug (2.5.0)
+      columnize (~> 0.3.6)
+      debugger-linecache (~> 1.2.0)
     cache_digests (0.2.0)
       actionpack (>= 3.2)
     cancan (1.6.10)
@@ -530,6 +533,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bunny (~> 1.0.4)
+  byebug
   cache_digests (~> 0.2.0)
   cancan
   carrierwave (~> 0.8.0)
