@@ -302,7 +302,13 @@ class BaseChatView extends Caramal.BackboneView
   receiveHisMessage: (options) ->
     # if @display
     msgs = options.msgs
+    origin_height = @$('.body')[0].scrollHeight
     @msgContent().prepend(@parseMessages(msgs))
+    setTimeout () =>
+      height = @$('.body')[0].scrollHeight
+      diff = height - origin_height
+      @$('.body').scrollTop(diff)
+
     if !options.theEnd
       @showMoreFlag()
     else
@@ -310,12 +316,14 @@ class BaseChatView extends Caramal.BackboneView
     # @model.trigger('active_avatar') if @name is msgs.user
     if @display
       @$('.message .image-zoom').fancybox()
-      @scrollDialog()
+      # @scrollDialog()
 
   more_unread_histroy: (event) ->
     target = event.target || event.srcElement
     if $(target).scrollTop() < 5
-      @channel.fetchUnread()
+      setTimeout(() =>
+        @channel.fetchUnread()
+      , 800)
 
   showMoreFlag: () ->
     moreFlag = @msgContent().find('.showMoreFlag')

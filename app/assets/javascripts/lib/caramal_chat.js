@@ -5039,7 +5039,7 @@ if (typeof define === "function" && define.amd) {
   define('chat/channel',['core', 'chat/manager', 'util', 'event', 'exports'], function(Caramal, Manager, Util, Event, exports) {
     var Channel;
     Channel = (function(_super) {
-      var MAXIMUM_MESSAGES;
+      var HIS_FETCH_STEP, MAXIMUM_MESSAGES;
 
       __extends(Channel, _super);
 
@@ -5050,6 +5050,8 @@ if (typeof define === "function" && define.amd) {
 
 
       MAXIMUM_MESSAGES = 2000;
+
+      HIS_FETCH_STEP = 10;
 
       /**
        * 有效命令列表
@@ -5128,12 +5130,17 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.setUnreadMsgCount = function() {
+        this.unreadFetchFlagSeted = true;
         if (this.manager.unreadMsgs && this.manager.unreadMsgs[this.group]) {
           this.unreadMsgCount = this.manager.unreadMsgs[this.group];
           this.unreadFetchFlag = true;
+          if (this.waitingForUnreadFetchFlagSet) {
+            this.fetchUnread();
+          }
           this.unreadFetched = 0;
-          return this.emit('unreadMsgsSeted', {});
+          this.emit('unreadMsgsSeted', {});
         }
+        return console.log('the state', this.getState());
       };
 
       Channel.prototype.onOpened = function() {
@@ -5144,36 +5151,42 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.fetchUnread = function() {
-        var fetch_options, step,
+        var fetch_count, fetch_options, step,
           _this = this;
-        if (!this.unreadFetchFlag) {
-          return;
-        }
-        step = this.unreadMsgCount - this.unreadFetched > 10 ? 10 : this.unreadMsgCount - this.unreadFetched;
-        fetch_options = this.lastFetchedMsgTime != null ? {
-          type: "time_step",
-          room: this.room,
-          start: this.lastFetchedMsgTime,
-          step: step
-        } : {
-          room: this.room,
-          start: 1,
-          step: step
-        };
-        return this.socket.emit('history', fetch_options, function(err, msgs) {
-          if (msgs.length === 0) {
+        if (this.unreadFetchFlagSeted) {
+          if (!this.unreadFetchFlag) {
             return;
           }
-          _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-          _this.unreadFetched += msgs.length;
-          if (_this.unreadFetched === _this.setUnreadMsgCount) {
-            _this.unreadFetchFlag = false;
-          }
-          return _this.emit('unreadMsgsFetched', {
-            msgs: msgs,
-            theEnd: !_this.unreadFetchFlag
+          fetch_count = this.unreadMsgCount - this.unreadFetched;
+          step = fetch_count > HIS_FETCH_STEP ? HIS_FETCH_STEP : fetch_count;
+          fetch_options = this.lastFetchedMsgTime != null ? {
+            type: "time_step",
+            room: this.room,
+            start: this.lastFetchedMsgTime,
+            step: step
+          } : {
+            room: this.room,
+            start: 1,
+            step: step
+          };
+          return this.socket.emit('history', fetch_options, function(err, msgs) {
+            if (msgs.length === 0) {
+              return;
+            }
+            _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
+            _this.unreadFetched += msgs.length;
+            if (_this.unreadFetched >= _this.unreadMsgCount) {
+              _this.unreadFetchFlag = false;
+            }
+            _this.emit('unreadMsgsFetched', {
+              msgs: msgs,
+              theEnd: !_this.unreadFetchFlag
+            });
+            return console.log('unreadMsgsFetched emited!');
           });
-        });
+        } else {
+          return this.waitingForUnreadFetchFlagSet = true;
+        }
       };
 
       Channel.prototype.getState = function() {
