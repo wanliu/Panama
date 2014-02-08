@@ -97,8 +97,7 @@
     var ps_elem = $(".form_activity_focus .shop_product_id")
     ps_elem.chosenEx({
       allow_single_deselect : true,
-      placeholder_text : "选择一个商品",
-      no_results_text : "没有以该关键词开头的商品",
+      placeholder_text : "选择一个商品",      
       <% if @activity.shop_product.present? %>
         data: [{
           id: <%= @activity.shop_product_id %>,
@@ -107,7 +106,8 @@
       <% end %>
       remote: {
         url: "/search/shop_products",
-        dataType: "json"
+        dataType: "json",
+        no_results_text : "没有以该关键词开头的商品, 请到<a href='/shops/<%=current_user.shop.name %>/admins/shop_products'>商品管理</a>中添加"
       },
       select: function(id){
         view.fetch_product(id)

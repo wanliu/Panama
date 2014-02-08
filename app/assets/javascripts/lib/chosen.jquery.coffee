@@ -112,7 +112,7 @@ class Chosen extends AbstractChosen
     if @is_multiple
       @search_choices.click (evt) => this.choices_click(evt)
     else
-      @container.click (evt) => evt.preventDefault() # gobble click of anchor
+      #@container.click (evt) => evt.preventDefault() # gobble click of anchor
 
 
   search_field_disabled: ->
