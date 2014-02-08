@@ -450,6 +450,10 @@ zh-CN:
         zip_code: 邮编
         contact_name: 联系人
         contact_phone: 联系电话
+      user_bank:
+        code: 账号
+        name: 开户人
+        bank_id: 银行账号
 
   mongoid:
     models:
