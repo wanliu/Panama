@@ -10,8 +10,8 @@ class OrderRefundCard extends TransactionCardBase
     @transaction.bind("change:delivery_price", @change_delivery_price, @)
 
   events: {
-    "click .refuse_protect" : "toggle_panel"
-    "click input.delivered" : "clickAction",
+    "click .transaction-actions .refuse_protect" : "toggle_panel"
+    "click .transaction-actions input.delivered" : "clickAction",
     "keyup input:text.delivery_code" : "change_delivery_code",
     'click .edit_rdprice' : 'edit_delivery_price',
     'blur input:text[name=edit_rdprice]' : 'update_delivery_price'
