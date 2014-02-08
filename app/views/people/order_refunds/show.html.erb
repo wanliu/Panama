@@ -12,7 +12,7 @@
     new OrderRefundCard({
       el: $(".transaction"),
       realtime: {
-        url: '<%= faye_server_uri %>',
+        url: '<%= realtime_uri %>',
         token: '<%= token %>'
       }
     })

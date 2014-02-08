@@ -52,21 +52,32 @@
   }
 }
 
-.product_list_wrap{
-  
-  .panel{
-    margin-right:13px;
+.dialog_product{
+  .product_list_wrap{
+    
+    .panel{
+      margin-right:13px;
 
-    .category_product_list{
+      .category_product_list{
 
-      .loader{
-        display: none;
-        text-align: center;
-        
-        img{
-          width: 40px;
-          height: 40px;
+        .loader{
+          display: none;
+          text-align: center;
+          
+          img{
+            width: 40px;
+            height: 40px;
+          }
         }
+      }
+    }
+  }
+
+  .my_products{
+
+    .wrap_my_product{
+      .editable-popup{
+        position: fixed;
       }
     }
   }

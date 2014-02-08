@@ -64,12 +64,12 @@ class ApplicationController < ActionController::Base
       login_required
     elsif current_user.services.empty?
       respond_to do |format|
-        format.js{
-          ajax_set_response_headers
-          render :text => :ok, :status => 403 }
         format.html  {
           @user = current_user
           redirect_to "/after_signup" }
+        format.js{
+          ajax_set_response_headers
+          render :text => :ok, :status => 403 }
         format.json {
           render :json => { 'error' => '您尚未选择服务' }.to_json  }
       end
@@ -79,15 +79,11 @@ class ApplicationController < ActionController::Base
   # 只需要验证是否登录而不需要验证是否选择服务用这个
   def login_required
     if !current_user
-      respond_to do |format|
-        format.js{
-          ajax_set_response_headers
-          render :text => :ok, :status => 403
-        }
+      respond_to do |format|        
         format.html{
           configure_callback_url
           redirect_to '/auth/wanliuid'
-        }
+        }        
         format.json{
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
