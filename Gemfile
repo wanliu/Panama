@@ -117,7 +117,7 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
-  # gem 'byebug'
+  gem 'byebug'
   gem "debugger-pry", :require => "debugger/pry"
   # gem 'pry-rails'
   # gem 'zeus'
