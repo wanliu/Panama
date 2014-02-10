@@ -299,6 +299,13 @@ class BaseChatView extends Caramal.BackboneView
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
+  receiveSysMsg: (data) ->
+    if @display
+      @msgContent().append(@parseSysMsg(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+
   receiveHisMessage: (options) ->
     # if @display
     msgs = options.msgs
@@ -372,6 +379,7 @@ class BaseChatView extends Caramal.BackboneView
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
+    @channel.onSysMsg(@receiveSysMsg, @)
 
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)
@@ -596,6 +604,13 @@ class root.OrderChatView extends Caramal.BackboneView
       html += @parseOne(message)  
     html
 
+  parseSysMsg: (message) ->
+    "<li>\
+      <div class='alert alert-info'>\
+        系统消息：\#{message.msg}
+      </div>\
+    </li>"
+
   sendContent: () ->
     @$('.content')
 
@@ -605,6 +620,13 @@ class root.OrderChatView extends Caramal.BackboneView
   receiveMessage: (data) ->
     if @display
       @msgContent().append(@parseMessages(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+
+  receiveSysMsg: (data) ->
+    if @display
+      @msgContent().append(@parseSysMsg(data))
       @model.trigger('active_avatar') if @name is data.user
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
@@ -644,6 +666,7 @@ class root.OrderChatView extends Caramal.BackboneView
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
+    @channel.onSysMsg(@receiveSysMsg, @)
 
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)

@@ -4933,6 +4933,9 @@ if (typeof define === "function" && define.amd) {
         this.client.on('chat', function(data) {
           return _this.dispatch_process('message', data);
         });
+        this.client.on('system_info', function(data) {
+          return _this.dispatch_process('system_info', data);
+        });
         return this.client.emit('get-unread', {}, function(err, unreadMsgs) {
           return _this.setUnreadMsg(err, unreadMsgs);
         });
@@ -5248,6 +5251,17 @@ if (typeof define === "function" && define.amd) {
       Channel.prototype.onMessage = function(message_callback, context) {
         this.message_callback = message_callback;
         return this.on('message', this.message_callback, context);
+      };
+
+      /**
+       * 接受到系统消息数据的回调
+       * @param  {Function} message_callback 消息回调
+      */
+
+
+      Channel.prototype.onSysMsg = function(meesage_callback, context) {
+        this.meesage_callback = meesage_callback;
+        return this.on('system_info', this.message_callback, ontext);
       };
 
       /**
@@ -5604,6 +5618,16 @@ if (typeof define === "function" && define.amd) {
       channel = Caramal.MessageManager.roomOfChannel(info.room);
       if (channel != null) {
         return channel.emit('message', info);
+      } else {
+        return next();
+      }
+    });
+    Caramal.MessageManager.registerDispatch('system_info', function(info, next) {
+      var channel;
+      Caramal.log('Receive System Message:', info);
+      channel = Caramal.MessageManager.roomOfChannel(info.room);
+      if (channel != null) {
+        return channel.emit('system_info', info);
       } else {
         return next();
       }
