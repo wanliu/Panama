@@ -21,8 +21,8 @@ class ShopProductsController < ApplicationController
       shop_products = product_ids.map do |product_id|
         current_user.shop.products.create(
           product_id: product_id,
-          price: 0,
-          inventory: 1
+          price: 1.0,
+          inventory: 0
         )
       end
       valid_shop_products = shop_products.find { |product| product.valid? }
