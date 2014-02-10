@@ -5130,17 +5130,22 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.setUnreadMsgCount = function() {
+        var channel_name, user_name;
         this.unreadFetchFlagSeted = true;
-        if (this.manager.unreadMsgs && this.manager.unreadMsgs[this.group]) {
-          this.unreadMsgCount = this.manager.unreadMsgs[this.group];
+        channel_name = this.group ? this.group : this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
+          return _.find(channel.split('-'), function(name) {
+            return name === user_name;
+          });
+        })) : void 0;
+        if (channel_name && this.manager.unreadMsgs && this.manager.unreadMsgs[channel_name]) {
+          this.unreadMsgCount = this.manager.unreadMsgs[channel_name];
           this.unreadFetchFlag = true;
           if (this.waitingForUnreadFetchFlagSet) {
             this.fetchUnread();
           }
           this.unreadFetched = 0;
-          this.emit('unreadMsgsSeted', {});
+          return this.emit('unreadMsgsSeted', {});
         }
-        return console.log('the state', this.getState());
       };
 
       Channel.prototype.onOpened = function() {
@@ -5178,11 +5183,10 @@ if (typeof define === "function" && define.amd) {
             if (_this.unreadFetched >= _this.unreadMsgCount) {
               _this.unreadFetchFlag = false;
             }
-            _this.emit('unreadMsgsFetched', {
+            return _this.emit('unreadMsgsFetched', {
               msgs: msgs,
               theEnd: !_this.unreadFetchFlag
             });
-            return console.log('unreadMsgsFetched emited!');
           });
         } else {
           return this.waitingForUnreadFetchFlagSet = true;
