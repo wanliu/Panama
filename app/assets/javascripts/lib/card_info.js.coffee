@@ -29,13 +29,13 @@ class CardInfo extends Backbone.View
 
   showActions: (e) ->
     @$actions.animate({
-      top : 85,
+      top : 60,
       opacity: 1
     })
 
   hideActions: (e) ->
     @$actions.animate({
-      top:  150,
+      top:  120,
       opacity: 0
     })
 

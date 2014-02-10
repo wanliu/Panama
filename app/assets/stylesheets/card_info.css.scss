@@ -11,7 +11,7 @@
     // margin-left: 20px;
     -webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
     box-shadow: 1px 2px 0 rgba(0,0,0,.05);
-    height: 125px;
+    height: 100px;
 
     .hover_place{
       top: 0px;
@@ -24,7 +24,8 @@
       color: #999;
       .actions {
         position: absolute;
-        top: 150px;
+        // top: 150px;
+        top: 120px;
         left: 40px;
       }
 
@@ -40,8 +41,8 @@
         max-width: none;
         float: left;
 
-        width: 125px;
-        height: 125px;
+        width: 100px;
+        height: 100px;
         margin-left: -132px;
       }
     }
