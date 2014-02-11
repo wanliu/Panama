@@ -1,0 +1,40 @@
+<% seller = refund.order.seller %>
+<div id="refund<%=refund.id %>"
+  class="transaction order_refund refund-<%=refund.id %>-<%=refund.state %>"
+  state-id='<%=refund.id %>'
+  state-url="<%=card_person_order_refund_path(@people, refund) %>"
+  state-initial="<%=refund.state %>"
+  state-title="<%=refund.state_title %>"
+  state-event-url="<%=trigger_event_person_order_refund_path(@people, refund) %>"
+  url-root="<%=person_order_refund_path(@people, refund) %>"
+  data-token="<%= refund.order.try(:temporary_channel).try(:token) %>"
+   >
+  <div class="transaction-header">
+    <div class="avatar">
+      <%= image_tag seller.photos.header, :class => 'img-polaroid' %>
+    </div>
+
+    <div class="container-fluid info-header">
+      <div class='page-header'>
+        <div class="trasaction-title">
+          <div class="name">
+            <%= seller.name %>
+          </div>
+          <span class='pull-right'>
+            订单编号: <%=refund.order.try(:number) %>
+          </span>
+        </div>
+        <div class="transaction-address">
+          <%=seller.address.location %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transaction-body">
+    <%=render refund.state, :refund => refund %>
+    <div class='transaction-actions'>
+      <%=render "state_button", :refund => refund %>
+    </div>
+  </div>
+</div>

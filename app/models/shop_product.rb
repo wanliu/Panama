@@ -15,6 +15,8 @@ class ShopProduct < ActiveRecord::Base
   has_many :answer_ask_buys, :dependent => :destroy
   has_many :transfers
   has_many :adjust_transfers, as: :targeable, dependent: :destroy, class_name: "Transfer"
+  has_many :sales_items, class_name: "ShopProductProductItems"
+  has_many :returned_items, class_name: "ShopProductRefundItems"
 
   validates :price, :numericality => { :greater_than => 0, :less_than => 9999999 }, :presence => true
   validates :inventory, :numericality => { :greater_than_or_equal_to => 0, :less_than => 9999999 }, :presence => true
@@ -104,8 +106,16 @@ class ShopProduct < ActiveRecord::Base
   end
 
   def skip_callback_update(amount)
-    self.inventory += amount 
+    self.inventory += amount     
     self.update_column(:inventory, inventory) if valid?
+  end
+
+  def update_sales
+    self.update_attribute(:sales, sales_items.size)
+  end
+
+  def update_returned
+    self.update_attribute(:returned, returned_items.size)
   end
 
   def recount_inventory
@@ -127,7 +137,8 @@ class ShopProduct < ActiveRecord::Base
   def generate_transfer    
     if changed.include?("inventory")
       old_inventory = changed_attributes["inventory"] || 0
-      amount = inventory - old_inventory      
+      amount = inventory - old_inventory
+      self.inventory = old_inventory
       adjust_transfers.create(
         :status => :success,
         :shop_product => self,

@@ -193,8 +193,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       order.buyer_payment      
-      order.activity_tran.participate if order.activity_tran.present?
-      order.update_item_sales
+      order.activity_tran.participate if order.activity_tran.present?      
     end
 
     after_transition do |order, transaction|
@@ -218,6 +217,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition [:waiting_paid, :waiting_audit] => :waiting_delivery do |order, transition|
       order.update_transfer_success
+      order.create_item_sales
     end
 
     after_transition :waiting_sign => :complete do |order, transition|
@@ -451,7 +451,7 @@ class OrderTransaction < ActiveRecord::Base
     transfers.each{|t| t.update_failer }
   end
 
-  def update_item_sales
+  def create_item_sales
     items.each{|i| i.create_sales_item }
   end
 

@@ -92,7 +92,7 @@ class ShopTransactionCard extends TransactionCardBase
       cb()
 
   monitor_notify: () ->
-    @client.monitor "/shops#{@realtime_url()}/change_state", () ->
+    @client.monitor "/shops#{@realtime_url()}/change_state", (data) =>
       @stateChange data
 
   delivery_code_elem: () ->

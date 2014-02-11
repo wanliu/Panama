@@ -94,6 +94,7 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
+      refund.create_returned_item
       if refund.valid?
         refund.handle_detail_return_money
         refund.change_order_refund_state
@@ -111,6 +112,7 @@ class OrderRefund < ActiveRecord::Base
       refund.seller_refund_money
       refund.change_order_refund_state
       refund.generate_transfer
+      refund.create_returned_item
     end
 
     after_transition :apply_refund => :apply_expired do |refund, transition|
@@ -154,6 +156,10 @@ class OrderRefund < ActiveRecord::Base
     unless order.fire_events!(:returned)
       errors.add(:state, "确认退货出错！")
     end
+  end
+
+  def create_returned_item
+    items.each{|i| i.create_product_returned }
   end
 
   def notice_change_buyer(event_name)

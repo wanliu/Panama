@@ -10,7 +10,7 @@ class ProductItem < ActiveRecord::Base
   cattr_accessor :product_options
   @@product_options = {}
 
-  has_many :sales_items, :class_name => "ShopProductProductItems", :foregin_key => "product_item_id"
+  has_many :sales_items, :class_name => "ShopProductProductItems", :dependent => :destroy
 
   has_and_belongs_to_many   :properties do
       def [](name)
@@ -109,10 +109,6 @@ class ProductItem < ActiveRecord::Base
 
   def create_sales_item
     sales_items.create(:shop_product => shop_product) if shop_product.present?
-  end
-
-  def update_product_sales
-    shop_product.update_attribute(:sales, sales_items.size) if shop_product.present?
   end
 
   def shop_product

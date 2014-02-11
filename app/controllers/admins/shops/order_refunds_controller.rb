@@ -12,10 +12,14 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     @refund = current_shop_refunds.find_by(:id => params[:id])
   end
 
+  def card
+    @refund = current_shop_refunds.find_by(:id => params[:id])
+  end
+
   def event
     @refund = current_shop_refunds.find_by(:id => params[:id])
     if @refund.seller_fire_events!(params[:event])
-      render :partial => "context", :locals => {refund: @refund}
+      render :partial => "card", :locals => {refund: @refund}
     end
   end
 
