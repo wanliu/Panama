@@ -4979,7 +4979,8 @@ if (typeof define === "function" && define.amd) {
       ClientMessageManager.prototype.unBind = function() {
         if (this.client != null) {
           this.client.unsubscribe('message');
-          return this.client.unsubscribe('chat');
+          this.client.unsubscribe('chat');
+          return this.client.unsubscribe('system_info');
         }
       };
 
@@ -5259,9 +5260,9 @@ if (typeof define === "function" && define.amd) {
       */
 
 
-      Channel.prototype.onSysMsg = function(meesage_callback, context) {
-        this.meesage_callback = meesage_callback;
-        return this.on('system_info', this.message_callback, ontext);
+      Channel.prototype.onSysMsg = function(sys_msg_callback, context) {
+        this.sys_msg_callback = sys_msg_callback;
+        return this.on('system_info', this.sys_msg_callback, context);
       };
 
       /**

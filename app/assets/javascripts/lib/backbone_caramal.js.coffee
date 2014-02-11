@@ -197,6 +197,7 @@ class BaseChatView extends Caramal.BackboneView
     @initChannel()
     @initDialog()
     @bindEvent()
+    @bindSysMsg()
 
   initChannel: () ->
     console.log('unimplemented...')
@@ -285,6 +286,13 @@ class BaseChatView extends Caramal.BackboneView
     _.each messages, (message) =>
       html += @parseOne(message)
     html
+
+  parseSysMsg: (message) ->
+    "<li>
+      <div class='alert alert-info'>
+        <i class='icon-info-sign'></i>系统消息：#{message.msg}
+      </div>
+    </li>"
 
   sendContent: () ->
     @$('.content')
@@ -379,6 +387,8 @@ class BaseChatView extends Caramal.BackboneView
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
+
+  bindSysMsg: () ->
     @channel.onSysMsg(@receiveSysMsg, @)
 
   unbindMessage: () ->
@@ -560,6 +570,7 @@ class root.OrderChatView extends Caramal.BackboneView
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
     @initChannel()
     @initDialog()
+    @bindSysMsg()
     $(window).bind('enterOrderChat', () =>
       @showWithMsg()
     )
@@ -605,10 +616,10 @@ class root.OrderChatView extends Caramal.BackboneView
     html
 
   parseSysMsg: (message) ->
-    "<li>\
-      <div class='alert alert-info'>\
-        系统消息：\#{message.msg}
-      </div>\
+    "<li>
+      <div class='alert alert-info'>
+        <i class='icon-info-sign'></i>系统消息：#{message.msg}
+      </div>
     </li>"
 
   sendContent: () ->
@@ -666,6 +677,8 @@ class root.OrderChatView extends Caramal.BackboneView
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
+
+  bindSysMsg: () ->
     @channel.onSysMsg(@receiveSysMsg, @)
 
   unbindMessage: () ->
