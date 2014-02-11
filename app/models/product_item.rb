@@ -10,6 +10,8 @@ class ProductItem < ActiveRecord::Base
   cattr_accessor :product_options
   @@product_options = {}
 
+  has_many :sales_items, :class_name => "ShopProductProductItems", :foregin_key => "product_item_id"
+
   has_and_belongs_to_many   :properties do
       def [](name)
       if name.is_a?(String) || name.is_a?(Symbol)
@@ -103,6 +105,14 @@ class ProductItem < ActiveRecord::Base
     unless amount.nil? || price.nil?
       self.total = self.price * self.amount
     end
+  end
+
+  def create_sales_item
+    sales_items.create(:shop_product => shop_product) if shop_product.present?
+  end
+
+  def update_product_sales
+    shop_product.update_attribute(:sales, sales_items.size) if shop_product.present?
   end
 
   def shop_product
