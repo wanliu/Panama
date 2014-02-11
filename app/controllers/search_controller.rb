@@ -50,7 +50,7 @@ class SearchController < ApplicationController
     @friends = User.joins("right join circle_friends as cf on cf.user_id = users.id ")
                    .select("users.*, cf.circle_id as circle_id")
                    .where("cf.circle_id in (?) and users.id in (?) ",@circles.pluck("circles.id"), my_friends).limit(5)
-    
+
     respond_to do |format|
       format.dialog { render "shop_circles.dialog", :layout => false }
     end

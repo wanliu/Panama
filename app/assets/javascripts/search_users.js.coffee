@@ -120,8 +120,8 @@ class FindUserView extends Backbone.View
 
 class FindCircleView extends Backbone.View
   events: 
-    "click .find_circle"              : "find_circle"
-    "keypress input.circle_input_info": "key_up"
+    "click .find_circle"               : "find_circle"
+    "keypress input.circle_input_info" : "key_up"
 
   initialize: () ->
     _.extend(@, @options)
@@ -134,7 +134,6 @@ class FindCircleView extends Backbone.View
     keyword = @$(".circle_input_info").val().trim()
     $.ajax({
       type: "get",
-      dataType: "json",
       url: "/search/shop_circles",
       data: {q: keyword ,area_id: @options.area_id }
       success: (data) =>
