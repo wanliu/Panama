@@ -134,7 +134,7 @@ class ShopProduct < ActiveRecord::Base
     errors.add(:inventory, "#{name}库存不足!") if inventory < 0
   end
 
-  def generate_transfer    
+  def generate_transfer   
     if changed.include?("inventory")
       old_inventory = changed_attributes["inventory"] || 0
       amount = inventory - old_inventory
