@@ -6,6 +6,7 @@
 //= require notify_dispose_state
 //= require backbone
 //= require twitter/bootstrap
+//= require lib/bootstrap-modal_extend
 //= require h5bp
 //= require lib/hogan
 //= require lib/chosen.ex
