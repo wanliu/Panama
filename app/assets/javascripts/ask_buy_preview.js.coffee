@@ -96,7 +96,7 @@ class AskBuyView extends Backbone.View
       @btn.removeClass("disabled")
 
   render_comment: (data) ->
-    data.created_at = new Date().format('yyyy-MM-dd hh:mm')
+    data.created_at = new Date(data.created_at).format('yyyy-MM-dd hh:mm')
     comment = Hogan.compile($("#ask_buy-comment-template").html()).render(data)
     @$(".comments").append(comment)
 
