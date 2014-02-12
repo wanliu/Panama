@@ -92,7 +92,7 @@ class ShopTransactionCard extends TransactionCardBase
       cb()
 
   monitor_notify: () ->
-    @client.monitor "/shops#{@realtime_url()}/change_state", () ->
+    @client.monitor "/shops#{@realtime_url()}/change_state", (data) =>
       @stateChange data
 
   delivery_code_elem: () ->
@@ -123,6 +123,8 @@ class ShopTransactionCard extends TransactionCardBase
         success: () =>
           @replace_total(@$dprice_panel, new_price)
           @$dprice_panel.show()
+          @$dprice_panel.attr("data-value", new_price)
+          @$dprice_input.val(new_price)
           @$dprice_edit_panel.hide()
       )
     else

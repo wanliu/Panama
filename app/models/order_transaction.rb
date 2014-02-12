@@ -32,7 +32,8 @@ class OrderTransaction < ActiveRecord::Base
 
   has_many :notifications, :as => :targeable, dependent: :destroy
   has_many :operators, class_name: "TransactionOperator", :dependent => :destroy
-  has_many :transfer_moneys, :as => :owner, dependent: :destroy
+  has_many :transfer_moneys, :as => :owner
+  has_many :transfers, :as => :targeable, autosave: true
 
   has_many  :items,
             class_name: "ProductItem",
@@ -50,29 +51,31 @@ class OrderTransaction < ActiveRecord::Base
 
   validates_presence_of :buyer
   validates_presence_of :seller
-  # validates_associated :address
   validates_numericality_of :items_count
   validates_numericality_of :total, :greater_than_or_equal_to => 1
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
-
-  # accepts_nested_attributes_for :address
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
 
   before_validation(:on => :create) do
     update_total_count
-    generate_number
+    generate_number        
+    generate_transfer
   end
 
-  after_create do
+  after_create do    
     state_change_detail
-    notice_user
+    notice_user    
   end
 
   after_save do     
     notify_seller_change
+  end
+
+  before_destroy do 
+    update_transfer_failer
   end
 
   after_commit :create_the_temporary_channel, on: :create
@@ -122,20 +125,17 @@ class OrderTransaction < ActiveRecord::Base
       transition :waiting_audit_failure => :waiting_audit
     end
 
-    event :back do
-      transition :waiting_paid     => :order,
-                 :waiting_delivery => :waiting_paid,
-                 :waiting_sign     => :waiting_delivery
-    end
-
     #过期事件
     event :expired do
       transition  :order             =>  :close,
+                  :waiting_transfer  =>  :close,
+                  :waiting_audit_failure =>  :close,
                   :waiting_paid      =>  :close,
                   :refund            =>  :close,
                   :complete          =>  :close,
                   :waiting_delivery  =>  :delivery_failure,
                   :waiting_sign      =>  :complete
+
     end
 
     #退货事件方式
@@ -193,7 +193,7 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       order.buyer_payment      
-      order.activity_tran.participate if order.activity_tran.present?
+      order.activity_tran.participate if order.activity_tran.present?      
     end
 
     after_transition do |order, transaction|
@@ -209,6 +209,15 @@ class OrderTransaction < ActiveRecord::Base
     #商家发货延时
     after_transition :waiting_delivery => :delivery_failure do |order, transition|
       order.expired_delivery
+    end
+
+    after_transition [:order, :waiting_paid, :waiting_transfer, :waiting_audit_failure] => :close do |order, transition|
+      order.update_transfer_failer
+    end
+
+    after_transition [:waiting_paid, :waiting_audit] => :waiting_delivery do |order, transition|
+      order.update_transfer_success
+      order.create_item_sales
     end
 
     after_transition :waiting_sign => :complete do |order, transition|
@@ -270,6 +279,14 @@ class OrderTransaction < ActiveRecord::Base
       "#{'0' * (9-_number.length)}#{_number}"
     else
       _number
+    end
+  end
+
+  def generate_transfer
+    items.each do |item|
+      transfers.build(
+        :amount => -item.amount,        
+        :shop_product => item.shop_product)      
     end
   end
 
@@ -426,6 +443,18 @@ class OrderTransaction < ActiveRecord::Base
     self.update_attribute(:pay_status, status)
   end
 
+  def update_transfer_success
+    transfers.each{|t| t.update_success }
+  end
+
+  def update_transfer_failer
+    transfers.each{|t| t.update_failer }
+  end
+
+  def create_item_sales
+    items.each{|i| i.create_sales_item }
+  end
+
   def get_delivery_price
     transport = OrderTransportType.get(transport_type)
     transport.blank? ? 0 : (transport.price || 0)
@@ -531,6 +560,7 @@ class OrderTransaction < ActiveRecord::Base
         options.merge(:order_transaction => self))
     else
       transfer_sheet.update_attributes(options)
+      transfer_sheet
     end
   end
 

@@ -30,6 +30,7 @@ class OrderRefund < ActiveRecord::Base
   has_many :items, class_name: "OrderRefundItem", dependent: :destroy
   has_many :state_details, class_name: "OrderRefundStateDetail", dependent: :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
+  has_many :transfers, :as => :targeable, dependent: :destroy
 
   validates :order_reason, :presence => true
   validates :order, :presence => true
@@ -93,6 +94,7 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
+      refund.create_returned_item
       if refund.valid?
         refund.handle_detail_return_money
         refund.change_order_refund_state
@@ -109,6 +111,8 @@ class OrderRefund < ActiveRecord::Base
     after_transition :waiting_sign => :complete do |refund, transition|
       refund.seller_refund_money
       refund.change_order_refund_state
+      refund.generate_transfer
+      refund.create_returned_item
     end
 
     after_transition :apply_refund => :apply_expired do |refund, transition|
@@ -129,6 +133,15 @@ class OrderRefund < ActiveRecord::Base
     refunds
   end
 
+  def generate_transfer
+    items.each do |item|
+      transfers.build(
+        :status => :success,
+        :amount => item.amount,        
+        :shop_product => item.shop_product)      
+    end
+  end
+
   def change_order_state
     order.fire_events!(:returned)
     order.change_state_notify_seller(:returned)
@@ -143,6 +156,10 @@ class OrderRefund < ActiveRecord::Base
     unless order.fire_events!(:returned)
       errors.add(:state, "确认退货出错！")
     end
+  end
+
+  def create_returned_item
+    items.each{|i| i.create_product_returned }
   end
 
   def notice_change_buyer(event_name)

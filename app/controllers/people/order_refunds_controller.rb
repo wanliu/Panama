@@ -15,6 +15,10 @@ class People::OrderRefundsController < People::BaseController
     @refund = current_user_refunds.find(params[:id])
   end
 
+  def card
+    @refund = current_user_refunds.find(params[:id])
+  end
+
   def mini_item
     @refund = current_user_refunds.find(params[:id])
     respond_to do |format|
@@ -25,7 +29,7 @@ class People::OrderRefundsController < People::BaseController
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
     if @refund.buyer_fire_events!(params[:event])
-      render :partial => "context", :locals => {
+      render :partial => "card", :locals => {
         :refund => @refund
       }
     end

@@ -12,7 +12,7 @@
       var card = new ShopTransactionCard({
         el: $("#order<%= @transaction.id %>"),
         realtime: {
-          url: '<%= faye_server_uri %>',
+          url: '<%= realtime_uri %>',
           token: '<%= token %>'
         },
         shop: {

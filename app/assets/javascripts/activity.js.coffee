@@ -147,20 +147,27 @@ class ActivityPreview extends Backbone.View
     @activity_view.modal()
     false
 
-  like: (event) ->
+  like: (event) ->    
     @load_view(event.currentTarget)
+    $btn = @$(".like-button")
+    return false if $btn.hasClass("disabled") 
+    $btn.addClass("disabled")        
     $.post(@model.url() + "/like", (data) =>
       @$('.like-button').replaceWith(@unlike_template)
       @incLike()
-    )
+    ).complete () -> $btn.removeClass("disabled")
+
     false
 
-  unlike: (event) ->
+  unlike: (event) ->    
     @load_view(event.currentTarget)
+    $btn = @$(".unlike-button")
+    return false if $btn.hasClass("disabled") 
+    $btn.addClass("disabled")
     $.post(@model.url() + "/unlike", (data) =>
       @$('.unlike-button').replaceWith(@like_template)
       @decLike()
-    )
+    ).complete () -> $btn.removeClass("disabled")
     false
 
   incLike: (n = 1) ->

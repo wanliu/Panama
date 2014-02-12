@@ -21,8 +21,8 @@ class ShopProductsController < ApplicationController
       shop_products = product_ids.map do |product_id|
         current_user.shop.products.create(
           product_id: product_id,
-          price: 0,
-          inventory: 1
+          price: 1.0,
+          inventory: 0
         )
       end
       valid_shop_products = shop_products.find { |product| product.valid? }
@@ -84,7 +84,7 @@ class ShopProductsController < ApplicationController
         :user_id => current_user.id,
         :shop_id => @shop_product.shop_id
       })
-      @item.buy_state = :guarantee
+      @item.buy_state = :guarantee   
       if @order.save
         format.json{ render :json => @order }
       else

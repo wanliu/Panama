@@ -54,6 +54,7 @@ development:
     银行汇款:
       name: bank_transfer
       title: 银行汇款
+  service_phone: XXXX-XXXXXX
 
 test:
   site_name: 万流电商平台
@@ -103,6 +104,7 @@ test:
     银行汇款:
       name: bank_transfer
       title: 银行汇款
+  service_phone: XXXX-XXXXXX
 
 production:
   site_name: 万流电商平台
@@ -152,3 +154,4 @@ production:
     银行汇款:
       name: bank_transfer
       title: 银行汇款
+  service_phone: XXXX-XXXXXX

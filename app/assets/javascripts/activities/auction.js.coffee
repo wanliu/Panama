@@ -108,7 +108,4 @@ class root.AuctionBuyView extends Backbone.View
     )
 
   get_date: () ->
-    values = @$form.serializeArray()
-    data = {}
-    _.each values, (val) -> data[val.name] = val.value
-    data
+    @$form.serializeHash()

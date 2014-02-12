@@ -12,9 +12,16 @@ class ShopProduct < ActiveRecord::Base
   has_many :activities, :dependent => :destroy, :foreign_key => :shop_product_id
   belongs_to :shop
   belongs_to :product
-  has_many :answer_ask_buys
+  has_many :answer_ask_buys, :dependent => :destroy
+  has_many :transfers
+  has_many :adjust_transfers, as: :targeable, dependent: :destroy, class_name: "Transfer"
+  has_many :sales_items, class_name: "ShopProductProductItems"
+  has_many :returned_items, class_name: "ShopProductRefundItems"
 
-  validate :valid_shop_and_product_uniq?
+  validates :price, :numericality => { :greater_than => 0, :less_than => 9999999 }, :presence => true
+  validates :inventory, :numericality => { :greater_than_or_equal_to => 0, :less_than => 9999999 }, :presence => true
+
+  validate :valid_shop_and_product_uniq?, :valid_inventory?
 
   after_destroy do
     self.index.remove self
@@ -26,6 +33,10 @@ class ShopProduct < ActiveRecord::Base
 
   after_update do
     update_relation_index
+  end
+
+  before_save do 
+    generate_transfer
   end
 
   # Tire 索引结构的 json
@@ -49,6 +60,8 @@ class ShopProduct < ActiveRecord::Base
       :created_at  => created_at,
       :price       => price,
       :inventory   => inventory,
+      :sales => sales,
+      :returned => returned,
       :updated_at  => updated_at,
       :photos      => {
         :icon         => product.photos.icon,
@@ -80,7 +93,10 @@ class ShopProduct < ActiveRecord::Base
   end
 
   def update_relation_index
-    # activities.each { |a| a.update_index  }
+  end
+
+  def no_inventory?
+    inventory <= 0
   end
 
   mapping do
@@ -89,10 +105,45 @@ class ShopProduct < ActiveRecord::Base
     indexes :shop_id, :index => :not_analyzed
   end
 
+  def skip_callback_update(amount)
+    self.inventory += amount     
+    self.update_column(:inventory, inventory) if valid?
+  end
+
+  def update_sales
+    self.update_attribute(:sales, sales_items.size)
+  end
+
+  def update_returned
+    self.update_attribute(:returned, returned_items.size)
+  end
+
+  def recount_inventory
+    self.update_column(:inventory, transfers.completed.sum(:amount))
+  end
+
   private
   def valid_shop_and_product_uniq?
-    if ShopProduct.where("shop_id=? and product_id=? and id<>?", shop_id, product_id, id.to_s).first.present?
+    if ShopProduct.exists?([
+      "shop_id=? and product_id=? and id<>?", shop_id, product_id, id.to_s])
       errors.add(:product_id, "该商店存在相同的商品了!")
+    end
+  end
+
+  def valid_inventory?
+    errors.add(:inventory, "#{name}库存不足!") if inventory < 0
+  end
+
+  def generate_transfer    
+    if changed.include?("inventory")
+      old_inventory = changed_attributes["inventory"] || 0
+      amount = inventory - old_inventory
+      self.inventory = old_inventory
+      adjust_transfers.create(
+        :status => :success,
+        :shop_product => self,
+        :amount => amount
+      ) if amount != 0
     end
   end
 end

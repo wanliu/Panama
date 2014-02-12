@@ -1,26 +1,27 @@
 <div class='shop_product' shop-product-id='{{id}}' id="shop_product{{id}}">
-	<div class='out-box'>
-		<form>
-			<div class='in-box'>
-				{{#photos}}
-					<img src="{{avatar}}" class="preview a-{{id}}" alt />
-				{{/photos}}
-			</div>
+  <div class='out-box'>
+    <form>
+      <div class='in-box'>
+        {{#photos}}
+          <img src="{{avatar}}" class="preview a-{{id}}" alt />
+        {{/photos}}
+      </div>
 
-			<div class='summary'>
-				<h5 class="title href_name">{{name}}</h5>
-				<p class='describe'>
-					单价 <span class='price'>￥{{price}}</span>
-				</p>
-			</div>
+      <div class='summary'>
+        <h5 class="title href_name">{{name}}</h5>
+        <p class='describe'>
+          单价 <span class='price'>￥{{price}}</span>
+          销量 <span class='sales'>{{sales}}</span>
+        </p>
+      </div>
 
-			<div class="buttons">
-				{{#seller}}
-					<%= button_tag class: 'btn btn-danger launch-button buy' do %>
-						<%= icon('shopping-cart') + " 购买" %>
-					<% end %>
-				{{/seller}}
-			</div>
-		</form>
-	</div>
+      <div class="buttons">
+        {{#seller}}
+          <%= button_tag class: 'btn btn-danger launch-button buy' do %>
+            <%= icon('shopping-cart') + " 购买" %>
+          <% end %>
+        {{/seller}}
+      </div>
+    </form>
+  </div>
 </div>

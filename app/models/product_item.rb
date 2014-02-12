@@ -10,6 +10,8 @@ class ProductItem < ActiveRecord::Base
   cattr_accessor :product_options
   @@product_options = {}
 
+  has_many :sales_items, :class_name => "ShopProductProductItems", :dependent => :destroy
+
   has_and_belongs_to_many   :properties do
       def [](name)
       if name.is_a?(String) || name.is_a?(Symbol)
@@ -99,10 +101,20 @@ class ProductItem < ActiveRecord::Base
     end
   end
 
-  def update_total
+  def update_total    
     unless amount.nil? || price.nil?
       self.total = self.price * self.amount
     end
+  end
+
+  def create_sales_item
+    sales_items.create(:shop_product => shop_product) if shop_product.present?
+  end
+
+  def shop_product
+    ShopProduct.find_by(
+      :shop_id => shop_id, 
+      :product_id => product_id)
   end
 
   def options
@@ -118,7 +130,7 @@ class ProductItem < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super.merge merge_photos(options[:photos])
+    attrs = super.merge merge_photos(options[:photos])
   end
 
   def merge_photos(options = nil)

@@ -167,6 +167,7 @@ Panama::Application.routes.draw do
         get 'page', :to => "people/order_refunds#page"
         post 'update_delivery_price', :to => "people/order_refunds#update_delivery_price"
         get :mini_item
+        get :card
       end
     end
 
@@ -522,7 +523,8 @@ Panama::Application.routes.draw do
           post "event(/:event)", :to => "shops/order_refunds#event", :as => :trigger_event
           post 'refuse_reason', :to => "shops/order_refunds#refuse_reason"
           get 'page', :to => "shops/order_refunds#page"
-          get 'mini_item'
+          get :mini_item
+          get :card
         end
       end
 

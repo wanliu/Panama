@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140118071718) do
+ActiveRecord::Schema.define(:version => 20140211063750) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -40,13 +40,14 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
     t.string   "rejected_reason"
     t.string   "title"
+    t.string   "group_name"
   end
 
   create_table "activities_attachments", :force => true do |t|
@@ -230,6 +231,14 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
     t.datetime "updated_at",           :null => false
   end
 
+  create_table "channels", :force => true do |t|
+    t.integer  "target_id"
+    t.string   "name"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "target_type"
+  end
+
   create_table "circle_categories", :force => true do |t|
     t.integer  "circle_id"
     t.string   "name"
@@ -371,12 +380,13 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
   create_table "direct_transactions", :force => true do |t|
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.decimal  "total",       :precision => 10, :scale => 0
-    t.datetime "created_at",                                 :null => false
-    t.datetime "updated_at",                                 :null => false
+    t.decimal  "total",        :precision => 10, :scale => 0
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.integer  "state"
     t.integer  "operator_id"
     t.string   "number"
+    t.datetime "expired_time"
   end
 
   create_table "file_entities", :force => true do |t|
@@ -532,17 +542,19 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
   create_table "order_transactions", :force => true do |t|
     t.string   "state"
     t.integer  "items_count"
-    t.decimal  "total",          :precision => 10, :scale => 2
+    t.decimal  "total",             :precision => 10, :scale => 2
     t.integer  "seller_id"
     t.integer  "buyer_id"
-    t.datetime "created_at",                                                       :null => false
-    t.datetime "updated_at",                                                       :null => false
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
     t.integer  "address_id"
-    t.boolean  "operator_state",                                :default => false
-    t.decimal  "delivery_price", :precision => 5,  :scale => 2
+    t.boolean  "operator_state",                                   :default => false
+    t.decimal  "delivery_price",    :precision => 5,  :scale => 2
     t.integer  "operator_id"
     t.string   "delivery_code"
-    t.integer  "pay_status",                                    :default => 0
+    t.integer  "transfer_sheet_id"
+    t.integer  "pay_status",                                       :default => 0
+    t.string   "group_name"
     t.string   "number"
     t.datetime "dispose_date"
     t.string   "transport_type"
@@ -563,6 +575,7 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
     t.datetime "updated_at",                 :null => false
     t.integer  "user_id"
     t.string   "icon"
+    t.integer  "channel_id"
   end
 
   create_table "price_options", :force => true do |t|
@@ -755,14 +768,30 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "shop_product_product_items", :force => true do |t|
+    t.integer  "shop_product_id"
+    t.integer  "product_item_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "shop_product_refund_items", :force => true do |t|
+    t.integer  "shop_product_id"
+    t.integer  "order_refund_item_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
   create_table "shop_products", :force => true do |t|
     t.integer  "shop_id"
     t.integer  "product_id"
     t.decimal  "price",      :precision => 10, :scale => 2
     t.decimal  "inventory",  :precision => 10, :scale => 2
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
     t.time     "deleted_at"
+    t.decimal  "sales",      :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "returned",   :precision => 10, :scale => 2, :default => 0.0
   end
 
   create_table "shop_user_groups", :force => true do |t|
@@ -841,6 +870,7 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
     t.string   "targeable_type"
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
+    t.integer  "channel_id"
   end
 
   create_table "topic_participates", :force => true do |t|
@@ -907,6 +937,16 @@ ActiveRecord::Schema.define(:version => 20140118071718) do
     t.integer  "order_transaction_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
+  end
+
+  create_table "transfers", :force => true do |t|
+    t.string   "targeable_type"
+    t.integer  "targeable_id"
+    t.decimal  "amount",          :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "status"
+    t.integer  "shop_product_id"
+    t.datetime "created_at",                                                      :null => false
+    t.datetime "updated_at",                                                      :null => false
   end
 
   create_table "user_banks", :force => true do |t|
