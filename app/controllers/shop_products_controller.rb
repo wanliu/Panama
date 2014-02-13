@@ -162,6 +162,7 @@ class ShopProductsController < ApplicationController
       end
       size _size
       from _from
+      sort{ by :inventory, 'desc' }
     end.results
     respond_to do |format|
       format.json{ render :json => products }
