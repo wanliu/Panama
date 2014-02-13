@@ -43,22 +43,23 @@ class ShopProductsController < ApplicationController
     end
   end
 
-  def update
+  def update_attribute
     @product = ShopProduct.find(params[:id])
     respond_to do |format|
-      if @product.update_attributes(params[:shop_product])
+      if ShopProduct.valid_attribute?(params[:name], params[:value])
+        @product.update_attribute(params[:name], params[:value])
         format.json { render json: @product }
       else
-        format.json { render json: @product.errors,
+        format.json { render json: @product.errors.message[params[:name]] ,
                    status: :unprocessable_entity }
       end
     end
   end
 
-  def update_attribute
-    params[:shop_product] = { params.delete(:name) => params.delete(:value) }
-    update
-  end
+  # def update_attribute
+  #   params[:shop_product] = { params.delete(:name) => params.delete(:value) }
+  #   update
+  # end
 
   def show
     @shop_product = ShopProduct.find(params[:id])
