@@ -56,11 +56,6 @@ class ShopProductsController < ApplicationController
     end
   end
 
-  # def update_attribute
-  #   params[:shop_product] = { params.delete(:name) => params.delete(:value) }
-  #   update
-  # end
-
   def show
     @shop_product = ShopProduct.find(params[:id])
     @product_comments = ProductComment.where("product_id=? and shop_id=?", @shop_product.product_id, @shop_product.shop.id)
