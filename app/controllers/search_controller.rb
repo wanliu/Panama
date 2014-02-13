@@ -85,7 +85,17 @@ class SearchController < ApplicationController
       shop_id = current_user.shop.id
       products = ShopProduct.search2 do
         query do
-          string "name:#{query} OR primitive:#{query} OR untouched:#{query}*", :default_operator => "AND"
+          boolean do 
+            must do 
+              filtered do 
+                filter :query, :query_string => {
+                  :query => "name:#{query} OR primitive:#{query} OR untouched:#{query}*",
+                  :default_operator => "AND"
+                }
+                filter :term, "seller.id" => shop_id
+              end
+            end
+          end
         end
       end.results
     else

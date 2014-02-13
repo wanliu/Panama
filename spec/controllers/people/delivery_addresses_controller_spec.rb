@@ -1,7 +1,7 @@
 #encoding: utf-8
 require 'spec_helper'
 
-describe People::AddressesController, "收货地址控制器" do
+describe People::DeliveryAddressesController, "收货地址控制器" do
 	let(:address) { FactoryGirl.create(:address) }
 
 	def person_param
