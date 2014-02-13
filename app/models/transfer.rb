@@ -47,9 +47,12 @@ class Transfer < ActiveRecord::Base
     end
   end
 
-  def update_inventory(number)    
-    shop_product.skip_callback_update(number)        
-    raise shop_product.errors.messages unless shop_product.valid?
+  def update_inventory(number)
+    if ShopProduct.valid_attribute?(:inventory, number) 
+      shop_product.update_column(:inventory, number)
+    else
+      raise shop_product.errors.messages[:inventory]
+    end 
   end
 
   def valid_status? 

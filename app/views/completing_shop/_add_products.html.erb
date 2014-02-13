@@ -182,7 +182,7 @@
         dataType: 'json'
       },
       validate: function(value) {
-        if(isNaN($.trim(value))) {
+        if(isNaN($.trim(value)) || $.trim(value) == "") {
             return '价格与数量必须为数字';
             value = 0.0
         }

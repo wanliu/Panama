@@ -122,6 +122,15 @@ class ShopProduct < ActiveRecord::Base
     self.update_column(:inventory, transfers.completed.sum(:amount))
   end
 
+  def self.valid_attribute?(attr, value)
+    shop_product = ShopProduct.new(attr => value)
+    if(shop_product.errors.to_hash.has_key?(attr))
+      false
+    else
+      true
+    end
+  end
+
   private
   def valid_shop_and_product_uniq?
     if ShopProduct.exists?([
