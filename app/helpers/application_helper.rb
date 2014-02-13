@@ -105,9 +105,9 @@ module ApplicationHelper
     OmniAuth::Wanliu.config["provider_url"]
   end
 
-  def faye_server_uri
-    Settings.faye_server
-  end
+  # def faye_server_uri
+  #   Settings.faye_server
+  # end
 
   def realtime_uri
     Settings.caramal_server

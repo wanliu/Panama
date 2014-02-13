@@ -15,7 +15,9 @@ class DatePickerInput < SimpleForm::Inputs::Base
       $(function() {
         $("##{element_id}").datetimepicker({
            pickTime: false,
-           language: "zh-CN"
+           language: "zh-CN",
+           weekStart: 1,
+           format: 'yyyy-mm-dd'
         });
       });
     </script>

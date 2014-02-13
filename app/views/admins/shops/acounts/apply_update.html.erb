@@ -103,14 +103,18 @@
           </div>
         </div>
       </div>
-      <input type="submit" class="btn pull-right submit_update" value="提交">
     <% end %>
+    <input type="submit" class="btn pull-right submit_update" value="提交">
   </div>
 </div>
 
 
 <script type="text/javascript">
   $(function(){
+    new ShopDataView({
+      el: $(".shop_info"),
+      shop_id: '<%=current_shop.id %>'
+    })
     new Upload({
       verify_authenticity_token: "<%=form_authenticity_token %>",
       action: "/user_checkings/upload_photo/",
@@ -132,10 +136,6 @@
 
   new AddressEditView({
     el: ".address_panels"
-  })
-  new ShopDataView({
-    el: $(".shop_info"),
-    shop_id: '<%=current_shop.id %>'
   })
 
 </script>

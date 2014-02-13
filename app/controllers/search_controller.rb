@@ -50,7 +50,7 @@ class SearchController < ApplicationController
     @friends = User.joins("right join circle_friends as cf on cf.user_id = users.id ")
                    .select("users.*, cf.circle_id as circle_id")
                    .where("cf.circle_id in (?) and users.id in (?) ",@circles.pluck("circles.id"), my_friends).limit(5)
-    
+
     respond_to do |format|
       format.dialog { render "shop_circles.dialog", :layout => false }
     end
@@ -85,7 +85,17 @@ class SearchController < ApplicationController
       shop_id = current_user.shop.id
       products = ShopProduct.search2 do
         query do
-          string "name:#{query} OR primitive:#{query} OR untouched:#{query}*", :default_operator => "AND"
+          boolean do 
+            must do 
+              filtered do 
+                filter :query, :query_string => {
+                  :query => "name:#{query} OR primitive:#{query} OR untouched:#{query}*",
+                  :default_operator => "AND"
+                }
+                filter :term, "seller.id" => shop_id
+              end
+            end
+          end
         end
       end.results
     else

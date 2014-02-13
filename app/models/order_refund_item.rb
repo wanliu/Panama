@@ -5,14 +5,19 @@ class OrderRefundItem < ActiveRecord::Base
 
   belongs_to :order_refund
   belongs_to :product
+  has_many :returned_items, :class_name => "ShopProductRefundItems", :dependent => :destroy
 
   validates :order_refund, :presence => true
-  validates :product, :presence => true
+  validates :product, :presence => true  
 
   delegate :photos, :to => :product
 
   before_validation(:on => :create) do
     update_total
+  end
+
+  def create_product_returned
+    returned_items.create(:shop_product => shop_product)
   end
 
   def update_total

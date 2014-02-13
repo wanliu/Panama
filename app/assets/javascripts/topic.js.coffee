@@ -272,7 +272,7 @@ class TopicView extends Backbone.View
 
   render_participate: (data) ->
     "<a data-toggle='tooltip' data-placement='top' data-original-title='#{data.login}' href='javascript:void(0)' class='participate'>
-      <img src='#{data.icon_url}' />
+      <img src='#{data.photos.avatar}' />
     </a>"
 
 root.CreateTopicView = CreateTopicView

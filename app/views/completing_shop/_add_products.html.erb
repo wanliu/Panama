@@ -162,7 +162,6 @@
         wizard.load_default_fetch = function(){
           product.default_options()
         }
-
       })
     </script>
   </div>
@@ -171,23 +170,22 @@
 <script type="text/javascript">
   $(function(){
     var bind_editable = function(elem, class_name){
-      id = $(elem).attr("id")
-      $(elem).find("input").select()
-      $("."+ class_name , elem).editable({
-        pk   :    id,
-        type :  'text',
-        name :  class_name,
-        title: '请输入数据',
-        url  :   "/shop_products/"+ id +"/update_attribute",
-        ajaxOptions: {
-          type: 'put',
-          dataType: 'json'
-        },
-        validate: function(value) {
-          if(isNaN($.trim(value))) {
-              return '价格与数量必须为数字';
-              value = 0.0
-          }
+    id = $(elem).attr("id")
+    $(elem).find("input").select()
+    $("."+ class_name , elem).editable({
+      pk   :    id,
+      type :  'text',
+      name :  class_name,
+      title: '请输入数据',
+      url  :   "/shop_products/"+ id +"/update_attribute",
+      ajaxOptions: {
+        type: 'put',
+        dataType: 'json'
+      },
+      validate: function(value) {
+        if(isNaN($.trim(value)) || $.trim(value) == "") {
+          return '价格与数量必须为数字';
+          value = 0.0
         }
       })
     };

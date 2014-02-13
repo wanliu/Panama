@@ -4,6 +4,7 @@
 root = window || @
 
 class root.AskBuyView extends Backbone.View
+  # 'keyup input[name="ask_buy[title]"]' : 'checkEmpty' # fix me, keyup not work
 
   params: {
     url_upload: "",
@@ -28,6 +29,13 @@ class root.AskBuyView extends Backbone.View
     @init_attachment(@upload_params.data)
 
     @$el.on "ajax:success", _.bind(@ajax_success, @)
+    @$('input[name="ask_buy[title]"]').bind('keyup', (event) => @checkEmpty(event) )
+
+  checkEmpty: (event) ->
+    $input = $(event.currentTarget)
+    return if _.isEmpty($input.val().trim())
+    $input.siblings('.help-inline').remove()
+    $input.parents('.control-group').removeClass('error')
 
   ajax_success: () ->
     pnotify({title: '提醒', text: "求购信息发布成功！"})
@@ -59,3 +67,4 @@ class root.AskBuyView extends Backbone.View
       limit: 4,
       params: @upload_params
     )
+

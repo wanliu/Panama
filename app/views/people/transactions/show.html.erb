@@ -21,7 +21,7 @@
     var card = new TransactionCard({
       el: $(".transaction-<%=@transaction.id %>-<%=@transaction.state %>"),
       realtime: {
-        url: '<%= faye_server_uri %>',
+        url: '<%= realtime_uri %>',
         token: '<%= token %>' }
     });
   })

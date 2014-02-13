@@ -20,8 +20,11 @@ class NewUsersView extends Backbone.View
       type: "get",
       url: "/communities/hot_region_name",
       success: (datas) =>
-        _.each datas, (data) =>
-          @$(".hot_region span").append(@hot_region_template(data))
+        if datas.length > 0
+          _.each datas, (data) =>
+            @$(".hot_region span").append(@hot_region_template(data))
+        else
+          @$(".hot_region span").append("暂无热区")
     })
 
   hot_region_search: (event) ->
@@ -43,7 +46,7 @@ class NewUsersView extends Backbone.View
     else
       @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
       _.each datas, (data) =>
-        view = if data.service == "buyer"          
+        view = if _.contains(data.service.split(","),"buyer")      
           new UserCardInfo(
             el: $(@buyer_template(_.extend(data, data.user))),
             model: data
@@ -58,7 +61,7 @@ class NewUsersView extends Backbone.View
 
   appendToWrapper: (el) ->
 
-    if @$wrapper.find(".span4").length % 3 == 0
+    if @$(".wrapper").find(".span4").length % 3 == 0
       @$row = $("<div class='row-fluid' />").appendTo(@$wrapper)
 
     @$row.append(el)
@@ -96,7 +99,7 @@ class FindUserView extends Backbone.View
       @$(".alert").fadeOut()
       @$(".wrapper").html ""
       _.each datas, (data) =>
-        view = if data.service == "buyer"          
+        view = if _.contains(data.service.split(","), "buyer")          
           new UserCardInfo(
             el: $(@buyer_template(_.extend(data, data.user))),
             model: data
@@ -108,11 +111,11 @@ class FindUserView extends Backbone.View
           )
 
         @appendToWrapper(view.render());
-
+ 
   appendToWrapper: (el) ->
 
-    if @$wrapper.find(".span4").length % 3 == 0
-      @$row = $("<div class='row-fluid' />").appendTo(@$wrapper)
+    if @$(".wrapper").find(".span4").length % 3 == 0
+      @$row = $("<div class='row-fluid' />").appendTo(@$(".wrapper"))
 
     @$row.append(el)
 
@@ -120,8 +123,8 @@ class FindUserView extends Backbone.View
 
 class FindCircleView extends Backbone.View
   events: 
-    "click .find_circle"              : "find_circle"
-    "keypress input.circle_input_info": "key_up"
+    "click .find_circle"               : "find_circle"
+    "keypress input.circle_input_info" : "key_up"
 
   initialize: () ->
     _.extend(@, @options)
@@ -134,7 +137,6 @@ class FindCircleView extends Backbone.View
     keyword = @$(".circle_input_info").val().trim()
     $.ajax({
       type: "get",
-      dataType: "json",
       url: "/search/shop_circles",
       data: {q: keyword ,area_id: @options.area_id }
       success: (data) =>

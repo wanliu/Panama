@@ -21,8 +21,8 @@ class ShopProductsController < ApplicationController
       shop_products = product_ids.map do |product_id|
         current_user.shop.products.create(
           product_id: product_id,
-          price: 0,
-          inventory: 1
+          price: 1.0,
+          inventory: 0
         )
       end
       valid_shop_products = shop_products.find { |product| product.valid? }
@@ -43,21 +43,17 @@ class ShopProductsController < ApplicationController
     end
   end
 
-  def update
+  def update_attribute
     @product = ShopProduct.find(params[:id])
     respond_to do |format|
-      if @product.update_attributes(params[:shop_product])
+      if ShopProduct.valid_attribute?(params[:name], params[:value])
+        @product.update_attribute(params[:name], params[:value])
         format.json { render json: @product }
       else
-        format.json { render json: @product.errors,
+        format.json { render json: @product.errors.message[params[:name]] ,
                    status: :unprocessable_entity }
       end
     end
-  end
-
-  def update_attribute
-    params[:shop_product] = { params.delete(:name) => params.delete(:value) }
-    update
   end
 
   def show

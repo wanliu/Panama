@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe DeliveryManner do
+describe ShopProductProductItems do
   pending "add some examples to (or delete) #{__FILE__}"
 end

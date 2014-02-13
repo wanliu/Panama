@@ -1,17 +1,26 @@
-.info-wrapper > div:first-child {
-  margin-left: 0px !important;
+// .info-wrapper > div:first-child {
+//   margin-left: 0px !important;
+// }
+.circles{
+  .row-fluid .businiess_community:first-child{
+    margin-left: 10px !important;
+  }
 }
+
 .info-wrapper{ 
+  .row-fluid .user_info:first-child{
+    margin-left: 0px !important;
+  }
   .user_info, .shop_info{
     overflow: hidden;
     // @include transparent(rgb(51,51,51),0.4);
     background-color: $white;
-    // margin-left: 0px;
+    margin-left: 10px;
     margin-bottom: 20px;
     // margin-left: 20px;
     -webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
     box-shadow: 1px 2px 0 rgba(0,0,0,.05);
-    height: 125px;
+    height: 100px;
 
     .hover_place{
       top: 0px;
@@ -24,7 +33,8 @@
       color: #999;
       .actions {
         position: absolute;
-        top: 150px;
+        // top: 150px;
+        top: 120px;
         left: 40px;
       }
 
@@ -40,8 +50,8 @@
         max-width: none;
         float: left;
 
-        width: 125px;
-        height: 125px;
+        width: 100px;
+        height: 100px;
         margin-left: -132px;
       }
     }
@@ -132,7 +142,7 @@
 
   .circle_info{
     margin-bottom: 20px;
-    margin-left: 20px;
+    // margin-left: 20px;
     @include transparent(rgb(51,51,51),0.4);
     -webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
     box-shadow: 1px 2px 0 rgba(0,0,0,.05);
