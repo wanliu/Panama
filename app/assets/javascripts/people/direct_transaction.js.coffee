@@ -3,10 +3,8 @@ root = (window || @)
 class Direct extends Backbone.Model
 
 class root.DirectTransactionView extends Backbone.View
-  events: {
-    "click .chat_wrapper .message-toggle": "toggle_message"
-    "click .wrap_event .completed"        : "completed"
-  }
+  events:
+    "click .wrap_event .completed" : "completed"
 
   initialize: () ->
     @$info = @$(".direct-info")
@@ -23,17 +21,16 @@ class root.DirectTransactionView extends Backbone.View
 
     @model.bind("change:state", @change_state, @)
     @load_realtime()
-    # @load_style()
-    @toggle_message()
+    @generateChat()
+    @setChatPanel()
 
-  load_style: () ->
-    setTimeout () =>
-      padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
-      @$messages.height(@$info.outerHeight() - @$toolbar.outerHeight() - padding)
-    , 60
+  setChatPanel: () ->
+    $order_row = @$el.parents('.wrapper-box')
+    $chat_foot = $order_row.find(".message_wrap .foot")
+    $chat_body = $order_row.find(".message_wrap .body")
+    $chat_body.height($order_row.outerHeight() - $chat_foot.outerHeight())
 
-  toggle_message: () ->
-    # @$messages.slideToggle()
+  generateChat: () ->
     @generateToken () =>
       @newAttachChat()
 
@@ -72,6 +69,7 @@ class root.DirectTransactionView extends Backbone.View
     )
 
   change_state: () ->
+    @setChatPanel()
     @$(".wrap_event .state_title").html(@model.get("state_title"))
 
   load_realtime: () ->

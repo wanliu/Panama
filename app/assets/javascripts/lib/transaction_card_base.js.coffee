@@ -32,8 +32,9 @@ class TransactionCardBase extends AbstructStateView
     @transaction.bind("change:state", @change_state, @)
     @transaction.bind("change:stotal", @change_stotal, @)
 
-    @initAttachChat() if @dialogState
     @load_realtime()
+    @generateChat() if @dialogState
+    @setChatPanel()
     super
 
   countdown: () ->
@@ -189,16 +190,13 @@ class TransactionCardBase extends AbstructStateView
       type: type
     })
 
-  setMessagePanel: () ->
-    @message_panel = @$(".message_wrap", ".transaction-footer")
-    total = @$(".wrapper-box>.left").outerHeight()
-    tm = @$(".message-toggle").outerHeight()
-    wrap = @$('.transaction-footer')
-    padding = parseInt(wrap.css("padding-top")) + parseInt(wrap.css("padding-bottom"))
-    @message_panel.height(total - tm - padding)
+  setChatPanel: () ->
+    $order_row = @$el.parents('.wrapper-box')
+    $chat_foot = $order_row.find(".message_wrap .foot")
+    $chat_body = $order_row.find(".message_wrap .body")
+    $chat_body.height($order_row.outerHeight() - $chat_foot.outerHeight())
 
-  initAttachChat: () ->
-    # @$(".message_wrap", ".transaction-footer").slideToggle()
+  generateChat: () ->
     @generateToken () =>
       @newAttachChat()
 
@@ -233,7 +231,7 @@ class TransactionCardBase extends AbstructStateView
     }
 
   change_state: () ->
-    @setMessagePanel()
+    @setChatPanel()
 
   load_realtime: () ->
     @client = window.clients
