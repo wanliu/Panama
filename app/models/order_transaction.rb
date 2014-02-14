@@ -55,6 +55,7 @@ class OrderTransaction < ActiveRecord::Base
   validates_numericality_of :total, :greater_than_or_equal_to => 1
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
+  validate :shop_checked?
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
@@ -631,6 +632,14 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   private
+
+  def shop_checked?
+    shop = Shop.find(seller_id)
+    unless shop.actived
+      errors.add(:shop, "商店还未通过审核，暂时还不能购买") 
+    end
+  end
+
   def valid_base_info?
     unless %w(order close).include?(state)
       if pay_type.blank? || !OrderPayType.exists?(pay_type)
