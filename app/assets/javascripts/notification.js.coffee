@@ -334,7 +334,7 @@ class InviteManyView extends Backbone.View
         @$(".noty_close").click()
         @el.modal("hide")
       error: (message) ->
-        pnotify(text: message.responseText, type: "error")
+        pnotify(text: JSON.parse(message.responseText), type: "error")
     })
 
 class AnswerInvite extends Backbone.View
