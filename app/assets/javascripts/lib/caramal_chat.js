@@ -5137,17 +5137,21 @@ if (typeof define === "function" && define.amd) {
         var channel_name, user_name;
         this.unreadFetchFlagSeted = true;
         channel_name = this.group ? this.group : this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
-          return _.find(channel.split('-'), function(name) {
-            return name === user_name;
-          });
+          if (clients && clients.current_user) {
+            return channel === [user_name, clients.current_user].sort().join('-');
+          } else {
+            return _.find(channel.split('-'), function(name) {
+              return name === user_name;
+            });
+          }
         })) : void 0;
         if (channel_name && this.manager.unreadMsgs && this.manager.unreadMsgs[channel_name]) {
           this.unreadMsgCount = this.manager.unreadMsgs[channel_name];
           this.unreadFetchFlag = true;
+          this.unreadFetched = 0;
           if (this.waitingForUnreadFetchFlagSet) {
             this.fetchUnread();
           }
-          this.unreadFetched = 0;
           return this.emit('unreadMsgsSeted', {});
         }
       };
