@@ -286,8 +286,8 @@ class OrderTransaction < ActiveRecord::Base
   def generate_transfer
     items.each do |item|
       transfers.build(
-        :amount => -item.amount,        
-        :shop_product => item.shop_product)      
+        :amount => -item.amount,
+        :shop_product => item.shop_product)
     end
   end
 

@@ -55,12 +55,13 @@
                   })
                 </script>
               </div>
-              <label class='control-label'>数量</label>
+              <!-- <label class='control-label'>数量</label>
               <div class='controls'>
                 <p class='text'>
                   <input type='number' value='1' class='amount' name='product_item[amount]' />
                 </p>
-              </div>
+              </div> -->
+              <%= f.input :amount, as: :spinner, input_html: { class: 'amount' } %>
             </div>
           <% end %>
         </div>
