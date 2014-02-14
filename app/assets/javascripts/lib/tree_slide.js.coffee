@@ -1,7 +1,7 @@
 
 root = window || @
 
-class TreeSlide extends Backbone.View
+class root.TreeSlide extends Backbone.View
 
 	events:
 		"click a[data-toggle='slide']": "toggleSlide"
@@ -43,7 +43,6 @@ class TreeSlide extends Backbone.View
 		removes = _(@$el.find("ul.in.collapse")).difference(elements)
 		$(elem).removeClass("in") for elem in  removes
 
-
 	elementLine: (e) ->
 		parents = @$(e.target).parents("ul.collapse").toArray()
 		parents.concat(@$(e.target).parent().find(">ul.in.collapse").toArray())
@@ -52,5 +51,3 @@ class TreeSlide extends Backbone.View
 		console.log e.currentTarget, document.elementFromPoint(e.pageX, e.pageY)
 		document.elementFromPoint(e.pageX, e.pageY)
 
-
-root.TreeSlide = TreeSlide
