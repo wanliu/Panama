@@ -29,7 +29,7 @@ class Activities::FocusController < Activities::BaseController
         @activity.activity_rules.build(:name => "activity_price", :value => people_number, :value_type => "dvalue", :dvalue => activity_params[:activity_price][i].to_d )
       end
     end
-
+    @activity.save # fix me
     respond_to do |format|
       if @activity.save
         format.json { render :json => { text: 'ok' } }
@@ -58,6 +58,7 @@ class Activities::FocusController < Activities::BaseController
     })
     @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
+
     respond_to do |format|
       if @transaction.save
         @activity.transactions << @transaction
@@ -85,7 +86,7 @@ class Activities::FocusController < Activities::BaseController
   def parse_time!(activity_params)
     [:start_time, :end_time].each do |field|
       unless activity_params[field].blank?
-        date = Date.strptime(activity_params[field], '%m/%d/%Y')
+        date = Date.strptime(activity_params[field], '%Y-%m-%d')
         activity_params[field] = Time.zone.parse(date.to_s)
       end
     end
