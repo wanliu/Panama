@@ -7,6 +7,9 @@ class root.TreeSlide extends Backbone.View
 		"click a[data-toggle='slide']": "toggleSlide"
 		# "mouseenter a[data-toggle='slide']": "openSlide"
 
+	openFirstRoot: () ->
+		@$("a[data-toggle='slide']").eq(0).trigger('click')
+
 	toggleSlide: (e) ->
 		$collapse_target = @$(@$(e.currentTarget).attr('href'))
 		if $collapse_target.toggleClass("in").hasClass("in")
