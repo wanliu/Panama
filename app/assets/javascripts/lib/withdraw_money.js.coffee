@@ -15,6 +15,7 @@ class root.WithDrawMoneyView extends Backbone.View
   initialize: () ->
     @$bank_wrap = @$(".bank-wrapper")
     @money = @options.money
+    @current_user = @options.current_user 
     @$form = @$("form.create")
     @$money = $("input.money", @$form)
     @money_wrap = @$(".money_wrap")
@@ -61,9 +62,11 @@ class root.WithDrawMoneyView extends Backbone.View
       type: "POST",
       data: {withdraw: data},
       success: (data) =>
-        pnotify(text: "提现成功!")        
-        @$form[0].reset()
-
+        # @$form[0].reset()
+        pnotify(text: "提现成功!")
+        setTimeout( () =>
+          location.href = "/people/#{@current_user}"
+        , 500)
       error: (data) =>
         ms = JSON.parse(data.responseText)
         pnotify(text: ms.join("<br />"), type: "error")
