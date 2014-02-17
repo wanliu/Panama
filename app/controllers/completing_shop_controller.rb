@@ -5,7 +5,7 @@ class CompletingShopController < Wicked::WizardController
   steps :pick_industry, :authenticate_license, :pick_product
 
   def show
-    @user_checking = current_user.user_checking ||  UserChecking.where(:service => "seller", :user_id => current_user.id).first_or_create
+    @user_checking = current_user.user_checking || UserChecking.where(:service => "seller", :user_id => current_user.id).first_or_create
 
     the_shop          = @user_checking.user.shop
     shop_auth_options = @user_checking.attributes

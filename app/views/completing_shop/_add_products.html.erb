@@ -12,7 +12,7 @@
     </header>
     <div class="body tab-content">
       <div id="categories" class="tab-pane active clearfix">
-        <div class='search-header'>
+        <div class='search-header hide'>
           <div class="input-append controls-row">
             <input class="span8" type="search" id="search-input3">
             <button type="button" class="btn btn-transparent span4">搜索</button>
@@ -168,31 +168,32 @@
 </div>
 
 <script type="text/javascript">
-  var bind_editable = function(elem, class_name){
-    id = $(elem).attr("id")
-    $(elem).find("input").select()
-    $("."+ class_name , elem).editable({
-      pk   :    id,
-      type :  'text',
-      name :  class_name,
-      title: '请输入数据',
-      url  :   "/shop_products/"+ id +"/update_attribute",
-      ajaxOptions: {
-        type: 'put',
-        dataType: 'json'
-      },
-      validate: function(value) {
-        if(isNaN($.trim(value))) {
+  $(function(){
+    var bind_editable = function(elem, class_name){
+      id = $(elem).attr("id")
+      $(elem).find("input").select()
+      $("."+ class_name , elem).editable({
+        pk   :    id,
+        type :  'text',
+        name :  class_name,
+        title: '请输入数据',
+        url  :   "/shop_products/"+ id +"/update_attribute",
+        ajaxOptions: {
+          type: 'put',
+          dataType: 'json'
+        },
+        validate: function(value) {
+          if(isNaN($.trim(value)) || $.trim(value) == "") {
             return '价格与数量必须为数字';
             value = 0.0
+          }
         }
-      }
-    })
-  };
+      });
+    }
 
-  $(document).delegate( '.my_product_list>li', 'click',function(i, elem){
-    bind_editable($(this), "price");
-    bind_editable($(this), "inventory");
+    $(document).delegate('.my_product_list>li', 'click', function(i, elem) {
+      bind_editable($(this), "price");
+      bind_editable($(this), "inventory");
+    });    
   });
-
 </script>

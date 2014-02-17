@@ -38,3 +38,5 @@
 #= require lib/banks
 #= require lib/withdraw_money
 #= require transaction_complete
+#= require addresses
+

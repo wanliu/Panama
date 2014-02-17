@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 # source 'https://rubygems.org'
-
 source 'http://ruby.taobao.org'
 
 gem 'rails', '3.2.15'
@@ -83,8 +82,6 @@ gem "mini_magick", '~> 3.4'
 
 gem "bunny", "~> 1.0.4"
 
-# To use debugger
-#
 # Pagination
 gem 'kaminari', '~> 0.14.1'
 gem 'kuaiqian', "~> 0.0.1", :github => "huxinghai1988/kuaiqian"
@@ -96,7 +93,6 @@ gem 'omniauth-wanliu', "0.1.1", :github => "wanliu/omniauth-wanliu"
 gem 'state_machine', '~> 1.1.2'
 
 group :development, :test do
-  # gem 'debugger', '~> 1.2.2'
   gem "selenium-webdriver", "~> 2.27.0"
   gem 'hirb', '~> 0.7.0'
   # gem 'rb-readline', '~> 0.4.2'
@@ -117,6 +113,7 @@ group :development, :test do
   gem 'simplecov', '~> 0.7.1', :require => false
   gem 'jasmine'
   gem 'rvm-capistrano'
+  # gem 'debugger', '~> 1.2.2'
   gem 'byebug'
   gem "debugger-pry", :require => "debugger/pry"
   # gem 'pry-rails'

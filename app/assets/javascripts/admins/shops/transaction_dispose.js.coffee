@@ -33,8 +33,10 @@ class TransactionEvent extends Backbone.View
 
     @model.bind("remove", @remove, @)
 
-  dispose: () ->
-    @model.dispose (data, xhr)  =>
+  dispose: (event) ->
+    @model.dispose (data, xhr) =>
+      return if _.isEmpty(data)
+      @$el.remove()
       window.location.href = "#open/#{data.id}/#{@workName}"
       # window.location.reload();
 
@@ -49,6 +51,7 @@ class TransactionEvent extends Backbone.View
 
   change_state: () ->
     @$(".state").html(@model.get("state_title"))
+
 
 class exports.TransactionDispose extends Backbone.View
 
@@ -151,6 +154,4 @@ class exports.TransactionDispose extends Backbone.View
       when "direct_transactions" then "direct"
       when "transactions" then "order"
       else ""
-
-
 

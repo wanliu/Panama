@@ -454,6 +454,8 @@ zh-CN:
         code: 账号
         name: 开户人
         bank_id: 银行账号
+      transfer:
+        shop_product: 商品
 
   mongoid:
     models:
