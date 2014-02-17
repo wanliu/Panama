@@ -19,6 +19,13 @@ class CategoryController < ApplicationController
     end
   end
 
+  # def filtered_brand
+    
+  #   respond_to do |format|
+  #     format.html
+  #   end
+  # end
+
   def shop_products
     @category = params[:id].blank? ? Category.root : Category.find(params[:id])
     category_ids = @category.descendants.pluck(:id) + [@category.id]

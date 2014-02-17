@@ -1,13 +1,24 @@
 <div class='row-fluid dialog_product'>
-  <div class="span4">
+  <div class="span4 product_tree_panel">
     <header>
-      <ul class="nav nav-tabs">
-        <li class="active" id ="sort">
+      <ul class="nav nav-tabs" style="position:relative;">
+        <li class="active" id ="sort" style="position: relative;">
           <a href="#categories" data-toggle="tab">分类</a>
         </li>
-        <li>
-          <a href="#brands" data-toggle="tab">品牌</a>
-        </li>
+        <div class="brand_panel row-fluid " style="position:absolute;text-align: left; left:55px; top:8px;">
+          <a class="btn pick_brand" style="width:70px;">
+            选择品牌
+            <b class="caret pick_brand"></b>
+          </a>
+          <div class="brand_list span12" style="border: 5px solid rgba(219, 224, 193, 0.81);display:none; position:absolute; background-color:white; color:black;z-index:9999;" >
+            <strong class="check_tips row-fluid span12">请勾选品牌</strong>
+            <div class="brand_content"><img src="/assets/loading_max.gif" />正在加载...</div>
+            <div class="row-fluid span12 ">
+              <span class="btn btn-primary  apply">应用</span>
+              <span class="btn btn-primary  cancle">取消</span>
+            </div>
+          </div>
+        </div>
       </ul>
     </header>
     <div class="body tab-content">
@@ -18,11 +29,9 @@
             <button type="button" class="btn btn-transparent span4">搜索</button>
           </div>
         </div>
-        <div>
+        <div class="category_tree">
           <%= render "category_selector"%>
         </div>
-      </div>
-      <div id="brands" class="tab-pane">
       </div>
     </div>
   </div>
@@ -170,29 +179,34 @@
 <script type="text/javascript">
   $(function(){
     var bind_editable = function(elem, class_name){
-    id = $(elem).attr("id")
-    $(elem).find("input").select()
-    $("."+ class_name , elem).editable({
-      pk   :    id,
-      type :  'text',
-      name :  class_name,
-      title: '请输入数据',
-      url  :   "/shop_products/"+ id +"/update_attribute",
-      ajaxOptions: {
-        type: 'put',
-        dataType: 'json'
-      },
-      validate: function(value) {
-        if(isNaN($.trim(value)) || $.trim(value) == "") {
-          return '价格与数量必须为数字';
-          value = 0.0
+      id = $(elem).attr("id");
+      $(elem).find("input").select();
+      $("."+ class_name , elem).editable({
+        pk   :    id,
+        type :  'text',
+        name :  class_name,
+        title: '请输入数据',
+        url  :   "/shop_products/"+ id +"/update_attribute",
+        ajaxOptions: {
+          type: 'put',
+          dataType: 'json'
+        },
+        validate: function(value) {
+          if(isNaN($.trim(value)) || $.trim(value) == "") {
+            return '价格与数量必须为数字';
+            value = 0.0;
+          }
         }
-      })
-    };
+      });
+    }
 
     $(document).delegate( '.my_product_list>li', 'click',function(i, elem){
       bind_editable($(this), "price");
       bind_editable($(this), "inventory");
-    });    
+    }); 
+
+    new BrandChoiceView({
+      el: $(".product_tree_panel")
+    });   
   });
 </script>

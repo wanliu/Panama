@@ -254,6 +254,11 @@ module ApplicationHelper
     as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
   end
 
+  # def build_menu3(root, current_brand = nil , element_id = nil)
+  #   output = ActiveSupport::SafeBuffer.new
+  #   if root.children && root
+  # end
+
   def build_menu(root, element_id = nil)
     output = ActiveSupport::SafeBuffer.new
     if root.children && root.children.size && root.children.size > 0
@@ -327,7 +332,7 @@ module ApplicationHelper
     end
     #end
   end
-
+  
   def get_delivery_type
     @delivery_types = DeliveryType.all
   end

@@ -27,6 +27,13 @@ class ProductsController < ApplicationController
     end
   end
 
+  def all_brand_name
+    @brand_names = Product.find_by_sql("select distinct brand_name, category_id from products")
+    respond_to do |format|
+      format.json{ render json: @brand_names}
+    end
+  end
+
   def base_info
     @product = Product.find(params[:id])
     respond_to do |format|

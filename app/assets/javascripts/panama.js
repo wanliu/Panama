@@ -48,6 +48,7 @@
 //= require notification
 //= require upload_photo
 //= require lib/circle
+//= require shop_product_search
 
 root = window || this;
 

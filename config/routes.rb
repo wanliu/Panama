@@ -350,6 +350,9 @@ Panama::Application.routes.draw do
   resources :contents, :except => :index
 
   resources :products, :except => :index do
+    collection do 
+      get "all_brand_name", :to => "products#all_brand_name"
+    end
     member do
       get 'base_info'
     end
@@ -392,6 +395,7 @@ Panama::Application.routes.draw do
     end
     collection do
       get "shop_products", :to => "category#shop_products"
+      get "filtered_tree", :to => "category#filtered_tree"
     end
   end
 
