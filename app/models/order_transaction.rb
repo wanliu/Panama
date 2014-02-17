@@ -52,7 +52,7 @@ class OrderTransaction < ActiveRecord::Base
   validates_presence_of :buyer
   validates_presence_of :seller
   validates_numericality_of :items_count
-  validates_numericality_of :total, :greater_than_or_equal_to => 1
+  validates_numericality_of :total, :greater_than => 0
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
   validate :shop_checked?

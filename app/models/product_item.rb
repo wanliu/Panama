@@ -73,7 +73,7 @@ class ProductItem < ActiveRecord::Base
   validates :price, :numericality => true
 
   validates :amount, :presence => true, 
-            :numericality => { :only_integer => false, :greater_than_or_equal_to => 1 }
+            :numericality => { :only_integer => false, :greater_than => 0 }
   validates :total, :presence => true,
             :numericality => { :greater_than => 0 }
 
