@@ -144,6 +144,13 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </div>')
 
+  sys_msg_template: _.template("
+    <li>
+      <div class='alert alert-info'>
+        <i class='icon-info-sign'></i>系统消息：<%= message.msg %>
+      </div>
+    </li>")
+
   receive_template: Handlebars.compile('
     <li clas="row-receive">
       <div class="pull-left">
@@ -288,11 +295,7 @@ class BaseChatView extends Caramal.BackboneView
     html
 
   parseSysMsg: (message) ->
-    "<li>
-      <div class='alert alert-info'>
-        <i class='icon-info-sign'></i>系统消息：#{message.msg}
-      </div>
-    </li>"
+    @sys_msg_template({ message: message })
 
   sendContent: () ->
     @$('.content')
@@ -518,6 +521,13 @@ class root.OrderChatView extends Caramal.BackboneView
       </div>
     </div>')
 
+  sys_msg_template: _.template("
+    <li>
+      <div class='alert alert-info'>
+        <i class='icon-info-sign'></i>系统消息：<%= message.msg %>
+      </div>
+    </li>")
+
   receive_template: Handlebars.compile('
     <li clas="row-receive">
       <div class="pull-left">
@@ -616,11 +626,7 @@ class root.OrderChatView extends Caramal.BackboneView
     html
 
   parseSysMsg: (message) ->
-    "<li>
-      <div class='alert alert-info'>
-        <i class='icon-info-sign'></i>系统消息：#{message.msg}
-      </div>
-    </li>"
+    @sys_msg_template({ message: message })
 
   sendContent: () ->
     @$('.content')
