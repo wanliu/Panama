@@ -20,8 +20,11 @@ class NewUsersView extends Backbone.View
       type: "get",
       url: "/communities/hot_region_name",
       success: (datas) =>
-        _.each datas, (data) =>
-          @$(".hot_region span").append(@hot_region_template(data))
+        if datas.length > 0
+          _.each datas, (data) =>
+            @$(".hot_region span").append(@hot_region_template(data))
+        else
+          @$(".hot_region span").append("暂无热区")
     })
 
   hot_region_search: (event) ->

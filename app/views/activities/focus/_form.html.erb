@@ -69,7 +69,7 @@
               id: "activity_focus_start_time",
               input_html: {
                 name: 'activity[start_time]',
-                value: (DateTime.now + (Settings.activity_start_time(1)).days).strftime('%m/%d/%Y')
+                value: (DateTime.now + (Settings.activity_start_time(1)).days).strftime('%Y-%m-%d')
               } %>
 
   <%= f.input :end_time,
@@ -79,7 +79,7 @@
               id: "activity_focus_end_time",
               input_html: {
                 name: 'activity[end_time]',
-                value: (DateTime.now + (Settings.activity_end_time(8)).days).strftime('%m/%d/%Y')
+                value: (DateTime.now + (Settings.activity_end_time(8)).days).strftime('%Y-%m-%d')
               } %>
   </div>
 

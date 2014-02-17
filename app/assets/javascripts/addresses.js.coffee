@@ -8,7 +8,6 @@ class root.AddressesView extends Backbone.View
     _.extend(@, options)
     @$el = $(@el)
     @$new_form = @$(".new_wrap form#address")
-    
 
   events:
     "click #new_address .save-button" : "new_address"

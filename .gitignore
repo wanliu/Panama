@@ -8,6 +8,7 @@
 /.bundle
 /.rvmrc
 /.yardoc
+/.vagrant
 # Ignore the default SQLite database.
 /db/*.sqlite3
 

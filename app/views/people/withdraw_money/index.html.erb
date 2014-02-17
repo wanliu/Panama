@@ -72,7 +72,8 @@
   $(function(){
     new WithDrawMoneyView({
       el: $(".withdraw_money_wrap"),
-      money: <%=@people.money %>
+      money: <%= @people.money %>,
+      current_user: "<%= @people.login %>"
     })
   })
 </script>

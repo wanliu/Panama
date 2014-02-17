@@ -44,7 +44,7 @@ class Activities::AuctionController < Activities::BaseController
     slice_options = [:shop_product_id, :price, :start_time, :end_time, :description, :attachment_ids,:title]
     activity_params = params[:activity].slice(*slice_options)
     parse_time!(activity_params)
-
+    
     @activity = current_user.activities.build(activity_params)
     @activity.activity_type = "auction"
     unless activity_params[:attachment_ids].nil?
@@ -57,7 +57,7 @@ class Activities::AuctionController < Activities::BaseController
                                      value_type: 'dvalue',
                                      dvalue: params[:activity][:activity_price])
     end
-
+    @activity.save # fix me
     respond_to do |format|
       if @activity.save
         format.json { render :json => { text: 'ok' } }
@@ -74,7 +74,7 @@ class Activities::AuctionController < Activities::BaseController
   def parse_time!(activity_params)
     [:start_time, :end_time].each do |field|
       unless activity_params[field].blank?
-        date = Date.strptime(activity_params[field], '%m/%d/%Y')
+        date = Date.strptime(activity_params[field], '%Y-%m-%d')
         activity_params[field] = Time.zone.parse(date.to_s)
       end
     end

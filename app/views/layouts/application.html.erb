@@ -21,8 +21,6 @@
     <%= javascript_include_tag "my_cart" %>
 
   <script type="text/javascript">
-
-
     window.clients = Realtime.connect({
       server_uri: '<%= realtime_uri %>',
       token: '<%= current_user.try(:im_token) %>',

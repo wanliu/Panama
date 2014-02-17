@@ -1,12 +1,21 @@
-.info-wrapper > div:first-child {
-  margin-left: 0px !important;
+// .info-wrapper > div:first-child {
+//   margin-left: 0px !important;
+// }
+.circles{
+  .row-fluid .businiess_community:first-child{
+    margin-left: 10px !important;
+  }
 }
+
 .info-wrapper{ 
+  .row-fluid .user_info:first-child{
+    margin-left: 0px !important;
+  }
   .user_info, .shop_info{
     overflow: hidden;
     // @include transparent(rgb(51,51,51),0.4);
     background-color: $white;
-    // margin-left: 0px;
+    margin-left: 10px;
     margin-bottom: 20px;
     // margin-left: 20px;
     -webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
@@ -133,7 +142,7 @@
 
   .circle_info{
     margin-bottom: 20px;
-    margin-left: 20px;
+    // margin-left: 20px;
     @include transparent(rgb(51,51,51),0.4);
     -webkit-box-shadow: 1px 2px 0 rgba(0,0,0,.05);
     box-shadow: 1px 2px 0 rgba(0,0,0,.05);

@@ -176,12 +176,6 @@
   <% if has_right_to_answer_ask_buy?(@ask_buy) %>
     var sp_elem = $(".form_answer_ask_buy .shop_product_id")
     <% shop_product = current_user.belongs_shop.has_product(@ask_buy.product_id) %>
-    sp_elem.bind('change', function(event){
-      var $target = $(event.currentTarget)
-      if (!_.isEmpty($target.val())) {
-        $target.parents('.control-group').removeClass('error')
-      }
-    })
 
     sp_elem.chosenEx({
       allow_single_deselect : true,
@@ -203,6 +197,10 @@
         no_results_text : "没有找到你的商品, 请到<a href='/shops/<%=current_user.belongs_shop.name %>/admins/shop_products'>商品管理</a>中添加"
       }
     });
+
+    $('#answer_ask_buy_shop_product_chzn .chzn-results>li').live("click", function(event){
+      $(".form_answer_ask_buy .shop_product_wrap").removeClass("error");
+    })
   <% end %>
   <% if !current_user.answered_ask_buy(@ask_buy.id).nil? %>
     $(".form_answer_ask_buy input").attr("readonly","readonly")
