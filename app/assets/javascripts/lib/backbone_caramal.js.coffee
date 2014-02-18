@@ -174,26 +174,8 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </li>')
 
-  fetchHistory: () ->
-    # @msgLoaded ||= false
-    # return if @msgLoaded
-    # start = @channel.message_buffer.length + 1
-    # setTimeout( () =>
-    #   @channel.history({start: start}, (chat, err, messages) =>
-    #     @msgLoaded = true
-    #     $html = @parseMessages(messages)
-    #     text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-    #     $html += @history_tip({text: text})
-    #     @msgContent().prepend($html)
-    #     @$('.message .image-zoom').fancybox()
-    #     @scrollDialog()
-    #   )
-    # , 300)
-
   resetHistory: () ->
-    @msgLoaded = false
     @msgContent().html('')
-    # @fetchHistory()
 
   initialize: (options) ->
     super
@@ -206,7 +188,6 @@ class BaseChatView extends Caramal.BackboneView
     @initDialog()
 
   getChannel: () ->
-    console.error('unimplemented...')
     @bindSysMsg()
 
   initChannel: () ->
@@ -217,20 +198,37 @@ class BaseChatView extends Caramal.BackboneView
     )
 
   initDialog: () ->
-    # @bindMessage()
-    $(@el).html(@chat_template({model: @model}))
-    @$('div.body').scroll($.proxy(@more_unread_histroy, @))
-    @state_el = @$(".head>.state")
-    @model.chat_view = @
-    @display = false
+    @render()
+    @bindScroll()
+    @setDisplay()
     $('body').append(@el)
+    @state_el = @$(".head>.state")
     @addResizable()
 
+    @addModelToManager()
+    @setImgUploader()
+    @hide()
+
+  render: () ->
+    $(@el).html(@chat_template({model: @model}))
+
+  bindScroll: () ->
+    @$('div.body').scroll($.proxy(@more_unread_histroy, @))
+
+  setDisplay: () ->
+    @model.chat_view = @
+    @display = false
+
+  addModelToManager: () ->
     ChatManager.getInstance().addModel(@model)
+
+  setImgUploader: () ->
     new ImageUpload({ el: @el, parent_view: @ })
     @$('.choose-face').popover({
       content: () => EmojifyChooser.getInstance().el
     })
+
+  hide: () ->
     $(@el).hide()
 
   addResizable: () ->
@@ -347,13 +345,14 @@ class BaseChatView extends Caramal.BackboneView
     target = event.target || event.srcElement
     if $(target).scrollTop() < 5
       setTimeout(() =>
-        @channel.fetchUnread()
+        # @channel.fetchUnread()
+        @channel.fetchMsgs()
       , 800)
 
   showMoreFlag: () ->
     moreFlag = @msgContent().find('.showMoreFlag')
     moreFlag.remove()
-    @msgContent().prepend("<li class='row-receive showMoreFlag' style='text-align: center; color: #478ebb'>\
+    @msgContent().prepend("<li class='row-receive showMoreFlag'>\
       <i class='icon-time'></i>查看更多信息</li>")
 
   removeMoreFlag: () ->
@@ -378,6 +377,8 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
     @channel.active()
     @showUnread()
+    @channel.on 'endOfHisMsg', (event) =>
+      @removeMoreFlag();
     # @bindMessage()
     @scrollDialog()
 
@@ -431,10 +432,6 @@ class BaseChatView extends Caramal.BackboneView
 
 
 class root.FriendChatView extends BaseChatView
-
-  initialize: () ->
-    super
-
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@name)
 
@@ -462,43 +459,18 @@ class root.FriendChatView extends BaseChatView
 
 
 class root.GroupChatView extends BaseChatView
-
-  initialize: () ->
-    super
-
   getChannel: () ->
     @channel ||= Caramal.Group.of(@name)
-
-
-class root.TemporaryChatView extends BaseChatView
-
-  initialize: () ->
     super
 
+class root.TemporaryChatView extends BaseChatView
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
+    super
 
 
-class root.OrderChatView extends Caramal.BackboneView
-  on_class: 'online'
-  off_class: 'offline'
+class root.OrderChatView extends BaseChatView
   className: 'order_chat'
-
-  EVENT_TYPE: {
-    'joined'     : 1,
-    'leaved'     : 2,
-    'inputing'   : 3,
-    'onlineState': 4
-  }
-
-  events:
-    'mouseover '                : 'activeDialog'
-    'click .close_label'        : 'hideDialog'
-    'click .send_button'        : 'sendMessage'
-    'click .emojify-chooser img': 'chooseEmojify'
-    'keyup textarea.content'    : 'fastKey'
-
-  # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="body">
@@ -522,55 +494,6 @@ class root.OrderChatView extends Caramal.BackboneView
       </div>
     </div>')
 
-  sys_msg_template: _.template("
-    <li>
-      <div class='alert alert-info'>
-        <i class='icon-info-sign'></i>系统消息：<%= message.msg %>
-      </div>
-    </li>")
-
-  receive_template: Handlebars.compile('
-    <li clas="row-receive">
-      <div class="pull-left">
-        <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg">
-        </div>
-      </div>
-      <div class="message-body">
-        <div class="pull-left">
-          <a href="#" class="login">{{ user }}</a>
-          {{calender time}}
-        </div>
-        <div class="message">
-          {{ msg }}
-          {{#each attachments}}
-            <a class="image-zoom" target="_blank" href="{{default}}">
-              <img src="{{header}}" alt="图片">
-            </a>
-          {{/each}}
-        </div>
-      </div>
-    </li>')
-
-  # fetchHistory: () ->
-  #   @msgLoaded ||= false
-  #   return if @msgLoaded
-  #   start = @channel.message_buffer.length + 1
-  #   @channel.history({start: start}, (chat, err, messages) =>
-  #     @msgLoaded = true
-  #     $html = @parseMessages(messages)
-  #     text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-  #     $html += @history_tip({text: text})
-  #     @msgContent().prepend($html)
-  #     @$('.message .image-zoom').fancybox()
-  #     @scrollDialog()
-  #   )
-
-  # resetHistory: () ->
-  #   @msgLoaded = false
-  #   @msgContent().html('')
-  #   @fetchHistory()
-
 
   initialize: (options) ->
     super
@@ -588,129 +511,33 @@ class root.OrderChatView extends Caramal.BackboneView
     #   , 300)
     # )
 
+
   initChannel: () ->
-    @channel ||= Caramal.Temporary.of(@name)
+    @getChannel()
     @channel.open( () =>
       @channel.record()
       @channel_ready = true
       $(@el).trigger('enterOrderChat')
     )
 
+  getChannel: () ->
+    @channel ||= Caramal.Temporary.of(@name)
+    super
+
   initDialog: () ->
-    # @bindMessage()
-    $(@el).html(@chat_template({model: @model}))
-    @model.chat_view = @
-    @display = false
+    @render()
+    @bindScroll()
+    @setDisplay()
     $(@model.get('attach_el')).append(@el)
 
-    ChatManager.getInstance().collection.add(@model)
-    new ImageUpload({ el: @el, parent_view: @ })
-    @$('.choose-face').popover({
-      content: () => EmojifyChooser.getInstance().el
-    })
-    $(@el).hide()
-
-  chooseEmojify: (event) ->
-    @$('.choose-face').popover('hide')
-    @sendContent().insertAtCursor(":#{$(event.target).data('name')}:")
-
-  parseOne: (message) ->
-    if message.user is clients.current_user
-      html = @receive_template(message)
-    else
-      html = @receive_template(message)
-
-    html.replace(/:([a-z]|_)+:/g, (word) =>
-      '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
-    )
-
-  parseMessages: (messages) ->
-    html = ''
-    messages = [messages] unless $.isArray(messages)
-    _.each messages, (message) =>
-      html += @parseOne(message)  
-    html
-
-  parseSysMsg: (message) ->
-    @sys_msg_template({ message: message })
-
-  sendContent: () ->
-    @$('.content')
-
-  msgContent: () ->
-    @$('.msg_content')
-
-  receiveMessage: (data) ->
-    if @display
-      @msgContent().append(@parseMessages(data))
-      @model.trigger('active_avatar') if @name is data.user
-      @$('.message .image-zoom').fancybox()
-      @scrollDialog()
-
-  receiveSysMsg: (data) ->
-    if @display
-      @msgContent().append(@parseSysMsg(data))
-      @model.trigger('active_avatar') if @name is data.user
-      @$('.message .image-zoom').fancybox()
-      @scrollDialog()
-
-  toggleDialog: () ->
-    if @display
-      @hideDialog()
-    else
-      @showWithMsg()
+    @addModelToManager()
+    @setImgUploader()
+    @hide()
 
   hideDialog: () ->
-    $(@el).hide()
-    @display = false
+    super
     @msgContent().html('')
-    @channel.deactive()
     # @unbindMessage()
-
-  showDialog: () ->
-    $(@el).show()
-    @display = true
-    @channel.active()
-    @showUnread()
-    # @bindMessage()
-    @scrollDialog()
-
-  scrollDialog: () ->
-    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
-
-  showUnread: () ->
-    _.each @channel.message_buffer, (msg) =>
-      @receiveMessage(msg)
-    @channel.message_buffer.splice(0, @channel.message_buffer.length)
-
-  showWithMsg: () ->
-    # @resetHistory()
-    @showDialog()
-
-  bindMessage: () ->
-    @channel.onMessage(@receiveMessage, @)
-
-  bindSysMsg: () ->
-    @channel.onSysMsg(@receiveSysMsg, @)
-
-  unbindMessage: () ->
-    @channel.removeEventListener('message', @receiveMessage)
-
-  activeDialog: () ->
-    @model.trigger('unactive_avatar')
-    @$el.css('z-index', 10000)
-    @$el.siblings('.global_chat').css('z-index', 9999)
 
   fastKey: (event) ->
     @sendMessage(event) if event.ctrlKey && event.keyCode == 13
-
-  sendImg: (photo) ->
-    return if _.isEmpty(photo)
-    @channel.send(msg: '', attachments: [ photo ])
-
-  sendMessage: (event) ->
-    msg = @sendContent().val().trim()
-    return if msg is ''
-    @channel.send(msg)
-    @sendContent().val('')
-
