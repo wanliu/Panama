@@ -19,12 +19,15 @@ class CategoryController < ApplicationController
     end
   end
 
-  # def filtered_brand
-    
-  #   respond_to do |format|
-  #     format.html
-  #   end
-  # end
+  def filtered_brand
+    @categories = Category.joins("left join products as p on categories.id = p.category_id")
+                          .where("p.brand_name in (?)",params[:brand_name]).uniq
+
+    @categories_ids = @categories.map{|c| c.ancestors.pluck("id") }.uniq + @categories.map { |c| c.id  }
+    respond_to do |format|
+       format.dialog { render "filtered_brand.dialog", :layout => false }
+    end
+  end
 
   def shop_products
     @category = params[:id].blank? ? Category.root : Category.find(params[:id])
@@ -43,6 +46,7 @@ class CategoryController < ApplicationController
 
   def products
     @category = Category.find(params[:id])
+    brand_name = params[:brand_name] || []
     category_id  = @category.id
     _offset, _limit = params[:offset] || 0, params[:limit] || 10
     @products = Product.search2 do
@@ -53,6 +57,9 @@ class CategoryController < ApplicationController
           must do
             filtered do
               filter :term, :category_id => category_id
+              if brand_name.length > 0
+                filter :terms, :brand_name => brand_name
+              end
             end
           end
         end

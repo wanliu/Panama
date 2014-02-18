@@ -1,3 +1,5 @@
+#=require lib/tree_slide
+
 root = window || @
 
 class BrandChoiceView extends Backbone.View
@@ -5,7 +7,7 @@ class BrandChoiceView extends Backbone.View
   template: Handlebars.compile(
     """<div class="span3" style="width:30%;">
         <div class='brand_line'>
-          <input type="checkbox"  data-value＝"{{category_id }}" />
+          <input type="checkbox"  data-brand="{{brand_name }}" />
           <span>{{ brand_name }}</span>
         </div>
       </div>""")
@@ -16,22 +18,20 @@ class BrandChoiceView extends Backbone.View
     "click .cancle"     : "cancle" 
 
   apply: () ->
-    category_id = []
-    _.each $("input[type=checkbox]:checked"), (elem) ->
-      category_id.push($(elem).attr("data-value"))
-    hit_category = _.uniq(category_id)
-    @ganerate_tree(hit_category)
+    brand_name = []
+    _.each @$("input[type=checkbox]:checked"), (elem) ->
+      brand_name.push($(elem).attr("data-brand"))
+    @ganerate_tree(brand_name)
     @cancle()
 
-  ganerate_tree: (hit_category) =>
+  ganerate_tree: (brand_name) =>
     $.ajax({
       type: "get",
-      dataType: "html"
-      url: "/category/filtered_tree",
-      data: {category_id: hit_category},
+      url: "/category/filtered_brand",
+      data: { brand_name: brand_name},
       success: (html) =>
-        debugger
         @$(".category_tree").html(html)
+        new TreeSlide({ el: @$(".tree-nav") })
     })
 
   cancle: () ->
@@ -55,6 +55,6 @@ class BrandChoiceView extends Backbone.View
     _.each datas, (data) =>
       if data.brand_name
         result += @template(data)
-    @$(".brand_content").replaceWith(result)
+    @$(".brand_content").replaceWith($(result))
 
 root.BrandChoiceView = BrandChoiceView

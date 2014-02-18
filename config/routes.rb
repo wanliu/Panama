@@ -394,8 +394,8 @@ Panama::Application.routes.draw do
       get :subtree_ids, :to => "category#subtree_ids"
     end
     collection do
-      get "shop_products", :to => "category#shop_products"
-      get "filtered_tree", :to => "category#filtered_tree"
+      get "shop_products",  :to => "category#shop_products"
+      get "filtered_brand", :to => "category#filtered_brand"
     end
   end
 
