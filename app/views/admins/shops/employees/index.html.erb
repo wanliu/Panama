@@ -13,7 +13,7 @@
         <span>
           <strong>请输入邀请人的Email地址</strong>
         </span>
-        <input type="text" name='login' />
+        <input type="text" name='login' autocomplete='off' />
         <button type="submit" class="btn btn-primary">邀请</button>
       </form>
     </div>
@@ -116,8 +116,8 @@
 
 <script type='text/javascript'>
   $(function(){
-    template = Hogan.compile($(".group-user-template").html())
-    _permission_template = Hogan.compile($(".permission-group-template").html())
+    var template = Hogan.compile($(".group-user-template").html())
+    var _permission_template = Hogan.compile($(".permission-group-template").html())
 
     new EmployeeGroup({
       el: $(".employee-groups"),

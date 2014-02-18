@@ -3,7 +3,6 @@
 #= require jquery
 #= require jquery-ui
 #= require backbone
-#= require user_typeahead
 #= require twitter/bootstrap/tab
 #= require twitter/bootstrap/modal
 #= require lib/hogan
@@ -95,6 +94,7 @@ class Employee extends Backbone.Model
       data: {login: login},
       type: 'post',
       success: callback,
+      dataType: 'JSON',
       error: error_callback
     })
 
@@ -129,12 +129,11 @@ class GroupEmployeeView extends Backbone.View
 
   remove: () ->
     if confirm("是否确认删除#{@model.get('login')}用户权限?")
-        @model.group_remove_employee({
-                shop_user_id: @model.id,
-                shop_group_id: @group_id
-            }, (data, xhr) =>
-                @remove_el()
-        )
+      @model.group_remove_employee({
+          shop_user_id: @model.id,
+          shop_group_id: @group_id
+        }, (data, xhr) => @remove_el()
+      )
   remove_el: () ->
     @el.remove()
     @trigger("remove_employee", @model.id)
@@ -160,7 +159,7 @@ class GroupEmployeeListView extends Backbone.View
 
   bind_droppable: () ->
     @$el.droppable({
-        drop: $.proxy(@drop, @)
+      drop: $.proxy(@drop, @)
     })
 
   drop: (event, ui) ->
@@ -489,7 +488,7 @@ class EmployeeGroup
   bind_user_typeahead: () ->
     new TypeaheadExtension({
       el: $("form>input:text", @invite_employee),
-      source: "/search/users",
+      source: "/search/all?search_type=users",
       field: 'login',
       select: (item)  =>
         $("form>input:text", @invite_employee).val(item.login)
@@ -507,8 +506,12 @@ class EmployeeGroup
             (model, data) =>
               @invite_notice("success", data.message)
 
-            (model, data) =>
-              @invite_notice("error", data.message)
+            (model, data) =>              
+              try
+                message = JSON.parse(data.responseText).message
+              catch error
+
+              @invite_notice("error", (message || data.responseText) )
         )
         false
     )
