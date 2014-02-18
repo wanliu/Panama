@@ -21,6 +21,7 @@
     <%= javascript_include_tag "my_cart" %>
 
   <script type="text/javascript">
+
     window.clients = Realtime.connect({
       server_uri: '<%= realtime_uri %>',
       token: '<%= current_user.try(:im_token) %>',
@@ -38,33 +39,6 @@
     });
 
     $(function(){
-
-      new ActivityLayoutView({
-        el: '#activities'
-      })
-
-      new ActivityPreview({
-        el: $("#activities"),
-        login: '<%= current_user.login %>'
-      })
-
-      new AskBuyPreview({
-        el: $("#activities"),
-        login: '<%= current_user.login %>'
-      })
-
-      new ShopProductPreview({
-        el: $("#activities")
-      })
-
-      new ProductPreview({
-        el: $("#activities")
-      })
-
-      new CirclePreview({
-        el: $("#activities"),
-        login: '<%= current_user.login %>'
-      })
 
       window.topbar = new TopBar({el: "#topbar"});
       NotificationViewList.startup({
@@ -118,17 +92,6 @@
           $form.replaceWith(xhr.responseText);
         });
       });
-      new LoadActivities({
-        el: $('.activities_panel')
-      });
-
-      new CatalogViewList({
-        el: $("#activity-category"),
-        search: function(data){
-          data.search_type = "activities";
-          $(window).trigger("reset_search", data);
-        }
-      })
 
       topbar.start();
 
