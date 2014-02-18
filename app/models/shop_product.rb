@@ -5,13 +5,14 @@ class ShopProduct < ActiveRecord::Base
   include Tire::Model::Callbacks
   include Tire::Model::UpdateByQuery
 
-  attr_accessible :shop_id, :product_id, :price, :inventory,:photos,:name
+  attr_accessible :shop_id, :product_id, :price, :inventory, :photos, :name, :inventory_unit_id
 
   validates :shop_id, :product_id, presence: true
 
   has_many :activities, :dependent => :destroy, :foreign_key => :shop_product_id
   belongs_to :shop
   belongs_to :product
+  belongs_to :inventory_unit, class_name: "Unit"  # 商品单位 
   has_many :answer_ask_buys, :dependent => :destroy
   has_many :transfers
   has_many :adjust_transfers, as: :targeable, dependent: :destroy, class_name: "Transfer"

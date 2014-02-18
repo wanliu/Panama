@@ -24,7 +24,8 @@ class Product < ActiveRecord::Base
                   :default_attachment_id,
                   :attachment_ids,
                   :brand_name,
-                  :prices
+                  :prices,
+                  :unit_id
 
   attr_accessor :uploader_secure_token, :price_definition
 
@@ -32,6 +33,7 @@ class Product < ActiveRecord::Base
 
   belongs_to :shop      
   belongs_to :user                                                          # 所属商店
+  belongs_to :unit, class_name: "Unit"                                      # 默认单位
   belongs_to :category, :autosave => true                                         # 商品类型
   belongs_to :shops_category                                                      # 商店分类
   belongs_to :default_attachment, :class_name => "Attachment"                     # 默认图片
