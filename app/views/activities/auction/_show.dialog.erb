@@ -1,143 +1,17 @@
 <div class="container activity-auction">
   <div class="row-fluid">
     <div class="offset1 span7">
-      <!-- 主展示框 -->
-      <div id="main-model" class="dialog">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3><%= activity.title %></h3>
-        </div>
-        <div class="modal-body main-show">
-          <div class='picture'>
-            <% if activity.attachments.length > 1  %>
-              <div id="myCarousel" class="carousel slide">
-                <div class="carousel-inner">
-                    <% activity.attachments.each do |picture| %>
-                      <div class="item">
-                        <img class="preview" src="<%=picture.file %>" alt="竞价活动-图片">
-                      </div>
-                    <% end %>
-                </div>
-                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-              </div>
-            <% else %>
-              <img class="preview" src="<%=activity.photos.default %>" />
-            <% end %>
-          </div>
-          <h4 class="right_bottom2 animate1 fadeInRight">
-            原价: <span>￥<%= activity.price %></span>
-          </h4>
-          <h4 class="right_bottom1 animate2 fadeInRight">
-            现价: <span>￥<%= activity.activity_price %></span>
-          </h4>
-          <h4>商品描述：</h4>
-          <span class='describe'>
-            <%= activity.description %>
-          </span>
-          <h4>活动时间：</h4>
-          <span class='describe'>
-            <%= activity.start_time.strftime('%Y年%m月%d日') %> ——  
-            <%= activity.end_time.strftime('%Y年%m月%d日') %>
-          </span>
-        </div>
-        <div class="modal-footer">
-          <div class="big_comments_and_reply">
-            <div class="comments">
-              <% activity.comments.each do |c| %>
-              <div class="comment">
-                <img class='people-image' src="<%=c.user.photos.header %>">
-                <span class='author-name'>
-                  <a href='/people/<%=c.user.login %>'>
-                    <%= c.user.login %>
-                  </a>
-                </span>
-                <div class="pull-right">
-                  评论于<%= c.created_at.strftime('%Y-%m-%d %H:%M') %>
-                </div>
-                <div class="message"><%= raw c.content_html %></div>
-              </div>
-              <% end %>
-            </div>
-            <div class="reply_form">
-              <div class='user-info'>
-                <img src="<%= current_user.photos.header %>">
-                <a href="<%= person_path(current_user) %>">
-                  <%= current_user.login %>
-                </a>
-              </div>
-              <div class='message'>
-                <textarea name='message' placeholder="发表评论..."></textarea>
-              </div>
-              <button class="submit-comment disabled btn btn-danger">评论</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <%=render "/activities/auction/main.html", activity: activity %>
     </div>
 
     <div class="span3">
-      <div class="dialog" id="activity-actions">
-        <div class="modal-body">
-          <img class="author_image" src="<%= activity.author.photos.header %>"  />
-          <a href="javascript:void(0)" class="btn btn-primary pull-right load_modal">分享活动</a> 
-          <h4><%= activity.author.login %></h4>
-          <p>关注 <%= activity.author.followings.count %></p>
-          <p>粉丝 <%= activity.author.followers.count %></p>
-        </div>
-        <div class="modal-footer">
-        </div>
-      </div>
-
-      <div class="dialog" id="purchase-forms">
-        <%= simple_form_for product_item, :url => join_activities_auction_path(activity), :remote => true do |f| %>
-          <div class="modal-body">
-            <%= f.label "价格" %>
-            <input type='text' class='span12' value="<%= activity.activity_price %>"  readonly="true" />
-            <%= f.label "数量" %>
-            <input type='number' class='span12 amount' value="1"  name="product_item[amount]" step="1"  />
-          </div>
-          <div class="modal-footer">
-            <div class="btn-group">
-            <% if activity.user_liked?(current_user) %>
-              <a class="btn unlike-button active" href="#">取消喜欢</a>
-            <% else %>
-              <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
-            <% end %>
-            <a class="btn like-count active" href="#"><%= activity.like %></a>
-            </div>
-            <div class="btn-group">
-              <% if activity.valid_expired? %>
-                <% if activity.start_sale? %>
-                <button class="btn btn-danger" type="submit" name="join">
-                  <%= icon(:'shopping-cart', :white) + " 购买" %>
-                </button>
-                <a class="btn btn-danger partic-button" href="#">
-                  <%= activity.participate %>
-                </a>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      </div>
+      <%=render "/activities/auction/right_bar.html", activity: activity, product_item: product_item %>
     </div>
   </div>
 </div>
 <%= render "/activities/share_activity_to_circles.html"%>
 <script type="text/template" id="comment-template">
-  <div class="comment hide">
-    <img class="people-image" src="<%= current_user.avatar %>">
-    <span class="author-name">
-      <a href='/people/<%=current_user.login %>'><%= current_user.login %></a>
-    </span>
-    <div class="pull-right">
-      评论于<%%= created_at %>
-    </div>
-    <div class="message">
-      <%%= content %>
-    </div>
-  </div>
+  <%=render "/activities/comment.html" %>
 </script>
 <script type="text/javascript">
   $(function(){

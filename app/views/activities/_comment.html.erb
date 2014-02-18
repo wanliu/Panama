@@ -1,0 +1,12 @@
+<div class="comment hide">
+  <img class="people-image" src="<%= current_user.avatar %>">
+  <span class="author-name">
+    <a href='/people/<%=current_user.login %>'><%= current_user.login %></a>
+  </span>
+  <div class="pull-right">
+    评论于<%%= created_at %>
+  </div>
+  <div class="message">
+    <%%= content %>
+  </div>
+</div>
