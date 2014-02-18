@@ -4795,14 +4795,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Event.prototype.on = function(event, callback, context) {
-        var added, cb_string;
-        cb_string = callback.toString();
-        added = _.any(this._listeners[event], function(handle) {
-          return handle.toString() === cb_string;
-        });
-        if (!added) {
-          return this.addEventListener(event, callback, context);
-        }
+        return this.addEventListener(event, callback, context);
       };
 
       Event.prototype.emit = function() {
@@ -4899,6 +4892,7 @@ if (typeof define === "function" && define.amd) {
       __extends(ClientMessageManager, _super);
 
       function ClientMessageManager(client) {
+        var _this = this;
         this.client = client;
         ClientMessageManager.__super__.constructor.apply(this, arguments);
         this.message_dispatchs = {};
@@ -4907,6 +4901,9 @@ if (typeof define === "function" && define.amd) {
         if (this.client == null) {
           return;
         }
+        this.client.on('connect', function() {
+          return _this.clent.emit('get-unread', {}, _this.setUnreadMsg);
+        });
         this.bind();
       }
 
@@ -4933,9 +4930,20 @@ if (typeof define === "function" && define.amd) {
             return _this.onError(e);
           }
         });
-        return this.client.on('chat', function(data) {
+        this.client.on('chat', function(data) {
           return _this.dispatch_process('message', data);
         });
+        this.client.on('system_info', function(data) {
+          return _this.dispatch_process('system_info', data);
+        });
+        return this.client.emit('get-unread', {}, function(err, unreadMsgs) {
+          return _this.setUnreadMsg(err, unreadMsgs);
+        });
+      };
+
+      ClientMessageManager.prototype.setUnreadMsg = function(err, unreadMsgs) {
+        this.unreadMsgs = unreadMsgs;
+        return this.emit('resetUnreadMsgs', {});
       };
 
       ClientMessageManager.prototype.dispatch_process = function(name, data) {
@@ -4971,7 +4979,8 @@ if (typeof define === "function" && define.amd) {
       ClientMessageManager.prototype.unBind = function() {
         if (this.client != null) {
           this.client.unsubscribe('message');
-          return this.client.unsubscribe('chat');
+          this.client.unsubscribe('chat');
+          return this.client.unsubscribe('system_info');
         }
       };
 
@@ -5034,7 +5043,7 @@ if (typeof define === "function" && define.amd) {
   define('chat/channel',['core', 'chat/manager', 'util', 'event', 'exports'], function(Caramal, Manager, Util, Event, exports) {
     var Channel;
     Channel = (function(_super) {
-      var MAXIMUM_MESSAGES;
+      var HIS_FETCH_STEP, MAXIMUM_MESSAGES;
 
       __extends(Channel, _super);
 
@@ -5045,6 +5054,8 @@ if (typeof define === "function" && define.amd) {
 
 
       MAXIMUM_MESSAGES = 2000;
+
+      HIS_FETCH_STEP = 10;
 
       /**
        * 有效命令列表
@@ -5076,12 +5087,19 @@ if (typeof define === "function" && define.amd) {
         this.options = options != null ? options : {};
         Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
+        this.unreadMsgCount = 0;
+        this.unreadFetchFlag = false;
+        this.onOpened();
         /**
          * 消息缓存区
          * @type {Array}
         */
 
         this.message_buffer = [];
+        this.unread_buffer = {
+          theEnd: true,
+          msgs: []
+        };
         /**
          * 频道状态
          * @type {String}
@@ -5113,6 +5131,74 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype.setState = function(_state) {
         this._state = _state;
+      };
+
+      Channel.prototype.setUnreadMsgCount = function() {
+        var channel_name, user_name;
+        this.unreadFetchFlagSeted = true;
+        channel_name = this.group ? this.group : this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
+          if (clients && clients.current_user) {
+            return channel === [user_name, clients.current_user].sort().join('-');
+          } else {
+            return _.find(channel.split('-'), function(name) {
+              return name === user_name;
+            });
+          }
+        })) : void 0;
+        if (channel_name && this.manager.unreadMsgs && this.manager.unreadMsgs[channel_name]) {
+          this.unreadMsgCount = this.manager.unreadMsgs[channel_name];
+          this.unreadFetchFlag = true;
+          this.unreadFetched = 0;
+          if (this.waitingForUnreadFetchFlagSet) {
+            this.fetchUnread();
+          }
+          return this.emit('unreadMsgsSeted', {});
+        }
+      };
+
+      Channel.prototype.onOpened = function() {
+        var _this = this;
+        return this.on('open', function() {
+          return _this.fetchUnread();
+        });
+      };
+
+      Channel.prototype.fetchUnread = function() {
+        var fetch_count, fetch_options, step,
+          _this = this;
+        if (this.unreadFetchFlagSeted) {
+          if (!this.unreadFetchFlag) {
+            return;
+          }
+          fetch_count = this.unreadMsgCount - this.unreadFetched;
+          step = fetch_count > HIS_FETCH_STEP ? HIS_FETCH_STEP : fetch_count;
+          fetch_options = this.lastFetchedMsgTime != null ? {
+            type: "time_step",
+            room: this.room,
+            start: this.lastFetchedMsgTime,
+            step: step
+          } : {
+            room: this.room,
+            start: 1,
+            step: step
+          };
+          return this.socket.emit('history', fetch_options, function(err, msgs) {
+            if (msgs.length === 0) {
+              return;
+            }
+            _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
+            _this.unreadFetched += msgs.length;
+            if (_this.unreadFetched >= _this.unreadMsgCount) {
+              _this.unreadFetchFlag = false;
+            }
+            return _this.emit('unreadMsgsFetched', {
+              msgs: msgs,
+              theEnd: !_this.unreadFetchFlag
+            });
+          });
+        } else {
+          return this.waitingForUnreadFetchFlagSet = true;
+        }
       };
 
       Channel.prototype.getState = function() {
@@ -5173,6 +5259,17 @@ if (typeof define === "function" && define.amd) {
       };
 
       /**
+       * 接受到系统消息数据的回调
+       * @param  {Function} message_callback 消息回调
+      */
+
+
+      Channel.prototype.onSysMsg = function(sys_msg_callback, context) {
+        this.sys_msg_callback = sys_msg_callback;
+        return this.on('system_info', this.sys_msg_callback, context);
+      };
+
+      /**
        * 来至服务端的命令回调
        * @param  {Function} command 命令对象
       */
@@ -5213,7 +5310,11 @@ if (typeof define === "function" && define.amd) {
 
 
       Channel.prototype.setManager = function(manager) {
+        var _this = this;
         this.manager = manager;
+        return this.manager.on('resetUnreadMsgs', function() {
+          return _this.setUnreadMsgCount();
+        });
       };
 
       /**
@@ -5492,6 +5593,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.setState('open');
+                  channel.emit('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5501,7 +5603,9 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.command('record', info.room);
-                  return channel.room = info.room;
+                  channel.room = info.room;
+                  channel.setState('open');
+                  return channel.emit('open');
                 }
               });
             }
@@ -5519,6 +5623,16 @@ if (typeof define === "function" && define.amd) {
       channel = Caramal.MessageManager.roomOfChannel(info.room);
       if (channel != null) {
         return channel.emit('message', info);
+      } else {
+        return next();
+      }
+    });
+    Caramal.MessageManager.registerDispatch('system_info', function(info, next) {
+      var channel;
+      Caramal.log('Receive System Message:', info);
+      channel = Caramal.MessageManager.roomOfChannel(info.room);
+      if (channel != null) {
+        return channel.emit('system_info', info);
       } else {
         return next();
       }
@@ -5638,6 +5752,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.setState('open');
+                  channel.emit('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5647,7 +5762,9 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.command('record', info.room);
-                  return channel.room = info.room;
+                  channel.room = info.room;
+                  channel.emit('open');
+                  return channel.setState('open');
                 }
               });
             }
@@ -5765,6 +5882,7 @@ if (typeof define === "function" && define.amd) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
                   channel.setState('open');
+                  channel.emit('open');
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5777,7 +5895,8 @@ if (typeof define === "function" && define.amd) {
                     channel.command('record', info.room);
                   }
                   channel.room = info.room;
-                  return channel.name = info.name;
+                  channel.name = info.name;
+                  return channel.emit('open');
                 }
               });
             }

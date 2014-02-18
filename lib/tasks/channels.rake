@@ -9,7 +9,7 @@ namespace :user do
 
   desc "sync user following channels"
   task :channels => :environment do
-    host = Settings.defaults['rabbitmq']['host']
+    host = Settings.rabbitmq['host']
 
     conn = Bunny.new(:hostname => host)
     conn.start

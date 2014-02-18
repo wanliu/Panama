@@ -112,8 +112,9 @@ class BaseChatView extends Caramal.BackboneView
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
+    # 'scroll div.body'           : 'more_unread_histroy'
 
-  history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
+  # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="head">
@@ -143,6 +144,13 @@ class BaseChatView extends Caramal.BackboneView
       </div>
     </div>')
 
+  sys_msg_template: _.template("
+    <li>
+      <div class='alert alert-info'>
+        <i class='icon-info-sign'></i>系统消息：<%= message.msg %>
+      </div>
+    </li>")
+
   receive_template: Handlebars.compile('
     <li clas="row-receive">
       <div class="pull-left">
@@ -167,25 +175,25 @@ class BaseChatView extends Caramal.BackboneView
     </li>')
 
   fetchHistory: () ->
-    @msgLoaded ||= false
-    return if @msgLoaded
-    start = @channel.message_buffer.length + 1
-    setTimeout( () =>
-      @channel.history({start: start}, (chat, err, messages) =>
-        @msgLoaded = true
-        $html = @parseMessages(messages)
-        text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-        $html += @history_tip({text: text})
-        @msgContent().prepend($html)
-        @$('.message .image-zoom').fancybox()
-        @scrollDialog()
-      )
-    , 300)
+    # @msgLoaded ||= false
+    # return if @msgLoaded
+    # start = @channel.message_buffer.length + 1
+    # setTimeout( () =>
+    #   @channel.history({start: start}, (chat, err, messages) =>
+    #     @msgLoaded = true
+    #     $html = @parseMessages(messages)
+    #     text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+    #     $html += @history_tip({text: text})
+    #     @msgContent().prepend($html)
+    #     @$('.message .image-zoom').fancybox()
+    #     @scrollDialog()
+    #   )
+    # , 300)
 
   resetHistory: () ->
     @msgLoaded = false
     @msgContent().html('')
-    @fetchHistory()
+    # @fetchHistory()
 
   initialize: (options) ->
     super
@@ -199,6 +207,7 @@ class BaseChatView extends Caramal.BackboneView
 
   getChannel: () ->
     console.error('unimplemented...')
+    @bindSysMsg()
 
   initChannel: () ->
     @getChannel()
@@ -210,6 +219,7 @@ class BaseChatView extends Caramal.BackboneView
   initDialog: () ->
     # @bindMessage()
     $(@el).html(@chat_template({model: @model}))
+    @$('div.body').scroll($.proxy(@more_unread_histroy, @))
     @state_el = @$(".head>.state")
     @model.chat_view = @
     @display = false
@@ -291,6 +301,9 @@ class BaseChatView extends Caramal.BackboneView
       html += @parseOne(message)
     html
 
+  parseSysMsg: (message) ->
+    @sys_msg_template({ message: message })
+
   sendContent: () ->
     @$('.content')
 
@@ -304,6 +317,49 @@ class BaseChatView extends Caramal.BackboneView
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
+  receiveSysMsg: (data) ->
+    if @display
+      @msgContent().append(@parseSysMsg(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+
+  receiveHisMessage: (options) ->
+    # if @display
+    msgs = options.msgs
+    origin_height = @$('.body')[0].scrollHeight
+    @msgContent().prepend(@parseMessages(msgs))
+    setTimeout () =>
+      height = @$('.body')[0].scrollHeight
+      diff = height - origin_height
+      @$('.body').scrollTop(diff)
+
+    if !options.theEnd
+      @showMoreFlag()
+    else
+      @removeMoreFlag()
+    # @model.trigger('active_avatar') if @name is msgs.user
+    if @display
+      @$('.message .image-zoom').fancybox()
+      # @scrollDialog()
+
+  more_unread_histroy: (event) ->
+    target = event.target || event.srcElement
+    if $(target).scrollTop() < 5
+      setTimeout(() =>
+        @channel.fetchUnread()
+      , 800)
+
+  showMoreFlag: () ->
+    moreFlag = @msgContent().find('.showMoreFlag')
+    moreFlag.remove()
+    @msgContent().prepend("<li class='row-receive showMoreFlag' style='text-align: center; color: #478ebb'>\
+      <i class='icon-time'></i>查看更多信息</li>")
+
+  removeMoreFlag: () ->
+    moreFlag = @msgContent().find('.showMoreFlag')
+    moreFlag.remove()
+
   toggleDialog: () ->
     if @display
       @hideDialog()
@@ -315,6 +371,7 @@ class BaseChatView extends Caramal.BackboneView
     @display = false
     @channel.deactive()
     # @unbindMessage()
+
 
   showDialog: () ->
     $(@el).show()
@@ -331,6 +388,8 @@ class BaseChatView extends Caramal.BackboneView
     _.each @channel.message_buffer, (msg) =>
       @receiveMessage(msg)
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
+    @receiveHisMessage(@channel.unread_buffer) if @channel.unread_buffer['msgs'].length > 0
+    @channel.unread_buffer = { theEnd: true, msgs: [] };
 
   showWithMsg: () ->
     @resetHistory()
@@ -338,6 +397,9 @@ class BaseChatView extends Caramal.BackboneView
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
+
+  bindSysMsg: () ->
+    @channel.onSysMsg(@receiveSysMsg, @)
 
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)
@@ -436,7 +498,7 @@ class root.OrderChatView extends Caramal.BackboneView
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
 
-  history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
+  # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="body">
@@ -459,6 +521,13 @@ class root.OrderChatView extends Caramal.BackboneView
         <button class="btn btn-primary send_button">发送</button>
       </div>
     </div>')
+
+  sys_msg_template: _.template("
+    <li>
+      <div class='alert alert-info'>
+        <i class='icon-info-sign'></i>系统消息：<%= message.msg %>
+      </div>
+    </li>")
 
   receive_template: Handlebars.compile('
     <li clas="row-receive">
@@ -483,24 +552,25 @@ class root.OrderChatView extends Caramal.BackboneView
       </div>
     </li>')
 
-  fetchHistory: () ->
-    @msgLoaded ||= false
-    return if @msgLoaded
-    start = @channel.message_buffer.length + 1
-    @channel.history({start: start}, (chat, err, messages) =>
-      @msgLoaded = true
-      $html = @parseMessages(messages)
-      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-      $html += @history_tip({text: text})
-      @msgContent().prepend($html)
-      @$('.message .image-zoom').fancybox()
-      @scrollDialog()
-    )
+  # fetchHistory: () ->
+  #   @msgLoaded ||= false
+  #   return if @msgLoaded
+  #   start = @channel.message_buffer.length + 1
+  #   @channel.history({start: start}, (chat, err, messages) =>
+  #     @msgLoaded = true
+  #     $html = @parseMessages(messages)
+  #     text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+  #     $html += @history_tip({text: text})
+  #     @msgContent().prepend($html)
+  #     @$('.message .image-zoom').fancybox()
+  #     @scrollDialog()
+  #   )
 
-  resetHistory: () ->
-    @msgLoaded = false
-    @msgContent().html('')
-    @fetchHistory()
+  # resetHistory: () ->
+  #   @msgLoaded = false
+  #   @msgContent().html('')
+  #   @fetchHistory()
+
 
   initialize: (options) ->
     super
@@ -510,13 +580,13 @@ class root.OrderChatView extends Caramal.BackboneView
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
     @initChannel()
     @initDialog()
-    $(@el).bind('enterOrderChat', () =>
-      int = window.setInterval( () =>
-        if !@msgLoaded && @channel_ready
-          window.clearInterval(int)
-          @showWithMsg()
-      , 300)
-    )
+    # $(@el).bind('enterOrderChat', () =>
+    #   int = window.setInterval( () =>
+    #     if !@msgLoaded && @channel_ready
+    #       window.clearInterval(int)
+    #       @showWithMsg()
+    #   , 300)
+    # )
 
   initChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
@@ -561,6 +631,9 @@ class root.OrderChatView extends Caramal.BackboneView
       html += @parseOne(message)  
     html
 
+  parseSysMsg: (message) ->
+    @sys_msg_template({ message: message })
+
   sendContent: () ->
     @$('.content')
 
@@ -574,6 +647,13 @@ class root.OrderChatView extends Caramal.BackboneView
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
+  receiveSysMsg: (data) ->
+    if @display
+      @msgContent().append(@parseSysMsg(data))
+      @model.trigger('active_avatar') if @name is data.user
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+
   toggleDialog: () ->
     if @display
       @hideDialog()
@@ -583,6 +663,7 @@ class root.OrderChatView extends Caramal.BackboneView
   hideDialog: () ->
     $(@el).hide()
     @display = false
+    @msgContent().html('')
     @channel.deactive()
     # @unbindMessage()
 
@@ -603,11 +684,14 @@ class root.OrderChatView extends Caramal.BackboneView
     @channel.message_buffer.splice(0, @channel.message_buffer.length)
 
   showWithMsg: () ->
-    @resetHistory()
+    # @resetHistory()
     @showDialog()
 
   bindMessage: () ->
     @channel.onMessage(@receiveMessage, @)
+
+  bindSysMsg: () ->
+    @channel.onSysMsg(@receiveSysMsg, @)
 
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)
