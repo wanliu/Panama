@@ -53,8 +53,42 @@
 }
 
 .dialog_product{
+  .product_tree_panel{
+    .nav-tabs{
+      position:relative;
+      .avtive{
+        position: relative;
+      }
+    }
+    .brand_panel{
+      .nav .pick_brand{
+        width: 70px;
+      }
+      position:absolute;
+      text-align: left; 
+      left:55px; 
+      top:8px;
+      .brand_list{
+        .check_tips{
+          margin: 10px 0px 0 10px;
+        }
+        border: 5px solid rgba(219, 224, 193, 0.81);
+        display:none; 
+        position:absolute; 
+        background-color:white; 
+        color:black;
+        z-index:9999;
+      }
+      .brand_content{
+        img{
+          width: 50px;
+          height: 50px;
+        }
+      }
+    }
+  }
+
   .product_list_wrap{
-    
     .panel{
       margin-right:13px;
 
@@ -63,7 +97,6 @@
         .loader{
           display: none;
           text-align: center;
-          
           img{
             width: 40px;
             height: 40px;
@@ -74,7 +107,6 @@
   }
 
   .my_products{
-
     .wrap_my_product{
       .editable-popup{
         position: fixed;

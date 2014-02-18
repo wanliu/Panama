@@ -60,20 +60,24 @@ class root.WizardView extends Backbone.View
 
   load_default_fetch: () ->
 
+  filter_brand: () ->
+    _.map @$("input[type=checkbox]:checked"), (elem) ->
+      $(elem).attr("data-brand")
 
   fetch: (data = {}, callback = (data) -> ) ->
-    _data = _.extend({}, @remote_options, data)
+    brand = @filter_brand()
+    _data = _.extend({}, @remote_options, data, { brand_name: brand})
     return if @promise && @promise.state() == "pending"
     @$(".loader").show()
     @promise = $.ajax({
-       type: "get",
-       url: @url,
-       dataType: "json",
-       data: _data,
-       success: (data) =>
-         @$(".loader").hide()
-         callback(data)
-         @reset(data)
+      type: "get",
+      url: @url,
+      dataType: "json",
+      data: _data,
+      success: (data) =>
+        @$(".loader").hide()
+        callback(data)
+        @reset(data)
     })
     $(".select_all").text("全选")
 

@@ -254,6 +254,38 @@ module ApplicationHelper
     as ? "#{action}_#{as}" : [options[:namespace], dom_id(object, action)].compact.join("_").presence
   end
 
+  def build_menu3(root, nodes_ids , element_id = nil, options = { :ul_class => 'tree-body collapse',
+                                                                  :li_class => 'tree-group',
+                                                                  :first_class => 'tree-nav',
+                                                                  :toggle => 'slide' })
+    output = ActiveSupport::SafeBuffer.new
+    if root.children && !contain_children(root, nodes_ids).blank?
+      content_tag(:ul, :class => options[:first_class] || options[:ul_class], :id => element_id || dom_id(root)) do 
+        options.delete(:first_class)
+        contain_children(root, nodes_ids).map do |node|
+          if node.children && node.children.size > 0
+            output.concat(content_tag(:li, :class => options[:li_class]) do 
+              link_to("##{dom_id(node)}", :html => {tabindex: -1}, 'data-id' => node.id, 'data-name' => node.name, 'data-toggle' => options[:toggle]) {
+                icon('caret-right') + " " + node.name
+                } +
+              build_menu3(node, nodes_ids, nil, options)
+            end)
+          else
+            output.concat(content_tag(:li) do
+              link_to node.name, node, 'data-id' => node.id, 'data-name' => node.name , 'class' => 'leaf_node', 'onclick' => 'javascript:void(0);return false;'
+            end)
+          end
+        end
+        output
+      end
+    end
+  end
+
+  def contain_children(root, children_ids )
+    categories = root.children.pluck("id") & children_ids.flatten
+    Category.where(:id => categories)
+  end
+
   def build_menu(root, element_id = nil)
     output = ActiveSupport::SafeBuffer.new
     if root.children && root.children.size && root.children.size > 0
@@ -327,7 +359,7 @@ module ApplicationHelper
     end
     #end
   end
-
+  
   def get_delivery_type
     @delivery_types = DeliveryType.all
   end

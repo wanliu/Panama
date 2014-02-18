@@ -165,6 +165,8 @@ class NotificationManager
     type_id = notifyDisposeState.getType(type) || ""
     type_id.toString()
 
+  close_message: () ->
+
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
     @commonNotify(data)
@@ -195,11 +197,12 @@ class NotificationManager
   shop_follow: (data) =>
     data.template = $(@shopFollowTempate(data))
     @commonNotify(data)
-    new InviteManyView({
+    invite_view = new InviteManyView({
       el: $(".circle_invite_list"),
       shop_name: data.shop_name,
       user_id: data.user.id
     })
+    # invite_view.trigger( "close_message",'invite_user');
 
   follow: (data) =>
     data.template = $(@followTemplate(data))
