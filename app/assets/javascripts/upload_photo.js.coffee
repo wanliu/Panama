@@ -9,7 +9,7 @@ class root.Upload extends Backbone.View
       <pre class="qq-upload-drop-area">
         <span>{dragText}</span>
       </pre>
-      <div class="qq-upload-button btn btn-success" style="width: 83px;">
+      <div class="qq-upload-button btn btn-success" style="width: 85px;">
         <i class="icon-upload icon-white"></i>
         {uploadButtonText}
       </div>
