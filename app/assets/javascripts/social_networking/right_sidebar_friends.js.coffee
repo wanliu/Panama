@@ -65,7 +65,7 @@ class root.ChatManager extends Backbone.View
 
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
-      console.log('channel:new ', channel)
+      # console.log('channel:new ', channel)
       return unless channel.type is 3
       if @is_ready
         @targetView(channel.type).process(channel)
