@@ -240,6 +240,7 @@ zh-CN:
       persistent_channel: 好友 
       community_notification:  圈子
       address: 地址
+      unit: 单位
 
     attributes:
       setting:
@@ -456,6 +457,13 @@ zh-CN:
         bank_id: 银行账号
       transfer:
         shop_product: 商品
+      unit:
+        id: 编号
+        code: 内部名称
+        name: 名称
+        child: 子单位
+        child_id: 子单位
+        percentage: 比例
 
   mongoid:
     models:

@@ -5,6 +5,6 @@ class Unit < ActiveRecord::Base
   belongs_to :child, class_name: "Unit", foreign_key: 'child_id'
 
   validates :name, presence: true, uniqueness: true
-  validates :percentage, presence: true, numericality: { greater_than: 0 }
+  validates :percentage, presence: true, numericality: { greater_than_or_equal_to: 1 }
 
 end
