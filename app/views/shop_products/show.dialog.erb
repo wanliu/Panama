@@ -32,6 +32,7 @@
               <div class="controls">
                 <p class="text">
                   <%=@shop_product.inventory %>
+                  <%=@shop_product.inventory_unit.try(:name) %>
                 </p>
               </div>
               <label class="control-label">

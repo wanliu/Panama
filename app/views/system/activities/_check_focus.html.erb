@@ -16,6 +16,13 @@
 				<td><%= @activity.activity_type %></td>
 			</tr>
 			<tr>
+				<td>库存</td>
+				<td>
+					<%= @activity.shop_product.try(:inventory) %>
+					<%= @activity.shop_product.try(:inventory_unit).try(:name) %>
+				</td>
+			</tr>
+			<tr>
 				<td>原价</td>
 				<td><%= number_to_currency @activity.shop_product.price %></td>
 			</tr>

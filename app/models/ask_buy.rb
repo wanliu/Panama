@@ -86,7 +86,11 @@ class AskBuy < ActiveRecord::Base
       :product => {
         :id => product.try(:id),
         :name => product.try(:name),
-        :properties => product.try(:properties_json)
+        :properties => product.try(:properties_json),
+        :unit     => {
+          :id     => product.try(:unit).try(:id),
+          :name   => product.try(:unit).try(:name)
+        }
       },
       :open => open
     }.to_json

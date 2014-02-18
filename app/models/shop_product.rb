@@ -61,6 +61,10 @@ class ShopProduct < ActiveRecord::Base
       :created_at  => created_at,
       :price       => price,
       :inventory   => inventory,
+      :inventory_unit => {
+        :id => inventory_unit.try(:id),
+        :name => inventory_unit.try(:name)
+      },
       :sales => sales,
       :returned => returned,
       :updated_at  => updated_at,
@@ -86,6 +90,7 @@ class ShopProduct < ActiveRecord::Base
     attra["product"] = product.as_json(options["version_name"])
     attra["product"]["photo_avatar"] = product.photos.avatar
     attra["photos"] = product.photos.attributes
+    attra["inventory_unit"] = inventory_unit.as_json
     attra
   end
 

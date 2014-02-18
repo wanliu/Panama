@@ -65,7 +65,8 @@
                       </div>
                       <div>                        
                         <span class="label label-warning">
-                          库存<%=item.shop_product.inventory %>  
+                          库存<%=item.shop_product.inventory %>
+                          <%=item.shop_product.try(:inventory_unit).try(:name) %>  
                         </span>
                       </div>
                     </td>

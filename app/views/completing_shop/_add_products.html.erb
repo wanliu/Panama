@@ -74,7 +74,6 @@
         {{/photos}}
         <h5>{{ name }} <b>{{ brand_name }}</b></h5>
         <span>单价:<i class='icon-jpy'></i> {{ price }}</span>
-        <span>库存: {{ inventory }}</span>
       </li>
     </script>
   </div>
@@ -99,7 +98,13 @@
         <h5>{{ name }} <b>{{ brand_name }}</b></h5>
         <section> 单价 <span class='label label-default editable-click price'>{{ price }}<i class='icon-edit'></i></span>
         </section>
-        <section> 库存 <span class='label label-default editable-click inventory'>{{ inventory }}<i class='icon-edit'></i></span>
+        <section>
+          库存 
+          <span class='label label-default editable-click inventory'>
+            {{ inventory }}
+            <i class='icon-edit'></i>
+          </span>
+          {{ inventory_unit.name }}
         </section>
       </li>
     </script>

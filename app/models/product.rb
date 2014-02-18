@@ -166,6 +166,10 @@ class Product < ActiveRecord::Base
       :name        => name,
       :category_id => category_id,      
       :price       => price,
+      :unit     => {
+        :id        => unit.try(:id),
+        :name      => unit.try(:name)
+      },
       :shop_id     => shop_id,
       :brand_name  => brand_name,
       :updated_at  => updated_at,

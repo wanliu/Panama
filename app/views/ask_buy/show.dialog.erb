@@ -31,7 +31,8 @@
               价格: <span>￥<%=@ask_buy.price %></span>
             </h4>
             <h4>
-              求购: <span><%=@ask_buy.amount.to_i %></span>件
+              求购: <span><%=@ask_buy.amount.to_i %></span>
+              <%= @ask_buy.product.try(:unit).try(:name) %>
             </h4>
             <h4>商品描述：</h4>
             <span style="word-wrap:break-word;margin-left:10px;">

@@ -8,6 +8,7 @@
     <%= f.input :category, :as => :category, :value => product.category_id %>
     <%= f.input :brand_name %>
     <%= f.input :summary %>
+    <%= f.input :unit %>
     <%= f.input :price, :class => :product_price %>
   <% end %>
   <%= f.inputs "规格/参数", :class => 'inputs additional_properties' do %>

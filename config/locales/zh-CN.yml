@@ -291,6 +291,8 @@ zh-CN:
         category_id: 分类
         shops_category_id: 商店分类
         default_attachment_id: 默认附加属性
+        unit: 单位
+        unit_id: 单位
         price: 价格
         summary: 商品概述
         description: 商品描述
