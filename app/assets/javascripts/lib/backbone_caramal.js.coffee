@@ -193,12 +193,19 @@ class BaseChatView extends Caramal.BackboneView
     @title = @name unless @title
     @channel = @model.get('channel')
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
+    @bindEvent()
     @initChannel()
     @initDialog()
-    @bindEvent()
+
+  getChannel: () ->
+    console.error('unimplemented...')
 
   initChannel: () ->
-    console.log('unimplemented...')
+    @getChannel()
+    @channel.open( () =>
+      @channel.record()
+      @channel_ready = true
+    )
 
   initDialog: () ->
     # @bindMessage()
@@ -366,10 +373,8 @@ class root.FriendChatView extends BaseChatView
   initialize: () ->
     super
 
-  initChannel: () ->
+  getChannel: () ->
     @channel ||= Caramal.Chat.of(@name)
-    @channel.open()
-    @channel.record()
 
   stateService: () ->
     $(window).bind('idle', () =>
@@ -399,10 +404,8 @@ class root.GroupChatView extends BaseChatView
   initialize: () ->
     super
 
-  initChannel: () ->
+  getChannel: () ->
     @channel ||= Caramal.Group.of(@name)
-    @channel.open()
-    @channel.record()
 
 
 class root.TemporaryChatView extends BaseChatView
@@ -410,15 +413,13 @@ class root.TemporaryChatView extends BaseChatView
   initialize: () ->
     super
 
-  initChannel: () ->
+  getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
-    @channel.open()
-    @channel.record()
 
 
 class root.OrderChatView extends Caramal.BackboneView
-  on_class: "online"
-  off_class: "offline"
+  on_class: 'online'
+  off_class: 'offline'
   className: 'order_chat'
 
   EVENT_TYPE: {
@@ -486,17 +487,15 @@ class root.OrderChatView extends Caramal.BackboneView
     @msgLoaded ||= false
     return if @msgLoaded
     start = @channel.message_buffer.length + 1
-    setTimeout( () =>
-      @channel.history({start: start}, (chat, err, messages) =>
-        @msgLoaded = true
-        $html = @parseMessages(messages)
-        text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
-        $html += @history_tip({text: text})
-        @msgContent().prepend($html)
-        @$('.message .image-zoom').fancybox()
-        @scrollDialog()
-      )
-    , 300)
+    @channel.history({start: start}, (chat, err, messages) =>
+      @msgLoaded = true
+      $html = @parseMessages(messages)
+      text = if $html is '' then '没有聊天记录' else '以上是聊天记录'
+      $html += @history_tip({text: text})
+      @msgContent().prepend($html)
+      @$('.message .image-zoom').fancybox()
+      @scrollDialog()
+    )
 
   resetHistory: () ->
     @msgLoaded = false
@@ -511,14 +510,21 @@ class root.OrderChatView extends Caramal.BackboneView
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
     @initChannel()
     @initDialog()
-    $(window).bind('enterOrderChat', () =>
-      @showWithMsg()
+    $(@el).bind('enterOrderChat', () =>
+      int = window.setInterval( () =>
+        if !@msgLoaded && @channel_ready
+          window.clearInterval(int)
+          @showWithMsg()
+      , 300)
     )
 
   initChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
-    @channel.open()
-    @channel.record()
+    @channel.open( () =>
+      @channel.record()
+      @channel_ready = true
+      $(@el).trigger('enterOrderChat')
+    )
 
   initDialog: () ->
     # @bindMessage()

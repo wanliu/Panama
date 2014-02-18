@@ -294,7 +294,7 @@ class MiniRow2ColView  extends Backbone.View
   openView: () ->
     @$operator.removeClass("open").addClass("exit").html("返回")
     @activeRowView()
-    $(window).trigger('enterOrderChat')
+    # $(window).trigger('enterOrderChat')
 
   activeRowView: () ->
     if @parentView?
