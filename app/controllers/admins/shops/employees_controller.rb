@@ -12,11 +12,15 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
     respond_to do |format|
       if @user
-        @user.notify("/employees/invite",
+        if current_shop.is_employees?(@user)
+          format.json{ render :json => {message: "对方已经加入该商店!"}, :status => 403 }
+        else
+          @user.notify("/employees/invite",
                      "商店 #{current_shop.name} 邀请你加入",
-                     { :avatar => @user.icon,
-                       :url => notification_url(@user.login) })
+                      :avatar => @user.icon,
+                      :url => notification_url(@user.login))
           format.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
+        end
       else
         # 如果email发送信息给它
         if params[:login] =~ email_match
@@ -25,7 +29,6 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
           format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
         else
           format.json{ render :json => {message: "用户不存在！"}, :status => 403 }
-
         end
       end
     end
