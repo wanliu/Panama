@@ -1,22 +1,23 @@
  <% admin_active_section :shop_info %>
 
-<div class='row-fluid'>
-  <div class='span8 widget shop_info'>
+<div class="container-fluid">
+  <div class="span7 widget shop_info">
     <a href="/shops/<%= @user_checking.shop.name %>/admins/apply_update" class="btn pull-right">申请审核</a>
     <h4>商店信息</h4>
     <hr />
     <div class="row-fluid section">
-      <div class="span5">
+      <div class="span2 title">
+        <span>商店图标</span>
+      </div>
+      <div class="span3">
         <div class="reset_avatar main_panle1">
-          <div class="photo_span cell" >
-            <span>商店图标</span>
+          <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
           <div id="image_bottom">
-            <div class="hidden_one offset2" id="hidden_text">
-              <%#= upload_tip %>
+            <div class="hidden_one" id="hidden_text">
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
+            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
             </div>
           </div>
         </div>
@@ -33,21 +34,21 @@
         </div>
       </div>
     </div>
-
     <h4>营业信息</h4>
     <hr />
     <div class="row-fluid section">
-      <div class="span5">
+      <div class="span2 title">
+        <span>营业执照</span>
+      </div>
+      <div class="span3">
         <div class="reset_avatar main_panle2">
-          <div class="photo_span cell" >
-            <span>营业执照</span>
+          <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
           <div id="image_bottom">
-            <div class="hidden_one offset2" id="hidden_text">
-              <%#= upload_tip %>
+            <div class="hidden_one" id="hidden_text">
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
+            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
             </div>
           </div>
         </div>
@@ -72,17 +73,18 @@
     <h4>个人信息</h4>
     <hr />
     <div class="row-fluid section">
-      <div class="span5">
+      <div class="span2 title">
+        <span>身份证照</span>
+      </div>
+      <div class="span3">
         <div class="reset_avatar main_panle3">
-          <div class="photo_span cell" >
-            <span>身份证照</span>
+          <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid" />
           </div>
           <div id="image_bottom">
-            <div class="hidden_one offset2" id="hidden_text">
-              <%#= upload_tip %>
+            <div class="hidden_one" id="hidden_text">
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box offset2" >
+            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
             </div>
           </div>
         </div>

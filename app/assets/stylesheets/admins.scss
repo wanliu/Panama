@@ -277,9 +277,14 @@ $left-side-admin-width: 160px;
   }
 
   .section {
-    .qq-uploader{
-      margin-left: 8px;
+    margin-top: 30px;
+    .title{
+      margin-top: 60px; 
+      text-align: right;
     }
+    // .qq-uploader{
+    //   margin-left: 8px;
+    // }
     margin-bottom: $margin-top;
 
     legend {
@@ -295,10 +300,6 @@ $left-side-admin-width: 160px;
         color:black;
       }
 
-      .cell {
-        margin-top: 2*$margin-top;
-      }
-
       .normal_picture {
         width: 5*$margin-top;
         height: 5.5*$margin-top;
@@ -306,7 +307,7 @@ $left-side-admin-width: 160px;
     }
 
     .input_locate {
-      margin-top: 50px;
+      margin-top: 40px;
       margin-left: -10px;
       margin-bottom: $margin-top;
 

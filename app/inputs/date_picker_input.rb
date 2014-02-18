@@ -14,10 +14,10 @@ class DatePickerInput < SimpleForm::Inputs::Base
     <script type="text/javascript">
       $(function() {
         $("##{element_id}").datetimepicker({
-           pickTime: false,
-           language: "zh-CN",
-           weekStart: 1,
-           format: 'yyyy-mm-dd'
+          pickTime: false,
+          language: "zh-CN",
+          weekStart: 1,
+          format: 'yyyy-mm-dd'
         });
       });
     </script>
