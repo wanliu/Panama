@@ -13,5 +13,47 @@
   </div>
   <%= render :partial => "activities/template" %>
 </div>
+<script type="text/javascript">
+  $(function(){
+    new ActivityLayoutView({
+      el: '#activities'
+    })
+
+    new ActivityPreview({
+      el: $("#activities"),
+      login: '<%= current_user.login %>'
+    })
+
+    new AskBuyPreview({
+      el: $("#activities"),
+      login: '<%= current_user.login %>'
+    })
+
+    new ShopProductPreview({
+      el: $("#activities")
+    })
+
+    new ProductPreview({
+      el: $("#activities")
+    })
+
+    new CirclePreview({
+      el: $("#activities"),
+      login: '<%= current_user.login %>'
+    })
+
+    new LoadActivities({
+      el: $('.activities_panel')
+    });
+
+    new CatalogViewList({
+      el: $("#activity-category"),
+      search: function(data){
+        data.search_type = "activities";
+        $(window).trigger("reset_search", data);
+      }
+    })
+  })
+</script>
 
 
