@@ -53,6 +53,10 @@ namespace "index" do
                 "index" => "not_analyzed"
               }
             }
+          },
+          "brand_name" => {
+            "type" => "string",
+            "index" => "not_analyzed"
           }
         },
         "dynamic_templates" => [{
