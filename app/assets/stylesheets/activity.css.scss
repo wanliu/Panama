@@ -366,3 +366,39 @@
   background-position: 0 30px;
   background-color: #FF0000;
 }
+
+.activities{
+  .not_dialog{
+
+    .activity-auction, .activity-focus{
+      width: 100%;
+
+      .dialog{
+        @include transparent(rgb(51,51,51),0.4);
+        @include border-radius(1px);
+        @include box-shadow(none);
+        border: none;
+
+        .modal-footer{
+          background-color: transparent;
+        }
+
+        .modal-header{
+          .close{
+            display: none;
+          }
+        }
+
+        .modal-body{
+          overflow: visible;
+          max-height: 100%;
+
+          .focus_progress{
+            margin-top: 23px;
+            margin-right: 20px;
+          }
+        }
+      }
+    }
+  }
+}

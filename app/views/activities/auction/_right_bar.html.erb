@@ -1,0 +1,44 @@
+<div class="dialog" id="activity-actions">
+  <div class="modal-body">
+    <img class="author_image" src="<%= activity.author.photos.header %>"  />
+    <a href="javascript:void(0)" class="btn btn-primary pull-right load_modal">分享活动</a> 
+    <h4><%= activity.author.login %></h4>
+    <p>关注 <%= activity.author.followings.count %></p>
+    <p>粉丝 <%= activity.author.followers.count %></p>
+  </div>
+  <div class="modal-footer">
+  </div>
+</div>
+
+<div class="dialog" id="purchase-forms">
+  <%= simple_form_for product_item, :url => join_activities_auction_path(activity), :remote => true do |f| %>
+    <div class="modal-body">
+      <%= f.label "价格" %>
+      <input type='text' class='span12' value="<%= activity.activity_price %>"  readonly="true" />
+      <%= f.label "数量" %>
+      <input type='number' class='span12 amount' value="1"  name="product_item[amount]" step="1"  />
+    </div>
+    <div class="modal-footer">
+      <div class="btn-group">
+      <% if activity.user_liked?(current_user) %>
+        <a class="btn unlike-button active" href="#">取消喜欢</a>
+      <% else %>
+        <a class="btn like-button" href="#"><%= icon(:heart) %> 喜欢</a>
+      <% end %>
+      <a class="btn like-count active" href="#"><%= activity.like %></a>
+      </div>
+      <div class="btn-group">
+        <% if activity.valid_expired? %>
+          <% if activity.start_sale? %>
+          <button class="btn btn-danger" type="submit" name="join">
+            <%= icon(:'shopping-cart', :white) + " 购买" %>
+          </button>
+          <a class="btn btn-danger partic-button" href="#">
+            <%= activity.participate %>
+          </a>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

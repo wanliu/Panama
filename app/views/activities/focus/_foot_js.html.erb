@@ -1,0 +1,18 @@
+<script type="text/javascript">
+  $(function(){
+    $(".item").first().addClass("active");
+    bar = $('.focus_progress');
+    bar.bind('positionChanged', function(event) {
+      event.bar.changedLabel = '当前' + event.bar.position + '人';
+    })
+    bar.bind('labelLoaded', function(event) {
+      i = event.labelIndex;
+      event.bar.loadedLabel = event.bar.getMarker(i)+'人/￥' + event.bar.getMarkerLabel(i);
+    })
+    bar.progressbar({
+      minimum: <%= activity.participate %>,
+      markers: <%= activity_rules.pluck(:value).map(&:to_i) %>, 
+      markerLabels: <%= activity_rules.pluck(:dvalue).map(&:to_f) %>
+    })
+  })
+</script>

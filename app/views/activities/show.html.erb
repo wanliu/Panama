@@ -1,21 +1,14 @@
-<!-- <p id="notice"><%= notice %></p>
-<p>
-<%#= image_tag @activity.photos.avatar, :style => "width:300px;height:240px;" %>
-</p> -->
-<!-- <%#= link_to 'Edit', edit_activity_path(@activity) %> | -->
-<%= render "activities/#{@activity.activity_type}/show", activity: @activity, product_item: @product_item %>
+<div id="main" class="content">
+  <div class='not_dialog'>
+    <%= render "activities/#{@activity.activity_type}/show", activity: @activity, product_item: @product_item %>
+  </div>
+</div>
 
 <script type="text/javascript">
-    // $(function(){
-    //   new ActivityView({
-    //     el: $(".content"),
-    //     login: '<%= current_user.login %>'
-    //   })
-    // })
-	$(function(){
-		new ActivityBind({
-			model: (new ActivityModel({ id: "<%=@activity.id %>", shop_id: "<%= @activity.shop_id %>" })),
-			el: $(".content")
-		})
-	})
+  $(function(){
+    new ActivityBind({
+      model: (new ActivityModel({ id: "<%=@activity.id %>", shop_id: "<%= @activity.shop_id %>" })),
+      el: $(".activity-auction")
+    })
+  })
 </script>
