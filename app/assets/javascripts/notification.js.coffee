@@ -15,7 +15,7 @@ class NotificationManager
           <div class='noty_close'></div>
           <div>
             <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-            <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
+            <a href="{{ url }}" class='btn btn-danger after_click pull-right'>查看</a>
           </div>
       </div>""")
 
@@ -37,7 +37,7 @@ class NotificationManager
         <div>
           <div class='noty_close'></div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
-          <a  href='/shops/{{ shop_name }}/shop_circles' data-toggle='modal' data-dismiss='modal' class="btn btn-primary pull-right" data-target='#choseCircle'>
+          <a  href='/shops/{{ shop_name }}/shop_circles' data-toggle='modal' data-dismiss='modal' class="after_click btn btn-primary pull-right" data-target='#choseCircle'>
             邀请加入商圈
           </a>
         </div>
@@ -61,7 +61,7 @@ class NotificationManager
         <div class='noty_close'></div>
         <div class='activity' activity-id="{{ target.id }}">
           <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-          <a href="javascript:void(0)" class='btn btn-danger pull-right preview'>查看</a>
+          <a href="javascript:void(0)" class='btn btn-danger after_click pull-right preview'>查看</a>
         </div>
       </div>""")
 
@@ -72,7 +72,7 @@ class NotificationManager
           <div class='noty_close'></div>
           <div class='ask_buy' ask-buy-id="{{ ask_buy_id }}">
             <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-            <a href="javascript:void(0)" class='btn btn-danger pull-right preview '>查看求购</a>
+            <a href="javascript:void(0)" class='btn btn-danger pull-right after_click preview '>查看求购</a>
           </div>
       </div>""")
 
@@ -193,7 +193,6 @@ class NotificationManager
       invite: data.invite,
     })
 
-
   shop_follow: (data) =>
     data.template = $(@shopFollowTempate(data))
     @commonNotify(data)
@@ -202,7 +201,8 @@ class NotificationManager
       shop_name: data.shop_name,
       user_id: data.user.id
     })
-    # invite_view.trigger( "close_message",'invite_user');
+
+    new DefaultView({el: data.template})
 
   follow: (data) =>
     data.template = $(@followTemplate(data))
@@ -308,7 +308,8 @@ class NotificationManager
 
 class DefaultView extends Backbone.View
   events:
-    "click .i_know" : "close_message"
+    "click .i_know"      : "close_message"
+    "click .after_click" : "close_message"
 
   close_message: () ->
     @$(".noty_close").click()
