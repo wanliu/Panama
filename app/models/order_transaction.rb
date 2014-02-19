@@ -263,17 +263,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  #如果卖家没有发货直接删除明细，返还买家的金额
-  def refund_handle_detail_return_money(refund)
-    product_ids = refund.refund_product_ids
-    refund_items = get_refund_items(product_ids)
-    if not_product_refund(product_ids).present?
-      refund_items.destroy_all
-      update_total_count
-    end
-    refund.buyer_recharge if save
-  end
-
   def generate_number
     _number = (OrderTransaction.max_id + 1).to_s
     self.number = if _number.length < 9
@@ -300,8 +289,8 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   #订单商品全退货了
-  def not_product_refund(product_ids)
-    items.where("product_id not in (?)", product_ids).first
+  def not_refund_item?(product_ids)
+    items.exists?(["product_id not in (?)", product_ids])
   end
 
   def shipped_state?
@@ -350,24 +339,26 @@ class OrderTransaction < ActiveRecord::Base
 
   def buyer_fire_event!(event)
     events = %w(online_payment bank_transfer back paid sign transfer confirm_transfer)
-    if filter_fire_event!(events, event)
-      change_state_notify_seller(event)
-    end
+    result = filter_fire_event!(events, event)    
+    change_state_notify_seller(event) if result
+    result    
   end
 
   def system_fire_event!(event)
     events = %w(expired audit_transfer audit_failure)
-    if filter_fire_event!(events, event)
+    result = filter_fire_event!(events, event)
+    if result
       change_state_notify_seller(event)
       change_state_notify_buyer(event)    
     end
+    result
   end
 
   def seller_fire_event!(event)
     events = %w(back delivered)
-    if filter_fire_event!(events, event)
-      change_state_notify_buyer(event)
-    end
+    result = filter_fire_event!(events, event)
+    change_state_notify_buyer(event) if result
+    result      
   end
 
   def change_state_notify_seller(event = nil)
@@ -424,7 +415,7 @@ class OrderTransaction < ActiveRecord::Base
 
   #付款
   def buyer_payment
-    buyer.payment(stotal,{
+    buyer.payment(stotal, {
       :owner => self,
       :pay_type => pay_status.name,
       :target => seller.user,

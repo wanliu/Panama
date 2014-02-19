@@ -95,17 +95,15 @@ class OrderRefund < ActiveRecord::Base
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
       refund.valid_unshipped_order_state?
       refund.create_returned_item
-      if refund.valid?
-        refund.handle_detail_return_money
-        refund.change_order_refund_state
-      end
+    end
+
+    after_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund|
+      refund.seller_refund_money
+      refund.change_order_refund_state
     end
 
     after_transition :apply_failure => [:complete, :waiting_delivery] do |refund, transition|
       refund.change_order_refund_state
-    end
-
-    before_transition :waiting_delivery => :waiting_sign do |refund, transition|
     end
 
     after_transition :waiting_sign => :complete do |refund, transition|
@@ -203,20 +201,16 @@ class OrderRefund < ActiveRecord::Base
     order.fire_events!("rollback_#{order_state}")
   end
 
-  def handle_detail_return_money
-    order.refund_handle_detail_return_money(self)
-  end
-
   def seller_fire_events!(event)
-    if type_fire_events!(%w(shipped_agree unshipped_agree  refuse sign), event)
-      notice_change_buyer(event)
-    end
+    result = type_fire_events!(%w(shipped_agree unshipped_agree refuse sign), event)
+    notice_change_buyer(event) if result
+    result      
   end
 
   def buyer_fire_events!(event)
-    if type_fire_events!(%w(delivered), event)
-      notice_change_seller(event)
-    end
+    result = type_fire_events!(%w(delivered), event)    
+    notice_change_seller(event) if result
+    result
   end
 
   def update_buyer_and_seller_and_operate
@@ -232,7 +226,7 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def refund_product_ids
-    items.map{|it| it.product_id}
+    items.pluck("product_id") 
   end
 
   def create_items(_items = [])
@@ -272,10 +266,8 @@ class OrderRefund < ActiveRecord::Base
 
   #卖家退款
   def seller_refund_money
-    if order_waiting_sign_state? || order_complete_state?
-      order.seller_recharge
-      buyer_recharge   
-    end
+    order.seller_recharge unless order_complete_state?
+    buyer_recharge 
   end
 
   def valid_destroy?

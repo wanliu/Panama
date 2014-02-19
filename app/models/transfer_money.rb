@@ -46,6 +46,7 @@ class TransferMoney < ActiveRecord::Base
     I18n.t("transfer_money.pay_type.#{pay_type.name}")
   end
 
+  #收入到帐多是到平台账户余额
   def active_money
     money_bill.active_money if pay_type == :account
   end
