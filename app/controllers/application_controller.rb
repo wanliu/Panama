@@ -28,9 +28,13 @@ class ApplicationController < ActionController::Base
     t_model = "activerecord.attributes.#{ist_model.class.to_s.underscore}"
     ist_model.errors.messages.each do |attr, ms|
       ms.each do |m|
-        if t(t_model).is_a?(Hash) && t(t_model).key?(attr)
-          attr_name = t("#{t_model}.#{attr}")
-          messages << "#{attr_name} #{m}"
+        if t(t_model).is_a?(Hash)
+          if t(t_model).key?(attr)
+            attr_name = t("#{t_model}.#{attr}")
+            messages << "#{attr_name} #{m}"
+          else
+            messages << "#{m}"
+          end
         else
           messages << "#{attr}: #{m}"
         end
