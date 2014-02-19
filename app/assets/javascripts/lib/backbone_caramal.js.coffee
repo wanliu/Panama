@@ -98,6 +98,7 @@ class BaseChatView extends Caramal.BackboneView
   on_class: "online"
   off_class: "offline"
   className: 'global_chat'
+  msgLoaded: false
 
   EVENT_TYPE: {
     'joined'     : 1,
@@ -112,7 +113,6 @@ class BaseChatView extends Caramal.BackboneView
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
-    # 'scroll div.body'           : 'more_unread_histroy'
 
   # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
@@ -189,6 +189,7 @@ class BaseChatView extends Caramal.BackboneView
 
   getChannel: () ->
     @bindSysMsg()
+    @bindHisMsg()
 
   initChannel: () ->
     @getChannel()
@@ -213,7 +214,7 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).html(@chat_template({model: @model}))
 
   bindScroll: () ->
-    @$('div.body').scroll($.proxy(@more_unread_histroy, @))
+    @$('div.body').scroll($.proxy(@moreHisMsgs, @))
 
   setDisplay: () ->
     @model.chat_view = @
@@ -322,30 +323,25 @@ class BaseChatView extends Caramal.BackboneView
       @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
-  receiveHisMessage: (options) ->
-    # if @display
-    msgs = options.msgs
+  receiveHisMessage: (msgs) ->
     origin_height = @$('.body')[0].scrollHeight
     @msgContent().prepend(@parseMessages(msgs))
+    @showMoreFlag()
     setTimeout () =>
       height = @$('.body')[0].scrollHeight
       diff = height - origin_height
       @$('.body').scrollTop(diff)
 
-    if !options.theEnd
-      @showMoreFlag()
-    else
-      @removeMoreFlag()
+
     # @model.trigger('active_avatar') if @name is msgs.user
     if @display
       @$('.message .image-zoom').fancybox()
       # @scrollDialog()
 
-  more_unread_histroy: (event) ->
+  moreHisMsgs: (event) ->
     target = event.target || event.srcElement
     if $(target).scrollTop() < 5
       setTimeout(() =>
-        # @channel.fetchUnread()
         @channel.fetchMsgs()
       , 800)
 
@@ -356,8 +352,7 @@ class BaseChatView extends Caramal.BackboneView
       <i class='icon-time'></i>查看更多信息</li>")
 
   removeMoreFlag: () ->
-    moreFlag = @msgContent().find('.showMoreFlag')
-    moreFlag.remove()
+    @msgContent().find('.showMoreFlag').remove()
 
   toggleDialog: () ->
     if @display
@@ -376,21 +371,19 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).show()
     @display = true
     @channel.active()
-    @showUnread()
+    @showBufferMsgs() unless @msgLoaded
     @channel.on 'endOfHisMsg', (event) =>
       @removeMoreFlag();
-    # @bindMessage()
-    @scrollDialog()
+    setTimeout () =>
+      @scrollDialog()
 
   scrollDialog: () ->
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
-  showUnread: () ->
+  showBufferMsgs: () ->
     _.each @channel.message_buffer, (msg) =>
-      @receiveMessage(msg)
-    @channel.message_buffer.splice(0, @channel.message_buffer.length)
-    @receiveHisMessage(@channel.unread_buffer) if @channel.unread_buffer['msgs'].length > 0
-    @channel.unread_buffer = { theEnd: true, msgs: [] };
+      @receiveHisMessage(msg)
+    @channel.emptyBuffer()
 
   showWithMsg: () ->
     @resetHistory()
@@ -401,6 +394,11 @@ class BaseChatView extends Caramal.BackboneView
 
   bindSysMsg: () ->
     @channel.onSysMsg(@receiveSysMsg, @)
+
+  bindHisMsg: () ->
+    @channel.on 'hisMsgsFetched', (msgs) =>
+      @receiveHisMessage(msgs)
+      @msgLoaded = true
 
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)
@@ -434,6 +432,7 @@ class BaseChatView extends Caramal.BackboneView
 class root.FriendChatView extends BaseChatView
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@name)
+    super
 
   stateService: () ->
     $(window).bind('idle', () =>
@@ -533,11 +532,6 @@ class root.OrderChatView extends BaseChatView
     @addModelToManager()
     @setImgUploader()
     @hide()
-
-  hideDialog: () ->
-    super
-    @msgContent().html('')
-    # @unbindMessage()
 
   fastKey: (event) ->
     @sendMessage(event) if event.ctrlKey && event.keyCode == 13

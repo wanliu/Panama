@@ -5094,10 +5094,6 @@ if (typeof define === "function" && define.amd) {
         */
 
         this.message_buffer = [];
-        this.unread_buffer = {
-          theEnd: true,
-          msgs: []
-        };
         /**
          * 频道状态
          * @type {String}
@@ -5116,6 +5112,10 @@ if (typeof define === "function" && define.amd) {
         this.bindSocket(this.manager.client);
         this._buildCommands();
       }
+
+      Channel.prototype.emptyBuffer = function() {
+        return this.message_buffer.length = 0;
+      };
 
       Channel.prototype.setOptions = function(options) {
         var name, opt, _results;
@@ -5171,9 +5171,8 @@ if (typeof define === "function" && define.amd) {
               return _this.emit('endOfHisMsg', {});
             } else {
               _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-              return _this.emit('unreadMsgsFetched', {
-                msgs: msgs
-              });
+              _this.message_buffer = msgs;
+              return _this.emit('hisMsgsFetched', msgs);
             }
           });
         }
