@@ -176,7 +176,6 @@ class BaseChatView extends Caramal.BackboneView
 
   resetHistory: () ->
     @msgContent().html('')
-    @channel.resetHisInitTime();
 
   initialize: (options) ->
     super
@@ -343,7 +342,7 @@ class BaseChatView extends Caramal.BackboneView
     target = event.target || event.srcElement
     if $(target).scrollTop() < 5
       setTimeout(() =>
-        @channel.fetchMsgs()
+        @channel.fetchMsgs() if $(target).scrollTop() < 5
       , 800)
 
   showMoreFlag: () ->
@@ -365,6 +364,7 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).hide()
     @resetHistory()
     @display = false
+    @channel.resetHisInitTime()
     @channel.deactive()
     # @unbindMessage()
 
