@@ -1,5 +1,5 @@
 class CategoryController < ApplicationController
-  before_filter :login_and_service_required, except: :products
+  before_filter :login_and_service_required, :except => [:products, :filtered_brand]
   before_filter :login_required, only: :products
 
   layout "application"
