@@ -456,6 +456,8 @@ zh-CN:
         bank_id: 银行账号
       transfer:
         shop_product: 商品
+      product_item: 
+        shop: 商店
 
   mongoid:
     models:

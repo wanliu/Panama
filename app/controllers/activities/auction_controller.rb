@@ -26,7 +26,7 @@ class Activities::AuctionController < Activities::BaseController
     })
     @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
-    respond_to do |format|
+    respond_to do |format|      
       if @transaction.save
         @activity.transactions << @transaction
         format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
