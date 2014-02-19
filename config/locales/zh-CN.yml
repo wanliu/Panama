@@ -442,6 +442,7 @@ zh-CN:
         price: 价格
         amount: 数量
         total: 总计
+        shop: 商店
       address: 
         province_id: 省份
         city_id: 城市
