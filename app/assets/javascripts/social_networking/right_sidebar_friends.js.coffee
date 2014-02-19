@@ -436,20 +436,12 @@ class BaseIconView extends Backbone.View
 
 
 class FriendIconView extends BaseIconView
-
-  initialize: () ->
-    super
-
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@model.get('name'))
     @channel.open()
 
 
 class GroupIconView extends BaseIconView
-
-  initialize: () ->
-    super
-
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
     @channel.open()

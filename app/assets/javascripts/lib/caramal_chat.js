@@ -5171,8 +5171,8 @@ if (typeof define === "function" && define.amd) {
               return _this.emit('endOfHisMsg', {});
             } else {
               _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-              _this.message_buffer = msgs;
-              return _this.emit('hisMsgsFetched', msgs);
+              _this.message_buffer = msgs.concat(_this.message_buffer);
+              return _this.emit('hisMsgsFetched', {});
             }
           });
         }

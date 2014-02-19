@@ -179,6 +179,7 @@ class BaseChatView extends Caramal.BackboneView
 
   initialize: (options) ->
     super
+    @render()
     @name = @model.get('name')
     @title = @name unless @title
     @channel = @model.get('channel')
@@ -188,6 +189,7 @@ class BaseChatView extends Caramal.BackboneView
     @initDialog()
 
   getChannel: () ->
+    @bindMessage()
     @bindSysMsg()
     @bindHisMsg()
 
@@ -199,7 +201,6 @@ class BaseChatView extends Caramal.BackboneView
     )
 
   initDialog: () ->
-    @render()
     @bindScroll()
     @setDisplay()
     $('body').append(@el)
@@ -310,11 +311,10 @@ class BaseChatView extends Caramal.BackboneView
     @$('.msg_content')
 
   receiveMessage: (data) ->
-    if @display
-      @msgContent().append(@parseMessages(data))
-      @model.trigger('active_avatar') if @name is data.user
-      @$('.message .image-zoom').fancybox()
-      @scrollDialog()
+    @msgContent().append(@parseMessages(data))
+    @model.trigger('active_avatar') if @name is data.user
+    @$('.message .image-zoom').fancybox()
+    @scrollDialog()
 
   receiveSysMsg: (data) ->
     if @display
@@ -362,6 +362,7 @@ class BaseChatView extends Caramal.BackboneView
 
   hideDialog: () ->
     $(@el).hide()
+    @resetHistory()
     @display = false
     @channel.deactive()
     # @unbindMessage()
@@ -371,7 +372,7 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).show()
     @display = true
     @channel.active()
-    @showBufferMsgs() unless @msgLoaded
+    @addBufferMsgs()
     @channel.on 'endOfHisMsg', (event) =>
       @removeMoreFlag();
     setTimeout () =>
@@ -380,13 +381,11 @@ class BaseChatView extends Caramal.BackboneView
   scrollDialog: () ->
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
-  showBufferMsgs: () ->
-    _.each @channel.message_buffer, (msg) =>
-      @receiveHisMessage(msg)
+  addBufferMsgs: () ->
+    @receiveHisMessage(@channel.message_buffer)
     @channel.emptyBuffer()
 
   showWithMsg: () ->
-    @resetHistory()
     @showDialog()
 
   bindMessage: () ->
@@ -396,9 +395,8 @@ class BaseChatView extends Caramal.BackboneView
     @channel.onSysMsg(@receiveSysMsg, @)
 
   bindHisMsg: () ->
-    @channel.on 'hisMsgsFetched', (msgs) =>
-      @receiveHisMessage(msgs)
-      @msgLoaded = true
+    @channel.on 'hisMsgsFetched', (event) =>
+      @addBufferMsgs()
 
   unbindMessage: () ->
     @channel.removeEventListener('message', @receiveMessage)
