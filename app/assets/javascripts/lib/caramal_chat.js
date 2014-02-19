@@ -5041,7 +5041,9 @@ if (typeof define === "function" && define.amd) {
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('chat/channel',['core', 'chat/manager', 'util', 'event', 'exports'], function(Caramal, Manager, Util, Event, exports) {
-    var Channel;
+    var Channel, OFF, ON;
+    ON = true;
+    OFF = false;
     Channel = (function(_super) {
       var MAXIMUM_MESSAGES;
 
@@ -5095,6 +5097,7 @@ if (typeof define === "function" && define.amd) {
 
         this.message_buffer = [];
         this.hisMsgBuf = [];
+        this.hisFetchLock = OFF;
         /**
          * 频道状态
          * @type {String}
@@ -5170,17 +5173,33 @@ if (typeof define === "function" && define.amd) {
             room: this.room,
             start: this.lastFetchedMsgTime || new Date().getTime()
           };
-          return this.socket.emit('history', fetch_options, function(err, msgs) {
-            if (msgs.length === 0) {
-              _this.hisMsgEnded = true;
-              return _this.emit('endOfHisMsg', {});
-            } else {
-              _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-              _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
-              return _this.emit('hisMsgsFetched', {});
-            }
-          });
+          if (!this.hisFetchLocked()) {
+            this.lockHisFetchLock();
+            return this.socket.emit('history', fetch_options, function(err, msgs) {
+              _this.freeHisFetchLock();
+              if (msgs.length === 0) {
+                _this.hisMsgEnded = true;
+                return _this.emit('endOfHisMsg', {});
+              } else {
+                _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
+                _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
+                return _this.emit('hisMsgsFetched', {});
+              }
+            });
+          }
         }
+      };
+
+      Channel.prototype.hisFetchLocked = function() {
+        return this.hisFetchLock === ON;
+      };
+
+      Channel.prototype.lockHisFetchLock = function() {
+        return this.hisFetchLock = ON;
+      };
+
+      Channel.prototype.freeHisFetchLock = function() {
+        return this.hisFetchLock = OFF;
       };
 
       Channel.prototype.resetHisInitTime = function() {
