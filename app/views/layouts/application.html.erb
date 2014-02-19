@@ -73,7 +73,11 @@
             pnotify({ text: '活动发布成功,等待审核……' });
           },
           error: function(xhr, status, error) {
-            pnotify({ type: 'error', title: '活动发布失败', text: JSON.parse(xhr.responseText).join('\n') })
+            pnotify({ 
+              type: 'error', 
+              title: '活动发布失败', 
+              text: JSON.parse(xhr.responseText).join('<br />') 
+            })
           }
         });
       });
