@@ -5041,9 +5041,11 @@ if (typeof define === "function" && define.amd) {
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define('chat/channel',['core', 'chat/manager', 'util', 'event', 'exports'], function(Caramal, Manager, Util, Event, exports) {
-    var Channel;
+    var Channel, OFF, ON;
+    ON = true;
+    OFF = false;
     Channel = (function(_super) {
-      var HIS_FETCH_STEP, MAXIMUM_MESSAGES;
+      var MAXIMUM_MESSAGES;
 
       __extends(Channel, _super);
 
@@ -5054,8 +5056,6 @@ if (typeof define === "function" && define.amd) {
 
 
       MAXIMUM_MESSAGES = 2000;
-
-      HIS_FETCH_STEP = 10;
 
       /**
        * 有效命令列表
@@ -5096,10 +5096,8 @@ if (typeof define === "function" && define.amd) {
         */
 
         this.message_buffer = [];
-        this.unread_buffer = {
-          theEnd: true,
-          msgs: []
-        };
+        this.hisMsgBuf = [];
+        this.hisFetchLock = OFF;
         /**
          * 频道状态
          * @type {String}
@@ -5119,6 +5117,14 @@ if (typeof define === "function" && define.amd) {
         this._buildCommands();
       }
 
+      Channel.prototype.emptyNewBuf = function() {
+        return this.message_buffer.length = 0;
+      };
+
+      Channel.prototype.emptyHisBuf = function() {
+        return this.hisMsgBuf.length = 0;
+      };
+
       Channel.prototype.setOptions = function(options) {
         var name, opt, _results;
         _results = [];
@@ -5134,7 +5140,7 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.setUnreadMsgCount = function() {
-        var channel_name, user_name;
+        var channel_name, unreadMsgCount, user_name;
         this.unreadFetchFlagSeted = true;
         channel_name = this.group ? this.group : this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
           if (clients && clients.current_user) {
@@ -5146,59 +5152,62 @@ if (typeof define === "function" && define.amd) {
           }
         })) : void 0;
         if (channel_name && this.manager.unreadMsgs && this.manager.unreadMsgs[channel_name]) {
-          this.unreadMsgCount = this.manager.unreadMsgs[channel_name];
-          this.unreadFetchFlag = true;
-          this.unreadFetched = 0;
-          if (this.waitingForUnreadFetchFlagSet) {
-            this.fetchUnread();
-          }
-          return this.emit('unreadMsgsSeted', {});
+          unreadMsgCount = this.manager.unreadMsgs[channel_name];
+          return this.emit('unreadMsgsSeted', unreadMsgCount);
         }
       };
 
       Channel.prototype.onOpened = function() {
         var _this = this;
-        return this.on('open', function() {
-          return _this.fetchUnread();
-        });
+        if (this.getState === "open") {
+          return this.fetchMsgs();
+        } else {
+          return this.on('open', function() {
+            return _this.fetchMsgs();
+          });
+        }
       };
 
-      Channel.prototype.fetchUnread = function() {
-        var fetch_count, fetch_options, step,
+      Channel.prototype.fetchMsgs = function() {
+        var fetch_options,
           _this = this;
-        if (this.unreadFetchFlagSeted) {
-          if (!this.unreadFetchFlag) {
-            return;
-          }
-          fetch_count = this.unreadMsgCount - this.unreadFetched;
-          step = fetch_count > HIS_FETCH_STEP ? HIS_FETCH_STEP : fetch_count;
-          fetch_options = this.lastFetchedMsgTime != null ? {
+        if (!this.hisMsgEnded) {
+          fetch_options = {
             type: "time_step",
             room: this.room,
-            start: this.lastFetchedMsgTime,
-            step: step
-          } : {
-            room: this.room,
-            start: 1,
-            step: step
+            start: this.lastFetchedMsgTime || new Date().getTime()
           };
-          return this.socket.emit('history', fetch_options, function(err, msgs) {
-            if (msgs.length === 0) {
-              return;
-            }
-            _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-            _this.unreadFetched += msgs.length;
-            if (_this.unreadFetched >= _this.unreadMsgCount) {
-              _this.unreadFetchFlag = false;
-            }
-            return _this.emit('unreadMsgsFetched', {
-              msgs: msgs,
-              theEnd: !_this.unreadFetchFlag
+          if (!this.hisFetchLocked()) {
+            this.lockHisFetchLock();
+            return this.socket.emit('history', fetch_options, function(err, msgs) {
+              _this.freeHisFetchLock();
+              if (msgs.length === 0) {
+                _this.hisMsgEnded = true;
+                return _this.emit('endOfHisMsg', {});
+              } else {
+                _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
+                _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
+                return _this.emit('hisMsgsFetched', {});
+              }
             });
-          });
-        } else {
-          return this.waitingForUnreadFetchFlagSet = true;
+          }
         }
+      };
+
+      Channel.prototype.hisFetchLocked = function() {
+        return this.hisFetchLock === ON;
+      };
+
+      Channel.prototype.lockHisFetchLock = function() {
+        return this.hisFetchLock = ON;
+      };
+
+      Channel.prototype.freeHisFetchLock = function() {
+        return this.hisFetchLock = OFF;
+      };
+
+      Channel.prototype.resetHisInitTime = function() {
+        return this.lastFetchedMsgTime = null;
       };
 
       Channel.prototype.getState = function() {
@@ -5489,6 +5498,7 @@ if (typeof define === "function" && define.amd) {
 
       Chat.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
+        this.channel.emit('open');
         return this.channel.room = room;
       });
 
@@ -5680,6 +5690,7 @@ if (typeof define === "function" && define.amd) {
 
       Group.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
+        this.channel.emit('open');
         return this.channel.room = room;
       });
 
@@ -5809,6 +5820,7 @@ if (typeof define === "function" && define.amd) {
 
       Temporary.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
+        this.channel.emit('open');
         return this.channel.room = room;
       });
 

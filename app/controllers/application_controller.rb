@@ -37,8 +37,12 @@ class ApplicationController < ActionController::Base
         end
 
         translate = t("#{path}#{model.class.to_s.underscore}")
-        if translate.is_a?(Hash) && translate.key?(key)        
-          "#{translate[key]} #{m}"
+        if translate.is_a?(Hash)
+          if translate.key?(key)        
+            "#{translate[key]}#{m}"
+          else
+            "#{m}"
+          end
         else
           "#{attrs}: #{m}"
         end
@@ -94,6 +98,13 @@ class ApplicationController < ActionController::Base
         format.json{
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
+    else
+      # fix #485
+      if self.class.try(:superclass).to_s == 'People::BaseController'
+        if current_user.login != params[:person_id]
+          redirect_to "/people/#{params[:person_id]}"
+        end
+      end
     end
   end
 
@@ -116,7 +127,6 @@ class ApplicationController < ActionController::Base
 
   def admin_required
     if !current_admin
-
       respond_to do |format|
         format.html  {
           configure_callback_url

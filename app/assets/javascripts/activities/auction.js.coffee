@@ -109,3 +109,4 @@ class root.AuctionBuyView extends Backbone.View
 
   get_date: () ->
     @$form.serializeHash()
+

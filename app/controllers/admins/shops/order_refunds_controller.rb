@@ -20,6 +20,8 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     @refund = current_shop_refunds.find_by(:id => params[:id])
     if @refund.seller_fire_events!(params[:event])
       render :partial => "card", :locals => {refund: @refund}
+    else
+      render :json => {message: "#{params[:event]}不属于你的!"}, :status => 403
     end
   end
 
