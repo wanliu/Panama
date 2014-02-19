@@ -24,19 +24,26 @@ class ApplicationController < ActionController::Base
   end
 
   def draw_errors_message(ist_model)
-    messages = []
-    t_model = "activerecord.attributes.#{ist_model.class.to_s.underscore}"
-    ist_model.errors.messages.each do |attr, ms|
-      ms.each do |m|
-        if t(t_model).is_a?(Hash) && t(t_model).key?(attr)
-          attr_name = t("#{t_model}.#{attr}")
-          messages << "#{attr_name} #{m}"
+    path = "activerecord.attributes."
+    ist_model.errors.messages.map do |key, ms|
+      ms.map do |m|  
+        attrs = key.to_s 
+        model = ist_model
+        if attrs.include?(".")
+          class_name, key = attrs.split(".")[-2..-1]
+          model = ist_model.send(class_name)
+          model = model[0] if model.is_a?(Array)          
+          key = key.to_sym
+        end
+
+        translate = t("#{path}#{model.class.to_s.underscore}")
+        if translate.is_a?(Hash) && translate.key?(key)        
+          "#{translate[key]} #{m}"
         else
-          messages << "#{attr}: #{m}"
+          "#{attrs}: #{m}"
         end
       end
-    end
-    messages
+    end.flatten
   end
 
   #转换csv

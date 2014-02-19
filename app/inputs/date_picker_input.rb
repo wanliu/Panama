@@ -2,10 +2,12 @@ class DatePickerInput < SimpleForm::Inputs::Base
 
   def input
     # element_id = input_options[:id] || rand.to_s.split(".").last
-    format = input_options[:value] || ""
+    format = input_options[:input_html][:format] || 'yyyy-mm-dd'
+    value = input_options[:input_html][:value]
+    
     <<-JAVASCRIPT
     <div id="#{element_id}" class="input-append date">
-      <input data-date-format="#{format}" type="text" #{ input_html }></input>
+      <input data-date="#{value}" data-date-format="#{format}" type="text" #{input_html}></input>
       <span class="add-on">
         <i data-time-icon="icon-time" data-date-icon="icon-calendar">
         </i>
@@ -14,10 +16,13 @@ class DatePickerInput < SimpleForm::Inputs::Base
     <script type="text/javascript">
       $(function() {
         $("##{element_id}").datetimepicker({
-          pickTime: false,
-          language: "zh-CN",
-          weekStart: 1,
-          format: 'yyyy-mm-dd'
+          'pickTime': false,
+          'language': 'zh-CN',
+          'weekStart': 1,
+          'autoclose': true,
+          'format': "#{format}"
+        }).on('changeDate', function(event){
+          $('.bootstrap-datetimepicker-widget').hide();
         });
       });
     </script>

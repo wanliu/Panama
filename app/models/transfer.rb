@@ -93,3 +93,4 @@ class Transfer < ActiveRecord::Base
     end
   end
 end
+
