@@ -153,6 +153,10 @@ class User < ActiveRecord::Base
       :owner_id => user_ids)
   end
 
+  def recount_money
+    self.update_attribute(:money, money_bills.available)
+  end
+
   def as_json(*args)
     attribute = super *args
     # attribute["icon_url"] = icon

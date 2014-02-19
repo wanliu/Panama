@@ -32,6 +32,8 @@ class People::OrderRefundsController < People::BaseController
       render :partial => "card", :locals => {
         :refund => @refund
       }
+    else
+      render :json => {message: "#{params[:event]}不属于你的!"}, :status => 403
     end
   end
 
