@@ -71,9 +71,32 @@ class root.ActivityBuyView extends Backbone.View
     @backdrop.hide()
 
   buy: () ->
+    data = @get_date()
+    address = data.address
+
+    if _.isEmpty(address.id)
+      if _.isEmpty(address.province_id) || 
+      _.isEmpty(address.city_id) || 
+      _.isEmpty(address.area_id) ||
+      _.isEmpty(address.contact_name) ||
+      _.isEmpty(address.contact_phone) ||
+      _.isEmpty(address.road) ||
+      _.isEmpty(address.zip_code)
+        pnotify(text: "请添加联系地址！", type: "warning")
+        return false
+
+
+    unless _.isFinite(data.product_item.amount)
+      pnotify(text: "请输入正确的数量！", type: "warning")
+      return false
+
+    if parseFloat(data.product_item.amount) <= 0
+      pnotify(text: "请输入大于0的数量！", type: "warning")
+      return false
+
     $.ajax(
       url: @$form.attr("action"),
-      data: @get_date(),
+      data: data,
       type: "POST",
       error: (xhr) =>
         try
@@ -86,7 +109,4 @@ class root.ActivityBuyView extends Backbone.View
     )
 
   get_date: () ->
-    values = @$form.serializeArray()
-    data = {}
-    _.each values, (val) -> data[val.name] = val.value
-    data
+    @$form.serializeHash()
