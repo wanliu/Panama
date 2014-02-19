@@ -91,6 +91,13 @@ class ApplicationController < ActionController::Base
         format.json{
           render :json => { 'error' => 'Access Denied' }.to_json  }
       end
+    else
+      # fix #485
+      if self.class.try(:superclass).to_s == 'People::BaseController'
+        if current_user.login != params[:person_id]
+          redirect_to "/people/#{params[:person_id]}"
+        end
+      end
     end
   end
 
@@ -113,7 +120,6 @@ class ApplicationController < ActionController::Base
 
   def admin_required
     if !current_admin
-
       respond_to do |format|
         format.html  {
           configure_callback_url
