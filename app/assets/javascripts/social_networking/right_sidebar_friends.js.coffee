@@ -406,15 +406,8 @@ class BaseIconView extends Backbone.View
         @active()
     , @
 
-    @channel.on('unreadMsgsFetched', (options) =>
-      if @chat_view# && $(@chat_view.el).is(':visible')
-        @chat_view.receiveHisMessage(options)
-      else
-        @channel.unread_buffer = options
-    )
-
-    @channel.on 'unreadMsgsSeted', () =>
-      @msg_count += @channel.unreadMsgCount
+    @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
+      @msg_count += unreadMsgCount
       @$('.message_count').html(@msg_count).show() if @msg_count > 0
 
   getChat: () ->
@@ -443,20 +436,12 @@ class BaseIconView extends Backbone.View
 
 
 class FriendIconView extends BaseIconView
-
-  initialize: () ->
-    super
-
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@model.get('name'))
     @channel.open()
 
 
 class GroupIconView extends BaseIconView
-
-  initialize: () ->
-    super
-
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('name'))
     @channel.open()

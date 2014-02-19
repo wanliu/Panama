@@ -74,13 +74,5 @@ def load_permission
   rake['permission:load'].invoke
 end
 
-def load_user_service
-  rake['user_services:load'].invoke
-end
-
-def load_logistics
-  LogisticsCompany.load_data
-end
-
 initialize_data
 

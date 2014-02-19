@@ -38,4 +38,8 @@ class MoneyBill < ActiveRecord::Base
     self.where(:state => false).sum(:money)
   end
 
+  def self.available
+    self.where(:state => true).sum(:money)
+  end
+
 end
