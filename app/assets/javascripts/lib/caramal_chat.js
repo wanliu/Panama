@@ -5094,6 +5094,7 @@ if (typeof define === "function" && define.amd) {
         */
 
         this.message_buffer = [];
+        this.hisMsgBuf = [];
         /**
          * 频道状态
          * @type {String}
@@ -5113,8 +5114,12 @@ if (typeof define === "function" && define.amd) {
         this._buildCommands();
       }
 
-      Channel.prototype.emptyBuffer = function() {
+      Channel.prototype.emptyNewBuf = function() {
         return this.message_buffer.length = 0;
+      };
+
+      Channel.prototype.emptyHisBuf = function() {
+        return this.hisMsgBuf.length = 0;
       };
 
       Channel.prototype.setOptions = function(options) {
@@ -5171,11 +5176,15 @@ if (typeof define === "function" && define.amd) {
               return _this.emit('endOfHisMsg', {});
             } else {
               _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-              _this.message_buffer = msgs.concat(_this.message_buffer);
+              _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
               return _this.emit('hisMsgsFetched', {});
             }
           });
         }
+      };
+
+      Channel.prototype.resetHisInitTime = function() {
+        return this.lastFetchedMsgTime = null;
       };
 
       Channel.prototype.getState = function() {

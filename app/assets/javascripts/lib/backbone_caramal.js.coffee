@@ -176,6 +176,7 @@ class BaseChatView extends Caramal.BackboneView
 
   resetHistory: () ->
     @msgContent().html('')
+    @channel.resetHisInitTime();
 
   initialize: (options) ->
     super
@@ -189,7 +190,7 @@ class BaseChatView extends Caramal.BackboneView
     @initDialog()
 
   getChannel: () ->
-    @bindMessage()
+    # @bindMessage()
     @bindSysMsg()
     @bindHisMsg()
 
@@ -382,14 +383,22 @@ class BaseChatView extends Caramal.BackboneView
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   addBufferMsgs: () ->
-    @receiveHisMessage(@channel.message_buffer)
-    @channel.emptyBuffer()
+    @addHisBufMsgs()
+    @addNewBufMsgs()
+
+  addHisBufMsgs: () ->
+    @receiveHisMessage(@channel.hisMsgBuf)
+    @channel.emptyHisBuf()
+
+  addNewBufMsgs: () ->
+    @receiveMessage(@channel.message_buffer)
+    @channel.emptyNewBuf()
 
   showWithMsg: () ->
     @showDialog()
 
-  bindMessage: () ->
-    @channel.onMessage(@receiveMessage, @)
+  # bindMessage: () ->
+  #   @channel.onMessage(@receiveMessage, @)
 
   bindSysMsg: () ->
     @channel.onSysMsg(@receiveSysMsg, @)
@@ -398,8 +407,8 @@ class BaseChatView extends Caramal.BackboneView
     @channel.on 'hisMsgsFetched', (event) =>
       @addBufferMsgs()
 
-  unbindMessage: () ->
-    @channel.removeEventListener('message', @receiveMessage)
+  # unbindMessage: () ->
+  #   @channel.removeEventListener('message', @receiveMessage)
 
   activeDialog: () ->
     @model.trigger('unactive_avatar')
