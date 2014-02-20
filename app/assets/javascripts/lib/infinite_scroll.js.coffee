@@ -8,7 +8,7 @@ class root.InfiniteScrollView extends Backbone.View
     @offset = 0
     @limit = 40
     @init_size = 40
-    @is_over = false
+    @is_over ||= false
     @search_options = {}
     @msg_tip = '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
     _.extend(@, options)
@@ -69,6 +69,7 @@ class root.InfiniteScrollView extends Backbone.View
     @search_options = options
     @remove_columns()
     @offset = 0
+    @is_over = false
     @fetch_size = @init_size
     @fetch()
 
