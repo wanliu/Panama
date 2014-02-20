@@ -457,6 +457,8 @@ zh-CN:
         bank_id: 银行账号
       activity_rule:
         dvalue: 活动价 
+      transfer: 
+        shop_product: 商品
 
   mongoid:
     models:

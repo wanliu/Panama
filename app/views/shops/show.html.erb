@@ -1,7 +1,7 @@
 <div id="main" class="content shop_wrap">
   <div class='container-fluid'>
     <div class="widget">
-      <div class='row'>
+      <div class='row-fluid'>
         <div class='shop_info span4'>
           <div class='photo'>
             <img src="<%=@shop.photos.header %>">
@@ -35,9 +35,9 @@
             </p>
           </div>
         </div>
-        <div class='circle_info span4'>
+        <div class='circle_info span8'>
           <h5>商圈</h5>
-          <ul class='circles'>
+          <ul class='circles span12'>
             <%=render :partial => "circle_item", :collection => @shop.circles %>
           </ul>
         </div>
