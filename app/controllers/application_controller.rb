@@ -37,8 +37,12 @@ class ApplicationController < ActionController::Base
         end
 
         translate = t("#{path}#{model.class.to_s.underscore}")
-        if translate.is_a?(Hash) && translate.key?(key)        
-          "#{translate[key]} #{m}"
+        if translate.is_a?(Hash)
+          if translate.key?(key)        
+            "#{translate[key]}#{m}"
+          else
+            "#{m}"
+          end
         else
           "#{attrs}: #{m}"
         end

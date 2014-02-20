@@ -455,6 +455,8 @@ zh-CN:
         code: 账号
         name: 开户人
         bank_id: 银行账号
+      activity_rule:
+        dvalue: 活动价 
 
   mongoid:
     models:
