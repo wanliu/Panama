@@ -88,7 +88,8 @@ class OrderRefund < ActiveRecord::Base
       refund.rollback_order_state if refund.valid?
     end
 
-    before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
+    before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|      
+      refund.valid_seller_money?
       refund.validate_shipped_order_state?
     end
 
@@ -96,6 +97,10 @@ class OrderRefund < ActiveRecord::Base
       refund.valid_seller_money?
       refund.valid_unshipped_order_state?
       refund.create_returned_item
+    end
+
+    before_transition :waiting_sign => :complete do |refund, transition|
+      refund.valid_seller_money?      
     end
 
     after_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund|
@@ -256,20 +261,18 @@ class OrderRefund < ActiveRecord::Base
   end
 
   #退款
-  def buyer_recharge   
-    seller_user = order.seller.user
-    if valid_seller_money?
-      seller_user.payment(stotal, {
-        :owner => self,
-        :decription => "订单#{order.number}退货",
-        :target => order.buyer,
-        :pay_type => :account
-      })
-    end    
+  def buyer_recharge           
+    order.seller.user.payment(stotal, {
+      :owner => self,
+      :decription => "订单#{order.number}退货",
+      :target => order.buyer,
+      :pay_type => :account
+    })
   end
 
   def valid_seller_money?
-    if seller_user.valid_money?(stotal)
+    order_money = order_state?(:complete) ? 0 : order.stotal
+    if order.seller.user.valid_money?(stotal - order_money)
       errors.add(:seller, "余额不足,请充值！")
       false
     else
@@ -279,8 +282,14 @@ class OrderRefund < ActiveRecord::Base
 
   #卖家退款
   def seller_refund_money
+    if valid_seller_money?
+      active_order_money
+      buyer_recharge
+    end
+  end
+
+  def active_order_money
     order.seller_recharge unless order_state?(:complete)
-    buyer_recharge 
   end
 
   def valid_destroy?

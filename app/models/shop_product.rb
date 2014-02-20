@@ -120,6 +120,7 @@ class ShopProduct < ActiveRecord::Base
 
   def recount_inventory
     self.update_column(:inventory, transfers.completed.sum(:amount))
+    update_index
   end
 
   def self.valid_attribute?(attr, value)

@@ -401,19 +401,17 @@ class OrderTransaction < ActiveRecord::Base
 
   def kuaiqian_paid
     update_pay_status(:kuaiqian)    
-    buyer_fire_event!(:paid)
+    buyer_fire_event(:paid)
   end
 
   #付款
-  def buyer_payment 
-    if valid_payment?   
-      buyer.payment(stotal, {
-        :owner => self,
-        :pay_type => pay_status.name,
-        :target => seller.user,
-        :decription => "订单#{number}付款",
-        :state => false })
-    end      
+  def buyer_payment    
+    buyer.payment(stotal, {
+      :owner => self,
+      :pay_type => pay_status.name,
+      :target => seller.user,
+      :decription => "订单#{number}付款",
+      :state => false })    
   end
 
   #卖家收款

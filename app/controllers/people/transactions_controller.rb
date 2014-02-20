@@ -70,7 +70,7 @@ class People::TransactionsController < People::BaseController
     if @transaction.buyer_fire_event(event_name)
       render_base_template "card", :transaction => @transaction
     else
-      render :json => {message: draw_errors_message(@transaction) }, :status => 403
+      render :json => draw_errors_message(@transaction), :status => 403
     end
   end
 
@@ -134,12 +134,17 @@ class People::TransactionsController < People::BaseController
 
   def test_payment
     @transaction = current_order.find(params[:id])
-    @transaction.kuaiqian_paid if payment_mode?
-    respond_to do |format|
-      url = "#{person_transactions_path(@people)}?pay_msg=success#open/#{@transaction.id}/order"
-      format.js{ 
-        render :js => "window.location.href='#{url}'" }
-      format.html{ redirect_to url }      
+    if payment_mode?     
+      respond_to do |format|
+        if @transaction.kuaiqian_paid 
+          url = "#{person_transactions_path(@people)}?pay_msg=success#open/#{@transaction.id}/order"
+          format.js{ 
+            render :js => "window.location.href='#{url}'" }
+          format.html{ redirect_to url }
+        else
+          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }
+        end      
+      end
     end
   end
 

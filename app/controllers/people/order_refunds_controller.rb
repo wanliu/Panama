@@ -33,7 +33,7 @@ class People::OrderRefundsController < People::BaseController
         :refund => @refund
       }
     else
-      render :json => {message: draw_errors_message(@refund), :status => 403
+      render :json => draw_errors_message(@refund), :status => 403
     end
   end
 
