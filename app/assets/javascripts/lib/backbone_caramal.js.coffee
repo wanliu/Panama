@@ -499,7 +499,6 @@ class root.OrderChatView extends BaseChatView
 
 
   initialize: (options) ->
-    super
     @name = @model.get('name')
     @title = @name unless @title
     @channel = @model.get('channel')
@@ -513,7 +512,6 @@ class root.OrderChatView extends BaseChatView
     #       @showWithMsg()
     #   , 300)
     # )
-
 
   initChannel: () ->
     @getChannel()
