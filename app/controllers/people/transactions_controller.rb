@@ -67,12 +67,10 @@ class People::TransactionsController < People::BaseController
     event_name = params[:event]
     authorize! :event, @transaction
 
-    if @transaction.buyer_fire_event!(event_name)
+    if @transaction.buyer_fire_event(event_name)
       render_base_template "card", :transaction => @transaction
     else
-      render :json => {message: "#{event_name}不属于你的!"}, :status => 403
-      # render :partial => 'transaction', :transaction => @transaction, :layout => false
-      # redirect_to person_transaction_path(@people.login, @transaction)
+      render :json => {message: draw_errors_message(@transaction) }, :status => 403
     end
   end
 
