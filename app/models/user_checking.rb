@@ -85,7 +85,7 @@ class UserChecking < ActiveRecord::Base
 
   def default_url
     url = if user.shop.blank?
-      File.join('http://www.wanliu.biz', "/people/#{user.login}")
+      File.join(Settings.site_url, "/people/#{user.login}")
     else
       File.join(Settings.site_url, user.shop.shop_url.to_s)
     end
