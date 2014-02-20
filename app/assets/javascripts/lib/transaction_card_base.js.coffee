@@ -110,8 +110,10 @@ class TransactionCardBase extends AbstructStateView
         @slidePage(data, direction)
     .fail (data) =>
       if data.status isnt 500
-        error_massage = JSON.parse(data.responseText).message
+        error_massage = JSON.parse(data.responseText)
         @notify("错误信息", error_massage, "error")
+      @back_state()
+
     .complete () ->
       $btn.removeClass("disabled")
 

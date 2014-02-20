@@ -22,7 +22,7 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     if @refund.seller_fire_event(params[:event])
       render :partial => "card", :locals => {refund: @refund}
     else
-      render :json => {message: draw_errors_message(@refund), :status => 403
+      render :json => draw_errors_message(@refund), :status => 403
     end   
   end
 
@@ -33,7 +33,7 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
       if @refund.save
         format.json{ head :no_content }
       else
-        format.json{ render :json =>draw_errors_message(@refund), :status => 403 }
+        format.json{ render :json => draw_errors_message(@refund), :status => 403 }
       end
     end
   end
