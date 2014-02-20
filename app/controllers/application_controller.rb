@@ -35,7 +35,6 @@ class ApplicationController < ActionController::Base
           model = model[0] if model.is_a?(Array)          
           key = key.to_sym
         end
-
         translate = t("#{path}#{model.class.to_s.underscore}")
         if translate.is_a?(Hash)
           if translate.key?(key)        
