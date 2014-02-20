@@ -27,6 +27,12 @@
       overflow: visibility;
       max-height: none;
       padding-top: 5px;
+
+      .href_name {
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis;
+      }
     }
   }
 
