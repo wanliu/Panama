@@ -5181,7 +5181,7 @@ if (typeof define === "function" && define.amd) {
             this.lockHisFetchLock();
             return this.socket.emit('history', fetch_options, function(err, msgs) {
               _this.freeHisFetchLock();
-              if (msgs.length === 0) {
+              if (!msgs || msgs.length === 0) {
                 _this.hisMsgEnded = true;
                 return _this.emit('endOfHisMsg', {});
               } else {

@@ -170,7 +170,8 @@ class root.WizardView extends Backbone.View
 
 class root.ProductView extends Backbone.View
   events: {
-    "submit form.search" : "search"
+    "submit form.
+    " : "search"
   }
   tr_template: "
     <tr id='{{id}}>
