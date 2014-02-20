@@ -5159,9 +5159,13 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype.onOpened = function() {
         var _this = this;
-        return this.on('open', function() {
-          return _this.fetchMsgs();
-        });
+        if (this.getState === "open") {
+          return this.fetchMsgs();
+        } else {
+          return this.on('open', function() {
+            return _this.fetchMsgs();
+          });
+        }
       };
 
       Channel.prototype.fetchMsgs = function() {
@@ -5494,6 +5498,7 @@ if (typeof define === "function" && define.amd) {
 
       Chat.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
+        this.channel.emit('open');
         return this.channel.room = room;
       });
 
@@ -5685,6 +5690,7 @@ if (typeof define === "function" && define.amd) {
 
       Group.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
+        this.channel.emit('open');
         return this.channel.room = room;
       });
 
@@ -5814,6 +5820,7 @@ if (typeof define === "function" && define.amd) {
 
       Temporary.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
+        this.channel.emit('open');
         return this.channel.room = room;
       });
 
