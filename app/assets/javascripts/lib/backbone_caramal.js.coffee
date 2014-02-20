@@ -195,10 +195,10 @@ class BaseChatView extends Caramal.BackboneView
 
   initChannel: () ->
     @getChannel()
-    @channel.open( () =>
-      @channel.record()
-      @channel_ready = true
-    )
+    unless @channel.getState() is 'open'
+      @channel.open () =>
+        @channel.record()
+        @channel_ready = true
 
   initDialog: () ->
     @bindScroll()
@@ -324,6 +324,7 @@ class BaseChatView extends Caramal.BackboneView
       @scrollDialog()
 
   receiveHisMessage: (msgs) ->
+    return if msgs.length is 0
     origin_height = @$('.body')[0].scrollHeight
     @msgContent().prepend(@parseMessages(msgs))
     @showMoreFlag() if msgs.length > 0
@@ -516,11 +517,11 @@ class root.OrderChatView extends BaseChatView
 
   initChannel: () ->
     @getChannel()
-    @channel.open( () =>
-      @channel.record()
-      @channel_ready = true
-      $(@el).trigger('enterOrderChat')
-    )
+    unless @channel.getState() is 'open'
+      @channel.open (chat, err, room) =>
+        @channel.record()
+        @channel_ready = true
+        $(@el).trigger('enterOrderChat')
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)

@@ -5498,8 +5498,8 @@ if (typeof define === "function" && define.amd) {
 
       Chat.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
-        this.channel.emit('open');
-        return this.channel.room = room;
+        this.channel.room = room;
+        return this.channel.emit('open');
       });
 
       /**
@@ -5602,8 +5602,10 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
-                  channel.setState('open');
-                  channel.emit('open');
+                  if (channel.getState !== 'open') {
+                    channel.setState('open');
+                    channel.emit('open');
+                  }
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5614,8 +5616,10 @@ if (typeof define === "function" && define.amd) {
                 } else {
                   channel.command('record', info.room);
                   channel.room = info.room;
-                  channel.setState('open');
-                  return channel.emit('open');
+                  if (channel.getState !== 'open') {
+                    channel.setState('open');
+                    return channel.emit('open');
+                  }
                 }
               });
             }
@@ -5690,8 +5694,8 @@ if (typeof define === "function" && define.amd) {
 
       Group.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
-        this.channel.emit('open');
-        return this.channel.room = room;
+        this.channel.room = room;
+        return this.channel.emit('open');
       });
 
       function Group(group, options) {
@@ -5762,8 +5766,10 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
-                  channel.setState('open');
-                  channel.emit('open');
+                  if (channel.getState !== 'open') {
+                    channel.setState('open');
+                    channel.emit('open');
+                  }
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
@@ -5774,8 +5780,10 @@ if (typeof define === "function" && define.amd) {
                 } else {
                   channel.command('record', info.room);
                   channel.room = info.room;
-                  channel.emit('open');
-                  return channel.setState('open');
+                  if (channel.getState !== 'open') {
+                    channel.setState('open');
+                    return channel.emit('open');
+                  }
                 }
               });
             }
@@ -5820,8 +5828,8 @@ if (typeof define === "function" && define.amd) {
 
       Temporary.afterCommand('open', function(ret, room) {
         this.channel.setState('open');
-        this.channel.emit('open');
-        return this.channel.room = room;
+        this.channel.room = room;
+        return this.channel.emit('open');
       });
 
       function Temporary(group, options) {
@@ -5893,8 +5901,10 @@ if (typeof define === "function" && define.amd) {
                 if (err != null) {
                   return console.error('fails to join room! becouse of', err);
                 } else {
-                  channel.setState('open');
-                  channel.emit('open');
+                  if (channel.getState !== 'open') {
+                    channel.setState('open');
+                    channel.emit('open');
+                  }
                   return Caramal.MessageManager.emit('channel:new', channel);
                 }
               });
