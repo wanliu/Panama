@@ -176,9 +176,10 @@ class root.WizardView extends Backbone.View
 
 
 class root.ProductView extends Backbone.View
+
   events:
     "submit form.search" : "search"
-  
+
   tr_template: "
     <tr id='{{id}}>
       <td><input type='checkbox'></td>

@@ -1,8 +1,19 @@
 <% active_section :person_info %>
 <div class='row-fluid'>
-  <div class='span7 widget'>
-    <%=@recharge.user.login %>用户充值<%=number_to_currency @recharge.money %> <%=@recharge.state_title %>
+  <div class='span7 widget recharge_info'>
+    <div>
+      <%=@recharge.user.login %>用户充值<%=number_to_currency @recharge.money %> <%=@recharge.state_title %>
+    </div>
+    <div>
+      还有<span class='clock'></span> 秒跳转到<a href="<%= person_path(@people) %>">基本信息页面</a>
+    </div>
   </div>
   <div class='span5'>
   </div>
 </div>
+
+<script type='text/javascript'>
+  $(function(){
+    new RechargeDone($(".recharge_info"), "<%=person_path(@people) %>")
+  })
+</script>

@@ -284,15 +284,6 @@ class OrderTransaction < ActiveRecord::Base
     transport_type || "暂无"
   end
 
-  def get_refund_items(product_ids)
-    items.where(:product_id => product_ids)
-  end
-
-  #订单商品全退货了
-  def not_refund_item?(product_ids)
-    items.exists?(["product_id not in (?)", product_ids])
-  end
-
   def shipped_state?
     %w(waiting_sign complete).include?(state)
   end
@@ -337,16 +328,16 @@ class OrderTransaction < ActiveRecord::Base
     %w(close order waiting_paid).include?(state)
   end
 
-  def buyer_fire_event!(event)
+  def buyer_fire_event(event)
     events = %w(online_payment bank_transfer back paid sign transfer confirm_transfer)
-    result = filter_fire_event!(events, event)    
+    result = filter_fire_event(events, event)    
     change_state_notify_seller(event) if result
     result    
   end
 
-  def system_fire_event!(event)
+  def system_fire_event(event)
     events = %w(expired audit_transfer audit_failure)
-    result = filter_fire_event!(events, event)
+    result = filter_fire_event(events, event)
     if result
       change_state_notify_seller(event)
       change_state_notify_buyer(event)    
@@ -354,9 +345,9 @@ class OrderTransaction < ActiveRecord::Base
     result
   end
 
-  def seller_fire_event!(event)
+  def seller_fire_event(event)
     events = %w(back delivered)
-    result = filter_fire_event!(events, event)
+    result = filter_fire_event(events, event)
     change_state_notify_buyer(event) if result
     result      
   end
@@ -410,17 +401,17 @@ class OrderTransaction < ActiveRecord::Base
 
   def kuaiqian_paid
     update_pay_status(:kuaiqian)    
-    buyer_fire_event!(:paid)
+    buyer_fire_event(:paid)
   end
 
   #付款
-  def buyer_payment
+  def buyer_payment    
     buyer.payment(stotal, {
       :owner => self,
       :pay_type => pay_status.name,
       :target => seller.user,
       :decription => "订单#{number}付款",
-      :state => false })      
+      :state => false })    
   end
 
   #卖家收款
@@ -626,9 +617,7 @@ class OrderTransaction < ActiveRecord::Base
 
   def shop_checked?
     shop = Shop.find(seller_id)
-    unless shop.actived
-      errors.add(:shop, "商店还未通过审核，暂时还不能购买") 
-    end
+    errors.add(:shop, "商店还未通过审核，暂时还不能购买") unless shop.actived
   end
 
   def valid_base_info?
@@ -675,11 +664,12 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def filter_fire_event!(events = [], event)
+  def filter_fire_event(events = [], event)
     name = event.to_s
     if events.include?(name)
-      fire_events!(name)
+      fire_state_event(name)
     else
+      errors.add(:state, "你不能执行当前动作!")
       false
     end
   end

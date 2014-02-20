@@ -88,13 +88,19 @@ class OrderRefund < ActiveRecord::Base
       refund.rollback_order_state if refund.valid?
     end
 
-    before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|
+    before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|      
+      refund.valid_seller_money?
       refund.validate_shipped_order_state?
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund, transition|
+      refund.valid_seller_money?
       refund.valid_unshipped_order_state?
       refund.create_returned_item
+    end
+
+    before_transition :waiting_sign => :complete do |refund, transition|
+      refund.valid_seller_money?      
     end
 
     after_transition [:apply_failure, :apply_refund, :apply_expired] => :complete do |refund|
@@ -102,7 +108,7 @@ class OrderRefund < ActiveRecord::Base
       refund.change_order_refund_state
     end
 
-    after_transition :apply_failure => [:complete, :waiting_delivery] do |refund, transition|
+    after_transition :apply_failure => :waiting_delivery do |refund, transition|
       refund.change_order_refund_state
     end
 
@@ -151,7 +157,7 @@ class OrderRefund < ActiveRecord::Base
   end
 
   def change_order_refund_state
-    unless order.fire_events!(:returned)
+    unless order.fire_state_event(:returned)
       errors.add(:state, "确认退货出错！")
     end
   end
@@ -201,14 +207,14 @@ class OrderRefund < ActiveRecord::Base
     order.fire_events!("rollback_#{order_state}")
   end
 
-  def seller_fire_events!(event)
-    result = type_fire_events!(%w(shipped_agree unshipped_agree refuse sign), event)
+  def seller_fire_event(event)
+    result = type_fire_events(%w(shipped_agree unshipped_agree refuse sign), event)
     notice_change_buyer(event) if result
     result      
   end
 
-  def buyer_fire_events!(event)
-    result = type_fire_events!(%w(delivered), event)    
+  def buyer_fire_event(event)
+    result = type_fire_events(%w(delivered), event)    
     notice_change_seller(event) if result
     result
   end
@@ -255,19 +261,35 @@ class OrderRefund < ActiveRecord::Base
   end
 
   #退款
-  def buyer_recharge
+  def buyer_recharge           
     order.seller.user.payment(stotal, {
       :owner => self,
       :decription => "订单#{order.number}退货",
       :target => order.buyer,
       :pay_type => :account
-    })    
+    })
+  end
+
+  def valid_seller_money?
+    order_money = order_state?(:complete) ? 0 : order.stotal
+    if order.seller.user.valid_money?(stotal - order_money)
+      errors.add(:seller, "余额不足,请充值！")
+      false
+    else
+      true
+    end
   end
 
   #卖家退款
   def seller_refund_money
-    order.seller_recharge unless order_complete_state?
-    buyer_recharge 
+    if valid_seller_money?
+      active_order_money
+      buyer_recharge
+    end
+  end
+
+  def active_order_money
+    order.seller_recharge unless order_state?(:complete)
   end
 
   def valid_destroy?
@@ -285,12 +307,8 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
-  def order_waiting_sign_state?
-    "waiting_sign" == order_state
-  end
-
-  def order_complete_state?
-    "complete" == order_state
+  def order_state?(_state)
+    order_state == _state
   end
 
   def shipped_state?
@@ -412,10 +430,11 @@ class OrderRefund < ActiveRecord::Base
     end
   end
 
-  def type_fire_events!(states, event)
+  def type_fire_events(states, event)
     if states.include?(event.to_s)
-      fire_events!(event)
+      fire_state_event(event)
     else
+      errors.add(:state, "不能操作#{event}事件！")
       false
     end
   end

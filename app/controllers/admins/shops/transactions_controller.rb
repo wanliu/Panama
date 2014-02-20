@@ -68,17 +68,15 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     @transaction = current_shop_order.find_by(:id => params[:id])
     respond_to do |format|
       if @transaction.current_operator == current_user
-        if @transaction.seller_fire_event!(params[:event])
+        if @transaction.seller_fire_event(params[:event])
           format.html{
             render_base_template 'card', :transaction => @transaction
           }          
         else
-          format.json{ render :json => ["你不能操作这状态！"], :status => 403 }
-          format.html{
-            redirect_to shop_admins_pending_path(current_shop.name) }        
+          format.json{ render :json => draw_errors_message(@transaction), :status => 403 }      
         end
       else
-        format.json{ render :json => ["你不能操作这状态！"], :status => 403 }
+        format.json{ render :json => ["你不能操作这订单！"], :status => 403 }
       end
     end
   end

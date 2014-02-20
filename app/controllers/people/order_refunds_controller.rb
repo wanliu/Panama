@@ -28,12 +28,12 @@ class People::OrderRefundsController < People::BaseController
 
   def event
     @refund = current_user_refunds.find_by(:id => params[:id])
-    if @refund.buyer_fire_events!(params[:event])
+    if @refund.buyer_fire_event(params[:event])
       render :partial => "card", :locals => {
         :refund => @refund
       }
     else
-      render :json => {message: "#{params[:event]}不属于你的!"}, :status => 403
+      render :json => draw_errors_message(@refund), :status => 403
     end
   end
 

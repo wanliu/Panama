@@ -18,11 +18,12 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
 
   def event
     @refund = current_shop_refunds.find_by(:id => params[:id])
-    if @refund.seller_fire_events!(params[:event])
+
+    if @refund.seller_fire_event(params[:event])
       render :partial => "card", :locals => {refund: @refund}
     else
-      render :json => {message: "#{params[:event]}不属于你的!"}, :status => 403
-    end
+      render :json => draw_errors_message(@refund), :status => 403
+    end   
   end
 
   def refuse_reason
@@ -32,7 +33,7 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
       if @refund.save
         format.json{ head :no_content }
       else
-        format.json{ render :json =>draw_errors_message(@refund), :status => 403 }
+        format.json{ render :json => draw_errors_message(@refund), :status => 403 }
       end
     end
   end

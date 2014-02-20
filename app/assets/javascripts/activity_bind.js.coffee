@@ -13,6 +13,7 @@ class ActivityBind extends Backbone.View
     'submit form.new_product_item'       : 'join'
     "click .focus .partic-button"        : "joinFocus"
     "click .focus .unpartic-button"      : "unjoinFocus"
+    "click .load_modal"                  : "load_modal"
     # "click .circle"                      : "select_circle"
     "click .share_activity"              : "share_activity"
 
@@ -25,6 +26,13 @@ class ActivityBind extends Backbone.View
     _.extend(@, options)
     @tool = new chosenTool({
       el: $(@el)
+    })
+
+  load_modal: () =>
+    $('#PickCircle').modal({
+      remote: "/people/#{ @login}/communities/all_circles",
+      keyboard: true,
+      backdrop: false
     })
 
   like: (event) ->
