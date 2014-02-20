@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_filter :login_and_service_required, except: :base_info
+  before_filter :login_and_service_required, :except => [:base_info, :all_brand_name]
 
   layout "product"
 
