@@ -138,7 +138,7 @@ class ShopProductsController < ApplicationController
 
   def search
     shop_id, value = params[:shop_id], filter_special_sym(params[:q])
-    _size, _from = params[:limit] || 10, params[:offset] || 0
+    _size, _from = params[:limit] || 40, params[:offset] || 0
     products = ShopProduct.search2 do
       query do
         boolean do

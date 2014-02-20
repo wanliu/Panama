@@ -67,11 +67,11 @@
         </div>
         <div class='span1'>
           <div>
-            <img src="<%=shop.photos.icon %>" />
+            <img src="<%=shop.photos.icon %>", title="<%= shop.try(:name) %>" />
           </div>
-          <div>
+          <div class="href_name">
             <% if shop.present? %>
-              <%= link_to shop.try(:name),shop_path(shop.try(:name)) %>
+              <%= link_to shop.try(:name), shop_path(shop.try(:name)), :title => shop.try(:name) %>
             <% end %>
           </div>
           <div>
