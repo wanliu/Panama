@@ -1,121 +1,44 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-	<%#= cache do %>
-		<%= render "head", :styles => ['shops'] %>
-	<%# end %>
-	<body class="<%= controller.controller_name %>" style="zoom: 1">
-		<%= render "chromeframe" %>
-		<%= render "logo" %>
-		<%= render "left_sidebar" %>
-		<div class="wrap">
-			<%= render "header" %>
-			<%= yield %>
-		</div>
-		<div id="popup-layout"></div>
-		<%= render "right_sidebar" %>
-		<%#= render 'header' %>
-		<%= render "footer" %>
-		<%# Javascript at the bottom for fast page loading %>
-		<%= render "baidu_analyzer" %>
-		 
-   	<%= javascript_include_tag "polyfills" %>
+  <%#= cache do %>
+    <%= render "head", :styles => ['shops'] %>
+  <%# end %>
+  <body class="<%= controller.controller_name %>" style="zoom: 1">
+    <%= render "chromeframe" %>
+    <%= render "logo" %>
+    <%= render "left_sidebar" %>
+    <div class="wrap">
+      <%= render "header" %>
+      <%= yield %>
+    </div>
+    <div id="popup-layout"></div>
+    <%= render "right_sidebar" %>
+    <%#= render 'header' %>
+    <%= render "footer" %>
+    <%# Javascript at the bottom for fast page loading %>
+    <%= render "baidu_analyzer" %>
+     
+    <%= javascript_include_tag "polyfills" %>
     <%= javascript_include_tag :shops %>
     <%= javascript_include_tag "my_cart" %>
+    <%= render "javascripts" %>
 
   <script type="text/javascript">
-
-
-    window.clients = Realtime.connect({
-      server_uri: '<%= realtime_uri %>',
-      token: '<%= current_user.try(:im_token) %>',
-      current_user: '<%= current_user.try(:login) %>',
-      current_shop: '<%= current_shop.try(:name) %>',
-      form_token: '<%= form_authenticity_token %>'
-    });
-
-    $("body").addClass('right-mini');
-    ChatManager.getInstance({ el: $(".right-sidebar .body") });
-    $( window ).resize(function() {
-      $viewportHeight = $(window).height()
-      $( ".right-sidebar .body" ).css("height", $viewportHeight);
-      $( ".right-sidebar .slimScrollDiv" ).css("height", $viewportHeight);
-    });
-
     $(function(){
-
-      window.topbar = new TopBar({el: "#topbar"});
-      NotificationViewList.startup({
-        el: $(".notification-menu"),
-        current_user_login: '<%= current_user.login %>'
-      });
-
-      $(document).delegate( ".connect_by_self", "click", function(){
-        clients.socket.socket.socket.reconnect()
-        $(".popover-content").html("正在连接...")
-      })
-
-      $('body').on('click', function (e) {
-        $choose_face = $('[data-toggle="popover"].choose-face');
-        $choose_face.each(function () {
-          if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $choose_face.has(e.target).length === 0 ){
-            $(this).popover('hide');
-          }
-        })
-      });
-
-      $(".save_activity").on('click', function(type){
-        var $form = $(".activity_forms>.active>form");
-        $.ajax({
-          type: 'post',
-          dataType: 'json',
-          data: $form.serialize(),
-          url: $form.attr('action'),
-          success: function(data, status, xhr) {
-            $form[0].reset();
-            $("#active_dialog").modal('hide');
-            pnotify({ text: '活动发布成功,等待审核……' });
-          },
-          error: function(xhr, status, error) {
-            pnotify({ type: 'error', title: '活动发布失败', text: JSON.parse(xhr.responseText).join('\n') })
-          }
-        });
-      });
-
-      $(".save_ask_buy").on('click', function(type){
-        var $form = $(".form_ask_buy");
-
-        $form.submit();
-
-        $form.on("ajax:success", function(){
-          $form[0].reset();
-          $("#ask_buy_dialog").modal('hide');
-        });
-
-        $form.on("ajax:error", function(event, xhr, state){
-          $form.replaceWith(xhr.responseText);
-        });
-      });
-
-      topbar.start();
-
       new CategoryTree({el: "#category-sidebar"});
       new LeftSideBar({el: "#left_sidebar"});
 
       var side_class = "<%= yield :side_nav %>";
       $("#side-nav li.active").removeClass("active");
       $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in");
+      notifier.setPermission();
     })
   </script>
   <%# 开发环境下显示500错误信息 %>
   <% unless Rails.env.production? %>
     <%= javascript_include_tag "show_500_error_in_dev" %>
-  <% end %>   		 
-	</body>
+  <% end %>        
+  </body>
 </html>
 
-<script type="text/javascript">
-	$(function(){
-		notifier.setPermission()
-	})
-</script>
