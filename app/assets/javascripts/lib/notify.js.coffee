@@ -83,8 +83,11 @@ class Notifier
           text: "<a href='javascript:void(0)' id='agree_notifiction_desktop'>点击这里</a>开启桌面提醒功能！")
 
         $(el.$message).on "click", "#agree_notifiction_desktop", (e) ->
+          $(this).parents("li").remove()
           e.preventDefault()
-          window.webkitNotifications.requestPermission()
+          window.webkitNotifications.requestPermission(() ->
+            console.log("allow permission?")
+          )
 
   support_browser: () ->
     if (window.webkitNotifications || navigator.mozNotification) then true else false

@@ -2,7 +2,7 @@
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
 	<%#= cache do %>
-		<%= render "head", :styles => ['shops'] %>
+	<%= render "head", :styles => ['shops'] %>
 	<%# end %>
 	<body class="<%= controller.controller_name %>" style="zoom: 1">
 		<%= render "chromeframe" %>
@@ -24,8 +24,6 @@
     <%= javascript_include_tag "my_cart" %>
 
   <script type="text/javascript">
-
-
     window.clients = Realtime.connect({
       server_uri: '<%= realtime_uri %>',
       token: '<%= current_user.try(:im_token) %>',
@@ -43,7 +41,6 @@
     });
 
     $(function(){
-
       window.topbar = new TopBar({el: "#topbar"});
       NotificationViewList.startup({
         el: $(".notification-menu"),
