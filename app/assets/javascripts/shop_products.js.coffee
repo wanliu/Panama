@@ -14,8 +14,8 @@ class ShopProductView extends Backbone.View
     _.extend(@, options)
 
     @loadTemplate () =>
-      @$el = $(@render()).appendTo("#popup-layout")
-      @$("#main-modal").modal()
+      @$el = $(@render()).appendTo("#popup-layout")   
+      @modal()
       @$("#main-modal").on "hidden", () =>
         @close()
 
@@ -32,13 +32,15 @@ class ShopProductView extends Backbone.View
     tpl.render(@model.attributes)
 
   modal: () ->
+    @$("#main-modal").modal()
     $("body").addClass("noScroll")
 
   unmodal: () ->
     $("body").removeClass("noScroll")
 
   close: () ->    
-    @remove()
+    #@remove()
+    @$("#main-modal").modal("hide")
     @unmodal()
 
 class ShopProductPreview extends Backbone.View
@@ -52,12 +54,12 @@ class ShopProductPreview extends Backbone.View
 
   launchShopProduct: (event) ->
     @load_view(event.currentTarget)
-    view = new ShopProductView({
+    @view.modal() if @view?
+    @view ?= new ShopProductView({
       el         : @$el,
       model      : @model,
       product_id : @product_id
-    })
-    view.modal()
+    })    
     false
 
   load_view: (target) ->

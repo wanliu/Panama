@@ -497,6 +497,6 @@ class TemporaryIconView extends BaseIconView
       type = 'order'
     else
       type = 'direct'
-    goto += "#open/#{~~@model.get('number').replace(/\D/, '')}/#{type}"
+    goto += "#open/#{~~number.replace(/\D/, '')}/#{type}"
     location.href = goto unless location.href is goto
 
