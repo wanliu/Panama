@@ -38,7 +38,7 @@ class TransactionEvent extends Backbone.View
       return if _.isEmpty(data)
       @$el.remove()
       window.location.href = "#open/#{data.id}/#{@workName}"
-      # window.location.reload();
+      $(window).trigger("orderUndispose", {order_id: data.id})
 
   change_address: () ->
     @$(".address").html(@model.get("address"))
