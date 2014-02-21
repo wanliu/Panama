@@ -1,6 +1,6 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
-  before_filter :login_required, :except => [:kuaiqian_receive]
+  before_filter :login_and_service_required, :person_self_required, :except => [:kuaiqian_receive]
   helper_method :base_template_path
 
   def index
