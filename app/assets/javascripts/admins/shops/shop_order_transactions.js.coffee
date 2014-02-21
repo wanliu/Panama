@@ -41,6 +41,7 @@ class TransactionView extends CardItemView
     )
 
   undispose: () ->
+    @$(".invalid-full").remove()
     @$(".actions .dispose").parent().remove()
     $.ajax(
       url: "#{@model.url()}/operator",
@@ -78,6 +79,9 @@ class root.ShopOrderTransactions extends CardItemListView
     @monitor_destroy()
     @client.monitor "/shops/#{@shop.token}/transactions/dispose", (data) =>
       @dispose data
+
+    #当前订单打开的话接单处理
+    $(window).bind "orderUndispose", (e, data) => @dispose data
 
   monitor_change_info: (order_id) ->
     url = "/#{@shop.token}/transactions/#{order_id}/change_info"
