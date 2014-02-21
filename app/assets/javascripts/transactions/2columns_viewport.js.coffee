@@ -293,8 +293,7 @@ class MiniRow2ColView  extends Backbone.View
 
   openView: () ->
     @$operator.removeClass("open").addClass("exit").html("返回")
-    @activeRowView()
-    # $(window).trigger('enterOrderChat')
+    @activeRowView()    
 
   activeRowView: () ->
     if @parentView?
@@ -307,10 +306,10 @@ class MiniRow2ColView  extends Backbone.View
         else
           @fullMode()
 
-  fullMode: () ->
+  fullMode: () ->    
     @$(".card_item_row").hide()
     @$detail.show()
-
+    $(window).trigger('resizeOrderChatDialog')
     @$el
       .css
         'margin-left': 0
