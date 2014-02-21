@@ -1,15 +1,15 @@
-
 <div class='row-fluid wrapper-box' data-group="<%= 'OrderTransaction_' + transaction.number %>">
   <div class='left span7'>
     <%=render_base_template "card", :transaction => transaction  %>
   </div>
 
   <div class='span5 chat_wrapper'>
-    <div class="transaction-footer">
-      <!-- <div class="message-toggle"><%= button_tag icon(:comments), :class => "btn" %>
-      </div> -->
+    <div class="transaction-footer">      
       <div class='message_wrap'>
       </div>
     </div>
   </div>
 </div>
+<% if transaction.current_operator.nil? %>
+  <div class='invalid-full'>接单之后才可以操作订单？</div>
+<% end %>
