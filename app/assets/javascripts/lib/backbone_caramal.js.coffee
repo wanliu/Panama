@@ -113,13 +113,14 @@ class BaseChatView extends Caramal.BackboneView
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
     'keyup textarea.content'    : 'fastKey'
+    'click .head .name'         : 'clickTitle'
 
   # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
     <div class="head">
       <span class="state online"></span>
-      <span class="name"><%= model.get("title") %></span>
+      <a class="name" href="javascript: void(0)"><%= model.get("title") %></a>
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>
@@ -173,6 +174,8 @@ class BaseChatView extends Caramal.BackboneView
         </div>
       </div>
     </li>')
+
+  clickTitle: () ->
 
   resetHistory: () ->
     @msgContent().html('')
@@ -466,10 +469,28 @@ class root.GroupChatView extends BaseChatView
     @channel ||= Caramal.Group.of(@name)
     super
 
+
 class root.TemporaryChatView extends BaseChatView
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
     super
+
+  clickTitle: () ->
+    number = @model.get('number')
+    return if _.isEmpty(number)
+    id = number.replace(/\D/, '')
+    group = @model.get('group')
+    type = group.substring(0, group.indexOf('_'))
+    $.ajax(
+      type: 'POST'
+      url: "/transaction/operate_url"
+      data: { type: type, id: id }
+      success: (data, xhr, res) =>
+        return if _.isEmpty(data.url)
+        document.location.href = data.url
+      error: (data, xhr, res) =>
+        pnotify(type: 'error', text: '跳转到订单失败')
+    )
 
 
 class root.OrderChatView extends BaseChatView
@@ -537,3 +558,4 @@ class root.OrderChatView extends BaseChatView
 
   fastKey: (event) ->
     @sendMessage(event) if event.ctrlKey && event.keyCode == 13
+
