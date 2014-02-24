@@ -9,6 +9,7 @@ class Controller extends Backbone.Router
 
 
 class TopBar extends Backbone.View
+  fetchState: false
 
   events:
     "click .link.friends": "toggleFriends"
@@ -58,6 +59,7 @@ class TopBar extends Backbone.View
     @_search(search_type)
     
   _search: (search_type) ->
+    @fetchState = true
     @$search_type.filter(".#{search_type}").click()  
     @enterSearch()  
 
