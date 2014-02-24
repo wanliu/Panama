@@ -459,6 +459,8 @@ zh-CN:
         dvalue: 活动价 
       transfer: 
         shop_product: 商品
+      circle_category:
+        name: '分类名'
 
   mongoid:
     models:
