@@ -330,7 +330,7 @@ class BaseChatView extends Caramal.BackboneView
     return if msgs.length is 0
     origin_height = @$('.body')[0].scrollHeight
     @msgContent().prepend(@parseMessages(msgs))
-    @showMoreFlag() if msgs.length > 0
+    @dealWithMoreFlag()
     setTimeout () =>
       height = @$('.body')[0].scrollHeight
       diff = height - origin_height
@@ -345,6 +345,12 @@ class BaseChatView extends Caramal.BackboneView
       setTimeout(() =>
         @channel.fetchMsgs() if $(target).scrollTop() < 5
       , 800)
+
+  dealWithMoreFlag: () ->
+    if @channel.hisMsgEnded
+      @removeMoreFlag()
+    else
+      @showMoreFlag()
 
   showMoreFlag: () ->
     moreFlag = @msgContent().find('.showMoreFlag')
@@ -374,8 +380,6 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
     @channel.active()
     @addBufferMsgs()
-    @channel.on 'endOfHisMsg', (event) =>
-      @removeMoreFlag();
     setTimeout () =>
       @scrollDialog()
 
