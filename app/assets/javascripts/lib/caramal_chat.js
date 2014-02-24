@@ -5160,7 +5160,7 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype.onOpened = function() {
         var _this = this;
-        if (this.getState === "open") {
+        if (this.getState() === "open") {
           return this.fetchMsgs();
         } else {
           return this.on('open', function() {
