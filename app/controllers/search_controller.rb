@@ -116,7 +116,7 @@ class SearchController < ApplicationController
 
     _query = condition_query(q)
 
-    s = Tire.search ["ask_buys", "activities", "shop_products", "products"] do
+    @results = Tire.search ["ask_buys", "activities", "shop_products", "products"] do
       from _from
       size _size
 
@@ -130,10 +130,28 @@ class SearchController < ApplicationController
         end
       end
       sort{ by :_score, :desc }
-    end
-    @results = deal_results(s.results)
+    end.results
     respond_to do |format|
-      format.json{ render :json => @results }
+      format.json{ render :json => deal_results(@results) }
+    end
+  end
+
+  def tomorrow
+    _size, _from = params[:limit], params[:offset]
+    time = DateTime.now.tomorrow.midnight
+    @results = Activity.search2 do 
+      from _from
+      size _size
+      query do 
+        boolean do 
+          must do 
+            range :start_time, :from => time, :to => (time.tomorrow - 1.second)
+          end
+        end
+      end
+    end.results
+    respond_to do |format|
+      format.json{ render :json => deal_results(@results) }
     end
   end
 
@@ -141,14 +159,15 @@ class SearchController < ApplicationController
   def deal_results(results)
     rs = results.map do |result|
       if result.type == "activity"
-        activity = Activity.find(result.id)
-        followed_id = activity.shop.followers.where(:user_id => current_user.id).pluck("id").first
+        activity = Activity.find(result.id)        
+        followed_id = activity.shop.followers.find_by(:user_id => current_user.id).try(:id)
         result = result.to_hash.merge({
           is_start: activity.start_sale?,
           likes: activity.likes.exists?(current_user),
           followed: activity.shop.followers.exists?(:user_id => current_user.id),
           is_self: activity.shop.user.eql?(current_user),
-          followed_id: followed_id
+          followed_id: followed_id,
+          setup_time: activity.setup_time
         })
       end
       result

@@ -15,6 +15,8 @@
 </div>
 <script type="text/javascript">
   $(function(){
+    topbar.start();
+    
     new ActivityLayoutView({
       el: '#activities'
     })
@@ -42,9 +44,10 @@
       login: '<%= current_user.login %>'
     })
 
-    new LoadActivities({
+    var load_view = new LoadActivities({
       el: $('.activities_panel')
     });
+    load_view.fetch();
 
     new CatalogViewList({
       el: $("#activity-category"),

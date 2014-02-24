@@ -1,6 +1,6 @@
 <%# asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet %>
 <%# Looks for google_account_id first in ENV['GOOGLE_ACCOUNT_ID'] then in config/html5_rails.yml %>
-<script type="text/javascript">
+<script type="text/javascript">  
 	window.clients = Realtime.connect({
     server_uri: '<%= realtime_uri %>',
     token: '<%= current_user.try(:im_token) %>',
@@ -16,10 +16,11 @@
     $( ".right-sidebar .body" ).css("height", $viewportHeight);
     $( ".right-sidebar .slimScrollDiv" ).css("height", $viewportHeight);
   });
+  
+  window.topbar = new TopBar({el: "#topbar"}); 
 
   $(function(){
-    window.topbar = new TopBar({el: "#topbar"});
-    topbar.start();
+
     NotificationViewList.startup({
       el: $(".notification-menu"),
       current_user_login: '<%= current_user.login %>'
