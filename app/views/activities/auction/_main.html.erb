@@ -22,12 +22,14 @@
         <img class="preview" src="<%=activity.photos.default %>" />
       <% end %>
     </div>
-    <h4 class="right_bottom2 animate1 fadeInRight">
-      原价: <span>￥<%= activity.price %></span>
-    </h4>
-    <h4 class="right_bottom1 animate2 fadeInRight">
-      现价: <span>￥<%= activity.activity_price %></span>
-    </h4>
+    <div class="row-fluid">
+      <h4 class="span6 right_bottom2 animate1 fadeInRight">
+        原价: <span class="old_price">￥<%= activity.price %></span>
+      </h4>
+      <h4 class="span6 right_bottom1 animate2 fadeInRight">
+        现价: <span class="activity_price">￥<%= activity.activity_price %></span>
+      </h4>
+    </div>
     <h4>商品描述：</h4>
     <span class='describe'>
       <%= activity.description %>

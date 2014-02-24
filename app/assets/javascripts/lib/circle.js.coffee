@@ -7,29 +7,43 @@ class CircleCreate extends Backbone.View
 		@$el = $(@el)
 
 	events:
-		"click .submit_cirlce" : "submit_data"
+		"click .submit_cirlce" : "submit_data"	
+
+	check_data: () ->
+		unless @$(".circle_name").val()
+			@$(".circle_name").addClass('error')
+			return false
+		if  isNaN($(".address_area_id").val())
+			@$(".address_province_id").addClass('error')
+			@$(".address_city_id").addClass('error')
+			@$(".address_area_id").addClass('error')
+			return false
+		true
 			
 	submit_data: () -> 
+		return false unless @check_data()
 		$.ajax({
 			type: "post",
 			dataType: "json",
 			data: { circle: { 
-						name: @$(".circle_name").val(), 
-						description: @$(".introduce").val(), 
-						attachment_id: @$(".attachable > input").val(),
-						city_id: @$(".address_area_id").val()
-					},
-					setting:{
-					    limit_city: @$(".limit_area").is(':checked'), 
-					    limit_join: @$(".limit_join").is(':checked')
-					}
+					name: @$(".circle_name").val(), 
+					description: @$(".introduce").val(), 
+					attachment_id: @$(".attachable > input").val(),
+					city_id: @$(".address_area_id").val()
 				},
+				setting:{
+			    limit_city: @$(".limit_area").is(':checked'), 
+			    limit_join: @$(".limit_join").is(':checked')
+				}
+			},
 			url: @remote_url,
 			success: () =>
 				if @current_user
 					window.location.href = @remote_url
 				else
 					window.location.href = "/shops/#{ @current_shop }/admins/communities"
+			error: (ms) ->
+				pnotify(text: JSON.parse(ms.responseText), type: "error")
 		})
 
 
