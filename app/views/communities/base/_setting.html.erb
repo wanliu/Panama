@@ -32,7 +32,7 @@
           </div>
           <div class="foot">
             <div class="pull-left">
-              <%= button_to '解散商圈', { action: :destroy_circle }, class: 'btn btn-danger', confirm: '确定要解散商圈吗？此操作不可恢复。', method: :delete %>
+              <%= button_to '解散商圈', destroy_circle_community_circles_path(circle), class: 'btn btn-danger', confirm: '确定要解散商圈吗？此操作不可恢复。', method: :delete %>
             </div>
             <div class="pull-right save">
               <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>

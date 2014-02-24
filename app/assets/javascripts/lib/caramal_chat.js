@@ -5089,6 +5089,7 @@ if (typeof define === "function" && define.amd) {
         this.id = Channel.nextId++;
         this.unreadMsgCount = 0;
         this.unreadFetchFlag = false;
+        this.hisMsgEnded = false;
         this.onOpened();
         /**
          * 消息缓存区
@@ -5159,7 +5160,7 @@ if (typeof define === "function" && define.amd) {
 
       Channel.prototype.onOpened = function() {
         var _this = this;
-        if (this.getState === "open") {
+        if (this.getState() === "open") {
           return this.fetchMsgs();
         } else {
           return this.on('open', function() {
@@ -5180,15 +5181,19 @@ if (typeof define === "function" && define.amd) {
           if (!this.hisFetchLocked()) {
             this.lockHisFetchLock();
             return this.socket.emit('history', fetch_options, function(err, msgs) {
-              _this.freeHisFetchLock();
-              if (!msgs || msgs.length === 0) {
-                _this.hisMsgEnded = true;
-                return _this.emit('endOfHisMsg', {});
-              } else {
-                _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-                _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
-                return _this.emit('hisMsgsFetched', {});
+              var endFlag;
+              if (err != null) {
+                console.log('fetch history error:', err);
+                return;
               }
+              _this.freeHisFetchLock();
+              endFlag = msgs.shift();
+              _this.hisMsgEnded = endFlag;
+              if (msgs.length > 0) {
+                _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
+              }
+              _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
+              return _this.emit('hisMsgsFetched', {});
             });
           }
         }
