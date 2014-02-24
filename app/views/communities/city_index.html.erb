@@ -62,18 +62,21 @@
   $(function() {    
     new FindUserView({
       el: $(".newer_panel"),
-      area_id: "<%=@city.id %>"
+      area_id: "<%=@city.id %>",
+      current_user_login: '<%=current_user.login %>'
     })
 
     var new_user_view = new NewUsersView({
-      el: $(".newer_panel")
+      el: $(".newer_panel"),
+      current_user_login: '<%=current_user.login %>'
     })
     new_user_view.render(<%= @new_users.to_json.html_safe %>)
 
 
     new FindCircleView({
       el: $(".circles"),
-      area_id: "<%=@city.id %>"
+      area_id: "<%=@city.id %>",
+      current_user_login: '<%=current_user.login %>'
     })
       
     $(".depend_select>option[value=]").html("--请选择--")

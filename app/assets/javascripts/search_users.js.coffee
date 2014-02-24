@@ -2,6 +2,59 @@
 
 root = window || @
 
+class RenderMethod
+
+  buyer_template: Handlebars.compile($("#buyer_base_template").html())
+  seller_template: Handlebars.compile($("#seller_base_template").html())
+
+  constructor: (options) ->
+    _.extend(@, options)
+    @$wrapper = @el.find(".wrapper")
+    # @render(@datas)
+
+  render: (datas) ->
+    if datas.length == 0
+      @el.find(".find_people_tip").show()
+    else
+      # @el.find(".wrapper > div").animate({left: '20px'},'slow',@el.find(".wrapper > div").fadeOut());
+      @el.find(".wrapper > div").remove()
+      _.each datas, (data) =>
+        view = ""
+        if _.contains(data.service.split(","),"buyer")    
+          view = new UserCardInfo(
+            el: $(@buyer_template(_.extend(data, data.user))),
+            model: data
+          )
+          new FollowView({
+            data: {
+              follow_id:  data.user.id,
+              follow_type: "User"
+            },
+            login: @current_user_login,
+            el: view.$el
+          })
+        else
+          view = new ShopCardInfo(
+            el: $(@seller_template(_.extend(data, data.shop))),
+            model: data
+          )
+          new FollowView({
+            data: {
+              follow_id:  data.shop.id,
+              follow_type: "Shop"
+            },
+            login: @current_user_login,
+            el: view.$el
+          })
+
+        @appendToWrapper(view.render());
+
+  appendToWrapper: (el) ->
+    if @$wrapper.find(".span4").length % 3 == 0
+      @$row = $("<div class='row-fluid' />").appendTo(@$wrapper)
+    @$row.append(el)
+
+
 class NewUsersView extends Backbone.View
   events:
     "click .hot_region_search" : "hot_region_search"
@@ -9,8 +62,6 @@ class NewUsersView extends Backbone.View
   initialize: () ->
     _.extend(@, @options)
     @get_hot_regions()
-    @buyer_template = Handlebars.compile($("#buyer_base_template").html())
-    @seller_template = Handlebars.compile($("#seller_base_template").html())
     @hot_region_template = Handlebars.compile("<a id='{{ id }}' href='#' class='hot_region_search'>{{ name }}</a>&nbsp;")
     @$wrapper = @$(".wrapper")
 
@@ -41,30 +92,7 @@ class NewUsersView extends Backbone.View
     return false
 
   render: (datas) =>
-    if datas.length == 0
-      @$(".find_people_tip").show()
-    else
-      @$(".wrapper > div").animate({left: '20px'},'slow',@$(".wrapper > div").fadeOut());
-      _.each datas, (data) =>
-        view = if _.contains(data.service.split(","),"buyer")      
-          new UserCardInfo(
-            el: $(@buyer_template(_.extend(data, data.user))),
-            model: data
-          )
-        else
-          new ShopCardInfo(
-            el: $(@seller_template(_.extend(data, data.shop))),
-            model: data
-          )          
-
-        @appendToWrapper(view.render());
-
-  appendToWrapper: (el) ->
-
-    if @$(".wrapper").find(".span4").length % 3 == 0
-      @$row = $("<div class='row-fluid' />").appendTo(@$wrapper)
-
-    @$row.append(el)
+    new RenderMethod(el: @$el,current_user_login: @current_user_login).render(datas)
 
 
 class FindUserView extends Backbone.View
@@ -74,8 +102,6 @@ class FindUserView extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
-    @buyer_template = Handlebars.compile($("#buyer_base_template").html())
-    @seller_template = Handlebars.compile($("#seller_base_template").html())
 
   key_up: (e) =>
     @find_user() if e.keyCode == 13
@@ -92,34 +118,8 @@ class FindUserView extends Backbone.View
         @render(datas)
     })
 
-  render: (datas) =>
-    if datas.length == 0
-      @$(".find_people_tip").show()
-    else
-      @$(".alert").fadeOut()
-      @$(".wrapper").html ""
-      _.each datas, (data) =>
-        view = if _.contains(data.service.split(","), "buyer")          
-          new UserCardInfo(
-            el: $(@buyer_template(_.extend(data, data.user))),
-            model: data
-          )
-        else
-          new ShopCardInfo(
-            el: $(@seller_template(_.extend(data, data.shop))),
-            model: data
-          )
-
-        @appendToWrapper(view.render());
- 
-  appendToWrapper: (el) ->
-
-    if @$(".wrapper").find(".span4").length % 3 == 0
-      @$row = $("<div class='row-fluid' />").appendTo(@$(".wrapper"))
-
-    @$row.append(el)
-
-
+  render: (datas) ->
+    new RenderMethod(el: @$el,current_user_login: @current_user_login).render(datas)
 
 class FindCircleView extends Backbone.View
   events: 
