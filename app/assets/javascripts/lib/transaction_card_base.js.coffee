@@ -27,7 +27,7 @@ class TransactionCardBase extends AbstructStateView
         token: @options['token'],
         group: @options['group']
       }, @current_state()))
-
+    
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
     @transaction.bind("change:stotal", @change_stotal, @)
