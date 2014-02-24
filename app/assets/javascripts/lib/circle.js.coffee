@@ -7,29 +7,43 @@ class CircleCreate extends Backbone.View
 		@$el = $(@el)
 
 	events:
-		"click .submit_cirlce" : "submit_data"
+		"click .submit_cirlce" : "submit_data"	
+
+	check_data: () ->
+		unless @$(".circle_name").val()
+			@$(".circle_name").addClass('error')
+			return false
+		if  isNaN($(".address_area_id").val())
+			@$(".address_province_id").addClass('error')
+			@$(".address_city_id").addClass('error')
+			@$(".address_area_id").addClass('error')
+			return false
+		true
 			
 	submit_data: () -> 
+		return false unless @check_data()
 		$.ajax({
 			type: "post",
 			dataType: "json",
 			data: { circle: { 
-						name: @$(".circle_name").val(), 
-						description: @$(".introduce").val(), 
-						attachment_id: @$(".attachable > input").val(),
-						city_id: @$(".address_area_id").val()
-					},
-					setting:{
-					    limit_city: @$(".limit_area").is(':checked'), 
-					    limit_join: @$(".limit_join").is(':checked')
-					}
+					name: @$(".circle_name").val(), 
+					description: @$(".introduce").val(), 
+					attachment_id: @$(".attachable > input").val(),
+					city_id: @$(".address_area_id").val()
 				},
+				setting:{
+			    limit_city: @$(".limit_area").is(':checked'), 
+			    limit_join: @$(".limit_join").is(':checked')
+				}
+			},
 			url: @remote_url,
 			success: () =>
 				if @current_user
 					window.location.href = @remote_url
 				else
 					window.location.href = "/shops/#{ @current_shop }/admins/communities"
+			error: (ms) ->
+				pnotify(text: JSON.parse(ms.responseText), type: "error")
 		})
 
 
@@ -115,9 +129,9 @@ class CircleCategoryView extends Backbone.View
 
 class CircleCategoryList extends Backbone.View
 	events: 
-		"click .new_input" : "new_input"
+		"click .new_input"          : "new_input"
 		"blur .new_circle_category" : "add_category"
-		"keyup .new_circle_category" : "enter"
+		"keyup .new_circle_category": "enter"
 
 	initialize: () ->
 		_.extend(@, @options)
@@ -137,6 +151,7 @@ class CircleCategoryList extends Backbone.View
 				el: el,
 				circle_id: @circle_id
 			})
+			
 	enter: (e) ->
 		@$(".new_circle_category").blur() if e.keyCode == 13
 		

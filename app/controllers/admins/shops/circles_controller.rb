@@ -13,11 +13,16 @@ class Admins::Shops::CirclesController < Admins::Shops::SectionController
     @setting = CircleSetting.create(params[:setting])
     params[:circle].merge!(:setting_id => @setting.id)
     @circle = current_shop.circles.create(params[:circle])
-    CircleCategory.create(:name => "分享", :circle_id => @circle.id)
+    @circle_category = CircleCategory.create(:name => "分享", :circle_id => @circle.id)
 
     respond_to do |format|
-      format.html { redirect_to shop_admins_circles_path(current_shop) }
-      format.json { head :no_content }
+      if @circle.valid?
+        format.html { redirect_to shop_admins_circles_path(current_shop) }
+      else
+        @setting.destroy
+        @circle_category.destroy
+        format.json{ render json: draw_errors_message(@circle), status: 403 }
+      end
     end
   end
 

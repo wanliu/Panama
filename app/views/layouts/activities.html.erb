@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <%# http://paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither %>
 <%= html_tag :class => "no-js" %>
-<%= render "head", :styles => [:activities], :javascripts => [:activities] %>
-<body class="<%= controller.controller_name %>">
-	<%= render "header-fluid" %>
-	<%= render "main_nav-fluid" %>
-	<div id="content" class="relative">
-		<%= render "social_sidebar" %>
+	<%= render "head", :styles => [:activities], :javascripts => [:activities] %>
+	<body class="<%= controller.controller_name %>">
+		<%= render "header-fluid" %>
+		<%= render "main_nav-fluid" %>
+		<div id="content" class="relative">
+			<%= render "social_sidebar" %>
 
-		<div id="main">
-			<div class="container-fluid">
-				<div class="main-body">
-				<!-- <div class="span3"> -->
-				<%= render "flashes" %>
-				<%#= render 'information' %>
-				<%= yield %>
+			<div id="main">
+				<div class="container-fluid">
+					<div class="main-body">
+					<!-- <div class="span3"> -->
+					<%= render "flashes" %>
+					<%#= render 'information' %>
+					<%= yield %>
+					</div>
+					<!-- </div> -->
+
+				<%= render "footer" %>
 				</div>
-				<!-- </div> -->
-
-			<%= render "footer" %>
 			</div>
+
+			<%#= render "left_sidebar" %>
 		</div>
 
-		<%#= render "left_sidebar" %>
-	</div>
-
-	<div class='footer_nav'>
-		<%= render_widget :chat %>
-		<%= render_widget :my_cart %>
-	</div>
-	<%= render "baidu_analyzer" %>
-
-	<script type="text/javascript">
-		$(function(){
-			notifier.setPermission()
-		})
-	</script>
-</body>
+		<div class='footer_nav'>
+			<%= render_widget :chat %>
+			<%= render_widget :my_cart %>
+		</div>
+		<%= render "baidu_analyzer" %>
+	</body>
 </html>
+
+

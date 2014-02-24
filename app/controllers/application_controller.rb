@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
 
   def person_self_required
     if @people != current_user
-      redirect_to "/people/#{@people.login}"
+      redirect_to "/people/#{@people.login}", {}
     end
   end
 

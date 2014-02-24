@@ -1,77 +1,84 @@
 <div id="main" class="content shop_wrap">
   <div class='container-fluid'>
-    <div class="widget">
-      <div class='row-fluid'>
-        <div class='shop_info span4'>
-          <div class='photo'>
-            <img src="<%=@shop.photos.header %>">
-          </div>
-          <div class="body">
-            <h3 class='page-title'><%= @shop.name %></h3>
-            <p>
-              <span class='title'>
-                关注
-              </span>
-              <span class='followers'>
-                <%=@shop.followers.count %>
-              </span>
-            </p>
-            <p>
-              <span class='title'>
-                <i class='icon-user'></i>
-              </span>
-              <span>
-                <a href="/people/<%=@shop.user.login %>">
-                  <%=@shop.user.login %>
-                </a>
-              </span>
-              <% if current_user != @shop.user  %>
-                <% if current_user.is_follow_shop?(@shop.id) %>
-                  <span data-value-id="<%= current_user.follow_shop(@shop.id).id %>" class="label label-success unfollow">取消关注</span>
-                <% else %>
-                  <span class="label label-success follow">+ 关注</span>
+    <% if @shop.blank? %>
+      <div class="alert">
+        <strong>商店不存在</strong>
+      </div>
+    <% else %>
+      <div class="widget">
+        <div class='row-fluid'>
+          <div class='shop_info span4'>
+            <div class='photo'>
+              <img src="<%=@shop.photos.try(:header) %>">
+            </div>
+            <div class="body">
+              <h3 class='page-title'><%= @shop.name %></h3>
+              <p>
+                <span class='title'>
+                  关注
+                </span>
+                <span class='followers'>
+                  <%=@shop.followers.try(:count) %>
+                </span>
+              </p>
+              <p>
+                <span class='title'>
+                  <i class='icon-user'></i>
+                </span>
+                <span>
+                  <a href="/people/<%=@shop.user.login %>">
+                    <%=@shop.user.login %>
+                  </a>
+                </span>
+                <% if current_user != @shop.user  %>
+                  <% if current_user.is_follow_shop?(@shop.id) %>
+                    <span data-value-id="<%= current_user.follow_shop(@shop.id).id %>" class="label label-success unfollow">取消关注</span>
+                  <% else %>
+                    <span class="label label-success follow">+ 关注</span>
+                  <% end %>
                 <% end %>
-              <% end %>
-            </p>
+              </p>
+            </div>
+          </div>
+          <div class='circle_info span8'>
+            <h5>商圈</h5>
+            <ul class='circles span12'>
+              <%=render :partial => "circle_item", :collection => @shop.circles %>
+            </ul>
           </div>
         </div>
-        <div class='circle_info span8'>
-          <h5>商圈</h5>
-          <ul class='circles span12'>
-            <%=render :partial => "circle_item", :collection => @shop.circles %>
-          </ul>
+      </div>
+
+      <div class='shop_products_panel'>
+        <div id="shop_products">
+        </div>
+        <div class='scroll-load-msg'>
+          <img src='/assets/loading_max.gif' />正在加载...
         </div>
       </div>
-    </div>
 
-    <div class='shop_products_panel'>
-      <div id="shop_products">
-      </div>
-      <div class='scroll-load-msg'>
-        <img src='/assets/loading_max.gif' />正在加载...
-      </div>
-    </div>
+      <script type="text/template" id="shop_products-preview-template">
+        <%= render "shop_products/page" %>
+      </script>
+
+      <script type="text/javascript">
+        $(function(){
+          new ActivityLayoutView({
+            el: '#shop_products'
+          })
+       
+          new ShopProductList({
+             el: $(".shop_wrap"),
+             shop: {
+               id: <%=@shop.id %>
+             },
+             user: {
+               login: "<%=current_user.login %>"
+             }
+          })
+        })
+      </script>
+    <% end %>
   </div>
 </div>
 
-<script type="text/template" id="shop_products-preview-template">
-  <%= render "shop_products/page" %>
-</script>
-
-<script type="text/javascript">
-  $(function(){
-    new ActivityLayoutView({
-      el: '#shop_products'
-    })
- 
-    new ShopProductList({
-       el: $(".shop_wrap"),
-       shop: {
-         id: <%=@shop.id %>
-       },
-       user: {
-         login: "<%=current_user.login %>"
-       }
-    })
-  })
-</script>
