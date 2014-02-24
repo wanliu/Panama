@@ -5089,6 +5089,7 @@ if (typeof define === "function" && define.amd) {
         this.id = Channel.nextId++;
         this.unreadMsgCount = 0;
         this.unreadFetchFlag = false;
+        this.hisMsgEnded = false;
         this.onOpened();
         /**
          * 消息缓存区
@@ -5180,15 +5181,17 @@ if (typeof define === "function" && define.amd) {
           if (!this.hisFetchLocked()) {
             this.lockHisFetchLock();
             return this.socket.emit('history', fetch_options, function(err, msgs) {
+              var endFlag;
               _this.freeHisFetchLock();
-              if (msgs.length === 0) {
+              endFlag = msgs.shift();
+              if (endFlag === true) {
                 _this.hisMsgEnded = true;
-                return _this.emit('endOfHisMsg', {});
-              } else {
-                _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
-                _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
-                return _this.emit('hisMsgsFetched', {});
               }
+              if (msgs.length > 0) {
+                _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
+              }
+              _this.hisMsgBuf = msgs.concat(_this.hisMsgBuf);
+              return _this.emit('hisMsgsFetched', {});
             });
           }
         }
