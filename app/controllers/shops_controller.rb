@@ -18,7 +18,7 @@ class ShopsController < ApplicationController
   layout 'shops'
 
   def title
-    @title = "首页 #{Shop.find(params[:id]).name}"
+    @title = "首页 #{@shop.try(:name)}"
   end
 
   def topic_categories
@@ -44,7 +44,9 @@ class ShopsController < ApplicationController
 
   def show
     @shop = Shop.find_by(:name => params[:id])
-    @content = PanamaCore::Contents.fetch_for(@shop, :index, :locals => { :shop_name => @shop.name })
+    unless @shop.blank?
+      @content = PanamaCore::Contents.fetch_for(@shop, :index, :locals => { :shop_name => @shop.name })
+    end
 
     respond_to do |format|
       format.html
