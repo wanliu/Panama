@@ -14,7 +14,8 @@
   <%= render :partial => "activities/template" %>
 </div>
 <script type="text/javascript">
-  $(function(){
+  $(function(){    
+    
     new ActivityLayoutView({
       el: '#activities'
     })
@@ -42,9 +43,12 @@
       login: '<%= current_user.login %>'
     })
 
-    new LoadActivities({
+    var load_view = new LoadActivities({
       el: $('.activities_panel')
-    });
+    });   
+
+    topbar.start();
+    if(!topbar.fetchState) load_view.fetch();       
 
     new CatalogViewList({
       el: $("#activity-category"),

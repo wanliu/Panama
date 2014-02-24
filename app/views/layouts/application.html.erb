@@ -29,7 +29,8 @@
       var side_class = "<%= yield :side_nav %>";
       $("#side-nav li.active").removeClass("active");
       $("#side-nav .side-"+side_class).parents("li").addClass("active").parents("ul.accordion-body").addClass("in");
-    })
+      notifier.setPermission();
+    })    
   </script>
   <%# 开发环境下显示500错误信息 %>
   <% unless Rails.env.production? %>

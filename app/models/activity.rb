@@ -165,6 +165,41 @@ class Activity < ActiveRecord::Base
     return false
   end
 
+  def setup_time    
+    info = {
+      state: proceed_state
+    }
+    info.merge!(started_time) if info[:state] == "started"
+    info
+  end
+
+  def started_time 
+    diff = end_time - Time.zone.now
+    info = {}
+    ["day", "hour", "minute", "second"].each do |t|      
+      info[:time_type] = t
+      info[:time] = (diff / 1.send(t))
+      info[:time] = if (info[:time] - info[:time].to_i) > 0
+        (info[:time] + 1).to_i
+      else
+        info[:time].to_i
+      end   
+      break if info[:time] > 0
+    end
+    info
+  end  
+
+  def proceed_state
+    ct = Time.zone.now
+    if start_time > ct
+      "waiting"
+    elsif end_time < ct
+      "over"
+    elsif start_time < ct
+      "started"
+    end
+  end
+
   def foucs_type?
     activity_type == "focus"
   end
@@ -208,8 +243,8 @@ class Activity < ActiveRecord::Base
       :shop_product_id  => shop_product_id,
       :description    => description,
       :price          => price,
-      :start_time     => start_time.strftime("%Y-%m-%d %H:%M:%S"),
-      :end_time       => end_time.strftime("%Y-%m-%d %H:%M:%S"),
+      :start_time     => start_time,
+      :end_time       => end_time,
       :participate    => participate,
       :status      => status,
       :like        => like,
@@ -269,6 +304,10 @@ class Activity < ActiveRecord::Base
   end
 
   private
+  def time_diff()
+
+  end
+
   def validate_focus?
     if foucs_type?
       if activity_rules.length <= 0

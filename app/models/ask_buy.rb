@@ -76,7 +76,7 @@ class AskBuy < ActiveRecord::Base
       :price       => price,
       :amount      => amount,
       :status      => status,
-      :created_at  => created_at.strftime("%Y-%m-%d %H:%M:%S"),
+      :created_at  => created_at,
       :updated_at  => updated_at,
       :photos      => {
         :icon         => photos.icon,

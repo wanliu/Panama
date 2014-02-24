@@ -178,9 +178,7 @@ class Product < ActiveRecord::Base
       },
       :properties => properties_json
     }
-    if created_at.present?
-      options[:created_at] = created_at.strftime("%Y-%m-%d %H:%M:%S")
-    end
+    options[:created_at] = created_at if created_at.present?
     options.to_json
   end
 

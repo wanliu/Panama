@@ -19,6 +19,7 @@ class root.ActivityViewTemplate extends Backbone.View
         $(".buttons>.launch-button", @$el).remove()
 
   get_status: () ->
+    ###
     time_wait = @model.start_time.toDate().getTime() - new Date().getTime()
     return {name: 'waiting', text: "敬请期待"} unless time_wait < 0 && @model.status == 1
     time_left = @model.end_time.toDate().getTime() - new Date().getTime()
@@ -34,3 +35,19 @@ class root.ActivityViewTemplate extends Backbone.View
     minutes = Math.floor(leave2/(60*1000))
     return {name: 'started', text: "最后#{minutes}分钟"} if minutes > 0
     # seconds = Math.round(leave3/1000)
+    ###
+    info = @model.setup_time
+    result = {name: info.state}
+    if info.state == "started"      
+      result.text = switch info.time_type
+        when "day" then "还剩#{info.time}天"
+        when "hour" then "仅剩#{info.time}小时"
+        when "minute" then "最后#{info.minute}分钟"
+        when "second" then "最后#{info.second}秒"
+        else ""
+    else if info.state == "waiting"
+      result.text = "敬请期待"
+    else if info.state == "over"
+      result.text = "已结束"
+
+    result
