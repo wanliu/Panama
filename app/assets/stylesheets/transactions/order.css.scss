@@ -146,6 +146,14 @@
 
   .full-mode {
     margin-bottom: 20px;
+    padding: 10px;
+    @include transparent(rgb(51, 51, 51), 0.4);
+    display: none;
+
+    >.wrapper-box{
+      padding: 0px;
+      background: none;
+    }
   }
 }
 

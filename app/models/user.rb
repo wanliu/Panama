@@ -36,9 +36,6 @@ class User < ActiveRecord::Base
   has_many :circle_friends, class_name: "CircleFriends", dependent: :destroy
   has_many :friend_groups, dependent: :destroy
   has_many :contact_friends, dependent: :destroy
-  # has_many :chat_messages, foreign_key: "send_user_id", dependent: :destroy
-  # has_many :receive_messages, foreign_key: "receive_user_id", class_name: "ChatMessage", dependent: :destroy
-  has_many :chat_messages, :as => :owner, dependent: :destroy
   has_many :money_bills, :dependent => :destroy
   has_many :transfer_moneys, :dependent => :destroy
   has_many :activities, foreign_key: "author_id", class_name: "Activity", dependent: :destroy

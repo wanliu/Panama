@@ -149,10 +149,10 @@
           scroll.bind("slimscrolling", function(e, post){
             load.scroll(post)
           })
-          return load
+          return load;
         }
 
-        var my_product = scrollLoad($('.my_product_list'), {
+        my_product = scrollLoad($('.my_product_list'), {
           slim: {
             wrapperClass: "wrap_my_product"
           },

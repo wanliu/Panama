@@ -29,17 +29,17 @@
     </a>
   </div> -->
   <div class="content">
+    <span class="label label-important pull-right">卖家</span>
     <div class="actions">
       <a href="javascript:void(0)" class="btn btn-success sayhi">打招呼</a>
     </div>    
-    <a href="/people/{{ login }}">
+    <a href="/shops/{{ name }}">
       <img src="{{ photos.header }}" class="avatar header"/>
     </a>    
     <div class="realname">
       <p>{{ower_name }}</p>
     </div>
     <div class="name">
-      <!-- <i class="icon-user"></i> -->
       {{ login }}
     </div>
 
@@ -49,7 +49,7 @@
 
     <div class="industry">
       <!-- <i class="icon-star"></i> -->
-      {{ industry_type }}行业&nbsp;卖家
+      {{ industry_type }}行业
     </div>    
   </div>
 </div>

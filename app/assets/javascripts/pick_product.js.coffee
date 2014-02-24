@@ -9,7 +9,7 @@ class root.LoadCategoryProduct extends Backbone.View
   fetch: (data = {}, callback = () -> ) ->
 
   scroll: (post) ->
-    return unless @remote_state
+    return unless @ready_fetch && @remote_state
     max_height = @$("ul.product_list")[0].scrollHeight
     _rail = @$(".slimScrollRail").outerHeight()
 
@@ -17,14 +17,21 @@ class root.LoadCategoryProduct extends Backbone.View
       @remote()
 
   remote: () ->
+    @ready_fetch = false
     @fetch @remote_options, (data) =>
+      @ready_fetch = true
       @remote_state = false if data.length <= 0
       opt = @remote_options
       opt.offset = opt.offset + opt.limit
 
   default_options: () ->
     @remote_state = true
+    @ready_fetch = true
     @remote_options = {offset: 0, limit: 40}
+
+  reset_load: (offset) ->
+    @default_options()
+    @remote_options.offset = (offset || 40) # 搜索为空时，后台默认返回40条
 
 
 class root.WizardView extends Backbone.View
@@ -169,9 +176,10 @@ class root.WizardView extends Backbone.View
 
 
 class root.ProductView extends Backbone.View
-  events: {
+
+  events:
     "submit form.search" : "search"
-  }
+
   tr_template: "
     <tr id='{{id}}>
       <td><input type='checkbox'></td>
@@ -191,11 +199,13 @@ class root.ProductView extends Backbone.View
 
   fetch: (data = {}, callback = () ->) ->
     $.ajax(
-      url: "/shop_products",
-      data: _.extend(q: {shop_id: @shop.id}, data),
-      success: (data) =>
+      url: "/shop_products/#{@shop.id}/search",
+      data: {q: @keyword, offset: @list.find(">li").size()},
+      success: (data, xhr, res) =>
         callback(data)
         @reset(data)
+      error: (data, xhr, res) =>
+        console.error(res.responseText)
     )
 
   reset: (data) ->
@@ -217,12 +227,15 @@ class root.ProductView extends Backbone.View
     })
 
   search: () ->
-    query = @$search.val().trim()
+    @keyword = @$search.val().trim()
     $.ajax(
       url: "/shop_products/#{@shop.id}/search",
-      data: {q: query},
+      data: {q: @keyword},
       success: (data) =>
         @list.empty()
         @reset(data)
+        my_product.reset_load(@list.find(">li").size()) if my_product
+      error: (data, xhr, res) =>
+        console.error(res.responseText)
     )
     false

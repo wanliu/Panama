@@ -5182,11 +5182,13 @@ if (typeof define === "function" && define.amd) {
             this.lockHisFetchLock();
             return this.socket.emit('history', fetch_options, function(err, msgs) {
               var endFlag;
+              if (err != null) {
+                console.log('fetch history error:', err);
+                return;
+              }
               _this.freeHisFetchLock();
               endFlag = msgs.shift();
-              if (endFlag === true) {
-                _this.hisMsgEnded = true;
-              }
+              _this.hisMsgEnded = endFlag;
               if (msgs.length > 0) {
                 _this.lastFetchedMsgTime = 1 * msgs[0].time - 1;
               }

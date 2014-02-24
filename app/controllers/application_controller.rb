@@ -35,7 +35,6 @@ class ApplicationController < ActionController::Base
           model = model[0] if model.is_a?(Array)          
           key = key.to_sym
         end
-
         translate = t("#{path}#{model.class.to_s.underscore}")
         if translate.is_a?(Hash)
           if translate.key?(key)        
@@ -87,6 +86,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def person_self_required
+    if @people != current_user
+      redirect_to "/people/#{@people.login}", {}
+    end
+  end
+
   # 只需要验证是否登录而不需要验证是否选择服务用这个
   def login_required
     if !current_user
@@ -97,13 +102,6 @@ class ApplicationController < ActionController::Base
         }        
         format.json{
           render :json => { 'error' => 'Access Denied' }.to_json  }
-      end
-    else
-      # fix #485
-      if self.class.try(:superclass).to_s == 'People::BaseController'
-        if current_user.login != params[:person_id]
-          redirect_to "/people/#{params[:person_id]}"
-        end
       end
     end
   end

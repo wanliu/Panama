@@ -115,9 +115,9 @@ class CircleCategoryView extends Backbone.View
 
 class CircleCategoryList extends Backbone.View
 	events: 
-		"click .new_input" : "new_input"
+		"click .new_input"          : "new_input"
 		"blur .new_circle_category" : "add_category"
-		"keyup .new_circle_category" : "enter"
+		"keyup .new_circle_category": "enter"
 
 	initialize: () ->
 		_.extend(@, @options)
@@ -137,6 +137,7 @@ class CircleCategoryList extends Backbone.View
 				el: el,
 				circle_id: @circle_id
 			})
+			
 	enter: (e) ->
 		@$(".new_circle_category").blur() if e.keyCode == 13
 		

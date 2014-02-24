@@ -8,7 +8,8 @@
   $(function(){
     new ActivityBind({
       model: (new ActivityModel({ id: "<%=@activity.id %>", shop_id: "<%= @activity.shop_id %>" })),
-      el: $(".activity-auction")
+      el: $(".not_dialog"),
+      login: '<%=current_user.login %>'
     })
   })
 </script>

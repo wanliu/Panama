@@ -35,6 +35,7 @@ class TransactionCardBase extends AbstructStateView
     @load_realtime()
     @generateChat() if @dialogState
     @setChatPanel()
+    $(window).bind("resizeOrderChatDialog", _.bind(@setChatPanel, @))
     super
 
   countdown: () ->
@@ -110,8 +111,10 @@ class TransactionCardBase extends AbstructStateView
         @slidePage(data, direction)
     .fail (data) =>
       if data.status isnt 500
-        error_massage = JSON.parse(data.responseText).message
+        error_massage = JSON.parse(data.responseText)
         @notify("错误信息", error_massage, "error")
+      @back_state()
+
     .complete () ->
       $btn.removeClass("disabled")
 
@@ -194,6 +197,7 @@ class TransactionCardBase extends AbstructStateView
     $order_row = @$el.parents('.wrapper-box')
     $chat_foot = $order_row.find(".message_wrap .foot")
     $chat_body = $order_row.find(".message_wrap .body")
+    setInterval () =>
     $chat_body.height($order_row.outerHeight() - $chat_foot.outerHeight())
 
   generateChat: () ->
