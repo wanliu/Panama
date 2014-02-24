@@ -31,12 +31,12 @@
 
   <%= f.input :price,
               :label => '原价',
-              :input_html=>{class: :span2},
+              :input_html=>{ :class => "span2"},
               required: true %>
 
   <%= f.input :activity_price,
               :label => '竞购价',
-              :input_html=>{class: :span2, "type" => "number"} %>
+              :input_html=>{ :class => "span2", "type" => "number"} %>
 
   <%= f.input :start_time,
               :as         => :date_picker,

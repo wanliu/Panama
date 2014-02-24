@@ -1010,6 +1010,15 @@ body>.model-popup-backdrop.out{
         @include background-clip(padding-box);
         outline: none;
         margin-bottom: 20px;
+        .old_price{
+          margin: 5px 0px 0px 0px;
+          text-decoration: line-through;
+        }
+        .activity_price{
+          margin: 5px 0px 0px 0px;
+          color:red;
+          font-size: 18px;
+        }
         .report{
           width: 100%;
           .report_line{
@@ -1286,6 +1295,9 @@ h2 small {
   }
 }
 
+.error{
+  border: 1px solid #b94a48!important;
+}
 .error{
   input[type=text], textarea{
     border: 1px solid #b94a48;
