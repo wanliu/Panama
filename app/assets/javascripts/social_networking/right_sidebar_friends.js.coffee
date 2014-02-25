@@ -398,7 +398,9 @@ class BaseIconView extends Backbone.View
 
     @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
       @msg_count += unreadMsgCount
-      @$('.message_count').html(@msg_count).show() if @msg_count > 0
+      if @msg_count > 0
+        $(@el).show()
+        @$('.message_count').html(@msg_count).show()
 
   getChat: () ->
     unless @chat_view
@@ -444,7 +446,7 @@ class TemporaryIconView extends BaseIconView
     $(@el).hide()
 
   getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@model.get('title'), { group: @model.get('token') })
+    @channel ||= Caramal.Temporary.of(@model.get('title'), { token: @model.get('token') })
     if @channel.room
       @channel.command('join', @channel.room, {})
     else
