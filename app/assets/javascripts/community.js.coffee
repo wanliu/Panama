@@ -8,6 +8,7 @@
 #= require topic
 #= require circles
 #= require circle_member
+#= require search_users
 
 root = window || @
 

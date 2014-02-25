@@ -44,7 +44,7 @@ class CreateTopicView extends Backbone.View
 
   create: () ->
     data = @form_serialize()
-    return false if data.content is ""
+    return false if data.content is "" && @$(".attachable").length <= 1
     $.ajax(
       type: "POST",
       url: "/communities/#{@circle_id}/topics",

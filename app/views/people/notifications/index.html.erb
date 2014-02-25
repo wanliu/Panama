@@ -34,7 +34,11 @@
               <p class='content'>
                 <%= raw n.content %>
                 <label class="label <%=n.targeable_type.try(:downcase) %>">
-                  <%= t("activerecord.models." + n.targeable_type.try(:underscore).to_s) %>
+                  <% if n.targeable_type.blank? %>
+                    未知
+                  <% else %>
+                    <%= t("activerecord.models." + n.targeable_type.try(:underscore).to_s) %>
+                  <% end %>
                 </label>
               </p>
             </li>

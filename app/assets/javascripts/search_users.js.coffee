@@ -16,6 +16,7 @@ class RenderMethod
       @el.find(".find_people_tip").show()
     else
       # @el.find(".wrapper > div").animate({left: '20px'},'slow',@el.find(".wrapper > div").fadeOut());
+      @el.find(".find_people_tip").hide()
       @el.find(".wrapper > div").remove()
       _.each datas, (data) =>
         view = ""

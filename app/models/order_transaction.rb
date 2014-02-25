@@ -361,6 +361,7 @@ class OrderTransaction < ActiveRecord::Base
       :state => state_name,
       :event => "refresh_#{event}",
       :state_title => seller_state_title,
+      :target => self,
       :url => seller_open_path
     ) do |options|
       options[:channel] = "/transactions/change_state"
@@ -375,6 +376,7 @@ class OrderTransaction < ActiveRecord::Base
       :state => state_name,
       :state_title => buyer_state_title,
       :event => "refresh_#{event}",
+      :target => self,
       :url => buyer_open_path
     ) do |options|
       options[:channel] = "/transactions/change_state"
@@ -390,6 +392,7 @@ class OrderTransaction < ActiveRecord::Base
       :state_title => buyer_state_title,
       :event => "refresh_#{event}",
       :persistent => false,
+      :target => self,
       :url => buyer_open_path
     )
   end
@@ -602,6 +605,7 @@ class OrderTransaction < ActiveRecord::Base
     Notification.dual_notify(buyer, 
       :channel => "/transactions/#{id}/change_info",
       :content => "订单#{number}已经修改运费",
+      :target => self,
       :url => buyer_open_path,
       :info => {
         :stotal => stotal,

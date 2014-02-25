@@ -16,6 +16,6 @@
 //= require lib/activity_base_info
 //= require catalog
 //= require following
-//= require apply_join_circle
 //= require search_users
+//= require apply_join_circle
 //= require filtered/filter_options
