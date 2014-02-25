@@ -46,6 +46,18 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
     end
   end
 
+  def dispose
+    @refund = current_shop_refunds.find_by(:id => params[:id])
+    @operator = @refund.order.operator_create(current_user.id)
+    respond_to do |format|
+      if @operator.valid?
+        format.json{ render :json => @refund }
+      else
+        format.json{ render :json => draw_errors_message(@operator), :status => 403 }
+      end
+    end
+  end
+
   private
   def current_shop_refunds
     OrderRefund.where(:seller_id => current_shop.id)

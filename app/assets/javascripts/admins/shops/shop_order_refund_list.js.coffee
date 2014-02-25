@@ -7,7 +7,9 @@ root = (window || @)
 class Refunds extends Backbone.Collection
 
 class OrderRefund extends CardItemView
-
+  events: {
+    "click .actions .dispose" : "dispose"
+  }
   initialize: (options) ->
     _.extend(@, options)
     super    
@@ -31,6 +33,17 @@ class OrderRefund extends CardItemView
         @card.transaction.get('state_title'))
 
     super
+
+  dispose: () ->
+    $.ajax(
+      url: "#{@model.url()}/dispose",      
+      type: "POST",
+      dataType: "JSON",
+      success: (data) ->
+        window.location.href = "#open/#{data.id}/refund"
+        window.location.reload()
+    )
+
 
 
 class root.ShopOrderRefundList extends CardItemListView

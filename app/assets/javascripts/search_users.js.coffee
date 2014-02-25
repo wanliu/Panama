@@ -2,14 +2,13 @@
 
 root = window || @
 
-class RenderMethod
-
-  buyer_template: Handlebars.compile($("#buyer_base_template").html())
-  seller_template: Handlebars.compile($("#seller_base_template").html())
+class RenderMethod  
 
   constructor: (options) ->
     _.extend(@, options)
     @$wrapper = @el.find(".wrapper")
+    @buyer_template = Handlebars.compile($("#buyer_base_template").html())
+    @seller_template = Handlebars.compile($("#seller_base_template").html())
     # @render(@datas)
 
   render: (datas) ->

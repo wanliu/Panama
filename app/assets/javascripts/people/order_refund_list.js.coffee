@@ -36,7 +36,6 @@ class OrderRefund extends CardItemView
 
     false
 
-
 class root.OrderRefundList extends CardItemListView
 
   initialize: (options) ->

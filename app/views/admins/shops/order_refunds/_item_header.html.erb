@@ -1,0 +1,32 @@
+<div class='card_item_header'>
+  <ul class='order_header'>
+    <li class='actions'>
+      <ul>       
+        <%=render :partial => "operator", :locals => {:operator => row.operator }  %>        
+        <li>          
+          <a href="javascript:void(0)" class='btn btn-primary btn-mini open operator'>
+            <%= icon :open %>打开
+          </a>
+        </li>
+        <% unless row.order_operator? %>
+        <li>
+          <a href="javascript:void(0)" class='btn btn-primary btn-mini dispose'>
+            接单
+          </a>
+        </li>
+        <% end %>
+        <li class='state'>
+          <div class='state-label label label-success'>
+            <%= row.state_title %>
+          </div>
+        </li>
+        <li class='time'>
+          <%= icon :time %><%=I18n.l row.created_at, :format => :short %>
+        </li>
+      </ul>
+    </li>
+    <li class='title'>
+      退货编号: <%= row.number %>
+    </li>
+  </ul>
+</div>
