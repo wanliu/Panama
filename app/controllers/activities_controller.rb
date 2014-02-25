@@ -97,8 +97,6 @@ class ActivitiesController < ApplicationController
   end
 
   def tomorrow
-    date = DateTime.now.tomorrow.midnight
-    @activities = Activity.access.where('start_time between ? and ?', date, date+1.day)
   end
 
   # GET /activities/new

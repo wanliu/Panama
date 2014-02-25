@@ -5,11 +5,11 @@ class Controller extends Backbone.Router
   routes: {
     "search/:search_type/:query" : "search",
     "search/:search_type"        : "search_type",
-    "" : "search_all"
   }
 
 
 class TopBar extends Backbone.View
+  fetchState: false
 
   events:
     "click .link.friends": "toggleFriends"
@@ -51,9 +51,6 @@ class TopBar extends Backbone.View
 
     false
 
-  search_all: () ->
-    @_search("activities")
-
   search: (search_type, query) ->
     @$query.val(query)
     @_search(search_type)
@@ -62,6 +59,7 @@ class TopBar extends Backbone.View
     @_search(search_type)
     
   _search: (search_type) ->
+    @fetchState = true
     @$search_type.filter(".#{search_type}").click()  
     @enterSearch()  
 
@@ -177,7 +175,7 @@ class TopBar extends Backbone.View
     return if Backbone.History.started
     @controller = new Controller()
     @controller.on "route:search", (search_type, query) => @search(search_type, query)
-    @controller.on "route:search_all", () => @search_all()
+    #@controller.on "route:search_all", () => @search_all()
     @controller.on "route:search_type", (search_type) => @search_type(search_type)
     Backbone.history.start()
 

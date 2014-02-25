@@ -7,38 +7,10 @@
 
   <div class='activities_panel'>
     <div id="activities" class='forecast'>
-      <div class="columns">
-        <% (0...@activities.size).group_by { |i| i % 5 }.each do |_, indexs| -%>
-          <div class="column">
-          <% indexs.each do |index| %>
-            <%= render_activity @activities[index] %>
-          <% end %>
-          </div>
-        <% end %>
-
-        <% if @activities.size == 0 -%>
-          <% (0..5).each do |i| %>
-            <div class="column">
-            </div>
-          <% end %>
-          <div class="row-fluid">
-            <div class="text-center">
-              暂时没有活动，尽请期待！
-            </div>
-          </div>
-        <% end %>
-      </div>
     </div>
+    <div class='scroll-load-msg'></div>
   </div>
 </div>
-
-<script type="text/template" id="product-preview-template">
-  <%= render "activities/products/preview_template" %>
-</script>
-
-<script type="text/template" id="shop-product-preview-template">
-  <%= render "shop_products/preview_template" %>
-</script>
 
 <script type="text/template" id="auction-preview-template">
   <%= render "activities/auction/preview_template" %>
@@ -48,15 +20,15 @@
   <%= render "activities/focus/preview_template" %>
 </script>
 
-<script type="text/template" id="ask_buy-preview-template">
-  <%= render "ask_buy/preview_template" %>
-</script>
-
 <script type="text/javascript">
   $(function(){
     var load_view = new LoadActivities({
-      el: $('.activities_panel')
+      el: $('.activities_panel'),
+      params: {
+        fetch_url: "/search/tomorrow"
+      }
     })
+    load_view.fetch();
 
     new ActivityLayoutView({
       el: '#activities'

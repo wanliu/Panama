@@ -1,40 +1,8 @@
 <div class='user_info span4'>
-  <div class="hover_place">
-<!--     <div class='info_detail' user-id='{{ id }}' >
-        <div class="bg_nature">
-          <img src="http://lorempixel.com/240/150/nature" />
-        </div>
-        <div class='userinfo'>
-          <div class="circle_avatar">
-            <img src='{{ photos.header }}' class="author img-circle" />
-          </div>
-          <div class="login">
-            <a href="/people/{{ login }} ">
-              {{ login }}</a>
-          </div>
-          <div class="industry_type">
-            <span>行业：{{ industry_type }}</span>
-          </div>
-          <div class="tel">
-            <span>联系方式：{{ phone }}</span>
-          </div>
-          <div class="add_friend">
-            <button><a href="javascript: void(0)">+关注</a></button>
-          </div>
-          <div class="contact">
-            <a href="#">
-              <i class="icon-leaf"></i>
-            </a>
-          </div>
-        </div>
-    </div> -->
-    <!-- <span class="label label-warning pull-right">买家</span> -->
-
-  </div>
   <div class="content">
     <span class="label label-warning pull-right">买家</span>
     <div class="actions">
-      <a href="javascript:void(0)" class="btn btn-success sayhi">打招呼</a>
+      <a href="javascript:void(0)" data-value-id="{{ user.id }}" class="btn btn-success follow">+关注</a>
     </div>
     <a href="/people/{{ login }}">
       <img src="{{ photos.header }}" class="avatar header"/>
@@ -51,7 +19,6 @@
     </div>
 
     <div class="industry">
-      <!-- <i class="icon-star"></i> -->
       {{ industry_type }}行业
     </div>    
   </div>

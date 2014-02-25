@@ -6,12 +6,12 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
   initialize: (options) ->
     @shop = options.shop
     super
-    @transaction.bind("change:delivery_price", @change_delivery_price, @)
+    @transaction.bind("change:delivery_price", @change_delivery_price, @)    
 
   events: {
     "click .transaction-actions .btn_event" : "clickAction",
     "click .transaction-actions input:button.refuse" : "toggle_refuse",
-    "click .refuse-panel input:button.refuse-confirm" : "clickAction",
+    "click .refuse-panel input:button.refuse-confirm" : "refuse_confirm",
     "keyup .refuse-panel textarea" : "change_refuse_reason"
   }
 
@@ -31,7 +31,11 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     ]
 
   leaveApplyRefund: (event, from, to, msg) ->
-    @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
+    if /^shipped_agree|unshipped_agree$/.test(event)
+      @slideAfterEvent(event)
+    else if /^refuse$/.test(event)
+      @saveReason(event)
+      StateMachine.ASYNC
 
   leaveApplyFailure: (event, from, to, msg) ->
     @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
@@ -43,19 +47,29 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     @slideAfterEvent(event) if /^shipped_agree|unshipped_agree$/.test(event)
 
   afterRefuse: (event, from, to, msg) ->
+    @change_refuse_reason() if @current == "apply_refund"
+
+  saveReason: (event) ->
     reason = @$('.refuse-panel textarea').val()
     return if _.isEmpty(reason)
     url = @transaction.urlRoot
-    @transaction.fetch(
+    $.ajax(
       url: "#{url}/refuse_reason",
       type: 'POST',
       data: {refuse_reason: reason},
       success: () =>
         @slideAfterEvent(event)
+      error: () =>
+        @back_state()
     )
 
   toggle_refuse: () ->
     @$(".transaction-body .refuse-panel").slideToggle()
+
+  refuse_confirm: (event) ->
+    $target = $(event.currentTarget)    
+    @clickAction(event)
+    $target.addClass("disabled")
 
   change_refuse_reason: () ->
     reason = @$('.refuse-panel textarea').val()
