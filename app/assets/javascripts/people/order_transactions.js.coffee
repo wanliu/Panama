@@ -14,7 +14,8 @@ class TransactionView extends CardItemView
   initialize: (options) ->
     _.extend(@, options)
     super 
-    @model.bind("dispose", _.bind(@dispose, @))   
+    @model.bind("dispose", _.bind(@dispose, @))
+    @model.bind("removeReturned", _.bind(@removeReturned, @))   
 
   get_register_view: () ->
     view = new TransactionCard({
@@ -55,7 +56,10 @@ class TransactionView extends CardItemView
           @toggleReturned(@card)
           
     else
-      @toggleReturned(@card) unless _.isEmpty(@card)    
+      @toggleReturned(@card) unless _.isEmpty(@card) 
+
+  removeReturned: () ->   
+    @$(".actions .operator").remove()
 
   delay_sign: () ->  
     url = "#{@model.url()}/delay_sign"
@@ -127,6 +131,9 @@ class root.OrderTransactions extends CardItemListView
         state: data.state,
         event: data.event,
         state_title: data.state_title})
+
+    model.trigger("removeReturned") if data.state == "waiting_refund"
+
 
   dispose: (data) ->
     model = @collection.get(data.order_id)

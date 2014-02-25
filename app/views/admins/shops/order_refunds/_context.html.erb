@@ -10,6 +10,6 @@
     </div>
   </div>
 </div>
-<% if refund.order.current_operator.nil? %>
-  <div class='invalid-full'>接单之后才可以操作订单？</div>
+<% unless refund.order_operator? %>
+  <div class='invalid-full'>接单之后才可以操作退货单？</div>
 <% end %>
