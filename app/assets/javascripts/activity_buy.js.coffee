@@ -5,6 +5,7 @@ class root.ActivityBuyView extends Backbone.View
     "click [data-dismiss='modal']" : "close",
     "click button.confirm" : "buy"
   }
+  
   initialize: () ->
     @activity_id = @options.activity_id
     @amount = @options.amount || 1;
