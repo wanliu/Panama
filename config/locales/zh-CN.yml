@@ -463,6 +463,8 @@ zh-CN:
         shop_product: 商品
       circle_category:
         name: '分类名'
+      transaction_state_detail:
+        expired: ''
 
   mongoid:
     models:
