@@ -5827,7 +5827,7 @@ if (typeof define === "function" && define.amd) {
         this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
-          group: this.channel.name
+          group: this.channel.group
         });
       });
 

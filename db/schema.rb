@@ -554,7 +554,6 @@ ActiveRecord::Schema.define(:version => 20140211063750) do
     t.string   "delivery_code"
     t.integer  "transfer_sheet_id"
     t.integer  "pay_status",                                       :default => 0
-    t.string   "group_name"
     t.string   "number"
     t.datetime "dispose_date"
     t.string   "transport_type"

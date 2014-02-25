@@ -150,6 +150,73 @@ class User < ActiveRecord::Base
       :owner_id => user_ids)
   end
 
+  # 聊天频道，除了活动临时聊天外，全部返回
+  def chat_channels
+    persistent_chat_channels
+      .concat(order_channels_as_buyer)
+      .concat(direct_order_channels_as_buyer)
+      .concat(shop_order_channels)
+      .concat(shop_direct_order_channels)
+  end
+
+  def persistent_chat_channels
+    persistent_channels.map do |ch|
+      { title: ch.name,
+        icon: ch.icon,
+        type: ch.channel_type }
+    end
+  end
+
+  def order_channels_as_buyer
+    transactions.map do |order|
+      ch = order.temporary_channel
+      { title: ch.name,
+        # icon: order.icon,
+        token: ch.token,
+        type: 3 }
+    end
+  end
+
+  def direct_order_channels_as_buyer
+    direct_transactions.map do |order|
+      ch = order.temporary_channel
+      { title: ch.name,
+        # icon: order.icon,
+        token: ch.token,
+        type: 3 }
+    end
+  end
+
+  def shop_order_channels
+    if shop.nil?
+      []
+    else
+      shop.transactions.map do |order|
+        ch = order.temporary_channel
+        {
+          title: ch.name,
+          # icon: order.icon,
+          token: ch.token,
+          type: 3 }
+      end
+    end
+  end
+
+  def shop_direct_order_channels
+    if shop.nil?
+      []
+    else
+      shop.direct_transactions.map do |order|
+        ch = order.temporary_channel
+        {
+          title: ch.name,
+          # icon: order.icon,
+          token: ch.token,
+          follow_type: 3 }
+      end
+    end
+  end
+
   def recount_money
     self.update_attribute(:money, money_bills.available)
   end
