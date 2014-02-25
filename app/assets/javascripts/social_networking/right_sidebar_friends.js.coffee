@@ -441,15 +441,14 @@ class TemporaryIconView extends BaseIconView
 
   initialize: () ->
     super
-    # $(@el).hide()
+    $(@el).hide()
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('title'), { group: @model.get('token') })
     if @channel.room
       @channel.command('join', @channel.room, {})
     else
-      @channel.command('open', {}, { group: @model.get('token'), type: 3 }, (ch, error, msg) =>
-        console.error('请求聊天房间号失败', error)
+      @channel.command('open', null, {}, (ch, error, msg) =>
         pnotify(type: 'error', text: '请求聊天房间号失败') if _.isEmpty(msg)
         # @channel.room = msg
         # clients.socket.emit('join', {room: @channel.room})

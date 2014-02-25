@@ -209,7 +209,7 @@ class TransactionCardBase extends AbstructStateView
       @chat_model = new ChatModel({
         type: 3,
         token: @transaction.get('token'),
-        title: @transaction.get('group')
+        title: @transaction.get('title')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()
