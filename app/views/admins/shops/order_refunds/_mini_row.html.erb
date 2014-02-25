@@ -1,0 +1,47 @@
+<div class='card_item' data-value-id='<%= row.id %>'>
+  <%=render :partial => "item_header", :locals => {:row => row } %>
+  <div class='card_item_row widget'>
+    <ul class='products'>
+      <li class='vertical'>
+        <ul>
+          <li class='actions'>
+            <ul>
+              <li class='price'>
+                单价
+              </li>
+              <li class='amount'>
+                数量
+              </li>
+              <li class='total'>
+                小计
+              </li>
+            </ul>
+          </li>
+          <li class='serial'>
+            <div class='title'>
+              商品
+            </div>
+          </li>
+        </ul>
+      </li>
+      <%= render :partial => "transactions/product_item_vertical", :collection => row.items, :as => :item %>
+      <li class='divider'></li>
+      <li class='vertical'>
+        <ul>
+          <li class='actions'>
+            <ul>
+
+              <li class='atotal'>
+                <%=number_to_currency row.stotal %>
+              </li>
+            </ul>
+          </li>
+          <li class='atotal'>
+            共计(包含运费)
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class='full-mode'></div>
+</div>

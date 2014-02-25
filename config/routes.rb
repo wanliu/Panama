@@ -531,6 +531,7 @@ Panama::Application.routes.draw do
           get 'page', :to => "shops/order_refunds#page"
           get :mini_item
           get :card
+          post :dispose
         end
       end
 

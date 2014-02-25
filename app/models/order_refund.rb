@@ -231,6 +231,10 @@ class OrderRefund < ActiveRecord::Base
     state_details.create(:state => state)
   end
 
+  def order_operator?
+    order.current_operator.present?
+  end
+
   def refund_product_ids
     items.pluck("product_id") 
   end

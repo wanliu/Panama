@@ -17,7 +17,7 @@
     </li>
     <% @circle.categories.each do |c| %>
     <li class='category_<%=c.id %>'>
-      <a class="circle-category-<%=c.id %>"  href="<%=community_category_path(@circle, c) %>">
+      <a class="circle-category-<%=c.id %>"  href="<%=community_categories_path(@circle, c) %>">
       <%=c.name %>
       </a>
     </li>

@@ -250,6 +250,8 @@ zh-CN:
         target_type: 关联类型
         created_at: 创建时间
         updated_at: 更新时间
+      topic:
+        content: 内容
       region:
         id: 编号
         name: 名称

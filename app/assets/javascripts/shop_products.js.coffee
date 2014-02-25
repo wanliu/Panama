@@ -16,8 +16,8 @@ class ShopProductView extends Backbone.View
     @loadTemplate () =>
       @$el = $(@render()).appendTo("#popup-layout")   
       @modal()
-      @$("#main-modal").on "hidden", () =>
-        @close()
+      @$("#main-modal").on "hidden", () => @close()
+      @$("#main-modal").on "shown", () => @fetch_state()
 
     super
 
@@ -31,19 +31,24 @@ class ShopProductView extends Backbone.View
     tpl = Hogan.compile(@template)
     tpl.render(@model.attributes)
 
-  modal: () ->
+  modal: () ->    
     @$("#main-modal").modal()
-    $("body").addClass("noScroll")
+    $("body").addClass("noScroll")    
 
   unmodal: () ->
     $("body").removeClass("noScroll")
+    @setState(true)
 
   close: () ->    
     #@remove()
-    @$("#main-modal").modal("hide")
+    #@$("#main-modal").modal("hide")
     @unmodal()
 
+  fetch_state: () ->
+    @setState(true)
+
 class ShopProductPreview extends Backbone.View
+  fetchState: true
 
   events:
     "click .shop_product .preview"    : "launchShopProduct",
@@ -54,18 +59,24 @@ class ShopProductPreview extends Backbone.View
 
   launchShopProduct: (event) ->
     @load_view(event.currentTarget)
-    @view.modal() if @view?
-    @view ?= new ShopProductView({
-      el         : @$el,
-      model      : @model,
-      product_id : @product_id
-    })    
+    if @fetchState
+      @fetchState = false
+      @view = new ShopProductView({
+        el: @$el,
+        model: @model,
+        setState: _.bind(@setFetchState, @)
+      }) 
+      @view.modal()
+
     false
 
   load_view: (target) ->
     @$el = @el = $(target).parents(".shop_product")
     @model = new ShopProductModel({id: @el.attr('shop-product-id')})
     @delegateEvents()
+
+  setFetchState: (state) ->
+    @fetchState = state
 
 class ShopProductToolbar extends Backbone.View
   events:

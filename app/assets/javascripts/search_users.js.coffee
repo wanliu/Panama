@@ -2,14 +2,13 @@
 
 root = window || @
 
-class RenderMethod
-
-  buyer_template: Handlebars.compile($("#buyer_base_template").html())
-  seller_template: Handlebars.compile($("#seller_base_template").html())
+class RenderMethod  
 
   constructor: (options) ->
     _.extend(@, options)
     @$wrapper = @el.find(".wrapper")
+    @buyer_template = Handlebars.compile($("#buyer_base_template").html())
+    @seller_template = Handlebars.compile($("#seller_base_template").html())
     # @render(@datas)
 
   render: (datas) ->
@@ -17,6 +16,7 @@ class RenderMethod
       @el.find(".find_people_tip").show()
     else
       # @el.find(".wrapper > div").animate({left: '20px'},'slow',@el.find(".wrapper > div").fadeOut());
+      @el.find(".find_people_tip").hide()
       @el.find(".wrapper > div").remove()
       _.each datas, (data) =>
         view = ""
