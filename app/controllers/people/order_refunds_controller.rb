@@ -4,7 +4,7 @@ class People::OrderRefundsController < People::BaseController
   before_filter :login_and_service_required, :person_self_required
 
   def index
-    @refunds = current_user_refunds.uncomplete.order("created_at desc").page(params[:page])
+    @refunds = current_user_refunds.order("created_at desc").page(params[:page])
   end
 
   def show

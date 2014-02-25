@@ -9,9 +9,9 @@ class Transaction extends Backbone.Model
     @urlRoot = url
 
 class TransactionCardBase extends AbstructStateView
-  dialogState: true
 
   initialize:(@option) ->
+    @dialogState = true
     _.extend(@, @options)
     @options['initial'] ?= @current_state().state
     @options['id']        ?= @$el.attr('state-id')
@@ -33,9 +33,9 @@ class TransactionCardBase extends AbstructStateView
     @transaction.bind("change:stotal", @change_stotal, @)
 
     @load_realtime()
-    @generateChat() if @dialogState
-    @setChatPanel()
-    $(window).bind("resizeOrderChatDialog", _.bind(@setChatPanel, @))
+    # @generateChat() if @dialogState
+    @generateChat()
+    $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     super
 
   countdown: () ->
@@ -193,14 +193,14 @@ class TransactionCardBase extends AbstructStateView
       type: type
     })
 
-  setChatPanel: () ->
+  setChatPanel: (event) ->
     $order_row = @$el.parents('.wrapper-box')
     $chat_foot = $order_row.find(".message_wrap .foot")
     $chat_body = $order_row.find(".message_wrap .body")
-    setInterval () =>
     $chat_body.height($order_row.outerHeight() - $chat_foot.outerHeight())
 
   generateChat: () ->
+    return if !@dialogState
     @generateToken () =>
       @newAttachChat()
 

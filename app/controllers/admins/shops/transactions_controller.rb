@@ -21,7 +21,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   def complete
     @transactions = current_shop_order.completed.order("created_at desc").page(params[:page])
     @directs = current_shop.direct_transactions.completed.order("created_at desc").page(params[:page])
-    @refunds = current_shop.order_refunds.completed.order("created_at desc").page(params[:page])
+    # @refunds = current_shop.order_refunds.completed.order("created_at desc").page(params[:page])
   end
 
   def page

@@ -9,9 +9,15 @@
           </a>
         </li>
         <li class='state'>
-          <div class='state-label label label-success'>
-            <%= row.state_title %>
-          </div>
+          <% if row.state == 'complete' %>
+            <div class='state-label label label-warning'>
+              <%= row.state_title %>
+            </div>
+          <% else %>
+            <div class='state-label label label-success'>
+              <%= row.state_title %>
+            </div>
+          <% end %>
         </li>
 
         <li class='time'>

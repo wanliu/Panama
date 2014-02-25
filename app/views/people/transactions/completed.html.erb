@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<div class="order_refund_list">
+<!-- <div class="order_refund_list">
   <div class='row-fluid'>
     <h4 class="page-title">
       退货单
@@ -87,7 +87,7 @@
       <div class='refund-detail'></div>
     </div>
   </div>
-</div>
+</div> -->
 <script type='text/javascript'>
   $(function(){
     var orders = new OrderTransactions({
@@ -95,10 +95,10 @@
       remote_url: "<%= person_transactions_path(@people) %>"
     })
 
-    var refunds = new OrderRefundList({
+    /*var refunds = new OrderRefundList({
       el: $(".order_refund_list"),
       remote_url: "<%= person_order_refunds_path(@people) %>"
-    })
+    })*/
 
     var directs = new DirectTransactionList({
       el: $(".direct_transaction_list"),
@@ -108,7 +108,7 @@
 
     var view = new TransactionComplete()
     view.register(orders)
-    view.register(refunds)
+    // view.register(refunds)
     view.register(directs)
 
     view.start()

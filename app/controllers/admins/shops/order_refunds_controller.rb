@@ -1,7 +1,7 @@
 class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
 
   def index
-    @refunds = current_shop_refunds.uncomplete.order("created_at desc").page(params[:page])
+    @refunds = current_shop_refunds.order("created_at desc").page(params[:page])
   end
 
   def show

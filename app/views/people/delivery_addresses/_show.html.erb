@@ -5,10 +5,9 @@
 <td><%= address.try(:contact_phone) %></td>
 <td style="min-width:40px;">
   <div class="row-fluid button_group">
-    <div class="pull-right">
-      <a class="btn_linked" data-toggle="modal" href="delivery_addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
+    <a class="btn_linked" data-toggle="modal" href="delivery_addresses/<%=address.id%>/edit" data-target="#edit_address<%=address.id%>">编辑</a>
+    <br/>
     <%= link_to "删除", { :action => "destroy", :id => address.id }, :confirm => "确定要删除该收货地址吗？", :method => "delete", :class => "btn_linked btn-danger" %>
-    </div>
   </div>
 </td>
 <td>

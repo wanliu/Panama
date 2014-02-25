@@ -25,14 +25,15 @@
           <% end %>
           <table class="table table-striped address_table address">
             <tr>
-              <th style="width:10%">收货人</th>
-              <th style="width:28%">所在地区</th>
-              <th style="width:35%">街道地址</th>
-              <th style="width:10%">邮编</th>
-              <th style="width:10%">联系方式</th>
-              <th style="width:7%">操作</th>
+              <th>收货人</th>
+              <th>所在地区</th>
+              <th>街道地址</th>
+              <th>邮编</th>
+              <th>联系方式</th>
+              <th>操作</th>
+              <th style="width: 0px;"></th>
             </tr>
-            <tbody class="table-striped">
+            <tbody>
               <% unless @addresses.nil? %>
                 <% @addresses.each do |address| %>
                   <tr class ="address<%=address.id%> address_line">

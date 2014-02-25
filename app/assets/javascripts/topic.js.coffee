@@ -54,7 +54,8 @@ class CreateTopicView extends Backbone.View
         @create_topic(view.render())
         @$content.val('')
         @$(".attachments-panel").hide()
-        @$(".attachable:first").remove()
+        index = @$(".attachable").length - 1
+        @$(".attachable:not(:eq(#{index}))").remove()
       error: (data) =>
         try
           err = JSON.parse(data.responseText)
