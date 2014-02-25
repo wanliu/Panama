@@ -42,7 +42,7 @@ class TopBar extends Backbone.View
     url = if _.isEmpty(data.query)
       "search/#{search_type}"
     else
-      "search/#{search_type}/#{data.query}"
+      "search/#{search_type}/#{encodeURIComponent(data.query)}"
 
     if _.isEmpty(@controller)
       window.location.href = "/##{url}"
@@ -52,7 +52,7 @@ class TopBar extends Backbone.View
     false
 
   search: (search_type, query) ->
-    @$query.val(query)
+    @$query.val(decodeURIComponent(query))
     @_search(search_type)
 
   search_type: (search_type) ->
