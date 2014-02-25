@@ -62,7 +62,7 @@ class root.CommunitySearch extends Backbone.View
     if e.keyCode == 13
       $.ajax({
         url: "/search/circles",
-        data: {q: @$(".search_circles").val() },
+        data: {q: {query: @$(".search_circles").val()} },
         success: (models) =>
           @render(models)
       })
