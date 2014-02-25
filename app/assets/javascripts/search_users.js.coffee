@@ -15,12 +15,11 @@ class RenderMethod
     if datas.length == 0
       @el.find(".find_people_tip").show()
     else
-      # @el.find(".wrapper > div").animate({left: '20px'},'slow',@el.find(".wrapper > div").fadeOut());
       @el.find(".find_people_tip").hide()
       @el.find(".wrapper > div").remove()
       _.each datas, (data) =>
         view = ""
-        if _.contains(data.service.split(","),"buyer")    
+        if _.contains(data.user.services,"buyer")    
           view = new UserCardInfo(
             el: $(@buyer_template(_.extend(data, data.user))),
             model: data

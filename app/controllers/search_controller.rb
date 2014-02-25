@@ -5,14 +5,18 @@ class SearchController < ApplicationController
   def user_checkings
     query_val = "%#{params[:q]}%"
     @region = RegionCity.location_region(params[:area_id])
-    if @region.nil?
-      city_ids = params[:area_id]
-    else
-      city_ids = @region.region_cities_ids()
+    city_ids = @region.nil? ? params[:area_id] : @region.region_cities_ids()
+    @results = UserChecking.users_checking_query.where("(sh.name like ? or (us.login like ? or us.email like ?)) and checked= true and ad.area_id in (?)",query_val,query_val,query_val,city_ids).limit(9)
+
+    @user_checkings = @results.map do |user_checking|
+      r = user_checking.as_json
+      user = user_checking.user
+      r[:is_followed] = user.is_seller? ? current_user.is_follow_shop?(user.shop.id) : current_user.is_follow_user?(user.id)
+      r
     end
-    @user_checkings = UserChecking.users_checking_query.where("(sh.name like ? or (us.login like ? or us.email like ?)) and checked= true and ad.area_id in (?)",query_val,query_val,query_val,city_ids).limit(9)
+
     respond_to do |format|
-      format.json{ render json: @user_checkings.as_json(:methods => [:shop, :user]) }
+      format.json{ render json: @user_checkings }
     end
   end
 
