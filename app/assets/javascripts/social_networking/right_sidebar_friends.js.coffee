@@ -102,8 +102,11 @@ class root.ChatManager extends Backbone.View
     #   return exist_model
     # else
     targetView = @targetView(model.get('type'))
-    targetView.collection.add(model)
-    model = targetView.collection.where(model.attributes)[0]
+    existModel = targetView.collection.where(model.attributes)[0]
+    if !existModel?
+      targetView.collection.add(model)
+      existModel = targetView.collection.where(model.attributes)[0]
+    existModel
 
   removeChatIcon: (model) ->
     model.setDisplayTitle()
@@ -168,7 +171,10 @@ class root.ChatManager extends Backbone.View
     type = item.type || item.get('type')
     _.find @collection.models, (model) =>
       if type is model.get('type')
-        model.get('title') is item.title || item.get('title')
+        if type is 3
+          model.get('token') is (item.token || item.get('token'))
+        else
+          model.get('title') is (item.title || item.get('title'))
         # switch type
         #   when 1
         #     model.get('title') is item.user
