@@ -85,7 +85,7 @@ class OrderRefund < ActiveRecord::Base
 
     before_transition :apply_refund => :apply_failure do |refund, transition|
       refund.valid_refuse_reason?
-      refund.rollback_order_state if refund.valid?
+      refund.rollback_order_state if refund.errors.messages.blank?
     end
 
     before_transition [:apply_failure, :apply_refund, :apply_expired] => :waiting_delivery do |refund, transition|      
@@ -334,13 +334,6 @@ class OrderRefund < ActiveRecord::Base
   def state_title
     I18n.t("refund_state.#{state}")
   end
-
-  # 检查本次被退货的商品是否已经在退货中
-  # def product_been_refunded?(product_item)
-  #   order.refunds.any? do |refund|
-  #     refund.items.any? { |item| item.product_id == product_item.product_id }
-  #   end
-  # end
 
   def generate_number
     _number = (OrderRefund.max_id + 1).to_s

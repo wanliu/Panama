@@ -13,8 +13,14 @@
 
       <div class='threeD-viewport'>
         <div class='orders card_list'>
-          <% @transactions.each do |row| %>
-            <%=render_base_template "order_mini_row", :row => row %>
+          <% if @transactions.length > 0 %>
+            <% @transactions.each do |row| %>
+              <%=render_base_template "order_mini_row", :row => row %>
+            <% end %>
+          <% else %>
+            <div class='widget'>
+              没有已处理完的担保交易
+            </div>
           <% end %>
         </div>
       </div>
@@ -47,7 +53,7 @@
             <%= render :partial => "admins/shops/direct_transactions/row", :collection => @directs, :as => :row %>
           <% else %>
             <div class='widget'>
-              没有直接处理的交易
+              没有已处理完的直接交易
             </div>
           <% end %>
         </div>
@@ -64,7 +70,7 @@
   </div>
 </div>
 
-<div class='order_refund_list'>
+<!-- <div class='order_refund_list'>
   <div class='row-fluid'>
     <div class='span8'>
       <h3 class='page-title'>退货单</h3>
@@ -77,8 +83,14 @@
         </div>
 
         <div class='threeD-viewport'>
-           <div class='refunds card_list'>
-            <%= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
+          <div class='refunds card_list'>
+            <%# if @refunds.length > 0 %>
+              <%#= render :partial => "order_refunds/mini_row", :collection => @refunds, :as => :row %>
+            <%# else %>
+              <div class='widget'>
+                没有已处理完的退货单
+              </div>
+            <%# end %>
           </div>
         </div>
 
@@ -87,12 +99,12 @@
           <div class='currentbox'></div>
           <div class='downbox'></div>
         </div>
-        <%= paginate @refunds %>
+        <%#= paginate @refunds %>
       </div>
       <div class='refund-detail'></div>
     </div>
   </div>
-</div>
+</div> -->
 
 <script type="text/javascript">
   $(function(){
@@ -116,15 +128,15 @@
       remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>"
     })
 
-    var refund = new ShopOrderRefundList({
+    /*var refund = new ShopOrderRefundList({
       el: $(".order_refund_list"),
       shop: shop,
       remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
-    })
+    })*/
     
     view.register(order)
     view.register(direct)
-    view.register(refund)
+    // view.register(refund)
 
     view.start()
   })

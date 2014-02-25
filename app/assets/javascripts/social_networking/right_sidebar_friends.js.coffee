@@ -2,7 +2,7 @@ root = (window || @)
 
 class root.ChatModel extends Backbone.Model
   getOrderUrl: () ->
-    pages = [ '/transactions', '/pending', '/direct_transactions', '/order_refunds' ]
+    pages = [ '/transactions', '/pending', '/direct_transactions', '/order_refunds', '/admins/complete' ]
     url = _.find pages, (page) => location.href.indexOf(page) != -1
 
   getPrefixTitle: (group) ->

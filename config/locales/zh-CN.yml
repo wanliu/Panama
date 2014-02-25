@@ -737,7 +737,7 @@ zh-CN:
     apply_failure: 拒绝
     waiting_delivery: 等待发货
     waiting_sign: 等待签收
-    complete: 完成
+    complete: 完成退货
     close: 关闭
 
   simple_form:
