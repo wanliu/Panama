@@ -171,7 +171,9 @@ class TransactionCard extends TransactionCardBase
         data: {transfer: transfers},
         type: 'POST',
         success: (model, data) =>
+          @transition()
           @slideAfterEvent(event_name)
+          
         error: (data, xhr, res) =>
           try
             ms = JSON.parse(xhr.responseText)
