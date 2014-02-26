@@ -7,7 +7,6 @@ class ShopTransactionCard extends TransactionCardBase
   initialize:() ->
     @shop = @options.shop
     super    
-    @initMessagePanel()
     @countdown()
     @monitor_notify()   
 
@@ -48,10 +47,6 @@ class ShopTransactionCard extends TransactionCardBase
   toggleItemDetail: (event) ->
     @$(".item-details").slideToggle()
     false
-
-  initMessagePanel: () ->
-  #   @setMessagePanel()
-  #   @message_panel.show()
 
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event

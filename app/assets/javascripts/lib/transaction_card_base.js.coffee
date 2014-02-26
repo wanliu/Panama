@@ -25,7 +25,7 @@ class TransactionCardBase extends AbstructStateView
       _.extend({
         id: @options['id'],
         token: @options['token'],
-        group: @options['group']
+        title: @options['group']
       }, @current_state()))
     
     @transaction.set_url(@options['url_root'])
@@ -67,20 +67,7 @@ class TransactionCardBase extends AbstructStateView
     event_name = data.event || "refresh"
     console.log event_name
     @[event_name].call(@)
-    $.get @url(), (data) =>
-      @slidePage(data)
-      #@effect 'flipInY'
-      ###
-      setTimeout () =>
-        html = $(data)
-        @$el.replaceWith(html)
-        @$el = html
-        @delegateEvents()
-        @countdown()
-        @transaction.set(@current_state())
-      , 300
-      ###
-
+    $.get @url(), (data) => @slidePage(data)
 
   closeThis: (event) ->
     if confirm("要取消这笔交易吗?")
@@ -208,8 +195,8 @@ class TransactionCardBase extends AbstructStateView
     unless @chat_model?
       @chat_model = new ChatModel({
         type: 3,
-        name: @transaction.get('token'),
-        group: @transaction.get('group')
+        token: @transaction.get('token'),
+        title: @transaction.get('title')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()

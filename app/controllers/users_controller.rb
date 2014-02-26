@@ -31,15 +31,10 @@ class UsersController < ApplicationController
   end
 
   def channels
-    @channels = current_user.persistent_channels.map do |c| {
-      login: c.name,
-      icon: c.icon,
-      follow_type: c.channel_type }
-    end
+    channels = current_user.chat_channels
     respond_to do |format|
-      format.json{ render :json => @channels }
+      format.json{ render :json => channels }
     end
-
   end
 
   def chat_authorization

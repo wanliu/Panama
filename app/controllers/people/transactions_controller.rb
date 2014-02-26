@@ -43,9 +43,13 @@ class People::TransactionsController < People::BaseController
   end
 
   def mini_item
-    @transaction = current_order.find(params[:id])
+    @transaction = current_order.find_by(:id => params[:id])
     respond_to do |format|
-      format.html{ render :layout => false }
+      if @transaction.present?
+        format.html{ render :layout => false }
+      else
+        format.json{ render :json => ["该订单不存在！"], :status => 403 }
+      end
     end
   end
 
