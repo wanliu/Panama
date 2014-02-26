@@ -5,48 +5,37 @@ class root.ChatModel extends Backbone.Model
     pages = [ '/transactions', '/pending', '/direct_transactions', '/order_refunds', '/admins/complete' ]
     url = _.find pages, (page) => location.href.indexOf(page) != -1
 
-  getPrefixTitle: (group) ->
-    prefix = group.substring(0, group.indexOf('_'))
+  getPrefixTitle: (title) ->
+    prefix = title.substring(0, title.indexOf('_'))
     switch prefix
       when 'OrderTransaction'
-        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
+        @set({ attach_el: '[data-group="' + @get('title') + '"] .message_wrap' })
         '担保交易'
       when 'DirectTransaction'
-        @set({ attach_el: '[data-group="'+@get('group')+'"] .message_wrap' })
+        @set({ attach_el: '[data-group="' + @get('title') + '"] .message_wrap' })
         '直接交易'
       when 'Activity'
         '活动'
       else
         console.error('未处理的类型')
 
-  setAttributes: () ->
-    type = @get('type') || @get('follow_type')
-    @set({ type: type }) if type
+  setDisplayTitle: () ->
+    # type = @get('type') || @get('follow_type')
+    # @set({ type: type }) if type
     switch @get('type')
       when 1
-        title = @get('title') || "好友 #{@get('login')}"
-        @set({
-          name: @get('login'),
-          title: title
-        })
+        displayTitle = "好友 #{@get('title')}"
+        @set({displayTitle: displayTitle})
       when 2
-        name = @get('login') || @get('group')
-        title = @get('title') || "商圈 #{name}"
-        @set({
-          name: name,
-          group: name,
-          title: title
-        })
+        displayTitle = "商圈 #{@get('title')}"
+        @set({displayTitle: displayTitle})
       when 3
-        name = @get('name') || @get('group')
-        group = @get('group')
-        number = group.substring(group.indexOf('_')+1, group.length)
-        title = @get('title') || "#{@getPrefixTitle(group)} #{number}"
+        title = @get('title')
+        number = title.substring(title.indexOf('_') + 1, title.length)
+        displayTitle = "#{@getPrefixTitle(title)} #{number}"
         @set({
-          number: number,
-          name: name,
-          group: group,
-          title: title
+          # number: number,
+          displayTitle: displayTitle
         })
 
 class root.ChatList extends Backbone.Collection
@@ -107,17 +96,20 @@ class root.ChatManager extends Backbone.View
     , 300) # fix me: setTimeout should be removed
 
   addChatIcon: (model) ->
-    model.setAttributes()
-    exist_model = @findExist(model)
-    if model.get('type') is 3 && exist_model
-      return exist_model
-    else
-      targetView = @targetView(model.get('type'))
+    model.setDisplayTitle()
+    # exist_model = @findExist(model)
+    # if model.get('type') is 3 && exist_model
+    #   return exist_model
+    # else
+    targetView = @targetView(model.get('type'))
+    existModel = targetView.collection.where(model.attributes)[0]
+    if !existModel?
       targetView.collection.add(model)
-      model = targetView.collection.where(model.attributes)[0]
+      existModel = targetView.collection.where(model.attributes)[0]
+    existModel
 
   removeChatIcon: (model) ->
-    model.setAttributes()
+    model.setDisplayTitle()
     targetView = @targetView(model.get('type'))
     exist_model = targetView.collection.where(model.attributes)[0]
     targetView.collection.remove(exist_model)
@@ -179,13 +171,17 @@ class root.ChatManager extends Backbone.View
     type = item.type || item.get('type')
     _.find @collection.models, (model) =>
       if type is model.get('type')
-        switch type
-          when 1
-            model.get('name') is (item.user || item.get('name'))
-          when 2
-            model.get('group') is (item.group || item.get('group'))
-          when 3
-            model.get('group') is  (item.group || item.get('group'))
+        if type is 3
+          model.get('token') is (item.token || item.get('token'))
+        else
+          model.get('title') is (item.title || item.get('title'))
+        # switch type
+        #   when 1
+        #     model.get('title') is item.user
+        #   when 2
+        #     model.get('title') is item.group || item.get('group'))
+        #   when 3
+        #     model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
     @collection.add(model)
@@ -242,11 +238,11 @@ class BaseIconsView extends Backbone.View
       return unless channel.type is 3
       exist_model.icon_view.setChannel(channel)
     else
-      model = new ChatModel({ 
+      model = new ChatModel({
         type: channel.type,
-        name: channel.name,
-        group: channel.group,
-        channel: channel 
+        token: channel.token,
+        title: channel.group,
+        channel: channel
       })
       @parent_view.targetView(channel.type).addModel(model)
 
@@ -271,7 +267,7 @@ class BaseIconsView extends Backbone.View
     if exist_model
       return exist_model
     else
-      model.setAttributes()
+      model.setDisplayTitle()
       return pnotify(type: 'error', text: '请求聊天失败，token为空') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
@@ -408,7 +404,9 @@ class BaseIconView extends Backbone.View
 
     @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
       @msg_count += unreadMsgCount
-      @$('.message_count').html(@msg_count).show() if @msg_count > 0
+      if @msg_count > 0
+        $(@el).show()
+        @$('.message_count').html(@msg_count).show()
 
   getChat: () ->
     unless @chat_view
@@ -437,13 +435,13 @@ class BaseIconView extends Backbone.View
 
 class FriendIconView extends BaseIconView
   getChannel: () ->
-    @channel ||= Caramal.Chat.of(@model.get('name'))
+    @channel ||= Caramal.Chat.of(@model.get('title'))
     @channel.open()
 
 
 class GroupIconView extends BaseIconView
   getChannel: () ->
-    @channel ||= Caramal.Group.of(@model.get('name'))
+    @channel ||= Caramal.Group.of(@model.get('title'))
     @channel.open()
 
 
@@ -454,14 +452,14 @@ class TemporaryIconView extends BaseIconView
     $(@el).hide()
 
   getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@model.get('group'), { name: @model.get('name') })
+    @channel ||= Caramal.Temporary.of(@model.get('title'), { token: @model.get('token') })
     if @channel.room
-      clients.socket.emit('join', {room: @channel.room})
+      @channel.command('join', @channel.room, {})
     else
-      clients.socket.emit('open', { group: @channel.group, type: 3 }, (error, msg) =>
+      @channel.command('open', null, {}, (ch, error, msg) =>
         pnotify(type: 'error', text: '请求聊天房间号失败') if _.isEmpty(msg)
-        @channel.room = msg
-        clients.socket.emit('join', {room: @channel.room})
+        # @channel.room = msg
+        # clients.socket.emit('join', {room: @channel.room})
       )
 
   showChat: () ->

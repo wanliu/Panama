@@ -41,8 +41,8 @@ class root.DirectTransactionView extends Backbone.View
     unless @chat_model?
       @chat_model = new ChatModel({
         type: 3,
-        name: @$el.attr('data-token'),
-        group: @$el.parents('.wrapper-box').attr('data-group')
+        token: @$el.attr('data-token'),
+        title: @$el.parents('.wrapper-box').attr('data-group')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()

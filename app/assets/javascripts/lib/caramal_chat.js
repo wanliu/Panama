@@ -5143,7 +5143,7 @@ if (typeof define === "function" && define.amd) {
       Channel.prototype.setUnreadMsgCount = function() {
         var channel_name, unreadMsgCount, user_name;
         this.unreadFetchFlagSeted = true;
-        channel_name = this.group ? this.group : this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
+        channel_name = this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
           if (clients && clients.current_user) {
             return channel === [user_name, clients.current_user].sort().join('-');
           } else {
@@ -5151,7 +5151,7 @@ if (typeof define === "function" && define.amd) {
               return name === user_name;
             });
           }
-        })) : void 0;
+        })) : this.token ? this.token : this.group;
         if (channel_name && this.manager.unreadMsgs && this.manager.unreadMsgs[channel_name]) {
           unreadMsgCount = this.manager.unreadMsgs[channel_name];
           return this.emit('unreadMsgsSeted', unreadMsgCount);
@@ -5827,7 +5827,7 @@ if (typeof define === "function" && define.amd) {
         this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
-          group: this.channel.name
+          group: this.channel.token
         });
       });
 
