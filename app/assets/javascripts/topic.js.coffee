@@ -124,13 +124,14 @@ class TopicView extends Backbone.View
   className: "row-fluid topic-panel"
 
   events:
-    "click .send_comment"         : "show_create_commnet"
-    "click .comment_form .cancel" : "hide_create_comment"
-    "submit form.comment_form"    : "comment"
-    "keyup .comment_form textarea": "textarea_status"
-    "click .more_comment"         : 'more_comment'
-    "click .hide_comment"         : 'hide_comment'
-    'click .add_participate'      : 'create_participate'
+    "click .send_comment"           : "show_create_commnet"
+    "click .comment_form .cancel"   : "hide_create_comment"
+    "submit form.comment_form"      : "comment"
+    "keyup .comment_form textarea"  : "textarea_status"
+    "keydown .comment_form textarea" : "hot_key"
+    "click .more_comment"           : 'more_comment'
+    "click .hide_comment"           : 'hide_comment'
+    'click .add_participate'        : 'create_participate'
 
   initialize: (options) ->
     @model = new Topic(options.data)
@@ -141,6 +142,9 @@ class TopicView extends Backbone.View
 
     @load_template()
     @$el = $(@el)
+
+  hot_key: (e) ->
+    @comment() if (e.keyCode == 10 || e.keyCode == 13) &&  e.ctrlKey == true
 
   render: () ->
     @$el.html(@template.render(@model.toJSON()))
