@@ -124,7 +124,9 @@
                     </div>
                     <div class='span2'>
                       <img src="<%=c.user.photos.icon %>" />
-                      <%=c.user.login %>
+                      <div class='href_name'>
+                        <a href="/people/<%=c.user.login %>"><%=c.user.login %></a>
+                      </div>
                     </div>
                   </div>
                 <% end %>

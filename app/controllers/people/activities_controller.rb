@@ -1,4 +1,5 @@
 class People::ActivitiesController < People::BaseController
+	before_filter :login_required, :person_self_required
 
   def my_activity
     @activities = Activity.joins(:activities_participates)

@@ -19,11 +19,11 @@
         <div class="trasaction-title">
           <div class="name"><%= buyer.login %></div>
           <span class='order_number pull-right'>
-            订单编号：<a href="<%=shop_admins_pending_path(current_shop) %>#open/<%=refund.order.id %>/order"><%=refund.order.number %></a>
+            订单编号：<a href="<%=shop_admins_pending_path(current_shop) %>#open/<%=refund.order.id %>/order"><%=refund.order.try(:number) %></a>
           </span>   
         </div>
         <div class="transaction-address">
-          <%=refund.order.address.location %>
+          <%=refund.order.try(:address).try(:location) %>
         </div>
       </div>
     </div>

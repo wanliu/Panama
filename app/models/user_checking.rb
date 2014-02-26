@@ -51,7 +51,8 @@ class UserChecking < ActiveRecord::Base
     attas['user'] = {
       :id => user.id,
       :login => user.login,
-      :photos => user.photos.attributes
+      :photos => user.photos.attributes,
+      :services => "#{ user.services.join(',')}"   #将服务类型的数组转换成字符串
     }
     attas['shop'] = {
       :id => shop.try(:id),

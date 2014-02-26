@@ -4,6 +4,7 @@ class root.ActivityBuyView extends Backbone.View
     "click .address_bar" : "toggle",
     "click button.confirm" : "buy"
   }
+  
   initialize: () ->
     #@activity_id = @options.activity_id
     @model.bind("modal", _.bind(@modal, @))

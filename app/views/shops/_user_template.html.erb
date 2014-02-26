@@ -2,7 +2,11 @@
   <div class="content">
     <span class="label label-important pull-right">卖家</span>
     <div class="actions">
-      <a href="javascript:void(0)" data-value-id="{{ shop.id }}" class="btn btn-success follow">+关注</a>
+      {{#if is_followed }}
+        <a href="javascript:void(0)" data-value-id="{{ shop.id }}" class="btn btn-success">已关注</a>
+      {{else}}
+        <a href="javascript:void(0)" data-value-id="{{ shop.id }}" class="btn btn-success follow">+关注</a>
+      {{/if}}
     </div>    
     <a href="/shops/{{ name }}">
       <img src="{{ photos.header }}" class="avatar header"/>

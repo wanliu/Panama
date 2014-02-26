@@ -1,8 +1,10 @@
 <div class="dialog" id="activity-actions">
   <div class="modal-body">
-    <img class="author_image" src="<%= activity.author.photos.header %>"  />
+    <a href='<%= person_path(activity.author.login) %>'>
+      <img class="author_image" src="<%= activity.author.photos.header %>"  />
+    </a>
     <a href="javascript:void(0)" class="btn btn-primary pull-right load_modal">分享活动</a> 
-    <h4><%= activity.author.login %></h4>
+    <h4><a href='<%= person_path(activity.author.login) %>'><%= activity.author.login %></a></h4>
     <p>关注 <%= activity.author.followings.count %></p>
     <p>粉丝 <%= activity.author.followers.count %></p>
   </div>

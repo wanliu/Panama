@@ -1,3 +1,4 @@
+@import "lib/mixin";
 // .info-wrapper > div:first-child {
 //   margin-left: 0px !important;
 // }
@@ -97,10 +98,8 @@
         color: #160f0f;
         font-size: 13px;
         line-height: 20px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
         margin-top: 40px;
+        @include href_ellipsis();
       }
 
       .tel{
@@ -164,10 +163,8 @@
         font-size: 16px;
         font-weight: bold;
         margin-bottom: 5px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
         margin-top: 5px;
+        @include href_ellipsis();
       }
 
       .circle_count{
