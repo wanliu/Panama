@@ -20,11 +20,10 @@ class root.DirectTransactionView extends Backbone.View
     @urlRoot = "/people/#{@login}/direct_transactions/#{@model.id}"
 
     @model.bind("change:state", @change_state, @)
-    $(window).bind("resizeOrderChatDialog", _.bind(@setChatPanel, @))
+    $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     
     @load_realtime()
-    @generateChat()
-    @setChatPanel()
+    @generateChat()    
 
   setChatPanel: () ->
     $order_row = @$el.parents('.wrapper-box')

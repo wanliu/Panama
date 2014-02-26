@@ -71,6 +71,8 @@ class root.ShopDirectTransactionList extends CardItemListView
       el: elem
     )
 
+    @$(".notify-message").remove()
+
   reset: () ->
     _.each @$(".directs>.card_item"), (el) => @add_elem el
 

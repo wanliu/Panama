@@ -90,28 +90,26 @@
 </div> -->
 <script type='text/javascript'>
   $(function(){
+    var view = new TransactionComplete()
+
     var orders = new OrderTransactions({
       el: $(".transaction-list"),
       remote_url: "<%= person_transactions_path(@people) %>"
     })
+    view.register(orders)
 
     /*var refunds = new OrderRefundList({
       el: $(".order_refund_list"),
       remote_url: "<%= person_order_refunds_path(@people) %>"
     })*/
+    // view.register(refunds)
 
     var directs = new DirectTransactionList({
       el: $(".direct_transaction_list"),
       login: "<%=current_user.login %>",
       remote_url: "<%= person_direct_transactions_path(@people) %>"
-    })
-
-    var view = new TransactionComplete()
-    view.register(orders)
-    // view.register(refunds)
-    view.register(directs)
-
-    view.start()
+    })    
+    view.register(directs)   
 
   })
 </script>

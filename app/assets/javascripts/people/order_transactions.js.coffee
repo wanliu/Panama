@@ -15,7 +15,7 @@ class TransactionView extends CardItemView
     _.extend(@, options)
     super 
     @model.bind("dispose", _.bind(@dispose, @))
-    @model.bind("removeReturned", _.bind(@removeReturned, @))   
+    @model.bind("removeReturned", _.bind(@removeReturned, @))      
 
   get_register_view: () ->
     view = new TransactionCard({
@@ -34,6 +34,7 @@ class TransactionView extends CardItemView
       @set_state(@card.transaction.get("state"))
       @model.set(
         state_title: @card.transaction.get("state_title"))
+      @_change_state()
 
     super
 
@@ -82,6 +83,9 @@ class TransactionView extends CardItemView
       success: (data) =>
         $(".actions ul", @$header).prepend(data)
     )
+
+  _change_state: () ->
+    @$(".actions .delay-sign-event").parent().remove() if @model.get("state") == "complete"
 
 
 class root.OrderTransactions extends CardItemListView

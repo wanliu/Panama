@@ -121,23 +121,20 @@
       el: $(".transaction-list"),
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
       shop: shop})
+    view.register(order)
 
     var direct = new ShopDirectTransactionList({
       el: $(".direct_transaction_list"),
       shop: shop,
       remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>"
     })
+    view.register(direct)
 
     /*var refund = new ShopOrderRefundList({
       el: $(".order_refund_list"),
       shop: shop,
       remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
-    })*/
-    
-    view.register(order)
-    view.register(direct)
+    })*/       
     // view.register(refund)
-
-    view.start()
   })
 </script>
