@@ -29,7 +29,7 @@ class ActivityBind extends Backbone.View
     })
 
   load_modal: () =>
-    $('#PickCircle').modal({
+    @$('#PickCircle').modal({
       remote: "/people/#{ @login}/communities/all_circles",
       keyboard: true,
       backdrop: false
@@ -148,7 +148,7 @@ class ActivityBind extends Backbone.View
     false
 
   share_activity: () ->
-    return false if $(".share_activity_to_circles .disabled").length == 1
+    return false if @$(".share_activity_to_circles .disabled").length == 1
     @$(".share_activity").addClass('disabled')
     ids = @tool.data()
     activity_id = @model.get('id')
@@ -157,15 +157,17 @@ class ActivityBind extends Backbone.View
       url: "/activities/"+activity_id+"/share_activity"
       type: "post"
       success: () =>
-        $(".share_activity_to_circles").modal('hide')
+        @$(".share_activity_to_circles").modal('hide')
         pnotify(text: '分享活动成功！!')
       error: (messages) ->
         pnotify(text: messages.responseText, type: "error")
     )
 
   join: () ->
+    $('.dialog-panel').remove()
     amount = @$('form.new_product_item input[name="product_item[amount]"]').val()
-    new ActivityBuyView({activity_id: @model.id, amount: amount})
+    new ActivityBuyView({model: @model, amount: amount})
+    $('.model-popup-backdrop').remove()
     false
 
 root.ActivityBind = ActivityBind
