@@ -373,7 +373,7 @@ class BaseIconView extends Backbone.View
   render: () ->
     html = @template(@model.attributes)
     $(@el).html(html)
-    @clearMsgCount()
+    @showMsgCount()
     @
 
   hideTooltip: (event) ->
@@ -383,6 +383,16 @@ class BaseIconView extends Backbone.View
   clearMsgCount: () ->
     @msg_count = 0
     @$('.message_count').hide()
+
+  showMsgCount: () ->
+    @msg_count = 0 if !@msg_count?
+    if @msg_count > 0
+      console.error(this.channel, @msg_count)
+      $(@el).show()
+      @$('.message_count').html(@msg_count)
+      @$('.message_count').show()
+    else
+      @$('.message_count').hide()
 
   incMsgCount: () ->
     @msg_count += 1
@@ -402,11 +412,15 @@ class BaseIconView extends Backbone.View
         @active()
     , @
 
-    @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
-      @msg_count += unreadMsgCount
-      if @msg_count > 0
-        $(@el).show()
-        @$('.message_count').html(@msg_count).show()
+    if @channel.unreadMsgCount?
+      @msg_count || @msg_count = 0
+      @msg_count += @channel.unreadMsgCount
+      @showMsgCount()
+    else
+      @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
+        @msg_count || @msg_count = 0
+        @msg_count += @channel.unreadMsgCount
+        @showMsgCount()
 
   getChat: () ->
     unless @chat_view
