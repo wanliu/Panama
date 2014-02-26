@@ -12,7 +12,6 @@ class OrderRefundCard extends TransactionCardBase
   events: {
     "click .transaction-actions .refuse_protect" : "toggle_panel"
     "click .transaction-actions input.delivered" : "clickAction",
-    "keyup input:text.delivery_code" : "change_delivery_code",
     'click .edit_rdprice' : 'edit_delivery_price',
     'blur input:text[name=edit_rdprice]' : 'update_delivery_price'
   }
@@ -32,20 +31,10 @@ class OrderRefundCard extends TransactionCardBase
       { name: 'delivered',                from: 'waiting_delivery',  to: 'waiting_sign' }
     ]
 
-  change_delivery_code: () ->
-    ###
-    code = @delivery_code_val()
-    button = @$('.transaction-actions .btn_event')
-    if _.isEmpty(code)
-      button.addClass("disabled")
-    else
-      button.removeClass("disabled")
-    ###
-
   toggle_panel: (option) ->
     @$(".connect").toggle("slow")
 
-  afterDelivered: (event, from, to, msg) ->
+  afterWaitingDelivery: (event, from, to, msg) ->
     code = @delivery_code_val()
     transport_type = @$("select[name=transport_type]").val()
     if _.isEmpty(code) && _.isEmpty(transport_type)
@@ -57,8 +46,13 @@ class OrderRefundCard extends TransactionCardBase
         url: "#{url}/update_delivery",
         type: 'POST',
         data: data,
-        success: () => @slideAfterEvent(event)
+        success: () => 
+          @transition()
+          @slideAfterEvent(event)
+        error: () =>
+          @back_state()
       )
+      StateMachine.ASYNC
 
   update_delivery_price: () ->
     url = @transaction.urlRoot

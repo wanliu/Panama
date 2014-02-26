@@ -52,7 +52,8 @@ class ShopTransactionCard extends TransactionCardBase
     _event = event
     if !/back/.test(_event) && !/refresh_returned/.test(_event)
       @save_delivery_code () =>
-        @slideAfterEvent(_event)
+        @transition()
+        @slideAfterEvent(_event)        
       StateMachine.ASYNC
     else
       @back_state()   
