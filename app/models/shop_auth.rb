@@ -40,8 +40,9 @@ class ShopAuth
     false
   end
 
-  def shop_id(id)
-    @shop_id = id 
+  def get_validate_params(shop_id, user_checking_id)
+    @shop_id = shop_id
+    @user_checking_id = user_checking_id   
   end
 
   def update_options

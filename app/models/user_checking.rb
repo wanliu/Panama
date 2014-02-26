@@ -28,6 +28,14 @@ class UserChecking < ActiveRecord::Base
     update_relation_index
   end
 
+  def checked_notify
+    user.notify('/audit/user', "恭喜你，你的资料审核通过……", :avatar => user.icon, :target => self, :url => default_url)
+  end
+
+   def unchecked_notify
+    user.notify('/audit/user', "很遗憾，你的资料审核未通过，请重新提起审核……", :avatar => user.icon, :target => self, :url => default_url)
+  end
+
   def unchecked
     update_attributes(checked: false)
     unreject
@@ -94,10 +102,12 @@ class UserChecking < ActiveRecord::Base
 
   def send_checked_mail
     UserMailer.delay.send_user_checked_notify(user.email, ower_name, default_url)
+    checked_notify
   end
 
   def send_rejected_mail
     UserMailer.delay.send_user_rejected_notify(user.email, ower_name, rejected_reason, default_url)
+    unchecked_notify
   end
 
   def self.users_checking_query
