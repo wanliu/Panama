@@ -309,11 +309,11 @@ class MiniRow2ColView  extends Backbone.View
   fullMode: () ->    
     @$(".card_item_row").hide()
     @$detail.show()
-    $(window).trigger('resizeOrderChat')
     @$el
       .css
         'margin-left': 0
         'opacity': 1
+    $(window).trigger('resizeOrderChat')
 
 
   miniMode: () ->
