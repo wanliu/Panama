@@ -5087,7 +5087,7 @@ if (typeof define === "function" && define.amd) {
         this.options = options != null ? options : {};
         Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
-        this.unreadMsgCount = 0;
+        this.unreadMsgCount = null;
         this.unreadFetchFlag = false;
         this.hisMsgEnded = false;
         this.onOpened();
@@ -5141,20 +5141,33 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.setUnreadMsgCount = function() {
-        var channel_name, unreadMsgCount, user_name;
-        this.unreadFetchFlagSeted = true;
-        channel_name = this.group ? this.group : this.user ? (user_name = this.user, _.find(_.keys(this.manager.unreadMsgs), function(channel) {
-          if (clients && clients.current_user) {
-            return channel === [user_name, clients.current_user].sort().join('-');
-          } else {
-            return _.find(channel.split('-'), function(name) {
-              return name === user_name;
-            });
-          }
-        })) : void 0;
-        if (channel_name && this.manager.unreadMsgs && this.manager.unreadMsgs[channel_name]) {
-          unreadMsgCount = this.manager.unreadMsgs[channel_name];
-          return this.emit('unreadMsgsSeted', unreadMsgCount);
+        var channelName;
+        channelName = this.getChannelName();
+        if (channelName && this.manager.unreadMsgs && this.manager.unreadMsgs[channelName]) {
+          this.unreadMsgCount = this.manager.unreadMsgs[channelName];
+        } else {
+          this.unreadMsgCount = 0;
+        }
+        return this.emit('unreadMsgsSeted');
+      };
+
+      Channel.prototype.getChannelName = function() {
+        var user_name;
+        if (this.user) {
+          user_name = this.user;
+          return _.find(_.keys(this.manager.unreadMsgs), function(channel) {
+            if (clients && clients.current_user) {
+              return channel === [user_name, clients.current_user].sort().join('-');
+            } else {
+              return _.find(channel.split('-'), function(name) {
+                return name === user_name;
+              });
+            }
+          });
+        } else if (this.token) {
+          return this.token;
+        } else {
+          return this.group;
         }
       };
 
@@ -5326,9 +5339,13 @@ if (typeof define === "function" && define.amd) {
       Channel.prototype.setManager = function(manager) {
         var _this = this;
         this.manager = manager;
-        return this.manager.on('resetUnreadMsgs', function() {
-          return _this.setUnreadMsgCount();
-        });
+        if (this.manager.unreadMsgs != null) {
+          return this.setUnreadMsgCount();
+        } else {
+          return this.manager.on('resetUnreadMsgs', function() {
+            return _this.setUnreadMsgCount();
+          });
+        }
       };
 
       /**
@@ -5827,7 +5844,7 @@ if (typeof define === "function" && define.amd) {
         this.channel.setState('opening');
         return Util.merge(options, {
           type: this.channel.type,
-          group: this.channel.name
+          group: this.channel.token
         });
       });
 
