@@ -67,20 +67,7 @@ class TransactionCardBase extends AbstructStateView
     event_name = data.event || "refresh"
     console.log event_name
     @[event_name].call(@)
-    $.get @url(), (data) =>
-      @slidePage(data)
-      #@effect 'flipInY'
-      ###
-      setTimeout () =>
-        html = $(data)
-        @$el.replaceWith(html)
-        @$el = html
-        @delegateEvents()
-        @countdown()
-        @transaction.set(@current_state())
-      , 300
-      ###
-
+    $.get @url(), (data) => @slidePage(data)
 
   closeThis: (event) ->
     if confirm("要取消这笔交易吗?")
@@ -260,7 +247,6 @@ class TransactionCardBase extends AbstructStateView
     if elem.length > 0
       tag = elem.text().trim().substring(0, 1)
       elem.html("#{tag} #{stotal}")
-
 
 
 exports.TransactionCardBase = TransactionCardBase

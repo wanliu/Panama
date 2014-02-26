@@ -55,7 +55,7 @@
           <% end %>
         {{/likes}}
         {{^likes}}
-          <%= link_to '#', class: 'btn like-button' do %>
+          <%= link_to '#', title: '喜欢就支持一下', 'data-toggle' => 'tooltip', class: 'btn like-button' do %>
             <%= icon('heart') + " 喜欢" %>
           <% end %>
         {{/likes}}

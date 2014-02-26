@@ -15,6 +15,7 @@ class root.ShopDirectTransactionView extends Backbone.View
 
     @model.bind("change:state", @change_state, @)
     @load_realtime()
+    $(window).bind("resizeOrderChat", _.bind(@load_style, @))
     # @load_style()
     @toggle_message()
 
@@ -27,10 +28,9 @@ class root.ShopDirectTransactionView extends Backbone.View
     @$toolbar = @$message.find(".toolbar")
 
   load_style: () ->
-    setTimeout () =>
-      padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
-      @$messages.height( @$info.outerHeight() - @$toolbar.outerHeight() - padding)
-    , 60
+    padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
+    @$messages.height( @$info.outerHeight() - @$toolbar.outerHeight() - padding)
+
 
   toggle_message: () ->
     # @$messages.slideToggle()

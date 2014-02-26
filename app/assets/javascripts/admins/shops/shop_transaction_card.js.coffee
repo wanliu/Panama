@@ -6,9 +6,7 @@ exports = window || @
 class ShopTransactionCard extends TransactionCardBase
   initialize:() ->
     @shop = @options.shop
-    super
-    @filter_delivery_code()
-    @initMessagePanel()
+    super    
     @countdown()
     @monitor_notify()   
 
@@ -17,7 +15,6 @@ class ShopTransactionCard extends TransactionCardBase
     "blur input:text[name=delivery_price]"  : "update_dprice"
     "click button.close"       : "closeThis"
     "click .detail"            : "toggleItemDetail"
-    "keyup input.delivery_code": "filter_delivery_code"
     "click .dprice_edit"       : "show_dprice_edit"
 
   states:
@@ -51,32 +48,19 @@ class ShopTransactionCard extends TransactionCardBase
     @$(".item-details").slideToggle()
     false
 
-  initMessagePanel: () ->
-  #   @setMessagePanel()
-  #   @message_panel.show()
-
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
     if !/back/.test(_event) && !/refresh_returned/.test(_event)
       @save_delivery_code () =>
         @slideAfterEvent(_event)
+      StateMachine.ASYNC
     else
-      @back_state()
-
-  filter_delivery_code: () ->      
-    $btn = @$(".btn_event.delivered")
-    return if $btn.hasClass("invalid")
-    delivery_code = @delivery_code_elem().val()
-    if _.isEmpty(delivery_code) 
-      $btn.addClass("disabled")
-    else
-      $btn.removeClass("disabled")      
+      @back_state()   
 
   save_delivery_code: (cb) ->
-    delivery = @delivery_code_elem()
+    delivery_code = @delivery_code_elem().val()
 
-    if delivery.length > 0
-      delivery_code = delivery.val()
+    unless _.isEmpty(delivery_code)
       urlRoot = @transaction.urlRoot
       @transaction.fetch(
         url: "#{urlRoot}/update_delivery",

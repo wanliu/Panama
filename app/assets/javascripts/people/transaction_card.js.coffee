@@ -70,6 +70,7 @@ class TransactionCard extends TransactionCardBase
 
   leaveWaitingTransfer: (event, from, to, msg) ->
     @create_transfer_info(event)
+    StateMachine.ASYNC
 
   leaveWaitingAuditFailure: (event, from, to, msg) ->
     @create_transfer_info(event)

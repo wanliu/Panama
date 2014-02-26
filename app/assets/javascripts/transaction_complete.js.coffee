@@ -4,28 +4,27 @@ root = (window || @)
 class root.TransactionComplete extends Backbone.View
   
   initialize: () ->
+    @current_view = null
     @views = []
 
   register: (view) ->
     @views.push view
+    @bindEvent view 
 
-  start: () ->
-    that = @
-    _.each @views, (view) ->
-      view.open_on () ->
-        @show()
-        that.vanish(@)
+  bindEvent: (view) ->
+    that = @    
+    view.open_on () ->
+      @show()
+      that.vanish(@)
 
-      view.home_on () ->  
-        that.expend()
-
-    if Backbone.History.started
-      Backbone.history.stop()
-      Backbone.history.start()
+    view.home_on () -> that.expend()
 
   vanish: (view) ->
-    _.each @views, (v) ->
-      v.hide() unless v == view
+    @current_view = view
+    _.each @views, (v)  => @view_hide(v)
+      
+  view_hide: (view) ->
+    view.hide() if view isnt @current_view
 
   expend: () ->
     _.each @views, (view) -> view.show()

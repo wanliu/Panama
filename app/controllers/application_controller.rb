@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
         end
         translate = t("activerecord.attributes.#{model.class.to_s.underscore}")
         if translate.is_a?(Hash)
-          translate.key?(key) ? "#{translate[key]}#{m}" : "#{m}"
+          translate.key?(key) ? "#{translate[key]}: #{m}" : "#{m}"
         else
           "#{attrs}: #{m}"
         end

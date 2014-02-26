@@ -23,8 +23,7 @@ class root.DirectTransactionView extends Backbone.View
     $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     
     @load_realtime()
-    @generateChat()
-    @setChatPanel()
+    @generateChat()    
 
   setChatPanel: () ->
     $order_row = @$el.parents('.wrapper-box')

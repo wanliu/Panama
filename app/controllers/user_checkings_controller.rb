@@ -12,6 +12,7 @@ class UserCheckingsController < ApplicationController
         @current_shop.update_attributes(:name => @shop_auth.shop_name, :shop_summary => @shop_auth.shop_summary)
         @user_checking.update_attributes(@shop_auth.to_param)
         @user_checking.unchecked
+        @current_shop.shutdown_shop
         format.json{ render :json => @shop_auth }
       else
         format.json{ render :json => draw_errors_message(@shop_auth), :status => 403 }

@@ -465,6 +465,11 @@ zh-CN:
         name: '分类名'
       transaction_state_detail:
         expired: ''
+      transfer_sheet:
+        bank: 汇款银行
+        code: 汇款单号
+        person: 汇款人
+        order_transaction: 订单
 
   mongoid:
     models:
