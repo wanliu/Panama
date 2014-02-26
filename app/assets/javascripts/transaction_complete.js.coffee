@@ -18,10 +18,6 @@ class root.TransactionComplete extends Backbone.View
       that.vanish(@)
 
     view.home_on () -> that.expend()
-    old_register = view.register 
-    view.register = () ->
-      that.vanish(@)
-      old_register.apply(@, arguments)
 
   vanish: (view) ->
     @current_view = view
