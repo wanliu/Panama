@@ -4,15 +4,15 @@ class UserCheckingsController < ApplicationController
 
   def update_shop_auth
     @current_shop = Shop.find(params[:shop_id])
-    @user = @current_shop.user
-    @shop_auth = ShopAuth.new(params[:shop_auth].merge!(:user_id => @user.id))
-    @shop_auth.shop_id(@current_shop.id)
+    @user_checking = @current_shop.user.user_checking
+    @shop_auth = ShopAuth.new(params[:shop_auth].merge!(:user_id => @current_shop.user.id))
+    @shop_auth.get_validate_params(@current_shop.id, @user_checking.id)
     respond_to do |format|
       if @shop_auth.valid?
-        @user_checking =@user.user_checking
         @current_shop.update_attributes(:name => @shop_auth.shop_name, :shop_summary => @shop_auth.shop_summary)
         @user_checking.update_attributes(@shop_auth.to_param)
         @user_checking.unchecked
+        @current_shop.shutdown_shop
         format.json{ render :json => @shop_auth }
       else
         format.json{ render :json => draw_errors_message(@shop_auth), :status => 403 }

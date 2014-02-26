@@ -29,7 +29,8 @@ class root.DirectTransactionView extends Backbone.View
     $order_row = @$el.parents('.wrapper-box')
     $chat_foot = $order_row.find(".message_wrap .foot")
     $chat_body = $order_row.find(".message_wrap .body")
-    $chat_body.height($order_row.outerHeight() - $chat_foot.outerHeight())
+    height = $order_row.outerHeight() - $chat_foot.outerHeight()
+    $chat_body.height(height) if height > 100
 
   generateChat: () ->
     @generateToken () =>
