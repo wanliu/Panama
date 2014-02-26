@@ -16,7 +16,7 @@ class OrderRefund extends CardItemView
   get_register_view: () ->
     view = new OrderRefundCard(
       el: @$(".full-mode .order_refund"),
-      dialogState: false
+      dialogState: true
     )
     view.transaction.bind("change:state", @card_change_state, @)
     data = view.transaction.toJSON()
