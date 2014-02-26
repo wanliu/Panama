@@ -1297,9 +1297,8 @@ h2 small {
 }
 
 .error{
-  border: 1px solid #b94a48!important;
-}
-.error{
+  border: 0px solid #b94a48!important;
+  
   input[type=text], textarea{
     border: 1px solid #b94a48;
   }

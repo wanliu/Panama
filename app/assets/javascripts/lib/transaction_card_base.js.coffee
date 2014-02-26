@@ -262,6 +262,5 @@ class TransactionCardBase extends AbstructStateView
       elem.html("#{tag} #{stotal}")
 
 
-
 exports.TransactionCardBase = TransactionCardBase
 exports
