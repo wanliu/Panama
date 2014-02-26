@@ -396,7 +396,7 @@ zh-CN:
       order_refund:
         id: 编号
         order_transaction: 订单
-        order_transaction_id: 订单ID
+        order_transaction_id: 订单
         total: 总金额
         state: 状态
         buyer: 买家
@@ -463,6 +463,8 @@ zh-CN:
         shop_product: 商品
       circle_category:
         name: '分类名'
+      transaction_state_detail:
+        expired: ''
 
   mongoid:
     models:

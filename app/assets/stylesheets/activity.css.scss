@@ -2,6 +2,7 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3";
 @import "lib/transparent";
+@import "lib/mixin";
 @import "card_info";
 
 .column{
@@ -26,9 +27,7 @@
       }
 
       .href_name {
-        overflow: hidden; 
-        white-space: nowrap; 
-        text-overflow: ellipsis;
+        @include href_ellipsis();
       }
 
       .activity_tag {

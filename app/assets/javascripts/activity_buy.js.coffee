@@ -2,39 +2,45 @@ root = window || @
 class root.ActivityBuyView extends Backbone.View
   events: {
     "click .address_bar" : "toggle",
-    "click [data-dismiss='modal']" : "close",
     "click button.confirm" : "buy"
   }
+  
   initialize: () ->
-    @activity_id = @options.activity_id
+    #@activity_id = @options.activity_id
+    @model.bind("modal", _.bind(@modal, @))
     @amount = @options.amount || 1;
     @load_template (html) ->
       @render(html)
 
   load_template: (callback) ->
     $.ajax(
-      url: "/activities/#{@activity_id}/buy.dialog",
+      url: "/activities/#{@model.id}/buy.dialog",
       success: (html) =>
         callback.call(@, html)
     )
 
   modal: () ->
     $("body").addClass("noScroll")
+    @$dialog = @$("#auction_buy_dialog") 
+    @$dialog.modal()
 
   render: (html) ->
     @$el.html(html)
-    $("#popup-layout").html(@el)
-
-    @load_binding()
-    @backdrop = new BackDropView()
-    @backdrop.show()
+    $("#popup-layout").append(@el)       
+    @modal()
+    @load_binding()    
+    #@backdrop = new BackDropView()
+    #@backdrop.show()
     @delegateEvents()
 
   load_binding: () ->
     @$address_info = @$(".address-info")
     @$form = @$("form.buy_activity")
-    @load_depend_chose()
-    @address_chose()
+    @$dialog.on "hidden", () => @close()
+    @$dialog.on "shown", () =>  
+      @load_depend_chose()
+      @address_chose()
+
     @$('input[name="product_item[amount]"]').val(@amount)
 
   load_depend_chose: () ->
@@ -67,8 +73,7 @@ class root.ActivityBuyView extends Backbone.View
     @$address_info.toggle()
 
   close: () ->
-    @remove()
-    @backdrop.hide()
+    $("body").removeClass("noScroll")
 
   buy: () ->
     data = @get_date()

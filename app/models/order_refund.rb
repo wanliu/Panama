@@ -395,7 +395,7 @@ class OrderRefund < ActiveRecord::Base
 
   def valid_order_already_exists?
     if order.refunds.count > 0
-      errors.add(:order_transaction_id, '订单已经有退货了！')
+      errors.add(:order_transaction_id, '已经有退货了！')
     end
   end
 
