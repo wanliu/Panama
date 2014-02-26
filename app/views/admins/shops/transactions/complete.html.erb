@@ -113,29 +113,27 @@
       id: "<%= current_shop.id %>",
       token: "<%= current_shop.im_token %>"
     }
+    var view = new TransactionComplete()
 
     var orders = new ShopOrderTransactions({
       el: $(".transaction-list"),
       remote_url: "<%= shop_admins_transactions_path(current_shop) %>",
       shop: shop})
+    view.register(orders)
 
     var directs = new ShopDirectTransactionList({
       el: $(".direct_transaction_list"),
       shop: shop,
       remote_url: "<%= shop_admins_direct_transactions_path(current_shop) %>"
     })
+    view.register(directs)
 
     /*var refunds = new ShopOrderRefundList({
       el: $(".order_refund_list"),
       shop: shop,
       remote_url: "<%= shop_admins_order_refunds_path(current_shop) %>"
-    })*/
-    
-    var view = new TransactionComplete()
-    view.register(orders)
-    view.register(directs)
+    })*/       
     // view.register(refunds)
 
-    view.start()
   })
 </script>

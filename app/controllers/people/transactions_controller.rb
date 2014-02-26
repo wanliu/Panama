@@ -202,14 +202,18 @@ class People::TransactionsController < People::BaseController
   end
 
   def delay_sign
-    order = current_order.find(params[:id])
-    @detail = order.current_state_detail
-    respond_to do |format|      
-      @detail.delay_sign_expired
-      if @detail.valid?
-        format.json{ head :no_content }
+    order = current_order.find(params[:id])    
+    respond_to do |format| 
+      if order.waiting_sign_state?  
+        @detail = order.current_state_detail
+        @detail.delay_sign_expired
+        if @detail.valid?
+          format.json{ head :no_content }
+        else
+          format.json{ render :json => draw_errors_message(@detail), :status => 403 }
+        end
       else
-        format.json{ render :json => draw_errors_message(@detail), :status => 403 }
+        format.json{ render :json => ["当前订单状态不能延时！"], :status => 403 }
       end
     end
   end

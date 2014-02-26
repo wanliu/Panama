@@ -29,8 +29,6 @@ class root.ActivityBuyView extends Backbone.View
     $("#popup-layout").append(@el)       
     @modal()
     @load_binding()    
-    #@backdrop = new BackDropView()
-    #@backdrop.show()
     @delegateEvents()
 
   load_binding: () ->

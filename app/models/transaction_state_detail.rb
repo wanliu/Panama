@@ -54,9 +54,13 @@ class TransactionStateDetail < ActiveRecord::Base
   def valid_delay_time?
     if persisted?
       if changed.include?("expired")
-        unless order_transaction.can_delay_sign_expired?
-          errors.add(:expired, "请在到期前3天内申请延时!")
-        end        
+        if order_transaction.waiting_sign_state?
+          unless order_transaction.can_delay_sign_expired?
+            errors.add(:expired, "请在到期前3天内申请延时!")
+          end        
+        else
+          errors.add(:expired, "只能在签收的时候申请延时！")
+        end
       end
       if changed.include?("count")
         errors.add(:expired, "该订单有已经延长时间了!") if count > 1
