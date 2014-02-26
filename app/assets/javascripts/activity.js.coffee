@@ -126,6 +126,8 @@ class ActivityPreview extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
+    @buy_models = new Backbone.Collection
+    @buy_models.bind("add", @add_buy, @)
 
   joinChat: (event) ->
     @load_view(event.currentTarget)
@@ -183,9 +185,16 @@ class ActivityPreview extends Backbone.View
     @model = new ActivityModel({ id: @el.attr("activity-id"), shop_id: $(@el).find(".shopinfo").attr("data-value-id") })
     @delegateEvents()
 
+  add_buy: (model) ->
+    new ActivityBuyView({model: model})
+
   buy: (event) ->
     @load_view(event.currentTarget)
-    new ActivityBuyView({activity_id: @model.id})
+    model = @buy_models.get(@model.id)
+    if _.isEmpty(model)
+      @buy_models.add(@model.toJSON())
+    else
+      model.trigger("modal")
 
   get_model: (event) ->
     @load_view(event.currentTarget)

@@ -53,7 +53,7 @@ class root.AuctionBuyView extends Backbone.View
     @$el.html(html)
     @$address_info = @$(".address-info")
     @$form = @$("form.buy_activity")
-    $("#popup-layout").html(@el)
+    $("#popup-layout").append(@el)
 
     @load_binding()
     @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
