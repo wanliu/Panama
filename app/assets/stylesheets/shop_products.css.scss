@@ -1,6 +1,4 @@
-// Place all the styles related to the shop_products controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+@import "lib/mixin";
 
 .shop_product_dialog{
   .toolbar{
@@ -29,9 +27,7 @@
       padding-top: 5px;
 
       .href_name {
-        overflow: hidden; 
-        white-space: nowrap; 
-        text-overflow: ellipsis;
+        @include href_ellipsis();
       }
     }
   }
