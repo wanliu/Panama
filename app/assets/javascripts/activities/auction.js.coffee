@@ -30,8 +30,10 @@ class root.ActivityAuctionView extends ActivityBaseInfoView
     @$('[name="activity[price]"]').val(product.price)
     @$('[name="activity[activity_price]"]').val(product.price)
 
-
+###
 class root.AuctionBuyView extends Backbone.View
+  bodyClass: "noScroll"
+
   events: {
     "click .address_bar" : "toggle",
     "click [data-dismiss='modal']" : "close",
@@ -49,14 +51,17 @@ class root.AuctionBuyView extends Backbone.View
         callback.call(@, html)
     )
 
+  modal: () ->  
+    $("body").addClass(@bodyClass)  
+    @$("")
+
   render: (html) ->
     @$el.html(html)
     @$address_info = @$(".address-info")
     @$form = @$("form.buy_activity")
     $("#popup-layout").append(@el)
 
-    @load_binding()
-    @$backdrop = $("<div class='model-popup-backdrop in' />").appendTo("body")
+    @load_binding()    
     @delegateEvents()
 
   load_binding: () ->
@@ -93,8 +98,7 @@ class root.AuctionBuyView extends Backbone.View
     @$address_info.toggle()
 
   close: () ->
-    @remove()
-    @$backdrop.remove()
+    $("body").removeClass(@bodyClass)
 
   buy: () ->
     $.ajax(
@@ -104,9 +108,15 @@ class root.AuctionBuyView extends Backbone.View
       success: (xhr) ->
 
       error: (xhr) ->
-
+        try
+          message = JSON.parse(xhr.responseText).join("<br />")
+          pnotify(text: message, type: "error")
+        catch error
+          pnotify(
+            text: xhr.responseText,
+            type: "error")
     )
 
   get_date: () ->
     @$form.serializeHash()
-
+###
