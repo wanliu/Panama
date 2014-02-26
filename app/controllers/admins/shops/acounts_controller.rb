@@ -17,7 +17,6 @@ class Admins::Shops::AcountsController < Admins::Shops::SectionController
     @user_checking = current_shop.user.user_checking
     @shop = Shop.find_by(:name => params[:shop_id])
     @shop_auth = ShopAuth.new(@user_checking.attributes.merge!(:shop_name => @shop.name,:shop_summary => @shop.shop_summary))
-    @shop.shutdown_shop
   end
 
   def edit_address
