@@ -218,7 +218,8 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).html(@chat_template({model: @model}))
 
   bindScroll: () ->
-    @$('div.body').scroll($.proxy(@moreHisMsgs, @))
+    @$('div.body').bind('mousewheel', $.proxy(@disablePageScroll, @))
+    @$('div.body').bind('mousewheel', $.proxy(@moreHisMsgs, @))
 
   setDisplay: () ->
     @model.chat_view = @
@@ -338,6 +339,16 @@ class BaseChatView extends Caramal.BackboneView
 
     if @display
       @$('.message .image-zoom').fancybox()
+
+  disablePageScroll: (event) ->
+    top = @$('.body').scrollTop()
+    delta = event.originalEvent.wheelDelta
+    height = @$('.body').height()
+    scrollHeight = @$('.body')[0].scrollHeight
+    if (delta > 0 && top <= 0)
+      return false
+    else if (delta < 0 && top >= scrollHeight - height)
+      return false
 
   moreHisMsgs: (event) ->
     target = event.target || event.srcElement

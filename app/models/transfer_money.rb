@@ -36,7 +36,7 @@ class TransferMoney < ActiveRecord::Base
     when "Recharge"
       source.payer_title
     when "WithdrawMoney"
-      source.bank.bank_name
+      source.bank.try(:bank_name)
     else
       "未知"
     end

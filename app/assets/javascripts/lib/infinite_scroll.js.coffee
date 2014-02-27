@@ -53,7 +53,7 @@ class root.InfiniteScrollView extends Backbone.View
 
   after_add: () ->
 
-  scroll_load: () ->
+  scroll_load: (event) ->
     return if @is_over
     sp_height = $(document).height()
     w_height = $(window).height() + $(window).scrollTop()

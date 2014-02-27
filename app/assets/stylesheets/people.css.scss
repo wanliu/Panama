@@ -344,6 +344,7 @@
 
   .address-list{
     .address_table{
+      word-break: break-word;
       width: 100%;
       .address_line{
         line-height: 30px;

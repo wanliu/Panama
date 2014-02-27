@@ -48,7 +48,10 @@
       var $a = $(".activity_select>.active");
       var content_id = $a.find(">a").attr('href')
       var $form = $(".activity_forms>" + content_id + " form");
-
+      validate = new Validate({el: $form});
+      if (!validate.validate){
+        return false;
+      };
       $.ajax({
         type: 'post',
         dataType: 'json',

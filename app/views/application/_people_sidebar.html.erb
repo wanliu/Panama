@@ -79,7 +79,8 @@
           </li>
         </ul>
       </li>
-    <%end%>
+    <% end %>
+    <% if can? :manage, User %>
     <li class='accordion-group'>
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#activity-collapse">
         <i class="icon-calendar"></i>
@@ -123,8 +124,11 @@
         <% end %>
       </ul>
     </li>
+    <% end %>
   </ul>
+
   <div class='row-fluid'>
+    <% if can? :manage, User %>
     <div class='span6 followers'>
       <div class='count'>
         <a href='/people/<%=@people.login %>/followers'>
@@ -149,5 +153,6 @@
         </a>
       </div>
     </div>
+    <% end %>
   </div>
 </nav>

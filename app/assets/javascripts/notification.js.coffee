@@ -120,6 +120,9 @@ class NotificationManager
     # @client.monitor("/comments/update", @commonNotify)
     # @client.monitor("/comments/remove", @commonNotify)
 
+    #审核消息
+    @client.monitor("/audit/user", @commonNotify)
+
     #求购 
     @client.monitor("/answer_ask_buy", @answer_ask_buy)
     @client.monitor("/shops/answer_ask_buy/failer", @commonNotify)

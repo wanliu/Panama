@@ -1055,6 +1055,11 @@ body>.model-popup-backdrop.out{
             .comment {
               padding: 0px 20px 10px 60px;
               min-height: 60px;
+
+              .message {
+                word-break: break-all;
+              }
+
               .people-image {
                 margin-left: -60px;
                 float: left;
@@ -1297,7 +1302,7 @@ h2 small {
 }
 
 .error{
-  border: 0px solid #b94a48!important;
+  border: 1px solid #b94a48!important;
   
   input[type=text], textarea{
     border: 1px solid #b94a48;
@@ -1771,3 +1776,8 @@ body>.global_chat {
     }
   }
 }
+
+.href_name {
+  @include href_ellipsis();
+}
+
