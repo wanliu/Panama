@@ -78,5 +78,9 @@
         $form.replaceWith(xhr.responseText);
       });
     });
+
+    if(!Backbone.History.started){
+      Backbone.history.start()
+    }
   })
 </script>

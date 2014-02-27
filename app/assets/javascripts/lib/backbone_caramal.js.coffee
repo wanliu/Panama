@@ -109,6 +109,7 @@ class BaseChatView extends Caramal.BackboneView
 
   events:
     'mouseover '                : 'activeDialog'
+    'mouseout '                 : 'deactiveDialog'
     'click .close_label'        : 'hideDialog'
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
@@ -120,7 +121,7 @@ class BaseChatView extends Caramal.BackboneView
   chat_template:  _.template('
     <div class="head">
       <span class="state online"></span>
-      <a class="name" href="javascript: void(0)"><%= model.get("title") %></a>
+      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>
@@ -183,21 +184,21 @@ class BaseChatView extends Caramal.BackboneView
   initialize: (options) ->
     super
     @render()
-    @name = @model.get('name')
+    @name = @model.get('title')
     @title = @name unless @title
-    @channel = @model.get('channel')
+    # @channel = @model.get('channel')
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
-    @bindEvent()
     @initChannel()
+    @bindEvent()
     @initDialog()
 
   getChannel: () ->
     # @bindMessage()
-    @bindSysMsg()
-    @bindHisMsg()
 
   initChannel: () ->
     @getChannel()
+    @bindSysMsg()
+    @bindHisMsg()
     unless @channel.getState() is 'open'
       @channel.open () =>
         @channel.record()
@@ -414,7 +415,15 @@ class BaseChatView extends Caramal.BackboneView
   # unbindMessage: () ->
   #   @channel.removeEventListener('message', @receiveMessage)
 
+  deactiveDialog: () ->
+    setTimeout( () =>
+      document.body.style.overflow = 'auto'
+    , 100)
+
   activeDialog: () ->
+    setTimeout( () =>
+      document.body.style.overflow = 'hidden'
+    , 100)
     @model.trigger('unactive_avatar')
     @$el.css('z-index', 10000)
     @$el.siblings('.global_chat').css('z-index', 9999)
@@ -442,8 +451,7 @@ class BaseChatView extends Caramal.BackboneView
 
 class root.FriendChatView extends BaseChatView
   getChannel: () ->
-    @channel ||= Caramal.Chat.of(@name)
-    super
+    @channel ||= Caramal.Chat.of(@title)
 
   stateService: () ->
     $(window).bind('idle', () =>
@@ -471,13 +479,11 @@ class root.FriendChatView extends BaseChatView
 class root.GroupChatView extends BaseChatView
   getChannel: () ->
     @channel ||= Caramal.Group.of(@name)
-    super
 
 
 class root.TemporaryChatView extends BaseChatView
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
-    super
 
   clickTitle: () ->
     number = @model.get('number')
@@ -487,8 +493,7 @@ class root.TemporaryChatView extends BaseChatView
     type = group.substring(0, group.indexOf('_'))
     $.ajax(
       type: 'POST'
-      url: "/transaction/operate_url"
-      data: { type: type, id: id }
+      url: "/transaction/#{id}/operate_url/#{type}"
       success: (data, xhr, res) =>
         return if _.isEmpty(data.url)
         document.location.href = data.url
@@ -524,7 +529,7 @@ class root.OrderChatView extends BaseChatView
 
 
   initialize: (options) ->
-    @name = @model.get('name')
+    @name = @model.get('title')
     @title = @name unless @title
     @channel = @model.get('channel')
     return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
@@ -540,6 +545,8 @@ class root.OrderChatView extends BaseChatView
 
   initChannel: () ->
     @getChannel()
+    @bindSysMsg()
+    @bindHisMsg()
     unless @channel.getState() is 'open'
       @channel.open (chat, err, room) =>
         @channel.record()
@@ -548,7 +555,6 @@ class root.OrderChatView extends BaseChatView
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
-    super
 
   initDialog: () ->
     @render()

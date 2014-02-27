@@ -59,7 +59,7 @@ Panama::Application.routes.draw do
   match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
   match "cities/:city_id/communities", :to => "communities#city_index", :via => :get
 
-  match "transaction/operate_url", :to => "transactions#operate_url"
+  match "transaction/:id/operate_url/:type", :to => "transactions#operate_url"
 
   resources :communities do
     collection do

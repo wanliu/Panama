@@ -210,9 +210,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     @route.on "route:home", () =>     
       model = @find_on()
       model.set(display: false) unless _.isEmpty(model)
-      @bodyScrollTop(@scrollTop)
-      
-    Backbone.history.start() unless Backbone.History.started
+      @bodyScrollTop(@scrollTop)            
 
   bodyScrollTop: (number) ->
     if number?

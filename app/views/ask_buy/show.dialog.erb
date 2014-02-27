@@ -6,7 +6,9 @@
         <div id="main-model" class="dialog">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3><%=@ask_buy.title %> 求购</h3>
+            <h3 class="href_name" title="<%=@ask_buy.title %> 求购">
+              <%=@ask_buy.title %> 求购
+            </h3>
           </div>
           <div class="modal-body main-show">
             <div class='picture'>
@@ -147,7 +149,9 @@
                 <input type="button" value="提交报价" class="btn btn-danger pull-right submit_report">
               <% end %>
             <% else %>
-              <h4><%=@ask_buy.title %> 求购</h4>
+              <h4 class="href_name" title="<%=@ask_buy.title %> 求购">
+                <%=@ask_buy.title %> 求购
+              </h4>
               <label class="decimal optional control-label" for="product_item_price">价格</label>
               <input type='text' class='span12' value="<%=@ask_buy.price %>"  readonly=true />
               <label class="integer optional control-label" for="product_item_amount">数量</label>

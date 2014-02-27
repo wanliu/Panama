@@ -88,7 +88,6 @@ class root.ActivityBuyView extends Backbone.View
         pnotify(text: "请添加联系地址！", type: "warning")
         return false
 
-
     unless _.isFinite(data.product_item.amount)
       pnotify(text: "请输入正确的数量！", type: "warning")
       return false
@@ -113,3 +112,4 @@ class root.ActivityBuyView extends Backbone.View
 
   get_date: () ->
     @$form.serializeHash()
+

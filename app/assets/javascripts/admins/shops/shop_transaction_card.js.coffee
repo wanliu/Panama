@@ -7,7 +7,6 @@ class ShopTransactionCard extends TransactionCardBase
   initialize:() ->
     @shop = @options.shop
     super    
-    @initMessagePanel()
     @countdown()
     @monitor_notify()   
 
@@ -49,15 +48,12 @@ class ShopTransactionCard extends TransactionCardBase
     @$(".item-details").slideToggle()
     false
 
-  initMessagePanel: () ->
-  #   @setMessagePanel()
-  #   @message_panel.show()
-
   leaveWaitingDelivery: (event, from, to, msg) ->
     _event = event
     if !/back/.test(_event) && !/refresh_returned/.test(_event)
       @save_delivery_code () =>
-        @slideAfterEvent(_event)
+        @transition()
+        @slideAfterEvent(_event)        
       StateMachine.ASYNC
     else
       @back_state()   
