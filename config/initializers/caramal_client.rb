@@ -70,7 +70,7 @@ class CaramalClient
 
   # 将加入的雇员添加到商店订单的聊天中去
   def self.add_remove_employee(group, type, options={})
-    return if !%w(add, remove).include?(type)
+    return if !%w(add remove).include?(type)
     conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
 
