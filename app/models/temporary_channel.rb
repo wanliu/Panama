@@ -4,7 +4,11 @@ class TemporaryChannel < ActiveRecord::Base
   belongs_to :user
 
   after_create do
-    options = {}
+    employees = user.shop.shop_users.map(&:user).map(&:login)
+    employees.delete(user.login)
+    options = {
+      employees: employees
+    }
     if "OrderTransaction" == self.targeable_type
       options[:members] = [self.targeable.buyer.login]
       options[:mode] = "onlyMember"

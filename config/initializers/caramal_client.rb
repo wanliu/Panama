@@ -68,6 +68,26 @@ class CaramalClient
 
   end
 
+  # 将加入的雇员添加到商店订单的聊天中去
+  def self.add_shop_order_employee(group, options={})
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
+    conn.start
+
+    data = {:group => group}
+    data.merge!(options)
+    data = data.to_json
+
+    ch  = conn.create_channel
+    x = ch.default_exchange
+
+    mq_prefix = 'wanliu_'
+    q = ch.queue("", { :exclusive => true })
+    routing_key = mq_prefix + 'rpc_add_shop_order_employee'
+
+    x.publish(data, :routing_key => routing_key)
+    conn.stop
+  end
+
 
   def self.remove_temporary_channel(name, owner, &block)
     conn = Bunny.new(:hostname =>  ENV["rabbitmq"])

@@ -5088,7 +5088,6 @@ if (typeof define === "function" && define.amd) {
         Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
         this.unreadMsgCount = null;
-        this.unreadFetchFlag = false;
         this.hisMsgEnded = false;
         this.onOpened();
         /**

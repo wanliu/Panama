@@ -155,8 +155,8 @@ class User < ActiveRecord::Base
     persistent_chat_channels
       .concat(order_channels_as_buyer)
       .concat(direct_order_channels_as_buyer)
-      .concat(shop_order_channels)
-      .concat(shop_direct_order_channels)
+      .concat(shop_order_channels_as_employee)
+      .concat(shop_direct_order_channels_as_employee)
   end
 
   def persistent_chat_channels
@@ -187,33 +187,31 @@ class User < ActiveRecord::Base
     end
   end
 
-  def shop_order_channels
-    if shop.nil?
-      []
-    else
-      shop.transactions.map do |order|
+  def shop_order_channels_as_employee
+    if shop_user && shop_user.shop
+      shop_user.shop.transactions.map do |order|
         ch = order.temporary_channel
-        {
-          title: ch.name,
+        { title: ch.name,
           # icon: order.icon,
           token: ch.token,
           type: 3 }
       end
+    else
+      []
     end
   end
 
-  def shop_direct_order_channels
-    if shop.nil?
-      []
-    else
-      shop.direct_transactions.map do |order|
+  def shop_direct_order_channels_as_employee
+    if shop_user && shop_user.shop
+      shop_user.shop.direct_transactions.map do |order|
         ch = order.temporary_channel
-        {
-          title: ch.name,
+        { title: ch.name,
           # icon: order.icon,
           token: ch.token,
           follow_type: 3 }
       end
+    else
+      []
     end
   end
 
