@@ -109,7 +109,6 @@ class BaseChatView extends Caramal.BackboneView
 
   events:
     'mouseover '                : 'activeDialog'
-    'mouseout '                 : 'deactiveDialog'
     'click .close_label'        : 'hideDialog'
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
@@ -219,7 +218,8 @@ class BaseChatView extends Caramal.BackboneView
     $(@el).html(@chat_template({model: @model}))
 
   bindScroll: () ->
-    @$('div.body').scroll($.proxy(@moreHisMsgs, @))
+    @$('div.body').bind('mousewheel', $.proxy(@disablePageScroll, @))
+    @$('div.body').bind('mousewheel', $.proxy(@moreHisMsgs, @))
 
   setDisplay: () ->
     @model.chat_view = @
@@ -340,6 +340,16 @@ class BaseChatView extends Caramal.BackboneView
     if @display
       @$('.message .image-zoom').fancybox()
 
+  disablePageScroll: (event) ->
+    top = @$('.body').scrollTop()
+    delta = event.originalEvent.wheelDelta
+    height = @$('.body').height()
+    scrollHeight = @$('.body')[0].scrollHeight
+    if (delta > 0 && top <= 0)
+      return false
+    else if (delta < 0 && top >= scrollHeight - height)
+      return false
+
   moreHisMsgs: (event) ->
     target = event.target || event.srcElement
     if $(target).scrollTop() < 5
@@ -415,15 +425,7 @@ class BaseChatView extends Caramal.BackboneView
   # unbindMessage: () ->
   #   @channel.removeEventListener('message', @receiveMessage)
 
-  deactiveDialog: () ->
-    setTimeout( () =>
-      document.body.style.overflow = 'auto'
-    , 100)
-
   activeDialog: () ->
-    setTimeout( () =>
-      document.body.style.overflow = 'hidden'
-    , 100)
     @model.trigger('unactive_avatar')
     @$el.css('z-index', 10000)
     @$el.siblings('.global_chat').css('z-index', 9999)
