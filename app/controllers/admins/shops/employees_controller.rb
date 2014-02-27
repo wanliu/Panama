@@ -18,7 +18,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
           @user.notify("/employees/invite",
                      "商店 #{current_shop.name} 邀请你加入",
                       :avatar => @user.icon,
-                      :url => notification_url(@user.login))
+                      :url => "/shops/current_shop.name")
           format.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
         end
       else
@@ -42,7 +42,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
         employee.user.notify("/shops/leaved",
                         "你已经离开#{current_shop.name} 商店",
                        {:avatar => current_shop.photos.icon,
-                        :url => notification_url(employee.user.login) })
+                        :url => (employee.user.login) })
         formatat.json{ render :json => {} }
       else
         formatat.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
