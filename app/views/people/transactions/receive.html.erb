@@ -1,1 +1,16 @@
-<%= @transaction.id %>支付成功！
+<% active_section :transaction %>
+<div class='row-fluid'>
+  <div class='span7 widget transaction-paid-messages'>
+    <div>
+      <%= @transaction.number %>订单支付<%=@pay_msg %>!
+    </div>
+    <div>
+      还有<span class='clock'>5</span>秒跳转到<a href="<%= person_transactions_path(@people) %>#open/<%=@transaction.id %>/order">订单页面</a>
+    </div>
+  </div>
+</div>
+<script type='text/javascript'>
+  $(function(){
+    new CountdownView($(".transaction-paid-messages"), "<%= person_transactions_path(@people) %>#open/<%=@transaction.id %>/order")
+  })
+</script>

@@ -106,7 +106,7 @@ class People::TransactionsController < People::BaseController
       :bg_url => paid_send_url,
       :payer_name => current_user.login,
       :order_id => @transaction.number,
-      :order_amount => (@transaction.stotal * 100).to_i,
+      :order_amount => (10).to_i,
       :product_name => @transaction.items[0].title,
       :product_num => @transaction.items_count,
       :order_time => Time.now.strftime("%Y%m%d%H%M%S")
@@ -130,10 +130,15 @@ class People::TransactionsController < People::BaseController
     else
       "error"
     end
-    url = "#{paid_receive_url}?pay_msg=#{state}#open/#{@transaction.id}/order"
+    url = "#{paid_receive_url(@transaction)}?pay_msg=#{state}"    
     render :xml => {
       :result => "1", 
       :redirecturl => url }
+  end
+
+  def receive
+    @transaction = current_order.find(params[:id])
+    @pay_msg = params[:pay_msg] == "success" ? "成功" : "失败"
   end
 
   def test_payment
@@ -141,7 +146,7 @@ class People::TransactionsController < People::BaseController
     if payment_mode?     
       respond_to do |format|
         if @transaction.kuaiqian_paid 
-          url = "#{person_transactions_path(@people)}?pay_msg=success#open/#{@transaction.id}/order"
+          url = "#{receive_person_transaction_path(@people, @transaction)}?pay_msg=success"
           format.js{ 
             render :js => "window.location.href='#{url}'" }
           format.html{ redirect_to url }
@@ -292,8 +297,8 @@ class People::TransactionsController < People::BaseController
     }
   end
 
-  def paid_receive_url
-    "#{Settings.site_url}#{person_transactions_path(@people)}"
+  def paid_receive_url(order)
+    "#{Settings.site_url}#{receive_person_transaction_path(@people, order)}"
   end
 
   def paid_send_url
