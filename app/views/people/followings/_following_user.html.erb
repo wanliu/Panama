@@ -1,12 +1,14 @@
 <% if followings.count > 0 %>
   <% followings.each do |f| %>
-    <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%= f.follow_id %>" >
+    <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%= f.follow_id %>">
       <div class='avatar'>
-        <img src="<%= f.follow.icon %>" class="img-rounded" />
+        <img src="<%= f.follow.try(:icon) %>" class="img-rounded" />
       </div>
       <div class='info'>
-        <div>
-          <%= f.follow.login %>
+        <div class='href_name'>
+          <a href="/people/<%= f.follow.try(:login) %>" title="<%= f.follow.try(:login) %>">
+            <%= f.follow.try(:login) %>
+          </a>
         </div>
         <div>
         <% if can? :destroy, Following %>
