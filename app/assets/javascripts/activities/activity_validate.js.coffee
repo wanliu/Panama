@@ -52,7 +52,7 @@ class AuctionValidate
       return false
     return true
 
-class root.FocusValidate
+class FocusValidate
   constructor: (options) ->
     _.extend(@, options)
     @title = @el.find("[name='activity[title]']");
