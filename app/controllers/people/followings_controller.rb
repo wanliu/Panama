@@ -2,9 +2,9 @@
 #describe: 关注控制器
 class People::FollowingsController < People::BaseController
   # before_filter :login_and_service_required, :except => [:index]
+  before_filter :login_required, :person_self_required
 
   def index
-
     @u_followings = @people.followings.users
     @s_followings = @people.followings.shops
     respond_to do |format|
