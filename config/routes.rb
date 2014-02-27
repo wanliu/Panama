@@ -153,6 +153,7 @@ Panama::Application.routes.draw do
         get :mini_item
         get :card
         get :operator
+        get :receive
       end
 
       collection do

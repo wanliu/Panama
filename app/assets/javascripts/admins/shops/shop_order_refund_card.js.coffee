@@ -58,6 +58,7 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
       type: 'POST',
       data: {refuse_reason: reason},
       success: () =>
+        @transition()
         @slideAfterEvent(event)
       error: () =>
         @back_state()

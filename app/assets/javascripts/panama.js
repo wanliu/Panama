@@ -14,6 +14,7 @@
 //= require lib/dnd
 //= require wanliu/ajax_auth_client
 //= require lib/core_extend
+//= require lib/count_down_view
 //= require lib/ifvisible
 //= require lib/emojify_chooser
 //= require lib/realtime_client

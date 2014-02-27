@@ -34,23 +34,3 @@ class root.RechargeView extends PayMentsView
         ms = JSON.parse(data.responseText)
         pnotify(text: ms.join("<br />"), type: "error")
     )
-
-class root.RechargeDone
-
-  maxTime: 5
-
-  constructor: (el, url) ->
-    @el = el
-    @url = url
-    @setClock(@maxTime)
-    interval_id = setInterval(() =>
-      @setClock(--@maxTime)
-      
-      if(@maxTime <= 0)
-        clearInterval(interval_id) 
-        window.location.href = @url  
-
-    , 1000)
-
-  setClock: (tm) ->
-    $(".clock", @el).html(tm)  

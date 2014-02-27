@@ -10,8 +10,10 @@
             <img src="<%= f.user.icon %>" class="img-rounded" />
           </div>
           <div class='info'>
-            <div>
-              <%= f.user.login %>
+            <div class='href_name'>
+              <a href="/people/<%= f.user.try(:login) %>" title="<%= f.user.try(:login) %>">
+                <%= f.user.try(:login) %>
+              </a>
             </div>
             <div>
             <% unless current_user.nil? %>

@@ -302,6 +302,9 @@ ul {
 	}
 
 	.search-btn {
+    position: absolute;
+    z-index: 5;
+    right: 0;
 		color: rgb(219, 194, 194);;
 		border: none;
 		text-shadow: none;
@@ -331,6 +334,7 @@ ul {
 		border: none;
 		color: #f8f8f8;
 		padding-left: 59px;
+    padding-right: 38px;
 		line-height: 20px;
 		@include border-radius(1px);
 		@include transition(width 0.2s);

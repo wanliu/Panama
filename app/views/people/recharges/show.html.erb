@@ -5,7 +5,7 @@
       <%=@recharge.user.login %>用户充值<%=number_to_currency @recharge.money %> <%=@recharge.state_title %>
     </div>
     <div>
-      还有<span class='clock'></span> 秒跳转到<a href="<%= person_path(@people) %>">基本信息页面</a>
+      还有<span class='clock'>5</span>秒跳转到<a href="<%= person_path(@people) %>">基本信息页面</a>
     </div>
   </div>
   <div class='span5'>
@@ -14,6 +14,6 @@
 
 <script type='text/javascript'>
   $(function(){
-    new RechargeDone($(".recharge_info"), "<%=person_path(@people) %>")
+    new CountdownView($(".recharge_info"), "<%=person_path(@people) %>")
   })
 </script>
