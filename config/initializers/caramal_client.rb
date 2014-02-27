@@ -69,7 +69,8 @@ class CaramalClient
   end
 
   # 将加入的雇员添加到商店订单的聊天中去
-  def self.add_shop_order_employee(group, options={})
+  def self.add_remove_employee(group, type, options={})
+    return if !%w(add, remove).include?(type)
     conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
     conn.start
 
@@ -82,7 +83,7 @@ class CaramalClient
 
     mq_prefix = 'wanliu_'
     q = ch.queue("", { :exclusive => true })
-    routing_key = mq_prefix + 'rpc_add_shop_order_employee'
+    routing_key = mq_prefix + 'rpc_' + type + '_shop_order_employee'
 
     x.publish(data, :routing_key => routing_key)
     conn.stop

@@ -13,6 +13,7 @@ class ShopUser < ActiveRecord::Base
   validate :valid_user_join_multi_shop?
 
   after_create :join_shop_temporary_channels
+  after_destroy :remove_from_shop_temporary_channels
 
   def groups
     shop_user_groups.includes(:shop_group).map{|g| g.shop_group }
@@ -29,15 +30,27 @@ class ShopUser < ActiveRecord::Base
     end
   end
 
+  protected
+
   # 将加入的雇员添加到商店订单的聊天中去
   def join_shop_temporary_channels
+    all_order_channel_token.each do |order_ch_token|
+      CaramalClient.add_remove_employee(order_ch_token, 'add', { employee: user.login })
+    end
+  end
+
+  # 将开除的雇员从商店订单的聊天名单中除去
+  def remove_from_shop_temporary_channels
+    all_order_channel_token.each do |order_ch_token|
+      CaramalClient.add_remove_employee(order_ch_token, 'remove', { employee: user.login })
+    end
+  end
+
+  def all_order_channel_token
     shop.transactions.to_a
         .concat(shop.direct_transactions)
         .map(&:temporary_channel)
         .map(&:token)
         .compact
-        .each do |order_ch_token|
-          CaramalClient.add_shop_order_employee(order_ch_token, { employee: user.login })
-        end
   end
 end
