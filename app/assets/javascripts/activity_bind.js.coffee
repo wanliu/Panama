@@ -14,7 +14,6 @@ class ActivityBind extends Backbone.View
     "click .focus .partic-button"        : "joinFocus"
     "click .focus .unpartic-button"      : "unjoinFocus"
     "click .load_modal"                  : "load_modal"
-    # "click .circle"                      : "select_circle"
     "click .share_activity"              : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
