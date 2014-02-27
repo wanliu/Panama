@@ -3,7 +3,7 @@ class Cart < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :items, inverse_of: :cart, class_name: 'ProductItem', autosave: true
+  has_many :items, inverse_of: :cart, class_name: 'ProductItem', autosave: true  
 
   def add_to(attributes, be_merge = true)
     product_id = attributes[:product_id]

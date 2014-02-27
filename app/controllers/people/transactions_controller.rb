@@ -81,8 +81,7 @@ class People::TransactionsController < People::BaseController
   def batch_create
     authorize! :batch_create, OrderTransaction
     item_ids = params[:items].map{ |k, v| 
-      v[:id].to_i if v[:checked] == 'on' }.compact
-          
+      v[:id].to_i if v[:checked] == 'on' }.compact    
     respond_to do |format|      
       if my_cart.create_transaction(@people, item_ids)
         url = cart_transaction_path
