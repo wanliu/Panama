@@ -106,7 +106,7 @@ class People::TransactionsController < People::BaseController
       :bg_url => paid_send_url,
       :payer_name => current_user.login,
       :order_id => @transaction.number,
-      :order_amount => (10).to_i,
+      :order_amount => (@transaction.stotal * 100).to_i,
       :product_name => @transaction.items[0].title,
       :product_num => @transaction.items_count,
       :order_time => Time.now.strftime("%Y%m%d%H%M%S")
