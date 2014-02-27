@@ -10,7 +10,6 @@ class PayMentView extends PayMentsView
 
   initialize: () ->
     _.extend(@, @options)
-    console.log("===#{@$(".btn_paid").length}==========")
     super
 
   online_paid: () ->
@@ -20,7 +19,6 @@ class PayMentView extends PayMentsView
       url: @remote_url,
       data: data,
       dataType: "script",
-      
       error: () ->
     )
 
@@ -37,8 +35,6 @@ class exports.TransactionPayment extends Backbone.View
 
     @button = @$(".pay-button")
     @filter_state()
-
-    @client.monitor ""
 
     new PayMentView(
       el: @$("form.payment"),
