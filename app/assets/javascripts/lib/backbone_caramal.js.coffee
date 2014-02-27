@@ -484,8 +484,7 @@ class root.TemporaryChatView extends BaseChatView
     type = group.substring(0, group.indexOf('_'))
     $.ajax(
       type: 'POST'
-      url: "/transaction/operate_url"
-      data: { type: type, id: id }
+      url: "/transaction/#{id}/operate_url/#{type}"
       success: (data, xhr, res) =>
         return if _.isEmpty(data.url)
         document.location.href = data.url
