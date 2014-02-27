@@ -79,8 +79,10 @@
       });
     });
 
-    if(!Backbone.History.started){
-      Backbone.history.start()
+    window.onload = function(){
+      if(!Backbone.History.started){
+        Backbone.history.start()
+      }  
     }
   })
 </script>

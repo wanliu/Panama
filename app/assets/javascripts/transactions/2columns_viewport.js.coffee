@@ -197,7 +197,6 @@ class TransactionTwoColumnsViewport extends Backbone.View
   registerView: (view) ->
 
   bindRoute: () ->
-
     @route = new WorkList(@spaceName)
     @route.on "route:open", (id) =>
       @scrollTop = @bodyScrollTop()
