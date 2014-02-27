@@ -109,6 +109,7 @@ class BaseChatView extends Caramal.BackboneView
 
   events:
     'mouseover '                : 'activeDialog'
+    'mouseout '                 : 'deactiveDialog'
     'click .close_label'        : 'hideDialog'
     'click .send_button'        : 'sendMessage'
     'click .emojify-chooser img': 'chooseEmojify'
@@ -414,7 +415,15 @@ class BaseChatView extends Caramal.BackboneView
   # unbindMessage: () ->
   #   @channel.removeEventListener('message', @receiveMessage)
 
+  deactiveDialog: () ->
+    setTimeout( () =>
+      document.body.style.overflow = 'auto'
+    , 100)
+
   activeDialog: () ->
+    setTimeout( () =>
+      document.body.style.overflow = 'hidden'
+    , 100)
     @model.trigger('unactive_avatar')
     @$el.css('z-index', 10000)
     @$el.siblings('.global_chat').css('z-index', 9999)
