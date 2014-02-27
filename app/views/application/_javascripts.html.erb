@@ -38,10 +38,14 @@
           $(this).popover('hide');
         }
       })
-    });
+    }); 
 
     $(".save_activity").on('click', function(type){
       var $form = $(".activity_forms>.active>form");
+      validate = new Validate({el: $form});
+      if (!validate.validate){
+        return false;
+      };
       $.ajax({
         type: 'post',
         dataType: 'json',
