@@ -34,25 +34,26 @@ class OrderRefundCard extends TransactionCardBase
   toggle_panel: (option) ->
     @$(".connect").toggle("slow")
 
-  afterWaitingDelivery: (event, from, to, msg) ->
-    code = @delivery_code_val()
-    transport_type = @$("select[name=transport_type]").val()
-    if _.isEmpty(code) && _.isEmpty(transport_type)
-      @slideAfterEvent(event)
-    else
-      data = {delivery_code: code, transport_type: transport_type}
-      url = @transaction.urlRoot
-      @transaction.fetch(
-        url: "#{url}/update_delivery",
-        type: 'POST',
-        data: data,
-        success: () => 
-          @transition()
-          @slideAfterEvent(event)
-        error: () =>
-          @back_state()
-      )
-      StateMachine.ASYNC
+  leaveWaitingDelivery: (event, from, to, msg) ->
+    if /delivered/.test(event)
+      code = @delivery_code_val()
+      transport_type = @$("select[name=transport_type]").val()
+      if _.isEmpty(code) && _.isEmpty(transport_type)
+        @slideAfterEvent(event)
+      else
+        data = {delivery_code: code, transport_type: transport_type}
+        url = @transaction.urlRoot
+        @transaction.fetch(
+          url: "#{url}/update_delivery",
+          type: 'POST',
+          data: data,
+          success: () => 
+            @transition()
+            @slideAfterEvent(event)
+          error: () =>
+            @back_state()
+        )
+        StateMachine.ASYNC
 
   update_delivery_price: () ->
     url = @transaction.urlRoot
