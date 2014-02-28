@@ -50,7 +50,7 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     @change_refuse_reason() if @current == "apply_refund"
 
   saveReason: (event) ->
-    reason = @$('.refuse-panel textarea').val()
+    reason = @$('.refuse-panel textarea').val().trim()
     return if _.isEmpty(reason)
     url = @transaction.urlRoot
     $.ajax(

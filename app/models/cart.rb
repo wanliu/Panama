@@ -3,7 +3,7 @@ class Cart < ActiveRecord::Base
 
   belongs_to :user
 
-  has_many :items, inverse_of: :cart, class_name: 'ProductItem', autosave: true
+  has_many :items, inverse_of: :cart, class_name: 'ProductItem', autosave: true  
 
   def add_to(attributes, be_merge = true)
     product_id = attributes[:product_id]
@@ -46,6 +46,14 @@ class Cart < ActiveRecord::Base
   end
 
   def create_transaction(people, item_ids)
+    if item_ids.blank?
+      errors.add(:items, "没有选择商品！")
+      return false
+    end
+    if items.length == 0
+      errors.add(:items, "购物车没商品！")
+      return false
+    end
     done = cart_items(item_ids).map do |header, pro_items|
       if header[:buy_state] == :guarantee
         save_transcation(header[:shop], pro_items, people)

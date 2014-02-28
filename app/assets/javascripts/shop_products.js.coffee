@@ -40,8 +40,7 @@ class ShopProductView extends Backbone.View
     @setState(true)
 
   close: () ->    
-    #@remove()
-    #@$("#main-modal").modal("hide")
+    @remove()
     @unmodal()
 
   fetch_state: () ->
@@ -106,8 +105,9 @@ class ShopProductToolbar extends Backbone.View
         url: "/shop_products/#{@shop_product_id}/buy",
         type: "POST",
         data: {amount: @amount.val()}
-        success: () =>
-          window.location.href = "/people/#{@login}/transactions"
+        dataType: 'JSON'
+        success: (data) =>
+          window.location.href = "/people/#{@login}/transactions#open/#{data.id}/order"
         error: (data) ->
           pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
       )
@@ -120,8 +120,9 @@ class ShopProductToolbar extends Backbone.View
         url: "/shop_products/#{@shop_product_id}/direct_buy",
         type: "POST",
         data: {amount: @amount.val()}
-        success: () =>
-          window.location.href = "/people/#{@login}/direct_transactions"
+        dataType: "JSON",
+        success: (data) =>
+          window.location.href = "/people/#{@login}/direct_transactions#open/#{data.id}/direct"
         error: (data) ->
           pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
       )
