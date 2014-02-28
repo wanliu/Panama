@@ -8,7 +8,8 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
 
   #邀请
   def invite
-    @user = User.find_by(:login => params[:login])
+    login = params[:login]
+    @user = User.find_by(:login => login)
 
     respond_to do |format|
       if @user
@@ -23,10 +24,15 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
         end
       else
         # 如果email发送信息给它
-        if params[:login] =~ email_match
-          UserMailer.invite_employee(params[:login], current_user,
-            current_shop, email_invite_url(email_callback_url)).deliver
-          format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
+        if login =~ email_match
+          user = User.find_by(:email => login)
+          if user.try(:shop).blank?
+            UserMailer.invite_employee(login, current_user,
+              current_shop, email_invite_url(email_callback_url)).deliver
+            format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
+          else
+            format.json{ render :json => {message: "对方已经加入其它商店!"}, :status => 403 }
+          end
         else
           format.json{ render :json => {message: "用户不存在！"}, :status => 403 }
         end
