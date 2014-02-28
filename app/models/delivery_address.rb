@@ -11,7 +11,7 @@ class DeliveryAddress < ActiveRecord::Base
   belongs_to :area, :inverse_of => :address , class_name: "City"      # 县
 
   validates :contact_phone, :format => { :with => /^\d{11}$|\d{3,4}-\d{6,8}(?:-\d{1,4})?$/ }
-  validates :zip_code, :format => { :with => /^[1-9]\d{5}(?!\d)/, :message => "邮政编码必须为六位数字"}
+  validates :zip_code, :format => { :with => /[1-9]\d{5}(?!\d)/, :message => "邮政编码必须为六位数字"}
 
   def location_area
     "#{province.try(:name)}#{city.try(:name)}#{area.try(:name)}"

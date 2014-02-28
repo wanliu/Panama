@@ -9,7 +9,7 @@
       </div>
 
       <div class='summary'>
-        <h5 class="title href_name">{{title}}</h5>
+        <h5 class="title href_name" title="{{title}}">{{title}}</h5>
         <p class='describe'>
           单价 <span class='price'>￥{{price}}</span>
           <span class="time-left"></span>
@@ -23,7 +23,7 @@
           </a>
         {{/shop.photos}}
         <p>
-          <a href="/shops/{{shop.name}}" class="href_name">
+          <a href="/shops/{{shop.name}}" class="href_name" title="{{ shop.name }}">
             {{ shop.name }}
           </a>
           {{^is_self}}
