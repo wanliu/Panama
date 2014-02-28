@@ -4,6 +4,15 @@ class PeopleController < ApplicationController
 
   layout "people"
 
+  def photos
+    user = User.find_by(:login => params[:login])
+    respond_to do |format|
+      format.json { 
+        render :json => { :icon => user.try(:photos).try(:icon) } 
+      }
+    end
+  end
+
   def show
     @people = User.find_by(:login => params[:id])
     @transfer_moneys = @people.transfer_moneys.order("created_at desc").page(params[:page])

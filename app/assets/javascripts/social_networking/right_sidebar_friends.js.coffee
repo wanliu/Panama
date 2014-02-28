@@ -20,12 +20,12 @@ class root.ChatModel extends Backbone.Model
         console.error('未处理的类型')
 
   setDisplayTitle: () ->
-    # type = @get('type') || @get('follow_type')
-    # @set({ type: type }) if type
+    type = @get('type') || @get('follow_type')
+    @set({ type: type }) if type
     switch @get('type')
       when 1
         displayTitle = "好友 #{@get('title')}"
-        @set({displayTitle: displayTitle})
+        @set({ displayTitle: displayTitle })
       when 2
         displayTitle = "商圈 #{@get('title')}"
         @set({displayTitle: displayTitle})
@@ -38,6 +38,7 @@ class root.ChatModel extends Backbone.Model
           displayTitle: displayTitle
         })
 
+
 class root.ChatList extends Backbone.Collection
   model: ChatModel
 
@@ -45,12 +46,34 @@ class root.ChatManager extends Backbone.View
   @rows = 1
   @count = 0
   @maxRows = 2
+  @iconList = {}
 
   @getInstance = (options) ->
     ChatManager.instance ||= new ChatManager(options)
 
   events:
     'keyup input.filter_key' : 'filterChat'
+
+  _getIcon: (login) ->
+    ChatManager.iconList["#{login}"]
+
+  getIcon: (login, handle) ->
+    default_url = '/default_img/t5050_default_avatar.jpg'
+    return default_url if _.isEmpty(login)
+    if _.isEmpty(@_getIcon(login))
+      $.ajax({ 
+        url: "/people/#{login}/photos"
+        success: (data, xhr, res) =>
+          if _.isEmpty(data.icon)
+            ChatManager.iconList["#{login}"] = default_url
+          else
+            ChatManager.iconList["#{login}"] = data.icon
+          handle.call(@) if _.isFunction(handle)
+        error: (data, xhr, res) =>
+          pnotify(type: 'error', text: res.responseText)
+      })
+    else
+      handle.call(@) if _.isFunction(handle)
 
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
