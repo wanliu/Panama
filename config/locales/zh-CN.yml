@@ -475,6 +475,9 @@ zh-CN:
       cart:
         transfers:
           shop_product: "商品"
+      topic_participate:
+        user_id: 用户
+        topic_id: 主题
 
   mongoid:
     models:
