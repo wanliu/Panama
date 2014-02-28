@@ -57,7 +57,7 @@
                           <%= image_tag item.shop.try(:icon_url), :class => "img-polaroid img-seller" %>
                         <% end %>
                       </div>
-                      <h5><%= item.shop.name.truncate(5) %></h5>
+                      <h5 title="<%=item.shop.name %>"><%= item.shop.name.truncate(5) %></h5>
                     </td>
                     <td>
                       <div>

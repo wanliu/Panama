@@ -25,10 +25,9 @@ class UserCheckingsController < ApplicationController
     if @shop.nil?
       @user_checking.user.create_shop()
     end
+    @current_ability = ShopAbility.new(current_user, @shop)
     authorize! :manage, @shop
     @shop.update_attribute("photo",file)
-    # @shop.photo = file
-    # @shop.save!
   end
 
   #上传头像

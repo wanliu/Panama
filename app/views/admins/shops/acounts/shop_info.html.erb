@@ -16,12 +16,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
+          <% if can? :manage, @shop %>
+            <div id="image_bottom">
+              <div class="hidden_one" id="hidden_text">
+              </div>
+              <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
+              </div>
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -47,12 +49,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
+          <% if can? :manage, @shop %>
+            <div id="image_bottom">
+              <div class="hidden_one" id="hidden_text">
+              </div>
+              <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
+              </div>
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -83,12 +87,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid" />
           </div>
-          <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
+          <% if can? :manage, @shop %>
+            <div id="image_bottom">
+              <div class="hidden_one" id="hidden_text">
+              </div>
+              <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
+              </div>
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
       <div class="span7 input_locate">
