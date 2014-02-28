@@ -79,9 +79,9 @@ class root.CartContainer extends Backbone.View
     @$('.check-all').attr('checked', flag)
 
   removeItem: () ->
-    items = @$('.check-item:checked')
-    return pnotify(text: '请勾选要移除的商品') unless items.length > 0
-    items.parents('.item-tr').fadeOut()
+    rows = @$('.check-item:checked')
+    return pnotify(text: '请勾选要移除的商品') unless rows.length > 0
+    rows.parents('.item-tr').fadeOut()
 
     item_ids = []
     items = @$('form#cartForm').serializeHash().items
@@ -95,7 +95,7 @@ class root.CartContainer extends Backbone.View
       dataType: "json"
     }).success((data, xhr, res) =>
       pnotify(text: '已经从购物车中移除')
-      items.parents('.item-tr').remove()
+      rows.parents('.item-tr').remove()
       @countCart()
     )
 

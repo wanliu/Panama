@@ -1,16 +1,16 @@
 <tr id="product_item<%= product_item.id %>" class="cart_main">
-	<td>
-		<%= image_tag product_item.icon %>
-	</td>
-	<td>
-		<span class='title' data-toggle="tooltip" title="<%= product_item.title %>">
-			<%= product_item.title %>
-		</span>
-	</td>
-	<td>
-		<%= product_item.amount %>
-	</td>
-	<td class="row">
-		<%= product_item.total %>
-	</td>
+  <td>
+    <%= image_tag product_item.icon %>
+  </td>
+  <td>
+    <span class='title' data-toggle="tooltip" title="<%= product_item.title %>">
+      <%= product_item.title %>
+    </span>
+  </td>
+  <td>
+    <%= product_item.amount %>
+  </td>
+  <td class="row">
+    <%= product_item.total %>
+  </td>
 </tr>

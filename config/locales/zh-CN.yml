@@ -348,6 +348,8 @@ zh-CN:
         action_link: 操作
         stotal: 总金额
         logistics_company: 物流公司
+        transfers:
+          shop_product: 商品          
       category:
         id: 编号
         name: 分类名
@@ -470,6 +472,9 @@ zh-CN:
         code: 汇款单号
         person: 汇款人
         order_transaction: 订单
+      cart:
+        transfers:
+          shop_product: "商品"
 
   mongoid:
     models:
