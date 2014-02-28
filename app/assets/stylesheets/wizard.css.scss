@@ -5,26 +5,26 @@
 @import "shop_products";
 
 body {
-	color: $grayDark;
+  color: $grayDark;
 }
 
 .logo {
-	top: 0px;
+  top: 0px;
 }
 
 h2 small {
-	color: $gray;
+  color: $gray;
 }
 
 .dialog {
-	background-color: $white;
-	border: 1px solid #999999;
-	border: 1px solid rgba(0, 0, 0, 0.3);
-	@include border-radius(1px);
-	@include box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
-	@include background-clip(padding-box);
-	outline: none;
-	padding: 10px;
+  background-color: $white;
+  border: 1px solid #999999;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  @include border-radius(1px);
+  @include box-shadow(0 3px 7px rgba(0, 0, 0, 0.3));
+  @include background-clip(padding-box);
+  outline: none;
+  padding: 10px;
   #new_shop_auth{
     .file-box{
       margin-left: 16%;
@@ -39,15 +39,15 @@ h2 small {
 
 
 .wrap {
-	margin-left: 0px;
-	margin-top: 30px;
-	min-height: 500px;
+  margin-left: 0px;
+  margin-top: 30px;
+  min-height: 500px;
 }
 
 
 .panel {
   &.diffrent{
-  	margin-left:3px;
+    margin-left:3px;
   }
   border:1px #ccc solid;
   color: #cccc;
@@ -124,25 +124,26 @@ h2 small {
   border-bottom: none;
   margin-bottom: 2px;
   li a {
-  	color: black;
+    color: black;
   }
 }
 
 .tab-content{
-	border: 1px solid #ccc;
-	.search-header {
-		margin: 10px 10px 0px 10px;
-    	padding-left: 20px;
-  	}
-  	.tree-nav {
-  		color: black;
-		padding: 10px 0;
-		background-color: white;
-		zoom: 1;
-	}
+  border: 1px solid #ccc;
+  .search-header {
+    margin: 10px 10px 0px 10px;
+      padding-left: 20px;
+    }
+    .tree-nav {
+      color: black;
+      padding: 10px 0;
+      background-color: white;
+      zoom: 1;
+    }
+  }
 }
 .page-title{
-	color: black;
+  color: black;
 }
 
 $margin-top: 20px;

@@ -71,6 +71,9 @@ class root.WizardView extends Backbone.View
     _.map @$("input[type=checkbox]:checked"), (elem) ->
       $(elem).attr("data-brand")
 
+  btn_select_all: () ->
+    @$(".select_all")
+
   fetch: (data = {}, callback = (data) -> ) ->
     brand = @filter_brand()
     _data = _.extend({}, @remote_options, data, { brand_name: brand})
@@ -86,7 +89,7 @@ class root.WizardView extends Backbone.View
         callback(data)
         @reset(data)
     })
-    $(".select_all").text("全选")
+    @btn_select_all().text("全选")
 
   add_one: (product) ->
     @$product_list.append(@category_product_tpl.render(product))
@@ -111,29 +114,29 @@ class root.WizardView extends Backbone.View
        product_ids.push($(this).attr("id"))
        $(this).remove()
     @render_product_infor(product_ids)
-    $(".select_all").text("全选")
+    @btn_select_all().text("全选")
 
-  select_many : (event) ->
+  select_many: (event) ->
     el = $(event.currentTarget)
     if el.hasClass('checked_product')
        el.removeClass("checked_product")
-       $(".select_all").text("全选")
+       @btn_select_all().text("全选")
     else
       el.addClass("checked_product")
 
-  select_all : ()->
-     if $(".select_all").text() == "全选"
+  select_all: ()->
+     if @btn_select_all().text() == "全选"
        $(".category_product_list .product_item").each(()->
          if !$(this).hasClass("checked_product")
            $(this).addClass("checked_product")
        )
-       $(".select_all").text("取消")
+       @btn_select_all().text("取消")
      else
        $(".category_product_list .product_item").each(()->
          if $(this).hasClass("checked_product")
            $(this).removeClass("checked_product")
        )
-       $(".select_all").text("全选")
+       @btn_select_all().text("全选")
 
   remove_from_shop: ()->
      shop_id = @options.shop_id
