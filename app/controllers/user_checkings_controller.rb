@@ -21,11 +21,14 @@ class UserCheckingsController < ApplicationController
   end
 
   def upload_shop_photo(file)
-    if @user_checking.user.shop.nil?
+    @shop = @user_checking.user.try(:belongs_shop)
+    if @shop.nil?
       @user_checking.user.create_shop()
     end
-    @user_checking.user.shop.photo = file
-    @user_checking.user.shop.save!
+    authorize! :manage, @shop
+    @shop.update_attribute("photo",file)
+    # @shop.photo = file
+    # @shop.save!
   end
 
   #上传头像
