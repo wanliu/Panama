@@ -18,14 +18,14 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
           @user.notify("/employees/invite",
                      "商店 #{current_shop.name} 邀请你加入",
                       :avatar => @user.icon,
-                      :url => "/shops/current_shop.name")
+                      :url => notification_url(@user.login))
           format.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
         end
       else
         # 如果email发送信息给它
         if params[:login] =~ email_match
           UserMailer.invite_employee(params[:login], current_user,
-              current_shop, email_invite_url(email_callback_url)).deliver
+            current_shop, email_invite_url(email_callback_url)).deliver
           format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
         else
           format.json{ render :json => {message: "用户不存在！"}, :status => 403 }
@@ -42,7 +42,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
         employee.user.notify("/shops/leaved",
                         "你已经离开#{current_shop.name} 商店",
                        {:avatar => current_shop.photos.icon,
-                        :url => (employee.user.login) })
+                        :url => "/shops/#{current_shop.name}"})
         formatat.json{ render :json => {} }
       else
         formatat.json{ render :json => {message: "商店不存在该用户！"}, :status => 403 }
