@@ -578,18 +578,18 @@ class OrderTransaction < ActiveRecord::Base
 
   def self.export_column
     {
-      "number" => "编号",
-      "state_title" => "状态",
-      "pay_type" => "支付方式",
-      "transport_type" => "运输方式",
-      "buyer_login" => "买家",
-      "seller_name" => "商家",
-      "title" => "商品",
-      "price" => "单价",
-      "amount" => "数量",
-      "delivery_price" => "运费",
-      "stotal" => "总额",
-      "address" => "地址"
+      "number" => "编号".encode("gbk"),
+      "state_title" => "状态".encode("gbk"),
+      "pay_type" => "支付方式".encode("gbk"),
+      "transport_type" => "运输方式".encode("gbk"),
+      "buyer_login" => "买家".encode("gbk"),
+      "seller_name" => "商家".encode("gbk"),
+      "title" => "商品".encode("gbk"),
+      "price" => "单价".encode("gbk"),
+      "amount" => "数量".encode("gbk"),
+      "delivery_price" => "运费".encode("gbk"),
+      "stotal" => "总额".encode("gbk"),
+      "address" => "地址".encode("gbk")
     }
   end
 
