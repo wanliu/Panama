@@ -99,6 +99,7 @@ class BaseChatView extends Caramal.BackboneView
   off_class: "offline"
   className: 'global_chat'
   msgLoaded: false
+  iconArr: []
 
   EVENT_TYPE: {
     'joined'     : 1,
@@ -156,12 +157,12 @@ class BaseChatView extends Caramal.BackboneView
     <li clas="row-receive">
       <div class="pull-left">
         <div class="icon">
-          <img src="/default_img/t5050_default_avatar.jpg">
+          <img class="{{user}}" src="{{icon}}" title="{{user}}" />
         </div>
       </div>
       <div class="message-body">
         <div class="pull-left">
-          <a href="#" class="login">{{ user }}</a>
+          <a href="#" class="{{user}}">{{user}}</a>
           {{calender time}}
         </div>
         <div class="message">
@@ -289,20 +290,33 @@ class BaseChatView extends Caramal.BackboneView
     @sendContent().insertAtCursor(":#{$(event.target).data('name')}:")
 
   parseOne: (message) ->
-    if message.user is clients.current_user
+    user = message.user
+    if user is clients.current_user
       html = @receive_template(message)
     else
       html = @receive_template(message)
 
-    html.replace(/:([a-z]|_)+:/g, (word) =>
+    html.replace /:([a-z]|_)+:/g, (word) =>
       '<img src="/assets/emojis/' + word.replace(/:/g, '') + '.png" class="emoji"/>'
-    )
+
+  fetchIcon: () ->
+    _.each @iconArr, (user) =>
+      ChatManager.getInstance().getIcon user, () =>
+        user_icon = ChatManager.iconList["#{user}"]
+        @$(".icon>img.#{user}").attr('src', user_icon)
 
   parseMessages: (messages) ->
     html = ''
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
-      html += @parseOne(message)
+      user = message.user
+      if @iconArr.contain(user)
+        message.icon = ChatManager.iconList["#{user}"]
+        html += @parseOne(message)
+      else
+        @iconArr.push(user)
+        message.icon = '/default_img/t5050_default_avatar.jpg'
+        html += @parseOne(message)
     html
 
   parseSysMsg: (message) ->
@@ -316,6 +330,7 @@ class BaseChatView extends Caramal.BackboneView
 
   receiveMessage: (data) ->
     @msgContent().append(@parseMessages(data))
+    @fetchIcon()
     @model.trigger('active_avatar') if @name is data.user
     @$('.message .image-zoom').fancybox()
     @scrollDialog()
@@ -331,6 +346,7 @@ class BaseChatView extends Caramal.BackboneView
     return if msgs.length is 0
     origin_height = @$('.body')[0].scrollHeight
     @msgContent().prepend(@parseMessages(msgs))
+    @fetchIcon()
     @dealWithMoreFlag()
     setTimeout () =>
       height = @$('.body')[0].scrollHeight
@@ -488,11 +504,11 @@ class root.TemporaryChatView extends BaseChatView
     @channel ||= Caramal.Temporary.of(@name)
 
   clickTitle: () ->
-    number = @model.get('number')
+    title = @model.get('title')
+    number = title.substring(title.indexOf('_') + 1, title.length)
     return if _.isEmpty(number)
     id = number.replace(/\D/, '')
-    group = @model.get('group')
-    type = group.substring(0, group.indexOf('_'))
+    type = title.substring(0, title.indexOf('_'))
     $.ajax(
       type: 'POST'
       url: "/transaction/#{id}/operate_url/#{type}"
