@@ -268,11 +268,17 @@ class TopicView extends Backbone.View
     $.ajax(
       url: "#{@root_url()}/participate",
       type: 'POST',
-      success: (data) =>
+      success: (data, xhr, res) =>
         el = @$(".participates .count")
         count = if _.isEmpty(el.text().trim()) then 0 else parseInt(el.text())
         el.html(++count)
         $(@render_participate(data)).insertAfter(@$(".participates>.add_participate"))
+      error: (data, xhr, res) =>
+        try
+          err = JSON.parse(data.responseText)
+          pnotify({ type: "error", text: err.join("<br />") })
+        catch err
+          pnotify({ title: "出错了！", type: "error", text: data.responseText })
     )
 
   render_participate: (data) ->

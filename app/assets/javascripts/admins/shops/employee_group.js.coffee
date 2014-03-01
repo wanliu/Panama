@@ -499,21 +499,21 @@ class EmployeeGroup
     form = @invite_employee.find("form.form-search-user")
     input = form.find("input[name=login]")
     form.submit(() =>
-        @invite_notice("success", "正在发送信息，请等待...")
-        login = input.val()
-        employee = new Employee({}, @default_params.shop)
-        employee.invite(login,
-            (model, data) =>
-              @invite_notice("success", data.message)
+      @invite_notice("success", "正在发送信息，请等待...")
+      login = input.val()
+      employee = new Employee({}, @default_params.shop)
+      employee.invite(login,
+        (model, data) =>
+          @invite_notice("success", data.message)
 
-            (model, data) =>              
-              try
-                message = JSON.parse(data.responseText).message
-              catch error
+        (model, data) =>              
+          try
+            message = JSON.parse(data.responseText).message
+          catch error
 
-              @invite_notice("error", (message || data.responseText) )
-        )
-        false
+          @invite_notice("error", (message || data.responseText) )
+      )
+      false
     )
 
   invite_notice: (status, message) ->
