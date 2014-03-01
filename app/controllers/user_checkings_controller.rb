@@ -24,6 +24,7 @@ class UserCheckingsController < ApplicationController
     @shop = @user_checking.user.try(:belongs_shop)
     if @shop.nil?
       @user_checking.user.create_shop()
+      @shop = @user_checking.user.try(:shop)
     end
     @current_ability = ShopAbility.new(current_user, @shop)
     authorize! :manage, @shop
