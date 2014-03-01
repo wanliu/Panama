@@ -57,6 +57,11 @@
     .comment {
       padding: 0px 20px 10px 60px;
       min-height: 60px;
+
+      .message {
+        word-break: break-all;
+      }
+
       .people-image {
         margin-left: -60px;
         float: left;

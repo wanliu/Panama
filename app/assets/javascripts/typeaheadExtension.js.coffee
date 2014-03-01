@@ -13,7 +13,7 @@ class TypeaheadExtension
 
     $.extend(@, options)
     @$el = $(@el)
-
+    return if @$el.length <= 0
     unless _.isArray(@source)
       @url = @source
       @source = $.proxy(@remote, @)
