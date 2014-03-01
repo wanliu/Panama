@@ -54,6 +54,13 @@ namespace :db do
   end
 end
 
+after "deploy:create_symlink" do
+  find_and_execute_task "whenever:clear_crontab"
+end
+
+after "deploy:migrate" do 
+  find_and_execute_task "whenever:update_crontab"
+end
 
 after "deploy:finalize_update", "deploy:symlink", :init_configure_path, "deploy:migrate"
 load 'deploy/assets'

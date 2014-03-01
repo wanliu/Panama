@@ -19,7 +19,7 @@ require 'yaml'
 # end
 
 # Learn more: http://github.com/javan/whenever
-config = YAML::load_file("config/whenever.yml")
+config = YAML::load_file("#{path}/config/whenever.yml")
 set :output, "~/whenever.log"
 set :environment, config["environment"]
 

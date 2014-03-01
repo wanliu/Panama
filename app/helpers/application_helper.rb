@@ -240,8 +240,7 @@ module ApplicationHelper
   end
 
   def icon(*names)
-
-    content_tag :i, nil, :class => names.map {|n| "icon-#{n}" }
+    content_tag :span, nil, :class => names.map {|n| "icon-#{n}" }
   end
 
   def caret(position = :down, *styles)

@@ -131,7 +131,7 @@ class TopBar extends Backbone.View
     
     return item.name
 
-  load_typeahead: () ->
+  load_typeahead: () ->    
     @typeahead = new TypeaheadExtension({
       el: @$("input.search-query"),
       source: "/search/all",      

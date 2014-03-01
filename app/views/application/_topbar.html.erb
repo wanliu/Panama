@@ -31,14 +31,14 @@
             </li>
           </ul>
         </li>
-      </ul>
-      <div class="input-prepend input-append">
-        <input type="search" name='query' class="search-query" placeholder="搜索商品，种类..." autocomplete='off'>
-        <span class="add-on search-btn">搜索</span>
+      </ul>      
+      <div class="input-prepend input-append">  
+        <input type="text" name='query' class="search-query" />
+        <div class="add-on search-btn">搜索</div>
       </div>
     </form>
   </li>
-  <li class="dropdown"  title="活动发布与购物需求">
+  <li class="dropdown" title="活动发布与购物需求">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
     <i class="icon-plus"></i>&nbsp;发布</a>
     <ul class="dropdown-menu publish">
@@ -79,18 +79,6 @@
       </li>
     </ul>
   </li>
-
-  <!--交易信息-->
-<!--  <li class="dropdown transaction_list" title="我的交易" data-toggle='tooltip' data-placement='bottom' >
-    <a href="#"  id="transcations-button" class="dropdown-toggle" data-toggle="dropdown">
-      <i class="icon-tasks handle"></i>
-      <span id="transaction_count" class="count badge badge-important"> </span>
-    </a>
-     <ul id="transcations-box" class="dropdown-menu support" role="menu">
-
-    </ul>
-  </li> -->
-
 
   <!--通知信息-->
   <li class="dropdown notification-menu" title="消息通知">
@@ -135,7 +123,8 @@
     <a href="javascript:void(0)" id="account" class="dropdown-toggle user-avatar" data-toggle="dropdown">
       <%= account_info %>
       <div class="progress login_progress progress-striped active" style="display:none;">
-        <div class="bar login_bar" style="width: 100%;"></div>
+        <div class="bar login_bar" style="width: 100%;">
+        </div>
       </div>
     </a>
     <div class="realtime_state" data-toggle="popover"></div>

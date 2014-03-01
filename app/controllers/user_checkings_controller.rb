@@ -24,6 +24,7 @@ class UserCheckingsController < ApplicationController
     if @user_checking.user.shop.nil?
       @user_checking.user.create_shop()
     end
+  
     @user_checking.user.shop.photo = file
     @user_checking.user.shop.save!
   end
