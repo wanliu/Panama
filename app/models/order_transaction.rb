@@ -56,7 +56,8 @@ class OrderTransaction < ActiveRecord::Base
   validates :number, :presence => true, :uniqueness => true
   validate :valid_base_info?
   validate :shop_checked?
-  validates :delivery_code, :format => { :with => /^\w{0,20}$/, :message => "快递单号必须小于20位"}
+  validates :delivery_code, :allow_blank => true, 
+            :format => { :with => /^\w{6,20}$/, :message => "快递单号必须小于20位"}
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]

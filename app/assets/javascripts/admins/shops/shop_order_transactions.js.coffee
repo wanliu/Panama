@@ -10,6 +10,7 @@ class TransactionView extends CardItemView
   events: {
     "click .actions .dispose" : "dispose"
   }
+
   initialize: (options) ->
     _.extend(@, options)
     super
@@ -42,6 +43,7 @@ class TransactionView extends CardItemView
 
   undispose: () ->
     @$(".invalid-full").remove()
+    @$('.transaction-body .btn-group .disabled').removeClass('disabled')
     @$(".actions .dispose").parent().remove()
     $.ajax(
       url: "#{@model.url()}/operator",
