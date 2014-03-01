@@ -10,7 +10,7 @@ class root.InfiniteScrollView extends Backbone.View
     @init_size = 40
     @is_over ||= false
     @search_options = {}
-    @msg_tip = '<div class="text-center alert alert-success">亲，已经到底啦～～～</div>'
+    @msg_tip = '<div class="text-center end_tip"><img src="/assets/end.png"></div>'
     _.extend(@, options)
     $(window).scroll(_.bind(@scroll_load, @))
 
