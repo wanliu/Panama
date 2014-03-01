@@ -49,6 +49,7 @@
 //= require upload_photo
 //= require lib/circle
 //= require shop_product_search
+//= require lib/place_holder
 
 root = window || this;
 

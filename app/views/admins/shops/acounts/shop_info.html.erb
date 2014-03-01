@@ -2,7 +2,9 @@
 
 <div class="container-fluid">
   <div class="span7 widget shop_info">
-    <a href="/shops/<%= @user_checking.shop.name %>/admins/apply_update" class="btn pull-right">申请审核</a>
+    <% if can? :manage, @shop %>
+      <a href="/shops/<%= @shop.name %>/admins/apply_update" class="btn pull-right">申请审核</a>
+    <% end %>
     <h4>商店信息</h4>
     <hr />
     <div class="row-fluid section">
@@ -14,12 +16,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
+          <% if can? :manage, @shop %>
+            <div id="image_bottom">
+              <div class="hidden_one" id="hidden_text">
+              </div>
+              <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
+              </div>
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -45,12 +49,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
+          <% if can? :manage, @shop %>
+            <div id="image_bottom">
+              <div class="hidden_one" id="hidden_text">
+              </div>
+              <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
+              </div>
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -81,12 +87,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid" />
           </div>
-          <div id="image_bottom">
-            <div class="hidden_one" id="hidden_text">
+          <% if can? :manage, @shop %>
+            <div id="image_bottom">
+              <div class="hidden_one" id="hidden_text">
+              </div>
+              <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
+              </div>
             </div>
-            <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -116,7 +124,7 @@
         login: "<%= current_user.login %>",
       },
       targets: [
-        { el: $(".main_panle1"), input_name: "photo", photo: "<%= @user_checking.user.shop.try(:photo) %>" },
+        { el: $(".main_panle1"), input_name: "photo", photo: "<%= @shop.try(:photo) %>" },
         { el: $(".main_panle2"), input_name: "company_license_photo", photo: "<%= @user_checking.try(:company_license_photo) %>" },
         { el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>" }
       ]

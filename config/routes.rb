@@ -52,6 +52,7 @@ Panama::Application.routes.draw do
   match "people/:shop_name/invite_people", :to => "people#invite_people"
   match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:login/update_user_auth", :to => "people#update_user_auth", :via => :put
+  match "people/:login/photos", :to => "people#photos"
   match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
   match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
   match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post

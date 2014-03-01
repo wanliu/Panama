@@ -4,7 +4,7 @@ class ShopAbility
 
   def initialize(user, shop)
 
-    if user == shop.user
+    if user == shop.try(:user)
       can :manage, :all
     elsif shop.find_employee(user.id)
       user.groups.each do |g|

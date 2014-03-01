@@ -7,7 +7,9 @@ class NotificationManager
 
   defaultTemplate: Handlebars.compile(
      """<div class='noty_message'>
-          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          {{#if avatar}}
+            <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          {{/if}}
           {{#if title}}
             <p>{{title}}</p>
           {{/if}}
@@ -21,10 +23,12 @@ class NotificationManager
 
   followTemplate: Handlebars.compile(
     """<div class='noty_message noty_message_follow'>
-        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{#if avatar}}
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{/if}}
         <span class='noty_text'></span>
+        <div class='noty_close'></div>
         <div>
-          <div class='noty_close'></div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看对方</a>
           <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
         </div>
@@ -32,10 +36,12 @@ class NotificationManager
   
   shopFollowTempate: Handlebars.compile(
     """<div class='noty_message'>
-        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{#if avatar}}
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{/if}}
         <span class='noty_text'></span>
+        <div class='noty_close'></div>
         <div>
-          <div class='noty_close'></div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
           <a  href='/shops/{{ shop_name }}/shop_circles' data-toggle='modal' data-dismiss='modal' class="after_click btn btn-primary pull-right" data-target='#choseCircle'>
             邀请加入商圈
@@ -45,10 +51,12 @@ class NotificationManager
 
   circleInviteTemplate: Handlebars.compile(
     """<div class='noty_message'>
-        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{#if avatar}}
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{/if}}
         <span class='noty_text'></span>
+        <div class='noty_close'></div>
         <div>
-          <div class='noty_close'></div>
           <button  class='btn btn-danger pull-right agree'>同意</button>
           <button class="btn btn-primary pull-right refuse" >拒绝</button>
         </div>
@@ -56,10 +64,12 @@ class NotificationManager
 
   activityTemplate: Handlebars.compile(
     """<div class='noty_message'>
-        <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{#if avatar}}
+          <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+        {{/if}}
         <span class='noty_text'></span>
         <div class='noty_close'></div>
-        <div class='activity' activity-id="{{ target.id }}">
+        <divclass='activity' activity-id="{{ target.id }}">
           <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
           <a href="javascript:void(0)" class='btn btn-danger after_click pull-right preview'>查看</a>
         </div>
@@ -67,13 +77,15 @@ class NotificationManager
 
   askBuyTemplate: Handlebars.compile(
    """<div class='noty_message'>
+        {{#if avatar}}
           <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
-          <span class='noty_text'></span>
-          <div class='noty_close'></div>
-          <div class='ask_buy' ask-buy-id="{{ ask_buy_id }}">
-            <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-            <a href="javascript:void(0)" class='btn btn-danger pull-right after_click preview '>查看求购</a>
-          </div>
+        {{/if}}
+        <span class='noty_text'></span>
+        <div class='noty_close'></div>
+        <div class='ask_buy' ask-buy-id="{{ ask_buy_id }}">
+          <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+          <a href="javascript:void(0)" class='btn btn-danger pull-right after_click preview '>查看求购</a>
+        </div>
       </div>""")
 
   constructor: () ->
