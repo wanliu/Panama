@@ -545,6 +545,7 @@ class root.OrderChatView extends BaseChatView
       </div>
     </div>')
 
+  disablePageScroll: (event) ->
 
   initialize: (options) ->
     @name = @model.get('title')

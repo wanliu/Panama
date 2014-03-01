@@ -342,14 +342,16 @@ zh-CN:
         total: 小计
         operator_state: 已接单
         delivery_price: 配送费用
-        delivery_code: 配送地邮编
+        delivery_code: 快递单号
         created_at: 创建时间
         updated_at: 更新时间
         action_link: 操作
         stotal: 总金额
         logistics_company: 物流公司
         transfers:
-          shop_product: 商品          
+          shop_product: 商品
+          item:
+            shop: 商店          
       category:
         id: 编号
         name: 分类名
