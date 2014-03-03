@@ -57,7 +57,7 @@
       <a href="<%= all_circles_person_communities_path(current_user) %>" data-toggle="modal" class="btn" data-target="#SelectCircle">分享此圈</a>
       <%= render "/communities/circles/select_circle_to_share"%>
       <% unless @circle.is_manage?(current_user.id) %>
-        <btn class='btn pull-right quit_circle'>退出</btn>
+        <button class='btn pull-right quit_circle'>退出</button>
       <% end %>
     <% end %>
   </div>

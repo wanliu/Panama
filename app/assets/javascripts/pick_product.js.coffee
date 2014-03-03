@@ -36,8 +36,7 @@ class root.LoadCategoryProduct extends Backbone.View
 
 class root.WizardView extends Backbone.View
 
-  events:
-    "click .leaf_node"       : "get_category_products"
+  events:    
     "click .add_to_shop"     : "add_to_shop"
     "click .remove_from_shop": "remove_from_shop"
     "click .product_list>li" : "select_many"
@@ -52,12 +51,13 @@ class root.WizardView extends Backbone.View
     template = @options['category_product_template'] || category_product_template
     @category_product_tpl ||= Hogan.compile(template)
     @$product_list = @$(".category_product_list>ul")
+    @$loader = @$(".category_product_list .loader")
     @bind_typeahead()
 
-  get_category_products: (event) ->
-    shop_id = @options.shop_id
-    @url = $(event.target).attr("href") + "/products"
-    category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
+  get_category_products: (category_id) ->
+    #shop_id = @options.shop_id
+    @url = "/category/#{category_id}/products"
+    # category_product_template = "<option id='{{ id }}' value='{{id}}'>{{ name }}</option>"
     @default_options()
     @fetch {}, (data) =>
       @$product_list.empty()
@@ -77,15 +77,16 @@ class root.WizardView extends Backbone.View
   fetch: (data = {}, callback = (data) -> ) ->
     brand = @filter_brand()
     _data = _.extend({}, @remote_options, data, { brand_name: brand})
+    return if _.isEmpty(@url)
     return if @promise && @promise.state() == "pending"
-    @$(".loader").show()
+    @$loader.show()
     @promise = $.ajax({
       type: "get",
       url: @url,
       dataType: "json",
       data: _data,
       success: (data) =>
-        @$(".loader").hide()
+        @$loader.hide()
         callback(data)
         @reset(data)
     })
@@ -102,6 +103,14 @@ class root.WizardView extends Backbone.View
       dataType: "json",
       success: (products) =>
         @options.select_handle(products)
+        @$(".product_list .checked_product").remove()
+
+      error: (xhr) ->
+        try
+          ms = JSON.parse(xhr.responseText).join("<br />")
+          pnotify(text: ms, type: "error")
+        catch error
+          pnotify(text: xhr.responseText, type: "error")
     })
     false
 
@@ -110,9 +119,9 @@ class root.WizardView extends Backbone.View
 
   add_to_shop: () ->
     product_ids = []
-    $(".checked_product").each () ->
-       product_ids.push($(this).attr("id"))
-       $(this).remove()
+    @$(".product_list .checked_product").each () ->
+      product_ids.push($(this).attr("id"))
+
     @render_product_infor(product_ids)
     @btn_select_all().text("全选")
 
@@ -182,6 +191,7 @@ class root.ProductView extends Backbone.View
 
   events:
     "submit form.search" : "search"
+    "click .my_product_list>li" : "select_many"
 
   tr_template: "
     <tr id='{{id}}>
@@ -238,7 +248,18 @@ class root.ProductView extends Backbone.View
         @list.empty()
         @reset(data)
         my_product.reset_load(@list.find(">li").size()) if my_product
-      error: (data, xhr, res) =>
-        console.error(res.responseText)
+      error: (xhr, res) =>
+        try
+          ms = JSON.parse(xhr.responseText).join("<br />")
+          pnotify(text: ms, type: "error")
+        catch err
+          pnotify(text: xhr.responseText, type: "error")
     )
     false
+
+  select_many: (event) ->
+    el = $(event.currentTarget)
+    if el.hasClass('checked_product')
+      el.removeClass("checked_product")
+    else
+      el.addClass("checked_product")

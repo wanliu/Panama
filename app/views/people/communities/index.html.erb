@@ -57,11 +57,11 @@
     })
 
     community.fetch_circles("<%= person_circles_path(current_user) %>");
-    
+
     new CircleCreate({
       el: $(".create_circle"),
       current_user: '<%= current_user.login %>',
-      remote_url: "/people/<%= current_user.login %>/communities"
+      remote_url: "<%= person_communities_path(current_user.login) %>"
     })
     new CommunitySearch({
       el: $(".community"),
