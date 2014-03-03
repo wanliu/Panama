@@ -21,11 +21,8 @@ class UserCheckingsController < ApplicationController
   end
 
   def upload_shop_photo(file)
-    @shop = @user_checking.user.try(:belongs_shop)
-    if @shop.nil?
-      @user_checking.user.create_shop()
-      @shop = @user_checking.user.try(:shop)
-    end
+    @belongs_shop = @user_checking.user.try(:belongs_shop)
+    @shop = @belongs_shop.nil? ? @user_checking.user.create_shop() : @belongs_shop
     @current_ability = ShopAbility.new(current_user, @shop)
     authorize! :manage, @shop
     @shop.update_attribute("photo",file)
@@ -39,7 +36,7 @@ class UserCheckingsController < ApplicationController
       @user_checking = User.find(params[:id]).user_checking
       if field_name == "photo"
         upload_shop_photo(file)
-        render :text => "{success: true, avatar_filename: '#{@user_checking.user.shop.send(field_name)}'}"
+        render :text => "{success: true, avatar_filename: '#{@shop.send(field_name)}'}"
         return 
       else 
         @user_checking.send(field_name).remove! if  @user_checking.send(field_name)

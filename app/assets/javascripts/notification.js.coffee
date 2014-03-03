@@ -69,7 +69,7 @@ class NotificationManager
         {{/if}}
         <span class='noty_text'></span>
         <div class='noty_close'></div>
-        <divclass='activity' activity-id="{{ target.id }}">
+        <div class='activity' activity-id="{{ target.id }}">
           <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
           <a href="javascript:void(0)" class='btn btn-danger after_click pull-right preview'>查看</a>
         </div>
