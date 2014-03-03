@@ -18,7 +18,7 @@
               <%=render_base_template "order_mini_row", :row => row %>
             <% end %>
           <% else %>
-            <div class='widget'>
+            <div class='widget　no_result_notify'>
               没有已处理完的担保交易
             </div>
           <% end %>
@@ -52,7 +52,7 @@
           <% if @directs.length > 0 %>
             <%= render :partial => "admins/shops/direct_transactions/row", :collection => @directs, :as => :row %>
           <% else %>
-            <div class='widget'>
+            <div class='widget　no_result_notify'>
               没有已处理完的直接交易
             </div>
           <% end %>

@@ -13,7 +13,13 @@
 
       <div class='threeD-viewport'>
          <div class='refunds card_list'>
-          <%= render :partial => "mini_row", :collection => @refunds, :as => :row %>
+          <% if @refunds.count > 0 %>
+            <%= render :partial => "mini_row", :collection => @refunds, :as => :row %>
+          <% else %>
+            <div class='widget no_result_notify'>
+              没有未处理的直接交易
+            </div>
+          <% end %>
         </div>
       </div>
 
