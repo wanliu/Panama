@@ -25,7 +25,7 @@ class CompletingShopController < Wicked::WizardController
         @products = ShopProduct
           .joins(:product)
           .select(["shop_products.*", "products.name"])
-          .where("shop_products.shop_id = ? ", @current_user.shop.id)
+          .where("shop_products.shop_id = ? ", current_user.shop.id)
       end
       render_wizard
     end

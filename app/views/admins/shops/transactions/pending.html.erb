@@ -40,8 +40,14 @@
 
       <div class='threeD-viewport'>
         <div class='orders card_list'>
-          <% @transactions.each do |row| %>
-            <%=render_base_template "order_mini_row", :row => row %>
+          <% if @transactions.count > 0 %>
+            <% @transactions.each do |row| %>
+              <%=render_base_template "order_mini_row", :row => row %>
+            <% end %>
+          <% else %>
+            <div class='widget no_result_notify'>
+              没有正在处理的订单！
+            </div>
           <% end %>
         </div>
       </div>

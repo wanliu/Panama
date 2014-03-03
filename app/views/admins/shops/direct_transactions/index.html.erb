@@ -41,7 +41,7 @@
           <% if @directs.length > 0 %>
             <%= render :partial => "row", :collection => @directs, :as => :row %>
           <% else %>
-            <div class='widget notify-message'>
+            <div class='widget no_result_notify'>
               没有直接处理的交易
             </div>
           <% end %>
