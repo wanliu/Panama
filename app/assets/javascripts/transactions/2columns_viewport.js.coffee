@@ -221,7 +221,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
       return top
     
   navigate: (url) ->
-    @route.navigate("#{url}#{@spaceName}", true)
+    @route.navigate("#{url}#{@spaceName}", trigger: true, replace: true)
 
   openView: (id) ->  
     model = @models.get(id)

@@ -3,10 +3,7 @@
     <form>
       <div class='in-box'>
         {{#photos.avatar}}
-          <img src="{{photos.avatar}}" class="preview a-{{id}}" alt />
-        {{/photos.avatar}}
-        {{^photos.avatar}}
-          <%#= image_tag ImageUploader.new.url("240240") %>
+          <img src="{{photos.avatar}}" class="preview a-{{id}}" />
         {{/photos.avatar}}
       </div>
       <div class='summary'>

@@ -24,10 +24,9 @@ class window.OrderExport extends Backbone.View
       ifra = $(@ifr_el).attr("name", ifr_name)
       ifra.attr("id", ifr_name)
       ifra.attr("src", @url_print)
-      ifra.load () =>
-        @print(ifr_name)
-
       @$display_el.html(ifra)
+      @print(ifr_name)
+
       window.frames[ifr_name].name = ifr_name
 
   print: (ifr_ame) ->
