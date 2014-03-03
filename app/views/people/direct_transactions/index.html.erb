@@ -14,7 +14,13 @@
 
       <div class='threeD-viewport'>
         <div class='directs card_list'>
-          <%= render :partial => "row", :collection => @direct_transactions, :as => :row %>
+          <% if @direct_transactions.count > 0 %>
+            <%= render :partial => "row", :collection => @direct_transactions, :as => :row %>
+          <% else %>
+            <div class='widget no_result_notify'>
+              没有未处理的直接交易
+            </div>
+          <% end %>
         </div>
       </div>
 

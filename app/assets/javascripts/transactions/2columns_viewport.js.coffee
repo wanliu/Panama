@@ -61,6 +61,8 @@ class TransactionTwoColumnsViewport extends Backbone.View
     model
 
   addView: (model) ->
+    @$(".card_list .no_result_notify").remove()
+    
     elem = model.get("elem")
     model.set(display: false)
     delete model.attributes.elem
@@ -73,7 +75,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     rowView.bind("registerView", _.bind(@registerView, @))
     rowView.bind("exitMenu", _.bind(@exitMenu, @))
 
-    @rows.push rowView
+    @rows.push rowView    
 
   activeRowView: (view, callback) =>
     @exceptView(view)
@@ -87,9 +89,11 @@ class TransactionTwoColumnsViewport extends Backbone.View
 
 
   setupLeftColumn: () ->
-    @$orders.slimScroll(height: $(window).height())
+    @$orders.slimScroll(
+      alwaysVisible: true,
+      height: $(window).height())
     @$orders.on("mouseleave", @hideLeftColumn)
-    $(".content").mousemove (e) =>
+    $("body").mousemove (e) =>
       if e.clientX < 25
         @showLeftColumn()
 
@@ -221,7 +225,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
       return top
     
   navigate: (url) ->
-    @route.navigate("#{url}#{@spaceName}", trigger: true, replace: true)
+    @route.navigate("#{url}#{@spaceName}", trigger: true)
 
   openView: (id) ->  
     model = @models.get(id)
