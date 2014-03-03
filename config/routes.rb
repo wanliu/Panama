@@ -66,6 +66,7 @@ Panama::Application.routes.draw do
     collection do
       get "hot_region_name", :to => "communities#hot_region_name"
       get "search", :to => "communities#search"
+      post "index_url", :to => "communities#index_url"
     end
 
     match "access_denied", :to => "communities/circles#access_denied"

@@ -119,12 +119,6 @@ class BaseChatView extends Caramal.BackboneView
   # history_tip: _.template('<li class="text-center">-----<%= text %>-----</li>')
 
   chat_template:  _.template('
-    <div class="head">
-      <span class="state online"></span>
-      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
-      <span class="input_state"></span>
-      <a class="close_label" href="javascript:void(0)"></a>
-    </div>
     <div class="body">
       <ul class="msg_content">
       </ul>
@@ -216,7 +210,9 @@ class BaseChatView extends Caramal.BackboneView
     @hide()
 
   render: () ->
-    $(@el).html(@chat_template({model: @model}))
+    head_html = @head_template({model: @model})
+    chat_html = @chat_template({model: @model})
+    $(@el).html(head_html + chat_html)
 
   bindScroll: () ->
     @$('div.body').bind('mousewheel', $.proxy(@disablePageScroll, @))
@@ -468,6 +464,17 @@ class BaseChatView extends Caramal.BackboneView
 
 
 class root.FriendChatView extends BaseChatView
+  head_template: _.template('
+    <div class="head">
+      <span class="state online"></span>
+      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
+      <span class="input_state"></span>
+      <a class="close_label" href="javascript:void(0)"></a>
+    </div>')
+
+  clickTitle: () ->
+    window.location.href = "/people/#{@title}"
+
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@title)
 
@@ -495,11 +502,38 @@ class root.FriendChatView extends BaseChatView
 
 
 class root.GroupChatView extends BaseChatView
+  head_template: _.template('
+    <div class="head">
+      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
+      <a class="close_label" href="javascript:void(0)"></a>
+    </div>')
+
   getChannel: () ->
     @channel ||= Caramal.Group.of(@name)
 
+  clickTitle: () ->
+    $.ajax(
+      type: 'POST'
+      dataType: 'json'
+      data: { name: @name }
+      url: "/communities/index_url"
+      success: (data, xhr, res) =>
+        return if _.isEmpty(data.url)
+        document.location.href = data.url
+      error: (data, xhr, res) =>
+        pnotify(type: 'error', text: '跳转失败')
+    )
+
 
 class root.TemporaryChatView extends BaseChatView
+  head_template: _.template('
+    <div class="head">
+      <span class="state online"></span>
+      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
+      <span class="input_state"></span>
+      <a class="close_label" href="javascript:void(0)"></a>
+    </div>')
+
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@name)
 
@@ -522,6 +556,8 @@ class root.TemporaryChatView extends BaseChatView
 
 class root.OrderChatView extends BaseChatView
   className: 'order_chat'
+
+  head_template: _.template('')
 
   chat_template:  _.template('
     <div class="body">
