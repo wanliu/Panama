@@ -6,7 +6,7 @@
   <div class="modal-body">
     <%=render :partial => "delivery_addresses/form",
       :locals => {
-        :url => "",
+        :url => person_delivery_addresses_path(current_user),
         :address => address
       } %>      
   </div>
