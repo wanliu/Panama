@@ -1247,10 +1247,6 @@ h2 small {
   width: 90px;
 }
 
-.error .chzn-container-single .chzn-single{
-  border: 1px solid #b94a48;
-}
-
 .dialog-panel{
   .activity-auction, .activity-focus{
 
@@ -1308,8 +1304,12 @@ h2 small {
   }
 }
 
+.error .chzn-container-single .chzn-single{
+  border: 1px solid #b94a48;
+}
+
 .error{
-  border: 1px solid #b94a48!important;
+  // border: 1px solid #b94a48!important;
   
   input[type=text], textarea{
     border: 1px solid #b94a48;
@@ -1317,6 +1317,9 @@ h2 small {
   input[type=number]{
     border: 1px solid #b94a48;
   }
+}
+input.error {
+  border: 1px solid #b94a48;
 }
 
 .disconnect {

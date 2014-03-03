@@ -56,9 +56,11 @@ class AskBuyView extends Backbone.View
     $amount = @$(".answer_ask_buy_amount")
 
     if $target.hasClass("answer_ask_buy_price") || $target.hasClass("answer_ask_buy_amount")
-      $total.val(($price.val() * $amount.val()).toFixed(2))
+      value = ($price.val() * $amount.val()) || 0
+      $total.val(value.toFixed(2))
     else
-      $price.val(($total.val() / $amount.val()).toFixed(2))
+      value = ($total.val() / $amount.val()) || 0
+      $price.val(value.toFixed(2))
 
   render: () ->
     @template
@@ -111,18 +113,26 @@ class AskBuyView extends Backbone.View
     if !$("#answer_ask_buy_shop_product_chzn .chzn-results li").hasClass("result-selected")
       @$(".shop_product_wrap").addClass("error")
       return  false
+    else
+      @$(".shop_product_wrap").removeClass("error")
       
     if isNaN($total.val()) || _.isEmpty($total.val())
       @$(".answer_ask_buy_total_wrap").addClass("error")
       return  false
+    else
+      @$(".answer_ask_buy_total_wrap").removeClass("error")
 
     if isNaN($price.val()) || _.isEmpty($price.val())
       @$(".answer_ask_buy_price_wrap").addClass("error")
       return  false
+    else
+      @$(".answer_ask_buy_price_wrap").removeClass("error")
 
     if isNaN($amount.val()) || _.isEmpty($amount.val())
       @$(".answer_ask_buy_amount_wrap").addClass("error")
       return  false
+    else
+      @$(".answer_ask_buy_amount_wrap").removeClass("error")
     return true
 
   report: () ->
