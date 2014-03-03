@@ -2,7 +2,8 @@ root = (window || @)
 
 class root.ChatModel extends Backbone.Model
   getOrderUrl: () ->
-    pages = [ '/transactions', '/pending', '/direct_transactions', '/order_refunds', '/admins/complete' ]
+    pages = [ '/transactions', '/pending', '/direct_transactions', 
+              '/order_refunds', '/admins/complete' ]
     url = _.find pages, (page) => location.href.indexOf(page) != -1
 
   getPrefixTitle: (title) ->
@@ -34,7 +35,7 @@ class root.ChatModel extends Backbone.Model
         number = title.substring(title.indexOf('_') + 1, title.length)
         displayTitle = "#{@getPrefixTitle(title)} #{number}"
         @set({
-          # number: number,
+          number: number,
           displayTitle: displayTitle
         })
 

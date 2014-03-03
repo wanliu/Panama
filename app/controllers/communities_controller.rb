@@ -2,7 +2,13 @@ class CommunitiesController < ApplicationController
 
 	layout "communities"
 
-	before_filter :login_and_service_required
+	before_filter :login_and_service_required, :except => [:index_url]
+
+	def index_url
+		name = params[:name]
+		@circle = Circle.find_by(:name => name)
+		render :json => { url: community_circles_path(@circle) }		
+	end
 
 	def index
 		if !cookies[:city_id].blank?

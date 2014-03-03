@@ -34,6 +34,11 @@
       el: '#activities'
     })
 
+    new ActivityPreview({
+      el: $('#activities'),
+      login: '<%= current_user.login %>'
+    })
+
     $("#category-sidebar .lv2_categories a").on("click", function(){
       $(this).parents(".lv2_categories").hide()
       category_id = $(this).attr("data-category_id")
