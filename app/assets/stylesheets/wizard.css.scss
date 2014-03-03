@@ -79,7 +79,7 @@ h2 small {
     }
   }
   .checked_product {
-    background-color: rgba(51, 51, 51, 0.6);
+    background-color: rgba(51, 51, 51, 0.5);
     border-left: 3px solid $blue;
   }
 }
@@ -110,13 +110,14 @@ h2 small {
   }
 
   &:hover {
-    @include transparent(rgb(51,51,51), 0.25);
+    @include transparent(rgb(51,51,51), 0.6);
     border-left: 3px solid $red;
   }
 }
 
 .checked_product{
-  background-color: rgba(51, 51, 51, 0.6);
+  @include transparent(rgb(51,51,51), 0.6);
+  // background-color: rgb(51, 51, 51, 0.6);
   border-left: 3px solid $red;
 }
 
