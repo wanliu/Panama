@@ -43,7 +43,10 @@ class CircleCreate extends Backbone.View
 				else
 					window.location.href = "/shops/#{ @current_shop }/admins/communities"
 			error: (ms) ->
-				pnotify(text: JSON.parse(ms.responseText), type: "error")
+				try
+					pnotify(text: JSON.parse(ms.responseText), type: "error")
+				catch err
+					pnotify(text: ms.responseText, type: "error")
 		})
 
 

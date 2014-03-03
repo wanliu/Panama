@@ -62,7 +62,7 @@
     new CircleCreate({
       el: $(".create_circle"),
       current_shop: '<%= current_shop.name %>',
-      remote_url: "/shops/<%=current_shop.name %>/admins/circles"
+      remote_url: "<%= shop_admins_circles_path(current_shop) %>"
     })
     new CommunitySearch({
       el: $(".community")
