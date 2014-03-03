@@ -113,67 +113,6 @@
         </section>
       </li>
     </script>
-    <script type="text/javascript">
-      $(function(){
-        var product_view = new ProductView({
-          el      : $(".my_products"),
-          shop    : {
-            id: <%= shop.id %>
-          },
-          template: $("#product_show").html()
-        });
-
-        var wizard = new WizardView({
-          el: $(".dialog_product"),
-          category_product_template: $("#category_product_show").html(),
-          remote_options: {
-            shop_id: <%= shop.id %>
-          },
-          select_handle: function(models){
-            _.each(models, function(model){
-              product_view.render(model);
-            })
-          }
-        });
-
-        var scrollLoad = function(elem, options){
-          var scroll = elem.slimScroll($.extend({
-            height: 500,
-            railVisible: true
-          }, options.slim));
-
-          var load = new LoadCategoryProduct({
-            fetch: options.fetch,
-            el: $("."+ options.slim.wrapperClass)
-          })
-
-          scroll.bind("slimscrolling", function(e, post){
-            load.scroll(post)
-          })
-          return load;
-        }
-
-        my_product = scrollLoad($('.my_product_list'), {
-          slim: {
-            wrapperClass: "wrap_my_product"
-          },
-          fetch: $.proxy(product_view.fetch, product_view)
-        })
-
-        var product = scrollLoad($('.category_product_list'), {
-          slim: {
-            wrapperClass: "wrapper_category_product"
-          },
-          fetch: $.proxy(wizard.fetch, wizard)
-        })
-
-        my_product.remote()
-
-        wizard.load_default_fetch = function(){
-          product.default_options()
-        }
-      })
-    </script>
   </div>
 </div>
 
@@ -206,8 +145,67 @@
       bind_editable($(this), "inventory");
     }); 
 
+    var product_view = new ProductView({
+      el      : $(".my_products"),
+      shop    : {
+        id: <%= shop.id %>
+      },
+      template: $("#product_show").html()
+    });
+
+    var wizard = new WizardView({
+      el: $(".product_list_wrap"),
+      category_product_template: $("#category_product_show").html(),
+      remote_options: {
+        shop_id: <%= shop.id %>
+      },
+      select_handle: function(models){
+        _.each(models, function(model){
+          product_view.render(model);
+        })
+      }
+    });
+
     new BrandChoiceView({
-      el: $(".product_tree_panel")
-    });   
+      el: $(".product_tree_panel"),
+      get_category_products: _.bind(wizard.get_category_products, wizard)
+    });
+
+    var scrollLoad = function(elem, options){
+      var scroll = elem.slimScroll($.extend({
+        height: 500,
+        railVisible: true
+      }, options.slim));
+
+      var load = new LoadCategoryProduct({
+        fetch: options.fetch,
+        el: $("."+ options.slim.wrapperClass)
+      })
+
+      scroll.bind("slimscrolling", function(e, post){
+        load.scroll(post)
+      })
+      return load;
+    }
+
+    my_product = scrollLoad($('.my_product_list'), {
+      slim: {
+        wrapperClass: "wrap_my_product"
+      },
+      fetch: $.proxy(product_view.fetch, product_view)
+    })
+
+    var product = scrollLoad($('.category_product_list'), {
+      slim: {
+        wrapperClass: "wrapper_category_product"
+      },
+      fetch: $.proxy(wizard.fetch, wizard)
+    })
+
+    my_product.remote()
+
+    wizard.load_default_fetch = function(){
+      product.default_options()
+    }   
   });
 </script>

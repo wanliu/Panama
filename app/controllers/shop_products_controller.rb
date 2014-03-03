@@ -16,10 +16,11 @@ class ShopProductsController < ApplicationController
   end
 
   def create
-    if current_user.shop.present?
+    shop = current_user.belongs_shop
+    if shop.present?
       product_ids   = params[:product_ids] || []
       shop_products = product_ids.map do |product_id|
-        current_user.shop.products.create(
+        shop.products.create(
           product_id: product_id,
           price: 1.0,
           inventory: 0
@@ -31,13 +32,13 @@ class ShopProductsController < ApplicationController
         if !valid_shop_products.blank?
           format.json { render json: shop_products }
         else
-          format.json { render json: { errors: "无法创建商店商品" },
+          format.json { render json: draw_errors_message(valid_shop_products),
                      status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.json { render json: { error: "请先建立商店信息" },
+        format.json { render json: ["请先建立商店信息"],
                    status: :unprocessable_entity }
       end
     end

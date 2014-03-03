@@ -252,6 +252,7 @@ zh-CN:
         updated_at: 更新时间
       topic:
         content: 内容
+        user_id: 用户
       region:
         id: 编号
         name: 名称
@@ -436,6 +437,7 @@ zh-CN:
         money: 金额
         arrive_mode: 到帐时间
         state: 处理状态
+        bank: 银行
       answer_ask_buy:
         price: 价格
         amount: 数量
