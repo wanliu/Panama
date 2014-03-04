@@ -27,7 +27,7 @@
     });
 
     $(document).delegate( ".connect_by_self", "click", function(){
-      clients.socket.socket.socket.reconnect()
+      clients.socket.reconnect()
       $(".popover-content").html("正在连接...")
     })
 
