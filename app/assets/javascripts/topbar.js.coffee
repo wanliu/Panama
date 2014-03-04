@@ -177,7 +177,5 @@ class TopBar extends Backbone.View
     @controller.on "route:search", (search_type, query) => @search(search_type, query)
     #@controller.on "route:search_all", () => @search_all()
     @controller.on "route:search_type", (search_type) => @search_type(search_type)
-    Backbone.history.start()
-
 
 root.TopBar = TopBar
