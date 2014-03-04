@@ -1,6 +1,6 @@
 #encoding: utf-8
 ActiveAdmin.register OrderRefund do
-
+  config.clear_action_items!
   index do
     column :id
     column :order_transaction do |refund|
@@ -23,6 +23,10 @@ ActiveAdmin.register OrderRefund do
       end
         "#{link_view} #{link_agree} #{link_close}".html_safe
     end
+  end
+
+  show do 
+    render "show"
   end
 
   member_action :agree, :method => :post do
