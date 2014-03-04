@@ -181,7 +181,7 @@ class BaseChatView extends Caramal.BackboneView
     @name = @model.get('title')
     @title = @name unless @title
     # @channel = @model.get('channel')
-    return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
+    return pnotify(type: 'error', text: '请求聊天失败') unless @name
     @initChannel()
     @bindEvent()
     @initDialog()
@@ -587,7 +587,7 @@ class root.OrderChatView extends BaseChatView
     @name = @model.get('title')
     @title = @name unless @title
     @channel = @model.get('channel')
-    return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
+    return pnotify(type: 'error', text: '请求聊天失败') unless @name
     @initChannel()
     @initDialog()
     # $(@el).bind('enterOrderChat', () =>
