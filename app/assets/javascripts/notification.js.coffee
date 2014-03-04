@@ -30,7 +30,9 @@ class NotificationManager
         <div class='noty_close'></div>
         <div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看对方</a>
+          {{#unless follow_state }}
           <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
+          {{/unless}}
         </div>
       </div>""")
   

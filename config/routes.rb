@@ -233,6 +233,7 @@ Panama::Application.routes.draw do
         post "User/:user_id" => "people/followings#user"
         post "Shop/:shop_id" => "people/followings#shop"
         get :shops
+        delete ':follow_type/unfollow/:follow_id' => "people/followings#unfollow"
       end
     end
 

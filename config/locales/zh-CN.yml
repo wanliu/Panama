@@ -253,6 +253,8 @@ zh-CN:
       topic:
         content: 内容
         user_id: 用户
+      following:
+        follow_id: 对方
       region:
         id: 编号
         name: 名称

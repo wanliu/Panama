@@ -44,6 +44,11 @@
       width: 130px;
     }
 
+    a{
+      display: block;
+      height: 140px;
+    }
+
   }
 
   .followers, .followings{
@@ -542,7 +547,7 @@
 
 .follow-shops {
   .follow {
-    width: 190px;
+    /*width: 190px;*/
 
     .info {
       max-width: 136px;

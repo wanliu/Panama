@@ -2,7 +2,8 @@
 #describe: 关注控制器
 class People::FollowingsController < People::BaseController
   # before_filter :login_and_service_required, :except => [:index]
-  before_filter :login_required, :person_self_required
+  before_filter :login_required
+  # before_filter :person_self_required
 
   def index
     @u_followings = @people.followings.users
@@ -45,6 +46,18 @@ class People::FollowingsController < People::BaseController
         format.json{ render :json => @follow }
       else
         format.json{ render :json => draw_errors_message(@follow), :status => 403 }
+      end
+    end
+  end
+
+  def unfollow
+    @follow = current_user.followings.find_by(follow_type: params[:follow_type], follow_id: params[:follow_id])
+    respond_to do |format|
+      if @follow.nil?
+        format.json{ render :json =>["你没有关注对方！"], :status => 403 }
+      else
+        @follow.destroy
+        format.json{ head :no_content }
       end
     end
   end

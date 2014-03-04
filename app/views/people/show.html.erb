@@ -10,15 +10,7 @@
           </div>
           <div class='span3'>
             <div class="btn-follow">
-              <% if current_user.present? %>
-                <% unless @people.id == current_user.id %>
-                  <% unless current_user.is_follow_user?(@people.id) %>
-                    <span class="label label-success lf follow" data-value="<%= @people.id %>">+关注</span>
-                  <% else %>
-                    <span class="label label-important lf unfollow" data-value="<%= @people.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
-                  <% end %>
-                <% end %>
-              <% end %>
+              <%= follow_action(@people) %>
             </div>
           </div>
         </div>
@@ -65,13 +57,15 @@
 </div>
 
 <script type="text/javascript">
-  $(function(){
+  $(function(){    
     <% if current_user.present? %>
-      new Followers({
-        login: "<%= current_user.login %>",
-        people_id: "<%= @people.id %>",
-        follow_type: "User",
-        el: $(".people_info .btn-follow") })
+      <% unless current_user == @people %>        
+        new FollowView({
+          data: { follow_type: 'User', follow_id: "<%= @people.id %>" },
+          el: $(".people_info .btn-follow"),
+          login: "<%=current_user.login %>"
+        })
+      <% end %>
       new PeopleSideView({ el: $("#people-sidebar") })
     <% end %>
   })

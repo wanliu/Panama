@@ -102,7 +102,7 @@
       </li>
      </ul>
     </li>
-
+    <% end %>
     <li class='accordion-group'>
       <a class="accordion-toggle" data-toggle="collapse" data-parent="#people-side-nav" href="#soical-collapse"><i class="icon-group"></i> <span class="name">社区</span></a>
       <ul id="soical-collapse" class="accordion-body collapse">
@@ -124,12 +124,10 @@
         </li>
         <% end %>
       </ul>
-    </li>
-    <% end %>
+    </li>    
   </ul>
 
   <div class='row-fluid'>
-    <% if can? :manage, User %>
     <div class='span6 followers'>
       <div class='count'>
         <a href='/people/<%=@people.login %>/followers'>
@@ -154,6 +152,5 @@
         </a>
       </div>
     </div>
-    <% end %>
   </div>
 </nav>
