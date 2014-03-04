@@ -71,7 +71,7 @@ class root.ChatManager extends Backbone.View
             ChatManager.iconList["#{login}"] = data.icon
           handle.call(@) if _.isFunction(handle)
         error: (data, xhr, res) =>
-          pnotify(type: 'error', text: res.responseText)
+          console.error(res.responseText)
       })
     else
       handle.call(@) if _.isFunction(handle)
@@ -292,7 +292,7 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setDisplayTitle()
-      return pnotify(type: 'error', text: '请求聊天失败，token为空') unless model.get('name')
+      return console.error('请求聊天失败') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
@@ -495,7 +495,7 @@ class TemporaryIconView extends BaseIconView
       @channel.command('join', @channel.room, {})
     else
       @channel.command('open', null, {}, (ch, error, msg) =>
-        pnotify(type: 'error', text: '请求聊天房间号失败') if _.isEmpty(msg)
+        console.error('请求聊天房间号失败') if _.isEmpty(msg)
         # @channel.room = msg
         # clients.socket.emit('join', {room: @channel.room})
       )
