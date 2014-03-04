@@ -120,8 +120,8 @@ class Shop < ActiveRecord::Base
       :address => address.try(:address_only),
       :user => {
         :id => user_id,
-        :login => user.login,
-        :photos => user.photos.attributes
+        :login => user.try(:login),
+        :photos => user.try(:photos).try(:attributes)
       },
       :actived => actived,
       :audit_count => audit_count,

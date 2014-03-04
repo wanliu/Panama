@@ -1,6 +1,21 @@
 #encoding: utf-8
 ActiveAdmin.register OrderTransaction do
   config.clear_action_items!
+  
+  filter :address, :collection => proc { DeliveryAddress.all.map(&:location) }
+  filter :seller, :collection => proc { Shop.all.map(&:name) }
+  filter :buyer, :collection => proc { User.all.map(&:login) }
+  # filter :seller, :collection => proc { User.all.map(&:login) }
+  filter :state
+  filter :operator_state
+  filter :delivery_price
+  filter :delivery_code
+  filter :number
+  filter :pay_status
+  filter :dispose_date
+  filter :transport_type
+  filter :pay_manner
+
   scope :等待审核, default: true do
     OrderTransaction.where("state = 'waiting_audit'")
   end
@@ -26,7 +41,7 @@ ActiveAdmin.register OrderTransaction do
       order.stotal
     end
     column :buyer do |order|
-      order.buyer.login
+      order.buyer.try(:login)
     end
     column :address do |order|
       order.address.try(:location)
