@@ -1,6 +1,6 @@
 #encoding: utf-8
 ActiveAdmin.register OrderTransaction do
-
+  config.clear_action_items!
   scope :等待审核, default: true do
     OrderTransaction.where("state = 'waiting_audit'")
   end
@@ -12,6 +12,8 @@ ActiveAdmin.register OrderTransaction do
   scope :已审核通过 do
     OrderTransaction.joins(:state_details).where("transaction_state_details.state='waiting_delivery' and pay_type = '银行汇款'")
   end
+
+  actions :all, :except => [:new]
 
   index do
     column :state do |order|
