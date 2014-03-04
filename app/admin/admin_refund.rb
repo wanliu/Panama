@@ -1,6 +1,9 @@
 #encoding: utf-8
 ActiveAdmin.register OrderRefund do
   config.clear_action_items!
+
+  actions :all, :except => [:new]
+  
   index do
     column :id
     column :order_transaction do |refund|
