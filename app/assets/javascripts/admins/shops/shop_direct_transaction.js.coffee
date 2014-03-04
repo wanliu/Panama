@@ -58,7 +58,7 @@ class root.ShopDirectTransactionView extends Backbone.View
         @$el.attr('data-token', data.token)
         handle.call(@)
       error: () =>
-        pnotify(type: 'error', text: '获取聊天token失败')
+        pnotify(type: 'error', text: '请求聊天失败')
     )
 
   change_state: () ->

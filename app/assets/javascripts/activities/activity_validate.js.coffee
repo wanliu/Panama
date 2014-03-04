@@ -33,23 +33,34 @@ class AuctionValidate
     $(@).removeClass('error') unless _.isEmpty($(@).val())
     if isNaN($(@).val())
       $(@).addClass('error')
+
+  _$product_controls: () ->
+    @el.find("#activity_auction_shop_product_chzn").parents('.controls')
    
   validate: () ->
     if _.isEmpty(@shop_product_id.val())
-      @el.find("#activity_auction_shop_product_chzn").addClass('error')
+      @_$product_controls().addClass('error')
       return false
+    else
+      @_$product_controls().removeClass('error')
 
     if _.isEmpty(@title.val())
       @title.addClass('error')
       return false
+    else
+      @title.removeClass('error')
 
     if _.isEmpty(@price.val()) || isNaN(@price.val()) || @price.val() <= 0
       @price.addClass('error')
       return false
+    else
+      @price.removeClass('error')
 
     if _.isEmpty(@activity_price.val()) || isNaN(@activity_price.val()) || @activity_price.val() <= 0
       @activity_price.addClass('error')
       return false
+    else
+      @activity_price.removeClass('error')
     return true
 
 class FocusValidate
@@ -77,22 +88,33 @@ class FocusValidate
     $(@).removeClass('error') unless _.isEmpty($(@).val())
     if isNaN($(@).val())
       $(@).addClass('error')
+
+  _$product_controls: () ->
+    @el.find("#activity_focus_shop_product_id_chzn").parents('.controls')
    
   validate: () ->
     if _.isEmpty(@shop_product_id.val())
-      @el.find("#activity_auction_shop_product_chzn").addClass('error')
+      @_$product_controls().addClass('error')
       return false
+    else
+      @_$product_controls().removeClass('error')
 
     if _.isEmpty(@title.val())
       @title.addClass('error')
       return false
+    else
+      @title.removeClass('error')
 
     if _.isEmpty(@activity_number.val()) || isNaN(@activity_number.val())
       @activity_number.addClass('error')
       return false
+    else
+      @activity_number.removeClass('error')
 
     if _.isEmpty(@activity_price.val()) || isNaN(@activity_price.val()) || @activity_price.val() <= 0
       @activity_price.addClass('error')
       return false
+    else
+      @activity_price.removeClass('error')
 
     return true

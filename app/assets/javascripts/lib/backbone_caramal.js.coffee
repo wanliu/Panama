@@ -162,7 +162,7 @@ class BaseChatView extends Caramal.BackboneView
         <div class="message">
           {{ msg }}
           {{#each attachments}}
-            <a class="image-zoom" target="_blank" href="{{default}}">
+            <a class="image-zoom unloaded" target="_blank" href="{{default}}">
               <img src="{{header}}" alt="图片">
             </a>
           {{/each}}
@@ -181,7 +181,7 @@ class BaseChatView extends Caramal.BackboneView
     @name = @model.get('title')
     @title = @name unless @title
     # @channel = @model.get('channel')
-    return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
+    return pnotify(type: 'error', text: '请求聊天失败') unless @name
     @initChannel()
     @bindEvent()
     @initDialog()
@@ -313,7 +313,7 @@ class BaseChatView extends Caramal.BackboneView
         @iconArr.push(user)
         message.icon = '/default_img/t5050_default_avatar.jpg'
         html += @parseOne(message)
-    html
+    $(html)
 
   parseSysMsg: (message) ->
     @sys_msg_template({ message: message })
@@ -325,17 +325,16 @@ class BaseChatView extends Caramal.BackboneView
     @$('.msg_content')
 
   receiveMessage: (data) ->
-    @msgContent().append(@parseMessages(data))
+    $html = @parseMessages(data)
+    @msgContent().append($html)
     @fetchIcon()
     @model.trigger('active_avatar') if @name is data.user
-    @$('.message .image-zoom').fancybox()
     @scrollDialog()
 
   receiveSysMsg: (data) ->
     if @display
       @msgContent().append(@parseSysMsg(data))
       @model.trigger('active_avatar') if @name is data.user
-      @$('.message .image-zoom').fancybox()
       @scrollDialog()
 
   receiveHisMessage: (msgs) ->
@@ -350,7 +349,7 @@ class BaseChatView extends Caramal.BackboneView
       @$('.body').scrollTop(diff)
 
     if @display
-      @$('.message .image-zoom').fancybox()
+      @$('.message .image-zoom.unloaded').fancybox()
 
   disablePageScroll: (event) ->
     top = @$('.body').scrollTop()
@@ -403,15 +402,24 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
     @channel.active()
     @addBufferMsgs()
-    setTimeout () =>
-      @scrollDialog()
+
+  _scrollDialog: () =>
+    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
 
   scrollDialog: () ->
-    @$('.body').scrollTop(@$('.body')[0].scrollHeight)
+    $img_zoom = @$('.message .image-zoom.unloaded')
+    if $img_zoom.length is 0
+      @_scrollDialog()
+    else
+      $img_zoom.removeClass('unloaded')
+      $img_zoom.find('>img').one 'load', () =>
+        $img_zoom.fancybox()
+        @_scrollDialog()
 
   addBufferMsgs: () ->
     @addHisBufMsgs()
     @addNewBufMsgs()
+    @scrollDialog()
 
   addHisBufMsgs: () ->
     @receiveHisMessage(@channel.hisMsgBuf)
@@ -587,7 +595,7 @@ class root.OrderChatView extends BaseChatView
     @name = @model.get('title')
     @title = @name unless @title
     @channel = @model.get('channel')
-    return pnotify(type: 'error', text: '请求聊天失败，name为空') unless @name
+    return pnotify(type: 'error', text: '请求聊天失败') unless @name
     @initChannel()
     @initDialog()
     # $(@el).bind('enterOrderChat', () =>
