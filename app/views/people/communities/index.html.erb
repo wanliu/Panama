@@ -40,20 +40,21 @@
     </div>
   </div>
 </div>
+<%= render "/people/communities/setting" %>
 
 <script type="text/template" id='you-template-circle'>
   <%= render :partial => "circles/circle", :locals => {:path => communities_path}  %>
 </script>
+
 <script type="text/template" id='search-template-circle'>
-  <%= render :partial => "circles/circle_template", :locals => {:path => communities_path}  %>
+  <%= render :partial => "circles/circle_search", :locals => {:path => communities_path}  %>
 </script>
 
 <script type='text/javascript'>
-
   $(function(){
-
     var community = new CommunityView({
-      el: $(".community")
+      el: $(".community"),
+      login: "<%=current_user.login %>"
     })
 
     community.fetch_circles("<%= person_circles_path(current_user) %>");
@@ -65,6 +66,7 @@
     })
     new CommunitySearch({
       el: $(".community"),
+      login: "<%=current_user.login %>"
     })
   })
 </script>

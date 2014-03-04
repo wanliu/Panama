@@ -1,8 +1,22 @@
-<a href="<%=path %>/{{id}}/circles">
-  <div class='photo'>
-    <img src="{{header_url}}" />
+<div class="span12">
+  <div class='photo span5'>
+    <img src="{{photos.header}}" />
   </div>
-  <div class='info'>
+  <div class="info span7">
+    {{#if isJoin}}
+      {{#if isOwner}}
+        <div class="pull-right">
+          <a href="#mySetting" role="button" title="设置" data-value-id="{{ id }}" class="setting_load">
+            <span class='icon-cog'></span>
+          </a>
+        </div>
+         <span class="label label-warning">群主</span>
+      {{else}}
+        <span class="label label-warning">已加入</span>
+      {{/if}}
+    {{ else }}
+      <a href="javascript:void(0)" data-value-id="{{ id }}" class="label label-warning add_circle">加入</a>
+    {{/if }}
     <div>
       {{name}}
     </div>
@@ -10,4 +24,4 @@
       {{friend_count}} 个成员
     </div>
   </div>
-</a>
+</div>

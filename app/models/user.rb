@@ -342,15 +342,11 @@ class User < ActiveRecord::Base
     end
   end
 
-  #加入的所有的个人的圈子
-  def circle_all
-    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
-    Circle.where("owner_type='User' and id in (?)", circle_ids)
-  end
-
   #加入的所有的圈子
   def all_circles
-    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id)
+    circle_ids = CircleFriends.where(:user_id => id).pluck(:circle_id) 
+    # ids = belongs_shop.nil? ? [] : belongs_shop.circles.pluck("id")
+    # Circle.where(:id => (circle_ids - ids))
     Circle.where(:id => circle_ids)
   end
 
@@ -501,6 +497,4 @@ class User < ActiveRecord::Base
       self.friend_groups.create(name) if self.friend_groups.find_by(name).nil?
     end
   end
-
-
 end
