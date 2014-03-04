@@ -93,8 +93,6 @@ ActiveAdmin.register Activity do
     activity = Activity.find(params[:id])
     activity.update_attributes(status: Activity.statuses[:access])
     activity.send_checked_mail
-    activity.notice_author
-    activity.notice_followers
     activity.draw_topic_in_yourself_circle
     redirect_to action: :index
   end
@@ -103,7 +101,6 @@ ActiveAdmin.register Activity do
     activity = Activity.find(params[:id])
     activity.update_attributes(status: Activity.statuses[:rejected], rejected_reason: params[:reject_reason])
     activity.send_rejected_mail
-    activity.notice_author(activity.author, "您发布的活动没有通过审核")
     redirect_to action: :index
   end
 end
