@@ -51,16 +51,10 @@ class Activity < ActiveRecord::Base
 
   after_create :create_the_temporary_channel
 
+  after_update :change_state_notify
+
   def notify_url
     "/activities/#{id}"
-  end
-
-  def notice_author
-    author.notify("/activities/add",
-                  "您发布的活动#{ title}已经通过审核,定于#{ start_time}正式开始",
-                  {:url => notify_url,
-                   :avatar => photos.avatar,
-                   :target => self })
   end
 
   def notice_followers
@@ -304,8 +298,19 @@ class Activity < ActiveRecord::Base
   end
 
   private
-  def time_diff()
-
+  def change_state_notify
+    if changed.include?("status")
+      message = if Activity.statuses[:access] == status
+        "您发布的活动#{ title}已经通过审核,定于#{ start_time}正式开始"
+      else
+        "您发布的活动#{title}拒绝通告,请查看原因！"
+      end
+      author.notify("/activities/add",
+        message,
+        :url => notify_url,
+        :avatar => photos.avatar,
+        :target => self)
+    end
   end
 
   def validate_focus?

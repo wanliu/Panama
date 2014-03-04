@@ -253,6 +253,8 @@ zh-CN:
       topic:
         content: 内容
         user_id: 用户
+      following:
+        follow_id: 对方
       region:
         id: 编号
         name: 名称
@@ -418,11 +420,9 @@ zh-CN:
         delivery_code: 快递单号
         refuse_reason: 退货理由
         delivery_price: 快递价格
-        delivery_manner: 发货方式
-        delivery_manner_id: 发货方式
-        logistics_company: 物流公司
-        logistics_company_id: 物流公司
         order_state: 订单状态
+        transport_type: 运输公司
+        number: 编号
         created_at: 创建时间
         updated_at: 更新时间
       content:

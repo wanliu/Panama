@@ -21,6 +21,7 @@ class Following < ActiveRecord::Base
                     :target => self,
                     :url => "/people/#{user.login}",
                     :avatar => user.avatar,
+                    :follow_state => follow.is_follow_user?(user.id),
                     :user =>  user)
       
     elsif follow.is_a?(Shop)
@@ -52,7 +53,7 @@ class Following < ActiveRecord::Base
 
   # 当相互关注后，才能添加持久化的通道
   after_create do
-    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id).count > 0
+    if follow.is_a?(User) && follow.is_follow_user?(user.id)
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
                               :icon => follow.avatar,
@@ -68,7 +69,7 @@ class Following < ActiveRecord::Base
   end
 
   after_destroy do
-    if follow.is_a?(User) && follow.followings.where('follow_id = ? and follow_type = "User" ', user.id).count > 0
+    if follow.is_a?(User) && follow.is_follow_user?(user.id)
       PersistentChannel.where(:user_id => user.id,
                               :name => follow.login,
                               :channel_type => 1)

@@ -7,7 +7,9 @@
         <h4>你的商圈</h4>
       </div>
       <div class='span4'>
+        <% if can? :manage, User %>
         <a href="#create_circle" role="button" class="btn btn-primary" data-toggle="modal">创建商圈</a>
+        <% end %>
         <input type="text" class="search-query search_circles" placeholder="搜索商圈...">
       </div>
     </div>
@@ -18,7 +20,7 @@
   </div>
   <div class='span3'>
   </div>
-
+  <% if can? :manage, User %>
   <div id="create_circle" class="modal hide fade create_circle" tabindex="-1" role="dialog" aria-labelledby="createCircleLabel" aria-hidden="true">
     <div class="modal-header">
       <h3 id="createCircleLabel">创建商圈</h3>
@@ -39,6 +41,7 @@
       <button class="btn btn-primary submit_cirlce">保存</button>
     </div>
   </div>
+  <% end %>
 </div>
 
 <script type="text/template" id='you-template-circle'>
@@ -53,18 +56,20 @@
   $(function(){
 
     var community = new CommunityView({
-      el: $(".community")
+      el: $(".my-community")
     })
 
     community.fetch_circles("<%= person_circles_path(current_user) %>");
 
+    <% if can? :manage, User %>
     new CircleCreate({
       el: $(".create_circle"),
       current_user: '<%= current_user.login %>',
       remote_url: "<%= person_communities_path(current_user.login) %>"
     })
+    <% end %>
     new CommunitySearch({
-      el: $(".community"),
+      el: $(".my-community"),
     })
   })
 </script>

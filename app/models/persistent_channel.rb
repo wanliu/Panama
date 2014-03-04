@@ -8,7 +8,11 @@ class PersistentChannel < ActiveRecord::Base
     # TODO： system avatar
     system_avatar = AvatarUploader.new.url
     if channel_type == 1
-      user.notify('/friends/add_user', "用户 #{name} 加你为好友", :avatar => icon, :friend_name => name, :target => self, :url => "/people/#{name}")
+      user.notify('/friends/add_user', "用户 #{name} 加你为好友", 
+        :avatar => icon, 
+        :friend_name => name,
+        :target => self, 
+        :url => "/people/#{name}")
     elsif channel_type == 2
       circle = Circle.find_by_name(name)
       user.notify('/friends/add_quan', "已经添加商圈 #{name} 到好友列表", :avatar => icon, :group_name => name, :target => self, :url => "/communities/#{ circle.id }/circles")

@@ -1,6 +1,7 @@
 #encoding: utf-8
 class People::CommunitiesController < People::BaseController
-  before_filter :login_required, :person_self_required
+  before_filter :login_required
+  before_filter :person_self_required, :only => [:create]
 
   layout "people"
   

@@ -24,11 +24,6 @@
   <script type="text/javascript">
     $(function(){
       <% if current_user.present? %>
-        new Followers({
-          login: "<%= current_user.login %>",
-          people_id: "<%= @people.id %>",
-          follow_type: "User",
-          el: $(".isfollowing") })
         new PeopleSideView({ el: $("#people-sidebar") })
       <% end %>
       var section = "<%= yield :people_siderbar %>"
