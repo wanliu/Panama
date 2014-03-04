@@ -19,6 +19,7 @@ $rightSideBarWidth: 200px;
 .columns{
 	/*display: inline-block;*/
 	text-align: center;
+	min-width: 235px;
 
 	.column:last-child{
 		margin-right: 0px

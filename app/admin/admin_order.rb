@@ -1,5 +1,7 @@
 #encoding: utf-8
 ActiveAdmin.register OrderTransaction do
+  config.clear_action_items!
+  
   filter :address, :collection => proc { DeliveryAddress.all.map(&:location) }
   filter :seller, :collection => proc { Shop.all.map(&:name) }
   filter :buyer, :collection => proc { User.all.map(&:login) }
@@ -25,6 +27,8 @@ ActiveAdmin.register OrderTransaction do
   scope :已审核通过 do
     OrderTransaction.joins(:state_details).where("transaction_state_details.state='waiting_delivery' and pay_type = '银行汇款'")
   end
+
+  actions :all, :except => [:new]
 
   index do
     column :state do |order|

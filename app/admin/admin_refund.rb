@@ -16,6 +16,9 @@ ActiveAdmin.register OrderRefund do
   filter :transport_type
 
   config.clear_action_items!
+
+  actions :all, :except => [:new]
+  
   index do
     column :id
     column :order_transaction do |refund|
