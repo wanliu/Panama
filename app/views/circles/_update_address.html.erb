@@ -1,5 +1,5 @@
 <div class="controls ">
-    <div class="address_select">
+    <div class="address_select1">
         <span class="m_r">地区</span>
         <select class="address_province_id span3">
             <option>--请选择省--</option>
@@ -16,7 +16,7 @@
 <script type="text/javascript">
   $(function(){
     new CircleAddressView({
-      el: $(".address_select"),
+      el: $(".address_select1"),
       province_call: function(){
         <% if circle.city.present? %>
           $(".address_province_id").val(<%=circle.city.parent.parent.id %>).change();

@@ -68,7 +68,7 @@ class root.CommunitySearch extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
-    @template = Handlebars.compile($("#search-template-circle").html())
+    # @template = Handlebars.compile($("#search-template-circle").html())
 
   events:
     "keyup .search_circles" : "search_circles" 
@@ -85,6 +85,8 @@ class root.CommunitySearch extends Backbone.View
   render: (models) ->
     @$(".circles").html("")
     _.each models, (model) =>
-      @$(".circles").append(@template(model))
-      new CircleView(model: model, login: @login)
+      # @$(".circles").append(@template(model))
+      view = new CircleView(model: new Circle(model), login: @login)
+      @$(".circles").append(view.render())
+
 

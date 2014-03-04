@@ -550,4 +550,31 @@
   }
 }
 
-
+.circle_setting{
+  .m_r{
+    margin-right: 20px;
+  }
+  .introduce{
+    width: 370px;
+    margin-top: 10px;
+  }
+  .circle_category_input{
+    display: none;
+  }
+  .manage_category{
+    font-size: 15px;
+  }
+  i{
+    cursor: pointer;
+  }
+  ul > li:first-child{
+    margin-left: 8px!important;
+  }
+  .foot{
+    margin-top: 20px;
+  }
+  .circle_icon{
+    margin-right: 12px;
+    width: 100%;
+  }
+}

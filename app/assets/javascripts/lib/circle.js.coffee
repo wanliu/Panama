@@ -141,5 +141,4 @@ class CircleAddressView extends Backbone.View
 
 root.CircleCreate = CircleCreate
 root.CircleUpdate = CircleUpdate
-root.CircleCategoryList = CircleCategoryList
 root.CircleAddressView = CircleAddressView

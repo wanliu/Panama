@@ -95,7 +95,6 @@ ActiveAdmin.register Activity do
     activity.send_checked_mail
     activity.notice_author
     activity.notice_followers
-    activity.draw_topic_in_yourself_circle
     redirect_to action: :index
   end
 
