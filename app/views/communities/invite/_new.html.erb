@@ -1,11 +1,6 @@
 <% if @circle.is_manage?(current_user) %>
-<div id="invite_dialog" class="dialog-invite modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>邀请用户加入</h3>
-  </div>
+<div>
   <form>
-  <div class="modal-body main-show">
     <div class='row-fluid'>
       <div class='span2 title'>
         <img class='' src="<%=current_user.photos.icon %>" />
@@ -23,10 +18,9 @@
         <input type="text" name='login' class='login' autocomplete = "off"/>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <input type='submit' value="邀请" class='btn btn-primary' />
-  </div>
+    <div>
+      <input type='submit' value="邀请" class='btn pull-right btn-primary' />
+    </div>
   </form>
 </div>
 <% end %>

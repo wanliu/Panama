@@ -129,6 +129,7 @@ class CircleView extends Backbone.View
 
   events:
     "click .remove_circle": "delete_circle"
+    "click .icon-cog" : "setting_load"
     "click .update-circle": "update_circle"
 
   initialize: (options) ->
@@ -147,6 +148,13 @@ class CircleView extends Backbone.View
     )
 
     @model.bind("remove_user", _.bind(@remove_user, @))
+
+  setting_load: (e) ->
+    id = $(e.currentTarget).attr("data-value-id")
+    modal = $('#mySetting').modal({
+      remote: "/people/#{@login}/circles/#{ id }",
+      backdrop: true,
+    })
 
   render: () ->
     if @model.attributes.created_type != "advance"

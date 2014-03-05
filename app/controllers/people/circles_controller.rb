@@ -2,10 +2,16 @@
 class People::CirclesController < People::BaseController
 
   def index
-    @circles = @people.circle_all
+    @circles = @people.all_circles
+    @circles = @circles.map do |circle|
+      c = circle.as_json
+      c[:isOwner] = circle.is_owner_people?(current_user)
+      c[:isJoin] = circle.is_member?(current_user)
+      c[:friend_count] = circle.friend_count
+      c
+    end
     respond_to do |format|
-      format.json{ render json: @circles.as_json(
-        methods: [:friend_count, :header_url]) }
+      format.json{ render json: @circles }
     end
   end
 
@@ -21,9 +27,9 @@ class People::CirclesController < People::BaseController
   end
 
   def show
-    @circle = @people.circle_all.find_by(:id => params[:id])
+    @circle = @people.all_circles.find_by(:id => params[:id])
     respond_to do |format|
-      format.html
+      format.html{ render :partial => "/circles/circle_setting", :locals => { :circle => @circle }}
     end
   end
 

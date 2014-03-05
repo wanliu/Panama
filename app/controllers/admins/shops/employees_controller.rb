@@ -11,28 +11,15 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
     login = params[:login]
     @user = User.find_by(:login => login)
 
-    respond_to do |format|
-      if @user
-        if current_shop.is_employees?(@user)
-          format.json{ render :json => {message: "对方已经加入该商店!"}, :status => 403 }
-        else
-          @user.notify("/employees/invite",
-                     "商店 #{current_shop.name} 邀请你加入",
-                      :avatar => @user.icon,
-                      :url => notification_url(@user.login))
-          format.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
-        end
-      else
+    if @user
+      invite_user(@user)
+    else
+      respond_to do |format|
         # 如果email发送信息给它
         if login =~ email_match
-          user = User.find_by(:email => login)
-          if user.try(:shop).blank?
-            UserMailer.invite_employee(login, current_user,
-              current_shop, email_invite_url(email_callback_url)).deliver
-            format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
-          else
-            format.json{ render :json => {message: "对方已经加入其它商店!"}, :status => 403 }
-          end
+          UserMailer.invite_employee(login, current_user,
+            current_shop, email_invite_url(email_callback_url)).deliver
+          format.json{ render :json => {message: "已经发送邀请邮件给对方了，等待同意！"} }
         else
           format.json{ render :json => {message: "用户不存在！"}, :status => 403 }
         end
@@ -60,7 +47,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
     @employees = current_shop.groups.find_by(:id => params[:group_id]).users
 
     respond_to do |formatat|
-      formatat.json{ render :json => @employees.as_json(root: false, methods: :icon) }
+      formatat.json{ render :json => @employees.as_json(methods: :icon) }
       formatat.html
     end
   end
@@ -81,7 +68,7 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
       respond_block({message: "加入雇员失败！" }, 403)
       return
     end
-    respond_block(user_group.user.as_json(root: false, methods: :icon), 200)
+    respond_block(user_group.user.as_json(methods: :icon), 200)
   end
 
   #删除雇员在权限组
@@ -100,12 +87,8 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
   end
 
   private
-  def notification_url(login)
-    "/people/#{encrypt(current_shop.name)}/show_invite/#{encrypt(login)}?auth=#{generate_auth_string}"
-  end
-
   def email_callback_url
-    "/people/#{encrypt(current_shop.name)}/show_email_invite?auth=#{generate_auth_string}"
+    "/people/show_email_invite/#{encrypt(current_shop.name)}/#{encrypt(current_user.id)}?auth=#{generate_auth_string}"
   end
 
   def email_invite_url(url)
@@ -136,6 +119,25 @@ class Admins::Shops::EmployeesController < Admins::Shops::SectionController
   def respond_block(_json, _status)
     respond_to do |formatat|
       formatat.json{ render json: _json, status: _status }
+    end
+  end
+
+  def invite_user(user)    
+    respond_to do |format|
+      if current_shop.is_employees?(@user)
+        format.json{ render :json => ["对方已经加入该商店!"], :status => 403 }
+      else
+        @invite = current_shop.invites.create(
+          :send_user => current_user,
+          :user => user,
+          :body => "商店 #{current_shop.name} 邀请你加入"
+        )
+        if @invite.valid?
+          format.json{ render :json => {message: "已经发送信息给对方了，等待同意！"} }
+        else
+          format.json{ render :json => draw_errors_message(@invite), :status => 403 }
+        end
+      end
     end
   end
 end

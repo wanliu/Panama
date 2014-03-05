@@ -24,6 +24,9 @@
   .body, .photo{
     display: inline-block;
     vertical-align: top;
+    height: 100%;
+    width: 100px;
+    
     img{
       height: 100px;
       width: 100px;

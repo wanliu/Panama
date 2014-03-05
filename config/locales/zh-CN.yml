@@ -305,12 +305,15 @@ zh-CN:
       shop:
         id: 编号
         name: 商店名
-        user: 用户
+        user: 店主
         photo: 商店实图
         actived: 审核通过
         im_token: 安全码
         created_at: 创建时间
         updated_at: 更新时间
+        address: 营业地址
+        shop_url: 商店网址
+        shop_summary: 商店简介
       property:
         title: 标题
         name: 属性名
@@ -324,6 +327,7 @@ zh-CN:
         id: 编号
         items_count: 总计项
         delivery_addresses: 收货地址
+        address: 收货地址
         address_id: 收货地址
         delivery_type: 配送方式
         delivery_type_id: 配送方式
@@ -335,6 +339,7 @@ zh-CN:
         buyer_id: 买家
         pay_manner: 支付方式
         pay_manner_id: 支付方式
+        pay_type: 支付方式
         delivery_manner: 配送类型
         delivery_manner_id: 配送类型
         transfer_sheet_id: 快递单
@@ -351,10 +356,16 @@ zh-CN:
         action_link: 操作
         stotal: 总金额
         logistics_company: 物流公司
+        pay_status: 支付状态
+        number: 订单编号
+        dispose_date: 接单时间
+        transport_type: 发货类型
+        items:
+          shop: ''
         transfers:
           shop_product: 商品
           item:
-            shop: 商店          
+            shop: 商店         
       category:
         id: 编号
         name: 分类名
@@ -437,7 +448,9 @@ zh-CN:
         money: 金额
         arrive_mode: 到帐时间
         state: 处理状态
-        bank: 银行
+        bank: 银行账户
+        created_at: 创建时间
+        updated_at: 更新时间
       answer_ask_buy:
         price: 价格
         amount: 数量
@@ -512,7 +525,7 @@ zh-CN:
   create: 新增
   templates: 模板
   employees: 雇员
-  communities: 社区
+  communities: 圈子
   order_refunds: 退货
   shop_products: 商品管理
   direct_transaction: 直接交易

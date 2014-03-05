@@ -16,7 +16,9 @@ ActiveAdmin.register WithdrawMoney do
     column :user
     column :money
     column "银行" do |row|
-      "#{row.bank.bank_name} #{row.bank.code_title}"
+      unless row.bank.blank?
+        "#{row.bank.bank_name} #{row.bank.code_title}"
+      end
     end
     column :arrive_mode do |row|
       I18n.t("withdraw_money.arrive_mode.#{row.arrive_mode.name}")

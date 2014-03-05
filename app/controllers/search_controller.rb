@@ -34,8 +34,9 @@ class SearchController < ApplicationController
       circle = Circle.find(result.id)
       s[:isOwner] = circle.is_owner_people?(current_user)
       s[:isJoin] = circle.is_member?(current_user)
-      s[:friends] = circle.friends.where(:user_id => friend_ids).limit(4)
-      s[:isSeller] = circle.owner_type == "Shop"
+      s[:friend_count] = circle.friend_count
+      # s[:friends] = circle.friends.where(:user_id => friend_ids).limit(4)
+      # s[:isSeller] = circle.owner_type == "Shop"
       s
     end
     respond_to do |format|
@@ -342,6 +343,13 @@ class SearchController < ApplicationController
                   :query_string => {
                     :query => "address:#{query_val} OR address.primitive:#{query_val} OR address.untouched:#{query_val}*",
                     :default_operator => 'AND'
+                  }
+                }
+              },{
+                :query => {
+                  :query_string => {
+                    :query => "email:#{query_val}*",
+                    :default_operator => 'AND' 
                   }
                 }
               }]

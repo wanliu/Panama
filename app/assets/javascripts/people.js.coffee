@@ -21,6 +21,7 @@
 #= require people/transaction_payment
 #= require people/transaction_refund
 #= require people/transaction_view
+#= require people/invite_employee
 #= require lib/transaction_bubbling
 #= require lib/state_progress
 #= require lib/attachment_upload
@@ -38,4 +39,5 @@
 #= require lib/withdraw_money
 #= require transaction_complete
 #= require addresses
+#= require lib/circle_info
 

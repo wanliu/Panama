@@ -1,6 +1,24 @@
 #encoding: utf-8
 ActiveAdmin.register OrderRefund do
+  filter :order, :collection => proc { OrderTransaction.all.map(&:number) }
+  filter :seller, :collection => proc { Shop.all.map(&:name) }
+  filter :buyer, :collection => proc { User.all.map(&:login) }
+  filter :order_reason
+  filter :operator
+  filter :decription
+  filter :total
+  filter :state
+  filter :refuse_reason
+  filter :delivery_code
+  filter :delivery_price
+  filter :order_state
+  filter :number
+  filter :transport_type
+
   config.clear_action_items!
+
+  actions :all, :except => [:new]
+  
   index do
     column :id
     column :order_transaction do |refund|
