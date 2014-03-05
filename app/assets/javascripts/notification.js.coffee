@@ -21,6 +21,22 @@ class NotificationManager
           </div>
       </div>""")
 
+  circlesTemplate: Handlebars.compile(
+    """<div class='noty_message'>
+          {{#if avatar}}
+            <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          {{/if}}
+          {{#if title}}
+            <p>{{title}}</p>
+          {{/if}}
+          <span class='noty_text'></span>
+          <div class='noty_close'></div>
+          <div>
+            <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+            <a href="javascript:void(0)" class='btn btn-danger after_click pull-right'>开始聊天</a>
+          </div>
+      </div>""")
+
   followTemplate: Handlebars.compile(
     """<div class='noty_message noty_message_follow'>
         {{#if avatar}}
@@ -116,7 +132,7 @@ class NotificationManager
     @client.monitor("/circles/request", @commonNotify) # √
     @client.monitor("/circles/invite", @circle_invite) # √
     @client.monitor("/circles/refuse", @commonNotify) # √
-    @client.monitor("/circles/joined", @commonNotify) # √
+    @client.monitor("/circles/joined", @joined) # √
     @client.monitor("/circles/leaved", @commonNotify) # √
     # 商店社交部分
     @client.monitor("/shops/follow", @shop_follow) # √
@@ -183,6 +199,11 @@ class NotificationManager
     type_id.toString()
 
   close_message: () ->
+
+  joined: (data) =>
+    data.template =  $(@circlesTemplate(data))
+    @commonNotify(data)
+    # to add a group chat
 
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
