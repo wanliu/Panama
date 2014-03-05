@@ -1,7 +1,7 @@
 #= require chosen_tool
 root = window || @
 
-class InviteUserView extends Backbone.View
+class root.InviteUserView extends Backbone.View
   events:
     "submit form" : "invite"
 

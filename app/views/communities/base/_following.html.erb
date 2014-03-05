@@ -1,7 +1,0 @@
-<% if current_user.present? && !@circle.is_member?(current_user) %>
-  <div class='row-fluid'>
-    <div class="span12 widget following">
-      <input type='button' value="加入商圈" class="btn btn-primary join" />
-    </div>
-  </div>
-<% end %>

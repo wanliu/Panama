@@ -11,13 +11,26 @@ class CircleList extends Backbone.Collection
 class CircleView extends Backbone.View
   className: "circle"
 
+  events: 
+    "click .icon-cog" : "setting_load"
+
   initialize: () ->
+    _.extend(@, @options)
     @$el = $(@el)
+
+  setting_load: (e) ->
+    id = $(e.currentTarget).parents("a").attr("data-value-id")
+    $.ajax(
+      url: "/people/#{@login}/circles/#{ id }",
+      success: (html) ->
+        $('#mySetting .modal-body').html(html)
+        $("#mySetting").modal()
+    )
 
   render: () ->
     data = @model.toJSON()
-    template = Hogan.compile($("#you-template-circle").html())
-    @$el.html(template.render(data))
+    template = Handlebars.compile($("#you-template-circle").html())
+    @$el.html(template(data))
 
 class MyCircleView extends Backbone.View
 
@@ -30,7 +43,7 @@ class MyCircleView extends Backbone.View
     @circles.fetch()
 
   add: (model) ->
-    view = new CircleView(model: model)
+    view = new CircleView(model: model,login: @login)
     @el.append(view.render())
 
   reset: (collections) ->
@@ -41,19 +54,21 @@ class MyCircleView extends Backbone.View
 class root.CommunityView extends Backbone.View
 
   initialize: () ->
+    _.extend(@, @options)
 
   render: () ->
 
   fetch_circles: (url) ->
     new MyCircleView({
       url: url,
-      el: @$(".circles")})
+      el: @$(".circles"),
+      login: @login})
 
 class root.CommunitySearch extends Backbone.View
 
   initialize: () ->
     _.extend(@, @options)
-    @template = Hogan.compile($("#search-template-circle").html())
+    # @template = Handlebars.compile($("#search-template-circle").html())
 
   events:
     "keyup .search_circles" : "search_circles" 
@@ -70,4 +85,13 @@ class root.CommunitySearch extends Backbone.View
   render: (models) ->
     @$(".circles").html("")
     _.each models, (model) =>
-       @$(".circles").append(@template.render(model))
+      # @$(".circles").append(@template(model))
+      view = new CircleView(model: new Circle(model), login: @login)
+      @$(".circles").append(view.render())
+      new ApplyJoinCircle({
+        el: $(view.el).find(".add_circle"),
+        model: {id: model.id},
+        current_user_login: @login,
+      })
+
+

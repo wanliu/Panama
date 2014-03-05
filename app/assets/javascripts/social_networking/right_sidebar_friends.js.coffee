@@ -25,11 +25,11 @@ class root.ChatModel extends Backbone.Model
     @set({ type: type }) if type
     switch @get('type')
       when 1
-        displayTitle = "好友 #{@get('title')}"
+        displayTitle = "好友 #{@get('login') || @get('title')}"
         @set({ displayTitle: displayTitle })
       when 2
         displayTitle = "商圈 #{@get('title')}"
-        @set({displayTitle: displayTitle})
+        @set({ displayTitle: displayTitle})
       when 3
         title = @get('title')
         number = title.substring(title.indexOf('_') + 1, title.length)
@@ -38,6 +38,7 @@ class root.ChatModel extends Backbone.Model
           number: number,
           displayTitle: displayTitle
         })
+    console.error('displayTitle为空', @attributes) if _.isEmpty(@get('displayTitle'))
 
 
 class root.ChatList extends Backbone.Collection
@@ -71,7 +72,7 @@ class root.ChatManager extends Backbone.View
             ChatManager.iconList["#{login}"] = data.icon
           handle.call(@) if _.isFunction(handle)
         error: (data, xhr, res) =>
-          pnotify(type: 'error', text: res.responseText)
+          console.error(res.responseText)
       })
     else
       handle.call(@) if _.isFunction(handle)
@@ -119,6 +120,9 @@ class root.ChatManager extends Backbone.View
       @is_ready = true
     , 300) # fix me: setTimeout should be removed
 
+  _filter: (model) ->
+    { type: model.get('type'), displayTitle: model.get('displayTitle') }
+
   addChatIcon: (model) ->
     model.setDisplayTitle()
     # exist_model = @findExist(model)
@@ -126,17 +130,19 @@ class root.ChatManager extends Backbone.View
     #   return exist_model
     # else
     targetView = @targetView(model.get('type'))
-    existModel = targetView.collection.where(model.attributes)[0]
+    existModel = targetView.collection.where(@_filter(model))[0]
     if !existModel?
+      @collection.add(model)
       targetView.collection.add(model)
-      existModel = targetView.collection.where(model.attributes)[0]
+      existModel = targetView.collection.where(@_filter(model))[0]
     existModel
 
   removeChatIcon: (model) ->
     model.setDisplayTitle()
     targetView = @targetView(model.get('type'))
-    exist_model = targetView.collection.where(model.attributes)[0]
+    exist_model = targetView.collection.where(@_filter(model))[0]
     targetView.collection.remove(exist_model)
+    @collection.remove(@collection.where(@_filter(model))[0])    
 
   targetView: (type) ->
     switch type
@@ -259,7 +265,7 @@ class BaseIconsView extends Backbone.View
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
-      return unless channel.type is 3
+      # return unless channel.type is 3
       exist_model.icon_view.setChannel(channel)
     else
       model = new ChatModel({
@@ -281,7 +287,7 @@ class BaseIconsView extends Backbone.View
     else
       _.each @collection.models, (model) ->
         # be sure title is exists
-        if pattern.test(model.get('title'))
+        if pattern.test(model.get('displayTitle'))
           $(model.icon_view.el).show()
         else
           $(model.icon_view.el).hide()
@@ -292,7 +298,7 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setDisplayTitle()
-      return pnotify(type: 'error', text: '请求聊天失败，token为空') unless model.get('name')
+      return console.error('请求聊天失败') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
@@ -381,12 +387,12 @@ class BaseIconView extends Backbone.View
     'mouseout ': 'hideTooltip'
 
   template: Handlebars.compile("""
-    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{title}}">
+    <a href="javascript:void(0)" data-toggle="tooltip" data-placement="left" data-container="body" title="{{displayTitle}}">
       <span class="badge badge-important message_count">0</span>
       {{#if icon}}
-        <img src='{{icon}}' alt='{{title}}' />
+        <img src='{{icon}}' alt='{{displayTitle}}' />
       {{else}}
-        <img src="/default_img/t5050_default_avatar.jpg" alt={{title}} class="" />
+        <img src="/default_img/t5050_default_avatar.jpg" alt={{displayTitle}} class="" />
       {{/if}}
     </a>""")
 
@@ -495,7 +501,7 @@ class TemporaryIconView extends BaseIconView
       @channel.command('join', @channel.room, {})
     else
       @channel.command('open', null, {}, (ch, error, msg) =>
-        pnotify(type: 'error', text: '请求聊天房间号失败') if _.isEmpty(msg)
+        console.error('请求聊天房间号失败') if _.isEmpty(msg)
         # @channel.room = msg
         # clients.socket.emit('join', {room: @channel.room})
       )

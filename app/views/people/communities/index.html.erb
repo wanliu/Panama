@@ -26,15 +26,30 @@
       <h3 id="createCircleLabel">创建商圈</h3>
     </div>
     <div class="modal-body offset1">
-      <div><span class="m_r">商圈</span><input type="text" class="circle_name" placeholder="名称..."/></div>
-      <div class="row-fluid"><span class="span1">封面</span><div class="up_photo"><%= render "/circles/upload_photo" %></div></div>
-      <div><%= render "/circles/address" %></div>
+      <div>
+        <span class="m_r">商圈</span>
+        <input type="text" class="circle_name" placeholder="名称..."/>
+      </div>
+      <div class="row-fluid">
+        <span class="span1">封面</span>
+        <div class="up_photo">
+          <%= render "/circles/upload_photo" %>
+        </div>
+      </div>
+      <div>
+        <%= render "/circles/address" %>
+      </div>
       <div class="setting">
         <span class="m_r">设置</span>
-        <span>限制地区</span><input type="checkbox" class="limit_area m_r" />
-        <span>申请加入</span><input type="checkbox" class="limit_join " />
+        <span>限制地区</span>
+        <input type="checkbox" class="limit_area m_r" />
+        <span>申请加入</span>
+        <input type="checkbox" class="limit_join " />
       </div>
-      <div><span class="m_r">简介</span><textarea class="introduce" placeholder="描述一下你的商圈..."></textarea></div>
+      <div>
+        <span class="m_r">简介</span>
+        <textarea class="introduce" placeholder="描述一下你的商圈..."></textarea>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -43,20 +58,21 @@
   </div>
   <% end %>
 </div>
+<%= render "/people/communities/setting" %>
 
 <script type="text/template" id='you-template-circle'>
   <%= render :partial => "circles/circle", :locals => {:path => communities_path}  %>
 </script>
+
 <script type="text/template" id='search-template-circle'>
-  <%= render :partial => "circles/circle_template", :locals => {:path => communities_path}  %>
+  <%= render :partial => "circles/circle_search", :locals => {:path => communities_path}  %>
 </script>
 
 <script type='text/javascript'>
-
   $(function(){
-
     var community = new CommunityView({
-      el: $(".my-community")
+      el: $(".community"),
+      login: "<%=current_user.login %>"
     })
 
     community.fetch_circles("<%= person_circles_path(current_user) %>");
@@ -69,7 +85,8 @@
     })
     <% end %>
     new CommunitySearch({
-      el: $(".my-community"),
+      el: $(".community"),
+      login: "<%=current_user.login %>"
     })
   })
 </script>

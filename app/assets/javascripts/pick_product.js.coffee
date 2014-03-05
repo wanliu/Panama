@@ -96,6 +96,9 @@ class root.WizardView extends Backbone.View
     @$product_list.append(@category_product_tpl.render(product))
 
   render_product_infor: (product_ids) =>
+    if product_ids.length <= 0
+      pnotify(text: "请先选择产品", type: "warning")
+      return false 
     $.ajax({
       type: "post",
       url: "/shop_products",
