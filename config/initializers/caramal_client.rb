@@ -139,4 +139,36 @@ class CaramalClient
     x.publish(data, :routing_key => mq_prefix + 'rpc_remove_persistent_channel')
     conn.stop
   end
+
+  def self.create_shop_employee(shop, user, role)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
+    conn.start
+
+    data = { :shop => shop, :user => user, :role => role }
+    data = data.to_json
+
+    ch  = conn.create_channel
+    x = ch.default_exchange
+    mq_prefix = 'wanliu_'
+    q = ch.queue("", { :exclusive => true })
+
+    x.publish(data, :routing_key => mq_prefix + 'rpc_create_shop_employee')
+    conn.stop
+  end
+
+  def self.remove_shop_employee(shop, user, role)
+    conn = Bunny.new(:hostname =>  ENV["rabbitmq"])
+    conn.start
+
+    data = { :shop => shop, :user => user, :role => role }
+    data = data.to_json
+
+    ch  = conn.create_channel
+    x = ch.default_exchange
+    mq_prefix = 'wanliu_'
+    q = ch.queue("", { :exclusive => true })
+
+    x.publish(data, :routing_key => mq_prefix + 'rpc_remove_shop_employee')
+    conn.stop
+  end
 end
