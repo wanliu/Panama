@@ -43,12 +43,14 @@ class root.CategoryProperty
     @$(".join_filter").bind "submit", $.proxy(@join_filter, @)
 
   join_filter: () ->
+    property_ids = @chose.checked_values()
+
     $.ajax(
       url: "/system/categories/#{@params.category_id}/batch_property_values",
       type: "POST",
-      data: {property_ids: @chose.checked_values()}
+      data: {property_ids: property_ids}
       success: () ->
-        pnotify(text: '加入成功', title: '成功信息')
+        pnotify(text: '操作成功！', title: '成功信息')
     )
     false
 

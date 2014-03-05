@@ -1,0 +1,10 @@
+<% active_section :notification %>
+<div class='row-fluid'>
+  <div class="span8 widget">
+    <% if @invite.behavior == :invalid %>
+      <%=render :partial => "form", :locals => { :invite => @invite } %>
+    <% else %>
+      <div>你的邀请信息，已经操作过了！</div>
+    <% end %>
+  </div>  
+</div>

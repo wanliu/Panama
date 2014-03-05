@@ -41,6 +41,7 @@ class Communities::InviteController < Communities::BaseController
     @invite = current_invite
     respond_to do |format|
       if @invite.agree_join
+        @circle.join_friend(@invite.user)
         format.js{
           render :js => "window.location.href='#{community_circles_path(@circle)}'" }
         format.html{

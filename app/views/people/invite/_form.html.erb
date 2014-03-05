@@ -1,0 +1,16 @@
+<div class='invite_employee_wrap'>
+  <%= form_tag  '', :method => "POST", :class => 'invite' do %>
+    <a href="<%=shop_admins_path(invite.targeable) %>"><%=invite.targeable.name %></a> 商店邀请你加入他们，是否同意？ 谢谢！<br /><br />
+    <input type='submit' class='btn btn-primary' value='同意' />
+    <a class='btn refuse' href='javascript:void(0)'>拒绝</a>
+  <% end %>
+</div>
+<script type='text/javascript'>
+  $(function(){
+    new InviteEmployee({
+      agree_url: "<%=agree_person_invite_path(current_user, invite) %>",
+      refuse_url: "<%=refuse_person_invite_path(current_user, invite) %>",
+      el: $(".invite_employee_wrap")
+    })
+  })
+</script>

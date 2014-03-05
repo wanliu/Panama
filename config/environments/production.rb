@@ -49,7 +49,7 @@ Panama::Application.configure do
 
 
   config.assets.precompile += %w(jquery.js stream.js polyfills.js chats/contact.js my_cart.js wizard.js sigin.js panama.js people.js faye.js chat.js admins.js shops.js category.js community.js)
-  config.assets.precompile += %w(stream.css people.css admins.css sigin.css wizard.css category.css another_bootstrap.css system/product.css system/category.css jquery.treeview.css products.css message.css print.css shops.css community.css)
+  config.assets.precompile += %w(stream.css people.css admins.css sigin.css wizard.css category.css another_bootstrap.css system/product.css system/category.css jquery.treeview.css products.css message.css print.css shops.css community.css error.css)
   config.assets.precompile += %w(font-awesome/css/font-awesome.min)
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false

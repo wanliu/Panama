@@ -49,13 +49,9 @@ Panama::Application.routes.draw do
   match "user_checkings/update_shop_auth", :to => "user_checkings#update_shop_auth", :via => :put
   match "user_checkings/upload_photo/:id", :to => "user_checkings#upload_photo", :via => :post
 
-  match "people/:shop_name/invite_people", :to => "people#invite_people"
-  match "people/:shop_name/show_invite/:login", :to => "people#show_invite"
   match "people/:login/update_user_auth", :to => "people#update_user_auth", :via => :put
   match "people/:login/photos", :to => "people#photos"
-  match "people/:shop_name/show_email_invite", :to => "people#show_email_invite"
-  match "people/:shop_name/show_invite", :to => "people#agree_invite_user", :via => :post
-  match "people/:shop_name/show_email_invite", :to => "people#agree_email_invite_user", :via => :post
+  match "people/show_email_invite/:shop_name/:send_user", :to => "people#show_email_invite"
 
   match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
   match "cities/:city_id/communities", :to => "communities#city_index", :via => :get
@@ -123,6 +119,13 @@ Panama::Application.routes.draw do
     member do
       get 'follow'
       get 'unfollow'
+    end
+
+    resources :invite, :controller => "people/invite", :only => [:show] do
+      member do 
+        post 'agree'
+        post 'refuse'
+      end
     end
 
     resources :withdraw_money, :controller => "people/withdraw_money" do 

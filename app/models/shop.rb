@@ -23,6 +23,7 @@ class Shop < ActiveRecord::Base
   # has_many :topic_categories, dependent: :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
   has_many :order_refunds, :foreign_key => "seller_id"
+  has_many :invites, :as => :targeable, class_name: 'InviteUser'
   belongs_to :address
   # has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
   # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
@@ -148,8 +149,13 @@ class Shop < ActiveRecord::Base
   end
 
   def is_employees?(user)
-    user_id = user.is_a?(User) ? user.id : user
-    shop_users.exists?(["user_id=?", user_id])
+    uid = user.is_a?(User) ? user.id : user
+    shop_users.exists?(["user_id=?", uid])
+  end
+
+  def join_employee(user)
+    uid = user.is_a?(User) ? user.id : user
+    shop_users.create(:user_id => uid)
   end
 
   def generate_employee
