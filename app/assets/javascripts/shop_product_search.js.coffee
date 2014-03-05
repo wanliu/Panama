@@ -16,6 +16,7 @@ class BrandChoiceView extends Backbone.View
     "click .pick_brand" : "judge"
     "click .apply"      : "apply"
     "click .cancle"     : "cancle" 
+    "click .leaf_node"  : "_get_category_products"
 
   apply: () ->
     brand_name = []
@@ -56,5 +57,11 @@ class BrandChoiceView extends Backbone.View
       if data.brand_name
         result += @template(data)
     @$(".brand_content").replaceWith($(result))
+
+  _get_category_products: (event) ->
+    if _.isFunction(@options.get_category_products)
+      category_id = $(event.currentTarget).attr("data-id")
+      @options.get_category_products(category_id) 
+
 
 root.BrandChoiceView = BrandChoiceView

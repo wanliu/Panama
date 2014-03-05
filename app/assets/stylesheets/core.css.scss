@@ -301,7 +301,7 @@ ul {
   }
 
   .search-btn{  
-    margin-left: -38px;
+    margin-left: -38px !important;
     z-index: 5;    
     color: rgb(219, 194, 194);
     border: none;
@@ -310,6 +310,14 @@ ul {
     line-height: 20px;
     @include border-radius(1px);
     @include transparent(rgb(51,51,51),0.4);
+    display: inline-block;
+    line-height: 28px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 38px;
+    text-align: center;
+    font-size: 12px;
   }
 
   .input-prepend.input-append{
@@ -1247,10 +1255,6 @@ h2 small {
   width: 90px;
 }
 
-.error .chzn-container-single .chzn-single{
-  border: 1px solid #b94a48;
-}
-
 .dialog-panel{
   .activity-auction, .activity-focus{
 
@@ -1308,8 +1312,12 @@ h2 small {
   }
 }
 
+.error .chzn-container-single .chzn-single{
+  border: 1px solid #b94a48;
+}
+
 .error{
-  border: 1px solid #b94a48!important;
+  // border: 1px solid #b94a48!important;
   
   input[type=text], textarea{
     border: 1px solid #b94a48;
@@ -1317,6 +1325,9 @@ h2 small {
   input[type=number]{
     border: 1px solid #b94a48;
   }
+}
+input.error {
+  border: 1px solid #b94a48;
 }
 
 .disconnect {
@@ -1787,4 +1798,3 @@ body>.global_chat {
 .href_name {
   @include href_ellipsis();
 }
-

@@ -1,14 +1,15 @@
 <% active_section :following %>
+<div class='row-fluid'>
+  <div class='followers widget span8'>
+    <div class='follow-users'>
+      <h4 class='title'>我关注的用户</h4>
+      <%= render :partial => "following_user", :locals => {followings: @u_followings} %>
+    </div>
 
-<div class='followers widget span8'>
-  <div class='follow-users'>
-    <h4 class='title'>我关注的用户</h4>
-    <%= render :partial => "following_user", :locals => {followings: @u_followings} %>
-  </div>
-
-  <div class='follow-shops'>
-    <h4 class='title'>我关注的商店</h4>
-    <%= render :partial => "following_shop", :locals => {followings: @s_followings } %>
+    <div class='follow-shops'>
+      <h4 class='title'>我关注的商店</h4>
+      <%= render :partial => "following_shop", :locals => {followings: @s_followings } %>
+    </div>
   </div>
 </div>
 
@@ -19,7 +20,7 @@
       el: $(".followers .follow-users"),
       login: "<%=current_user.login %>"
     });
-
+    
     new FollowListView({
       follow_type: "Shop",
       el: $(".followers .follow-shops"),

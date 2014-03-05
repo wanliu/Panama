@@ -221,8 +221,9 @@ body.communities{
 
     .bgtoolbar{
       width: 100%;
-      height: 161px;
+      height: 100%;
       position: absolute;
+      z-index: 5;
       top: 0px;
       left: 0px;
       @include transparent(rgb(88, 88, 88), 0.5);

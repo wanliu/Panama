@@ -6,7 +6,6 @@
 #= require models/element_model
 #= require people/people_side
 #= require lib/chosen.jquery
-#= require people/followers
 #= require following
 #= require lib/table_list
 #= require transactions/2columns_viewport

@@ -101,10 +101,18 @@
 
 .community{
   .title{
+    h4{
+      margin: 0;
+    }
 
     input.search-query{
       width: 121px;
+      float: right;
     }
+  }
+
+  .circles{
+    margin-top: 5px;
   }
 
   .body{

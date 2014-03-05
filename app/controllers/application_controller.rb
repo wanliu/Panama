@@ -20,7 +20,10 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    respond_to do |format|
+      format.json{ render :json => ["您没有权限！"], :status => 403 }
+      format.html{ redirect_to root_url, :alert => exception.message }      
+    end
   end
 
   def draw_errors_message(ist_model)

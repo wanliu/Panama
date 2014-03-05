@@ -17,7 +17,7 @@
                 <span class='title'>
                   关注
                 </span>
-                <span class='followers'>
+                <span class='follows_count'>
                   <%=@shop.followers.try(:count) %>
                 </span>
               </p>
@@ -30,13 +30,9 @@
                     <%=@shop.user.login %>
                   </a>
                 </span>
-                <% if current_user != @shop.user  %>
-                  <% if current_user.is_follow_shop?(@shop.id) %>
-                    <span data-value-id="<%= current_user.follow_shop(@shop.id).id %>" class="label label-success unfollow">取消关注</span>
-                  <% else %>
-                    <span class="label label-success follow">+ 关注</span>
-                  <% end %>
-                <% end %>
+                <span class='btn-follow'>
+                  <%=follow_action(@shop) %>
+                </span>
               </p>
             </div>
           </div>

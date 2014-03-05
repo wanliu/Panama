@@ -10,14 +10,8 @@
             <%= f.follow.try(:login) %>
           </a>
         </div>
-        <div>
-        <% if can? :destroy, Following %>
-          <label class='label label-success unfollow'>取消关注</label>
-        <% else %>
-          <% unless current_user.nil? || f.follow == current_user %>
-            <label class='label label-success follow'>关注</label>
-          <% end %>
-        <% end %>
+        <div>        
+          <%= follow_action(f.follow) %>        
         </div>
       </div>
     </div>

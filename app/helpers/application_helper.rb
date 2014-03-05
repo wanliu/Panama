@@ -386,6 +386,23 @@ module ApplicationHelper
     end
   end
 
+  def follow_action(follow)
+    method, owner = if follow.is_a?(User)
+      ['is_follow_user?', follow]
+    else
+      ['is_follow_shop?', follow.user]
+    end
+
+    return if current_user == owner
+    class_name, title = if current_user.send(method, follow)
+      [:unfollow, "取消关注"]
+    else
+      [:follow, "+关注"]
+    end
+    label_class = class_name == :follow ? 'success' : 'important'
+    label_tag class_name, title, :class => "label label-#{label_class} #{class_name}"
+  end
+
   def city_ids(city_id)
     @region = RegionCity.location_region(city_id)
     unless @region.blank?

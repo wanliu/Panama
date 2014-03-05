@@ -17,7 +17,7 @@ class root.EmojifyChooser extends Backbone.View
     ['kissing_closed_eyes', '亲亲'],
     ['flushed', '可爱'],
     ['relieved', '释然'],
-    ['satisfied', '满意'],
+    # ['satisfied', '满意'],
     ['grin', '咧嘴'],
     ['wink', '眨眼'],
     ['stuck_out_tongue_winking_eye', '媚眼'],
@@ -76,9 +76,9 @@ class root.EmojifyChooser extends Backbone.View
     ['heartpulse', '心脉'],
     ['two_hearts', '两心相对'],
     ['revolving_hearts', '两心相伴'],
-    ['cupid', '一见钟情'],
   ]
   extra: [
+    ['cupid', '一见钟情'],
     ['sparkling_heart', 'emojify sparkling_heart'],
     ['sparkles', 'emojify sparkles'],
     ['star', 'emojify star'],
