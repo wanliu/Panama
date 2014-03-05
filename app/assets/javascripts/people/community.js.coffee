@@ -88,5 +88,10 @@ class root.CommunitySearch extends Backbone.View
       # @$(".circles").append(@template(model))
       view = new CircleView(model: new Circle(model), login: @login)
       @$(".circles").append(view.render())
+      new ApplyJoinCircle({
+        el: view.el.find(".add_circle"),
+        model: {id: model.id},
+        current_user_login: @login,
+      })
 
 

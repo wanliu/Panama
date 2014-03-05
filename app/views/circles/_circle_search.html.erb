@@ -13,10 +13,14 @@
 	        </div>
 	         <span class="label label-warning">群主</span>
 	      {{else}}
-	        <span class="label label-warning">已加入</span>
+	        <div>
+	        	<span class="label label-warning">已加入</span>
+	        </div>
 	      {{/if}}
 	    {{ else }}
-	      <a href="javascript:void(0)" data-value-id="{{ id }}" class="label label-warning add_circle">加入</a>
+	      <div>
+	      	<span data-value-id="{{ id }}" class="label label-warning add_circle">加入</span>
+	      </div>
 	    {{/if }}
 	    <div>
 	      {{name}}

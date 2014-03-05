@@ -13,11 +13,11 @@
         <input type="text" class="circle_name" value="<%=circle.name %>"/>
       </div>
       <div class="row-fluid">
-        <span class="span1 m_r">封面</span>
-        <%= render "/circles/update_photo", circle: circle %>
+        <span class="span1 m_r_10">封面</span>
+        <div><%= render "/circles/update_photo", circle: circle %></div>
       </div>
       <div class="row-fluid">
-        <%= render "/circles/update_address", circle: circle %>
+        <div><%= render "/circles/update_address", circle: circle %></div>
       </div>
       <div class="settings">
         <span class="m_r">设置</span>
