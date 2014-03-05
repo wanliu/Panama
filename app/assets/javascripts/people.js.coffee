@@ -38,4 +38,5 @@
 #= require lib/withdraw_money
 #= require transaction_complete
 #= require addresses
+#= require lib/circle_info
 

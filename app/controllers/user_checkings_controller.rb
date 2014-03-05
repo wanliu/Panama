@@ -1,4 +1,4 @@
-# encoding : utf-8
+  # encoding : utf-8
 class UserCheckingsController < ApplicationController
   before_filter :login_required
 
@@ -25,7 +25,8 @@ class UserCheckingsController < ApplicationController
     @shop = @belongs_shop.nil? ? @user_checking.user.create_shop() : @belongs_shop
     @current_ability = ShopAbility.new(current_user, @shop)
     authorize! :manage, @shop
-    @shop.update_attribute("photo",file)
+    @shop.send("photo=",file)
+    @shop.save
   end
 
   #上传头像
@@ -35,7 +36,7 @@ class UserCheckingsController < ApplicationController
     unless file.nil?
       @user_checking = User.find(params[:id]).user_checking
       if field_name == "photo"
-        upload_shop_photo(file)
+        upload_shop_photo(file) 
         render :text => "{success: true, avatar_filename: '#{@shop.send(field_name)}'}"
         return 
       else 
