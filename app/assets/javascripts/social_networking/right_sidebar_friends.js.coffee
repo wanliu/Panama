@@ -265,7 +265,7 @@ class BaseIconsView extends Backbone.View
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
-      # return unless channel.type is 3
+      return unless channel.type is 3
       exist_model.icon_view.setChannel(channel)
     else
       model = new ChatModel({
