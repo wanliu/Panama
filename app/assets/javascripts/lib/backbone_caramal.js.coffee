@@ -178,7 +178,7 @@ class BaseChatView extends Caramal.BackboneView
   initialize: (options) ->
     super
     @render()
-    @name = @model.get('title')
+    @name = @model.get('login') || @model.get('title')
     @title = @name unless @title
     # @channel = @model.get('channel')
     return console.error('请求聊天失败') unless @name

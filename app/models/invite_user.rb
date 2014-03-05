@@ -6,13 +6,13 @@ class InviteUser < ActiveRecord::Base
   belongs_to :user
   belongs_to :targeable, :polymorphic => true
 
+  validates :send_user, :presence => true
+  validates :user, :presence => true
+  validates :targeable, :presence => true
+
   acts_as_status :behavior, [:agree, :refuse]
 
   after_create :notify_receiver
-
-  def notify_url
-    "/communities/#{targeable_id}/invite/#{id}"
-  end
 
   def read_notify
     n = Notification.find_by(
@@ -22,12 +22,17 @@ class InviteUser < ActiveRecord::Base
   end
 
   def agree_join
-    self.update_attribute(:behavior, :agree)
-    targeable.join_friend(user)
+    self.update_attribute(:behavior, :agree)    
   end
 
   def refuse_join
     self.update_attribute(:behavior, :refuse)
+  end
+
+  def self.find_by_update(id)
+    invite = find(id)
+    invite.update_attribute(:read, true)
+    invite
   end
 
   private
@@ -39,6 +44,16 @@ class InviteUser < ActiveRecord::Base
           :user_id => send_user.id,
           :invite => self,
           :url => notify_url)
+    elsif targeable_type == "Shop"
+      user.notify("/employees/invite",
+        "商店 #{targeable.name} 邀请你加入",
+        :target => targeable,
+        :avatar => user.icon,
+        :url => "/people/#{user.login}/invite/#{id}")
     end
+  end
+
+  def notify_url
+    "/communities/#{targeable_id}/invite/#{id}"
   end
 end

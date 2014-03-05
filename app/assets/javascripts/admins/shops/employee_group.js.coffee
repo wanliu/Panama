@@ -499,16 +499,16 @@ class EmployeeGroup
     form = @invite_employee.find("form.form-search-user")
     input = form.find("input[name=login]")
     form.submit(() =>
-      @invite_notice("success", "正在发送信息，请等待...")
       login = input.val()
       employee = new Employee({}, @default_params.shop)
       employee.invite(login,
         (model, data) =>
+          input.val('')
           @invite_notice("success", data.message)
 
         (model, data) =>              
           try
-            message = JSON.parse(data.responseText).message
+            message = JSON.parse(data.responseText)
           catch error
 
           @invite_notice("error", (message || data.responseText) )
@@ -517,11 +517,7 @@ class EmployeeGroup
     )
 
   invite_notice: (status, message) ->
-    reverse_status = if status=="success" then "error" : "success"
-    alert = @invite_employee.find("form.form-search-user .alert-message")
-    alert.removeClass("alert-#{reverse_status}").addClass("alert-#{status}")
-    alert.find(".content").html(message)
-    alert.show()
+    pnotify(text: message, type: status)
 
   load_group: () ->
     @group_view_list = new GroupViewList({

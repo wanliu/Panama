@@ -29,11 +29,17 @@
             </div>
             <div class='info inline'>
               <div>
-                <%= e.login %>
-              </div>
+                <a href="<%=person_path(e) %>">
+                  <%= e.login %>
+                </a>
+              </div>              
               <div>
+                <% unless e == current_shop.user %>
                 <label class='label label-important remove'>移除</label>
-              </div>
+                <% else %>
+                  管理员
+                <% end %>
+              </div>              
             </div>
           </div>
         <% end %>

@@ -345,6 +345,13 @@ class SearchController < ApplicationController
                     :default_operator => 'AND'
                   }
                 }
+              },{
+                :query => {
+                  :query_string => {
+                    :query => "email:#{query_val}*",
+                    :default_operator => 'AND' 
+                  }
+                }
               }]
             end
           end

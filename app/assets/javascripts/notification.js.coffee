@@ -153,6 +153,10 @@ class NotificationManager
     #审核消息
     @client.monitor("/audit/user", @commonNotify)
 
+    #邀请加入雇员
+    @client.monitor("/people/invite/agree", @commonNotify)
+    @client.monitor("/people/invite/refuse", @commonNotify)
+
     #求购 
     @client.monitor("/answer_ask_buy", @answer_ask_buy)
     @client.monitor("/shops/answer_ask_buy/failer", @commonNotify)
