@@ -94,7 +94,7 @@
   </div>
 </div>
 <% end %>
-
+<a href="/system/order_transactions">返回</a>
 <% if @order_transaction.waiting_audit_state? %>
   <%= button_to "审核通过", { action: :audit } %>
   <%= button_to "审核未通过", { action: :audit_failure } %>
