@@ -41,8 +41,12 @@ class Admins::Shops::OrderRefundsController < Admins::Shops::SectionController
   def mini_item
     @refund = current_shop_refunds.find_by(:id => params[:id])
     respond_to do |format|
-      format.html{
-        render :layout => false }      
+      if @refund.present?
+        format.html{
+          render :layout => false }      
+      else
+        format.json{ render :json => ["退货单不存在！"], :status => 403 }
+      end
     end
   end
 

@@ -1,7 +1,7 @@
 class ProductSearchController < ApplicationController
-  before_filter :login_and_service_required
+  before_filter :login_required
 
-  def index
+  def index    
     products = product_search(params[:q])
     if params[:shop_id].present?
       products = product_join_state(products, params[:shop_id])

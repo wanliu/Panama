@@ -12,6 +12,7 @@ class TransferMoney < ActiveRecord::Base
   acts_as_status :pay_type, [:account, :kuaiqian, :bank_transfer]
 
   validates :user, :owner, :source, :presence => true
+  validates :number, :presence => true, :uniqueness => true
 
   validate :valid_pay_type?, :valid_money?
 

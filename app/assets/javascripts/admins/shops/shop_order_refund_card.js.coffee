@@ -60,7 +60,8 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
       success: () =>
         @transition()
         @slideAfterEvent(event)
-      error: () =>
+      error: (xhr) =>
+        @error_message(xhr.responseText)
         @back_state()
     )
 
@@ -88,3 +89,11 @@ class exports.ShopOrderRefundCard extends TransactionCardBase
     price = @$(".delivery_price")
     tag = price.text().trim().substring(0, 1)
     price.html("#{tag} #{@transaction.get('delivery_price')}")
+
+  error_message: (text) ->
+    try
+      ms = JSON.parse(text).join("<br />")
+      pnotify(text: ms, type: "error")
+    catch error
+      pnotify(text: text, type: "error")
+

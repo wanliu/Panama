@@ -198,7 +198,7 @@ class ActivityPreview extends Backbone.View
 
   get_model: (event) ->
     @load_view(event.currentTarget)
-    @_follow ||= new Follow({follow_type: 'Shop', follow_id: @model.get('shop_id')}, @login)
+    @_follow = new FollowModel({follow_type: 'Shop', follow_id: @model.get('shop_id')}, @login)
 
   follow: (event) ->
     @get_model(event)
@@ -207,6 +207,8 @@ class ActivityPreview extends Backbone.View
         if $(elem).attr("data-value-id") == @model.get('shop_id')
           $(elem).addClass("unfollow").removeClass("follow")
           $(elem).html("取消关注")
+    , (error) =>
+      @error_message(error.responseText)
 
   unfollow: (event) ->
     @get_model(event)
@@ -214,11 +216,21 @@ class ActivityPreview extends Backbone.View
       id = @$(".unfollow").attr("data-follow-id");
       @_follow.set({id: id})
 
-    @_follow.destroy success: (model, data) =>
+    @_follow.unfollow (model, data) =>
       $(".shopinfo .unfollow").each (_i, elem) =>
         if $(elem).attr("data-value-id") == @model.get('shop_id')
           $(elem).addClass("follow").removeClass("unfollow")
           $(elem).html("+ 关注")
+    , (error) =>
+      @error_message(error.responseText)
+
+  error_message: (text) ->
+    try 
+      ms = JSON.parse(text).join("<br />")
+      pnotify(text: ms, type: "error")
+    catch error
+      pnotify(text: text, type: "error")
+
 
 class ActivityModel extends Backbone.Model
 

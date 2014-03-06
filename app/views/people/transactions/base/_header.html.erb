@@ -8,7 +8,7 @@
             <%= icon :open %>打开
           </a>
         </li>
-        <% if row.order_refund_state? %>
+        <% if row.order_refund_state? && row.refunds.count <= 0 %>
           <li>
             <a href='javascript:void(0)' class='returned-event btn btn-primary btn-mini'>
             申请退货
