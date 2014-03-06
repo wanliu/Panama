@@ -128,15 +128,15 @@
 	$(function(){
 		new Upload({
 			verify_authenticity_token: "<%= form_authenticity_token %>",
-			action: "/user_checkings/upload_photo",
+			action: "/user_checkings/upload_photo/",
 			current_user: { id: "<%= current_user.id %>",
 				login: "<%= current_user.login %>",
 			},
 			targets: [
 				{
 					el: $(".main_panle1"),
-					input_name: "photo",
-					photo: "<%= current_user.try(:shop).try(:photo) || '/default_img/file_blank.gif' %>"
+					input_name: "shop_photo",
+					photo: "<%= @user_checking.try(:shop_photo) %>"
 				},{
 					el: $(".main_panle2"),
 					input_name: "company_license_photo",
