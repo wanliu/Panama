@@ -89,6 +89,9 @@ class Employee extends Backbone.Model
     })
 
   invite: (login, callback, error_callback) ->
+    if _.isEmpty(login)
+      pnotify(text: "请填写邀请人的Email或者用户名", type: "warning")
+      return false  
     this.fetch({
       url: "#{@url}/invite",
       data: {login: login},
