@@ -51,16 +51,21 @@ ActiveAdmin.register OrderRefund do
 
   member_action :agree, :method => :post do
     @refund = OrderRefund.find(params[:id])
-    event_name = @refund.order.unshipped_state? ? 'unshipped_agree' : 'shipped_agree'
-    @refund.fire_events!(event_name)
-    @refund.notice_change_buyer(event_name)
-    @refund.notice_change_seller(event_name)
+    if @refund.state == "apply_failure"
+      event_name = @refund.order.unshipped_state? ? 'unshipped_agree' : 'shipped_agree'
+      @refund.fire_events!(event_name)
+      @refund.notice_change_buyer(event_name)
+      @refund.notice_change_seller(event_name)
+    end
     redirect_to system_order_refund_path
   end
 
   member_action :close, :method => :post do
     @refund = OrderRefund.find(params[:id])
-    @refund.fire_events!(:expired)
+    if @refund.state == "apply_failure"
+      @refund.fire_events!(:expired)
+    end
     redirect_to system_order_refund_path
-  end
+  end  
+
 end
