@@ -86,6 +86,6 @@ class People::DirectTransactionsController < People::BaseController
 
   private
   def current_direct_transaction
-    @people.direct_transactions.find(params[:id])
+    @people.direct_transactions.find_by(id: params[:id])
   end
 end

@@ -79,6 +79,6 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
 
   private
   def current_shop_direct_transaction
-    current_shop.direct_transactions.find(params[:id])
+    current_shop.direct_transactions.find_by(id: params[:id])
   end
 end

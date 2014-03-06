@@ -58,8 +58,10 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
       operator = @transaction.current_operator
       if operator.present? && operator !=  current_user
         format.json{ render :json => ["这订单已经被#{operator.login}处理了！"], :status => 403 }
-      else
+      elsif @transaction.present?
         format.html{ render :layout => false }
+      else
+        format.json{ render :json => ["订单不存在！"], :status => 403 }
       end
     end
   end

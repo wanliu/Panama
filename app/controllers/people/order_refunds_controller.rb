@@ -20,7 +20,7 @@ class People::OrderRefundsController < People::BaseController
   end
 
   def mini_item
-    @refund = current_user_refunds.find(params[:id])
+    @refund = current_user_refunds.find_by(id: params[:id])
     respond_to do |format|
       if @refund.present?
         format.html{ render :layout => false }
