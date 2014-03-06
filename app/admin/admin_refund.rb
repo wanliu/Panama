@@ -25,7 +25,9 @@ ActiveAdmin.register OrderRefund do
       refund.try(:order).try(:number)
     end
     column :total
-    column :state
+    column :state do |refund|
+      refund.state_title
+    end
     column :buyer do |refund|
       refund.try(:buyer).try(:login)
     end
