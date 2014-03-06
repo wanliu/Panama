@@ -25,7 +25,7 @@ class People::OrderRefundsController < People::BaseController
       if @refund.present?
         format.html{ render :layout => false }
       else
-        format.json{ render :json => ["退货单不存在"], :statu => 403 }
+        format.json{ render :json => ["退货单不存在"], :status => 403 }
       end
     end
   end
