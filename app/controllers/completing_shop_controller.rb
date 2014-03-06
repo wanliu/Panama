@@ -82,7 +82,8 @@ class CompletingShopController < Wicked::WizardController
       shop_params = {
         name: shop_auth_params[:shop_name],
         shop_summary: shop_auth_params[:shop_summary],
-        address_id: @user_checking.address.try(:id)
+        address_id: @user_checking.address.try(:id),
+        photo: @user_checking.shop_photo
       }
 
       begin

@@ -5,7 +5,7 @@ class UserChecking < ActiveRecord::Base
   attr_accessible :user_id, :industry_type, :service,
                   :company_name, :address, :company_license, :company_license_photo,
                   :ower_name, :ower_photo, :ower_shenfenzheng_number, :phone, :products_added,
-                  :rejected, :rejected_reason, :checked, :address_id
+                  :rejected, :rejected_reason, :checked, :address_id, :shop_photo
   attr_accessor :uploader_secure_token
 
   belongs_to :user
@@ -19,10 +19,10 @@ class UserChecking < ActiveRecord::Base
 
   mount_uploader :company_license_photo, ImageUploader
   mount_uploader :ower_photo, ImageUploader
-  # mount_uploader :shop_photo, ImageUploader
+  mount_uploader :shop_photo, ImageUploader
 
   define_graphical_attr :ower_photos, :handler => :ower_photo
-  # define_graphical_attr :shop_photos, :handler => :shop_photo
+  define_graphical_attr :shop_photos, :handler => :shop_photo
   after_update do 
     clone_delivery_address    
     update_relation_index

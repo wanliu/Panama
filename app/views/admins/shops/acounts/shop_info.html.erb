@@ -125,7 +125,7 @@
         login: "<%= current_user.login %>",
       },
       targets: [
-        { el: $(".main_panle1"), input_name: "photo", photo: "<%= @shop.try(:photo) %>" },
+        { el: $(".main_panle1"), input_name: "shop_photo", photo: "<%= @user_checking.try(:shop_photo) %>" },
         { el: $(".main_panle2"), input_name: "company_license_photo", photo: "<%= @user_checking.try(:company_license_photo) %>" },
         { el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>" }
       ]
