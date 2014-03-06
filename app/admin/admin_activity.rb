@@ -4,6 +4,8 @@ ActiveAdmin.register Activity do
   config.clear_action_items!
   form :partial => "form"
 
+  actions :all, :except => [:new]
+
   scope :等待审核, default: true do
     Activity.where("status = ?", Activity.statuses[:wait])
   end

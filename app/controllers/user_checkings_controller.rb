@@ -20,37 +20,37 @@ class UserCheckingsController < ApplicationController
     end
   end
 
-  def upload_shop_photo(file)
-    @belongs_shop = @user_checking.user.try(:belongs_shop)
-    @shop = @belongs_shop.nil? ? @user_checking.user.create_shop() : @belongs_shop
-    @current_ability = ShopAbility.new(current_user, @shop)
-    authorize! :manage, @shop
-    @shop.send("photo=",file)
-    @shop.save
-  end
-
   #上传头像
   def upload_photo   
     field_name = params[:field_name]
     file = params[:file].is_a?(ActionDispatch::Http::UploadedFile) ? params[:file] : params[field_name] 
     unless file.nil?
       @user_checking = User.find(params[:id]).user_checking
-      if field_name == "photo"
-        upload_shop_photo(file) 
-        render :text => "{success: true, avatar_filename: '#{@shop.send(field_name)}'}"
-        return 
+      if field_name == "photo"        
+        upload_shop_photo(file)
+        render :text => "{success: true, avatar_filename: '#{@shop.photos.header}'}"
       else 
-        @user_checking.send(field_name).remove! if  @user_checking.send(field_name)
+        @user_checking.send(field_name).remove! if @user_checking.send(field_name)
         @user_checking.send("#{field_name}=",file)
-      end
 
-      if @user_checking.save
-        render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
-      else
-        render :text => "{success: false, error: '上传头像失败！'}"
+        if @user_checking.save
+          render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
+        else
+          render :text => "{success: false, error: '上传头像失败！'}"
+        end
       end
     else
       render :text => "{success: false, error: '请上传头像！'}"
     end
+  end
+
+  private 
+  def upload_shop_photo(file)
+    @belongs_shop = @user_checking.user.try(:belongs_shop)
+    @shop = @belongs_shop.nil? ? @user_checking.user.create_shop() : @belongs_shop
+    @current_ability = ShopAbility.new(current_user, @shop)
+    authorize! :manage, @shop
+    @shop.photo = file
+    @shop.save
   end
 end
