@@ -1,12 +1,6 @@
 <!-- 等待发货 -->
 <div class="container-fluid">
-<!--   <div class='row-fluid'>
-    <div class='offset10'>
-      <a href='javascript:void(0)' class='returned-event'>
-        申请退货
-      </a>
-    </div>
-  </div> -->
+  <%=render_base_template "refunds", :transaction => transaction %>
   <%=render_base_template "delivery_price", :transaction => transaction %>
   <%=render_base_template "manner_and_address", :transaction => transaction %>
 </div>

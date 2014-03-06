@@ -1,5 +1,6 @@
 <!-- 等待收货确认 -->
 <div class="container-fluid">
+  <%=render_base_template "refunds", :transaction => transaction %>
   <%= render_funcat "refund_display", :locals => {
     :transaction => transaction } %>
   <div class='row-fluid'>

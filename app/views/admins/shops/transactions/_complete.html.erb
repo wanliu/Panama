@@ -1,6 +1,7 @@
 <div class="container-fluid">
+  <%= render_base_template "refunds", :transaction => transaction %>
   <%= render_base_template "delivery", :transaction => transaction %>
-  <%=render_base_template "manner", :transaction => transaction %>
+  <%= render_base_template "manner", :transaction => transaction %>
   <div class='row-fluid'>
     <div class='span12'>
       <%= render "products", :transaction => transaction %>

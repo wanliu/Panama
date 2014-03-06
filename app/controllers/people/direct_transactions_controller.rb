@@ -61,7 +61,11 @@ class People::DirectTransactionsController < People::BaseController
   def mini_item
     @direct_transaction = current_direct_transaction
     respond_to do |format|
-      format.html{ render :layout => false }
+      if @direct_transaction.present?
+        format.html{ render :layout => false }
+      else
+        format.json{ render :json => ["直接交易不存在！"], :status => 403 }
+      end
     end
   end
 

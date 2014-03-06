@@ -1,3 +1,4 @@
+<% if transaction.refunds.count <= 0 %>
 <div class='container-fluid returned_panel'>
   <div class='span12'>
     <form class="form-horizontal">
@@ -40,3 +41,4 @@
     })
   })
 </script>
+<% end %>

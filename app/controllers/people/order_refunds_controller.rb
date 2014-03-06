@@ -22,7 +22,11 @@ class People::OrderRefundsController < People::BaseController
   def mini_item
     @refund = current_user_refunds.find(params[:id])
     respond_to do |format|
-      format.html{ render :layout => false }
+      if @refund.present?
+        format.html{ render :layout => false }
+      else
+        format.json{ render :json => ["退货单不存在"], :statu => 403 }
+      end
     end
   end
 

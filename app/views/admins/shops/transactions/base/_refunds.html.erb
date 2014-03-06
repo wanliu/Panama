@@ -1,0 +1,12 @@
+<% transaction.refunds.each do |refund| %>
+<div class='row-fluid'>
+  <div class='span2'>退货单</div>
+  <div class='span4'>
+    <a href="<%=shop_admins_order_refunds_path(current_shop) %>#open/<%= refund.id %>/refund">
+      <%=refund.number %>
+    </a>
+  </div>
+  <div class='span2'>退货状态</div>
+  <div class='span4'><%=refund.state_title %></div>
+</div>
+<% end %>
