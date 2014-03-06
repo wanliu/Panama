@@ -109,6 +109,6 @@ class FollowListView extends Backbone.View
 
 
 
-root.Follow = Follow
+root.FollowModel = Follow
 root.FollowView = FollowView
 root.FollowListView = FollowListView
