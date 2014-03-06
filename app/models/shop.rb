@@ -2,14 +2,16 @@
 require 'orm_fs'
 
 class Shop < ActiveRecord::Base
+  mount_uploader :photo, ImageUploader
+
   include Graphical::Display
-  include Tire::Model::Search
-  include Tire::Model::Callbacks
+  include Tire::Model::Search 
+  include Tire::Model::Callbacks 
   include Tire::Model::UpdateByQuery
   extend FriendlyId
 
-  attr_accessible :name, :user, :address, :shop_summary, :address_id,:shop_url,:audit_count
-  attr_accessor :uploader_secure_token
+  attr_accessible :name, :user, :address, :shop_summary, :address_id, :shop_url, :audit_count, :photo
+  attr_accessor :uploader_secure_token  
 
   has_many :products, :class_name => "ShopProduct", dependent: :destroy
   has_many :groups, dependent: :destroy, class_name: "ShopGroup"
@@ -19,17 +21,13 @@ class Shop < ActiveRecord::Base
   has_many :followers, as: :follow, class_name: "Following", dependent: :destroy
   has_many :circles, as: :owner, class_name: "Circle", dependent: :destroy
   has_many :topics, as: :owner, dependent: :destroy
-  # has_many :topic_receives, as: :receive, dependent: :destroy, class_name: "TopicReceive"
-  # has_many :topic_categories, dependent: :destroy
   has_many :direct_transactions, :foreign_key => "seller_id"
   has_many :order_refunds, :foreign_key => "seller_id"
   has_many :invites, :as => :targeable, class_name: 'InviteUser'
   belongs_to :address
-  # has_many :pay_manners, dependent: :destroy, class_name: "PayManner"
-  # has_many :delivery_manners, dependent: :destroy, class_name: "DeliveryManner"
 
   has_one :shops_category
-  belongs_to :user
+  belongs_to :user 
 
   alias_method :owner, :user
 
@@ -37,7 +35,7 @@ class Shop < ActiveRecord::Base
 
   delegate :banks, :to => :user
 
-  after_update do
+  after_save do
     update_relation_index
   end
 
@@ -57,7 +55,6 @@ class Shop < ActiveRecord::Base
 
   validates_presence_of :user
 
-  mount_uploader :photo, ImageUploader
   define_graphical_attr :photos, :handler => :photo
   friendly_id :name
 

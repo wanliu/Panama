@@ -128,7 +128,7 @@
 	$(function(){
 		new Upload({
 			verify_authenticity_token: "<%= form_authenticity_token %>",
-			action: "/user_checkings/upload_photo/",
+			action: "/user_checkings/upload_photo",
 			current_user: { id: "<%= current_user.id %>",
 				login: "<%= current_user.login %>",
 			},

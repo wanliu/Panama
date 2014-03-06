@@ -1,6 +1,6 @@
 <div class="span12">
   <div class='photo span5'>
-    <img src="{{photos.header}}" />
+    <img src="{{photos.header}}" data-toggle="tooltip" data-placement="bottom" data-original-title="点击聊天" />
   </div>
   <div class="info span7">
     {{#if isJoin}}
@@ -21,7 +21,7 @@
         <span data-value-id="{{ id }}" class="label label-warning add_circle">加入</span>
       </div>
     {{/if }}
-    <div>
+    <div class="group-name" data-name="{{name}}">
       {{name}}
     </div>
     <div>

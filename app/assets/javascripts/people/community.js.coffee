@@ -12,7 +12,8 @@ class CircleView extends Backbone.View
   className: "circle"
 
   events: 
-    "click .icon-cog" : "setting_load"
+    "click .icon-cog"  : "setting_load"
+    "click .photo>img" : "open_chat"
 
   initialize: () ->
     _.extend(@, @options)
@@ -31,6 +32,18 @@ class CircleView extends Backbone.View
     data = @model.toJSON()
     template = Handlebars.compile($("#you-template-circle").html())
     @$el.html(template(data))
+
+  open_chat: () ->
+    chat_model = new ChatModel({
+      type: 2,
+      title: @$('.group-name').attr('data-name')
+    })
+    chat_model = ChatManager.getInstance().findChatIcon(chat_model)
+    if chat_model
+      chat_model.icon_view.toggleChat()
+    else
+      console.error('请求商圈群聊失败')
+
 
 class MyCircleView extends Backbone.View
 

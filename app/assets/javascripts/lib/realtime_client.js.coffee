@@ -29,7 +29,7 @@ class root.Realtime
 
     @on('connecting', () =>
       @connecting()
-      console.log('connecting')
+      # console.log('connecting')
     )
 
     @on('connect_failed', () =>

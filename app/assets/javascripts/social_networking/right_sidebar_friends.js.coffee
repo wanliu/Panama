@@ -123,6 +123,11 @@ class root.ChatManager extends Backbone.View
   _filter: (model) ->
     { type: model.get('type'), displayTitle: model.get('displayTitle') }
 
+  findChatIcon: (model) ->
+    model.setDisplayTitle()
+    targetView = @targetView(model.get('type'))
+    existModel = targetView.collection.where(@_filter(model))[0]
+
   addChatIcon: (model) ->
     model.setDisplayTitle()
     # exist_model = @findExist(model)
@@ -265,7 +270,7 @@ class BaseIconsView extends Backbone.View
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
-      # return unless channel.type is 3
+      return unless channel.type is 3
       exist_model.icon_view.setChannel(channel)
     else
       model = new ChatModel({

@@ -512,7 +512,9 @@ class root.FriendChatView extends BaseChatView
 class root.GroupChatView extends BaseChatView
   head_template: _.template('
     <div class="head">
-      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
+      <a class="name" href="/people/<%= clients.current_user %>/communities">
+        <%= model.get("displayTitle") %>
+      </a>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>')
 
@@ -520,7 +522,7 @@ class root.GroupChatView extends BaseChatView
     @channel ||= Caramal.Group.of(@name)
 
   clickTitle: () ->
-    $.ajax(
+    ###$.ajax(
       type: 'POST'
       dataType: 'json'
       data: { name: @name }
@@ -530,7 +532,7 @@ class root.GroupChatView extends BaseChatView
         document.location.href = data.url
       error: (data, xhr, res) =>
         console.error('跳转失败')
-    )
+    )###
 
 
 class root.TemporaryChatView extends BaseChatView
