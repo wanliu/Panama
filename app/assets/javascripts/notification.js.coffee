@@ -21,6 +21,22 @@ class NotificationManager
           </div>
       </div>""")
 
+  circlesTemplate: Handlebars.compile(
+    """<div class='noty_message'>
+          {{#if avatar}}
+            <img class='avatar avatar-icon noty_avatar' src='{{avatar}}' />
+          {{/if}}
+          {{#if title}}
+            <p>{{title}}</p>
+          {{/if}}
+          <span class='noty_text'></span>
+          <div class='noty_close'></div>
+          <div>
+            <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
+            <a href="javascript:void(0)" class='btn btn-danger after_click pull-right'>开始聊天</a>
+          </div>
+      </div>""")
+
   followTemplate: Handlebars.compile(
     """<div class='noty_message noty_message_follow'>
         {{#if avatar}}
@@ -109,14 +125,14 @@ class NotificationManager
     @client.monitor("/friends/add_quan", @commonNotify) # √
     @client.monitor("/friends/add_user", @add_user) # √
     @client.monitor("/friends/remove_user", @remove_user) # √
-    @client.monitor("/friends/remove_quan", @commonNotify) # √
+    @client.monitor("/friends/remove_quan", @remove_quan) # √
     # 个人社交部分
     @client.monitor("/follow", @follow) # √
     @client.monitor("/unfollow", @commonNotify) # √
     @client.monitor("/circles/request", @commonNotify) # √
     @client.monitor("/circles/invite", @circle_invite) # √
     @client.monitor("/circles/refuse", @commonNotify) # √
-    @client.monitor("/circles/joined", @commonNotify) # √
+    @client.monitor("/circles/joined", @joined) # √
     @client.monitor("/circles/leaved", @commonNotify) # √
     # 商店社交部分
     @client.monitor("/shops/follow", @shop_follow) # √
@@ -188,6 +204,10 @@ class NotificationManager
 
   close_message: () ->
 
+  joined: (data) =>
+    data.template =  $(@circlesTemplate(data))
+    @commonNotify(data)
+
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
     @commonNotify(data)
@@ -212,6 +232,7 @@ class NotificationManager
     new AnswerInvite({
       el: data.template,
       invite: data.invite,
+      data: data
     })
 
   shop_follow: (data) =>
@@ -251,6 +272,15 @@ class NotificationManager
     model = new ChatModel({
       follow_type: 1,
       login: data.friend_name,
+      icon: data.avatar
+    })
+    ChatManager.getInstance().removeChatIcon(model)
+
+  remove_quan: (data) =>
+    @commonNotify(data)
+    model = new ChatModel({
+      type: 2,
+      title: data.group_name,
       icon: data.avatar
     })
     ChatManager.getInstance().removeChatIcon(model)
@@ -367,15 +397,24 @@ class AnswerInvite extends Backbone.View
     "click .agree"   :  "agree_invite"
     "click .refuse"  :  "refuse_invite"
 
+  initialize: (@options) ->
+    @model = new ChatModel({
+      type: 2,
+      title: @options.data.group_name,
+      icon: @options.data.avatar
+    })
+
   agree_invite: () =>
     $.ajax({
       dataType: "json",
       type: "post",
       url: "/communities/#{@options.invite.targeable_id}/invite/#{ @options.invite.id }/agree_join",
       success: () =>
+        ChatManager.getInstance().addChatIcon(@model)
         @$(".noty_close").click()
         pnotify(text: "加入商圈成功.....")
     })
+
   refuse_invite: () =>
     $.ajax({
       dataType: "json",

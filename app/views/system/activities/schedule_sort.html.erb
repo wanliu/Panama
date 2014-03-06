@@ -188,7 +188,7 @@
           $(".begin_time").val((event.start).format("yyyy-MM-dd"));
           $(".end_time").val((event.end).format("yyyy-MM-dd"));
           $('#activity').modal();
-          $('#calendar').fullCalendar('updateEvent', event,revertFunc);     
+          $('#calendar').fullCalendar('updateEvent', event.revertFunc);     
         }
       },
 

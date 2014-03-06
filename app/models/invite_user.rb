@@ -43,6 +43,7 @@ class InviteUser < ActiveRecord::Base
           :target => targeable,
           :user_id => send_user.id,
           :invite => self,
+          :group_name => targeable.name,
           :url => notify_url)
     elsif targeable_type == "Shop"
       user.notify("/employees/invite",

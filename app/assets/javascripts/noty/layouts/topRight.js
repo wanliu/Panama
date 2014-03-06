@@ -31,7 +31,7 @@
 			object: '<li />',
 			selector: 'li',
 			css: {
-				height: 60,
+				height: "auto",
 				"margin-bottom": 10,
 			}
 		},

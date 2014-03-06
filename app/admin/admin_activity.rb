@@ -59,6 +59,10 @@ ActiveAdmin.register Activity do
     link_to "排程日历", schedule_sort_system_activities_path
   end
 
+  action_item  do
+    link_to "返回", system_activities_path
+  end
+
   collection_action :schedule_sort, :title => "活动日历", :method => :get do
   end
 
