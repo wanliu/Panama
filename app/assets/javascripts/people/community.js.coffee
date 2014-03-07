@@ -63,6 +63,11 @@ class MyCircleView extends Backbone.View
     return @el.html('没有商圈，创建属于你自己的商圈吧。') if collections.length is 0
     collections.each (model) =>
       @add(model)
+    new ApplyJoinCircleList({
+      el: $(".circles"),
+      current_user_login: @login,
+    })
+
 
 class root.CommunityView extends Backbone.View
 
@@ -101,10 +106,10 @@ class root.CommunitySearch extends Backbone.View
       # @$(".circles").append(@template(model))
       view = new CircleView(model: new Circle(model), login: @login)
       @$(".circles").append(view.render())
-      new ApplyJoinCircle({
-        el: $(view.el).find(".add_circle"),
-        model: {id: model.id},
-        current_user_login: @login,
-      })
+    
+    new ApplyJoinCircleList({
+      el: @$(".circles"),
+      current_user_login: @login,
+    })
 
 
