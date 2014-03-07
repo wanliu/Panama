@@ -48,7 +48,7 @@ class People::NotificationsController < People::BaseController
     @notification = Notification.find(params[:id])
     @notification.change_read
     respond_to do |format|
-      format.html { redirect_to @notification.url }
+      format.html { redirect_to @notification.url || person_notifications_path(@people) }
       format.json { render json: @notification.as_json }
     end
   end
