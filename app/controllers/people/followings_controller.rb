@@ -52,6 +52,7 @@ class People::FollowingsController < People::BaseController
 
   def unfollow
     @follow = current_user.followings.find_by(follow_type: params[:follow_type], follow_id: params[:follow_id])
+    
     respond_to do |format|
       if @follow.nil?
         format.json{ render :json =>["你没有关注对方！"], :status => 403 }

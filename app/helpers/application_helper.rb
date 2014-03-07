@@ -375,7 +375,7 @@ module ApplicationHelper
   end
 
   def city_by_ip(client_ip)
-    client_ip = "124.228.76.190" unless Rails.env.production?
+    # client_ip = "124.228.76.190" unless Rails.env.production?
     address = IPSearch.ip_query(client_ip)
     if address.blank? || (address["status"] == 1)
       City.find_by_name("衡阳市")
@@ -399,6 +399,7 @@ module ApplicationHelper
     else
       [:follow, "+关注"]
     end
+    
     label_class = class_name == :follow ? 'success' : 'important'
     label_tag class_name, title, :class => "label label-#{label_class} #{class_name}"
   end
