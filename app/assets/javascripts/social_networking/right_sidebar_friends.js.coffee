@@ -17,6 +17,8 @@ class root.ChatModel extends Backbone.Model
         '直接交易'
       when 'Activity'
         '活动'
+      when 'cs'
+        '客服'
       else
         console.error('未处理的类型')
 
@@ -298,7 +300,7 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setDisplayTitle()
-      return console.error('请求聊天失败') unless model.get('name')
+      # return console.error('请求聊天失败') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
