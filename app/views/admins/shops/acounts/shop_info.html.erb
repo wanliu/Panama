@@ -117,7 +117,6 @@
 
 <script type="text/javascript">
   $(function(){
-    <% if can? :manage, @shop %>
     new Upload({
       verify_authenticity_token: "<%=form_authenticity_token %>",
       action: "/user_checkings/upload_photo/",
@@ -130,6 +129,5 @@
         { el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>" }
       ]
     })
-    <% end %>
   });
 </script>
