@@ -77,6 +77,11 @@ class Shop < ActiveRecord::Base
     end
   end
 
+  #shop 的所有的圈子，包括店主个人的
+  def all_type_circles
+    Circle.where("owner_type='Shop' and owner_id=? or owner_type='User' and owner_id=?",user.id, id)
+  end
+
   #加入的商店商圈
   def circle_all
     circle_ids = CircleFriends.where(:user_id => user.id).pluck(:circle_id)
@@ -95,8 +100,7 @@ class Shop < ActiveRecord::Base
   #所有好友的圈子
   def all_friend_circles
     user_ids = circle_all_friends.select(:user_id).map{|f| f.user_id}
-    Circle.where(:owner_type => "User",
-      :owner_id => user_ids)
+    Circle.where(:owner_type => "User",:owner_id => user_ids)
   end
 
   def has_product(product_id)

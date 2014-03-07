@@ -14,7 +14,7 @@ class ActivityBind extends Backbone.View
     "click .focus .partic-button"        : "joinFocus"
     "click .focus .unpartic-button"      : "unjoinFocus"
     "click .load_modal"                  : "load_modal"
-    "click .share_activity"              : "share_activity"
+    # "click .share_activity"              : "share_activity"
 
   like_template: '<a class="btn like-button" href="#"><i class="icon-heart"></i> 喜欢</a>'
   unlike_template: '<a class="btn unlike-button active" href="#"> 取消喜欢</a>'
@@ -23,9 +23,9 @@ class ActivityBind extends Backbone.View
 
   initialize: (options) ->
     _.extend(@, options)
-    @tool = new chosenTool({
-      el: $(@el)
-    })
+    # @tool = new chosenTool({
+    #   el: $(@el)
+    # })
 
   load_modal: () =>
     @$('#PickCircle').modal({
@@ -146,21 +146,21 @@ class ActivityBind extends Backbone.View
     MyCart.myCart.addToCart(@$('.preview'),$form , url)
     false
 
-  share_activity: () ->
-    return false if @$(".share_activity_to_circles .disabled").length == 1
-    @$(".share_activity").addClass('disabled')
-    ids = @tool.data()
-    activity_id = @model.get('id')
-    $.ajax(
-      data: {ids: ids}
-      url: "/activities/"+activity_id+"/share_activity"
-      type: "post"
-      success: () =>
-        @$(".share_activity_to_circles").modal('hide')
-        pnotify(text: '分享活动成功！!')
-      error: (messages) ->
-        pnotify(text: messages.responseText, type: "error")
-    )
+  # share_activity: () ->
+  #   return false if @$(".share_activity_to_circles .disabled").length == 1
+  #   @$(".share_activity").addClass('disabled')
+  #   ids = @tool.data()
+  #   activity_id = @model.get('id')
+  #   $.ajax(
+  #     data: {ids: ids}
+  #     url: "/activities/"+activity_id+"/share_activity"
+  #     type: "post"
+  #     success: () =>
+  #       @$(".share_activity_to_circles").modal('hide')
+  #       pnotify(text: '分享活动成功！!')
+  #     error: (messages) ->
+  #       pnotify(text: messages.responseText, type: "error")
+  #   )
 
   join: () ->
     $('.dialog-panel').remove()

@@ -102,7 +102,7 @@ class ShopsController < ApplicationController
   def shop_circles
     @shop = Shop.find_by(:name => params[:id])
     @circles = @shop.circles
-    render "/people/communities/all_circles", :layout => false    
+    render "/people/communities/all_circles", :layout => false
   end
 
   # 关注

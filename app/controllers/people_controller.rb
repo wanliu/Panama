@@ -57,6 +57,12 @@ class PeopleController < ApplicationController
     end
   end
 
+  def all_circles
+    @user = User.find_by(:login => params[:id])
+    @circles = @user.shop.all_type_circles
+    render "/people/communities/all_circles", :layout => false    
+  end
+
   # 关注
   def follow
     this_person = User.find_by(:login => params[:id])

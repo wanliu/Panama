@@ -11,23 +11,23 @@ class root.CircleListView extends Backbone.View
   initialize: (option) ->
     _.extend(@, option)
 
-    @$left = @$(".left")
-    @$right = @$(".right")
+    # @$left = @$(".left")
+    # @$right = @$(".right")
 
-    @topics = new TopicViewList(
-      sp_el: @el,
-      add_topic: _.bind(@add_topic, @),
-      fetch_url: @topic_fetch_url)
+    # @topics = new TopicViewList(
+    #   sp_el: @el,
+    #   add_topic: _.bind(@add_topic, @),
+    #   fetch_url: @topic_fetch_url)
 
-    @view = new CreateTopicView(
-      circle_id: @circle_id,
-      create_topic: _.bind(@create_topic, @),
-      el: @$(".left>.toolbar"))
+    # @view = new CreateTopicView(
+    #   circle_id: @circle_id,
+    #   create_topic: _.bind(@create_topic, @),
+    #   el: @$(".left>.toolbar"))
 
-    new CircleInfoView(
-      el: @$(".circle-description"),
-      circle_id: @circle_id
-    )
+    # new CircleInfoView(
+    #   el: @$(".circle-description"),
+    #   circle_id: @circle_id
+    # )
 
   # add_topic: (template) ->
   #   @short_elem().append(template)
@@ -48,12 +48,12 @@ class root.CircleListView extends Backbone.View
   #       window.location.href = "/communities/#{@circle_id}/circles"
   #   )
 
-  # quit_circle: (event) ->
-  #   return unless confirm('确定退出商圈吗？')
-  #   $.ajax({
-  #     type: "delete",
-  #     url: "/communities/#{@circle_id}/circles/quit_circle",
-  #     success: (data, xhr, res) =>
-  #       window.location.href = "/communities/#{@circle_id}/circles"
-  #   })
+  quit_circle: (event) ->
+    return unless confirm('确定退出商圈吗？')
+    $.ajax({
+      type: "delete",
+      url: "/communities/#{@circle_id}/circles/quit_circle",
+      success: (data, xhr, res) =>
+        window.location.href = "/communities/#{@circle_id}/circles"
+    })
 
