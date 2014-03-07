@@ -33,7 +33,7 @@ class NotificationManager
           <div class='noty_close'></div>
           <div>
             <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-            <a href="javascript:void(0)" class='btn btn-danger after_click pull-right'>开始聊天</a>
+            <a href="javascript:void(0)" class='btn btn-danger join_chat after_click pull-right'>开始聊天</a>
           </div>
       </div>""")
 
@@ -207,6 +207,20 @@ class NotificationManager
   joined: (data) =>
     data.template =  $(@circlesTemplate(data))
     @commonNotify(data)
+    model = new ChatModel({
+      type: 2,
+      title: data.group_name,
+      icon: data.avatar
+    })
+    chat_model = ChatManager.getInstance().addChatIcon(model)
+
+    data.template.find(".join_chat").on("click", () => 
+      if chat_model
+        chat_model.icon_view.toggleChat()
+      else
+        console.error('请求商圈群聊失败')
+    )
+    new DefaultView({ el: data.template})
 
   modal_callback: () ->
     $(".modal-backdrop.fade.in").click()
