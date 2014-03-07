@@ -141,6 +141,7 @@ class ActivityPreview extends Backbone.View
     model.icon_view.toggleChat()
 
   launch: (event) ->
+    @callback() if @callback 
     @load_view(event.currentTarget)
     @activity_view = new ActivityView({
       model: @model,

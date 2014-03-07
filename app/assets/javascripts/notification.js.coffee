@@ -61,7 +61,7 @@ class NotificationManager
         <div class='noty_close'></div>
         <div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
-          <a  href='/shops/{{ shop_name }}/shop_circles' data-toggle='modal' data-dismiss='modal' class="after_click btn btn-primary pull-right" data-target='#choseCircle'>
+          <a  href='/people/{{ followed_user }}/all_circles' data-toggle='modal' data-dismiss='modal' class="after_click btn btn-primary pull-right" data-target='#choseCircle'>
             邀请加入商圈
           </a>
         </div>
@@ -208,12 +208,20 @@ class NotificationManager
     data.template =  $(@circlesTemplate(data))
     @commonNotify(data)
 
+  modal_callback: () ->
+    $(".modal-backdrop.fade.in").click()
+    if $(".model-popup-backdrop.in")
+      $(".model-popup-backdrop.in").hide()
+      $(".dialog-panel").remove()
+      $("body").removeClass("noScroll")
+
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
     @commonNotify(data)
     new AskBuyPreview({
       el: data.template,
-      login: @current_user_login
+      login: @current_user_login,
+      callback: @modal_callback
     })
     new DefaultView({ el: data.template})
 
@@ -223,6 +231,7 @@ class NotificationManager
     new ActivityPreview({
       el: data.template,
       login: @current_user_login
+      callback: @modal_callback
     })
     new DefaultView({ el: data.template})
 
@@ -242,6 +251,7 @@ class NotificationManager
       el: $(".circle_invite_list"),
       shop_name: data.shop_name,
       user_id: data.user.id
+      callback: @modal_callback
     })
 
     new DefaultView({el: data.template})
@@ -377,6 +387,7 @@ class InviteManyView extends Backbone.View
     })
 
   invite_user: (e) =>
+    @callback() if @callback
     return false if @$(".disabled").length == 1
     $(e.currentTarget).addClass("disabled")
     ids = @tool_view.data()
