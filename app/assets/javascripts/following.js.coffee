@@ -40,7 +40,6 @@ class FollowView extends Backbone.View
     @model = new Follow(@data, @login);
 
   unfollow: () ->
-
     @model.unfollow (model, data) =>
       @$(".unfollow").addClass("follow").removeClass("unfollow")
       @change_callback(@$(".follow"))
@@ -94,7 +93,7 @@ class FollowListView extends Backbone.View
 
   load_all_tr: () ->
     @$tbody.each (i, tr) =>
-      follow_id = $(tr).attr("data-value-follow-id")
+      follow_id = $(tr).attr("data-follow-id")
       @bindFollow({follow_id: follow_id}, $(tr))
 
 

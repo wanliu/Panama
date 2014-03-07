@@ -475,13 +475,15 @@ class root.FriendChatView extends BaseChatView
   head_template: _.template('
     <div class="head">
       <span class="state online"></span>
-      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
+      <a class="name" href="/people/<%= model.get("title") %>">
+        <%= model.get("displayTitle") %>
+      </a>
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>')
 
   clickTitle: () ->
-    window.location.href = "/people/#{@title}"
+    # window.location.href = "/people/#{@title}"
 
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@title)

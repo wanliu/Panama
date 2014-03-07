@@ -399,6 +399,7 @@ module ApplicationHelper
     else
       [:follow, "+关注"]
     end
+    
     label_class = class_name == :follow ? 'success' : 'important'
     label_tag class_name, title, :class => "label label-#{label_class} #{class_name}"
   end
