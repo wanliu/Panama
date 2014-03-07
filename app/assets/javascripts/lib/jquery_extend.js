@@ -1,4 +1,5 @@
 //= require jquery
+//= require lib/jquery.mousewheel
 
 jQuery.fn.extend({
     insertAtCursor: function(myValue) {
