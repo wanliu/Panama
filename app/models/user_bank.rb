@@ -7,7 +7,7 @@ class UserBank < ActiveRecord::Base
   belongs_to :bank
   belongs_to :user
 
-  validates :code, :presence => true, format: { with: /^\d{19}$/, message: "请确定银行卡号真实有效，只能是19位数字" }
+  validates :code, :presence => true, format: { with: /^\d{13,19}$/, message: "请确定银行卡号真实有效，13-19位数字" }
 
   validates :bank, :user, :name, :presence => true
   validates :name, format: { with: /^[\u4e00-\u9fa5]{2,}$/, message: "请确定姓名真实有效" }
