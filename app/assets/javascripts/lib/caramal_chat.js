@@ -5088,7 +5088,6 @@ if (typeof define === "function" && define.amd) {
         Channel.__super__.constructor.apply(this, arguments);
         this.id = Channel.nextId++;
         this.unreadMsgCount = null;
-        this.unreadFetchFlag = false;
         this.hisMsgEnded = false;
         this.onOpened();
         /**
@@ -5615,9 +5614,9 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['chat']) {
-            channel = Caramal.MessageManager.nameOfChannel(info.from);
+            channel = Caramal.MessageManager.nameOfChannel(info.title);
             if (channel == null) {
-              channel = Chat.create(info.from, {
+              channel = Chat.create(info.title, {
                 room: info.room
               });
               return channel.command('join', info.room, {}, function(ch, err, msg) {
@@ -5781,7 +5780,7 @@ if (typeof define === "function" && define.amd) {
           if (info.type === Channel.TYPES['group']) {
             channel = Caramal.MessageManager.nameOfChannel(info.group);
             if (channel == null) {
-              channel = Group.create(info.from, {
+              channel = Group.create(info.title, {
                 room: info.room
               });
               return channel.command('join', info.room, {}, function(ch, err, msg) {
@@ -5913,9 +5912,9 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['temporary']) {
-            channel = Caramal.MessageManager.nameOfChannel(info.group);
+            channel = Caramal.MessageManager.nameOfChannel(info.title);
             if (channel == null) {
-              channel = Temporary.create(info.group, {
+              channel = Temporary.create(info.title, {
                 room: info.room,
                 name: info.name
               });
