@@ -10,7 +10,7 @@ class UserBank < ActiveRecord::Base
   validates :code, :presence => true, format: { with: /^\d{13,19}$/, message: "请确定银行卡号真实有效，13-19位数字" }
 
   validates :bank, :user, :name, :presence => true
-  validates :name, format: { with: /^[\u4e00-\u9fa5]{2,}$/, message: "请确定姓名真实有效" }
+  validates :name, format: { with: /^[\u4e00-\u9fa5]{2,}$/, message: "请确定中文姓名真实有效，不能有空格" }
 
   delegate :name, :code, :to => :bank, :prefix => :bank
 
