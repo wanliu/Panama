@@ -79,7 +79,7 @@ class root.ChatManager extends Backbone.View
 
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
-      # console.log('channel:new ', channel)
+      console.log('channel:new ', channel)
       return unless channel.type is 3
       if @is_ready
         @targetView(channel.type).process(channel)
@@ -207,9 +207,11 @@ class root.ChatManager extends Backbone.View
     _.find @collection.models, (model) =>
       if type is model.get('type')
         if type is 3
-          model.get('token') is (item.token || item.get('token'))
+          token = if item.get? then item.get('token') else null
+          model.get('token') is (item.token || token)
         else
-          model.get('title') is (item.title || item.get('title'))
+          title = if item.get? then item.get('title') else null
+          model.get('title') is (item.title || title)
         # switch type
         #   when 1
         #     model.get('title') is item.user

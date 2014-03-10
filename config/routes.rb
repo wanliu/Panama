@@ -52,6 +52,7 @@ Panama::Application.routes.draw do
   match "people/:login/update_user_auth", :to => "people#update_user_auth", :via => :put
   match "people/:login/photos", :to => "people#photos"
   match "people/show_email_invite/:shop_name/:send_user", :to => "people#show_email_invite"
+  match "people/update_email", :to => "people#update_email", :via => :put
 
   match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
   match "cities/:city_id/communities", :to => "communities#city_index", :via => :get

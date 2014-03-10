@@ -11,12 +11,12 @@ class UserSessionsController < ApplicationController
     if not user
       # New user registration
       user = User.new(:uid => omniauth['uid'])
-      user.login = omniauth["info"]["login"]
-      user.email = omniauth["info"]["email"]
+      user.login = omniauth["info"]["login"]      
       user.photo.filename = omniauth["info"]["avatar"]
     else
       user.photo.filename = omniauth["info"]["avatar"]
-    end
+    end    
+    user.email = omniauth["info"]["email"]
     user.im_token = omniauth["info"]["im_token"]
 
     user.save
