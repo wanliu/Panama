@@ -181,7 +181,7 @@ class Circle < ActiveRecord::Base
   end
 
   def remove_friend(user)
-    uid = user.id
+    uid = user.is_a?(User) ? user.id : user
     friends.find_by(user_id: uid).destroy
 
   end

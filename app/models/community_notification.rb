@@ -14,8 +14,8 @@ class CommunityNotification < ActiveRecord::Base
                   :url => url) # v
   end
 
-  def notify_url
-    "/communities/#{circle.id}/circles"
+  def notify_url(user)
+    "/people/#{user.login }"
   end
 
   #
@@ -46,7 +46,7 @@ class CommunityNotification < ActiveRecord::Base
                 "#{user.login}拒绝您加入圈子 #{circle.name}",
                 :target => circle,
                 :community_id => id,
-                :url => notify_url)
+                :url => notify_url(user))
 
     self.update_attribute(:apply_state, false)
   end
@@ -56,7 +56,7 @@ class CommunityNotification < ActiveRecord::Base
                 "#{user.login}同意您加入圈子 #{circle.name}",
                 :target => circle,
                 :community_id => id,
-                :url => notify_url)
+                :url => notify_url(user))
     self.update_attribute(:apply_state, true)
   end
 end

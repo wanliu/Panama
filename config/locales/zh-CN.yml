@@ -361,7 +361,7 @@ zh-CN:
         dispose_date: 接单时间
         transport_type: 发货类型
         items:
-          shop: ''
+          shop: '商店'
         transfers:
           shop_product: 商品
           item:

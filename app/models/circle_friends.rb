@@ -23,8 +23,8 @@ class CircleFriends < ActiveRecord::Base
 
   after_destroy :remove_from_persistent_channel
 
-  def notify_url
-    "/communities/#{circle.id}/circles"
+  def notify_url(user)
+    "/people/#{user.login}"
   end
 
   def add_to_persistent_channel
@@ -43,7 +43,7 @@ class CircleFriends < ActiveRecord::Base
                    :avatar => pc.icon,
                    :group_name => pc.name,
                    :user_id => user.id,
-                   :url => notify_url)
+                   :url => notify_url(user))
     elsif owner.is_a?(User)
       owner.notify("/circles/joined",
                    "#{user.login} 加入了个人圈 #{circle_name}",
@@ -51,7 +51,7 @@ class CircleFriends < ActiveRecord::Base
                    :avatar => pc.icon,
                    :group_name => pc.name, 
                    :user_id => user.id,
-                   :url => notify_url)
+                   :url => notify_url(user))
     end
   end
 
@@ -70,13 +70,13 @@ class CircleFriends < ActiveRecord::Base
                    :target => self,
                    :avatar => user.icon,
                    :user_id => user.id,
-                   :url => notify_url)
+                   :url => notify_url(user))
     elsif owner.is_a?(User)
       owner.notify('/circles/leaved', "#{user.login} 离开了个人圈 #{circle_name}",
                    :target => self,
                    :avatar => user.icon,
                    :user_id => user.id,
-                   :url => notify_url)
+                   :url => notify_url(user))
 
     end
   end
