@@ -40,4 +40,5 @@
 #= require transaction_complete
 #= require addresses
 #= require lib/circle_info
+#= require lib/update_password
 

@@ -74,12 +74,12 @@ class root.Realtime
 
   disconnect_state: () ->
     # 订单聊天窗口
-    $("iframe").contents().find("body [data-realtime-state]").each () ->
+    $("iframe:not(.no_connected_state)").contents().find("body [data-realtime-state]").each () ->
       $(@).attr("data-realtime-state", "disconnect").attr("readonly","readonly")
       $(@).tooltip({'trigger':'focus', 'title': '此窗口已经失效，请刷新'})
 
   connected_state: () ->
-    $("iframe").contents().find("body [data-realtime-state]").each () ->
+    $("iframe:not(.no_connected_state)").contents().find("body [data-realtime-state]").each () ->
       $(@).removeAttr("readonly")
       $(@).removeData("tooltip")
 
