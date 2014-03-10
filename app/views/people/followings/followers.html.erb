@@ -5,9 +5,9 @@
       <h4 class='title'>关注我的用户</h4>
       <% if @followers.count > 0 %>
         <% @followers.each do |f| %>
-          <div class='alert alert-info follow'>
+          <div class='alert alert-info follow' data-follow-id="<%=f.user.try(:id) %>">
             <div class='avatar'>
-              <img src="<%= f.user.icon %>" class="img-rounded" />
+              <img src="<%= f.user.try(:icon) %>" class="img-rounded" />
             </div>
             <div class='info'>
               <div class='href_name'>
@@ -27,3 +27,13 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  $(function(){
+    new FollowListView({
+      follow_type: "User",
+      el: $(".followers .follow-users"),
+      login: "<%=current_user.login %>"
+    });
+  })
+</script>

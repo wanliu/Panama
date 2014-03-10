@@ -1,6 +1,6 @@
 <% if followings.count > 0 %>
   <% followings.each do |f| %>
-    <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-value-follow-id="<%=f.follow_id %>">
+    <div class='alert alert-info follow' data-value-id="<%= f.id %>" data-follow-id="<%=f.follow_id %>">
       <div class='avatar'>
         <img src="<%= f.follow.try(:photos).try(:icon) %>" class="img-rounded" />
       </div>

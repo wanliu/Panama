@@ -29,7 +29,7 @@ class CircleFriends < ActiveRecord::Base
 
   def add_to_persistent_channel
     circle_name = circle.name
-    PersistentChannel.where(:user_id => user.id,
+    pc = PersistentChannel.where(:user_id => user.id,
                             :name => circle.name,
                             :icon => circle.photos.icon,
                             :channel_type => 2)
@@ -40,14 +40,16 @@ class CircleFriends < ActiveRecord::Base
       owner.owner.notify("/circles/joined",
                    "#{user.login} 加入了商圈 #{circle_name}",
                    :target => self,
-                   :avatar => user.icon,
+                   :avatar => pc.icon,
+                   :group_name => pc.name,
                    :user_id => user.id,
                    :url => notify_url)
     elsif owner.is_a?(User)
       owner.notify("/circles/joined",
                    "#{user.login} 加入了个人圈 #{circle_name}",
                    :target => self,
-                   :avatar => user.icon,
+                   :avatar => pc.icon,
+                   :group_name => pc.name, 
                    :user_id => user.id,
                    :url => notify_url)
     end

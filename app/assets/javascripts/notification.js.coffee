@@ -33,7 +33,7 @@ class NotificationManager
           <div class='noty_close'></div>
           <div>
             <a class="pull-right btn btn-primary i_know" href="javascript:void(0)">我知道了</a>
-            <a href="javascript:void(0)" class='btn btn-danger after_click pull-right'>开始聊天</a>
+            <a href="javascript:void(0)" class='btn btn-danger join_chat after_click pull-right'>开始聊天</a>
           </div>
       </div>""")
 
@@ -61,7 +61,7 @@ class NotificationManager
         <div class='noty_close'></div>
         <div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看</a>
-          <a  href='/shops/{{ shop_name }}/shop_circles' data-toggle='modal' data-dismiss='modal' class="after_click btn btn-primary pull-right" data-target='#choseCircle'>
+          <a  href='/people/{{ followed_user }}/all_circles' data-toggle='modal' data-dismiss='modal' class="after_click btn btn-primary pull-right" data-target='#choseCircle'>
             邀请加入商圈
           </a>
         </div>
@@ -207,13 +207,35 @@ class NotificationManager
   joined: (data) =>
     data.template =  $(@circlesTemplate(data))
     @commonNotify(data)
+    model = new ChatModel({
+      type: 2,
+      title: data.group_name,
+      icon: data.avatar
+    })
+    chat_model = ChatManager.getInstance().addChatIcon(model)
+
+    data.template.find(".join_chat").on("click", () => 
+      if chat_model
+        chat_model.icon_view.toggleChat()
+      else
+        console.error('请求商圈群聊失败')
+    )
+    new DefaultView({ el: data.template})
+
+  modal_callback: () ->
+    $(".modal-backdrop.fade.in").click()
+    if $(".model-popup-backdrop.in")
+      $(".model-popup-backdrop.in").hide()
+      $(".dialog-panel").remove()
+      $("body").removeClass("noScroll")
 
   answer_ask_buy: (data) =>
     data.template = $(@askBuyTemplate(data))
     @commonNotify(data)
     new AskBuyPreview({
       el: data.template,
-      login: @current_user_login
+      login: @current_user_login,
+      callback: @modal_callback
     })
     new DefaultView({ el: data.template})
 
@@ -223,6 +245,7 @@ class NotificationManager
     new ActivityPreview({
       el: data.template,
       login: @current_user_login
+      callback: @modal_callback
     })
     new DefaultView({ el: data.template})
 
@@ -242,6 +265,7 @@ class NotificationManager
       el: $(".circle_invite_list"),
       shop_name: data.shop_name,
       user_id: data.user.id
+      callback: @modal_callback
     })
 
     new DefaultView({el: data.template})
@@ -377,6 +401,7 @@ class InviteManyView extends Backbone.View
     })
 
   invite_user: (e) =>
+    @callback() if @callback
     return false if @$(".disabled").length == 1
     $(e.currentTarget).addClass("disabled")
     ids = @tool_view.data()
@@ -514,7 +539,7 @@ class NotificationView extends Backbone.View
     )
 
   read_message: () ->
-    return pnotify(text: '跳转地址为空', type: 'error') unless @fetch_url 
+    return console.error('跳转链接为空') unless @fetch_url 
     window.location.href = @fetch_url
 
   render: () ->

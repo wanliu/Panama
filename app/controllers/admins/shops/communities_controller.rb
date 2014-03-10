@@ -1,6 +1,6 @@
 class Admins::Shops::CommunitiesController < Admins::Shops::SectionController
   def index
-    @circles = current_shop.circles
+    @circles = current_shop.all_type_circles
   end
 
   def people
@@ -10,7 +10,7 @@ class Admins::Shops::CommunitiesController < Admins::Shops::SectionController
     @shop = Shop.find_by(:name => params[:shop_id])
     @user = User.find(params[:user_id])
     ids = params[:ids] unless params[:ids].blank?
-    @circles = @shop.circles.where(:id => ids)
+    @circles = @shop.all_type_circles.where(:id => ids)
     respond_to do |format|
       @circles.each do |circle|
         unless circle.is_member?(@user)

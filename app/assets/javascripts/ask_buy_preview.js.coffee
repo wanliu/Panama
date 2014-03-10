@@ -172,6 +172,7 @@ class AskBuyPreview extends Backbone.View
     _.extend(@, options)
 
   launch: (event) ->
+    @callback() if @callback
     id = $(event.currentTarget).parents(".ask_buy").attr("ask-buy-id")
     new AskBuyView( ask_buy_id: id, login: @login ).modal()
 

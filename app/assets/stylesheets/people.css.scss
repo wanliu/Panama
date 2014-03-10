@@ -536,6 +536,13 @@
 }
 
 .follow-users {
+  .alert-info{
+    width: 160px;
+    margin-left: 10px;
+    .href_name{
+      width: 100px;
+    }
+  }
   .follow {
     /*width: 190px;*/
 

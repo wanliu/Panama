@@ -338,7 +338,6 @@ class BaseChatView extends Caramal.BackboneView
       @scrollDialog()
 
   receiveHisMessage: (msgs) ->
-    return if msgs.length is 0
     origin_height = @$('.body')[0].scrollHeight
     @msgContent().prepend(@parseMessages(msgs))
     @fetchIcon()
@@ -353,7 +352,8 @@ class BaseChatView extends Caramal.BackboneView
 
   disablePageScroll: (event) ->
     top = @$('.body').scrollTop()
-    delta = event.originalEvent.wheelDelta
+    delta = event.originalEvent.wheelDelta || event.deltaY # fix ff undefined bug
+    console.error('disable scroll failed', delta) if delta is undefined
     height = @$('.body').height()
     scrollHeight = @$('.body')[0].scrollHeight
     if (delta > 0 && top <= 0)
@@ -378,7 +378,7 @@ class BaseChatView extends Caramal.BackboneView
     moreFlag = @msgContent().find('.showMoreFlag')
     moreFlag.remove()
     @msgContent().prepend("<li class='row-receive showMoreFlag'>\
-      <i class='icon-time'></i>查看更多信息</li>")
+      <i class='icon-time'></i>向上滚动查看更多</li>")
 
   removeMoreFlag: () ->
     @msgContent().find('.showMoreFlag').remove()
@@ -475,13 +475,15 @@ class root.FriendChatView extends BaseChatView
   head_template: _.template('
     <div class="head">
       <span class="state online"></span>
-      <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
+      <a class="name" href="/people/<%= model.get("title") %>">
+        <%= model.get("displayTitle") %>
+      </a>
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>')
 
   clickTitle: () ->
-    window.location.href = "/people/#{@title}"
+    # window.location.href = "/people/#{@title}"
 
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@title)

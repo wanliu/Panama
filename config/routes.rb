@@ -119,6 +119,7 @@ Panama::Application.routes.draw do
     member do
       get 'follow'
       get 'unfollow'
+      get 'all_circles'
     end
 
     resources :invite, :controller => "people/invite", :only => [:show] do
