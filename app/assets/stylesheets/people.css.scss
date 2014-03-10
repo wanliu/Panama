@@ -567,3 +567,17 @@
   margin-bottom: 15px;
   margin-top: 15px;
 }
+
+.edit_password{
+  margin-right: 10%;
+}
+
+#edit_password_dialog{
+  .modal-body{
+    iframe{
+      width: 100%;
+      border: none;
+      height: 234px;
+    }
+  }
+}

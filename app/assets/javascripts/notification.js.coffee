@@ -539,7 +539,7 @@ class NotificationView extends Backbone.View
     )
 
   read_message: () ->
-    return pnotify(text: '跳转地址为空', type: 'error') unless @fetch_url 
+    return console.error('跳转链接为空') unless @fetch_url 
     window.location.href = @fetch_url
 
   render: () ->

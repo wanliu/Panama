@@ -35,7 +35,7 @@
                 <%= raw n.content %>
                 <label class="label <%=n.targeable_type.try(:downcase) %>">
                   <% if n.targeable_type.blank? %>
-                    未知
+                    通知
                   <% else %>
                     <%= t("activerecord.models." + n.targeable_type.try(:underscore).to_s) %>
                   <% end %>
