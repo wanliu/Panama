@@ -10,7 +10,7 @@
             <span class='icon-cog'></span>
           </a>
         </div>
-         <span class="label label-warning">群主</span>
+         <span class="label label-warning"><a href="/people/<%=current_user.login %>/communities/show_members/{{ id }}">管理</a></span>
       {{else}}
         <div>
           <span class="label quit_circle label-warning"  data-value-id="{{ id }}">退出圈子</span>

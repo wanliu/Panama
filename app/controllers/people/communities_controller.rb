@@ -23,14 +23,19 @@ class People::CommunitiesController < People::BaseController
     end
   end
 
-  def all_topics
-    circle_ids = CircleFriends.where(:user_id => @people.id).pluck(:circle_id)
-    @topics = Topic.joins("left join circles as c on topics.circle_id = c.id").where("c.id in (?)",circle_ids).order("updated_at desc").offset(params[:offset]).limit(params[:limit])
-    respond_to do |format|
-      format.json{ render :json => @topics.as_json(
-        :methods => [:comments_count, :top_comments]) }
-    end
+  def show_members
+    @circle = @people.all_circles.find_by(:id => params[:id])
+    @members = @circle.friends
   end
+
+  # def all_topics
+  #   circle_ids = CircleFriends.where(:user_id => @people.id).pluck(:circle_id)
+  #   @topics = Topic.joins("left join circles as c on topics.circle_id = c.id").where("c.id in (?)",circle_ids).order("updated_at desc").offset(params[:offset]).limit(params[:limit])
+  #   respond_to do |format|
+  #     format.json{ render :json => @topics.as_json(
+  #       :methods => [:comments_count, :top_comments]) }
+  #   end
+  # end
 
   def create
   	@setting = CircleSetting.create(params[:setting])

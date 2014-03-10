@@ -15,7 +15,7 @@ class PersistentChannel < ActiveRecord::Base
         :url => "/people/#{name}")
     elsif channel_type == 2
       circle = Circle.find_by_name(name)
-      user.notify('/friends/add_quan', "已经添加商圈 #{name} 到好友列表", :avatar => icon, :group_name => name, :target => self, :url => "/communities/#{ circle.id }/circles")
+      user.notify('/friends/add_quan', "已经添加商圈 #{name} 到好友列表", :avatar => icon, :group_name => name, :target => self, :url => "/people/#{user.login}/communities")
     end
 
     role = nil
@@ -37,7 +37,7 @@ class PersistentChannel < ActiveRecord::Base
         :avatar => icon, 
         :group_name => name, 
         :target => self, 
-        :url => "/communities")
+        :url => "/people/#{user.login}/communities")
     end
 
     CaramalClient.remove_persistent_channel(name, user.login, channel_type)

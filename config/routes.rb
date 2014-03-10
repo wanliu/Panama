@@ -218,6 +218,7 @@ Panama::Application.routes.draw do
     resources :communities, :controller => "people/communities" do
       collection do
         get :all_circles
+        get "show_members/:id",                   :to => "people/communities#show_members"
       end
     end
 
@@ -227,9 +228,9 @@ Panama::Application.routes.draw do
         get "friends"
         get "addedyou"
         get "all_friends"
-        post "/:id/join_friend/:user_id", :to => "people/circles#join_friend"
-        delete "/:id/remove_friend/:user_id", :to => "people/circles#remove_friend"
-        delete "circles_remove_friend/:user_id", :to => "people/circles#circles_remove_friend"
+        post "/:id/join_friend/:user_id",         :to => "people/circles#join_friend"
+        delete "/:id/remove_friend/:user_id",     :to => "people/circles#remove_friend"
+        delete "circles_remove_friend/:user_id",  :to => "people/circles#circles_remove_friend"
       end
     end
 
