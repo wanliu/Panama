@@ -26,7 +26,7 @@ class ShopAuth
   validates :company_license, format: { with: /^\w{10,}$/, message: "请输入真实有效的营业执照号，只能包含字母或数字" }
   # validates :shop_url, :shop_name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }
   validates :shop_name, format: { with: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, message: "只能包含数字、字母、汉字和下划线（_­）组成，不能有空格" }
-  validates :ower_name, presence: true, format: { with: /^[\u4e00-\u9fa5]{2,}$/, message: "请确定姓名真实有效，不能有空格" }
+  validates :ower_name, presence: true, format: { with: /^[\u4e00-\u9fa5]{2,}$/, message: "请确定中文姓名真实有效，不能有空格" }
   validate :uniqueness_fields_validate
 
   def initialize(attributes = {})
