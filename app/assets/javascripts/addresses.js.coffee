@@ -89,13 +89,15 @@ class root.AddressesView extends Backbone.View
 
 
 class root.AddressEditView extends Backbone.View
+  formName: "address"
+
   events:
     "click .edit-button" : "update_address"
 
   update_address: (event) ->
-    data = @$("form").serialize()
+    data = @$("form").serializeHash()
     address = new ValidateEddress()
-    return false unless address.valid_data(data || {}) 
+    return false unless address.valid_data(data[@formName] || {}) 
     $.ajax(
       type: "POST",
       dataType: "JSON",
