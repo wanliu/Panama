@@ -28,9 +28,12 @@ class ApplicationController < ActionController::Base
 
   def draw_errors_message(ist_model)
     ist_model.errors.messages.map do |key, ms|
-      ms.map do |m|  
-        path = t("activerecord.attributes.#{ist_model.class.to_s.underscore}.#{key}")
-        "#{path}: #{m}"
+      ms.map do |m|          
+        info = t("activerecord.attributes.#{ist_model.class.to_s.underscore}")
+        path = if info.is_a?(Hash) 
+          "#{info[key.to_sym]}: " if info.key?(key.to_sym)
+        end
+        "#{path} #{m}"
       end
     end.flatten
   end
