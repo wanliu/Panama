@@ -568,16 +568,15 @@
   margin-top: 15px;
 }
 
-.edit_password{
+.edit_password, .edit_email{
   margin-right: 10%;
 }
 
-#edit_password_dialog{
+.edit_user_dialog{
   .modal-body{
     iframe{
       width: 100%;
       border: none;
-      height: 234px;
     }
   }
 }
@@ -589,11 +588,14 @@
   }
 }
 
+#edit_password_dialog{
+  iframe{
+    height: 234px;
+  }
+}
 
-
-
-
-
-
-
-
+#edit_email_dialog{
+  iframe{
+    height: 180px;
+  }
+}

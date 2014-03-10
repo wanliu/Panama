@@ -60,7 +60,7 @@ class exports.TransactionDispose extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @transactions = new TransactionList()
-    @transactions.url = "/shops/#{@shop.name}/admins/#{@_type}"
+    @transactions.url = "/shops/#{encodeURIComponent(@shop.name)}/admins/#{@_type}"
     @transactions.bind("add", @add_data, @)
 
     @init_el()

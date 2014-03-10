@@ -295,6 +295,7 @@ qq.FileUploaderBasic = function(o){
             sizeError: "{file} is too large, maximum file size is {sizeLimit}.",
             minSizeError: "{file} is too small, minimum file size is {minSizeLimit}.",
             emptyError: "{file} is empty, please select files again without it.",
+            unsupportedError: "unsupported file type, please drag from file chooser",
             onLeave: "The files are being uploaded, if you leave now the upload will be cancelled."
         },
         showMessage: function(message){
@@ -473,10 +474,12 @@ qq.FileUploaderBasic.prototype = {
         var message = this._options.messages[code];
         function r(name, replacement){ message = message.replace(name, replacement); }
 
-        r('{file}', this._formatFileName(fileName));
-        r('{extensions}', this._options.allowedExtensions.join(', '));
-        r('{sizeLimit}', this._formatSize(this._options.sizeLimit));
-        r('{minSizeLimit}', this._formatSize(this._options.minSizeLimit));
+        if (fileName) {
+            r('{file}', this._formatFileName(fileName));
+            r('{extensions}', this._options.allowedExtensions.join(', '));
+            r('{sizeLimit}', this._formatSize(this._options.sizeLimit));
+            r('{minSizeLimit}', this._formatSize(this._options.minSizeLimit));
+        }
 
         this._options.showMessage(message);
     },
@@ -633,10 +636,13 @@ qq.extend(qq.FileUploader.prototype, {
                 qq.removeClass(dropArea, self._classes.dropActive);
             },
             onDrop: function(e){
-                console.log('ready to upload file...');
                 dropArea.style.display = 'none';
                 qq.removeClass(dropArea, self._classes.dropActive);
-                self._uploadFileList(e.dataTransfer.files);
+                if (e.dataTransfer.files.length > 0) {
+                    self._uploadFileList(e.dataTransfer.files);
+                } else {
+                    self._error('unsupportedError');
+                }
             }
         });
 

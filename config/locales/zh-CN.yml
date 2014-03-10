@@ -483,7 +483,7 @@ zh-CN:
       circle_category:
         name: '分类名'
       transaction_state_detail:
-        expired: ''
+        expired: '延时'
       transfer_sheet:
         bank: 汇款银行
         code: 汇款单号
