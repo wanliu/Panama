@@ -41,6 +41,18 @@ class PeopleController < ApplicationController
     end
   end
 
+  def update_email
+    @people = current_user
+    @people.email = params[:email]
+    respond_to do |format|
+      if @people.save
+        format.json{ render :json => @people }
+      else
+        format.json{ render :json => draw_errors_message(@people), :status => 403 }
+      end
+    end
+  end
+
   def show_email_invite
     @people = User.find_by(:login => current_user.login)
     if valid_invite_options(decrypt_options)

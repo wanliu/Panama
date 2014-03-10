@@ -52,6 +52,7 @@ Panama::Application.routes.draw do
   match "people/:login/update_user_auth", :to => "people#update_user_auth", :via => :put
   match "people/:login/photos", :to => "people#photos"
   match "people/show_email_invite/:shop_name/:send_user", :to => "people#show_email_invite"
+  match "people/update_email", :to => "people#update_email", :via => :put
 
   match "cities/:city_id/communities/search", :to => "communities#search", :via => :get
   match "cities/:city_id/communities", :to => "communities#city_index", :via => :get
@@ -217,6 +218,7 @@ Panama::Application.routes.draw do
     resources :communities, :controller => "people/communities" do
       collection do
         get :all_circles
+        get "show_members/:id",                   :to => "people/communities#show_members"
       end
     end
 
@@ -226,9 +228,9 @@ Panama::Application.routes.draw do
         get "friends"
         get "addedyou"
         get "all_friends"
-        post "/:id/join_friend/:user_id", :to => "people/circles#join_friend"
-        delete "/:id/remove_friend/:user_id", :to => "people/circles#remove_friend"
-        delete "circles_remove_friend/:user_id", :to => "people/circles#circles_remove_friend"
+        post "/:id/join_friend/:user_id",         :to => "people/circles#join_friend"
+        delete "/:id/remove_friend/:user_id",     :to => "people/circles#remove_friend"
+        delete "circles_remove_friend/:user_id",  :to => "people/circles#circles_remove_friend"
       end
     end
 

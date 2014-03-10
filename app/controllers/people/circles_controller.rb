@@ -78,12 +78,17 @@ class People::CirclesController < People::BaseController
 
   #移除某个圈子的某个用户
   def remove_friend
-    @circle = current_user.circles.find(params[:id])
+    @circle = current_user.all_circles.find(params[:id])
     respond_to do |format|
+      url = "/people/#{current_user.login}/communities/show_members/#{@circle.id}"
       if @circle.remove_friend(params[:user_id])
+        flash[:success] = " 删除成员成功"
         format.json{ head :no_content }
+        format.html{ redirect_to url}
       else
+        flash[:success] = "删除失败"
         format.json{ render json: {message: "删除失败!"}, status: 403 }
+        format.json{ redirect_to url }
       end
     end
   end

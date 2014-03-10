@@ -87,7 +87,7 @@
     dispose_view.add(<%= @untransactions.as_json(:methods => "seller_state_title").to_json.html_safe %>)
 
     new TransactionBubbling({
-      url: "http://<%= request.env['HTTP_HOST'] %>/shops/<%= current_shop.name %>/admins/pending#order"
+      url: "http://<%= request.env['HTTP_HOST'] %>/shops/"+ encodeURIComponent("<%= current_shop.name %>") +"/admins/pending#order"
     })
   })
 </script>

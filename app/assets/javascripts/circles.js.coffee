@@ -1,15 +1,15 @@
 #= require topic
 #= require lib/circle_info
 
-root = window || @
+# root = window || @
 
-class root.CircleListView extends Backbone.View
-  events:
-    'click .following .join': 'join_circle'
-    'click .quit_circle'    : 'quit_circle'
+# class root.CircleListView extends Backbone.View
+#   events:
+#     'click .following .join': 'join_circle'
+#     'click .quit_circle'    : 'quit_circle'
 
-  initialize: (option) ->
-    _.extend(@, option)
+#   initialize: (option) ->
+#     _.extend(@, option)
 
     # @$left = @$(".left")
     # @$right = @$(".right")
@@ -48,12 +48,12 @@ class root.CircleListView extends Backbone.View
   #       window.location.href = "/communities/#{@circle_id}/circles"
   #   )
 
-  quit_circle: (event) ->
-    return unless confirm('确定退出商圈吗？')
-    $.ajax({
-      type: "delete",
-      url: "/communities/#{@circle_id}/circles/quit_circle",
-      success: (data, xhr, res) =>
-        window.location.href = "/communities/#{@circle_id}/circles"
-    })
+  # quit_circle: (event) ->
+  #   return unless confirm('确定退出商圈吗？')
+  #   $.ajax({
+  #     type: "delete",
+  #     url: "/communities/#{@circle_id}/circles/quit_circle",
+  #     success: (data, xhr, res) =>
+  #       window.location.href = "/communities/#{@circle_id}/circles"
+  #   })
 

@@ -1,0 +1,35 @@
+<div class="row-fluid span8">
+	<div class="row-fluid">
+		<h3>所有成员</h3>
+	</div>
+	<div class="row-fluid">
+		<ul class="span8 widget circle_member_list">
+			<% unless flash.empty? %>
+        <% flash.each do |f| %>
+          <div class="alert alert-<%=f[0]%>">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+              <%= f[1] %>
+            </div>
+        <% end %>
+      <% end %>
+
+			<% unless @members.blank?  %>
+				<% @members.each do |m|%>
+					<li class="widget">				
+						<img src="<%=m.photos.icon %>">
+						<a href="/people/<%=m.login %>">
+							<span><%=m.login %></span>
+						</a>
+						<% unless m.user_id == current_user.id %>
+							<%=link_to "删除成员", "/people/#{current_user.login }/circles/#{ m.circle_id }/remove_friend/#{m.user_id}", 
+													:method => "delete",
+													:class => "pull-right" %>
+						<% end %>
+					</li>
+				<% end %>
+			<% else%>
+				<li>暂时还没有成员</li>
+			<% end %>
+		</ul>	
+	</div>
+</div>
