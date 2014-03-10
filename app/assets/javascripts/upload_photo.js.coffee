@@ -60,7 +60,8 @@ class root.Upload extends Backbone.View
 
       messages: {
         typeError : "请选择正确的{file}图片，只支持{extensions}图片",
-        sizeError : "{file}图片，超过{sizeLimit}了！"
+        sizeError : "{file}图片，超过{sizeLimit}了！",
+        unsupportedError: "不支持该类型的文件，请从文件管理器中拖放文件"
       }
     })
 

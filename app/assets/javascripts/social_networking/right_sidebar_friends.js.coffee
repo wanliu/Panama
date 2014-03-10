@@ -206,12 +206,22 @@ class root.ChatManager extends Backbone.View
     type = item.type || item.get('type')
     _.find @collection.models, (model) =>
       if type is model.get('type')
-        if type is 3
-          token = if item.get? then item.get('token') else null
-          model.get('token') is (item.token || token)
-        else
-          title = if item.get? then item.get('title') else null
-          model.get('title') is (item.title || title)
+
+        if item instanceof Backbone.Model
+            model.get('title') is item.get('title')
+          else
+            model.get('title') is item.group
+        # if type is 3
+        #   if item instanceof Backbone.Model
+        #     model.get('token') is item.get('token')
+        #   else
+        #     model.get('token') is item.token
+        # else
+        #   if item instanceof Backbone.Model
+        #     model.get('title') is item.get('title')
+        #   else
+        #     model.get('title') is item.title
+        
         # switch type
         #   when 1
         #     model.get('title') is item.user

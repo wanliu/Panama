@@ -32,7 +32,8 @@ class ImageUpload extends Backbone.View
   action: "/attachments/upload"
   messages: {
     sizeError: "{file}图片，超过{sizeLimit}了！",
-    typeError: "请选择正确的{file}图片，只支持{extensions}图片"
+    typeError: "请选择正确的{file}图片，只支持{extensions}图片",
+    unsupportedError: "不支持该类型的文件，请从文件管理器中拖放文件"
   }
 
   template: '
@@ -163,7 +164,7 @@ class BaseChatView extends Caramal.BackboneView
           {{ msg }}
           {{#each attachments}}
             <a class="image-zoom unloaded" target="_blank" href="{{default}}">
-              <img src="{{header}}" alt="图片">
+              <img src="{{header}}" alt="图片" title="点击查看大图">
             </a>
           {{/each}}
         </div>
@@ -237,7 +238,7 @@ class BaseChatView extends Caramal.BackboneView
   addResizable: () ->
     $el = $(@el)
     $el.resizable()
-       .draggable(handle: @$('.head'))
+       .draggable({ containment: 'body', handle: @$('.head') })
        .css('position', 'fixed')
     $el.on('resize', (event, ui) =>
       height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
