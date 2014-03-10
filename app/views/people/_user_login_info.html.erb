@@ -1,48 +1,73 @@
 <div class="section">
-	<h4>登录信息</h4>
-	<hr />
-	<div class="row-fluid top_head form-horizontal">
-		<div class="span2 title">
-			<span>个人头像</span>
-		</div>
-		<div class="span3 reset_avatar main_panle1">
-			<div class="photo_span" >
-				<img class="bottom normal_picture img-polaroid">
-			</div>  
-			<div id="image_bottom">
-				<div class="hidden_one " id="hidden_text">
-				</div>
-				<div class="update_photo_panle cant_see_me upload_user_avatar file-box ">
-				</div>
-			</div>
-		</div>
-		<div class="span7 input_locate">
-			<dl class="dl-horizontal">
-			  <dt>邮&nbsp;&nbsp;&nbsp;&nbsp;箱</dt>
-			  <dd><%= @people.email %></dd>
-			</dl>
-			<dl class="dl-horizontal">
-			  <dt>登录名</dt>
-			  <dd><%= @people.login %></dd>
-			</dl>
-		</div>
-	</div>
+  <h4>登录信息</h4>
+  <hr />
+  <div class="row-fluid top_head form-horizontal">
+    <div class="span2 title">
+      <span>个人头像</span>
+    </div>
+    <div class="span3 reset_avatar main_panle1">
+      <div class="photo_span" >
+        <img class="bottom normal_picture img-polaroid">
+      </div>  
+      <div id="image_bottom">
+        <div class="hidden_one " id="hidden_text">
+        </div>
+        <div class="update_photo_panle cant_see_me upload_user_avatar file-box ">
+        </div>
+      </div>
+    </div>
+    <div class="span7 input_locate">
+      <div>
+        <dl class="dl-horizontal">
+          <dt>登录名</dt>
+          <dd><%= @people.login %></dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>邮&nbsp;&nbsp;&nbsp;&nbsp;箱</dt>
+          <dd><%= @people.email %></dd>
+        </dl>
+      </div>
+      <div>
+        <a href='javascript:void(0)' class='btn btn-primary pull-right edit_password' data-toggle="modal" data-target="#edit_password_dialog">修改密码</a>
+      </div>    
+    </div>
+  </div>
+</div>
+
+<!-- 修改密码 -->
+<div id="edit_password_dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">修改密码</h4>
+      </div>
+      <div class="modal-body">
+        <iframe class='no_connected_state' border="0" src="<%=accounts_provider_url %>/accounts/jsonp_edit_password">
+        </iframe>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">
-	$(function(){
-		new Upload({
-			verify_authenticity_token: "<%= form_authenticity_token %>",
-			action: "/users/upload_avatar/",
-			current_user: { 
-				id: "<%= current_user.id %>", 
-				login: "<%= current_user.login %>",
-			},
-			targets: [{ 
-				el: $(".main_panle1"), 
-				input_name: "filename", 
-				photo: "<%= @people.photo.filename %>" 
-			}]
-		})
-	})
+  $(function(){
+    new UpdatePasswordView({
+      el: $("#edit_password_dialog")
+    })
+
+    new Upload({
+      verify_authenticity_token: "<%= form_authenticity_token %>",
+      action: "/users/upload_avatar/",
+      current_user: { 
+        id: "<%= current_user.id %>", 
+        login: "<%= current_user.login %>",
+      },
+      targets: [{ 
+        el: $(".main_panle1"), 
+        input_name: "filename", 
+        photo: "<%= @people.photo.filename %>" 
+      }]
+    })
+  })
 </script>
