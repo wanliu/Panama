@@ -29,9 +29,9 @@ class Activities::AuctionController < Activities::BaseController
     respond_to do |format|
       if @transaction.save
         @activity.transactions << @transaction
-        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}'" }
+        format.js{ render :js => "window.location.href='#{person_transactions_path(current_user)}#open/#{@transaction.id}/order'" }
         format.html{
-          redirect_to person_transactions_path(current_user.login),
+          redirect_to "#{person_transactions_path(current_user.login)}#open/#{@transaction.id}/order",
                     notice: 'Transaction was successfully created.'
         }
       else
