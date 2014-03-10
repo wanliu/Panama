@@ -128,7 +128,7 @@ class BaseChatView extends Caramal.BackboneView
       <div class="send_content">
         <textarea class="content"></textarea>
       </div>
-      <div class="foot_nav">
+      <div class="foot_nav drag-area">
         <span class="face-panel">
           <a href="javascript:void(0)" class="btn choose-face" data-toggle="popover" data-trigger="click" data-placement="top" data-html="true" data-original-title="">
             <i class="icon-glass"></i>
@@ -238,8 +238,8 @@ class BaseChatView extends Caramal.BackboneView
   addResizable: () ->
     $el = $(@el)
     $el.resizable()
-       .draggable({ containment: 'body', handle: @$('.head') })
-       .css('position', 'fixed')
+       .draggable({ cursor: 'move', handle: @$('.drag-area') })
+       # .css('position', 'fixed')
     $el.on('resize', (event, ui) =>
       height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
       $el.find(".body").css('height', height)
@@ -474,7 +474,7 @@ class BaseChatView extends Caramal.BackboneView
 
 class root.FriendChatView extends BaseChatView
   head_template: _.template('
-    <div class="head">
+    <div class="head drag-area">
       <span class="state online"></span>
       <a class="name" href="/people/<%= model.get("title") %>">
         <%= model.get("displayTitle") %>
@@ -514,7 +514,7 @@ class root.FriendChatView extends BaseChatView
 
 class root.GroupChatView extends BaseChatView
   head_template: _.template('
-    <div class="head">
+    <div class="head drag-area">
       <a class="name" href="/people/<%= clients.current_user %>/communities">
         <%= model.get("displayTitle") %>
       </a>
@@ -540,7 +540,7 @@ class root.GroupChatView extends BaseChatView
 
 class root.TemporaryChatView extends BaseChatView
   head_template: _.template('
-    <div class="head">
+    <div class="head drag-area">
       <span class="state online"></span>
       <a class="name" href="javascript: void(0)"><%= model.get("displayTitle") %></a>
       <span class="input_state"></span>
