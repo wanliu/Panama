@@ -56,20 +56,17 @@ class root.ChatManager extends Backbone.View
   events:
     'keyup input.filter_key' : 'filterChat'
 
-  _getIcon: (login) ->
-    ChatManager.iconList["#{login}"]
-
   getIcon: (login, handle) ->
     default_url = '/default_img/t5050_default_avatar.jpg'
     return default_url if _.isEmpty(login)
-    if _.isEmpty(@_getIcon(login))
+    if _.isEmpty(ChatManager.iconList[login])
       $.ajax({ 
         url: "/people/#{login}/photos"
         success: (data, xhr, res) =>
           if _.isEmpty(data.icon)
-            ChatManager.iconList["#{login}"] = default_url
+            ChatManager.iconList[login] = default_url
           else
-            ChatManager.iconList["#{login}"] = data.icon
+            ChatManager.iconList[login] = data.icon
           handle.call(@) if _.isFunction(handle)
         error: (data, xhr, res) =>
           console.error(res.responseText)
@@ -79,7 +76,7 @@ class root.ChatManager extends Backbone.View
 
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
-      console.log('channel:new ', channel)
+      console.log('channel:new', channel)
       return unless channel.type is 3
       if @is_ready
         @targetView(channel.type).process(channel)
@@ -206,29 +203,10 @@ class root.ChatManager extends Backbone.View
     type = item.type || item.get('type')
     _.find @collection.models, (model) =>
       if type is model.get('type')
-
         if item instanceof Backbone.Model
             model.get('title') is item.get('title')
           else
             model.get('title') is item.group
-        # if type is 3
-        #   if item instanceof Backbone.Model
-        #     model.get('token') is item.get('token')
-        #   else
-        #     model.get('token') is item.token
-        # else
-        #   if item instanceof Backbone.Model
-        #     model.get('title') is item.get('title')
-        #   else
-        #     model.get('title') is item.title
-        
-        # switch type
-        #   when 1
-        #     model.get('title') is item.user
-        #   when 2
-        #     model.get('title') is item.group || item.get('group'))
-        #   when 3
-        #     model.get('group') is  (item.group || item.get('group'))
 
   addModel: (model) ->
     @collection.add(model)
@@ -282,8 +260,8 @@ class BaseIconsView extends Backbone.View
     exist_model = @parent_view.findExist(channel)
     if exist_model
       @top(exist_model)
-      return unless channel.type is 3
-      exist_model.icon_view.setChannel(channel)
+      # return unless channel.type is 3
+      # exist_model.icon_view.setChannel(channel)
     else
       model = new ChatModel({
         type: channel.type,

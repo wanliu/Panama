@@ -38,10 +38,23 @@ class UserSessionsController < ApplicationController
   # logout - Clear our rack session BUT essentially redirect to the provider
   # to clean up the Devise session from there too !
   def destroy    
-    #交给accounts项目处理session清空，
-    #如果这边处理session accounts不会执行before_logout用户不能正常离线
-    #session.destroy if session.present?
+    if session.present?
+      #与accounts/config/initializers/devise文件before_logout重复
+      send_logout_message
+      session.destroy
+    end
     flash[:notice] = 'You have successfully signed out!'
     redirect_to "#{accounts_provider_url}/accounts/logout?redirect_uri=http://#{request.env['HTTP_HOST']}"
+  end
+
+  private 
+
+  def send_logout_message
+    user_name = current_user.login
+
+    conn = Bunny.new(:hostname => "localhost")
+    conn.start
+    ch = conn.create_channel
+    ch.default_exchange.publish "{\"login\": \"#{user_name}\"}", :routing_key => "wanliu_task_logout"
   end
 end
