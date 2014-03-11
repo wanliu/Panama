@@ -38,7 +38,9 @@ class UserSessionsController < ApplicationController
   # logout - Clear our rack session BUT essentially redirect to the provider
   # to clean up the Devise session from there too !
   def destroy    
-    session.destroy if session.present?
+    #交给accounts项目处理session清空，
+    #如果这边处理session accounts不会执行before_logout用户不能正常离线
+    #session.destroy if session.present?
     flash[:notice] = 'You have successfully signed out!'
     redirect_to "#{accounts_provider_url}/accounts/logout?redirect_uri=http://#{request.env['HTTP_HOST']}"
   end
