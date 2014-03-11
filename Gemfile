@@ -42,7 +42,7 @@ gem 'omniauth-oauth2', '~> 1.1.1'
 
 # gem 'cells'
 gem 'apotomo', '~> 1.2.3'
-
+gem 'redis-rails'
 # gem 'widget_ui', :github => 'hysios/widget_ui'
 
 # markup
@@ -152,7 +152,7 @@ gem 'whenever', :require => false
 gem 'chinese_pinyin', '0.4.1'
 gem 'rmmseg-cpp-huacnlee', '0.2.9'
 gem 'redis-namespace','~> 1.0.2'
-gem 'redis-search', '0.9.0'
+# gem 'redis-search', '0.9.0'
 gem 'redis'
 gem "wicked"
 

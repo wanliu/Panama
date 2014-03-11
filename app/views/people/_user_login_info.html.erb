@@ -37,7 +37,7 @@
   </div>
 
   <!-- 修改密码 -->
-  <div id="edit_password_dialog" class="modal fade edit_user_dialog">
+  <div id="edit_password_dialog" class="modal fade hide edit_user_dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -45,7 +45,7 @@
           <h4 class="modal-title">修改密码</h4>
         </div>
         <div class="modal-body">
-          <iframe class='no_connected_state' border="0" src="<%=accounts_provider_url %>/users/jsonp/edit_password">
+          <iframe class='no_connected_state' frameborder="0" border="0" src="<%=accounts_provider_url %>/users/jsonp/edit_password">
           </iframe>
         </div>
       </div>
@@ -53,7 +53,7 @@
   </div>
 
   <!-- 修改邮箱 -->
-  <div id="edit_email_dialog" class="modal fade edit_user_dialog">
+  <div id="edit_email_dialog" class="modal fade hide edit_user_dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -61,7 +61,7 @@
           <h4 class="modal-title">重新绑定邮箱</h4>
         </div>
         <div class="modal-body">
-          <iframe class='no_connected_state' border="0" src="<%=accounts_provider_url %>/users/jsonp/edit_email">
+          <iframe class='no_connected_state' frameborder="0" border="0" src="<%=accounts_provider_url %>/users/jsonp/edit_email">
           </iframe>
         </div>
       </div>
