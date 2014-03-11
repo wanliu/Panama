@@ -57,11 +57,15 @@ class Activity < ActiveRecord::Base
     "/activities/#{id}"
   end
 
+  def format_time(time)
+    time.strftime "%Y-%m-%d %H:%M:%S" 
+  end
+
   def notice_followers
     unless shop.followers.blank?
       (shop.followers - [ author ]).each do |follower|
         follower.user.notify('/activities/add',
-                             "您关注的商家 #{shop.name} 发布新活动 #{title},定于#{ start_time}正式开始,敬请期待",
+                             "您关注的商家 #{shop.name} 发布新活动 #{title},定于#{ format_time(start_time)}正式开始,敬请期待",
                              {:target => self,
                               :url => notify_url,
                               :avatar => photos.avatar } )
@@ -285,9 +289,9 @@ class Activity < ActiveRecord::Base
   def change_state_notify
     if changed.include?("status")
       message = if Activity.statuses[:access] == status
-        "您发布的活动#{ title}已经通过审核,定于#{ start_time}正式开始"
+        "您发布的活动#{ title}已经通过审核, 活动时间为#{ format_time(start_time)} -- #{ format_time(end_time)}"
       else
-        "您发布的活动#{title}拒绝通告,请查看原因！"
+        "您发布的活动#{title}拒绝通告,请登陆邮箱查看原因！"
       end
       author.notify("/activities/add",
         message,
