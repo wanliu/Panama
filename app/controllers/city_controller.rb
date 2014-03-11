@@ -19,7 +19,7 @@ class CityController < ApplicationController
   # GET /city/1
   # GET /city/1.json
   def show
-    @city =  City.find(params[:id]).children
+    @city =  City.find(params[:id]).children if params[:id]
 
     respond_to do |format|
         format.html # show.html.erb

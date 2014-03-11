@@ -56,7 +56,7 @@ class Communities::CirclesController < Communities::BaseController
     @circle = Circle.find(params[:community_id])
     @circle.destroy
     respond_to do |format|
-      format.html { redirect_to communities_path }
+      format.html { redirect_to person_communities_path(current_user) }
     end
   end
 
