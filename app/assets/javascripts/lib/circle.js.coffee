@@ -13,7 +13,7 @@ class CircleCreate extends Backbone.View
 		unless @$(".circle_name").val()
 			@$(".circle_name").addClass('error')
 			return false
-		if  isNaN($(".address_area_id").val())
+		if !@$(".address_area_id").val() ||  isNaN($(".address_area_id").val())
 			@$(".address_province_id").addClass('error')
 			@$(".address_city_id").addClass('error')
 			@$(".address_area_id").addClass('error')
@@ -44,7 +44,7 @@ class CircleCreate extends Backbone.View
 					window.location.href = "/shops/#{ @current_shop }/admins/communities"
 			error: (ms) ->
 				try
-					pnotify(text: JSON.parse(ms.responseText), type: "error")
+					pnotify(text: JSON.parse(ms.responseText).join("<br />"), type: "error")
 				catch err
 					pnotify(text: ms.responseText, type: "error")
 		})

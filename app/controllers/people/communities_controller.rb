@@ -41,11 +41,15 @@ class People::CommunitiesController < People::BaseController
   	@setting = CircleSetting.create(params[:setting])
     params[:circle].merge!(:setting_id => @setting.id)
   	@circle = @people.circles.create(params[:circle])
-    CircleCategory.create(:name => "分享", :circle_id => @circle.id)
 
   	respond_to do |format|
-  		format.html { redirect_to person_circles_path(@people) }
-      format.json { head :no_content }
+      if @circle.valid?
+    		format.html { redirect_to person_circles_path(@people) }
+        format.json { head :no_content }
+      else
+        @setting.destroy
+        format.json{ render :json => draw_errors_message(@circle), :status => 403}
+      end
   	end
   end
 
