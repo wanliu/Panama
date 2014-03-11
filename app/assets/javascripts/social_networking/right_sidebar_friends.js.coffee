@@ -414,6 +414,7 @@ class BaseIconView extends Backbone.View
     </a>""")
 
   initialize: () ->
+    @msg_count ||= 0
     @model.icon_view = @
     @setChannel() unless @channel?
 
@@ -432,9 +433,8 @@ class BaseIconView extends Backbone.View
     @$('.message_count').hide()
 
   showMsgCount: () ->
-    @msg_count = 0 if !@msg_count?
     if @msg_count > 0
-      console.error(this.channel, @msg_count)
+      console.log(this.channel, @msg_count)
       $(@el).show()
       @$('.message_count').html(@msg_count)
       @$('.message_count').show()
@@ -458,14 +458,14 @@ class BaseIconView extends Backbone.View
         @incMsgCount()
         @active()
     , @
-
-    if @channel.unreadMsgCount?
-      @msg_count || @msg_count = 0
+    
+    # console.log('-->', @channel.unreadMsgCount)
+    @msg_count ||= 0
+    if @channel.unreadMsgCount > 0
       @msg_count += @channel.unreadMsgCount
       @showMsgCount()
     else
       @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
-        @msg_count || @msg_count = 0
         @msg_count += @channel.unreadMsgCount
         @showMsgCount()
 
