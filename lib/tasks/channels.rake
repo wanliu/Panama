@@ -42,10 +42,13 @@ namespace :user do
 
   desc "recreate temporary channel"
   task :create_temporary_channels => :environment do
-    targets = [ Activity, OrderTransaction, DirectTransaction ]
+    targets = [ OrderTransaction, DirectTransaction ]
     targets.each do |target|
       target.all.each do |o|
         name = o.class.to_s << "_" << o.number 
+        if o.temporary_channel.present?
+          o.temporary_channel.delete
+        end
         o.create_temporary_channel(targeable_type: o.class.to_s, user_id: o.seller.owner.id, name: name)
         # o.send('create_the_temporary_channel')
       end
