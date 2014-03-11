@@ -36,6 +36,7 @@ class TransactionCardBase extends AbstructStateView
     @generateChat()
     $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     super
+    @countdown()
 
   countdown: () ->
     @$(".clock").kkcountdown({
@@ -140,7 +141,7 @@ class TransactionCardBase extends AbstructStateView
       .unwrap()
       .unwrap()
       .unwrap()
-      @transaction.set(@current_state())
+      @transaction.set(@current_state())      
 
     if direction == 'right'
       $side1.css('float', 'left')
@@ -222,6 +223,7 @@ class TransactionCardBase extends AbstructStateView
     }
 
   change_state: () ->
+    @countdown()
     @setChatPanel()
 
   load_realtime: () ->
