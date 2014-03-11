@@ -96,8 +96,8 @@ Handlebars.registerHelper 'calender', (time) ->
 
 
 class BaseChatView extends Caramal.BackboneView
-  on_class: "online"
-  off_class: "offline"
+  on_class: 'online'
+  off_class: 'offline'
   className: 'global_chat'
   msgLoaded: false
   iconArr: []
@@ -299,7 +299,7 @@ class BaseChatView extends Caramal.BackboneView
   fetchIcon: () ->
     _.each @iconArr, (user) =>
       ChatManager.getInstance().getIcon user, () =>
-        user_icon = ChatManager.iconList["#{user}"]
+        user_icon = ChatManager.iconList[user]
         @$(".icon>img.#{user}").attr('src', user_icon)
 
   parseMessages: (messages) ->
@@ -307,13 +307,9 @@ class BaseChatView extends Caramal.BackboneView
     messages = [messages] unless $.isArray(messages)
     _.each messages, (message) =>
       user = message.user
-      if @iconArr.contain(user)
-        message.icon = ChatManager.iconList["#{user}"]
-        html += @parseOne(message)
-      else
-        @iconArr.push(user)
-        message.icon = '/default_img/t5050_default_avatar.jpg'
-        html += @parseOne(message)
+      @iconArr.push(user) unless @iconArr.contain(user)
+      message.icon = ChatManager.iconList[user] || '/default_img/t5050_default_avatar.jpg'
+      html += @parseOne(message)
     $(html)
 
   parseSysMsg: (message) ->
