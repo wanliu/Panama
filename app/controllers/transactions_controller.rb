@@ -6,13 +6,32 @@ class TransactionsController < ApplicationController
     render :json => { url: "#{url}#open/#{params[:id]}/#{type}" }
   end
 
+  def photos
+    if params[:type] == 'DirectTransaction'
+      order = DirectTransaction.find(params[:id])
+    elsif params[:type] == 'OrderTransaction'
+      order = OrderTransaction.find(params[:id])
+    end
+    unless order.blank?
+      icon = if order.buyer == current_user
+        # 当前用户为买家，显示对方(卖家)商店头像
+        order.seller.try(:photos).try(:icon)
+      else
+        # 当前用户为卖家，显示对方(买家)个人头像
+        order.buyer.try(:photos).try(:icon)
+      end
+    end
+      
+    render :json => { icon: icon }
+  end
+
   private
   def direct_transaction_by_url_type(id)
     order = DirectTransaction.find(id)
     url = if order.buyer == current_user
-      person_direct_transactions_path(current_user)
+      order.buyer.photos
     else
-      shop_admins_direct_transactions_path(current_user.shop)
+      order.seller.photos
     end
     [url, "direct"]
   end

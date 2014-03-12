@@ -100,6 +100,7 @@ class BaseChatView extends Caramal.BackboneView
   off_class: 'offline'
   className: 'global_chat'
   msgLoaded: false
+  iconType: 'person'
   iconArr: []
 
   EVENT_TYPE: {
@@ -298,8 +299,8 @@ class BaseChatView extends Caramal.BackboneView
 
   fetchIcon: () ->
     _.each @iconArr, (user) =>
-      ChatManager.getInstance().getIcon user, () =>
-        user_icon = ChatManager.iconList[user]
+      ChatManager.getInstance().getIcon @iconType, user, "/people/#{user}/photos", () =>
+        user_icon = ChatManager.iconList[@iconType][user]
         @$(".icon>img.#{user}").attr('src', user_icon)
 
   parseMessages: (messages) ->
@@ -308,7 +309,7 @@ class BaseChatView extends Caramal.BackboneView
     _.each messages, (message) =>
       user = message.user
       @iconArr.push(user) unless @iconArr.contain(user)
-      message.icon = ChatManager.iconList[user] || '/default_img/t5050_default_avatar.jpg'
+      message.icon = ChatManager.iconList[@iconType][user] || '/default_img/t5050_default_avatar.jpg'
       html += @parseOne(message)
     $(html)
 
@@ -535,6 +536,7 @@ class root.GroupChatView extends BaseChatView
 
 
 class root.TemporaryChatView extends BaseChatView
+  iconType: 'person'
   head_template: _.template('
     <div class="head drag-area">
       <span class="state online"></span>
@@ -554,7 +556,7 @@ class root.TemporaryChatView extends BaseChatView
     type = title.substring(0, title.indexOf('_'))
     $.ajax(
       type: 'POST'
-      url: "/transaction/#{id}/operate_url/#{type}"
+      url: "/transactions/#{id}/operate_url/#{type}"
       success: (data, xhr, res) =>
         return if _.isEmpty(data.url)
         document.location.href = data.url
@@ -564,6 +566,7 @@ class root.TemporaryChatView extends BaseChatView
 
 
 class root.OrderChatView extends BaseChatView
+  iconType: 'person'
   className: 'order_chat'
 
   head_template: _.template('')
