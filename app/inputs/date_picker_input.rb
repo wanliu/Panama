@@ -14,7 +14,8 @@ class DatePickerInput < SimpleForm::Inputs::Base
     </div>
     <script type="text/javascript">
       $(function() {
-        $("##{element_id}").datetimepicker({
+        var $elem = $("##{element_id}")
+        $elem.datetimepicker({
           'pickTime': false,
           'language': 'zh-CN',
           'weekStart': 1,
@@ -24,6 +25,11 @@ class DatePickerInput < SimpleForm::Inputs::Base
           'formatViewType': 'month',
           'format': "#{format}"
         })
+        
+        $("input:text", $elem).blur(function(){
+          $elem.data("datetimepicker").setValue(this.value.trim())
+        })        
+
       });
     </script>
     JAVASCRIPT
