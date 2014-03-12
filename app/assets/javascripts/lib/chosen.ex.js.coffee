@@ -44,19 +44,10 @@ class ChosenEx extends Chosen
       @search_field.unbind()
       @search_field.bind('keyup', $.proxy(@keyupRemote, @))
 
-    if $.isFunction(@options.select)
-      @search_results.on "mouseup", "li", $.proxy(@_select, @)
-
     if $.isFunction(@options.reset)
       @form_field_jq.bind('reset', $.proxy(@options.reset, @))
 
     @remote_callback(@options.data) if $.isArray(@options.data)
-
-
-  _select: () ->
-    setTimeout () =>
-      @options.select $(this.form_field).val()
-    , 40
 
   default_remote_options: () ->
     return {

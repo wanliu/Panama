@@ -64,11 +64,17 @@ class root.ActivityBuyView extends Backbone.View
     @$("select.address_id").chosen({
       allow_single_deselect : true,
       placeholder_text : "选择一个地址",
-      no_results_text : "没有以该关键词开头的地址"
+      no_results_text : "没有以该关键词开头的地址",
+      select: () =>
+        @$address_info.slideUp();
+
     })
 
   toggle: () ->
-    @$address_info.toggle()
+    if @$address_info.css("display") == "none"
+      @$('.search-choice-close').trigger("mouseup")
+
+    @$address_info.slideToggle()
 
   close: () ->
     $("body").removeClass("noScroll")
