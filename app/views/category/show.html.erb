@@ -1,5 +1,6 @@
 <div id="main" class="content">
   <%= render :partial => "search/options", :locals => {:category => @category } %>
+  <div class='category_wrap_info'></div>
   <%=render :partial => "activities/template" %>
 </div>
 
@@ -14,6 +15,10 @@
       }
     })
 
+    new ActivityLayoutView({
+      el: '.category_wrap_info'
+    })
+
     filter_options.params.change = function(options){
       load_view.is_over = false
       load_view.reset_fetch({
@@ -22,5 +27,6 @@
       })
     }
 
+    load_view.fetch();
   })
 </script>
