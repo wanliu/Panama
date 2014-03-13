@@ -1,16 +1,18 @@
 <nav id="left_sidebar" class="sidebar nav nav-collapse collapse" data-spy="affix" data-offset-top="80">
   <ul id="admin-side-nav" class="side-nav">
-     <%= image_tag current_shop.photos.avatar, :class => "img-polaroid" %>
-      <h4 class="cell"><%= current_shop.name %></h4>
-       <div class="btn-follow cell">
-          <% unless current_shop.user.id == current_user.id %>
-              <% unless current_user.is_follow_user?(current_shop.id) %>
-                  <span class="label label-success lf follow" data-value="<%= current_shop.id %>">+关注</span>
-              <% else %>
-                  <span class="label label-important lf unfollow" data-value="<%= current_shop.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
-              <% end %>
-           <% end %>
-        </div>
+    <div class='avatar_wrap'>
+      <%= image_tag current_shop.photos.avatar, :class => "img-polaroid" %>
+    </div>
+    <h4 class="cell"><%= current_shop.name %></h4>
+    <div class="btn-follow cell">
+      <% unless current_shop.user.id == current_user.id %>
+          <% unless current_user.is_follow_user?(current_shop.id) %>
+              <span class="label label-success lf follow" data-value="<%= current_shop.id %>">+关注</span>
+          <% else %>
+              <span class="label label-important lf unfollow" data-value="<%= current_shop.followers.find_by(user_id: current_user.id).id %>">取消关注</span>
+          <% end %>
+       <% end %>
+    </div>
 
     <% sections(:top).each do |section| %>
       <%= render :partial => "section", :locals => section %>

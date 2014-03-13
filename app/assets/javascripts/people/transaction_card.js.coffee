@@ -73,6 +73,7 @@ class TransactionCard extends TransactionCardBase
 
   leaveWaitingAuditFailure: (event, from, to, msg) ->
     @create_transfer_info(event)
+    StateMachine.ASYNC
 
   leaveOrder: (event, from ,to , msg) ->
     @$(".address-form>form").submit()

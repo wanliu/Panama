@@ -28,6 +28,19 @@ $.fn.extend({
 
 class Chosen extends AbstractChosen
 
+  constructor: (form_field_jq, options) ->    
+    super
+
+    @options = options
+    if $.isFunction(@options.select)
+      @search_results.on "mouseup", "li", $.proxy(@_select, @)
+
+
+  _select: () ->
+    setTimeout () =>
+      @options.select $(@form_field_jq).val()
+    , 40
+
   setup: ->
     @form_field_jq = $ @form_field
     @current_value = @form_field_jq.val()

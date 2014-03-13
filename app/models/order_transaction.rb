@@ -196,7 +196,6 @@ class OrderTransaction < ActiveRecord::Base
 
     after_transition :waiting_paid => :waiting_delivery do |order, transition|
       order.buyer_payment      
-      order.activity_tran.participate if order.activity_tran.present?      
     end
 
     after_transition do |order, transaction|
@@ -417,7 +416,9 @@ class OrderTransaction < ActiveRecord::Base
       :pay_type => pay_status.name,
       :target => seller.user,
       :decription => "订单#{number}付款",
-      :state => false })    
+      :state => false })
+        
+    activity_tran.participate if activity_tran.present?      
   end
 
   #卖家收款

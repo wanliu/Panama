@@ -48,7 +48,7 @@ class root.ChatManager extends Backbone.View
   @rows = 1
   @count = 0
   @maxRows = 2
-  @iconList = {}
+  @iconList = { 'person': {}, 'order': {} }
 
   @getInstance = (options) ->
     ChatManager.instance ||= new ChatManager(options)
@@ -56,17 +56,18 @@ class root.ChatManager extends Backbone.View
   events:
     'keyup input.filter_key' : 'filterChat'
 
-  getIcon: (login, handle) ->
-    default_url = '/default_img/t5050_default_avatar.jpg'
+  getIcon: (type, login, url, handle) ->
+    # default_url = '/default_img/t5050_default_avatar.jpg'
+    default_url = ''
     return default_url if _.isEmpty(login)
-    if _.isEmpty(ChatManager.iconList[login])
+    if _.isEmpty(ChatManager.iconList[type][login])
       $.ajax({ 
-        url: "/people/#{login}/photos"
+        url: url
         success: (data, xhr, res) =>
           if _.isEmpty(data.icon)
-            ChatManager.iconList[login] = default_url
+            ChatManager.iconList[type][login] = default_url
           else
-            ChatManager.iconList[login] = data.icon
+            ChatManager.iconList[type][login] = data.icon
           handle.call(@) if _.isFunction(handle)
         error: (data, xhr, res) =>
           console.error(res.responseText)
@@ -293,7 +294,6 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setDisplayTitle()
-      return console.error('请求聊天失败') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
@@ -423,10 +423,14 @@ class BaseIconView extends Backbone.View
     @msg_count += 1
     @$('.message_count').html(@msg_count).show()
 
+  fetchIcon: () ->
+    console.log('unimplemented...')
+
   setChannel: (@channel) ->
     @getChannel()
     @model.set({ channel: @channel })
     @channel.onMessage (msg) =>
+      @fetchIcon()
       $(@el).show()
       # if @channel.isActive()
       if @chat_view && $(@chat_view.el).is(':visible')
@@ -485,10 +489,22 @@ class GroupIconView extends BaseIconView
 
 
 class TemporaryIconView extends BaseIconView
+  iconType: 'order'
 
   initialize: () ->
     super
     $(@el).hide()
+
+  fetchIcon: () ->
+    icon = @model.get('icon')
+    return unless _.isEmpty(icon)
+    title = @model.get('title')
+    type = title.substring(0, title.indexOf('_'))
+    number = @model.get('number').replace(/\D/, '')
+    ChatManager.getInstance().getIcon @iconType, clients.current_user, "/transactions/#{number}/photos/#{type}", () =>
+      user_icon = ChatManager.iconList[@iconType][clients.current_user]
+      @model.set({ icon: user_icon })
+      @$("img").attr('src', user_icon)
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('title'), { token: @model.get('token') })

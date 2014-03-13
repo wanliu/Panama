@@ -11,12 +11,11 @@ class root.ActivityFocusView extends ActivityBaseInfoView
     super
 
   fill_info: (data) ->
-    product = data.product
-    @$('[name="activity[title]"]').val(product.name);
-    @$('[name="activity[shop_product_id]"]').val(product.id);
+    @$('[name="activity[title]"]').val(data.name);
+    @$('[name="activity[shop_product_id]"]').val(data.id);
 
     @$('ul.product_selector').hide();
-    @load_attachments(product.attachments)
+    @load_attachments(data.product.attachments)
 
   clone_elem: () ->
     one_line = @$(".bettwen:eq(0)").clone(true)

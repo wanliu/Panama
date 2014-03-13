@@ -140,7 +140,7 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.decimal  "price",      :precision => 10, :scale => 2, :default => 0.0
     t.integer  "amount",                                    :default => 0
     t.text     "describe"
-    t.integer  "status"
+    t.integer  "status",                                    :default => 0
     t.datetime "created_at",                                                  :null => false
     t.datetime "updated_at",                                                  :null => false
     t.integer  "user_id"
@@ -496,10 +496,9 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.decimal  "amount",          :precision => 10, :scale => 0, :default => 0
     t.decimal  "price",           :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",           :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
-    t.integer  "shop_product_id"
-    t.integer  "product_id"
     t.integer  "shop_id"
   end
 
@@ -526,7 +525,6 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.datetime "updated_at",                                                           :null => false
     t.string   "delivery_code"
     t.decimal  "delivery_price",       :precision => 5,  :scale => 2, :default => 0.0
-    t.string   "shipped_state"
     t.string   "order_state"
     t.string   "number"
     t.string   "transport_type"
@@ -568,6 +566,14 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.string   "icon"
   end
 
+  create_table "price_lists", :force => true do |t|
+    t.integer  "people_number"
+    t.decimal  "price",         :precision => 10, :scale => 0
+    t.integer  "activity_id"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+  end
+
   create_table "price_options", :force => true do |t|
     t.string   "name"
     t.string   "title"
@@ -606,9 +612,9 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.datetime "created_at",                                                 :null => false
     t.datetime "updated_at",                                                 :null => false
     t.integer  "cart_id"
+    t.integer  "product_id"
     t.string   "options"
     t.integer  "shop_id"
-    t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "buy_state"
     t.integer  "owner_id"
@@ -653,6 +659,7 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.integer  "shops_category_id"
     t.string   "brand_name"
     t.string   "emc13"
+    t.integer  "unit_id"
   end
 
   create_table "products_properties", :force => true do |t|
@@ -775,13 +782,14 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
   create_table "shop_products", :force => true do |t|
     t.integer  "shop_id"
     t.integer  "product_id"
-    t.decimal  "price",      :precision => 10, :scale => 2
-    t.decimal  "inventory",  :precision => 10, :scale => 2
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.decimal  "price",             :precision => 10, :scale => 2
+    t.decimal  "inventory",         :precision => 10, :scale => 2
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
     t.time     "deleted_at"
-    t.decimal  "sales",      :precision => 10, :scale => 2, :default => 0.0
-    t.decimal  "returned",   :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "sales",             :precision => 10, :scale => 2, :default => 0.0
+    t.decimal  "returned",          :precision => 10, :scale => 2, :default => 0.0
+    t.integer  "inventory_unit_id"
   end
 
   create_table "shop_user_groups", :force => true do |t|
@@ -804,7 +812,6 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.datetime "updated_at",                      :null => false
     t.string   "photo"
     t.integer  "user_id"
-    t.string   "tmp_token"
     t.string   "im_token"
     t.boolean  "actived",      :default => false
     t.integer  "address_id"
@@ -874,11 +881,11 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.integer  "user_id"
     t.string   "content"
     t.string   "content_html"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.integer  "category_id"
     t.integer  "circle_id"
-    t.integer  "participate"
+    t.integer  "participate",  :default => 0
   end
 
   create_table "transaction_operators", :force => true do |t|
@@ -937,6 +944,19 @@ ActiveRecord::Schema.define(:version => 20140306033307) do
     t.integer  "shop_product_id"
     t.datetime "created_at",                                                      :null => false
     t.datetime "updated_at",                                                      :null => false
+  end
+
+  create_table "unit_conversions", :force => true do |t|
+    t.integer "big_unit_id"
+    t.integer "small_unit_id"
+    t.float   "percentage",    :default => 1.0
+  end
+
+  create_table "units", :force => true do |t|
+    t.string  "code"
+    t.string  "name"
+    t.integer "child_id"
+    t.float   "percentage", :default => 1.0
   end
 
   create_table "user_banks", :force => true do |t|
