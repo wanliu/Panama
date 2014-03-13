@@ -274,6 +274,7 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
+  #产生库存记录
   def generate_transfer
     items.each do |item|
       transfers.build(

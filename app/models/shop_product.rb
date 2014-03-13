@@ -107,7 +107,10 @@ class ShopProduct < ActiveRecord::Base
 
   def skip_callback_update(amount)
     self.inventory += amount     
-    self.update_column(:inventory, inventory) if valid?
+    if valid?
+      self.update_column(:inventory, inventory) 
+      update_index
+    end
   end
 
   def update_sales
