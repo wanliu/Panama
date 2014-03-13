@@ -1794,6 +1794,17 @@ body>.global_chat {
       }
     }
   }
+
+  .search-wrap{
+    .typeahead{
+      li{
+        img.icon{
+          height: 25px;
+          width: 25px;
+        }
+      }
+    }
+  }
 }
 
 .href_name {
