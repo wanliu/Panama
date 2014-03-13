@@ -181,21 +181,14 @@ class BaseChatView extends Caramal.BackboneView
     super
     @render()
     @title = @model.get('title') || @model.get('login')
-    # @channel = @model.get('channel')
+    @channel = @model.get('channel')
     @initChannel()
     @bindEvent()
     @initDialog()
 
-  getChannel: () ->
-
   initChannel: () ->
-    @getChannel()
     @bindSysMsg()
     @bindHisMsg()
-    unless @channel.getState() is 'open'
-      @channel.open () =>
-        @channel.record()
-        @channel_ready = true
 
   initDialog: () ->
     @bindScroll()
@@ -238,11 +231,10 @@ class BaseChatView extends Caramal.BackboneView
     $el.resizable()
        .draggable({ cursor: 'move', handle: @$('.drag-area') })
        # .css('position', 'fixed')
-    $el.on('resize', (event, ui) =>
+    $el.on 'resize', (event, ui) =>
       height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
       $el.find(".body").css('height', height)
       $el.css('position', 'fixed')
-    )
 
   bindEvent: () ->
     @stateService()
@@ -480,9 +472,6 @@ class root.FriendChatView extends BaseChatView
   clickTitle: () ->
     # window.location.href = "/people/#{@title}"
 
-  getChannel: () ->
-    @channel ||= Caramal.Chat.of(@title)
-
   stateService: () ->
     $(window).bind('idle', () =>
       @sendState('away')
@@ -515,9 +504,6 @@ class root.GroupChatView extends BaseChatView
       <a class="close_label" href="javascript:void(0)"></a>
     </div>')
 
-  getChannel: () ->
-    @channel ||= Caramal.Group.of(@title)
-
   clickTitle: () ->
     ###$.ajax(
       type: 'POST'
@@ -540,9 +526,6 @@ class root.TemporaryChatView extends BaseChatView
       <span class="input_state"></span>
       <a class="close_label" href="javascript:void(0)"></a>
     </div>')
-
-  getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@title)
 
   clickTitle: () ->
     title = @model.get('title')
@@ -594,26 +577,10 @@ class root.OrderChatView extends BaseChatView
     @channel = @model.get('channel')
     @initChannel()
     @initDialog()
-    # $(@el).bind('enterOrderChat', () =>
-    #   int = window.setInterval( () =>
-    #     if !@msgLoaded && @channel_ready
-    #       window.clearInterval(int)
-    #       @showWithMsg()
-    #   , 300)
-    # )
 
   initChannel: () ->
-    @getChannel()
     @bindSysMsg()
     @bindHisMsg()
-    unless @channel.getState() is 'open'
-      @channel.open (chat, err, room) =>
-        @channel.record()
-        @channel_ready = true
-        $(@el).trigger('enterOrderChat')
-
-  getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@title)
 
   initDialog: () ->
     @render()
