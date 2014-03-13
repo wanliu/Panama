@@ -294,7 +294,6 @@ class BaseIconsView extends Backbone.View
       return exist_model
     else
       model.setDisplayTitle()
-      return console.error('请求聊天失败') unless model.get('name')
       @parent_view.collection.add(model)
       @collection.add(model)
       return model
