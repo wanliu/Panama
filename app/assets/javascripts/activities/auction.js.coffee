@@ -11,12 +11,11 @@ class root.ActivityAuctionView extends ActivityBaseInfoView
   initialize: () ->
     super
 
-  fill_info: (data) ->
-    product = data.product
-    @inputs_val(product)
+  fill_info: (data) ->    
+    @inputs_val(data)
 
     @$('ul.product_selector').hide();
-    @load_attachments(product.attachments)
+    @load_attachments(data.product.attachments)
 
   reset: () ->
     @inputs_val({

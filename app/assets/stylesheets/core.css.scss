@@ -808,6 +808,10 @@ ul {
 
 .open_right_side .right-sidebar {
   display: block;
+
+  .wrap_friend{
+    position: absolute;
+  }
 }
 
 .right-sidebar {
@@ -825,6 +829,10 @@ ul {
 
     .message_count {
       position: absolute;
+    }
+
+    .fixed_head{
+      margin-left: -5px;
     }
 
     .filter_key {
@@ -1790,6 +1798,17 @@ body>.global_chat {
           li.circles{
             margin: 0px;
           }
+        }
+      }
+    }
+  }
+
+  .search-wrap{
+    .typeahead{
+      li{
+        img.icon{
+          height: 25px;
+          width: 25px;
         }
       }
     }

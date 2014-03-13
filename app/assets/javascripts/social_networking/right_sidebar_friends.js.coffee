@@ -92,14 +92,17 @@ class root.ChatManager extends Backbone.View
     @collection.bind('add', @addChatIcon, @)
     @collection.bind('remove', @removeChatIcon, @)
 
+    $(@el).append('
+      <div class="fixed_head">
+        <input class="filter_key" type="text"/>
+      </div>
+      <div class="wrap_friend"></div>
+    ')
+
     @temporarys_view = new TemporaryIconsView(parent_view: @)
     @friends_view = new FriendIconsView(parent_view: @)
     @groups_view = new GroupIconsView(parent_view: @)
 
-    $(@el).prepend('
-      <div class="fixed_head">
-        <input class="filter_key" type="text"/>
-      </div>')
     @initFetch()
     @bindItems()
     @bindEvent()
@@ -244,7 +247,7 @@ class BaseIconsView extends Backbone.View
 
   initialize: () ->
     @parent_view  = @options.parent_view
-    @$parent_view = $(@options.parent_view.el)
+    @$parent_view = @options.parent_view.$(".wrap_friend")
     @$parent_view.append(@el)
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)

@@ -245,7 +245,7 @@ class SearchController < ApplicationController
         if options[:catalog_id].present?
           filter :terms, "category.id" => conditions[:catalog_id]
         end
-
+        
         if options[:category_id].present?
           filter :terms, "category.id" => conditions[:category_id]
         end

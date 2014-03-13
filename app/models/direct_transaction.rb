@@ -16,7 +16,7 @@ class DirectTransaction < ActiveRecord::Base
   has_many :transfers, :as => :targeable
   has_one :temporary_channel, as: :targeable, dependent: :destroy
 
-  validates :buyer, :presence => true
+  validates :buyer,  :presence => true
   validates :seller, :presence => true
   validates :number, :presence => true, :uniqueness => true
 

@@ -47,6 +47,12 @@
 				<td>所属商店</td>
 				<td><a href="/system/shops/<%= @activity.shop.try(:id) %>"><%= @activity.shop.try(:name) %></a></td>
 			</tr>
+			<tr>
+				<td>商品名</td>
+				<td>
+					<%= @activity.shop_product.try(:name) %>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </div>
