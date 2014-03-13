@@ -429,6 +429,17 @@ class BaseIconView extends Backbone.View
   setChannel: (@channel) ->
     @getChannel()
     @model.set({ channel: @channel })
+    # console.log('-->', @channel.unreadMsgCount)
+    @msg_count ||= 0
+    if @channel.unreadMsgCount > 0
+      @msg_count += @channel.unreadMsgCount
+      @showMsgCount()
+    else
+      @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
+        @msg_count += @channel.unreadMsgCount
+        @showMsgCount()
+
+    # console.log("-->", @channel, @model.get('title'))
     @channel.onMessage (msg) =>
       @fetchIcon()
       $(@el).show()
@@ -440,16 +451,7 @@ class BaseIconView extends Backbone.View
         @incMsgCount()
         @active()
     , @
-    
-    # console.log('-->', @channel.unreadMsgCount)
-    @msg_count ||= 0
-    if @channel.unreadMsgCount > 0
-      @msg_count += @channel.unreadMsgCount
-      @showMsgCount()
-    else
-      @channel.on 'unreadMsgsSeted', (unreadMsgCount) =>
-        @msg_count += @channel.unreadMsgCount
-        @showMsgCount()
+    console.log("-->", @channel._listeners.message)
 
   getChat: () ->
     unless @chat_view
@@ -485,7 +487,11 @@ class FriendIconView extends BaseIconView
 class GroupIconView extends BaseIconView
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('title'))
-    @channel.open()
+    if @channel.room
+      @channel.command('join', @channel.room, {})
+    else
+      @channel.command 'open', null, {}, (ch, error, msg) =>
+        console.error('请求聊天房间号失败') if _.isEmpty(msg)
 
 
 class TemporaryIconView extends BaseIconView
@@ -511,11 +517,8 @@ class TemporaryIconView extends BaseIconView
     if @channel.room
       @channel.command('join', @channel.room, {})
     else
-      @channel.command('open', null, {}, (ch, error, msg) =>
+      @channel.command 'open', null, {}, (ch, error, msg) =>
         console.error('请求聊天房间号失败') if _.isEmpty(msg)
-        # @channel.room = msg
-        # clients.socket.emit('join', {room: @channel.room})
-      )
 
   showChat: () ->
     url = @model.getOrderUrl()
