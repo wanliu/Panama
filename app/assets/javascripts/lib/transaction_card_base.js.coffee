@@ -31,6 +31,7 @@ class TransactionCardBase extends AbstructStateView
     @transaction.set_url(@options['url_root'])
     @transaction.bind("change:state", @change_state, @)
     @transaction.bind("change:stotal", @change_stotal, @)
+    @transaction.bind("change:delivery_price", @change_delivery_price, @)
 
     @load_realtime()
     @generateChat()
@@ -241,6 +242,14 @@ class TransactionCardBase extends AbstructStateView
   back_state: () ->
     @alarm()
     @transition.cancel()
+
+  change_delivery_price: ()->
+    @replace_delivery_price(@$(".delivery_price"), @transaction.get('delivery_price'))
+
+  replace_delivery_price: (elem, delivery_price) ->
+    if elem.length > 0
+      tag = elem.text().trim().substring(0, 1)
+      elem.html("#{tag} #{delivery_price}")
 
   change_stotal: () ->
     @replace_total(@$(".stotal"), @transaction.get('stotal'))
