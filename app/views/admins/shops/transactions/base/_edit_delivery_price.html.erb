@@ -3,7 +3,7 @@
     配送费用
   </div>
   <div class="span4">
-    <span class='dprice_panel' data-value="<%=transaction.delivery_price %>">
+    <span class='dprice_panel delivery_price' data-value="<%=transaction.delivery_price %>">
       <%= number_to_currency(transaction.delivery_price) %>
     </span>
     <% if transaction.operator_state  %>
