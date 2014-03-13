@@ -2,7 +2,7 @@
 root = (window || @)
 
 class root.CircleViewTemplate extends Backbone.View
-  className: "circle info-wrapper"
+  className: "circle info-wrapper widget"
 
   initialize: () ->
     @$el = $(@el)

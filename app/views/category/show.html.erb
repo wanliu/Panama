@@ -19,6 +19,24 @@
       el: '.category_wrap_info'
     })
 
+    new ActivityPreview({
+      el: $(".category_wrap_info"),
+      login: '<%= current_user.login %>'
+    })
+
+    new AskBuyPreview({
+      el: $(".category_wrap_info"),
+      login: '<%= current_user.login %>'
+    })
+
+    new ShopProductPreview({
+      el: $(".category_wrap_info")
+    })
+
+    new ProductPreview({
+      el: $(".category_wrap_info")
+    })
+
     filter_options.params.change = function(options){
       load_view.is_over = false
       load_view.reset_fetch({

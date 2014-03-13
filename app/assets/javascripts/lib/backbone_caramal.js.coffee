@@ -180,16 +180,13 @@ class BaseChatView extends Caramal.BackboneView
   initialize: (options) ->
     super
     @render()
-    @name = @model.get('login') || @model.get('title')
-    @title = @name unless @title
+    @title = @model.get('title') || @model.get('login')
     # @channel = @model.get('channel')
-    return console.error('请求聊天失败') unless @name
     @initChannel()
     @bindEvent()
     @initDialog()
 
   getChannel: () ->
-    # @bindMessage()
 
   initChannel: () ->
     @getChannel()
@@ -326,13 +323,13 @@ class BaseChatView extends Caramal.BackboneView
     $html = @parseMessages(data)
     @msgContent().append($html)
     @fetchIcon()
-    @model.trigger('active_avatar') if @name is data.user
+    @model.trigger('active_avatar') if @title is data.user
     @scrollDialog()
 
   receiveSysMsg: (data) ->
     if @display
       @msgContent().append(@parseSysMsg(data))
-      @model.trigger('active_avatar') if @name is data.user
+      @model.trigger('active_avatar') if @title is data.user
       @scrollDialog()
 
   receiveHisMessage: (msgs) ->
@@ -519,13 +516,13 @@ class root.GroupChatView extends BaseChatView
     </div>')
 
   getChannel: () ->
-    @channel ||= Caramal.Group.of(@name)
+    @channel ||= Caramal.Group.of(@title)
 
   clickTitle: () ->
     ###$.ajax(
       type: 'POST'
       dataType: 'json'
-      data: { name: @name }
+      data: { name: @title }
       url: "/communities/index_url"
       success: (data, xhr, res) =>
         return if _.isEmpty(data.url)
@@ -536,7 +533,6 @@ class root.GroupChatView extends BaseChatView
 
 
 class root.TemporaryChatView extends BaseChatView
-  iconType: 'person'
   head_template: _.template('
     <div class="head drag-area">
       <span class="state online"></span>
@@ -546,17 +542,16 @@ class root.TemporaryChatView extends BaseChatView
     </div>')
 
   getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@name)
+    @channel ||= Caramal.Temporary.of(@title)
 
   clickTitle: () ->
     title = @model.get('title')
-    number = title.substring(title.indexOf('_') + 1, title.length)
+    number = @model.get('number').replace(/\D/, '')
     return if _.isEmpty(number)
-    id = number.replace(/\D/, '')
     type = title.substring(0, title.indexOf('_'))
     $.ajax(
       type: 'POST'
-      url: "/transactions/#{id}/operate_url/#{type}"
+      url: "/transactions/#{number}/operate_url/#{type}"
       success: (data, xhr, res) =>
         return if _.isEmpty(data.url)
         document.location.href = data.url
@@ -566,7 +561,6 @@ class root.TemporaryChatView extends BaseChatView
 
 
 class root.OrderChatView extends BaseChatView
-  iconType: 'person'
   className: 'order_chat'
 
   head_template: _.template('')
@@ -596,10 +590,8 @@ class root.OrderChatView extends BaseChatView
   disablePageScroll: (event) ->
 
   initialize: (options) ->
-    @name = @model.get('title')
-    @title = @name unless @title
+    @title = @model.get('title')
     @channel = @model.get('channel')
-    return console.error('请求聊天失败') unless @name
     @initChannel()
     @initDialog()
     # $(@el).bind('enterOrderChat', () =>
@@ -621,7 +613,7 @@ class root.OrderChatView extends BaseChatView
         $(@el).trigger('enterOrderChat')
 
   getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@name)
+    @channel ||= Caramal.Temporary.of(@title)
 
   initDialog: () ->
     @render()
