@@ -18,14 +18,14 @@ class root.ChatModel extends Backbone.Model
       when 'Activity'
         '活动'
       else
-        console.error('未处理的类型')
+        console.error('unprocess type ...')
 
   setDisplayTitle: () ->
     type = @get('type') || @get('follow_type')
     @set({ type: type }) if type
     switch @get('type')
       when 1
-        displayTitle = "好友 #{@get('login') || @get('title')}"
+        displayTitle = "好友 #{@get('title') || @get('login')}"
         @set({ displayTitle: displayTitle })
       when 2
         displayTitle = "商圈 #{@get('title')}"
@@ -38,7 +38,6 @@ class root.ChatModel extends Backbone.Model
           number: number,
           displayTitle: displayTitle
         })
-    console.error('displayTitle为空', @attributes) if _.isEmpty(@get('displayTitle'))
 
 
 class root.ChatList extends Backbone.Collection
@@ -57,8 +56,7 @@ class root.ChatManager extends Backbone.View
     'keyup input.filter_key' : 'filterChat'
 
   getIcon: (type, login, url, handle) ->
-    # default_url = '/default_img/t5050_default_avatar.jpg'
-    default_url = ''
+    default_url = '/default_img/t5050_default_avatar.jpg'
     return default_url if _.isEmpty(login)
     if _.isEmpty(ChatManager.iconList[type][login])
       $.ajax({ 
@@ -92,17 +90,14 @@ class root.ChatManager extends Backbone.View
     @collection.bind('add', @addChatIcon, @)
     @collection.bind('remove', @removeChatIcon, @)
 
-    $(@el).append('
-      <div class="fixed_head">
-        <input class="filter_key" type="text"/>
-      </div>
-      <div class="wrap_friend"></div>
-    ')
-
     @temporarys_view = new TemporaryIconsView(parent_view: @)
     @friends_view = new FriendIconsView(parent_view: @)
     @groups_view = new GroupIconsView(parent_view: @)
 
+    $(@el).prepend('
+      <div class="fixed_head">
+        <input class="filter_key" type="text"/>
+      </div>')
     @initFetch()
     @bindItems()
     @bindEvent()
@@ -131,10 +126,6 @@ class root.ChatManager extends Backbone.View
 
   addChatIcon: (model) ->
     model.setDisplayTitle()
-    # exist_model = @findExist(model)
-    # if model.get('type') is 3 && exist_model
-    #   return exist_model
-    # else
     targetView = @targetView(model.get('type'))
     existModel = targetView.collection.where(@_filter(model))[0]
     if !existModel?
@@ -247,7 +238,7 @@ class BaseIconsView extends Backbone.View
 
   initialize: () ->
     @parent_view  = @options.parent_view
-    @$parent_view = @options.parent_view.$(".wrap_friend")
+    @$parent_view = $(@options.parent_view.el)
     @$parent_view.append(@el)
     @collection = new ChatList()
     @collection.bind('reset', @addAll, @)
@@ -285,7 +276,6 @@ class BaseIconsView extends Backbone.View
       @filterEmpty()
     else
       _.each @collection.models, (model) ->
-        # be sure title is exists
         if pattern.test(model.get('displayTitle'))
           $(model.icon_view.el).show()
         else
@@ -429,10 +419,20 @@ class BaseIconView extends Backbone.View
   fetchIcon: () ->
     console.log('unimplemented...')
 
+  openChannel: () ->
+    if @channel.room
+      @channel.command('join', @channel.room, {})
+    else
+      @channel.command 'open', null, {}, (ch, error, msg) =>
+        console.error('请求聊天房间号失败') if _.isEmpty(msg)
+
   setChannel: (@channel) ->
     @getChannel()
     @model.set({ channel: @channel })
-    # console.log('-->', @channel.unreadMsgCount)
+    @bindMessage()
+    @fetchUnread()    
+
+  fetchUnread: () ->
     @msg_count ||= 0
     if @channel.unreadMsgCount > 0
       @msg_count += @channel.unreadMsgCount
@@ -442,11 +442,10 @@ class BaseIconView extends Backbone.View
         @msg_count += @channel.unreadMsgCount
         @showMsgCount()
 
-    # console.log("-->", @channel, @model.get('title'))
+  bindMessage: () ->
     @channel.onMessage (msg) =>
       @fetchIcon()
       $(@el).show()
-      # if @channel.isActive()
       if @chat_view && $(@chat_view.el).is(':visible')
         @chat_view.receiveMessage(msg)
       else
@@ -454,7 +453,6 @@ class BaseIconView extends Backbone.View
         @incMsgCount()
         @active()
     , @
-    console.log("-->", @channel._listeners.message)
 
   getChat: () ->
     unless @chat_view
@@ -490,11 +488,7 @@ class FriendIconView extends BaseIconView
 class GroupIconView extends BaseIconView
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('title'))
-    if @channel.room
-      @channel.command('join', @channel.room, {})
-    else
-      @channel.command 'open', null, {}, (ch, error, msg) =>
-        console.error('请求聊天房间号失败') if _.isEmpty(msg)
+    @openChannel()
 
 
 class TemporaryIconView extends BaseIconView
@@ -517,11 +511,7 @@ class TemporaryIconView extends BaseIconView
 
   getChannel: () ->
     @channel ||= Caramal.Temporary.of(@model.get('title'), { token: @model.get('token') })
-    if @channel.room
-      @channel.command('join', @channel.room, {})
-    else
-      @channel.command 'open', null, {}, (ch, error, msg) =>
-        console.error('请求聊天房间号失败') if _.isEmpty(msg)
+    @openChannel()
 
   showChat: () ->
     url = @model.getOrderUrl()
@@ -534,7 +524,6 @@ class TemporaryIconView extends BaseIconView
     number = @model.get('number')
     flag = number.indexOf('D') is -1    # true 担保交易，false 直接交易
     current_shop = clients.current_shop # true admin页面，false people页面
-
     if current_shop
       if flag
         # /shops/xxx/admins/pending#open/yyy/order
