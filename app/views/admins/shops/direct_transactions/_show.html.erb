@@ -83,3 +83,6 @@
     </div>
   </div>
 </div>
+<% if direct_transaction.operator.nil? %>
+  <div class='invalid-full'>接单之后才可以操作订单</div>
+<% end %>
