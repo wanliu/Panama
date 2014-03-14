@@ -59,7 +59,7 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
       operator = @direct_transaction.operator
       if operator.present? && operator != current_user
         format.json{ render :json => ["这订单已经被#{operator.login}接了"], :status => 403 }
-      elsif operator.present?
+      elsif @direct_transaction.present?
         format.html{ 
           render :layout => false
         }    

@@ -809,9 +809,6 @@ ul {
 .open_right_side .right-sidebar {
   display: block;
 
-  .wrap_friend{
-    position: absolute;
-  }
 }
 
 .right-sidebar {
@@ -836,6 +833,7 @@ ul {
     }
 
     .filter_key {
+      width: 50px;
       margin: 0px;
       border: none;
       color: #f8f8f8;

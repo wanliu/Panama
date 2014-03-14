@@ -79,6 +79,14 @@ class ProductItem < ActiveRecord::Base
 
   validate :valid_buyer_self_product?
 
+  before_update do 
+    validate_payed?
+  end
+
+  after_update do 
+    changed_price?
+  end
+
   after_initialize do
     update_total
   end
@@ -149,7 +157,16 @@ class ProductItem < ActiveRecord::Base
   end
 
   private
+
+  def changed_price?
+    owner.update_total_count if changed.include?("price")
+  end
+
   def valid_buyer_self_product?
     errors.add(:shop, "不能购买自己的商品！") if user == shop.user
+  end
+
+  def validate_payed?
+    errors.add(:owner, "订单已经付款，不能改变价格") unless owner.pay_status == 0 #  如果付款状态为0（未付款）则不允许修改
   end
 end
