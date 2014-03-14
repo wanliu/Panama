@@ -157,10 +157,10 @@ class AskBuyView extends Backbone.View
     $.ajax(
       url: "/answer_ask_buy/"+answer_ask_buy_id+"/create_order",
       type: "POST",
-      success: () =>
-        window.location.href = "/people/#{@login}/transactions"
-      error: (data) ->
-        pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+      success: (data) =>
+        window.location.href = "/people/#{@login}/transactions#open/#{data.id}/order"
+      error: (ms) ->
+        pnotify({text: JSON.parse(ms.responseText).join("<br />"), title: "出错了！", type: "error"})
     )
 
 class AskBuyPreview extends Backbone.View

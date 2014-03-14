@@ -11,7 +11,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def generate_token
     @transaction = current_shop_order.find(params[:id])
-    @transaction.send('create_the_temporary_channel')
+    # @transaction.send('create_the_temporary_channel')
     
     respond_to do |format|
       format.json{ render :json => { token: @transaction.temporary_channel.try(:token) } }

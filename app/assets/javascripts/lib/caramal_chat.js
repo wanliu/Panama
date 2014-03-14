@@ -4897,7 +4897,12 @@ if (typeof define === "function" && define.amd) {
         ClientMessageManager.__super__.constructor.apply(this, arguments);
         this.message_dispatchs = {};
         this.return_commands = {};
-        this.channels = {};
+        this.channels = {
+          0: {},
+          1: {},
+          2: {},
+          3: {}
+        };
         if (this.client == null) {
           return;
         }
@@ -4999,32 +5004,37 @@ if (typeof define === "function" && define.amd) {
         return console.log(e);
       };
 
-      ClientMessageManager.prototype.addChannel = function(id, channel) {
-        return this.channels[id.toString()] = channel;
+      ClientMessageManager.prototype.addChannel = function(id, channel, type) {
+        return this.channels[type][id.toString()] = channel;
       };
 
-      ClientMessageManager.prototype.addNamedChannel = function(name, channel) {
-        return this.channels[name] = channel;
+      ClientMessageManager.prototype.addNamedChannel = function(name, channel, type) {
+        return this.channels[type][name] = channel;
       };
 
-      ClientMessageManager.prototype.ofChannel = function(id) {
-        return this.channels[id.toString()];
+      ClientMessageManager.prototype.ofChannel = function(id, type) {
+        return this.channels[type][id.toString()];
       };
 
-      ClientMessageManager.prototype.nameOfChannel = function(name) {
-        return this.channels[name];
+      ClientMessageManager.prototype.nameOfChannel = function(name, type) {
+        return this.channels[type][name];
       };
 
       ClientMessageManager.prototype.roomOfChannel = function(room) {
-        var chn, id, _ref;
+        var chat, chn, chns, i, id, _ref;
+        chat = null;
         _ref = this.channels;
-        for (id in _ref) {
-          chn = _ref[id];
-          if (chn.room === room) {
-            return chn;
+        for (i in _ref) {
+          chns = _ref[i];
+          for (id in chns) {
+            chn = chns[id];
+            if (chn.room === room) {
+              chat = chn;
+              break;
+            }
           }
         }
-        return null;
+        return chat;
       };
 
       return ClientMessageManager;
@@ -5431,19 +5441,19 @@ if (typeof define === "function" && define.amd) {
         return _results;
       };
 
-      Channel.create = function(options) {
+      Channel.create = function(options, type) {
         var manager;
         if (options == null) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        return manager.addChannel(Channel.nextId, new Channel(options));
+        return manager.addChannel(Channel.nextId, new Channel(options), type);
       };
 
-      Channel.of = function(id) {
+      Channel.of = function(id, type) {
         var manager;
         manager = options.manager || this.default_manager;
-        return manager.ofChannel(id);
+        return manager.ofChannel(id, type);
       };
 
       Channel.beforeCommand = function(cmd, callback) {
@@ -5590,7 +5600,7 @@ if (typeof define === "function" && define.amd) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        return manager.addNamedChannel(user, new Chat(user, options));
+        return manager.addNamedChannel(user, new Chat(user, options), Channel.TYPES['chat']);
       };
 
       Chat.of = function(user, options) {
@@ -5599,7 +5609,7 @@ if (typeof define === "function" && define.amd) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        chat = manager.nameOfChannel(user);
+        chat = manager.nameOfChannel(user, Channel.TYPES['chat']);
         return chat || this.create(user, options);
       };
 
@@ -5614,7 +5624,7 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['chat']) {
-            channel = Caramal.MessageManager.nameOfChannel(info.title);
+            channel = Caramal.MessageManager.nameOfChannel(info.title, Channel.TYPES['chat']);
             if (channel == null) {
               channel = Chat.create(info.title, {
                 room: info.room
@@ -5754,7 +5764,7 @@ if (typeof define === "function" && define.amd) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        return manager.addNamedChannel(group, new Group(group, options));
+        return manager.addNamedChannel(group, new Group(group, options), Channel.TYPES['group']);
       };
 
       Group.of = function(group, options) {
@@ -5763,7 +5773,7 @@ if (typeof define === "function" && define.amd) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        channel = manager.nameOfChannel(group);
+        channel = manager.nameOfChannel(group, Channel.TYPES['group']);
         return channel || this.create(group, options);
       };
 
@@ -5778,7 +5788,7 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['group']) {
-            channel = Caramal.MessageManager.nameOfChannel(info.group);
+            channel = Caramal.MessageManager.nameOfChannel(info.title, Channel.TYPES['group']);
             if (channel == null) {
               channel = Group.create(info.title, {
                 room: info.room
@@ -5888,7 +5898,7 @@ if (typeof define === "function" && define.amd) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        return manager.addNamedChannel(group, new Temporary(group, options));
+        return manager.addNamedChannel(group, new Temporary(group, options), Channel.TYPES['temporary']);
       };
 
       Temporary.of = function(group, options) {
@@ -5897,7 +5907,7 @@ if (typeof define === "function" && define.amd) {
           options = {};
         }
         manager = options.manager || this.default_manager;
-        channel = manager.nameOfChannel(group);
+        channel = manager.nameOfChannel(group, Channel.TYPES['temporary']);
         return channel || this.create(group, options);
       };
 
@@ -5912,7 +5922,7 @@ if (typeof define === "function" && define.amd) {
       switch (info.action) {
         case 'join':
           if (info.type === Channel.TYPES['temporary']) {
-            channel = Caramal.MessageManager.nameOfChannel(info.title);
+            channel = Caramal.MessageManager.nameOfChannel(info.title, Channel.TYPES['temporary']);
             if (channel == null) {
               channel = Temporary.create(info.title, {
                 room: info.room,

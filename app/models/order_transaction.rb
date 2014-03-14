@@ -417,7 +417,6 @@ class OrderTransaction < ActiveRecord::Base
       :target => seller.user,
       :decription => "订单#{number}付款",
       :state => false })
-        
     activity_tran.participate if activity_tran.present?      
   end
 
