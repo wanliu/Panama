@@ -8,7 +8,7 @@ class People::DirectTransactionsController < People::BaseController
 
   def generate_token
     @direct_transaction = current_direct_transaction
-    @direct_transaction.send('create_the_temporary_channel')
+    # @direct_transaction.send('create_the_temporary_channel')
     
     respond_to do |format|
       format.json{ render :json => { token: @direct_transaction.temporary_channel.try(:token) } }

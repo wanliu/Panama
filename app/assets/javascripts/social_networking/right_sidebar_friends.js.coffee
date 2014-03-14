@@ -422,12 +422,15 @@ class BaseIconView extends Backbone.View
   openChannel: () ->
     if @channel.room
       @channel.command('join', @channel.room, {})
+      @channel.record()
     else
-      @channel.command 'open', null, {}, (ch, error, msg) =>
-        console.error('请求聊天房间号失败') if _.isEmpty(msg)
+      @channel.command 'open', null, {}, (ch, error, room) =>
+        console.error('请求聊天房间号失败') if _.isEmpty(room)
+        @channel.record()
 
   setChannel: (@channel) ->
     @getChannel()
+    @openChannel()
     @model.set({ channel: @channel })
     @bindMessage()
     @fetchUnread()    
@@ -482,13 +485,11 @@ class BaseIconView extends Backbone.View
 class FriendIconView extends BaseIconView
   getChannel: () ->
     @channel ||= Caramal.Chat.of(@model.get('title'))
-    @channel.open()
 
 
 class GroupIconView extends BaseIconView
   getChannel: () ->
     @channel ||= Caramal.Group.of(@model.get('title'))
-    @openChannel()
 
 
 class TemporaryIconView extends BaseIconView
@@ -497,6 +498,9 @@ class TemporaryIconView extends BaseIconView
   initialize: () ->
     super
     $(@el).hide()
+
+  getChannel: () ->
+    @channel ||= Caramal.Temporary.of(@model.get('title'), { token: @model.get('token') })
 
   fetchIcon: () ->
     icon = @model.get('icon')
@@ -508,10 +512,6 @@ class TemporaryIconView extends BaseIconView
       user_icon = ChatManager.iconList[@iconType][clients.current_user]
       @model.set({ icon: user_icon })
       @$("img").attr('src', user_icon)
-
-  getChannel: () ->
-    @channel ||= Caramal.Temporary.of(@model.get('title'), { token: @model.get('token') })
-    @openChannel()
 
   showChat: () ->
     url = @model.getOrderUrl()
