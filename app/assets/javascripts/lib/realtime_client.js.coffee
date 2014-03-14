@@ -9,7 +9,7 @@ class root.Realtime
 
   constructor: (options) ->
     _.extend(@, options)
-    Caramal.debug = true
+    # Caramal.debug = true
     @url = @server_uri + '?token=' + @token
     @connect()
     @events = {}

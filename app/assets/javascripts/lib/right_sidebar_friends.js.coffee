@@ -75,7 +75,7 @@ class root.ChatManager extends Backbone.View
 
   bindItems: () ->
     Caramal.MessageManager.on('channel:new', (channel) =>
-      console.log('channel:new', channel)
+      # console.log('channel:new', channel)
       return unless channel.type is 3
       if @is_ready
         @targetView(channel.type).process(channel)
@@ -405,8 +405,6 @@ class BaseIconView extends Backbone.View
 
   showMsgCount: () ->
     if @msg_count > 0
-      console.log(this.channel, @msg_count)
-      $(@el).show()
       @$('.message_count').html(@msg_count)
       @$('.message_count').show()
     else

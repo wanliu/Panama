@@ -35,10 +35,9 @@
 //= require lib/jquery.treeview
 //= require lib/jquery.cookie
 //= require lib/backdrop
+//= require lib/right_sidebar_friends
 //= require left_sidebar
 //= require topbar
-//= require social_networking/transaction_chat_remind
-//= require social_networking/right_sidebar_friends
 //= require pick_product
 //= require typeaheadExtension
 //= require ask_buy

@@ -5161,18 +5161,8 @@ if (typeof define === "function" && define.amd) {
       };
 
       Channel.prototype.getChannelName = function() {
-        var user_name;
         if (this.user) {
-          user_name = this.user;
-          return _.find(_.keys(this.manager.unreadMsgs), function(channel) {
-            if (clients && clients.current_user) {
-              return channel === [user_name, clients.current_user].sort().join('-');
-            } else {
-              return _.find(channel.split('-'), function(name) {
-                return name === user_name;
-              });
-            }
-          });
+          return this.user;
         } else if (this.token) {
           return this.token;
         } else {
