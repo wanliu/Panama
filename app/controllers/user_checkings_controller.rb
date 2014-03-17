@@ -30,7 +30,7 @@ class UserCheckingsController < ApplicationController
       @user_checking.send("#{field_name}=",file)
       if @user_checking.save
         @shop = @user_checking.user.try(:belongs_shop)
-        update_shop_photo(file) unless @shop.nil?
+        # update_shop_photo(file) unless @shop.nil?
         render :text => "{success: true, avatar_filename: '#{@user_checking.send(field_name)}'}"
       else
         render :text => "{success: false, error: '上传头像失败！'}"
@@ -39,15 +39,12 @@ class UserCheckingsController < ApplicationController
       render :text => "{success: false, error: '请上传头像！'}"
     end
   end
-
-  # 讲userchecking的shop_photo字段同步到shop的photo字段
-  private
-  def update_shop_photo(file)
-    @current_ability = ShopAbility.new(current_user, @shop)
-    authorize! :manage, @shop
-    unless @shop.nil?
-      @shop.photo = @user_checking.shop_photo
-      @shop.save
-    end
-  end
+  # #将userchecking的shop_photo字段同步到shop的photo字段
+  # private
+  # def update_shop_photo(file)
+  #   @current_ability = ShopAbility.new(current_user, @shop)
+  #   authorize! :manage, @shop
+  #   @shop.photo = @user_checking.shop_photo
+  #   @shop.save
+  # end
 end

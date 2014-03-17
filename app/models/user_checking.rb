@@ -23,6 +23,9 @@ class UserChecking < ActiveRecord::Base
 
   define_graphical_attr :ower_photos, :handler => :ower_photo
   define_graphical_attr :shop_photos, :handler => :shop_photo
+
+  after_save :update_shop_photo
+
   after_update do 
     clone_delivery_address    
     update_relation_index
@@ -34,6 +37,12 @@ class UserChecking < ActiveRecord::Base
 
    def unchecked_notify
     user.notify('/audit/user', "很遗憾，你的资料审核未通过，请重新提起审核……", :avatar => user.icon, :target => self, :url => default_url)
+  end
+
+  def update_shop_photo
+    if changed.include?("shop_photo") && !shop.nil?
+      shop.update_attributes(:photo => self.shop_photo)
+    end
   end
 
   def unchecked
