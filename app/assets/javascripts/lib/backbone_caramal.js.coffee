@@ -586,7 +586,7 @@ class root.OrderChatView extends BaseChatView
     @render()
     @bindScroll()
     @setDisplay()
-    $(@model.get('attach_el')).append(@el)
+    $(@model.get('attach_el')).html(@el)
     @addModelToManager()
     @setImgUploader()
     @hide()

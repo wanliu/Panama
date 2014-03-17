@@ -8,12 +8,26 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     @directs = directs.uncomplete.where(:operator_id => current_user.id).page(params[:page])
   end
 
+  def get_token
+    @direct_transaction.temporary_channel.try(:token)
+  end
+
   def generate_token
     @direct_transaction = current_shop_direct_transaction
-    # @direct_transaction.send('create_the_temporary_channel')
+    if get_token.blank?
+      @direct_transaction.send('create_the_temporary_channel')
+      try_times = 0
+      Thread.new do
+        while try_times < 24 do
+          try_times += 1
+          break unless get_token.blank?
+          sleep 0.2
+        end
+      end
+    end
     
     respond_to do |format|
-      format.json{ render :json => { token: @direct_transaction.temporary_channel.try(:token) } }
+      format.json{ render :json => { token: get_token } }
     end
   end
 

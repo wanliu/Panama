@@ -3,7 +3,13 @@ class TemporaryChannel < ActiveRecord::Base
   belongs_to :targeable, :polymorphic => true
   belongs_to :user
 
-  after_create do
+  after_create :create_caramal_channel
+
+  after_destroy do
+    CaramalClient.remove_temporary_channel(name, user.login)
+  end
+
+  def create_caramal_channel
     options = {}
     if "OrderTransaction" == self.targeable_type
       options[:members] = [self.targeable.buyer.login]
@@ -20,9 +26,5 @@ class TemporaryChannel < ActiveRecord::Base
       self.update_attribute(:token, _token)
     end
   end
-
-  after_destroy do
-    CaramalClient.remove_temporary_channel(name, user.login)
-  end
-
+  
 end
