@@ -101,7 +101,6 @@ class root.ChatManager extends Backbone.View
     @initFetch()
     @bindItems()
     @bindEvent()
-    @$el.slimScroll(height: $(window).height())
 
   addAll: () ->
     @$("ul").html('')
