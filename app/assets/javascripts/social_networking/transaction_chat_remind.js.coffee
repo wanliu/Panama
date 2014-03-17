@@ -82,8 +82,6 @@ class TransactionChatRemindView extends Backbone.View
 		$(@el).html(@template(model: @model))
 		@
 
-
-
 	message_handle: () ->
 		@trigger("remove_model", @model.id)
 		$.ajax({
