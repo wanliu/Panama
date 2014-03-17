@@ -12,12 +12,26 @@ class People::TransactionsController < People::BaseController
     end
   end
 
+  def get_token
+    @transaction.temporary_channel.try(:token)
+  end
+
   def generate_token
     @transaction = current_order.find(params[:id])
-    # @transaction.send('create_the_temporary_channel')
+    if get_token.blank?
+      @transaction.send('create_the_temporary_channel')
+      try_times = 0
+      Thread.new do
+        while try_times < 24 do
+          try_times += 1
+          break unless get_token.blank?
+          sleep 0.2
+        end
+      end
+    end
     
     respond_to do |format|
-      format.json{ render :json => { token: @transaction.temporary_channel.try(:token) } }
+      format.json{ render :json => { token: get_token } }
     end
   end
 

@@ -696,6 +696,8 @@ class OrderTransaction < ActiveRecord::Base
     if temporary_channel.nil?    
       name = self.class.to_s << "_" << number
       self.create_temporary_channel(targeable_type: "OrderTransaction", user_id: seller.owner.id, name: name)
+    else
+      temporary_channel.create_caramal_channel
     end
   end
 

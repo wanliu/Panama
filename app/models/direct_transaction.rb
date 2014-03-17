@@ -177,8 +177,12 @@ class DirectTransaction < ActiveRecord::Base
   end
 
   def create_the_temporary_channel
-    name = self.class.to_s << "_" << number
-    self.create_temporary_channel(targeable_type: 'DirectTransaction', user_id: seller.owner.id, name: name)
+    if temporary_channel.nil? 
+      name = self.class.to_s << "_" << number
+      self.create_temporary_channel(targeable_type: 'DirectTransaction', user_id: seller.owner.id, name: name)
+    else
+      temporary_channel.create_caramal_channel
+    end
   end
 
   def buyer_open_path

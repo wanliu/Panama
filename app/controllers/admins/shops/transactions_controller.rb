@@ -1,4 +1,6 @@
 #encoding: utf-8
+require 'timeout'
+
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   helper_method :base_template_path
 
@@ -9,12 +11,26 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     .order("dispose_date desc").page(params[:page])
   end
 
+  def get_token
+    @transaction.temporary_channel.try(:token)
+  end
+
   def generate_token
     @transaction = current_shop_order.find(params[:id])
-    # @transaction.send('create_the_temporary_channel')
-    
+    if get_token.blank?
+      @transaction.send('create_the_temporary_channel')
+      try_times = 0
+      Thread.new do
+        while try_times < 24 do
+          try_times += 1
+          break unless get_token.blank?
+          sleep 0.2
+        end
+      end
+    end
+
     respond_to do |format|
-      format.json{ render :json => { token: @transaction.temporary_channel.try(:token) } }
+      format.json{ render :json => { token: get_token } }
     end
   end
 

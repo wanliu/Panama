@@ -47,6 +47,9 @@ class root.DirectTransactionView extends Backbone.View
     @chat_model.icon_view.toggleChat()
 
   generateToken: (handle) ->
+    @$el.parents('.wrapper-box')
+      .find('.message_wrap')
+      .html('<img src="/assets/loading_max.gif">')
     return handle.call(@) unless _.isEmpty(@$el.attr('data-token'))
     $.ajax(
       type: 'POST',

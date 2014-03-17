@@ -119,8 +119,6 @@ class TransactionCardBase extends AbstructStateView
     $side2.html(page)
 
     $side1 = @$el
-
-
     height =  Math.max($side2.height(), $side1.height())
     length = $slideBox.width()
     width = @$el.width()
@@ -189,7 +187,6 @@ class TransactionCardBase extends AbstructStateView
     $chat_body.height(height) if height > 100
 
   generateChat: () ->
-    return if !@dialogState
     @generateToken () =>
       @newAttachChat()
 
@@ -205,6 +202,9 @@ class TransactionCardBase extends AbstructStateView
     false
 
   generateToken: (handle) ->
+    @$el.parents('.wrapper-box')
+      .find('.message_wrap')
+      .html('<img src="/assets/loading_max.gif">')
     return handle.call(@) unless _.isEmpty(@$el.attr('data-token'))
     $.ajax(
       type: 'POST',
@@ -214,7 +214,7 @@ class TransactionCardBase extends AbstructStateView
         @$el.attr('data-token', data.token)
         handle.call(@)
       error: () =>
-        pnotify(type: 'error', text: '获取聊天token失败')
+        console.error('获取聊天token失败')
     )
 
   current_state: () ->
