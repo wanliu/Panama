@@ -172,7 +172,7 @@ class DirectTransaction < ActiveRecord::Base
 
   def self.expired_state
     uncomplete.where("expired_time <= ?", DateTime.now).each do |t|
-      t.update_attributes(:state, :close)
+      t.update_attributes(:state => "close")
     end
   end
 
