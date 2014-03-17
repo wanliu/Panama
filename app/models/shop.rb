@@ -79,7 +79,7 @@ class Shop < ActiveRecord::Base
 
   #shop 的所有的圈子，包括店主个人的
   def all_type_circles
-    Circle.where("owner_type='Shop' and owner_id=? or owner_type='User' and owner_id=?",user.id, id)
+    Circle.where("owner_type='Shop' and owner_id=? or owner_type='User' and owner_id=?",id, user.id)
   end
 
   #加入的商店商圈

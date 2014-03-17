@@ -57,7 +57,7 @@ class OrderTransaction < ActiveRecord::Base
   validate :valid_base_info?
   validate :shop_checked?
   validates :delivery_code, :allow_blank => true, 
-            :format => { :with => /^\w{6,20}$/, :message => "快递单号必须小于20位"}
+            :format => { :with => /^\w{6,20}$/, :message => "快递单号必须大于6位小于20位"}
 
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
@@ -358,7 +358,7 @@ class OrderTransaction < ActiveRecord::Base
     target = current_operator.nil? ? seller : current_operator    
     Notification.dual_notify(target,
       :channel => "/#{seller.im_token}/transactions/#{id}/change_state",
-      :content => "您的订单#{number}买家已经#{seller_state_title}",
+      :content => "您的订单#{number} 已经#{seller_state_title}",
       :order_id => id,
       :state => state_name,
       :event => "refresh_#{event}",
@@ -574,7 +574,10 @@ class OrderTransaction < ActiveRecord::Base
       details.state = order_transactions.state and details.expired_state=true",
       :conditions => ["details.expired <=?", DateTime.now],
       :readonly => false)
-    transactions.each{|t| t.fire_events!(:expired) }
+       
+    transactions.each do |t| 
+      t.fire_events!(:expired)
+    end    
     puts "=order===start: #{DateTime.now}=====count: #{transactions.count}===="
     transactions
   end
