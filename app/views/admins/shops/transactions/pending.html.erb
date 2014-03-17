@@ -81,7 +81,7 @@
       el: $("table.untransactions"),
       shop: shop,
       _type: "transactions",
-      template: Hogan.compile("<%= j render :partial => 'untransaction' %>")
+      template: Handlebars.compile("<%= j render :partial => 'untransaction' %>")
     })
 
     dispose_view.add(<%= @untransactions.as_json(:methods => "seller_state_title").to_json.html_safe %>)

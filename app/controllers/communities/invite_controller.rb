@@ -42,6 +42,13 @@ class Communities::InviteController < Communities::BaseController
     respond_to do |format|
       if @invite.agree_join
         @circle.join_friend(@invite.user)
+        @invite.send_user.notify(
+          "/circles/agree",
+          "#{current_user.login} 同意加入你的圈子 #{@circle.name}！",
+          :avatar => current_user.icon,
+          :targeable => @invite,
+          :url => "/people/#{@circle.send_user.login}"
+        )
         format.js{
           render :js => "window.location.href='#{community_circles_path(@circle)}'" }
         format.html{
@@ -59,6 +66,13 @@ class Communities::InviteController < Communities::BaseController
     @invite = current_invite
     respond_to do |format|
       if @invite.refuse_join
+        @invite.send_user.notify(
+          "/circles/refuse",
+          "#{current_user.login} 拒绝加入你的圈子 #{@circle.name}！",
+          :avatar => current_user.icon,
+          :targeable => @invite,
+          :url => "/people/#{@circle.send_user.login}"
+        )
         format.js{ render :js => "window.location.href='#{person_communities_path(@current_user)}'" }
         format.html{
           redirect_to person_communities_path(@current_user)
