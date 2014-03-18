@@ -68,9 +68,12 @@ class OrderTransaction < ActiveRecord::Base
     generate_transfer
   end
 
+  after_commit do 
+    notice_user
+  end 
+
   after_create do    
-    state_change_detail
-    notice_user    
+    state_change_detail    
   end
 
   after_save do     
