@@ -16,14 +16,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <% if can? :manage, @shop %>
+          <%# if can? :manage, @shop %>
             <div id="image_bottom">
               <div class="hidden_one" id="hidden_text">
               </div>
               <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
               </div>
             </div>
-          <% end %>
+          <%# end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -49,14 +49,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid"/>
           </div>
-          <% if can? :manage, @shop %>
+          <%# if can? :manage, @shop %>
             <div id="image_bottom">
               <div class="hidden_one" id="hidden_text">
               </div>
               <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
               </div>
             </div>
-          <% end %>
+          <%# end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -87,14 +87,14 @@
           <div class="photo_span" >
             <img class="bottom normal_picture img-polaroid" />
           </div>
-          <% if can? :manage, @shop %>
+          <%# if can? :manage, @shop %>
             <div id="image_bottom">
               <div class="hidden_one" id="hidden_text">
               </div>
               <div class="update_photo_panle cant_see_me upload_user_avatar file-box" >
               </div>
             </div>
-          <% end %>
+          <%# end %>
         </div>
       </div>
       <div class="span7 input_locate">
@@ -129,5 +129,9 @@
         { el: $(".main_panle3"), input_name: "ower_photo", photo: "<%= @user_checking.try(:ower_photo) %>" }
       ]
     })
+    <% unless can? :manage, @shop %>
+      $(".qq-upload-button").remove()
+    <% end %>
+
   });
 </script>
