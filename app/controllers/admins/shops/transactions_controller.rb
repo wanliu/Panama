@@ -58,7 +58,12 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
 
   def show
     @transaction = current_shop_order.find_by(:id => params[:id])
-    respond_to do | format |
+    puts "========================="
+    puts "========================="
+    puts @transaction.attributes
+    puts "========================="
+    puts "========================="
+    respond_to do |format|
       format.html
       format.json{ render :json => @transaction.as_json(:methods => :seller_state_title) }
       format.csv do

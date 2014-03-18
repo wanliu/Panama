@@ -84,6 +84,8 @@ class exports.TransactionDispose extends Backbone.View
     @notice_msg()
 
   add_one: (data) ->
+    console.log("=======add_one=====")
+    console.log(data) 
     @transactions.add(data)
 
   init_el: () ->
@@ -108,6 +110,7 @@ class exports.TransactionDispose extends Backbone.View
   bind_realtime: () ->
     @realtime = new TransactionRealTime @shop_key(), @_type
     @realtime.create (data) =>
+      console.log(data)
       @fetch_data data[@type_key()]
 
     @realtime.dispose (data) =>
@@ -118,8 +121,10 @@ class exports.TransactionDispose extends Backbone.View
       @realtime_destroy data[@type_key()]
 
   fetch_data: (id) ->
+    console.log(id)
     model = new Transaction(id: id)
     url = "#{@transactions.url}/#{id}"
+    console.log("======url=="+url+"=========")
     model.fetch url: url, success: (model, data) => @add_one(data)
 
   realtime_destroy: (id) ->
