@@ -1,9 +1,6 @@
 root = (window || @)
 
 class root.ShopDirectTransactionView extends Backbone.View
-  events: {
-    "click .chat_wrapper .message-toggle" : "toggle_message"
-  }
 
   initialize: (options) ->
     _.extend(@, options)
@@ -17,7 +14,7 @@ class root.ShopDirectTransactionView extends Backbone.View
     @load_realtime()
     $(window).bind("resizeOrderChat", _.bind(@load_style, @))
     # @load_style()
-    @toggle_message()
+    @generateChat()
 
   init_elem: () =>
     @$el = $(@el)
@@ -31,10 +28,9 @@ class root.ShopDirectTransactionView extends Backbone.View
     padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
     @$messages.height( @$info.outerHeight() - @$toolbar.outerHeight() - padding)
 
-
-  toggle_message: () ->
-    # @$messages.slideToggle()
+  generateChat: () ->
     @generateToken () =>
+      return pnotify(type: 'error', text: '请求聊天超时，请刷新后再试') if _.isEmpty(@$el.attr('data-token'))
       @newAttachChat()
 
   newAttachChat: () ->

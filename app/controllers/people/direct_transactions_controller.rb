@@ -16,7 +16,7 @@ class People::DirectTransactionsController < People::BaseController
       @direct_transaction.send('create_the_temporary_channel')
       try_times = 0
       Thread.new do
-        while try_times < 24 do
+        while try_times < 100 do
           try_times += 1
           break unless get_token.blank?
           sleep 0.2

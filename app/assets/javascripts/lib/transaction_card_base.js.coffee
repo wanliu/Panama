@@ -188,13 +188,14 @@ class TransactionCardBase extends AbstructStateView
 
   generateChat: () ->
     @generateToken () =>
+      return pnotify(type: 'error', text: '请求聊天超时，请刷新后再试') if _.isEmpty(@$el.attr('data-token'))
       @newAttachChat()
 
   newAttachChat: () ->
     unless @chat_model?
       @chat_model = new ChatModel({
         type: 3,
-        token: @transaction.get('token'),
+        token: @$el.attr('data-token'),
         title: @transaction.get('title')
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)

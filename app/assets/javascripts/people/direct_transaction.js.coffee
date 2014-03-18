@@ -34,6 +34,7 @@ class root.DirectTransactionView extends Backbone.View
 
   generateChat: () ->
     @generateToken () =>
+      return pnotify(type: 'error', text: '请求聊天超时，请刷新后再试') if _.isEmpty(@$el.attr('data-token'))
       @newAttachChat()
 
   newAttachChat: () ->
