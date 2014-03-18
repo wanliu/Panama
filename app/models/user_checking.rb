@@ -24,10 +24,7 @@ class UserChecking < ActiveRecord::Base
   define_graphical_attr :ower_photos, :handler => :ower_photo
   define_graphical_attr :shop_photos, :handler => :shop_photo
 
-  after_save :update_shop_photo
-
-  after_update do 
-    clone_delivery_address    
+  after_save do 
     update_relation_index
   end
 
@@ -126,7 +123,8 @@ class UserChecking < ActiveRecord::Base
   end
 
   def update_relation_index
-
+    update_shop_photo
+    update_delivery_address
   end
 
   def update_user_index
@@ -204,7 +202,7 @@ class UserChecking < ActiveRecord::Base
     end
   end
 
-  def clone_delivery_address
+  def update_delivery_address
     if changed.include?("address_id")
       if address.present?
         user.delivery_addresses.create(address.attributes)
