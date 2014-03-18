@@ -26,7 +26,7 @@ class TransactionEvent extends Backbone.View
   initialize: (options) ->
     _.extend(@, options)
     @$el = $(@el)
-    @$el.html @template.render(@model.toJSON())
+    @$el.html @template(@model.attributes)
     @model.bind("change:state_title", @change_state, @)
     @model.bind("change:stotal", @change_stotal, @)
     @model.bind("change:address", @change_address, @)
