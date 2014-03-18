@@ -110,8 +110,6 @@ class Shop < ActiveRecord::Base
   def as_json(*args)
     attribute = super *args
     attribute["photos"] = photos.attributes
-    # attribute["icon_url"] = icon_url
-
     attribute
   end
 
@@ -223,9 +221,11 @@ class Shop < ActiveRecord::Base
       },
       :update => {
         :shop => {
-          :icon => photos.icon,
-          :header => photos.header,
-          :avatar => photos.avatar
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
         }
       }
     )
@@ -240,9 +240,11 @@ class Shop < ActiveRecord::Base
       },
       :update => {
         :seller => {
-          :icon => photos.icon,
-          :header => photos.header,
-          :avatar => photos.avatar
+          :photos => {
+            :icon => photos.icon,
+            :header => photos.header,
+            :avatar => photos.avatar
+          }
         }
       }
     )
