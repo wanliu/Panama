@@ -570,8 +570,6 @@ class root.OrderChatView extends BaseChatView
       </div>
     </div>')
 
-  disablePageScroll: (event) ->
-
   initialize: (options) ->
     @title = @model.get('title')
     @channel = @model.get('channel')

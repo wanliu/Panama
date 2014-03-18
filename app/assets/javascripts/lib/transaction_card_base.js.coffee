@@ -179,17 +179,24 @@ class TransactionCardBase extends AbstructStateView
       type: type
     })
 
+  messageWrap: () ->
+    @$el.parents('.wrapper-box').find('.message_wrap')
+
   setChatPanel: (event) ->
     $order_row = @$el.parents('.wrapper-box')
-    $chat_foot = $order_row.find(".message_wrap .foot")
-    $chat_body = $order_row.find(".message_wrap .body")
+    $chat_foot = @messageWrap().find(".foot")
+    $chat_body = @messageWrap().find(".body")
     height = $order_row.outerHeight() - $chat_foot.outerHeight()
     $chat_body.height(height) if height > 100
 
   generateChat: () ->
     @generateToken () =>
-      return pnotify(type: 'error', text: '请求聊天超时，请刷新后再试') if _.isEmpty(@$el.attr('data-token'))
-      @newAttachChat()
+      if _.isEmpty(@$el.attr('data-token'))
+        @messageWrap().html(
+          '请求聊天超时，点这里重新<a class="generate-chat" href="javascript: void(0)">请求聊天</a>')
+        @messageWrap().find('.generate-chat').bind 'click', () => @generateChat()
+      else
+        @newAttachChat()
 
   newAttachChat: () ->
     unless @chat_model?
@@ -203,9 +210,7 @@ class TransactionCardBase extends AbstructStateView
     false
 
   generateToken: (handle) ->
-    @$el.parents('.wrapper-box')
-      .find('.message_wrap')
-      .html('<img src="/assets/loading_max.gif">')
+    @messageWrap().html('<img src="/assets/loading_max.gif">')
     return handle.call(@) unless _.isEmpty(@$el.attr('data-token'))
     $.ajax(
       type: 'POST',
@@ -215,7 +220,7 @@ class TransactionCardBase extends AbstructStateView
         @$el.attr('data-token', data.token)
         handle.call(@)
       error: () =>
-        console.error('获取聊天token失败')
+        console.error('请求聊天失败')
     )
 
   current_state: () ->

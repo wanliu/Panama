@@ -28,10 +28,17 @@ class root.ShopDirectTransactionView extends Backbone.View
     padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
     @$messages.height( @$info.outerHeight() - @$toolbar.outerHeight() - padding)
 
+  messageWrap: () ->
+    @$el.parents('.wrapper-box').find('.message_wrap')
+
   generateChat: () ->
     @generateToken () =>
-      return pnotify(type: 'error', text: '请求聊天超时，请刷新后再试') if _.isEmpty(@$el.attr('data-token'))
-      @newAttachChat()
+      if _.isEmpty(@$el.attr('data-token'))
+        @messageWrap().html(
+          '请求聊天超时，点这里重新<a class="generate-chat" href="javascript: void(0)">请求聊天</a>')
+        @messageWrap().find('.generate-chat').bind 'click', () => @generateChat()
+      else
+        @newAttachChat()
 
   newAttachChat: () ->
     unless @chat_model?
@@ -44,9 +51,7 @@ class root.ShopDirectTransactionView extends Backbone.View
     @chat_model.icon_view.toggleChat()
 
   generateToken: (handle) ->
-    @$el.parents('.wrapper-box')
-      .find('.message_wrap')
-      .html('<img src="/assets/loading_max.gif">')
+    @messageWrap().html('<img src="/assets/loading_max.gif">')
     return handle.call(@) unless _.isEmpty(@$el.attr('data-token'))
     @urlRoot = "/shops/#{@shop.name}/admins/direct_transactions/#{@model.id}"
     $.ajax(
@@ -57,7 +62,7 @@ class root.ShopDirectTransactionView extends Backbone.View
         @$el.attr('data-token', data.token)
         handle.call(@)
       error: () =>
-        pnotify(type: 'error', text: '请求聊天失败')
+        console.error('请求聊天失败')
     )
 
   change_state: () ->
