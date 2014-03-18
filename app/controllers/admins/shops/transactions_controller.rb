@@ -1,5 +1,4 @@
 #encoding: utf-8
-require 'timeout'
 
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   helper_method :base_template_path
@@ -57,8 +56,9 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
   end
 
   def show
+    #@transaction = current_shop.transactions.find_by(:id => params[:id])
     @transaction = current_shop_order.find_by(:id => params[:id])
-    respond_to do | format |
+    respond_to do |format|
       format.html
       format.json{ render :json => @transaction.as_json(:methods => :seller_state_title) }
       format.csv do
