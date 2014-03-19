@@ -78,7 +78,7 @@
       el: $("table.untransactions"),
       shop: shop,
       _type: "direct_transactions",
-      template: Hogan.compile("<%= j render :partial => 'undirect' %>")
+      template: Handlebars.compile("<%= j render :partial => 'undirect' %>")
     })
 
     dispose.add(<%=@undirects.to_json.html_safe %>)
