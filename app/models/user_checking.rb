@@ -24,9 +24,9 @@ class UserChecking < ActiveRecord::Base
   define_graphical_attr :ower_photos, :handler => :ower_photo
   define_graphical_attr :shop_photos, :handler => :shop_photo
 
-  after_save do 
-    update_relation_index
-  end
+  after_save :update_delivery_address
+
+  after_update :update_shop_photo
 
   def checked_notify
     user.notify('/audit/user', "恭喜你，你的资料审核通过……", :avatar => user.icon, :target => self, :url => default_url)
@@ -123,8 +123,7 @@ class UserChecking < ActiveRecord::Base
   end
 
   def update_relation_index
-    update_shop_photo
-    update_delivery_address
+
   end
 
   def update_user_index
