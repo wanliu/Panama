@@ -5,6 +5,9 @@ class Direct extends Backbone.Model
 class root.DirectTransactionView extends Backbone.View
   events:
     "click .wrap_event .completed" : "completed"
+    "click .address-add>button"    : "addAddress"
+    "click .item-detail"           : "toggleItemDetail"
+    "click .chzn-results>li"       : "hideAddress"
 
   initialize: () ->
     @$info = @$(".direct-info")
@@ -14,16 +17,30 @@ class root.DirectTransactionView extends Backbone.View
     @$iframe = @$message.find("iframe")
     @$messages = @$message.find(".messages")
     @$toolbar = @$message.find(".toolbar")
+    @hideAddress()
     @model = new Direct(
       state: @$el.attr("state-name"),
       id: @$el.attr("data-value-id"))
     @urlRoot = "/people/#{@login}/direct_transactions/#{@model.id}"
 
     @model.bind("change:state", @change_state, @)
+    @model.bind("change:address", @change_address, @)
     $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     
     @load_realtime()
     @generateChat()
+
+  addAddress: (event) ->
+    @$(".address-panel").slideToggle()
+    @$el.find("abbr:first").trigger("mouseup")
+    false
+
+  toggleItemDetail: (event) ->
+    @$(".item-details").slideToggle()
+    false
+
+  hideAddress: () ->
+    @$(".address-panel").slideUp()
 
   messageWrap: () ->
     @$el.parents('.wrapper-box').find('.message_wrap')  
@@ -70,14 +87,20 @@ class root.DirectTransactionView extends Backbone.View
 
   completed: () ->
     $.ajax(
-      url: "#{@urlRoot}/completed",
       type: 'POST',
+      url: "#{@urlRoot}/completed",
+      data: {data: @$(".address-form > form").serializeHash()},
       success: (data) =>
         @model.set(
+          address: data.address,
           state: data.state_name,
           state_title: data.state_title
         )
     )
+
+  change_address: () ->
+    @setChatPanel()
+    @$(".transaction-address").html(@model.get("address"))
 
   change_state: () ->
     @setChatPanel()
@@ -87,6 +110,7 @@ class root.DirectTransactionView extends Backbone.View
     @client = window.clients.socket
     @client.subscribe "notify:/direct_transactions/#{@model.id}/change_state", (data) =>
       @model.set(
+        address: data.address,
         state: data.state,
         state_title: data.state_title
       )

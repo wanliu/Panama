@@ -167,6 +167,10 @@ class ProductItem < ActiveRecord::Base
   end
 
   def validate_payed?
-    errors.add(:owner, "订单已经付款，不能改变价格") unless owner.pay_status == 0 #  如果付款状态为0（未付款）则不允许修改
+    if owner.is_a?(OrderTransaction)
+      unless owner.pay_status == 0
+        errors.add(:owner, "订单已经付款，不能改变价格") #  如果付款状态为0（未付款）则不允许修改
+      end
+    end
   end
 end

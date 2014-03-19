@@ -1,6 +1,6 @@
 #encoding: utf-8
 class DirectTransaction < ActiveRecord::Base
-  attr_accessible :buyer_id, :seller_id, :operator
+  attr_accessible :buyer_id, :seller_id, :operator, :address_id, :delivery_code
 
   acts_as_status :state, [:uncomplete, :complete, :close]
 
@@ -10,6 +10,7 @@ class DirectTransaction < ActiveRecord::Base
   belongs_to :buyer, :class_name => "User"
   belongs_to :seller, :class_name => "Shop"
   belongs_to :operator, :class_name => "User"
+  belongs_to :address, foreign_key: 'address_id', class_name: "DeliveryAddress"
 
   has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
   has_many :notifications, :as => :targeable, dependent: :destroy
@@ -41,6 +42,28 @@ class DirectTransaction < ActiveRecord::Base
     self.expired_time = DateTime.now + 3.days
   end
 
+
+  def self.export_column
+    {
+      "number" => "编号".encode("gbk"),
+      "buyer_login" => "买家".encode("gbk"),
+      "seller_name" => "商家".encode("gbk"),
+      "title" => "商品".encode("gbk"),
+      "price" => "单价".encode("gbk"),
+      "amount" => "数量".encode("gbk"),
+      "total" => "总额".encode("gbk"),
+      "address" => "地址".encode("gbk")
+    }
+  end
+
+  def convert_json
+    items.map do |item|
+      attra = item.as_json
+      attra.merge!(as_json)
+      attra
+    end
+  end
+
   def as_json(*args)
     attra = super *args
     attra["number"] =  number
@@ -49,6 +72,7 @@ class DirectTransaction < ActiveRecord::Base
     attra["state_title"] = state_title
     attra["state_name"] = state.name
     attra["created_at"] = created_at.strftime("%Y-%m-%d %H:%M:%S")
+    attra["address"] = address.try(:location)
     attra
   end
 
@@ -104,6 +128,7 @@ class DirectTransaction < ActiveRecord::Base
         :url => seller_open_path,
         :avatar => buyer.photos.icon,
         :target => self,
+        :address => address.try(:location)
         :state => state.name,
         :state_title => state_title,
         :direct_id => id

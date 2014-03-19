@@ -1,0 +1,74 @@
+<div class="address-form row-fluid">
+<%= simple_nested_form_for transaction,
+          :url => completed_person_direct_transaction_path(@people, transaction),
+          :html => { :class => "form-horizontal"},
+          :remote=>true do |f| %>
+  <div class="address_input row">
+    <%= f.input :address_id,
+          :collection => @people.delivery_addresses,
+          :object => transaction,
+          :selected => transaction.address_id,
+          :include_blank => true,
+          :label_method => :location,
+          :label => '收货地址',
+          :value_method => :id,
+          :wrapper_html => {:class => "span11"},
+          :input_html => { :class => :span11, id: "address_id_"+transaction.id.to_s } %>
+    <div class="btn-group address-add span1">
+      <%= button_tag icon(:list), :class => "btn" %>
+    </div>
+  </div>
+
+  <div class="address-panel row">
+  <%= simple_fields_for :address, transaction.address do |address_form| %>
+    <label class="chosen optional control-label" for="transaction_address">省,市,县</label>
+    <div class="controls controls-row">
+      <div class="span8 control-group <%= transaction.errors[:address].size > 0 ? 'error' : '' %> ">
+        <%= address_form.input :province_id,
+                     :as => :depend_select,
+                     :children => :city_id,
+                     :object => transaction,
+                     :wrapper => :inline,
+                     :collection => get_city %>
+
+        <%= address_form.input :city_id,
+                     :as => :depend_select,
+                     :children => :area_id,
+                     :target => :province,
+                     :object => transaction,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
+
+        <%= address_form.input :area_id,
+                     :as => :depend_select,
+                     :object => transaction,
+                     :target => :city,
+                     :wrapper => :inline,
+                     :collection_url => "/city/" %>
+        <%= address_form.error :province_id %>
+      </div>
+      <div class='span2'>
+        <%= address_form.label :zip_code, :wrapper => :inline_label, :class => :label_zip_code %>
+      </div>
+      <div class='span2'>
+        <%= address_form.input_field :zip_code, :class => :span12  %>
+      </div>
+    </div>
+    <%= address_form.input :road, :input_html => { :class => :span12 } %>
+
+    <div class='row-fluid'>
+      <%=address_form.input :contact_name, :wrapper_html => {:class => :contact_name_wrapper }, :input_html => {:class => :span12} %>
+      <%=address_form.input :contact_phone, :wrapper_html => {:class => :contact_phone_wrapper }, :input_html => {:class => :span12} %>
+    </div>
+  <% end %>
+  </div>
+<% end %>
+</div>
+
+<script type="text/javascript">
+  $("#address_id_<%=transaction.id%>", ".transaction-<%=transaction.id%>-order").chosen({
+      allow_single_deselect : true,
+      placeholder_text : "选择一个地址",
+      no_results_text : "没有以该关键词开头的地址"
+  });
+</script>

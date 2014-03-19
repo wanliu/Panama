@@ -1,7 +1,6 @@
 #encoding: utf-8
 
 class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionController
-
   def index
     directs = current_shop.direct_transactions.order("created_at desc")
     @undirects = directs.where(:operator_id => nil)
@@ -28,6 +27,19 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     
     respond_to do |format|
       format.json{ render :json => { token: get_token } }
+    end
+  end
+
+  def completed
+    @direct_transaction = current_direct_transaction
+    @direct_transaction.state = :complete
+    @direct_transaction.address = generate_address
+    respond_to do |format|
+      if @direct_transaction.save
+        format.json{ render :json => @direct_transaction }
+      else
+        format.json{ render :json => draw_errors_message(@direct_transaction), :status => 403 }
+      end
     end
   end
 
@@ -64,7 +76,16 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
     respond_to do |format|
       format.html
       format.json{ render :json => @direct_transaction }
+      format.csv do
+        send_data(to_csv(DirectTransaction.export_column, @direct_transaction.convert_json),
+          :filename => "order#{DateTime.now.strftime('%Y%m%d%H%M%S')}.csv")
+      end
     end
+  end
+
+  def print
+    @direct_transaction = current_shop_direct_transaction
+    render :layout => "print"
   end
 
   def mini_item
