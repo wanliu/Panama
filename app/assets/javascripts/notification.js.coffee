@@ -1,4 +1,5 @@
 #= require chosen_tool
+#= require following
 root  = window || @
 
 class NotificationManager
@@ -47,7 +48,7 @@ class NotificationManager
         <div>
           <a href="{{ url }}" class='btn btn-danger pull-right'>查看对方</a>
           {{#unless follow_state }}
-          <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
+            <button data-value-id="{{ user_id }}" class='follow btn btn-primary pull-right'>回关注</button>
           {{/unless}}
         </div>
       </div>""")
