@@ -128,7 +128,7 @@ class DirectTransaction < ActiveRecord::Base
         :url => seller_open_path,
         :avatar => buyer.photos.icon,
         :target => self,
-        :address => address.try(:location)
+        :address => address.try(:location),
         :state => state.name,
         :state_title => state_title,
         :direct_id => id
