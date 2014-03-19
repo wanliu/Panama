@@ -17,6 +17,7 @@
 /config/database.yml
 /config/deploy.rb
 /config/switch_carrierwave.yml
+*.log
 /log/*.log
 /coverage
 /doc

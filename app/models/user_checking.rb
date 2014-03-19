@@ -24,9 +24,9 @@ class UserChecking < ActiveRecord::Base
   define_graphical_attr :ower_photos, :handler => :ower_photo
   define_graphical_attr :shop_photos, :handler => :shop_photo
 
-  after_save :update_delivery_address
+  after_save :update_shop_photo
 
-  after_update :update_shop_photo
+  after_update :update_delivery_address
 
   def checked_notify
     user.notify('/audit/user', "恭喜你，你的资料审核通过……", :avatar => user.icon, :target => self, :url => default_url)
