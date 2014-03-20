@@ -43,7 +43,7 @@ class People::DirectTransactionsController < People::BaseController
 
   def completed
     @direct_transaction = current_direct_transaction
-    @direct_transaction.state = :buy_complete
+    @direct_transaction.state = :complete
     @direct_transaction.address = generate_address
     respond_to do |format|
       if @direct_transaction.save

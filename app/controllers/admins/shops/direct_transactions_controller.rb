@@ -31,7 +31,6 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
   def completed
     @direct_transaction = current_direct_transaction
     @direct_transaction.state = :complete
-    @direct_transaction.address = generate_address
     respond_to do |format|
       if @direct_transaction.save
         format.json{ render :json => @direct_transaction }
