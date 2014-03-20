@@ -21,12 +21,10 @@ class People::TransactionsController < People::BaseController
     if get_token.blank?
       @transaction.send('create_the_temporary_channel')
       try_times = 0
-      Thread.new do
-        while try_times < 50 do
-          try_times += 1
-          break unless get_token.blank?
-          sleep 0.2
-        end
+      while try_times < 50 do
+        try_times += 1
+        break unless get_token.blank?
+        sleep 0.2
       end
     end
     

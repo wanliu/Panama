@@ -83,9 +83,11 @@ class root.DirectTransactionView extends Backbone.View
       dataType: 'json',
       url: "#{@urlRoot}/generate_token",
       success: (data, xhr, res) =>
-        @$el.attr('data-token', data.token)
-        g = Caramal.MessageManager.nameOfChannel(@group, 3)
-        g.token = data.token
+        if !_.isEmpty(data.token)
+          @$el.attr('data-token', data.token)
+          chat = Caramal.MessageManager.nameOfChannel(@group, 3)
+          chat.token = data.token
+          chat.open()
         handle.call(@)
       error: () =>
         console.error('请求聊天失败')
