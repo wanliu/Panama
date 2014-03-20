@@ -165,8 +165,4 @@ class ProductItem < ActiveRecord::Base
   def valid_buyer_self_product?
     errors.add(:shop, "不能购买自己的商品！") if user == shop.user
   end
-
-  def validate_payed?
-    errors.add(:owner, "订单已经付款，不能改变价格") unless owner.pay_status == 0 #  如果付款状态为0（未付款）则不允许修改
-  end
 end

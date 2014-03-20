@@ -18,6 +18,16 @@
           </div>
         </div>
       </div>
+      <div class="transaction-address">
+        <% if direct_transaction.state == :uncomplete %>
+          <%=render "address", transaction: direct_transaction %>
+        <% else %>
+          <p>
+            <strong>收货地址: </strong>
+            <%= direct_transaction.address.location %>
+          </p>
+        <% end %>
+      </div>
       <div class='row-fluid'>
         <table class='table table-striped'>
           <thead>

@@ -1,0 +1,60 @@
+<table class='table'>
+  <tr>
+    <td>订单编号</td>
+    <td><%=@direct_transaction.number %></td>
+  </tr>
+  <tr>
+    <td>买家</td>
+    <td><%=@direct_transaction.buyer.login %></td>
+    <td>商家</td>
+    <td><%=@direct_transaction.seller.name %></td>
+  </tr>
+  <tr>
+    <td>运单号</td>
+    <td colspan="3"><%=@direct_transaction.try(:delivery_code) || "无" %></td>
+  </tr>  
+  <tr>
+    <td>地址</td>
+    <td colspan='3'><%=@direct_transaction.address.try(:location) || "暂无" %></td>
+  </tr>
+  <tr>
+    <td colspan='4'>
+      <table class='table table-striped'>
+        <thead>
+          <tr>
+            <th>
+              图片
+            </th>
+            <th>商品</th>
+            <th>
+              单价
+            </th>
+            <th>
+              数量
+            </th>
+            <th>金额
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @direct_transaction.items.each do | item | %>
+          <tr>
+            <td><%= image_tag item.product.photos.icon %></td>
+            <td><%= item.title %></td>
+            <td><%= item.price %></td>
+            <td><%= item.amount %></td>
+            <td><%= number_to_currency item.total %></td>
+          </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan='5' class='order-stotal'>
+              总金额<%=number_to_currency @direct_transaction.total %>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </td>
+  </tr>
+</table>

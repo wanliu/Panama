@@ -7,10 +7,12 @@ class root.ShopDirectTransactionView extends Backbone.View
     @init_elem()
 
     @model = new Backbone.Model(
+      address: "",
       state: @$el.attr("state-name"),
       id: @$el.attr("data-value-id"))
 
     @model.bind("change:state", @change_state, @)
+    @model.bind("change:address", @change_address, @)
     @load_realtime()
     $(window).bind("resizeOrderChat", _.bind(@load_style, @))
     # @load_style()
@@ -71,11 +73,14 @@ class root.ShopDirectTransactionView extends Backbone.View
   change_state: () ->
     @$(".wrap_event .state_title").html(@model.get("state_title"))
 
+  change_address: () ->
+    @$(".transaction_address > p").html(@model.get("address"))
+
   load_realtime: () ->
     @client = window.clients.socket
-
     @client.subscribe "notify:/#{@shop.token}/direct_transactions/#{@model.id}/change_state", (data) =>
       @model.set(
+        address: data.address,
         state: data.state,
         state_title: data.state_title
       )

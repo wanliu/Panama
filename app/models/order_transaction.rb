@@ -68,10 +68,6 @@ class OrderTransaction < ActiveRecord::Base
     generate_transfer
   end
 
-  after_commit do 
-    notice_user
-  end 
-
   after_create do    
     state_change_detail    
   end
@@ -84,7 +80,7 @@ class OrderTransaction < ActiveRecord::Base
     update_transfer_failer
   end
 
-  after_commit :create_the_temporary_channel, on: :create
+  after_commit :create_the_temporary_channel, :notice_user, on: :create
 
   def notice_user
     Notification.dual_notify(seller,

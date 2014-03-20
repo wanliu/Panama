@@ -441,6 +441,7 @@ Panama::Application.routes.draw do
       resources :direct_transactions, :to => "shops/direct_transactions" do
         member do
           get :dialog, :to => "shops/direct_transactions#dialog"
+          get :print, :to => "shops/direct_transactions#print"
           get :messages, :to => "shops/direct_transactions#messages"
           post :send_message, :to => "shops/direct_transactions#send_message"
           post :dispose, :to => "shops/direct_transactions#dispose"

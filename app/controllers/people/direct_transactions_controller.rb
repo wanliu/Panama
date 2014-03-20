@@ -45,7 +45,8 @@ class People::DirectTransactionsController < People::BaseController
 
   def completed
     @direct_transaction = current_direct_transaction
-    @direct_transaction.state = :complete
+    @direct_transaction.state = :buy_complete
+    @direct_transaction.address = generate_address
     respond_to do |format|
       if @direct_transaction.save
         format.json{ render :json => @direct_transaction }
@@ -96,6 +97,29 @@ class People::DirectTransactionsController < People::BaseController
       format.html{ 
         render :partial => "direct_transactions/operator", :locals => {operator: @operator} }
     end
+  end
+
+
+  def generate_address
+    args = params[:data][:direct_transaction]
+    address_id = args.delete(:address_id)
+    if address_id.present?
+      DeliveryAddress.find(address_id)
+    else
+      current_user.delivery_addresses.create(gener_address_arg(params[:data][:address]))
+    end
+  end
+
+  def gener_address_arg(a)
+    {
+      :province_id => a[:province_id],
+      :city_id => a[:city_id],
+      :area_id => a[:area_id],
+      :zip_code => a[:zip_code],
+      :road => a[:road],
+      :contact_name => a[:contact_name],
+      :contact_phone => a[:contact_phone]
+    }
   end
 
   private
