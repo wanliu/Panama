@@ -23,6 +23,7 @@ class root.ShopDirectTransactionView extends Backbone.View
     @$iframe = @$message.find("iframe")
     @$messages = @$message.find(".messages")
     @$toolbar = @$message.find(".toolbar")
+    @group = @$el.parents('.wrapper-box').attr('data-group')
 
   load_style: () ->
     padding = parseInt(@$message.css("padding-bottom")) + parseInt(@$message.css("padding-top"))
@@ -45,7 +46,7 @@ class root.ShopDirectTransactionView extends Backbone.View
       @chat_model = new ChatModel({
         type: 3,
         token: @$el.attr('data-token'),
-        title: @$el.parents('.wrapper-box').attr('data-group')
+        title: @group
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()
@@ -60,6 +61,8 @@ class root.ShopDirectTransactionView extends Backbone.View
       url: "#{@urlRoot}/generate_token",
       success: (data, xhr, res) =>
         @$el.attr('data-token', data.token)
+        g = Caramal.MessageManager.nameOfChannel(@group, 3)
+        g.token = data.token
         handle.call(@)
       error: () =>
         console.error('请求聊天失败')

@@ -218,6 +218,8 @@ class TransactionCardBase extends AbstructStateView
       url: "#{@transaction.urlRoot}/generate_token",
       success: (data, xhr, res) =>
         @$el.attr('data-token', data.token)
+        g = Caramal.MessageManager.nameOfChannel(@options['group'], 3)
+        g.token = data.token
         handle.call(@)
       error: () =>
         console.error('请求聊天失败')

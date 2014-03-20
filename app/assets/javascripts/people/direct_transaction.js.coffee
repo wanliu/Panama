@@ -7,13 +7,7 @@ class root.DirectTransactionView extends Backbone.View
     "click .wrap_event .completed" : "completed"
 
   initialize: () ->
-    @$info = @$(".direct-info")
-    @login = @options.login
-    @$el = $(@el)
-    @$message = @$(".chat_wrapper")
-    @$iframe = @$message.find("iframe")
-    @$messages = @$message.find(".messages")
-    @$toolbar = @$message.find(".toolbar")
+    @init_elem()
     @model = new Direct(
       state: @$el.attr("state-name"),
       id: @$el.attr("data-value-id"))
@@ -24,6 +18,16 @@ class root.DirectTransactionView extends Backbone.View
     
     @load_realtime()
     @generateChat()
+
+  init_elem: () =>
+    @$info = @$(".direct-info")
+    @login = @options.login
+    @$el = $(@el)
+    @$message = @$(".chat_wrapper")
+    @$iframe = @$message.find("iframe")
+    @$messages = @$message.find(".messages")
+    @$toolbar = @$message.find(".toolbar")
+    @group = @$el.parents('.wrapper-box').attr('data-group')
 
   messageWrap: () ->
     @$el.parents('.wrapper-box').find('.message_wrap')  
@@ -49,7 +53,7 @@ class root.DirectTransactionView extends Backbone.View
       @chat_model = new ChatModel({
         type: 3,
         token: @$el.attr('data-token'),
-        title: @$el.parents('.wrapper-box').attr('data-group')
+        title: @group
       })
       @chat_model = ChatManager.getInstance().addChatIcon(@chat_model)
     @chat_model.icon_view.toggleChat()
@@ -63,9 +67,11 @@ class root.DirectTransactionView extends Backbone.View
       url: "#{@urlRoot}/generate_token",
       success: (data, xhr, res) =>
         @$el.attr('data-token', data.token)
+        g = Caramal.MessageManager.nameOfChannel(@group, 3)
+        g.token = data.token
         handle.call(@)
       error: () =>
-        pnotify(type: 'error', text: '获取聊天token失败')
+        console.error('请求聊天失败')
     )
 
   completed: () ->
