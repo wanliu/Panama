@@ -1,4 +1,3 @@
-
 root = (window || @)
 
 class root.CircleViewTemplate extends Backbone.View

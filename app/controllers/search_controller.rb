@@ -35,8 +35,6 @@ class SearchController < ApplicationController
       s[:isOwner] = circle.is_owner_people?(current_user)
       s[:isJoin] = circle.is_member?(current_user)
       s[:friend_count] = circle.friend_count
-      # s[:friends] = circle.friends.where(:user_id => friend_ids).limit(4)
-      # s[:isSeller] = circle.owner_type == "Shop"
       s
     end
     respond_to do |format|

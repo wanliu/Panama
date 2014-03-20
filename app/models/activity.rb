@@ -291,7 +291,7 @@ class Activity < ActiveRecord::Base
       message = if Activity.statuses[:access] == status
         "您发布的活动#{ title}已经通过审核, 活动时间为#{ format_time(start_time)} -- #{ format_time(end_time)}"
       else
-        "您发布的活动#{title}拒绝通告,请登陆邮箱查看原因！"
+        "您发布的活动#{title} 被拒绝,请登陆邮箱查看原因！"
       end
       author.notify("/activities/add",
         message,
