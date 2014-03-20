@@ -276,6 +276,7 @@
     margin-top: 10px;
 
     .delivery_manner_panel{
+
       line-height: 30px;
 
       .mdify_show{
@@ -525,6 +526,11 @@
 }
 
 .manner_wrap{
+  .delivery_types_panel{
+    .dropdown-menu > li > a {
+      white-space: normal;
+    }
+  }
   .custom_delivery_price{
     display: none;
 

@@ -38,6 +38,9 @@
 
 .left-column{
   &.float{
+    background-color: bisque;
+    height: auto;
+    overflow-y: scroll;
     .card_item_header{
 
       .title, .time{
