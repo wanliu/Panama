@@ -6,7 +6,8 @@
 		width: 400px;
 		bottom: 0px;
 		z-index: 1099;
-		background-color: $white;
+		// background-color: $white;
+		background: radial-gradient(farthest-side ellipse at 20% 0, rgba(104, 84, 184, 0.91), rgba(61, 150, 158, 0.91), rgba(27, 48, 40, 0.91));
 	}
 	@include transition(0.5s);
 
