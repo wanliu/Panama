@@ -20,7 +20,6 @@
   window.topbar = new TopBar({el: "#topbar"}); 
 
   $(function(){
-
     NotificationViewList.startup({
       el: $(".notification-menu"),
       current_user_login: '<%= current_user.login %>'
@@ -83,6 +82,26 @@
       if(!Backbone.History.started){
         Backbone.history.start()
       }  
+    }
+
+    // fix IE offline message bug
+    if ($.browser.msie) {
+      var logout_url = $('#account-menu .logout-btn').attr('href')
+      $('#account-menu .logout-btn')
+        .attr('href', 'javascript: void(0);')
+        .on('click', function(event){
+          clients.socket.socket.disconnect();
+          setTimeout(function(){
+            document.location.href = logout_url;
+          }, 100);
+        })
+
+      $(window).unload(function(){
+        clients.socket.socket.disconnect();
+        setTimeout(function(){
+
+        }, 100);
+      })
     }
   })
 </script>

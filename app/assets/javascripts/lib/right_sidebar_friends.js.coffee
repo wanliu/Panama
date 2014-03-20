@@ -101,6 +101,7 @@ class root.ChatManager extends Backbone.View
     @initFetch()
     @bindItems()
     @bindEvent()
+    @$el.slimScroll(height: $(window).height())
 
   addAll: () ->
     @$("ul").html('')
@@ -404,6 +405,8 @@ class BaseIconView extends Backbone.View
 
   showMsgCount: () ->
     if @msg_count > 0
+      @fetchIcon()
+      $(@el).show()
       @$('.message_count').html(@msg_count)
       @$('.message_count').show()
     else

@@ -144,7 +144,7 @@ module ApplicationHelper
   end
 
   def link_to_logout
-    link_to logout_path, :method => :delete do
+    link_to logout_path, :method => :delete, :class => 'logout-btn' do
       icon(:signout) + ' 注销登录'
     end
   end
