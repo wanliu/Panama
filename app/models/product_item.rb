@@ -79,10 +79,6 @@ class ProductItem < ActiveRecord::Base
 
   validate :valid_buyer_self_product?
 
-  before_update do 
-    validate_payed?
-  end
-
   after_update do 
     changed_price?
   end

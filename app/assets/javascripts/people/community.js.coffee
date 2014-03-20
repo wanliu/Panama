@@ -8,7 +8,7 @@ class CircleList extends Backbone.Collection
   set_url: (url) ->
     @url = url
 
-class CircleView extends Backbone.View
+class root.CircleView extends Backbone.View
   className: "circle"
 
   events: 
@@ -111,5 +111,3 @@ class root.CommunitySearch extends Backbone.View
       el: @$(".circles"),
       current_user_login: @login,
     })
-
-

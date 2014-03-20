@@ -100,7 +100,6 @@ ActiveAdmin.register Activity do
     activity.update_attributes(status: Activity.statuses[:access])
     activity.send_checked_mail    
     activity.notice_followers
-    # activity.draw_topic_in_yourself_circle
     redirect_to action: :index
   end
 
