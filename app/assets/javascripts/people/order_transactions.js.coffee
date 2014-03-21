@@ -60,7 +60,7 @@ class TransactionView extends CardItemView
       @toggleReturned(@card) unless _.isEmpty(@card) 
 
   removeReturned: () ->   
-    @$(".actions .operator").remove()
+    @$(".actions .returned-event").remove()
 
   delay_sign: () ->  
     url = "#{@model.url()}/delay_sign"

@@ -487,10 +487,10 @@ class OrderTransaction < ActiveRecord::Base
     ) do |options|
       options[:channel] = "/transactions/dispose"
     end
-
+    
     buyer.notify(
       "/transactions/dispose",
-      "#{user.login}处理 #{number}订单",
+      "#{user.login}正在处理 #{number}订单",
       :order_id => id,
       :persistent => false      
     )

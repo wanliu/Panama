@@ -41,6 +41,10 @@ class TransactionEvent extends Backbone.View
       setTimeout( () =>
         window.location.href = "#open/#{data.id}/#{@workName}"
       , 100)
+      @position()
+
+  position: () ->
+    $('body').animate({scrollTop: $(".order-detail .order_header").offset().top}, 1000) 
 
   change_address: () ->
     @$(".address").html(@model.get("address"))

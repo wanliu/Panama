@@ -144,10 +144,10 @@ class NotificationManager
     @client.monitor("/shops/leaved", @commonNotify) # √
     @client.monitor("/shops/refuse", @commonNotify) 
     @client.monitor("/shops/request", @commonNotify) #暂时不需要实现
-    @client.monitor("/employees/invite", @commonNotify) # √ 
+    #@client.monitor("/employees/invite", @commonNotify) # √ 
     # 评论
     # @client.monitor("/comments/add", @commonNotify)
-    @client.monitor("/comments/mention", @commonNotify) # √
+    # @client.monitor("/comments/mention", @commonNotify) # √
     # @client.monitor("/comments/update", @commonNotify)
     # @client.monitor("/comments/remove", @commonNotify)
 
@@ -172,7 +172,6 @@ class NotificationManager
     @client.monitor("/transactions/destroy", @commonNotify)
     @client.monitor("/transactions/change_state", @orderNotify)
     @client.monitor("/transactions/change_info", @commonNotify)
-
 
     #直接订单
     @client.monitor("/shops/direct_transactions/create", @commonNotify)
