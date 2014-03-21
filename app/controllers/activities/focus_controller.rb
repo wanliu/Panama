@@ -56,6 +56,7 @@ class Activities::FocusController < Activities::BaseController
       :shop_id => @activity.shop_id,
       :user_id => current_user.id
     })
+    debugger
     @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
 

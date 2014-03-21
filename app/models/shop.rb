@@ -200,11 +200,12 @@ class Shop < ActiveRecord::Base
   end
 
   def notify(channel, data, options = {})
-    exclude = options.key?(:exclude) ? options.delete(:exclude) : []
-    exclude = [exclude] unless exclude.is_a?(Array)
-    (employees - exclude).each do |member|
-      member.notify(File.join("/shops", channel), data, options)
-    end
+    # exclude = options.key?(:exclude) ? options.delete(:exclude) : []
+    # exclude = [exclude] unless exclude.is_a?(Array)
+    # (employees - exclude).each do |member|
+    #   member.notify(File.join("/shops", channel), data, options)
+    # end
+    user.notify(File.join("/shops", channel), data, options)
   end
 
   def update_relation_index
