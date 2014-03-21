@@ -46,6 +46,7 @@ class ShopProductView extends Backbone.View
   fetch_state: () ->
     @setState(true)
 
+
 class ShopProductPreview extends Backbone.View
   fetchState: true
 
@@ -77,6 +78,7 @@ class ShopProductPreview extends Backbone.View
   setFetchState: (state) ->
     @fetchState = state
 
+
 class ShopProductToolbar extends Backbone.View
   events:
     "click .toolbar .buy" : "buy"
@@ -90,15 +92,32 @@ class ShopProductToolbar extends Backbone.View
     @$cart_el = @$(".toolbar .cart")
     @$buy_el = @$(".toolbar .buy")
 
+  _disable_buy: () ->
+    @$buy_el.addClass('disable_buy')
+
+  _enable_buy: () ->
+    @$buy_el.removeClass('disable_buy')
+
   buy: () ->
+    return if @$buy_el.hasClass('disable_buy') || !@validate_amount()
+    @_disable_buy()
     state = @buy_manner()
     if state == "guarantee"
       @create_order()
     else
       @create_direct_buy()
 
+  validate_amount: () ->
+    amount = @amount.val().trim()
+    if _.isFinite(amount) && ~~amount >= 1 && ~~amount == parseFloat(amount)
+      return true
+    else
+      pnotify(text: "数量必须为不小于1的整数！", type: "warning")
+      return false
+
   create_order: () ->
     if @$buy_el.hasClass("disabled")
+      @_enable_buy()
       pnotify(text: "这商品不能购买,可能没有库存!", type: "warning")
     else    
       $.ajax(
@@ -108,12 +127,21 @@ class ShopProductToolbar extends Backbone.View
         dataType: 'JSON'
         success: (data) =>
           window.location.href = "/people/#{@login}/transactions#open/#{data.id}/order"
-        error: (data) ->
-          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+        error: (data, xhr, res) =>
+          try
+            message = JSON.parse(xhr.responseText).join("<br />")
+            pnotify(text: message, type: "error")
+          catch error
+            pnotify(
+              text: xhr.responseText,
+              type: "error")
+            @_enable_buy()
       )
+
 
   create_direct_buy: () ->
     if @$buy_el.hasClass("disabled")
+      @_enable_buy()
       pnotify(text: "这商品不能购买,可能没有库存!", type: "warning")
     else
       $.ajax(
@@ -123,8 +151,15 @@ class ShopProductToolbar extends Backbone.View
         dataType: "JSON",
         success: (data) =>
           window.location.href = "/people/#{@login}/direct_transactions#open/#{data.id}/direct"
-        error: (data) ->
-          pnotify({text: JSON.parse(data.responseText).join("<br />"), title: "出错了！", type: "error"})
+        error: (data, xhr, res) =>
+          try
+            message = JSON.parse(xhr.responseText).join("<br />")
+            pnotify(text: message, type: "error")
+          catch error
+            pnotify(
+              text: xhr.responseText,
+              type: "error")
+            @_enable_buy()
       )
 
   cart: () ->

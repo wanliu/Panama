@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140319014518) do
+ActiveRecord::Schema.define(:version => 20140321054925) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(:version => 20140319014518) do
     t.datetime "end_time"
     t.integer  "author_id"
     t.integer  "limit_count",     :limit => 8
-    t.integer  "like",                                                         :default => 0
-    t.integer  "participate",                                                  :default => 0
+    t.integer  "like"
+    t.integer  "participate"
     t.integer  "shop_product_id"
     t.integer  "shop_id"
     t.integer  "status",                                                       :default => 0
@@ -568,6 +568,14 @@ ActiveRecord::Schema.define(:version => 20140319014518) do
     t.string   "icon"
   end
 
+  create_table "price_lists", :force => true do |t|
+    t.integer  "people_number"
+    t.decimal  "price",         :precision => 10, :scale => 0
+    t.integer  "activity_id"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+  end
+
   create_table "price_options", :force => true do |t|
     t.string   "name"
     t.string   "title"
@@ -600,7 +608,7 @@ ActiveRecord::Schema.define(:version => 20140319014518) do
 
   create_table "product_items", :force => true do |t|
     t.string   "title"
-    t.decimal  "amount",     :precision => 10, :scale => 0, :default => 0
+    t.integer  "amount",                                    :default => 0
     t.decimal  "price",      :precision => 10, :scale => 2, :default => 0.0
     t.decimal  "total",      :precision => 10, :scale => 2, :default => 0.0
     t.datetime "created_at",                                                 :null => false
@@ -940,9 +948,15 @@ ActiveRecord::Schema.define(:version => 20140319014518) do
     t.datetime "updated_at",                                                      :null => false
   end
 
+  create_table "unit_conversions", :force => true do |t|
+    t.integer "big_unit_id"
+    t.integer "small_unit_id"
+    t.float   "percentage",    :default => 1.0
+  end
+
   create_table "units", :force => true do |t|
     t.string  "code"
-    t.string  "name",       :default => "件"
+    t.string  "name"
     t.integer "child_id"
     t.float   "percentage", :default => 1.0
   end
