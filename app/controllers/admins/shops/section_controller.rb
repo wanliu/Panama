@@ -22,7 +22,7 @@ class Admins::Shops::SectionController < Admins::BaseController
   section :contents, :design
   section :menu, :design
   section :templates, :design
-  section :employees, :admins
+  #section :employees, :admins
   # section :communities, :admins
   section :order_refunds, :transactions
   section :banks, :admins
