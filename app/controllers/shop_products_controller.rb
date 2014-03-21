@@ -81,7 +81,8 @@ class ShopProductsController < ApplicationController
         :user_id => current_user.id,
         :shop_id => @shop_product.shop_id
       })
-      @item.buy_state = :guarantee      
+      @item.buy_state = :guarantee
+           
       if @order.save
         format.json{ render :json => @order }
       else

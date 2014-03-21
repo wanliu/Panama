@@ -1,13 +1,14 @@
 root = window || @
 class root.ActivityBuyView extends Backbone.View
   events: {
-    "click .address_bar" : "toggle",
-    "click button.confirm" : "buy"
+    "click .address_bar"  : "toggle",
+    "click button.confirm": "buy"
   }
   
   initialize: () ->
     #@activity_id = @options.activity_id
     @model.bind("modal", _.bind(@modal, @))
+    @buy_btn = @$('button.confirm')
     @amount = @options.amount || 1;
     @load_template (html) ->
       @render(html)
@@ -79,8 +80,16 @@ class root.ActivityBuyView extends Backbone.View
   close: () ->
     $("body").removeClass("noScroll")
 
+  _disable_buy: () ->
+    @buy_btn.addClass('disabled')
+
+  _enable_buy: () ->
+    @buy_btn.removeClass('disabled')
+
   buy: () ->
-    data = @get_date()
+    return if @buy_btn.hasClass('disabled')
+    @_disable_buy()
+    data = @$form.serializeHash()
     address = data.address
 
     if _.isEmpty(address.id)
@@ -92,21 +101,20 @@ class root.ActivityBuyView extends Backbone.View
       _.isEmpty(address.road) ||
       _.isEmpty(address.zip_code)
         pnotify(text: "请添加联系地址！", type: "warning")
+        @_enable_buy()
         return false
 
-    unless _.isFinite(data.product_item.amount)
-      pnotify(text: "请输入正确的数量！", type: "warning")
-      return false
-
-    if parseFloat(data.product_item.amount) <= 0
-      pnotify(text: "请输入大于0的数量！", type: "warning")
+    amount = data.product_item.amount    
+    unless _.isFinite(amount) && ~~amount >= 1 && ~~amount == parseFloat(amount)
+      pnotify(text: "数量必须为不小于1的整数！", type: "warning")
+      @_enable_buy()
       return false
 
     $.ajax(
       url: @$form.attr("action"),
       data: data,
       type: "POST",
-      error: (xhr) =>
+      error: (data, xhr, res) =>
         try
           message = JSON.parse(xhr.responseText).join("<br />")
           pnotify(text: message, type: "error")
@@ -114,8 +122,6 @@ class root.ActivityBuyView extends Backbone.View
           pnotify(
             text: xhr.responseText,
             type: "error")
-    )
-
-  get_date: () ->
-    @$form.serializeHash()
+          @_enable_buy()
+    )  
 

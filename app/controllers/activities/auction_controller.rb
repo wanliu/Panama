@@ -26,6 +26,7 @@ class Activities::AuctionController < Activities::BaseController
     })
     @transaction.address = delivery_address(address)
     @transaction.items.each{|item| item.update_total }
+    
     respond_to do |format|
       if @transaction.save
         @activity.transactions << @transaction
