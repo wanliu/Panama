@@ -85,11 +85,11 @@ class TransactionTwoColumnsViewport extends Backbone.View
         callback()
 
   setupLeftColumn: () ->
-    @$orders.slimScroll(
-      alwaysVisible: true,
-      allowPageScroll: true,
-      height: 'auto'
-    )
+    # @$orders.slimScroll(
+    #   alwaysVisible: true,
+    #   allowPageScroll: true,
+    #   height: 'auto'
+    # )
     @$orders.on("mouseleave", @hideLeftColumn)
     $("body").mousemove (e) =>
       if e.clientX < 25
@@ -185,11 +185,11 @@ class TransactionTwoColumnsViewport extends Backbone.View
       @currentView.miniMode()
 
     @restoreFromDetail()
-    @$orders.slimScroll(
-      railVisible: false,
-      allowPageScroll: true,
-      height: 'auto'
-    )
+    # @$orders.slimScroll(
+    #   railVisible: false,
+    #   allowPageScroll: true,
+    #   height: 'auto'
+    # )
     # @$orders.slimScroll(destroy: true)
     # @$orders.attr('style', '')
     @inLayout = false
