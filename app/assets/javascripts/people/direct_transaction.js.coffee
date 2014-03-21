@@ -83,7 +83,7 @@ class root.DirectTransactionView extends Backbone.View
       dataType: 'json',
       url: "#{@urlRoot}/generate_token",
       success: (data, xhr, res) =>
-        if !_.isEmpty(data.token)
+        if data && !_.isEmpty(data.token)
           @$el.attr('data-token', data.token)
           chat = Caramal.MessageManager.nameOfChannel(@group, 3)
           chat.token = data.token

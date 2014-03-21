@@ -217,7 +217,7 @@ class TransactionCardBase extends AbstructStateView
       dataType: 'json',
       url: "#{@transaction.urlRoot}/generate_token",
       success: (data, xhr, res) =>
-        if !_.isEmpty(data.token)
+        if data && !_.isEmpty(data.token)
           @$el.attr('data-token', data.token)
           chat = Caramal.MessageManager.nameOfChannel(@options['group'], 3)
           chat.token = data.token
