@@ -479,15 +479,15 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   def notice_change_operator(user)    
-    Notification.dual_notify(seller,
-      :channel => "/#{seller.im_token}/transactions/dispose",
-      :content => "#{user.login}处理 #{number}订单",
-      :order_id => id,
-      :url => buyer_open_path,
-      :exclude => user
-    ) do |options|
-      options[:channel] = "/transactions/dispose"
-    end
+    # Notification.dual_notify(seller,
+    #   :channel => "/#{seller.im_token}/transactions/dispose",
+    #   :content => "#{user.login}正在处理 #{number}订单",
+    #   :order_id => id,
+    #   :url => buyer_open_path,
+    #   :exclude => user
+    # ) do |options|
+    #   options[:channel] = "/transactions/dispose"
+    # end
     
     buyer.notify(
       "/transactions/dispose",
