@@ -52,16 +52,17 @@
 
             this.$avatar.css({
                 float: 'left',
-                marginLeft: '-60px'
+                // marginLeft: '-60px'
+                marginRight: '10px'
             });
 
             this.$message.css({
                 fontSize: '13px',
                 lineHeight: '16px',
                 textAlign: 'center',
-                padding: '8px 10px 9px',
+                padding: '8px 10px 9px 10px',
                 width: 'auto',
-                paddingLeft: '70px',
+                paddingLeft: '10px',
                 position: 'relative',
                 minHeight: '45px'
             });
