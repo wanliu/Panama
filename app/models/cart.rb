@@ -91,7 +91,7 @@ class Cart < ActiveRecord::Base
 
   private
   def errors_build(model)
-    model.errors.messages.each do |k, v| 
+    model.errors.messages.each do |k, v|
       v.each{|e| errors.add(k, e) }      
     end
   end

@@ -20,7 +20,7 @@ class DirectTransaction < ActiveRecord::Base
   validates :buyer,  :presence => true
   validates :seller, :presence => true
   validates :number, :presence => true, :uniqueness => true
-  validates :items,  :presence => true
+  validate :validate_items
 
   before_validation(:on => :create) do
     generate_number
@@ -175,9 +175,12 @@ class DirectTransaction < ActiveRecord::Base
 
   def generate_transfer
     items.each do |item|
-      transfers.build(
+      transfer = transfers.build(
         :amount => -item.amount,        
-        :shop_product => item.shop_product)      
+        :shop_product => item.shop_product)
+      unless transfer.valid?
+        return false
+      end      
     end
   end
 
@@ -208,6 +211,12 @@ class DirectTransaction < ActiveRecord::Base
       self.create_temporary_channel(targeable_type: 'DirectTransaction', user_id: seller.owner.id, name: name)
     else
       temporary_channel.create_caramal_channel
+    end
+  end
+
+  def validate_items
+    if items.blank?
+      errors.add(:items, "该订单没有任何商品!")
     end
   end
 
