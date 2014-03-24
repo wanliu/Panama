@@ -13,20 +13,29 @@ class People::TransactionsController < People::BaseController
   end
 
   def get_token
-    @transaction.temporary_channel.try(:token)
+    require 'net/http'  
+  
+    begin
+      app_id = "Gbiuildi235ljifjel5ju89gn1saj436l35u9uGeYYGe99eQQax0mbhF49Ui8T"
+      url = "http://localhost:5000/api/" << app_id << "/get_token/" <<
+              @transaction.class << "_" << @transaction.number
+      url_str = URI.parse(url)
+      site = Net::HTTP.new(url_str.host, url_str.port)
+      site.open_timeout = 0.2
+      site.read_timeout = 0.2
+      path = url_str.query.blank? ? url_str.path : url_str.path+"?"+url_str.query
+      response = site.get2(path)
+      response = JSON.parse(response)
+    rescue Exception => ex
+      response = {}
+    end
+
+    response['token']
   end
 
   def generate_token
     @transaction = current_order.find(params[:id])
-    if get_token.blank?
-      @transaction.send('create_the_temporary_channel')
-      try_times = 0
-      while try_times < 50 do
-        try_times += 1
-        break unless get_token.blank?
-        sleep 0.2
-      end
-    end
+    token = @transaction.token || get_token
     
     respond_to do |format|
       format.json{ render :json => { token: get_token } }
