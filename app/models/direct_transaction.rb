@@ -20,6 +20,7 @@ class DirectTransaction < ActiveRecord::Base
   validates :buyer,  :presence => true
   validates :seller, :presence => true
   validates :number, :presence => true, :uniqueness => true
+  validate :validate_items
 
   before_validation(:on => :create) do
     generate_number
@@ -84,17 +85,17 @@ class DirectTransaction < ActiveRecord::Base
     results = if operator.nil? && seller.is_employees?(user)
       update_attributes(:operator => user)
     end
-    Notification.dual_notify(seller,
-      :channel => "/#{seller.im_token}/direct_transactions/dispose",
-      :content => "直接交易订单#{number}被#{user.login}处理了",
-      :url => seller_open_path,
-      :avatar => user.photos.icon,
-      :target => self,
-      :direct_id => id,
-      :exclude => user
-    ) do |options|
-      options[:channel] = "/direct_transactions/dispose"
-    end if results
+    # Notification.dual_notify(seller,
+    #   :channel => "/#{seller.im_token}/direct_transactions/dispose",
+    #   :content => "直接交易订单#{number}被#{user.login}处理了",
+    #   :url => seller_open_path,
+    #   :avatar => user.photos.icon,
+    #   :target => self,
+    #   :direct_id => id,
+    #   :exclude => user
+    # ) do |options|
+    #   options[:channel] = "/direct_transactions/dispose"
+    # end if results
 
     buyer.notify(
       "/direct_transactions/dispose",
@@ -174,9 +175,12 @@ class DirectTransaction < ActiveRecord::Base
 
   def generate_transfer
     items.each do |item|
-      transfers.build(
+      transfer = transfers.build(
         :amount => -item.amount,        
-        :shop_product => item.shop_product)      
+        :shop_product => item.shop_product)
+      unless transfer.valid?
+        return false
+      end      
     end
   end
 
@@ -207,6 +211,12 @@ class DirectTransaction < ActiveRecord::Base
       self.create_temporary_channel(targeable_type: 'DirectTransaction', user_id: seller.owner.id, name: name)
     else
       temporary_channel.create_caramal_channel
+    end
+  end
+
+  def validate_items
+    if items.blank?
+      errors.add(:items, "该订单没有任何商品!")
     end
   end
 

@@ -108,7 +108,7 @@ class root.DirectTransactionView extends Backbone.View
 
   change_address: () ->
     @setChatPanel()
-    @$(".transaction-address").html(@model.get("address"))
+    @$(".transaction-address").html("<p><strong>收货地址：</strong>#{ @model.get('address')}</p>")
 
   change_state: () ->
     @setChatPanel()

@@ -22,9 +22,9 @@
         <% if direct_transaction.state == :uncomplete %>
           <%=render "address", transaction: direct_transaction %>
         <% else %>
-          <p>
-            <strong>收货地址: </strong>
-            <%= direct_transaction.address.location %>
+            <p>
+              <strong>收货地址: </strong>
+              <%= direct_transaction.address.try(:location) %>
           </p>
         <% end %>
       </div>
