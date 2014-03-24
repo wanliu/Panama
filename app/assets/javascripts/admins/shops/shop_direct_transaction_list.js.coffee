@@ -49,7 +49,6 @@ class DirectTransaction extends CardItemView
         window.location.reload()
     )
 
-
 class root.ShopDirectTransactionList extends CardItemListView
   
   initialize: (options) ->

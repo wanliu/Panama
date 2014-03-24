@@ -9,7 +9,7 @@ class Cart < ActiveRecord::Base
     product_id = attributes[:product_id]
     shop_id = attributes[:shop_id]
     item = exist_build_options(shop_id, product_id, attributes) do |_item|
-      _item.amount += attributes[:amount].to_d
+      _item.amount += attributes[:amount].to_i
     end
     item.total = item.price * item.amount
     item

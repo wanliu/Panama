@@ -19,7 +19,8 @@
         </div>
       </div>
       <div class="transaction_address">
-        <P><strong>收货地址： </strong><%=direct_transaction.address.try(:location) || "暂无" %></p>
+        <% address = direct_transaction.address %>
+        <P><strong>收货地址： </strong><%=(address.try(:location) unless address.nil?) || "暂无" %></p>
       </div>
       <div class='row-fluid'>
         <table class='table table-striped products'>

@@ -84,17 +84,17 @@ class DirectTransaction < ActiveRecord::Base
     results = if operator.nil? && seller.is_employees?(user)
       update_attributes(:operator => user)
     end
-    Notification.dual_notify(seller,
-      :channel => "/#{seller.im_token}/direct_transactions/dispose",
-      :content => "直接交易订单#{number}被#{user.login}处理了",
-      :url => seller_open_path,
-      :avatar => user.photos.icon,
-      :target => self,
-      :direct_id => id,
-      :exclude => user
-    ) do |options|
-      options[:channel] = "/direct_transactions/dispose"
-    end if results
+    # Notification.dual_notify(seller,
+    #   :channel => "/#{seller.im_token}/direct_transactions/dispose",
+    #   :content => "直接交易订单#{number}被#{user.login}处理了",
+    #   :url => seller_open_path,
+    #   :avatar => user.photos.icon,
+    #   :target => self,
+    #   :direct_id => id,
+    #   :exclude => user
+    # ) do |options|
+    #   options[:channel] = "/direct_transactions/dispose"
+    # end if results
 
     buyer.notify(
       "/direct_transactions/dispose",

@@ -56,8 +56,9 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
 
   def dispose
     @direct_transaction = current_shop_direct_transaction
+    @operator = @direct_transaction.update_operator(current_user)
     respond_to do |format|
-      if @direct_transaction.update_operator(current_user)
+      if @operator
         format.html
         format.json{ render :json => @direct_transaction }
       else
