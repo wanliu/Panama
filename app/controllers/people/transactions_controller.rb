@@ -1,5 +1,6 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
+  include TransactionHelper
   before_filter :login_and_service_required, :person_self_required, :except => [:kuaiqian_receive]
   helper_method :base_template_path
 
@@ -12,31 +13,7 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  def get_token
-    require 'net/http'  
-  
-    begin
-      app_id = "Gbiuildi235ljifjel5ju89gn1saj436l35u9uGeYYGe99eQQax0mbhF49Ui8T"
-      url = "http://localhost:5000/api/" << app_id << "/get_token/" <<
-              @transaction.class << "_" << @transaction.number
-      url_str = URI.parse(url)
-      site = Net::HTTP.new(url_str.host, url_str.port)
-      site.open_timeout = 0.2
-      site.read_timeout = 0.2
-      path = url_str.query.blank? ? url_str.path : url_str.path+"?"+url_str.query
-      response = site.get2(path)
-      response = JSON.parse(response)
-    rescue Exception => ex
-      response = {}
-    end
-
-    response['token']
-  end
-
   def generate_token
-    @transaction = current_order.find(params[:id])
-    token = @transaction.token || get_token
-    
     respond_to do |format|
       format.json{ render :json => { token: get_token } }
     end
