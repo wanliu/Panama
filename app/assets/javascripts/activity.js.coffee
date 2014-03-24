@@ -277,7 +277,7 @@ class ActivityLayoutView extends Backbone.View
         @appendResult(e, product)
 
   adjustNumber: () ->
-    count = parseInt(@$('.columns').width() / 235)
+    count = parseInt(@$('.columns').width() / 240)
 
   relayoutColumns: () ->
     @render_columns()

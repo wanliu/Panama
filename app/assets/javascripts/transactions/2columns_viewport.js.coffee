@@ -90,7 +90,7 @@ class TransactionTwoColumnsViewport extends Backbone.View
     #   allowPageScroll: true,
     #   height: 'auto'
     # )
-    @$orders.on("mouseleave", @hideLeftColumn)
+    @$orderList.on("mouseleave", @hideLeftColumn)
     $("body").mousemove (e) =>
       if e.clientX < 25
         @showLeftColumn()
