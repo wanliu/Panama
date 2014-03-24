@@ -20,6 +20,7 @@ class DirectTransaction < ActiveRecord::Base
   validates :buyer,  :presence => true
   validates :seller, :presence => true
   validates :number, :presence => true, :uniqueness => true
+  validates :items,  :presence => true
 
   before_validation(:on => :create) do
     generate_number
