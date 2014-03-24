@@ -256,7 +256,7 @@ class ActivityLayoutView extends Backbone.View
     @relayoutColumns()
 
   resizeWrap: (e) ->
-    #@$el.width(@$columns.width())
+    # @$el.width(@$columns.width())
 
   appendResult: (e, product) ->
     $columns = @$('.column')
