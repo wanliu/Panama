@@ -44,13 +44,16 @@ namespace :user do
   task :create_temporary_channels => :environment do
     targets = [ OrderTransaction, DirectTransaction ]
     targets.each do |target|
-      target.all.each do |o|
+      target.all.each_with_index do |o, index|
         name = o.class.to_s << "_" << o.number 
         if o.temporary_channel.present?
           o.temporary_channel.delete
         end
         o.create_temporary_channel(targeable_type: o.class.to_s, user_id: o.seller.owner.id, name: name)
         # o.send('create_the_temporary_channel')
+        if index % 50 == 0
+          sleep 10
+        end
       end
     end
   end
