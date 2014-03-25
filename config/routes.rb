@@ -354,6 +354,7 @@ Panama::Application.routes.draw do
     collection do
       get "connect/:token", :to => "users#connect"
       get "disconnect/:id", :to => "users#disconnect"
+      get "get_token/:login", :to => "users#get_token"
       get "followings"
       get "channels"
       post "upload_avatar/:id", :to => "users#upload_avatar"

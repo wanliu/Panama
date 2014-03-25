@@ -23,6 +23,43 @@ class UsersController < ApplicationController
     end
   end
 
+  def get_token
+    require 'net/http'  
+
+    @user = User.where(login: params[:login]).first
+    puts "========= #{@user.login} =============="
+    if (@user.blank?)
+      respond_to do |format|
+        format.json { render :json => { token: nil } }
+      end
+    else
+      caramal_app_id = Settings.caramal_api_token
+      caramal_host   = Settings.caramal_api_server
+
+      begin
+        url = get_user_token_url(caramal_host, caramal_app_id, @user)
+        puts ">>>>>> #{url} <<<<<<<<<<"
+        url_str = URI.parse(url)
+        site = Net::HTTP.new(url_str.host, url_str.port)
+        site.open_timeout = 0.2
+        site.read_timeout = 0.2
+        path = url_str.query.blank? ? url_str.path : url_str.path + "?" + url_str.query
+        response = site.get2(path, {'accept'=>'text/json'})
+        response = JSON.parse(response.body)
+        puts "======== #{response} ========"
+      rescue Exception => ex
+        puts "Error: #{ex}"
+        response = {}
+      end
+
+      token = response['token']
+
+      respond_to do |format|
+        format.json { render :json => { token: token } }
+      end
+    end
+  end
+
   def followings
     @followings = current_user.followings.users.as_json
     respond_to do |format|
@@ -63,5 +100,10 @@ class UsersController < ApplicationController
     else
       render :text => "{success: false, error: '请上传头像！'}"
     end
+  end
+
+  protected
+  def get_user_token_url(caramal_host, caramal_app_id, user)
+    "#{caramal_host}/api/#{caramal_app_id}/user_token/#{user.login}"
   end
 end

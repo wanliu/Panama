@@ -1,18 +1,18 @@
 module TransactionHelper
 
-  def get_token
-    @transaction = current_order.find(params[:id])
-    @transaction.temporary_channel.try(:token) || api_token
+  def get_token(transaction)
+    # @transaction = current_order.find(params[:id])
+    transaction.temporary_channel.try(:token) || api_token(transaction)
   end
 
-  def api_token
+  def api_token(transaction)
     require 'net/http'  
 
     caramal_app_id = Settings.caramal_api_token
     caramal_host   = Settings.caramal_api_server
 
     begin
-      url = get_temporary_token_url(caramal_host, caramal_app_id, @transaction)
+      url = get_temporary_token_url(caramal_host, caramal_app_id, transaction)
       url_str = URI.parse(url)
       site = Net::HTTP.new(url_str.host, url_str.port)
       site.open_timeout = 0.2
@@ -28,7 +28,7 @@ module TransactionHelper
   end
 
   def get_temporary_token_url(caramal_host, caramal_app_id, transaction)
-    "#{caramal_host}/api/#{caramal_app_id}/get_token/" <<
+    "#{caramal_host}/api/#{caramal_app_id}/group_token/" <<
         "#{transaction.class.to_s}_#{transaction.number}"
   end
 end
