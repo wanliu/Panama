@@ -83,7 +83,7 @@ class OrderTransaction < ActiveRecord::Base
     update_transfer_failer
   end
 
-  after_commit :create_the_temporary_channel, :notice_user, on: :create
+  after_commit :create_the_temporary_channel, :notice_user, on: :create, if: :persisted?
 
   def validate_items
     if items.blank?
@@ -92,17 +92,6 @@ class OrderTransaction < ActiveRecord::Base
     end
   end
 
-  def notice_user
-    Notification.dual_notify(seller,
-      :channel => "/#{seller.im_token}/transactions/create",
-      :content => "你有编号#{number}新的订单",
-      :url => seller_open_path,
-      :order_id => id,
-      :target => self
-    ) do |options|
-      options[:channel] = "/transactions/create"
-    end
-  end
   after_destroy :notice_destroy, :destroy_activity
 
   state_machine :initial => :order do
@@ -729,6 +718,19 @@ class OrderTransaction < ActiveRecord::Base
 
   def seller_open_path
     "/shops/#{seller.name}/admins/pending#open/#{id}/order"
+  end
+
+  private
+  def notice_user
+    Notification.dual_notify(seller,
+      :channel => "/#{seller.im_token}/transactions/create",
+      :content => "你有编号#{number}新的订单",
+      :url => seller_open_path,
+      :order_id => id,
+      :target => self
+    ) do |options|
+      options[:channel] = "/transactions/create"
+    end
   end
 
 end

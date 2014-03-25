@@ -44,7 +44,7 @@ class TransactionEvent extends Backbone.View
       @position()
 
   position: () ->
-    $('body').animate({scrollTop: $(".card_item.threeD.active .order_header").offset().top}, 1000) 
+    $('body').animate({scrollTop: $(".card_item.threeD.active .order_header").last().offset().top}, 1000) 
 
   change_address: () ->
     @$(".address").html(@model.get("address"))

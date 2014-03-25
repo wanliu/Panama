@@ -54,14 +54,20 @@ class Cart < ActiveRecord::Base
       errors.add(:items, "购物车没商品！")
       return false
     end
-    done = cart_items(item_ids).map do |header, pro_items|
-      if header[:buy_state] == :guarantee
-        save_transcation(header[:shop], pro_items, people)
-      else
-        create_direct_transaction(header[:shop], pro_items, people)
+
+    done = false
+    OrderTransaction.transaction do 
+      DirectTransaction.transaction do 
+        done = cart_items(item_ids).map do |header, pro_items|
+          if header[:buy_state] == :guarantee
+            save_transcation(header[:shop], pro_items, people)
+          else
+            create_direct_transaction(header[:shop], pro_items, people)
+          end
+        end.all?
+        items.where("id in (?)", item_ids).update_all(cart_id: nil) if done
       end
-    end.all?
-    items.where("id in (?)", item_ids).update_all(cart_id: nil) if done # FIXME :should't be items.clear?
+    end
     done
   end
 
@@ -77,7 +83,10 @@ class Cart < ActiveRecord::Base
     transaction = people.transactions.build(seller_id: shop.id)
     transaction.items = pro_items    
     state = transaction.save  
-    errors_build(transaction) unless state        
+    errors_build(transaction) unless state
+    if !state
+      raise ActiveRecord::Rollback
+    end
     state
   end
 
@@ -86,6 +95,9 @@ class Cart < ActiveRecord::Base
     transaction.items = pro_items
     state = transaction.save
     errors_build(transaction) unless state
+    if !state
+      raise ActiveRecord::Rollback
+    end
     state
   end
 
