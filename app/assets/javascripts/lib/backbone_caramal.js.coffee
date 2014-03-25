@@ -389,6 +389,10 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
     @channel.active()
     @addBufferMsgs()
+    @closeRead()
+
+  closeRead: () ->
+    clients.socket.emit('close-read', { room: @channel.room } )
 
   _scrollDialog: () =>
     @$('.body').scrollTop(@$('.body')[0].scrollHeight)

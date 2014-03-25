@@ -50,7 +50,7 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
         format.json{ render :json => @direct_transaction }
       else
         format.json{
-          render :json => draw_errors_message(@operator), :status => 403
+          render :json => draw_errors_message(@direct_transaction), :status => 403
         }
       end
     end

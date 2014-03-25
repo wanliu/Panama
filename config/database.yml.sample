@@ -38,7 +38,7 @@ production:
   encoding: utf8
   reconnect: false
   database: panama_production
-  pool: 5
+  pool: 50
   username: root
   password:
   host: localhost
