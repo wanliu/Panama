@@ -3,6 +3,8 @@ development:
   site_name: 万流商业社区
   site_url: http://www.wanliu.biz
   caramal_server: http://realtime.wanliu.biz
+  caramal_api_server: http://localhost:5000
+  caramal_api_token: Gbiuildi235ljifjel5ju89gn1saj436l35u9uGeYYGe99eQQax0mbhF49Ui8T
   redis_port: 6379
   redis_server: localhost
   pay_mode: test
@@ -60,6 +62,8 @@ test:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
   caramal_server: http://realtime.wanliu.biz
+  caramal_api_server: http://localhost:5000
+  caramal_api_token: Gbiuildi235ljifjel5ju89gn1saj436l35u9uGeYYGe99eQQax0mbhF49Ui8T
   redis_port: 6379
   redis_server: localhost
   pay_mode: test
@@ -110,6 +114,8 @@ production:
   site_name: 万流电商平台
   site_url: http://panama.wanliu.biz
   caramal_server: http://realtime.wanliu.biz
+  caramal_api_server: http://localhost:5000
+  caramal_api_token: Gbiuildi235ljifjel5ju89gn1saj436l35u9uGeYYGe99eQQax0mbhF49Ui8T
   redis_port: 6379
   pay_mode: production
   redis_server: localhost
