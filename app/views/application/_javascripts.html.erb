@@ -84,24 +84,39 @@
       }  
     }
 
-    // fix IE offline message bug
-    if ($.browser.msie) {
-      var logout_url = $('#account-menu .logout-btn').attr('href')
-      $('#account-menu .logout-btn')
-        .attr('href', 'javascript: void(0);')
-        .on('click', function(event){
-          clients.socket.socket.disconnect();
-          setTimeout(function(){
-            document.location.href = logout_url;
-          }, 100);
+    function closeRead() {
+      var rooms = [];
+      var chats = Caramal.MessageManager.channels;
+      _.each(chats, function(list, i){ 
+        _.each(list, function(chat, index){ 
+          if(chat._active){
+            rooms.contain(chat.room) || rooms.push(chat.room);
+          } 
         })
-
-      $(window).unload(function(){
-        clients.socket.socket.disconnect();
-        setTimeout(function(){
-
-        }, 100);
+        if(!_.isEmpty(rooms)) {
+          clients.socket.emit('close-read', { rooms: rooms} );
+        }
       })
     }
+
+    // fix IE offline message bug
+    var logout_url = $('#account-menu .logout-btn').attr('href')
+    $('#account-menu .logout-btn')
+      .attr('href', 'javascript: void(0);')
+      .on('click', function(event){
+        closeRead();
+        clients.socket.socket.disconnect();
+        setTimeout(function(){
+          document.location.href = logout_url;
+        }, 100);
+      })
+
+    $(window).unload(function(){
+      closeRead();
+      clients.socket.socket.disconnect();
+      setTimeout(function(){
+
+      }, 100);
+    })
   })
 </script>
