@@ -63,6 +63,8 @@ class OrderTransaction < ActiveRecord::Base
   #在线支付类型 account: 帐户支付 kuaiqian: 快钱支付
   acts_as_status :pay_status, [:account, :kuaiqian, :bank_transfer]
 
+  validate :validate_items
+
   before_validation(:on => :create) do
     update_total_count
     generate_number        
@@ -82,6 +84,13 @@ class OrderTransaction < ActiveRecord::Base
   end
 
   after_commit :create_the_temporary_channel, :notice_user, on: :create
+
+  def validate_items
+    if items.blank?
+      self.errors.add(:items, "该订单没有任何商品!")
+      return false
+    end
+  end
 
   def notice_user
     Notification.dual_notify(seller,
