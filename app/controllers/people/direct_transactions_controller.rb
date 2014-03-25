@@ -9,7 +9,7 @@ class People::DirectTransactionsController < People::BaseController
 
   def generate_token
     respond_to do |format|
-      format.json{ render :json => { token: get_token } }
+      format.json{ render :json => { token: get_token(current_direct_transaction) } }
     end
   end
 

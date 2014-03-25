@@ -11,12 +11,12 @@ class Admins::Shops::DirectTransactionsController < Admins::Shops::SectionContro
 
   def generate_token
     respond_to do |format|
-      format.json{ render :json => { token: get_token } }
+      format.json{ render :json => { token: get_token(current_shop_direct_transaction) } }
     end
   end
 
   def completed
-    @direct_transaction = current_direct_transaction
+    @direct_transaction = current_shop_direct_transaction
     @direct_transaction.state = :complete
     respond_to do |format|
       if @direct_transaction.save

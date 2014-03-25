@@ -15,7 +15,7 @@ class People::TransactionsController < People::BaseController
 
   def generate_token
     respond_to do |format|
-      format.json{ render :json => { token: get_token } }
+      format.json{ render :json => { token: get_token(current_order.find(params[:id])) } }
     end
   end
 
