@@ -1,5 +1,6 @@
 #encoding: utf-8
 class People::TransactionsController < People::BaseController
+  include TransactionHelper
   before_filter :login_and_service_required, :person_self_required, :except => [:kuaiqian_receive]
   helper_method :base_template_path
 
@@ -12,22 +13,7 @@ class People::TransactionsController < People::BaseController
     end
   end
 
-  def get_token
-    @transaction.temporary_channel.try(:token)
-  end
-
   def generate_token
-    @transaction = current_order.find(params[:id])
-    if get_token.blank?
-      @transaction.send('create_the_temporary_channel')
-      try_times = 0
-      while try_times < 50 do
-        try_times += 1
-        break unless get_token.blank?
-        sleep 0.2
-      end
-    end
-    
     respond_to do |format|
       format.json{ render :json => { token: get_token } }
     end

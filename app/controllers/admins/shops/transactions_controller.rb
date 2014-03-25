@@ -1,6 +1,7 @@
 #encoding: utf-8
 
 class Admins::Shops::TransactionsController < Admins::Shops::SectionController
+  include TransactionHelper
   helper_method :base_template_path
 
   def pending
@@ -10,22 +11,7 @@ class Admins::Shops::TransactionsController < Admins::Shops::SectionController
     .order("dispose_date desc").page(params[:page])
   end
 
-  def get_token
-    @transaction.temporary_channel.try(:token)
-  end
-
   def generate_token
-    @transaction = current_shop_order.find(params[:id])
-    if get_token.blank?
-      @transaction.send('create_the_temporary_channel')
-      try_times = 0
-      while try_times < 50 do
-        try_times += 1
-        break unless get_token.blank?
-        sleep 0.2
-      end
-    end
-
     respond_to do |format|
       format.json{ render :json => { token: get_token } }
     end
