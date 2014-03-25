@@ -217,6 +217,7 @@ class DirectTransaction < ActiveRecord::Base
   def validate_items
     if items.blank?
       errors.add(:items, "该订单没有任何商品!")
+      return false
     end
   end
 

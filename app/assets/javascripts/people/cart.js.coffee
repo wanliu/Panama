@@ -57,7 +57,9 @@ class root.CartContainer extends Backbone.View
     @checkAll()
 
   submitCart: () ->
-    return pnotify(type: 'error', text: '请勾选要结算的商品') unless @$('.check-item:checked').length > 0    
+    return false if  @$(".submit-cart").hasClass("disabled")
+    return pnotify(type: 'error', text: '请勾选要结算的商品') unless @$('.check-item:checked').length > 0   
+    @$(".submit-cart").addClass("disabled") 
     $.ajax(
       url: @$form.attr("action"),
       type: @$form.attr('method'),
@@ -66,8 +68,10 @@ class root.CartContainer extends Backbone.View
         try
           ms = JSON.parse(data.responseText)
           pnotify(text: ms.join("<br />"), type: "error")
+          @$(".submit-cart").removeClass("disabled")
         catch error
           pnotify(text: data.responseText, type: "error")
+          @$(".submit-cart").removeClass("disabled")
 
     )
     false
