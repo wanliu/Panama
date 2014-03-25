@@ -28,7 +28,7 @@ module TransactionHelper
   end
 
   def get_temporary_token_url(caramal_host, caramal_app_id, transaction)
-    "#{caramal_host}/api/#{caramal_app_id}/get_token/" <<
+    "#{caramal_host}/api/#{caramal_app_id}/group_token/" <<
         "#{transaction.class.to_s}_#{transaction.number}"
   end
 end
