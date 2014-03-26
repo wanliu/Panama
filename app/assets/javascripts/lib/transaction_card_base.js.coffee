@@ -37,7 +37,7 @@ class TransactionCardBase extends AbstructStateView
     @generateChat()
     $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     super
-    #@countdown()
+    @countdown()
 
   countdown: () ->
     @$(".clock").kkcountdown({
