@@ -69,6 +69,7 @@ class MyCart extends Backbone.View
 			.addClass("animated fadeInDownBig")
 
 	addToCart: ($element, form, urlAction) ->
+		@scrollY = window.scrollY
 		$el = $("#cart_box")
 		targetPosition = @targetAttributes($(".icon-shopping-cart"))
 		pos = $element.offset()
@@ -85,6 +86,7 @@ class MyCart extends Backbone.View
 				$(@el).addClass("bounce")
 				moveTarget.remove()
 				@cartAddAction(urlAction, form)
+
 
 	cartAddAction: (url, form) ->
 		amount = form.serializeHash().product_item.amount
@@ -105,6 +107,8 @@ class MyCart extends Backbone.View
 				pnotify(title: "出错了", text: messages.join(), type: "error")
 			catch error
 				pnotify(title: "出错了", text: data, type: "error")
+
+		window.scrollTo(0, @scrollY)
 
 	total_amounts: () ->
 		trs = @$(".cart_main")
