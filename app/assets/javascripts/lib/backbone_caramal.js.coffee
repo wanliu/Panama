@@ -533,19 +533,7 @@ class root.TemporaryChatView extends BaseChatView
     </div>')
 
   clickTitle: () ->
-    title = @model.get('title')
-    number = @model.get('number').replace(/\D/, '')
-    return if _.isEmpty(number)
-    type = title.substring(0, title.indexOf('_'))
-    $.ajax(
-      type: 'POST'
-      url: "/transactions/#{number}/operate_url/#{type}"
-      success: (data, xhr, res) =>
-        return if _.isEmpty(data.url)
-        document.location.href = data.url
-      error: (data, xhr, res) =>
-        console.error('跳转到订单失败')
-    )
+    @model.openOrder()
 
 
 class root.OrderChatView extends BaseChatView

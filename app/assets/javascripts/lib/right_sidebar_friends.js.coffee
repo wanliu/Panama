@@ -6,6 +6,22 @@ class root.ChatModel extends Backbone.Model
               '/order_refunds', '/admins/complete' ]
     url = _.find pages, (page) => location.href.indexOf(page) != -1
 
+  openOrder: () ->
+    return unless @get('type') is 3
+    title = @get('title')
+    number = @get('number').replace(/\D/, '')
+    return if _.isEmpty(number)
+    type = title.substring(0, title.indexOf('_'))
+    $.ajax(
+      type: 'POST'
+      url: "/transactions/#{number}/operate_url/#{type}"
+      success: (data, xhr, res) =>
+        return if _.isEmpty(data.url)
+        document.location.href = data.url
+      error: (data, xhr, res) =>
+        console.error('跳转到订单失败')
+    )
+
   getPrefixTitle: (title) ->
     prefix = title.substring(0, title.indexOf('_'))
     switch prefix
@@ -521,30 +537,5 @@ class TemporaryIconView extends BaseIconView
       @toggleChat()
 
   gotoOrder: (url) ->
-    number = @model.get('number')
-    flag = number.indexOf('D') is -1    # true 担保交易，false 直接交易
-    current_shop = clients.current_shop # true admin页面，false people页面
-    if current_shop
-      if flag
-        # /shops/xxx/admins/pending#open/yyy/order
-        transactions = "pending"
-      else
-        # /shops/xxx/admins/direct_transactions#open/yyy/direct
-        transactions = "direct_transactions"
-      goto = "/shops/#{current_shop}/admins/#{transactions}"
-    else
-      if flag
-        # /people/xxx/transactions#open/yyy/order
-        transactions = "transactions"
-      else
-        # /people/xxx/direct_transactions#open/yyy/direct
-        transactions = "direct_transactions"
-      goto = "/people/#{clients.current_user}/#{transactions}"
-
-    if flag
-      type = 'order'
-    else
-      type = 'direct'
-    goto += "#open/#{~~number.replace(/\D/, '')}/#{type}"
-    location.href = goto unless location.href is goto
+    @model.openOrder()
 
