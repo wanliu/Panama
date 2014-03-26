@@ -6,7 +6,7 @@ root = window || @
 class root.Upload extends Backbone.View
   template: '
     <div class="qq-uploader">
-      <pre class="qq-upload-drop-area">
+      <pre class="qq-upload-drop-area qq-upload-drop-area-disabled">
         <span>{dragText}</span>
       </pre>
       <div class="qq-upload-button btn btn-success" style="width: 85px;">
