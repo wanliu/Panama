@@ -7,8 +7,7 @@
   state-title="<%=refund.state_title %>"
   state-event-url="<%=trigger_event_shop_admins_order_refund_path(current_shop, refund) %>"
   url-root="<%=shop_admins_order_refund_path(current_shop, refund) %>"
-  data-token="<%= refund.order.try(:temporary_channel).try(:token) %>"
-   >
+  data-token="<%= refund.order.try(:temporary_channel).try(:token) %>" >
   <div class="transaction-header">
     <div class="avatar">
       <%= image_tag buyer.photos.header, :class => 'img-polaroid' %>
@@ -19,7 +18,9 @@
         <div class="trasaction-title">
           <div class="name"><%= buyer.login %></div>
           <span class='order_number pull-right'>
-            订单编号：<a href="<%=shop_admins_pending_path(current_shop) %>#open/<%=refund.order.id %>/order"><%=refund.order.try(:number) %></a>
+            订单编号：<a href="<%=shop_admins_pending_path(current_shop) %>#open/<%=refund.order.id %>/order">
+              <%=refund.order.try(:number) %>
+            </a>
           </span>   
         </div>
         <div class="transaction-address">
