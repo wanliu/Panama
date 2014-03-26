@@ -116,7 +116,7 @@ class root.ActivityBuyView extends Backbone.View
       type: "POST",
       error: (data, xhr, res) =>
         try
-          message = JSON.parse(xhr.responseText).join("<br />")
+          message = JSON.parse(data.responseText).join("<br />")
           pnotify(text: message, type: "error")
         catch error
           pnotify(
