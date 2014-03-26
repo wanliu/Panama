@@ -35,7 +35,7 @@ class Shop < ActiveRecord::Base
 
   delegate :banks, :to => :user
 
-  after_save do
+  after_commit do
     update_relation_index
   end
 
