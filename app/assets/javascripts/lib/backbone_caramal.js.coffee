@@ -381,6 +381,7 @@ class BaseChatView extends Caramal.BackboneView
     # @resetHistory()
     @display = false
     # @channel.resetHisInitTime()
+    @closeRead()
     @channel.deactive()
     # @unbindMessage()
 
@@ -389,9 +390,9 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
     @channel.active()
     @addBufferMsgs()
-    @closeRead()
 
   closeRead: () ->
+    console.error('channel.room -->', @channel.room) if _.isEmpty(@channel.room)
     clients.socket.emit('close-read', { room: @channel.room } )
 
   _scrollDialog: () =>
