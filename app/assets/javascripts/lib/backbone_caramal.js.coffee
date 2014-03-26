@@ -38,7 +38,7 @@ class ImageUpload extends Backbone.View
 
   template: '
     <div class="qq-uploader">
-      <pre class="qq-upload-drop-area">
+      <pre class="qq-upload-drop-area qq-upload-drop-area-disabled">
         <span>{dragText}</span>
       </pre>
       <div class="qq-upload-button btn" style="width: auto;">
