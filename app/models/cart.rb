@@ -56,17 +56,18 @@ class Cart < ActiveRecord::Base
     end
 
     done = false
-    OrderTransaction.transaction do 
-      DirectTransaction.transaction do 
-        done = cart_items(item_ids).map do |header, pro_items|
-          if header[:buy_state] == :guarantee
-            save_transcation(header[:shop], pro_items, people)
-          else
-            create_direct_transaction(header[:shop], pro_items, people)
-          end
-        end.all?
-        items.where("id in (?)", item_ids).update_all(cart_id: nil) if done
+    DirectTransaction.transaction do 
+      done = cart_items(item_ids).map do |header, pro_items|
+        if header[:buy_state] == :guarantee
+          save_transcation(header[:shop], pro_items, people)
+        else
+          create_direct_transaction(header[:shop], pro_items, people)
+        end
+      end.all?
+      unless done
+        raise ActiveRecord::Rollback
       end
+      items.where("id in (?)", item_ids).update_all(cart_id: nil) if done
     end
     done
   end
@@ -82,11 +83,8 @@ class Cart < ActiveRecord::Base
   def save_transcation(shop, pro_items, people)
     transaction = people.transactions.build(seller_id: shop.id)
     transaction.items = pro_items    
-    state = transaction.save  
+    state = transaction.save 
     errors_build(transaction) unless state
-    if !state
-      raise ActiveRecord::Rollback
-    end
     state
   end
 
@@ -95,9 +93,6 @@ class Cart < ActiveRecord::Base
     transaction.items = pro_items
     state = transaction.save
     errors_build(transaction) unless state
-    if !state
-      raise ActiveRecord::Rollback
-    end
     state
   end
 

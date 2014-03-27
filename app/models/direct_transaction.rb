@@ -12,9 +12,14 @@ class DirectTransaction < ActiveRecord::Base
   belongs_to :operator, :class_name => "User"
   belongs_to :address, foreign_key: 'address_id', class_name: "DeliveryAddress"
 
-  has_many :items, :class_name => "ProductItem", :as => :owner, :dependent => :destroy
+  has_many :items,
+           :class_name => "ProductItem",
+           :as => :owner,
+           :autosave => true,
+           :dependent => :destroy
+
   has_many :notifications, :as => :targeable, dependent: :destroy
-  has_many :transfers, :as => :targeable
+  has_many :transfers, :as => :targeable, autosave: true
   has_one :temporary_channel, as: :targeable, dependent: :destroy
 
   validates :buyer,  :presence => true
@@ -35,7 +40,7 @@ class DirectTransaction < ActiveRecord::Base
 
   after_update :notice_change_state, :update_transfer
 
-  after_commit :create_the_temporary_channel, on: :create
+  after_commit :create_the_temporary_channel, on: :create, if: :persisted?
 
   def init_data
     self.total = items.inject(0){|s, v|  s = s + (v.amount * v.price) }
@@ -177,10 +182,7 @@ class DirectTransaction < ActiveRecord::Base
     items.each do |item|
       transfer = transfers.build(
         :amount => -item.amount,        
-        :shop_product => item.shop_product)
-      unless transfer.valid?
-        return false
-      end      
+        :shop_product => item.shop_product)  
     end
   end
 
