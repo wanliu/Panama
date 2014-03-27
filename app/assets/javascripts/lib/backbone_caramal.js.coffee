@@ -229,7 +229,8 @@ class BaseChatView extends Caramal.BackboneView
   addResizable: () ->
     $el = $(@el)
     $el.resizable()
-       .draggable({ cursor: 'move', handle: @$('.drag-area') })
+       .draggable({ cursor: 'move', handle: @$('.drag-area'), containment: 'body'})
+       # .draggable({ appendTo:  'body' })
        # .css('position', 'fixed')
     $el.on 'resize', (event, ui) =>
       height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
@@ -381,6 +382,7 @@ class BaseChatView extends Caramal.BackboneView
     # @resetHistory()
     @display = false
     # @channel.resetHisInitTime()
+    @closeRead()
     @channel.deactive()
     # @unbindMessage()
 
@@ -389,9 +391,9 @@ class BaseChatView extends Caramal.BackboneView
     @display = true
     @channel.active()
     @addBufferMsgs()
-    @closeRead()
 
   closeRead: () ->
+    console.error('channel.room -->', @channel.room) if _.isEmpty(@channel.room)
     clients.socket.emit('close-read', { room: @channel.room } )
 
   _scrollDialog: () =>
@@ -532,19 +534,7 @@ class root.TemporaryChatView extends BaseChatView
     </div>')
 
   clickTitle: () ->
-    title = @model.get('title')
-    number = @model.get('number').replace(/\D/, '')
-    return if _.isEmpty(number)
-    type = title.substring(0, title.indexOf('_'))
-    $.ajax(
-      type: 'POST'
-      url: "/transactions/#{number}/operate_url/#{type}"
-      success: (data, xhr, res) =>
-        return if _.isEmpty(data.url)
-        document.location.href = data.url
-      error: (data, xhr, res) =>
-        console.error('跳转到订单失败')
-    )
+    @model.openOrder()
 
 
 class root.OrderChatView extends BaseChatView

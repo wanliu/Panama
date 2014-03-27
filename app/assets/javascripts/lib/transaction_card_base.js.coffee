@@ -37,7 +37,7 @@ class TransactionCardBase extends AbstructStateView
     @generateChat()
     $(window).bind("resizeOrderChat", _.bind(@setChatPanel, @))
     super
-    #@countdown()
+    @countdown()
 
   countdown: () ->
     @$(".clock").kkcountdown({
@@ -183,7 +183,7 @@ class TransactionCardBase extends AbstructStateView
     @$el.parents('.wrapper-box').find('.message_wrap')
 
   setChatPanel: (event) ->
-    $order_row = @$el.parents('.wrapper-box')
+    $order_row = @$el.parents('.wrapper-box .left')
     $chat_foot = @messageWrap().find(".foot")
     $chat_body = @messageWrap().find(".body")
     height = $order_row.outerHeight() - $chat_foot.outerHeight()

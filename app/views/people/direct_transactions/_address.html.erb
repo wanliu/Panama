@@ -66,7 +66,7 @@
 </div>
 
 <script type="text/javascript">
-  $("#address_id_<%=transaction.id%>", ".transaction-<%=transaction.id%>-order").chosen({
+  $("#address_id_<%=transaction.id%>", "#direct<%=transaction.id %>").chosen({
       allow_single_deselect : true,
       placeholder_text : "选择一个地址",
       no_results_text : "没有以该关键词开头的地址"

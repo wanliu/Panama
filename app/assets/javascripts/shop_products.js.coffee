@@ -129,7 +129,7 @@ class ShopProductToolbar extends Backbone.View
           window.location.href = "/people/#{@login}/transactions#open/#{data.id}/order"
         error: (data, xhr, res) =>
           try
-            message = JSON.parse(xhr.responseText).join("<br />")
+            message = JSON.parse(data.responseText).join("<br />")
             pnotify(text: message, type: "error")
           catch error
             pnotify(
@@ -153,7 +153,7 @@ class ShopProductToolbar extends Backbone.View
           window.location.href = "/people/#{@login}/direct_transactions#open/#{data.id}/direct"
         error: (data, xhr, res) =>
           try
-            message = JSON.parse(xhr.responseText).join("<br />")
+            message = JSON.parse(data.responseText).join("<br />")
             pnotify(text: message, type: "error")
           catch error
             pnotify(
