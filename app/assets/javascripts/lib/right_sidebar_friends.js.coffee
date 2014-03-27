@@ -235,7 +235,9 @@ class root.ChatManager extends Backbone.View
       @setRows(Math.ceil(count/count_x))
       right = $(".right-sidebar").width() + (count-1)%count_x*$el.width()
 
-    top = w_height - ChatManager.rows*$el.height()
+    top = window.scrollY + $(window).height() - ChatManager.rows*$el.height()
+
+    # top = w_height - ChatManager.rows*$el.height()
     $el.css('right', right + "px")
     $el.css('top', top + "px")
 

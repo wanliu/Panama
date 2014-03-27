@@ -229,7 +229,8 @@ class BaseChatView extends Caramal.BackboneView
   addResizable: () ->
     $el = $(@el)
     $el.resizable()
-       .draggable({ cursor: 'move', handle: @$('.drag-area') })
+       .draggable({ cursor: 'move', handle: @$('.drag-area'), containment: 'body'})
+       # .draggable({ appendTo:  'body' })
        # .css('position', 'fixed')
     $el.on 'resize', (event, ui) =>
       height = $el.outerHeight() - $el.find(".head").outerHeight() - $el.find(".foot").outerHeight()
